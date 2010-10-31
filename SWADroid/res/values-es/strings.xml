@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="app_name">SWADroid</string>
+    <string name="loginModuleLabel">Conectar</string>
+    <string name="title_error_dialog">ERROR</string>
+    <string name="close_dialog">Cerrar</string>
+    <string name="set_preferences">Configuración</string>
+    <string name="user_preferences">Datos del usuario</string>
+    <string name="userIDName_preferences">Usuario</string>
+    <string name="userIDSummary_preferences">DNI o Alias</string>
+    <string name="userIDTitle_preferences">Usuario</string>
+    <string name="userPasswordName_preferences">Contraseña</string>
+    <string name="userPasswordSummary_preferences">Contraseña</string>
+    <string name="userPasswordTitle_preferences">Contraseña</string>
+    <string name="saveMsg_preferences">Configuración guardada</string>
+    <string name="saveSummary_preferences">Guarda la configuración actual</string>
+    <string name="saveTitle_preferences">Guardar Configuración</string>
+    <string name="functionsTitle_menu">Funciones</string>
+    <string name="preferencesTitle_menu">Configuración</string>
+    <string name="loginTitle_menu">Conectar</string>
+    <string name="loginProgressTitle">Identificación</string>
+    <string name="loginProgressDescription">Conectando...</string>
+    <string name="errorMsgLaunchingActivity">Ha ocurrido un error durante la ejecución de la operación</string>
+</resources>

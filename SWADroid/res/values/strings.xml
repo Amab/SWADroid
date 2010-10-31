@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="app_name">SWADroid</string>
+    <string name="loginModuleLabel">Login</string>
+    <string name="title_error_dialog">ERROR</string>
+    <string name="close_dialog">Close</string>
+    <string name="set_preferences">Preferences</string>
+    <string name="user_preferences">User data</string>
+    <string name="userIDName_preferences">User</string>
+    <string name="userIDSummary_preferences">DNI or Nickname</string>
+    <string name="userIDTitle_preferences">User</string>
+    <string name="userPasswordName_preferences">Password</string>
+    <string name="userPasswordSummary_preferences">Password</string>
+    <string name="userPasswordTitle_preferences">Password</string>
+    <string name="saveMsg_preferences">Preferences have been saved</string>
+    <string name="saveSummary_preferences">Save actual preferences</string>
+    <string name="saveTitle_preferences">Save preferences</string>
+    <string name="functionsTitle_menu">Functions</string>
+    <string name="preferencesTitle_menu">Preferences</string>
+    <string name="loginTitle_menu">Login</string>
+    <string name="loginProgressTitle">Login</string>
+    <string name="loginProgressDescription">Connecting...</string>
+    <string name="errorMsgLaunchingActivity">An error occurred during the execution of the operation</string>
+</resources>
