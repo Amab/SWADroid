@@ -76,7 +76,7 @@ public class Login extends Module {
     public void requestService()
             throws NoSuchAlgorithmException, IOException, XmlPullParserException, SoapFault {
 
-        //Encrypts user password wiht SHA-512 and encodes it to Base64
+        //Encrypts user password with SHA-512 and encodes it to Base64
         md = MessageDigest.getInstance("SHA-512");
         md.update(prefs.getUserPassword().getBytes());
         userPassword = Base64.encode(md.digest());
@@ -133,10 +133,10 @@ public class Login extends Module {
             try {
                 //Sends webservice request
                 requestService();
-                /**
-                 * If an exception occurs, capture and points exception pointer
-                 * to it.
-                 */
+            /**
+             * If an exception occurs, capture and points exception pointer
+             * to it.
+             */
             } catch (SoapFault ex) {
                 e = ex;
             } catch (Exception ex) {
