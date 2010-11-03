@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">        
+    <PreferenceCategory
+                android:title="@string/user_preferences">
+        <EditTextPreference
+                android:name="@string/userIDName_preferences"
+                android:summary="@string/userIDSummary_preferences"
+                android:defaultValue=""
+                android:title="@string/userIDTitle_preferences"
+                android:key="userIDPref" />
+        <EditTextPreference
+                android:name="@string/userPasswordName_preferences"
+                android:summary="@string/userPasswordSummary_preferences"
+                android:defaultValue=""
+                android:title="@string/userPasswordTitle_preferences"
+                android:key="userPasswordPref"                
+                android:password="true" />
+    </PreferenceCategory>
+    <PreferenceCategory>
+        <Preference
+                android:title="@string/saveTitle_preferences"
+                android:summary="@string/saveSummary_preferences"
+                android:key="savePref" />
+    </PreferenceCategory>
+</PreferenceScreen>
