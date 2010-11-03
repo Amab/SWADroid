@@ -19,6 +19,14 @@ HISTORY.md		Changelog file in GitHub markdown format.
 README.md		This file in GitHub markdown format.
 
 
+Mailing list
+------------
+
+For discussions with others users, questions and more:
+
+ [http://groups.google.es/group/swadroid](http://groups.google.es/group/swadroid)
+
+
 Copyright and License
 ---------------------
 
