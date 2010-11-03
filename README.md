@@ -1,11 +1,9 @@
-SWADroid
-================================
+# SWADroid
 
 Android client for e-learning platform SWAD.
 
 
-Content
--------
+## Content
 
 SWADroid/         	Android client.
 	/LICENSE	License file.
@@ -19,25 +17,33 @@ HISTORY.md		Changelog file in GitHub markdown format.
 README.md		This file in GitHub markdown format.
 
 
-Mailing list
-------------
-
-For discussions with others users, questions and more:
-
- [http://groups.google.es/group/swadroid](http://groups.google.es/group/swadroid)
-
-
-Copyright and License
----------------------
+## Copyright and License
 
 Copyright (C) 2010, Juan Miguel Boyero Corral
 
-SWADroid client is free software; you can redistribute it and/or modify
+[gplv3_img][gplv3] SWADroid client is free software; you can redistribute it and/or modify
 it under the same terms as [GPLv3][gplv3] license.
 
-SWADroid Webservices is free software; you can redistribute it and/or modify
+[agplv3_img][agplv3] SWADroid Webservices is free software; you can redistribute it and/or modify
 it under the same terms as [AGPLv3][agplv3] license.
 
 
+## Contributing
+
+SWADroid is an open source project.  I encourage contributions.
+
+The Github team has also been kind enough to write up some great [documentation][doc_contrib] on working with pull requests. Contributions should be performed on [topic branches][topic_br] in your personal forks - just issue your pull requests from there.
+
+
+## More
+
+* {Issue tracker}[https://github.com/Amab/SWADroid/issues]
+* {Mailing list}[http://groups.google.es/group/swadroid]
+
+
 [gplv3]: http://www.gnu.org/licenses/gpl.html
+[gplv3_img]: http://www.gnu.org/graphics/gplv3-88x31.png
 [agplv3]: http://www.gnu.org/licenses/agpl.html
+[agplv3_img]: http://www.gnu.org/graphics/agplv3-88x31.png
+[doc_contrib]: http://help.github.com/pull-requests/
+[topic_br]: http://progit.org/book/ch3-4.html
