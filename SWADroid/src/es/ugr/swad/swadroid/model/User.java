@@ -29,7 +29,7 @@ public class User {
      */
     private static String userCode;
     /**
-     * Code of the user type.
+     * Code of user type.
      */
     private static String userTypeCode;
     /**
@@ -66,13 +66,13 @@ public class User {
     /**
      * Constructor.
      * @param userCode User code.
-     * @param userTypeCode Code of the user type.
+     * @param userTypeCode Code of user type.
      * @param wsKey Webservices session key.
      * @param userID User identifier.
      * @param userSurname1 User first surname.
      * @param userSurname2 User last surname.
      * @param userFirstName User name.
-     * @param userTypeName Name of the user type.
+     * @param userTypeName Name of user type.
      */
     public User(String userCode, String userTypeCode, String wsKey, String userID, String userSurname1, String userSurname2, String userFirstName, String userTypeName) {
         User.userCode = userCode;
