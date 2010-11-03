@@ -103,14 +103,14 @@ public class SWADMain extends Activity {
 
     /**
      * Handles the result of launch an activity and performs an action.
-     * @param requestCode Identifier od the action requested.
+     * @param requestCode Identifier of the action requested.
      * @param resultCode Status of the activity's result (correct or not).
      * @param data Data returned by the launched activity.
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
-            Bundle extras = data.getExtras();
+            //Bundle extras = data.getExtras();
 
             switch(requestCode) {
                 case Global.LOGIN_REQUEST_CODE:
