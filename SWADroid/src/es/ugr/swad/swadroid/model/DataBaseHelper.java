@@ -1,3 +1,21 @@
+/*
+ *  This file is part of SWADroid.
+ *
+ *  Copyright (C) 2010 Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ *
+ *  SWADroid is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  SWADroid is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with SWADroid.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package es.ugr.swad.swadroid.model;
 
 import java.io.FileOutputStream;
@@ -5,8 +23,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+
+import es.ugr.swad.swadroid.Global;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -21,7 +40,7 @@ public class DataBaseHelper extends SQLiteOpenHelper{
 	private static String DB_PATH = "/data/data/es.ugr.swad.swadroid/databases/";
 	private static String DB_NAME = "swadroid";
     private static final int DATABASE_VERSION = 1;
-    private static final String TAG = "SWADroidDBAdapter";
+    private static final String TAG = "SWADroidDB";
 	private SQLiteDatabase swadroidDataBase;
 	private final Context context;
 	
@@ -154,30 +173,37 @@ public class DataBaseHelper extends SQLiteOpenHelper{
 	Model createObjectByTable(String table, Cursor rows) {
 		Model o = null;
 		
-		if(table.equals("courses")) {
+		if(table.equals(Global.DB_TABLE_COURSES)) {
 			o = new Course((Integer) rows.getInt(0),
 							(String) rows.getString(1));
-		} else if(table.equals("notices")) {
+		} else if(table.equals(Global.DB_TABLE_NOTICES)) {
 			o = new Notice((Integer) rows.getInt(0),
 							(Integer) rows.getInt(1),
 							(String) rows.getString(2));
-		} else if(table.equals("students")) {
+		} else if(table.equals(Global.DB_TABLE_STUDENTS)) {
 			o = new Student((Integer) rows.getInt(0),
 							(String) rows.getString(1),
 							(String) rows.getString(2),
 							(String) rows.getString(3),
 							(String) rows.getString(4));
-		} else if(table.equals("tst_answers")) {
+		} else if(table.equals(Global.DB_TABLE_TEST_ANSWERS)) {
 			o = new TestAnswer((Integer) rows.getInt(0),
 					(Boolean) parseIntBool(rows.getInt(1)),
 					(String) rows.getString(2));
-		} else if(table.equals("tst_questions")) {
+		} else if(table.equals(Global.DB_TABLE_TEST_QUESTIONS)) {
 			o = new TestQuestion((Integer) rows.getInt(0),
 					(String) rows.getString(1),
 					(String) rows.getString(2),
 					(Integer) rows.getInt(3),
 					(Boolean) parseStringBool(rows.getString(4)),
 					(Float) rows.getFloat(5));
+		} else if(table.equals(Global.DB_TABLE_NOTICES_COURSES) ||
+				table.equals(Global.DB_TABLE_STUDENTS_COURSES) ||
+				table.equals(Global.DB_TABLE_TEST_QUESTIONS_COURSES)) {
+			
+			o = new PairTable<Integer, Integer>(table,
+					(Integer) rows.getInt(0),
+					(Integer) rows.getInt(1));
 		}
 		
 		return o;
@@ -199,42 +225,42 @@ public class DataBaseHelper extends SQLiteOpenHelper{
         return result;
     }
 	
-	public void insertRow(String table, Model row)
+	public void insertRow(Model row)
     {
-        String command = "INSERT INTO "  + table + " (?) VALUES (?)";
+        String command = "INSERT INTO ";
         
         if(row instanceof Course) {
         	Course c = (Course) row;
-        	command += " (_id, name) VALUES ("
+        	command += Global.DB_TABLE_COURSES + " (_id, name) VALUES ("
         				+ c.getId() + ", "
-        				+ c.getName()
-        									+ ")";
+    					+ c.getName()
+    								+ ")";
         } else if(row instanceof Notice) {
         	Notice n = (Notice) row;
-        	command += " (_id, timestamp, description) VALUES ("
-        				+ n.getId() + ", "
-        				+ n.getTimestamp() + ", "
-        				+ n.getDescription()
-        													+ ")";
+        	command += Global.DB_TABLE_NOTICES + " (_id, timestamp, description) VALUES ("
+						+ n.getId() + ", "
+    					+ n.getTimestamp() + ", "
+    					+ n.getDescription()
+    										+ ")";
         } else if(row instanceof Student) {
         	Student s = (Student) row;
-        	command += " (_id, dni, firstname, surname1, surname2) VALUES ("
+        	command += Global.DB_TABLE_STUDENTS + " (_id, dni, firstname, surname1, surname2) VALUES ("
         				+ s.getId() + ", "
         				+ s.getDni() + ", "
         				+ s.getFirstName() + ", "
         				+ s.getSurname1() + ", "
         				+ s.getSurname2()
-        																+ ")";
+        								+ ")";
         } else if(row instanceof TestAnswer) {
         	TestAnswer a = (TestAnswer) row;
-        	command += " (_id, answer, correct) VALUES ("
+        	command += Global.DB_TABLE_TEST_ANSWERS + " (_id, answer, correct) VALUES ("
         				+ a.getId() + ", "
         				+ a.getAnswer() + ", "
         				+ parseBoolInt(a.getCorrect())
         											+ ")";
         } else if(row instanceof TestQuestion) {
         	TestQuestion q = (TestQuestion) row;
-        	command += " (_id, anstype, numhits, question, score, shuffle) VALUES ("
+        	command += Global.DB_TABLE_TEST_QUESTIONS + " (_id, anstype, numhits, question, score, shuffle) VALUES ("
         				+ q.getId() + ", "
         				+ q.getAnstype() + ", "
         				+ q.getNumhits() + ", "
@@ -242,6 +268,23 @@ public class DataBaseHelper extends SQLiteOpenHelper{
         				+ q.getScore() + ", "
         				+ parseBoolInt(q.getShuffle())
         											+ ")";
+        } else if(row instanceof PairTable) {
+        	PairTable<?, ?> p = (PairTable<?, ?>) row;
+        	String table = p.getTable();
+        	command += table + " ";
+        	
+        	if(table.equals(Global.DB_TABLE_NOTICES_COURSES)) {
+        		command +=  " (idcourse, idnotice) VALUES (";
+        	} else if(table.equals(Global.DB_TABLE_STUDENTS_COURSES)) {
+        		command +=  " (idcourse, idstudent) VALUES (";
+        	} else if(table.equals(Global.DB_TABLE_TEST_QUESTIONS_COURSES)) {
+        		command +=  " (crscod, qstcod) VALUES (";
+        	}
+        	
+        	command += p.getFirst() + ", "
+        			+ p.getSecond()
+        							+ ")";
+        	
         }
         
         swadroidDataBase.execSQL(command, null);
