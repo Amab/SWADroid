@@ -21,4 +21,5 @@
     <string name="loginProgressTitle">Login</string>
     <string name="loginProgressDescription">Connecting...</string>
     <string name="errorMsgLaunchingActivity">An error occurred during the execution of the operation</string>
+<string name="errorMsgWorkaroundEmulator">Damn. That Android emulator bug appeared again. Retrying...</string>
 </resources>

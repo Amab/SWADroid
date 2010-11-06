@@ -40,11 +40,11 @@ public class Login extends Module {
     /**
      * Digest for user password.
      */
-    MessageDigest md;
+    private MessageDigest md;
     /**
      * User password.
      */
-    String userPassword;
+    private String userPassword;
 
     /**
      * Called when activity is first created.

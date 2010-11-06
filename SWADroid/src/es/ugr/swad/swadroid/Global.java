@@ -28,4 +28,8 @@ public class Global {
      * Request code for Login module.
      */
     public static final int LOGIN_REQUEST_CODE = 1;
+    /**
+     * Class Module's tag name for Logcat
+     */
+    public static final String MODULE_TAG = "Module";
 }
