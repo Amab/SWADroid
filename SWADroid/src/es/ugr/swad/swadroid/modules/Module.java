@@ -22,6 +22,8 @@ package es.ugr.swad.swadroid.modules;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.util.Log;
+import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import java.io.IOException;
@@ -209,7 +211,17 @@ public class Module extends Activity {
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         envelope.setOutputSoapObject(request);
         HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
-        androidHttpTransport.call(SOAP_ACTION, envelope);
+        
+        //If an XmlPullParserException occurs, retry once in order to workaround an Android emulator bug
+        try {
+        	androidHttpTransport.call(SOAP_ACTION, envelope);
+        } catch(XmlPullParserException ex) {
+        	Log.e(Global.MODULE_TAG, ex.getLocalizedMessage());
+        	ex.printStackTrace();
+        	Log.e(Global.MODULE_TAG, getString(R.string.errorMsgWorkaroundEmulator));
+        	androidHttpTransport.call(SOAP_ACTION, envelope);
+        }
+        
         result = (SoapObject) envelope.getResponse();
     }
 

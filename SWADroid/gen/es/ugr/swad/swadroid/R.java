@@ -32,6 +32,7 @@ public final class R {
         public static final int app_name=0x7f050000;
         public static final int close_dialog=0x7f050003;
         public static final int errorMsgLaunchingActivity=0x7f050014;
+        public static final int errorMsgWorkaroundEmulator=0x7f050015;
         public static final int functionsTitle_menu=0x7f05000f;
         public static final int loginModuleLabel=0x7f050001;
         public static final int loginProgressDescription=0x7f050013;

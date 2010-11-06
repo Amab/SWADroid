@@ -20,5 +20,5 @@
     <string name="loginTitle_menu">Conectar</string>
     <string name="loginProgressTitle">Identificación</string>
     <string name="loginProgressDescription">Conectando...</string>
-    <string name="errorMsgLaunchingActivity">Ha ocurrido un error durante la ejecución de la operación</string>
+    <string name="errorMsgLaunchingActivity">Ha ocurrido un error durante la ejecución de la operación</string><string name="errorMsgWorkaroundEmulator">Mierda. Ese bug del emulador de Android ha vuelto a aparecer. Reintentando...</string>
 </resources>
