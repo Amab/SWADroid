@@ -15,7 +15,7 @@
     <string name="saveMsg_preferences">Configuración guardada</string>
     <string name="saveSummary_preferences">Guarda la configuración actual</string>
     <string name="saveTitle_preferences">Guardar Configuración</string>
-    <string name="functionsTitle_menu">Funciones</string>
+    
     <string name="preferencesTitle_menu">Configuración</string>
     <string name="loginTitle_menu">Conectar</string>
     <string name="loginProgressTitle">Identificación</string>
