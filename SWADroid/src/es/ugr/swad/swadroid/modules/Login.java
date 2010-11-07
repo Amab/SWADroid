@@ -53,7 +53,6 @@ public class Login extends Module {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        prefs.getPreferences(getBaseContext());
         setMETHOD_NAME("loginByUserPassword");
         connect();
     }
@@ -62,7 +61,7 @@ public class Login extends Module {
      * Launches login action in a separate thread while shows a progress dialog
      * in UI thread.
      */
-    public void connect() {
+    private void connect() {
         new Connect().execute();
     }
 
@@ -73,7 +72,7 @@ public class Login extends Module {
      * @throws XmlPullParserException
      * @throws SoapFault
      */
-    public void requestService()
+    private void requestService()
             throws NoSuchAlgorithmException, IOException, XmlPullParserException, SoapFault {
 
         //Encrypts user password with SHA-512 and encodes it to Base64
