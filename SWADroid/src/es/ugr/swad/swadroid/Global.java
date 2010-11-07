@@ -29,6 +29,10 @@ public class Global {
      */
     public static final int LOGIN_REQUEST_CODE = 1;
     /**
+     * User logged flag
+     */
+    public static boolean logged;
+    /**
      * Class Module's tag name for Logcat
      */
     public static final String MODULE_TAG = "Module";
