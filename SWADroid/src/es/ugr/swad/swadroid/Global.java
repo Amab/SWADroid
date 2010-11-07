@@ -57,6 +57,22 @@ public class Global {
      */ 
     public static final String DB_TABLE_TEST_CONFIG = "tst_config";
     /**
+     * Table name for test's configuration
+     */ 
+    public static final String DB_TABLE_MSG_CONTENT = "msg_content";
+    /**
+     * Table name for test's configuration
+     */ 
+    public static final String DB_TABLE_MSG_RCV = "msg_rcv";
+    /**
+     * Table name for test's configuration
+     */ 
+    public static final String DB_TABLE_MSG_SNT = "msg_snt";
+    /**
+     * Table name for test's configuration
+     */ 
+    public static final String DB_TABLE_MARKS = "marks";
+    /**
      * Table name for relationship between notices and courses
      */
     public static final String DB_TABLE_NOTICES_COURSES = "notices_courses";

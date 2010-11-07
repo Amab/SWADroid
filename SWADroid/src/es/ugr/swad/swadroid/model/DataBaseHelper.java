@@ -232,6 +232,36 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 					(Integer) rows.getInt(3),
 					(Boolean) parseStringBool(rows.getString(4)),
 					(Float) rows.getFloat(5));
+		} else if(table.equals(Global.DB_TABLE_MSG_CONTENT)) {
+			o = new MessageContent((Integer) rows.getInt(0),
+					(String) rows.getString(1),
+					(String) rows.getString(2),
+					(Boolean) parseStringBool(rows.getString(3)),
+					(Integer) rows.getInt(4));
+		} else if(table.equals(Global.DB_TABLE_MSG_RCV)) {
+			o = new MessageReceived((Integer) rows.getInt(0),
+					(String) rows.getString(1),
+					(String) rows.getString(2),
+					(Integer) rows.getInt(3),
+					(Boolean) parseStringBool(rows.getString(4)),
+					(Boolean) parseStringBool(rows.getString(5)),
+					(Boolean) parseStringBool(rows.getString(6)),
+					(Boolean) parseStringBool(rows.getString(7)));
+		} else if(table.equals(Global.DB_TABLE_MSG_SNT)) {
+			o = new MessageSent((Integer) rows.getInt(0),
+					(String) rows.getString(1),
+					(String) rows.getString(2),
+					(Boolean) parseStringBool(rows.getString(3)),
+					(Integer) rows.getInt(4),
+					(Integer) rows.getInt(5),
+					(String) rows.getString(6));
+		} else if(table.equals(Global.DB_TABLE_MARKS)) {
+			o = new Mark((Integer) rows.getInt(0),
+					(Integer) rows.getInt(1),
+					(Integer) rows.getInt(2),
+					(String) rows.getString(3),
+					(Integer) rows.getInt(4),
+					(Integer) rows.getInt(5));
 		} else if(table.equals(Global.DB_TABLE_NOTICES_COURSES) ||
 				table.equals(Global.DB_TABLE_STUDENTS_COURSES) ||
 				table.equals(Global.DB_TABLE_TEST_QUESTIONS_COURSES)) {
@@ -311,6 +341,41 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         				+ q.getQuestion() + ", "
         				+ q.getScore() + ", "
         				+ parseBoolString(q.getShuffle())
+        											+ ")";
+        } else if(row instanceof MessageContent) {
+        	MessageContent m = (MessageContent) row;
+        	command += Global.DB_TABLE_MSG_CONTENT + " (msgcod, subject, content) VALUES ("
+        				+ m.getId() + ", "
+        				+ m.getSubject() + ", "
+        				+ m.getContent()
+        											+ ")";
+        } else if(row instanceof MessageReceived) {
+        	MessageReceived m = (MessageReceived) row;
+        	command += Global.DB_TABLE_MSG_RCV + " (msgcod, usrcod, notified, open, replied, expanded) VALUES ("
+        				+ m.getId() + ", "
+        				+ m.getUsrcod() + ", "
+        				+ parseBoolString(m.isNotified()) + ", "
+        				+ parseBoolString(m.isOpen()) + ", "
+        				+ parseBoolString(m.isReplied()) + ", "
+        				+ parseBoolString(m.isExpanded())
+        											+ ")";
+        } else if(row instanceof MessageSent) {
+        	MessageSent m = (MessageSent) row;
+        	command += Global.DB_TABLE_MSG_SNT + " (msgcod, crscod, usrcod, creattime, expanded) VALUES ("
+        				+ m.getId() + ", "
+        				+ m.getCrscod() + ", "
+        				+ m.getUsrcod() + ", "
+        				+ m.getCreattime() + ", "
+        				+ parseBoolString(m.isExpanded())
+        											+ ")";
+        } else if(row instanceof Mark) {
+        	Mark m = (Mark) row;
+        	command += Global.DB_TABLE_MARKS + " (crscod, grpcod, path, header, footer) VALUES ("
+        				+ m.getCrscod() + ", "
+        				+ m.getGrpcod() + ", "
+        				+ m.getPath() + ", "
+        				+ m.getHeader() + ", "
+        				+ m.getFooter()
         											+ ")";
         } else if(row instanceof PairTable) {
         	PairTable<?, ?> p = (PairTable<?, ?>) row;
