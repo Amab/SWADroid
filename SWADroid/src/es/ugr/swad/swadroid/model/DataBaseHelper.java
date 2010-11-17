@@ -296,106 +296,191 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 	
 	/**
-	 * Inserts a row into the appropriated table looking at the Model's subclass of the object to be inserted
-	 * @param row Model's subclass object
+	 * Inserts a course in database
+	 * @param c Course to be inserted
 	 */
-	public void insertRow(Model row)
+	public void insertCourse(Course c)
     {
-        String command = "INSERT INTO ";
+		String command = "INSERT INTO "
+						+ Global.DB_TABLE_COURSES
+						+ " (_id, name) VALUES ("
+						+ c.getId() + ", "
+						+ c.getName()
+									+ ")";
         
-        if(row instanceof Course) {
-        	Course c = (Course) row;
-        	command += Global.DB_TABLE_COURSES + " (_id, name) VALUES ("
-        				+ c.getId() + ", "
-    					+ c.getName()
-    								+ ")";
-        } else if(row instanceof Notice) {
-        	Notice n = (Notice) row;
-        	command += Global.DB_TABLE_NOTICES + " (_id, timestamp, description) VALUES ("
+		swadroidDataBase.execSQL(command, null);
+    }
+	
+	/**
+	 * Inserts a notice in database
+	 * @param n Notice to be inserted
+	 */
+	public void insertNotice(Notice n)
+    {
+		String command = "INSERT INTO "
+						+ Global.DB_TABLE_NOTICES
+						+ " (_id, timestamp, description) VALUES ("
 						+ n.getId() + ", "
-    					+ n.getTimestamp() + ", "
-    					+ n.getDescription()
-    										+ ")";
-        } else if(row instanceof Student) {
-        	Student s = (Student) row;
-        	command += Global.DB_TABLE_STUDENTS + " (_id, dni, firstname, surname1, surname2) VALUES ("
-        				+ s.getId() + ", "
-        				+ s.getDni() + ", "
-        				+ s.getFirstName() + ", "
-        				+ s.getSurname1() + ", "
-        				+ s.getSurname2()
-        								+ ")";
-        } else if(row instanceof TestAnswer) {
-        	TestAnswer a = (TestAnswer) row;
-        	command += Global.DB_TABLE_TEST_ANSWERS + " (_id, answer, correct) VALUES ("
-        				+ a.getId() + ", "
-        				+ a.getAnswer() + ", "
-        				+ parseBoolInt(a.getCorrect())
-        											+ ")";
-        } else if(row instanceof TestQuestion) {
-        	TestQuestion q = (TestQuestion) row;
-        	command += Global.DB_TABLE_TEST_QUESTIONS + " (_id, anstype, numhits, question, score, shuffle) VALUES ("
-        				+ q.getId() + ", "
-        				+ q.getAnstype() + ", "
-        				+ q.getNumhits() + ", "
-        				+ q.getQuestion() + ", "
-        				+ q.getScore() + ", "
-        				+ parseBoolString(q.getShuffle())
-        											+ ")";
-        } else if(row instanceof MessageContent) {
-        	MessageContent m = (MessageContent) row;
-        	command += Global.DB_TABLE_MSG_CONTENT + " (msgcod, subject, content) VALUES ("
-        				+ m.getId() + ", "
-        				+ m.getSubject() + ", "
-        				+ m.getContent()
-        											+ ")";
-        } else if(row instanceof MessageReceived) {
-        	MessageReceived m = (MessageReceived) row;
-        	command += Global.DB_TABLE_MSG_RCV + " (msgcod, usrcod, notified, open, replied, expanded) VALUES ("
-        				+ m.getId() + ", "
-        				+ m.getUsrcod() + ", "
-        				+ parseBoolString(m.isNotified()) + ", "
-        				+ parseBoolString(m.isOpen()) + ", "
-        				+ parseBoolString(m.isReplied()) + ", "
-        				+ parseBoolString(m.isExpanded())
-        											+ ")";
-        } else if(row instanceof MessageSent) {
-        	MessageSent m = (MessageSent) row;
-        	command += Global.DB_TABLE_MSG_SNT + " (msgcod, crscod, usrcod, creattime, expanded) VALUES ("
-        				+ m.getId() + ", "
-        				+ m.getCrscod() + ", "
-        				+ m.getUsrcod() + ", "
-        				+ m.getCreattime() + ", "
-        				+ parseBoolString(m.isExpanded())
-        											+ ")";
-        } else if(row instanceof Mark) {
-        	Mark m = (Mark) row;
-        	command += Global.DB_TABLE_MARKS + " (crscod, grpcod, path, header, footer) VALUES ("
-        				+ m.getCrscod() + ", "
-        				+ m.getGrpcod() + ", "
-        				+ m.getPath() + ", "
-        				+ m.getHeader() + ", "
-        				+ m.getFooter()
-        											+ ")";
-        } else if(row instanceof PairTable) {
-        	PairTable<?, ?> p = (PairTable<?, ?>) row;
-        	String table = p.getTable();
-        	command += table + " ";
-        	
-        	if(table.equals(Global.DB_TABLE_NOTICES_COURSES)) {
-        		command +=  " (idcourse, idnotice) VALUES (";
-        	} else if(table.equals(Global.DB_TABLE_STUDENTS_COURSES)) {
-        		command +=  " (idcourse, idstudent) VALUES (";
-        	} else if(table.equals(Global.DB_TABLE_TEST_QUESTIONS_COURSES)) {
-        		command +=  " (crscod, qstcod) VALUES (";
-        	}
-        	
-        	command += p.getFirst() + ", "
-        			+ p.getSecond()
-        							+ ")";
-        	
-        }
+						+ n.getTimestamp() + ", "
+						+ n.getDescription()
+											+ ")";
         
-        swadroidDataBase.execSQL(command, null);
+		swadroidDataBase.execSQL(command, null);
+    }
+	
+	/**
+	 * Inserts a student in database
+	 * @param s Student to be inserted
+	 */
+	public void insertStudent(Student s)
+    {
+		String command = "INSERT INTO "
+						+ Global.DB_TABLE_STUDENTS
+						+ " (_id, dni, firstname, surname1, surname2) VALUES ("
+						+ s.getId() + ", "
+						+ s.getDni() + ", "
+						+ s.getFirstName() + ", "
+						+ s.getSurname1() + ", "
+						+ s.getSurname2()
+											+ ")";
+        
+		swadroidDataBase.execSQL(command, null);
+    }
+	
+	/**
+	 * Inserts a test answer in database
+	 * @param a test answer to be inserted
+	 */
+	public void insertTestAnswer(TestAnswer a)
+    {
+		String command = "INSERT INTO "
+						+ Global.DB_TABLE_TEST_ANSWERS
+						+ " (_id, answer, correct) VALUES ("
+						+ a.getId() + ", "
+						+ a.getAnswer() + ", "
+						+ parseBoolInt(a.getCorrect())
+													+ ")";
+        
+		swadroidDataBase.execSQL(command, null);
+    }
+	
+	/**
+	 * Inserts a test question in database
+	 * @param q test question to be inserted
+	 */
+	public void insertTestQuestion(TestQuestion q)
+    {
+		String command = "INSERT INTO "
+						+ Global.DB_TABLE_TEST_QUESTIONS
+						+ " (_id, anstype, numhits, question, score, shuffle) VALUES ("
+						+ q.getId() + ", "
+						+ q.getAnstype() + ", "
+						+ q.getNumhits() + ", "
+						+ q.getQuestion() + ", "
+						+ q.getScore() + ", "
+						+ parseBoolString(q.getShuffle())
+														+ ")";
+        
+		swadroidDataBase.execSQL(command, null);
+    }
+	
+	/**
+	 * Inserts a message in database
+	 * @param m Message to be inserted
+	 */
+	public void insertMessageContent(MessageContent m)
+    {
+		String command = "INSERT INTO "
+						+ Global.DB_TABLE_MSG_CONTENT
+						+ " (msgcod, subject, content) VALUES ("
+						+ m.getId() + ", "
+						+ m.getSubject() + ", "
+						+ m.getContent()
+										+ ")";
+        
+		swadroidDataBase.execSQL(command, null);
+    }
+	
+	/**
+	 * Inserts a received message in database
+	 * @param m Message to be inserted
+	 */
+	public void insertMessageReceived(MessageReceived m)
+    {
+		String command = "INSERT INTO "
+						+ Global.DB_TABLE_MSG_RCV
+						+ " (msgcod, usrcod, notified, open, replied, expanded) VALUES ("
+						+ m.getId() + ", "
+						+ m.getUsrcod() + ", "
+						+ parseBoolString(m.isNotified()) + ", "
+						+ parseBoolString(m.isOpen()) + ", "
+						+ parseBoolString(m.isReplied()) + ", "
+						+ parseBoolString(m.isExpanded())
+														+ ")";
+        
+		swadroidDataBase.execSQL(command, null);
+    }
+	
+	/**
+	 * Inserts a sent message in database
+	 * @param m Message to be inserted
+	 */
+	public void insertMessageSent(MessageSent m)
+    {
+		String command = "INSERT INTO "
+						+ Global.DB_TABLE_MSG_SNT
+						+ " (msgcod, crscod, usrcod, creattime, expanded) VALUES ("
+						+ m.getId() + ", "
+						+ m.getCrscod() + ", "
+						+ m.getUsrcod() + ", "
+						+ m.getCreattime() + ", "
+						+ parseBoolString(m.isExpanded())
+														+ ")";
+        
+		swadroidDataBase.execSQL(command, null);
+    }
+	
+	/**
+	 * Inserts a mark in database
+	 * @param m Mark to be inserted
+	 */
+	public void insertMark(Mark m)
+    {
+		String command = "INSERT INTO "
+						+ Global.DB_TABLE_MARKS
+						+ " (crscod, grpcod, path, header, footer) VALUES ("
+						+ m.getCrscod() + ", "
+						+ m.getGrpcod() + ", "
+						+ m.getPath() + ", "
+						+ m.getHeader() + ", "
+						+ m.getFooter()
+											+ ")";
+        
+		swadroidDataBase.execSQL(command, null);
+    }
+	
+	/**
+	 * Inserts a relation in database
+	 * @param p Relation to be inserted
+	 */
+	public void insertPairTable(PairTable<?, ?> p)
+    {
+		String command = "INSERT INTO ";
+		String table = p.getTable();
+    	command += table + " ";
+    	
+    	if(table.equals(Global.DB_TABLE_NOTICES_COURSES)) {
+    		command +=  " (idcourse, idnotice) VALUES (";
+    	} else if(table.equals(Global.DB_TABLE_STUDENTS_COURSES)) {
+    		command +=  " (idcourse, idstudent) VALUES (";
+    	} else if(table.equals(Global.DB_TABLE_TEST_QUESTIONS_COURSES)) {
+    		command +=  " (crscod, qstcod) VALUES (";
+    	}
+    	
+    	command += p.getFirst() + ", "
+    			+ p.getSecond()
+    							+ ")";
+        
+		swadroidDataBase.execSQL(command, null);
     }
 }
