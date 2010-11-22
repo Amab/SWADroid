@@ -29,7 +29,6 @@ public class Global {
      */
     public static final int LOGIN_REQUEST_CODE = 1;
     /**
-<<<<<<< HEAD
      * User logged flag
      */
     public static boolean logged;
@@ -41,12 +40,12 @@ public class Global {
         ADMIN,
         STUDENT,
         TEACHER
-    } 
+    }
     /**
      * Class Module's tag name for Logcat
      */
     public static final String MODULE_TAG = "Module";
-=======
+    /*
      * Table name for courses
      */
     public static final String DB_TABLE_COURSES = "courses";
@@ -106,5 +105,4 @@ public class Global {
      * Table name for for relationship between test's questions and tags
      */ 
     public static final String DB_TABLE_TEST_QUESTIONS_TAGS = "tst_questions_tags";
->>>>>>> feature/database
 }
