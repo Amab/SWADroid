@@ -87,14 +87,14 @@ public class Login extends Module {
         sendRequest();
 
         //Stores user data returned by webservice response
-        User.setUserCode((String) result.getProperty("userCode"));
-        User.setUserTypeCode((String) result.getProperty("userTypeCode"));
-        User.setWsKey((String) result.getProperty("wsKey"));
-        User.setUserID((String) result.getProperty("userID"));
-        User.setUserSurname1((String) result.getProperty("userSurname1"));
-        User.setUserSurname2((String) result.getProperty("userSurname2"));
-        User.setUserFirstName((String) result.getProperty("userFirstName"));
-        User.setUserTypeName((String) result.getProperty("userTypeName"));
+        User.setUserCode(result.getProperty("userCode").toString());
+        User.setUserTypeCode(result.getProperty("userTypeCode").toString());
+        User.setWsKey(result.getProperty("wsKey").toString());
+        User.setUserID(result.getProperty("userID").toString());
+        User.setUserSurname1(result.getProperty("userSurname1").toString());
+        User.setUserSurname2(result.getProperty("userSurname2").toString());
+        User.setUserFirstName(result.getProperty("userFirstName").toString());
+        User.setUserTypeName(result.getProperty("userTypeName").toString());
 
         //Request finalized without errors
         setResult(RESULT_OK);
