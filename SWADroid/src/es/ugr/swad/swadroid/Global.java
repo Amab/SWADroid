@@ -68,7 +68,7 @@ public class Global {
     /**
      * Table name for test's tags
      */ 
-    public static final String DB_TABLE_TEST_tags = "tst_tags";
+    public static final String DB_TABLE_TEST_TAGS = "tst_tags";
     /**
      * Table name for test's configuration
      */ 
