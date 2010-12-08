@@ -31,7 +31,7 @@ public class Global {
     /**
      * User logged flag
      */
-    public static boolean logged;
+    private static boolean logged;
     /**
      * Enum type defining allowed user types
      */
@@ -105,4 +105,18 @@ public class Global {
      * Table name for for relationship between test's questions and tags
      */ 
     public static final String DB_TABLE_TEST_QUESTIONS_TAGS = "tst_questions_tags";
+	/**
+	 * Checks if user is already logged on SWAD
+	 * @return User logged flag
+	 */
+	public static boolean isLogged() {
+		return logged;
+	}
+	/**
+	 * Sets user logged flag
+	 * @param logged User logged flag
+	 */
+	public static void setLogged(boolean logged) {
+		Global.logged = logged;
+	}
 }

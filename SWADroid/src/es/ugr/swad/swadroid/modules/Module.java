@@ -196,7 +196,7 @@ public class Module extends Activity {
         prefs.getPreferences(getBaseContext());
         
         //If not logged and this is not the Login module, launch login
-        if(!Global.logged && !(this instanceof Login)) {
+        if(!Global.isLogged() && !(this instanceof Login)) {
         	Intent loginActivity = new Intent(getBaseContext(),
                     Login.class);
             startActivityForResult(loginActivity, Global.LOGIN_REQUEST_CODE);
@@ -216,7 +216,7 @@ public class Module extends Activity {
 
             switch(requestCode) {
                 case Global.LOGIN_REQUEST_CODE:
-                     Global.logged = true;
+                     Global.setLogged(true);
                      break;
             }
         }

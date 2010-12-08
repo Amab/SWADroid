@@ -19,7 +19,6 @@
 
 package es.ugr.swad.swadroid;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -104,9 +103,9 @@ public class Preferences extends PreferenceActivity {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
         //Get the custom preference
-        Preference savePref = (Preference) findPreference("savePref");
-        Preference userIDPref = (Preference) findPreference("userIDPref");
-        Preference userPasswordPref = (Preference) findPreference("userPasswordPref");
+        Preference savePref = findPreference("savePref");
+        Preference userIDPref = findPreference("userIDPref");
+        Preference userPasswordPref = findPreference("userPasswordPref");
         userIDPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
             /**
@@ -146,12 +145,12 @@ public class Preferences extends PreferenceActivity {
                         R.string.saveMsg_preferences,
                         Toast.LENGTH_LONG).show();
                 SharedPreferences saveSharedPreference = getSharedPreferences(
-                        "SWADroidSharedPrefs", Activity.MODE_PRIVATE);
+                        "SWADroidSharedPrefs", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = saveSharedPreference.edit();
                 
                 //If user ID or password have changed, logout automatically to force a new login
                 if(!userID.equals(oldUserID) || !userPassword.equals(oldUserPassword)) {
-                	Global.logged = false;
+                	Global.setLogged(false);
                 }
 
                 editor.putString("userIDPref", userID);
