@@ -19,6 +19,8 @@
 
 package es.ugr.swad.swadroid;
 
+import com.android.dataframework.DataFramework;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -28,6 +30,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.Window;
+import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
 
@@ -40,10 +43,16 @@ public class SWADMain extends Activity {
      * Application preferences.
      */
     protected static Preferences prefs = new Preferences();
+    
     /**
-     * Login flag.
+     * Database Helper.
      */
-    boolean logged = false;
+    protected static DataBaseHelper dbHelper;
+    
+    /**
+     * Database Framework.
+     */
+    protected static DataFramework db;
 
     /**
      * Shows an error message.
@@ -71,11 +80,11 @@ public class SWADMain extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
+        inflater.inflate(R.menu.menu_main, menu);
         return true;
     }
 
-    /**
+	/**
      * Called when an item of menu is selected.
      * @param item Item selected.
      * @return true if action was performed.
@@ -84,17 +93,15 @@ public class SWADMain extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.functions_menu:
-                return true;
+	        case R.id.login_menu:
+	            Intent loginActivity = new Intent(getBaseContext(),
+	                    Login.class);
+	            startActivityForResult(loginActivity, Global.LOGIN_REQUEST_CODE);
+	            return true;
             case R.id.preferences_menu:
                 Intent settingsActivity = new Intent(getBaseContext(),
                         Preferences.class);
                 startActivity(settingsActivity);
-                return true;
-            case R.id.login_menu:
-                Intent loginActivity = new Intent(getBaseContext(),
-                        Login.class);
-                startActivityForResult(loginActivity, Global.LOGIN_REQUEST_CODE);
                 return true;
         }
 
@@ -114,7 +121,7 @@ public class SWADMain extends Activity {
 
             switch(requestCode) {
                 case Global.LOGIN_REQUEST_CODE:
-                     logged = true;
+                     Global.setLogged(true);
                      break;
             }
         }
@@ -141,7 +148,11 @@ public class SWADMain extends Activity {
             w.requestFeature(Window.FEATURE_LEFT_ICON);
             setContentView(R.layout.main);
             w.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.swadroid);
-
+            
+            db = DataFramework.getInstance();
+            db.open(this, this.getPackageName());
+            dbHelper = new DataBaseHelper(db);
+            
             prefs.getPreferences(getBaseContext());
             SecureConnection.initSecureConnection();
         } catch (Exception ex) {
@@ -150,4 +161,13 @@ public class SWADMain extends Activity {
             ex.printStackTrace();
         }
     }
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onDestroy()
+	 */
+	@Override
+	protected void onDestroy() {
+		dbHelper.close();
+		super.onDestroy();
+	}
 }

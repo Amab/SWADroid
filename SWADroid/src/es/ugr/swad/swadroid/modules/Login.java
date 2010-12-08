@@ -53,7 +53,6 @@ public class Login extends Module {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        prefs.getPreferences(getBaseContext());
         setMETHOD_NAME("loginByUserPassword");
         connect();
     }
@@ -62,7 +61,7 @@ public class Login extends Module {
      * Launches login action in a separate thread while shows a progress dialog
      * in UI thread.
      */
-    public void connect() {
+    private void connect() {
         new Connect().execute();
     }
 
@@ -73,7 +72,7 @@ public class Login extends Module {
      * @throws XmlPullParserException
      * @throws SoapFault
      */
-    public void requestService()
+    private void requestService()
             throws NoSuchAlgorithmException, IOException, XmlPullParserException, SoapFault {
 
         //Encrypts user password with SHA-512 and encodes it to Base64
@@ -88,14 +87,14 @@ public class Login extends Module {
         sendRequest();
 
         //Stores user data returned by webservice response
-        User.setUserCode((String) result.getProperty("userCode"));
-        User.setUserTypeCode((String) result.getProperty("userTypeCode"));
-        User.setWsKey((String) result.getProperty("wsKey"));
-        User.setUserID((String) result.getProperty("userID"));
-        User.setUserSurname1((String) result.getProperty("userSurname1"));
-        User.setUserSurname2((String) result.getProperty("userSurname2"));
-        User.setUserFirstName((String) result.getProperty("userFirstName"));
-        User.setUserTypeName((String) result.getProperty("userTypeName"));
+        User.setUserCode(result.getProperty("userCode").toString());
+        User.setUserTypeCode(result.getProperty("userTypeCode").toString());
+        User.setWsKey(result.getProperty("wsKey").toString());
+        User.setUserID(result.getProperty("userID").toString());
+        User.setUserSurname1(result.getProperty("userSurname1").toString());
+        User.setUserSurname2(result.getProperty("userSurname2").toString());
+        User.setUserFirstName(result.getProperty("userFirstName").toString());
+        User.setUserTypeName(result.getProperty("userTypeName").toString());
 
         //Request finalized without errors
         setResult(RESULT_OK);
@@ -129,7 +128,8 @@ public class Login extends Module {
          * @param urls Background thread parameters.
          * @return Nothing.
          */
-        protected Void doInBackground(String... urls) {
+        @Override
+		protected Void doInBackground(String... urls) {
             try {
                 //Sends webservice request
                 requestService();
@@ -163,7 +163,7 @@ public class Login extends Module {
                     SoapFault es = (SoapFault) e;
                     Log.e(es.getClass().getSimpleName(), es.faultstring);
                     error(es.faultstring);
-                } else if(e instanceof Exception) {
+                } else {
                     Log.e(e.getClass().getSimpleName(), e.toString());
                     error(e.toString());
                 }

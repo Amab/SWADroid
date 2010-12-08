@@ -19,13 +19,12 @@
 
 package es.ugr.swad.swadroid;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
 import android.preference.Preference.OnPreferenceClickListener;
+import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 
@@ -37,11 +36,20 @@ public class Preferences extends PreferenceActivity {
     /**
      * User identifier.
      */
-    String userID;
+    private String userID;
     /**
      * User password.
      */
-    String userPassword;
+    private String userPassword;
+    /**
+     * Old user identifier
+     */
+    private String oldUserID;
+
+	/**
+     * Old user password 
+     */
+    private String oldUserPassword;
 
     /**
      * Gets user identifier.
@@ -58,6 +66,22 @@ public class Preferences extends PreferenceActivity {
     public String getUserPassword() {
         return userPassword;
     }
+
+    /**
+     * Gets old user identifier
+	 * @return Old user identifier
+	 */
+	public String getOldUserID() {
+		return oldUserID;
+	}
+
+	/**
+	 * Gets old user password
+	 * @return Old user password
+	 */
+	public String getOldUserPassword() {
+		return oldUserPassword;
+	}
 
     /**
      * Initializes preferences of activity.
@@ -78,9 +102,39 @@ public class Preferences extends PreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
-        // Get the custom preference
-        Preference customPref = (Preference) findPreference("savePref");
-        customPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+        //Get the custom preference
+        Preference savePref = findPreference("savePref");
+        Preference userIDPref = findPreference("userIDPref");
+        Preference userPasswordPref = findPreference("userPasswordPref");
+        userIDPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+
+            /**
+             * Called when a preference is selected.
+             * @param preference Preference selected.
+             */
+            public boolean onPreferenceClick(Preference preference) {
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                userID = prefs.getString("userIDPref", "");
+                //Save userID before change it
+                oldUserID = userID;
+                return true;
+            }
+        });
+        userPasswordPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+
+            /**
+             * Called when a preference is selected.
+             * @param preference Preference selected.
+             */
+            public boolean onPreferenceClick(Preference preference) {
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                userPassword = prefs.getString("userPasswordPref", "");
+                //Save userPassword before change it
+                oldUserPassword = userPassword;
+                return true;
+            }
+        });
+        savePref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
             /**
              * Called when a preference is selected.
@@ -90,9 +144,14 @@ public class Preferences extends PreferenceActivity {
                 Toast.makeText(getBaseContext(),
                         R.string.saveMsg_preferences,
                         Toast.LENGTH_LONG).show();
-                SharedPreferences customSharedPreference = getSharedPreferences(
-                        "SWADroidSharedPrefs", Activity.MODE_PRIVATE);
-                SharedPreferences.Editor editor = customSharedPreference.edit();
+                SharedPreferences saveSharedPreference = getSharedPreferences(
+                        "SWADroidSharedPrefs", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = saveSharedPreference.edit();
+                
+                //If user ID or password have changed, logout automatically to force a new login
+                if(!userID.equals(oldUserID) || !userPassword.equals(oldUserPassword)) {
+                	Global.setLogged(false);
+                }
 
                 editor.putString("userIDPref", userID);
                 editor.putString("userPasswordPref", userPassword);

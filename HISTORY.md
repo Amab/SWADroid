@@ -1,3 +1,11 @@
+## 0.2 (2010-12-08)
+
+* Added auto logout when user id or password changes
+* Added initial database
+* Added Android JUnit tests project
+* Added Android DataFrameWork license in README.md
+* Removed install location for Android 1.6 compatibility
+
 ## 0.1.1 (2010-11-06)
 
 * Added workaround for Android emulator bug

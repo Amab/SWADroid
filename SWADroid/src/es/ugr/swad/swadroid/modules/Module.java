@@ -22,6 +22,8 @@ package es.ugr.swad.swadroid.modules;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.Preferences;
@@ -183,11 +185,47 @@ public class Module extends Activity {
     public void setResult(SoapObject result) {
         this.result = result;
     }
-
+    
     /**
+     * Called when activity is first created.
+     * @param savedInstanceState State of activity.
+     */
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+        prefs.getPreferences(getBaseContext());
+        
+        //If not logged and this is not the Login module, launch login
+        if(!Global.isLogged() && !(this instanceof Login)) {
+        	Intent loginActivity = new Intent(getBaseContext(),
+                    Login.class);
+            startActivityForResult(loginActivity, Global.LOGIN_REQUEST_CODE);
+        }
+	}
+	
+	/**
+     * Handles the result of launch an activity and performs an action.
+     * @param requestCode Identifier of action requested.
+     * @param resultCode Status of activity's result (correct or not).
+     * @param data Data returned by launched activity.
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            //Bundle extras = data.getExtras();
+
+            switch(requestCode) {
+                case Global.LOGIN_REQUEST_CODE:
+                     Global.setLogged(true);
+                     break;
+            }
+        }
+    }
+
+	/**
      * Creates webservice request.
      */
-    public void createRequest() {
+	protected void createRequest() {
         request = new SoapObject(NAMESPACE, METHOD_NAME);
         result = null;
     }
@@ -197,7 +235,7 @@ public class Module extends Activity {
      * @param param Parameter name.
      * @param value Parameter value.
      */
-    public void addParam(String param, Object value) {
+    protected void addParam(String param, Object value) {
         request.addProperty(param, value);
     }
 
@@ -207,7 +245,7 @@ public class Module extends Activity {
      * @throws XmlPullParserException
      * @throws SoapFault
      */
-    public void sendRequest() throws IOException, XmlPullParserException, SoapFault {
+    protected void sendRequest() throws IOException, XmlPullParserException, SoapFault {
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         envelope.setOutputSoapObject(request);
         HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
@@ -229,7 +267,7 @@ public class Module extends Activity {
      * Shows an error message.
      * @param message Error message to show.
      */
-    public void error(String message) {
+    protected void error(String message) {
         errorDialog = new AlertDialog
                 .Builder(this)
                 .setTitle(R.string.title_error_dialog)
