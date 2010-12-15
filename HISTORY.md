@@ -1,3 +1,8 @@
+## 0.2.1 (2010-12-15)
+
+* Added Android 2.3 Gingerbread compatibility
+* Completed login module
+
 ## 0.2 (2010-12-08)
 
 * Added auto logout when user id or password changes

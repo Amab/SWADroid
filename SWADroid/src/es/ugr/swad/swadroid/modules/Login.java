@@ -22,13 +22,14 @@ package es.ugr.swad.swadroid.modules;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
+import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import org.kobjects.base64.Base64;
 import org.ksoap2.SoapFault;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -53,7 +54,7 @@ public class Login extends Module {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setMETHOD_NAME("loginByUserPassword");
+        setMETHOD_NAME("loginByUserPasswordKey");
         connect();
     }
 
@@ -75,26 +76,27 @@ public class Login extends Module {
     private void requestService()
             throws NoSuchAlgorithmException, IOException, XmlPullParserException, SoapFault {
 
-        //Encrypts user password with SHA-512 and encodes it to Base64
+        //Encrypts user password with SHA-512 and encodes it to Base64    	
         md = MessageDigest.getInstance("SHA-512");
         md.update(prefs.getUserPassword().getBytes());
-        userPassword = Base64.encode(md.digest());
+        userPassword = new String(Base64.encode(md.digest(), Base64.URL_SAFE + Base64.NO_PADDING + Base64.NO_WRAP));
 
         //Creates webservice request, adds required params and sends request to webservice
         createRequest();
         addParam("userID", prefs.getUserID());
         addParam("userPassword", userPassword);
+        addParam("appKey", Global.getAppKey());
         sendRequest();
 
         //Stores user data returned by webservice response
-        User.setUserCode(result.getProperty("userCode").toString());
-        User.setUserTypeCode(result.getProperty("userTypeCode").toString());
-        User.setWsKey(result.getProperty("wsKey").toString());
-        User.setUserID(result.getProperty("userID").toString());
-        User.setUserSurname1(result.getProperty("userSurname1").toString());
-        User.setUserSurname2(result.getProperty("userSurname2").toString());
-        User.setUserFirstName(result.getProperty("userFirstName").toString());
-        User.setUserTypeName(result.getProperty("userTypeName").toString());
+        User.setUserCode(result.get(0).toString());
+        User.setUserTypeCode(result.get(1).toString());
+        User.setWsKey(result.get(2).toString());
+        User.setUserID(result.get(3).toString());
+        User.setUserSurname1(result.get(4).toString());
+        User.setUserSurname2(result.get(5).toString());
+        User.setUserFirstName(result.get(6).toString());
+        User.setUserTypeName(result.get(7).toString());
 
         //Request finalized without errors
         setResult(RESULT_OK);
