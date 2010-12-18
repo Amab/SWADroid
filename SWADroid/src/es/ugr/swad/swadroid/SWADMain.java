@@ -30,6 +30,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.Window;
+import android.widget.Toast;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.Login;
@@ -123,6 +124,18 @@ public class SWADMain extends Activity {
             switch(requestCode) {
                 case Global.LOGIN_REQUEST_CODE:
                      Global.setLogged(true);
+                     Toast.makeText(getBaseContext(),
+                             R.string.loginSuccessfulMsg,
+                             Toast.LENGTH_LONG).show();
+                     Log.d(Global.LOGIN_TAG, getString(R.string.loginSuccessfulMsg));
+                     /*Log.d(Global.LOGIN_TAG, "userCode=" + User.getUserCode());
+                     Log.d(Global.LOGIN_TAG, "userTypeCode=" + User.getUserTypeCode());
+                     Log.d(Global.LOGIN_TAG, "userTypeName=" + User.getUserTypeName());
+                     Log.d(Global.LOGIN_TAG, "userID=" + User.getUserID());
+                     Log.d(Global.LOGIN_TAG, "userFirstName=" + User.getUserFirstName());
+                     Log.d(Global.LOGIN_TAG, "userSurname1=" + User.getUserSurname1());
+                     Log.d(Global.LOGIN_TAG, "userSurname2=" + User.getUserSurname2());
+                     Log.d(Global.LOGIN_TAG, "wsKey=" + User.getWsKey());*/
                      break;
             }
         }
