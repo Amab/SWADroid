@@ -22,7 +22,7 @@ package es.ugr.swad.swadroid.modules;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Base64;
+//import android.util.Base64;
 import android.util.Log;
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
@@ -30,6 +30,7 @@ import es.ugr.swad.swadroid.model.User;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import org.kobjects.base64.Base64;
 import org.ksoap2.SoapFault;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -79,7 +80,9 @@ public class Login extends Module {
         //Encrypts user password with SHA-512 and encodes it to Base64    	
         md = MessageDigest.getInstance("SHA-512");
         md.update(prefs.getUserPassword().getBytes());
-        userPassword = new String(Base64.encode(md.digest(), Base64.URL_SAFE + Base64.NO_PADDING + Base64.NO_WRAP));
+        //userPassword = new String(Base64.encode(md.digest(), Base64.URL_SAFE + Base64.NO_PADDING + Base64.NO_WRAP));
+        userPassword = new String(Base64.encode(md.digest()));
+        userPassword = userPassword.replace('+','-').replace('/','_').replace('=', ' ').replaceAll("\\s+", "").trim();
 
         //Creates webservice request, adds required params and sends request to webservice
         createRequest();
