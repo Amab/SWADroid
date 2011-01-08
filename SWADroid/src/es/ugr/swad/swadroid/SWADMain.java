@@ -21,15 +21,18 @@ package es.ugr.swad.swadroid;
 
 import com.android.dataframework.DataFramework;
 
-import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.modules.Login;
@@ -39,7 +42,7 @@ import es.ugr.swad.swadroid.ssl.SecureConnection;
  * Main class of the application.
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
-public class SWADMain extends Activity {
+public class SWADMain extends ListActivity {
     /**
      * Application preferences.
      */
@@ -48,12 +51,15 @@ public class SWADMain extends Activity {
     /**
      * Database Helper.
      */
-    protected static DataBaseHelper dbHelper;
-    
+    protected static DataBaseHelper dbHelper;    
     /**
      * Database Framework.
      */
     protected static DataFramework db;
+    /**
+     * Array of strings for main ListView
+     */
+    protected String[] functions;
     
     /**
      * Shows Preferences screen
@@ -115,7 +121,7 @@ public class SWADMain extends Activity {
 	 */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK) {
+        if (resultCode == ListActivity.RESULT_OK) {
             //Bundle extras = data.getExtras();
 
             switch(requestCode) {
@@ -137,6 +143,16 @@ public class SWADMain extends Activity {
             }
         }
     }
+    
+    @Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		super.onListItemClick(l, v, position, id);
+		// Get the item that was clicked
+		Object o = this.getListAdapter().getItem(position);
+		String keyword = o.toString();
+		Toast.makeText(this, keyword + " aún no implementado", Toast.LENGTH_LONG)
+				.show();
+	}
 
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onStart()
@@ -157,14 +173,17 @@ public class SWADMain extends Activity {
             Window w = getWindow();
             w.requestFeature(Window.FEATURE_LEFT_ICON);
             setContentView(R.layout.main);
-            w.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.swadroid);
+            w.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.swadroid);   
+            
+            functions = getResources().getStringArray(R.array.functions);
+            setListAdapter(new ArrayAdapter<String>(this, R.layout.functions_list_item, functions));
             
             db = DataFramework.getInstance();
             db.open(this, this.getPackageName());
             dbHelper = new DataBaseHelper(db);
             
             prefs.getPreferences(getBaseContext());
-            SecureConnection.initSecureConnection();
+            SecureConnection.initSecureConnection(); 
             
             if(prefs.getFirstRun()) {
             	viewPreferences();
