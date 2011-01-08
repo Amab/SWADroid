@@ -32,6 +32,10 @@ public class Global {
      * User logged flag
      */
     private static boolean logged;
+	/**
+	 * Name of application preferences
+	 */
+	private static final String PREFS_NAME = "SWADroidSharedPrefs";
     /**
      * Request code for Login module.
      */
@@ -133,5 +137,12 @@ public class Global {
 	 */
 	public static void setLogged(boolean logged) {
 		Global.logged = logged;
+	}
+	/**
+	 * Gets Application preferences name
+	 * @return SharedPreferences name
+	 */
+	public static String getPrefsName() {
+		return PREFS_NAME;
 	}
 }
