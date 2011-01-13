@@ -169,7 +169,8 @@ public class Preferences extends PreferenceActivity {
                 SharedPreferences.Editor editor = saveSharedPreference.edit();
                 
                 //If user ID or password have changed, logout automatically to force a new login
-                if(!userID.equals(oldUserID) || !userPassword.equals(oldUserPassword)) {
+                if(userID != null && oldUserID != null && userPassword != null && oldUserPassword != null &&
+                		(!userID.equals(oldUserID) || !userPassword.equals(oldUserPassword))) {
                 	Global.setLogged(false);
                 }
 
