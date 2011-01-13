@@ -19,11 +19,16 @@
 
 package es.ugr.swad.swadroid.model;
 
+import java.util.Hashtable;
+
+import org.ksoap2.serialization.KvmSerializable;
+import org.ksoap2.serialization.PropertyInfo;
+
 /**
  * User data.
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
-public class User {
+public class User implements KvmSerializable {
     /**
      * User code.
      */
@@ -56,6 +61,25 @@ public class User {
      * Name of the user type.
      */
     private static String userTypeName;
+    private static PropertyInfo PI_userCode = new PropertyInfo();
+    private static PropertyInfo PI_userTypeCode = new PropertyInfo();
+    private static PropertyInfo PI_wsKey = new PropertyInfo();
+    private static PropertyInfo PI_userID = new PropertyInfo();
+    private static PropertyInfo PI_userSurname1 = new PropertyInfo();
+    private static PropertyInfo PI_userSurname2 = new PropertyInfo();
+    private static PropertyInfo PI_userFirstName = new PropertyInfo();
+    private static PropertyInfo PI_userTypeName = new PropertyInfo();
+    private static PropertyInfo[] PI_PROP_ARRAY =
+    {
+    	PI_userCode,
+    	PI_userTypeCode,
+    	PI_wsKey,
+    	PI_userID,
+    	PI_userSurname1,
+    	PI_userSurname2,
+    	PI_userFirstName,
+    	PI_userTypeName
+    };
 
     /**
      * Empty constructor.
@@ -212,4 +236,76 @@ public class User {
     public static void setWsKey(String wsKey) {
         User.wsKey = wsKey;
     }
+
+	public Object getProperty(int param) {
+		Object object = null;
+        switch(param)
+        {
+            case 0 : object = userCode;break;
+            case 1 : object = userTypeCode;break;
+            case 2 : object = wsKey;break;
+            case 3 : object = userID;break;
+            case 4 : object = userSurname1;break;
+            case 5 : object = userSurname2;break;
+            case 6 : object = userFirstName;break;
+            case 7 : object = userTypeName;break;
+        }
+        
+        return object;
+	}
+
+	public int getPropertyCount() {		
+		return 8;
+	}
+
+	public void getPropertyInfo(int param, Hashtable arg1, PropertyInfo propertyInfo) {
+		switch(param){
+        case 0:
+            propertyInfo.type = PropertyInfo.STRING_CLASS;
+            propertyInfo.name = "userCode";
+            break;            
+        case 1:
+            propertyInfo.type = PropertyInfo.STRING_CLASS;
+            propertyInfo.name = "userTypeCode";
+            break;            
+        case 2:
+            propertyInfo.type = PropertyInfo.STRING_CLASS;
+            propertyInfo.name = "wsKey";
+            break;            
+        case 3:
+            propertyInfo.type = PropertyInfo.STRING_CLASS;
+            propertyInfo.name = "userID";
+            break;            
+        case 4:
+            propertyInfo.type = PropertyInfo.STRING_CLASS;
+            propertyInfo.name = "userSurname1";
+            break;              
+        case 5:
+            propertyInfo.type = PropertyInfo.STRING_CLASS;
+            propertyInfo.name = "userSurname2";
+            break;             
+        case 6:
+            propertyInfo.type = PropertyInfo.STRING_CLASS;
+            propertyInfo.name = "userFirstName";
+            break;             
+        case 7:
+            propertyInfo.type = PropertyInfo.STRING_CLASS;
+            propertyInfo.name = "userTypeName";
+            break;           
+		}
+	}
+
+	public void setProperty(int param, Object obj) {
+		switch(param)
+		{
+			case 0  : userCode     	= (String)obj; break;
+			case 1  : userTypeCode 	= (String)obj; break;
+			case 2  : wsKey     	= (String)obj; break;
+			case 3  : userID     	= (String)obj; break;
+			case 4  : userSurname1  = (String)obj; break;
+			case 5  : userSurname2  = (String)obj; break;
+			case 6  : userFirstName = (String)obj; break;
+			case 7  : userTypeName  = (String)obj; break;
+		}    
+	}
 }
