@@ -15,7 +15,7 @@ public final class R {
     }
     public static final class drawable {
         public static final int erroricon=0x7f020000;
-        public static final int swadroid=0x7f020001;
+        public static final int ic_launcher_swadroid=0x7f020001;
     }
     public static final class id {
         public static final int login_menu=0x7f080000;
