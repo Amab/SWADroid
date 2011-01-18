@@ -1,3 +1,15 @@
+## 0.2.2 (2011-01-18)
+
+* Added connection check
+* Added functions list to main activity
+* Added first run configuration
+* Added automatic termination of login module
+* Added login successful message
+* Fixed launcher icons
+* Fixed Android 1.6 compatibility issues
+* Updated ksoap2-android library
+* Disabled application restart on orientation change
+
 ## 0.2.1 (2010-12-15)
 
 * Added Android 2.3 Gingerbread compatibility
