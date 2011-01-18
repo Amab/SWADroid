@@ -21,19 +21,19 @@ package es.ugr.swad.swadroid.modules;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import java.io.IOException;
-import java.util.ArrayList;
-
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
-import org.ksoap2.serialization.KvmSerializable;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
@@ -42,6 +42,10 @@ import org.xmlpull.v1.XmlPullParserException;
 /**
  * Superclass for encapsulate common behavior of all modules.
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ */
+/**
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ *
  */
 public class Module extends Activity {
     /**
@@ -71,7 +75,7 @@ public class Module extends Activity {
     /**
      * Webservice result.
      */
-    ArrayList<Object> result;
+    Object result;
     /**
      * Shows error messages.
      */
@@ -177,7 +181,7 @@ public class Module extends Activity {
      * Gets webservice result.
      * @return Webservice result.
      */
-    public ArrayList<Object> getResult() {
+    public Object getResult() {
         return result;
     }
 
@@ -185,14 +189,13 @@ public class Module extends Activity {
      * Sets webservice result.
      * @param result Webservice result.
      */
-    public void setResult(ArrayList<Object> result) {
+    public void setResult(Object result) {
         this.result = result;
     }
-    
-    /**
-     * Called when activity is first created.
-     * @param savedInstanceState State of activity.
-     */
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreate()
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -205,13 +208,10 @@ public class Module extends Activity {
             startActivityForResult(loginActivity, Global.LOGIN_REQUEST_CODE);
         }
 	}
-	
-	/**
-     * Handles the result of launch an activity and performs an action.
-     * @param requestCode Identifier of action requested.
-     * @param resultCode Status of activity's result (correct or not).
-     * @param data Data returned by launched activity.
-     */
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onActivityResult()
+	 */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
@@ -230,7 +230,7 @@ public class Module extends Activity {
      */
 	protected void createRequest() {
         request = new SoapObject(NAMESPACE, METHOD_NAME);
-        result = new ArrayList<Object>();
+        result = null;
     }
 
     /**
@@ -244,30 +244,64 @@ public class Module extends Activity {
 
     /**
      * Sends request to webservice.
+     * @param cl Class to be mapped
      * @throws IOException
-     * @throws XmlPullParserException
      * @throws SoapFault
+     * @throws InstantiationException 
+     * @throws IllegalAccessException 
      */
-    protected void sendRequest() throws IOException, XmlPullParserException, SoapFault {
-        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-        envelope.setOutputSoapObject(request);
+    protected void sendRequest(Class cl)
+    	throws IOException, SoapFault, IllegalAccessException, InstantiationException {
+    	
+    	int numRetrys = 1;
+        Object res;
         HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        
+        envelope.setOutputSoapObject(request);
+        envelope.dotNet = false;
+        envelope.addMapping(NAMESPACE, cl.getName(),cl.newInstance().getClass());
         
         //If an XmlPullParserException occurs, retry once in order to workaround an Android emulator bug
-        try {
-        	androidHttpTransport.call(SOAP_ACTION, envelope);
-        } catch(XmlPullParserException ex) {
-        	Log.e(Global.MODULE_TAG, ex.getLocalizedMessage());
-        	ex.printStackTrace();
-        	Log.e(Global.MODULE_TAG, getString(R.string.errorMsgWorkaroundEmulator));
-        	androidHttpTransport.call(SOAP_ACTION, envelope);
+        do {
+	        try {
+	        	androidHttpTransport.call(SOAP_ACTION, envelope);
+	        	
+	        	res = envelope.getResponse();
+	        	if(res instanceof SoapFault) {
+	        		result = null;
+	        	} else {
+	        		result = res;
+	        	}
+	        } catch(XmlPullParserException ex) {
+	        	Log.e(Global.MODULE_TAG, getString(R.string.errorMsgWorkaroundEmulator));
+	        	Log.e(Global.MODULE_TAG, ex.getLocalizedMessage());
+	        	ex.printStackTrace();
+	        }
+        } while(numRetrys-- > 0);
+    }
+    
+    /**
+     * Checks if any connection is available 
+     * @param ctx Application context
+     * @return true if there is a connection available, false in other case
+     */
+    public static boolean connectionAvailable(Context ctx){
+        boolean connAvailable = false;
+        ConnectivityManager connec =  (ConnectivityManager)ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        //Survey all networks (wifi, gprs...)
+        NetworkInfo[] networks = connec.getAllNetworkInfo();
+        
+        for(int i=0; i<2; i++){
+            //If any of them has a connection available, put boolean to true
+            if (networks[i].isConnected()){
+                connAvailable = true;
+            }
         }
         
-        KvmSerializable ks = (KvmSerializable)envelope.bodyIn;
-        for(int i=0;i<ks.getPropertyCount();i++)
-        {
-           result.add(ks.getProperty(i)); //if complex type is present then you can cast this to SoapObject and if primitive type is returned you can use toString() to get actual value.
-        }
+        //If boolean remains false there is no connection available        
+        return connAvailable;
     }
 
     /**
@@ -289,9 +323,9 @@ public class Module extends Activity {
                 
     }
 
-    /**
-     * Called when activity is paused.
-     */
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onPause()
+	 */
     @Override
     protected void onPause() {
         super.onPause();

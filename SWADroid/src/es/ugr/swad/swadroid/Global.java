@@ -32,23 +32,30 @@ public class Global {
      * User logged flag
      */
     private static boolean logged;
+	/**
+	 * Name of application preferences
+	 */
+	private static final String PREFS_NAME = "SWADroidSharedPrefs";
     /**
      * Request code for Login module.
      */
     public static final int LOGIN_REQUEST_CODE = 1;
     /**
-     * Enum type defining allowed user types
+     * Student type constant
      */
-    public static enum UserType {
-        ALL,
-        ADMIN,
-        STUDENT,
-        TEACHER
-    }
+    public static String STUDENT_TYPE = "student";
+    /**
+     * Teacher type constant
+     */
+    public static String TEACHER_TYPE = "teacher";
     /**
      * Class Module's tag name for Logcat
      */
     public static final String MODULE_TAG = "Module";
+    /**
+     * Login tag name for Logcat
+     */
+    public static final String LOGIN_TAG = "Login";
     /*
      * Table name for courses
      */
@@ -130,5 +137,12 @@ public class Global {
 	 */
 	public static void setLogged(boolean logged) {
 		Global.logged = logged;
+	}
+	/**
+	 * Gets Application preferences name
+	 * @return SharedPreferences name
+	 */
+	public static String getPrefsName() {
+		return PREFS_NAME;
 	}
 }

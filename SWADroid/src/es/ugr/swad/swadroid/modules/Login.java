@@ -22,14 +22,18 @@ package es.ugr.swad.swadroid.modules;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Base64;
+//import android.util.Base64;
 import android.util.Log;
+import android.widget.Toast;
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Vector;
+
+import org.kobjects.base64.Base64;
 import org.ksoap2.SoapFault;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -46,6 +50,10 @@ public class Login extends Module {
      * User password.
      */
     private String userPassword;
+    /**
+     * Connection available flag
+     */
+    private boolean isConnected;
 
     /**
      * Called when activity is first created.
@@ -55,6 +63,12 @@ public class Login extends Module {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setMETHOD_NAME("loginByUserPasswordKey");
+        isConnected = connectionAvailable(this);
+        
+        if (!isConnected) { 
+        	Toast.makeText(this, R.string.errorMsgNoConnection, Toast.LENGTH_LONG).show(); 
+        }
+        
         connect();
     }
 
@@ -72,34 +86,44 @@ public class Login extends Module {
      * @throws IOException
      * @throws XmlPullParserException
      * @throws SoapFault
+     * @throws InstantiationException 
+     * @throws IllegalAccessException 
      */
     private void requestService()
-            throws NoSuchAlgorithmException, IOException, XmlPullParserException, SoapFault {
+            throws NoSuchAlgorithmException, IOException, XmlPullParserException, SoapFault, IllegalAccessException, InstantiationException {
 
-        //Encrypts user password with SHA-512 and encodes it to Base64    	
-        md = MessageDigest.getInstance("SHA-512");
-        md.update(prefs.getUserPassword().getBytes());
-        userPassword = new String(Base64.encode(md.digest(), Base64.URL_SAFE + Base64.NO_PADDING + Base64.NO_WRAP));
-
-        //Creates webservice request, adds required params and sends request to webservice
-        createRequest();
-        addParam("userID", prefs.getUserID());
-        addParam("userPassword", userPassword);
-        addParam("appKey", Global.getAppKey());
-        sendRequest();
-
-        //Stores user data returned by webservice response
-        User.setUserCode(result.get(0).toString());
-        User.setUserTypeCode(result.get(1).toString());
-        User.setWsKey(result.get(2).toString());
-        User.setUserID(result.get(3).toString());
-        User.setUserSurname1(result.get(4).toString());
-        User.setUserSurname2(result.get(5).toString());
-        User.setUserFirstName(result.get(6).toString());
-        User.setUserTypeName(result.get(7).toString());
-
-        //Request finalized without errors
-        setResult(RESULT_OK);
+    	if (isConnected) {
+	        //Encrypts user password with SHA-512 and encodes it to Base64UrlSafe   	
+	        md = MessageDigest.getInstance("SHA-512");
+	        md.update(prefs.getUserPassword().getBytes());
+	        //userPassword = new String(Base64.encode(md.digest(), Base64.URL_SAFE + Base64.NO_PADDING + Base64.NO_WRAP));
+	        userPassword = new String(Base64.encode(md.digest()));
+	        userPassword = userPassword.replace('+','-').replace('/','_').replace('=', ' ').replaceAll("\\s+", "").trim();
+	
+	        //Creates webservice request, adds required params and sends request to webservice
+	        createRequest();
+	        addParam("userID", prefs.getUserID());
+	        addParam("userPassword", userPassword);
+	        addParam("appKey", Global.getAppKey());
+	        sendRequest(User.class);
+	
+	        if (result != null) {
+	        	Vector v = (Vector) result;	        	
+		        //Stores user data returned by webservice response
+		        User.setUserCode(v.get(0).toString());
+		        User.setUserTypeCode(v.get(1).toString());
+		        User.setWsKey(v.get(2).toString());
+		        User.setUserID(v.get(3).toString());
+		        User.setUserSurname1(v.get(4).toString());
+		        User.setUserSurname2(v.get(5).toString());
+		        User.setUserFirstName(v.get(6).toString());
+		        User.setUserTypeName(v.get(7).toString());
+		        //Request finalized without errors
+		        setResult(RESULT_OK);
+	        }
+        }
+    	
+        finish();
     }
 
     /**
@@ -163,8 +187,8 @@ public class Login extends Module {
                  */
                 if(e instanceof SoapFault) {
                     SoapFault es = (SoapFault) e;
-                    Log.e(es.getClass().getSimpleName(), es.faultstring);
-                    error(es.faultstring);
+                    Log.e(es.getClass().getSimpleName(), es.getMessage());
+                    error(es.getMessage());
                 } else {
                     Log.e(e.getClass().getSimpleName(), e.toString());
                     error(e.toString());

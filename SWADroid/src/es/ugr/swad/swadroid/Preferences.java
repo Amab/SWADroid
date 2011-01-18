@@ -33,6 +33,10 @@ import android.widget.Toast;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class Preferences extends PreferenceActivity {
+	/**
+	 * Application preferences
+	 */
+	private SharedPreferences prefs;
     /**
      * User identifier.
      */
@@ -74,7 +78,6 @@ public class Preferences extends PreferenceActivity {
 	public String getOldUserID() {
 		return oldUserID;
 	}
-
 	/**
 	 * Gets old user password
 	 * @return Old user password
@@ -83,21 +86,38 @@ public class Preferences extends PreferenceActivity {
 		return oldUserPassword;
 	}
 
+	/**
+	 * Get if this is the first run
+	 *
+	 * @return returns true, if this is the first run
+	 */
+	 public boolean getFirstRun() {
+	    return prefs.getBoolean("firstRun", true);
+	 }
+	 
+	 /**
+	 * Store the first run
+	 */
+	 public void setRunned() {
+	    SharedPreferences.Editor edit = prefs.edit();
+	    edit.putBoolean("firstRun", false);
+	    edit.commit();
+	 }
+	
     /**
      * Initializes preferences of activity.
      * @param ctx Context of activity.
      */
     public void getPreferences(Context ctx) {
         // Get the xml/preferences.xml preferences
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+        prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         userID = prefs.getString("userIDPref", "");
         userPassword = prefs.getString("userPasswordPref", "");
     }
 
-    /**
-     * Called when activity is first created.
-     * @param savedInstanceState State of activity.
-     */
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreate()
+	 */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,7 +133,7 @@ public class Preferences extends PreferenceActivity {
              * @param preference Preference selected.
              */
             public boolean onPreferenceClick(Preference preference) {
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                 userID = prefs.getString("userIDPref", "");
                 //Save userID before change it
                 oldUserID = userID;
@@ -127,7 +147,7 @@ public class Preferences extends PreferenceActivity {
              * @param preference Preference selected.
              */
             public boolean onPreferenceClick(Preference preference) {
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                 userPassword = prefs.getString("userPasswordPref", "");
                 //Save userPassword before change it
                 oldUserPassword = userPassword;
@@ -145,11 +165,12 @@ public class Preferences extends PreferenceActivity {
                         R.string.saveMsg_preferences,
                         Toast.LENGTH_LONG).show();
                 SharedPreferences saveSharedPreference = getSharedPreferences(
-                        "SWADroidSharedPrefs", Context.MODE_PRIVATE);
+                		Global.getPrefsName(), Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = saveSharedPreference.edit();
                 
                 //If user ID or password have changed, logout automatically to force a new login
-                if(!userID.equals(oldUserID) || !userPassword.equals(oldUserPassword)) {
+                if(userID != null && oldUserID != null && userPassword != null && oldUserPassword != null &&
+                		(!userID.equals(oldUserID) || !userPassword.equals(oldUserPassword))) {
                 	Global.setLogged(false);
                 }
 

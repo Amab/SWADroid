@@ -21,17 +21,20 @@ package es.ugr.swad.swadroid;
 
 import com.android.dataframework.DataFramework;
 
-import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
-import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
 
@@ -39,7 +42,7 @@ import es.ugr.swad.swadroid.ssl.SecureConnection;
  * Main class of the application.
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
-public class SWADMain extends Activity {
+public class SWADMain extends ListActivity {
     /**
      * Application preferences.
      */
@@ -48,12 +51,24 @@ public class SWADMain extends Activity {
     /**
      * Database Helper.
      */
-    protected static DataBaseHelper dbHelper;
-    
+    protected static DataBaseHelper dbHelper;    
     /**
      * Database Framework.
      */
     protected static DataFramework db;
+    /**
+     * Array of strings for main ListView
+     */
+    protected String[] functions;
+    
+    /**
+     * Shows Preferences screen
+     */
+    protected void viewPreferences() {
+    	Intent settingsActivity = new Intent(getBaseContext(),
+                Preferences.class);
+        startActivity(settingsActivity);
+    }
 
     /**
      * Shows an error message.
@@ -72,12 +87,9 @@ public class SWADMain extends Activity {
                 })*/
     }
 
-    /**
-     * Creates application menu.
-     * @param menu Object to store created menu.
-     * @return true if menu was created.
-     *         false if menu was not created.
-     */
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreateOptionsMenu()
+	 */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -85,12 +97,9 @@ public class SWADMain extends Activity {
         return true;
     }
 
-	/**
-     * Called when an item of menu is selected.
-     * @param item Item selected.
-     * @return true if action was performed.
-     *         false if action was not performed.
-     */
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onOptionsItemSelected()
+	 */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -100,47 +109,63 @@ public class SWADMain extends Activity {
 	            startActivityForResult(loginActivity, Global.LOGIN_REQUEST_CODE);
 	            return true;
             case R.id.preferences_menu:
-                Intent settingsActivity = new Intent(getBaseContext(),
-                        Preferences.class);
-                startActivity(settingsActivity);
+            	viewPreferences();
                 return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Handles the result of launch an activity and performs an action.
-     * @param requestCode Identifier of action requested.
-     * @param resultCode Status of activity's result (correct or not).
-     * @param data Data returned by launched activity.
-     */
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onActivityResult()
+	 */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK) {
+        if (resultCode == ListActivity.RESULT_OK) {
             //Bundle extras = data.getExtras();
 
             switch(requestCode) {
                 case Global.LOGIN_REQUEST_CODE:
                      Global.setLogged(true);
+                     Toast.makeText(getBaseContext(),
+                             R.string.loginSuccessfulMsg,
+                             Toast.LENGTH_LONG).show();
+                     Log.d(Global.LOGIN_TAG, getString(R.string.loginSuccessfulMsg));
+                     /*Log.d(Global.LOGIN_TAG, "userCode=" + User.getUserCode());
+                     Log.d(Global.LOGIN_TAG, "userTypeCode=" + User.getUserTypeCode());
+                     Log.d(Global.LOGIN_TAG, "userTypeName=" + User.getUserTypeName());
+                     Log.d(Global.LOGIN_TAG, "userID=" + User.getUserID());
+                     Log.d(Global.LOGIN_TAG, "userFirstName=" + User.getUserFirstName());
+                     Log.d(Global.LOGIN_TAG, "userSurname1=" + User.getUserSurname1());
+                     Log.d(Global.LOGIN_TAG, "userSurname2=" + User.getUserSurname2());
+                     Log.d(Global.LOGIN_TAG, "wsKey=" + User.getWsKey());*/
                      break;
             }
         }
     }
+    
+    @Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		super.onListItemClick(l, v, position, id);
+		// Get the item that was clicked
+		Object o = this.getListAdapter().getItem(position);
+		String keyword = o.toString();
+		Toast.makeText(this, keyword + " aún no implementado", Toast.LENGTH_LONG)
+				.show();
+	}
 
-    /**
-     * Called each time activity is started.
-     */
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onStart()
+	 */
     @Override
     protected void onStart() {
         super.onStart();
         prefs.getPreferences(getBaseContext());
     }
-    
-    /**
-     * Called when activity is first created.
-     * @param icicle State of activity.
-     */
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreate()
+	 */
     @Override
     public void onCreate(Bundle icicle) {
         try {
@@ -148,14 +173,22 @@ public class SWADMain extends Activity {
             Window w = getWindow();
             w.requestFeature(Window.FEATURE_LEFT_ICON);
             setContentView(R.layout.main);
-            w.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.swadroid);
+            w.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.ic_launcher_swadroid);   
+            
+            functions = getResources().getStringArray(R.array.functions);
+            setListAdapter(new ArrayAdapter<String>(this, R.layout.functions_list_item, functions));
             
             db = DataFramework.getInstance();
             db.open(this, this.getPackageName());
             dbHelper = new DataBaseHelper(db);
             
             prefs.getPreferences(getBaseContext());
-            SecureConnection.initSecureConnection();
+            SecureConnection.initSecureConnection(); 
+            
+            if(prefs.getFirstRun()) {
+            	viewPreferences();
+            	prefs.setRunned();
+            }
         } catch (Exception ex) {
             Log.e(ex.getClass().getSimpleName(), ex.toString());
             error(ex.toString());
