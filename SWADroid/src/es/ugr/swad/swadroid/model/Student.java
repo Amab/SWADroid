@@ -18,6 +18,10 @@
  */
 package es.ugr.swad.swadroid.model;
 
+import java.util.Hashtable;
+
+import org.ksoap2.serialization.PropertyInfo;
+
 /**
  * Class for store a student
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
@@ -117,5 +121,25 @@ public class Student extends Model {
 	 */
 	public void setSurname2(String surname2) {
 		this.surname2 = surname2;
+	}
+
+	public Object getProperty(int arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public int getPropertyCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public void getPropertyInfo(int arg0, Hashtable arg1, PropertyInfo arg2) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setProperty(int arg0, Object arg1) {
+		// TODO Auto-generated method stub
+		
 	}	
 }

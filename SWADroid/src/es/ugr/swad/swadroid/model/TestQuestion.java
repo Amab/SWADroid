@@ -19,8 +19,11 @@
 package es.ugr.swad.swadroid.model;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+
+import org.ksoap2.serialization.PropertyInfo;
 
 /**
  * Clas for store a test question
@@ -188,5 +191,25 @@ public class TestQuestion extends Model {
 		}
 		
 		return corrects;
+	}
+
+	public Object getProperty(int arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public int getPropertyCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public void getPropertyInfo(int arg0, Hashtable arg1, PropertyInfo arg2) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setProperty(int arg0, Object arg1) {
+		// TODO Auto-generated method stub
+		
 	}
 }

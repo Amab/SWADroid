@@ -21,17 +21,21 @@ package es.ugr.swad.swadroid.modules;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
@@ -47,7 +51,7 @@ import org.xmlpull.v1.XmlPullParserException;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  *
  */
-public class Module extends Activity {
+public abstract class Module extends Activity {
     /**
      * SOAP_ACTION param for webservice request.
      */
@@ -80,6 +84,9 @@ public class Module extends Activity {
      * Shows error messages.
      */
     AlertDialog errorDialog = null;
+    
+    protected abstract void requestService()
+    	throws NoSuchAlgorithmException, IOException, XmlPullParserException, SoapFault, IllegalAccessException, InstantiationException;
 
     /**
      * Gets METHOD_NAME parameter.
@@ -218,9 +225,9 @@ public class Module extends Activity {
             //Bundle extras = data.getExtras();
 
             switch(requestCode) {
-                case Global.LOGIN_REQUEST_CODE:
-                     Global.setLogged(true);
-                     break;
+            case Global.LOGIN_REQUEST_CODE:
+            	Global.setLogged(true);
+            	break;
             }
         }
     }
@@ -245,33 +252,31 @@ public class Module extends Activity {
     /**
      * Sends request to webservice.
      * @param cl Class to be mapped
+     * @param simple Flag for select simple or complex response
      * @throws IOException
      * @throws SoapFault
      * @throws InstantiationException 
      * @throws IllegalAccessException 
      */
-    protected void sendRequest(Class cl)
+    protected void sendRequest(Class cl, boolean simple)
     	throws IOException, SoapFault, IllegalAccessException, InstantiationException {
-    	
+
     	int numRetrys = 1;
-        Object res;
         HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         
         envelope.setOutputSoapObject(request);
-        envelope.dotNet = false;
-        envelope.addMapping(NAMESPACE, cl.getName(),cl.newInstance().getClass());
+        envelope.addMapping(NAMESPACE, cl.getSimpleName(), cl);
         
         //If an XmlPullParserException occurs, retry once in order to workaround an Android emulator bug
         do {
 	        try {
 	        	androidHttpTransport.call(SOAP_ACTION, envelope);
 	        	
-	        	res = envelope.getResponse();
-	        	if(res instanceof SoapFault) {
-	        		result = null;
+	        	if(simple) {
+	        		result = envelope.bodyIn;
 	        	} else {
-	        		result = res;
+	        		result = envelope.getResponse();
 	        	}
 	        } catch(XmlPullParserException ex) {
 	        	Log.e(Global.MODULE_TAG, getString(R.string.errorMsgWorkaroundEmulator));
@@ -333,4 +338,89 @@ public class Module extends Activity {
             errorDialog.dismiss();
         }
     }
+    
+    /**
+     * Shows progress dialog when connecting to SWAD
+     */
+    protected class Connect extends AsyncTask<String, Void, Void> {
+        /**
+         * Progress dialog.
+         */
+        ProgressDialog Dialog = new ProgressDialog(Module.this);
+        /**
+         * Exception pointer.
+         */
+        Exception e = null;
+        String progressDescription;
+        int progressTitle;
+
+        /**
+         * Shows progress dialog and connects to SWAD in background
+		 * @param progressDescription Description to be showed in dialog
+		 * @param progressTitle Title to be showed in dialog
+		 */
+		public Connect(String progressDescription, int progressTitle) {
+			super();
+			this.progressDescription = progressDescription;
+			this.progressTitle = progressTitle;
+		}
+
+		/* (non-Javadoc)
+    	 * @see android.app.Activity#onPreExecute()
+    	 */
+        @Override
+        protected void onPreExecute() {
+            Dialog.setMessage(progressDescription);
+            Dialog.setTitle(progressTitle);
+            Dialog.show();
+        }
+
+        /* (non-Javadoc)
+    	 * @see android.app.Activity#doInBackground()
+    	 */
+        @Override
+		protected Void doInBackground(String... urls) {
+            try {
+                //Sends webservice request
+                requestService();
+            /**
+             * If an exception occurs, capture and points exception pointer
+             * to it.
+             */
+            } catch (SoapFault ex) {
+                e = ex;
+            } catch (Exception ex) {
+                e = ex;
+            }
+
+            return null;
+        }
+
+        /* (non-Javadoc)
+    	 * @see android.app.Activity#onPostExecute()
+    	 */
+        @Override
+        protected void onPostExecute(Void unused) {
+            Dialog.dismiss();
+            
+            if(e != null) {
+                /**
+                 * If an exception has occurred, shows error message according to
+                 * exception type.
+                 */
+                if(e instanceof SoapFault) {
+                    SoapFault es = (SoapFault) e;
+                    Log.e(es.getClass().getSimpleName(), es.getMessage());
+                    error(es.getMessage());
+                } else {
+                    Log.e(e.getClass().getSimpleName(), e.toString());
+                    error(e.toString());
+                }
+
+                //Request finalized with errors
+                e.printStackTrace();
+                setResult(RESULT_CANCELED);
+            }
+        }
+    }    
 }

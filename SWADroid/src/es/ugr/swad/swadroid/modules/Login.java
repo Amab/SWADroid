@@ -19,11 +19,7 @@
 
 package es.ugr.swad.swadroid.modules;
 
-import android.app.ProgressDialog;
-import android.os.AsyncTask;
 import android.os.Bundle;
-//import android.util.Base64;
-import android.util.Log;
 import android.widget.Toast;
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
@@ -31,10 +27,9 @@ import es.ugr.swad.swadroid.model.User;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Vector;
-
 import org.kobjects.base64.Base64;
 import org.ksoap2.SoapFault;
+import org.ksoap2.serialization.KvmSerializable;
 import org.xmlpull.v1.XmlPullParserException;
 
 /**
@@ -55,10 +50,9 @@ public class Login extends Module {
      */
     private boolean isConnected;
 
-    /**
-     * Called when activity is first created.
-     * @param savedInstanceState State of activity.
-     */
+    /* (non-Javadoc)
+	 * @see android.app.Activity#onCreate()
+	 */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +71,10 @@ public class Login extends Module {
      * in UI thread.
      */
     private void connect() {
-        new Connect().execute();
+    	String progressDescription = getString(R.string.loginProgressDescription);
+    	int progressTitle = R.string.loginProgressTitle;
+    	
+        new Connect(progressDescription, progressTitle).execute();
     }
 
     /**
@@ -89,7 +86,7 @@ public class Login extends Module {
      * @throws InstantiationException 
      * @throws IllegalAccessException 
      */
-    private void requestService()
+    protected void requestService()
             throws NoSuchAlgorithmException, IOException, XmlPullParserException, SoapFault, IllegalAccessException, InstantiationException {
 
     	if (isConnected) {
@@ -105,99 +102,26 @@ public class Login extends Module {
 	        addParam("userID", prefs.getUserID());
 	        addParam("userPassword", userPassword);
 	        addParam("appKey", Global.getAppKey());
-	        sendRequest(User.class);
+	        sendRequest(User.class, true);
 	
 	        if (result != null) {
-	        	Vector v = (Vector) result;	        	
+	        	KvmSerializable ks = (KvmSerializable) result;
+	        	
 		        //Stores user data returned by webservice response
-		        User.setUserCode(v.get(0).toString());
-		        User.setUserTypeCode(v.get(1).toString());
-		        User.setWsKey(v.get(2).toString());
-		        User.setUserID(v.get(3).toString());
-		        User.setUserSurname1(v.get(4).toString());
-		        User.setUserSurname2(v.get(5).toString());
-		        User.setUserFirstName(v.get(6).toString());
-		        User.setUserTypeName(v.get(7).toString());
+		        User.setUserCode(ks.getProperty(0).toString());
+		        User.setUserTypeCode(ks.getProperty(1).toString());
+		        User.setWsKey(ks.getProperty(2).toString());
+		        User.setUserID(ks.getProperty(3).toString());
+		        User.setUserSurname1(ks.getProperty(4).toString());
+		        User.setUserSurname2(ks.getProperty(5).toString());
+		        User.setUserFirstName(ks.getProperty(6).toString());
+		        User.setUserTypeName(ks.getProperty(7).toString());
+		        
 		        //Request finalized without errors
 		        setResult(RESULT_OK);
 	        }
         }
     	
         finish();
-    }
-
-    /**
-     * Shows progress dialog when connecting to SWAD
-     */
-    private class Connect extends AsyncTask<String, Void, Void> {
-        /**
-         * Progress dialog.
-         */
-        ProgressDialog Dialog = new ProgressDialog(Login.this);
-        /**
-         * Exception pointer.
-         */
-        Exception e = null;
-
-        /**
-         * Called before launch background thread.
-         */
-        @Override
-        protected void onPreExecute() {
-            Dialog.setMessage(getString(R.string.loginProgressDescription));
-            Dialog.setTitle(R.string.loginProgressTitle);
-            Dialog.show();
-        }
-
-        /**
-         * Called in background thread.
-         * @param urls Background thread parameters.
-         * @return Nothing.
-         */
-        @Override
-		protected Void doInBackground(String... urls) {
-            try {
-                //Sends webservice request
-                requestService();
-            /**
-             * If an exception occurs, capture and points exception pointer
-             * to it.
-             */
-            } catch (SoapFault ex) {
-                e = ex;
-            } catch (Exception ex) {
-                e = ex;
-            }
-
-            return null;
-        }
-
-        /**
-         * Called after calling background thread.
-         * @param unused Does nothing.
-         */
-        @Override
-        protected void onPostExecute(Void unused) {
-            Dialog.dismiss();
-            
-            if(e != null) {
-                /**
-                 * If an exception has occurred, shows error message according to
-                 * exception type.
-                 */
-                if(e instanceof SoapFault) {
-                    SoapFault es = (SoapFault) e;
-                    Log.e(es.getClass().getSimpleName(), es.getMessage());
-                    error(es.getMessage());
-                } else {
-                    Log.e(e.getClass().getSimpleName(), e.toString());
-                    error(e.toString());
-                }
-
-                //Request finalized with errors
-                e.printStackTrace();
-                setResult(RESULT_CANCELED);
-            }
-        }
     }
 }
