@@ -18,6 +18,10 @@
  */
 package es.ugr.swad.swadroid.model;
 
+import java.util.Hashtable;
+
+import org.ksoap2.serialization.PropertyInfo;
+
 /**
  * Class for store a course
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
@@ -27,6 +31,13 @@ public class Course extends Model {
 	 * Course name
 	 */
 	private String name;
+	private static PropertyInfo PI_id = new PropertyInfo();
+	private static PropertyInfo PI_name = new PropertyInfo();
+    private static PropertyInfo[] PI_PROP_ARRAY =
+    {
+    	PI_id,
+    	PI_name
+    };
 	
 	/**
 	 * Constructor
@@ -37,7 +48,7 @@ public class Course extends Model {
 		super(id);
 		this.name = name;
 	}
-	
+
 	/**
 	 * Gets course name
 	 * @return Course name
@@ -90,6 +101,42 @@ public class Course extends Model {
 	 */
 	@Override
 	public String toString() {
-		return "Course [name=" + name + "]";
+		return "Course [name=" + name + ", getId()=" + getId() + "]";
+	}
+
+	public Object getProperty(int param) {
+		Object object = null;
+        switch(param)
+        {
+            case 0 : object = this.getId();break;
+            case 1 : object = name;break;
+        }
+        
+        return object;
+	}
+
+	public int getPropertyCount() {
+		return 2;
+	}
+
+	public void getPropertyInfo(int param, Hashtable arg1, PropertyInfo propertyInfo) {
+		switch(param){
+	        case 0:
+	            propertyInfo.type = PropertyInfo.INTEGER_CLASS;
+	            propertyInfo.name = "id";
+	            break;   
+	        case 1:
+	            propertyInfo.type = PropertyInfo.STRING_CLASS;
+	            propertyInfo.name = "name";
+	            break;           
+		}
+	}
+
+	public void setProperty(int param, Object obj) {
+		switch(param)
+		{
+			case 0  : this.setId((Integer)obj); break;
+			case 1  : name = (String)obj; break;
+		}    
 	}
 }

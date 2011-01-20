@@ -35,6 +35,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
+import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
 
@@ -105,7 +106,7 @@ public class SWADMain extends ListActivity {
         switch (item.getItemId()) {
 	        case R.id.login_menu:
 	            Intent loginActivity = new Intent(getBaseContext(),
-	                    Login.class);
+	                    Courses.class);
 	            startActivityForResult(loginActivity, Global.LOGIN_REQUEST_CODE);
 	            return true;
             case R.id.preferences_menu:
