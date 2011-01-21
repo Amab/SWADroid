@@ -36,7 +36,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.modules.Courses;
-import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
 
 /**
@@ -47,8 +46,7 @@ public class SWADMain extends ListActivity {
     /**
      * Application preferences.
      */
-    protected static Preferences prefs = new Preferences();
-    
+    protected static Preferences prefs = new Preferences();    
     /**
      * Database Helper.
      */
@@ -56,7 +54,7 @@ public class SWADMain extends ListActivity {
     /**
      * Database Framework.
      */
-    protected static DataFramework db;
+    private static DataFramework db;
     /**
      * Array of strings for main ListView
      */
@@ -107,7 +105,7 @@ public class SWADMain extends ListActivity {
 	        case R.id.login_menu:
 	            Intent loginActivity = new Intent(getBaseContext(),
 	                    Courses.class);
-	            startActivityForResult(loginActivity, Global.LOGIN_REQUEST_CODE);
+	            startActivityForResult(loginActivity, Global.COURSES_REQUEST_CODE);
 	            return true;
             case R.id.preferences_menu:
             	viewPreferences();
@@ -125,23 +123,10 @@ public class SWADMain extends ListActivity {
         if (resultCode == ListActivity.RESULT_OK) {
             //Bundle extras = data.getExtras();
 
-            switch(requestCode) {
+            /*switch(requestCode) {
                 case Global.LOGIN_REQUEST_CODE:
-                     Global.setLogged(true);
-                     Toast.makeText(getBaseContext(),
-                             R.string.loginSuccessfulMsg,
-                             Toast.LENGTH_LONG).show();
-                     Log.d(Global.LOGIN_TAG, getString(R.string.loginSuccessfulMsg));
-                     /*Log.d(Global.LOGIN_TAG, "userCode=" + User.getUserCode());
-                     Log.d(Global.LOGIN_TAG, "userTypeCode=" + User.getUserTypeCode());
-                     Log.d(Global.LOGIN_TAG, "userTypeName=" + User.getUserTypeName());
-                     Log.d(Global.LOGIN_TAG, "userID=" + User.getUserID());
-                     Log.d(Global.LOGIN_TAG, "userFirstName=" + User.getUserFirstName());
-                     Log.d(Global.LOGIN_TAG, "userSurname1=" + User.getUserSurname1());
-                     Log.d(Global.LOGIN_TAG, "userSurname2=" + User.getUserSurname2());
-                     Log.d(Global.LOGIN_TAG, "wsKey=" + User.getWsKey());*/
                      break;
-            }
+            }*/
         }
     }
     
