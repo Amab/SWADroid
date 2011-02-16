@@ -27,7 +27,7 @@ public class Global {
 	/**
 	 * SWAD application key
 	 */
-	private static final String AppKey = "";
+	private static final String AppKey = "HTC-Desire";
     /**
      * User logged flag
      */
@@ -44,6 +44,10 @@ public class Global {
      * Request code for Courses module.
      */
     public static final int COURSES_REQUEST_CODE = 2;
+    /**
+     * Request code for Notifications module.
+     */
+    public static final int NOTIFICATIONS_REQUEST_CODE = 3;
     /**
      * Student type constant
      */
@@ -65,13 +69,9 @@ public class Global {
      */
     public static final String DB_TABLE_COURSES = "courses";
     /**
-     * Table name for notices
+     * Table name for notifications
      */
-    public static final String DB_TABLE_NOTICES = "notices";
-    /**
-     * Table name for students
-     */
-    public static final String DB_TABLE_STUDENTS = "students";
+    public static final String DB_TABLE_NOTIFICATIONS = "notifications";
     /**
      * Table name for test's answers
      */
@@ -81,45 +81,9 @@ public class Global {
      */
     public static final String DB_TABLE_TEST_QUESTIONS = "tst_questions";
     /**
-     * Table name for test's tags
-     */ 
-    public static final String DB_TABLE_TEST_TAGS = "tst_tags";
-    /**
-     * Table name for test's configuration
-     */ 
-    public static final String DB_TABLE_TEST_CONFIG = "tst_config";
-    /**
-     * Table name for test's configuration
-     */ 
-    public static final String DB_TABLE_MSG_CONTENT = "msg_content";
-    /**
-     * Table name for test's configuration
-     */ 
-    public static final String DB_TABLE_MSG_RCV = "msg_rcv";
-    /**
-     * Table name for test's configuration
-     */ 
-    public static final String DB_TABLE_MSG_SNT = "msg_snt";
-    /**
-     * Table name for test's configuration
-     */ 
-    public static final String DB_TABLE_MARKS = "marks";
-    /**
-     * Table name for relationship between notices and courses
-     */
-    public static final String DB_TABLE_NOTICES_COURSES = "notices_courses";
-    /**
-     * Table name for relationship between students and courses
-     */ 
-    public static final String DB_TABLE_STUDENTS_COURSES = "students_courses";
-    /**
      * Table name for relationship between test's questions and courses
      */ 
     public static final String DB_TABLE_TEST_QUESTIONS_COURSES = "tst_questions_courses";
-    /**
-     * Table name for for relationship between test's questions and tags
-     */ 
-    public static final String DB_TABLE_TEST_QUESTIONS_TAGS = "tst_questions_tags";
     
 	/**
 	 * Gets the SWAD application key

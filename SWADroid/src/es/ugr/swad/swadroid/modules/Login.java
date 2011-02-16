@@ -74,7 +74,7 @@ public class Login extends Module {
     	String progressDescription = getString(R.string.loginProgressDescription);
     	int progressTitle = R.string.loginProgressTitle;
     	
-        new Connect(progressDescription, progressTitle).execute();
+        new Connect(false, progressDescription, progressTitle).execute();
     }
 
     /**
