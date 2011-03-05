@@ -26,6 +26,7 @@ import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
+import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.model.Notification;
@@ -37,12 +38,18 @@ import android.util.Log;
  *
  */
 public class Notifications extends Module {
+    /**
+     * Time period to store notifications 
+     */
+	private static final long TIMESTAMP_LIMIT = 2629743; //A month
+	
 	/* (non-Javadoc)
 	 * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+        //setContentView(R.layout.notifications);
         setMETHOD_NAME("getNotifications");
 	}
 
@@ -53,41 +60,46 @@ public class Notifications extends Module {
 	protected void requestService() throws NoSuchAlgorithmException,
 			IOException, XmlPullParserException, SoapFault,
 			IllegalAccessException, InstantiationException {
-		
+        
 		//Calculates next timestamp to be requested
-		int timestamp = dbHelper.getLastNotificationTimestamp() + 1;
+		Long timestamp = new Long(dbHelper.getFieldOfLastNotification("eventTime"));
+		timestamp++;
+		
+		//Clear old notifications to control database size
+		dbHelper.clearOldNotifications(timestamp - TIMESTAMP_LIMIT);
 		
 		//Creates webservice request, adds required params and sends request to webservice
-        createRequest();
-        addParam("wsKey", User.getWsKey());
-        addParam("beginTime", timestamp);
-        sendRequest(Notification.class, false);
-
-        if (result != null) {
+	    createRequest();
+	    addParam("wsKey", User.getWsKey());
+	    addParam("beginTime", timestamp);
+	    sendRequest(Notification.class, false);
+	
+	    if (result != null) {
 	        //Stores notifications data returned by webservice response
-        	Vector res = (Vector) result;
-        	SoapObject soap = (SoapObject) res.get(1);	
-        	int csSize = soap.getPropertyCount();
-        	int lastId = dbHelper.getLastNotificationId();
-            for (int i = 0; i < csSize; i++) {
-                SoapObject pii = (SoapObject)soap.getProperty(i);
-                String eventType = pii.getProperty(1).toString();
-                int eventTime = Integer.parseInt(pii.getProperty(0).toString());
-                String userSurname1 = pii.getProperty(1).toString();
-                String userSurname2 = pii.getProperty(1).toString();
-                String userFirstName = pii.getProperty(1).toString();
-                String location = pii.getProperty(1).toString();
-                String summary = pii.getProperty(1).toString();
-                Notification n = new Notification(lastId+i, eventType, eventTime, userSurname1, userSurname2, userFirstName, location, summary);
-                dbHelper.insertNotification(n);
-                Log.d("Notifications", n.toString());
-            }
-            
+	    	Vector res = (Vector) result;
+	    	SoapObject soap = (SoapObject) res.get(1);
+	    	int csSize = soap.getPropertyCount();
+	    	Integer lastId = new Integer(dbHelper.getFieldOfLastNotification("id"));
+	        for (int i = 0; i < csSize; i++) {
+	            SoapObject pii = (SoapObject)soap.getProperty(i);
+	            String eventType = pii.getProperty("eventType").toString();
+	            Long eventTime = new Long(pii.getProperty("eventTime").toString());
+	            String userSurname1 = pii.getProperty("userSurname1").toString();
+	            String userSurname2 = pii.getProperty("userSurname2").toString();
+	            String userFirstName = pii.getProperty("userFirstname").toString();
+	            String location = pii.getProperty("location").toString();
+	            String summary = pii.getProperty("summary").toString();
+	            Integer status = new Integer(pii.getProperty("status").toString());
+	            Notification n = new Notification(lastId+i, eventType, eventTime, userSurname1, userSurname2, userFirstName, location, summary, status);
+	            dbHelper.insertNotification(n);
+	            Log.d(Global.NOTIFICATIONS_TAG, n.toString());
+	        }
+	        
 	        //Request finalized without errors
-	        setResult(RESULT_OK);
-        }
+	        //setResult(RESULT_OK);
+	    }
     	
-        finish();
+        //finish();
 	}
 
 	/* (non-Javadoc)

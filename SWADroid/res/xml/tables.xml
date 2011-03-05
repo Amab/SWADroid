@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<database name="swadroid_db" version="2">  
+<database name="swadroid_db" version="4">  
   <table name="courses" to-string="%name%">
     <field name="id" obligatory="true" type="integer"/>
     <field name="name" obligatory="true" type="text"/>
   </table> 
   
-  <table name="notifications" to-string="%name%">
+  <table name="notifications" to-string="%name%" new-in-version="3">
     <field name="id" obligatory="true" type="integer"/>
     <field name="eventType" obligatory="true" type="text"/>
-    <field name="eventTime" obligatory="true" type="integer"/>
+    <field name="eventTime" obligatory="true" type="text"/>
     <field name="userSurname1" obligatory="true" type="text"/>
     <field name="userSurname2" obligatory="true" type="text"/>
     <field name="userFirstname" obligatory="true" type="text"/>
     <field name="location" obligatory="true" type="text"/>
     <field name="summary" obligatory="true" type="text"/>
+    <field name="status" obligatory="true" type="text" new-in-version="4"/>
   </table>
   
 </database>
