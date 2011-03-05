@@ -56,13 +56,7 @@ public class Login extends Module {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setMETHOD_NAME("loginByUserPasswordKey");
-        isConnected = connectionAvailable(this);
-        
-        if (!isConnected) { 
-        	Toast.makeText(this, R.string.errorMsgNoConnection, Toast.LENGTH_LONG).show(); 
-        }
-        
+        setMETHOD_NAME("loginByUserPasswordKey");        
         connect();
     }
 
@@ -73,6 +67,7 @@ public class Login extends Module {
     protected void connect() {
     	String progressDescription = getString(R.string.loginProgressDescription);
     	int progressTitle = R.string.loginProgressTitle;
+    	Toast.makeText(this, progressDescription, Toast.LENGTH_LONG).show();
     	
         new Connect(false, progressDescription, progressTitle).execute();
     }
@@ -89,39 +84,37 @@ public class Login extends Module {
     protected void requestService()
             throws NoSuchAlgorithmException, IOException, XmlPullParserException, SoapFault, IllegalAccessException, InstantiationException {
 
-    	if (isConnected) {
-	        //Encrypts user password with SHA-512 and encodes it to Base64UrlSafe   	
-	        md = MessageDigest.getInstance("SHA-512");
-	        md.update(prefs.getUserPassword().getBytes());
-	        //userPassword = new String(Base64.encode(md.digest(), Base64.URL_SAFE + Base64.NO_PADDING + Base64.NO_WRAP));
-	        userPassword = new String(Base64.encode(md.digest()));
-	        userPassword = userPassword.replace('+','-').replace('/','_').replace('=', ' ').replaceAll("\\s+", "").trim();
-	
-	        //Creates webservice request, adds required params and sends request to webservice
-	        createRequest();
-	        addParam("userID", prefs.getUserID());
-	        addParam("userPassword", userPassword);
-	        addParam("appKey", Global.getAppKey());
-	        sendRequest(User.class, true);
-	
-	        if (result != null) {
-	        	KvmSerializable ks = (KvmSerializable) result;
-	        	
-		        //Stores user data returned by webservice response
-		        User.setUserCode(ks.getProperty(0).toString());
-		        User.setUserTypeCode(ks.getProperty(1).toString());
-		        User.setWsKey(ks.getProperty(2).toString());
-		        User.setUserID(ks.getProperty(3).toString());
-		        User.setUserSurname1(ks.getProperty(4).toString());
-		        User.setUserSurname2(ks.getProperty(5).toString());
-		        User.setUserFirstName(ks.getProperty(6).toString());
-		        User.setUserTypeName(ks.getProperty(7).toString());
-		        
-		        //Request finalized without errors
-		        setResult(RESULT_OK);
-	        }
+        //Encrypts user password with SHA-512 and encodes it to Base64UrlSafe   	
+        md = MessageDigest.getInstance("SHA-512");
+        md.update(prefs.getUserPassword().getBytes());
+        //userPassword = new String(Base64.encode(md.digest(), Base64.URL_SAFE + Base64.NO_PADDING + Base64.NO_WRAP));
+        userPassword = new String(Base64.encode(md.digest()));
+        userPassword = userPassword.replace('+','-').replace('/','_').replace('=', ' ').replaceAll("\\s+", "").trim();
+
+        //Creates webservice request, adds required params and sends request to webservice
+        createRequest();
+        addParam("userID", prefs.getUserID());
+        addParam("userPassword", userPassword);
+        addParam("appKey", Global.getAppKey());
+        sendRequest(User.class, true);
+
+        if (result != null) {
+        	KvmSerializable ks = (KvmSerializable) result;
+        	
+	        //Stores user data returned by webservice response
+	        User.setUserCode(ks.getProperty(0).toString());
+	        User.setUserTypeCode(ks.getProperty(1).toString());
+	        User.setWsKey(ks.getProperty(2).toString());
+	        User.setUserID(ks.getProperty(3).toString());
+	        User.setUserSurname1(ks.getProperty(4).toString());
+	        User.setUserSurname2(ks.getProperty(5).toString());
+	        User.setUserFirstName(ks.getProperty(6).toString());
+	        User.setUserTypeName(ks.getProperty(7).toString());
+	        
+	        //Request finalized without errors
+	        setResult(RESULT_OK);
         }
     	
         finish();
-    }
+	}
 }
