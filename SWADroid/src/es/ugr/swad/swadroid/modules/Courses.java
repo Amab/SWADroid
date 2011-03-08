@@ -34,6 +34,7 @@ import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.User;
 
 /**
+ * Courses module for get user's courses
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  *
  */
@@ -46,6 +47,15 @@ public class Courses extends Module {
         super.onCreate(savedInstanceState);
         setMETHOD_NAME("getCourses");
     }
+
+    /* (non-Javadoc)
+	 * @see android.app.Activity#onStart()
+	 */
+	@Override
+	protected void onStart() {
+		super.onStart();      
+        connect();
+	}
     
     /**
      * Launches action in a separate thread while shows a progress dialog
@@ -87,7 +97,7 @@ public class Courses extends Module {
                 String name = pii.getProperty(1).toString();
                 Course c = new Course(id, name);
                 dbHelper.insertCourse(c);
-                //Log.d("Courses", c.toString());
+                Log.d("Courses", c.toString());
             }
             
 	        //Request finalized without errors
@@ -96,4 +106,9 @@ public class Courses extends Module {
     	
         finish();
     }
+
+	@Override
+	protected void postConnect() {
+		
+	}
 }
