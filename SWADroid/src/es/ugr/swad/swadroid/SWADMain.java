@@ -35,7 +35,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
-import es.ugr.swad.swadroid.modules.Login;
+import es.ugr.swad.swadroid.modules.Notifications;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
 
 /**
@@ -46,8 +46,7 @@ public class SWADMain extends ListActivity {
     /**
      * Application preferences.
      */
-    protected static Preferences prefs = new Preferences();
-    
+    protected static Preferences prefs = new Preferences();    
     /**
      * Database Helper.
      */
@@ -55,7 +54,7 @@ public class SWADMain extends ListActivity {
     /**
      * Database Framework.
      */
-    protected static DataFramework db;
+    private static DataFramework db;
     /**
      * Array of strings for main ListView
      */
@@ -103,11 +102,6 @@ public class SWADMain extends ListActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-	        case R.id.login_menu:
-	            Intent loginActivity = new Intent(getBaseContext(),
-	                    Login.class);
-	            startActivityForResult(loginActivity, Global.LOGIN_REQUEST_CODE);
-	            return true;
             case R.id.preferences_menu:
             	viewPreferences();
                 return true;
@@ -125,21 +119,11 @@ public class SWADMain extends ListActivity {
             //Bundle extras = data.getExtras();
 
             switch(requestCode) {
-                case Global.LOGIN_REQUEST_CODE:
-                     Global.setLogged(true);
-                     Toast.makeText(getBaseContext(),
-                             R.string.loginSuccessfulMsg,
-                             Toast.LENGTH_LONG).show();
-                     Log.d(Global.LOGIN_TAG, getString(R.string.loginSuccessfulMsg));
-                     /*Log.d(Global.LOGIN_TAG, "userCode=" + User.getUserCode());
-                     Log.d(Global.LOGIN_TAG, "userTypeCode=" + User.getUserTypeCode());
-                     Log.d(Global.LOGIN_TAG, "userTypeName=" + User.getUserTypeName());
-                     Log.d(Global.LOGIN_TAG, "userID=" + User.getUserID());
-                     Log.d(Global.LOGIN_TAG, "userFirstName=" + User.getUserFirstName());
-                     Log.d(Global.LOGIN_TAG, "userSurname1=" + User.getUserSurname1());
-                     Log.d(Global.LOGIN_TAG, "userSurname2=" + User.getUserSurname2());
-                     Log.d(Global.LOGIN_TAG, "wsKey=" + User.getWsKey());*/
-                     break;
+		        case Global.NOTIFICATIONS_REQUEST_CODE:
+		            Toast.makeText(getBaseContext(),
+		                    R.string.notificationsSuccessfulMsg,
+		                    Toast.LENGTH_LONG).show();
+		            Log.d(Global.NOTIFICATIONS_TAG, getString(R.string.notificationsSuccessfulMsg));
             }
         }
     }
@@ -150,8 +134,24 @@ public class SWADMain extends ListActivity {
 		// Get the item that was clicked
 		Object o = this.getListAdapter().getItem(position);
 		String keyword = o.toString();
-		Toast.makeText(this, keyword + " aún no implementado", Toast.LENGTH_LONG)
-				.show();
+		
+		Intent activity;
+		switch(position)
+		{
+			case 0:
+				activity = new Intent(getBaseContext(),
+	                Notifications.class);
+				startActivityForResult(activity, Global.NOTIFICATIONS_REQUEST_CODE);
+				break;
+				
+			case 1:
+				/*activity = new Intent(getBaseContext(),
+		                Tests.class);
+					startActivityForResult(activity, Global.TESTS_REQUEST_CODE);*/
+				Toast.makeText(this, keyword + " aún no implementado", Toast.LENGTH_LONG)
+					.show();
+				break;
+		}
 	}
 
 	/* (non-Javadoc)

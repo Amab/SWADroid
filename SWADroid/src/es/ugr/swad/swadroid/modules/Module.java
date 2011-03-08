@@ -21,17 +21,29 @@ package es.ugr.swad.swadroid.modules;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ListActivity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.Window;
+import android.widget.Toast;
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.model.DataBaseHelper;
+
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
@@ -39,15 +51,13 @@ import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 import org.xmlpull.v1.XmlPullParserException;
 
+import com.android.dataframework.DataFramework;
+
 /**
  * Superclass for encapsulate common behavior of all modules.
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
-/**
- * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
- *
- */
-public class Module extends Activity {
+public abstract class Module extends ListActivity {
     /**
      * SOAP_ACTION param for webservice request.
      */
@@ -80,7 +90,42 @@ public class Module extends Activity {
      * Shows error messages.
      */
     AlertDialog errorDialog = null;
+    /**
+     * Database Helper.
+     */
+    protected static DataBaseHelper dbHelper = null;    
+    /**
+     * Database Framework.
+     */
+    private static DataFramework db;
+    /**
+     * Connection available flag
+     */
+    protected static boolean isConnected;
+    
+    /**
+     * Connects to SWAD and gets user data.
+     * @throws NoSuchAlgorithmException
+     * @throws IOException
+     * @throws XmlPullParserException
+     * @throws SoapFault
+     * @throws InstantiationException 
+     * @throws IllegalAccessException 
+     */
+    protected abstract void requestService()
+    	throws NoSuchAlgorithmException, IOException, XmlPullParserException, SoapFault, IllegalAccessException, InstantiationException;
 
+    /**
+     * Launches action in a separate thread while shows a progress dialog
+     * in UI thread.
+     */
+    protected abstract void connect();
+    
+    /**
+     * Launches action after executing connect() method 
+     */
+    protected abstract void postConnect();
+    
     /**
      * Gets METHOD_NAME parameter.
      * @return METHOD_NAME parameter.
@@ -192,6 +237,24 @@ public class Module extends Activity {
     public void setResult(Object result) {
         this.result = result;
     }
+    
+    /**
+     * Run connection. Launch Login activity when required
+     */
+    protected void runConnection()
+    {
+    	isConnected = connectionAvailable(this);
+        if (!isConnected) { 
+        	Toast.makeText(this, R.string.errorMsgNoConnection, Toast.LENGTH_LONG).show(); 
+        } else {
+	        //If this is not the Login module, launch login check
+	        if(!(this instanceof Login)) {
+	        	Intent loginActivity = new Intent(getBaseContext(),
+	        			Login.class);
+	        	startActivityForResult(loginActivity, Global.LOGIN_REQUEST_CODE);
+	        }
+        }
+    }
 
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onCreate()
@@ -201,12 +264,89 @@ public class Module extends Activity {
 		super.onCreate(savedInstanceState);
         prefs.getPreferences(getBaseContext());
         
-        //If not logged and this is not the Login module, launch login
-        if(!Global.isLogged() && !(this instanceof Login)) {
-        	Intent loginActivity = new Intent(getBaseContext(),
-                    Login.class);
-            startActivityForResult(loginActivity, Global.LOGIN_REQUEST_CODE);
+        Window w = getWindow();
+        w.requestFeature(Window.FEATURE_LEFT_ICON);
+        w.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.ic_launcher_swadroid);
+        
+        //If not connected to database, connect now
+        if(dbHelper == null) {
+	        try {
+	            db = DataFramework.getInstance();
+				db.open(this, this.getPackageName());
+		        dbHelper = new DataBaseHelper(db);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
         }
+        
+        Log.d(Global.MODULE_TAG, "onCreate()");
+	}
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onPause()
+	 */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(errorDialog != null) {
+            errorDialog.dismiss();
+        }
+        
+        Log.d(Global.MODULE_TAG, "onPause()");
+    }
+
+	/* (non-Javadoc)
+	 * @see android.app.ListActivity#onDestroy()
+	 */
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+        Log.d(Global.MODULE_TAG, "onDestroy()");
+	}
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onNewIntent(android.content.Intent)
+	 */
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+        Log.d(Global.MODULE_TAG, "onNewIntent()");
+	}
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onRestart()
+	 */
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+        Log.d(Global.MODULE_TAG, "onRestart()");
+	}
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onResume()
+	 */
+	@Override
+	protected void onResume() {
+		super.onResume();
+        Log.d(Global.MODULE_TAG, "onResume()");
+	}
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onStart()
+	 */
+	@Override
+	protected void onStart() {
+		super.onStart();
+        Log.d(Global.MODULE_TAG, "onStart()");
+	}
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onStop()
+	 */
+	@Override
+	protected void onStop() {
+		super.onStop();
+        Log.d(Global.MODULE_TAG, "onStop()");
 	}
 
 	/* (non-Javadoc)
@@ -218,11 +358,22 @@ public class Module extends Activity {
             //Bundle extras = data.getExtras();
 
             switch(requestCode) {
-                case Global.LOGIN_REQUEST_CODE:
-                     Global.setLogged(true);
-                     break;
+	            case Global.LOGIN_REQUEST_CODE:
+                    Global.setLogged(true);
+                    Toast.makeText(getBaseContext(),
+                            R.string.loginSuccessfulMsg,
+                            Toast.LENGTH_LONG).show();
+                    Log.d(Global.LOGIN_TAG, getString(R.string.loginSuccessfulMsg));
+                    
+                    if(!(this instanceof Login)) {
+                    	connect();
+                    }
+                    
+	            	break;
             }
         }
+        
+		Log.d(Global.MODULE_TAG, "onActivityResult()");
     }
 
 	/**
@@ -245,33 +396,31 @@ public class Module extends Activity {
     /**
      * Sends request to webservice.
      * @param cl Class to be mapped
+     * @param simple Flag for select simple or complex response
      * @throws IOException
      * @throws SoapFault
      * @throws InstantiationException 
      * @throws IllegalAccessException 
      */
-    protected void sendRequest(Class cl)
+    protected void sendRequest(Class cl, boolean simple)
     	throws IOException, SoapFault, IllegalAccessException, InstantiationException {
-    	
+
     	int numRetrys = 1;
-        Object res;
         HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         
         envelope.setOutputSoapObject(request);
-        envelope.dotNet = false;
-        envelope.addMapping(NAMESPACE, cl.getName(),cl.newInstance().getClass());
+        envelope.addMapping(NAMESPACE, cl.getSimpleName(), cl);
         
         //If an XmlPullParserException occurs, retry once in order to workaround an Android emulator bug
         do {
 	        try {
 	        	androidHttpTransport.call(SOAP_ACTION, envelope);
 	        	
-	        	res = envelope.getResponse();
-	        	if(res instanceof SoapFault) {
-	        		result = null;
+	        	if(simple) {
+	        		result = envelope.bodyIn;
 	        	} else {
-	        		result = res;
+	        		result = envelope.getResponse();
 	        	}
 	        } catch(XmlPullParserException ex) {
 	        	Log.e(Global.MODULE_TAG, getString(R.string.errorMsgWorkaroundEmulator));
@@ -322,15 +471,130 @@ public class Module extends Activity {
                 .setIcon(R.drawable.erroricon).show();
                 
     }
+    
+    /**
+     * Shows Preferences screen
+     */
+    protected void viewPreferences() {
+    	Intent settingsActivity = new Intent(getBaseContext(),
+                Preferences.class);
+        startActivity(settingsActivity);
+    }
 
 	/* (non-Javadoc)
-	 * @see android.app.Activity#onPause()
+	 * @see android.app.Activity#onCreateOptionsMenu()
 	 */
     @Override
-    protected void onPause() {
-        super.onPause();
-        if(errorDialog != null) {
-            errorDialog.dismiss();
-        }
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return true;
     }
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onOptionsItemSelected()
+	 */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.preferences_menu:
+            	viewPreferences();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+	/**
+     * Shows progress dialog when connecting to SWAD
+     */
+    protected class Connect extends AsyncTask<String, Void, Void> {
+        /**
+         * Progress dialog.
+         */
+        ProgressDialog dialog = new ProgressDialog(Module.this);
+        /**
+         * Exception pointer.
+         */
+        Exception e = null;
+        String progressDescription;
+        int progressTitle;
+        boolean showDialog;
+
+        /**
+         * Shows progress dialog and connects to SWAD in background
+		 * @param progressDescription Description to be showed in dialog
+		 * @param progressTitle Title to be showed in dialog
+		 */
+		public Connect(boolean showDialog, String progressDescription, int progressTitle) {
+			super();
+			this.progressDescription = progressDescription;
+			this.progressTitle = progressTitle;
+			this.showDialog = showDialog;
+		}
+
+		/* (non-Javadoc)
+    	 * @see android.app.Activity#onPreExecute()
+    	 */
+        @Override
+        protected void onPreExecute() {
+        	if(showDialog) {
+	            dialog.setMessage(progressDescription);
+	            dialog.setTitle(progressTitle);
+	            dialog.show();
+        	}
+        }
+
+        /* (non-Javadoc)
+    	 * @see android.app.Activity#doInBackground()
+    	 */
+        @Override
+		protected Void doInBackground(String... urls) {
+            try {
+                //Sends webservice request
+                requestService();
+            /**
+             * If an exception occurs, capture and points exception pointer
+             * to it.
+             */
+            } catch (SoapFault ex) {
+                e = ex;
+            } catch (Exception ex) {
+                e = ex;
+            }
+
+            return null;
+        }
+
+        /* (non-Javadoc)
+    	 * @see android.app.Activity#onPostExecute()
+    	 */
+        @Override
+        protected void onPostExecute(Void unused) {
+        	if(dialog.isShowing()) {
+        		dialog.dismiss();
+        	}
+        	
+        	postConnect();
+            
+            if(e != null) {
+                /**
+                 * If an exception has occurred, shows error message according to
+                 * exception type.
+                 */
+                if(e instanceof SoapFault) {
+                    SoapFault es = (SoapFault) e;
+                    Log.e(es.getClass().getSimpleName(), es.getMessage());
+                    error(es.getMessage());
+                } else {
+                    Log.e(e.getClass().getSimpleName(), e.toString());
+                    error(e.toString());
+                }
+
+                //Request finalized with errors
+                e.printStackTrace();
+                setResult(RESULT_CANCELED);
+            }
+        }
+    }    
 }

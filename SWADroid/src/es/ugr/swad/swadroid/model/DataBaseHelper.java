@@ -45,6 +45,22 @@ public class DataBaseHelper {
 	}
 	
 	/**
+	 * Gets DB object
+	 * @return DataFramework DB object
+	 */
+	public DataFramework getDb() {
+		return db;
+	}
+
+	/**
+	 * Sets DB object
+	 * @param db DataFramework DB object
+	 */
+	public void setDb(DataFramework db) {
+		this.db = db;
+	}
+
+	/**
 	 * Function to parse from Integer to Boolean
 	 * @param n Integer to be parsed
 	 * @return true if n==0, false in other case
@@ -84,13 +100,7 @@ public class DataBaseHelper {
 		String firstParam = null;
 		String secondParam = null;
 		
-    	if(table.equals(Global.DB_TABLE_NOTICES_COURSES)) {
-    		firstParam = "idcourse";
-    		secondParam = "idnotice";
-    	} else if(table.equals(Global.DB_TABLE_STUDENTS_COURSES)) {
-    		firstParam = "idcourse";
-    		secondParam = "idstudent";
-    	} else if(table.equals(Global.DB_TABLE_TEST_QUESTIONS_COURSES)) {
+    	if(table.equals(Global.DB_TABLE_TEST_QUESTIONS_COURSES)) {
     		firstParam = "crscod";
     		secondParam = "qstcod";
     	} else {
@@ -113,66 +123,23 @@ public class DataBaseHelper {
 		if(table.equals(Global.DB_TABLE_COURSES)) {
 			o = new Course(ent.getInt("id"),
 							ent.getString("name"));
-		} else if(table.equals(Global.DB_TABLE_NOTICES)) {
-			o = new Notice(ent.getInt("id"),
-							ent.getInt("timestamp"),
-							ent.getString("description"));
-		/*} else if(table.equals(Global.DB_TABLE_STUDENTS)) {
-			o = new Student((Integer) ent.getInt(0),
-							(String) ent.getString(1),
-							(String) ent.getString(2),
-							(String) ent.getString(3),
-							(String) ent.getString(4));
-		} else if(table.equals(Global.DB_TABLE_TEST_ANSWERS)) {
-			o = new TestAnswer((Integer) ent.getInt(0),
-					(Boolean) parseIntBool(ent.getInt(1)),
-					(String) ent.getString(2));
-		} else if(table.equals(Global.DB_TABLE_TEST_QUESTIONS)) {
-			o = new TestQuestion((Integer) ent.getInt(0),
-					(String) ent.getString(1),
-					(String) ent.getString(2),
-					(Integer) ent.getInt(3),
-					(Boolean) parseStringBool(ent.getString(4)),
-					(Float) ent.getFloat(5));
-		} else if(table.equals(Global.DB_TABLE_MSG_CONTENT)) {
-			o = new MessageContent((Integer) ent.getInt(0),
-					(String) ent.getString(1),
-					(String) ent.getString(2),
-					(Boolean) parseStringBool(ent.getString(3)),
-					(Integer) ent.getInt(4));
-		} else if(table.equals(Global.DB_TABLE_MSG_RCV)) {
-			o = new MessageReceived((Integer) ent.getInt(0),
-					(String) ent.getString(1),
-					(String) ent.getString(2),
-					(Integer) ent.getInt(3),
-					(Boolean) parseStringBool(ent.getString(4)),
-					(Boolean) parseStringBool(ent.getString(5)),
-					(Boolean) parseStringBool(ent.getString(6)),
-					(Boolean) parseStringBool(ent.getString(7)));
-		} else if(table.equals(Global.DB_TABLE_MSG_SNT)) {
-			o = new MessageSent((Integer) ent.getInt(0),
-					(String) ent.getString(1),
-					(String) ent.getString(2),
-					(Boolean) parseStringBool(ent.getString(3)),
-					(Integer) ent.getInt(4),
-					(Integer) ent.getInt(5),
-					(String) ent.getString(6));
-		} else if(table.equals(Global.DB_TABLE_MARKS)) {
-			o = new Mark((Integer) ent.getInt(0),
-					(Integer) ent.getInt(1),
-					(Integer) ent.getInt(2),
-					(String) ent.getString(3),
-					(Integer) ent.getInt(4),
-					(Integer) ent.getInt(5));*/
-		} else if(table.equals(Global.DB_TABLE_NOTICES_COURSES) ||
-				table.equals(Global.DB_TABLE_STUDENTS_COURSES) ||
-				table.equals(Global.DB_TABLE_TEST_QUESTIONS_COURSES)) {
+		} else if(table.equals(Global.DB_TABLE_TEST_QUESTIONS_COURSES)) {
 			
 			params = selectParamsPairTable(table);
 			
 			o = new PairTable<Integer, Integer>(table,
 					ent.getInt(params.getFirst()),
 					ent.getInt(params.getSecond()));
+		} else if(table.equals(Global.DB_TABLE_NOTIFICATIONS)) {			
+			o = new Notification(ent.getInt("id"),
+					ent.getString("eventType"), 
+					ent.getLong("eventTime"), 
+					ent.getString("userSurname1"), 
+					ent.getString("userSurname2"), 
+					ent.getString("userFirstname"), 
+					ent.getString("location"), 
+					ent.getString("summary"), 
+					ent.getInt("status"));
 		}
 		
 		return o;
@@ -212,15 +179,25 @@ public class DataBaseHelper {
     }
 	
 	/**
-	 * Inserts a notice in database
-	 * @param n Notice to be inserted
+	 * Inserts a notification in database
+	 * @param n Notification to be inserted
 	 */
-	public void insertNotice(Notice n)
+	public void insertNotification(Notification n)
     {
-		Entity ent = new Entity(Global.DB_TABLE_NOTICES);
+		Entity ent = new Entity(Global.DB_TABLE_NOTIFICATIONS);
+		
+		String eventTime = String.valueOf(n.getEventTime());
+		String status = String.valueOf(n.getStatus());
+		
 		ent.setValue("id", n.getId());
-		ent.setValue("timestamp", n.getTimestamp());
-		ent.setValue("description", n.getDescription());
+		ent.setValue("eventType", n.getEventType());
+		ent.setValue("eventTime", eventTime);
+		ent.setValue("userSurname1", n.getUserSurname1());
+		ent.setValue("userSurname2", n.getUserSurname2());
+		ent.setValue("userFirstname", n.getUserFirstName());
+		ent.setValue("location", n.getLocation());
+		ent.setValue("summary", n.getSummary());
+		ent.setValue("status", status);
 		ent.save();
     }
 	
@@ -254,17 +231,27 @@ public class DataBaseHelper {
     }
 	
 	/**
-	 * Updates a notice in database
-	 * @param prev Notice to be updated
-	 * @param actual Updated notice
+	 * Updates a notification in database
+	 * @param prev Notification to be updated
+	 * @param actual Updated notification
 	 */
-	public void updateNotice(Notice prev, Notice actual)
+	public void updateNotification(Notification prev, Notification actual)
     {
-		List<Entity> rows = db.getEntityList(Global.DB_TABLE_NOTICES, "id = " + prev.getId());
+		List<Entity> rows = db.getEntityList(Global.DB_TABLE_NOTIFICATIONS, "id = " + prev.getId());
 		Entity ent = rows.get(0);
+		
+		String eventTime = String.valueOf(actual.getEventTime());
+		String status = String.valueOf(actual.getStatus());
+		
 		ent.setValue("id", actual.getId());
-		ent.setValue("timestamp", actual.getTimestamp());
-		ent.setValue("description", actual.getDescription());
+		ent.setValue("eventType", actual.getEventType());
+		ent.setValue("eventTime", eventTime);
+		ent.setValue("userSurname1", actual.getUserSurname1());
+		ent.setValue("userSurname2", actual.getUserSurname2());
+		ent.setValue("userFirstName", actual.getUserFirstName());
+		ent.setValue("location", actual.getLocation());
+		ent.setValue("summary", actual.getSummary());
+		ent.setValue("status", status);
 		ent.save();
     }
 	
@@ -300,30 +287,23 @@ public class DataBaseHelper {
 		Entity ent = rows.get(0);		
 		ent.delete();
 		
-		rows = db.getEntityList(Global.DB_TABLE_NOTICES_COURSES, "idcourse = " + id);
+		/*rows = db.getEntityList(Global.DB_TABLE_NOTICES_COURSES, "idcourse = " + id);
 		Iterator<Entity> iter = rows.iterator();
 		while (iter.hasNext()) {
 		  ent = iter.next();
 		  ent.delete();
-		}
+		}*/
     }
 	
 	/**
-	 * Removes a notice from database
-	 * @param id Identifier of Notice to be removed
+	 * Removes a notification from database
+	 * @param id Identifier of Notification to be removed
 	 */
-	public void removeNotice(int id)
+	public void removeNotification(int id)
     {
-		List<Entity> rows = db.getEntityList(Global.DB_TABLE_NOTICES, "id = " + id);
+		List<Entity> rows = db.getEntityList(Global.DB_TABLE_NOTIFICATIONS, "id = " + id);
 		Entity ent = rows.get(0);		
 		ent.delete();
-		
-		rows = db.getEntityList(Global.DB_TABLE_NOTICES_COURSES, "idnotice = " + id);
-		Iterator<Entity> iter = rows.iterator();
-		while (iter.hasNext()) {
-		  ent = iter.next();
-		  ent.delete();
-		}
     }
 	
 	/**
@@ -342,9 +322,57 @@ public class DataBaseHelper {
 		
 		where = params.getFirst() + " = " + first + " AND " + params.getSecond() + " = " + second;
 
-		Log.d("removePairTable", where);
 		rows = db.getEntityList(table, where);
 		ent = rows.get(0);
 		ent.delete();
     }
+	
+	/**
+	 * Empty table from database
+	 * @param table Table to be emptied
+	 */
+	public void emptyTable(String table)
+    {
+		db.emptyTable(table);
+    }
+	
+	/**
+	 * Gets a field of last notification
+	 * @param field A field of last notification
+	 * @return The field of last notification
+	 */
+	public String getFieldOfLastNotification(String field)
+    {
+		String where = null;
+		String orderby = "eventTime DESC";
+		List<Entity> rows = db.getEntityList(Global.DB_TABLE_NOTIFICATIONS, where, orderby);
+		String f = "0";
+		
+		if(rows.size() > 0)
+		{
+			Entity ent = rows.get(0);
+			f = (String) ent.getValue(field);
+		}
+		
+		return f;
+    }
+	
+	/**
+	 * Clear old notifications
+	 * @param size Max table size 
+	 */
+	public void clearOldNotifications(int size)
+	{
+		String where = null;
+		String orderby = "eventTime ASC";
+		List<Entity> rows = db.getEntityList(Global.DB_TABLE_NOTIFICATIONS, where, orderby);
+		int numRows = rows.size();
+		int numDeletions = numRows - size;
+		
+		if(numRows > size)
+		{
+			for(int i=0; i<numDeletions; i++)
+				rows.remove(i);
+		}
+	}
 }

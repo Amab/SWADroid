@@ -1,3 +1,9 @@
+## 0.3 (2011-03-08)
+
+* Added notifications module
+* Added Android 3.0 Honeycomb compatibility
+* Updated ksoap2-android library
+
 ## 0.2.2 (2011-01-18)
 
 * Added connection check
