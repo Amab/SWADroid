@@ -28,28 +28,67 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.gui.NotificationsCursorAdapter;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.model.Notification;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 
 /**
+ * Notifications module for get user's notifications
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  *
  */
 public class Notifications extends Module {
     /**
-     * Time period to store notifications 
+     * Max size to store notifications 
      */
-	private static final long TIMESTAMP_LIMIT = 2629743; //A month
+	private static final int SIZE_LIMIT = 25;
+	/**
+	 * Downloads new notifications when pushed
+	 */
+	private Button updateButton;
+	/**
+	 * Notifications adapter for showing the data
+	 */
+	private NotificationsCursorAdapter adapter;
+	/**
+	 * Cursor for database access
+	 */
+	private Cursor dbCursor;
+	/**
+	 * Cursor selection parameter
+	 */
+	private String selection = null;
+	/**
+	 * Cursor orderby parameter
+	 */
+    private String orderby = "eventTime DESC";
 	
 	/* (non-Javadoc)
 	 * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
 	 */
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {		
 		super.onCreate(savedInstanceState);
-        //setContentView(R.layout.notifications);
+        setContentView(R.layout.notifications);
+        
+        updateButton = (Button)this.findViewById(R.id.notificationsUpdateButton);
+        updateButton.setOnClickListener(new OnClickListener() {
+          public void onClick(View v) {
+        	  runConnection();
+          }          
+        });
+        
+        //dbHelper.emptyTable(Global.DB_TABLE_NOTIFICATIONS);
+        dbCursor = dbHelper.getDb().getCursor(Global.DB_TABLE_NOTIFICATIONS, selection, orderby);
+        adapter = new NotificationsCursorAdapter(this, dbCursor);
+        setListAdapter(adapter);
+        
         setMETHOD_NAME("getNotifications");
 	}
 
@@ -64,9 +103,6 @@ public class Notifications extends Module {
 		//Calculates next timestamp to be requested
 		Long timestamp = new Long(dbHelper.getFieldOfLastNotification("eventTime"));
 		timestamp++;
-		
-		//Clear old notifications to control database size
-		dbHelper.clearOldNotifications(timestamp - TIMESTAMP_LIMIT);
 		
 		//Creates webservice request, adds required params and sends request to webservice
 	    createRequest();
@@ -96,10 +132,11 @@ public class Notifications extends Module {
 	        }
 	        
 	        //Request finalized without errors
-	        //setResult(RESULT_OK);
+	        Log.i(Global.NOTIFICATIONS_TAG, "Retrieved " + csSize + " notifications");
+			
+			//Clear old notifications to control database size
+			dbHelper.clearOldNotifications(SIZE_LIMIT);
 	    }
-    	
-        //finish();
 	}
 
 	/* (non-Javadoc)
@@ -109,8 +146,17 @@ public class Notifications extends Module {
 	protected void connect() {
 		String progressDescription = getString(R.string.notificationsProgressDescription);
     	int progressTitle = R.string.notificationsProgressTitle;
-    	
+  	    
         new Connect(true, progressDescription, progressTitle).execute();
 	}
 
+	/* (non-Javadoc)
+	 * @see es.ugr.swad.swadroid.modules.Module#postConnect()
+	 */
+	@Override
+	protected void postConnect() {		
+		//Refresh data on screen 
+        dbCursor = dbHelper.getDb().getCursor(Global.DB_TABLE_NOTIFICATIONS, selection, orderby);
+        adapter.changeCursor(dbCursor);		
+	}
 }

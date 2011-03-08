@@ -21,6 +21,7 @@ package es.ugr.swad.swadroid.modules;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -56,7 +57,7 @@ import com.android.dataframework.DataFramework;
  * Superclass for encapsulate common behavior of all modules.
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
-public abstract class Module extends Activity {
+public abstract class Module extends ListActivity {
     /**
      * SOAP_ACTION param for webservice request.
      */
@@ -119,6 +120,11 @@ public abstract class Module extends Activity {
      * in UI thread.
      */
     protected abstract void connect();
+    
+    /**
+     * Launches action after executing connect() method 
+     */
+    protected abstract void postConnect();
     
     /**
      * Gets METHOD_NAME parameter.
@@ -233,19 +239,19 @@ public abstract class Module extends Activity {
     }
     
     /**
-     * Launch login activity when required
+     * Run connection. Launch Login activity when required
      */
-    private void runLogin()
+    protected void runConnection()
     {
     	isConnected = connectionAvailable(this);
         if (!isConnected) { 
         	Toast.makeText(this, R.string.errorMsgNoConnection, Toast.LENGTH_LONG).show(); 
         } else {
-	        //If not logged and this is not the Login module, launch login
-	        if(!Global.isLogged() && !(this instanceof Login)) {
+	        //If this is not the Login module, launch login check
+	        if(!(this instanceof Login)) {
 	        	Intent loginActivity = new Intent(getBaseContext(),
-	                    Login.class);
-	            startActivityForResult(loginActivity, Global.LOGIN_REQUEST_CODE);
+	        			Login.class);
+	        	startActivityForResult(loginActivity, Global.LOGIN_REQUEST_CODE);
 	        }
         }
     }
@@ -272,8 +278,75 @@ public abstract class Module extends Activity {
 				e.printStackTrace();
 			}
         }
-		
-        runLogin();
+        
+        Log.d(Global.MODULE_TAG, "onCreate()");
+	}
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onPause()
+	 */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(errorDialog != null) {
+            errorDialog.dismiss();
+        }
+        
+        Log.d(Global.MODULE_TAG, "onPause()");
+    }
+
+	/* (non-Javadoc)
+	 * @see android.app.ListActivity#onDestroy()
+	 */
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+        Log.d(Global.MODULE_TAG, "onDestroy()");
+	}
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onNewIntent(android.content.Intent)
+	 */
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+        Log.d(Global.MODULE_TAG, "onNewIntent()");
+	}
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onRestart()
+	 */
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+        Log.d(Global.MODULE_TAG, "onRestart()");
+	}
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onResume()
+	 */
+	@Override
+	protected void onResume() {
+		super.onResume();
+        Log.d(Global.MODULE_TAG, "onResume()");
+	}
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onStart()
+	 */
+	@Override
+	protected void onStart() {
+		super.onStart();
+        Log.d(Global.MODULE_TAG, "onStart()");
+	}
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onStop()
+	 */
+	@Override
+	protected void onStop() {
+		super.onStop();
+        Log.d(Global.MODULE_TAG, "onStop()");
 	}
 
 	/* (non-Javadoc)
@@ -299,6 +372,8 @@ public abstract class Module extends Activity {
 	            	break;
             }
         }
+        
+		Log.d(Global.MODULE_TAG, "onActivityResult()");
     }
 
 	/**
@@ -430,25 +505,14 @@ public abstract class Module extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onPause()
-	 */
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if(errorDialog != null) {
-            errorDialog.dismiss();
-        }
-    }
-    
-    /**
+	/**
      * Shows progress dialog when connecting to SWAD
      */
     protected class Connect extends AsyncTask<String, Void, Void> {
         /**
          * Progress dialog.
          */
-        ProgressDialog Dialog = new ProgressDialog(Module.this);
+        ProgressDialog dialog = new ProgressDialog(Module.this);
         /**
          * Exception pointer.
          */
@@ -475,9 +539,9 @@ public abstract class Module extends Activity {
         @Override
         protected void onPreExecute() {
         	if(showDialog) {
-	            Dialog.setMessage(progressDescription);
-	            Dialog.setTitle(progressTitle);
-	            Dialog.show();
+	            dialog.setMessage(progressDescription);
+	            dialog.setTitle(progressTitle);
+	            dialog.show();
         	}
         }
 
@@ -507,9 +571,11 @@ public abstract class Module extends Activity {
     	 */
         @Override
         protected void onPostExecute(Void unused) {
-        	if(showDialog) {
-        		Dialog.dismiss();
+        	if(dialog.isShowing()) {
+        		dialog.dismiss();
         	}
+        	
+        	postConnect();
             
             if(e != null) {
                 /**

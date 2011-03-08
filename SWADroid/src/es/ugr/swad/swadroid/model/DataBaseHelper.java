@@ -45,6 +45,22 @@ public class DataBaseHelper {
 	}
 	
 	/**
+	 * Gets DB object
+	 * @return DataFramework DB object
+	 */
+	public DataFramework getDb() {
+		return db;
+	}
+
+	/**
+	 * Sets DB object
+	 * @param db DataFramework DB object
+	 */
+	public void setDb(DataFramework db) {
+		this.db = db;
+	}
+
+	/**
 	 * Function to parse from Integer to Boolean
 	 * @param n Integer to be parsed
 	 * @return true if n==0, false in other case
@@ -114,6 +130,16 @@ public class DataBaseHelper {
 			o = new PairTable<Integer, Integer>(table,
 					ent.getInt(params.getFirst()),
 					ent.getInt(params.getSecond()));
+		} else if(table.equals(Global.DB_TABLE_NOTIFICATIONS)) {			
+			o = new Notification(ent.getInt("id"),
+					ent.getString("eventType"), 
+					ent.getLong("eventTime"), 
+					ent.getString("userSurname1"), 
+					ent.getString("userSurname2"), 
+					ent.getString("userFirstname"), 
+					ent.getString("location"), 
+					ent.getString("summary"), 
+					ent.getInt("status"));
 		}
 		
 		return o;
@@ -168,7 +194,7 @@ public class DataBaseHelper {
 		ent.setValue("eventTime", eventTime);
 		ent.setValue("userSurname1", n.getUserSurname1());
 		ent.setValue("userSurname2", n.getUserSurname2());
-		ent.setValue("userFirstName", n.getUserFirstName());
+		ent.setValue("userFirstname", n.getUserFirstName());
 		ent.setValue("location", n.getLocation());
 		ent.setValue("summary", n.getSummary());
 		ent.setValue("status", status);
@@ -317,13 +343,14 @@ public class DataBaseHelper {
 	 */
 	public String getFieldOfLastNotification(String field)
     {
-		String orderby = "eventTime desc";
-		List<Entity> rows = db.getEntityList(Global.DB_TABLE_NOTIFICATIONS, null, orderby);
+		String where = null;
+		String orderby = "eventTime DESC";
+		List<Entity> rows = db.getEntityList(Global.DB_TABLE_NOTIFICATIONS, where, orderby);
 		String f = "0";
 		
 		if(rows.size() > 0)
 		{
-			Entity ent = rows.get(rows.size()-1);
+			Entity ent = rows.get(0);
 			f = (String) ent.getValue(field);
 		}
 		
@@ -332,17 +359,20 @@ public class DataBaseHelper {
 	
 	/**
 	 * Clear old notifications
-	 * @param timestamp Newest timestamp to clear
+	 * @param size Max table size 
 	 */
-	public void clearOldNotifications(long timestamp)
+	public void clearOldNotifications(int size)
 	{
-		String where = "eventTime < " + timestamp;
-		List<Entity> rows = db.getEntityList(Global.DB_TABLE_NOTIFICATIONS, where);
-		Iterator<Entity> iter = rows.iterator();
+		String where = null;
+		String orderby = "eventTime ASC";
+		List<Entity> rows = db.getEntityList(Global.DB_TABLE_NOTIFICATIONS, where, orderby);
+		int numRows = rows.size();
+		int numDeletions = numRows - size;
 		
-		while (iter.hasNext()) {
-		  Entity ent = iter.next();
-		  ent.delete();
+		if(numRows > size)
+		{
+			for(int i=0; i<numDeletions; i++)
+				rows.remove(i);
 		}
 	}
 }
