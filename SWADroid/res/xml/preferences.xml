@@ -4,13 +4,13 @@
                 android:title="@string/user_preferences">
         <EditTextPreference
                 android:name="@string/userIDName_preferences"
-                android:summary="@string/userIDSummary_preferences"
+                android:hint="@string/userIDSummary_preferences"
                 android:defaultValue=""
                 android:title="@string/userIDTitle_preferences"
                 android:key="userIDPref" />
         <EditTextPreference
                 android:name="@string/userPasswordName_preferences"
-                android:summary="@string/userPasswordSummary_preferences"
+                android:hint="@string/userPasswordSummary_preferences"
                 android:defaultValue=""
                 android:title="@string/userPasswordTitle_preferences"
                 android:key="userPasswordPref"                

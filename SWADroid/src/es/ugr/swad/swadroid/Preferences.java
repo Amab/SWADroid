@@ -55,6 +55,18 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
      * User password preference name.
      */
     private static final String USERPASSWORDPREF = "userPasswordPref";
+    /**
+     * User ID preference
+     */
+    private Preference userIDPref;
+    /**
+     * User password preference
+     */
+    private Preference userPasswordPref;
+    /**
+     * Preferences editor
+     */
+ 	Editor editor;
 
     /**
      * Gets user identifier.
@@ -85,9 +97,20 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 	 * Store the first run
 	 */
 	 public void setRunned() {
-	    SharedPreferences.Editor edit = prefs.edit();
-	    edit.putBoolean("firstRun", false);
-	    edit.commit();
+	    editor.putBoolean("firstRun", false);
+	    editor.commit();
+	 }
+	 
+	 private String getStarsSequence(int size)
+	 {
+		 String stars = "";
+		 
+		 for(int i=0; i<size; i++)
+		 {
+			 stars += "*";
+		 }
+		 
+		 return stars;
 	 }
 	
     /**
@@ -111,8 +134,10 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         //Restore preferences
         addPreferencesFromResource(R.xml.preferences);
         prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        final Preference userIDPref = findPreference(USERIDPREF);
-        final Preference userPasswordPref = findPreference(USERPASSWORDPREF);
+        editor = prefs.edit();
+        
+        userIDPref = findPreference(USERIDPREF);
+        userPasswordPref = findPreference(USERPASSWORDPREF);
         
         userIDPref.setOnPreferenceChangeListener(this);
         userPasswordPref.setOnPreferenceChangeListener(this);
@@ -125,6 +150,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
              */
             public boolean onPreferenceClick(Preference preference) {
                 userID = prefs.getString(USERIDPREF, "");
+            	editor.putString(USERIDPREF, userID);
                 return true;
             }
         });
@@ -136,6 +162,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
              */
             public boolean onPreferenceClick(Preference preference) {
                 userPassword = prefs.getString(USERPASSWORDPREF, "");
+            	editor.putString(USERPASSWORDPREF, userPassword);
                 return true;
             }
         });
@@ -143,19 +170,39 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 
 	public boolean onPreferenceChange(Preference preference, Object newValue) {
 		 	String key = preference.getKey();
-		 	Editor editor = prefs.edit();
 		 	Notifications n = new Notifications();
 		 
 		 	//If preferences have changed, logout and save new preferences
 	        if (USERIDPREF.equals(key) || USERPASSWORDPREF.equals(key)) {
 	        	Global.setLogged(false);
-	        	n.clearNotifications(this);	
-	        	
-	        	editor.putString(USERIDPREF, userID);
-	        	editor.putString(USERPASSWORDPREF, userPassword);
-	        	editor.commit();
+	        	n.clearNotifications(this);
+            	editor.commit();
+	        }
+	        
+	        if(USERPASSWORDPREF.equals(key))
+	        {
+        		String stars = getStarsSequence(((String) newValue).length());
+        		preference.setSummary(stars);	        	
+	        } else {
+	        	preference.setSummary((CharSequence) newValue);
 	        }
 	        
 	        return true;
 	}
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onResume()
+	 */
+	@Override
+	protected void onResume() {
+		super.onResume();
+		String stars = getStarsSequence(prefs.getString(USERPASSWORDPREF, "").length());
+        userIDPref.setSummary(prefs.getString(USERIDPREF, ""));
+        userPasswordPref.setSummary(stars);
+	}
+	
+	@Override
+    protected void onPause() {
+        super.onPause();
+    }
 }
