@@ -48,7 +48,7 @@ import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
-import org.ksoap2.transport.HttpTransportSE;
+import org.ksoap2.transport.KeepAliveHttpsTransportSE;
 import org.xmlpull.v1.XmlPullParserException;
 
 import com.android.dataframework.DataFramework;
@@ -73,7 +73,7 @@ public abstract class Module extends ListActivity {
     /**
      * URL param for webservice request.
      */
-    String URL = "https://swad.ugr.es/";
+    String URL = "swad.ugr.es";
     /**
      * Preferences of the activity.
      */
@@ -102,6 +102,10 @@ public abstract class Module extends ListActivity {
      * Connection available flag
      */
     protected static boolean isConnected;
+    /**
+     * Connection timeout in milliseconds
+     */
+    private static int TIMEOUT = 10000;
     
     /**
      * Connects to SWAD and gets user data.
@@ -260,7 +264,9 @@ public abstract class Module extends ListActivity {
 	 * @see android.app.Activity#onCreate()
 	 */
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {        
+        Log.d(Global.MODULE_TAG, "onCreate()");
+        
 		super.onCreate(savedInstanceState);
         prefs.getPreferences(getBaseContext());
         
@@ -275,24 +281,23 @@ public abstract class Module extends ListActivity {
 				db.open(this, this.getPackageName());
 		        dbHelper = new DataBaseHelper(db);
 			} catch (Exception e) {
-				e.printStackTrace();
+				Log.e(e.getClass().getSimpleName(), e.getMessage());
+                error(e.getMessage());
 			}
         }
-        
-        Log.d(Global.MODULE_TAG, "onCreate()");
 	}
 
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onPause()
 	 */
     @Override
-    protected void onPause() {
+    protected void onPause() {        
+        Log.d(Global.MODULE_TAG, "onPause()");
+        
         super.onPause();
         if(errorDialog != null) {
             errorDialog.dismiss();
         }
-        
-        Log.d(Global.MODULE_TAG, "onPause()");
     }
 
 	/* (non-Javadoc)
@@ -300,17 +305,8 @@ public abstract class Module extends ListActivity {
 	 */
 	@Override
 	protected void onDestroy() {
-		super.onDestroy();
         Log.d(Global.MODULE_TAG, "onDestroy()");
-	}
-
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onNewIntent(android.content.Intent)
-	 */
-	@Override
-	protected void onNewIntent(Intent intent) {
-		super.onNewIntent(intent);
-        Log.d(Global.MODULE_TAG, "onNewIntent()");
+		super.onDestroy();
 	}
 
 	/* (non-Javadoc)
@@ -318,8 +314,8 @@ public abstract class Module extends ListActivity {
 	 */
 	@Override
 	protected void onRestart() {
-		super.onRestart();
         Log.d(Global.MODULE_TAG, "onRestart()");
+		super.onRestart();
 	}
 
 	/* (non-Javadoc)
@@ -327,8 +323,8 @@ public abstract class Module extends ListActivity {
 	 */
 	@Override
 	protected void onResume() {
-		super.onResume();
         Log.d(Global.MODULE_TAG, "onResume()");
+		super.onResume();
 	}
 
 	/* (non-Javadoc)
@@ -336,8 +332,8 @@ public abstract class Module extends ListActivity {
 	 */
 	@Override
 	protected void onStart() {
-		super.onStart();
         Log.d(Global.MODULE_TAG, "onStart()");
+		super.onStart();
 	}
 
 	/* (non-Javadoc)
@@ -345,15 +341,17 @@ public abstract class Module extends ListActivity {
 	 */
 	@Override
 	protected void onStop() {
-		super.onStop();
         Log.d(Global.MODULE_TAG, "onStop()");
+		super.onStop();
 	}
 
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onActivityResult()
 	 */
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {        
+		Log.d(Global.MODULE_TAG, "onActivityResult()");
+		
         if (resultCode == Activity.RESULT_OK) {
             //Bundle extras = data.getExtras();
 
@@ -371,9 +369,12 @@ public abstract class Module extends ListActivity {
                     
 	            	break;
             }
+        } else {
+        	switch(requestCode) {
+	            case Global.LOGIN_REQUEST_CODE:	                
+	            	break;
+        	}
         }
-        
-		Log.d(Global.MODULE_TAG, "onActivityResult()");
     }
 
 	/**
@@ -401,33 +402,24 @@ public abstract class Module extends ListActivity {
      * @throws SoapFault
      * @throws InstantiationException 
      * @throws IllegalAccessException 
+     * @throws XmlPullParserException 
      */
     protected void sendRequest(Class cl, boolean simple)
-    	throws IOException, SoapFault, IllegalAccessException, InstantiationException {
+    	throws IOException, SoapFault, IllegalAccessException, InstantiationException, XmlPullParserException {
 
-    	int numRetrys = 1;
-        HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
+        KeepAliveHttpsTransportSE connection = new KeepAliveHttpsTransportSE(URL, 443, "", TIMEOUT);
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        System.setProperty("http.keepAlive", "false");
         
         envelope.setOutputSoapObject(request);
         envelope.addMapping(NAMESPACE, cl.getSimpleName(), cl);
-        
-        //If an XmlPullParserException occurs, retry once in order to workaround an Android emulator bug
-        do {
-	        try {
-	        	androidHttpTransport.call(SOAP_ACTION, envelope);
-	        	
-	        	if(simple) {
-	        		result = envelope.bodyIn;
-	        	} else {
-	        		result = envelope.getResponse();
-	        	}
-	        } catch(XmlPullParserException ex) {
-	        	Log.e(Global.MODULE_TAG, getString(R.string.errorMsgWorkaroundEmulator));
-	        	Log.e(Global.MODULE_TAG, ex.getLocalizedMessage());
-	        	ex.printStackTrace();
-	        }
-        } while(numRetrys-- > 0);
+    	connection.call(SOAP_ACTION, envelope);
+    	
+    	if(simple && !(envelope.getResponse() instanceof SoapFault)) {
+    		result = envelope.bodyIn;
+    	} else {
+    		result = envelope.getResponse();
+    	}
     }
     
     /**
@@ -469,7 +461,6 @@ public abstract class Module extends ListActivity {
                     }
                 })
                 .setIcon(R.drawable.erroricon).show();
-                
     }
     
     /**
@@ -521,7 +512,7 @@ public abstract class Module extends ListActivity {
         int progressTitle;
         boolean showDialog;
 
-        /**
+		/**
          * Shows progress dialog and connects to SWAD in background
 		 * @param progressDescription Description to be showed in dialog
 		 * @param progressTitle Title to be showed in dialog
@@ -537,7 +528,9 @@ public abstract class Module extends ListActivity {
     	 * @see android.app.Activity#onPreExecute()
     	 */
         @Override
-        protected void onPreExecute() {
+        protected void onPreExecute() {        	
+        	Log.d(Global.MODULE_TAG, "onPreExecute()");
+        	
         	if(showDialog) {
 	            dialog.setMessage(progressDescription);
 	            dialog.setTitle(progressTitle);
@@ -549,18 +542,20 @@ public abstract class Module extends ListActivity {
     	 * @see android.app.Activity#doInBackground()
     	 */
         @Override
-		protected Void doInBackground(String... urls) {
+		protected Void doInBackground(String... urls) {        	
+        	Log.d(Global.MODULE_TAG, "doInBackground()");
+        	
             try {
                 //Sends webservice request
                 requestService();
             /**
-             * If an exception occurs, capture and points exception pointer
-             * to it.
+             * If an exception occurs, capture, points exception pointer
+             * to it and shows error message according to exception type.
              */
             } catch (SoapFault ex) {
-                e = ex;
+            	e = ex;
             } catch (Exception ex) {
-                e = ex;
+            	e = ex;
             }
 
             return null;
@@ -570,14 +565,14 @@ public abstract class Module extends ListActivity {
     	 * @see android.app.Activity#onPostExecute()
     	 */
         @Override
-        protected void onPostExecute(Void unused) {
+        protected void onPostExecute(Void unused) {        	
+        	Log.d(Global.MODULE_TAG, "onPostExecute()");
+        	
         	if(dialog.isShowing()) {
         		dialog.dismiss();
         	}
         	
-        	postConnect();
-            
-            if(e != null) {
+        	if(e != null) {
                 /**
                  * If an exception has occurred, shows error message according to
                  * exception type.
@@ -587,14 +582,16 @@ public abstract class Module extends ListActivity {
                     Log.e(es.getClass().getSimpleName(), es.getMessage());
                     error(es.getMessage());
                 } else {
-                    Log.e(e.getClass().getSimpleName(), e.toString());
-                    error(e.toString());
+                    Log.e(e.getClass().getSimpleName(), e.getMessage());
+                    error(e.getMessage());
                 }
 
                 //Request finalized with errors
                 e.printStackTrace();
                 setResult(RESULT_CANCELED);
-            }
-        }
+            } else {
+        		postConnect();
+        	}
+        }        
     }    
 }
