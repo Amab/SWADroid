@@ -3,8 +3,4 @@ SWADroid/default.properties
 SWADroid/.classpath
 SWADroid/.project
 SWADroid/.settings/
-SWADroidTest/bin/
-SWADroidTest/default.properties
-SWADroidTest/.classpath
-SWADroidTest/.project
-SWADroidTest/.settings/
+SWADroidTest/
