@@ -1,3 +1,10 @@
+## 0.3.1 (2011-03-21)
+
+* Added automatic saving of preferences
+* Added automatic notifications cleaning when username or password changes
+* Changed background colors of notifications
+* Fixed compatibility issues with some devices
+
 ## 0.3 (2011-03-08)
 
 * Added notifications module

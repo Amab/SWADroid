@@ -23,6 +23,7 @@ import es.ugr.swad.swadroid.R;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,12 @@ import android.widget.TextView;
  *
  */
 public class NotificationsCursorAdapter extends CursorAdapter {
+	private static final String EXAM_ANNOUNCEMENT_COLOR = "#380B61";
+	private static final String MARKS_FILE_COLOR = "#4B088A";
+	private static final String NOTICE_COLOR = "#08088A";
+	private static final String MESSAGE_COLOR = "#0B615E";
+	private static final String FORUM_REPLY_COLOR = "#0B0B3B";
+	
 	public NotificationsCursorAdapter(Context context, Cursor c) {
 		super(context, c);
 	}
@@ -45,14 +52,10 @@ public class NotificationsCursorAdapter extends CursorAdapter {
 		super(context, c, autoRequery);
 	}
 
-	public NotificationsCursorAdapter(Context context, Cursor c, int flags) {
-		super(context, c, flags);
-	}
-
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {		
 		long unixTime;
-		String type, sender, from, dateTitle;
+		String type, sender, from, dateTitle, summaryText;
     	Date d;
     	
         TextView eventType = (TextView) view.findViewById(R.id.eventType);
@@ -67,23 +70,23 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         	if(type.equals("examAnnouncement"))
         	{
         		type = context.getString(R.string.examAnnouncement);
-        		view.setBackgroundColor(Color.parseColor("#088A08"));
+        		view.setBackgroundColor(Color.parseColor(EXAM_ANNOUNCEMENT_COLOR));
         	} else if(type.equals("marksFile"))
         	{
         		type = context.getString(R.string.marksFile);
-        		view.setBackgroundColor(Color.parseColor("#DF7401"));
+        		view.setBackgroundColor(Color.parseColor(MARKS_FILE_COLOR));
         	} else if(type.equals("notice"))
         	{
         		type = context.getString(R.string.notice);
-        		view.setBackgroundColor(Color.parseColor("#868A08"));
+        		view.setBackgroundColor(Color.parseColor(NOTICE_COLOR));
         	} else if(type.equals("message"))
         	{
         		type = context.getString(R.string.message);
-        		view.setBackgroundColor(Color.BLUE);
+        		view.setBackgroundColor(Color.parseColor(MESSAGE_COLOR));
         	} else if(type.equals("forumReply"))
         	{
         		type = context.getString(R.string.forumReply);
-        		view.setBackgroundColor(Color.parseColor("#B40404"));
+        		view.setBackgroundColor(Color.parseColor(FORUM_REPLY_COLOR));
         	}
         	
         	eventType.setText(type);
@@ -105,7 +108,8 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         	location.setText(cursor.getString(cursor.getColumnIndex("location")));
         }
         if(summary != null){
-        	summary.setText(cursor.getString(cursor.getColumnIndex("summary")));
+        	summaryText = cursor.getString(cursor.getColumnIndex("summary"));
+        	summary.setText(Html.fromHtml(summaryText));
         }
 	}
 
