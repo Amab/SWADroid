@@ -28,5 +28,10 @@
 <string name="marksFile">Archivo de calificaciones</string>
 <string name="notice">Aviso</string>
 <string name="message">Mensaje</string>
-<string name="forumReply">Respuesta en foro</string><string name="notificationsFromMsg">De</string><string name=" notificationsDateMsg">Fecha</string>
+<string name="forumReply">Respuesta en foro</string><string name="content">Contenido</string><string name="notificationsFromMsg">De</string><string name=" notificationsDateMsg">Fecha</string>
+<string name="yesMsg">Sí</string>
+<string name="noMsg">No</string>
+<string name="firstRunMsg">Antes de usar la aplicación por primera vez debe introducir el nombre de usuario y la contraseña de acceso a SWAD en la pantalla de configuración.\n\nPuede acceder a la pantalla de configuración desde el menú de la aplicación en cualquier momento.\n\n¿Desea abrir ahora la pantalla de configuración?</string>
+<string name="initialDialogTitle">IMPORTANTE</string>
+
 </resources>

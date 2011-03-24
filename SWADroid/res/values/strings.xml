@@ -30,9 +30,13 @@
 <string name="marksFile">Marks file</string>
 <string name="notice">Notice</string>
 <string name="message">Message</string>
-<string name="forumReply">Forum reply</string>
+<string name="forumReply">Forum reply</string><string name="content">Content</string>
 <string name="notificationsFromMsg">From</string>
 <string name=" notificationsDateMsg">Date</string>
+<string name="yesMsg">Yes</string>
+<string name="noMsg">No</string><string name="firstRunMsg">Before using the application for the first time you must enter the user name and password for SWAD at the setup screen.\n\nYou can access to the setup screen from the application menu anytime.\n\nDo you want to open the configuration screen now?</string>
+<string name="initialDialogTitle">IMPORTANT</string>
+
 
 
 
