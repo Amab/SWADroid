@@ -1,3 +1,8 @@
+## 0.3.2 (2011-03-24)
+
+* Added first run dialog
+* Improved preferences screen
+
 ## 0.3.1 (2011-03-21)
 
 * Added automatic saving of preferences
