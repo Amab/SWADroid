@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with SWADroid.  If not, see <http://www.gnu.org/licenses/>.
  */
-package es.ugr.swad.swadroid.modules;
+package es.ugr.swad.swadroid.modules.notifications;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -30,10 +30,10 @@ import com.android.dataframework.DataFramework;
 
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.gui.NotificationsCursorAdapter;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.model.Notification;
+import es.ugr.swad.swadroid.modules.Module;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
