@@ -4,6 +4,12 @@ Android client for e-learning platform SWAD. This project is currently under hea
 
 [Download APK][apk]
 
+* Code: `git clone git://github.com/Amab/SWADroid.git`
+* Issue tracker: <https://github.com/Amab/SWADroid/issues>
+* Mailing list: <http://groups.google.es/group/swadroid>
+* Twitter: <http://twitter.com/SWADroid>
+* Facebook: <http://www.facebook.com/pages/SWADroid/116319955109575>
+
 ## Content
 
 	SWADroid/		Android client.
@@ -36,15 +42,6 @@ SWADroid is an open source project.  I encourage contributions.
 The Github team has also been kind enough to write up some great [documentation][doc_contrib] on working with pull requests. Contributions should be performed on [topic branches][topic_br] in your personal forks - just issue your pull requests from there.
 
 
-## More
-
-* Code: `git clone git://github.com/Amab/SWADroid.git`
-* Issue tracker: <https://github.com/Amab/SWADroid/issues>
-* Mailing list: <http://groups.google.es/group/swadroid>
-* Twitter: <http://twitter.com/SWADroid>
-* Facebook: <http://www.facebook.com/pages/SWADroid/116319955109575>
-
-
 [gplv3]: http://www.gnu.org/licenses/gpl.html
 [lgplv3]: http://www.gnu.org/licenses/lgpl.html
 [mit]: http://www.opensource.org/licenses/mit-license.php
@@ -54,4 +51,4 @@ The Github team has also been kind enough to write up some great [documentation]
 [ksoap2-author]: https://github.com/mosabua
 [androiddataframework-library]: http://code.google.com/p/androiddataframework/
 [androiddataframework-author]: http://www.javielinux.com/quiensoy.php
-[apk]: https://github.com/Amab/SWADroid/SWADroid.apk/qr_code
+[apk]: https://market.android.com/details?id=es.ugr.swad.swadroid
