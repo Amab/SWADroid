@@ -85,7 +85,7 @@ public abstract class Module extends ListActivity {
     /**
      * Webservice result.
      */
-    Object result;
+    protected Object result;
     /**
      * Shows error messages.
      */
@@ -249,7 +249,7 @@ public abstract class Module extends ListActivity {
     {
     	isConnected = connectionAvailable(this);
         if (!isConnected) { 
-        	Toast.makeText(this, R.string.errorMsgNoConnection, Toast.LENGTH_LONG).show(); 
+        	Toast.makeText(this, R.string.errorMsgNoConnection, Toast.LENGTH_SHORT).show(); 
         } else {
 	        //If this is not the Login module, launch login check
 	        if(!(this instanceof Login)) {
@@ -360,7 +360,7 @@ public abstract class Module extends ListActivity {
                     Global.setLogged(true);
                     Toast.makeText(getBaseContext(),
                             R.string.loginSuccessfulMsg,
-                            Toast.LENGTH_LONG).show();
+                            Toast.LENGTH_SHORT).show();
                     Log.d(Global.LOGIN_TAG, getString(R.string.loginSuccessfulMsg));
                     
                     if(!(this instanceof Login)) {

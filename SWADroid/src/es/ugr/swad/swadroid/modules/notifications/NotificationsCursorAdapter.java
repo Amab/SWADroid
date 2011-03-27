@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with SWADroid.  If not, see <http://www.gnu.org/licenses/>.
  */
-package es.ugr.swad.swadroid.gui;
+package es.ugr.swad.swadroid.modules.notifications;
 
 import java.util.Date;
 import es.ugr.swad.swadroid.R;
@@ -28,6 +28,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -56,13 +57,16 @@ public class NotificationsCursorAdapter extends CursorAdapter {
 	public void bindView(View view, Context context, Cursor cursor) {		
 		long unixTime;
 		String type, sender, from, dateTitle, summaryTitle, summaryText;
+		String[] dateContent;
     	Date d;
     	
         TextView eventType = (TextView) view.findViewById(R.id.eventType);
+        TextView eventDate = (TextView) view.findViewById(R.id.eventDate);
         TextView eventTime = (TextView) view.findViewById(R.id.eventTime);
         TextView eventSender = (TextView) view.findViewById(R.id.eventSender);
         TextView location = (TextView) view.findViewById(R.id.eventLocation);
         TextView summary = (TextView) view.findViewById(R.id.eventSummary);
+        ImageView icon = (ImageView) view.findViewById(R.id.notificationIcon);
         
         if(eventType != null) {
         	type = cursor.getString(cursor.getColumnIndex("eventType"));
@@ -70,47 +74,54 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         	if(type.equals("examAnnouncement"))
         	{
         		type = context.getString(R.string.examAnnouncement);
-        		view.setBackgroundColor(Color.parseColor(EXAM_ANNOUNCEMENT_COLOR));
+        		icon.setImageResource(R.drawable.announce);
+        		//view.setBackgroundColor(Color.parseColor(EXAM_ANNOUNCEMENT_COLOR));
         	} else if(type.equals("marksFile"))
         	{
         		type = context.getString(R.string.marksFile);
-        		view.setBackgroundColor(Color.parseColor(MARKS_FILE_COLOR));
+        		icon.setImageResource(R.drawable.grades);
+        		//view.setBackgroundColor(Color.parseColor(MARKS_FILE_COLOR));
         	} else if(type.equals("notice"))
         	{
         		type = context.getString(R.string.notice);
-        		view.setBackgroundColor(Color.parseColor(NOTICE_COLOR));
+        		icon.setImageResource(R.drawable.note);
+        		//view.setBackgroundColor(Color.parseColor(NOTICE_COLOR));
         	} else if(type.equals("message"))
         	{
         		type = context.getString(R.string.message);
-        		view.setBackgroundColor(Color.parseColor(MESSAGE_COLOR));
+        		icon.setImageResource(R.drawable.recmsg);
+        		//view.setBackgroundColor(Color.parseColor(MESSAGE_COLOR));
         	} else if(type.equals("forumReply"))
         	{
         		type = context.getString(R.string.forumReply);
-        		view.setBackgroundColor(Color.parseColor(FORUM_REPLY_COLOR));
+        		icon.setImageResource(R.drawable.forum);
+        		//view.setBackgroundColor(Color.parseColor(FORUM_REPLY_COLOR));
         	}
         	
         	eventType.setText(type);
         }
-        if(eventTime != null){
+        if((eventDate != null) && (eventTime != null)){
         	unixTime = Long.parseLong(cursor.getString(cursor.getColumnIndex("eventTime")));
         	d = new Date(unixTime * 1000);
-        	dateTitle = context.getString(R.string.notificationsDateMsg);
-        	eventTime.setText(dateTitle + ": " + d.toLocaleString());
+        	//dateTitle = context.getString(R.string.dateMsg);
+        	dateContent = d.toLocaleString().split(" ");
+        	eventDate.setText(dateContent[0]);
+        	eventTime.setText(dateContent[1]);
         }
         if(eventSender != null){
         	sender = cursor.getString(cursor.getColumnIndex("userFirstname")) + " "
         			+ cursor.getString(cursor.getColumnIndex("userSurname1")) + " "
         			+ cursor.getString(cursor.getColumnIndex("userSurname2"));
-        	from = context.getString(R.string.notificationsFromMsg);
-        	eventSender.setText(from + ": " + sender);
+        	//from = context.getString(R.string.fromMsg);
+        	eventSender.setText(sender);
         }
         if(location != null) {
         	location.setText(cursor.getString(cursor.getColumnIndex("location")));
         }
         if(summary != null){
-        	summaryTitle = context.getString(R.string.content);
+        	//summaryTitle = context.getString(R.string.content);
         	summaryText = cursor.getString(cursor.getColumnIndex("summary"));
-        	summary.setText(summaryTitle + ":\n" + Html.fromHtml(summaryText));
+        	summary.setText(Html.fromHtml(summaryText));
         }
 	}
 

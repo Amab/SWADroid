@@ -33,10 +33,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
-import es.ugr.swad.swadroid.modules.Notifications;
+import es.ugr.swad.swadroid.modules.notifications.Notifications;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
 
 /**
@@ -190,6 +191,7 @@ public class SWADMain extends ListActivity {
     @Override
     public void onCreate(Bundle icicle) {
         int lastVersion, currentVersion;
+        FunctionsArrayAdapter<String> functionsArray;
         
         try {
         	//Initialize screen
@@ -200,7 +202,9 @@ public class SWADMain extends ListActivity {
             w.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.ic_launcher_swadroid);   
             
             functions = getResources().getStringArray(R.array.functions);
-            setListAdapter(new ArrayAdapter<String>(this, R.layout.functions_list_item, functions));
+            functionsArray = new FunctionsArrayAdapter<String>(this, R.layout.functions_list_item, functions);
+            setListAdapter(functionsArray);
+            
             
             //Initialize database
             db = DataFramework.getInstance();
