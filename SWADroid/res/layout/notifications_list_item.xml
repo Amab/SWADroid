@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?> 
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_height="wrap_content" android:layout_width="match_parent" android:orientation="horizontal">
+  android:layout_height="wrap_content"
+  android:layout_width="match_parent"
+  android:orientation="horizontal"
+  android:background="#ffffff">
    
  <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
@@ -50,7 +53,7 @@
 		android:id="@+id/eventType"
 		android:layout_height="wrap_content"
 		android:layout_width="match_parent"
-  		android:textColor="#ffffff"
+  		android:textColor="#000000"
   		android:textSize="18sp"
   		android:textStyle="bold" />
 		
@@ -58,7 +61,7 @@
 		android:id="@+id/eventLocation"
 		android:layout_height="wrap_content"
 		android:layout_width="match_parent"
-  		android:textColor="#ffffff"
+  		android:textColor="#000000"
   		android:padding="1dip" />
 		
     <TextView
@@ -66,7 +69,7 @@
 		android:layout_height="wrap_content"
 		android:layout_width="match_parent"
     	android:singleLine="false"
-  		android:textColor="#ffffff"
+  		android:textColor="#000000"
   		android:textSize="16sp"
   		android:padding="2dip" />
  </LinearLayout>

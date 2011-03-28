@@ -21,8 +21,9 @@ public final class R {
         public static final int ic_launcher_swadroid=0x7f020004;
         public static final int note=0x7f020005;
         public static final int notif=0x7f020006;
-        public static final int recmsg=0x7f020007;
-        public static final int test=0x7f020008;
+        public static final int notif36x36=0x7f020007;
+        public static final int recmsg=0x7f020008;
+        public static final int test=0x7f020009;
     }
     public static final class id {
         public static final int eventDate=0x7f080004;
@@ -54,10 +55,13 @@ public final class R {
         public static final int coursesProgressDescription=0x7f060018;
         public static final int coursesProgressTitle=0x7f060017;
         public static final int dateMsg=0x7f060028;
+        public static final int errorConnectionMsg=0x7f06002e;
         public static final int errorCopyMsg_DB=0x7f06001b;
         public static final int errorMsgLaunchingActivity=0x7f060019;
         public static final int errorMsgNoConnection=0x7f06001c;
         public static final int errorMsgWorkaroundEmulator=0x7f06001a;
+        public static final int errorServerResponseMsg=0x7f06002d;
+        public static final int errorTimeoutMsg=0x7f06002f;
         public static final int examAnnouncement=0x7f060021;
         public static final int firstRunMsg=0x7f06002b;
         public static final int forumReply=0x7f060025;
