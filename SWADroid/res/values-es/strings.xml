@@ -33,5 +33,6 @@
 <string name="noMsg">No</string>
 <string name="firstRunMsg">Antes de usar la aplicación por primera vez debe introducir el nombre de usuario y la contraseña de acceso a SWAD en la pantalla de configuración.\n\nPuede acceder a la pantalla de configuración desde el menú de la aplicación en cualquier momento.\n\n¿Desea abrir ahora la pantalla de configuración?</string>
 <string name="initialDialogTitle">IMPORTANTE</string>
+<string name="errorServerResponseMsg">Error en respuesta del servidor</string><string name="errorConnectionMsg">Error durante la conexión con el servidor</string><string name="errorTimeoutMsg">Tiempo de espera agotado intentando conectar con el servidor</string>
 
 </resources>

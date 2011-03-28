@@ -35,7 +35,9 @@
 <string name="dateMsg">Date</string>
 <string name="yesMsg">Yes</string>
 <string name="noMsg">No</string><string name="firstRunMsg">Before using the application for the first time you must enter the user name and password for SWAD at the setup screen.\n\nYou can access to the setup screen from the application menu anytime.\n\nDo you want to open the configuration screen now?</string>
-<string name="initialDialogTitle">IMPORTANT</string>
+<string name="initialDialogTitle">IMPORTANT</string><string name="errorServerResponseMsg">Error in server response</string>
+<string name="errorConnectionMsg">Error while connecting to server</string>
+<string name="errorTimeoutMsg">Timeout trying to connect to the server</string>
 
 
 
