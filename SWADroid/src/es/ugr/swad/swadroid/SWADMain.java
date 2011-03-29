@@ -31,10 +31,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.modules.notifications.Notifications;
@@ -192,20 +191,27 @@ public class SWADMain extends ListActivity {
     public void onCreate(Bundle icicle) {
         int lastVersion, currentVersion;
         FunctionsArrayAdapter<String> functionsArray;
+		ImageView image;
+		TextView text;
+		
+    	//Initialize screen
+        super.onCreate(icicle);
+        setContentView(R.layout.main);
+        /*Window w = getWindow();
+        w.requestFeature(Window.FEATURE_LEFT_ICON);
+        w.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.ic_launcher_swadroid);*/
         
-        try {
-        	//Initialize screen
-            super.onCreate(icicle);
-            Window w = getWindow();
-            w.requestFeature(Window.FEATURE_LEFT_ICON);
-            setContentView(R.layout.main);
-            w.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.ic_launcher_swadroid);   
-            
-            functions = getResources().getStringArray(R.array.functions);
-            functionsArray = new FunctionsArrayAdapter<String>(this, R.layout.functions_list_item, functions);
-            setListAdapter(functionsArray);
-            
-            
+        image = (ImageView)this.findViewById(R.id.moduleIcon);
+        image.setBackgroundResource(R.drawable.ic_launcher_swadroid);
+        
+        text = (TextView)this.findViewById(R.id.moduleName);
+        text.setText(R.string.app_name);
+        
+        functions = getResources().getStringArray(R.array.functions);
+        functionsArray = new FunctionsArrayAdapter<String>(this, R.layout.functions_list_item, functions);
+        setListAdapter(functionsArray);     
+        
+        try {            
             //Initialize database
             db = DataFramework.getInstance();
             db.open(this, this.getPackageName());
