@@ -23,6 +23,7 @@ import es.ugr.swad.swadroid.modules.notifications.Notifications;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
@@ -64,6 +65,10 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
      */
     private static final String LASTVERSIONPREF = "lastVersionPref";
     /**
+     * Current application version preference name.
+     */
+    private static final String CURRENTVERSIONPREF = "currentVersionPref";
+    /**
      * User ID preference
      */
     private Preference userIDPref;
@@ -71,6 +76,10 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
      * User password preference
      */
     private Preference userPasswordPref;
+    /**
+     * Current application version preference
+     */
+    private Preference currentVersionPref;
     /**
      * Preferences editor
      */
@@ -95,7 +104,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 	/**
 	 * Gets last application version
 	 *
-	 * @return returns true, if this is the first run
+	 * @return returns last application version
 	 */
 	 public int getLastVersion() {
 		return lastVersion;
@@ -153,6 +162,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         
         userIDPref = findPreference(USERIDPREF);
         userPasswordPref = findPreference(USERPASSWORDPREF);
+        currentVersionPref = findPreference(CURRENTVERSIONPREF);
         
         userIDPref.setOnPreferenceChangeListener(this);
         userPasswordPref.setOnPreferenceChangeListener(this);
@@ -181,6 +191,12 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
                 return true;
             }
         });
+        
+        try {
+			currentVersionPref.setSummary(getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+		}
     }
 
 	public boolean onPreferenceChange(Preference preference, Object newValue) {
