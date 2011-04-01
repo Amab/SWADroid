@@ -6,9 +6,9 @@
     android:background="@color/background"> 
     <include layout="@layout/action_bar"/>
     
-    <ListView
+    <ExpandableListView
        	android:id="@+id/android:list"
        	android:layout_width="match_parent"
        	android:layout_height="wrap_content">
-    </ListView>
+    </ExpandableListView>
 </LinearLayout>
