@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?> 
-<LinearLayout
+<RelativeLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_height="wrap_content"
   android:layout_width="match_parent"
-  android:orientation="horizontal"
-  android:background="#ffffff">
+  android:orientation="horizontal">
    
  <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/eventMetaData"
   android:layout_height="wrap_content" android:layout_width="100dip" android:orientation="vertical"
-  android:layout_marginTop="6dip">
+  android:layout_marginTop="6dip" android:layout_alignParentLeft="true">
   
   <ImageView 
     android:id="@+id/notificationIcon"
     android:gravity="center_horizontal"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content">
   </ImageView>  
 		
@@ -23,7 +23,7 @@
 		android:layout_height="wrap_content"
 		android:layout_width="match_parent"
     	android:gravity="center_horizontal"
-  		android:textColor="#848484"
+  		android:textColor="@color/foreground2"
   		android:layout_marginTop="6dip" />
 		
    <TextView
@@ -31,7 +31,7 @@
 		android:layout_height="wrap_content"
 		android:layout_width="match_parent"
     	android:gravity="center_horizontal"
-  		android:textColor="#848484" />
+  		android:textColor="@color/foreground2" />
 		
    <TextView
 		android:id="@+id/eventSender"
@@ -39,21 +39,22 @@
 		android:layout_width="match_parent"
     	android:singleLine="false"
     	android:gravity="center_horizontal"
-  		android:textColor="#848484"
+  		android:textColor="@color/foreground2"
   		android:layout_marginBottom="6dip"
   		android:padding="1dip" />
  </LinearLayout>
  
  <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/eventContent"
   android:layout_height="wrap_content" android:layout_width="match_parent" android:orientation="vertical"
-  android:layout_marginTop="3dip" android:layout_marginRight="6dip">
+  android:layout_marginTop="3dip" android:layout_toRightOf="@+id/eventMetaData" android:layout_toLeftOf="@+id/eventRight">
   
     <TextView
 		android:id="@+id/eventType"
 		android:layout_height="wrap_content"
 		android:layout_width="match_parent"
-  		android:textColor="#000000"
+  		android:textColor="@color/foreground1"
   		android:textSize="18sp"
   		android:textStyle="bold" />
 		
@@ -61,7 +62,7 @@
 		android:id="@+id/eventLocation"
 		android:layout_height="wrap_content"
 		android:layout_width="match_parent"
-  		android:textColor="#000000"
+  		android:textColor="@color/foreground1"
   		android:padding="1dip" />
 		
     <TextView
@@ -69,8 +70,23 @@
 		android:layout_height="wrap_content"
 		android:layout_width="match_parent"
     	android:singleLine="false"
-  		android:textColor="#000000"
+  		android:textColor="@color/foreground1"
   		android:textSize="16sp"
-  		android:padding="2dip" />
+  		android:padding="1dip" />
  </LinearLayout>
-</LinearLayout>
+  
+ <LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/eventRight"
+  android:layout_height="match_parent" android:layout_width="wrap_content" android:orientation="vertical"
+  android:layout_marginTop="3dip" android:layout_marginRight="6dip" android:layout_alignParentRight="true">
+  
+  <ImageView 
+    android:id="@+id/notificationDetailsIcon"
+    android:src="@android:drawable/ic_input_add"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:visibility="gone">
+  </ImageView>  
+ </LinearLayout>
+</RelativeLayout>

@@ -19,10 +19,14 @@
 
 package es.ugr.swad.swadroid;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.android.dataframework.DataFramework;
 
 import android.app.AlertDialog;
-import android.app.ListActivity;
+import android.app.ExpandableListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -31,10 +35,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.widget.ArrayAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.modules.notifications.Notifications;
@@ -44,7 +47,7 @@ import es.ugr.swad.swadroid.ssl.SecureConnection;
  * Main class of the application.
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
-public class SWADMain extends ListActivity {
+public class SWADMain extends ExpandableListActivity {
     /**
      * Application preferences.
      */
@@ -61,8 +64,24 @@ public class SWADMain extends ListActivity {
      * Array of strings for main ListView
      */
     protected String[] functions;
+    /**
+     * Function name field
+     */
+    final String NAME = "functionText";
+    /**
+     * Function text field
+     */
+    final String IMAGE = "functionIcon";
     
     /**
+     * Gets the database helper
+	 * @return the database helper
+	 */
+	public static DataBaseHelper getDbHelper() {
+		return dbHelper;
+	}
+
+	/**
      * Shows Preferences screen
      */
     protected void viewPreferences() {
@@ -137,7 +156,7 @@ public class SWADMain extends ListActivity {
 	 */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == ListActivity.RESULT_OK) {
+        if (resultCode == ExpandableListActivity.RESULT_OK) {
             //Bundle extras = data.getExtras();
 
             switch(requestCode) {
@@ -149,31 +168,33 @@ public class SWADMain extends ListActivity {
             }
         }
     }
-    
-    @Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
-		super.onListItemClick(l, v, position, id);
+
+	/* (non-Javadoc)
+	 * @see android.app.ExpandableListActivity#onChildClick(android.widget.ExpandableListView, android.view.View, int, int, long)
+	 */
+	@Override
+	public boolean onChildClick(ExpandableListView parent, View v,
+			int groupPosition, int childPosition, long id) {
 		// Get the item that was clicked
-		Object o = this.getListAdapter().getItem(position);
-		String keyword = o.toString();
+		Object o = this.getExpandableListAdapter().getChild(groupPosition, childPosition);
+		String keyword = (String) ((Map<String,Object>)o).get(NAME);
 		
 		Intent activity;
-		switch(position)
+		if(keyword.equals(getString(R.string.notificationsModuleLabel)))
 		{
-			case 0:
 				activity = new Intent(getBaseContext(),
 	                Notifications.class);
 				startActivityForResult(activity, Global.NOTIFICATIONS_REQUEST_CODE);
-				break;
 				
-			case 1:
+		} else if(keyword.equals(getString(R.string.testsModuleLabel))) {
 				/*activity = new Intent(getBaseContext(),
 		                Tests.class);
 					startActivityForResult(activity, Global.TESTS_REQUEST_CODE);*/
 				Toast.makeText(this, keyword + " aún no implementado", Toast.LENGTH_LONG)
 					.show();
-				break;
 		}
+		
+		return true;
 	}
 
 	/* (non-Javadoc)
@@ -184,6 +205,54 @@ public class SWADMain extends ListActivity {
         super.onStart();
         prefs.getPreferences(getBaseContext());
     }
+    
+    private void createMainMenu()
+    {
+    	// Construct Expandable List
+        final ArrayList<HashMap<String, Object>> headerData = new ArrayList<HashMap<String, Object>>();
+
+        final HashMap<String, Object> messages = new HashMap<String, Object>();
+        messages.put(NAME, getString(R.string.messages));
+        messages.put(IMAGE, getResources().getDrawable(R.drawable.msg));
+        headerData.add( messages );
+
+        final HashMap<String, Object> evaluation = new HashMap<String, Object>();
+        evaluation.put(NAME, getString(R.string.evaluation));
+        evaluation.put(IMAGE, getResources().getDrawable(R.drawable.grades));
+        headerData.add( evaluation);
+
+        final ArrayList<ArrayList<HashMap<String, Object>>> childData = new ArrayList<ArrayList<HashMap<String, Object>>>();
+
+        final ArrayList<HashMap<String, Object>> messagesData = new ArrayList<HashMap<String, Object>>();
+        childData.add(messagesData);
+
+        final ArrayList<HashMap<String, Object>> evaluationData = new ArrayList<HashMap<String, Object>>();
+        childData.add(evaluationData);
+
+        HashMap<String, Object> map = new HashMap<String,Object>();
+        map.put(NAME, getString(R.string.notificationsModuleLabel) );
+        map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
+        messagesData.add(map);
+        
+        map = new HashMap<String,Object>();
+        map.put(NAME, getString(R.string.testsModuleLabel) );
+        map.put(IMAGE, getResources().getDrawable(R.drawable.test));
+        evaluationData.add(map);
+
+        setListAdapter( new ImageExpandableListAdapter(
+                this,
+                headerData,
+                R.layout.functions_list_item,
+                new String[] { NAME },            // the name of the field data
+                new int[] { R.id.functionText }, // the text field to populate with the field data
+                childData,
+                0,
+                null,
+                new int[] {}
+            ));
+        
+        getExpandableListView().setOnChildClickListener(this);
+    }
 
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onCreate()
@@ -191,21 +260,22 @@ public class SWADMain extends ListActivity {
     @Override
     public void onCreate(Bundle icicle) {
         int lastVersion, currentVersion;
-        FunctionsArrayAdapter<String> functionsArray;
+		ImageView image;
+		TextView text;
+		
+    	//Initialize screen
+        super.onCreate(icicle);
+        setContentView(R.layout.main);
         
-        try {
-        	//Initialize screen
-            super.onCreate(icicle);
-            Window w = getWindow();
-            w.requestFeature(Window.FEATURE_LEFT_ICON);
-            setContentView(R.layout.main);
-            w.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.ic_launcher_swadroid);   
-            
-            functions = getResources().getStringArray(R.array.functions);
-            functionsArray = new FunctionsArrayAdapter<String>(this, R.layout.functions_list_item, functions);
-            setListAdapter(functionsArray);
-            
-            
+        image = (ImageView)this.findViewById(R.id.moduleIcon);
+        image.setBackgroundResource(R.drawable.ic_launcher_swadroid);
+        
+        text = (TextView)this.findViewById(R.id.moduleName);
+        text.setText(R.string.app_name);
+        
+        createMainMenu();
+        
+        try {            
             //Initialize database
             db = DataFramework.getInstance();
             db.open(this, this.getPackageName());

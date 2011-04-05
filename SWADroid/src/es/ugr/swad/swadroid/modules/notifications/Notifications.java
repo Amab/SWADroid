@@ -39,8 +39,10 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 
 /**
  * Notifications module for get user's notifications
@@ -52,10 +54,6 @@ public class Notifications extends Module {
      * Max size to store notifications 
      */
 	private static final int SIZE_LIMIT = 25;
-	/**
-	 * Downloads new notifications when pushed
-	 */
-	private Button updateButton;
 	/**
 	 * Notifications adapter for showing the data
 	 */
@@ -77,16 +75,25 @@ public class Notifications extends Module {
 	 * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
 	 */
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {		
+	protected void onCreate(Bundle savedInstanceState) {
+		ImageButton updateButton;
+		ImageView image;
+		TextView text;
+		
 		super.onCreate(savedInstanceState);
         setContentView(R.layout.notifications);
         
-        updateButton = (Button)this.findViewById(R.id.notificationsUpdateButton);
-        updateButton.setOnClickListener(new OnClickListener() {
-          public void onClick(View v) {
-        	  runConnection();
-          }          
-        });
+        image = (ImageView)this.findViewById(R.id.moduleIcon);
+        image.setBackgroundResource(R.drawable.notif);
+        
+        text = (TextView)this.findViewById(R.id.moduleName);
+        text.setText(R.string.notificationsModuleLabel);        
+
+        image = (ImageView)this.findViewById(R.id.title_sep_1);
+        image.setVisibility(View.VISIBLE);
+        
+        updateButton = (ImageButton)this.findViewById(R.id.refresh);
+        updateButton.setVisibility(View.VISIBLE);
         
         //dbHelper.emptyTable(Global.DB_TABLE_NOTIFICATIONS);
         dbCursor = dbHelper.getDb().getCursor(Global.DB_TABLE_NOTIFICATIONS, selection, orderby);
@@ -94,6 +101,23 @@ public class Notifications extends Module {
         setListAdapter(adapter);
         
         setMETHOD_NAME("getNotifications");
+	}
+	
+	/**
+	 * Launches an action when refresh button is pushed
+	 * @param v Actual view
+	 */
+	public void onRefreshClick(View v)
+	{
+		runConnection();
+	}
+
+	/* (non-Javadoc)
+	 * @see android.app.ListActivity#onListItemClick(android.widget.ListView, android.view.View, int, long)
+	 */
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		super.onListItemClick(l, v, position, id);
 	}
 
 	/* (non-Javadoc)
@@ -144,11 +168,14 @@ public class Notifications extends Module {
 	            Integer status = new Integer(pii.getProperty("status").toString());
 	            Notification n = new Notification(lastId+i, eventType, eventTime, userSurname1, userSurname2, userFirstName, location, summary, status);
 	            dbHelper.insertNotification(n);
-	            Log.d(Global.NOTIFICATIONS_TAG, n.toString());
+	            
+	    		if(isDebuggable)
+	    			Log.d(Global.NOTIFICATIONS_TAG, n.toString());
 	        }
 	        
 	        //Request finalized without errors
-	        Log.i(Global.NOTIFICATIONS_TAG, "Retrieved " + csSize + " notifications");
+			if(isDebuggable)
+				Log.i(Global.NOTIFICATIONS_TAG, "Retrieved " + csSize + " notifications");
 			
 			//Clear old notifications to control database size
 			dbHelper.clearOldNotifications(SIZE_LIMIT);

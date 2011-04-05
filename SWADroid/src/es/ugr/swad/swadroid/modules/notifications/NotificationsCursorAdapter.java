@@ -22,7 +22,6 @@ import java.util.Date;
 import es.ugr.swad.swadroid.R;
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,13 +35,7 @@ import android.widget.TextView;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  *
  */
-public class NotificationsCursorAdapter extends CursorAdapter {
-	private static final String EXAM_ANNOUNCEMENT_COLOR = "#380B61";
-	private static final String MARKS_FILE_COLOR = "#4B088A";
-	private static final String NOTICE_COLOR = "#08088A";
-	private static final String MESSAGE_COLOR = "#0B615E";
-	private static final String FORUM_REPLY_COLOR = "#0B0B3B";
-	
+public class NotificationsCursorAdapter extends CursorAdapter {	
 	public NotificationsCursorAdapter(Context context, Cursor c) {
 		super(context, c);
 	}
@@ -56,7 +49,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {		
 		long unixTime;
-		String type, sender, from, dateTitle, summaryTitle, summaryText;
+		String type, sender, summaryText;
 		String[] dateContent;
     	Date d;
     	
@@ -66,7 +59,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         TextView eventSender = (TextView) view.findViewById(R.id.eventSender);
         TextView location = (TextView) view.findViewById(R.id.eventLocation);
         TextView summary = (TextView) view.findViewById(R.id.eventSummary);
-        ImageView icon = (ImageView) view.findViewById(R.id.notificationIcon);
+        ImageView notificationIcon = (ImageView) view.findViewById(R.id.notificationIcon);
         
         if(eventType != null) {
         	type = cursor.getString(cursor.getColumnIndex("eventType"));
@@ -74,28 +67,23 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         	if(type.equals("examAnnouncement"))
         	{
         		type = context.getString(R.string.examAnnouncement);
-        		icon.setImageResource(R.drawable.announce);
-        		//view.setBackgroundColor(Color.parseColor(EXAM_ANNOUNCEMENT_COLOR));
+        		notificationIcon.setImageResource(R.drawable.announce);
         	} else if(type.equals("marksFile"))
         	{
         		type = context.getString(R.string.marksFile);
-        		icon.setImageResource(R.drawable.grades);
-        		//view.setBackgroundColor(Color.parseColor(MARKS_FILE_COLOR));
+        		notificationIcon.setImageResource(R.drawable.grades);
         	} else if(type.equals("notice"))
         	{
         		type = context.getString(R.string.notice);
-        		icon.setImageResource(R.drawable.note);
-        		//view.setBackgroundColor(Color.parseColor(NOTICE_COLOR));
+        		notificationIcon.setImageResource(R.drawable.note);
         	} else if(type.equals("message"))
         	{
         		type = context.getString(R.string.message);
-        		icon.setImageResource(R.drawable.recmsg);
-        		//view.setBackgroundColor(Color.parseColor(MESSAGE_COLOR));
+        		notificationIcon.setImageResource(R.drawable.recmsg);
         	} else if(type.equals("forumReply"))
         	{
         		type = context.getString(R.string.forumReply);
-        		icon.setImageResource(R.drawable.forum);
-        		//view.setBackgroundColor(Color.parseColor(FORUM_REPLY_COLOR));
+        		notificationIcon.setImageResource(R.drawable.forum);
         	}
         	
         	eventType.setText(type);
@@ -103,7 +91,6 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         if((eventDate != null) && (eventTime != null)){
         	unixTime = Long.parseLong(cursor.getString(cursor.getColumnIndex("eventTime")));
         	d = new Date(unixTime * 1000);
-        	//dateTitle = context.getString(R.string.dateMsg);
         	dateContent = d.toLocaleString().split(" ");
         	eventDate.setText(dateContent[0]);
         	eventTime.setText(dateContent[1]);
@@ -112,14 +99,12 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         	sender = cursor.getString(cursor.getColumnIndex("userFirstname")) + " "
         			+ cursor.getString(cursor.getColumnIndex("userSurname1")) + " "
         			+ cursor.getString(cursor.getColumnIndex("userSurname2"));
-        	//from = context.getString(R.string.fromMsg);
         	eventSender.setText(sender);
         }
         if(location != null) {
         	location.setText(cursor.getString(cursor.getColumnIndex("location")));
         }
         if(summary != null){
-        	//summaryTitle = context.getString(R.string.content);
         	summaryText = cursor.getString(cursor.getColumnIndex("summary"));
         	summary.setText(Html.fromHtml(summaryText));
         }
@@ -128,7 +113,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
 	@Override
 	public View newView(Context context, Cursor cursor, ViewGroup parent) {	
 		LayoutInflater vi = LayoutInflater.from(context);
-		View v = vi.inflate(R.layout.notifications_list_item, null);
+		View v = vi.inflate(R.layout.notifications_list_item, parent, false);
 		
 		return v;
 	}

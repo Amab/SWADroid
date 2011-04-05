@@ -1,20 +1,24 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>  
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="#ffffff">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+    <include layout="@layout/action_bar"/>
     
     <Button
 		android:id="@+id/notificationsUpdateButton"
 		android:layout_height="wrap_content"
 		android:layout_width="match_parent"
 		android:text="@string/notificationsUpdateButton"
-		android:layout_gravity="center_horizontal"/>
+		android:layout_gravity="center_horizontal"
+		android:visibility="gone">
+	</Button>
     
     <ListView
        	android:id="@+id/android:list"
-       	android:layout_width="fill_parent"
-       	android:layout_height="wrap_content"
-       	android:listSelector="@android:color/transparent" />
+       	android:cacheColorHint="@color/background"
+       	android:layout_width="match_parent"
+       	android:layout_height="wrap_content">
+    </ListView>
 </LinearLayout>
