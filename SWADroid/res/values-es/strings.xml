@@ -25,7 +25,7 @@
 <string name="loginSuccessfulMsg">Conectado</string><string name="notificationsSuccessfulMsg">Notificaciones descargadas</string>
 <string name="notificationsUpdateButton">Actualizar</string>
 <string name="examAnnouncement">Convocatoria de examen</string>
-<string name="marksFile">Archivo de calificaciones</string>
+<string name="marksFile">Calificaciones</string>
 <string name="notice">Aviso</string>
 <string name="message">Mensaje</string>
 <string name="forumReply">Respuesta en foro</string><string name="content">Contenido</string><string name="messages">Mensajes</string><string name="evaluation">Evaluación</string><string name="fromMsg">De</string><string name="dateMsg">Fecha</string>

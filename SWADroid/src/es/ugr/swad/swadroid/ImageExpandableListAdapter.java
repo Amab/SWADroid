@@ -84,11 +84,11 @@ public class ImageExpandableListAdapter extends SimpleExpandableListAdapter {
 	 */
 	@Override
 	public View newGroupView(boolean isExpanded, ViewGroup parent) {
-		 return layoutInflater.inflate(R.layout.functions_list_item, null, false);
+		 return layoutInflater.inflate(R.layout.functions_list_item, parent, false);
 	}
 
 	@Override
     public View newChildView(boolean isLastChild, ViewGroup parent) {
-         return layoutInflater.inflate(R.layout.functions_list_item, null, false);
+         return layoutInflater.inflate(R.layout.functions_list_item, parent, false);
     }
 }
