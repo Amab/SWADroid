@@ -59,7 +59,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         TextView eventSender = (TextView) view.findViewById(R.id.eventSender);
         TextView location = (TextView) view.findViewById(R.id.eventLocation);
         TextView summary = (TextView) view.findViewById(R.id.eventSummary);
-        ImageView icon = (ImageView) view.findViewById(R.id.notificationIcon);
+        ImageView notificationIcon = (ImageView) view.findViewById(R.id.notificationIcon);
         
         if(eventType != null) {
         	type = cursor.getString(cursor.getColumnIndex("eventType"));
@@ -67,23 +67,23 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         	if(type.equals("examAnnouncement"))
         	{
         		type = context.getString(R.string.examAnnouncement);
-        		icon.setImageResource(R.drawable.announce);
+        		notificationIcon.setImageResource(R.drawable.announce);
         	} else if(type.equals("marksFile"))
         	{
         		type = context.getString(R.string.marksFile);
-        		icon.setImageResource(R.drawable.grades);
+        		notificationIcon.setImageResource(R.drawable.grades);
         	} else if(type.equals("notice"))
         	{
         		type = context.getString(R.string.notice);
-        		icon.setImageResource(R.drawable.note);
+        		notificationIcon.setImageResource(R.drawable.note);
         	} else if(type.equals("message"))
         	{
         		type = context.getString(R.string.message);
-        		icon.setImageResource(R.drawable.recmsg);
+        		notificationIcon.setImageResource(R.drawable.recmsg);
         	} else if(type.equals("forumReply"))
         	{
         		type = context.getString(R.string.forumReply);
-        		icon.setImageResource(R.drawable.forum);;
+        		notificationIcon.setImageResource(R.drawable.forum);
         	}
         	
         	eventType.setText(type);
@@ -113,7 +113,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
 	@Override
 	public View newView(Context context, Cursor cursor, ViewGroup parent) {	
 		LayoutInflater vi = LayoutInflater.from(context);
-		View v = vi.inflate(R.layout.notifications_list_item, null);
+		View v = vi.inflate(R.layout.notifications_list_item, parent, false);
 		
 		return v;
 	}
