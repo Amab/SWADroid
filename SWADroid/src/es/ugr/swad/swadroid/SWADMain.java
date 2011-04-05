@@ -64,10 +64,24 @@ public class SWADMain extends ExpandableListActivity {
      * Array of strings for main ListView
      */
     protected String[] functions;
+    /**
+     * Function name field
+     */
     final String NAME = "functionText";
+    /**
+     * Function text field
+     */
     final String IMAGE = "functionIcon";
     
     /**
+     * Gets the database helper
+	 * @return the database helper
+	 */
+	public static DataBaseHelper getDbHelper() {
+		return dbHelper;
+	}
+
+	/**
      * Shows Preferences screen
      */
     protected void viewPreferences() {
@@ -199,7 +213,7 @@ public class SWADMain extends ExpandableListActivity {
 
         final HashMap<String, Object> messages = new HashMap<String, Object>();
         messages.put(NAME, getString(R.string.messages));
-        messages.put(IMAGE, getResources().getDrawable(R.drawable.notif));
+        messages.put(IMAGE, getResources().getDrawable(R.drawable.msg));
         headerData.add( messages );
 
         final HashMap<String, Object> evaluation = new HashMap<String, Object>();

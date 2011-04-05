@@ -167,6 +167,21 @@ public class DataBaseHelper {
     }
 	
 	/**
+	 * Gets a row of specified table
+	 * @param table Table containing the rows
+	 * @param fieldName Field's name
+	 * @param fieldValue Field's value
+	 * @return A Model's subclass object
+	 */
+	public Model getRow(String table, String fieldName, String fieldValue)
+    {
+		List<Entity> rows = db.getEntityList(table, fieldName + " = " + fieldValue);		
+		Entity ent = rows.get(0);
+        
+        return createObjectByTable(table, ent);
+    }
+	
+	/**
 	 * Inserts a course in database
 	 * @param c Course to be inserted
 	 */
