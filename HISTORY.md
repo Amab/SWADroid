@@ -1,9 +1,16 @@
-## 0.3.3 (2001-03-27)
+## 0.3.5 (2011-04-05)
+
+* Improved GUI
+* Improved performance
+* Added action bar
+* Added category organization on main menu
+
+## 0.3.4 (2011-03-27)
 
 * Improved GUI
 * Fixed minor errors on error messages
 
-## 0.3.3 (2001-03-27)
+## 0.3.3 (2011-03-27)
 
 * Redesigned GUI
 
