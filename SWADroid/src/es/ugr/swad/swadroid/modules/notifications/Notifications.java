@@ -116,8 +116,16 @@ public class Notifications extends Module {
 	 * @see android.app.ListActivity#onListItemClick(android.widget.ListView, android.view.View, int, long)
 	 */
 	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
-		super.onListItemClick(l, v, position, id);
+	protected void onListItemClick(ListView l, View v, int position, long id) {		
+		super.onListItemClick(l, v, position, id);	
+		
+		TextView content = (TextView) v.findViewById(R.id.eventText);
+		if(content.getVisibility() == View.VISIBLE)
+		{
+			content.setVisibility(View.GONE);
+		} else {
+			content.setVisibility(View.VISIBLE);
+		}
 	}
 
 	/* (non-Javadoc)
@@ -166,7 +174,8 @@ public class Notifications extends Module {
 	            String location = pii.getProperty("location").toString();
 	            String summary = pii.getProperty("summary").toString();
 	            Integer status = new Integer(pii.getProperty("status").toString());
-	            Notification n = new Notification(lastId+i, eventType, eventTime, userSurname1, userSurname2, userFirstName, location, summary, status);
+	            String content = pii.getProperty("content").toString();
+	            Notification n = new Notification(lastId+i, eventType, eventTime, userSurname1, userSurname2, userFirstName, location, summary, status, content);
 	            dbHelper.insertNotification(n);
 	            
 	    		if(isDebuggable)
