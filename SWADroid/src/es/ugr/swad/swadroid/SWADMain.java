@@ -130,7 +130,7 @@ public class SWADMain extends ExpandableListActivity {
     /**
      * Shows initial dialog after application upgrade.
      */
-    public void showInitialDialog() {
+    public void showUpgradeDialog() {
     	new AlertDialog.Builder(this)
     		   .setTitle(R.string.initialDialogTitle)
     	       .setMessage(R.string.upgradeMsg)
@@ -300,16 +300,17 @@ public class SWADMain extends ExpandableListActivity {
             SecureConnection.initSecureConnection(); 
             
             //Check if this is the first run after an install or upgrade
-            //If this is the first run, show initial dialog
+            //If this is the first run, show configuration dialog
+            //If this is an upgrade, show upgrade dialog
             lastVersion = prefs.getLastVersion();
             currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
             if(lastVersion == 0) {
             	showConfigurationDialog();
             	prefs.setLastVersion(currentVersion);
-            } else if(currentVersion > lastVersion) {
+            } else if(lastVersion < 11) {
             	dbHelper.emptyTable(Global.DB_TABLE_NOTIFICATIONS);
             	prefs.setLastVersion(currentVersion);
-            	showInitialDialog();
+            	showUpgradeDialog();
             }
         } catch (Exception ex) {
             Log.e(ex.getClass().getSimpleName(), ex.getMessage());
