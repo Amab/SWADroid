@@ -1,3 +1,7 @@
+## 0.3.7 (2011-04-14)
+
+* Fixed notifications bug in surname
+
 ## 0.3.6 (2011-04-13)
 
 * Added notification details
