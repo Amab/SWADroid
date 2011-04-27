@@ -22,79 +22,52 @@ import java.util.Hashtable;
 
 import org.ksoap2.serialization.PropertyInfo;
 
-import es.ugr.swad.swadroid.Global;
-
 /**
- * Class for store a test answer
+ * Class for store a test tag
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
-public class TestAnswer extends Model {
+public class TestTag extends Model {
 	/**
 	 * Question code;
 	 */
 	private int qstCod;
 	/**
-	 * Flag to know if this is the correct answer of the question
+	 * Tag text
 	 */
-	private boolean correct;
-	/**
-	 * Answer's text
-	 */
-	private String answer;
+	private String tagTxt;
 	private static PropertyInfo PI_id = new PropertyInfo();
-	private static PropertyInfo PI_correct = new PropertyInfo();
-	private static PropertyInfo PI_answer = new PropertyInfo();
+	private static PropertyInfo PI_tagText = new PropertyInfo();
     private static PropertyInfo[] PI_PROP_ARRAY =
     {
     	PI_id,
-    	PI_correct,
-    	PI_answer
+    	PI_tagText
     };
-	
+
 	/**
 	 * Constructor
-	 * @param id Answer id
-	 * @param qstCod Question code
-	 * @param correct Flag to know if this is the correct answer of the question
-	 * @param answer Answer's text
+	 * @param id tag id
+	 * @param tagTxt Tag text
 	 */
-	public TestAnswer(int id, int qstCod, boolean correct, String answer) {
+	public TestTag(int id, int qstCod, String tagTxt) {
 		super(id);
 		this.qstCod = qstCod;
-		this.correct = correct;
-		this.answer = answer;
+		this.tagTxt = tagTxt;
 	}
 
 	/**
-	 * Gets answer correct flag
-	 * @return Answer correct flag
+	 * Gets tag text
+	 * @return Tag text
 	 */
-	public boolean getCorrect() {
-		return correct;
+	public String getTagTxt() {
+		return tagTxt;
 	}
 
 	/**
-	 * Sets answer correct flag
-	 * @param Answer correct flag
+	 * Sets tag text
+	 * @param tagTxt Tag text
 	 */
-	public void setCorrect(boolean correct) {
-		this.correct = correct;
-	}
-
-	/**
-	 * Gets answer text
-	 * @return Answer text
-	 */
-	public String getAnswer() {
-		return answer;
-	}
-
-	/**
-	 * Sets answer text
-	 * @param answer Answer text
-	 */
-	public void setAnswer(String answer) {
-		this.answer = answer;
+	public void setTagTxt(String tagTxt) {
+		this.tagTxt = tagTxt;
 	}
 
 	/**
@@ -120,8 +93,7 @@ public class TestAnswer extends Model {
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + ((answer == null) ? 0 : answer.hashCode());
-		result = prime * result + (correct ? 1231 : 1237);
+		result = prime * result + ((tagTxt == null) ? 0 : tagTxt.hashCode());
 		return result;
 	}
 
@@ -136,13 +108,11 @@ public class TestAnswer extends Model {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		TestAnswer other = (TestAnswer) obj;
-		if (answer == null) {
-			if (other.answer != null)
+		TestTag other = (TestTag) obj;
+		if (tagTxt == null) {
+			if (other.tagTxt != null)
 				return false;
-		} else if (!answer.equals(other.answer))
-			return false;
-		if (correct != other.correct)
+		} else if (!tagTxt.equals(other.tagTxt))
 			return false;
 		return true;
 	}
@@ -152,8 +122,7 @@ public class TestAnswer extends Model {
 	 */
 	@Override
 	public String toString() {
-		return "TestAnswer [correct=" + correct + ", answer=" + answer
-				+ ", getId()=" + getId() + "]";
+		return "TestTag [tagTxt=" + tagTxt + ", getId()=" + getId() + "]";
 	}
 
 	/* (non-Javadoc)
@@ -164,8 +133,7 @@ public class TestAnswer extends Model {
         switch(param)
         {
             case 0 : object = this.getId();break;
-            case 1 : object = correct;break;
-            case 2 : object = answer;break;
+            case 1 : object = tagTxt;break;
         }
         
         return object;
@@ -175,7 +143,7 @@ public class TestAnswer extends Model {
 	 * @see org.ksoap2.serialization.KvmSerializable#getPropertyCount()
 	 */
 	public int getPropertyCount() {
-		return 3;
+		return 2;
 	}
 
 	/* (non-Javadoc)
@@ -189,11 +157,7 @@ public class TestAnswer extends Model {
 	            break;   
 	        case 1:
 	            propertyInfo.type = PropertyInfo.STRING_CLASS;
-	            propertyInfo.name = "correct";
-	            break;    
-	        case 2:
-	            propertyInfo.type = PropertyInfo.STRING_CLASS;
-	            propertyInfo.name = "answer";
+	            propertyInfo.name = "tagTxt";
 	            break;           
 		}
 	}
@@ -205,8 +169,8 @@ public class TestAnswer extends Model {
 		switch(param)
 		{
 			case 0  : this.setId((Integer)obj); break;
-			case 1  : correct = Global.parseStringBool((String)obj); break;
-			case 2  : answer = (String)obj; break;
+			case 1  : tagTxt = (String)obj; break;
 		}    
 	}
+
 }
