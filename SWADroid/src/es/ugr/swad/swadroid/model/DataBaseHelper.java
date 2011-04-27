@@ -519,7 +519,7 @@ public class DataBaseHelper {
 		if(numRows > size)
 		{
 			for(int i=0; i<numDeletions; i++)
-				rows.remove(i);
+				rows.get(i).delete();
 		}
 	}
 }
