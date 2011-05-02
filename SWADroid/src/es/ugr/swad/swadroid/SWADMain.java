@@ -170,14 +170,12 @@ public class SWADMain extends ExpandableListActivity {
 		Intent activity;
 		if(keyword.equals(getString(R.string.notificationsModuleLabel)))
 		{
-				activity = new Intent(getBaseContext(),
-	                Notifications.class);
+				activity = new Intent(getBaseContext(), Notifications.class);
 				startActivityForResult(activity, Global.NOTIFICATIONS_REQUEST_CODE);
 				
 		} else if(keyword.equals(getString(R.string.testsModuleLabel))) {
-				activity = new Intent(getBaseContext(),
-		                Tests.class);
-					startActivityForResult(activity, Global.TESTS_REQUEST_CODE);
+				activity = new Intent(getBaseContext(), Tests.class);
+				startActivityForResult(activity, Global.TESTS_REQUEST_CODE);
 				/*Toast.makeText(this, keyword + " aún no implementado", Toast.LENGTH_LONG)
 					.show();*/
 		}
