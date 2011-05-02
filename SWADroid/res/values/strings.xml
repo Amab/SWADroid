@@ -1,43 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-    <string name="app_name">SWADroid</string>
-    <string name="loginModuleLabel">Login</string><string name="notificationsModuleLabel">Notifications</string><string name="coursesModuleLabel">Courses</string><string name="testsModuleLabel">Tests</string>
-    <string name="title_error_dialog">ERROR</string>
-    <string name="close_dialog">Close</string>
-    <string name="set_preferences">Preferences</string>
-    <string name="user_preferences">User data</string>
-    <string name="userIDName_preferences">User</string>
-    <string name="userIDSummary_preferences">DNI or Nickname</string>
-    <string name="userIDTitle_preferences">User</string>
-    <string name="userPasswordName_preferences">Password</string>
-    <string name="userPasswordSummary_preferences">Password</string>
-    <string name="userPasswordTitle_preferences">Password</string>
-    <string name="saveMsg_preferences">Preferences have been saved</string>
-    <string name="saveSummary_preferences">Save actual preferences</string>
-    <string name="saveTitle_preferences">Save preferences</string>
-    <string name="preferencesTitle_menu">Preferences</string><string name="about_preferences">About</string><string name="versionTitle_preferences">Application version</string>
-    <string name="loginTitle_menu">Login</string>
-    <string name="loginProgressTitle">Login</string>
-    <string name="loginProgressDescription">Connecting...</string>
-    <string name="notificationsProgressTitle">Notifications</string><string name="notificationsProgressDescription">Retrieving new notifications</string><string name="coursesProgressTitle">Courses</string><string name="coursesProgressDescription">Retrieving courses...</string><string name="errorMsgLaunchingActivity">An error occurred during the execution of the operation</string>
-    <string name="errorMsgWorkaroundEmulator">Damn. That Android emulator bug appeared again. Retrying...</string>
-    
-    <string name="errorCopyMsg_DB">Error copying database</string>
-<string name="errorMsgNoConnection">No connection found</string><string name="upgradeMsg_DB">Upgrading database...</string><string name="loginSuccessfulMsg">Login successful</string>
-<string name="notificationsSuccessfulMsg">Notifications fetched</string>
-<string name="notificationsUpdateButton">Update</string>
-<string name="examAnnouncement">Exam announcement</string>
-<string name="marksFile">Marks file</string>
-<string name="notice">Notice</string>
-<string name="message">Message</string>
-<string name="forumReply">Forum reply</string><string name="content">Content</string>
-<string name="messages">Messages</string><string name="evaluation">Evaluation</string><string name="fromMsg">From</string>
-<string name="dateMsg">Date</string>
-<string name="yesMsg">Yes</string>
-<string name="noMsg">No</string>
-<string name="initialDialogTitle">IMPORTANT</string><string name="firstRunMsg">Before using the application for the first time you must enter the user name and password for SWAD at the setup screen.\n\nYou can access to the setup screen from the application menu anytime.\n\nDo you want to open the configuration screen now?</string><string name="upgradeMsg">Due to changes in the database all notifications data have been deleted.\n\nSorry.</string><string name="errorServerResponseMsg">Error in server response</string>
-<string name="errorConnectionMsg">Error while connecting to server</string>
-<string name="errorTimeoutMsg">Timeout trying to connect to the server</string>
+	<string name="app_name">SWADroid</string>
+	<string name="loginModuleLabel">Login</string>
+	<string name="notificationsModuleLabel">Notifications</string>
+	<string name="coursesModuleLabel">Courses</string>
+	<string name="testsModuleLabel">Tests</string>
+	<string name="title_error_dialog">ERROR</string>
+	<string name="close_dialog">Close</string>
+	<string name="set_preferences">Preferences</string>
+	<string name="user_preferences">User data</string>
+	<string name="userIDName_preferences">User</string>
+	<string name="userIDSummary_preferences">DNI or Nickname</string>
+	<string name="userIDTitle_preferences">User</string>
+	<string name="userPasswordName_preferences">Password</string>
+	<string name="userPasswordSummary_preferences">Password</string>
+	<string name="userPasswordTitle_preferences">Password</string>
+	<string name="saveMsg_preferences">Preferences have been saved</string>
+	<string name="saveSummary_preferences">Save actual preferences</string>
+	<string name="saveTitle_preferences">Save preferences</string>
+	<string name="preferencesTitle_menu">Preferences</string>
+	<string name="about_preferences">About</string>
+	<string name="versionTitle_preferences">Application version</string>
+	<string name="loginTitle_menu">Login</string>
+	<string name="loginProgressTitle">Login</string>
+	<string name="loginProgressDescription">Connecting...</string>
+	<string name="notificationsProgressTitle">Notifications</string>
+	<string name="notificationsProgressDescription">Retrieving new notifications</string>
+	<string name="coursesProgressTitle">Courses</string>
+	<string name="coursesProgressDescription">Retrieving courses...</string>
+	<string name="errorMsgLaunchingActivity">An error occurred during the execution of the
+		operation</string>
+	<string name="errorMsgWorkaroundEmulator">Damn. That Android emulator bug appeared again.
+		Retrying...</string>
+
+	<string name="errorCopyMsg_DB">Error copying database</string>
+	<string name="errorMsgNoConnection">No connection found</string>
+	<string name="upgradeMsg_DB">Upgrading database...</string>
+	<string name="loginSuccessfulMsg">Login successful</string>
+	<string name="examAnnouncement">Exam announcement</string>
+	<string name="marksFile">Marks file</string>
+	<string name="notice">Notice</string>
+	<string name="message">Message</string>
+	<string name="forumReply">Forum reply</string>
+	<string name="content">Content</string>
+	<string name="messages">Messages</string>
+	<string name="evaluation">Evaluation</string>
+	<string name="fromMsg">From</string>
+	<string name="dateMsg">Date</string>
+	<string name="yesMsg">Yes</string>
+	<string name="noMsg">No</string>
+	<string name="initialDialogTitle">IMPORTANT</string>
+	<string name="firstRunMsg">Before using the application for the first time you
+		must enter the user name and password for SWAD at the setup
+		screen.\n\nYou can access to the setup screen from the application
+		menu anytime.\n\nDo you want to open the configuration screen now?
+	</string>
+	<string name="upgradeMsg">Due to changes in the database all notifications
+		data have been deleted.\n\nSorry.</string>
+	<string name="errorServerResponseMsg">Error in server response</string>
+	<string name="errorConnectionMsg">Error while connecting to server</string>
+	<string name="errorTimeoutMsg">Timeout trying to connect to the server</string>
 
 
 

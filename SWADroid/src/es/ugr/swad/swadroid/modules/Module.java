@@ -21,7 +21,6 @@ package es.ugr.swad.swadroid.modules;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -57,7 +56,7 @@ import org.xmlpull.v1.XmlPullParserException;
  * Superclass for encapsulate common behavior of all modules.
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
-public abstract class Module extends ListActivity {
+public abstract class Module extends Activity {
     /**
      * SOAP_ACTION param for webservice request.
      */
@@ -375,11 +374,6 @@ public abstract class Module extends ListActivity {
                     
 	            	break;
             }
-        } else {
-        	switch(requestCode) {
-	            case Global.LOGIN_REQUEST_CODE:	                
-	            	break;
-        	}
         }
     }
 
