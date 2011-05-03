@@ -49,6 +49,14 @@ public class Global {
      */
     public static final int TESTS_REQUEST_CODE = 4;
     /**
+     * Request code for Tests module.
+     */
+    public static final int TESTS_DOWNLOAD_REQUEST_CODE = 5;
+    /**
+     * Request code for Tests module.
+     */
+    public static final int TESTS_MAKE_REQUEST_CODE = 6;
+    /**
      * Class Module's tag name for Logcat
      */
     public static final String MODULE_TAG = "Module";
@@ -60,6 +68,10 @@ public class Global {
      * Notifications tag name for Logcat
      */
     public static final String NOTIFICATIONS_TAG = "Notifications";
+    /**
+     * Tests tag name for Logcat
+     */
+    public static final String TESTS_TAG = "Tests";
     /**
      * Table name for courses
      */
