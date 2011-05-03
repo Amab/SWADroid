@@ -4,20 +4,12 @@
   android:layout_height="wrap_content"
   android:layout_width="match_parent"
   android:orientation="horizontal">
-
- <ImageView 
-   android:id="@+id/functionIcon"
-   android:layout_gravity="center_vertical"
-   android:layout_width="wrap_content"
-   android:layout_height="wrap_content"
-   android:layout_marginLeft="35dip">
- </ImageView>
  
  <TextView
-  android:id="@+id/functionText"
+  android:id="@+id/listText"
   android:layout_width="fill_parent"
   android:layout_height="wrap_content"
-  android:padding="20dip"
+  android:padding="10dip"
   android:textColor="@color/foreground1"
   android:textSize="24sp">
  </TextView>

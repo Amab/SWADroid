@@ -35,8 +35,8 @@ import android.widget.TextView;
  *
  */
 public class ImageExpandableListAdapter extends SimpleExpandableListAdapter {
-	final String NAME = "functionText";
-    final String IMAGE = "functionIcon";
+	final String NAME = "listText";
+    final String IMAGE = "listIcon";
     final LayoutInflater layoutInflater;
     
 	public ImageExpandableListAdapter(Context context,
@@ -62,8 +62,8 @@ public class ImageExpandableListAdapter extends SimpleExpandableListAdapter {
 		final View v = super.getGroupView(groupPosition, isExpanded, convertView, parent);
 
         // Populate your custom view here
-        ((TextView)v.findViewById(R.id.functionText)).setText( (String) ((Map<String,Object>)getGroup(groupPosition)).get(NAME) );
-        ((ImageView)v.findViewById(R.id.functionIcon)).setImageDrawable( (Drawable) ((Map<String,Object>)getGroup(groupPosition)).get(IMAGE) );
+        ((TextView)v.findViewById(R.id.listText)).setText( (String) ((Map<String,Object>)getGroup(groupPosition)).get(NAME) );
+        ((ImageView)v.findViewById(R.id.listIcon)).setImageDrawable( (Drawable) ((Map<String,Object>)getGroup(groupPosition)).get(IMAGE) );
 
         return v;
 	}
@@ -73,8 +73,8 @@ public class ImageExpandableListAdapter extends SimpleExpandableListAdapter {
         final View v = super.getChildView(groupPosition, childPosition, isLastChild, convertView, parent);
 
         // Populate your custom view here
-        ((TextView)v.findViewById(R.id.functionText)).setText( (String) ((Map<String,Object>)getChild(groupPosition, childPosition)).get(NAME) );
-        ((ImageView)v.findViewById(R.id.functionIcon)).setImageDrawable( (Drawable) ((Map<String,Object>)getChild(groupPosition, childPosition)).get(IMAGE) );
+        ((TextView)v.findViewById(R.id.listText)).setText( (String) ((Map<String,Object>)getChild(groupPosition, childPosition)).get(NAME) );
+        ((ImageView)v.findViewById(R.id.listIcon)).setImageDrawable( (Drawable) ((Map<String,Object>)getChild(groupPosition, childPosition)).get(IMAGE) );
 
         return v;
     }
@@ -84,11 +84,11 @@ public class ImageExpandableListAdapter extends SimpleExpandableListAdapter {
 	 */
 	@Override
 	public View newGroupView(boolean isExpanded, ViewGroup parent) {
-		 return layoutInflater.inflate(R.layout.functions_list_item, parent, false);
+		 return layoutInflater.inflate(R.layout.image_list_item, parent, false);
 	}
 
 	@Override
     public View newChildView(boolean isLastChild, ViewGroup parent) {
-         return layoutInflater.inflate(R.layout.functions_list_item, parent, false);
+         return layoutInflater.inflate(R.layout.image_list_item, parent, false);
     }
 }

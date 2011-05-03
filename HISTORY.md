@@ -1,6 +1,10 @@
+## 0.3.9 (2011-05-03)
+
+* Fixed empty fields bug on notifications module
+
 ## 0.3.8 (2011-04-27)
 
-* Fixed bug on cleaning old notifications.
+* Fixed bug on cleaning old notifications
 
 ## 0.3.7 (2011-04-14)
 

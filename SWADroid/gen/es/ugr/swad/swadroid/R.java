@@ -10,6 +10,7 @@ package es.ugr.swad.swadroid;
 public final class R {
     public static final class array {
         public static final int functions=0x7f060000;
+        public static final int testMenuItems=0x7f060001;
     }
     public static final class attr {
     }
@@ -47,22 +48,23 @@ public final class R {
         public static final int eventText=0x7f090010;
         public static final int eventTime=0x7f09000a;
         public static final int eventType=0x7f09000d;
-        public static final int functionIcon=0x7f090004;
-        public static final int functionText=0x7f090005;
+        public static final int listIcon=0x7f090004;
+        public static final int listItems=0x7f090006;
+        public static final int listText=0x7f090005;
         public static final int moduleIcon=0x7f090000;
         public static final int moduleName=0x7f090001;
         public static final int notificationIcon=0x7f090008;
-        public static final int notificationsUpdateButton=0x7f090006;
         public static final int preferences_menu=0x7f090011;
         public static final int refresh=0x7f090003;
         public static final int title_sep_1=0x7f090002;
     }
     public static final class layout {
         public static final int action_bar=0x7f030000;
-        public static final int functions_list_item=0x7f030001;
-        public static final int main=0x7f030002;
-        public static final int notifications=0x7f030003;
+        public static final int image_list_item=0x7f030001;
+        public static final int list_items=0x7f030002;
+        public static final int main=0x7f030003;
         public static final int notifications_list_item=0x7f030004;
+        public static final int simple_list_item=0x7f030005;
     }
     public static final class menu {
         public static final int menu_main=0x7f080000;
@@ -71,11 +73,11 @@ public final class R {
         public static final int about_preferences=0x7f070013;
         public static final int app_name=0x7f070000;
         public static final int close_dialog=0x7f070006;
-        public static final int content=0x7f070029;
+        public static final int content=0x7f070027;
         public static final int coursesModuleLabel=0x7f070003;
         public static final int coursesProgressDescription=0x7f07001b;
         public static final int coursesProgressTitle=0x7f07001a;
-        public static final int dateMsg=0x7f07002d;
+        public static final int dateMsg=0x7f07002b;
         public static final int errorConnectionMsg=0x7f070034;
         public static final int errorCopyMsg_DB=0x7f07001e;
         public static final int errorMsgLaunchingActivity=0x7f07001c;
@@ -83,27 +85,27 @@ public final class R {
         public static final int errorMsgWorkaroundEmulator=0x7f07001d;
         public static final int errorServerResponseMsg=0x7f070033;
         public static final int errorTimeoutMsg=0x7f070035;
-        public static final int evaluation=0x7f07002b;
-        public static final int examAnnouncement=0x7f070024;
+        public static final int evaluation=0x7f070029;
+        public static final int examAnnouncement=0x7f070022;
         public static final int firstRunMsg=0x7f070031;
-        public static final int forumReply=0x7f070028;
-        public static final int fromMsg=0x7f07002c;
+        public static final int forumReply=0x7f070026;
+        public static final int fromMsg=0x7f07002a;
         public static final int initialDialogTitle=0x7f070030;
         public static final int loginModuleLabel=0x7f070001;
         public static final int loginProgressDescription=0x7f070017;
         public static final int loginProgressTitle=0x7f070016;
         public static final int loginSuccessfulMsg=0x7f070021;
         public static final int loginTitle_menu=0x7f070015;
-        public static final int marksFile=0x7f070025;
-        public static final int message=0x7f070027;
-        public static final int messages=0x7f07002a;
+        public static final int marksFile=0x7f070023;
+        public static final int message=0x7f070025;
+        public static final int messages=0x7f070028;
+        public static final int noContentMsg=0x7f07002d;
         public static final int noMsg=0x7f07002f;
-        public static final int notice=0x7f070026;
+        public static final int noSubjectMsg=0x7f07002c;
+        public static final int notice=0x7f070024;
         public static final int notificationsModuleLabel=0x7f070002;
         public static final int notificationsProgressDescription=0x7f070019;
         public static final int notificationsProgressTitle=0x7f070018;
-        public static final int notificationsSuccessfulMsg=0x7f070022;
-        public static final int notificationsUpdateButton=0x7f070023;
         public static final int preferencesTitle_menu=0x7f070012;
         public static final int saveMsg_preferences=0x7f07000f;
         public static final int saveSummary_preferences=0x7f070010;

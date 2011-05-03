@@ -116,15 +116,23 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         if(location != null) {
         	location.setText(cursor.getString(cursor.getColumnIndex("location")));
         }
-        if(summary != null){
+        if(summary != null){   
         	summaryText = cursor.getString(cursor.getColumnIndex("summary"));
+        	
+        	//Empty field checking
+        	if(summaryText.equals("anyType{}"))
+        		summaryText = context.getString(R.string.noSubjectMsg);
+        	
         	summary.setText(Html.fromHtml(summaryText));
         }
         if((content != null)){
         	contentText = cursor.getString(cursor.getColumnIndex("content"));
         	
-        	if(contentText != null)
-        		content.setText(Html.fromHtml(contentText));
+        	//Empty field checking
+        	if(contentText.equals("anyType{}"))
+        		contentText = context.getString(R.string.noContentMsg);
+        		
+        	content.setText(Html.fromHtml(contentText));
         }
 	}
 
