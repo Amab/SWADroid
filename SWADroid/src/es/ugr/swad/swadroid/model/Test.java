@@ -49,6 +49,10 @@ public class Test extends Model {
 	 * Feedback to be showed to the student
 	 */
 	private String feedback;
+	/**
+	 * Last time test was updated
+	 */
+	private Long editTime;
 	private static PropertyInfo PI_min = new PropertyInfo();
 	private static PropertyInfo PI_def = new PropertyInfo();
 	private static PropertyInfo PI_max = new PropertyInfo();
@@ -63,20 +67,57 @@ public class Test extends Model {
 	
 	/**
 	 * Constructor from fields
-	 * @param questionsAndAnswers List of questions and related answers
+	 * @param crsCode Code of test's course
 	 * @param min Minimum questions in test
 	 * @param def Default questions in test
 	 * @param max Maximum questions in test
 	 * @param feedback Feedback to be showed to the student
 	 */
+	public Test(int crsCode, int min, int def, int max, String feedback) {
+		super(crsCode);
+		this.min = min;
+		this.def = def;
+		this.max = max;
+		this.feedback = feedback;
+	}
+	
+	/**
+	 * Constructor from fields
+	 * @param crsCode Code of test's course
+	 * @param min Minimum questions in test
+	 * @param def Default questions in test
+	 * @param max Maximum questions in test
+	 * @param feedback Feedback to be showed to the student
+	 * @param editTime Last time test was updated
+	 */
+	public Test(int crsCode, int min, int def, int max, String feedback, Long editTime) {
+		super(crsCode);
+		this.min = min;
+		this.def = def;
+		this.max = max;
+		this.feedback = feedback;
+		this.editTime = editTime;
+	}
+	
+	/**
+	 * Constructor from fields
+	 * @param questionsAndAnswers List of questions and related answers
+	 * @param crsCode Code of test's course
+	 * @param min Minimum questions in test
+	 * @param def Default questions in test
+	 * @param max Maximum questions in test
+	 * @param feedback Feedback to be showed to the student
+	 * @param editTime Last time test was updated
+	 */
 	public Test(List<Pair<TestQuestion, List<TestAnswer>>> questionsAndAnswers,
-			int min, int def, int max, String feedback) {
-		super(0);
+			int crsCode, int min, int def, int max, String feedback, Long editTime) {
+		super(crsCode);
 		this.questionsAndAnswers = questionsAndAnswers;
 		this.min = min;
 		this.def = def;
 		this.max = max;
 		this.feedback = feedback;
+		this.editTime = editTime;
 	}
 
 	/**
@@ -104,7 +145,7 @@ public class Test extends Model {
 	public Pair<TestQuestion, List<TestAnswer>> getQuestionAnswers(int i) {
 		return questionsAndAnswers.get(i);
 	}
-	
+
 	/**
 	 * Gets minimum questions in test
 	 * @return Minimum questions in test
@@ -170,6 +211,21 @@ public class Test extends Model {
 	}
 
 	/**
+	 * Gets last time test was updated
+	 * @return Last time test was updated
+	 */
+	public Long getEditTime() {
+		return editTime;
+	}
+
+	/** Sets last time test was updated
+	 * @param timestamp Last time test was updated
+	 */
+	public void setEditTime(Long timestamp) {
+		this.editTime = timestamp;
+	}
+
+	/**
 	 * Adds a question and related answers
 	 * @param qa A pair of values <Question, List of answers>
 	 */
@@ -217,37 +273,6 @@ public class Test extends Model {
 				+ ((questionsAndAnswers == null) ? 0 : questionsAndAnswers
 						.hashCode());
 		return result;
-	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Test other = (Test) obj;
-		if (def != other.def)
-			return false;
-		if (feedback == null) {
-			if (other.feedback != null)
-				return false;
-		} else if (!feedback.equals(other.feedback))
-			return false;
-		if (max != other.max)
-			return false;
-		if (min != other.min)
-			return false;
-		if (questionsAndAnswers == null) {
-			if (other.questionsAndAnswers != null)
-				return false;
-		} else if (!questionsAndAnswers.equals(other.questionsAndAnswers))
-			return false;
-		return true;
 	}
 
 	/* (non-Javadoc)

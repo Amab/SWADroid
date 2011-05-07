@@ -9,7 +9,7 @@
   android:id="@+id/listText"
   android:layout_width="fill_parent"
   android:layout_height="wrap_content"
-  android:padding="10dip"
+  android:padding="20dip"
   android:textColor="@color/foreground1"
   android:textSize="24sp">
  </TextView>

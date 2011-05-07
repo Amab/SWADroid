@@ -120,8 +120,7 @@ public class TestAnswer extends Model {
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + ((answer == null) ? 0 : answer.hashCode());
-		result = prime * result + (correct ? 1231 : 1237);
+		result = prime * result + qstCod;
 		return result;
 	}
 
@@ -137,12 +136,7 @@ public class TestAnswer extends Model {
 		if (getClass() != obj.getClass())
 			return false;
 		TestAnswer other = (TestAnswer) obj;
-		if (answer == null) {
-			if (other.answer != null)
-				return false;
-		} else if (!answer.equals(other.answer))
-			return false;
-		if (correct != other.correct)
+		if (qstCod != other.qstCod)
 			return false;
 		return true;
 	}

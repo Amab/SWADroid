@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<database name="swadroid_db" version="6">  
+<database name="swadroid_db" version="7">  
   <table name="courses" to-string="%name%">
     <field name="id" obligatory="true" type="integer"/>
     <field name="name" obligatory="true" type="text"/>
@@ -24,11 +24,11 @@
     <field name="def" obligatory="true" type="integer"/>
     <field name="max" obligatory="true" type="integer"/>
     <field name="feedback" obligatory="true" type="text"/>
+    <field name="editTime" obligatory="true" type="text" new-in-version="7"/>
   </table>
   
   <table name="tst_questions" to-string="%name%" new-in-version="6">
     <field name="id" obligatory="true" type="integer"/>
-    <field name="editTime" obligatory="true" type="integer"/>
     <field name="ansType" obligatory="true" type="text"/>
     <field name="shuffle" obligatory="true" type="text"/>
     <field name="stem" obligatory="true" type="text"/>

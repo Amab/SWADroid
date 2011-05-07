@@ -356,14 +356,10 @@ public abstract class Module extends Activity {
 			Log.d(Global.MODULE_TAG, "onActivityResult()");
 		
         if (resultCode == Activity.RESULT_OK) {
-            //Bundle extras = data.getExtras();
-
             switch(requestCode) {
 	            case Global.LOGIN_REQUEST_CODE:
                     Global.setLogged(true);
-                    Toast.makeText(getBaseContext(),
-                            R.string.loginSuccessfulMsg,
-                            Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getBaseContext(), R.string.loginSuccessfulMsg, Toast.LENGTH_SHORT).show();
                     
             		if(isDebuggable)
             			Log.d(Global.LOGIN_TAG, getString(R.string.loginSuccessfulMsg));
@@ -407,6 +403,10 @@ public abstract class Module extends Activity {
     protected void sendRequest(Class cl, boolean simple)
     	throws IOException, SoapFault, IllegalAccessException, InstantiationException, XmlPullParserException {
 
+    	/**
+    	 * Use of KeepAliveHttpsTransport deals with the problems with the Android ssl libraries having trouble
+    	 * with certificates and certificate authorities somehow messing up connecting/needing reconnects.
+    	 */
         KeepAliveHttpsTransportSE connection = new KeepAliveHttpsTransportSE(URL, 443, "", TIMEOUT);
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         System.setProperty("http.keepAlive", "false");
@@ -513,15 +513,18 @@ public abstract class Module extends Activity {
         boolean showDialog, isLoginModule;
 
 		/**
-         * Shows progress dialog and connects to SWAD in background
+		 * Shows progress dialog and connects to SWAD in background
+		 * @param showDialog Flag for show a progress dialog or not
 		 * @param progressDescription Description to be showed in dialog
 		 * @param progressTitle Title to be showed in dialog
+		 * @param isLogin Flag for detect if this is the login module
 		 */
 		public Connect(boolean showDialog, String progressDescription, int progressTitle, Boolean... isLogin) {
 			super();
 			this.progressDescription = progressDescription;
 			this.progressTitle = progressTitle;
 			this.showDialog = showDialog;
+			
 			assert isLogin.length <= 1;
 		    this.isLoginModule = isLogin.length > 0 ? isLogin[0].booleanValue() : false;
 		}
@@ -570,7 +573,7 @@ public abstract class Module extends Activity {
     	 */
         @Override
         protected void onPostExecute(Void unused) {  
-        	String errorMsg;
+        	String errorMsg = "";
         	
     		if(isDebuggable)
     			Log.d(Global.MODULE_TAG, "onPostExecute()");
@@ -591,42 +594,24 @@ public abstract class Module extends Activity {
             			errorMsg = getString(R.string.errorBadLoginMsg);
             		else
             			errorMsg = es.getMessage();
-                    
-            		if(isDebuggable)
-            			Log.e(e.getClass().getSimpleName(), errorMsg);
-            		
-        			error(errorMsg);
                 } else if (e instanceof XmlPullParserException) {
                 	errorMsg = getString(R.string.errorServerResponseMsg);
-                	
-            		if(isDebuggable)
-            			Log.e(e.getClass().getSimpleName(), errorMsg);
-            		
-                    error(errorMsg);
                 } else if (e instanceof IOException) {
                 	errorMsg = getString(R.string.errorConnectionMsg);
-                	
-            		if(isDebuggable)
-            			Log.e(e.getClass().getSimpleName(), errorMsg);
-                	
-                    error(errorMsg);
                 } else if (e instanceof TimeoutException) {
                 	errorMsg = getString(R.string.errorTimeoutMsg);
-                	
-            		if(isDebuggable)
-            			Log.e(e.getClass().getSimpleName(), errorMsg);
-            		
-                    error(errorMsg);
                 } else {
-            		if(isDebuggable)
-            			Log.e(e.getClass().getSimpleName(), e.getMessage());
-            		
-                    error(e.getMessage());
+                	errorMsg = e.getMessage();
                 }
 
-                //Request finalized with errors
-                e.printStackTrace();
+                //Request finalized with errors 
+        		error(errorMsg);               
+        		if(isDebuggable) {    		
+        			e.printStackTrace();
+        		}
+        		
                 setResult(RESULT_CANCELED);
+                finish();
             } else {
         		postConnect();
         	}
