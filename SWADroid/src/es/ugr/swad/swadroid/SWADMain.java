@@ -38,7 +38,6 @@ import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.modules.notifications.Notifications;
 import es.ugr.swad.swadroid.modules.tests.Tests;
@@ -175,10 +174,10 @@ public class SWADMain extends ExpandableListActivity {
 				startActivityForResult(activity, Global.NOTIFICATIONS_REQUEST_CODE);
 				
 		} else if(keyword.equals(getString(R.string.testsModuleLabel))) {
-				/*activity = new Intent(getBaseContext(), Tests.class);
-				startActivityForResult(activity, Global.TESTS_REQUEST_CODE);*/
-				Toast.makeText(this, keyword + " aún no implementado", Toast.LENGTH_LONG)
-					.show();
+				activity = new Intent(getBaseContext(), Tests.class);
+				startActivityForResult(activity, Global.TESTS_REQUEST_CODE);
+				/*Toast.makeText(this, keyword + " aún no implementado", Toast.LENGTH_LONG)
+					.show();*/
 		}
 		
 		return true;
@@ -198,7 +197,7 @@ public class SWADMain extends ExpandableListActivity {
      */
     private void createMainMenu()
     {
-    	// Construct Expandable List
+    	//Construct Expandable List
         final ArrayList<HashMap<String, Object>> headerData = new ArrayList<HashMap<String, Object>>();
 
         final HashMap<String, Object> messages = new HashMap<String, Object>();
@@ -278,13 +277,15 @@ public class SWADMain extends ExpandableListActivity {
             SecureConnection.initSecureConnection(); 
             
             //Check if this is the first run after an install or upgrade
-            //If this is the first run, show configuration dialog
-            //If this is an upgrade, show upgrade dialog
             lastVersion = prefs.getLastVersion();
             currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+
+            //If this is the first run, show configuration dialog
             if(lastVersion == 0) {
             	showConfigurationDialog();
             	prefs.setLastVersion(currentVersion);
+
+            //If this is an upgrade, show upgrade dialog
             } else if(lastVersion < 12) {
             	dbHelper.emptyTable(Global.DB_TABLE_NOTIFICATIONS);
             	prefs.setLastVersion(currentVersion);
