@@ -73,6 +73,24 @@ public class Notifications extends Module {
 	 */
     private String orderby = "eventTime DESC";
 	
+    /**
+     * Refreshes data on screen
+     */
+    private void refreshScreen() {
+    	//Refresh data on screen 
+        dbCursor = dbHelper.getDb().getCursor(Global.DB_TABLE_NOTIFICATIONS, selection, orderby);
+        adapter.changeCursor(dbCursor);
+        
+        TextView text = (TextView) this.findViewById(R.id.listText);
+        ListView list = (ListView)this.findViewById(R.id.listItems);
+        
+        //If there are notifications to show, hide the empty notifications message and show the notifications list
+        if(dbCursor.getCount() > 0) {
+        	text.setVisibility(View.GONE);
+        	list.setVisibility(View.VISIBLE);
+        }
+    }
+    
 	/* (non-Javadoc)
 	 * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
 	 */
@@ -119,6 +137,18 @@ public class Notifications extends Module {
         list.setAdapter(adapter);
         list.setOnItemClickListener(clickListener);
         
+    	text = (TextView) this.findViewById(R.id.listText);
+
+    	/*
+    	 * If there aren't notifications to show, hide the notifications list and show the empty notifications
+    	 * message
+    	 */
+        if(dbCursor.getCount() == 0) {
+        	list.setVisibility(View.GONE);
+        	text.setVisibility(View.VISIBLE);
+        	text.setText(R.string.notificationsEmptyListMsg);
+        }
+        
         setMETHOD_NAME("getNotifications");
 	}
 	
@@ -136,11 +166,8 @@ public class Notifications extends Module {
 	 */
 	@Override
 	protected void onResume() {		
-		super.onResume();
-		
-		//Refresh data on screen 
-        dbCursor = dbHelper.getDb().getCursor(Global.DB_TABLE_NOTIFICATIONS, selection, orderby);
-        adapter.changeCursor(dbCursor);
+		super.onResume();		
+		refreshScreen();
 	}
 
 	/* (non-Javadoc)
@@ -209,11 +236,13 @@ public class Notifications extends Module {
 	 */
 	@Override
 	protected void postConnect() {		
-		//Refresh data on screen 
-        dbCursor = dbHelper.getDb().getCursor(Global.DB_TABLE_NOTIFICATIONS, selection, orderby);
-        adapter.changeCursor(dbCursor);		
+		refreshScreen();	
 	}
 	
+	/**
+	 * Removes all notifications from database
+	 * @param context Database context
+	 */
 	public void clearNotifications(Context context) {
 	    try {
 	       	DataFramework db = DataFramework.getInstance();
