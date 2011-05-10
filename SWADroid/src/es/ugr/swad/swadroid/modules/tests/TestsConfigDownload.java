@@ -69,6 +69,10 @@ public class TestsConfigDownload extends Module {
 	 * Number of available questions
 	 */
 	private int numQuestions;
+    /**
+     * Tests tag name for Logcat
+     */
+    public static final String TAG = Global.APP_TAG + " TestsConfigDownload";
 	
 	/* (non-Javadoc)
 	 * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
@@ -104,7 +108,7 @@ public class TestsConfigDownload extends Module {
 				
 				if(isDebuggable) {
 					Integer s = whichButton;
-					Log.d(Global.TESTS_TAG, "singleChoice = " + s.toString());
+					Log.d(TAG, "singleChoice = " + s.toString());
 				}
 			}
 		};
@@ -113,7 +117,7 @@ public class TestsConfigDownload extends Module {
 				try {
 					if(isDebuggable) {
 						Integer s = selectedCourseCode;
-						Log.d(Global.TESTS_TAG, "selectedCourseCode = " + s.toString());
+						Log.d(TAG, "selectedCourseCode = " + s.toString());
 					}
 					
 					if(selectedCourseCode != 0) {
@@ -184,11 +188,11 @@ public class TestsConfigDownload extends Module {
 	    	
             //If there are no available questions, notify to user
             if(numQuestions == 0) {
-            	Log.i(Global.TESTS_TAG, getString(R.string.noQuestionsAvailableTestsDownloadMsg));
+            	Log.i(TAG, getString(R.string.noQuestionsAvailableTestsDownloadMsg));
             	
             //If the teacher doesn't allows questions download, notify to user
 	    	} else if(!isPluggable) {
-            	Log.i(Global.TESTS_TAG, getString(R.string.noQuestionsPluggableTestsDownloadMsg));
+            	Log.i(TAG, getString(R.string.noQuestionsPluggableTestsDownloadMsg));
             	
 	    	//If there are questions and the teacher allows their download, process the questions data
             } else {
@@ -205,10 +209,10 @@ public class TestsConfigDownload extends Module {
                 }
                 
                 if(isDebuggable) {
-                	Log.d(Global.TESTS_TAG, "minQuestions=" + minQuestions);
-                	Log.d(Global.TESTS_TAG, "defQuestions=" + defQuestions);
-                	Log.d(Global.TESTS_TAG, "maxQuestions=" + maxQuestions);
-                	Log.d(Global.TESTS_TAG, "feedback=" + feedback);
+                	Log.d(TAG, "minQuestions=" + minQuestions);
+                	Log.d(TAG, "defQuestions=" + defQuestions);
+                	Log.d(TAG, "maxQuestions=" + maxQuestions);
+                	Log.d(TAG, "feedback=" + feedback);
                 }
                 
                 Intent activity = new Intent(getBaseContext(), TestsQuestionsDownload.class);

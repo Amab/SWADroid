@@ -55,6 +55,10 @@ public class TestsQuestionsDownload extends Module {
 	 * Next timestamp to be requested
 	 */
 	private Long timestamp;
+    /**
+     * Tests tag name for Logcat
+     */
+    public static final String TAG = Global.APP_TAG + " TestsQuestionsDownload";
 	
 	/* (non-Javadoc)
 	 * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
@@ -115,10 +119,10 @@ public class TestsQuestionsDownload extends Module {
 	            tagsList.add(tag);
 	            
 	    		if(isDebuggable)
-	    			Log.d(Global.TESTS_TAG, tag.toString());
+	    			Log.d(TAG, tag.toString());
 	        }
 	        
-			Log.i(Global.TESTS_TAG, "Retrieved " + listSize + " tags");
+			Log.i(TAG, "Retrieved " + listSize + " tags");
             
 			//Read questions info from webservice response
 	    	listSize = questionsListObject.getPropertyCount();
@@ -142,10 +146,10 @@ public class TestsQuestionsDownload extends Module {
 	            }
 	            
 	    		if(isDebuggable)
-	    			Log.d(Global.TESTS_TAG, q.toString());
+	    			Log.d(TAG, q.toString());
 	        }
 	        
-			Log.i(Global.TESTS_TAG, "Retrieved " + listSize + " questions");
+			Log.i(TAG, "Retrieved " + listSize + " questions");
             
 			//Read answers info from webservice response
 	    	listSize = answersListObject.getPropertyCount();
@@ -169,10 +173,10 @@ public class TestsQuestionsDownload extends Module {
 	            }
 	            
 	    		if(isDebuggable)
-	    			Log.d(Global.TESTS_TAG, a.toString());
+	    			Log.d(TAG, a.toString());
 	        }
 	        
-			Log.i(Global.TESTS_TAG, "Retrieved " + listSize + " answers");
+			Log.i(TAG, "Retrieved " + listSize + " answers");
             
 			//Read relationships between questions and tags from webservice response
 	    	listSize = questionTagsListObject.getPropertyCount();
@@ -201,7 +205,7 @@ public class TestsQuestionsDownload extends Module {
 	            }
 	        }
 
-			Log.i(Global.TESTS_TAG, "Retrieved " + listSize + " relationships between questions and tags");
+			Log.i(TAG, "Retrieved " + listSize + " relationships between questions and tags");
 			
 			//Update last time test was updated
 			Test oldTestConfigDB = (Test) dbHelper.getRow(Global.DB_TABLE_TEST_CONFIG, "id", selectedCourseCode.toString());

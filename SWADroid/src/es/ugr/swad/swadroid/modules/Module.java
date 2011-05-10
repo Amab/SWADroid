@@ -105,6 +105,10 @@ public abstract class Module extends Activity {
      * Application debuggable flag
      */
     protected static boolean isDebuggable;
+    /**
+     * Class Module's tag name for Logcat
+     */
+    public static final String TAG = Global.APP_TAG + " Module";
     
     /**
      * Connects to SWAD and gets user data.
@@ -272,7 +276,7 @@ public abstract class Module extends Activity {
 		}
 		
 		if(isDebuggable)
-			Log.d(Global.MODULE_TAG, "onCreate()");
+			Log.d(TAG, "onCreate()");
         
 		super.onCreate(savedInstanceState);
         prefs.getPreferences(getBaseContext());
@@ -284,7 +288,7 @@ public abstract class Module extends Activity {
     @Override
     protected void onPause() { 
 		if(isDebuggable)			       
-			Log.d(Global.MODULE_TAG, "onPause()");
+			Log.d(TAG, "onPause()");
         
         super.onPause();
         if(errorDialog != null) {
@@ -298,7 +302,7 @@ public abstract class Module extends Activity {
 	@Override
 	protected void onDestroy() {
 		if(isDebuggable)
-			Log.d(Global.MODULE_TAG, "onDestroy()");
+			Log.d(TAG, "onDestroy()");
 		
 		super.onDestroy();
 	}
@@ -309,7 +313,7 @@ public abstract class Module extends Activity {
 	@Override
 	protected void onRestart() {
 		if(isDebuggable)
-			Log.d(Global.MODULE_TAG, "onRestart()");
+			Log.d(TAG, "onRestart()");
 		
 		super.onRestart();
 	}
@@ -320,7 +324,7 @@ public abstract class Module extends Activity {
 	@Override
 	protected void onResume() {
 		if(isDebuggable)
-			Log.d(Global.MODULE_TAG, "onResume()");
+			Log.d(TAG, "onResume()");
 		
 		super.onResume();
 	}
@@ -331,7 +335,7 @@ public abstract class Module extends Activity {
 	@Override
 	protected void onStart() {
 		if(isDebuggable)
-			Log.d(Global.MODULE_TAG, "onStart()");
+			Log.d(TAG, "onStart()");
 		
 		super.onStart();
 	}
@@ -342,7 +346,7 @@ public abstract class Module extends Activity {
 	@Override
 	protected void onStop() {
 		if(isDebuggable)
-			Log.d(Global.MODULE_TAG, "onStop()");
+			Log.d(TAG, "onStop()");
 		
 		super.onStop();
 	}
@@ -353,7 +357,7 @@ public abstract class Module extends Activity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if(isDebuggable)
-			Log.d(Global.MODULE_TAG, "onActivityResult()");
+			Log.d(TAG, "onActivityResult()");
 		
         if (resultCode == Activity.RESULT_OK) {
             switch(requestCode) {
@@ -362,7 +366,7 @@ public abstract class Module extends Activity {
                     //Toast.makeText(getBaseContext(), R.string.loginSuccessfulMsg, Toast.LENGTH_SHORT).show();
                     
             		if(isDebuggable)
-            			Log.d(Global.LOGIN_TAG, getString(R.string.loginSuccessfulMsg));
+            			Log.d(TAG, getString(R.string.loginSuccessfulMsg));
                     
                     if(!(this instanceof Login)) {
                     	connect();
@@ -535,7 +539,7 @@ public abstract class Module extends Activity {
         @Override
         protected void onPreExecute() { 
     		if(isDebuggable)
-    			Log.d(Global.MODULE_TAG, "onPreExecute()");
+    			Log.d(TAG, "onPreExecute()");
         	
         	if(showDialog) {
 	            dialog.setMessage(progressDescription);
@@ -550,7 +554,7 @@ public abstract class Module extends Activity {
         @Override
 		protected Void doInBackground(String... urls) {
     		if(isDebuggable)
-    			Log.d(Global.MODULE_TAG, "doInBackground()");
+    			Log.d(TAG, "doInBackground()");
         	
             try {
                 //Sends webservice request
@@ -576,7 +580,7 @@ public abstract class Module extends Activity {
         	String errorMsg = "";
         	
     		if(isDebuggable)
-    			Log.d(Global.MODULE_TAG, "onPostExecute()");
+    			Log.d(TAG, "onPostExecute()");
         	
         	if(dialog.isShowing()) {
         		dialog.dismiss();

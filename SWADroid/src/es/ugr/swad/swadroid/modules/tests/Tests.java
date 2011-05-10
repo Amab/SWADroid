@@ -47,6 +47,10 @@ public class Tests extends Module {
 	 * Array adapter for showing menu options
 	 */
 	private ArrayAdapter<String> adapter;
+    /**
+     * Tests tag name for Logcat
+     */
+    public static final String TAG = Global.APP_TAG + " Tests";
 	
 	/* (non-Javadoc)
 	 * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)

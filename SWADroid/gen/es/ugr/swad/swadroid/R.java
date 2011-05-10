@@ -35,10 +35,28 @@ public final class R {
         public static final int notif=0x7f020009;
         public static final int recmsg=0x7f02000a;
         public static final int test=0x7f02000b;
-        public static final int title_button=0x7f02000c;
-        public static final int title_refresh=0x7f02000d;
+        public static final int timepicker_down_btn=0x7f02000c;
+        public static final int timepicker_down_disabled=0x7f02000d;
+        public static final int timepicker_down_disabled_focused=0x7f02000e;
+        public static final int timepicker_down_normal=0x7f02000f;
+        public static final int timepicker_down_pressed=0x7f020010;
+        public static final int timepicker_down_selected=0x7f020011;
+        public static final int timepicker_input=0x7f020012;
+        public static final int timepicker_input_disabled=0x7f020013;
+        public static final int timepicker_input_normal=0x7f020014;
+        public static final int timepicker_input_pressed=0x7f020015;
+        public static final int timepicker_input_selected=0x7f020016;
+        public static final int timepicker_up_btn=0x7f020017;
+        public static final int timepicker_up_disabled=0x7f020018;
+        public static final int timepicker_up_disabled_focused=0x7f020019;
+        public static final int timepicker_up_normal=0x7f02001a;
+        public static final int timepicker_up_pressed=0x7f02001b;
+        public static final int timepicker_up_selected=0x7f02001c;
+        public static final int title_button=0x7f02001d;
+        public static final int title_refresh=0x7f02001e;
     }
     public static final class id {
+        public static final int decrement=0x7f090013;
         public static final int eventContent=0x7f09000c;
         public static final int eventDate=0x7f090009;
         public static final int eventLocation=0x7f09000e;
@@ -48,14 +66,19 @@ public final class R {
         public static final int eventText=0x7f090010;
         public static final int eventTime=0x7f09000a;
         public static final int eventType=0x7f09000d;
+        public static final int increment=0x7f090011;
         public static final int listIcon=0x7f090004;
         public static final int listItems=0x7f090006;
         public static final int listText=0x7f090005;
         public static final int moduleIcon=0x7f090000;
         public static final int moduleName=0x7f090001;
         public static final int notificationIcon=0x7f090008;
-        public static final int preferences_menu=0x7f090011;
+        public static final int preferences_menu=0x7f090017;
         public static final int refresh=0x7f090003;
+        public static final int testNumQuestionsAcceptButton=0x7f090016;
+        public static final int testNumQuestionsNumberPicker=0x7f090015;
+        public static final int testNumQuestionsText=0x7f090014;
+        public static final int timepicker_input=0x7f090012;
         public static final int title_sep_1=0x7f090002;
     }
     public static final class layout {
@@ -64,7 +87,10 @@ public final class R {
         public static final int list_items=0x7f030002;
         public static final int main=0x7f030003;
         public static final int notifications_list_item=0x7f030004;
-        public static final int simple_list_item=0x7f030005;
+        public static final int number_picker=0x7f030005;
+        public static final int simple_list_item=0x7f030006;
+        public static final int tests_make_main=0x7f030007;
+        public static final int tests_num_questions=0x7f030008;
     }
     public static final class menu {
         public static final int menu_main=0x7f080000;
@@ -80,20 +106,20 @@ public final class R {
         public static final int coursesProgressDescription=0x7f07001e;
         public static final int coursesProgressTitle=0x7f07001d;
         public static final int dateMsg=0x7f07002e;
-        public static final int errorBadLoginMsg=0x7f07003d;
-        public static final int errorConnectionMsg=0x7f07003f;
+        public static final int errorBadLoginMsg=0x7f070040;
+        public static final int errorConnectionMsg=0x7f070042;
         public static final int errorCopyMsg_DB=0x7f070021;
         public static final int errorMsgLaunchingActivity=0x7f07001f;
         public static final int errorMsgNoConnection=0x7f070022;
         public static final int errorMsgWorkaroundEmulator=0x7f070020;
-        public static final int errorServerResponseMsg=0x7f07003e;
-        public static final int errorTimeoutMsg=0x7f070040;
+        public static final int errorServerResponseMsg=0x7f070041;
+        public static final int errorTimeoutMsg=0x7f070043;
         public static final int evaluation=0x7f07002c;
         public static final int examAnnouncement=0x7f070025;
-        public static final int firstRunMsg=0x7f07003b;
+        public static final int firstRunMsg=0x7f07003e;
         public static final int forumReply=0x7f070029;
         public static final int fromMsg=0x7f07002d;
-        public static final int initialDialogTitle=0x7f07003a;
+        public static final int initialDialogTitle=0x7f07003d;
         public static final int loginModuleLabel=0x7f070001;
         public static final int loginProgressDescription=0x7f070017;
         public static final int loginProgressTitle=0x7f070016;
@@ -120,11 +146,14 @@ public final class R {
         public static final int saveTitle_preferences=0x7f070011;
         public static final int selectCourseTitle=0x7f070035;
         public static final int set_preferences=0x7f070007;
+        public static final int testNoQuestionsCourseMsg=0x7f07003b;
+        public static final int testNoQuestionsMsg=0x7f07003c;
+        public static final int testNumQuestionsMsg=0x7f07003a;
         public static final int testsDownloadProgressDescription=0x7f07001c;
         public static final int testsDownloadProgressTitle=0x7f07001b;
         public static final int testsModuleLabel=0x7f070004;
         public static final int title_error_dialog=0x7f070005;
-        public static final int upgradeMsg=0x7f07003c;
+        public static final int upgradeMsg=0x7f07003f;
         public static final int upgradeMsg_DB=0x7f070023;
         public static final int userIDName_preferences=0x7f070009;
         public static final int userIDSummary_preferences=0x7f07000a;
