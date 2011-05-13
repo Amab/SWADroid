@@ -7,27 +7,31 @@
     <include layout="@layout/action_bar"/>    
  
 	<TextView
-		android:id="@+id/testNumQuestionsText"
+		android:id="@+id/testAnswerTypesText"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_above="@+id/testNumQuestionsNumberPicker"
+		android:layout_below="@+id/actionBarLayout"
 		android:gravity="center"
 		android:padding="20dip"
 		android:textColor="@color/foreground1"
 		android:textSize="20sp"
-		android:text="@string/testNumQuestionsMsg"/>
-   
-	<es.ugr.swad.swadroid.widget.NumberPicker
-	    android:id="@+id/testNumQuestionsNumberPicker"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
+		android:text="@string/testAnswerTypesMsg"/>
+		
+    <ListView
+	    android:id="@+id/testAnswerTypesList"
+    	android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+		android:layout_below="@+id/testAnswerTypesText"
+		android:layout_above="@+id/testAnswerTypesAcceptButton"
 		android:layout_centerInParent="true"
-	    android:textSize="24sp" />
+    	android:background="@android:color/transparent"
+    	android:cacheColorHint="@color/background">
+    </ListView>
    
 	<Button 
-	  android:id="@+id/testNumQuestionsAcceptButton"
+	  android:id="@+id/testAnswerTypesAcceptButton"
 	  android:layout_width="match_parent"
 	  android:layout_height="wrap_content"
-	  android:layout_alignParentBottom="true"
-	  android:text="@string/acceptMsg"/>
+	  android:text="@string/acceptMsg"
+	  android:layout_alignParentBottom="true"/>
 </RelativeLayout>

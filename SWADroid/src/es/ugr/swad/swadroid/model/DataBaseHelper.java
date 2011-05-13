@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import android.database.Cursor;
 import android.util.Log;
 
 import com.android.dataframework.DataFramework;
@@ -174,6 +175,30 @@ public class DataBaseHelper {
     {
 		List<Model> result = new ArrayList<Model>();		
 		List<Entity> rows = db.getEntityList(table);
+		Model row;
+		
+		Iterator<Entity> iter = rows.iterator();
+		while (iter.hasNext()) {
+		  Entity ent = iter.next();
+		  row = createObjectByTable(table, ent);
+  		  result.add(row);
+		}
+        
+        return result;
+    }
+	
+	/**
+	 * Gets the rows of specified table that matches "where" condition. The rows are ordered as says the "orderby"
+	 * parameter
+	 * @param table Table containing the rows
+	 * @param where Where condition of SQL sentence
+	 * @param orderby Orderby part of SQL sentence
+	 * @return A list of Model's subclass objects
+	 */
+	public List<Model> getAllRows(String table, String where, String orderby)
+    {
+		List<Model> result = new ArrayList<Model>();		
+		List<Entity> rows = db.getEntityList(table, where, orderby);
 		Model row;
 		
 		Iterator<Entity> iter = rows.iterator();
@@ -557,11 +582,11 @@ public class DataBaseHelper {
     }
 	
 	/**
-	 * Gets a field of last test
-	 * @param field A field of last test
-	 * @return The field of last test
+	 * Gets last time the test was updated
+	 * @param crsCode Test's course
+	 * @return Last time the test was updated
 	 */
-	public String getTimeOfLastTestUpdate(Integer crsCode)
+	public String getTimeOfLastTestUpdate(int crsCode)
     {
 		String where = "id=" + crsCode;
 		String orderby = null;
@@ -575,6 +600,35 @@ public class DataBaseHelper {
 		}
 
 		return f;
+    }
+	
+
+	
+	/**
+	 * Gets the tags of specified course ordered by tagInd field
+	 * @param crsCode Test's course
+	 * @return A list of the tags of specified course ordered by tagInd field
+	 */
+	public List<TestTag> getOrderedCourseTags(int crsCode)
+    {
+		String select = "SELECT DISTINCT T.id, T.tagTxt, Q.qstCod, Q.tagInd";
+		String tables = " FROM " + Global.DB_TABLE_TEST_TAGS + " AS T, " + Global.DB_TABLE_TEST_QUESTION_TAGS
+			+ " AS Q, "	+ Global.DB_TABLE_TEST_QUESTIONS_COURSE + " AS C";
+		String where = " WHERE T.id=Q.tagCod AND Q.qstCod=C.qstCod AND C.crsCod=" + crsCode;
+		String orderby = " GROUP BY T.id ORDER BY Q.tagInd ASC";
+		Cursor dbCursor = db.getDB().rawQuery(select + tables + where + orderby, null);
+		List<TestTag> result = new ArrayList<TestTag>();
+		
+		while(dbCursor.moveToNext()) {			
+			int id = dbCursor.getInt(0);
+			String tagTxt = dbCursor.getString(1);
+			int qstCod = dbCursor.getInt(2);
+			int tagInd = dbCursor.getInt(3);
+			
+			result.add(new TestTag(id, qstCod, tagTxt, tagInd));
+		}
+        
+        return result;
     }
 	
 	/**
