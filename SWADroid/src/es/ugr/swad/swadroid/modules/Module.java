@@ -376,7 +376,6 @@ public abstract class Module extends Activity {
             }
         } else {
         	setResult(RESULT_CANCELED);
-        	finish();
         }
     }
 
@@ -618,7 +617,6 @@ public abstract class Module extends Activity {
         		}
         		
                 setResult(RESULT_CANCELED);
-                finish();
             } else {
         		postConnect();
         	}
