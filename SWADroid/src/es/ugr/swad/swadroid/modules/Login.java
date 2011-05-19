@@ -20,6 +20,7 @@
 package es.ugr.swad.swadroid.modules;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 import es.ugr.swad.swadroid.Base64;
 import es.ugr.swad.swadroid.Global;
@@ -46,6 +47,10 @@ public class Login extends Module {
      * User password.
      */
     private String userPassword;
+    /**
+     * Login tag name for Logcat
+     */
+    public static final String TAG = Global.APP_TAG + " Login";
 
     /* (non-Javadoc)
 	 * @see android.app.Activity#onCreate()
@@ -72,8 +77,10 @@ public class Login extends Module {
     protected void connect() {
     	String progressDescription = getString(R.string.loginProgressDescription);
     	int progressTitle = R.string.loginProgressTitle;
-    	Connect con = new Connect(false, progressDescription, progressTitle);
-    	Toast.makeText(this, progressDescription, Toast.LENGTH_LONG).show();
+    	Connect con = new Connect(false, progressDescription, progressTitle, true);
+    	
+    	if(!Global.isLogged())
+    		Toast.makeText(this, progressDescription, Toast.LENGTH_LONG).show();
     	
         con.execute();
     }
@@ -90,6 +97,12 @@ public class Login extends Module {
     protected void requestService()
             throws NoSuchAlgorithmException, IOException, XmlPullParserException, SoapFault, IllegalAccessException, InstantiationException {
 
+    	//If last login time > Global.RELOGIN_TIME, force login
+    	if(System.currentTimeMillis()-Global.getLastLoginTime() > Global.RELOGIN_TIME) {
+    		Global.setLogged(false);
+    	}
+    	
+    	//If the application isn't logged, force login
     	if(!Global.isLogged())
     	{
 	        //Encrypts user password with SHA-512 and encodes it to Base64UrlSafe   	
@@ -118,19 +131,29 @@ public class Login extends Module {
 		        User.setUserFirstName(ks.getProperty(6).toString());
 		        User.setUserTypeName(ks.getProperty(7).toString());
 		        
-		        //Request finalized without errors
-		        setResult(RESULT_OK);
+		        //Update application last login time
+		        Global.setLastLoginTime(System.currentTimeMillis());
 	        }
-    	} else {
-    		 //Request finalized without errors
-	        setResult(RESULT_OK);
     	}
     	
-        finish();
+    	if(isDebuggable) {
+    		Log.d(TAG, "userCode=" + User.getUserCode());
+    		Log.d(TAG, "userTypeCode=" + User.getUserTypeCode());
+    		Log.d(TAG, "wsKey=" + User.getWsKey());
+    		Log.d(TAG, "userID=" + User.getUserID());
+    		Log.d(TAG, "userSurname1=" + User.getUserSurname1());
+    		Log.d(TAG, "userSurname2=" + User.getUserSurname2());
+    		Log.d(TAG, "userFirstName=" + User.getUserFirstName());
+    		Log.d(TAG, "userTypeName=" + User.getUserTypeName());
+    		Log.d(TAG, "lastLoginTime=" + Global.getLastLoginTime());
+    	}
+    	
+        //Request finalized without errors
+        setResult(RESULT_OK);
 	}
 
 	@Override
 	protected void postConnect() {
-
+        finish();
 	}
 }

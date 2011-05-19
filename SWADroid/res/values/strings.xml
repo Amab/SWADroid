@@ -25,14 +25,17 @@
 	<string name="loginProgressTitle">Login</string>
 	<string name="loginProgressDescription">Connecting...</string>
 	<string name="notificationsProgressTitle">Notifications</string>
-	<string name="notificationsProgressDescription">Retrieving new notifications</string>
+	<string name="notificationsProgressDescription">Retrieving new notifications...</string>
+	<string name="notificationsEmptyListMsg">Did not download any notification.\n\nTo download most recent
+		notifications click the icon in the upper right of the screen.</string>
+	<string name="testsDownloadProgressTitle">Tests</string>
+	<string name="testsDownloadProgressDescription">Synchronizing test questions...</string>
 	<string name="coursesProgressTitle">Courses</string>
 	<string name="coursesProgressDescription">Retrieving courses...</string>
 	<string name="errorMsgLaunchingActivity">An error occurred during the execution of the
 		operation</string>
 	<string name="errorMsgWorkaroundEmulator">Damn. That Android emulator bug appeared again.
 		Retrying...</string>
-
 	<string name="errorCopyMsg_DB">Error copying database</string>
 	<string name="errorMsgNoConnection">No connection found</string>
 	<string name="upgradeMsg_DB">Upgrading database...</string>
@@ -45,12 +48,31 @@
 	<string name="content">Content</string>
 	<string name="messages">Messages</string>
 	<string name="evaluation">Evaluation</string>
+	<string name="assignment">Assignment</string>
+	<string name="survey">Survey</string>
+	<string name="unknownNotification">Unknown notification</string>
 	<string name="fromMsg">From</string>
 	<string name="dateMsg">Date</string>
 	<string name="noSubjectMsg">No subject</string>
 	<string name="noContentMsg">No content</string>
 	<string name="yesMsg">Yes</string>
 	<string name="noMsg">No</string>
+	<string name="acceptMsg">Ok</string>
+	<string name="cancelMsg">Cancel</string>
+	<string name="allMsg">All</string>
+	<string name="selectCourseTitle">Select course</string>
+	<string name="noCourseSelectedMsg">You must select a course to download tests</string>
+	<string name="noQuestionsAvailableTestsDownloadMsg">There are no questions available for this course</string>
+	<string name="noQuestionsPluggableTestsDownloadMsg">The teacher does not allows the questions download</string>
+	<string name="questionsTestsDownloadSuccesfulMsg">Questions downloaded successfully</string>
+	<string name="testNoQuestionsCourseMsg">Not downloaded any test question for this course</string>
+	<string name="testNoQuestionsMsg">Before performing a test you should download the test questions for at least
+		one course</string>
+	<string name="testNumQuestionsMsg">Indicate the number of test questions</string>
+	<string name="testTagsMsg">Select the tags that will be included in the test</string>
+	<string name="testNoTagsSelectedMsg">You must select at least one tag</string>
+	<string name="testAnswerTypesMsg">Select the answer types that will be included in the test</string>
+	<string name="testNoAnswerTypesSelectedMsg">You must select at least one answer type</string>
 	<string name="initialDialogTitle">IMPORTANT</string>
 	<string name="firstRunMsg">Before using the application for the first time you
 		must enter the user name and password for SWAD at the setup
@@ -59,18 +81,8 @@
 	</string>
 	<string name="upgradeMsg">Due to changes in the database all notifications
 		data have been deleted.\n\nSorry.</string>
+	<string name="errorBadLoginMsg">Incorrect user or password</string>
 	<string name="errorServerResponseMsg">Error in server response</string>
 	<string name="errorConnectionMsg">Error while connecting to server</string>
 	<string name="errorTimeoutMsg">Timeout trying to connect to the server</string>
-
-
-
-
-
-
-
-
-
-
-
 </resources>

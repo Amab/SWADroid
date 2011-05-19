@@ -41,10 +41,6 @@ public class TestQuestion extends Model {
 	 */
 	private String stem;
 	/**
-	 * Time of last edition
-	 */
-	private int editTime;
-	/**
 	 * Answer type
 	 */
 	private String anstype;
@@ -69,6 +65,20 @@ public class TestQuestion extends Model {
     	PI_ansType,
     	PI_shuffle
     };
+	
+	/**
+	 * @param id Test identifier
+	 * @param stem Question's text
+	 * @param anstype Answer type
+	 * @param shuffle Flag to shuffle answers in test
+	 */
+	public TestQuestion(int id, String stem, String anstype, boolean shuffle) {
+		super(id);
+		this.stem = stem;
+		this.anstype = anstype;
+		this.shuffle = shuffle;
+		this.answers = new ArrayList<TestAnswer>();
+	}
 	
 	/**
 	 * @param id Test identifier
@@ -108,22 +118,6 @@ public class TestQuestion extends Model {
 	 */
 	public String getStem() {
 		return stem;
-	}
-
-	/**
-	 * Gets time of last edition
-	 * @return Time of last edition
-	 */
-	public int getEditTime() {
-		return editTime;
-	}
-
-	/**
-	 * Sets time of last edition
-	 * @param editTime Time of last edition
-	 */
-	public void setEditTime(int editTime) {
-		this.editTime = editTime;
 	}
 
 	/**
@@ -214,44 +208,9 @@ public class TestQuestion extends Model {
 		int result = super.hashCode();
 		result = prime * result + ((anstype == null) ? 0 : anstype.hashCode());
 		result = prime * result + ((answers == null) ? 0 : answers.hashCode());
-		result = prime * result + editTime;
 		result = prime * result + (shuffle ? 1231 : 1237);
 		result = prime * result + ((stem == null) ? 0 : stem.hashCode());
 		return result;
-	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		TestQuestion other = (TestQuestion) obj;
-		if (anstype == null) {
-			if (other.anstype != null)
-				return false;
-		} else if (!anstype.equals(other.anstype))
-			return false;
-		if (answers == null) {
-			if (other.answers != null)
-				return false;
-		} else if (!answers.equals(other.answers))
-			return false;
-		if (editTime != other.editTime)
-			return false;
-		if (shuffle != other.shuffle)
-			return false;
-		if (stem == null) {
-			if (other.stem != null)
-				return false;
-		} else if (!stem.equals(other.stem))
-			return false;
-		return true;
 	}
 
 	/* (non-Javadoc)
@@ -259,8 +218,7 @@ public class TestQuestion extends Model {
 	 */
 	@Override
 	public String toString() {
-		return "TestQuestion [stem=" + stem + ", editTime=" + editTime
-				+ ", anstype=" + anstype + ", shuffle=" + shuffle
+		return "TestQuestion [stem=" + stem + ", anstype=" + anstype + ", shuffle=" + shuffle
 				+ ", answers=" + answers + ", getId()=" + getId() + "]";
 	}
 	
@@ -273,9 +231,8 @@ public class TestQuestion extends Model {
         {
             case 0 : object = this.getId();break;
             case 1 : object = stem;break;
-            case 2 : object = editTime;break;
-            case 3 : object = anstype;break;
-            case 4 : object = shuffle;break;
+            case 2 : object = anstype;break;
+            case 3 : object = shuffle;break;
         }
         
         return object;
@@ -285,7 +242,7 @@ public class TestQuestion extends Model {
 	 * @see org.ksoap2.serialization.KvmSerializable#getPropertyCount()
 	 */
 	public int getPropertyCount() {
-		return 5;
+		return 4;
 	}
 
 	/* (non-Javadoc)
@@ -302,14 +259,10 @@ public class TestQuestion extends Model {
 	            propertyInfo.name = "stem";
 	            break;  
 	        case 2:
-	            propertyInfo.type = PropertyInfo.INTEGER_CLASS;
-	            propertyInfo.name = "editTime";
-	            break;  
-	        case 3:
 	            propertyInfo.type = PropertyInfo.STRING_CLASS;
 	            propertyInfo.name = "anstype";
 	            break;  
-	        case 4:
+	        case 3:
 	            propertyInfo.type = PropertyInfo.STRING_CLASS;
 	            propertyInfo.name = "shuffle";
 	            break;
@@ -324,9 +277,8 @@ public class TestQuestion extends Model {
 		{
 			case 0  : this.setId((Integer)obj); break;
 			case 1  : stem = (String)obj; break;
-			case 2  : editTime = (Integer)obj; break;
-			case 3  : anstype = (String)obj; break;
-			case 4  : shuffle = Global.parseStringBool((String)obj); break;
+			case 2  : anstype = (String)obj; break;
+			case 3  : shuffle = Global.parseStringBool((String)obj); break;
 		}    
 	}
 }

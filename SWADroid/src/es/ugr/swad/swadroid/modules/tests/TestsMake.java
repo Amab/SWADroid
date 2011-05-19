@@ -20,17 +20,318 @@ package es.ugr.swad.swadroid.modules.tests;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.ksoap2.SoapFault;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import android.database.Cursor;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CheckedTextView;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.model.Course;
+import es.ugr.swad.swadroid.model.Model;
+import es.ugr.swad.swadroid.model.Test;
+import es.ugr.swad.swadroid.model.TestTag;
 import es.ugr.swad.swadroid.modules.Module;
+import es.ugr.swad.swadroid.widget.NumberPicker;
 
 /**
  * Tests module for evaluate user skills in a course
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class TestsMake extends Module {
+	/**
+	 * Cursor for database access
+	 */
+	private Cursor dbCursor;
+	/**
+	 * User courses list
+	 */
+	private List<Model>listCourses;
+	/**
+	 * Selected course code
+	 */
+	private Integer selectedCourseCode = 0;
+	/**
+	 * Test's number of questions
+	 */
+	private int numQuestions;
+	/**
+	 * Test data
+	 */
+	private Test test;
+	/**
+	 * Tags's list of the test
+	 */
+	private List<TestTag> tagsList;
+	/**
+	 * Answer types's list of the test
+	 */
+	private List<String> answerTypesList;
+	/**
+	 * Click listener for courses dialog items
+	 */
+	private OnClickListener coursesDialogSingleChoiceItemsClickListener;
+	/**
+	 * Click listener for courses dialog accept button
+	 */
+	private OnClickListener coursesDialogPositiveClickListener;
+	/**
+	 * Click listener for courses dialog cancel button
+	 */
+	private OnClickListener coursesDialogNegativeClickListener;
+	/**
+	 * Course selection dialog
+	 */
+	private AlertDialog.Builder coursesDialog;
+    /**
+     * Tests tag name for Logcat
+     */
+    public static final String TAG = Global.APP_TAG + " TestsMake";
+	
+	/**
+	 * Sets layout maintaining tests action bar
+	 * @param layout Layout to be applied
+	 */
+	private void setLayout(int layout) {
+		ImageView image;
+		TextView text;
+		
+		setContentView(layout);
+        
+        image = (ImageView)this.findViewById(R.id.moduleIcon);
+        image.setBackgroundResource(R.drawable.test);
+        
+        text = (TextView)this.findViewById(R.id.moduleName);
+        text.setText(R.string.testsModuleLabel);
+	}
+	
+	/**
+	 * Screen to select the number of questions in the test 
+	 */
+	private void setNumQuestions() {
+		final NumberPicker numberPicker;
+		Button acceptButton;
+		
+		setLayout(R.layout.tests_num_questions);
+	    
+		numberPicker = (NumberPicker)findViewById(R.id.testNumQuestionsNumberPicker);		
+		numberPicker.setRange(test.getMin(), test.getMax());
+		numberPicker.setCurrent(test.getDef());
+		
+		acceptButton = (Button)findViewById(R.id.testNumQuestionsAcceptButton);
+		acceptButton.setOnClickListener(new View.OnClickListener() {			
+			public void onClick(View v) {
+				numQuestions = numberPicker.getCurrent();
+				
+				if(isDebuggable) {
+					Log.d(TAG, "numQuestions="+numQuestions);
+				}
+				
+				setTags();
+			}
+		});
+	}
+	
+	/**
+	 * Screen to select the tags that will be present in the test
+	 */
+	private void setTags() {
+		Button acceptButton;
+		final ListView checkBoxesList;
+		final TagsArrayAdapter tagsAdapter;
+		final List<TestTag> allTagsList = dbHelper.getOrderedCourseTags(selectedCourseCode);
+		
+		//Add "All tags" item in list's top
+		allTagsList.add(0, new TestTag(0, getResources().getString(R.string.allMsg), 0));
+		
+		setLayout(R.layout.tests_tags);
+		
+		checkBoxesList = (ListView) findViewById(R.id.testTagsList); 
+		tagsAdapter = new TagsArrayAdapter(this, R.layout.list_item_multiple_choice, allTagsList);
+		checkBoxesList.setAdapter(tagsAdapter);
+		checkBoxesList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+		
+		acceptButton = (Button)findViewById(R.id.testTagsAcceptButton);
+		acceptButton.setOnClickListener(new View.OnClickListener() {			
+			public void onClick(View v) {
+				int childsCount = checkBoxesList.getCount();
+				tagsList = new ArrayList<TestTag>();
+				
+				//If "All tags" item checked, add the whole list to the list of selected tags
+				CheckedTextView allChk = (CheckedTextView) checkBoxesList.getChildAt(0);
+				if(allChk.isChecked()) {
+					allTagsList.remove(0);
+					tagsList.addAll(allTagsList);
+					
+				//If "All tags" item not checked, add the selected items to the list of selected tags
+				} else {				
+					for(int i=0; i<childsCount; i++) {
+						CheckedTextView chk = (CheckedTextView) checkBoxesList.getChildAt(i);
+						if(chk.isChecked()) {
+							tagsList.add(tagsAdapter.getItem(i));
+						}
+					}
+				}
+				
+				if(isDebuggable) {
+					Log.d(TAG, "tagsList="+tagsList.toString());
+				}
+				
+				//If no tags selected, show a message to notice user
+				if(tagsList.isEmpty()) {
+					Toast.makeText(getBaseContext(), R.string.testNoTagsSelectedMsg, Toast.LENGTH_LONG).show();
+					
+				//If any tag is selected, show the answer types selection screen
+				} else {
+					setAnswerTypes();
+				}
+			}
+		});
+	}
+	
+	/**
+	 * Screen to select the answer types that will be present in the test
+	 */
+	private void setAnswerTypes() {
+		Button acceptButton;
+		final ListView checkBoxesList;
+		final AnswerTypesArrayAdapter answerTypesAdapter;
+		
+		setLayout(R.layout.tests_answer_types);
+		
+		checkBoxesList = (ListView) findViewById(R.id.testAnswerTypesList); 
+		answerTypesAdapter = new AnswerTypesArrayAdapter(this, R.array.testAnswerTypes,
+				R.array.testAnswerTypesNames, R.layout.list_item_multiple_choice);
+		checkBoxesList.setAdapter(answerTypesAdapter);
+		checkBoxesList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+		
+		acceptButton = (Button)findViewById(R.id.testAnswerTypesAcceptButton);
+		acceptButton.setOnClickListener(new View.OnClickListener() {			
+			public void onClick(View v) {
+				int childsCount = checkBoxesList.getCount();
+				answerTypesList = new ArrayList<String>();
+				
+				/*
+				 * If "All tags" item checked, add the whole list to the list of selected answer types,
+				 * else, add the selected items to the list of selected answer types
+				 */
+				CheckedTextView allChk = (CheckedTextView) checkBoxesList.getChildAt(0);
+				for(int i=1; i<childsCount; i++) {
+					CheckedTextView chk = (CheckedTextView) checkBoxesList.getChildAt(i);
+					if(allChk.isChecked() || ((chk != null) && (chk.isChecked()))) {
+						answerTypesList.add((String) answerTypesAdapter.getItem(i));
+					}
+				}
+				
+				if(isDebuggable) {
+					Log.d(TAG, "answerTypesList="+answerTypesList.toString());
+				}
+				
+				//If no answer types selected, show a message to notice user
+				if(answerTypesList.isEmpty()) {
+					Toast.makeText(getBaseContext(), R.string.testNoAnswerTypesSelectedMsg, Toast.LENGTH_LONG)
+						.show();
+					
+				//If any answer type is selected, generate the test and show the first question screen
+				} else {
+					makeTest();
+				}
+			}
+		});
+	}
+	
+	private void makeTest() {
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
+	 */
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {		
+		super.onCreate(savedInstanceState);
+		setLayout(R.layout.tests_make_main);
+		
+		coursesDialogSingleChoiceItemsClickListener = new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+				Course c = (Course) listCourses.get(whichButton);
+				selectedCourseCode = c.getId();
+				
+				if(isDebuggable) {
+					Integer s = whichButton;
+					Log.d(TAG, "singleChoice = " + s.toString());
+				}
+			}
+		};
+		coursesDialogPositiveClickListener = new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {				
+				if(selectedCourseCode != 0) {					
+					if(isDebuggable) {
+						Integer s = selectedCourseCode;
+						Log.d(TAG, "selectedCourseCode = " + s.toString());
+					}
+						
+					test = (Test) dbHelper.getRow(Global.DB_TABLE_TEST_CONFIG, "id", selectedCourseCode.toString());
+					
+					if(test != null) {
+						setNumQuestions();
+					} else {
+						Toast.makeText(getBaseContext(), R.string.testNoQuestionsCourseMsg, Toast.LENGTH_LONG).show();
+						finish();
+					}
+				} else {
+					Toast.makeText(getBaseContext(), R.string.noCourseSelectedMsg, Toast.LENGTH_LONG).show();
+					finish();
+				}
+			}
+		};
+		coursesDialogNegativeClickListener = new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+				dialog.cancel();
+				finish();
+			}
+		};
+		
+		coursesDialog = new AlertDialog.Builder(this);		
+		coursesDialog.setTitle(R.string.selectCourseTitle);
+		coursesDialog.setPositiveButton(R.string.acceptMsg, coursesDialogPositiveClickListener);
+		coursesDialog.setNegativeButton(R.string.cancelMsg, coursesDialogNegativeClickListener);
+		setResult(RESULT_OK);
+	}
+
+	/* (non-Javadoc)
+	 * @see es.ugr.swad.swadroid.modules.Module#onStart()
+	 */
+	@Override
+	protected void onStart() {		
+		super.onStart();
+		if(dbHelper.getDb().getCursor(Global.DB_TABLE_TEST_CONFIG).getCount() > 0) {			
+			dbCursor = dbHelper.getDb().getCursor(Global.DB_TABLE_COURSES);
+			listCourses = dbHelper.getAllRows(Global.DB_TABLE_COURSES);
+			Course c = (Course) listCourses.get(0);
+			selectedCourseCode = c.getId();
+			coursesDialog.setSingleChoiceItems(dbCursor, 0, "name", coursesDialogSingleChoiceItemsClickListener);		
+			coursesDialog.show();
+		} else {
+			Toast.makeText(getBaseContext(), R.string.testNoQuestionsMsg, Toast.LENGTH_LONG).show();
+		}		
+	}
 
 	/* (non-Javadoc)
 	 * @see es.ugr.swad.swadroid.modules.Module#requestService()
@@ -39,7 +340,6 @@ public class TestsMake extends Module {
 	protected void requestService() throws NoSuchAlgorithmException,
 			IOException, XmlPullParserException, SoapFault,
 			IllegalAccessException, InstantiationException {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -48,7 +348,6 @@ public class TestsMake extends Module {
 	 */
 	@Override
 	protected void connect() {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -57,7 +356,6 @@ public class TestsMake extends Module {
 	 */
 	@Override
 	protected void postConnect() {
-		// TODO Auto-generated method stub
 
 	}
 

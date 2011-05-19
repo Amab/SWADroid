@@ -54,6 +54,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
 		String[] dateContent;
     	Date d;
     	
+    	view.setScrollContainer(false);
         TextView eventType = (TextView) view.findViewById(R.id.eventType);
         TextView eventDate = (TextView) view.findViewById(R.id.eventDate);
         TextView eventTime = (TextView) view.findViewById(R.id.eventTime);
@@ -86,6 +87,17 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         	{
         		type = context.getString(R.string.forumReply);
         		notificationIcon.setImageResource(R.drawable.forum);
+        	} else if(type.equals("assignment"))
+        	{
+        		type = context.getString(R.string.assignment);
+        		notificationIcon.setImageResource(R.drawable.desk);
+        	} else if(type.equals("survey"))
+        	{
+        		type = context.getString(R.string.survey);
+        		notificationIcon.setImageResource(R.drawable.survey);
+        	} else {
+        		type = context.getString(R.string.unknownNotification);
+        		notificationIcon.setImageResource(R.drawable.ic_launcher_swadroid);
         	}
         	
         	eventType.setText(type);

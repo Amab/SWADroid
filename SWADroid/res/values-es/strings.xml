@@ -27,7 +27,11 @@
 	<string name="coursesProgressTitle">Asignaturas</string>
 	<string name="coursesProgressDescription">Obteniendo asignaturas...</string>
 	<string name="notificationsProgressTitle">Notificaciones</string>
-	<string name="notificationsProgressDescription">Obteniendo nuevas notificaciones</string>
+	<string name="notificationsProgressDescription">Obteniendo nuevas notificaciones...</string>
+	<string name="notificationsEmptyListMsg">No se ha descargado ninguna notificación.\n\nPara descargar las
+		notificaciones más recientes pulse el icono de la esquina superior derecha de la pantalla.</string>
+	<string name="testsDownloadProgressTitle">Tests</string>
+	<string name="testsDownloadProgressDescription">Sincronizando preguntas de test...</string>
 	<string name="errorMsgWorkaroundEmulator">Mierda. Ese bug del emulador de Android ha vuelto a
 		aparecer. Reintentando...</string>
 	<string name="errorMsgLaunchingActivity">Ha ocurrido un error durante la ejecución de la
@@ -44,12 +48,32 @@
 	<string name="content">Contenido</string>
 	<string name="messages">Mensajes</string>
 	<string name="evaluation">Evaluación</string>
+	<string name="assignment">Actividad</string>
+	<string name="survey">Encuesta</string>
+	<string name="unknownNotification">Notificación desconocida</string>
 	<string name="fromMsg">De</string>
 	<string name="dateMsg">Fecha</string>
 	<string name="noSubjectMsg">Sin asunto</string>
 	<string name="noContentMsg">Sin contenido</string>
 	<string name="yesMsg">Sí</string>
 	<string name="noMsg">No</string>
+	<string name="acceptMsg">Aceptar</string>
+	<string name="cancelMsg">Cancelar</string>
+	<string name="allMsg">Todos</string>
+	<string name="selectCourseTitle">Seleccione asignatura</string>
+	<string name="noCourseSelectedMsg">Debe seleccionar una asignatura para descargar las preguntas de test</string>
+	<string name="noQuestionsAvailableTestsDownloadMsg">No hay preguntas de test disponibles para esta asignatura</string>
+	<string name="noQuestionsPluggableTestsDownloadMsg">El profesor de esta asignatura no permite la descarga de las
+		preguntas de test</string>
+	<string name="questionsTestsDownloadSuccesfulMsg">Preguntas de test sincronizadas</string>
+	<string name="testNoQuestionsCourseMsg">No se ha descargado ninguna pregunta de test para esta asignatura</string>
+	<string name="testNoQuestionsMsg">Antes de realizar un test debe descargar las preguntas de test de al menos una
+		asignatura</string>
+	<string name="testNumQuestionsMsg">Indique el número de preguntas del test</string>
+	<string name="testTagsMsg">Seleccione los descriptores que desea incluir en el test</string>
+	<string name="testNoTagsSelectedMsg">Debe seleccionar al menos un descriptor</string>
+	<string name="testAnswerTypesMsg">Seleccione los tipos de respuesta que desea incluir en el test</string>
+	<string name="testNoAnswerTypesSelectedMsg">Debe seleccionar al menos un tipo de respuesta</string>
 	<string name="firstRunMsg">Antes de usar la aplicación por primera vez debe
 		introducir el nombre de usuario y la contraseña de acceso a SWAD en la
 		pantalla de configuración.\n\nPuede acceder a la pantalla de
@@ -59,11 +83,9 @@
 	<string name="upgradeMsg">Debido a cambios en la base de datos todos los
 		datos de las notificaciones han sido borrados.\n\nDisculpe las
 		molestias.</string>
+	<string name="errorBadLoginMsg">Usuario o contraseña incorrectos</string>
 	<string name="errorServerResponseMsg">Error en respuesta del servidor</string>
 	<string name="errorConnectionMsg">Error durante la conexión con el servidor</string>
 	<string name="errorTimeoutMsg">Tiempo de espera agotado intentando conectar con el
 		servidor</string>
-
-
-
 </resources>

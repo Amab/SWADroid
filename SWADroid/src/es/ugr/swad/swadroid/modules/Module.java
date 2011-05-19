@@ -105,6 +105,10 @@ public abstract class Module extends Activity {
      * Application debuggable flag
      */
     protected static boolean isDebuggable;
+    /**
+     * Class Module's tag name for Logcat
+     */
+    public static final String TAG = Global.APP_TAG + " Module";
     
     /**
      * Connects to SWAD and gets user data.
@@ -272,7 +276,7 @@ public abstract class Module extends Activity {
 		}
 		
 		if(isDebuggable)
-			Log.d(Global.MODULE_TAG, "onCreate()");
+			Log.d(TAG, "onCreate()");
         
 		super.onCreate(savedInstanceState);
         prefs.getPreferences(getBaseContext());
@@ -284,7 +288,7 @@ public abstract class Module extends Activity {
     @Override
     protected void onPause() { 
 		if(isDebuggable)			       
-			Log.d(Global.MODULE_TAG, "onPause()");
+			Log.d(TAG, "onPause()");
         
         super.onPause();
         if(errorDialog != null) {
@@ -298,7 +302,7 @@ public abstract class Module extends Activity {
 	@Override
 	protected void onDestroy() {
 		if(isDebuggable)
-			Log.d(Global.MODULE_TAG, "onDestroy()");
+			Log.d(TAG, "onDestroy()");
 		
 		super.onDestroy();
 	}
@@ -309,7 +313,7 @@ public abstract class Module extends Activity {
 	@Override
 	protected void onRestart() {
 		if(isDebuggable)
-			Log.d(Global.MODULE_TAG, "onRestart()");
+			Log.d(TAG, "onRestart()");
 		
 		super.onRestart();
 	}
@@ -320,7 +324,7 @@ public abstract class Module extends Activity {
 	@Override
 	protected void onResume() {
 		if(isDebuggable)
-			Log.d(Global.MODULE_TAG, "onResume()");
+			Log.d(TAG, "onResume()");
 		
 		super.onResume();
 	}
@@ -331,7 +335,7 @@ public abstract class Module extends Activity {
 	@Override
 	protected void onStart() {
 		if(isDebuggable)
-			Log.d(Global.MODULE_TAG, "onStart()");
+			Log.d(TAG, "onStart()");
 		
 		super.onStart();
 	}
@@ -342,7 +346,7 @@ public abstract class Module extends Activity {
 	@Override
 	protected void onStop() {
 		if(isDebuggable)
-			Log.d(Global.MODULE_TAG, "onStop()");
+			Log.d(TAG, "onStop()");
 		
 		super.onStop();
 	}
@@ -353,20 +357,16 @@ public abstract class Module extends Activity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if(isDebuggable)
-			Log.d(Global.MODULE_TAG, "onActivityResult()");
+			Log.d(TAG, "onActivityResult()");
 		
         if (resultCode == Activity.RESULT_OK) {
-            //Bundle extras = data.getExtras();
-
             switch(requestCode) {
 	            case Global.LOGIN_REQUEST_CODE:
                     Global.setLogged(true);
-                    Toast.makeText(getBaseContext(),
-                            R.string.loginSuccessfulMsg,
-                            Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getBaseContext(), R.string.loginSuccessfulMsg, Toast.LENGTH_SHORT).show();
                     
             		if(isDebuggable)
-            			Log.d(Global.LOGIN_TAG, getString(R.string.loginSuccessfulMsg));
+            			Log.d(TAG, getString(R.string.loginSuccessfulMsg));
                     
                     if(!(this instanceof Login)) {
                     	connect();
@@ -374,6 +374,8 @@ public abstract class Module extends Activity {
                     
 	            	break;
             }
+        } else {
+        	setResult(RESULT_CANCELED);
         }
     }
 
@@ -395,7 +397,7 @@ public abstract class Module extends Activity {
     }
 
     /**
-     * Sends request to webservice.
+     * Sends a request to the specified webservice in METHOD_NAME class constant.
      * @param cl Class to be mapped
      * @param simple Flag for select simple or complex response
      * @throws IOException
@@ -407,6 +409,10 @@ public abstract class Module extends Activity {
     protected void sendRequest(Class cl, boolean simple)
     	throws IOException, SoapFault, IllegalAccessException, InstantiationException, XmlPullParserException {
 
+    	/**
+    	 * Use of KeepAliveHttpsTransport deals with the problems with the Android ssl libraries having trouble
+    	 * with certificates and certificate authorities somehow messing up connecting/needing reconnects.
+    	 */
         KeepAliveHttpsTransportSE connection = new KeepAliveHttpsTransportSE(URL, 443, "", TIMEOUT);
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         System.setProperty("http.keepAlive", "false");
@@ -457,7 +463,7 @@ public abstract class Module extends Activity {
                 .setNeutralButton(R.string.close_dialog,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Module.this.finish();
+                        finish();
                     }
                 })
                 .setIcon(R.drawable.erroricon).show();
@@ -501,27 +507,32 @@ public abstract class Module extends Activity {
      */
     protected class Connect extends AsyncTask<String, Void, Void> {
         /**
-         * Progress dialog.
+         * Progress dialog
          */
         ProgressDialog dialog = new ProgressDialog(Module.this);
         /**
-         * Exception pointer.
+         * Exception pointer
          */
         Exception e = null;
         String progressDescription;
         int progressTitle;
-        boolean showDialog;
+        boolean showDialog, isLoginModule;
 
 		/**
-         * Shows progress dialog and connects to SWAD in background
+		 * Shows progress dialog and connects to SWAD in background
+		 * @param showDialog Flag for show a progress dialog or not
 		 * @param progressDescription Description to be showed in dialog
 		 * @param progressTitle Title to be showed in dialog
+		 * @param isLogin Flag for detect if this is the login module
 		 */
-		public Connect(boolean showDialog, String progressDescription, int progressTitle) {
+		public Connect(boolean showDialog, String progressDescription, int progressTitle, Boolean... isLogin) {
 			super();
 			this.progressDescription = progressDescription;
 			this.progressTitle = progressTitle;
 			this.showDialog = showDialog;
+			
+			assert isLogin.length <= 1;
+		    this.isLoginModule = isLogin.length > 0 ? isLogin[0].booleanValue() : false;
 		}
 
 		/* (non-Javadoc)
@@ -530,7 +541,7 @@ public abstract class Module extends Activity {
         @Override
         protected void onPreExecute() { 
     		if(isDebuggable)
-    			Log.d(Global.MODULE_TAG, "onPreExecute()");
+    			Log.d(TAG, "onPreExecute()");
         	
         	if(showDialog) {
 	            dialog.setMessage(progressDescription);
@@ -545,7 +556,7 @@ public abstract class Module extends Activity {
         @Override
 		protected Void doInBackground(String... urls) {
     		if(isDebuggable)
-    			Log.d(Global.MODULE_TAG, "doInBackground()");
+    			Log.d(TAG, "doInBackground()");
         	
             try {
                 //Sends webservice request
@@ -568,10 +579,10 @@ public abstract class Module extends Activity {
     	 */
         @Override
         protected void onPostExecute(Void unused) {  
-        	String errorMsg;
+        	String errorMsg = "";
         	
     		if(isDebuggable)
-    			Log.d(Global.MODULE_TAG, "onPostExecute()");
+    			Log.d(TAG, "onPostExecute()");
         	
         	if(dialog.isShowing()) {
         		dialog.dismiss();
@@ -584,41 +595,27 @@ public abstract class Module extends Activity {
                  */
                 if(e instanceof SoapFault) {
                     SoapFault es = (SoapFault) e;
-                    
-            		if(isDebuggable)
-            			Log.e(es.getClass().getSimpleName(), es.getMessage());
             		
-                    error(es.getMessage());
+            		if(isLoginModule)
+            			errorMsg = getString(R.string.errorBadLoginMsg);
+            		else
+            			errorMsg = es.getMessage();
                 } else if (e instanceof XmlPullParserException) {
                 	errorMsg = getString(R.string.errorServerResponseMsg);
-                	
-            		if(isDebuggable)
-            			Log.e(e.getClass().getSimpleName(), errorMsg);
-            		
-                    error(errorMsg);
                 } else if (e instanceof IOException) {
                 	errorMsg = getString(R.string.errorConnectionMsg);
-                	
-            		if(isDebuggable)
-            			Log.e(e.getClass().getSimpleName(), errorMsg);
-                	
-                    error(errorMsg);
                 } else if (e instanceof TimeoutException) {
                 	errorMsg = getString(R.string.errorTimeoutMsg);
-                	
-            		if(isDebuggable)
-            			Log.e(e.getClass().getSimpleName(), errorMsg);
-            		
-                    error(errorMsg);
                 } else {
-            		if(isDebuggable)
-            			Log.e(e.getClass().getSimpleName(), e.getMessage());
-            		
-                    error(e.getMessage());
+                	errorMsg = e.getMessage();
                 }
 
-                //Request finalized with errors
-                e.printStackTrace();
+                //Request finalized with errors 
+        		error(errorMsg);               
+        		if(isDebuggable) {    		
+        			e.printStackTrace();
+        		}
+        		
                 setResult(RESULT_CANCELED);
             } else {
         		postConnect();

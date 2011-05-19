@@ -35,25 +35,46 @@ public class TestTag extends Model {
 	 * Tag text
 	 */
 	private String tagTxt;
+	/**
+	 * Tag index
+	 */
+	private int tagInd;
 	private static PropertyInfo PI_id = new PropertyInfo();
 	private static PropertyInfo PI_tagText = new PropertyInfo();
+	private static PropertyInfo PI_tagInd = new PropertyInfo();
     private static PropertyInfo[] PI_PROP_ARRAY =
     {
     	PI_id,
-    	PI_tagText
+    	PI_tagText,
+    	PI_tagInd
     };
 
 	/**
 	 * Constructor
 	 * @param id tag id
 	 * @param tagTxt Tag text
+	 * @param tagInd Tag index
 	 */
-	public TestTag(int id, int qstCod, String tagTxt) {
+	public TestTag(int id, String tagTxt, int tagInd) {
+		super(id);
+		this.tagTxt = tagTxt;
+		this.tagInd = tagInd;
+	}
+
+	/**
+	 * Constructor
+	 * @param id tag id
+	 * @param qstCod question id
+	 * @param tagTxt Tag text
+	 * @param tagInd Tag index
+	 */
+	public TestTag(int id, int qstCod, String tagTxt, int tagInd) {
 		super(id);
 		this.qstCod = qstCod;
 		this.tagTxt = tagTxt;
+		this.tagInd = tagInd;
 	}
-
+	
 	/**
 	 * Gets tag text
 	 * @return Tag text
@@ -86,6 +107,22 @@ public class TestTag extends Model {
 		this.qstCod = qstCod;
 	}
 
+	/**
+	 * Gets tag index
+	 * @return Tag index
+	 */
+	public int getTagInd() {
+		return tagInd;
+	}
+
+	/**
+	 * Sets tag index
+	 * @param tagInd Tag index
+	 */
+	public void setTagInd(int tagInd) {
+		this.tagInd = tagInd;
+	}
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
@@ -93,28 +130,10 @@ public class TestTag extends Model {
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
+		result = prime * result + qstCod;
+		result = prime * result + tagInd;
 		result = prime * result + ((tagTxt == null) ? 0 : tagTxt.hashCode());
 		return result;
-	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		TestTag other = (TestTag) obj;
-		if (tagTxt == null) {
-			if (other.tagTxt != null)
-				return false;
-		} else if (!tagTxt.equals(other.tagTxt))
-			return false;
-		return true;
 	}
 
 	/* (non-Javadoc)
@@ -122,7 +141,8 @@ public class TestTag extends Model {
 	 */
 	@Override
 	public String toString() {
-		return "TestTag [tagTxt=" + tagTxt + ", getId()=" + getId() + "]";
+		return "TestTag [qstCod=" + qstCod + ", tagTxt=" + tagTxt + ", tagInd="
+				+ tagInd + ", getId()=" + getId() + "]";
 	}
 
 	/* (non-Javadoc)
@@ -134,6 +154,7 @@ public class TestTag extends Model {
         {
             case 0 : object = this.getId();break;
             case 1 : object = tagTxt;break;
+            case 2 : object = tagInd;break;
         }
         
         return object;
@@ -143,7 +164,7 @@ public class TestTag extends Model {
 	 * @see org.ksoap2.serialization.KvmSerializable#getPropertyCount()
 	 */
 	public int getPropertyCount() {
-		return 2;
+		return 3;
 	}
 
 	/* (non-Javadoc)
@@ -159,6 +180,10 @@ public class TestTag extends Model {
 	            propertyInfo.type = PropertyInfo.STRING_CLASS;
 	            propertyInfo.name = "tagTxt";
 	            break;           
+	        case 2:
+	            propertyInfo.type = PropertyInfo.INTEGER_CLASS;
+	            propertyInfo.name = "tagInd";
+	            break;           
 		}
 	}
 
@@ -170,6 +195,7 @@ public class TestTag extends Model {
 		{
 			case 0  : this.setId((Integer)obj); break;
 			case 1  : tagTxt = (String)obj; break;
+			case 2  : tagInd = (Integer)obj; break;
 		}    
 	}
 

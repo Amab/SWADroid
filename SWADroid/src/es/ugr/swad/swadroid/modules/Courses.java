@@ -20,17 +20,22 @@ package es.ugr.swad.swadroid.modules;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Course;
+import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.model.User;
 
 /**
@@ -38,7 +43,12 @@ import es.ugr.swad.swadroid.model.User;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  *
  */
-public class Courses extends Module {	
+public class Courses extends Module {
+    /**
+     * Courses tag name for Logcat
+     */
+    public static final String TAG = Global.APP_TAG + " Courses";
+    
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onCreate()
 	 */
@@ -54,29 +64,36 @@ public class Courses extends Module {
 	@Override
 	protected void onStart() {
 		super.onStart();      
-        connect();
+        runConnection();
 	}
     
-    /**
-     * Launches action in a separate thread while shows a progress dialog
-     * in UI thread.
-     */
+	/* (non-Javadoc)
+	 * @see es.ugr.swad.swadroid.modules.Module#onActivityResult(int, int, android.content.Intent)
+	 */
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == Activity.RESULT_CANCELED) {
+			 setResult(RESULT_CANCELED);
+			 finish();
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see es.ugr.swad.swadroid.modules.Module#connect()
+	 */
+	@Override
     protected void connect() {
     	String progressDescription = getString(R.string.coursesProgressDescription);
     	int progressTitle = R.string.coursesProgressTitle;
     	
         new Connect(false, progressDescription, progressTitle).execute();
     }
-    
-    /**
-     * Connects to SWAD and gets courses data.
-     * @throws NoSuchAlgorithmException
-     * @throws IOException
-     * @throws XmlPullParserException
-     * @throws SoapFault
-     * @throws InstantiationException 
-     * @throws IllegalAccessException 
-     */
+
+	/* (non-Javadoc)
+	 * @see es.ugr.swad.swadroid.modules.Module#requestService()
+	 */
+	@Override
     protected void requestService()
             throws NoSuchAlgorithmException, IOException, XmlPullParserException, SoapFault, IllegalAccessException, InstantiationException {
 	
@@ -86,8 +103,11 @@ public class Courses extends Module {
         sendRequest(Course.class, false);
 
         if (result != null) {
-        	dbHelper.emptyTable(Global.DB_TABLE_COURSES);
 	        //Stores courses data returned by webservice response
+            List<Model> coursesDB = dbHelper.getAllRows(Global.DB_TABLE_COURSES);
+            List<Model> coursesSWAD = new ArrayList<Model>();
+            List<Model> newCourses = new ArrayList<Model>();
+            List<Model> obsoleteCourses = new ArrayList<Model>();
         	Vector res = (Vector) result;
         	SoapObject soap = (SoapObject) res.get(1);	
         	int csSize = soap.getPropertyCount();
@@ -96,21 +116,50 @@ public class Courses extends Module {
                 int id = Integer.parseInt(pii.getProperty(0).toString());
                 String name = pii.getProperty(1).toString();
                 Course c = new Course(id, name);
-                dbHelper.insertCourse(c);
+               	coursesSWAD.add(c);
                 
         		if(isDebuggable)
-        			Log.d("Courses", c.toString());
+        			Log.d(TAG, c.toString());
             }
+            
+            Log.i(TAG, "Retrieved " + csSize + " courses");
+
+            //Obtain old unregistered courses
+            obsoleteCourses.addAll(coursesDB);
+            obsoleteCourses.removeAll(coursesSWAD);
+            
+            //Obtain new registered courses
+            newCourses.addAll(coursesSWAD);
+            newCourses.removeAll(coursesDB);
+            
+            //Delete old unregistered courses stuff
+            csSize = obsoleteCourses.size();
+            for (int i = 0; i < csSize; i++) {
+            	Course c = (Course) obsoleteCourses.get(i);
+            	dbHelper.removeRow(Global.DB_TABLE_COURSES, c.getId());
+            }
+            
+            Log.i(TAG, "Deleted " + csSize + " old courses");
+            
+            //Insert new registered courses
+            csSize = newCourses.size();
+            for (int i = 0; i < csSize; i++) {
+            	Course c = (Course) newCourses.get(i);
+            	dbHelper.insertCourse(c);
+            }
+
+            Log.i(TAG, "Added " + csSize + " new courses");
             
 	        //Request finalized without errors
 	        setResult(RESULT_OK);
         }
-    	
-        finish();
     }
 
+	/* (non-Javadoc)
+	 * @see es.ugr.swad.swadroid.modules.Module#postConnect()
+	 */
 	@Override
 	protected void postConnect() {
-		
+		finish();
 	}
 }

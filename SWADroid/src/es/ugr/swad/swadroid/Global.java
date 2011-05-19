@@ -33,6 +33,14 @@ public class Global {
      */
     private static boolean logged;
     /**
+     * Time of application's last login
+     */
+    private static long lastLoginTime;
+    /**
+     * Time to force relogin
+     */
+    public static final int RELOGIN_TIME = 86400000; //24h
+    /**
      * Request code for Login module.
      */
     public static final int LOGIN_REQUEST_CODE = 1;
@@ -51,27 +59,19 @@ public class Global {
     /**
      * Request code for Tests module.
      */
-    public static final int TESTS_DOWNLOAD_REQUEST_CODE = 5;
+    public static final int TESTS_CONFIG_DOWNLOAD_REQUEST_CODE = 5;
     /**
      * Request code for Tests module.
      */
-    public static final int TESTS_MAKE_REQUEST_CODE = 6;
+    public static final int TESTS_QUESTIONS_DOWNLOAD_REQUEST_CODE = 6;
     /**
-     * Class Module's tag name for Logcat
+     * Request code for Tests module.
      */
-    public static final String MODULE_TAG = "Module";
+    public static final int TESTS_MAKE_REQUEST_CODE = 7;
     /**
-     * Login tag name for Logcat
+     * Prefix tag name for Logcat
      */
-    public static final String LOGIN_TAG = "Login";
-    /**
-     * Notifications tag name for Logcat
-     */
-    public static final String NOTIFICATIONS_TAG = "Notifications";
-    /**
-     * Tests tag name for Logcat
-     */
-    public static final String TESTS_TAG = "Tests";
+    public static final String APP_TAG = "SWADroid";
     /**
      * Table name for courses
      */
@@ -132,12 +132,26 @@ public class Global {
 	}
 	
 	/**
+	 * Gets start time of application
+	 * @return Start time of application
+	 */
+	public static long getLastLoginTime() {
+		return lastLoginTime;
+	}
+	/**
+	 * Sets start time of application
+	 * @param l Start time of application
+	 */
+	public static void setLastLoginTime(long l) {
+		Global.lastLoginTime = l;
+	}
+	/**
 	 * Function to parse from Integer to Boolean
 	 * @param n Integer to be parsed
 	 * @return true if n==0, false in other case
 	 */
 	public static boolean parseIntBool(int n) {
-		return n==0 ? true : false;
+		return n!=0;
 	}
 	
 	/**
