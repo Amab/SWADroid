@@ -1,3 +1,10 @@
+## 0.3.10 (2011-05-19)
+
+* Added assignment, survey and unknown notifications
+* Added empty notifications message
+* Added forced relogin if connection time exceeds a certain period
+* Added incorrect user or password error message
+
 ## 0.3.9 (2011-05-03)
 
 * Fixed empty fields bug on notifications module
