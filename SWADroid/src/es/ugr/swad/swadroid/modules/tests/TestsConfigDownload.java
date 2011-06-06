@@ -60,7 +60,7 @@ public class TestsConfigDownload extends Module {
 	/**
 	 * Selected course code
 	 */
-	private Integer selectedCourseCode;
+	private long selectedCourseCode = 0;
 	/**
 	 * Flag for detect if the teacher allows questions download
 	 */
@@ -114,17 +114,18 @@ public class TestsConfigDownload extends Module {
 		};
 		OnClickListener positiveClickListener = new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
-				try {
-					if(isDebuggable) {
-						Integer s = selectedCourseCode;
-						Log.d(TAG, "selectedCourseCode = " + s.toString());
+				try {					
+					if(selectedCourseCode == 0) {
+						//Toast.makeText(getBaseContext(), R.string.noCourseSelectedMsg, Toast.LENGTH_LONG).show();
+						Course c = (Course) listCourses.get(0);
+						selectedCourseCode = c.getId();
 					}
 					
-					if(selectedCourseCode != 0) {
-						runConnection();
-					} else {
-						Toast.makeText(getBaseContext(), R.string.noCourseSelectedMsg, Toast.LENGTH_LONG).show();
+					if(isDebuggable) {
+						Log.d(TAG, "selectedCourseCode = " + Long.toString(selectedCourseCode));
 					}
+
+					runConnection();
 				} catch (Exception ex) {
                 	String errorMsg = getString(R.string.errorServerResponseMsg);
 					error(errorMsg);
@@ -150,7 +151,7 @@ public class TestsConfigDownload extends Module {
 	            	final AlertDialog.Builder alert = new AlertDialog.Builder(this);
 	            	dbCursor = dbHelper.getDb().getCursor(Global.DB_TABLE_COURSES);
 	            	listCourses = dbHelper.getAllRows(Global.DB_TABLE_COURSES);
-	        		alert.setSingleChoiceItems(dbCursor, -1, "name", singleChoiceItemsClickListener);
+	        		alert.setSingleChoiceItems(dbCursor, 0, "name", singleChoiceItemsClickListener);
 	        		alert.setTitle(R.string.selectCourseTitle);
 	        		alert.setPositiveButton(R.string.acceptMsg, positiveClickListener);
 	        		alert.setNegativeButton(R.string.cancelMsg, negativeClickListener);	        		
@@ -178,7 +179,7 @@ public class TestsConfigDownload extends Module {
 		//Creates webservice request, adds required params and sends request to webservice
 	    createRequest();
 	    addParam("wsKey", User.getWsKey());
-	    addParam("courseCode", selectedCourseCode);
+	    addParam("courseCode", (int)selectedCourseCode);
 	    sendRequest(Test.class, false);
 
 	    if (result != null) {
@@ -203,7 +204,8 @@ public class TestsConfigDownload extends Module {
                 Integer defQuestions = new Integer(res.get(3).toString());
                 Integer maxQuestions = new Integer(res.get(4).toString());
                 String feedback = res.get(5).toString();
-                Test tDB = (Test) dbHelper.getRow(Global.DB_TABLE_TEST_CONFIG, "id", selectedCourseCode.toString());
+                Test tDB = (Test) dbHelper.getRow(Global.DB_TABLE_TEST_CONFIG, "id",
+                		Long.toString(selectedCourseCode));
                 
                 //If not exists a test configuration for this course, insert to database
                 if(tDB == null) {

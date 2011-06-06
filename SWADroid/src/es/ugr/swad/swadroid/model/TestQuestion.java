@@ -19,6 +19,7 @@
 package es.ugr.swad.swadroid.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -35,7 +36,7 @@ public class TestQuestion extends Model {
 	/**
 	 * Course code
 	 */
-	private int crsCod;
+	private long crsCod;
 	/**
 	 * Question's text
 	 */
@@ -43,7 +44,7 @@ public class TestQuestion extends Model {
 	/**
 	 * Answer type
 	 */
-	private String anstype;
+	private String answerType;
 	/**
 	 * Flag to shuffle answers in test
 	 */
@@ -72,26 +73,26 @@ public class TestQuestion extends Model {
 	 * @param anstype Answer type
 	 * @param shuffle Flag to shuffle answers in test
 	 */
-	public TestQuestion(int id, String stem, String anstype, boolean shuffle) {
+	public TestQuestion(long id, String stem, String anstype, boolean shuffle) {
 		super(id);
 		this.stem = stem;
-		this.anstype = anstype;
+		this.answerType = anstype;
 		this.shuffle = shuffle;
 		this.answers = new ArrayList<TestAnswer>();
 	}
 	
 	/**
 	 * @param id Test identifier
-	 * @param crsCod Course code
+	 * @param selectedCourseCode Course code
 	 * @param stem Question's text
 	 * @param anstype Answer type
 	 * @param shuffle Flag to shuffle answers in test
 	 */
-	public TestQuestion(int id, int crsCod, String stem, String anstype, boolean shuffle) {
+	public TestQuestion(long id, long selectedCourseCode, String stem, String anstype, boolean shuffle) {
 		super(id);
-		this.crsCod = crsCod;
+		this.crsCod = selectedCourseCode;
 		this.stem = stem;
-		this.anstype = anstype;
+		this.answerType = anstype;
 		this.shuffle = shuffle;
 		this.answers = new ArrayList<TestAnswer>();
 	}
@@ -100,7 +101,7 @@ public class TestQuestion extends Model {
 	 * Gets question code
 	 * @return Question code
 	 */
-	public int getCrsCod() {
+	public long getCrsCod() {
 		return crsCod;
 	}
 
@@ -108,7 +109,7 @@ public class TestQuestion extends Model {
 	 * Sets question code
 	 * @param crsCod Question code
 	 */
-	public void setCrsCod(int crsCod) {
+	public void setCrsCod(long crsCod) {
 		this.crsCod = crsCod;
 	}
 
@@ -132,16 +133,16 @@ public class TestQuestion extends Model {
 	 * Gets answer type
 	 * @return Answer type
 	 */
-	public String getAnstype() {
-		return anstype;
+	public String getAnswerType() {
+		return answerType;
 	}
 
 	/**
 	 * Sets answer type
 	 * @param anstype Answer type
 	 */
-	public void setAnstype(String anstype) {
-		this.anstype = anstype;
+	public void setAnswerType(String anstype) {
+		this.answerType = anstype;
 	}
 
 	/**
@@ -199,6 +200,13 @@ public class TestQuestion extends Model {
 		return corrects;
 	}
 
+	/**
+	 * Shuffles the list of related answers in a question
+	 */
+	public void shuffleAnswers() {
+		Collections.shuffle(answers);
+	}
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
@@ -206,7 +214,7 @@ public class TestQuestion extends Model {
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + ((anstype == null) ? 0 : anstype.hashCode());
+		result = prime * result + ((answerType == null) ? 0 : answerType.hashCode());
 		result = prime * result + ((answers == null) ? 0 : answers.hashCode());
 		result = prime * result + (shuffle ? 1231 : 1237);
 		result = prime * result + ((stem == null) ? 0 : stem.hashCode());
@@ -218,7 +226,7 @@ public class TestQuestion extends Model {
 	 */
 	@Override
 	public String toString() {
-		return "TestQuestion [stem=" + stem + ", anstype=" + anstype + ", shuffle=" + shuffle
+		return "TestQuestion [stem=" + stem + ", anstype=" + answerType + ", shuffle=" + shuffle
 				+ ", answers=" + answers + ", getId()=" + getId() + "]";
 	}
 	
@@ -231,7 +239,7 @@ public class TestQuestion extends Model {
         {
             case 0 : object = this.getId();break;
             case 1 : object = stem;break;
-            case 2 : object = anstype;break;
+            case 2 : object = answerType;break;
             case 3 : object = shuffle;break;
         }
         
@@ -251,7 +259,7 @@ public class TestQuestion extends Model {
 	public void getPropertyInfo(int param, Hashtable arg1, PropertyInfo propertyInfo) {
 		switch(param){
 	        case 0:
-	            propertyInfo.type = PropertyInfo.INTEGER_CLASS;
+	            propertyInfo.type = PropertyInfo.LONG_CLASS;
 	            propertyInfo.name = "id";
 	            break;   
 	        case 1:
@@ -275,9 +283,9 @@ public class TestQuestion extends Model {
 	public void setProperty(int param, Object obj) {
 		switch(param)
 		{
-			case 0  : this.setId((Integer)obj); break;
+			case 0  : this.setId((Long)obj); break;
 			case 1  : stem = (String)obj; break;
-			case 2  : anstype = (String)obj; break;
+			case 2  : answerType = (String)obj; break;
 			case 3  : shuffle = Global.parseStringBool((String)obj); break;
 		}    
 	}

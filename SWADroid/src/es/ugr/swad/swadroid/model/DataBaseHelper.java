@@ -87,7 +87,7 @@ public class DataBaseHelper {
 	private Model createObjectByTable(String table, Entity ent) {
 		Model o = null;
 		Pair<String, String> params;
-		Integer id;
+		long id;
 		
 		if(table.equals(Global.DB_TABLE_COURSES)) {
 			o = new Course(ent.getInt("id"),
@@ -113,7 +113,7 @@ public class DataBaseHelper {
 					ent.getString("content"));
 		} else if(table.equals(Global.DB_TABLE_TEST_QUESTIONS)) {
 			id = ent.getInt("id");
-			PairTable q = (PairTable)getRow(Global.DB_TABLE_TEST_QUESTIONS_COURSE, "qstCod", id.toString());
+			PairTable q = (PairTable)getRow(Global.DB_TABLE_TEST_QUESTIONS_COURSE, "qstCod", Long.toString(id));
 
 			if(q != null) {
 				o = new TestQuestion(id,
@@ -125,11 +125,13 @@ public class DataBaseHelper {
 				o = null;
 			}
 		} else if(table.equals(Global.DB_TABLE_TEST_ANSWERS)) {	
-			id = ent.getInt("id");
-			PairTable a = (PairTable)getRow(Global.DB_TABLE_TEST_QUESTION_ANSWERS, "ansCod", id.toString());
+			id = ent.getId();
+			int ansInd = ent.getInt("ansInd");
+			PairTable a = (PairTable)getRow(Global.DB_TABLE_TEST_QUESTION_ANSWERS, "ansCod", Long.toString(id));
 
 			if(a != null) {
 				o = new TestAnswer(id,
+						ansInd,
 					(Integer) a.getFirst(),
 					Global.parseStringBool(ent.getString("correct")), 
 					ent.getString("answer"));
@@ -138,7 +140,7 @@ public class DataBaseHelper {
 			}
 		} else if(table.equals(Global.DB_TABLE_TEST_TAGS)) {	
 			id = ent.getInt("tagCod");
-			TestTag t = (TestTag)getRow(Global.DB_TABLE_TEST_QUESTION_TAGS, "tagCod", id.toString());
+			TestTag t = (TestTag)getRow(Global.DB_TABLE_TEST_QUESTION_TAGS, "tagCod", Long.toString(id));
 					
 			if(t != null) {
 				o = new TestTag(id,
@@ -149,8 +151,7 @@ public class DataBaseHelper {
 				o = null;
 			}
 		} else if(table.equals(Global.DB_TABLE_TEST_CONFIG)) {			
-			o = new Test(null, 
-					ent.getInt("id"),  
+			o = new Test(ent.getInt("id"),  
 					ent.getInt("min"),  
 					ent.getInt("def"),  
 					ent.getInt("max"),
@@ -271,21 +272,21 @@ public class DataBaseHelper {
 	/**
 	 * Inserts a test question in database
 	 * @param q Test question to be inserted
-	 * @param crsCod Course code to be referenced
+	 * @param selectedCourseCode Course code to be referenced
 	 */
-	public void insertTestQuestion(TestQuestion q, int crsCod)
+	public void insertTestQuestion(TestQuestion q, long selectedCourseCode)
     {
 		Entity ent = new Entity(Global.DB_TABLE_TEST_QUESTIONS);
 		
 		ent.setValue("id", q.getId());
-		ent.setValue("ansType", q.getAnstype());
+		ent.setValue("ansType", q.getAnswerType());
 		ent.setValue("stem", q.getStem());
 		ent.setValue("shuffle", Global.parseBoolString(q.getShuffle()));
 		ent.save();
 		
 		ent = new Entity(Global.DB_TABLE_TEST_QUESTIONS_COURSE);
 		ent.setValue("qstCod", q.getId());
-		ent.setValue("crsCod", crsCod);
+		ent.setValue("crsCod", selectedCourseCode);
 		ent.save();
     }
 	
@@ -297,15 +298,17 @@ public class DataBaseHelper {
 	public void insertTestAnswer(TestAnswer a, int qstCod)
     {
 		Entity ent = new Entity(Global.DB_TABLE_TEST_ANSWERS);
+		long id;
 		
-		ent.setValue("id", a.getId());
+		ent.setValue("ansInd", a.getAnsInd());
 		ent.setValue("answer", a.getAnswer());
 		ent.setValue("correct", a.getCorrect());
 		ent.save();
+		id = ent.getId();
 		
 		ent = new Entity(Global.DB_TABLE_TEST_QUESTION_ANSWERS);
 		ent.setValue("qstCod", qstCod);
-		ent.setValue("ansCod", a.getId());
+		ent.setValue("ansCod", id);
 		ent.save();
     }
 	
@@ -404,15 +407,15 @@ public class DataBaseHelper {
 	 * Updates a test question in database
 	 * @param prev Test question to be updated
 	 * @param actual Updated test question
-	 * @param crsCod Course code to be referenced
+	 * @param selectedCourseCode Course code to be referenced
 	 */
-	public void updateTestQuestion(TestQuestion prev, TestQuestion actual, int crsCod)
+	public void updateTestQuestion(TestQuestion prev, TestQuestion actual, long selectedCourseCode)
     {
 		List<Entity> rows = db.getEntityList(Global.DB_TABLE_TEST_QUESTIONS, "id = " + prev.getId());
 		Entity ent = rows.get(0);
 		
 		ent.setValue("id", actual.getId());
-		ent.setValue("ansType", actual.getAnstype());
+		ent.setValue("ansType", actual.getAnswerType());
 		ent.setValue("stem", actual.getStem());
 		ent.setValue("shuffle", Global.parseBoolString(actual.getShuffle()));
 		ent.save();
@@ -421,7 +424,7 @@ public class DataBaseHelper {
 		Iterator<Entity> iter = rows.iterator();
 		while (iter.hasNext()) {
 		  ent = iter.next();
-		  ent.setValue("crsCod", crsCod);
+		  ent.setValue("crsCod", selectedCourseCode);
 		  ent.save();
 		}
     }
@@ -434,10 +437,10 @@ public class DataBaseHelper {
 	 */
 	public void updateTestAnswer(TestAnswer prev, TestAnswer actual, int qstCod)
     {
-		List<Entity> rows = db.getEntityList(Global.DB_TABLE_TEST_ANSWERS, "id = " + prev.getId());
+		List<Entity> rows = db.getEntityList(Global.DB_TABLE_TEST_ANSWERS, "_id = " + prev.getId());
 		Entity ent = rows.get(0);
 		
-		ent.setValue("id", actual.getId());
+		ent.setValue("ansInd", actual.getAnsInd());
 		ent.setValue("answer", actual.getAnswer());
 		ent.setValue("correct", actual.getCorrect());
 		ent.save();
@@ -465,11 +468,15 @@ public class DataBaseHelper {
 		ent.setValue("tagTxt", actual.getTagTxt());
 		ent.save();
 
-		ent = new Entity(Global.DB_TABLE_TEST_QUESTION_TAGS);
-		ent.setValue("tagCod", actual.getId());
-		ent.setValue("qstCod", actual.getQstCod());
-		ent.setValue("tagInd", actual.getTagInd());
-		ent.save();
+		rows = db.getEntityList(Global.DB_TABLE_TEST_QUESTION_TAGS, "tagCod = " + prev.getId());
+		Iterator<Entity> iter = rows.iterator();
+		while (iter.hasNext()) {
+		  ent = iter.next();
+		  ent.setValue("tagCod", actual.getId());
+		  ent.setValue("qstCod", actual.getQstCod());
+		  ent.setValue("tagInd", actual.getTagInd());
+		  ent.save();
+		}
     }
 	
 	/**
@@ -481,6 +488,7 @@ public class DataBaseHelper {
     {
 		List<Entity> rows = db.getEntityList(Global.DB_TABLE_TEST_CONFIG, "id = " + prev.getId());
 		Entity ent = rows.get(0);
+		
 		ent.setValue("id", actual.getId());
 		ent.setValue("min", actual.getMin());
 		ent.setValue("def", actual.getDef());
@@ -516,7 +524,7 @@ public class DataBaseHelper {
 	 * Removes a row from a database table
 	 * @param id Identifier of row to be removed
 	 */
-	public void removeRow(String table, int id)
+	public void removeRow(String table, long id)
     {
 		List<Entity> rows = db.getEntityList(table, "id = " + id);
 		Entity ent = rows.get(0);		
@@ -552,15 +560,6 @@ public class DataBaseHelper {
     }
 	
 	/**
-	 * Empty table from database
-	 * @param table Table to be emptied
-	 */
-	public void emptyTable(String table)
-    {
-		db.emptyTable(table);
-    }
-	
-	/**
 	 * Gets a field of last notification
 	 * @param field A field of last notification
 	 * @return The field of last notification
@@ -583,12 +582,12 @@ public class DataBaseHelper {
 	
 	/**
 	 * Gets last time the test was updated
-	 * @param crsCode Test's course
+	 * @param selectedCourseCode Test's course
 	 * @return Last time the test was updated
 	 */
-	public String getTimeOfLastTestUpdate(int crsCode)
+	public String getTimeOfLastTestUpdate(long selectedCourseCode)
     {
-		String where = "id=" + crsCode;
+		String where = "id=" + selectedCourseCode;
 		String orderby = null;
 		List<Entity> rows = db.getEntityList(Global.DB_TABLE_TEST_CONFIG, where, orderby);
 		String f = "0";
@@ -601,20 +600,18 @@ public class DataBaseHelper {
 
 		return f;
     }
-	
-
-	
+		
 	/**
 	 * Gets the tags of specified course ordered by tagInd field
-	 * @param crsCode Test's course
+	 * @param selectedCourseCode Test's course
 	 * @return A list of the tags of specified course ordered by tagInd field
 	 */
-	public List<TestTag> getOrderedCourseTags(int crsCode)
+	public List<TestTag> getOrderedCourseTags(long selectedCourseCode)
     {
 		String select = "SELECT DISTINCT T.id, T.tagTxt, Q.qstCod, Q.tagInd";
 		String tables = " FROM " + Global.DB_TABLE_TEST_TAGS + " AS T, " + Global.DB_TABLE_TEST_QUESTION_TAGS
 			+ " AS Q, "	+ Global.DB_TABLE_TEST_QUESTIONS_COURSE + " AS C";
-		String where = " WHERE T.id=Q.tagCod AND Q.qstCod=C.qstCod AND C.crsCod=" + crsCode;
+		String where = " WHERE T.id=Q.tagCod AND Q.qstCod=C.qstCod AND C.crsCod=" + selectedCourseCode;
 		String orderby = " GROUP BY T.id ORDER BY Q.tagInd ASC";
 		Cursor dbCursor = db.getDB().rawQuery(select + tables + where + orderby, null);
 		List<TestTag> result = new ArrayList<TestTag>();
@@ -628,6 +625,74 @@ public class DataBaseHelper {
 			result.add(new TestTag(id, qstCod, tagTxt, tagInd));
 		}
         
+        return result;
+    }
+	
+	/**
+	 * Gets the questions of specified course and tags
+	 * @param selectedCourseCode Test's course
+	 * @param tagsList Tag's list of the questions to be extracted
+	 * @return A list of the questions of specified course and tags
+	 */
+	public List<TestQuestion> getCourseQuestionsByTagAndAnswerType(long selectedCourseCode, List<TestTag> tagsList,
+			List<String> answerTypesList)
+    {
+		String select = "SELECT Q.id, Q.ansType, Q.shuffle, Q.stem";
+		String tables = " FROM " + Global.DB_TABLE_TEST_QUESTIONS + " AS Q, "
+			+ Global.DB_TABLE_TEST_QUESTIONS_COURSE + " AS C, "
+			+ Global.DB_TABLE_TEST_QUESTION_TAGS + " AS T";
+		String where = " WHERE Q.id=C.qstCod AND C.crsCod=" + selectedCourseCode + " AND ";
+		String orderby = "";
+		Cursor dbCursorQuestions, dbCursorAnswers;
+		List<TestQuestion> result = new ArrayList<TestQuestion>();
+		List<TestAnswer> answers = new ArrayList<TestAnswer>();
+		int tagsListSize = tagsList.size();
+		int answerTypesListSize = answerTypesList.size();
+		
+		for(int i=0; i<tagsListSize; i++) {
+			where += "T.tagCod=" + tagsList.get(i).getId() + " AND ";
+		}
+		
+		where += "(";
+		for(int i=0; i<answerTypesListSize; i++) {
+			where += "Q.ansType='" + answerTypesList.get(i) + "'";
+			
+			if(i < answerTypesListSize-1) {
+				where += " OR ";
+			}
+		}		
+		where += ")";
+		
+		dbCursorQuestions = db.getDB().rawQuery(select + tables + where + orderby, null);
+		
+		select = "SELECT A._id, A.ansInd, A.answer, A.correct";
+		tables = " FROM " + Global.DB_TABLE_TEST_ANSWERS + " AS A, "
+			+ Global.DB_TABLE_TEST_QUESTION_ANSWERS + " AS Q";
+		orderby = " ORDER BY A.ansInd";
+		
+		while(dbCursorQuestions.moveToNext()) {
+			int qstCod = dbCursorQuestions.getInt(0);
+			String ansType = dbCursorQuestions.getString(1);
+			boolean shuffle = Global.parseStringBool(dbCursorQuestions.getString(2));
+			String stem = dbCursorQuestions.getString(3);
+			TestQuestion q = new TestQuestion(qstCod, selectedCourseCode, stem, ansType, shuffle);			
+
+			where = " WHERE Q.qstCod=" + qstCod + " AND Q.ansCod=A._id";
+			dbCursorAnswers = db.getDB().rawQuery(select + tables + where + orderby, null);
+			answers = new ArrayList<TestAnswer>();
+			while(dbCursorAnswers.moveToNext()) {
+				long ansCod = dbCursorAnswers.getLong(0);
+				int ansInd = dbCursorAnswers.getInt(1);
+				String answer = dbCursorAnswers.getString(2);
+				boolean correct = dbCursorAnswers.getString(3).equals("true") ? true: false;
+				
+				answers.add(new TestAnswer(ansCod, ansInd, qstCod, correct, answer));
+			}
+
+			q.setAnswers(answers);
+			result.add(q);
+		}
+
         return result;
     }
 	
@@ -649,4 +714,30 @@ public class DataBaseHelper {
 				rows.get(i).delete();
 		}
 	}
+	
+	/**
+	 * Empty table from database
+	 * @param table Table to be emptied
+	 */
+	public void emptyTable(String table)
+    {
+		db.emptyTable(table);
+    }
+	
+	/**
+	 * Delete table from database
+	 * @param table Table to be deleted
+	 */
+	public void deleteTable(String table)
+    {
+		db.deleteTable(table);
+    }
+	
+	/**
+	 * Delete all tables from database
+	 */
+	public void clearDB()
+    {
+		db.deleteTables();
+    }
 }

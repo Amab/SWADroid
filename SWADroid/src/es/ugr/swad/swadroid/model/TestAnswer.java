@@ -22,8 +22,6 @@ import java.util.Hashtable;
 
 import org.ksoap2.serialization.PropertyInfo;
 
-import es.ugr.swad.swadroid.Global;
-
 /**
  * Class for store a test answer
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
@@ -34,35 +32,55 @@ public class TestAnswer extends Model {
 	 */
 	private int qstCod;
 	/**
+	 * Answer index;
+	 */
+	private int ansInd;
+	/**
 	 * Flag to know if this is the correct answer of the question
 	 */
 	private boolean correct;
 	/**
+	 * Flag to know if the user has answered correctly
+	 */
+	private boolean correctAnswered;
+	/**
 	 * Answer's text
 	 */
 	private String answer;
+	/**
+	 * User answer
+	 */
+	private String userAnswer;
 	private static PropertyInfo PI_id = new PropertyInfo();
 	private static PropertyInfo PI_correct = new PropertyInfo();
+	private static PropertyInfo PI_correctAnswered = new PropertyInfo();
 	private static PropertyInfo PI_answer = new PropertyInfo();
+	private static PropertyInfo PI_ansInd = new PropertyInfo();
     private static PropertyInfo[] PI_PROP_ARRAY =
     {
     	PI_id,
     	PI_correct,
-    	PI_answer
+    	PI_correctAnswered,
+    	PI_answer,
+    	PI_ansInd
     };
 	
 	/**
 	 * Constructor
 	 * @param id Answer id
+	 * @param ansInd Answer index inside the question
 	 * @param qstCod Question code
 	 * @param correct Flag to know if this is the correct answer of the question
 	 * @param answer Answer's text
 	 */
-	public TestAnswer(int id, int qstCod, boolean correct, String answer) {
+	public TestAnswer(long id, int ansInd, int qstCod, boolean correct, String answer) {
 		super(id);
+		this.ansInd = ansInd;
 		this.qstCod = qstCod;
 		this.correct = correct;
+		this.correctAnswered = false;
 		this.answer = answer;
+		this.userAnswer = "";
 	}
 
 	/**
@@ -113,6 +131,56 @@ public class TestAnswer extends Model {
 		this.qstCod = qstCod;
 	}
 
+	/**
+	 * Gets the user answer
+	 * @return User answer
+	 */
+	public String getUserAnswer() {
+		return userAnswer;
+	}
+
+	/**
+	 * Sets user answer text
+	 * @param userAnswer User answer text
+	 */
+	public void setUserAnswer(String userAnswer) {
+		this.userAnswer = userAnswer;
+	}
+
+	/**
+	 * Checks if the user has answered correctly
+	 * @return true if the user has answered correctly
+	 * 		   false otherwise
+	 */
+	public boolean isCorrectAnswered() {
+		return correctAnswered;
+	}
+
+	/**
+	 * Marks this answer as correctly or incorrectly answered by the user
+	 * @param correctAnswered true if the user has answered correctly
+	 * 		   				  false otherwise
+	 */
+	public void setCorrectAnswered(boolean correctAnswered) {
+		this.correctAnswered = correctAnswered;
+	}
+
+	/**
+	 * Gets the answer index inside the question
+	 * @return Answer index inside the question
+	 */
+	public int getAnsInd() {
+		return ansInd;
+	}
+
+	/**
+	 * Sets the answer index inside the question
+	 * @param ansInd Answer index inside the question
+	 */
+	public void setAnsInd(int ansInd) {
+		this.ansInd = ansInd;
+	}
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
@@ -120,6 +188,9 @@ public class TestAnswer extends Model {
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
+		result = prime * result + ansInd;
+		result = prime * result + ((answer == null) ? 0 : answer.hashCode());
+		result = prime * result + (correct ? 1231 : 1237);
 		result = prime * result + qstCod;
 		return result;
 	}
@@ -136,6 +207,15 @@ public class TestAnswer extends Model {
 		if (getClass() != obj.getClass())
 			return false;
 		TestAnswer other = (TestAnswer) obj;
+		if (ansInd != other.ansInd)
+			return false;
+		if (answer == null) {
+			if (other.answer != null)
+				return false;
+		} else if (!answer.equals(other.answer))
+			return false;
+		if (correct != other.correct)
+			return false;
 		if (qstCod != other.qstCod)
 			return false;
 		return true;
@@ -146,8 +226,10 @@ public class TestAnswer extends Model {
 	 */
 	@Override
 	public String toString() {
-		return "TestAnswer [correct=" + correct + ", answer=" + answer
-				+ ", getId()=" + getId() + "]";
+		return "TestAnswer [qstCod=" + qstCod + ", ansInd=" + ansInd
+				+ ", correct=" + correct + ", correctAnswered="
+				+ correctAnswered + ", answer=" + answer + ", userAnswer="
+				+ userAnswer + ", getId()=" + getId() + "]";
 	}
 
 	/* (non-Javadoc)
@@ -159,7 +241,9 @@ public class TestAnswer extends Model {
         {
             case 0 : object = this.getId();break;
             case 1 : object = correct;break;
-            case 2 : object = answer;break;
+            case 2 : object = correctAnswered;break;
+            case 3 : object = answer;break;
+            case 4 : object = ansInd;break;
         }
         
         return object;
@@ -169,7 +253,7 @@ public class TestAnswer extends Model {
 	 * @see org.ksoap2.serialization.KvmSerializable#getPropertyCount()
 	 */
 	public int getPropertyCount() {
-		return 3;
+		return 5;
 	}
 
 	/* (non-Javadoc)
@@ -178,17 +262,25 @@ public class TestAnswer extends Model {
 	public void getPropertyInfo(int param, Hashtable arg1, PropertyInfo propertyInfo) {
 		switch(param){
 	        case 0:
-	            propertyInfo.type = PropertyInfo.INTEGER_CLASS;
+	            propertyInfo.type = PropertyInfo.LONG_CLASS;
 	            propertyInfo.name = "id";
 	            break;   
 	        case 1:
-	            propertyInfo.type = PropertyInfo.STRING_CLASS;
+	            propertyInfo.type = PropertyInfo.BOOLEAN_CLASS;
 	            propertyInfo.name = "correct";
 	            break;    
 	        case 2:
+	            propertyInfo.type = PropertyInfo.BOOLEAN_CLASS;
+	            propertyInfo.name = "correctAnswered";
+	            break;    
+	        case 3:
 	            propertyInfo.type = PropertyInfo.STRING_CLASS;
 	            propertyInfo.name = "answer";
-	            break;           
+	            break;      
+	        case 4:
+	            propertyInfo.type = PropertyInfo.INTEGER_CLASS;
+	            propertyInfo.name = "ansInd";
+	            break;        
 		}
 	}
 
@@ -199,8 +291,10 @@ public class TestAnswer extends Model {
 		switch(param)
 		{
 			case 0  : this.setId((Integer)obj); break;
-			case 1  : correct = Global.parseStringBool((String)obj); break;
-			case 2  : answer = (String)obj; break;
+			case 1  : correct = (Boolean) obj; break;
+			case 2  : correctAnswered = (Boolean) obj; break;
+			case 3  : answer = (String) obj; break;
+			case 4  : ansInd = (Integer) obj; break;
 		}    
 	}
 }

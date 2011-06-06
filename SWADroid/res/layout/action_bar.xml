@@ -31,6 +31,64 @@
 
 	<!-- Right buttons -->
     <ImageView
+    	android:id="@+id/title_sep_3"
+		android:layout_toLeftOf="@+id/testShowResultsButton"
+        android:layout_width="1px"
+        android:layout_height="match_parent"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:background="@color/title_separator"
+        android:visibility="gone"/>
+        
+    <Button
+    	android:id="@+id/testShowResultsButton"
+		android:layout_toLeftOf="@+id/title_sep_2"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+		android:padding="8dp"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="@string/testShowResultsMsg"
+		android:textColor="@color/title_text"
+		android:textSize="18sp"
+		android:textStyle="bold"
+        android:onClick="onEvaluateClick"
+        android:background="@drawable/title_button"
+        android:visibility="gone"/>
+        
+    <ImageView
+    	android:id="@+id/title_sep_2"
+		android:layout_toLeftOf="@+id/testEvaluateButton"
+        android:layout_width="1px"
+        android:layout_height="match_parent"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:background="@color/title_separator"
+        android:visibility="gone"/>
+        
+    <Button
+    	android:id="@+id/testEvaluateButton"
+		android:layout_toLeftOf="@+id/title_sep_1"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+		android:padding="8dp"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="@string/testEvaluateMsg"
+		android:textColor="@color/title_text"
+		android:textSize="18sp"
+		android:textStyle="bold"
+        android:onClick="onEvaluateClick"
+        android:background="@drawable/title_button"
+        android:visibility="gone"/>
+        
+    <ImageView
     	android:id="@+id/title_sep_1"
 		android:layout_toLeftOf="@+id/refresh"
         android:layout_width="1px"

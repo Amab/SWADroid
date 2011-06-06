@@ -18,9 +18,10 @@
  */
 package es.ugr.swad.swadroid.model;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import org.ksoap2.serialization.PropertyInfo;
 
@@ -30,9 +31,13 @@ import org.ksoap2.serialization.PropertyInfo;
  */
 public class Test extends Model {
 	/**
+	 * Correct answer score
+	 */
+	private final float CORRECT_ANSWER_SCORE = 1;
+	/**
 	 * List of questions and related answers
 	 */
-	private List<Pair<TestQuestion, List<TestAnswer>>> questionsAndAnswers;
+	private List<TestQuestion> questions;
 	/**
 	 * Minimum questions in test
 	 */
@@ -53,6 +58,18 @@ public class Test extends Model {
 	 * Last time test was updated
 	 */
 	private Long editTime;
+	/**
+	 * Total test's score
+	 */
+	private float totalScore;
+	/**
+	 * Individual answers's score
+	 */
+	private List<Float> questionsScore;
+	/**
+	 * Flag for check if the test has been evaluated
+	 */
+	private boolean evaluated;
 	private static PropertyInfo PI_min = new PropertyInfo();
 	private static PropertyInfo PI_def = new PropertyInfo();
 	private static PropertyInfo PI_max = new PropertyInfo();
@@ -67,18 +84,20 @@ public class Test extends Model {
 	
 	/**
 	 * Constructor from fields
-	 * @param crsCode Code of test's course
+	 * @param selectedCourseCode Code of test's course
 	 * @param min Minimum questions in test
 	 * @param def Default questions in test
 	 * @param max Maximum questions in test
 	 * @param feedback Feedback to be showed to the student
 	 */
-	public Test(int crsCode, int min, int def, int max, String feedback) {
-		super(crsCode);
+	public Test(long selectedCourseCode, int min, int def, int max, String feedback) {
+		super(selectedCourseCode);
 		this.min = min;
 		this.def = def;
 		this.max = max;
 		this.feedback = feedback;
+		this.totalScore = 0;
+		this.questionsScore = new ArrayList<Float>();
 	}
 	
 	/**
@@ -91,50 +110,8 @@ public class Test extends Model {
 	 * @param editTime Last time test was updated
 	 */
 	public Test(int crsCode, int min, int def, int max, String feedback, Long editTime) {
-		super(crsCode);
-		this.min = min;
-		this.def = def;
-		this.max = max;
-		this.feedback = feedback;
+		this(crsCode, min, def, max, feedback);
 		this.editTime = editTime;
-	}
-	
-	/**
-	 * Constructor from fields
-	 * @param questionsAndAnswers List of questions and related answers
-	 * @param crsCode Code of test's course
-	 * @param min Minimum questions in test
-	 * @param def Default questions in test
-	 * @param max Maximum questions in test
-	 * @param feedback Feedback to be showed to the student
-	 * @param editTime Last time test was updated
-	 */
-	public Test(List<Pair<TestQuestion, List<TestAnswer>>> questionsAndAnswers,
-			int crsCode, int min, int def, int max, String feedback, Long editTime) {
-		super(crsCode);
-		this.questionsAndAnswers = questionsAndAnswers;
-		this.min = min;
-		this.def = def;
-		this.max = max;
-		this.feedback = feedback;
-		this.editTime = editTime;
-	}
-
-	/**
-	 * Gets the list of questions and related answers
-	 * @return List of questions and related answers
-	 */
-	public List<Pair<TestQuestion, List<TestAnswer>>> getQuestionsAndAnswers() {
-		return questionsAndAnswers;
-	}
-
-	/**
-	 * Sets the list of questions and related answers
-	 * @param questionsAndAnswers List of questions and related answers
-	 */
-	public void setQuestionsAndAnswers(
-			List<Pair<TestQuestion, List<TestAnswer>>> questionsAndAnswers) {
-		this.questionsAndAnswers = questionsAndAnswers;
 	}
 
 	/**
@@ -142,8 +119,8 @@ public class Test extends Model {
 	 * @param i Question's position
 	 * @return A pair of values <Question, List of answers>
 	 */
-	public Pair<TestQuestion, List<TestAnswer>> getQuestionAnswers(int i) {
-		return questionsAndAnswers.get(i);
+	public TestQuestion getQuestionAndAnswers(int i) {
+		return questions.get(i);
 	}
 
 	/**
@@ -218,7 +195,8 @@ public class Test extends Model {
 		return editTime;
 	}
 
-	/** Sets last time test was updated
+	/** 
+	 * Sets last time test was updated
 	 * @param timestamp Last time test was updated
 	 */
 	public void setEditTime(Long timestamp) {
@@ -226,53 +204,283 @@ public class Test extends Model {
 	}
 
 	/**
-	 * Adds a question and related answers
-	 * @param qa A pair of values <Question, List of answers>
+	 * Gets total test's score
+	 * @return Total test's score
 	 */
-	public void addQuestionAnswers(Pair<TestQuestion, List<TestAnswer>> qa) {
-		questionsAndAnswers.add(qa);
-	}
-	
-	/**
-	 * Removes a question and related answers
-	 * @param qa A pair of values <Question, List of answers>
-	 */
-	public void removeQuestionAnswers(Pair<TestQuestion, List<TestAnswer>> qa) {
-		questionsAndAnswers.remove(qa);
-	}
-	
-	/**
-	 * Removes a question and related answers
-	 * @param i Question's position
-	 */
-	public void removeQuestionAnswers(int i) {
-		questionsAndAnswers.remove(i);
-	}
-	
-	/**
-	 * Shuffles the list of questions and related answers
-	 */
-	public void shuffle() {
-		Collections.shuffle(questionsAndAnswers);
+	public float getTotalScore() {
+		return totalScore;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
+	/**
+	 * Sets total test's score
+	 * @param totalScore Total test's score
 	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + def;
-		result = prime * result
-				+ ((feedback == null) ? 0 : feedback.hashCode());
-		result = prime * result + max;
-		result = prime * result + min;
-		result = prime
-				* result
-				+ ((questionsAndAnswers == null) ? 0 : questionsAndAnswers
-						.hashCode());
-		return result;
+	public void setTotalScore(float totalScore) {
+		this.totalScore = totalScore;
+	}
+
+	/**
+	 * Gets individual score for question in position i
+	 * @param pos Questions's position in test
+	 * @return Individual score for question in position i
+	 */
+	public Float getQuestionScore(int pos) {
+		return questionsScore.get(pos);
+	}
+
+	/**
+	 * Sets individual answers's score
+	 * @param pos Questions's position in test
+	 * @param score Questions's score
+	 */
+	public void setQuestionScore(int pos, Float score) {		
+		this.questionsScore.set(pos, score);
+	}
+	
+	/**
+	 * Gets the questions list
+	 * @return The questions list
+	 */
+	public List<TestQuestion> getQuestions() {
+		return questions;
+	}
+
+	/**
+	 * Sets the questions list
+	 * @param questions The questions to set
+	 */
+	public void setQuestions(List<TestQuestion> questions) {
+		this.questions = questions;
+	}
+
+	/**
+	 * Gets the questions's score
+	 * @return The questions's score
+	 */
+	public List<Float> getQuestionsScore() {
+		return questionsScore;
+	}
+
+	/**
+	 * Sets the questions's score
+	 * @param questionsScore The questions's score
+	 */
+	public void setQuestionsScore(List<Float> questionsScore) {
+		this.questionsScore = questionsScore;
+	}
+
+	/**
+	 * Checks if the test has been evaluated
+	 * @return true if the test has been evaluated
+	 * 		   false if the test hasn't been evaluated
+	 */
+	public boolean isEvaluated() {
+		return evaluated;
+	}
+
+	/**
+	 * Specifies if the test has been evaluated
+	 * @param evaluated true if the test has been evaluated
+	 * 		   			false if the test hasn't been evaluated
+	 */
+	public void setEvaluated(boolean evaluated) {
+		this.evaluated = evaluated;
+	}
+	
+	/**
+	 * Initializes questions's score and total score
+	 */
+	public void prepareEvaluation() {
+		evaluated = false;
+		totalScore = 0;
+		questionsScore.clear();
+		
+		for(int i=0; i<this.questions.size(); i++) {
+			this.questionsScore.add(new Float(0));
+		}
+	}
+	
+	/**
+	 * Prepares a string for evaluate() method
+	 * @param s String to be prepared
+	 * @return String without unnecessary spaces or accents 
+	 */
+	private String prepareString(String s) {
+		//Remove spaces
+		StringTokenizer tokens = new StringTokenizer(s);
+        StringBuilder buff = new StringBuilder();
+        while (tokens.hasMoreTokens()) {
+            buff.append(" ").append(tokens.nextToken());
+        }
+        s = buff.toString().trim();
+        
+        //Remove accents
+		s = s.replace('á', 'a');
+		s = s.replace('é', 'e');
+		s = s.replace('í', 'i');
+		s = s.replace('ó', 'o');
+		s = s.replace('ú', 'u');
+		
+		return s;
+	}
+	
+	/**
+	 * Calculates total score and individual question's score of the test
+	 */
+	public void evaluate() {
+		int totalAnswers, trueAnswers, falseAnswers, correctUserAnswers, errors;
+		Float score = new Float(0);
+		Float userFloatAnswer, minFloatRange = new Float(0), maxFloatRange = new Float(0);
+		TestQuestion q;
+		List<TestAnswer> la;
+		String answerType, userAnswerText, answerText;
+		boolean correctAnswered;
+		
+		prepareEvaluation();
+		for(int i=0; i<questions.size(); i++) {
+			TestAnswer a;
+			q = questions.get(i);
+			la = q.getAnswers();
+			answerType = q.getAnswerType();
+			totalAnswers = 1;
+			trueAnswers = 0;
+			falseAnswers = 0;
+			correctUserAnswers = 0;
+			errors = 0;
+			
+			if(answerType.equals("float")) {
+				a = la.get(0);
+				
+				userAnswerText = a.getUserAnswer();				
+				if(userAnswerText == "") {
+					a.setCorrectAnswered(false);
+				} else {
+					userFloatAnswer = new Float(userAnswerText);				
+					minFloatRange = new Float(a.getAnswer());
+					maxFloatRange = new Float(la.get(1).getAnswer());
+					a.setCorrectAnswered((userFloatAnswer >= minFloatRange) && (userFloatAnswer <= maxFloatRange));
+				}
+				
+				if(a.isCorrectAnswered()) {
+					correctUserAnswers++;
+				} else {
+					errors++;
+				}
+				
+				score = correctUserAnswers/(float)totalAnswers;
+			} else if(answerType.equals("TF")) {
+				a = la.get(0);
+
+				userAnswerText = a.getUserAnswer();
+				if(userAnswerText == "") {
+					a.setCorrectAnswered(false);
+				} else {
+					a.setCorrectAnswered(a.getAnswer().equals(a.getUserAnswer()));
+				}
+				
+				if(a.isCorrectAnswered()) {
+					correctUserAnswers++;
+				} else {
+					errors++;
+				}
+				
+				score = (float) (correctUserAnswers-errors);
+			} else if(answerType.equals("int")) {
+				a = la.get(0);userAnswerText = a.getUserAnswer();				
+				if(userAnswerText == "") {
+					a.setCorrectAnswered(false);
+				} else {
+					a.setCorrectAnswered(a.getAnswer().equals(a.getUserAnswer()));
+				}
+				
+				if(a.isCorrectAnswered()) {
+					correctUserAnswers++;
+				} else {
+					errors++;
+				}
+				
+				score = correctUserAnswers/(float)totalAnswers;
+			} else if(answerType.equals("text")) {
+				a = la.get(0);
+				userAnswerText = prepareString(a.getUserAnswer());
+				a.setCorrectAnswered(false);
+				
+				for(TestAnswer ans : la) {
+					answerText = prepareString(ans.getAnswer());
+					
+					if(userAnswerText.equalsIgnoreCase(answerText)) {
+						a.setCorrectAnswered(true);
+						break;
+					}
+				}
+				
+				if(a.isCorrectAnswered()) {
+					correctUserAnswers++;
+				} else {
+					errors++;
+				}
+				
+				score = correctUserAnswers/(float)totalAnswers;
+			} else if(answerType.equals("uniqueChoice")) {		
+				totalAnswers = la.size();
+				a = la.get(0);
+				a.setCorrectAnswered(false);
+				
+				for(TestAnswer ans : la) {	
+					if(ans.getCorrect() && ans.getAnswer().equals(a.getUserAnswer())) {
+						a.setCorrectAnswered(true);
+						break;
+					}
+				}				
+				
+				if(a.isCorrectAnswered()) {
+					correctUserAnswers++;
+				} else {
+					errors++;
+				}
+
+				score = correctUserAnswers-(errors/((float)totalAnswers-1));
+			} else {	
+				totalAnswers = la.size();
+				for(TestAnswer ans : la) {				
+					if(ans.getCorrect()) {
+						trueAnswers++;
+						if(ans.getUserAnswer().equals("Y")) {
+							correctUserAnswers++;
+							correctAnswered = true;
+						} else {
+							errors++;
+							correctAnswered = false;
+						}
+					} else {
+						falseAnswers++;
+						if(ans.getUserAnswer().equals("N")) {
+							correctAnswered = true;
+						} else {
+							errors++;
+							correctAnswered = false;
+						}
+					}
+					
+					ans.setCorrectAnswered(correctAnswered);
+					
+					if(falseAnswers == 0) {
+						score = correctUserAnswers/(float)totalAnswers;
+					} else {
+						score = (correctUserAnswers/(float)trueAnswers)-(errors/(float)falseAnswers);
+					}
+				}
+			}
+			
+			if(score < 0) {
+				score = new Float(0);
+			}
+			
+			questionsScore.set(i, score*CORRECT_ANSWER_SCORE);
+			totalScore += score*CORRECT_ANSWER_SCORE;
+		}
+		
+		evaluated = true;
 	}
 
 	/* (non-Javadoc)
@@ -280,9 +488,12 @@ public class Test extends Model {
 	 */
 	@Override
 	public String toString() {
-		return "Test [questionsAndAnswers=" + questionsAndAnswers + ", min="
+		return "Test [CORRECT_ANSWER_SCORE=" + CORRECT_ANSWER_SCORE
+				+ ", questionsAndAnswers=" + questions + ", min="
 				+ min + ", def=" + def + ", max=" + max + ", feedback="
-				+ feedback + ", getId()=" + getId() + "]";
+				+ feedback + ", editTime=" + editTime + ", totalScore="
+				+ totalScore + ", questionsScore=" + questionsScore
+				+ ", getId()=" + getId() + "]";
 	}
 
 	/* (non-Javadoc)
