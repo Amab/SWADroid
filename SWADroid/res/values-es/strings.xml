@@ -71,6 +71,8 @@
 	<string name="testNoQuestionsCourseMsg">No se ha descargado ninguna pregunta de test para esta asignatura</string>
 	<string name="testNoQuestionsMsg">Antes de realizar un test debe descargar las preguntas de test de al menos una
 		asignatura</string>
+	<string name="testNoQuestionsMeetsSpecifiedCriteriaMsg">No hay ninguna pregunta que se ajuste a los	criterios
+		especificados</string>
 	<string name="testNumQuestionsMsg">Indique el número de preguntas del test</string>
 	<string name="testTagsMsg">Seleccione los descriptores que desea incluir en el test</string>
 	<string name="testNoTagsSelectedMsg">Debe seleccionar al menos un descriptor</string>
@@ -78,7 +80,7 @@
 	<string name="testNoAnswerTypesSelectedMsg">Debe seleccionar al menos un tipo de respuesta</string>
 	<string name="testEvaluateMsg">Corregir</string>
 	<string name="testResultsTextMsg">Puntuación</string>
-	<string name="testShowResultsMsg">Ver resultados</string>
+	<string name="testShowResultsMsg">Ver totales</string>
 	<string name="testShowResultsDetailsMsg">Ver detalles</string>
 	<string name="testNoDetailsMsg">El profesor no permite ver los detalles</string>
 	<string name="testNoResultsMsg">El profesor no permite ver los resultados del test</string>

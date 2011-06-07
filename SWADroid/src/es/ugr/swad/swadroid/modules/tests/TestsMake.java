@@ -339,10 +339,14 @@ public class TestsMake extends Module {
 			a = answers.get(0);					
 			sp.setAdapter(tfAdapter);
 
-			if(a.getUserAnswer().equals("T")) {
-				sp.setSelection(0);
-			} else {
+			if(a.getUserAnswer().equals("F")) {
 				sp.setSelection(1);
+			} else {
+				sp.setSelection(0);
+			}
+			
+			if(a.getUserAnswer().equals("")) {
+				a.setUserAnswer(a.getAnswer());
 			}
 			
 			sp.setVisibility(View.VISIBLE);
@@ -370,6 +374,11 @@ public class TestsMake extends Module {
 				if(a.getCorrect()) {
 					correctAnswer = a.getAnswer();
 				}
+			}
+			
+			a = answers.get(0);
+			if(a.getUserAnswer().equals("")) {
+				a.setUserAnswer(a.getAnswer());
 			}
 			
 			sp.setAdapter(uniqueChoiceAdapter);
@@ -533,23 +542,28 @@ public class TestsMake extends Module {
 		
 		//Generates the test
 		questions = dbHelper.getCourseQuestionsByTagAndAnswerType(selectedCourseCode, tagsList, answerTypesList);
-		Collections.shuffle(questions);
-		
-		if(questions.size() > numQuestions) {
-			questions = questions.subList(0, numQuestions);
-		}
-		
-		test.setQuestions(questions);
-		
-		//Shuffles related answers in a question if necessary
-		for(TestQuestion q : questions) {
-			if(q.getShuffle()) {
-				q.shuffleAnswers();
+		if(!questions.isEmpty()) {
+			Collections.shuffle(questions);
+			
+			if(questions.size() > numQuestions) {
+				questions = questions.subList(0, numQuestions);
 			}
+			
+			test.setQuestions(questions);
+	
+			//Shuffles related answers in a question if necessary
+			for(TestQuestion q : questions) {
+				if(q.getShuffle()) {
+					q.shuffleAnswers();
+				}
+			}
+			
+			//Shows the test
+			showTest();
+		} else {
+			Toast.makeText(this, R.string.testNoQuestionsMeetsSpecifiedCriteriaMsg, Toast.LENGTH_LONG);
+			finish();
 		}
-		
-		//Shows the test
-		showTest();
 	}
 	
 	/**
@@ -584,7 +598,7 @@ public class TestsMake extends Module {
 			textView.setText(df.format(score) + "/" + test.getQuestions().size() + "\n"
 					+ df.format(scoreDec) + "/10");
 			
-			if(score < 5) {
+			if(scoreDec < 5) {
 				textView.setTextColor(Color.RED);
 			}
 			
