@@ -5,14 +5,14 @@
     android:layout_height="match_parent"
     android:background="@color/background">
     <include layout="@layout/action_bar"/>    
- 
- <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+ 		
+ 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 		android:id="@+id/testMakeStem"
     	android:orientation="horizontal"
     	android:layout_width="match_parent"
     	android:layout_height="wrap_content"
-		android:weightSum="1.0"
 		android:layout_below="@+id/actionBarLayout"
+		android:weightSum="1.0"
 		android:gravity="center"
     	android:background="@android:color/transparent">
 		<TextView
@@ -20,8 +20,8 @@
 			android:layout_width="0dip"
 			android:layout_height="wrap_content"
 			android:layout_weight="0.2"
+			android:padding="1dip"
 			android:gravity="center"
-			android:padding="5dip"
 			android:textColor="@color/foreground1"
 			android:textStyle="bold"
 			android:textSize="20sp"
@@ -32,11 +32,9 @@
 			android:layout_width="0dip"
 			android:layout_height="wrap_content"
 			android:layout_weight="0.8"
-			android:gravity="center"
-			android:padding="10dip"
-			android:textColor="@color/foreground1"
-			android:textSize="20sp"/>
-		</LinearLayout>
+			android:padding="1dip"
+			android:textColor="@color/foreground1"/>
+	</LinearLayout>
 		
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 		android:id="@+id/testMakeAnswer"
@@ -114,7 +112,7 @@
 			  android:layout_width="0dip"
 			  android:layout_height="wrap_content"
 			  android:layout_weight="0.1"
-	          android:background="@android:drawable/ic_media_rew"/>
+	          android:background="@drawable/back"/>
 	          
 	        <es.ugr.swad.swadroid.widget.TextProgressBar
 			  android:id="@+id/test_questions_bar"
@@ -128,7 +126,7 @@
 			  android:layout_width="0dip"
 			  android:layout_height="wrap_content"
 			  android:layout_weight="0.1"
-	          android:background="@android:drawable/ic_media_ff"/>
+	          android:background="@drawable/forward"/>
           </LinearLayout>
 	  </RelativeLayout>
 </RelativeLayout>
