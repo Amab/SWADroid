@@ -44,11 +44,11 @@ import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.Model;
@@ -121,6 +121,10 @@ public class TestsMake extends Module {
      * Tests tag name for Logcat
      */
     public static final String TAG = Global.APP_TAG + " TestsMake";
+    /**
+     * Application preferences.
+     */
+    protected static Preferences prefs = new Preferences(); 
 	
 	/**
 	 * Sets layout maintaining tests action bar
@@ -290,7 +294,6 @@ public class TestsMake extends Module {
 		TextView score = (TextView) findViewById(R.id.testMakeQuestionScore);
 		TextView textCorrectAnswer = (TextView) findViewById(R.id.testMakeCorrectAnswer);
 		EditText textAnswer = (EditText) findViewById(R.id.testMakeEditText);
-		Spinner sp = (Spinner) findViewById(R.id.testMakeSpinner);
 		ImageView img = (ImageView) findViewById(R.id.testMakeCorrectAnswerImage);
 		CheckedAnswersArrayAdapter checkedAnswersAdapter;
 		String answerType = question.getAnswerType();
@@ -303,7 +306,6 @@ public class TestsMake extends Module {
 		score.setVisibility(View.GONE);
 		textAnswer.setVisibility(View.GONE);
 		textCorrectAnswer.setVisibility(View.GONE);
-		sp.setVisibility(View.GONE);
 		testMakeList.setVisibility(View.GONE);
 		img.setVisibility(View.GONE);
 		
@@ -335,35 +337,32 @@ public class TestsMake extends Module {
 				textCorrectAnswer.setText(Html.fromHtml(correctAnswer));
 				textCorrectAnswer.setVisibility(View.VISIBLE);
 			}
-		 } else if(answerType.equals("TF")) {
-			a = answers.get(0);					
-			sp.setAdapter(tfAdapter);
-
-			if(a.getUserAnswer().equals("F")) {
-				sp.setSelection(1);
-			} else {
-				sp.setSelection(0);
+		 } else if(answerType.equals("multipleChoice")) {
+			checkedAnswersAdapter = new CheckedAnswersArrayAdapter(this, R.layout.list_item_multiple_choice,
+						answers, test.isEvaluated(), test.getFeedback(), answerType);
+			
+			testMakeList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);			
+			testMakeList.setAdapter(checkedAnswersAdapter);	
+			
+			for(int i=0; i<numAnswers; i++) {
+				a = answers.get(i);
+				testMakeList.setItemChecked(i, Global.parseStringBool(a.getUserAnswer()));
 			}
 			
-			if(a.getUserAnswer().equals("")) {
-				a.setUserAnswer(a.getAnswer());
-			}
-			
-			sp.setVisibility(View.VISIBLE);
-			
-			if(test.isEvaluated() && feedback.equals("eachGoodBad")) {
-				if(a.getAnswer().equals("T")) {
-					correctAnswer = getString(R.string.trueMsg);
+			testMakeList.setVisibility(View.VISIBLE);
+		 } else {				
+			if(answerType.equals("TF") && (numAnswers < 2)) {
+				if(answers.get(0).getAnswer().equals("T")) {
+					answers.add(1, new TestAnswer(0, 1, 0, false, "F"));
 				} else {
-					correctAnswer = getString(R.string.falseMsg);
+					answers.add(0, new TestAnswer(0, 0, 0, false, "T"));
 				}
 				
-				textCorrectAnswer.setText(correctAnswer);
-				textCorrectAnswer.setVisibility(View.VISIBLE);
+				numAnswers = 2;
 			}
-		 } else if(answerType.equals("uniqueChoice")) {
+			
 			checkedAnswersAdapter = new CheckedAnswersArrayAdapter(this, R.layout.list_item_single_choice,
-						answers, test.isEvaluated(), test.getFeedback());
+						answers, test.isEvaluated(), test.getFeedback(), answerType);
 			
 			testMakeList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 			testMakeList.setAdapter(checkedAnswersAdapter);
@@ -377,42 +376,21 @@ public class TestsMake extends Module {
 			}
 			
 			testMakeList.setVisibility(View.VISIBLE);
-		 } else {
-			checkedAnswersAdapter = new CheckedAnswersArrayAdapter(this, R.layout.list_item_multiple_choice,
-						answers, test.isEvaluated(), test.getFeedback());
-			
-			testMakeList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);			
-			testMakeList.setAdapter(checkedAnswersAdapter);	
-			
-			for(int i=0; i<numAnswers; i++) {
-				a = answers.get(i);
-				testMakeList.setItemChecked(i, Global.parseStringBool(a.getUserAnswer()));
-			}
-			
-			testMakeList.setVisibility(View.VISIBLE);
 		 }
 
 		if(test.isEvaluated() && (feedback.equals("eachResult") || feedback.equals("eachGoodBad"))) {
 			textAnswer.setEnabled(false);
 			textAnswer.setOnClickListener(null);
-			sp.setEnabled(false);
 			
 			if(feedback.equals("eachGoodBad")) {
-				img.setImageResource(R.drawable.btn_check_buttonless_on);
-				if(answerType.equals("multipleChoice") || answerType.equals("multipleChoice")) {
-					for(TestAnswer ans : answers) {
-						if(!ans.isCorrectAnswered()) {
-							img.setImageResource(android.R.drawable.ic_delete);
-							break;
-						}
-					}
-				} else {
+				img.setImageResource(R.drawable.btn_check_buttonless_on);				
+				if(!answerType.equals("TF") && !answerType.equals("multipleChoice")
+						&& !answerType.equals("uniqueChoice")) {
+					
 					if(!answers.get(0).isCorrectAnswered()) {
 						img.setImageResource(android.R.drawable.ic_delete);
 					}
-				}
-				
-				if(!answerType.equals("multipleChoice") && !answerType.equals("uniqueChoice")) {
+					
 					img.setVisibility(View.VISIBLE);
 				}
 			}
@@ -436,10 +414,9 @@ public class TestsMake extends Module {
 	private void readUserAnswer(TestQuestion q) {
 		ListView testMakeList = (ListView) findViewById(R.id.testMakeList);
 		EditText textAnswer = (EditText) findViewById(R.id.testMakeEditText);
-		Spinner sp = (Spinner) findViewById(R.id.testMakeSpinner);
 		List<TestAnswer> la = q.getAnswers();
 		int checkedListCount, selectedPos;
-		String answerType;
+		String answerType, userAnswer;
 		SparseBooleanArray checkedItems;
 				
 		answerType = q.getAnswerType();
@@ -448,21 +425,21 @@ public class TestsMake extends Module {
 				|| answerType.equals("float")) {
 			
 			la.get(0).setUserAnswer(String.valueOf(textAnswer.getText()));
-		} else if(answerType.equals("TF")) {
-				if(sp.getSelectedItemPosition() == 0) {
-					la.get(0).setUserAnswer("T");
-				} else {
-					la.get(0).setUserAnswer("F");
-				}
-		} else if(answerType.equals("uniqueChoice")) {
-			selectedPos = testMakeList.getCheckedItemPosition();
-			la.get(0).setUserAnswer(la.get(selectedPos).getAnswer());
-		} else {
+		} else if(answerType.equals("multipleChoice")) {
 			checkedItems = testMakeList.getCheckedItemPositions();
 			checkedListCount = checkedItems.size();
 			for(int i=0; i<checkedListCount; i++) {
 				la.get(i).setUserAnswer(Global.parseBoolString(checkedItems.get(i, false)));
 			}
+		} else {
+			selectedPos = testMakeList.getCheckedItemPosition();
+			if(selectedPos == -1) {
+				userAnswer = "";
+			} else {
+				userAnswer = la.get(selectedPos).getAnswer();
+			}
+			
+			la.get(0).setUserAnswer(userAnswer);
 		}
 	}
 	
@@ -644,6 +621,7 @@ public class TestsMake extends Module {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				Course c = (Course) listCourses.get(whichButton);
 				selectedCourseCode = c.getId();
+				prefs.setLastCourseSelected(whichButton);
 				
 				if(isDebuggable) {
 					Integer s = whichButton;
@@ -696,14 +674,22 @@ public class TestsMake extends Module {
 	 * @see es.ugr.swad.swadroid.modules.Module#onStart()
 	 */
 	@Override
-	protected void onStart() {		
+	protected void onStart() {
+		Course c;
+		int lastCourseSelected;
+		
 		super.onStart();
+		prefs.getPreferences(getBaseContext());
+		
 		if(dbHelper.getDb().getCursor(Global.DB_TABLE_TEST_CONFIG).getCount() > 0) {			
 			dbCursor = dbHelper.getDb().getCursor(Global.DB_TABLE_COURSES);
 			listCourses = dbHelper.getAllRows(Global.DB_TABLE_COURSES);
-			Course c = (Course) listCourses.get(0);
+			lastCourseSelected = prefs.getLastCourseSelected();
+			c = (Course) listCourses.get(lastCourseSelected);
 			selectedCourseCode = c.getId();
-			coursesDialog.setSingleChoiceItems(dbCursor, 0, "name", coursesDialogSingleChoiceItemsClickListener);		
+			coursesDialog.setSingleChoiceItems(dbCursor, lastCourseSelected, "name",
+					coursesDialogSingleChoiceItemsClickListener);
+			
 			coursesDialog.show();
 		} else {
 			Toast.makeText(getBaseContext(), R.string.testNoQuestionsMsg, Toast.LENGTH_LONG).show();
