@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.ksoap2.SoapFault;
@@ -45,11 +44,11 @@ import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.Model;
@@ -122,6 +121,10 @@ public class TestsMake extends Module {
      * Tests tag name for Logcat
      */
     public static final String TAG = Global.APP_TAG + " TestsMake";
+    /**
+     * Application preferences.
+     */
+    protected static Preferences prefs = new Preferences(); 
 	
 	/**
 	 * Sets layout maintaining tests action bar
@@ -195,14 +198,13 @@ public class TestsMake extends Module {
 				//If "All tags" item checked, add the whole list to the list of selected tags
 				CheckedTextView allChk = (CheckedTextView) checkBoxesList.getChildAt(0);
 				if(allChk.isChecked()) {
-					allTagsList.remove(0);
-					tagsList.addAll(allTagsList);
+					tagsList.add(new TestTag(0, 0, "all", 0));
 					
 				//If "All tags" item not checked, add the selected items to the list of selected tags
 				} else {				
 					for(int i=0; i<childsCount; i++) {
 						CheckedTextView chk = (CheckedTextView) checkBoxesList.getChildAt(i);
-						if(chk.isChecked()) {
+						if((chk != null) && chk.isChecked()) {
 							tagsList.add(tagsAdapter.getItem(i));
 						}
 					}
@@ -251,10 +253,14 @@ public class TestsMake extends Module {
 				 * else, add the selected items to the list of selected answer types
 				 */
 				CheckedTextView allChk = (CheckedTextView) checkBoxesList.getChildAt(0);
-				for(int i=1; i<childsCount; i++) {
-					CheckedTextView chk = (CheckedTextView) checkBoxesList.getChildAt(i);
-					if(allChk.isChecked() || ((chk != null) && (chk.isChecked()))) {
-						answerTypesList.add((String) answerTypesAdapter.getItem(i));
+				if(allChk.isChecked()) {
+					answerTypesList.add("all");
+				} else {
+					for(int i=1; i<childsCount; i++) {
+						CheckedTextView chk = (CheckedTextView) checkBoxesList.getChildAt(i);
+						if((chk != null) && chk.isChecked()) {
+							answerTypesList.add((String) answerTypesAdapter.getItem(i));
+						}
 					}
 				}
 				
@@ -288,22 +294,18 @@ public class TestsMake extends Module {
 		TextView score = (TextView) findViewById(R.id.testMakeQuestionScore);
 		TextView textCorrectAnswer = (TextView) findViewById(R.id.testMakeCorrectAnswer);
 		EditText textAnswer = (EditText) findViewById(R.id.testMakeEditText);
-		Spinner sp = (Spinner) findViewById(R.id.testMakeSpinner);
 		ImageView img = (ImageView) findViewById(R.id.testMakeCorrectAnswerImage);
 		CheckedAnswersArrayAdapter checkedAnswersAdapter;
-		ArrayAdapter<String> uniqueChoiceAdapter;
 		String answerType = question.getAnswerType();
 		String feedback = test.getFeedback();
 		String correctAnswer = "";
 		int numAnswers = answers.size();
-		int selectedChoice = 0;
 		Float questionScore;
 		DecimalFormat df = new DecimalFormat("0.00");
 
 		score.setVisibility(View.GONE);
 		textAnswer.setVisibility(View.GONE);
 		textCorrectAnswer.setVisibility(View.GONE);
-		sp.setVisibility(View.GONE);
 		testMakeList.setVisibility(View.GONE);
 		img.setVisibility(View.GONE);
 		
@@ -328,72 +330,19 @@ public class TestsMake extends Module {
 				} else {
 					for(int i=0; i<numAnswers; i++) {
 						a = answers.get(i);
-						correctAnswer += a.getAnswer() + "\n";
+						correctAnswer += a.getAnswer() + "<br/>";
 					}
 				}
 				
-				textCorrectAnswer.setText(correctAnswer);
+				textCorrectAnswer.setText(Html.fromHtml(correctAnswer));
 				textCorrectAnswer.setVisibility(View.VISIBLE);
 			}
-		 } else if(answerType.equals("TF")) {
-			a = answers.get(0);					
-			sp.setAdapter(tfAdapter);
-
-			if(a.getUserAnswer().equals("F")) {
-				sp.setSelection(1);
-			} else {
-				sp.setSelection(0);
-			}
-			
-			if(a.getUserAnswer().equals("")) {
-				a.setUserAnswer(a.getAnswer());
-			}
-			
-			sp.setVisibility(View.VISIBLE);
-			
-			if(test.isEvaluated() && feedback.equals("eachGoodBad")) {
-				if(a.getAnswer().equals("T")) {
-					correctAnswer = getString(R.string.trueMsg);
-				} else {
-					correctAnswer = getString(R.string.falseMsg);
-				}
-				
-				textCorrectAnswer.setText(correctAnswer);
-				textCorrectAnswer.setVisibility(View.VISIBLE);
-			}
-		 } else if(answerType.equals("uniqueChoice")) {			
-			uniqueChoiceAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
-			for(int i=0; i<numAnswers; i++) {
-				a = answers.get(i);
-				uniqueChoiceAdapter.add(a.getAnswer());
-				
-				if(a.getAnswer().equals(answers.get(0).getUserAnswer())) {
-					selectedChoice = i;
-				}
-				
-				if(a.getCorrect()) {
-					correctAnswer = a.getAnswer();
-				}
-			}
-			
-			a = answers.get(0);
-			if(a.getUserAnswer().equals("")) {
-				a.setUserAnswer(a.getAnswer());
-			}
-			
-			sp.setAdapter(uniqueChoiceAdapter);
-			sp.setSelection(selectedChoice);
-			sp.setVisibility(View.VISIBLE);
-			
-			if(test.isEvaluated() && feedback.equals("eachGoodBad")) {
-				textCorrectAnswer.setText(correctAnswer);
-				textCorrectAnswer.setVisibility(View.VISIBLE);
-			}
-		 } else {
+		 } else if(answerType.equals("multipleChoice")) {
 			checkedAnswersAdapter = new CheckedAnswersArrayAdapter(this, R.layout.list_item_multiple_choice,
-					answers, test.isEvaluated(), test.getFeedback());
-			testMakeList.setAdapter(checkedAnswersAdapter);			
-			testMakeList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+						answers, test.isEvaluated(), test.getFeedback(), answerType);
+			
+			testMakeList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);			
+			testMakeList.setAdapter(checkedAnswersAdapter);	
 			
 			for(int i=0; i<numAnswers; i++) {
 				a = answers.get(i);
@@ -401,32 +350,56 @@ public class TestsMake extends Module {
 			}
 			
 			testMakeList.setVisibility(View.VISIBLE);
+		 } else {				
+			if(answerType.equals("TF") && (numAnswers < 2)) {
+				if(answers.get(0).getAnswer().equals("T")) {
+					answers.add(1, new TestAnswer(0, 1, 0, false, "F"));
+				} else {
+					answers.add(0, new TestAnswer(0, 0, 0, false, "T"));
+				}
+				
+				numAnswers = 2;
+			}
+			
+			checkedAnswersAdapter = new CheckedAnswersArrayAdapter(this, R.layout.list_item_single_choice,
+						answers, test.isEvaluated(), test.getFeedback(), answerType);
+			
+			testMakeList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+			testMakeList.setAdapter(checkedAnswersAdapter);
+			
+			for(int i=0; i<numAnswers; i++) {
+				a = answers.get(i);
+				if(a.getAnswer().equals(answers.get(0).getUserAnswer())) {
+					testMakeList.setItemChecked(i, true);
+					break;
+				}
+			}
+			
+			testMakeList.setVisibility(View.VISIBLE);
 		 }
 
 		if(test.isEvaluated() && (feedback.equals("eachResult") || feedback.equals("eachGoodBad"))) {
+			textAnswer.setEnabled(false);
+			textAnswer.setOnClickListener(null);
+			
 			if(feedback.equals("eachGoodBad")) {
-				img.setImageResource(R.drawable.btn_check_buttonless_on);
-				if(answerType.equals("multipleChoice")) {
-					for(TestAnswer ans : answers) {
-						if(!ans.isCorrectAnswered()) {
-							img.setImageResource(android.R.drawable.ic_delete);
-							break;
-						}
-					}
-				} else {
+				img.setImageResource(R.drawable.btn_check_buttonless_on);				
+				if(!answerType.equals("TF") && !answerType.equals("multipleChoice")
+						&& !answerType.equals("uniqueChoice")) {
+					
 					if(!answers.get(0).isCorrectAnswered()) {
 						img.setImageResource(android.R.drawable.ic_delete);
 					}
-				}
-				
-				if(!answerType.equals("multipleChoice")) {
+					
 					img.setVisibility(View.VISIBLE);
 				}
 			}
 			
 			questionScore = test.getQuestionScore(pos);
 			if(questionScore >= 0.5) {
-				score.setTextColor(Color.GREEN);
+				score.setTextColor(getResources().getColor(R.color.green));
+			} else {
+				score.setTextColor(getResources().getColor(R.color.red));
 			}
 			
 			score.setText(df.format(questionScore));				
@@ -441,10 +414,9 @@ public class TestsMake extends Module {
 	private void readUserAnswer(TestQuestion q) {
 		ListView testMakeList = (ListView) findViewById(R.id.testMakeList);
 		EditText textAnswer = (EditText) findViewById(R.id.testMakeEditText);
-		Spinner sp = (Spinner) findViewById(R.id.testMakeSpinner);
 		List<TestAnswer> la = q.getAnswers();
-		int checkedListCount;
-		String answerType;
+		int checkedListCount, selectedPos;
+		String answerType, userAnswer;
 		SparseBooleanArray checkedItems;
 				
 		answerType = q.getAnswerType();
@@ -453,20 +425,21 @@ public class TestsMake extends Module {
 				|| answerType.equals("float")) {
 			
 			la.get(0).setUserAnswer(String.valueOf(textAnswer.getText()));
-		} else if(answerType.equals("TF")) {
-				if(sp.getSelectedItemPosition() == 0) {
-					la.get(0).setUserAnswer("T");
-				} else {
-					la.get(0).setUserAnswer("F");
-				}
-		} else if(answerType.equals("uniqueChoice")) {
-			la.get(0).setUserAnswer((String) sp.getSelectedItem());
-		} else {
+		} else if(answerType.equals("multipleChoice")) {
 			checkedItems = testMakeList.getCheckedItemPositions();
 			checkedListCount = checkedItems.size();
 			for(int i=0; i<checkedListCount; i++) {
 				la.get(i).setUserAnswer(Global.parseBoolString(checkedItems.get(i, false)));
 			}
+		} else {
+			selectedPos = testMakeList.getCheckedItemPosition();
+			if(selectedPos == -1) {
+				userAnswer = "";
+			} else {
+				userAnswer = la.get(selectedPos).getAnswer();
+			}
+			
+			la.get(0).setUserAnswer(userAnswer);
 		}
 	}
 	
@@ -499,7 +472,9 @@ public class TestsMake extends Module {
 				TestQuestion question = test.getQuestionAndAnswers(actualQuestion);
 				int pos;
 				
-				readUserAnswer(question);
+				if(!test.isEvaluated()) {
+					readUserAnswer(question);
+				}
 				
 				actualQuestion--;				
 				if(actualQuestion < 0) {
@@ -519,7 +494,9 @@ public class TestsMake extends Module {
 				TestQuestion question = test.getQuestionAndAnswers(actualQuestion);
 				int pos;
 				
-				readUserAnswer(question);
+				if(!test.isEvaluated()) {
+					readUserAnswer(question);
+				}
 				
 				actualQuestion++;
 				actualQuestion %= size;
@@ -541,14 +518,9 @@ public class TestsMake extends Module {
 		List<TestQuestion> questions;
 		
 		//Generates the test
-		questions = dbHelper.getCourseQuestionsByTagAndAnswerType(selectedCourseCode, tagsList, answerTypesList);
-		if(!questions.isEmpty()) {
-			Collections.shuffle(questions);
-			
-			if(questions.size() > numQuestions) {
-				questions = questions.subList(0, numQuestions);
-			}
-			
+		questions = dbHelper.getRandomCourseQuestionsByTagAndAnswerType(selectedCourseCode, tagsList, answerTypesList,
+				numQuestions);
+		if(!questions.isEmpty()) {			
 			test.setQuestions(questions);
 	
 			//Shuffles related answers in a question if necessary
@@ -649,6 +621,7 @@ public class TestsMake extends Module {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				Course c = (Course) listCourses.get(whichButton);
 				selectedCourseCode = c.getId();
+				prefs.setLastCourseSelected(whichButton);
 				
 				if(isDebuggable) {
 					Integer s = whichButton;
@@ -701,14 +674,22 @@ public class TestsMake extends Module {
 	 * @see es.ugr.swad.swadroid.modules.Module#onStart()
 	 */
 	@Override
-	protected void onStart() {		
+	protected void onStart() {
+		Course c;
+		int lastCourseSelected;
+		
 		super.onStart();
+		prefs.getPreferences(getBaseContext());
+		
 		if(dbHelper.getDb().getCursor(Global.DB_TABLE_TEST_CONFIG).getCount() > 0) {			
 			dbCursor = dbHelper.getDb().getCursor(Global.DB_TABLE_COURSES);
 			listCourses = dbHelper.getAllRows(Global.DB_TABLE_COURSES);
-			Course c = (Course) listCourses.get(0);
+			lastCourseSelected = prefs.getLastCourseSelected();
+			c = (Course) listCourses.get(lastCourseSelected);
 			selectedCourseCode = c.getId();
-			coursesDialog.setSingleChoiceItems(dbCursor, 0, "name", coursesDialogSingleChoiceItemsClickListener);		
+			coursesDialog.setSingleChoiceItems(dbCursor, lastCourseSelected, "name",
+					coursesDialogSingleChoiceItemsClickListener);
+			
 			coursesDialog.show();
 		} else {
 			Toast.makeText(getBaseContext(), R.string.testNoQuestionsMsg, Toast.LENGTH_LONG).show();

@@ -1,6 +1,6 @@
 # SWADroid
 
-Android client for e-learning platform SWAD. This project is currently under heavy development.
+Android client for e-learning platform SWAD.
 
 [Install from Android Market][apk]
 

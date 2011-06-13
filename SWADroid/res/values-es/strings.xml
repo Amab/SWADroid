@@ -10,7 +10,7 @@
 	<string name="set_preferences">Configuración</string>
 	<string name="user_preferences">Datos del usuario</string>
 	<string name="userIDName_preferences">Usuario</string>
-	<string name="userIDSummary_preferences">DNI o Alias</string>
+	<string name="userIDSummary_preferences">DNI o Apodo</string>
 	<string name="userIDTitle_preferences">Usuario</string>
 	<string name="userPasswordName_preferences">Contraseña</string>
 	<string name="userPasswordSummary_preferences">Contraseña</string>
@@ -21,6 +21,8 @@
 	<string name="preferencesTitle_menu">Configuración</string>
 	<string name="about_preferences">Acerca de</string>
 	<string name="versionTitle_preferences">Versión de la aplicación</string>
+	<string name="author_preferences">Programado por Juan Miguel Boyero Corral</string>
+	<string name="organization_preferences">Universidad de Granada</string>
 	<string name="loginTitle_menu">Conectar</string>
 	<string name="loginProgressTitle">Identificación</string>
 	<string name="loginProgressDescription">Conectando...</string>
@@ -31,7 +33,8 @@
 	<string name="notificationsEmptyListMsg">No se ha descargado ninguna notificación.\n\nPara descargar las
 		notificaciones más recientes pulse el icono de la esquina superior derecha de la pantalla.</string>
 	<string name="testsDownloadProgressTitle">Tests</string>
-	<string name="testsDownloadProgressDescription">Sincronizando preguntas de test...</string>
+	<string name="testsDownloadProgressDescription">Sincronizando preguntas de test.\n\nDependiendo del número de
+		preguntas a sincronizar, el procesamiento de los datos puede tardar unos minutos.\n\nPor favor, espere...</string>
 	<string name="errorMsgWorkaroundEmulator">Mierda. Ese bug del emulador de Android ha vuelto a
 		aparecer. Reintentando...</string>
 	<string name="errorMsgLaunchingActivity">Ha ocurrido un error durante la ejecución de la

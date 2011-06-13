@@ -21,6 +21,8 @@
 	<string name="preferencesTitle_menu">Preferences</string>
 	<string name="about_preferences">About</string>
 	<string name="versionTitle_preferences">Application version</string>
+	<string name="author_preferences">Programmed by Juan Miguel Boyero Corral</string>
+	<string name="organization_preferences">University of Granada</string>
 	<string name="loginTitle_menu">Login</string>
 	<string name="loginProgressTitle">Login</string>
 	<string name="loginProgressDescription">Connecting...</string>
@@ -29,7 +31,8 @@
 	<string name="notificationsEmptyListMsg">Did not download any notification.\n\nTo download most recent
 		notifications click the icon in the upper right of the screen.</string>
 	<string name="testsDownloadProgressTitle">Tests</string>
-	<string name="testsDownloadProgressDescription">Synchronizing test questions...</string>
+	<string name="testsDownloadProgressDescription">Synchronizing test questions.\n\nDepending of the number of
+		questions to synchronize, the data processing can take several minutes.\n\nPlease wait...</string>
 	<string name="coursesProgressTitle">Courses</string>
 	<string name="coursesProgressDescription">Retrieving courses...</string>
 	<string name="errorMsgLaunchingActivity">An error occurred during the execution of the

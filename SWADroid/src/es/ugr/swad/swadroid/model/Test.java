@@ -374,8 +374,10 @@ public class Test extends Model {
 				userAnswerText = a.getUserAnswer();
 				if(userAnswerText.equals("")) {
 					a.setCorrectAnswered(false);
-				} else {
+				} else if(a.getCorrect()) {
 					a.setCorrectAnswered(a.getAnswer().equals(a.getUserAnswer()));
+				} else {
+					a.setCorrectAnswered(!a.getAnswer().equals(a.getUserAnswer()));
 				}
 				
 				if(a.isCorrectAnswered()) {

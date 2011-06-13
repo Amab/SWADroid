@@ -20,6 +20,7 @@ package es.ugr.swad.swadroid.modules.tests;
 
 import java.util.List;
 
+import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.TestAnswer;
 import android.content.Context;
 import android.graphics.Color;
@@ -36,9 +37,10 @@ public class CheckedAnswersArrayAdapter extends ArrayAdapter<TestAnswer> {
 	private List<TestAnswer> items;
 	private boolean evaluated;
 	private String feedback;
+	private String answerType;
 	
 	public CheckedAnswersArrayAdapter(Context context, int textViewResourceId,
-			List<TestAnswer> objects, boolean eval, String feedb) {
+			List<TestAnswer> objects, boolean eval, String feedb, String anstype) {
 		
 		super(context, textViewResourceId, objects);
 		this.context = context;
@@ -46,6 +48,7 @@ public class CheckedAnswersArrayAdapter extends ArrayAdapter<TestAnswer> {
 		this.items = objects;
 		this.evaluated = eval;
 		this.feedback = feedb;
+		this.answerType = anstype;
 	}
 
 	/* (non-Javadoc)
@@ -61,12 +64,24 @@ public class CheckedAnswersArrayAdapter extends ArrayAdapter<TestAnswer> {
         }
 		 
 		CheckedTextView tt = (CheckedTextView) convertView.findViewById(android.R.id.text1);
-		tt.setText(Html.fromHtml(a.getAnswer()));
-		
-		if(evaluated && feedback.equals("eachGoodBad") && a.getCorrect()) {
-			tt.setTextColor(Color.BLUE);
+		if(answerType.equals("TF")) {
+			if(a.getAnswer().equals("T")) {
+				tt.setText(R.string.trueMsg);
+			} else {
+				tt.setText(R.string.falseMsg);
+			}
 		} else {
-			tt.setTextColor(Color.BLACK);
+			tt.setText(Html.fromHtml(a.getAnswer()));
+		}
+		
+		if(evaluated) {
+			tt.setOnClickListener(null);
+			
+			if(feedback.equals("eachGoodBad") && a.getCorrect()) {
+				tt.setTextColor(context.getResources().getColor(R.color.green));
+			} else {
+				tt.setTextColor(Color.BLACK);
+			}
 		}
          
         return convertView;
