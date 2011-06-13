@@ -38,7 +38,6 @@ import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.modules.notifications.Notifications;
 import es.ugr.swad.swadroid.modules.tests.Tests;
@@ -175,10 +174,10 @@ public class SWADMain extends ExpandableListActivity {
 				startActivityForResult(activity, Global.NOTIFICATIONS_REQUEST_CODE);
 				
 		} else if(keyword.equals(getString(R.string.testsModuleLabel))) {
-				/*activity = new Intent(getBaseContext(), Tests.class);
-				startActivityForResult(activity, Global.TESTS_REQUEST_CODE);*/
-				Toast.makeText(this, keyword + " en proceso de desarrollo", Toast.LENGTH_LONG)
-					.show();
+				activity = new Intent(getBaseContext(), Tests.class);
+				startActivityForResult(activity, Global.TESTS_REQUEST_CODE);
+				/*Toast.makeText(this, keyword + " en proceso de desarrollo", Toast.LENGTH_LONG)
+					.show();*/
 		}
 		
 		return true;
@@ -243,8 +242,8 @@ public class SWADMain extends ExpandableListActivity {
         
         getExpandableListView().setOnChildClickListener(this);
     }
-
-	/* (non-Javadoc)
+    
+    /* (non-Javadoc)
 	 * @see android.app.Activity#onCreate()
 	 */
     @Override
@@ -287,10 +286,9 @@ public class SWADMain extends ExpandableListActivity {
             	prefs.setLastVersion(currentVersion);
 
             //If this is an upgrade, show upgrade dialog
-            } else if(lastVersion < 12) {
-            	dbHelper.emptyTable(Global.DB_TABLE_NOTIFICATIONS);
+            } else if(lastVersion < 17) {
+            	dbHelper.upgradeDB(this);
             	prefs.setLastVersion(currentVersion);
-            	showUpgradeDialog();
             }
         } catch (Exception ex) {
             Log.e(ex.getClass().getSimpleName(), ex.getMessage());

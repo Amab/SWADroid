@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<database name="swadroid_db" version="7">  
+<database name="swadroid_db" version="8">  
   <table name="courses" to-string="%name%">
-    <field name="id" obligatory="true" type="integer"/>
+    <field name="id" obligatory="true" type="long"/>
     <field name="name" obligatory="true" type="text"/>
   </table> 
   
   <table name="notifications" to-string="%name%" new-in-version="3">
-    <field name="id" obligatory="true" type="integer"/>
+    <field name="id" obligatory="true" type="long"/>
     <field name="eventType" obligatory="true" type="text"/>
     <field name="eventTime" obligatory="true" type="text"/>
     <field name="userSurname1" obligatory="true" type="text"/>
@@ -19,7 +19,7 @@
   </table>
   
   <table name="tst_config" to-string="%name%" new-in-version="6">
-    <field name="id" obligatory="true" type="integer"/>
+    <field name="id" obligatory="true" type="long"/>
     <field name="min" obligatory="true" type="integer"/>
     <field name="def" obligatory="true" type="integer"/>
     <field name="max" obligatory="true" type="integer"/>
@@ -28,20 +28,20 @@
   </table>
   
   <table name="tst_questions" to-string="%name%" new-in-version="6">
-    <field name="id" obligatory="true" type="integer"/>
+    <field name="id" obligatory="true" type="long"/>
     <field name="ansType" obligatory="true" type="text"/>
     <field name="shuffle" obligatory="true" type="text"/>
     <field name="stem" obligatory="true" type="text"/>
   </table>
   
   <table name="tst_answers" to-string="%name%" new-in-version="6">
-    <field name="id" obligatory="true" type="integer"/>
+    <field name="ansInd" obligatory="true" type="integer" new-in-version="8"/>
     <field name="answer" obligatory="true" type="text"/>
     <field name="correct" obligatory="true" type="text"/>
   </table>
   
   <table name="tst_tags" to-string="%name%" new-in-version="6">
-    <field name="id" obligatory="true" type="integer"/>
+    <field name="id" obligatory="true" type="long"/>
     <field name="tagTxt" obligatory="true" type="text"/>
   </table>
   

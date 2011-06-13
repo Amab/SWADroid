@@ -148,7 +148,7 @@ public class Global {
 	/**
 	 * Function to parse from Integer to Boolean
 	 * @param n Integer to be parsed
-	 * @return true if n==0, false in other case
+	 * @return true if n!=0, false in other case
 	 */
 	public static boolean parseIntBool(int n) {
 		return n!=0;
