@@ -1,3 +1,8 @@
+## 0.4.1 (2011-06-14)
+
+* Allowed negative scores on tests
+* Fixed bug on questions syncronization
+
 ## 0.4 (2011-06-13)
 
 * Added tests module
