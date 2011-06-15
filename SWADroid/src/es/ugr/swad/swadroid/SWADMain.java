@@ -176,8 +176,6 @@ public class SWADMain extends ExpandableListActivity {
 		} else if(keyword.equals(getString(R.string.testsModuleLabel))) {
 				activity = new Intent(getBaseContext(), Tests.class);
 				startActivityForResult(activity, Global.TESTS_REQUEST_CODE);
-				/*Toast.makeText(this, keyword + " en proceso de desarrollo", Toast.LENGTH_LONG)
-					.show();*/
 		}
 		
 		return true;

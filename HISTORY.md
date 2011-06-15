@@ -1,3 +1,9 @@
+## 0.4.2 (2011-06-15)
+
+* Now not answered questions score as 0
+* Now is allowed to uncheck a checked answer on T/F and unique choice questions
+* Improved tests GUI
+
 ## 0.4.1 (2011-06-14)
 
 * Allowed negative scores on tests
