@@ -200,18 +200,17 @@ public class TestsMake extends Module {
 		acceptButton.setOnClickListener(new View.OnClickListener() {			
 			public void onClick(View v) {
 				int childsCount = checkBoxesList.getCount();
+				SparseBooleanArray checkedItems = checkBoxesList.getCheckedItemPositions();
 				tagsList = new ArrayList<TestTag>();
 				
 				//If "All tags" item checked, add the whole list to the list of selected tags
-				CheckedTextView allChk = (CheckedTextView) checkBoxesList.getChildAt(0);
-				if(allChk.isChecked()) {
+				if(checkedItems.get(0, false)) {
 					tagsList.add(new TestTag(0, 0, "all", 0));
 					
 				//If "All tags" item not checked, add the selected items to the list of selected tags
 				} else {				
 					for(int i=0; i<childsCount; i++) {
-						CheckedTextView chk = (CheckedTextView) checkBoxesList.getChildAt(i);
-						if((chk != null) && chk.isChecked()) {
+						if(checkedItems.get(i, false)) {
 							tagsList.add(tagsAdapter.getItem(i));
 						}
 					}
@@ -254,19 +253,18 @@ public class TestsMake extends Module {
 		acceptButton.setOnClickListener(new View.OnClickListener() {			
 			public void onClick(View v) {
 				int childsCount = checkBoxesList.getCount();
+				SparseBooleanArray checkedItems = checkBoxesList.getCheckedItemPositions();
 				answerTypesList = new ArrayList<String>();
 				
 				/*
 				 * If "All tags" item checked, add the whole list to the list of selected answer types,
 				 * else, add the selected items to the list of selected answer types
 				 */
-				CheckedTextView allChk = (CheckedTextView) checkBoxesList.getChildAt(0);
-				if(allChk.isChecked()) {
+				if(checkedItems.get(0, false)) {
 					answerTypesList.add("all");
 				} else {
 					for(int i=1; i<childsCount; i++) {
-						CheckedTextView chk = (CheckedTextView) checkBoxesList.getChildAt(i);
-						if((chk != null) && chk.isChecked()) {
+						if(checkedItems.get(i, false)) {
 							answerTypesList.add((String) answerTypesAdapter.getItem(i));
 						}
 					}
@@ -472,6 +470,8 @@ public class TestsMake extends Module {
 		bar.setMax(size);
 	    bar.setProgress(1);  
 	    bar.setText(1 + "/" + size);
+	    bar.setTextColor(Color.BLUE);
+	    bar.setTextSize(18);
 	    
 	    eval.setVisibility(View.VISIBLE);
 	    title_separator.setVisibility(View.VISIBLE);
@@ -675,19 +675,14 @@ public class TestsMake extends Module {
 				ListView lv = (ListView) parent;
 				int childCount = lv.getCount();
 				SparseBooleanArray checkedItems = lv.getCheckedItemPositions();
-				int checkedItemsCount = checkedItems.size();
 				boolean allChecked = true;
 				
 				if(position == 0) {
 					for(int i=1; i<childCount; i++) {
 						lv.setItemChecked(i, !chk.isChecked());
 					}
-				} else {
-					if(chk.isChecked()) {
-						lv.setItemChecked(0, false);
-					}
-					
-					for(int i=1; i<checkedItemsCount; i++) {
+				} else {					
+					for(int i=1; i<childCount; i++) {
 						if(!checkedItems.get(i, false)) {
 							allChecked = false;
 						}
@@ -695,6 +690,8 @@ public class TestsMake extends Module {
 					
 					if (allChecked) {
 						lv.setItemChecked(0, true);
+					} else if(chk.isChecked()) {
+						lv.setItemChecked(0, false);
 					}
 				}
 			}			

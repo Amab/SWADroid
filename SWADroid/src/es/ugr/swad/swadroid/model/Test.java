@@ -471,8 +471,6 @@ public class Test extends Model {
 						if(ans.getUserAnswer().equals("Y")) {
 							errors++;
 							noneSelected = false;
-						} else {
-							correctUserAnswers++;
 						}
 					}
 				}
