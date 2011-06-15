@@ -332,13 +332,13 @@ public class Test extends Model {
 		Float score = new Float(0);
 		Float userFloatAnswer, minFloatRange = new Float(0), maxFloatRange = new Float(0);
 		TestQuestion q;
+		TestAnswer a;
 		List<TestAnswer> la;
 		String answerType, userAnswerText, answerText;
-		boolean correctAnswered;
+		boolean noneSelected;
 		
 		prepareEvaluation();
 		for(int i=0; i<questions.size(); i++) {
-			TestAnswer a;
 			q = questions.get(i);
 			la = q.getAnswers();
 			answerType = q.getAnswerType();
@@ -352,9 +352,7 @@ public class Test extends Model {
 				a = la.get(0);
 				
 				userAnswerText = a.getUserAnswer();				
-				if(userAnswerText.equals("")) {
-					a.setCorrectAnswered(false);
-				} else {
+				if(!userAnswerText.equals("")) {
 					userFloatAnswer = new Float(userAnswerText);				
 					minFloatRange = new Float(a.getAnswer());
 					maxFloatRange = new Float(la.get(1).getAnswer());
@@ -367,14 +365,16 @@ public class Test extends Model {
 					errors++;
 				}
 				
-				score = correctUserAnswers/(float)totalAnswers;
+				if(userAnswerText.equals("")) {
+					score = new Float(0);
+				} else {
+					score = correctUserAnswers/(float)totalAnswers;
+				}
 			} else if(answerType.equals("TF")) {
 				a = la.get(0);
 
 				userAnswerText = a.getUserAnswer();
-				if(userAnswerText.equals("")) {
-					a.setCorrectAnswered(false);
-				} else if(a.getCorrect()) {
+				if(a.getCorrect()) {
 					a.setCorrectAnswered(a.getAnswer().equals(a.getUserAnswer()));
 				} else {
 					a.setCorrectAnswered(!a.getAnswer().equals(a.getUserAnswer()));
@@ -386,14 +386,14 @@ public class Test extends Model {
 					errors++;
 				}
 				
-				score = (float) (correctUserAnswers-errors);
+				if(userAnswerText.equals("")) {
+					score = new Float(0);
+				} else {
+					score = (float) (correctUserAnswers-errors);
+				}
 			} else if(answerType.equals("int")) {
 				a = la.get(0);userAnswerText = a.getUserAnswer();				
-				if(userAnswerText.equals("")) {
-					a.setCorrectAnswered(false);
-				} else {
-					a.setCorrectAnswered(a.getAnswer().equals(a.getUserAnswer()));
-				}
+				a.setCorrectAnswered(a.getAnswer().equals(a.getUserAnswer()));
 				
 				if(a.isCorrectAnswered()) {
 					correctUserAnswers++;
@@ -401,7 +401,11 @@ public class Test extends Model {
 					errors++;
 				}
 				
-				score = correctUserAnswers/(float)totalAnswers;
+				if(userAnswerText.equals("")) {
+					score = new Float(0);
+				} else {
+					score = correctUserAnswers/(float)totalAnswers;
+				}
 			} else if(answerType.equals("text")) {
 				a = la.get(0);
 				userAnswerText = prepareString(a.getUserAnswer());
@@ -422,13 +426,17 @@ public class Test extends Model {
 					errors++;
 				}
 				
-				score = correctUserAnswers/(float)totalAnswers;
+				if(userAnswerText.equals("")) {
+					score = new Float(0);
+				} else {
+					score = correctUserAnswers/(float)totalAnswers;
+				}
 			} else if(answerType.equals("uniqueChoice")) {		
 				totalAnswers = la.size();
 				a = la.get(0);
 				a.setCorrectAnswered(false);
 				
-				for(TestAnswer ans : la) {	
+				for(TestAnswer ans : la) {
 					if(ans.getCorrect() && ans.getAnswer().equals(a.getUserAnswer())) {
 						a.setCorrectAnswered(true);
 						break;
@@ -441,31 +449,37 @@ public class Test extends Model {
 					errors++;
 				}
 
-				score = correctUserAnswers-(errors/((float)totalAnswers-1));
+				if(a.getUserAnswer().equals("")) {
+					score = new Float(0);
+				} else {
+					score = correctUserAnswers-(errors/((float)totalAnswers-1));
+				}
 			} else {	
+				noneSelected = true;
 				totalAnswers = la.size();
-				for(TestAnswer ans : la) {				
+				for(TestAnswer ans : la) {		
 					if(ans.getCorrect()) {
 						trueAnswers++;
 						if(ans.getUserAnswer().equals("Y")) {
 							correctUserAnswers++;
-							correctAnswered = true;
+							noneSelected = false;
 						} else {
 							errors++;
-							correctAnswered = false;
 						}
 					} else {
 						falseAnswers++;
-						if(ans.getUserAnswer().equals("N")) {
-							correctAnswered = true;
-						} else {
+						if(ans.getUserAnswer().equals("Y")) {
 							errors++;
-							correctAnswered = false;
+							noneSelected = false;
+						} else {
+							correctUserAnswers++;
 						}
 					}
-					
-					ans.setCorrectAnswered(correctAnswered);
-					
+				}
+				
+				if(noneSelected) {
+					score = new Float(0);
+				} else {
 					if(falseAnswers == 0) {
 						score = correctUserAnswers/(float)totalAnswers;
 					} else {
