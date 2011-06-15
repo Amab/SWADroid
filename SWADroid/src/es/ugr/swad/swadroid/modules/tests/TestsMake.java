@@ -38,6 +38,8 @@ import android.text.InputType;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckedTextView;
@@ -105,6 +107,10 @@ public class TestsMake extends Module {
 	 * Click listener for courses dialog cancel button
 	 */
 	private OnClickListener coursesDialogNegativeClickListener;
+	/**
+	 * Click listener for courses dialog cancel button
+	 */
+	private OnItemClickListener tagsAnswersTypeItemClickListener;
 	/**
 	 * Adapter for answer TF questions
 	 */
@@ -188,6 +194,7 @@ public class TestsMake extends Module {
 		tagsAdapter = new TagsArrayAdapter(this, R.layout.list_item_multiple_choice, allTagsList);
 		checkBoxesList.setAdapter(tagsAdapter);
 		checkBoxesList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+		checkBoxesList.setOnItemClickListener(tagsAnswersTypeItemClickListener);
 		
 		acceptButton = (Button)findViewById(R.id.testTagsAcceptButton);
 		acceptButton.setOnClickListener(new View.OnClickListener() {			
@@ -241,6 +248,7 @@ public class TestsMake extends Module {
 				R.array.testAnswerTypesNames, R.layout.list_item_multiple_choice);
 		checkBoxesList.setAdapter(answerTypesAdapter);
 		checkBoxesList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+		checkBoxesList.setOnItemClickListener(tagsAnswersTypeItemClickListener);
 		
 		acceptButton = (Button)findViewById(R.id.testAnswerTypesAcceptButton);
 		acceptButton.setOnClickListener(new View.OnClickListener() {			
@@ -396,10 +404,12 @@ public class TestsMake extends Module {
 			}
 			
 			questionScore = test.getQuestionScore(pos);
-			if(questionScore >= 0.5) {
+			if(questionScore > 0) {
 				score.setTextColor(getResources().getColor(R.color.green));
-			} else {
+			} else if(questionScore < 0) {
 				score.setTextColor(getResources().getColor(R.color.red));
+			} else {
+				score.setTextColor(Color.BLACK);
 			}
 			
 			score.setText(df.format(questionScore));				
@@ -571,7 +581,7 @@ public class TestsMake extends Module {
 					+ df.format(scoreDec) + "/10");
 			
 			if(scoreDec < 5) {
-				textView.setTextColor(Color.RED);
+				textView.setTextColor(getResources().getColor(R.color.red));
 			}
 			
 			bt = (Button) findViewById(R.id.testResultsButton);
@@ -656,6 +666,38 @@ public class TestsMake extends Module {
 				dialog.cancel();
 				finish();
 			}
+		};
+		tagsAnswersTypeItemClickListener = new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View v, int position,
+					long id) {
+				
+				CheckedTextView chk = (CheckedTextView) v;
+				ListView lv = (ListView) parent;
+				int childCount = lv.getCount();
+				SparseBooleanArray checkedItems = lv.getCheckedItemPositions();
+				int checkedItemsCount = checkedItems.size();
+				boolean allChecked = true;
+				
+				if(position == 0) {
+					for(int i=1; i<childCount; i++) {
+						lv.setItemChecked(i, !chk.isChecked());
+					}
+				} else {
+					if(chk.isChecked()) {
+						lv.setItemChecked(0, false);
+					}
+					
+					for(int i=1; i<checkedItemsCount; i++) {
+						if(!checkedItems.get(i, false)) {
+							allChecked = false;
+						}
+					}
+					
+					if (allChecked) {
+						lv.setItemChecked(0, true);
+					}
+				}
+			}			
 		};
 		
 		coursesDialog = new AlertDialog.Builder(this);		
