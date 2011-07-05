@@ -1,3 +1,9 @@
+## 0.4.4 (2011-07-05)
+
+* Added Write message function on main menu
+* Updated ksoap2-android library
+* Minor fixes
+
 ## 0.4.3 (2011-06-15)
 
 * Minor fixes
