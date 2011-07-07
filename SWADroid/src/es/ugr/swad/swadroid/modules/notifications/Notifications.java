@@ -196,9 +196,9 @@ public class Notifications extends Module {
 	    	Vector res = (Vector) result;
 	    	SoapObject soap = (SoapObject) res.get(1);
 	    	int csSize = soap.getPropertyCount();
-	    	Integer lastId = new Integer(dbHelper.getFieldOfLastNotification("id"));
 	        for (int i = 0; i < csSize; i++) {
 	            SoapObject pii = (SoapObject)soap.getProperty(i);
+		    	Long notificationCode = new Long(pii.getProperty("notificationCode").toString());
 	            String eventType = pii.getProperty("eventType").toString();
 	            Long eventTime = new Long(pii.getProperty("eventTime").toString());
 	            String userSurname1 = pii.getProperty("userSurname1").toString();
@@ -208,7 +208,7 @@ public class Notifications extends Module {
 	            String summary = pii.getProperty("summary").toString();
 	            Integer status = new Integer(pii.getProperty("status").toString());
 	            String content = pii.getProperty("content").toString();
-	            Notification n = new Notification(lastId+i, eventType, eventTime, userSurname1, userSurname2, userFirstName, location, summary, status, content);
+	            Notification n = new Notification(notificationCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, location, summary, status, content);
 	            dbHelper.insertNotification(n);
 	            
 	    		if(isDebuggable)
