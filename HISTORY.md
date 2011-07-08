@@ -1,3 +1,7 @@
+## 0.4.5 (2011-07-08)
+
+* Optimized questions syncronization
+
 ## 0.4.4 (2011-07-05)
 
 * Added Write message function on main menu
