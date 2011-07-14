@@ -195,7 +195,8 @@ public class TestsConfigDownload extends Module {
 
 	    if (result != null) {
 	        //Stores tests data returned by webservice response
-	    	Vector res = (Vector) result;
+	    	@SuppressWarnings("rawtypes")
+			Vector res = (Vector) result;
 
 	    	Integer pluggable = new Integer(res.get(0).toString());
 	    	isPluggable = Global.parseIntBool(pluggable);
