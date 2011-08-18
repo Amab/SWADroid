@@ -5,7 +5,7 @@
 	<string name="notificationsModuleLabel">Notificaciones</string>
 	<string name="coursesModuleLabel">Asignaturas</string>
 	<string name="testsModuleLabel">Tests</string>
-	<string name="messageModuleLabel">Enviar mensaje</string>
+	<string name="messagesModuleLabel">Enviar mensaje</string>
 	<string name="title_error_dialog">ERROR</string>
 	<string name="close_dialog">Cerrar</string>
 	<string name="set_preferences">Configuración</string>
@@ -32,7 +32,7 @@
 	<string name="notificationsProgressTitle">Notificaciones</string>
 	<string name="notificationsProgressDescription">Obteniendo nuevas notificaciones...</string>
 	<string name="notificationsEmptyListMsg">No se ha descargado ninguna notificación.\n\nPara descargar las
-		notificaciones más recientes pulse el icono de la esquina superior derecha de la pantalla.</string>
+		notificaciones más recientes pulse el icono de la esquina superior derecha de la pantalla.</string><string name="notificationsDownloadedMsg">Notificaciones descargadas</string>
 	<string name="testsDownloadProgressTitle">Tests</string>
 	<string name="testsDownloadProgressDescription">Sincronizando preguntas de test.\n\nDependiendo del número de
 		preguntas a sincronizar, el procesamiento de los datos puede tardar unos minutos.\n\nPor favor, espere...</string>
@@ -102,4 +102,12 @@
 	<string name="errorConnectionMsg">Error durante la conexión con el servidor</string>
 	<string name="errorTimeoutMsg">Tiempo de espera agotado intentando conectar con el
 		servidor</string>
+	<string name="sendingMessageMsg">Enviando mensaje...</string>
+	<string name="messageSendedMsg">Mensaje enviado</string><string name="messageSendErrorMsg">Error al enviar el mensaje. Compruebe los datos introducidos</string>
+	<string name="message_receivers_title">Destinatarios (separados por comas)</string>
+	<string name="message_subject_title">Asunto</string>
+	<string name="message_body_title">Mensaje</string>
+	<string name="sendMsg">Enviar</string>
+	
+	
 </resources>

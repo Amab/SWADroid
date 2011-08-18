@@ -19,11 +19,12 @@
             android:name=".modules.Login"
             android:label="@string/loginModuleLabel" android:configChanges="keyboard|keyboardHidden|orientation" android:theme="@android:style/Theme.Translucent.NoTitleBar">
         </activity>
-    <activity android:name=".modules.Courses" android:theme="@android:style/Theme.Translucent.NoTitleBar"><activity android:name=".modules.Courses" android:theme="@android:style/Theme.Dialog"></activity></activity>
+    <activity android:name=".modules.Courses" android:theme="@android:style/Theme.Translucent.NoTitleBar" android:label="@string/coursesModuleLabel"><activity android:name=".modules.Courses" android:theme="@android:style/Theme.Dialog"></activity></activity>
     <activity android:label="@string/notificationsModuleLabel" android:name=".modules.notifications.Notifications" android:theme="@android:style/Theme.NoTitleBar">
     </activity><activity android:name=".modules.tests.Tests" android:theme="@android:style/Theme.NoTitleBar" android:label="@string/testsModuleLabel"></activity>
     <activity android:label="@string/testsModuleLabel" android:theme="@android:style/Theme.Translucent.NoTitleBar" android:name=".modules.tests.TestsQuestionsDownload"><activity android:label="@string/testsModuleLabel" android:theme="@android:style/Theme.Translucent.NoTitleBar" android:name=".modules.tests.TestsQuestionsDownload"></activity></activity>
     <activity android:name=".modules.tests.TestsConfigDownload" android:label="@string/testsModuleLabel" android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity><activity android:theme="@android:style/Theme.NoTitleBar" android:label="@string/testsModuleLabel" android:configChanges="orientation" android:name=".modules.tests.TestsMake"></activity>
+    <activity android:theme="@android:style/Theme.Translucent.NoTitleBar" android:name=".modules.Messages" android:label="@string/messagesModuleLabel" android:configChanges="keyboard|keyboardHidden|orientation"></activity>
     
     
 </application>
