@@ -407,7 +407,7 @@ public abstract class Module extends Activity {
      * @throws IllegalAccessException 
      * @throws XmlPullParserException 
      */
-    protected void sendRequest(@SuppressWarnings("rawtypes") Class cl, boolean simple)
+    protected void sendRequest(Class<?> cl, boolean simple)
     	throws IOException, SoapFault, IllegalAccessException, InstantiationException, XmlPullParserException {
 
     	/**
