@@ -73,7 +73,8 @@ public class Notification extends Model {
 	private static PropertyInfo PI_summary = new PropertyInfo();
 	private static PropertyInfo PI_status = new PropertyInfo();
 	private static PropertyInfo PI_content = new PropertyInfo();
-    private static PropertyInfo[] PI_PROP_ARRAY =
+    @SuppressWarnings("unused")
+	private static PropertyInfo[] PI_PROP_ARRAY =
     {
     	PI_id,
     	PI_eventType,
@@ -326,7 +327,7 @@ public class Notification extends Model {
 	/* (non-Javadoc)
 	 * @see org.ksoap2.serialization.KvmSerializable#getPropertyInfo(int, java.util.Hashtable, org.ksoap2.serialization.PropertyInfo)
 	 */
-	public void getPropertyInfo(int param, Hashtable arg1, PropertyInfo propertyInfo) {
+	public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo propertyInfo) {
 		switch(param){
 	        case 0:
 	            propertyInfo.type = PropertyInfo.LONG_CLASS;

@@ -195,7 +195,7 @@ public class TestsConfigDownload extends Module {
 
 	    if (result != null) {
 	        //Stores tests data returned by webservice response
-	    	Vector res = (Vector) result;
+			Vector<?> res = (Vector<?>) result;
 
 	    	Integer pluggable = new Integer(res.get(0).toString());
 	    	isPluggable = Global.parseIntBool(pluggable);
@@ -260,7 +260,9 @@ public class TestsConfigDownload extends Module {
 	protected void postConnect() {
 		if(numQuestions == 0) {
 			Toast.makeText(this, R.string.noQuestionsAvailableTestsDownloadMsg, Toast.LENGTH_LONG).show();		
-		} else if(!isPluggable) {
+		}
+
+		if(!isPluggable) {
         	Toast.makeText(this, R.string.noQuestionsPluggableTestsDownloadMsg, Toast.LENGTH_LONG).show();
 		}
 		

@@ -69,6 +69,10 @@ public class Global {
      */
     public static final int TESTS_MAKE_REQUEST_CODE = 7;
     /**
+     * Request code for Tests module.
+     */
+    public static final int MESSAGES_REQUEST_CODE = 8;
+    /**
      * Prefix tag name for Logcat
      */
     public static final String APP_TAG = "SWADroid";

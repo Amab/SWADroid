@@ -266,6 +266,7 @@ public abstract class Module extends Activity {
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onCreate()
 	 */
+	@SuppressWarnings("static-access")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		//Check if debug mode is enabled
@@ -406,7 +407,7 @@ public abstract class Module extends Activity {
      * @throws IllegalAccessException 
      * @throws XmlPullParserException 
      */
-    protected void sendRequest(Class cl, boolean simple)
+    protected void sendRequest(Class<?> cl, boolean simple)
     	throws IOException, SoapFault, IllegalAccessException, InstantiationException, XmlPullParserException {
 
     	/**

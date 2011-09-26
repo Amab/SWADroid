@@ -8,7 +8,10 @@
  <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:id="@+id/eventMetaData"
-  android:layout_height="wrap_content" android:layout_width="100dip" android:orientation="vertical"
+  android:layout_height="wrap_content"
+  android:layout_width="100dip"
+  android:gravity="center_horizontal"
+  android:orientation="vertical"
   android:layout_marginTop="6dip">
   
   <ImageView 
@@ -42,13 +45,25 @@
   		android:textColor="@color/foreground2"
   		android:layout_marginBottom="6dip"
   		android:padding="1dip" />
+  		
+  	<ImageView
+		android:id="@+id/messageReplyButton"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:cropToPadding="false"
+		android:background="@drawable/message_reply"
+		android:clickable="true"
+  		android:visibility="gone" />
  </LinearLayout>
  
  <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:id="@+id/eventContent"
-  android:layout_height="wrap_content" android:layout_width="match_parent" android:orientation="vertical"
-  android:layout_marginTop="3dip" android:layout_marginRight="6dip">
+  android:layout_height="wrap_content"
+  android:layout_width="match_parent"
+  android:orientation="vertical"
+  android:layout_marginTop="3dip"
+  android:layout_marginRight="6dip">
   
     <TextView
 		android:id="@+id/eventType"

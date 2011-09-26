@@ -45,6 +45,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Notifications module for get user's notifications
@@ -105,16 +106,8 @@ public class Notifications extends Module {
 		TextView text;
 		ListView list;
 		OnItemClickListener clickListener = new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> av, View v, int arg2,
-					long arg3) {
-				
-				TextView content = (TextView) v.findViewById(R.id.eventText);
-				if(content.getVisibility() == View.VISIBLE)
-				{
-					content.setVisibility(View.GONE);
-				} else {
-					content.setVisibility(View.VISIBLE);
-				}
+			public void onItemClick(AdapterView<?> av, View v, int position, long rowId) {
+				adapter.toggleContentVisibility(position);
 			}    	
         };
 		
@@ -193,7 +186,7 @@ public class Notifications extends Module {
 	
 	    if (result != null) {
 	        //Stores notifications data returned by webservice response
-	    	Vector res = (Vector) result;
+			Vector<?> res = (Vector<?>) result;
 	    	SoapObject soap = (SoapObject) res.get(1);
 	    	int csSize = soap.getPropertyCount();
 	        for (int i = 0; i < csSize; i++) {
@@ -239,7 +232,8 @@ public class Notifications extends Module {
 	 */
 	@Override
 	protected void postConnect() {		
-		refreshScreen();	
+		refreshScreen();
+		Toast.makeText(this, R.string.notificationsDownloadedMsg, Toast.LENGTH_SHORT).show();
 	}
 	
 	/**

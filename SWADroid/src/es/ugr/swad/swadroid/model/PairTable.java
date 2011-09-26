@@ -134,7 +134,7 @@ public class PairTable<FIRST, SECOND> extends Model {
 		return 0;
 	}
 
-	public void getPropertyInfo(int arg0, Hashtable arg1, PropertyInfo arg2) {
+	public void getPropertyInfo(int arg0, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo arg2) {
 		// TODO Auto-generated method stub
 		
 	}

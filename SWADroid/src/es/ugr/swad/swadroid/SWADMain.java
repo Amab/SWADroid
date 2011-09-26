@@ -38,8 +38,8 @@ import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
+import es.ugr.swad.swadroid.modules.Messages;
 import es.ugr.swad.swadroid.modules.notifications.Notifications;
 import es.ugr.swad.swadroid.modules.tests.Tests;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
@@ -166,6 +166,7 @@ public class SWADMain extends ExpandableListActivity {
 			int groupPosition, int childPosition, long id) {
 		// Get the item that was clicked
 		Object o = this.getExpandableListAdapter().getChild(groupPosition, childPosition);
+		@SuppressWarnings("unchecked")
 		String keyword = (String) ((Map<String,Object>)o).get(NAME);
 		
 		Intent activity;
@@ -176,8 +177,11 @@ public class SWADMain extends ExpandableListActivity {
 		} else if(keyword.equals(getString(R.string.testsModuleLabel))) {
 			activity = new Intent(getBaseContext(), Tests.class);
 			startActivityForResult(activity, Global.TESTS_REQUEST_CODE);
-		} else if(keyword.equals(getString(R.string.messageModuleLabel))) {
-			Toast.makeText(this, "Opción en desarrollo", Toast.LENGTH_SHORT).show();
+		} else if(keyword.equals(getString(R.string.messagesModuleLabel))) {
+			//Toast.makeText(this, "Opción en desarrollo", Toast.LENGTH_SHORT).show();
+			activity = new Intent(getBaseContext(), Messages.class);
+			activity.putExtra("notificationCode", new Long(0));
+			startActivityForResult(activity, Global.MESSAGES_REQUEST_CODE);
 		}
 		
 		return true;
@@ -225,7 +229,7 @@ public class SWADMain extends ExpandableListActivity {
         messagesData.add(map); 
         
         map = new HashMap<String,Object>();        
-        map.put(NAME, getString(R.string.messageModuleLabel) );
+        map.put(NAME, getString(R.string.messagesModuleLabel) );
         map.put(IMAGE, getResources().getDrawable(R.drawable.msg));
         messagesData.add(map);
         

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
      package="es.ugr.swad.swadroid"
-      android:installLocation="auto" android:versionName="0.4.5" android:versionCode="22">
+      android:installLocation="auto" android:versionCode="23" android:versionName="0.5">
     <application android:label="@string/app_name" android:icon="@drawable/ic_launcher_swadroid" android:debuggable="true">
          <activity android:name=".SWADMain"
                    android:label="@string/app_name"
@@ -19,11 +19,12 @@
             android:name=".modules.Login"
             android:label="@string/loginModuleLabel" android:configChanges="keyboard|keyboardHidden|orientation" android:theme="@android:style/Theme.Translucent.NoTitleBar">
         </activity>
-    <activity android:name=".modules.Courses" android:theme="@android:style/Theme.Translucent.NoTitleBar"><activity android:name=".modules.Courses" android:theme="@android:style/Theme.Dialog"></activity></activity>
+    <activity android:name=".modules.Courses" android:theme="@android:style/Theme.Translucent.NoTitleBar" android:label="@string/coursesModuleLabel"><activity android:name=".modules.Courses" android:theme="@android:style/Theme.Dialog"></activity></activity>
     <activity android:label="@string/notificationsModuleLabel" android:name=".modules.notifications.Notifications" android:theme="@android:style/Theme.NoTitleBar">
     </activity><activity android:name=".modules.tests.Tests" android:theme="@android:style/Theme.NoTitleBar" android:label="@string/testsModuleLabel"></activity>
     <activity android:label="@string/testsModuleLabel" android:theme="@android:style/Theme.Translucent.NoTitleBar" android:name=".modules.tests.TestsQuestionsDownload"><activity android:label="@string/testsModuleLabel" android:theme="@android:style/Theme.Translucent.NoTitleBar" android:name=".modules.tests.TestsQuestionsDownload"></activity></activity>
     <activity android:name=".modules.tests.TestsConfigDownload" android:label="@string/testsModuleLabel" android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity><activity android:theme="@android:style/Theme.NoTitleBar" android:label="@string/testsModuleLabel" android:configChanges="orientation" android:name=".modules.tests.TestsMake"></activity>
+    <activity android:theme="@android:style/Theme.Translucent.NoTitleBar" android:name=".modules.Messages" android:label="@string/messagesModuleLabel" android:configChanges="keyboard|keyboardHidden|orientation"></activity>
     
     
 </application>

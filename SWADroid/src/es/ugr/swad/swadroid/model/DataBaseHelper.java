@@ -89,6 +89,7 @@ public class DataBaseHelper {
 	 * @param ent Cursor to the table rows
 	 * @return A Model's subclass object
 	 */
+	@SuppressWarnings("rawtypes")
 	private Model createObjectByTable(String table, Entity ent) {
 		Model o = null;
 		Pair<String, String> params;
@@ -552,7 +553,7 @@ public class DataBaseHelper {
 	 * Removes a PairTable from database
 	 * @param p PairTable to be removed
 	 */
-	public void removePairTable(PairTable p)
+	public void removePairTable(@SuppressWarnings("rawtypes") PairTable p)
     {
 		String table = p.getTable();
 		Integer first = (Integer) p.getFirst();
