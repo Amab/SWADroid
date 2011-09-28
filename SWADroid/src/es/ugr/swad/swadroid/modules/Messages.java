@@ -108,7 +108,7 @@ public class Messages extends Module {
 		
 		super.onStart();
 		notificationCode = getIntent().getLongExtra("notificationCode", 0);
-		
+
 		messageDialog.setTitle(R.string.messagesModuleLabel);
 		messageDialog.setContentView(R.layout.messages_dialog);
 		messageDialog.setCancelable(true);
@@ -163,10 +163,10 @@ public class Messages extends Module {
 			IllegalAccessException, InstantiationException {
 		
 		readData();
-		
+
 		createRequest();
         addParam("wsKey", User.getWsKey());
-        addParam("notificationCode", notificationCode);
+        addParam("messageCode", notificationCode.intValue());
         addParam("to", receivers);
         addParam("subject", subject);
         addParam("body", body);
