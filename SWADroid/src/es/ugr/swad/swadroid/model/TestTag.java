@@ -18,7 +18,9 @@
  */
 package es.ugr.swad.swadroid.model;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 
 import org.ksoap2.serialization.PropertyInfo;
 
@@ -28,9 +30,9 @@ import org.ksoap2.serialization.PropertyInfo;
  */
 public class TestTag extends Model {
 	/**
-	 * Question code;
+	 * Question codes;
 	 */
-	private int qstCod;
+	private List<Integer> qstCodList;
 	/**
 	 * Tag text
 	 */
@@ -69,9 +71,9 @@ public class TestTag extends Model {
 	 * @param tagTxt Tag text
 	 * @param tagInd Tag index
 	 */
-	public TestTag(long id, int qstCod, String tagTxt, int tagInd) {
+	public TestTag(long id, List<Integer> qstCodList, String tagTxt, int tagInd) {
 		super(id);
-		this.qstCod = qstCod;
+		this.qstCodList = qstCodList;
 		this.tagTxt = tagTxt;
 		this.tagInd = tagInd;
 	}
@@ -93,22 +95,6 @@ public class TestTag extends Model {
 	}
 
 	/**
-	 * Gets question code
-	 * @return Question code
-	 */
-	public int getQstCod() {
-		return qstCod;
-	}
-
-	/**
-	 * Sets question code
-	 * @param qstCod question code
-	 */
-	public void setQstCod(int qstCod) {
-		this.qstCod = qstCod;
-	}
-
-	/**
 	 * Gets tag index
 	 * @return Tag index
 	 */
@@ -124,17 +110,10 @@ public class TestTag extends Model {
 		this.tagInd = tagInd;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + qstCod;
-		result = prime * result + tagInd;
-		result = prime * result + ((tagTxt == null) ? 0 : tagTxt.hashCode());
-		return result;
+	public String toString() {
+		return "TestTag [qstCodList=" + qstCodList + ", tagTxt=" + tagTxt
+				+ ", tagInd=" + tagInd + "]";
 	}
 
 	/* (non-Javadoc)
@@ -149,15 +128,6 @@ public class TestTag extends Model {
 		if (getClass() != obj.getClass())
 			return false;
 		return true;
-	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "TestTag [qstCod=" + qstCod + ", tagTxt=" + tagTxt + ", tagInd="
-				+ tagInd + ", getId()=" + getId() + "]";
 	}
 
 	/* (non-Javadoc)
@@ -214,4 +184,40 @@ public class TestTag extends Model {
 		}    
 	}
 
+	/**
+	 * Gets question codes
+	 * @return Question codes
+	 */
+	public List<Integer> getQstCodList() {
+		return qstCodList;
+	}
+
+	/**
+	 * Sets question codes
+	 * @param qstCodList Question codes
+	 */
+	public void setQstCodList(List<Integer> qstCodList) {
+		this.qstCodList = qstCodList;
+	}
+	
+	/**
+	 * Gets the question code in position i
+	 * @param i Position of question code
+	 * @return Question code
+	 */
+	public Integer getQstCod(int i) {
+		return this.qstCodList.get(i);
+	}
+	
+	/**
+	 * Adds a question code to the list
+	 * @param qstCod Question code to be added
+	 */
+	public void addQstCod(Integer qstCod) {
+		if(this.qstCodList == null) {
+			this.qstCodList = new ArrayList<Integer>();
+		}
+		
+		this.qstCodList.add(qstCod);
+	}
 }

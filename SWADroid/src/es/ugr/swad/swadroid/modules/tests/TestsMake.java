@@ -205,7 +205,7 @@ public class TestsMake extends Module {
 				
 				//If "All tags" item checked, add the whole list to the list of selected tags
 				if(checkedItems.get(0, false)) {
-					tagsList.add(new TestTag(0, 0, "all", 0));
+					tagsList.add(new TestTag(0, null, "all", 0));
 					
 				//If "All tags" item not checked, add the selected items to the list of selected tags
 				} else {				

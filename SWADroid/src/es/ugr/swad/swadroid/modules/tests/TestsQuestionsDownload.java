@@ -114,7 +114,7 @@ public class TestsQuestionsDownload extends Module {
 	            SoapObject pii = (SoapObject)tagsListObject.getProperty(i);
 	            Integer tagCod = new Integer(pii.getProperty("tagCode").toString());
 	            String tagTxt = pii.getProperty("tagText").toString();
-	            TestTag tag = new TestTag(tagCod, 0, tagTxt, 0);
+	            TestTag tag = new TestTag(tagCod, null, tagTxt, 0);
 	            tagsList.add(tag);
 	            
 	    		if(isDebuggable)
@@ -124,6 +124,8 @@ public class TestsQuestionsDownload extends Module {
 			Log.i(TAG, "Retrieved " + listSize + " tags");
             
 			//Read questions info from webservice response
+			dbHelper.beginTransaction();
+			
 	    	listSize = questionsListObject.getPropertyCount();
 	        for (int i = 0; i < listSize; i++) {
 	            SoapObject pii = (SoapObject)questionsListObject.getProperty(i);
@@ -150,9 +152,12 @@ public class TestsQuestionsDownload extends Module {
 	            }
 	        }
 	        
+	        dbHelper.endTransaction();	        
 			Log.i(TAG, "Retrieved " + listSize + " questions");
             
 			//Read answers info from webservice response
+			dbHelper.beginTransaction();
+			
 	    	listSize = answersListObject.getPropertyCount();
 	        for (int i = 0; i < listSize; i++) {
 	            SoapObject pii = (SoapObject)answersListObject.getProperty(i);
@@ -179,9 +184,12 @@ public class TestsQuestionsDownload extends Module {
             	}
 	        }
 	        
+	        dbHelper.endTransaction();
 			Log.i(TAG, "Retrieved " + listSize + " answers");
             
 			//Read relationships between questions and tags from webservice response
+			dbHelper.beginTransaction();
+			
 	    	listSize = questionTagsListObject.getPropertyCount();
 	        for (int i = 0; i < listSize; i++) {
 	            SoapObject pii = (SoapObject)questionTagsListObject.getProperty(i);
@@ -189,7 +197,7 @@ public class TestsQuestionsDownload extends Module {
 	            Integer tagCod = new Integer(pii.getProperty("tagCode").toString());
 	            Integer tagIndex = new Integer(pii.getProperty("tagIndex").toString());
 	            TestTag tag = tagsList.get(tagsList.indexOf(new TestTag(tagCod, "", 0)));
-	            tag.setQstCod(qstCod);
+	            tag.addQstCod(qstCod);
 	            tag.setTagInd(tagIndex);
 
 	            //If it's a new tag, insert in database
@@ -203,13 +211,16 @@ public class TestsQuestionsDownload extends Module {
 	            //If it's an updated tag, update it's rows in database
 	            } catch (SQLException e) {
 	            	TestTag old = (TestTag) tagsListDB.get(tagsListDB.indexOf(tag));
+	            	tag.setQstCodList(old.getQstCodList());
+		            tag.addQstCod(qstCod);
 	            	dbHelper.updateTestTag(old, tag);
 		            
 		    		if(isDebuggable)
 		    			Log.d(TAG, "UPDATED: " + tag.toString());
 	            }
 	        }
-
+		    
+		    dbHelper.endTransaction();
 			Log.i(TAG, "Retrieved " + listSize + " relationships between questions and tags");
 			
 			//Update last time test was updated
