@@ -1,6 +1,13 @@
+## 0.5.2 (2011-09-29)
+
+* Optimized questions syncronization
+* Added real names of receivers in sendedMessageMsg
+* Fixed bug on test questions syncronization
+
 ## 0.5.1 (2011-09-26)
 
 * Fixed bug in reply messages function
+* Updated ksoap2-android library
 
 ## 0.5 (2011-09-26)
 

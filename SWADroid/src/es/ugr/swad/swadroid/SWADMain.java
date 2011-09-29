@@ -294,10 +294,13 @@ public class SWADMain extends ExpandableListActivity {
             //If this is the first run, show configuration dialog
             if(lastVersion == 0) {
             	showConfigurationDialog();
+            	dbHelper.initializeDB();
             	prefs.setLastVersion(currentVersion);
 
             //If this is an upgrade, show upgrade dialog
             } else if(lastVersion < currentVersion) {
+            	showUpgradeDialog();
+            	dbHelper.upgradeDB(this);
             	prefs.setLastVersion(currentVersion);
             }
         } catch (Exception ex) {
