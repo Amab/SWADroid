@@ -1,3 +1,10 @@
+## 0.6 (2011-11-06)
+
+* Added Android 4.0 compatibility
+* Added sharing options to application menu and preferences
+* Added clean database option to application menu
+* Added name of SWAD's creator to author preferences
+
 ## 0.5.2 (2011-09-29)
 
 * Optimized questions syncronization

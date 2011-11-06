@@ -19,15 +19,38 @@
     <PreferenceCategory
                 android:title="@string/about_preferences">
         <Preference
+                android:summary="@string/marketTitle"
+                android:defaultValue=""
+                android:title="@string/rateTitle_menu"
+                android:key="ratePref" />
+        <Preference
+                android:summary="@string/twitterUser"
+                android:defaultValue=""
+                android:title="@string/twitterTitle"
+                android:key="twitterPref" />
+        <Preference
+                android:summary="@string/facebookURL"
+                android:defaultValue=""
+                android:title="@string/facebookTitle"
+                android:key="facebookPref" />
+        <Preference
+                android:summary="@string/mailingListURL"
+                android:defaultValue=""
+                android:title="@string/mailingListTitle"
+                android:key="mailingListPref" />
+        <Preference
+                android:summary="@string/shareBodyMsg"
+                android:defaultValue=""
+                android:title="@string/shareTitle_menu"
+                android:key="sharePref" />
+        <Preference
                 android:hint=""
                 android:defaultValue=""
-                android:selectable="false"
                 android:title="@string/versionTitle_preferences"
                 android:key="currentVersionPref" />
         <Preference
                 android:summary="@string/author_preferences"
                 android:defaultValue=""
-                android:selectable="false"
                 android:title="@string/organization_preferences"/>
     </PreferenceCategory>
 </PreferenceScreen>
