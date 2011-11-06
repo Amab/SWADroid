@@ -20,9 +20,13 @@
 	<string name="saveSummary_preferences">Guarda la configuración actual</string>
 	<string name="saveTitle_preferences">Guardar configuración</string>
 	<string name="preferencesTitle_menu">Configuración</string>
+	<string name="shareTitle_menu">Compartir SWADroid</string>
+	<string name="rateTitle_menu">Calificar</string>
+	<string name="cleanDatabaseTitle_menu">Limpiar base de datos</string>
 	<string name="about_preferences">Acerca de</string>
 	<string name="versionTitle_preferences">Versión de la aplicación</string>
-	<string name="author_preferences">Programado por Juan Miguel Boyero Corral</string>
+	<string name="author_preferences">Coordinado por Antonio Cañas Vargas
+		\nProgramado por Juan Miguel Boyero Corral</string>
 	<string name="organization_preferences">Universidad de Granada</string>
 	<string name="loginTitle_menu">Conectar</string>
 	<string name="loginProgressTitle">Identificación</string>
@@ -108,6 +112,9 @@
 	<string name="message_subject_title">Asunto</string>
 	<string name="message_body_title">Mensaje</string>
 	<string name="sendMsg">Enviar</string>
-	
-	
+	<string name="cleanDatabaseMsg">Todos los datos de la base de datos han sido borrados</string>
+	<string name="shareBodyMsg">Estoy usando #SWADroid en mi Android para acceder a la
+		plataforma de teleformación SWAD.\nObtenlo gratis aquí:
+		 https://market.android.com/details?id=es.ugr.swad.swadroid</string>
+	<string name="mailingListTitle">Lista de correo</string>
 </resources>
