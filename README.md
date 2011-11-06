@@ -8,7 +8,7 @@ Android client for e-learning platform SWAD.
 * Issue tracker: <https://github.com/Amab/SWADroid/issues>
 * Mailing list: <https://groups.google.com/forum/#!forum/swadroid>
 * Twitter: <http://twitter.com/SWADroid>
-* Facebook: <http://www.facebook.com/pages/SWADroid/116319955109575>
+* Facebook: <https://www.facebook.com/SWADroid>
 
 ## Content
 
