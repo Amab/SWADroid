@@ -23,18 +23,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.android.dataframework.DataFramework;
-
 import android.app.AlertDialog;
-import android.app.ExpandableListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
@@ -49,19 +42,11 @@ import es.ugr.swad.swadroid.ssl.SecureConnection;
  * Main class of the application.
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
-public class SWADMain extends ExpandableListActivity {
+public class SWADMain extends MenuExpandableListActivity {
     /**
      * Application preferences.
      */
-    protected static Preferences prefs = new Preferences();    
-    /**
-     * Database Helper.
-     */
-    protected static DataBaseHelper dbHelper;    
-    /**
-     * Database Framework.
-     */
-    private static DataFramework db;
+    protected static Preferences prefs = new Preferences();
     /**
      * Array of strings for main ListView
      */
@@ -82,26 +67,6 @@ public class SWADMain extends ExpandableListActivity {
 	public static DataBaseHelper getDbHelper() {
 		return dbHelper;
 	}
-
-	/**
-     * Shows Preferences screen
-     */
-    protected void viewPreferences() {
-    	Intent settingsActivity = new Intent(getBaseContext(),
-                Preferences.class);
-        startActivity(settingsActivity);
-    }
-
-    /**
-     * Shows an error message.
-     * @param message Error message to show.
-     */
-    public void error(String message) {
-        new AlertDialog.Builder(this).setTitle(R.string.title_error_dialog)
-                .setMessage(message)
-                .setNeutralButton(R.string.close_dialog, null)
-                .setIcon(R.drawable.erroricon).show();
-    }
 
     /**
      * Shows configuration dialog on first run.
@@ -133,58 +98,6 @@ public class SWADMain extends ExpandableListActivity {
     	       .setCancelable(false)
                .setNeutralButton(R.string.close_dialog, null)
     	       .show();
-    }
-    
-    /**
-     * Shows a dialog.
-     */
-    public void showDialog(int title, int message) {
-    	new AlertDialog.Builder(this)
-    		   .setTitle(title)
-    	       .setMessage(message)
-    	       .setCancelable(false)
-               .setNeutralButton(R.string.close_dialog, null)
-    	       .show();
-    }
-
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onCreateOptionsMenu()
-	 */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onOptionsItemSelected()
-	 */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-	        case R.id.share_menu:
-	        	Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-	        	sharingIntent.setType("text/plain");
-	        	sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "SWADroid");
-	        	sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, getString(R.string.shareBodyMsg));
-	        	startActivity(Intent.createChooser(sharingIntent, getString(R.string.shareTitle_menu)));
-	            return true;
-	        case R.id.rate_menu:
-	        	Intent rateIntent = new Intent(Intent.ACTION_VIEW);
-	        	rateIntent.setData(Uri.parse(getString(R.string.marketURL)));
-	        	startActivity(rateIntent);
-	            return true;
-	        case R.id.clean_database_menu:
-	        	dbHelper.cleanTables();
-	        	showDialog(R.string.cleanDatabaseTitle_menu, R.string.cleanDatabaseMsg);
-	            return true;
-            case R.id.preferences_menu:
-            	viewPreferences();
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
 	/* (non-Javadoc)
@@ -305,9 +218,9 @@ public class SWADMain extends ExpandableListActivity {
         
         try {            
             //Initialize database
-            db = DataFramework.getInstance();
+            /*db = DataFramework.getInstance();
             db.open(this, this.getPackageName());
-            dbHelper = new DataBaseHelper(db);
+            dbHelper = new DataBaseHelper(db);*/
             
             //Initialize preferences
             prefs.getPreferences(getBaseContext()); 
@@ -327,7 +240,7 @@ public class SWADMain extends ExpandableListActivity {
 
             //If this is an upgrade, show upgrade dialog
             } else if(lastVersion < currentVersion) {
-            	showUpgradeDialog();
+            	//showUpgradeDialog();
             	dbHelper.upgradeDB(this);
             	prefs.setLastVersion(currentVersion);
             }
@@ -337,13 +250,4 @@ public class SWADMain extends ExpandableListActivity {
             ex.printStackTrace();
         }
     }
-
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onDestroy()
-	 */
-	@Override
-	protected void onDestroy() {
-		dbHelper.close();
-		super.onDestroy();
-	}
 }

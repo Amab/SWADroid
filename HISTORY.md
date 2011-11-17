@@ -1,3 +1,10 @@
+## 0.6.1 (2011-11-16)
+
+* Added Google+ account to preferences screen
+* Optimized database access
+* Fixed menu operation in all activities
+* Minor improvements
+
 ## 0.6 (2011-11-06)
 
 * Added Android 4.0 compatibility

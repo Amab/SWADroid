@@ -797,6 +797,7 @@ public class DataBaseHelper {
     	emptyTable(Global.DB_TABLE_TEST_CONFIG);
     	emptyTable(Global.DB_TABLE_TEST_QUESTIONS);
     	emptyTable(Global.DB_TABLE_TEST_TAGS);
+    	compactDB();
     }
 	
 	/**
@@ -835,7 +836,7 @@ public class DataBaseHelper {
     public void upgradeDB(Context context) throws XmlPullParserException, IOException {    	
     	//cleanTables();    	
     	//initializeDB();
-    	//compactDB();
+    	compactDB();
     	
     	/*db.getDB().execSQL("CREATE TEMPORARY TABLE __"
                 + Global.DB_TABLE_NOTIFICATIONS

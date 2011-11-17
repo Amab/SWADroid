@@ -23,7 +23,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.ConnectivityManager;
@@ -31,16 +30,11 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.widget.Toast;
 import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.MenuActivity;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.SWADMain;
-import es.ugr.swad.swadroid.model.DataBaseHelper;
-
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeoutException;
@@ -56,7 +50,7 @@ import org.xmlpull.v1.XmlPullParserException;
  * Superclass for encapsulate common behavior of all modules.
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
-public abstract class Module extends Activity {
+public abstract class Module extends MenuActivity {
     /**
      * SOAP_ACTION param for webservice request.
      */
@@ -89,10 +83,6 @@ public abstract class Module extends Activity {
      * Shows error messages.
      */
     AlertDialog errorDialog = null;
-    /**
-     * Database Helper.
-     */
-    protected static DataBaseHelper dbHelper = SWADMain.getDbHelper();
     /**
      * Connection available flag
      */
@@ -458,7 +448,7 @@ public abstract class Module extends Activity {
      * Shows an error message.
      * @param message Error message to show.
      */
-    protected void error(String message) {
+    /*protected void error(String message) {
         errorDialog = new AlertDialog
                 .Builder(this)
                 .setTitle(R.string.title_error_dialog)
@@ -470,40 +460,7 @@ public abstract class Module extends Activity {
                     }
                 })
                 .setIcon(R.drawable.erroricon).show();
-    }
-    
-    /**
-     * Shows Preferences screen
-     */
-    protected void viewPreferences() {
-    	Intent settingsActivity = new Intent(getBaseContext(),
-                Preferences.class);
-        startActivity(settingsActivity);
-    }
-
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onCreateOptionsMenu()
-	 */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onOptionsItemSelected()
-	 */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.preferences_menu:
-            	viewPreferences();
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
+    }*/
 
 	/**
      * Shows progress dialog when connecting to SWAD
