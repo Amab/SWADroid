@@ -836,7 +836,7 @@ public class DataBaseHelper {
     public void upgradeDB(Context context) throws XmlPullParserException, IOException {    	
     	//cleanTables();    	
     	//initializeDB();
-    	//compactDB();
+    	compactDB();
     	
     	/*db.getDB().execSQL("CREATE TEMPORARY TABLE __"
                 + Global.DB_TABLE_NOTIFICATIONS

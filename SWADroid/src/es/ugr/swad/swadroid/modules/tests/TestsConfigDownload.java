@@ -260,9 +260,7 @@ public class TestsConfigDownload extends Module {
 	protected void postConnect() {
 		if(numQuestions == 0) {
 			Toast.makeText(this, R.string.noQuestionsAvailableTestsDownloadMsg, Toast.LENGTH_LONG).show();		
-		}
-
-		if(!isPluggable) {
+		} else if(!isPluggable) {
         	Toast.makeText(this, R.string.noQuestionsPluggableTestsDownloadMsg, Toast.LENGTH_LONG).show();
 		}
 		
