@@ -34,6 +34,11 @@
                 android:title="@string/facebookTitle"
                 android:key="facebookPref" />
         <Preference
+                android:summary="@string/googlePlusURL"
+                android:defaultValue=""
+                android:title="@string/googlePlusTitle"
+                android:key="googlePlusPref" />
+        <Preference
                 android:summary="@string/mailingListURL"
                 android:defaultValue=""
                 android:title="@string/mailingListTitle"
