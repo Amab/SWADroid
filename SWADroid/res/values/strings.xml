@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
     <string name="app_name">SWADroid</string>
-    <string name="loginModuleLabel">Login</string>
+    <string name="loginModuleLabel">Login</string><string name="coursesModuleLabel">Courses</string>
     <string name="title_error_dialog">ERROR</string>
     <string name="close_dialog">Close</string>
     <string name="set_preferences">Preferences</string>

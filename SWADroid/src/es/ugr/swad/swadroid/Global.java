@@ -27,7 +27,7 @@ public class Global {
 	/**
 	 * SWAD application key
 	 */
-	private static final String AppKey = "HTC-Desire";
+	private static final String AppKey = "";
     /**
      * User logged flag
      */
@@ -40,6 +40,10 @@ public class Global {
      * Request code for Login module.
      */
     public static final int LOGIN_REQUEST_CODE = 1;
+    /**
+     * Request code for Courses module.
+     */
+    public static final int COURSES_REQUEST_CODE = 2;
     /**
      * Student type constant
      */

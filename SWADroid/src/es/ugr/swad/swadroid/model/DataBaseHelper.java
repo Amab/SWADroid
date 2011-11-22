@@ -342,9 +342,17 @@ public class DataBaseHelper {
 		
 		where = params.getFirst() + " = " + first + " AND " + params.getSecond() + " = " + second;
 
-		Log.d("removePairTable", where);
 		rows = db.getEntityList(table, where);
 		ent = rows.get(0);
 		ent.delete();
+    }
+	
+	/**
+	 * Empty table from database
+	 * @param table Table to be emptied
+	 */
+	public void emptyTable(String table)
+    {
+		db.emptyTable(table);
     }
 }
