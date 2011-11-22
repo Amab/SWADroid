@@ -189,11 +189,10 @@ public class Module extends Activity {
     public void setResult(ArrayList<Object> result) {
         this.result = result;
     }
-    
-    /**
-     * Called when activity is first created.
-     * @param savedInstanceState State of activity.
-     */
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreate()
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -206,13 +205,10 @@ public class Module extends Activity {
             startActivityForResult(loginActivity, Global.LOGIN_REQUEST_CODE);
         }
 	}
-	
-	/**
-     * Handles the result of launch an activity and performs an action.
-     * @param requestCode Identifier of action requested.
-     * @param resultCode Status of activity's result (correct or not).
-     * @param data Data returned by launched activity.
-     */
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onActivityResult()
+	 */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
@@ -290,9 +286,9 @@ public class Module extends Activity {
                 
     }
 
-    /**
-     * Called when activity is paused.
-     */
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onPause()
+	 */
     @Override
     protected void onPause() {
         super.onPause();
