@@ -37,9 +37,10 @@ public class CheckedAnswersArrayAdapter extends ArrayAdapter<TestAnswer> {
 	private List<TestAnswer> items;
 	private boolean evaluated;
 	private String feedback;
+	private String answerType;
 	
 	public CheckedAnswersArrayAdapter(Context context, int textViewResourceId,
-			List<TestAnswer> objects, boolean eval, String feedb) {
+			List<TestAnswer> objects, boolean eval, String feedb, String anstype) {
 		
 		super(context, textViewResourceId, objects);
 		this.context = context;
@@ -47,6 +48,7 @@ public class CheckedAnswersArrayAdapter extends ArrayAdapter<TestAnswer> {
 		this.items = objects;
 		this.evaluated = eval;
 		this.feedback = feedb;
+		this.answerType = anstype;
 	}
 
 	/* (non-Javadoc)
@@ -62,7 +64,15 @@ public class CheckedAnswersArrayAdapter extends ArrayAdapter<TestAnswer> {
         }
 		 
 		CheckedTextView tt = (CheckedTextView) convertView.findViewById(android.R.id.text1);
-		tt.setText(Html.fromHtml(a.getAnswer()));
+		if(answerType.equals("TF")) {
+			if(a.getAnswer().equals("T")) {
+				tt.setText(R.string.trueMsg);
+			} else {
+				tt.setText(R.string.falseMsg);
+			}
+		} else {
+			tt.setText(Html.fromHtml(a.getAnswer()));
+		}
 		
 		if(evaluated) {
 			tt.setOnClickListener(null);
