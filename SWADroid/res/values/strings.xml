@@ -93,7 +93,7 @@
 		menu anytime.\n\nDo you want to open the configuration screen now?
 	</string><string name="initialDialogTitle">IMPORTANT</string>
 	
-	<string name="upgradeMsg">Due to changes in the database all notifications
+	<string name="upgradeMsg">Due to changes in the database all test questions
 		data have been deleted.\n\nSorry.</string>
 	<string name="errorBadLoginMsg">Incorrect user or password</string>
 	<string name="errorServerResponseMsg">Error in server response</string>
