@@ -28,6 +28,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.os.Bundle;
 import android.util.Log;
+import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.User;
@@ -44,14 +45,13 @@ public class Courses extends Module {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setMETHOD_NAME("getCourses");
-        connect();
     }
     
     /**
-     * Launches courses action in a separate thread while shows a progress dialog
+     * Launches action in a separate thread while shows a progress dialog
      * in UI thread.
      */
-    private void connect() {
+    protected void connect() {
     	String progressDescription = "Asignaturas";
     	int progressTitle = R.string.loginProgressTitle;
     	
@@ -76,16 +76,17 @@ public class Courses extends Module {
         sendRequest(Course.class, false);
 
         if (result != null) {
+        	dbHelper.emptyTable(Global.DB_TABLE_COURSES);
 	        //Stores courses data returned by webservice response
         	Vector res = (Vector) result;
         	SoapObject soap = (SoapObject) res.get(1);	
-        	Course[] cs = new Course[soap.getPropertyCount()];
-            for (int i = 0; i < cs.length; i++) {
+        	int csSize = soap.getPropertyCount();
+            for (int i = 0; i < csSize; i++) {
                 SoapObject pii = (SoapObject)soap.getProperty(i);
                 int id = Integer.parseInt(pii.getProperty(0).toString());
                 String name = pii.getProperty(1).toString();
                 Course c = new Course(id, name);
-                cs[i] = c;
+                dbHelper.insertCourse(c);
                 Log.d("Courses", c.toString());
             }
             

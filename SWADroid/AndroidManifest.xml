@@ -19,7 +19,7 @@
             android:name=".modules.Login"
             android:label="@string/loginModuleLabel" android:configChanges="keyboard|keyboardHidden|orientation" android:theme="@android:style/Theme.Dialog">
         </activity>
-    <activity android:name=".modules.Courses"></activity>
+    <activity android:name=".modules.Courses" android:theme="@android:style/Theme.Dialog"></activity>
 </application>
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
     
