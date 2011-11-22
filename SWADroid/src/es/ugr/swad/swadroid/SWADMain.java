@@ -307,7 +307,7 @@ public class SWADMain extends ExpandableListActivity {
             if(lastVersion == 0) {
             	showConfigurationDialog();
             	prefs.setLastVersion(currentVersion);
-            } else if(lastVersion < 11) {
+            } else if(lastVersion < 12) {
             	dbHelper.emptyTable(Global.DB_TABLE_NOTIFICATIONS);
             	prefs.setLastVersion(currentVersion);
             	showUpgradeDialog();
