@@ -15,5 +15,14 @@
                 android:title="@string/userPasswordTitle_preferences"
                 android:key="userPasswordPref"                
                 android:password="true" />
+    </PreferenceCategory>       
+    <PreferenceCategory
+                android:title="@string/about_preferences">
+        <Preference
+                android:hint=""
+                android:defaultValue=""
+                android:selectable="false"
+                android:title="@string/versionTitle_preferences"
+                android:key="currentVersionPref" />
     </PreferenceCategory>
 </PreferenceScreen>
