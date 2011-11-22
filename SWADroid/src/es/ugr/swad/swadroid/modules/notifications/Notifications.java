@@ -186,8 +186,7 @@ public class Notifications extends Module {
 	        }
 	        
 	        //Request finalized without errors
-			if(isDebuggable)
-				Log.i(Global.NOTIFICATIONS_TAG, "Retrieved " + csSize + " notifications");
+	        Log.i(Global.NOTIFICATIONS_TAG, "Retrieved " + csSize + " notifications");
 			
 			//Clear old notifications to control database size
 			dbHelper.clearOldNotifications(SIZE_LIMIT);
