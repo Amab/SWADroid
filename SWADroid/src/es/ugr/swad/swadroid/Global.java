@@ -20,7 +20,7 @@
 package es.ugr.swad.swadroid;
 
 /**
- * Global data of the application.
+ * Global data of application.
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class Global {

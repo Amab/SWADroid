@@ -65,8 +65,8 @@ public class SWADMain extends Activity {
     /**
      * Creates application menu.
      * @param menu Object to store created menu.
-     * @return true if the menu was created.
-     *         false if the menu was not created.
+     * @return true if menu was created.
+     *         false if menu was not created.
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -76,10 +76,10 @@ public class SWADMain extends Activity {
     }
 
     /**
-     * Called when an item of the menu is selected.
+     * Called when an item of menu is selected.
      * @param item Item selected.
-     * @return true if the action was performed.
-     *         false if the action was not performed.
+     * @return true if action was performed.
+     *         false if action was not performed.
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -103,9 +103,9 @@ public class SWADMain extends Activity {
 
     /**
      * Handles the result of launch an activity and performs an action.
-     * @param requestCode Identifier of the action requested.
-     * @param resultCode Status of the activity's result (correct or not).
-     * @param data Data returned by the launched activity.
+     * @param requestCode Identifier of action requested.
+     * @param resultCode Status of activity's result (correct or not).
+     * @param data Data returned by launched activity.
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -121,7 +121,7 @@ public class SWADMain extends Activity {
     }
 
     /**
-     * Called each time the activity is started.
+     * Called each time activity is started.
      */
     @Override
     protected void onStart() {
@@ -130,8 +130,8 @@ public class SWADMain extends Activity {
     }
     
     /**
-     * Called when the activity is first created.
-     * @param icicle State of the activity.
+     * Called when activity is first created.
+     * @param icicle State of activity.
      */
     @Override
     public void onCreate(Bundle icicle) {

@@ -30,7 +30,7 @@ import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 /**
- * Preferences window of the application.
+ * Preferences window of application.
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class Preferences extends PreferenceActivity {
@@ -60,8 +60,8 @@ public class Preferences extends PreferenceActivity {
     }
 
     /**
-     * Initializes the preferences of the activity.
-     * @param ctx Context of the activity.
+     * Initializes preferences of activity.
+     * @param ctx Context of activity.
      */
     public void getPreferences(Context ctx) {
         // Get the xml/preferences.xml preferences
@@ -71,8 +71,8 @@ public class Preferences extends PreferenceActivity {
     }
 
     /**
-     * Called when the activity is first created.
-     * @param savedInstanceState State of the activity.
+     * Called when activity is first created.
+     * @param savedInstanceState State of activity.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
