@@ -732,6 +732,7 @@ public class TestsMake extends Module {
 			coursesDialog.show();
 		} else {
 			Toast.makeText(getBaseContext(), R.string.testNoQuestionsMsg, Toast.LENGTH_LONG).show();
+			finish();
 		}		
 	}
 
