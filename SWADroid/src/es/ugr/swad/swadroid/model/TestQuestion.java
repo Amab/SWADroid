@@ -171,20 +171,22 @@ public class TestQuestion extends Model {
 	 * Gets correct answer for this test
 	 * @return Correct test's answer
 	 */
-	public TestAnswer getCorrectAnswer() {
-		TestAnswer correct = null;
+	public List<TestAnswer> getCorrectAnswers() {
+		List<TestAnswer> corrects = new ArrayList<TestAnswer>();
 		TestAnswer current = null;
 		Iterator<TestAnswer> it = this.answers.iterator();
-		boolean continueCondition = true;
 		
-		while(it.hasNext() && continueCondition) {
+		while(it.hasNext()) {
 			current = it.next();
 			if(current.getCorrect()) {
-				correct = current;
-				continueCondition = false;
+				corrects.add(current);
 			}
 		}
 		
-		return correct;
+		if(corrects.isEmpty()) {
+			corrects = null;
+		}
+		
+		return corrects;
 	}
 }
