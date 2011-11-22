@@ -33,10 +33,10 @@ it under the same terms as [GPLv3][gplv3] license.
 [![Copyright and License](http://www.gnu.org/graphics/agplv3-88x31.png)][agplv3] SWADroid Webservices is free software; you can redistribute it and/or modify it under the same terms as [AGPLv3][agplv3] license.
 
 [![Copyright and License](http://web.mit.edu/facts/img/mitlogo.gif)][mit]
-SWADroid uses [ksoap2-android][ksoap2-library] library developed by [Manfred Moser][ksoap2-author] and licensed under [MIT][mit].
+SWADroid uses [ksoap2-android][ksoap2-library] library developed by [Manfred Moser][ksoap2-author] licensed under [MIT][mit].
 
 [![Copyright and License](http://www.gnu.org/graphics/lgplv3-88x31.png)][lgplv3]
-SWADroid uses [Android DataFrameWork][androiddataframework-library] library developed by [Javier Pérez Pacheco][androiddataframework-author] and licensed under [LGPL3][lgplv3].
+SWADroid uses [Android DataFrameWork][androiddataframework-library] library developed by [Javier Pérez Pacheco][androiddataframework-author] licensed under [LGPL3][lgplv3].
 
 
 ## Contributing
