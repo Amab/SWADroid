@@ -29,7 +29,7 @@ public class Test extends Model {
 	/**
 	 * List of questions and related answers
 	 */
-	List<Pair<TestQuestion, List<TestAnswer>>> questionsAndAnswers;
+	private List<Pair<TestQuestion, List<TestAnswer>>> questionsAndAnswers;
 
 	/**
 	 * Constructor

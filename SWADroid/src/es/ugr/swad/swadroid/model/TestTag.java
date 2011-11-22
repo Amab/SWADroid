@@ -26,15 +26,15 @@ public class TestTag extends Model {
 	/**
 	 * Course code
 	 */
-	int crsCod;
+	private int crsCod;
 	/**
 	 * Tag's text
 	 */
-	String tagTxt;
+	private String tagTxt;
 	/**
 	 * Flag for know if the tag is hidden
 	 */
-	boolean tagHidden;
+	private boolean tagHidden;
 	
 	/**
 	 * Constructor

@@ -23,23 +23,32 @@ package es.ugr.swad.swadroid.model;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class TestConfig extends Model {
-	int def;
-	int max;
-	int min;
 	/**
-	 * Minimum time between two tests
+	 * Default value for number of questions in test
 	 */
-	int mintimenxttstperqst;
+	private int def;
+	/**
+	 * Maximum value for number of questions in test
+	 */
+	private int max;
+	/**
+	 * Minimum value for number of questions in test
+	 */
+	private int min;
+	/**
+	 * Minimum time (in seconds) by question between two tests
+	 */
+	private int mintimenxttstperqst;
 	/**
 	 * Feedback type received by student
 	 */
-	String feedback;
+	private String feedback;
 	
 	/**
-	 * @param id
-	 * @param def
-	 * @param max
-	 * @param min
+	 * @param id Course code
+	 * @param def Default value for number of questions in test
+	 * @param max Maximum value for number of questions in test
+	 * @param min Minimum value for number of questions in test
 	 * @param mintimenxttstperqst Minimum time between two tests
 	 * @param feedback Feedback type received by student
 	 */
@@ -54,42 +63,48 @@ public class TestConfig extends Model {
 	}
 
 	/**
-	 * @return the def
+	 * Gets default value for number of questions in test
+	 * @return Default value for number of questions in test
 	 */
 	public int getDef() {
 		return def;
 	}
 
 	/**
-	 * @param def the def to set
+	 * Sets default value for number of questions in test
+	 * @param def Default value for number of questions in test
 	 */
 	public void setDef(int def) {
 		this.def = def;
 	}
 
 	/**
-	 * @return the max
+	 * Gets maximum value for number of questions in test
+	 * @return Maximum value for number of questions in test
 	 */
 	public int getMax() {
 		return max;
 	}
 
 	/**
-	 * @param max the max to set
+	 * Sets maximum value for number of questions in test
+	 * @param max Maximum value for number of questions in test
 	 */
 	public void setMax(int max) {
 		this.max = max;
 	}
 
 	/**
-	 * @return the min
+	 * Gets minimum value for number of questions in test
+	 * @return Minimum value for number of questions in test
 	 */
 	public int getMin() {
 		return min;
 	}
 
 	/**
-	 * @param min the min to set
+	 * Sets minimum value for number of questions in test
+	 * @param min Minimum value for number of questions in test
 	 */
 	public void setMin(int min) {
 		this.min = min;
