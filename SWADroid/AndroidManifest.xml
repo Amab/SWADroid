@@ -19,12 +19,12 @@
             android:name=".modules.Login"
             android:label="@string/loginModuleLabel" android:configChanges="keyboard|keyboardHidden|orientation" android:theme="@android:style/Theme.Translucent.NoTitleBar">
         </activity>
-    <activity android:name=".modules.Courses"><activity android:name=".modules.Courses" android:theme="@android:style/Theme.Dialog"></activity></activity>
-    <activity android:name=".modules.Notifications" android:label="@string/notificationsModuleLabel" android:icon="@drawable/ic_launcher_swadroid"></activity>
+    <activity android:name=".modules.Courses" android:theme="@android:style/Theme.Translucent.NoTitleBar"><activity android:name=".modules.Courses" android:theme="@android:style/Theme.Dialog"></activity></activity>
+    <activity android:name=".modules.Notifications" android:label="@string/notificationsModuleLabel"></activity>
 </application>
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
     
-<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="10"></uses-sdk>
+<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="11"></uses-sdk>
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
 <supports-screens android:normalScreens="true" android:resizeable="true" android:smallScreens="true" android:anyDensity="true" android:largeScreens="true" android:xlargeScreens="true"></supports-screens>
 </manifest>

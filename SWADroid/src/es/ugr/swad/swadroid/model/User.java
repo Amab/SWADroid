@@ -308,4 +308,5 @@ public class User implements KvmSerializable {
 			case 7  : userTypeName  = (String)obj; break;
 		}    
 	}
+	
 }
