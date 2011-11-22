@@ -27,7 +27,7 @@ public class Global {
 	/**
 	 * SWAD application key
 	 */
-	private static final String AppKey = "";
+	private static final String AppKey = "HTC-Desire";
     /**
      * User logged flag
      */
@@ -37,18 +37,21 @@ public class Global {
      */
     public static final int LOGIN_REQUEST_CODE = 1;
     /**
-     * Enum type defining allowed user types
+     * Student type constant
      */
-    public static enum UserType {
-        ALL,
-        ADMIN,
-        STUDENT,
-        TEACHER
-    }
+    public static String STUDENT_TYPE = "student";
+    /**
+     * Teacher type constant
+     */
+    public static String TEACHER_TYPE = "teacher";
     /**
      * Class Module's tag name for Logcat
      */
     public static final String MODULE_TAG = "Module";
+    /**
+     * Login tag name for Logcat
+     */
+    public static final String LOGIN_TAG = "Login";
     /*
      * Table name for courses
      */
