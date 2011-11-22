@@ -1,3 +1,7 @@
+## 0.3.8 (2011-04-27)
+
+* Fixed bug on cleaning old notifications.
+
 ## 0.3.7 (2011-04-14)
 
 * Fixed notifications bug in surname
