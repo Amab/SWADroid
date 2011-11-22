@@ -20,6 +20,7 @@ package es.ugr.swad.swadroid.modules.tests;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.ksoap2.SoapFault;
@@ -35,7 +36,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckedTextView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +47,7 @@ import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.model.Test;
+import es.ugr.swad.swadroid.model.TestTag;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.widget.NumberPicker;
 
@@ -63,7 +67,7 @@ public class TestsMake extends Module {
 	/**
 	 * Selected course code
 	 */
-	private Integer selectedCourseCode;
+	private Integer selectedCourseCode = 0;
 	/**
 	 * Test's number of questions
 	 */
@@ -72,6 +76,14 @@ public class TestsMake extends Module {
 	 * Test data
 	 */
 	private Test test;
+	/**
+	 * Tags's list of the test
+	 */
+	private List<TestTag> tagsList;
+	/**
+	 * Answer types's list of the test
+	 */
+	private List<String> answerTypesList;
 	/**
 	 * Click listener for courses dialog
 	 */
@@ -123,10 +135,121 @@ public class TestsMake extends Module {
 				if(isDebuggable) {
 					Log.d(TAG, "numQuestions="+numQuestions);
 				}
+				
+				setTags();
 			}
 		});
 	}
 	
+	/**
+	 * Screen to select the tags that will be present in the test
+	 */
+	private void setTags() {
+		Button acceptButton;
+		final ListView checkBoxesList;
+		final TagsArrayAdapter tagsAdapter;
+		final List<TestTag> allTagsList = dbHelper.getOrderedCourseTags(selectedCourseCode);
+		
+		//Add "All tags" item in list's top
+		allTagsList.add(0, new TestTag(0, getResources().getString(R.string.allMsg), 0));
+		
+		setLayout(R.layout.tests_tags);
+		
+		checkBoxesList = (ListView) findViewById(R.id.testTagsList); 
+		tagsAdapter = new TagsArrayAdapter(this, R.layout.list_item_multiple_choice, allTagsList);
+		checkBoxesList.setAdapter(tagsAdapter);
+		checkBoxesList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+		
+		acceptButton = (Button)findViewById(R.id.testTagsAcceptButton);
+		acceptButton.setOnClickListener(new View.OnClickListener() {			
+			public void onClick(View v) {
+				int childsCount = checkBoxesList.getCount();
+				tagsList = new ArrayList<TestTag>();
+				
+				//If "All tags" item checked, add the whole list to the list of selected tags
+				CheckedTextView allChk = (CheckedTextView) checkBoxesList.getChildAt(0);
+				if(allChk.isChecked()) {
+					allTagsList.remove(0);
+					tagsList.addAll(allTagsList);
+					
+				//If "All tags" item not checked, add the selected items to the list of selected tags
+				} else {				
+					for(int i=0; i<childsCount; i++) {
+						CheckedTextView chk = (CheckedTextView) checkBoxesList.getChildAt(i);
+						if(chk.isChecked()) {
+							tagsList.add(tagsAdapter.getItem(i));
+						}
+					}
+				}
+				
+				if(isDebuggable) {
+					Log.d(TAG, "tagsList="+tagsList.toString());
+				}
+				
+				//If no tags selected, show a message to notice user
+				if(tagsList.isEmpty()) {
+					Toast.makeText(getBaseContext(), R.string.testNoTagsSelectedMsg, Toast.LENGTH_LONG).show();
+					
+				//If any tag is selected, show the answer types selection screen
+				} else {
+					setAnswerTypes();
+				}
+			}
+		});
+	}
+	
+	private void setAnswerTypes() {
+		Button acceptButton;
+		final ListView checkBoxesList;
+		final AnswerTypesArrayAdapter answerTypesAdapter;
+		
+		setLayout(R.layout.tests_answer_types);
+		
+		checkBoxesList = (ListView) findViewById(R.id.testAnswerTypesList); 
+		answerTypesAdapter = new AnswerTypesArrayAdapter(this, R.array.testAnswerTypes,
+				R.array.testAnswerTypesNames, R.layout.list_item_multiple_choice);
+		checkBoxesList.setAdapter(answerTypesAdapter);
+		checkBoxesList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+		
+		acceptButton = (Button)findViewById(R.id.testAnswerTypesAcceptButton);
+		acceptButton.setOnClickListener(new View.OnClickListener() {			
+			public void onClick(View v) {
+				int childsCount = checkBoxesList.getCount();
+				answerTypesList = new ArrayList<String>();
+				
+				/*
+				 * If "All tags" item checked, add the whole list to the list of selected answer types,
+				 * else, add the selected items to the list of selected answer types
+				 */
+				CheckedTextView allChk = (CheckedTextView) checkBoxesList.getChildAt(0);
+				for(int i=1; i<childsCount; i++) {
+					CheckedTextView chk = (CheckedTextView) checkBoxesList.getChildAt(i);
+					if(allChk.isChecked() || chk.isChecked()) {
+						answerTypesList.add((String) answerTypesAdapter.getItem(i));
+					}
+				}
+				
+				if(isDebuggable) {
+					Log.d(TAG, "answerTypesList="+answerTypesList.toString());
+				}
+				
+				//If no answer types selected, show a message to notice user
+				if(answerTypesList.isEmpty()) {
+					Toast.makeText(getBaseContext(), R.string.testNoAnswerTypesSelectedMsg, Toast.LENGTH_LONG)
+						.show();
+					
+				//If any answer type is selected, generate the test and show the first question screen
+				} else {
+					makeTest();
+				}
+			}
+		});
+	}
+	
+	private void makeTest() {
+		
+	}
+
 	/* (non-Javadoc)
 	 * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
 	 */
@@ -147,12 +270,7 @@ public class TestsMake extends Module {
 			}
 		};
 		OnClickListener positiveClickListener = new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int whichButton) {
-				if(isDebuggable) {
-					Integer s = selectedCourseCode;
-					Log.d(TAG, "selectedCourseCode = " + s.toString());
-				}
-				
+			public void onClick(DialogInterface dialog, int whichButton) {				
 				if(selectedCourseCode != 0) {
 					test = (Test) dbHelper.getRow(Global.DB_TABLE_TEST_CONFIG, "id", selectedCourseCode.toString());
 					
@@ -160,7 +278,11 @@ public class TestsMake extends Module {
 						setNumQuestions();
 					} else {
 						Toast.makeText(getBaseContext(), R.string.testNoQuestionsCourseMsg, Toast.LENGTH_LONG).show();
-						finish();
+					}
+					
+					if(isDebuggable) {
+						Integer s = selectedCourseCode;
+						Log.d(TAG, "selectedCourseCode = " + s.toString());
 					}
 				} else {
 					Toast.makeText(getBaseContext(), R.string.noCourseSelectedMsg, Toast.LENGTH_LONG).show();
@@ -170,7 +292,6 @@ public class TestsMake extends Module {
 		OnClickListener negativeClickListener = new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				dialog.cancel();
-				finish();
 			}
 		};
 		
@@ -190,7 +311,9 @@ public class TestsMake extends Module {
 			
 			dbCursor = dbHelper.getDb().getCursor(Global.DB_TABLE_COURSES);
 			listCourses = dbHelper.getAllRows(Global.DB_TABLE_COURSES);
-			coursesDialog.setSingleChoiceItems(dbCursor, -1, "name", singleChoiceItemsClickListener);		
+			Course c = (Course) listCourses.get(0);
+			selectedCourseCode = c.getId();
+			coursesDialog.setSingleChoiceItems(dbCursor, 0, "name", singleChoiceItemsClickListener);		
 			coursesDialog.show();
 		} else {
 			Toast.makeText(getBaseContext(), R.string.testNoQuestionsMsg, Toast.LENGTH_LONG).show();
