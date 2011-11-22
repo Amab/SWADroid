@@ -59,6 +59,10 @@ public class Notification extends Model {
 	 * Notification status
 	 */
 	private int status;
+	/**
+	 * Notification content
+	 */
+	private String content;
 	private static PropertyInfo PI_id = new PropertyInfo();
 	private static PropertyInfo PI_eventType = new PropertyInfo();
 	private static PropertyInfo PI_eventTime = new PropertyInfo();
@@ -68,6 +72,7 @@ public class Notification extends Model {
 	private static PropertyInfo PI_location = new PropertyInfo();
 	private static PropertyInfo PI_summary = new PropertyInfo();
 	private static PropertyInfo PI_status = new PropertyInfo();
+	private static PropertyInfo PI_content = new PropertyInfo();
     private static PropertyInfo[] PI_PROP_ARRAY =
     {
     	PI_id,
@@ -78,7 +83,8 @@ public class Notification extends Model {
     	PI_userFirstName,
     	PI_location,
     	PI_summary,
-    	PI_status
+    	PI_status,
+    	PI_content
     };
 	
 	/**
@@ -94,7 +100,7 @@ public class Notification extends Model {
 	 */
 	public Notification(int id, String eventType, long eventTime,
 			String userSurname1, String userSurname2, String userFirstName,
-			String location, String summary, int status) {
+			String location, String summary, int status, String content) {
 		
 		super(id);
 		this.eventType = eventType;
@@ -105,6 +111,7 @@ public class Notification extends Model {
 		this.location = location;
 		this.summary = summary;
 		this.status = status;
+		this.content = content;
 	}
 
 	/**
@@ -235,6 +242,22 @@ public class Notification extends Model {
 		this.status = status;
 	}
 
+	/**
+	 * Gets notification content
+	 * @return Notification content
+	 */
+	public String getContent() {
+		return content;
+	}
+
+	/**
+	 * Sets notification content
+	 * @param content notification content
+	 */
+	public void setContent(String content) {
+		this.content = content;
+	}
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
@@ -242,6 +265,7 @@ public class Notification extends Model {
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
+		result = prime * result + ((content == null) ? 0 : content.hashCode());
 		result = prime * result + (int) (eventTime ^ (eventTime >>> 32));
 		result = prime * result
 				+ ((eventType == null) ? 0 : eventType.hashCode());
@@ -270,6 +294,11 @@ public class Notification extends Model {
 		if (getClass() != obj.getClass())
 			return false;
 		Notification other = (Notification) obj;
+		if (content == null) {
+			if (other.content != null)
+				return false;
+		} else if (!content.equals(other.content))
+			return false;
 		if (eventTime != other.eventTime)
 			return false;
 		if (eventType == null) {
@@ -316,7 +345,7 @@ public class Notification extends Model {
 				+ eventTime + ", userSurname1=" + userSurname1
 				+ ", userSurname2=" + userSurname2 + ", userFirstName="
 				+ userFirstName + ", location=" + location + ", summary="
-				+ summary + ", status=" + status + "]";
+				+ summary + ", status=" + status + ", content=" + content + "]";
 	}
 
 	/* (non-Javadoc)
@@ -335,6 +364,7 @@ public class Notification extends Model {
 	        case 6 : object = location;break;
 	        case 7 : object = summary;break;
 	        case 8 : object = status;break;
+	        case 9 : object = content;break;
 	    }
 	    
 	    return object;
@@ -388,6 +418,10 @@ public class Notification extends Model {
 	            propertyInfo.type = PropertyInfo.INTEGER_CLASS;
 	            propertyInfo.name = "status";
 	            break;
+	        case 9:
+	            propertyInfo.type = PropertyInfo.STRING_CLASS;
+	            propertyInfo.name = "content";
+	            break;
 		}
 	}
 
@@ -406,6 +440,7 @@ public class Notification extends Model {
 			case 6  : location = (String)obj; break;
 			case 7  : summary = (String)obj; break;
 			case 8  : status = (Integer)obj; break;
+			case 9  : content = (String)obj; break;
 		}    
 	}
 }

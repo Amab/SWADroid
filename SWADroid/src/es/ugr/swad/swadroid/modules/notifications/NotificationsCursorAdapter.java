@@ -19,6 +19,7 @@
 package es.ugr.swad.swadroid.modules.notifications;
 
 import java.util.Date;
+
 import es.ugr.swad.swadroid.R;
 import android.content.Context;
 import android.database.Cursor;
@@ -49,7 +50,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {		
 		long unixTime;
-		String type, sender, summaryText;
+		String type, sender, summaryText, contentText;
 		String[] dateContent;
     	Date d;
     	
@@ -59,6 +60,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         TextView eventSender = (TextView) view.findViewById(R.id.eventSender);
         TextView location = (TextView) view.findViewById(R.id.eventLocation);
         TextView summary = (TextView) view.findViewById(R.id.eventSummary);
+        TextView content = (TextView) view.findViewById(R.id.eventText);
         ImageView notificationIcon = (ImageView) view.findViewById(R.id.notificationIcon);
         
         if(eventType != null) {
@@ -107,6 +109,12 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         if(summary != null){
         	summaryText = cursor.getString(cursor.getColumnIndex("summary"));
         	summary.setText(Html.fromHtml(summaryText));
+        }
+        if((content != null)){
+        	contentText = cursor.getString(cursor.getColumnIndex("content"));
+        	
+        	if(contentText != null)
+        		content.setText(Html.fromHtml(contentText));
         }
 	}
 
