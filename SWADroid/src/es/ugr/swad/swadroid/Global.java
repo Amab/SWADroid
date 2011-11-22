@@ -45,6 +45,10 @@ public class Global {
      */
     public static final int NOTIFICATIONS_REQUEST_CODE = 3;
     /**
+     * Request code for Tests module.
+     */
+    public static final int TESTS_REQUEST_CODE = 4;
+    /**
      * Class Module's tag name for Logcat
      */
     public static final String MODULE_TAG = "Module";
@@ -73,9 +77,25 @@ public class Global {
      */
     public static final String DB_TABLE_TEST_QUESTIONS = "tst_questions";
     /**
+     * Table name for test's tags
+     */
+    public static final String DB_TABLE_TEST_TAGS = "tst_tags";
+    /**
+     * Table name for test's configuration
+     */
+    public static final String DB_TABLE_TEST_CONFIG = "tst_config";
+    /**
+     * Table name for relationship between test's questions and tags
+     */ 
+    public static final String DB_TABLE_TEST_QUESTION_TAGS = "tst_question_tags";
+    /**
      * Table name for relationship between test's questions and courses
      */ 
-    public static final String DB_TABLE_TEST_QUESTIONS_COURSES = "tst_questions_courses";
+    public static final String DB_TABLE_TEST_QUESTIONS_COURSE = "tst_questions_course";
+    /**
+     * Table name for relationship between test's questions and answers
+     */ 
+    public static final String DB_TABLE_TEST_QUESTION_ANSWERS = "tst_question_answers";
     
 	/**
 	 * Gets the SWAD application key
@@ -97,5 +117,41 @@ public class Global {
 	 */
 	public static void setLogged(boolean logged) {
 		Global.logged = logged;
+	}
+	
+	/**
+	 * Function to parse from Integer to Boolean
+	 * @param n Integer to be parsed
+	 * @return true if n==0, false in other case
+	 */
+	public static boolean parseIntBool(int n) {
+		return n==0 ? true : false;
+	}
+	
+	/**
+	 * Function to parse from String to Boolean
+	 * @param s String to be parsed
+	 * @return true if s equals "Y", false in other case
+	 */
+	public static boolean parseStringBool(String s) {
+		return s.equals("Y") ? true : false;
+	}
+	
+	/**
+	 * Function to parse from Boolean to Integer
+	 * @param b Boolean to be parsed
+	 * @return 1 if b==true, 0 in other case
+	 */
+	public static int parseBoolInt(boolean b) {
+		return b ? 1 : 0;
+	}
+	
+	/**
+	 * Function to parse from Boolean to String
+	 * @param b Boolean to be parsed
+	 * @return "Y" if b==true, "N" in other case
+	 */
+	public static String parseBoolString(boolean b) {
+		return b ? "Y" : "N";
 	}
 }
