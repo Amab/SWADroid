@@ -34,7 +34,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.Window;
 import android.widget.Toast;
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.Preferences;
@@ -270,10 +269,6 @@ public abstract class Module extends ListActivity {
         
 		super.onCreate(savedInstanceState);
         prefs.getPreferences(getBaseContext());
-        
-        Window w = getWindow();
-        w.requestFeature(Window.FEATURE_LEFT_ICON);
-        w.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.ic_launcher_swadroid);
         
         //If not connected to database, connect now
         if(dbHelper == null) {
