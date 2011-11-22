@@ -17,16 +17,15 @@ public final class R {
     }
     public static final class id {
         public static final int functionsList=0x7f070001;
-        public static final int functions_menu=0x7f070002;
-        public static final int login_menu=0x7f070003;
-        public static final int preferences_menu=0x7f070004;
+        public static final int login_menu=0x7f070002;
+        public static final int preferences_menu=0x7f070003;
         public static final int test=0x7f070000;
     }
     public static final class layout {
         public static final int main=0x7f030000;
     }
     public static final class menu {
-        public static final int menu=0x7f060000;
+        public static final int menu_main=0x7f060000;
     }
     public static final class string {
         public static final int app_name=0x7f050000;
@@ -36,10 +35,10 @@ public final class R {
         public static final int errorMsgWorkaroundEmulator=0x7f050015;
         public static final int functionsTitle_menu=0x7f05000f;
         public static final int loginModuleLabel=0x7f050001;
-        public static final int loginProgressDescription=0x7f050013;
-        public static final int loginProgressTitle=0x7f050012;
-        public static final int loginTitle_menu=0x7f050011;
-        public static final int preferencesTitle_menu=0x7f050010;
+        public static final int loginProgressDescription=0x7f050012;
+        public static final int loginProgressTitle=0x7f050011;
+        public static final int loginTitle_menu=0x7f050010;
+        public static final int preferencesTitle_menu=0x7f05000f;
         public static final int saveMsg_preferences=0x7f05000c;
         public static final int saveSummary_preferences=0x7f05000d;
         public static final int saveTitle_preferences=0x7f05000e;
