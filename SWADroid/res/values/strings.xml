@@ -29,7 +29,8 @@
 	<string name="notificationsEmptyListMsg">Did not download any notification.\n\nTo download most recent
 		notifications click the icon in the upper right of the screen.</string>
 	<string name="testsDownloadProgressTitle">Tests</string>
-	<string name="testsDownloadProgressDescription">Synchronizing test questions...</string>
+	<string name="testsDownloadProgressDescription">Synchronizing test questions.\n\nDepending of the number of
+		questions to synchronize, the data processing can take several minutes.\n\nPlease wait...</string>
 	<string name="coursesProgressTitle">Courses</string>
 	<string name="coursesProgressDescription">Retrieving courses...</string>
 	<string name="errorMsgLaunchingActivity">An error occurred during the execution of the

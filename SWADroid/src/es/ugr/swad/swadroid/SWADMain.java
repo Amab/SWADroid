@@ -242,8 +242,8 @@ public class SWADMain extends ExpandableListActivity {
         
         getExpandableListView().setOnChildClickListener(this);
     }
-
-	/* (non-Javadoc)
+    
+    /* (non-Javadoc)
 	 * @see android.app.Activity#onCreate()
 	 */
     @Override
@@ -286,10 +286,9 @@ public class SWADMain extends ExpandableListActivity {
             	prefs.setLastVersion(currentVersion);
 
             //If this is an upgrade, show upgrade dialog
-            } else if(lastVersion < 12) {
-            	dbHelper.emptyTable(Global.DB_TABLE_NOTIFICATIONS);
+            } else if(lastVersion < 17) {
+            	dbHelper.upgradeDB(this);
             	prefs.setLastVersion(currentVersion);
-            	showUpgradeDialog();
             }
         } catch (Exception ex) {
             Log.e(ex.getClass().getSimpleName(), ex.getMessage());

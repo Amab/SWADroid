@@ -18,10 +18,14 @@
  */
 package es.ugr.swad.swadroid.model;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.xmlpull.v1.XmlPullParserException;
+
+import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
@@ -597,7 +601,11 @@ public class DataBaseHelper {
 			Entity ent = rows.get(0);
 			f = (String) ent.getValue("editTime");
 		}
-
+		
+		if(f == null) {
+			f = "0";
+		}
+		
 		return f;
     }
 		
@@ -634,38 +642,55 @@ public class DataBaseHelper {
 	 * @param tagsList Tag's list of the questions to be extracted
 	 * @return A list of the questions of specified course and tags
 	 */
-	public List<TestQuestion> getCourseQuestionsByTagAndAnswerType(long selectedCourseCode, List<TestTag> tagsList,
-			List<String> answerTypesList)
+	public List<TestQuestion> getRandomCourseQuestionsByTagAndAnswerType(long selectedCourseCode, List<TestTag> tagsList,
+			List<String> answerTypesList, int maxQuestions)
     {
-		String select = "SELECT Q.id, Q.ansType, Q.shuffle, Q.stem";
+		String select = "SELECT DISTINCT Q.id, Q.ansType, Q.shuffle, Q.stem";
 		String tables = " FROM " + Global.DB_TABLE_TEST_QUESTIONS + " AS Q, "
 			+ Global.DB_TABLE_TEST_QUESTIONS_COURSE + " AS C, "
 			+ Global.DB_TABLE_TEST_QUESTION_TAGS + " AS T";
-		String where = " WHERE Q.id=C.qstCod AND C.crsCod=" + selectedCourseCode + " AND ";
-		String orderby = "";
+		String where = " WHERE Q.id=C.qstCod AND C.crsCod=" + selectedCourseCode;
+		String orderby = " ORDER BY RANDOM()";
+		String limit = " LIMIT " + maxQuestions;
 		Cursor dbCursorQuestions, dbCursorAnswers;
 		List<TestQuestion> result = new ArrayList<TestQuestion>();
 		List<TestAnswer> answers = new ArrayList<TestAnswer>();
 		int tagsListSize = tagsList.size();
 		int answerTypesListSize = answerTypesList.size();
 		
-		for(int i=0; i<tagsListSize; i++) {
-			where += "T.tagCod=" + tagsList.get(i).getId() + " AND ";
+		if(!tagsList.get(0).getTagTxt().equals("all")) {
+			where += " AND ";
+			for(int i=0; i<tagsListSize; i++) {
+				where += "T.tagCod=" + tagsList.get(i).getId();
+				if(i < tagsListSize-1) {
+					where +=  " OR ";
+				}
+			}
+			
+			if(!answerTypesList.get(0).equals("all")) {
+				where +=  " AND ";
+			}
 		}
 		
-		where += "(";
-		for(int i=0; i<answerTypesListSize; i++) {
-			where += "Q.ansType='" + answerTypesList.get(i) + "'";
-			
-			if(i < answerTypesListSize-1) {
-				where += " OR ";
+		if(!answerTypesList.get(0).equals("all")) {
+			if(tagsList.get(0).getTagTxt().equals("all")) {
+				where +=  " AND ";
 			}
-		}		
-		where += ")";
+			
+			where += "(";
+			for(int i=0; i<answerTypesListSize; i++) {
+				where += "Q.ansType='" + answerTypesList.get(i) + "'";
+				
+				if(i < answerTypesListSize-1) {
+					where += " OR ";
+				}
+			}		
+			where += ")";
+		}
 		
-		dbCursorQuestions = db.getDB().rawQuery(select + tables + where + orderby, null);
+		dbCursorQuestions = db.getDB().rawQuery(select + tables + where + orderby + limit, null);
 		
-		select = "SELECT A._id, A.ansInd, A.answer, A.correct";
+		select = "SELECT DISTINCT A._id, A.ansInd, A.answer, A.correct";
 		tables = " FROM " + Global.DB_TABLE_TEST_ANSWERS + " AS A, "
 			+ Global.DB_TABLE_TEST_QUESTION_ANSWERS + " AS Q";
 		orderby = " ORDER BY A.ansInd";
@@ -692,7 +717,7 @@ public class DataBaseHelper {
 			q.setAnswers(answers);
 			result.add(q);
 		}
-
+		
         return result;
     }
 	
@@ -739,5 +764,38 @@ public class DataBaseHelper {
 	public void clearDB()
     {
 		db.deleteTables();
+    }
+	
+	/**
+     * Upgrades the database structure
+	 * @throws IOException 
+	 * @throws XmlPullParserException 
+     */
+    public void upgradeDB(Context context) throws XmlPullParserException, IOException {    	
+    	db.getDB().execSQL("CREATE TEMPORARY TABLE __"
+                + Global.DB_TABLE_NOTIFICATIONS
+                + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, id INTEGER, eventType TEXT, eventTime TEXT,"
+                + " userSurname1 TEXT, userSurname2 TEXT, userFirstname TEXT, location TEXT, summary TEXT," 
+                + "status TEXT, content TEXT); "
+                + "INSERT INTO __" + Global.DB_TABLE_NOTIFICATIONS + " SELECT _id, id, eventType, eventTime, "
+                + "userSurname1, userSurname2, userFirstname, location, summary, status, content FROM "
+                + Global.DB_TABLE_NOTIFICATIONS + ";");
+    	
+    	deleteTable(Global.DB_TABLE_TEST_QUESTION_ANSWERS);
+    	deleteTable(Global.DB_TABLE_TEST_QUESTION_TAGS);
+    	deleteTable(Global.DB_TABLE_TEST_QUESTIONS_COURSE);
+    	deleteTable(Global.DB_TABLE_COURSES);
+    	deleteTable(Global.DB_TABLE_TEST_ANSWERS);
+    	deleteTable(Global.DB_TABLE_TEST_CONFIG);
+    	deleteTable(Global.DB_TABLE_TEST_QUESTIONS);
+    	deleteTable(Global.DB_TABLE_TEST_TAGS);
+    	deleteTable(Global.DB_TABLE_NOTIFICATIONS);
+    	
+        db.createTables();
+        
+    	db.getDB().execSQL("INSERT INTO " + Global.DB_TABLE_NOTIFICATIONS + " SELECT _id, id, eventType, eventTime, "
+                + "userSurname1, userSurname2, userFirstname, location, summary, status, content FROM __"
+                + Global.DB_TABLE_NOTIFICATIONS + ";"
+                + "DROP TABLE __" + Global.DB_TABLE_NOTIFICATIONS + ";");
     }
 }
