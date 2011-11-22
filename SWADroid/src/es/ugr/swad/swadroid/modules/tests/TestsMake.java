@@ -471,7 +471,7 @@ public class TestsMake extends Module {
 	    bar.setProgress(1);  
 	    bar.setText(1 + "/" + size);
 	    bar.setTextColor(Color.BLUE);
-	    bar.setTextSize(18);
+	    bar.setTextSize(20);
 	    
 	    eval.setVisibility(View.VISIBLE);
 	    title_separator.setVisibility(View.VISIBLE);
