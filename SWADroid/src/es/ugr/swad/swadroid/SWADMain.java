@@ -166,6 +166,7 @@ public class SWADMain extends ExpandableListActivity {
 			int groupPosition, int childPosition, long id) {
 		// Get the item that was clicked
 		Object o = this.getExpandableListAdapter().getChild(groupPosition, childPosition);
+		@SuppressWarnings("unchecked")
 		String keyword = (String) ((Map<String,Object>)o).get(NAME);
 		
 		Intent activity;

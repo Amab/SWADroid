@@ -193,7 +193,8 @@ public class Notifications extends Module {
 	
 	    if (result != null) {
 	        //Stores notifications data returned by webservice response
-	    	Vector res = (Vector) result;
+	    	@SuppressWarnings("rawtypes")
+			Vector res = (Vector) result;
 	    	SoapObject soap = (SoapObject) res.get(1);
 	    	int csSize = soap.getPropertyCount();
 	        for (int i = 0; i < csSize; i++) {
