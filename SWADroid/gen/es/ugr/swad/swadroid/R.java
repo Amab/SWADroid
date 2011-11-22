@@ -188,6 +188,7 @@ public final class R {
         public static final int loginTitle_menu=0x7f07001b;
         public static final int mailingListTitle=0x7f07006c;
         public static final int mailingListURL=0x7f070068;
+        public static final int marketTitle=0x7f07006d;
         public static final int marketURL=0x7f070065;
         public static final int marksFile=0x7f07002d;
         public static final int message=0x7f07002f;
