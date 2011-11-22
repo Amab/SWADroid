@@ -28,6 +28,8 @@
 	<string name="coursesProgressDescription">Obteniendo asignaturas...</string>
 	<string name="notificationsProgressTitle">Notificaciones</string>
 	<string name="notificationsProgressDescription">Obteniendo nuevas notificaciones</string>
+	<string name="testsDownloadProgressTitle">Tests</string>
+	<string name="testsDownloadProgressDescription">Obteniendo preguntas de test...</string>
 	<string name="errorMsgWorkaroundEmulator">Mierda. Ese bug del emulador de Android ha vuelto a
 		aparecer. Reintentando...</string>
 	<string name="errorMsgLaunchingActivity">Ha ocurrido un error durante la ejecución de la
@@ -50,6 +52,11 @@
 	<string name="noContentMsg">Sin contenido</string>
 	<string name="yesMsg">Sí</string>
 	<string name="noMsg">No</string>
+	<string name="acceptMsg">Aceptar</string>
+	<string name="cancelMsg">Cancelar</string>
+	<string name="selectCourseTitle">Seleccione asignatura</string>
+	<string name="noCourseSelectedMsg">Debe seleccionar una asignatura para descargar los tests</string>
+	<string name="forbiddenCourseTestsDownloadMsg">El profesor de esta asignatura no permite la descarga de tests</string>
 	<string name="firstRunMsg">Antes de usar la aplicación por primera vez debe
 		introducir el nombre de usuario y la contraseña de acceso a SWAD en la
 		pantalla de configuración.\n\nPuede acceder a la pantalla de
@@ -59,11 +66,9 @@
 	<string name="upgradeMsg">Debido a cambios en la base de datos todos los
 		datos de las notificaciones han sido borrados.\n\nDisculpe las
 		molestias.</string>
+	<string name="errorBadLoginMsg">Usuario o contraseña incorrectos</string>
 	<string name="errorServerResponseMsg">Error en respuesta del servidor</string>
 	<string name="errorConnectionMsg">Error durante la conexión con el servidor</string>
 	<string name="errorTimeoutMsg">Tiempo de espera agotado intentando conectar con el
 		servidor</string>
-
-
-
 </resources>
