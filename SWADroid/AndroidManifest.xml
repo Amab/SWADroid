@@ -20,8 +20,9 @@
             android:label="@string/loginModuleLabel" android:configChanges="keyboard|keyboardHidden|orientation" android:theme="@android:style/Theme.Translucent.NoTitleBar">
         </activity>
     <activity android:name=".modules.Courses" android:theme="@android:style/Theme.Translucent.NoTitleBar"><activity android:name=".modules.Courses" android:theme="@android:style/Theme.Dialog"></activity></activity>
-    <activity android:label="@string/notificationsModuleLabel" android:name=".modules.notifications.Notifications" android:theme="@android:style/Theme.NoTitleBar"></activity>
-    <activity android:name=".modules.tests.Tests"></activity>
+    <activity android:label="@string/notificationsModuleLabel" android:name=".modules.notifications.Notifications" android:theme="@android:style/Theme.NoTitleBar">
+    </activity><activity android:name=".modules.tests.Tests"></activity>
+    
 </application>
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
     

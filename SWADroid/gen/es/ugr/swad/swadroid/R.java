@@ -29,27 +29,32 @@ public final class R {
         public static final int forum=0x7f020004;
         public static final int grades=0x7f020005;
         public static final int ic_launcher_swadroid=0x7f020006;
-        public static final int note=0x7f020007;
-        public static final int notif=0x7f020008;
-        public static final int recmsg=0x7f020009;
-        public static final int test=0x7f02000a;
-        public static final int title_button=0x7f02000b;
-        public static final int title_refresh=0x7f02000c;
+        public static final int msg=0x7f020007;
+        public static final int note=0x7f020008;
+        public static final int notif=0x7f020009;
+        public static final int recmsg=0x7f02000a;
+        public static final int test=0x7f02000b;
+        public static final int title_button=0x7f02000c;
+        public static final int title_refresh=0x7f02000d;
     }
     public static final class id {
-        public static final int eventDate=0x7f090008;
-        public static final int eventLocation=0x7f09000c;
-        public static final int eventSender=0x7f09000a;
-        public static final int eventSummary=0x7f09000d;
-        public static final int eventTime=0x7f090009;
-        public static final int eventType=0x7f09000b;
+        public static final int eventContent=0x7f09000c;
+        public static final int eventDate=0x7f090009;
+        public static final int eventLocation=0x7f09000f;
+        public static final int eventMetaData=0x7f090007;
+        public static final int eventRight=0x7f09000d;
+        public static final int eventSender=0x7f09000b;
+        public static final int eventSummary=0x7f090010;
+        public static final int eventTime=0x7f09000a;
+        public static final int eventType=0x7f09000e;
         public static final int functionIcon=0x7f090004;
         public static final int functionText=0x7f090005;
         public static final int moduleIcon=0x7f090000;
         public static final int moduleName=0x7f090001;
-        public static final int notificationIcon=0x7f090007;
+        public static final int notificationDetailsIcon=0x7f090011;
+        public static final int notificationIcon=0x7f090008;
         public static final int notificationsUpdateButton=0x7f090006;
-        public static final int preferences_menu=0x7f09000e;
+        public static final int preferences_menu=0x7f090012;
         public static final int refresh=0x7f090003;
         public static final int title_sep_1=0x7f090002;
     }
