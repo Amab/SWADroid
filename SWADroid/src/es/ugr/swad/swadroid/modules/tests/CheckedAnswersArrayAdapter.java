@@ -64,7 +64,9 @@ public class CheckedAnswersArrayAdapter extends ArrayAdapter<TestAnswer> {
 		tt.setText(Html.fromHtml(a.getAnswer()));
 		
 		if(evaluated && feedback.equals("eachGoodBad") && a.getCorrect()) {
-    	   tt.setTextColor(Color.BLUE);
+			tt.setTextColor(Color.BLUE);
+		} else {
+			tt.setTextColor(Color.BLACK);
 		}
          
         return convertView;

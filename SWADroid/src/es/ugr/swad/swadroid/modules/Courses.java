@@ -49,6 +49,15 @@ public class Courses extends Module {
      */
     public static final String TAG = Global.APP_TAG + " Courses";
     
+    @Override
+    protected void runConnection() {
+    	super.runConnection();
+    	if (!isConnected) {
+    		setResult(RESULT_CANCELED);
+    		finish();
+    	}
+    }
+    
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onCreate()
 	 */

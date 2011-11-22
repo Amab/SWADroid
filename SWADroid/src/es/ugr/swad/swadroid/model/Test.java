@@ -352,7 +352,7 @@ public class Test extends Model {
 				a = la.get(0);
 				
 				userAnswerText = a.getUserAnswer();				
-				if(userAnswerText == "") {
+				if(userAnswerText.equals("")) {
 					a.setCorrectAnswered(false);
 				} else {
 					userFloatAnswer = new Float(userAnswerText);				
@@ -372,7 +372,7 @@ public class Test extends Model {
 				a = la.get(0);
 
 				userAnswerText = a.getUserAnswer();
-				if(userAnswerText == "") {
+				if(userAnswerText.equals("")) {
 					a.setCorrectAnswered(false);
 				} else {
 					a.setCorrectAnswered(a.getAnswer().equals(a.getUserAnswer()));
@@ -387,7 +387,7 @@ public class Test extends Model {
 				score = (float) (correctUserAnswers-errors);
 			} else if(answerType.equals("int")) {
 				a = la.get(0);userAnswerText = a.getUserAnswer();				
-				if(userAnswerText == "") {
+				if(userAnswerText.equals("")) {
 					a.setCorrectAnswered(false);
 				} else {
 					a.setCorrectAnswered(a.getAnswer().equals(a.getUserAnswer()));
