@@ -162,7 +162,7 @@ public class Login extends Module {
                     SoapFault es = (SoapFault) e;
                     Log.e(es.getClass().getSimpleName(), es.faultstring);
                     error(es.faultstring);
-                } else if(e instanceof Exception) {
+                } else {
                     Log.e(e.getClass().getSimpleName(), e.toString());
                     error(e.toString());
                 }
