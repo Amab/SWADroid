@@ -31,6 +31,7 @@ public final class R {
     public static final class string {
         public static final int app_name=0x7f050000;
         public static final int close_dialog=0x7f050003;
+        public static final int errorCopyMsg_DB=0x7f050016;
         public static final int errorMsgLaunchingActivity=0x7f050014;
         public static final int functionsTitle_menu=0x7f05000f;
         public static final int loginModuleLabel=0x7f050001;
@@ -43,6 +44,7 @@ public final class R {
         public static final int saveTitle_preferences=0x7f05000e;
         public static final int set_preferences=0x7f050004;
         public static final int title_error_dialog=0x7f050002;
+        public static final int upgradeMsg_DB=0x7f050015;
         public static final int userIDName_preferences=0x7f050006;
         public static final int userIDSummary_preferences=0x7f050007;
         public static final int userIDTitle_preferences=0x7f050008;
