@@ -22,7 +22,7 @@ import org.ksoap2.serialization.KvmSerializable;
 
 /**
  * Superclass for encapsulate common behavior of all Models.
- * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com> *
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public abstract class Model implements KvmSerializable {
 	/**

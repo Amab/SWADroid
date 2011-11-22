@@ -26,6 +26,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -38,6 +39,7 @@ import android.widget.Toast;
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.SWADMain;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 
 import java.io.IOException;
@@ -50,8 +52,6 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.KeepAliveHttpsTransportSE;
 import org.xmlpull.v1.XmlPullParserException;
-
-import com.android.dataframework.DataFramework;
 
 /**
  * Superclass for encapsulate common behavior of all modules.
@@ -93,11 +93,7 @@ public abstract class Module extends ListActivity {
     /**
      * Database Helper.
      */
-    protected static DataBaseHelper dbHelper = null;    
-    /**
-     * Database Framework.
-     */
-    private static DataFramework db;
+    protected static DataBaseHelper dbHelper = SWADMain.getDbHelper();
     /**
      * Connection available flag
      */
@@ -106,6 +102,10 @@ public abstract class Module extends ListActivity {
      * Connection timeout in milliseconds
      */
     private static int TIMEOUT = 10000;
+    /**
+     * Application debuggable flag
+     */
+    protected static boolean isDebuggable;
     
     /**
      * Connects to SWAD and gets user data.
@@ -264,31 +264,28 @@ public abstract class Module extends ListActivity {
 	 * @see android.app.Activity#onCreate()
 	 */
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {        
-        Log.d(Global.MODULE_TAG, "onCreate()");
+	protected void onCreate(Bundle savedInstanceState) {
+		//Check if debug mode is enabled
+		try {
+			isDebuggable = (getPackageManager().getApplicationInfo(getPackageName(), 0).FLAG_DEBUGGABLE != 0);
+		} catch (NameNotFoundException e1) {
+			e1.printStackTrace();
+		}
+		
+		if(isDebuggable)
+			Log.d(Global.MODULE_TAG, "onCreate()");
         
 		super.onCreate(savedInstanceState);
         prefs.getPreferences(getBaseContext());
-        
-        //If not connected to database, connect now
-        if(dbHelper == null) {
-	        try {
-	            db = DataFramework.getInstance();
-				db.open(this, this.getPackageName());
-		        dbHelper = new DataBaseHelper(db);
-			} catch (Exception e) {
-				Log.e(e.getClass().getSimpleName(), e.getMessage());
-                error(e.getMessage());
-			}
-        }
 	}
 
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onPause()
 	 */
     @Override
-    protected void onPause() {        
-        Log.d(Global.MODULE_TAG, "onPause()");
+    protected void onPause() { 
+		if(isDebuggable)			       
+			Log.d(Global.MODULE_TAG, "onPause()");
         
         super.onPause();
         if(errorDialog != null) {
@@ -301,7 +298,9 @@ public abstract class Module extends ListActivity {
 	 */
 	@Override
 	protected void onDestroy() {
-        Log.d(Global.MODULE_TAG, "onDestroy()");
+		if(isDebuggable)
+			Log.d(Global.MODULE_TAG, "onDestroy()");
+		
 		super.onDestroy();
 	}
 
@@ -310,7 +309,9 @@ public abstract class Module extends ListActivity {
 	 */
 	@Override
 	protected void onRestart() {
-        Log.d(Global.MODULE_TAG, "onRestart()");
+		if(isDebuggable)
+			Log.d(Global.MODULE_TAG, "onRestart()");
+		
 		super.onRestart();
 	}
 
@@ -319,7 +320,9 @@ public abstract class Module extends ListActivity {
 	 */
 	@Override
 	protected void onResume() {
-        Log.d(Global.MODULE_TAG, "onResume()");
+		if(isDebuggable)
+			Log.d(Global.MODULE_TAG, "onResume()");
+		
 		super.onResume();
 	}
 
@@ -328,7 +331,9 @@ public abstract class Module extends ListActivity {
 	 */
 	@Override
 	protected void onStart() {
-        Log.d(Global.MODULE_TAG, "onStart()");
+		if(isDebuggable)
+			Log.d(Global.MODULE_TAG, "onStart()");
+		
 		super.onStart();
 	}
 
@@ -337,7 +342,9 @@ public abstract class Module extends ListActivity {
 	 */
 	@Override
 	protected void onStop() {
-        Log.d(Global.MODULE_TAG, "onStop()");
+		if(isDebuggable)
+			Log.d(Global.MODULE_TAG, "onStop()");
+		
 		super.onStop();
 	}
 
@@ -345,8 +352,9 @@ public abstract class Module extends ListActivity {
 	 * @see android.app.Activity#onActivityResult()
 	 */
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {        
-		Log.d(Global.MODULE_TAG, "onActivityResult()");
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if(isDebuggable)
+			Log.d(Global.MODULE_TAG, "onActivityResult()");
 		
         if (resultCode == Activity.RESULT_OK) {
             //Bundle extras = data.getExtras();
@@ -357,7 +365,9 @@ public abstract class Module extends ListActivity {
                     Toast.makeText(getBaseContext(),
                             R.string.loginSuccessfulMsg,
                             Toast.LENGTH_SHORT).show();
-                    Log.d(Global.LOGIN_TAG, getString(R.string.loginSuccessfulMsg));
+                    
+            		if(isDebuggable)
+            			Log.d(Global.LOGIN_TAG, getString(R.string.loginSuccessfulMsg));
                     
                     if(!(this instanceof Login)) {
                     	connect();
@@ -524,8 +534,9 @@ public abstract class Module extends ListActivity {
     	 * @see android.app.Activity#onPreExecute()
     	 */
         @Override
-        protected void onPreExecute() {        	
-        	Log.d(Global.MODULE_TAG, "onPreExecute()");
+        protected void onPreExecute() { 
+    		if(isDebuggable)
+    			Log.d(Global.MODULE_TAG, "onPreExecute()");
         	
         	if(showDialog) {
 	            dialog.setMessage(progressDescription);
@@ -538,8 +549,9 @@ public abstract class Module extends ListActivity {
     	 * @see android.app.Activity#doInBackground()
     	 */
         @Override
-		protected Void doInBackground(String... urls) {        	
-        	Log.d(Global.MODULE_TAG, "doInBackground()");
+		protected Void doInBackground(String... urls) {
+    		if(isDebuggable)
+    			Log.d(Global.MODULE_TAG, "doInBackground()");
         	
             try {
                 //Sends webservice request
@@ -562,8 +574,10 @@ public abstract class Module extends ListActivity {
     	 */
         @Override
         protected void onPostExecute(Void unused) {  
-        	String errorMsg;      	
-        	Log.d(Global.MODULE_TAG, "onPostExecute()");
+        	String errorMsg;
+        	
+    		if(isDebuggable)
+    			Log.d(Global.MODULE_TAG, "onPostExecute()");
         	
         	if(dialog.isShowing()) {
         		dialog.dismiss();
@@ -576,22 +590,36 @@ public abstract class Module extends ListActivity {
                  */
                 if(e instanceof SoapFault) {
                     SoapFault es = (SoapFault) e;
-                    Log.e(es.getClass().getSimpleName(), es.getMessage());
+                    
+            		if(isDebuggable)
+            			Log.e(es.getClass().getSimpleName(), es.getMessage());
+            		
                     error(es.getMessage());
                 } else if (e instanceof XmlPullParserException) {
                 	errorMsg = getString(R.string.errorServerResponseMsg);
-                    Log.e(e.getClass().getSimpleName(), errorMsg);
+                	
+            		if(isDebuggable)
+            			Log.e(e.getClass().getSimpleName(), errorMsg);
+            		
                     error(errorMsg);
                 } else if (e instanceof IOException) {
                 	errorMsg = getString(R.string.errorConnectionMsg);
-                    Log.e(e.getClass().getSimpleName(), errorMsg);
+                	
+            		if(isDebuggable)
+            			Log.e(e.getClass().getSimpleName(), errorMsg);
+                	
                     error(errorMsg);
                 } else if (e instanceof TimeoutException) {
                 	errorMsg = getString(R.string.errorTimeoutMsg);
-                    Log.e(e.getClass().getSimpleName(), errorMsg);
+                	
+            		if(isDebuggable)
+            			Log.e(e.getClass().getSimpleName(), errorMsg);
+            		
                     error(errorMsg);
                 } else {
-                    Log.e(e.getClass().getSimpleName(), e.getMessage());
+            		if(isDebuggable)
+            			Log.e(e.getClass().getSimpleName(), e.getMessage());
+            		
                     error(e.getMessage());
                 }
 
