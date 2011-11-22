@@ -182,7 +182,7 @@ public class SWADMain extends ListActivity {
             db.open(this, this.getPackageName());
             dbHelper = new DataBaseHelper(db);
             
-            prefs.getPreferences(getBaseContext());
+            prefs.getPreferences(getBaseContext());            
             SecureConnection.initSecureConnection(); 
             
             if(prefs.getFirstRun()) {
