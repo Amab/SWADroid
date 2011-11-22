@@ -47,6 +47,8 @@
 	<string name="evaluation">Evaluation</string>
 	<string name="fromMsg">From</string>
 	<string name="dateMsg">Date</string>
+	<string name="noSubjectMsg">No subject</string>
+	<string name="noContentMsg">No content</string>
 	<string name="yesMsg">Yes</string>
 	<string name="noMsg">No</string>
 	<string name="initialDialogTitle">IMPORTANT</string>
