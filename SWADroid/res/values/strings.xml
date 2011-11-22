@@ -70,6 +70,8 @@
 	<string name="testNoQuestionsCourseMsg">Not downloaded any test question for this course</string>
 	<string name="testNoQuestionsMsg">Before performing a test you should download the test questions for at least
 		one course</string>
+	<string name="testNoQuestionsMeetsSpecifiedCriteriaMsg">There is no question that meets the specified
+		criteria</string>
 	<string name="testNumQuestionsMsg">Indicate the number of test questions</string>
 	<string name="testTagsMsg">Select the tags that will be included in the test</string>
 	<string name="testNoTagsSelectedMsg">You must select at least one tag</string>
@@ -77,7 +79,7 @@
 	<string name="testNoAnswerTypesSelectedMsg">You must select at least one answer type</string>
 	<string name="testEvaluateMsg">Evaluate</string>
 	<string name="testResultsTextMsg">Score</string>
-	<string name="testShowResultsMsg">Show results</string>
+	<string name="testShowResultsMsg">Show totals</string>
 	<string name="testShowResultsDetailsMsg">Show details</string>
 	<string name="testNoDetailsMsg">The teacher does not allow to see the details</string>
 	<string name="testNoResultsMsg">The teacher does not allow to see the results</string>

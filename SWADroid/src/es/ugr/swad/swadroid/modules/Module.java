@@ -252,7 +252,7 @@ public abstract class Module extends Activity {
     {
     	isConnected = connectionAvailable(this);
         if (!isConnected) { 
-        	Toast.makeText(this, R.string.errorMsgNoConnection, Toast.LENGTH_SHORT).show(); 
+        	Toast.makeText(this, R.string.errorMsgNoConnection, Toast.LENGTH_SHORT).show();
         } else {
 	        //If this is not the Login module, launch login check
 	        if(!(this instanceof Login)) {
