@@ -35,7 +35,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
-import es.ugr.swad.swadroid.model.Notification;
+import es.ugr.swad.swadroid.modules.Notifications;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
 
 /**
@@ -118,10 +118,13 @@ public class SWADMain extends ListActivity {
         if (resultCode == ListActivity.RESULT_OK) {
             //Bundle extras = data.getExtras();
 
-            /*switch(requestCode) {
-                case Global.LOGIN_REQUEST_CODE:
-                     break;
-            }*/
+            switch(requestCode) {
+		        case Global.NOTIFICATIONS_REQUEST_CODE:
+		            Toast.makeText(getBaseContext(),
+		                    R.string.notificationsSuccessfulMsg,
+		                    Toast.LENGTH_LONG).show();
+		            Log.d(Global.NOTIFICATIONS_TAG, getString(R.string.notificationsSuccessfulMsg));
+            }
         }
     }
     
@@ -132,15 +135,19 @@ public class SWADMain extends ListActivity {
 		Object o = this.getListAdapter().getItem(position);
 		String keyword = o.toString();
 		
+		Intent activity;
 		switch(position)
 		{
 			case 0:
-				Intent notificationsActivity = new Intent(getBaseContext(),
-	                Notification.class);
-				startActivityForResult(notificationsActivity, Global.NOTIFICATIONS_REQUEST_CODE);
+				activity = new Intent(getBaseContext(),
+	                Notifications.class);
+				startActivityForResult(activity, Global.NOTIFICATIONS_REQUEST_CODE);
 				break;
 				
 			case 1:
+				/*activity = new Intent(getBaseContext(),
+		                Tests.class);
+					startActivityForResult(activity, Global.TESTS_REQUEST_CODE);*/
 				Toast.makeText(this, keyword + " aún no implementado", Toast.LENGTH_LONG)
 					.show();
 				break;
