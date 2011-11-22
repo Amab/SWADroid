@@ -47,8 +47,8 @@ public class Login extends Module {
     String userPassword;
 
     /**
-     * Called when the activity is first created.
-     * @param savedInstanceState State of the activity.
+     * Called when activity is first created.
+     * @param savedInstanceState State of activity.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +81,7 @@ public class Login extends Module {
         md.update(prefs.getUserPassword().getBytes());
         userPassword = Base64.encode(md.digest());
 
-        //Creates webservice request, add required params and send request to webservice
+        //Creates webservice request, adds required params and sends request to webservice
         createRequest();
         addParam("userID", prefs.getUserID());
         addParam("userPassword", userPassword);
@@ -148,7 +148,7 @@ public class Login extends Module {
 
         /**
          * Called after calling background thread.
-         * @param unused Does Nothing.
+         * @param unused Does nothing.
          */
         @Override
         protected void onPostExecute(Void unused) {

@@ -135,16 +135,16 @@ public class Module extends Activity {
     }
 
     /**
-     * Gets preferences of the activity.
-     * @return Preferences of the activity.
+     * Gets preferences of activity.
+     * @return Preferences of activity.
      */
     public Preferences getPrefs() {
         return prefs;
     }
 
     /**
-     * Sets preferences of the activity.
-     * @param prefs Preferences of the activity.
+     * Sets preferences of activity.
+     * @param prefs Preferences of activity.
      */
     public void setPrefs(Preferences prefs) {
         this.prefs = prefs;
