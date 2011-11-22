@@ -28,4 +28,36 @@ public class Global {
      * Request code for Login module.
      */
     public static final int LOGIN_REQUEST_CODE = 1;
+    /**
+     * Table name for courses
+     */
+    public static final String DB_TABLE_COURSES = "courses";
+    /**
+     * Table name for notices
+     */
+    public static final String DB_TABLE_NOTICES = "notices";
+    /**
+     * Table name for students
+     */
+    public static final String DB_TABLE_STUDENTS = "students";
+    /**
+     * Table name for test's answers
+     */
+    public static final String DB_TABLE_TEST_ANSWERS = "tst_answers";
+    /**
+     * Table name for test's questions
+     */
+    public static final String DB_TABLE_TEST_QUESTIONS = "tst_questions";
+    /**
+     * Table name for relationship between notices and courses
+     */
+    public static final String DB_TABLE_NOTICES_COURSES = "notices_courses";
+    /**
+     * Table name for relationship between students and courses
+     */ 
+    public static final String DB_TABLE_STUDENTS_COURSES = "students_courses";
+    /**
+     * Table name for relationship between test's questions and courses
+     */ 
+    public static final String DB_TABLE_TEST_QUESTIONS_COURSES = "tst_questions_courses";   
 }
