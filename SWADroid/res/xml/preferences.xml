@@ -24,5 +24,15 @@
                 android:selectable="false"
                 android:title="@string/versionTitle_preferences"
                 android:key="currentVersionPref" />
+        <Preference
+                android:hint=""
+                android:defaultValue=""
+                android:selectable="false"
+                android:title="@string/author_preferences"/>
+        <Preference
+                android:hint=""
+                android:defaultValue=""
+                android:selectable="false"
+                android:title="@string/organization_preferences"/>
     </PreferenceCategory>
 </PreferenceScreen>
