@@ -34,7 +34,6 @@ it under the same terms as [GPLv3][gplv3] license.
 [![Copyright and License](http://www.gnu.org/graphics/lgplv3-88x31.png)][lgplv3]
 SWADroid uses [Android DataFrameWork][androiddataframework-library] library developed by [Javier Pérez Pacheco][androiddataframework-author] licensed under [LGPLv3][lgplv3].
 
-[![Copyright and License](http://web.mit.edu/facts/img/mitlogo.gif)][mit]
 SWADroid uses [ksoap2-android][ksoap2-library] library developed by [Manfred Moser][ksoap2-author] licensed under [MIT][mit].
 
 
