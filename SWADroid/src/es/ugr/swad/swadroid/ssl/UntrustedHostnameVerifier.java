@@ -33,7 +33,6 @@ public class UntrustedHostnameVerifier implements HostnameVerifier{
      * @param session SSL session.
      * @return Verification result.
      */
-    @Override
     public boolean verify(String hostname, SSLSession session) {
            return true;
     }
