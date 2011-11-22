@@ -57,6 +57,8 @@
 	<string name="noContentMsg">No content</string>
 	<string name="yesMsg">Yes</string>
 	<string name="noMsg">No</string>
+	<string name="trueMsg">True</string>
+	<string name="falseMsg">False</string>
 	<string name="acceptMsg">Ok</string>
 	<string name="cancelMsg">Cancel</string>
 	<string name="allMsg">All</string>
@@ -73,6 +75,12 @@
 	<string name="testNoTagsSelectedMsg">You must select at least one tag</string>
 	<string name="testAnswerTypesMsg">Select the answer types that will be included in the test</string>
 	<string name="testNoAnswerTypesSelectedMsg">You must select at least one answer type</string>
+	<string name="testEvaluateMsg">Evaluate</string>
+	<string name="testResultsTextMsg">Score</string>
+	<string name="testShowResultsMsg">Show results</string>
+	<string name="testShowResultsDetailsMsg">Show details</string>
+	<string name="testNoDetailsMsg">The teacher does not allow to see the details</string>
+	<string name="testNoResultsMsg">The teacher does not allow to see the results</string>
 	<string name="initialDialogTitle">IMPORTANT</string>
 	<string name="firstRunMsg">Before using the application for the first time you
 		must enter the user name and password for SWAD at the setup

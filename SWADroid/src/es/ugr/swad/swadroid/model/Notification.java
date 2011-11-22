@@ -98,7 +98,7 @@ public class Notification extends Model {
 	 * @param summary Notification summary
 	 * @param status Notification summary
 	 */
-	public Notification(int id, String eventType, long eventTime,
+	public Notification(long id, String eventType, long eventTime,
 			String userSurname1, String userSurname2, String userFirstName,
 			String location, String summary, int status, String content) {
 		
@@ -329,7 +329,7 @@ public class Notification extends Model {
 	public void getPropertyInfo(int param, Hashtable arg1, PropertyInfo propertyInfo) {
 		switch(param){
 	        case 0:
-	            propertyInfo.type = PropertyInfo.INTEGER_CLASS;
+	            propertyInfo.type = PropertyInfo.LONG_CLASS;
 	            propertyInfo.name = "id";
 	            break;   
 	        case 1:
@@ -377,7 +377,7 @@ public class Notification extends Model {
 	public void setProperty(int param, Object obj) {
 		switch(param)
 		{
-			case 0  : this.setId((Integer)obj); break;
+			case 0  : this.setId((Long)obj); break;
 			case 1  : eventType = (String)obj; break;
 			case 2  : eventTime = (Long)obj; break;
 			case 3  : userSurname1 = (String)obj; break;

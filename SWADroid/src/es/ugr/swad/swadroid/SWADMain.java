@@ -38,7 +38,6 @@ import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.modules.notifications.Notifications;
 import es.ugr.swad.swadroid.modules.tests.Tests;
@@ -175,10 +174,10 @@ public class SWADMain extends ExpandableListActivity {
 				startActivityForResult(activity, Global.NOTIFICATIONS_REQUEST_CODE);
 				
 		} else if(keyword.equals(getString(R.string.testsModuleLabel))) {
-				/*activity = new Intent(getBaseContext(), Tests.class);
-				startActivityForResult(activity, Global.TESTS_REQUEST_CODE);*/
-				Toast.makeText(this, keyword + " en proceso de desarrollo", Toast.LENGTH_LONG)
-					.show();
+				activity = new Intent(getBaseContext(), Tests.class);
+				startActivityForResult(activity, Global.TESTS_REQUEST_CODE);
+				/*Toast.makeText(this, keyword + " en proceso de desarrollo", Toast.LENGTH_LONG)
+					.show();*/
 		}
 		
 		return true;

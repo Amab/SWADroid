@@ -44,7 +44,7 @@ public class Course extends Model {
 	 * @param id Course identifier
 	 * @param name Course name
 	 */
-	public Course(int id, String name) {
+	public Course(long id, String name) {
 		super(id);
 		this.name = name;
 	}
@@ -111,7 +111,7 @@ public class Course extends Model {
 	public void getPropertyInfo(int param, Hashtable arg1, PropertyInfo propertyInfo) {
 		switch(param){
 	        case 0:
-	            propertyInfo.type = PropertyInfo.INTEGER_CLASS;
+	            propertyInfo.type = PropertyInfo.LONG_CLASS;
 	            propertyInfo.name = "id";
 	            break;   
 	        case 1:
@@ -127,7 +127,7 @@ public class Course extends Model {
 	public void setProperty(int param, Object obj) {
 		switch(param)
 		{
-			case 0  : this.setId((Integer)obj); break;
+			case 0  : this.setId((Long)obj); break;
 			case 1  : name = (String)obj; break;
 		}    
 	}
