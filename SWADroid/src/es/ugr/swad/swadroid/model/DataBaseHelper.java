@@ -797,6 +797,7 @@ public class DataBaseHelper {
     	emptyTable(Global.DB_TABLE_TEST_CONFIG);
     	emptyTable(Global.DB_TABLE_TEST_QUESTIONS);
     	emptyTable(Global.DB_TABLE_TEST_TAGS);
+    	compactDB();
     }
 	
 	/**
