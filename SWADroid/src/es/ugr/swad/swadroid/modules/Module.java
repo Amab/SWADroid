@@ -21,8 +21,11 @@ package es.ugr.swad.swadroid.modules;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import es.ugr.swad.swadroid.Global;
@@ -42,6 +45,10 @@ import org.xmlpull.v1.XmlPullParserException;
 /**
  * Superclass for encapsulate common behavior of all modules.
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ */
+/**
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ *
  */
 public class Module extends Activity {
     /**
@@ -265,6 +272,29 @@ public class Module extends Activity {
         {
            result.add(ks.getProperty(i)); //if complex type is present then you can cast this to SoapObject and if primitive type is returned you can use toString() to get actual value.
         }
+    }
+    
+    /**
+     * Checks if any connection is available 
+     * @param ctx Application context
+     * @return true if there is a connection available, false in other case
+     */
+    public static boolean connectionAvailable(Context ctx){
+        boolean connAvailable = false;
+        ConnectivityManager connec =  (ConnectivityManager)ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        //Survey all networks (wifi, gprs...)
+        NetworkInfo[] networks = connec.getAllNetworkInfo();
+        
+        for(int i=0; i<2; i++){
+            //If any of them has a connection available, put boolean to true
+            if (networks[i].isConnected()){
+                connAvailable = true;
+            }
+        }
+        
+        //If boolean remains false there is no connection available        
+        return connAvailable;
     }
 
     /**
