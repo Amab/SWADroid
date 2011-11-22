@@ -2,11 +2,11 @@
 
 Android client for e-learning platform SWAD. This project is currently under heavy development.
 
-[Download APK][apk]
+[Install from Android Market][apk]
 
 * Code: `git clone git://github.com/Amab/SWADroid.git`
 * Issue tracker: <https://github.com/Amab/SWADroid/issues>
-* Mailing list: <http://groups.google.es/group/swadroid>
+* Mailing list: <https://groups.google.com/forum/#!forum/swadroid>
 * Twitter: <http://twitter.com/SWADroid>
 * Facebook: <http://www.facebook.com/pages/SWADroid/116319955109575>
 
