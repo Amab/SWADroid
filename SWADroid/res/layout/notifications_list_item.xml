@@ -1,46 +1,73 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?> 
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_height="wrap_content" android:layout_width="match_parent" android:orientation="vertical">
+  android:layout_height="wrap_content" android:layout_width="match_parent" android:orientation="horizontal">
+   
+ <LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_height="wrap_content" android:layout_width="100dip" android:orientation="vertical"
+  android:layout_marginTop="6dip">
   
-    <TextView
+  <ImageView 
+    android:id="@+id/notificationIcon"
+    android:gravity="center_horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+  </ImageView>  
+		
+  <TextView
+		android:id="@+id/eventDate"
 		android:layout_height="wrap_content"
 		android:layout_width="match_parent"
+    	android:gravity="center_horizontal"
+  		android:textColor="#848484"
+  		android:layout_marginTop="6dip" />
+		
+   <TextView
+		android:id="@+id/eventTime"
+		android:layout_height="wrap_content"
+		android:layout_width="match_parent"
+    	android:gravity="center_horizontal"
+  		android:textColor="#848484" />
+		
+   <TextView
+		android:id="@+id/eventSender"
+		android:layout_height="wrap_content"
+		android:layout_width="match_parent"
+    	android:singleLine="false"
+    	android:gravity="center_horizontal"
+  		android:textColor="#848484"
+  		android:layout_marginBottom="6dip"
+  		android:padding="1dip" />
+ </LinearLayout>
+ 
+ <LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_height="wrap_content" android:layout_width="match_parent" android:orientation="vertical"
+  android:layout_marginTop="3dip" android:layout_marginRight="6dip">
+  
+    <TextView
 		android:id="@+id/eventType"
-  		android:padding="5dp"
+		android:layout_height="wrap_content"
+		android:layout_width="match_parent"
   		android:textColor="#ffffff"
   		android:textSize="18sp"
   		android:textStyle="bold" />
 		
     <TextView
-		android:layout_height="wrap_content"
-		android:layout_width="match_parent"
-		android:id="@+id/eventTime"
-  		android:textColor="#ffffff"
-  		android:padding="1dp"
-  		android:textStyle="italic" />
-		
-    <TextView
-		android:layout_height="wrap_content"
-		android:layout_width="match_parent"
-		android:id="@+id/eventSender"
-  		android:textColor="#ffffff"
-  		android:padding="1dp"
-  		android:textStyle="italic" />
-		
-    <TextView
-		android:layout_height="wrap_content"
-		android:layout_width="match_parent"
 		android:id="@+id/eventLocation"
+		android:layout_height="wrap_content"
+		android:layout_width="match_parent"
   		android:textColor="#ffffff"
-  		android:padding="1dp"
-  		android:textStyle="italic" />
+  		android:padding="1dip" />
 		
     <TextView
+		android:id="@+id/eventSummary"
 		android:layout_height="wrap_content"
 		android:layout_width="match_parent"
     	android:singleLine="false"
-		android:id="@+id/eventSummary"
   		android:textColor="#ffffff"
-  		android:padding="1dp" />
+  		android:textSize="16sp"
+  		android:padding="2dip" />
+ </LinearLayout>
 </LinearLayout>
