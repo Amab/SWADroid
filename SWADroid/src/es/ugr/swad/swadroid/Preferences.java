@@ -21,9 +21,11 @@ package es.ugr.swad.swadroid;
 
 import es.ugr.swad.swadroid.modules.notifications.Notifications;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
@@ -77,6 +79,26 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
      */
     private static final String LASTCOURSESELECTEDPREF = "lastCourseSelectedPref";
     /**
+     * Rate preference name.
+     */
+    private static final String RATEPREF = "ratePref";
+    /**
+     * Twitter preference name.
+     */
+    private static final String TWITTERPREF = "twitterPref";
+    /**
+     * Facebook preference name.
+     */
+    private static final String FACEBOOKPREF = "facebookPref";
+    /**
+     * Mailing list preference name.
+     */
+    private static final String MAILINGLISTPREF = "mailingListPref";
+    /**
+     * Share preference name.
+     */
+    private static final String SHAREPREF = "sharePref";
+    /**
      * User ID preference
      */
     private Preference userIDPref;
@@ -88,6 +110,26 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
      * Current application version preference
      */
     private Preference currentVersionPref;
+    /**
+     * Rate preference
+     */
+    private Preference ratePref;
+    /**
+     * Twitter preference
+     */
+    private Preference twitterPref;
+    /**
+     * Facebook preference
+     */
+    private Preference facebookPref;
+    /**
+     * Mailing list preference
+     */
+    private Preference mailingListPref;
+    /**
+     * Sare preference
+     */
+    private Preference sharePref;
     /**
      * Preferences editor
      */
@@ -155,7 +197,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 		 {
 			 stars += "*";
 		 }
-		 
+
 		 return stars;
 	 }
 	
@@ -188,16 +230,25 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         lastVersion = prefs.getInt(LASTVERSIONPREF, 0);
         lastCourseSelected = prefs.getInt(LASTCOURSESELECTEDPREF, 0);
         editor = prefs.edit();
-        
+
         userIDPref = findPreference(USERIDPREF);
         userPasswordPref = findPreference(USERPASSWORDPREF);
         currentVersionPref = findPreference(CURRENTVERSIONPREF);
+        ratePref = findPreference(RATEPREF);
+        twitterPref = findPreference(TWITTERPREF);
+        facebookPref = findPreference(FACEBOOKPREF);
+        mailingListPref = findPreference(MAILINGLISTPREF);
+        sharePref = findPreference(SHAREPREF);
         
         userIDPref.setOnPreferenceChangeListener(this);
         userPasswordPref.setOnPreferenceChangeListener(this);
+        ratePref.setOnPreferenceChangeListener(this);
+        twitterPref.setOnPreferenceChangeListener(this);
+        facebookPref.setOnPreferenceChangeListener(this);
+        mailingListPref.setOnPreferenceChangeListener(this);
+        sharePref.setOnPreferenceChangeListener(this);
         
         userIDPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-
             /**
              * Called when a preference is selected.
              * @param preference Preference selected.
@@ -209,7 +260,6 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
             }
         });
         userPasswordPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-
             /**
              * Called when a preference is selected.
              * @param preference Preference selected.
@@ -217,6 +267,68 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
             public boolean onPreferenceClick(Preference preference) {
                 userPassword = prefs.getString(USERPASSWORDPREF, "");
             	editor.putString(USERPASSWORDPREF, userPassword);
+                return true;
+            }
+        });
+        ratePref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            /**
+             * Called when a preference is selected.
+             * @param preference Preference selected.
+             */
+            public boolean onPreferenceClick(Preference preference) {
+            	Intent urlIntent = new Intent(Intent.ACTION_VIEW);
+            	urlIntent.setData(Uri.parse(getString(R.string.marketURL)));
+	        	startActivity(urlIntent);
+                return true;
+            }
+        });
+        twitterPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            /**
+             * Called when a preference is selected.
+             * @param preference Preference selected.
+             */
+            public boolean onPreferenceClick(Preference preference) {
+            	Intent urlIntent = new Intent(Intent.ACTION_VIEW);
+            	urlIntent.setData(Uri.parse(getString(R.string.twitterURL)));
+	        	startActivity(urlIntent);
+                return true;
+            }
+        });
+        facebookPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            /**
+             * Called when a preference is selected.
+             * @param preference Preference selected.
+             */
+            public boolean onPreferenceClick(Preference preference) {
+            	Intent urlIntent = new Intent(Intent.ACTION_VIEW);
+            	urlIntent.setData(Uri.parse(getString(R.string.facebookURL)));
+	        	startActivity(urlIntent);
+                return true;
+            }
+        });
+        mailingListPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            /**
+             * Called when a preference is selected.
+             * @param preference Preference selected.
+             */
+            public boolean onPreferenceClick(Preference preference) {
+            	Intent urlIntent = new Intent(Intent.ACTION_VIEW);
+            	urlIntent.setData(Uri.parse(getString(R.string.mailingListURL)));
+	        	startActivity(urlIntent);
+                return true;
+            }
+        });
+        sharePref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            /**
+             * Called when a preference is selected.
+             * @param preference Preference selected.
+             */
+            public boolean onPreferenceClick(Preference preference) {
+            	Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+	        	sharingIntent.setType("text/plain");
+	        	sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "SWADroid");
+	        	sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, getString(R.string.shareBodyMsg));
+	        	startActivity(Intent.createChooser(sharingIntent, getString(R.string.shareTitle_menu)));
                 return true;
             }
         });
