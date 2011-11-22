@@ -28,6 +28,8 @@
 	<string name="coursesProgressDescription">Obteniendo asignaturas...</string>
 	<string name="notificationsProgressTitle">Notificaciones</string>
 	<string name="notificationsProgressDescription">Obteniendo nuevas notificaciones...</string>
+	<string name="notificationsEmptyListMsg">No se ha descargado ninguna notificación.\n\nPara descargar las
+		notificaciones más recientes pulse el icono de la esquina superior derecha de la pantalla.</string>
 	<string name="testsDownloadProgressTitle">Tests</string>
 	<string name="testsDownloadProgressDescription">Sincronizando preguntas de test...</string>
 	<string name="errorMsgWorkaroundEmulator">Mierda. Ese bug del emulador de Android ha vuelto a
