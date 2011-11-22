@@ -139,7 +139,8 @@ public class DataBaseHelper {
 					ent.getString("userFirstname"), 
 					ent.getString("location"), 
 					ent.getString("summary"), 
-					ent.getInt("status"));
+					ent.getInt("status"), 
+					ent.getString("content"));
 		}
 		
 		return o;
@@ -213,6 +214,7 @@ public class DataBaseHelper {
 		ent.setValue("location", n.getLocation());
 		ent.setValue("summary", n.getSummary());
 		ent.setValue("status", status);
+		ent.setValue("content", n.getContent());
 		ent.save();
     }
 	
@@ -267,6 +269,7 @@ public class DataBaseHelper {
 		ent.setValue("location", actual.getLocation());
 		ent.setValue("summary", actual.getSummary());
 		ent.setValue("status", status);
+		ent.setValue("content", actual.getContent());
 		ent.save();
     }
 	
