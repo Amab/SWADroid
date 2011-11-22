@@ -17,7 +17,7 @@
         </activity>
         <activity
             android:name=".modules.Login"
-            android:label="@string/loginModuleLabel" android:configChanges="keyboard|keyboardHidden|orientation">
+            android:label="@string/loginModuleLabel" android:configChanges="keyboard|keyboardHidden|orientation" android:theme="@android:style/Theme.Dialog" android:background="@android:color/transparent">
         </activity>
     </application>
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
