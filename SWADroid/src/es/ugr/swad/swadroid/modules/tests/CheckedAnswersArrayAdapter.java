@@ -25,11 +25,14 @@ import es.ugr.swad.swadroid.model.TestAnswer;
 import android.content.Context;
 import android.graphics.Color;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckedTextView;
+import android.widget.ListView;
 
 public class CheckedAnswersArrayAdapter extends ArrayAdapter<TestAnswer> {
 	private Context context;
@@ -56,6 +59,8 @@ public class CheckedAnswersArrayAdapter extends ArrayAdapter<TestAnswer> {
 	 */
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
+		CheckedTextView tt;
+		final ListView lv = (ListView) parent;
 		TestAnswer a = items.get(position);
         
 		if (convertView == null) {
@@ -63,7 +68,7 @@ public class CheckedAnswersArrayAdapter extends ArrayAdapter<TestAnswer> {
              convertView = vi.inflate(textViewResourceId, null);
         }
 		 
-		CheckedTextView tt = (CheckedTextView) convertView.findViewById(android.R.id.text1);
+		tt = (CheckedTextView) convertView.findViewById(android.R.id.text1);
 		if(answerType.equals("TF")) {
 			if(a.getAnswer().equals("T")) {
 				tt.setText(R.string.trueMsg);
@@ -72,6 +77,26 @@ public class CheckedAnswersArrayAdapter extends ArrayAdapter<TestAnswer> {
 			}
 		} else {
 			tt.setText(Html.fromHtml(a.getAnswer()));
+		}
+		
+		if(lv.getChoiceMode() == ListView.CHOICE_MODE_SINGLE) {
+			tt.setOnClickListener(new OnClickListener() {				
+				public void onClick(View v) {
+					CheckedTextView rb = (CheckedTextView) v;					
+					int childCount = lv.getChildCount();
+					int itemPos = 0;
+					boolean checked = rb.isChecked();
+					
+					for(int i=0; i<childCount; i++) {
+						lv.setItemChecked(i, false);
+						if(rb == lv.getChildAt(i)) {
+							itemPos = i;
+						}
+					}
+					
+					lv.setItemChecked(itemPos, !checked);
+				}
+			});			
 		}
 		
 		if(evaluated) {
