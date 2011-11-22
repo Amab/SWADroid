@@ -133,7 +133,6 @@ public class Notifications extends Module {
         updateButton = (ImageButton)this.findViewById(R.id.refresh);
         updateButton.setVisibility(View.VISIBLE);
         
-        //dbHelper.emptyTable(Global.DB_TABLE_NOTIFICATIONS);
         dbCursor = dbHelper.getDb().getCursor(Global.DB_TABLE_NOTIFICATIONS, selection, orderby);
         adapter = new NotificationsCursorAdapter(this, dbCursor);
         
