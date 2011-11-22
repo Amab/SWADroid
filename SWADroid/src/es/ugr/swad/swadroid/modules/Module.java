@@ -43,6 +43,7 @@ import es.ugr.swad.swadroid.model.DataBaseHelper;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.concurrent.TimeoutException;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
@@ -565,7 +566,8 @@ public abstract class Module extends ListActivity {
     	 * @see android.app.Activity#onPostExecute()
     	 */
         @Override
-        protected void onPostExecute(Void unused) {        	
+        protected void onPostExecute(Void unused) {  
+        	String errorMsg;      	
         	Log.d(Global.MODULE_TAG, "onPostExecute()");
         	
         	if(dialog.isShowing()) {
@@ -581,6 +583,18 @@ public abstract class Module extends ListActivity {
                     SoapFault es = (SoapFault) e;
                     Log.e(es.getClass().getSimpleName(), es.getMessage());
                     error(es.getMessage());
+                } else if (e instanceof XmlPullParserException) {
+                	errorMsg = getString(R.string.errorServerResponseMsg);
+                    Log.e(e.getClass().getSimpleName(), errorMsg);
+                    error(errorMsg);
+                } else if (e instanceof IOException) {
+                	errorMsg = getString(R.string.errorConnectionMsg);
+                    Log.e(e.getClass().getSimpleName(), errorMsg);
+                    error(errorMsg);
+                } else if (e instanceof TimeoutException) {
+                	errorMsg = getString(R.string.errorTimeoutMsg);
+                    Log.e(e.getClass().getSimpleName(), errorMsg);
+                    error(errorMsg);
                 } else {
                     Log.e(e.getClass().getSimpleName(), e.getMessage());
                     error(e.getMessage());
