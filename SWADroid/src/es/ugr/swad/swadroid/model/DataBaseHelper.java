@@ -27,6 +27,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.util.Log;
 
 import com.android.dataframework.DataFramework;
@@ -322,17 +323,22 @@ public class DataBaseHelper {
 	 */
 	public void insertTestTag(TestTag t)
     {
-		Entity ent = new Entity(Global.DB_TABLE_TEST_TAGS);
-		
-		ent.setValue("id", t.getId());
-		ent.setValue("tagTxt", t.getTagTxt());
-		ent.save();
-		
-		ent = new Entity(Global.DB_TABLE_TEST_QUESTION_TAGS);
-		ent.setValue("qstCod", t.getQstCod());
-		ent.setValue("tagCod", t.getId());
-		ent.setValue("tagInd", t.getTagInd());
-		ent.save();
+		List<Entity> rows = db.getEntityList(Global.DB_TABLE_TEST_TAGS, "id = " + t.getId());
+		if(rows.isEmpty()) {
+			Entity ent = new Entity(Global.DB_TABLE_TEST_TAGS);
+			
+			ent.setValue("id", t.getId());
+			ent.setValue("tagTxt", t.getTagTxt());
+			ent.save();
+			
+			ent = new Entity(Global.DB_TABLE_TEST_QUESTION_TAGS);
+			ent.setValue("qstCod", t.getQstCod());
+			ent.setValue("tagCod", t.getId());
+			ent.setValue("tagInd", t.getTagInd());
+			ent.save();
+		} else {
+			throw new SQLException();
+		}
     }
 	
 	/**

@@ -28,13 +28,13 @@ import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.database.SQLException;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Model;
-import es.ugr.swad.swadroid.model.PairTable;
 import es.ugr.swad.swadroid.model.Test;
 import es.ugr.swad.swadroid.model.TestAnswer;
 import es.ugr.swad.swadroid.model.TestQuestion;
@@ -107,7 +107,6 @@ public class TestsQuestionsDownload extends Module {
             List<Model> tagsListDB = dbHelper.getAllRows(Global.DB_TABLE_TEST_TAGS);
             List<Model> questionsListDB = dbHelper.getAllRows(Global.DB_TABLE_TEST_QUESTIONS);
             List<Model> answersListDB = dbHelper.getAllRows(Global.DB_TABLE_TEST_ANSWERS);
-            List<Model> questionTagsListDB = dbHelper.getAllRows(Global.DB_TABLE_TEST_QUESTION_TAGS);
             
             //Read tags info from webservice response
 	    	int listSize = tagsListObject.getPropertyCount();
@@ -135,18 +134,20 @@ public class TestsQuestionsDownload extends Module {
 	            TestQuestion q = new TestQuestion(qstCod, stem, anstype, Global.parseIntBool(shuffle));
 	            
 	            //If it's a new question, insert in database
-	            if(!questionsListDB.contains(q)) {
+	            try {
 	            	dbHelper.insertTestQuestion(q, selectedCourseCode);
-	            	questionsListDB.add(q);
+		            
+		    		if(isDebuggable)
+		    			Log.d(TAG, "INSERTED: " + q.toString());
 	            	
 	            //If it's an updated question, update it's row in database
-	            } else {
+	            } catch (SQLException e) {
 	            	TestQuestion old = (TestQuestion) questionsListDB.get(questionsListDB.indexOf(q));
 	            	dbHelper.updateTestQuestion(old, q, selectedCourseCode);
+		            
+		    		if(isDebuggable)
+		    			Log.d(TAG, "UPDATED: " + q.toString());
 	            }
-	            
-	    		if(isDebuggable)
-	    			Log.d(TAG, q.toString());
 	        }
 	        
 			Log.i(TAG, "Retrieved " + listSize + " questions");
@@ -162,18 +163,20 @@ public class TestsQuestionsDownload extends Module {
 	            TestAnswer a = new TestAnswer(0, ansIndex, qstCod, Global.parseIntBool(correct), answer);
 	            
 	            //If it's a new answer, insert in database
-	            if(!answersListDB.contains(a)) {
+	            try {
 	            	dbHelper.insertTestAnswer(a, qstCod);
-	            	answersListDB.add(a);
+		            
+		    		if(isDebuggable)
+		    			Log.d(TAG, "INSERTED: " + a.toString());
 	            	
 	            //If it's an updated answer, update it's row in database
-	            } else {
+	            } catch (SQLException e) {
 	            	TestAnswer old = (TestAnswer) answersListDB.get(answersListDB.indexOf(a));
 	            	dbHelper.updateTestAnswer(old, a, qstCod);
-	            }
-	            
-	    		if(isDebuggable)
-	    			Log.d(TAG, a.toString());
+		            
+		    		if(isDebuggable)
+		    			Log.d(TAG, "UPDATED: " + a.toString());
+            	}
 	        }
 	        
 			Log.i(TAG, "Retrieved " + listSize + " answers");
@@ -190,18 +193,20 @@ public class TestsQuestionsDownload extends Module {
 	            tag.setTagInd(tagIndex);
 
 	            //If it's a new tag, insert in database
-	            if(!tagsListDB.contains(tag)) {
+	            try {
 	            	dbHelper.insertTestTag(tag);
 	                tagsListDB.add(tag);
-	                questionTagsListDB.add(new PairTable<Integer, Long>(Global.DB_TABLE_TEST_QUESTION_TAGS,
-	                		tag.getQstCod(), tag.getId()));
+		            
+		    		if(isDebuggable)
+		    			Log.d(TAG, "INSERTED: " + tag.toString());
 
 	            //If it's an updated tag, update it's rows in database
-	            } else if(!questionTagsListDB.contains(tag)) {
+	            } catch (SQLException e) {
 	            	TestTag old = (TestTag) tagsListDB.get(tagsListDB.indexOf(tag));
 	            	dbHelper.updateTestTag(old, tag);
-	                questionTagsListDB.add(new PairTable<Integer, Long>(Global.DB_TABLE_TEST_QUESTION_TAGS,
-	                		tag.getQstCod(), tag.getId()));
+		            
+		    		if(isDebuggable)
+		    			Log.d(TAG, "UPDATED: " + tag.toString());
 	            }
 	        }
 
