@@ -327,7 +327,7 @@ public class SWADMain extends ExpandableListActivity {
 
             //If this is an upgrade, show upgrade dialog
             } else if(lastVersion < currentVersion) {
-            	showUpgradeDialog();
+            	//showUpgradeDialog();
             	dbHelper.upgradeDB(this);
             	prefs.setLastVersion(currentVersion);
             }
