@@ -24,13 +24,68 @@ import java.security.NoSuchAlgorithmException;
 import org.ksoap2.SoapFault;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
+
+import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.modules.Module;
 
 /**
+ * Tests module for download questions and evaluate user skills in a course
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
- *
  */
 public class Tests extends Module {
+	/**
+	 * Array adapter for showing menu options
+	 */
+	private ArrayAdapter<String> adapter;
+	
+	/* (non-Javadoc)
+	 * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
+	 */
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		ImageView image;
+		TextView text;
+		ListView list;
+		String[] items = getResources().getStringArray(R.array.testMenuItems);
+		OnItemClickListener clickListener = new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> av, View v, int arg2,
+					long arg3) {
+				
+				
+			}    	
+        };
+		
+		super.onCreate(savedInstanceState);
+        setContentView(R.layout.list_items);
+        
+        image = (ImageView)this.findViewById(R.id.moduleIcon);
+        image.setBackgroundResource(R.drawable.test);
+        
+        text = (TextView)this.findViewById(R.id.moduleName);
+        text.setText(R.string.testsModuleLabel);
+
+        adapter = new ArrayAdapter<String>(this, R.layout.simple_list_item, R.id.listText, items);
+        list = (ListView)this.findViewById(R.id.listItems);
+        list.setAdapter(adapter);
+        list.setOnItemClickListener(clickListener);
+	}
+
+	/* (non-Javadoc)
+	 * @see es.ugr.swad.swadroid.modules.Module#onActivityResult(int, int, android.content.Intent)
+	 */
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+	}
 
 	/* (non-Javadoc)
 	 * @see es.ugr.swad.swadroid.modules.Module#requestService()
@@ -39,7 +94,6 @@ public class Tests extends Module {
 	protected void requestService() throws NoSuchAlgorithmException,
 			IOException, XmlPullParserException, SoapFault,
 			IllegalAccessException, InstantiationException {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -48,7 +102,6 @@ public class Tests extends Module {
 	 */
 	@Override
 	protected void connect() {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -57,7 +110,6 @@ public class Tests extends Module {
 	 */
 	@Override
 	protected void postConnect() {
-		// TODO Auto-generated method stub
 
 	}
 
