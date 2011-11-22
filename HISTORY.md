@@ -1,3 +1,8 @@
+## 0.4.3 (2011-06-15)
+
+* Minor fixes
+* Improved tests GUI
+
 ## 0.4.2 (2011-06-15)
 
 * Now not answered questions score as 0
