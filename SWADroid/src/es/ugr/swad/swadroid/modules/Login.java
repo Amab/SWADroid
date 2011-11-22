@@ -77,7 +77,7 @@ public class Login extends Module {
     private void requestService()
             throws NoSuchAlgorithmException, IOException, XmlPullParserException, SoapFault {
 
-        //Encrypts user password with SHA-512 and encodes it to Base64    	
+        //Encrypts user password with SHA-512 and encodes it to Base64UrlSafe   	
         md = MessageDigest.getInstance("SHA-512");
         md.update(prefs.getUserPassword().getBytes());
         //userPassword = new String(Base64.encode(md.digest(), Base64.URL_SAFE + Base64.NO_PADDING + Base64.NO_WRAP));
@@ -103,6 +103,7 @@ public class Login extends Module {
 
         //Request finalized without errors
         setResult(RESULT_OK);
+        finish();
     }
 
     /**

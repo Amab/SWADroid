@@ -23,7 +23,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import es.ugr.swad.swadroid.Global;
@@ -261,6 +260,7 @@ public class Module extends Activity {
         }
         
         KvmSerializable ks = (KvmSerializable)envelope.bodyIn;
+        //KvmSerializable ks = (KvmSerializable)envelope.getResponse();
         for(int i=0;i<ks.getPropertyCount();i++)
         {
            result.add(ks.getProperty(i)); //if complex type is present then you can cast this to SoapObject and if primitive type is returned you can use toString() to get actual value.
