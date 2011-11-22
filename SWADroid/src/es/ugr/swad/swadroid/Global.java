@@ -49,6 +49,14 @@ public class Global {
      */
     public static final String DB_TABLE_TEST_QUESTIONS = "tst_questions";
     /**
+     * Table name for test's tags
+     */ 
+    public static final String DB_TABLE_TEST_tags = "tst_tags";
+    /**
+     * Table name for test's configuration
+     */ 
+    public static final String DB_TABLE_TEST_CONFIG = "tst_config";
+    /**
      * Table name for relationship between notices and courses
      */
     public static final String DB_TABLE_NOTICES_COURSES = "notices_courses";
@@ -59,5 +67,9 @@ public class Global {
     /**
      * Table name for relationship between test's questions and courses
      */ 
-    public static final String DB_TABLE_TEST_QUESTIONS_COURSES = "tst_questions_courses";   
+    public static final String DB_TABLE_TEST_QUESTIONS_COURSES = "tst_questions_courses";
+    /**
+     * Table name for for relationship between test's questions and tags
+     */ 
+    public static final String DB_TABLE_TEST_QUESTIONS_TAGS = "tst_questions_tags";
 }
