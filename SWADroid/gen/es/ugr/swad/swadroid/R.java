@@ -37,6 +37,7 @@ public final class R {
         public static final int loginModuleLabel=0x7f050001;
         public static final int loginProgressDescription=0x7f050012;
         public static final int loginProgressTitle=0x7f050011;
+        public static final int loginSuccessfulMsg=0x7f050017;
         public static final int loginTitle_menu=0x7f050010;
         public static final int preferencesTitle_menu=0x7f05000f;
         public static final int saveMsg_preferences=0x7f05000c;

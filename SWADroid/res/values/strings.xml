@@ -23,4 +23,5 @@
     <string name="errorMsgWorkaroundEmulator">Damn. That Android emulator bug appeared again. Retrying...</string>
     <string name="upgradeMsg_DB">Upgrading database...</string>
     <string name="errorCopyMsg_DB">Error copying database</string>
+<string name="loginSuccessfulMsg">Login successful</string>
 </resources>
