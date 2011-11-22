@@ -61,6 +61,10 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
      */
     private int lastVersion; 
     /**
+     * Last course selected
+     */
+    private int lastCourseSelected; 
+    /**
      * Last application version preference name.
      */
     private static final String LASTVERSIONPREF = "lastVersionPref";
@@ -68,6 +72,10 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
      * Current application version preference name.
      */
     private static final String CURRENTVERSIONPREF = "currentVersionPref";
+    /**
+     * Last course selected preference name.
+     */
+    private static final String LASTCOURSESELECTEDPREF = "lastCourseSelectedPref";
     /**
      * User ID preference
      */
@@ -111,8 +119,8 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 	 }
 	 
 	 /**
-	 * Sets last application version
-	 */
+	  * Sets last application version
+	  */
 	 public void setLastVersion(int lv) {
 		lastVersion = lv;
 		editor = prefs.edit();
@@ -120,7 +128,26 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 		editor.commit();
 	 }
 	 
-	 private String getStarsSequence(int size)
+	/**
+	 * Gets last course selected
+	 * @return Last course selected
+	 */
+	public int getLastCourseSelected() {
+		return lastCourseSelected;
+	}
+
+	/**
+	 * Sets last course selected
+	 * @param lastCourseSelected Last course selected
+	 */
+	public void setLastCourseSelected(int lcs) {
+		lastCourseSelected = lcs;
+		editor = prefs.edit();
+		editor.putInt(LASTCOURSESELECTEDPREF, lcs);
+		editor.commit();
+	}
+
+	private String getStarsSequence(int size)
 	 {
 		 String stars = "";
 		 
@@ -142,6 +169,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         userID = prefs.getString(USERIDPREF, "");
         userPassword = prefs.getString(USERPASSWORDPREF, "");
         lastVersion = prefs.getInt(LASTVERSIONPREF, 0);
+        lastCourseSelected = prefs.getInt(LASTCOURSESELECTEDPREF, 0);
     }
 
 	/* (non-Javadoc)
@@ -158,6 +186,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         userID = prefs.getString(USERIDPREF, "");
         userPassword = prefs.getString(USERPASSWORDPREF, "");
         lastVersion = prefs.getInt(LASTVERSIONPREF, 0);
+        lastCourseSelected = prefs.getInt(LASTCOURSESELECTEDPREF, 0);
         editor = prefs.edit();
         
         userIDPref = findPreference(USERIDPREF);
@@ -236,6 +265,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
     protected void onPause() {
         super.onPause();
 	    editor.putInt(LASTVERSIONPREF, lastVersion);
+	    editor.putInt(LASTCOURSESELECTEDPREF, lastCourseSelected);
 	    editor.commit();
     }
 }
