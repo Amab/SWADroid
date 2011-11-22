@@ -24,7 +24,6 @@ import com.android.dataframework.DataFramework;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -55,6 +54,15 @@ public class SWADMain extends Activity {
      * Database Framework.
      */
     protected static DataFramework db;
+    
+    /**
+     * Shows Preferences screen
+     */
+    protected void viewPreferences() {
+    	Intent settingsActivity = new Intent(getBaseContext(),
+                Preferences.class);
+        startActivity(settingsActivity);
+    }
 
     /**
      * Shows an error message.
@@ -95,9 +103,7 @@ public class SWADMain extends Activity {
 	            startActivityForResult(loginActivity, Global.LOGIN_REQUEST_CODE);
 	            return true;
             case R.id.preferences_menu:
-                Intent settingsActivity = new Intent(getBaseContext(),
-                        Preferences.class);
-                startActivity(settingsActivity);
+            	viewPreferences();
                 return true;
         }
 
@@ -159,6 +165,11 @@ public class SWADMain extends Activity {
             
             prefs.getPreferences(getBaseContext());
             SecureConnection.initSecureConnection();
+            
+            if(prefs.getFirstRun()) {
+            	viewPreferences();
+            	prefs.setRunned();
+            }
         } catch (Exception ex) {
             Log.e(ex.getClass().getSimpleName(), ex.toString());
             error(ex.toString());
