@@ -37,11 +37,11 @@ public class Preferences extends PreferenceActivity {
     /**
      * User identifier.
      */
-    String userID;
+    private String userID;
     /**
      * User password.
      */
-    String userPassword;
+    private String userPassword;
 
     /**
      * Gets user identifier.
@@ -93,6 +93,12 @@ public class Preferences extends PreferenceActivity {
                 SharedPreferences customSharedPreference = getSharedPreferences(
                         "SWADroidSharedPrefs", Activity.MODE_PRIVATE);
                 SharedPreferences.Editor editor = customSharedPreference.edit();
+                
+                //If user ID or password have changed, logout automatically to force a new login
+                if(!userID.equals(customSharedPreference.getString("userIDPref", "")) ||
+                		!userPassword.equals(customSharedPreference.getString("userPasswordPref", ""))) {
+                	Global.logged = false;
+                }
 
                 editor.putString("userIDPref", userID);
                 editor.putString("userPasswordPref", userPassword);

@@ -89,6 +89,10 @@ public class Global {
      */ 
     public static final String DB_TABLE_TEST_QUESTIONS_TAGS = "tst_questions_tags";
     /*
+     * User logged flag
+     */
+    public static boolean logged;
+    /**
      * Class Module's tag name for Logcat
      */
     public static final String MODULE_TAG = "Module";

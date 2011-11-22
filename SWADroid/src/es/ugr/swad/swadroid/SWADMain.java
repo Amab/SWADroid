@@ -40,10 +40,6 @@ public class SWADMain extends Activity {
      * Application preferences.
      */
     protected static Preferences prefs = new Preferences();
-    /**
-     * Login flag.
-     */
-    boolean logged = false;
 
     /**
      * Shows an error message.
@@ -114,7 +110,7 @@ public class SWADMain extends Activity {
 
             switch(requestCode) {
                 case Global.LOGIN_REQUEST_CODE:
-                     logged = true;
+                     Global.logged = true;
                      break;
             }
         }
