@@ -28,6 +28,8 @@ import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import es.ugr.swad.swadroid.Global;
@@ -65,6 +67,18 @@ public class Courses extends Module {
         runConnection();
 	}
     
+	/* (non-Javadoc)
+	 * @see es.ugr.swad.swadroid.modules.Module#onActivityResult(int, int, android.content.Intent)
+	 */
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == Activity.RESULT_CANCELED) {
+			 setResult(RESULT_CANCELED);
+			 finish();
+		}
+	}
+
 	/* (non-Javadoc)
 	 * @see es.ugr.swad.swadroid.modules.Module#connect()
 	 */
@@ -139,8 +153,6 @@ public class Courses extends Module {
 	        //Request finalized without errors
 	        setResult(RESULT_OK);
         }
-    	
-        finish();
     }
 
 	/* (non-Javadoc)
@@ -148,6 +160,6 @@ public class Courses extends Module {
 	 */
 	@Override
 	protected void postConnect() {
-		
+		finish();
 	}
 }

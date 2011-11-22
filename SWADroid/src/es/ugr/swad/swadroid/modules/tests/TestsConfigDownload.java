@@ -157,6 +157,9 @@ public class TestsConfigDownload extends Module {
 	        		alert.show();
 	            	break;
             }
+        } else {
+        	setResult(RESULT_CANCELED);
+        	finish();
         }
 	}
 
