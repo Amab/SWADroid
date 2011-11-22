@@ -20,8 +20,10 @@ package es.ugr.swad.swadroid.modules;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Vector;
 
 import org.ksoap2.SoapFault;
+import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
 import es.ugr.swad.swadroid.Global;
@@ -54,6 +56,10 @@ public class Messages extends Module {
      * Message's receivers
      */
     private String receivers;
+    /**
+     * Names of receivers
+     */
+    private String receiversNames;
     /**
      * Message's subject
      */
@@ -172,6 +178,25 @@ public class Messages extends Module {
         addParam("body", body);
         sendRequest(User.class, false);
         
+        receiversNames = "";
+        if(result != null) {
+        	Vector<?> res = (Vector<?>) result;
+        	SoapObject soap = (SoapObject) res.get(1);	
+        	int csSize = soap.getPropertyCount();
+            for (int i = 0; i < csSize; i++) {
+                SoapObject pii = (SoapObject)soap.getProperty(i);
+                String nickname = pii.getProperty("userNickname").toString();
+                String firstname = pii.getProperty("userFirstname").toString();
+                String surname1 = pii.getProperty("userSurname1").toString();
+                String surname2 = pii.getProperty("userSurname2").toString();
+                
+                receiversNames += firstname + " " + surname1 + " " + surname2 + " (" + nickname + ")";                
+                if(i < csSize) {
+                	receiversNames += "\n";
+                }
+            }
+        }
+        
         setResult(RESULT_OK);
 	}
 
@@ -193,9 +218,12 @@ public class Messages extends Module {
 	 * @see es.ugr.swad.swadroid.modules.Module#postConnect()
 	 */
 	@Override
-	protected void postConnect() {		
-		Toast.makeText(this, R.string.messageSendedMsg, Toast.LENGTH_SHORT).show();
-		Log.i(TAG, getString(R.string.messageSendedMsg));
+	protected void postConnect() {
+		String messageSended =  getString(R.string.messageSendedMsg) + ":\n" + receiversNames;
+		
+		Toast.makeText(this, messageSended, Toast.LENGTH_LONG).show();
+		Log.i(TAG, messageSended);
+		
 		finish();
 	}
 
