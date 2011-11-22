@@ -93,6 +93,15 @@ public class Global {
      */
     public static boolean logged;
     /**
+     * Enum type defining allowed user types
+     */
+    public static enum UserType {
+        ALL,
+        ADMIN,
+        STUDENT,
+        TEACHER
+    } 
+    /**
      * Class Module's tag name for Logcat
      */
     public static final String MODULE_TAG = "Module";
