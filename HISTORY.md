@@ -1,3 +1,8 @@
+## 0.5 (2011-09-26)
+
+* Added messages module
+* Minor fixes
+
 ## 0.4.5 (2011-07-08)
 
 * Optimized questions syncronization
