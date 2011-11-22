@@ -63,27 +63,7 @@ public class Global {
     /**
      * Prefix tag name for Logcat
      */
-    private static final String APP_TAG = "SWADroid";
-    /**
-     * Class Module's tag name for Logcat
-     */
-    public static final String MODULE_TAG = APP_TAG + " Module";
-    /**
-     * Login tag name for Logcat
-     */
-    public static final String LOGIN_TAG = APP_TAG + " Login";
-    /**
-     * Courses tag name for Logcat
-     */
-    public static final String COURSES_TAG = APP_TAG + " Courses";
-    /**
-     * Notifications tag name for Logcat
-     */
-    public static final String NOTIFICATIONS_TAG = APP_TAG + " Notifications";
-    /**
-     * Tests tag name for Logcat
-     */
-    public static final String TESTS_TAG = APP_TAG + " Tests";
+    public static final String APP_TAG = "SWADroid";
     /**
      * Table name for courses
      */

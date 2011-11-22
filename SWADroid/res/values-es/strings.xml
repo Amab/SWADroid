@@ -62,6 +62,10 @@
 	<string name="noQuestionsPluggableTestsDownloadMsg">El profesor de esta asignatura no permite la descarga de las
 		preguntas de test</string>
 	<string name="questionsTestsDownloadSuccesfulMsg">Preguntas de test sincronizadas</string>
+	<string name="testNumQuestionsMsg">Indique el número de preguntas del test</string>
+	<string name="testNoQuestionsCourseMsg">No se ha descargado ninguna pregunta de test para esta asignatura</string>
+	<string name="testNoQuestionsMsg">Antes de realizar un test debe descargar las preguntas de test de al menos una
+		asignatura</string>
 	<string name="firstRunMsg">Antes de usar la aplicación por primera vez debe
 		introducir el nombre de usuario y la contraseña de acceso a SWAD en la
 		pantalla de configuración.\n\nPuede acceder a la pantalla de
