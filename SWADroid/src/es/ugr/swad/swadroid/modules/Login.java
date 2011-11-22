@@ -67,10 +67,10 @@ public class Login extends Module {
     }
 
     /**
-     * Launches login action in a separate thread while shows a progress dialog
+     * Launches action in a separate thread while shows a progress dialog
      * in UI thread.
      */
-    private void connect() {
+    protected void connect() {
     	String progressDescription = getString(R.string.loginProgressDescription);
     	int progressTitle = R.string.loginProgressTitle;
     	

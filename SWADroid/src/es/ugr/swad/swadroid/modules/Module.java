@@ -30,9 +30,12 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.model.DataBaseHelper;
+
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
@@ -42,6 +45,8 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 import org.xmlpull.v1.XmlPullParserException;
+
+import com.android.dataframework.DataFramework;
 
 /**
  * Superclass for encapsulate common behavior of all modules.
@@ -84,10 +89,33 @@ public abstract class Module extends Activity {
      * Shows error messages.
      */
     AlertDialog errorDialog = null;
+    /**
+     * Database Helper.
+     */
+    protected static DataBaseHelper dbHelper = null;    
+    /**
+     * Database Framework.
+     */
+    private static DataFramework db;
     
+    /**
+     * Connects to SWAD and gets user data.
+     * @throws NoSuchAlgorithmException
+     * @throws IOException
+     * @throws XmlPullParserException
+     * @throws SoapFault
+     * @throws InstantiationException 
+     * @throws IllegalAccessException 
+     */
     protected abstract void requestService()
     	throws NoSuchAlgorithmException, IOException, XmlPullParserException, SoapFault, IllegalAccessException, InstantiationException;
 
+    /**
+     * Launches action in a separate thread while shows a progress dialog
+     * in UI thread.
+     */
+    protected abstract void connect();
+    
     /**
      * Gets METHOD_NAME parameter.
      * @return METHOD_NAME parameter.
@@ -208,6 +236,17 @@ public abstract class Module extends Activity {
 		super.onCreate(savedInstanceState);
         prefs.getPreferences(getBaseContext());
         
+        //If not connected to database, connect now
+        if(dbHelper == null) {
+	        try {
+	            db = DataFramework.getInstance();
+				db.open(this, this.getPackageName());
+		        dbHelper = new DataBaseHelper(db);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+        }
+        
         //If not logged and this is not the Login module, launch login
         if(!Global.isLogged() && !(this instanceof Login)) {
         	Intent loginActivity = new Intent(getBaseContext(),
@@ -225,9 +264,18 @@ public abstract class Module extends Activity {
             //Bundle extras = data.getExtras();
 
             switch(requestCode) {
-            case Global.LOGIN_REQUEST_CODE:
-            	Global.setLogged(true);
-            	break;
+	            case Global.LOGIN_REQUEST_CODE:
+                    Global.setLogged(true);
+                    Toast.makeText(getBaseContext(),
+                            R.string.loginSuccessfulMsg,
+                            Toast.LENGTH_LONG).show();
+                    Log.d(Global.LOGIN_TAG, getString(R.string.loginSuccessfulMsg));
+                    
+                    if(!(this instanceof Login)) {
+                    	connect();
+                    }
+                    
+	            	break;
             }
         }
     }
