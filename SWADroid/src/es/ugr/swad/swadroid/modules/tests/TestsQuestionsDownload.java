@@ -111,7 +111,7 @@ public class TestsQuestionsDownload extends Module {
 	            SoapObject pii = (SoapObject)tagsListObject.getProperty(i);
 	            Integer tagCod = new Integer(pii.getProperty("tagCode").toString());
 	            String tagTxt = pii.getProperty("tagText").toString();
-	            TestTag tag = new TestTag(tagCod, 0, tagTxt);
+	            TestTag tag = new TestTag(tagCod, 0, tagTxt, 0);
 	            tagsList.add(tag);
 	            
 	    		if(isDebuggable)
@@ -180,13 +180,14 @@ public class TestsQuestionsDownload extends Module {
 	            SoapObject pii = (SoapObject)questionTagsListObject.getProperty(i);
 	            Integer qstCod = new Integer(pii.getProperty("questionCode").toString());
 	            Integer tagCod = new Integer(pii.getProperty("tagCode").toString());
-	            //Integer tagIndex = new Integer(pii.getProperty("tagIndex").toString());
-	            TestTag tag = tagsList.get(tagsList.indexOf(new TestTag(tagCod, "")));
+	            Integer tagIndex = new Integer(pii.getProperty("tagIndex").toString());
+	            TestTag tag = tagsList.get(tagsList.indexOf(new TestTag(tagCod, "", 0)));
 	            tag.setQstCod(qstCod);
+	            tag.setTagInd(tagIndex);
 
 	            //If it's a new tag, insert in database
 	            if(!tagsListDB.contains(tag)) {
-	            	dbHelper.insertTestTag(tag, qstCod);
+	            	dbHelper.insertTestTag(tag);
 	                tagsListDB.add(tag);
 	                questionTagsListDB.add(new PairTable<Integer, Integer>(Global.DB_TABLE_TEST_QUESTION_TAGS,
 	                		tag.getQstCod(), tag.getId()));
@@ -194,7 +195,7 @@ public class TestsQuestionsDownload extends Module {
 	            //If it's an updated tag, update it's rows in database
 	            } else if(!questionTagsListDB.contains(tag)) {
 	            	TestTag old = (TestTag) tagsListDB.get(tagsListDB.indexOf(tag));
-	            	dbHelper.updateTestTag(old, tag, qstCod);
+	            	dbHelper.updateTestTag(old, tag);
 	                questionTagsListDB.add(new PairTable<Integer, Integer>(Global.DB_TABLE_TEST_QUESTION_TAGS,
 	                		tag.getQstCod(), tag.getId()));
 	            }

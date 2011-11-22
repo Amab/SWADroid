@@ -35,22 +35,30 @@ public class TestTag extends Model {
 	 * Tag text
 	 */
 	private String tagTxt;
+	/**
+	 * Tag index
+	 */
+	private int tagInd;
 	private static PropertyInfo PI_id = new PropertyInfo();
 	private static PropertyInfo PI_tagText = new PropertyInfo();
+	private static PropertyInfo PI_tagInd = new PropertyInfo();
     private static PropertyInfo[] PI_PROP_ARRAY =
     {
     	PI_id,
-    	PI_tagText
+    	PI_tagText,
+    	PI_tagInd
     };
 
 	/**
 	 * Constructor
 	 * @param id tag id
 	 * @param tagTxt Tag text
+	 * @param tagInd Tag index
 	 */
-	public TestTag(int id, String tagTxt) {
+	public TestTag(int id, String tagTxt, int tagInd) {
 		super(id);
 		this.tagTxt = tagTxt;
+		this.tagInd = tagInd;
 	}
 
 	/**
@@ -58,11 +66,13 @@ public class TestTag extends Model {
 	 * @param id tag id
 	 * @param qstCod question id
 	 * @param tagTxt Tag text
+	 * @param tagInd Tag index
 	 */
-	public TestTag(int id, int qstCod, String tagTxt) {
+	public TestTag(int id, int qstCod, String tagTxt, int tagInd) {
 		super(id);
 		this.qstCod = qstCod;
 		this.tagTxt = tagTxt;
+		this.tagInd = tagInd;
 	}
 	
 	/**
@@ -97,6 +107,22 @@ public class TestTag extends Model {
 		this.qstCod = qstCod;
 	}
 
+	/**
+	 * Gets tag index
+	 * @return Tag index
+	 */
+	public int getTagInd() {
+		return tagInd;
+	}
+
+	/**
+	 * Sets tag index
+	 * @param tagInd Tag index
+	 */
+	public void setTagInd(int tagInd) {
+		this.tagInd = tagInd;
+	}
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
@@ -105,6 +131,8 @@ public class TestTag extends Model {
 		final int prime = 31;
 		int result = super.hashCode();
 		result = prime * result + qstCod;
+		result = prime * result + tagInd;
+		result = prime * result + ((tagTxt == null) ? 0 : tagTxt.hashCode());
 		return result;
 	}
 
@@ -113,8 +141,8 @@ public class TestTag extends Model {
 	 */
 	@Override
 	public String toString() {
-		return "TestTag [qstCod=" + qstCod + ", tagTxt=" + tagTxt
-				+ ", getId()=" + getId() + "]";
+		return "TestTag [qstCod=" + qstCod + ", tagTxt=" + tagTxt + ", tagInd="
+				+ tagInd + ", getId()=" + getId() + "]";
 	}
 
 	/* (non-Javadoc)
@@ -126,6 +154,7 @@ public class TestTag extends Model {
         {
             case 0 : object = this.getId();break;
             case 1 : object = tagTxt;break;
+            case 2 : object = tagInd;break;
         }
         
         return object;
@@ -135,7 +164,7 @@ public class TestTag extends Model {
 	 * @see org.ksoap2.serialization.KvmSerializable#getPropertyCount()
 	 */
 	public int getPropertyCount() {
-		return 2;
+		return 3;
 	}
 
 	/* (non-Javadoc)
@@ -151,6 +180,10 @@ public class TestTag extends Model {
 	            propertyInfo.type = PropertyInfo.STRING_CLASS;
 	            propertyInfo.name = "tagTxt";
 	            break;           
+	        case 2:
+	            propertyInfo.type = PropertyInfo.INTEGER_CLASS;
+	            propertyInfo.name = "tagInd";
+	            break;           
 		}
 	}
 
@@ -162,6 +195,7 @@ public class TestTag extends Model {
 		{
 			case 0  : this.setId((Integer)obj); break;
 			case 1  : tagTxt = (String)obj; break;
+			case 2  : tagInd = (Integer)obj; break;
 		}    
 	}
 
