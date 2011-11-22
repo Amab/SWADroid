@@ -16,10 +16,4 @@
                 android:key="userPasswordPref"                
                 android:password="true" />
     </PreferenceCategory>
-    <PreferenceCategory>
-        <Preference
-                android:title="@string/saveTitle_preferences"
-                android:summary="@string/saveSummary_preferences"
-                android:key="savePref" />
-    </PreferenceCategory>
 </PreferenceScreen>
