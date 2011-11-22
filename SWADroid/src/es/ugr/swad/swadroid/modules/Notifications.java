@@ -26,11 +26,15 @@ import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
+import com.android.dataframework.DataFramework;
+
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.NotificationsCursorAdapter;
+import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.model.Notification;
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
@@ -90,6 +94,18 @@ public class Notifications extends Module {
         setListAdapter(adapter);
         
         setMETHOD_NAME("getNotifications");
+	}
+
+	/* (non-Javadoc)
+	 * @see es.ugr.swad.swadroid.modules.Module#onResume()
+	 */
+	@Override
+	protected void onResume() {		
+		super.onResume();
+		
+		//Refresh data on screen 
+        dbCursor = dbHelper.getDb().getCursor(Global.DB_TABLE_NOTIFICATIONS, selection, orderby);
+        adapter.changeCursor(dbCursor);
 	}
 
 	/* (non-Javadoc)
@@ -158,5 +174,17 @@ public class Notifications extends Module {
 		//Refresh data on screen 
         dbCursor = dbHelper.getDb().getCursor(Global.DB_TABLE_NOTIFICATIONS, selection, orderby);
         adapter.changeCursor(dbCursor);		
+	}
+	
+	public void clearNotifications(Context context) {
+	    try {
+	       	DataFramework db = DataFramework.getInstance();
+			db.open(context, context.getPackageName());
+		    dbHelper = new DataBaseHelper(db);
+	        
+			dbHelper.emptyTable(Global.DB_TABLE_NOTIFICATIONS);
+		} catch (Exception e) {
+				e.printStackTrace();
+		}
 	}
 }

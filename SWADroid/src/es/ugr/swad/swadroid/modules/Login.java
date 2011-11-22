@@ -21,13 +21,14 @@ package es.ugr.swad.swadroid.modules;
 
 import android.os.Bundle;
 import android.widget.Toast;
+import es.ugr.swad.swadroid.Base64;
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import org.kobjects.base64.Base64;
+
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.KvmSerializable;
 import org.xmlpull.v1.XmlPullParserException;
@@ -71,9 +72,10 @@ public class Login extends Module {
     protected void connect() {
     	String progressDescription = getString(R.string.loginProgressDescription);
     	int progressTitle = R.string.loginProgressTitle;
+    	Connect con = new Connect(false, progressDescription, progressTitle);
     	Toast.makeText(this, progressDescription, Toast.LENGTH_LONG).show();
     	
-        new Connect(false, progressDescription, progressTitle).execute();
+        con.execute();
     }
 
     /**
@@ -93,8 +95,7 @@ public class Login extends Module {
 	        //Encrypts user password with SHA-512 and encodes it to Base64UrlSafe   	
 	        md = MessageDigest.getInstance("SHA-512");
 	        md.update(prefs.getUserPassword().getBytes());
-	        //userPassword = new String(Base64.encode(md.digest(), Base64.URL_SAFE + Base64.NO_PADDING + Base64.NO_WRAP));
-	        userPassword = new String(Base64.encode(md.digest()));
+	        userPassword = new String(Base64.encodeBytes(md.digest()));
 	        userPassword = userPassword.replace('+','-').replace('/','_').replace('=', ' ').replaceAll("\\s+", "").trim();
 	
 	        //Creates webservice request, adds required params and sends request to webservice
@@ -119,7 +120,6 @@ public class Login extends Module {
 		        
 		        //Request finalized without errors
 		        setResult(RESULT_OK);
-		        Global.setLogged(true);
 	        }
     	} else {
     		 //Request finalized without errors
