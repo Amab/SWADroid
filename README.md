@@ -11,7 +11,7 @@ Android client for e-learning platform SWAD. This project is currently under hea
 		/libs/		Libraries required by SWADroid.
 		/res/		Resources required by SWADroid.
 		/src/		Source files.
-	Webservices/		Webservices implemented in SWAD server.
+	Webservices/	Webservices implemented in SWAD server.
 		/LICENSE	License file.
 	HISTORY.md		Changelog file in GitHub markdown format.
 	README.md		This file in GitHub markdown format.
@@ -24,10 +24,10 @@ Copyright (C) 2010, Juan Miguel Boyero Corral
 [![Copyright and License](http://www.gnu.org/graphics/gplv3-88x31.png)][gplv3] SWADroid client is free software; you can redistribute it and/or modify
 it under the same terms as [GPLv3][gplv3] license.
 
-[![Copyright and License](http://www.gnu.org/graphics/agplv3-88x31.png)][agplv3] SWADroid Webservices is free software; you can redistribute it and/or modify
-it under the same terms as [AGPLv3][agplv3] license.
+[![Copyright and License](http://www.gnu.org/graphics/agplv3-88x31.png)][agplv3] SWADroid Webservices is free software; you can redistribute it and/or modify it under the same terms as [AGPLv3][agplv3] license.
 
-[![Copyright and License](http://web.mit.edu/facts/img/mitlogo.gif)][mit] SWADroid uses [ksoap2-android][ksoap2-library] library developed by [Manfred Moser][ksoap2-author]. [ksoap2-android][ksoap2-library] library is licensed under [MIT][mit].
+[![Copyright and License](http://web.mit.edu/facts/img/mitlogo.gif)][mit]
+SWADroid uses [ksoap2-android][ksoap2-library] library developed by [Manfred Moser][ksoap2-author]. [ksoap2-android][ksoap2-library] library is licensed under [MIT][mit].
 
 
 ## Contributing
