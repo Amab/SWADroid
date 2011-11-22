@@ -49,6 +49,8 @@ The Github team has also been kind enough to write up some great [documentation]
 * Code: `git clone git://github.com/Amab/SWADroid.git`
 * Issue tracker: <https://github.com/Amab/SWADroid/issues>
 * Mailing list: <http://groups.google.es/group/swadroid>
+* Twitter: <http://twitter.com/SWADroid>
+* Facebook: <http://www.facebook.com/pages/SWADroid/116319955109575>
 
 
 [gplv3]: http://www.gnu.org/licenses/gpl.html
