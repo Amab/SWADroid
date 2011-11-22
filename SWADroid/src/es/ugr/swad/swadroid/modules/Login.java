@@ -140,11 +140,10 @@ public class Login extends Module {
     	
         //Request finalized without errors
         setResult(RESULT_OK);
-        finish();
 	}
 
 	@Override
 	protected void postConnect() {
-
+        finish();
 	}
 }

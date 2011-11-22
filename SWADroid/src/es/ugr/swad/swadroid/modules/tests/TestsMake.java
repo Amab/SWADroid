@@ -26,10 +26,9 @@ import java.util.List;
 import org.ksoap2.SoapFault;
 import org.xmlpull.v1.XmlPullParserException;
 
-import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -85,9 +84,17 @@ public class TestsMake extends Module {
 	 */
 	private List<String> answerTypesList;
 	/**
-	 * Click listener for courses dialog
+	 * Click listener for courses dialog items
 	 */
-	private OnClickListener singleChoiceItemsClickListener;
+	private OnClickListener coursesDialogSingleChoiceItemsClickListener;
+	/**
+	 * Click listener for courses dialog accept button
+	 */
+	private OnClickListener coursesDialogPositiveClickListener;
+	/**
+	 * Click listener for courses dialog cancel button
+	 */
+	private OnClickListener coursesDialogNegativeClickListener;
 	/**
 	 * Course selection dialog
 	 */
@@ -198,6 +205,9 @@ public class TestsMake extends Module {
 		});
 	}
 	
+	/**
+	 * Screen to select the answer types that will be present in the test
+	 */
 	private void setAnswerTypes() {
 		Button acceptButton;
 		final ListView checkBoxesList;
@@ -224,7 +234,7 @@ public class TestsMake extends Module {
 				CheckedTextView allChk = (CheckedTextView) checkBoxesList.getChildAt(0);
 				for(int i=1; i<childsCount; i++) {
 					CheckedTextView chk = (CheckedTextView) checkBoxesList.getChildAt(i);
-					if(allChk.isChecked() || chk.isChecked()) {
+					if(allChk.isChecked() || ((chk != null) && (chk.isChecked()))) {
 						answerTypesList.add((String) answerTypesAdapter.getItem(i));
 					}
 				}
@@ -258,7 +268,7 @@ public class TestsMake extends Module {
 		super.onCreate(savedInstanceState);
 		setLayout(R.layout.tests_make_main);
 		
-		singleChoiceItemsClickListener = new DialogInterface.OnClickListener() {
+		coursesDialogSingleChoiceItemsClickListener = new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				Course c = (Course) listCourses.get(whichButton);
 				selectedCourseCode = c.getId();
@@ -269,36 +279,40 @@ public class TestsMake extends Module {
 				}
 			}
 		};
-		OnClickListener positiveClickListener = new DialogInterface.OnClickListener() {
+		coursesDialogPositiveClickListener = new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {				
-				if(selectedCourseCode != 0) {
+				if(selectedCourseCode != 0) {					
+					if(isDebuggable) {
+						Integer s = selectedCourseCode;
+						Log.d(TAG, "selectedCourseCode = " + s.toString());
+					}
+						
 					test = (Test) dbHelper.getRow(Global.DB_TABLE_TEST_CONFIG, "id", selectedCourseCode.toString());
 					
 					if(test != null) {
 						setNumQuestions();
 					} else {
 						Toast.makeText(getBaseContext(), R.string.testNoQuestionsCourseMsg, Toast.LENGTH_LONG).show();
-					}
-					
-					if(isDebuggable) {
-						Integer s = selectedCourseCode;
-						Log.d(TAG, "selectedCourseCode = " + s.toString());
+						finish();
 					}
 				} else {
 					Toast.makeText(getBaseContext(), R.string.noCourseSelectedMsg, Toast.LENGTH_LONG).show();
+					finish();
 				}
 			}
 		};
-		OnClickListener negativeClickListener = new DialogInterface.OnClickListener() {
+		coursesDialogNegativeClickListener = new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				dialog.cancel();
+				finish();
 			}
 		};
 		
 		coursesDialog = new AlertDialog.Builder(this);		
 		coursesDialog.setTitle(R.string.selectCourseTitle);
-		coursesDialog.setPositiveButton(R.string.acceptMsg, positiveClickListener);
-		coursesDialog.setNegativeButton(R.string.cancelMsg, negativeClickListener);
+		coursesDialog.setPositiveButton(R.string.acceptMsg, coursesDialogPositiveClickListener);
+		coursesDialog.setNegativeButton(R.string.cancelMsg, coursesDialogNegativeClickListener);
+		setResult(RESULT_OK);
 	}
 
 	/* (non-Javadoc)
@@ -307,87 +321,16 @@ public class TestsMake extends Module {
 	@Override
 	protected void onStart() {		
 		super.onStart();
-		if(dbHelper.getDb().getCursor(Global.DB_TABLE_TEST_CONFIG).getCount() > 0) {
-			
+		if(dbHelper.getDb().getCursor(Global.DB_TABLE_TEST_CONFIG).getCount() > 0) {			
 			dbCursor = dbHelper.getDb().getCursor(Global.DB_TABLE_COURSES);
 			listCourses = dbHelper.getAllRows(Global.DB_TABLE_COURSES);
 			Course c = (Course) listCourses.get(0);
 			selectedCourseCode = c.getId();
-			coursesDialog.setSingleChoiceItems(dbCursor, 0, "name", singleChoiceItemsClickListener);		
+			coursesDialog.setSingleChoiceItems(dbCursor, 0, "name", coursesDialogSingleChoiceItemsClickListener);		
 			coursesDialog.show();
 		} else {
 			Toast.makeText(getBaseContext(), R.string.testNoQuestionsMsg, Toast.LENGTH_LONG).show();
-		}
-	}
-
-	/* (non-Javadoc)
-	 * @see es.ugr.swad.swadroid.modules.Module#onActivityResult(int, int, android.content.Intent)
-	 */
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		OnClickListener singleChoiceItemsClickListener = new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int whichButton) {
-				Course c = (Course) listCourses.get(whichButton);
-				selectedCourseCode = c.getId();
-				
-				if(isDebuggable) {
-					Integer s = whichButton;
-					Log.d(TAG, "singleChoice = " + s.toString());
-				}
-			}
-		};
-		OnClickListener positiveClickListener = new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int whichButton) {
-				try {
-					if(isDebuggable) {
-						Integer s = selectedCourseCode;
-						Log.d(TAG, "selectedCourseCode = " + s.toString());
-					}
-					
-					if(selectedCourseCode != 0) {
-						test = (Test) dbHelper.getRow(Global.DB_TABLE_TEST_CONFIG, "id", selectedCourseCode.toString());
-						
-						if(test != null) {
-							setNumQuestions();
-						} else {
-							Toast.makeText(getBaseContext(), R.string.testNoQuestionsMsg, Toast.LENGTH_LONG).show();
-						}
-					} else {
-						Toast.makeText(getBaseContext(), R.string.noCourseSelectedMsg, Toast.LENGTH_LONG).show();
-					}
-				} catch (Exception ex) {
-                	String errorMsg = getString(R.string.errorServerResponseMsg);
-					error(errorMsg);
-					
-	        		if(isDebuggable) {
-	        			Log.e(ex.getClass().getSimpleName(), errorMsg);        		
-	        			ex.printStackTrace();
-	        		}
-		        }
-			}
-		};
-		OnClickListener negativeClickListener = new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int whichButton) {
-				dialog.cancel();
-				finish();
-			}
-		};
-			
-		super.onActivityResult(requestCode, resultCode, data);
-		if (resultCode == Activity.RESULT_OK) {
-            switch(requestCode) {
-	            case Global.COURSES_REQUEST_CODE:
-	            	final AlertDialog.Builder alert = new AlertDialog.Builder(this);
-	            	dbCursor = dbHelper.getDb().getCursor(Global.DB_TABLE_COURSES);
-	            	listCourses = dbHelper.getAllRows(Global.DB_TABLE_COURSES);
-	        		alert.setSingleChoiceItems(dbCursor, -1, "name", singleChoiceItemsClickListener);
-	        		alert.setTitle(R.string.selectCourseTitle);
-	        		alert.setPositiveButton(R.string.acceptMsg, positiveClickListener);
-	        		alert.setNegativeButton(R.string.cancelMsg, negativeClickListener);	        		
-	        		alert.show();
-	            	break;
-            }
-        }
+		}		
 	}
 
 	/* (non-Javadoc)
