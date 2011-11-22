@@ -24,14 +24,18 @@ package es.ugr.swad.swadroid;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class Global {
-    /**
-     * Request code for Login module.
-     */
-    public static final int LOGIN_REQUEST_CODE = 1;
+	/**
+	 * SWAD application key
+	 */
+	private static final String AppKey = "HTC-Desire";
     /**
      * User logged flag
      */
     private static boolean logged;
+    /**
+     * Request code for Login module.
+     */
+    public static final int LOGIN_REQUEST_CODE = 1;
     /**
      * Enum type defining allowed user types
      */
@@ -105,6 +109,14 @@ public class Global {
      * Table name for for relationship between test's questions and tags
      */ 
     public static final String DB_TABLE_TEST_QUESTIONS_TAGS = "tst_questions_tags";
+    
+	/**
+	 * Gets the SWAD application key
+	 * @return SWAD application key
+	 */
+	public static String getAppKey() {
+		return AppKey;
+	}
 	/**
 	 * Checks if user is already logged on SWAD
 	 * @return User logged flag

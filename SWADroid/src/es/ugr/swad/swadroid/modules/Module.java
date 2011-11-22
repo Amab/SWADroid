@@ -29,8 +29,11 @@ import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import java.io.IOException;
+import java.util.ArrayList;
+
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
+import org.ksoap2.serialization.KvmSerializable;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
@@ -68,7 +71,7 @@ public class Module extends Activity {
     /**
      * Webservice result.
      */
-    SoapObject result;
+    ArrayList<Object> result;
     /**
      * Shows error messages.
      */
@@ -174,7 +177,7 @@ public class Module extends Activity {
      * Gets webservice result.
      * @return Webservice result.
      */
-    public SoapObject getResult() {
+    public ArrayList<Object> getResult() {
         return result;
     }
 
@@ -182,7 +185,7 @@ public class Module extends Activity {
      * Sets webservice result.
      * @param result Webservice result.
      */
-    public void setResult(SoapObject result) {
+    public void setResult(ArrayList<Object> result) {
         this.result = result;
     }
     
@@ -227,7 +230,7 @@ public class Module extends Activity {
      */
 	protected void createRequest() {
         request = new SoapObject(NAMESPACE, METHOD_NAME);
-        result = null;
+        result = new ArrayList<Object>();
     }
 
     /**
@@ -260,7 +263,11 @@ public class Module extends Activity {
         	androidHttpTransport.call(SOAP_ACTION, envelope);
         }
         
-        result = (SoapObject) envelope.getResponse();
+        KvmSerializable ks = (KvmSerializable)envelope.bodyIn;
+        for(int i=0;i<ks.getPropertyCount();i++)
+        {
+           result.add(ks.getProperty(i)); //if complex type is present then you can cast this to SoapObject and if primitive type is returned you can use toString() to get actual value.
+        }
     }
 
     /**
