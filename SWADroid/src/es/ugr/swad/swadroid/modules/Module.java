@@ -374,6 +374,9 @@ public abstract class Module extends Activity {
                     
 	            	break;
             }
+        } else {
+        	setResult(RESULT_CANCELED);
+        	finish();
         }
     }
 
@@ -395,7 +398,7 @@ public abstract class Module extends Activity {
     }
 
     /**
-     * Sends request to webservice.
+     * Sends a request to the specified webservice in METHOD_NAME class constant.
      * @param cl Class to be mapped
      * @param simple Flag for select simple or complex response
      * @throws IOException
