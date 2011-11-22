@@ -1,3 +1,9 @@
+## 0.4 (2011-06-08)
+
+* Added tests module
+* Updated ksoap2-android library
+* Minor fixes
+
 ## 0.3.10 (2011-05-19)
 
 * Added assignment, survey and unknown notifications
