@@ -142,7 +142,8 @@ public class DataBaseHelper {
 			if(t != null) {
 				o = new TestTag(id,
 					t.getQstCod(),
-					ent.getString("tagTxt"));
+					ent.getString("tagTxt"),
+					ent.getInt("tagInd"));
 			} else {
 				o = null;
 			}
@@ -157,7 +158,8 @@ public class DataBaseHelper {
 		} else if(table.equals(Global.DB_TABLE_TEST_QUESTION_TAGS)) {			
 			o = new TestTag(ent.getInt("tagCod"),  
 					ent.getInt("qstCod"),
-					null);
+					null,  
+					ent.getInt("tagInd"));
 		}
 		
 		return o;
@@ -285,9 +287,8 @@ public class DataBaseHelper {
 	/**
 	 * Inserts a test tag in database
 	 * @param t Test tag to be inserted
-	 * @param qstCod Test question code to be referenced
 	 */
-	public void insertTestTag(TestTag t, int qstCod)
+	public void insertTestTag(TestTag t)
     {
 		Entity ent = new Entity(Global.DB_TABLE_TEST_TAGS);
 		
@@ -296,8 +297,9 @@ public class DataBaseHelper {
 		ent.save();
 		
 		ent = new Entity(Global.DB_TABLE_TEST_QUESTION_TAGS);
-		ent.setValue("qstCod", qstCod);
+		ent.setValue("qstCod", t.getQstCod());
 		ent.setValue("tagCod", t.getId());
+		ent.setValue("tagInd", t.getTagInd());
 		ent.save();
     }
 	
@@ -428,9 +430,8 @@ public class DataBaseHelper {
 	 * Updates a test tag in database
 	 * @param prev Test tag to be updated
 	 * @param actual Updated test tag
-	 * @param qstCod Test question code to be referenced
 	 */
-	public void updateTestTag(TestTag prev, TestTag actual, int qstCod)
+	public void updateTestTag(TestTag prev, TestTag actual)
     {
 		List<Entity> rows = db.getEntityList(Global.DB_TABLE_TEST_TAGS, "id = " + prev.getId());
 		Entity ent = rows.get(0);
@@ -441,7 +442,8 @@ public class DataBaseHelper {
 
 		ent = new Entity(Global.DB_TABLE_TEST_QUESTION_TAGS);
 		ent.setValue("tagCod", actual.getId());
-		ent.setValue("qstCod", qstCod);
+		ent.setValue("qstCod", actual.getQstCod());
+		ent.setValue("tagInd", actual.getTagInd());
 		ent.save();
     }
 	

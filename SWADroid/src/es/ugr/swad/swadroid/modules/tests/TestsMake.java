@@ -24,6 +24,8 @@ import java.security.NoSuchAlgorithmException;
 import org.ksoap2.SoapFault;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.os.Bundle;
+
 import es.ugr.swad.swadroid.modules.Module;
 
 /**
@@ -33,13 +35,21 @@ import es.ugr.swad.swadroid.modules.Module;
 public class TestsMake extends Module {
 
 	/* (non-Javadoc)
+	 * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
+	 */
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+	}
+
+	/* (non-Javadoc)
 	 * @see es.ugr.swad.swadroid.modules.Module#requestService()
 	 */
 	@Override
 	protected void requestService() throws NoSuchAlgorithmException,
 			IOException, XmlPullParserException, SoapFault,
 			IllegalAccessException, InstantiationException {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -48,7 +58,6 @@ public class TestsMake extends Module {
 	 */
 	@Override
 	protected void connect() {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -57,7 +66,6 @@ public class TestsMake extends Module {
 	 */
 	@Override
 	protected void postConnect() {
-		// TODO Auto-generated method stub
 
 	}
 
