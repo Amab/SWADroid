@@ -13,7 +13,8 @@
                 android:summary="@string/userPasswordSummary_preferences"
                 android:defaultValue=""
                 android:title="@string/userPasswordTitle_preferences"
-                android:key="userPasswordPref" />
+                android:key="userPasswordPref"                
+                android:password="true" />
     </PreferenceCategory>
     <PreferenceCategory>
         <Preference
