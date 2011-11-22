@@ -55,6 +55,7 @@ public class ImageExpandableListAdapter extends SimpleExpandableListAdapter {
     /* (non-Javadoc)
 	 * @see android.widget.SimpleExpandableListAdapter#getGroupView(int, boolean, android.view.View, android.view.ViewGroup)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded,
 			View convertView, ViewGroup parent) {
@@ -68,6 +69,7 @@ public class ImageExpandableListAdapter extends SimpleExpandableListAdapter {
         return v;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         final View v = super.getChildView(groupPosition, childPosition, isLastChild, convertView, parent);
