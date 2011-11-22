@@ -36,7 +36,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
-import es.ugr.swad.swadroid.modules.Notifications;
+import es.ugr.swad.swadroid.modules.notifications.Notifications;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
 
 /**
