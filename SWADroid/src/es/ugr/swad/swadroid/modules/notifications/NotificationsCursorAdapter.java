@@ -21,11 +21,14 @@ package es.ugr.swad.swadroid.modules.notifications;
 import java.util.Date;
 
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.modules.Messages;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
@@ -36,9 +39,18 @@ import android.widget.TextView;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  *
  */
-public class NotificationsCursorAdapter extends CursorAdapter {	
+public class NotificationsCursorAdapter extends CursorAdapter {
+	private boolean [] contentVisible;
+	
 	public NotificationsCursorAdapter(Context context, Cursor c) {
 		super(context, c);
+		
+		int numRows = c.getCount();
+
+		contentVisible = new boolean[numRows];
+		for(int i=0; i<numRows; i++) {
+			contentVisible[i] = false;
+		}
 	}
 
 	public NotificationsCursorAdapter(Context context, Cursor c,
@@ -48,11 +60,18 @@ public class NotificationsCursorAdapter extends CursorAdapter {
 	}
 
 	@Override
-	public void bindView(View view, Context context, Cursor cursor) {		
+	public void bindView(View view, Context context, Cursor cursor) {
+		final Context ctx = context;
+		final Long notificationCode = cursor.getLong(cursor.getColumnIndex("id"));
 		long unixTime;
 		String type, sender, senderFirstname, senderSurname1, senderSurname2, summaryText, contentText;
 		String[] dateContent;
-    	Date d;
+    	Date d;    	
+    	int numRows = cursor.getCount();
+    	
+    	if(contentVisible.length == 0) {
+    		contentVisible = new boolean[numRows];
+    	}
     	
     	view.setScrollContainer(false);
         TextView eventType = (TextView) view.findViewById(R.id.eventType);
@@ -60,12 +79,23 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         TextView eventTime = (TextView) view.findViewById(R.id.eventTime);
         TextView eventSender = (TextView) view.findViewById(R.id.eventSender);
         TextView location = (TextView) view.findViewById(R.id.eventLocation);
-        TextView summary = (TextView) view.findViewById(R.id.eventSummary);
+        final TextView summary = (TextView) view.findViewById(R.id.eventSummary);
         TextView content = (TextView) view.findViewById(R.id.eventText);
         ImageView notificationIcon = (ImageView) view.findViewById(R.id.notificationIcon);
+        ImageView messageReplyButton = (ImageView) view.findViewById(R.id.messageReplyButton);
+        
+        OnClickListener replyMessageListener = new OnClickListener() {
+			public void onClick(View v) {				
+				Intent activity = new Intent(ctx.getApplicationContext(), Messages.class);
+				activity.putExtra("notificationCode", notificationCode);
+				activity.putExtra("summary", summary.getText().toString());
+				ctx.startActivity(activity);
+			}        	
+        };
         
         if(eventType != null) {
         	type = cursor.getString(cursor.getColumnIndex("eventType"));
+        	messageReplyButton.setVisibility(View.GONE);
         	
         	if(type.equals("examAnnouncement"))
         	{
@@ -83,6 +113,8 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         	{
         		type = context.getString(R.string.message);
         		notificationIcon.setImageResource(R.drawable.recmsg);
+        		messageReplyButton.setOnClickListener(replyMessageListener);
+        		messageReplyButton.setVisibility(View.VISIBLE);
         	} else if(type.equals("forumReply"))
         	{
         		type = context.getString(R.string.forumReply);
@@ -145,6 +177,12 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         		contentText = context.getString(R.string.noContentMsg);
         		
         	content.setText(Html.fromHtml(contentText));
+        	
+        	if(contentVisible[cursor.getPosition()]) {
+        		content.setVisibility(View.VISIBLE);
+        	} else {
+        		content.setVisibility(View.GONE);
+        	}
         }
 	}
 
@@ -156,4 +194,8 @@ public class NotificationsCursorAdapter extends CursorAdapter {
 		return v;
 	}
 
+	public void toggleContentVisibility(int position) {
+		contentVisible[position] = !contentVisible[position];
+		this.notifyDataSetChanged();
+	}
 }
