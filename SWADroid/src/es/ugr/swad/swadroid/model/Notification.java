@@ -283,60 +283,6 @@ public class Notification extends Model {
 	}
 
 	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Notification other = (Notification) obj;
-		if (content == null) {
-			if (other.content != null)
-				return false;
-		} else if (!content.equals(other.content))
-			return false;
-		if (eventTime != other.eventTime)
-			return false;
-		if (eventType == null) {
-			if (other.eventType != null)
-				return false;
-		} else if (!eventType.equals(other.eventType))
-			return false;
-		if (location == null) {
-			if (other.location != null)
-				return false;
-		} else if (!location.equals(other.location))
-			return false;
-		if (status != other.status)
-			return false;
-		if (summary == null) {
-			if (other.summary != null)
-				return false;
-		} else if (!summary.equals(other.summary))
-			return false;
-		if (userFirstName == null) {
-			if (other.userFirstName != null)
-				return false;
-		} else if (!userFirstName.equals(other.userFirstName))
-			return false;
-		if (userSurname1 == null) {
-			if (other.userSurname1 != null)
-				return false;
-		} else if (!userSurname1.equals(other.userSurname1))
-			return false;
-		if (userSurname2 == null) {
-			if (other.userSurname2 != null)
-				return false;
-		} else if (!userSurname2.equals(other.userSurname2))
-			return false;
-		return true;
-	}
-
-	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

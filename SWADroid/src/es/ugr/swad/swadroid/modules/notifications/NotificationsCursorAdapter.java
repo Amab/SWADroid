@@ -54,6 +54,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
 		String[] dateContent;
     	Date d;
     	
+    	view.setScrollContainer(false);
         TextView eventType = (TextView) view.findViewById(R.id.eventType);
         TextView eventDate = (TextView) view.findViewById(R.id.eventDate);
         TextView eventTime = (TextView) view.findViewById(R.id.eventTime);
