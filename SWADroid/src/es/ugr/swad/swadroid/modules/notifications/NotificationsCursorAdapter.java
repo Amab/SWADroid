@@ -90,11 +90,11 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         	} else if(type.equals("assignment"))
         	{
         		type = context.getString(R.string.assignment);
-        		notificationIcon.setImageResource(R.drawable.ic_launcher_swadroid);
+        		notificationIcon.setImageResource(R.drawable.desk);
         	} else if(type.equals("survey"))
         	{
         		type = context.getString(R.string.survey);
-        		notificationIcon.setImageResource(R.drawable.ic_launcher_swadroid);
+        		notificationIcon.setImageResource(R.drawable.survey);
         	} else {
         		type = context.getString(R.string.unknownNotification);
         		notificationIcon.setImageResource(R.drawable.ic_launcher_swadroid);
