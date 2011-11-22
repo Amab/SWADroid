@@ -67,11 +67,11 @@ public class SWADMain extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
+        inflater.inflate(R.menu.menu_main, menu);
         return true;
     }
 
-    /**
+	/**
      * Called when an item of menu is selected.
      * @param item Item selected.
      * @return true if action was performed.
@@ -80,17 +80,15 @@ public class SWADMain extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.functions_menu:
-                return true;
+	        case R.id.login_menu:
+	            Intent loginActivity = new Intent(getBaseContext(),
+	                    Login.class);
+	            startActivityForResult(loginActivity, Global.LOGIN_REQUEST_CODE);
+	            return true;
             case R.id.preferences_menu:
                 Intent settingsActivity = new Intent(getBaseContext(),
                         Preferences.class);
                 startActivity(settingsActivity);
-                return true;
-            case R.id.login_menu:
-                Intent loginActivity = new Intent(getBaseContext(),
-                        Login.class);
-                startActivityForResult(loginActivity, Global.LOGIN_REQUEST_CODE);
                 return true;
         }
 

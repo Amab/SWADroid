@@ -15,7 +15,7 @@
     <string name="saveMsg_preferences">Preferences have been saved</string>
     <string name="saveSummary_preferences">Save actual preferences</string>
     <string name="saveTitle_preferences">Save preferences</string>
-    <string name="functionsTitle_menu">Functions</string>
+    
     <string name="preferencesTitle_menu">Preferences</string>
     <string name="loginTitle_menu">Login</string>
     <string name="loginProgressTitle">Login</string>
