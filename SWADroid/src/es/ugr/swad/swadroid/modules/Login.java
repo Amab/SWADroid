@@ -134,7 +134,7 @@ public class Login extends Module {
                 //Sends webservice request
                 requestService();
                 /**
-                 * If an exception occures, capture and points exception pointer
+                 * If an exception occurs, capture and points exception pointer
                  * to it.
                  */
             } catch (SoapFault ex) {
@@ -156,7 +156,7 @@ public class Login extends Module {
             
             if(e != null) {
                 /**
-                 * If an exception has occured, shows error message according to
+                 * If an exception has occurred, shows error message according to
                  * exception type.
                  */
                 if(e instanceof SoapFault) {

@@ -35,7 +35,6 @@ public class UntrustedTrustManager implements X509TrustManager {
      * @param chain Certificate.
      * @param authType Authentication type.
      */
-    @Override
     public void checkClientTrusted(X509Certificate[] chain, String authType) {
     }
 
@@ -47,7 +46,6 @@ public class UntrustedTrustManager implements X509TrustManager {
      * @param chain Certificate.
      * @param authType Authentication type.
      */
-    @Override
     public void checkServerTrusted(X509Certificate[] chain, String authType) {
     }
 
@@ -56,7 +54,6 @@ public class UntrustedTrustManager implements X509TrustManager {
      * for authenticating peers.
      * @return Array of certificate authority certificates.
      */
-    @Override
     public X509Certificate[] getAcceptedIssuers() {
            return null;
     }

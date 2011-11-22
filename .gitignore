@@ -1,5 +1,7 @@
-SWADroid/build/
-SWADroid/build.xml
-SWADroid/dist/
-SWADroid/manifest.mf
-SWADroid/nbproject/
+SWADroid/assets/
+SWADroid/bin/
+SWADroid/gen/
+SWADroid/default.properties
+SWADroid/.classpath
+SWADroid/.project
+SWADroid/.settings/
