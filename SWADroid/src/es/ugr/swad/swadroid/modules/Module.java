@@ -85,7 +85,7 @@ public abstract class Module extends ListActivity {
     /**
      * Webservice result.
      */
-    Object result;
+    protected Object result;
     /**
      * Shows error messages.
      */

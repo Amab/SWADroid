@@ -19,7 +19,7 @@
 
 package es.ugr.swad.swadroid;
 
-import es.ugr.swad.swadroid.modules.Notifications;
+import es.ugr.swad.swadroid.modules.notifications.Notifications;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
