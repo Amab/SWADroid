@@ -47,6 +47,10 @@ public class Login extends Module {
      * User password.
      */
     private String userPassword;
+    /**
+     * Login tag name for Logcat
+     */
+    public static final String TAG = Global.APP_TAG + " Login";
 
     /* (non-Javadoc)
 	 * @see android.app.Activity#onCreate()
@@ -124,14 +128,14 @@ public class Login extends Module {
     	}
     	
     	if(isDebuggable) {
-    		Log.d(Global.LOGIN_TAG, "userCode=" + User.getUserCode());
-    		Log.d(Global.LOGIN_TAG, "userTypeCode=" + User.getUserTypeCode());
-    		Log.d(Global.LOGIN_TAG, "wsKey=" + User.getWsKey());
-    		Log.d(Global.LOGIN_TAG, "userID=" + User.getUserID());
-    		Log.d(Global.LOGIN_TAG, "userSurname1=" + User.getUserSurname1());
-    		Log.d(Global.LOGIN_TAG, "userSurname2=" + User.getUserSurname2());
-    		Log.d(Global.LOGIN_TAG, "userFirstName=" + User.getUserFirstName());
-    		Log.d(Global.LOGIN_TAG, "userTypeName=" + User.getUserTypeName());
+    		Log.d(TAG, "userCode=" + User.getUserCode());
+    		Log.d(TAG, "userTypeCode=" + User.getUserTypeCode());
+    		Log.d(TAG, "wsKey=" + User.getWsKey());
+    		Log.d(TAG, "userID=" + User.getUserID());
+    		Log.d(TAG, "userSurname1=" + User.getUserSurname1());
+    		Log.d(TAG, "userSurname2=" + User.getUserSurname2());
+    		Log.d(TAG, "userFirstName=" + User.getUserFirstName());
+    		Log.d(TAG, "userTypeName=" + User.getUserTypeName());
     	}
     	
         //Request finalized without errors

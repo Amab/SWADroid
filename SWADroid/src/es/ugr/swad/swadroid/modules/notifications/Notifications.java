@@ -72,6 +72,10 @@ public class Notifications extends Module {
 	 * Cursor orderby parameter
 	 */
     private String orderby = "eventTime DESC";
+    /**
+     * Notifications tag name for Logcat
+     */
+    public static final String TAG = Global.APP_TAG + " Notifications";
 	
     /**
      * Refreshes data on screen
@@ -209,11 +213,11 @@ public class Notifications extends Module {
 	            dbHelper.insertNotification(n);
 	            
 	    		if(isDebuggable)
-	    			Log.d(Global.NOTIFICATIONS_TAG, n.toString());
+	    			Log.d(TAG, n.toString());
 	        }
 	        
 	        //Request finalized without errors
-	        Log.i(Global.NOTIFICATIONS_TAG, "Retrieved " + csSize + " notifications");
+	        Log.i(TAG, "Retrieved " + csSize + " notifications");
 			
 			//Clear old notifications to control database size
 			dbHelper.clearOldNotifications(SIZE_LIMIT);

@@ -41,7 +41,12 @@ import es.ugr.swad.swadroid.model.User;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  *
  */
-public class Courses extends Module {	
+public class Courses extends Module {
+    /**
+     * Courses tag name for Logcat
+     */
+    public static final String TAG = Global.APP_TAG + " Courses";
+    
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onCreate()
 	 */
@@ -100,10 +105,10 @@ public class Courses extends Module {
                	coursesSWAD.add(c);
                 
         		if(isDebuggable)
-        			Log.d(Global.COURSES_TAG, c.toString());
+        			Log.d(TAG, c.toString());
             }
             
-            Log.i(Global.COURSES_TAG, "Retrieved " + csSize + " courses");
+            Log.i(TAG, "Retrieved " + csSize + " courses");
 
             //Obtain old unregistered courses
             obsoleteCourses.addAll(coursesDB);
@@ -120,7 +125,7 @@ public class Courses extends Module {
             	dbHelper.removeRow(Global.DB_TABLE_COURSES, c.getId());
             }
             
-            Log.i(Global.COURSES_TAG, "Deleted " + csSize + " old courses");
+            Log.i(TAG, "Deleted " + csSize + " old courses");
             
             //Insert new registered courses
             csSize = newCourses.size();
@@ -129,7 +134,7 @@ public class Courses extends Module {
             	dbHelper.insertCourse(c);
             }
 
-            Log.i(Global.COURSES_TAG, "Added " + csSize + " new courses");
+            Log.i(TAG, "Added " + csSize + " new courses");
             
 	        //Request finalized without errors
 	        setResult(RESULT_OK);
