@@ -41,6 +41,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 /**
@@ -112,6 +113,14 @@ public class Notifications extends Module {
 	}
 
 	/* (non-Javadoc)
+	 * @see android.app.ListActivity#onListItemClick(android.widget.ListView, android.view.View, int, long)
+	 */
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		super.onListItemClick(l, v, position, id);
+	}
+
+	/* (non-Javadoc)
 	 * @see es.ugr.swad.swadroid.modules.Module#onResume()
 	 */
 	@Override
@@ -159,11 +168,14 @@ public class Notifications extends Module {
 	            Integer status = new Integer(pii.getProperty("status").toString());
 	            Notification n = new Notification(lastId+i, eventType, eventTime, userSurname1, userSurname2, userFirstName, location, summary, status);
 	            dbHelper.insertNotification(n);
-	            Log.d(Global.NOTIFICATIONS_TAG, n.toString());
+	            
+	    		if(isDebuggable)
+	    			Log.d(Global.NOTIFICATIONS_TAG, n.toString());
 	        }
 	        
 	        //Request finalized without errors
-	        Log.i(Global.NOTIFICATIONS_TAG, "Retrieved " + csSize + " notifications");
+			if(isDebuggable)
+				Log.i(Global.NOTIFICATIONS_TAG, "Retrieved " + csSize + " notifications");
 			
 			//Clear old notifications to control database size
 			dbHelper.clearOldNotifications(SIZE_LIMIT);
