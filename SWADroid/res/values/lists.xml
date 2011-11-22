@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array name="functions">
+		<item>Notices</item>
+		<item>Tests</item>
+	</string-array>
+	<string-array name="testMenuItems">
+		<item>Download/Update tests</item>
+		<item>Make test</item>
+	</string-array>
+</resources>

@@ -1,39 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-    <string name="app_name">SWADroid</string>
-    <string name="loginModuleLabel">Conectar</string><string name="notificationsModuleLabel">Notificaciones</string><string name="coursesModuleLabel">Asignaturas</string><string name="testsModuleLabel">Tests</string>
-    <string name="title_error_dialog">ERROR</string>
-    <string name="close_dialog">Cerrar</string>
-    <string name="set_preferences">Configuración</string>
-    <string name="user_preferences">Datos del usuario</string>
-    <string name="userIDName_preferences">Usuario</string>
-    <string name="userIDSummary_preferences">DNI o Alias</string>
-    <string name="userIDTitle_preferences">Usuario</string>
-    <string name="userPasswordName_preferences">Contraseña</string>
-    <string name="userPasswordSummary_preferences">Contraseña</string>
-    <string name="userPasswordTitle_preferences">Contraseña</string>
-    <string name="saveMsg_preferences">Configuración guardada</string>
-    <string name="saveSummary_preferences">Guarda la configuración actual</string>
-    <string name="saveTitle_preferences">Guardar configuración</string>
-    <string name="preferencesTitle_menu">Configuración</string><string name="about_preferences">Acerca de</string><string name="versionTitle_preferences">Versión de la aplicación</string>
-    <string name="loginTitle_menu">Conectar</string>
-    <string name="loginProgressTitle">Identificación</string>
-    <string name="loginProgressDescription">Conectando...</string>
-    <string name="coursesProgressTitle">Asignaturas</string><string name="coursesProgressDescription">Obteniendo asignaturas...</string><string name="notificationsProgressTitle">Notificaciones</string><string name="notificationsProgressDescription">Obteniendo nuevas notificaciones</string><string name="errorMsgWorkaroundEmulator">Mierda. Ese bug del emulador de Android ha vuelto a aparecer. Reintentando...</string>
-    <string name="errorMsgLaunchingActivity">Ha ocurrido un error durante la ejecución de la operación</string><string name="errorMsgNoConnection">No hay conexión</string>
-    <string name="errorCopyMsg_DB">Error copiando base de datos</string><string name="upgradeMsg_DB">Actualizando base de datos...</string>
-<string name="loginSuccessfulMsg">Conectado</string><string name="notificationsSuccessfulMsg">Notificaciones descargadas</string>
-<string name="notificationsUpdateButton">Actualizar</string>
-<string name="examAnnouncement">Convocatoria de examen</string>
-<string name="marksFile">Calificaciones</string>
-<string name="notice">Aviso</string>
-<string name="message">Mensaje</string>
-<string name="forumReply">Respuesta en foro</string><string name="content">Contenido</string><string name="messages">Mensajes</string><string name="evaluation">Evaluación</string><string name="fromMsg">De</string><string name="dateMsg">Fecha</string>
-<string name="yesMsg">Sí</string>
-<string name="noMsg">No</string>
-<string name="firstRunMsg">Antes de usar la aplicación por primera vez debe introducir el nombre de usuario y la contraseña de acceso a SWAD en la pantalla de configuración.\n\nPuede acceder a la pantalla de configuración desde el menú de la aplicación en cualquier momento.\n\n¿Desea abrir ahora la pantalla de configuración?</string>
-<string name="initialDialogTitle">IMPORTANTE</string><string name="upgradeMsg">Debido a cambios en la base de datos todos los datos de las notificaciones han sido borrados.\n\nDisculpe las molestias.</string>
-<string name="errorServerResponseMsg">Error en respuesta del servidor</string><string name="errorConnectionMsg">Error durante la conexión con el servidor</string><string name="errorTimeoutMsg">Tiempo de espera agotado intentando conectar con el servidor</string>
+	<string name="app_name">SWADroid</string>
+	<string name="loginModuleLabel">Conectar</string>
+	<string name="notificationsModuleLabel">Notificaciones</string>
+	<string name="coursesModuleLabel">Asignaturas</string>
+	<string name="testsModuleLabel">Tests</string>
+	<string name="title_error_dialog">ERROR</string>
+	<string name="close_dialog">Cerrar</string>
+	<string name="set_preferences">Configuración</string>
+	<string name="user_preferences">Datos del usuario</string>
+	<string name="userIDName_preferences">Usuario</string>
+	<string name="userIDSummary_preferences">DNI o Alias</string>
+	<string name="userIDTitle_preferences">Usuario</string>
+	<string name="userPasswordName_preferences">Contraseña</string>
+	<string name="userPasswordSummary_preferences">Contraseña</string>
+	<string name="userPasswordTitle_preferences">Contraseña</string>
+	<string name="saveMsg_preferences">Configuración guardada</string>
+	<string name="saveSummary_preferences">Guarda la configuración actual</string>
+	<string name="saveTitle_preferences">Guardar configuración</string>
+	<string name="preferencesTitle_menu">Configuración</string>
+	<string name="about_preferences">Acerca de</string>
+	<string name="versionTitle_preferences">Versión de la aplicación</string>
+	<string name="loginTitle_menu">Conectar</string>
+	<string name="loginProgressTitle">Identificación</string>
+	<string name="loginProgressDescription">Conectando...</string>
+	<string name="coursesProgressTitle">Asignaturas</string>
+	<string name="coursesProgressDescription">Obteniendo asignaturas...</string>
+	<string name="notificationsProgressTitle">Notificaciones</string>
+	<string name="notificationsProgressDescription">Obteniendo nuevas notificaciones</string>
+	<string name="errorMsgWorkaroundEmulator">Mierda. Ese bug del emulador de Android ha vuelto a
+		aparecer. Reintentando...</string>
+	<string name="errorMsgLaunchingActivity">Ha ocurrido un error durante la ejecución de la
+		operación</string>
+	<string name="errorMsgNoConnection">No hay conexión</string>
+	<string name="errorCopyMsg_DB">Error copiando base de datos</string>
+	<string name="upgradeMsg_DB">Actualizando base de datos...</string>
+	<string name="loginSuccessfulMsg">Conectado</string>
+	<string name="examAnnouncement">Convocatoria de examen</string>
+	<string name="marksFile">Calificaciones</string>
+	<string name="notice">Aviso</string>
+	<string name="message">Mensaje</string>
+	<string name="forumReply">Respuesta en foro</string>
+	<string name="content">Contenido</string>
+	<string name="messages">Mensajes</string>
+	<string name="evaluation">Evaluación</string>
+	<string name="fromMsg">De</string>
+	<string name="dateMsg">Fecha</string>
+	<string name="yesMsg">Sí</string>
+	<string name="noMsg">No</string>
+	<string name="firstRunMsg">Antes de usar la aplicación por primera vez debe
+		introducir el nombre de usuario y la contraseña de acceso a SWAD en la
+		pantalla de configuración.\n\nPuede acceder a la pantalla de
+		configuración desde el menú de la aplicación en cualquier
+		momento.\n\n¿Desea abrir ahora la pantalla de configuración?</string>
+	<string name="initialDialogTitle">IMPORTANTE</string>
+	<string name="upgradeMsg">Debido a cambios en la base de datos todos los
+		datos de las notificaciones han sido borrados.\n\nDisculpe las
+		molestias.</string>
+	<string name="errorServerResponseMsg">Error en respuesta del servidor</string>
+	<string name="errorConnectionMsg">Error durante la conexión con el servidor</string>
+	<string name="errorTimeoutMsg">Tiempo de espera agotado intentando conectar con el
+		servidor</string>
 
 
 

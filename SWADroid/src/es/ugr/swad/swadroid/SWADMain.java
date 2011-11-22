@@ -38,9 +38,9 @@ import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.modules.notifications.Notifications;
+import es.ugr.swad.swadroid.modules.tests.Tests;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
 
 /**
@@ -67,11 +67,11 @@ public class SWADMain extends ExpandableListActivity {
     /**
      * Function name field
      */
-    final String NAME = "functionText";
+    final String NAME = "listText";
     /**
      * Function text field
      */
-    final String IMAGE = "functionIcon";
+    final String IMAGE = "listIcon";
     
     /**
      * Gets the database helper
@@ -99,12 +99,6 @@ public class SWADMain extends ExpandableListActivity {
                 .setMessage(message)
                 .setNeutralButton(R.string.close_dialog, null)
                 .setIcon(R.drawable.erroricon).show();
-                /*.setNeutralButton(R.string.close_dialog,
-                new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                SWADMain.this.finish();
-                }
-                })*/
     }
 
     /**
@@ -164,24 +158,6 @@ public class SWADMain extends ExpandableListActivity {
     }
 
 	/* (non-Javadoc)
-	 * @see android.app.Activity#onActivityResult()
-	 */
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == ExpandableListActivity.RESULT_OK) {
-            //Bundle extras = data.getExtras();
-
-            switch(requestCode) {
-		        case Global.NOTIFICATIONS_REQUEST_CODE:
-		            Toast.makeText(getBaseContext(),
-		                    R.string.notificationsSuccessfulMsg,
-		                    Toast.LENGTH_LONG).show();
-		            Log.d(Global.NOTIFICATIONS_TAG, getString(R.string.notificationsSuccessfulMsg));
-            }
-        }
-    }
-
-	/* (non-Javadoc)
 	 * @see android.app.ExpandableListActivity#onChildClick(android.widget.ExpandableListView, android.view.View, int, int, long)
 	 */
 	@Override
@@ -199,11 +175,11 @@ public class SWADMain extends ExpandableListActivity {
 				startActivityForResult(activity, Global.NOTIFICATIONS_REQUEST_CODE);
 				
 		} else if(keyword.equals(getString(R.string.testsModuleLabel))) {
-				/*activity = new Intent(getBaseContext(),
+				activity = new Intent(getBaseContext(),
 		                Tests.class);
-					startActivityForResult(activity, Global.TESTS_REQUEST_CODE);*/
-				Toast.makeText(this, keyword + " aún no implementado", Toast.LENGTH_LONG)
-					.show();
+					startActivityForResult(activity, Global.TESTS_REQUEST_CODE);
+				/*Toast.makeText(this, keyword + " aún no implementado", Toast.LENGTH_LONG)
+					.show();*/
 		}
 		
 		return true;
@@ -218,6 +194,9 @@ public class SWADMain extends ExpandableListActivity {
         prefs.getPreferences(getBaseContext());
     }
     
+    /**
+     * Create main menu with an expandable list
+     */
     private void createMainMenu()
     {
     	// Construct Expandable List
@@ -254,9 +233,9 @@ public class SWADMain extends ExpandableListActivity {
         setListAdapter( new ImageExpandableListAdapter(
                 this,
                 headerData,
-                R.layout.functions_list_item,
+                R.layout.image_list_item,
                 new String[] { NAME },            // the name of the field data
-                new int[] { R.id.functionText }, // the text field to populate with the field data
+                new int[] { R.id.listText }, // the text field to populate with the field data
                 childData,
                 0,
                 null,
