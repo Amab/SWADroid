@@ -121,7 +121,7 @@ public class SWADMain extends Activity {
 
             switch(requestCode) {
                 case Global.LOGIN_REQUEST_CODE:
-                     Global.logged = true;
+                     Global.setLogged(true);
                      break;
             }
         }

@@ -128,7 +128,8 @@ public class Login extends Module {
          * @param urls Background thread parameters.
          * @return Nothing.
          */
-        protected Void doInBackground(String... urls) {
+        @Override
+		protected Void doInBackground(String... urls) {
             try {
                 //Sends webservice request
                 requestService();

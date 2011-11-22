@@ -29,6 +29,23 @@ public class Global {
      */
     public static final int LOGIN_REQUEST_CODE = 1;
     /**
+     * User logged flag
+     */
+    private static boolean logged;
+    /**
+     * Enum type defining allowed user types
+     */
+    public static enum UserType {
+        ALL,
+        ADMIN,
+        STUDENT,
+        TEACHER
+    }
+    /**
+     * Class Module's tag name for Logcat
+     */
+    public static final String MODULE_TAG = "Module";
+    /*
      * Table name for courses
      */
     public static final String DB_TABLE_COURSES = "courses";
@@ -88,21 +105,18 @@ public class Global {
      * Table name for for relationship between test's questions and tags
      */ 
     public static final String DB_TABLE_TEST_QUESTIONS_TAGS = "tst_questions_tags";
-    /*
-     * User logged flag
-     */
-    public static boolean logged;
-    /**
-     * Enum type defining allowed user types
-     */
-    public static enum UserType {
-        ALL,
-        ADMIN,
-        STUDENT,
-        TEACHER
-    } 
-    /**
-     * Class Module's tag name for Logcat
-     */
-    public static final String MODULE_TAG = "Module";
+	/**
+	 * Checks if user is already logged on SWAD
+	 * @return User logged flag
+	 */
+	public static boolean isLogged() {
+		return logged;
+	}
+	/**
+	 * Sets user logged flag
+	 * @param logged User logged flag
+	 */
+	public static void setLogged(boolean logged) {
+		Global.logged = logged;
+	}
 }
