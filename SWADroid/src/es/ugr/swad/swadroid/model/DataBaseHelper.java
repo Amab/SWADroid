@@ -67,9 +67,6 @@ public class DataBaseHelper {
     	if(table.equals(Global.DB_TABLE_TEST_QUESTIONS_COURSE)) {
     		firstParam = "qstCod";
     		secondParam = "crsCod";
-    	} else if(table.equals(Global.DB_TABLE_TEST_QUESTION_TAGS)) {
-    		firstParam = "qstCod";
-    		secondParam = "tagCod";
     	} else if(table.equals(Global.DB_TABLE_TEST_QUESTION_ANSWERS)) {
     		firstParam = "qstCod";
     		secondParam = "ansCod";
@@ -95,7 +92,6 @@ public class DataBaseHelper {
 			o = new Course(ent.getInt("id"),
 							ent.getString("name"));
 		} else if(table.equals(Global.DB_TABLE_TEST_QUESTIONS_COURSE) ||
-				table.equals(Global.DB_TABLE_TEST_QUESTION_TAGS) ||
 				table.equals(Global.DB_TABLE_TEST_QUESTION_ANSWERS)) {
 			
 			params = selectParamsPairTable(table);
@@ -116,34 +112,52 @@ public class DataBaseHelper {
 					ent.getString("content"));
 		} else if(table.equals(Global.DB_TABLE_TEST_QUESTIONS)) {
 			id = ent.getInt("id");
-			TestQuestion q = (TestQuestion)getRow(Global.DB_TABLE_TEST_QUESTIONS_COURSE, "qstCod", id.toString());
-			
-			o = new TestQuestion(id,
-					q.getCrsCod(),
+			PairTable q = (PairTable)getRow(Global.DB_TABLE_TEST_QUESTIONS_COURSE, "qstCod", id.toString());
+
+			if(q != null) {
+				o = new TestQuestion(id,
+					(Integer) q.getFirst(),
 					ent.getString("stem"), 
-					ent.getString("anstype"), 
+					ent.getString("ansType"), 
 					Global.parseStringBool(ent.getString("shuffle")));
+			} else {
+				o = null;
+			}
 		} else if(table.equals(Global.DB_TABLE_TEST_ANSWERS)) {	
 			id = ent.getInt("id");
-			TestAnswer a = (TestAnswer)getRow(Global.DB_TABLE_TEST_QUESTION_ANSWERS, "ansCod", id.toString());
-					
-			o = new TestAnswer(id,
-					a.getQstCod(),
+			PairTable a = (PairTable)getRow(Global.DB_TABLE_TEST_QUESTION_ANSWERS, "ansCod", id.toString());
+
+			if(a != null) {
+				o = new TestAnswer(id,
+					(Integer) a.getFirst(),
 					Global.parseStringBool(ent.getString("correct")), 
 					ent.getString("answer"));
+			} else {
+				o = null;
+			}
 		} else if(table.equals(Global.DB_TABLE_TEST_TAGS)) {	
-			id = ent.getInt("id");
+			id = ent.getInt("tagCod");
 			TestTag t = (TestTag)getRow(Global.DB_TABLE_TEST_QUESTION_TAGS, "tagCod", id.toString());
 					
-			o = new TestTag(id,
+			if(t != null) {
+				o = new TestTag(id,
 					t.getQstCod(),
 					ent.getString("tagTxt"));
+			} else {
+				o = null;
+			}
 		} else if(table.equals(Global.DB_TABLE_TEST_CONFIG)) {			
 			o = new Test(null, 
+					ent.getInt("id"),  
 					ent.getInt("min"),  
 					ent.getInt("def"),  
 					ent.getInt("max"),
-					ent.getString("feedback"));
+					ent.getString("feedback"),
+					ent.getLong("editTime"));
+		} else if(table.equals(Global.DB_TABLE_TEST_QUESTION_TAGS)) {			
+			o = new TestTag(ent.getInt("tagCod"),  
+					ent.getInt("qstCod"),
+					null);
 		}
 		
 		return o;
@@ -179,10 +193,16 @@ public class DataBaseHelper {
 	 */
 	public Model getRow(String table, String fieldName, String fieldValue)
     {
-		List<Entity> rows = db.getEntityList(table, fieldName + " = " + fieldValue);		
-		Entity ent = rows.get(0);
+		List<Entity> rows = db.getEntityList(table, fieldName + " = " + fieldValue);
+		Entity ent;
+		Model row = null;
+		
+		if(rows.size() > 0) {
+			ent = rows.get(0);
+			row = createObjectByTable(table, ent);
+		}
         
-        return createObjectByTable(table, ent);
+        return row;
     }
 	
 	/**
@@ -231,7 +251,6 @@ public class DataBaseHelper {
 		Entity ent = new Entity(Global.DB_TABLE_TEST_QUESTIONS);
 		
 		ent.setValue("id", q.getId());
-		ent.setValue("editTime", q.getEditTime());
 		ent.setValue("ansType", q.getAnstype());
 		ent.setValue("stem", q.getStem());
 		ent.setValue("shuffle", Global.parseBoolString(q.getShuffle()));
@@ -279,6 +298,23 @@ public class DataBaseHelper {
 		ent = new Entity(Global.DB_TABLE_TEST_QUESTION_TAGS);
 		ent.setValue("qstCod", qstCod);
 		ent.setValue("tagCod", t.getId());
+		ent.save();
+    }
+	
+	/**
+	 * Inserts a test config in database
+	 * @param t Test config to be inserted
+	 */
+	public void insertTestConfig(Test t)
+    {
+		Entity ent = new Entity(Global.DB_TABLE_TEST_CONFIG);
+		
+		ent.setValue("id", t.getId());
+		ent.setValue("min", t.getMin());
+		ent.setValue("def", t.getDef());
+		ent.setValue("max", t.getMax());
+		ent.setValue("feedback", t.getFeedback());
+		ent.setValue("editTime", t.getEditTime());
 		ent.save();
     }
 	
@@ -349,7 +385,6 @@ public class DataBaseHelper {
 		Entity ent = rows.get(0);
 		
 		ent.setValue("id", actual.getId());
-		ent.setValue("editTime", actual.getEditTime());
 		ent.setValue("ansType", actual.getAnstype());
 		ent.setValue("stem", actual.getStem());
 		ent.setValue("shuffle", Global.parseBoolString(actual.getShuffle()));
@@ -403,14 +438,29 @@ public class DataBaseHelper {
 		ent.setValue("id", actual.getId());
 		ent.setValue("tagTxt", actual.getTagTxt());
 		ent.save();
-		
-		rows = db.getEntityList(Global.DB_TABLE_TEST_QUESTION_TAGS, "tagCod = " + actual.getId());
-		Iterator<Entity> iter = rows.iterator();
-		while (iter.hasNext()) {
-		  ent = iter.next();
-		  ent.setValue("qstCod", qstCod);
-		  ent.save();
-		}
+
+		ent = new Entity(Global.DB_TABLE_TEST_QUESTION_TAGS);
+		ent.setValue("tagCod", actual.getId());
+		ent.setValue("qstCod", qstCod);
+		ent.save();
+    }
+	
+	/**
+	 * Updates a test config in database
+	 * @param prev Test to be updated
+	 * @param actual Updated test
+	 */
+	public void updateTestConfig(Test prev, Test actual)
+    {
+		List<Entity> rows = db.getEntityList(Global.DB_TABLE_TEST_CONFIG, "id = " + prev.getId());
+		Entity ent = rows.get(0);
+		ent.setValue("id", actual.getId());
+		ent.setValue("min", actual.getMin());
+		ent.setValue("def", actual.getDef());
+		ent.setValue("max", actual.getMax());
+		ent.setValue("feedback", actual.getFeedback());
+		ent.setValue("editTime", actual.getEditTime());
+		ent.save();
     }
 	
 	/**
@@ -501,6 +551,27 @@ public class DataBaseHelper {
 			f = (String) ent.getValue(field);
 		}
 		
+		return f;
+    }
+	
+	/**
+	 * Gets a field of last test
+	 * @param field A field of last test
+	 * @return The field of last test
+	 */
+	public String getTimeOfLastTestUpdate(Integer crsCode)
+    {
+		String where = "id=" + crsCode;
+		String orderby = null;
+		List<Entity> rows = db.getEntityList(Global.DB_TABLE_TEST_CONFIG, where, orderby);
+		String f = "0";
+		
+		if(rows.size() > 0)
+		{
+			Entity ent = rows.get(0);
+			f = (String) ent.getValue("editTime");
+		}
+
 		return f;
     }
 	

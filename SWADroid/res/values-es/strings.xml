@@ -27,9 +27,9 @@
 	<string name="coursesProgressTitle">Asignaturas</string>
 	<string name="coursesProgressDescription">Obteniendo asignaturas...</string>
 	<string name="notificationsProgressTitle">Notificaciones</string>
-	<string name="notificationsProgressDescription">Obteniendo nuevas notificaciones</string>
+	<string name="notificationsProgressDescription">Obteniendo nuevas notificaciones...</string>
 	<string name="testsDownloadProgressTitle">Tests</string>
-	<string name="testsDownloadProgressDescription">Obteniendo preguntas de test...</string>
+	<string name="testsDownloadProgressDescription">Sincronizando preguntas de test...</string>
 	<string name="errorMsgWorkaroundEmulator">Mierda. Ese bug del emulador de Android ha vuelto a
 		aparecer. Reintentando...</string>
 	<string name="errorMsgLaunchingActivity">Ha ocurrido un error durante la ejecución de la
@@ -55,8 +55,11 @@
 	<string name="acceptMsg">Aceptar</string>
 	<string name="cancelMsg">Cancelar</string>
 	<string name="selectCourseTitle">Seleccione asignatura</string>
-	<string name="noCourseSelectedMsg">Debe seleccionar una asignatura para descargar los tests</string>
-	<string name="forbiddenCourseTestsDownloadMsg">El profesor de esta asignatura no permite la descarga de tests</string>
+	<string name="noCourseSelectedMsg">Debe seleccionar una asignatura para descargar las preguntas de test</string>
+	<string name="noQuestionsAvailableTestsDownloadMsg">No hay preguntas de test disponibles para esta asignatura</string>
+	<string name="noQuestionsPluggableTestsDownloadMsg">El profesor de esta asignatura no permite la descarga de las
+		preguntas de test</string>
+	<string name="questionsTestsDownloadSuccesfulMsg">Preguntas de test sincronizadas</string>
 	<string name="firstRunMsg">Antes de usar la aplicación por primera vez debe
 		introducir el nombre de usuario y la contraseña de acceso a SWAD en la
 		pantalla de configuración.\n\nPuede acceder a la pantalla de
