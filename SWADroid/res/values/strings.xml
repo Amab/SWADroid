@@ -15,7 +15,7 @@
     <string name="saveMsg_preferences">Preferences have been saved</string>
     <string name="saveSummary_preferences">Save actual preferences</string>
     <string name="saveTitle_preferences">Save preferences</string>
-    <string name="preferencesTitle_menu">Preferences</string>
+    <string name="preferencesTitle_menu">Preferences</string><string name="about_preferences">About</string><string name="versionTitle_preferences">Application version</string>
     <string name="loginTitle_menu">Login</string>
     <string name="loginProgressTitle">Login</string>
     <string name="loginProgressDescription">Connecting...</string>
@@ -38,6 +38,8 @@
 <string name="initialDialogTitle">IMPORTANT</string><string name="errorServerResponseMsg">Error in server response</string>
 <string name="errorConnectionMsg">Error while connecting to server</string>
 <string name="errorTimeoutMsg">Timeout trying to connect to the server</string>
+
+
 
 
 
