@@ -50,7 +50,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {		
 		long unixTime;
-		String type, sender, summaryText, contentText;
+		String type, sender, senderFirstname, senderSurname1, senderSurname2, summaryText, contentText;
 		String[] dateContent;
     	Date d;
     	
@@ -98,9 +98,19 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         	eventTime.setText(dateContent[1]);
         }
         if(eventSender != null){
-        	sender = cursor.getString(cursor.getColumnIndex("userFirstname")) + " "
-        			+ cursor.getString(cursor.getColumnIndex("userSurname1")) + " "
-        			+ cursor.getString(cursor.getColumnIndex("userSurname2"));
+        	sender = "";
+        	senderFirstname = cursor.getString(cursor.getColumnIndex("userFirstname"));
+        	senderSurname1 = cursor.getString(cursor.getColumnIndex("userSurname1"));
+        	senderSurname2 = cursor.getString(cursor.getColumnIndex("userSurname2"));
+        	
+        	//Empty fields checking
+        	if(!senderFirstname.equals("anyType{}"))
+        		sender += senderFirstname + " ";
+        	if(!senderSurname1.equals("anyType{}"))
+        		sender += senderSurname1 + " ";
+        	if(!senderSurname2.equals("anyType{}"))
+        		sender += senderSurname2;
+        	
         	eventSender.setText(sender);
         }
         if(location != null) {
