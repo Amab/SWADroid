@@ -1,3 +1,8 @@
+## 0.3.6 (2011-04-13)
+
+* Added notification details
+* Added upgrade dialog
+
 ## 0.3.5 (2011-04-05)
 
 * Improved GUI
