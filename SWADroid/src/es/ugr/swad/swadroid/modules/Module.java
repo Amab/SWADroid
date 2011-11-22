@@ -417,10 +417,12 @@ public abstract class Module extends Activity {
         KeepAliveHttpsTransportSE connection = new KeepAliveHttpsTransportSE(URL, 443, "", TIMEOUT);
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         System.setProperty("http.keepAlive", "false");
-        
         envelope.setOutputSoapObject(request);
         envelope.addMapping(NAMESPACE, cl.getSimpleName(), cl);
+        //connection.debug = true;
     	connection.call(SOAP_ACTION, envelope);
+        //Log.d(TAG, connection.requestDump.toString());
+        //Log.d(TAG, connection.responseDump.toString());
     	
     	if(simple && !(envelope.getResponse() instanceof SoapFault)) {
     		result = envelope.bodyIn;
