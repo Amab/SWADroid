@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Needs to remove the "s" from "https" for the menus -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/functions_menu"
+          android:title="@string/functionsTitle_menu"
+          android:icon="@android:drawable/ic_menu_more">
+        <!-- "functions" submenu -->
+        <menu>
+            <item android:id="@+id/login_menu"
+                  android:title="@string/loginTitle_menu">
+            </item>
+        </menu>
+    </item>
+    <item android:id="@+id/preferences_menu"
+          android:title="@string/preferencesTitle_menu"
+          android:icon="@android:drawable/ic_menu_manage">
+    </item>
+</menu>
