@@ -97,8 +97,13 @@ public class Login extends Module {
     protected void requestService()
             throws NoSuchAlgorithmException, IOException, XmlPullParserException, SoapFault, IllegalAccessException, InstantiationException {
 
-    	//If the application isn't logged or last login time > Global.RELOGIN_TIME, force login
-    	if(!Global.isLogged() || (System.currentTimeMillis()-Global.getLastLoginTime() > Global.RELOGIN_TIME))
+    	//If last login time > Global.RELOGIN_TIME, force login
+    	if(System.currentTimeMillis()-Global.getLastLoginTime() > Global.RELOGIN_TIME) {
+    		Global.setLogged(false);
+    	}
+    	
+    	//If the application isn't logged, force login
+    	if(!Global.isLogged())
     	{
 	        //Encrypts user password with SHA-512 and encodes it to Base64UrlSafe   	
 	        md = MessageDigest.getInstance("SHA-512");
