@@ -117,8 +117,7 @@ public class Courses extends Module {
             List<Model> coursesSWAD = new ArrayList<Model>();
             List<Model> newCourses = new ArrayList<Model>();
             List<Model> obsoleteCourses = new ArrayList<Model>();
-        	@SuppressWarnings("rawtypes")
-			Vector res = (Vector) result;
+			Vector<?> res = (Vector<?>) result;
         	SoapObject soap = (SoapObject) res.get(1);	
         	int csSize = soap.getPropertyCount();
             for (int i = 0; i < csSize; i++) {
