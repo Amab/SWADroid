@@ -113,7 +113,7 @@ public class Courses extends Module {
         	int csSize = soap.getPropertyCount();
             for (int i = 0; i < csSize; i++) {
                 SoapObject pii = (SoapObject)soap.getProperty(i);
-                int id = Integer.parseInt(pii.getProperty(0).toString());
+                long id = Long.parseLong(pii.getProperty(0).toString());
                 String name = pii.getProperty(1).toString();
                 Course c = new Course(id, name);
                	coursesSWAD.add(c);

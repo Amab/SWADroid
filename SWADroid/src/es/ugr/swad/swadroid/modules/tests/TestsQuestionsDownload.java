@@ -50,7 +50,7 @@ public class TestsQuestionsDownload extends Module {
 	/**
 	 * Selected course code
 	 */
-	private Integer selectedCourseCode;
+	private long selectedCourseCode;
 	/**
 	 * Next timestamp to be requested
 	 */
@@ -75,7 +75,7 @@ public class TestsQuestionsDownload extends Module {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		selectedCourseCode = getIntent().getIntExtra("selectedCourseCode", 0);
+		selectedCourseCode = getIntent().getLongExtra("selectedCourseCode", 0);
 		timestamp = getIntent().getLongExtra("timestamp", 0);
 		runConnection();	
 	}
@@ -91,7 +91,7 @@ public class TestsQuestionsDownload extends Module {
 		//Creates webservice request, adds required params and sends request to webservice
 	    createRequest();
 	    addParam("wsKey", User.getWsKey());
-	    addParam("courseCode", selectedCourseCode);
+	    addParam("courseCode", (int)selectedCourseCode);
 	    addParam("beginTime", timestamp);
 	    sendRequest(Test.class, false);
 
@@ -159,7 +159,7 @@ public class TestsQuestionsDownload extends Module {
 	            Integer ansIndex = new Integer(pii.getProperty("answerIndex").toString());
 	            Integer correct = new Integer(pii.getProperty("correct").toString());
 	            String answer = pii.getProperty("answerText").toString();
-	            TestAnswer a = new TestAnswer(ansIndex, qstCod, Global.parseIntBool(correct), answer);
+	            TestAnswer a = new TestAnswer(0, ansIndex, qstCod, Global.parseIntBool(correct), answer);
 	            
 	            //If it's a new answer, insert in database
 	            if(!answersListDB.contains(a)) {
@@ -193,14 +193,14 @@ public class TestsQuestionsDownload extends Module {
 	            if(!tagsListDB.contains(tag)) {
 	            	dbHelper.insertTestTag(tag);
 	                tagsListDB.add(tag);
-	                questionTagsListDB.add(new PairTable<Integer, Integer>(Global.DB_TABLE_TEST_QUESTION_TAGS,
+	                questionTagsListDB.add(new PairTable<Integer, Long>(Global.DB_TABLE_TEST_QUESTION_TAGS,
 	                		tag.getQstCod(), tag.getId()));
 
 	            //If it's an updated tag, update it's rows in database
 	            } else if(!questionTagsListDB.contains(tag)) {
 	            	TestTag old = (TestTag) tagsListDB.get(tagsListDB.indexOf(tag));
 	            	dbHelper.updateTestTag(old, tag);
-	                questionTagsListDB.add(new PairTable<Integer, Integer>(Global.DB_TABLE_TEST_QUESTION_TAGS,
+	                questionTagsListDB.add(new PairTable<Integer, Long>(Global.DB_TABLE_TEST_QUESTION_TAGS,
 	                		tag.getQstCod(), tag.getId()));
 	            }
 	        }
@@ -208,7 +208,7 @@ public class TestsQuestionsDownload extends Module {
 			Log.i(TAG, "Retrieved " + listSize + " relationships between questions and tags");
 			
 			//Update last time test was updated
-			Test oldTestConfigDB = (Test) dbHelper.getRow(Global.DB_TABLE_TEST_CONFIG, "id", selectedCourseCode.toString());
+			Test oldTestConfigDB = (Test) dbHelper.getRow(Global.DB_TABLE_TEST_CONFIG, "id", Long.toString(selectedCourseCode));
 			Test testConfig = oldTestConfigDB;
 			testConfig.setEditTime(System.currentTimeMillis() / 1000L);
 			dbHelper.updateTestConfig(oldTestConfigDB, testConfig);

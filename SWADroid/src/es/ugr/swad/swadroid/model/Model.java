@@ -28,9 +28,9 @@ public abstract class Model implements KvmSerializable {
 	/**
 	 * Model identifier
 	 */
-	private int id;
+	private long id;
 
-	public Model(int id) {
+	public Model(long id) {
 		super();
 		this.id = id;
 	}
@@ -39,7 +39,7 @@ public abstract class Model implements KvmSerializable {
 	 * Gets model identifier
 	 * @return Model identifier
 	 */
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 	
@@ -47,7 +47,7 @@ public abstract class Model implements KvmSerializable {
 	 * Sets model identifier
 	 * @param id Model identifier
 	 */
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -58,7 +58,7 @@ public abstract class Model implements KvmSerializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + id;
+		result = prime * result + (int) (id ^ (id >>> 32));
 		return result;
 	}
 

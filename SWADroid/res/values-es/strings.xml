@@ -57,6 +57,8 @@
 	<string name="noContentMsg">Sin contenido</string>
 	<string name="yesMsg">Sí</string>
 	<string name="noMsg">No</string>
+	<string name="trueMsg">Verdadero</string>
+	<string name="falseMsg">Falso</string>
 	<string name="acceptMsg">Aceptar</string>
 	<string name="cancelMsg">Cancelar</string>
 	<string name="allMsg">Todos</string>
@@ -74,6 +76,12 @@
 	<string name="testNoTagsSelectedMsg">Debe seleccionar al menos un descriptor</string>
 	<string name="testAnswerTypesMsg">Seleccione los tipos de respuesta que desea incluir en el test</string>
 	<string name="testNoAnswerTypesSelectedMsg">Debe seleccionar al menos un tipo de respuesta</string>
+	<string name="testEvaluateMsg">Corregir</string>
+	<string name="testResultsTextMsg">Puntuación</string>
+	<string name="testShowResultsMsg">Ver resultados</string>
+	<string name="testShowResultsDetailsMsg">Ver detalles</string>
+	<string name="testNoDetailsMsg">El profesor no permite ver los detalles</string>
+	<string name="testNoResultsMsg">El profesor no permite ver los resultados del test</string>
 	<string name="firstRunMsg">Antes de usar la aplicación por primera vez debe
 		introducir el nombre de usuario y la contraseña de acceso a SWAD en la
 		pantalla de configuración.\n\nPuede acceder a la pantalla de

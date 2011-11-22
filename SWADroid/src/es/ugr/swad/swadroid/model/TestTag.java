@@ -55,7 +55,7 @@ public class TestTag extends Model {
 	 * @param tagTxt Tag text
 	 * @param tagInd Tag index
 	 */
-	public TestTag(int id, String tagTxt, int tagInd) {
+	public TestTag(long id, String tagTxt, int tagInd) {
 		super(id);
 		this.tagTxt = tagTxt;
 		this.tagInd = tagInd;
@@ -68,7 +68,7 @@ public class TestTag extends Model {
 	 * @param tagTxt Tag text
 	 * @param tagInd Tag index
 	 */
-	public TestTag(int id, int qstCod, String tagTxt, int tagInd) {
+	public TestTag(long id, int qstCod, String tagTxt, int tagInd) {
 		super(id);
 		this.qstCod = qstCod;
 		this.tagTxt = tagTxt;
@@ -173,7 +173,7 @@ public class TestTag extends Model {
 	public void getPropertyInfo(int param, Hashtable arg1, PropertyInfo propertyInfo) {
 		switch(param){
 	        case 0:
-	            propertyInfo.type = PropertyInfo.INTEGER_CLASS;
+	            propertyInfo.type = PropertyInfo.LONG_CLASS;
 	            propertyInfo.name = "id";
 	            break;   
 	        case 1:
@@ -193,7 +193,7 @@ public class TestTag extends Model {
 	public void setProperty(int param, Object obj) {
 		switch(param)
 		{
-			case 0  : this.setId((Integer)obj); break;
+			case 0  : this.setId((Long)obj); break;
 			case 1  : tagTxt = (String)obj; break;
 			case 2  : tagInd = (Integer)obj; break;
 		}    
