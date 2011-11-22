@@ -19,54 +19,60 @@
 package es.ugr.swad.swadroid.model;
 
 /**
- * Class for manage a pair of values
+ * Specific Pair class for database tables
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
-public class Pair<FIRST, SECOND>
-{
+public class PairTable<FIRST, SECOND> extends Model {
 	/**
-	 * First value
+	 * Pair of values
 	 */
-	private FIRST first;
+	private Pair<FIRST, SECOND> values;
 	/**
-	 * Second value
+	 * Table who owns the pair of values
 	 */
-	private SECOND second;
+	private String table;
 
 	/**
 	 * Constructor
-	 * @param f First value
-	 * @param s Second value
+	 * @param table Table who owns the pair of values
+	 * @param first First value
+	 * @param second Second value
 	 */
-	public Pair(FIRST f, SECOND s)
-	{ 
-		first = f;
-		second = s;   
+	public PairTable(String table, FIRST first, SECOND second) {
+		super(0);
+		this.values = new Pair<FIRST, SECOND>(first, second);
+		this.table = table;
 	}
 
+	/**
+	 * Gets the pair of values
+	 * @return Pair of values
+	 */
+	public Pair<FIRST, SECOND> getValues() {
+		return values;
+	}
+	
 	/**
 	 * Gets first value
 	 * @return First value
 	 */
-	public FIRST getFirst()
-	{
-		return first;
+	public FIRST getFirst() {
+		return this.values.getFirst();
 	}
-
+	
 	/**
 	 * Gets second value
 	 * @return Second value
 	 */
-	public SECOND getSecond() 
-	{
-		return second;
+	public SECOND getSecond() {
+		return this.values.getSecond();
 	}
 
 	/**
-	 * Converts this Pair into a string
+	 * Gets the table who owns the pair of values
+	 * @return Table who owns the pair of values
 	 */
-	public String toString()
-	{ 
-		return "(" + first.toString() + ", " + second.toString() + ")"; 
-	}
+	public String getTable() {
+		return table;
+	}	
 }
