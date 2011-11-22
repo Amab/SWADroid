@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.R;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -35,7 +36,7 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-public class DataBaseHelper extends SQLiteOpenHelper{
+public class DataBaseHelper extends SQLiteOpenHelper {
 	//The Android's default system path of your application database.
 	private static String DB_PATH = "/data/data/es.ugr.swad.swadroid/databases/";
 	private static String DB_NAME = "swadroid";
@@ -56,7 +57,8 @@ public class DataBaseHelper extends SQLiteOpenHelper{
 	
 	/**
 	 * Creates a empty database on the system and rewrites it with your own database.
-	 * */
+	 * @throws IOException
+	 */
 	public void createDataBase() throws IOException{
 		boolean dbExist = checkDataBase();
 		if(dbExist){
@@ -68,7 +70,7 @@ public class DataBaseHelper extends SQLiteOpenHelper{
 			try {
 				copyDataBase();
 			} catch (IOException e) {
-				throw new Error("Error copying database");
+				throw new Error(context.getString(R.string.errorCopyMsg_DB));
 			}
 		}
 	}
@@ -96,7 +98,8 @@ public class DataBaseHelper extends SQLiteOpenHelper{
 	 * Copies your database from your local assets-folder to the just created empty database in the
 	 * system folder, from where it can be accessed and handled.
 	 * This is done by transferring bytestream.
-	 * */
+	 * @throws IOException
+	 **/
 	private void copyDataBase() throws IOException{
 		//Open your local db as the input stream
 		InputStream myInput = context.getAssets().open(DB_NAME);
@@ -134,13 +137,13 @@ public class DataBaseHelper extends SQLiteOpenHelper{
 	}
 	
 	@Override
-	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		Log.w(TAG, "Upgrading database!!!!!");
+	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
+		Log.w(TAG, context.getString(R.string.upgradeMsg_DB));
         //db.execSQL("");
         try {
 			copyDataBase();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			Log.e(TAG, context.getString(R.string.errorCopyMsg_DB));
 			e.printStackTrace();
 		}
 	}
@@ -148,29 +151,61 @@ public class DataBaseHelper extends SQLiteOpenHelper{
 	// Add your public helper methods to access and get content from the database.
 	// You could return cursors by doing "return swadroidDataBase.query(....)" so it'd be easy
 	// to you to create adapters for your views.
+	
+	/**
+	 * Gets all rows of specified table
+	 * @param table Table containing the rows
+	 * @return A cursor pointing to the rows
+	 */
 	public Cursor getCursorAllRows(String table)
     {
         String query = "SELECT * FROM " + table;
         return swadroidDataBase.rawQuery(query, null);
     }
 	
-	public boolean parseIntBool(int n) {
+	/**
+	 * Function to parse from Integer to Boolean
+	 * @param n Integer to be parsed
+	 * @return true if n==0, false in other case
+	 */
+	private boolean parseIntBool(int n) {
 		return n==0 ? true : false;
 	}
 	
-	public boolean parseStringBool(String s) {
+	/**
+	 * Function to parse from String to Boolean
+	 * @param s String to be parsed
+	 * @return true if s equals "Y", false in other case
+	 */
+	private boolean parseStringBool(String s) {
 		return s.equals("Y") ? true : false;
 	}
 	
-	public int parseBoolInt(boolean b) {
+	/**
+	 * Function to parse from Boolean to Integer
+	 * @param b Boolean to be parsed
+	 * @return 1 if b==true, 0 in other case
+	 */
+	private int parseBoolInt(boolean b) {
 		return b ? 1 : 0;
 	}
 	
-	public String parseBoolString(boolean b) {
+	/**
+	 * Function to parse from Boolean to String
+	 * @param b Boolean to be parsed
+	 * @return "Y" if b==true, "N" in other case
+	 */
+	private String parseBoolString(boolean b) {
 		return b ? "Y" : "N";
 	}
 	
-	Model createObjectByTable(String table, Cursor rows) {
+	/**
+	 * Creates a Model's subclass object looking at the table selected
+	 * @param table Table selected
+	 * @param rows Cursor to the table rows
+	 * @return A Model's subclass object
+	 */
+	private Model createObjectByTable(String table, Cursor rows) {
 		Model o = null;
 		
 		if(table.equals(Global.DB_TABLE_COURSES)) {
@@ -209,6 +244,11 @@ public class DataBaseHelper extends SQLiteOpenHelper{
 		return o;
 	}
 	
+	/**
+	 * Gets all rows of specified table
+	 * @param table Table containing the rows
+	 * @return A list of Model's subclass objects
+	 */
 	public List<Model> getAllRows(String table)
     {
 		List<Model> result = new ArrayList<Model>();		
@@ -225,6 +265,10 @@ public class DataBaseHelper extends SQLiteOpenHelper{
         return result;
     }
 	
+	/**
+	 * Inserts a row into the appropriated table looking at the Model's subclass of the object to be inserted
+	 * @param row Model's subclass object
+	 */
 	public void insertRow(Model row)
     {
         String command = "INSERT INTO ";
@@ -266,7 +310,7 @@ public class DataBaseHelper extends SQLiteOpenHelper{
         				+ q.getNumhits() + ", "
         				+ q.getQuestion() + ", "
         				+ q.getScore() + ", "
-        				+ parseBoolInt(q.getShuffle())
+        				+ parseBoolString(q.getShuffle())
         											+ ")";
         } else if(row instanceof PairTable) {
         	PairTable<?, ?> p = (PairTable<?, ?>) row;
