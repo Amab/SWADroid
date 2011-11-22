@@ -23,6 +23,7 @@ import com.android.dataframework.DataFramework;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -84,6 +85,26 @@ public class SWADMain extends ListActivity {
                 SWADMain.this.finish();
                 }
                 })*/
+    }
+
+    /**
+     * Shows initial dialog on first run.
+     */
+    public void showInitialDialog() {
+    	new AlertDialog.Builder(this)
+    		   .setTitle(R.string.initialDialogTitle)
+    	       .setMessage(R.string.firstRunMsg)
+    	       .setCancelable(false)
+    	       .setPositiveButton(R.string.yesMsg, new DialogInterface.OnClickListener() {
+    	           public void onClick(DialogInterface dialog, int id) {
+    	        	   viewPreferences();
+    	           }
+    	       })
+    	       .setNegativeButton(R.string.noMsg, new DialogInterface.OnClickListener() {
+    	           public void onClick(DialogInterface dialog, int id) {
+    	                dialog.cancel();
+    	           }
+    	       }).show();
     }
 
 	/* (non-Javadoc)
@@ -168,7 +189,10 @@ public class SWADMain extends ListActivity {
 	 */
     @Override
     public void onCreate(Bundle icicle) {
+        int lastVersion, currentVersion;
+        
         try {
+        	//Initialize screen
             super.onCreate(icicle);
             Window w = getWindow();
             w.requestFeature(Window.FEATURE_LEFT_ICON);
@@ -178,20 +202,28 @@ public class SWADMain extends ListActivity {
             functions = getResources().getStringArray(R.array.functions);
             setListAdapter(new ArrayAdapter<String>(this, R.layout.functions_list_item, functions));
             
+            //Initialize database
             db = DataFramework.getInstance();
             db.open(this, this.getPackageName());
             dbHelper = new DataBaseHelper(db);
             
-            prefs.getPreferences(getBaseContext());            
+            //Initialize preferences
+            prefs.getPreferences(getBaseContext()); 
+            
+            //Initialize HTTPS connections 
             SecureConnection.initSecureConnection(); 
             
-            if(prefs.getFirstRun()) {
-            	viewPreferences();
-            	prefs.setRunned();
+            //Check if this is the first run after an install or upgrade
+            //If this is the first run, show initial dialog
+            lastVersion = prefs.getLastVersion();
+            currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+            if(lastVersion == 0) {
+            	showInitialDialog();
+            	prefs.setLastVersion(currentVersion);
             }
         } catch (Exception ex) {
-            Log.e(ex.getClass().getSimpleName(), ex.toString());
-            error(ex.toString());
+            Log.e(ex.getClass().getSimpleName(), ex.getMessage());
+            error(ex.getMessage());
             ex.printStackTrace();
         }
     }
