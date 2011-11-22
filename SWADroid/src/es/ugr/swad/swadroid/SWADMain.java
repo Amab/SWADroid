@@ -38,6 +38,7 @@ import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.modules.notifications.Notifications;
 import es.ugr.swad.swadroid.modules.tests.Tests;
@@ -170,12 +171,13 @@ public class SWADMain extends ExpandableListActivity {
 		Intent activity;
 		if(keyword.equals(getString(R.string.notificationsModuleLabel)))
 		{
-				activity = new Intent(getBaseContext(), Notifications.class);
-				startActivityForResult(activity, Global.NOTIFICATIONS_REQUEST_CODE);
-				
+			activity = new Intent(getBaseContext(), Notifications.class);
+			startActivityForResult(activity, Global.NOTIFICATIONS_REQUEST_CODE);				
 		} else if(keyword.equals(getString(R.string.testsModuleLabel))) {
-				activity = new Intent(getBaseContext(), Tests.class);
-				startActivityForResult(activity, Global.TESTS_REQUEST_CODE);
+			activity = new Intent(getBaseContext(), Tests.class);
+			startActivityForResult(activity, Global.TESTS_REQUEST_CODE);
+		} else if(keyword.equals(getString(R.string.messageModuleLabel))) {
+			Toast.makeText(this, "Opción en desarrollo", Toast.LENGTH_SHORT).show();
 		}
 		
 		return true;
@@ -215,12 +217,19 @@ public class SWADMain extends ExpandableListActivity {
 
         final ArrayList<HashMap<String, Object>> evaluationData = new ArrayList<HashMap<String, Object>>();
         childData.add(evaluationData);
-
+        
+        //Messages category
         HashMap<String, Object> map = new HashMap<String,Object>();
         map.put(NAME, getString(R.string.notificationsModuleLabel) );
         map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
+        messagesData.add(map); 
+        
+        map = new HashMap<String,Object>();        
+        map.put(NAME, getString(R.string.messageModuleLabel) );
+        map.put(IMAGE, getResources().getDrawable(R.drawable.msg));
         messagesData.add(map);
         
+        //Evaluation category
         map = new HashMap<String,Object>();
         map.put(NAME, getString(R.string.testsModuleLabel) );
         map.put(IMAGE, getResources().getDrawable(R.drawable.test));
