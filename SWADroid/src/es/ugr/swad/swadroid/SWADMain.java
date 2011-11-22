@@ -24,6 +24,7 @@ import com.android.dataframework.DataFramework;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -32,7 +33,6 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.widget.Toast;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
-import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
 
@@ -73,12 +73,9 @@ public class SWADMain extends Activity {
                 })*/
     }
 
-    /**
-     * Creates application menu.
-     * @param menu Object to store created menu.
-     * @return true if menu was created.
-     *         false if menu was not created.
-     */
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreateOptionsMenu()
+	 */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -86,12 +83,9 @@ public class SWADMain extends Activity {
         return true;
     }
 
-	/**
-     * Called when an item of menu is selected.
-     * @param item Item selected.
-     * @return true if action was performed.
-     *         false if action was not performed.
-     */
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onOptionsItemSelected()
+	 */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -110,12 +104,9 @@ public class SWADMain extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Handles the result of launch an activity and performs an action.
-     * @param requestCode Identifier of action requested.
-     * @param resultCode Status of activity's result (correct or not).
-     * @param data Data returned by launched activity.
-     */
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onActivityResult()
+	 */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
@@ -141,19 +132,18 @@ public class SWADMain extends Activity {
         }
     }
 
-    /**
-     * Called each time activity is started.
-     */
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onStart()
+	 */
     @Override
     protected void onStart() {
         super.onStart();
         prefs.getPreferences(getBaseContext());
     }
-    
-    /**
-     * Called when activity is first created.
-     * @param icicle State of activity.
-     */
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreate()
+	 */
     @Override
     public void onCreate(Bundle icicle) {
         try {

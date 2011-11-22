@@ -21,6 +21,7 @@ package es.ugr.swad.swadroid;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
@@ -94,10 +95,9 @@ public class Preferences extends PreferenceActivity {
         userPassword = prefs.getString("userPasswordPref", "");
     }
 
-    /**
-     * Called when activity is first created.
-     * @param savedInstanceState State of activity.
-     */
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreate()
+	 */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
