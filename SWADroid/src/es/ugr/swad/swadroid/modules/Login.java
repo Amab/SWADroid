@@ -24,6 +24,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 //import android.util.Base64;
 import android.util.Log;
+import android.widget.Toast;
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
@@ -47,6 +48,7 @@ public class Login extends Module {
      * User password.
      */
     private String userPassword;
+    private boolean isConnected;
 
     /**
      * Called when activity is first created.
@@ -56,6 +58,12 @@ public class Login extends Module {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setMETHOD_NAME("loginByUserPasswordKey");
+        isConnected = connectionAvailable(this);
+        
+        if (!isConnected) { 
+        	Toast.makeText(this, R.string.errorMsgNoConnection, Toast.LENGTH_LONG).show(); 
+        }
+        
         connect();
     }
 
@@ -76,33 +84,35 @@ public class Login extends Module {
      */
     private void requestService()
             throws NoSuchAlgorithmException, IOException, XmlPullParserException, SoapFault {
-
-        //Encrypts user password with SHA-512 and encodes it to Base64UrlSafe   	
-        md = MessageDigest.getInstance("SHA-512");
-        md.update(prefs.getUserPassword().getBytes());
-        //userPassword = new String(Base64.encode(md.digest(), Base64.URL_SAFE + Base64.NO_PADDING + Base64.NO_WRAP));
-        userPassword = new String(Base64.encode(md.digest()));
-        userPassword = userPassword.replace('+','-').replace('/','_').replace('=', ' ').replaceAll("\\s+", "").trim();
-
-        //Creates webservice request, adds required params and sends request to webservice
-        createRequest();
-        addParam("userID", prefs.getUserID());
-        addParam("userPassword", userPassword);
-        addParam("appKey", Global.getAppKey());
-        sendRequest();
-
-        //Stores user data returned by webservice response
-        User.setUserCode(result.get(0).toString());
-        User.setUserTypeCode(result.get(1).toString());
-        User.setWsKey(result.get(2).toString());
-        User.setUserID(result.get(3).toString());
-        User.setUserSurname1(result.get(4).toString());
-        User.setUserSurname2(result.get(5).toString());
-        User.setUserFirstName(result.get(6).toString());
-        User.setUserTypeName(result.get(7).toString());
-
-        //Request finalized without errors
-        setResult(RESULT_OK);
+    	if (isConnected) {
+	        //Encrypts user password with SHA-512 and encodes it to Base64UrlSafe   	
+	        md = MessageDigest.getInstance("SHA-512");
+	        md.update(prefs.getUserPassword().getBytes());
+	        //userPassword = new String(Base64.encode(md.digest(), Base64.URL_SAFE + Base64.NO_PADDING + Base64.NO_WRAP));
+	        userPassword = new String(Base64.encode(md.digest()));
+	        userPassword = userPassword.replace('+','-').replace('/','_').replace('=', ' ').replaceAll("\\s+", "").trim();
+	
+	        //Creates webservice request, adds required params and sends request to webservice
+	        createRequest();
+	        addParam("userID", prefs.getUserID());
+	        addParam("userPassword", userPassword);
+	        addParam("appKey", Global.getAppKey());
+	        sendRequest();
+	
+	        //Stores user data returned by webservice response
+	        User.setUserCode(result.get(0).toString());
+	        User.setUserTypeCode(result.get(1).toString());
+	        User.setWsKey(result.get(2).toString());
+	        User.setUserID(result.get(3).toString());
+	        User.setUserSurname1(result.get(4).toString());
+	        User.setUserSurname2(result.get(5).toString());
+	        User.setUserFirstName(result.get(6).toString());
+	        User.setUserTypeName(result.get(7).toString());
+	
+	        //Request finalized without errors
+	        setResult(RESULT_OK);
+        }
+    	
         finish();
     }
 
