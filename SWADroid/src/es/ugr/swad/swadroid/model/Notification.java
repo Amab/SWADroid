@@ -34,7 +34,7 @@ public class Notification extends Model {
 	/**
 	 * Notification timestamp
 	 */
-	private int eventTime;
+	private long eventTime;
 	/**
 	 * Sender first surname
 	 */
@@ -55,6 +55,10 @@ public class Notification extends Model {
 	 * Notification summary
 	 */
 	private String summary;
+	/**
+	 * Notification status
+	 */
+	private int status;
 	private static PropertyInfo PI_id = new PropertyInfo();
 	private static PropertyInfo PI_eventType = new PropertyInfo();
 	private static PropertyInfo PI_eventTime = new PropertyInfo();
@@ -63,6 +67,7 @@ public class Notification extends Model {
 	private static PropertyInfo PI_userFirstName = new PropertyInfo();
 	private static PropertyInfo PI_location = new PropertyInfo();
 	private static PropertyInfo PI_summary = new PropertyInfo();
+	private static PropertyInfo PI_status = new PropertyInfo();
     private static PropertyInfo[] PI_PROP_ARRAY =
     {
     	PI_id,
@@ -72,7 +77,8 @@ public class Notification extends Model {
     	PI_userSurname2,
     	PI_userFirstName,
     	PI_location,
-    	PI_summary   	
+    	PI_summary,
+    	PI_status
     };
 	
 	/**
@@ -84,10 +90,11 @@ public class Notification extends Model {
 	 * @param userFirstName Sender first name
 	 * @param location Notification location
 	 * @param summary Notification summary
+	 * @param status Notification summary
 	 */
-	public Notification(int id, String eventType, int eventTime,
+	public Notification(int id, String eventType, long eventTime,
 			String userSurname1, String userSurname2, String userFirstName,
-			String location, String summary) {
+			String location, String summary, int status) {
 		
 		super(id);
 		this.eventType = eventType;
@@ -97,6 +104,7 @@ public class Notification extends Model {
 		this.userFirstName = userFirstName;
 		this.location = location;
 		this.summary = summary;
+		this.status = status;
 	}
 
 	/**
@@ -119,7 +127,7 @@ public class Notification extends Model {
 	 * Gets notification timestamp
 	 * @return Notification timestamp
 	 */
-	public int getEventTime() {
+	public long getEventTime() {
 		return eventTime;
 	}
 
@@ -211,6 +219,22 @@ public class Notification extends Model {
 		this.summary = summary;
 	}	
 
+	/**
+	 * Gets notification status
+	 * @return Notification status
+	 */
+	public int getStatus() {
+		return status;
+	}
+
+	/**
+	 * Sets notification status
+	 * @param status Notification status
+	 */
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
@@ -218,11 +242,12 @@ public class Notification extends Model {
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + eventTime;
+		result = prime * result + (int) (eventTime ^ (eventTime >>> 32));
 		result = prime * result
 				+ ((eventType == null) ? 0 : eventType.hashCode());
 		result = prime * result
 				+ ((location == null) ? 0 : location.hashCode());
+		result = prime * result + status;
 		result = prime * result + ((summary == null) ? 0 : summary.hashCode());
 		result = prime * result
 				+ ((userFirstName == null) ? 0 : userFirstName.hashCode());
@@ -257,6 +282,8 @@ public class Notification extends Model {
 				return false;
 		} else if (!location.equals(other.location))
 			return false;
+		if (status != other.status)
+			return false;
 		if (summary == null) {
 			if (other.summary != null)
 				return false;
@@ -278,7 +305,7 @@ public class Notification extends Model {
 		} else if (!userSurname2.equals(other.userSurname2))
 			return false;
 		return true;
-	}	
+	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
@@ -289,7 +316,7 @@ public class Notification extends Model {
 				+ eventTime + ", userSurname1=" + userSurname1
 				+ ", userSurname2=" + userSurname2 + ", userFirstName="
 				+ userFirstName + ", location=" + location + ", summary="
-				+ summary + ", getId()=" + getId() + "]";
+				+ summary + ", status=" + status + "]";
 	}
 
 	/* (non-Javadoc)
@@ -307,6 +334,7 @@ public class Notification extends Model {
 	        case 5 : object = userFirstName;break;
 	        case 6 : object = location;break;
 	        case 7 : object = summary;break;
+	        case 8 : object = status;break;
 	    }
 	    
 	    return object;
@@ -316,7 +344,7 @@ public class Notification extends Model {
 	 * @see org.ksoap2.serialization.KvmSerializable#getPropertyCount()
 	 */
 	public int getPropertyCount() {
-		return 8;
+		return 9;
 	}
 
 	/* (non-Javadoc)
@@ -333,7 +361,7 @@ public class Notification extends Model {
 	            propertyInfo.name = "eventType";
 	            break;    
 	        case 2:
-	            propertyInfo.type = PropertyInfo.INTEGER_CLASS;
+	            propertyInfo.type = PropertyInfo.LONG_CLASS;
 	            propertyInfo.name = "eventTime";
 	            break;    
 	        case 3:
@@ -356,6 +384,10 @@ public class Notification extends Model {
 	            propertyInfo.type = PropertyInfo.STRING_CLASS;
 	            propertyInfo.name = "summary";
 	            break;
+	        case 8:
+	            propertyInfo.type = PropertyInfo.INTEGER_CLASS;
+	            propertyInfo.name = "status";
+	            break;
 		}
 	}
 
@@ -367,13 +399,13 @@ public class Notification extends Model {
 		{
 			case 0  : this.setId((Integer)obj); break;
 			case 1  : eventType = (String)obj; break;
-			case 2  : eventTime = (Integer)obj; break;
+			case 2  : eventTime = (Long)obj; break;
 			case 3  : userSurname1 = (String)obj; break;
 			case 4  : userSurname2 = (String)obj; break;
 			case 5  : userFirstName = (String)obj; break;
 			case 6  : location = (String)obj; break;
 			case 7  : summary = (String)obj; break;
+			case 8  : status = (Integer)obj; break;
 		}    
 	}
-
 }

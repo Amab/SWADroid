@@ -30,6 +30,10 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.Window;
 import android.widget.Toast;
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.Preferences;
@@ -51,10 +55,6 @@ import com.android.dataframework.DataFramework;
 /**
  * Superclass for encapsulate common behavior of all modules.
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
- */
-/**
- * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
- *
  */
 public abstract class Module extends Activity {
     /**
@@ -97,6 +97,10 @@ public abstract class Module extends Activity {
      * Database Framework.
      */
     private static DataFramework db;
+    /**
+     * Connection available flag
+     */
+    protected static boolean isConnected;
     
     /**
      * Connects to SWAD and gets user data.
@@ -227,6 +231,24 @@ public abstract class Module extends Activity {
     public void setResult(Object result) {
         this.result = result;
     }
+    
+    /**
+     * Launch login activity when required
+     */
+    private void runLogin()
+    {
+    	isConnected = connectionAvailable(this);
+        if (!isConnected) { 
+        	Toast.makeText(this, R.string.errorMsgNoConnection, Toast.LENGTH_LONG).show(); 
+        } else {
+	        //If not logged and this is not the Login module, launch login
+	        if(!Global.isLogged() && !(this instanceof Login)) {
+	        	Intent loginActivity = new Intent(getBaseContext(),
+	                    Login.class);
+	            startActivityForResult(loginActivity, Global.LOGIN_REQUEST_CODE);
+	        }
+        }
+    }
 
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onCreate()
@@ -235,6 +257,10 @@ public abstract class Module extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
         prefs.getPreferences(getBaseContext());
+        
+        Window w = getWindow();
+        w.requestFeature(Window.FEATURE_LEFT_ICON);
+        w.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.ic_launcher_swadroid);
         
         //If not connected to database, connect now
         if(dbHelper == null) {
@@ -246,13 +272,8 @@ public abstract class Module extends Activity {
 				e.printStackTrace();
 			}
         }
-        
-        //If not logged and this is not the Login module, launch login
-        if(!Global.isLogged() && !(this instanceof Login)) {
-        	Intent loginActivity = new Intent(getBaseContext(),
-                    Login.class);
-            startActivityForResult(loginActivity, Global.LOGIN_REQUEST_CODE);
-        }
+		
+        runLogin();
 	}
 
 	/* (non-Javadoc)
@@ -374,6 +395,39 @@ public abstract class Module extends Activity {
                 })
                 .setIcon(R.drawable.erroricon).show();
                 
+    }
+    
+    /**
+     * Shows Preferences screen
+     */
+    protected void viewPreferences() {
+    	Intent settingsActivity = new Intent(getBaseContext(),
+                Preferences.class);
+        startActivity(settingsActivity);
+    }
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreateOptionsMenu()
+	 */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onOptionsItemSelected()
+	 */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.preferences_menu:
+            	viewPreferences();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 	/* (non-Javadoc)

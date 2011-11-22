@@ -159,14 +159,19 @@ public class DataBaseHelper {
 	public void insertNotification(Notification n)
     {
 		Entity ent = new Entity(Global.DB_TABLE_NOTIFICATIONS);
+		
+		String eventTime = String.valueOf(n.getEventTime());
+		String status = String.valueOf(n.getStatus());
+		
 		ent.setValue("id", n.getId());
 		ent.setValue("eventType", n.getEventType());
-		ent.setValue("eventTime", n.getEventTime());
+		ent.setValue("eventTime", eventTime);
 		ent.setValue("userSurname1", n.getUserSurname1());
 		ent.setValue("userSurname2", n.getUserSurname2());
 		ent.setValue("userFirstName", n.getUserFirstName());
 		ent.setValue("location", n.getLocation());
 		ent.setValue("summary", n.getSummary());
+		ent.setValue("status", status);
 		ent.save();
     }
 	
@@ -208,13 +213,19 @@ public class DataBaseHelper {
     {
 		List<Entity> rows = db.getEntityList(Global.DB_TABLE_NOTIFICATIONS, "id = " + prev.getId());
 		Entity ent = rows.get(0);
+		
+		String eventTime = String.valueOf(actual.getEventTime());
+		String status = String.valueOf(actual.getStatus());
+		
 		ent.setValue("id", actual.getId());
 		ent.setValue("eventType", actual.getEventType());
-		ent.setValue("eventTime", actual.getEventTime());
+		ent.setValue("eventTime", eventTime);
 		ent.setValue("userSurname1", actual.getUserSurname1());
 		ent.setValue("userSurname2", actual.getUserSurname2());
 		ent.setValue("userFirstName", actual.getUserFirstName());
-		ent.setValue("location", actual.getSummary());
+		ent.setValue("location", actual.getLocation());
+		ent.setValue("summary", actual.getSummary());
+		ent.setValue("status", status);
 		ent.save();
     }
 	
@@ -300,42 +311,38 @@ public class DataBaseHelper {
     }
 	
 	/**
-	 * Gets timestamp of last notification
-	 * @return Timestamp of last notification
+	 * Gets a field of last notification
+	 * @param field A field of last notification
+	 * @return The field of last notification
 	 */
-	public int getLastNotificationTimestamp()
+	public String getFieldOfLastNotification(String field)
     {
-		List<Entity> rows = db.getEntityList(Global.DB_TABLE_NOTIFICATIONS);
-		int timestamp;
+		String orderby = "eventTime desc";
+		List<Entity> rows = db.getEntityList(Global.DB_TABLE_NOTIFICATIONS, null, orderby);
+		String f = "0";
 		
 		if(rows.size() > 0)
 		{
 			Entity ent = rows.get(rows.size()-1);
-			timestamp = (Integer) ent.getValue("eventTime");
-		} else {
-			timestamp = 0;
+			f = (String) ent.getValue(field);
 		}
 		
-		return timestamp;
+		return f;
     }
 	
 	/**
-	 * Gets id of last notification
-	 * @return Id of last notification
+	 * Clear old notifications
+	 * @param timestamp Newest timestamp to clear
 	 */
-	public int getLastNotificationId()
-    {
-		List<Entity> rows = db.getEntityList(Global.DB_TABLE_NOTIFICATIONS);
-		int id;
+	public void clearOldNotifications(long timestamp)
+	{
+		String where = "eventTime < " + timestamp;
+		List<Entity> rows = db.getEntityList(Global.DB_TABLE_NOTIFICATIONS, where);
+		Iterator<Entity> iter = rows.iterator();
 		
-		if(rows.size() > 0)
-		{
-			Entity ent = rows.get(rows.size()-1);
-			id = (Integer) ent.getValue("id");
-		} else {
-			id = 0;
+		while (iter.hasNext()) {
+		  Entity ent = iter.next();
+		  ent.delete();
 		}
-		
-		return id;
-    }
+	}
 }
