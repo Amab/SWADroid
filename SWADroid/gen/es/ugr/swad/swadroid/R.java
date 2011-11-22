@@ -55,5 +55,6 @@ public final class R {
     }
     public static final class xml {
         public static final int preferences=0x7f040000;
+        public static final int tables=0x7f040001;
     }
 }

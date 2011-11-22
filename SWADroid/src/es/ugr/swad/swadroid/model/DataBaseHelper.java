@@ -18,170 +18,31 @@
  */
 package es.ugr.swad.swadroid.model;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-import es.ugr.swad.swadroid.Global;
-import es.ugr.swad.swadroid.R;
-
-import android.content.Context;
-import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-public class DataBaseHelper extends SQLiteOpenHelper {
-	//The Android's default system path of your application database.
-	private static String DB_PATH = "/data/data/es.ugr.swad.swadroid/databases/";
-	private static String DB_NAME = "swadroid";
-    private static final int DATABASE_VERSION = 1;
-    private static final String TAG = "SWADroidDB";
-	private SQLiteDatabase swadroidDataBase;
-	private final Context context;
-	
-	/**
-	 * Constructor
-	 * Takes and keeps a reference of the passed context in order to access to the application assets and resources.
-	 * @param context
-	 */
-	public DataBaseHelper(Context context) {
-		super(context, DB_NAME, null, DATABASE_VERSION);
-		this.context = context;
-	}
-	
-	/**
-	 * Creates a empty database on the system and rewrites it with your own database.
-	 * @throws IOException
-	 */
-	public void createDataBase() throws IOException{
-		boolean dbExist = checkDataBase();
-		if(dbExist){
-			//do nothing - database already exist
-			Log.d("createDataBase", "Database already exists.");
-		}else{
-			//By calling this method and empty database will be created into the default system path
-			//of your application so we are gonna be able to overwrite that database with our database.
-			this.getReadableDatabase();
-			try {
-				Log.d("createDataBase", "Creating database...");
-				copyDataBase();
-				Log.d("createDataBase", "Database created successfully.");
-			} catch (IOException e) {
-				throw new Error(context.getString(R.string.errorCopyMsg_DB));
-			}
-		}
-	}
-	
-	/**
-	 * Check if the database already exist to avoid re-copying the file each time you open the application.
-	 * @return true if it exists, false if it doesn't
-	 * @throws IOException 
-	 */
-	private boolean checkDataBase() throws IOException{
-		SQLiteDatabase checkDB = null;
-		try{
-			Log.d("checkDataBase", "Checking database...");
-			String myPath = DB_PATH + DB_NAME;
-			checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
-			Log.d("checkDataBase", "Database already exists.");
-		}catch(SQLiteException e){
-			//database doesn't exist yet.
-			Log.d("checkDataBase", "Database doesn't exist yet.");
-			createDataBase();
-		}
+import com.android.dataframework.DataFramework;
+import com.android.dataframework.Entity;
 
-		if(checkDB != null){
-			checkDB.close();
-		}
-		return checkDB != null ? true : false;
+import es.ugr.swad.swadroid.Global;
+
+/**
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ *
+ */
+public class DataBaseHelper {
+	private DataFramework db;
+	
+    public DataBaseHelper(DataFramework database) {
+    	db = database;
 	}
 	
-	/**
-	 * Copies your database from your local assets-folder to the just created empty database in the
-	 * system folder, from where it can be accessed and handled.
-	 * This is done by transferring bytestream.
-	 * @throws IOException
-	 **/
-	private void copyDataBase() throws IOException{
-		Log.d("copyDataBase", "Copying database to destination...");
-		
-		//Open your local db as the input stream
-		InputStream myInput = context.getAssets().open(DB_NAME);
-		// Path to the just created empty db
-		String outFileName = DB_PATH + DB_NAME;
-		//Open the empty db as the output stream
-		OutputStream myOutput = new FileOutputStream(outFileName);
-		
-		//transfer bytes from the inputfile to the outputfile
-		byte[] buffer = new byte[1024];
-		int length;
-		while ((length = myInput.read(buffer))>0){
-			myOutput.write(buffer, 0, length);
-		}
-		
-		//Close the streams
-		myOutput.flush();
-		myOutput.close();
-		myInput.close();
-		
-		Log.d("copyDataBase", "Database successfully copied.");
-	}
-	
-	public void openDataBase() throws SQLException, IOException {
-		Log.d("openDataBase", "Opening database...");
-		
-		checkDataBase();
-		
-		//Open the database
-		String myPath = DB_PATH + DB_NAME;
-		swadroidDataBase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
-		
-		Log.d("openDataBase", "Database successfully opened.");
-	}
-	
-	@Override
 	public synchronized void close() {
-		if(swadroidDataBase != null)
-			swadroidDataBase.close();
-		super.close();
+		db.close();
 	}
-	
-	@Override
-	public void onCreate(SQLiteDatabase db) {
-	}
-	
-	@Override
-	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
-		Log.w(TAG, context.getString(R.string.upgradeMsg_DB));
-        //db.execSQL("");
-        try {
-			copyDataBase();
-		} catch (IOException e) {
-			Log.e(TAG, context.getString(R.string.errorCopyMsg_DB));
-			e.printStackTrace();
-		}
-	}
-	
-	// Add your public helper methods to access and get content from the database.
-	// You could return cursors by doing "return swadroidDataBase.query(....)" so it'd be easy
-	// to you to create adapters for your views.
-	
-	/**
-	 * Gets all rows of specified table
-	 * @param table Table containing the rows
-	 * @return A cursor pointing to the rows
-	 */
-	public Cursor getCursorAllRows(String table)
-    {
-        String query = "SELECT * FROM " + table;
-        return swadroidDataBase.rawQuery(query, null);
-    }
 	
 	/**
 	 * Function to parse from Integer to Boolean
@@ -219,76 +80,99 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 		return b ? "Y" : "N";
 	}
 	
+	private Pair<String, String> selectParamsPairTable(String table) {  
+		String firstParam = null;
+		String secondParam = null;
+		
+    	if(table.equals(Global.DB_TABLE_NOTICES_COURSES)) {
+    		firstParam = "idcourse";
+    		secondParam = "idnotice";
+    	} else if(table.equals(Global.DB_TABLE_STUDENTS_COURSES)) {
+    		firstParam = "idcourse";
+    		secondParam = "idstudent";
+    	} else if(table.equals(Global.DB_TABLE_TEST_QUESTIONS_COURSES)) {
+    		firstParam = "crscod";
+    		secondParam = "qstcod";
+    	} else {
+    		Log.e("selectParamsPairTable", "Table " + table + " not exists");
+    	}
+    	
+    	return new Pair<String, String>(firstParam, secondParam);
+	}
+	
 	/**
 	 * Creates a Model's subclass object looking at the table selected
 	 * @param table Table selected
-	 * @param rows Cursor to the table rows
+	 * @param ent Cursor to the table rows
 	 * @return A Model's subclass object
 	 */
-	private Model createObjectByTable(String table, Cursor rows) {
+	private Model createObjectByTable(String table, Entity ent) {
 		Model o = null;
+		Pair<String, String> params;
 		
 		if(table.equals(Global.DB_TABLE_COURSES)) {
-			o = new Course((Integer) rows.getInt(0),
-							(String) rows.getString(1));
+			o = new Course(ent.getInt("id"),
+							ent.getString("name"));
 		} else if(table.equals(Global.DB_TABLE_NOTICES)) {
-			o = new Notice((Integer) rows.getInt(0),
-							(Integer) rows.getInt(1),
-							(String) rows.getString(2));
-		} else if(table.equals(Global.DB_TABLE_STUDENTS)) {
-			o = new Student((Integer) rows.getInt(0),
-							(String) rows.getString(1),
-							(String) rows.getString(2),
-							(String) rows.getString(3),
-							(String) rows.getString(4));
+			o = new Notice(ent.getInt("id"),
+							ent.getInt("timestamp"),
+							ent.getString("description"));
+		/*} else if(table.equals(Global.DB_TABLE_STUDENTS)) {
+			o = new Student((Integer) ent.getInt(0),
+							(String) ent.getString(1),
+							(String) ent.getString(2),
+							(String) ent.getString(3),
+							(String) ent.getString(4));
 		} else if(table.equals(Global.DB_TABLE_TEST_ANSWERS)) {
-			o = new TestAnswer((Integer) rows.getInt(0),
-					(Boolean) parseIntBool(rows.getInt(1)),
-					(String) rows.getString(2));
+			o = new TestAnswer((Integer) ent.getInt(0),
+					(Boolean) parseIntBool(ent.getInt(1)),
+					(String) ent.getString(2));
 		} else if(table.equals(Global.DB_TABLE_TEST_QUESTIONS)) {
-			o = new TestQuestion((Integer) rows.getInt(0),
-					(String) rows.getString(1),
-					(String) rows.getString(2),
-					(Integer) rows.getInt(3),
-					(Boolean) parseStringBool(rows.getString(4)),
-					(Float) rows.getFloat(5));
+			o = new TestQuestion((Integer) ent.getInt(0),
+					(String) ent.getString(1),
+					(String) ent.getString(2),
+					(Integer) ent.getInt(3),
+					(Boolean) parseStringBool(ent.getString(4)),
+					(Float) ent.getFloat(5));
 		} else if(table.equals(Global.DB_TABLE_MSG_CONTENT)) {
-			o = new MessageContent((Integer) rows.getInt(0),
-					(String) rows.getString(1),
-					(String) rows.getString(2),
-					(Boolean) parseStringBool(rows.getString(3)),
-					(Integer) rows.getInt(4));
+			o = new MessageContent((Integer) ent.getInt(0),
+					(String) ent.getString(1),
+					(String) ent.getString(2),
+					(Boolean) parseStringBool(ent.getString(3)),
+					(Integer) ent.getInt(4));
 		} else if(table.equals(Global.DB_TABLE_MSG_RCV)) {
-			o = new MessageReceived((Integer) rows.getInt(0),
-					(String) rows.getString(1),
-					(String) rows.getString(2),
-					(Integer) rows.getInt(3),
-					(Boolean) parseStringBool(rows.getString(4)),
-					(Boolean) parseStringBool(rows.getString(5)),
-					(Boolean) parseStringBool(rows.getString(6)),
-					(Boolean) parseStringBool(rows.getString(7)));
+			o = new MessageReceived((Integer) ent.getInt(0),
+					(String) ent.getString(1),
+					(String) ent.getString(2),
+					(Integer) ent.getInt(3),
+					(Boolean) parseStringBool(ent.getString(4)),
+					(Boolean) parseStringBool(ent.getString(5)),
+					(Boolean) parseStringBool(ent.getString(6)),
+					(Boolean) parseStringBool(ent.getString(7)));
 		} else if(table.equals(Global.DB_TABLE_MSG_SNT)) {
-			o = new MessageSent((Integer) rows.getInt(0),
-					(String) rows.getString(1),
-					(String) rows.getString(2),
-					(Boolean) parseStringBool(rows.getString(3)),
-					(Integer) rows.getInt(4),
-					(Integer) rows.getInt(5),
-					(String) rows.getString(6));
+			o = new MessageSent((Integer) ent.getInt(0),
+					(String) ent.getString(1),
+					(String) ent.getString(2),
+					(Boolean) parseStringBool(ent.getString(3)),
+					(Integer) ent.getInt(4),
+					(Integer) ent.getInt(5),
+					(String) ent.getString(6));
 		} else if(table.equals(Global.DB_TABLE_MARKS)) {
-			o = new Mark((Integer) rows.getInt(0),
-					(Integer) rows.getInt(1),
-					(Integer) rows.getInt(2),
-					(String) rows.getString(3),
-					(Integer) rows.getInt(4),
-					(Integer) rows.getInt(5));
+			o = new Mark((Integer) ent.getInt(0),
+					(Integer) ent.getInt(1),
+					(Integer) ent.getInt(2),
+					(String) ent.getString(3),
+					(Integer) ent.getInt(4),
+					(Integer) ent.getInt(5));*/
 		} else if(table.equals(Global.DB_TABLE_NOTICES_COURSES) ||
 				table.equals(Global.DB_TABLE_STUDENTS_COURSES) ||
 				table.equals(Global.DB_TABLE_TEST_QUESTIONS_COURSES)) {
 			
+			params = selectParamsPairTable(table);
+			
 			o = new PairTable<Integer, Integer>(table,
-					(Integer) rows.getInt(0),
-					(Integer) rows.getInt(1));
+					ent.getInt(params.getFirst()),
+					ent.getInt(params.getSecond()));
 		}
 		
 		return o;
@@ -302,15 +186,15 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 	public List<Model> getAllRows(String table)
     {
 		List<Model> result = new ArrayList<Model>();		
-        Cursor rows = getCursorAllRows(table);
-        Model row = null;
-        
-        if(rows.moveToFirst()) {        	
-        	do {
-        		row = createObjectByTable(table, rows);
-        		result.add(row);
-        	} while (rows.moveToNext());
-        }
+		List<Entity> rows = db.getEntityList(table);
+		Model row;
+		
+		Iterator<Entity> iter = rows.iterator();
+		while (iter.hasNext()) {
+		  Entity ent = iter.next();
+		  row = createObjectByTable(table, ent);
+  		  result.add(row);
+		}
         
         return result;
     }
@@ -321,14 +205,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 	 */
 	public void insertCourse(Course c)
     {
-		String command = "INSERT INTO "
-						+ Global.DB_TABLE_COURSES
-						+ " (_id, name) VALUES ("
-						+ c.getId() + ", \'"
-						+ c.getName()
-									+ "\')";
-        Log.d("DB", command);
-		swadroidDataBase.execSQL(command, null);
+		Entity ent = new Entity(Global.DB_TABLE_COURSES);
+		ent.setValue("id", c.getId());
+		ent.setValue("name", c.getName());
+		ent.save();
     }
 	
 	/**
@@ -337,146 +217,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 	 */
 	public void insertNotice(Notice n)
     {
-		String command = "INSERT INTO "
-						+ Global.DB_TABLE_NOTICES
-						+ " (_id, timestamp, description) VALUES ("
-						+ n.getId() + ", "
-						+ n.getTimestamp() + ", \'"
-						+ n.getDescription()
-											+ "\')";
-        
-		swadroidDataBase.execSQL(command, null);
-    }
-	
-	/**
-	 * Inserts a student in database
-	 * @param s Student to be inserted
-	 */
-	public void insertStudent(Student s)
-    {
-		String command = "INSERT INTO "
-						+ Global.DB_TABLE_STUDENTS
-						+ " (_id, dni, firstname, surname1, surname2) VALUES ("
-						+ s.getId() + ", "
-						+ s.getDni() + ", \'"
-						+ s.getFirstName() + "\', \'"
-						+ s.getSurname1() + "\', \'"
-						+ s.getSurname2()
-											+ "\')";
-        
-		swadroidDataBase.execSQL(command, null);
-    }
-	
-	/**
-	 * Inserts a test answer in database
-	 * @param a test answer to be inserted
-	 */
-	public void insertTestAnswer(TestAnswer a)
-    {
-		String command = "INSERT INTO "
-						+ Global.DB_TABLE_TEST_ANSWERS
-						+ " (_id, answer, correct) VALUES ("
-						+ a.getId() + ", \'"
-						+ a.getAnswer() + "\', "
-						+ parseBoolInt(a.getCorrect())
-													+ ")";
-        
-		swadroidDataBase.execSQL(command, null);
-    }
-	
-	/**
-	 * Inserts a test question in database
-	 * @param q test question to be inserted
-	 */
-	public void insertTestQuestion(TestQuestion q)
-    {
-		String command = "INSERT INTO "
-						+ Global.DB_TABLE_TEST_QUESTIONS
-						+ " (_id, anstype, numhits, question, score, shuffle) VALUES ("
-						+ q.getId() + ", "
-						+ q.getAnstype() + ", "
-						+ q.getNumhits() + ", \'"
-						+ q.getQuestion() + "\', "
-						+ q.getScore() + ", "
-						+ parseBoolString(q.getShuffle())
-														+ ")";
-        
-		swadroidDataBase.execSQL(command, null);
-    }
-	
-	/**
-	 * Inserts a message in database
-	 * @param m Message to be inserted
-	 */
-	public void insertMessageContent(MessageContent m)
-    {
-		String command = "INSERT INTO "
-						+ Global.DB_TABLE_MSG_CONTENT
-						+ " (msgcod, subject, content) VALUES ("
-						+ m.getId() + ", \'"
-						+ m.getSubject() + "\', \'"
-						+ m.getContent()
-										+ "\')";
-        
-		swadroidDataBase.execSQL(command, null);
-    }
-	
-	/**
-	 * Inserts a received message in database
-	 * @param m Message to be inserted
-	 */
-	public void insertMessageReceived(MessageReceived m)
-    {
-		String command = "INSERT INTO "
-						+ Global.DB_TABLE_MSG_RCV
-						+ " (msgcod, usrcod, notified, open, replied, expanded) VALUES ("
-						+ m.getId() + ", "
-						+ m.getUsrcod() + ", "
-						+ parseBoolString(m.isNotified()) + ", "
-						+ parseBoolString(m.isOpen()) + ", "
-						+ parseBoolString(m.isReplied()) + ", "
-						+ parseBoolString(m.isExpanded())
-														+ ")";
-        
-		swadroidDataBase.execSQL(command, null);
-    }
-	
-	/**
-	 * Inserts a sent message in database
-	 * @param m Message to be inserted
-	 */
-	public void insertMessageSent(MessageSent m)
-    {
-		String command = "INSERT INTO "
-						+ Global.DB_TABLE_MSG_SNT
-						+ " (msgcod, crscod, usrcod, creattime, expanded) VALUES ("
-						+ m.getId() + ", "
-						+ m.getCrscod() + ", "
-						+ m.getUsrcod() + ", "
-						+ m.getCreattime() + ", "
-						+ parseBoolString(m.isExpanded())
-														+ ")";
-        
-		swadroidDataBase.execSQL(command, null);
-    }
-	
-	/**
-	 * Inserts a mark in database
-	 * @param m Mark to be inserted
-	 */
-	public void insertMark(Mark m)
-    {
-		String command = "INSERT INTO "
-						+ Global.DB_TABLE_MARKS
-						+ " (crscod, grpcod, path, header, footer) VALUES ("
-						+ m.getCrscod() + ", "
-						+ m.getGrpcod() + ", "
-						+ m.getPath() + ", "
-						+ m.getHeader() + ", "
-						+ m.getFooter()
-											+ ")";
-        
-		swadroidDataBase.execSQL(command, null);
+		Entity ent = new Entity(Global.DB_TABLE_NOTICES);
+		ent.setValue("id", n.getId());
+		ent.setValue("timestamp", n.getTimestamp());
+		ent.setValue("description", n.getDescription());
+		ent.save();
     }
 	
 	/**
@@ -485,22 +230,121 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 	 */
 	public void insertPairTable(PairTable<?, ?> p)
     {
-		String command = "INSERT INTO ";
 		String table = p.getTable();
-    	command += table + " ";
+		Pair<String, String> params = selectParamsPairTable(table);
+
+		Entity ent = new Entity(table);
+		ent.setValue(params.getFirst(), p.getFirst());
+		ent.setValue(params.getSecond(), p.getSecond());
+		ent.save();
+    }
+	
+	/**
+	 * Updates a course in database
+	 * @param prev Course to be updated
+	 * @param actual Updated course
+	 */
+	public void updateCourse(Course prev, Course actual)
+    {
+		List<Entity> rows = db.getEntityList(Global.DB_TABLE_COURSES, "id = " + prev.getId());
+		Entity ent = rows.get(0);
+		ent.setValue("id", actual.getId());
+		ent.setValue("name", actual.getName());
+		ent.save();
+    }
+	
+	/**
+	 * Updates a notice in database
+	 * @param prev Notice to be updated
+	 * @param actual Updated notice
+	 */
+	public void updateNotice(Notice prev, Notice actual)
+    {
+		List<Entity> rows = db.getEntityList(Global.DB_TABLE_NOTICES, "id = " + prev.getId());
+		Entity ent = rows.get(0);
+		ent.setValue("id", actual.getId());
+		ent.setValue("timestamp", actual.getTimestamp());
+		ent.setValue("description", actual.getDescription());
+		ent.save();
+    }
+	
+	/**
+	 * Updates a relation in database
+	 * @param prev Relation to be updated
+	 * @param actual Updated relation
+	 */
+	public void updatePairTable(PairTable<?, ?> prev, PairTable<?, ?> actual)
+    {
+		String table = prev.getTable();
+		String where;
+		Integer first = (Integer) prev.getFirst();
+		Integer second = (Integer) prev.getSecond();
+		Pair<String, String> params = selectParamsPairTable(table);
     	
-    	if(table.equals(Global.DB_TABLE_NOTICES_COURSES)) {
-    		command +=  " (idcourse, idnotice) VALUES (";
-    	} else if(table.equals(Global.DB_TABLE_STUDENTS_COURSES)) {
-    		command +=  " (idcourse, idstudent) VALUES (";
-    	} else if(table.equals(Global.DB_TABLE_TEST_QUESTIONS_COURSES)) {
-    		command +=  " (crscod, qstcod) VALUES (";
-    	}
-    	
-    	command += p.getFirst() + ", "
-    			+ p.getSecond()
-    							+ ")";
-        
-		swadroidDataBase.execSQL(command, null);
+		where = params.getFirst() + " = " + first + " AND " + params.getSecond() + " = " + second;
+
+		List<Entity> rows = db.getEntityList(table, where);
+		Entity ent = rows.get(0);
+		ent.setValue(params.getFirst(), actual.getFirst());
+		ent.setValue(params.getSecond(), actual.getSecond());
+		ent.save();
+    }
+	
+	/**
+	 * Removes a course from database
+	 * @param id Identifier of Course to be removed
+	 */
+	public void removeCourse(int id)
+    {
+		List<Entity> rows = db.getEntityList(Global.DB_TABLE_COURSES, "id = " + id);
+		Entity ent = rows.get(0);		
+		ent.delete();
+		
+		rows = db.getEntityList(Global.DB_TABLE_NOTICES_COURSES, "idcourse = " + id);
+		Iterator<Entity> iter = rows.iterator();
+		while (iter.hasNext()) {
+		  ent = iter.next();
+		  ent.delete();
+		}
+    }
+	
+	/**
+	 * Removes a notice from database
+	 * @param id Identifier of Notice to be removed
+	 */
+	public void removeNotice(int id)
+    {
+		List<Entity> rows = db.getEntityList(Global.DB_TABLE_NOTICES, "id = " + id);
+		Entity ent = rows.get(0);		
+		ent.delete();
+		
+		rows = db.getEntityList(Global.DB_TABLE_NOTICES_COURSES, "idnotice = " + id);
+		Iterator<Entity> iter = rows.iterator();
+		while (iter.hasNext()) {
+		  ent = iter.next();
+		  ent.delete();
+		}
+    }
+	
+	/**
+	 * Removes a PairTable from database
+	 * @param p PairTable to be removed
+	 */
+	public void removePairTable(PairTable p)
+    {
+		String table = p.getTable();
+		Integer first = (Integer) p.getFirst();
+		Integer second = (Integer) p.getSecond();
+		String where;
+		List<Entity> rows;
+		Entity ent;
+		Pair<String, String> params = selectParamsPairTable(table);
+		
+		where = params.getFirst() + " = " + first + " AND " + params.getSecond() + " = " + second;
+
+		Log.d("removePairTable", where);
+		rows = db.getEntityList(table, where);
+		ent = rows.get(0);
+		ent.delete();
     }
 }

@@ -67,6 +67,22 @@ public class PairTable<FIRST, SECOND> extends Model {
 	public SECOND getSecond() {
 		return this.values.getSecond();
 	}
+	
+	/**
+	 * Sets first value
+	 * param first First value
+	 */
+	public void setFirst(FIRST first) {
+		this.values.setFirst(first);
+	}
+
+	/**
+	 * Sets second value
+	 * param second Second value
+	 */
+	public void setSecond(SECOND second) {
+		this.values.setSecond(second);
+	}
 
 	/**
 	 * Gets the table who owns the pair of values
@@ -74,5 +90,57 @@ public class PairTable<FIRST, SECOND> extends Model {
 	 */
 	public String getTable() {
 		return table;
+	}
+
+	/**
+	 * @param table the table to set
+	 */
+	public void setTable(String table) {
+		this.table = table;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((table == null) ? 0 : table.hashCode());
+		result = prime * result + ((values == null) ? 0 : values.hashCode());
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PairTable other = (PairTable) obj;
+		if (table == null) {
+			if (other.table != null)
+				return false;
+		} else if (!table.equals(other.table))
+			return false;
+		if (values == null) {
+			if (other.values != null)
+				return false;
+		} else if (!values.equals(other.values))
+			return false;
+		return true;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "PairTable [values=" + values + ", table=" + table + "]";
 	}	
 }
