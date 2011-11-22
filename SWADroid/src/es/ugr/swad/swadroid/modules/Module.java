@@ -401,16 +401,18 @@ public abstract class Module extends Activity {
         Exception e = null;
         String progressDescription;
         int progressTitle;
+        boolean showDialog;
 
         /**
          * Shows progress dialog and connects to SWAD in background
 		 * @param progressDescription Description to be showed in dialog
 		 * @param progressTitle Title to be showed in dialog
 		 */
-		public Connect(String progressDescription, int progressTitle) {
+		public Connect(boolean showDialog, String progressDescription, int progressTitle) {
 			super();
 			this.progressDescription = progressDescription;
 			this.progressTitle = progressTitle;
+			this.showDialog = showDialog;
 		}
 
 		/* (non-Javadoc)
@@ -418,9 +420,11 @@ public abstract class Module extends Activity {
     	 */
         @Override
         protected void onPreExecute() {
-            Dialog.setMessage(progressDescription);
-            Dialog.setTitle(progressTitle);
-            Dialog.show();
+        	if(showDialog) {
+	            Dialog.setMessage(progressDescription);
+	            Dialog.setTitle(progressTitle);
+	            Dialog.show();
+        	}
         }
 
         /* (non-Javadoc)
@@ -449,7 +453,9 @@ public abstract class Module extends Activity {
     	 */
         @Override
         protected void onPostExecute(Void unused) {
-            Dialog.dismiss();
+        	if(showDialog) {
+        		Dialog.dismiss();
+        	}
             
             if(e != null) {
                 /**

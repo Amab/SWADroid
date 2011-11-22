@@ -52,10 +52,10 @@ public class Courses extends Module {
      * in UI thread.
      */
     protected void connect() {
-    	String progressDescription = "Asignaturas";
-    	int progressTitle = R.string.loginProgressTitle;
+    	String progressDescription = getString(R.string.coursesProgressDescription);
+    	int progressTitle = R.string.coursesProgressTitle;
     	
-        new Connect(progressDescription, progressTitle).execute();
+        new Connect(false, progressDescription, progressTitle).execute();
     }
     
     /**
@@ -87,7 +87,7 @@ public class Courses extends Module {
                 String name = pii.getProperty(1).toString();
                 Course c = new Course(id, name);
                 dbHelper.insertCourse(c);
-                Log.d("Courses", c.toString());
+                //Log.d("Courses", c.toString());
             }
             
 	        //Request finalized without errors

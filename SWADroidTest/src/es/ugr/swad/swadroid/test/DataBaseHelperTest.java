@@ -31,7 +31,6 @@ import es.ugr.swad.swadroid.SWADMain;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.model.Model;
-import es.ugr.swad.swadroid.model.Notice;
 import es.ugr.swad.swadroid.model.PairTable;
 /**
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
@@ -43,7 +42,6 @@ public class DataBaseHelperTest extends ActivityInstrumentationTestCase2<SWADMai
 	List<Model> rows;
 	List<Entity> entities;
     Course c, d;
-	Notice m, n;
 	PairTable<Integer, Integer> p, q;
     
     public DataBaseHelperTest() {
@@ -61,14 +59,11 @@ public class DataBaseHelperTest extends ActivityInstrumentationTestCase2<SWADMai
         
         c = new Course(0, "Test Course");
         d = new Course(1, "Test Course D");
-		m = new Notice(1, 0, "Test Notice M");
-		n = new Notice(0, 0, "Test Notice");
-		p = new PairTable<Integer, Integer>(Global.DB_TABLE_NOTICES_COURSES, 0, 0);
-		q = new PairTable<Integer, Integer>(Global.DB_TABLE_NOTICES_COURSES, 1, 1);
+		//p = new PairTable<Integer, Integer>(Global.DB_TABLE_NOTICES_COURSES, 0, 0);
+		//q = new PairTable<Integer, Integer>(Global.DB_TABLE_NOTICES_COURSES, 1, 1);
 		
 		dbHelper.insertCourse(c);
-		dbHelper.insertNotice(n);
-		dbHelper.insertPairTable(p);
+		//dbHelper.insertPairTable(p);
 	}
 
 	/* (non-Javadoc)
@@ -88,12 +83,6 @@ public class DataBaseHelperTest extends ActivityInstrumentationTestCase2<SWADMai
 		
 		rows = dbHelper.getAllRows(Global.DB_TABLE_COURSES);
 		Assert.assertEquals("", c, rows.get(0));
-		
-		rows = dbHelper.getAllRows(Global.DB_TABLE_NOTICES);
-		Assert.assertEquals("", n, rows.get(0));
-		
-		rows = dbHelper.getAllRows(Global.DB_TABLE_NOTICES_COURSES);
-		Assert.assertEquals("", p, rows.get(0));
 	}
 
 	/**
@@ -104,7 +93,7 @@ public class DataBaseHelperTest extends ActivityInstrumentationTestCase2<SWADMai
 		Entity ent;
 		
 		dbHelper.insertCourse(d);		
-		entities = db.getEntityList(Global.DB_TABLE_COURSES, "id = " + m.getId());
+		entities = db.getEntityList(Global.DB_TABLE_COURSES, "id = " + d.getId());
 		ent = entities.get(0);
 		
 		t = new Course(ent.getInt("id"), ent.getString("name"));
@@ -113,25 +102,9 @@ public class DataBaseHelperTest extends ActivityInstrumentationTestCase2<SWADMai
 	}
 
 	/**
-	 * Test method for {@link es.ugr.swad.swadroid.model.DataBaseHelper#insertNotice(es.ugr.swad.swadroid.model.Notice)}.
-	 */
-	public void testInsertNotice() {
-		Notice t;
-		Entity ent;
-		
-		dbHelper.insertNotice(m);		
-		entities = db.getEntityList(Global.DB_TABLE_NOTICES, "id = " + m.getId());
-		ent = entities.get(0);
-		
-		t = new Notice(ent.getInt("id"), ent.getInt("timestamp"), ent.getString("description"));
-		
-		Assert.assertEquals(m, t);
-	}
-
-	/**
 	 * Test method for {@link es.ugr.swad.swadroid.model.DataBaseHelper#insertPairTable(es.ugr.swad.swadroid.model.PairTable)}.
 	 */
-	public void testInsertPairTable() {
+	/*public void testInsertPairTable() {
 		PairTable<Integer, Integer> t;
 		Entity ent;
 		String where;
@@ -144,7 +117,7 @@ public class DataBaseHelperTest extends ActivityInstrumentationTestCase2<SWADMai
 		t = new PairTable<Integer, Integer>(Global.DB_TABLE_NOTICES_COURSES, ent.getInt("idcourse"), ent.getInt("idnotice"));
 		
 		Assert.assertEquals(q, t);
-	}
+	}*/
 
 	/**
 	 * Test method for {@link es.ugr.swad.swadroid.model.DataBaseHelper#updateCourse(es.ugr.swad.swadroid.model.Course)}.
@@ -163,25 +136,9 @@ public class DataBaseHelperTest extends ActivityInstrumentationTestCase2<SWADMai
 	}
 
 	/**
-	 * Test method for {@link es.ugr.swad.swadroid.model.DataBaseHelper#updateNotice(es.ugr.swad.swadroid.model.Notice)}.
-	 */
-	public void testUpdateNotice() {
-		Notice t;		
-		Entity ent;
-		
-		dbHelper.updateNotice(n, m);
-		entities = db.getEntityList(Global.DB_TABLE_NOTICES, "id = " + m.getId());
-		ent = entities.get(0);
-		
-		t = new Notice(ent.getInt("id"), ent.getInt("timestamp"), ent.getString("description"));
-		
-		Assert.assertEquals(m, t);
-	}
-
-	/**
 	 * Test method for {@link es.ugr.swad.swadroid.model.DataBaseHelper#updatePairTable(es.ugr.swad.swadroid.model.PairTable)}.
 	 */
-	public void testUpdatePairTable() {
+/*	public void testUpdatePairTable() {
 		PairTable<Integer, Integer> t;
 		Entity ent;
 		String where;
@@ -194,7 +151,7 @@ public class DataBaseHelperTest extends ActivityInstrumentationTestCase2<SWADMai
 		t = new PairTable<Integer, Integer>(Global.DB_TABLE_NOTICES_COURSES, ent.getInt("idcourse"), ent.getInt("idnotice"));
 		
 		Assert.assertEquals(q, t);
-	}
+	}*/
 
 	/**
 	 * Test method for {@link es.ugr.swad.swadroid.model.DataBaseHelper#removeCourse(int)}.
@@ -208,26 +165,8 @@ public class DataBaseHelperTest extends ActivityInstrumentationTestCase2<SWADMai
 		entities = db.getEntityList(Global.DB_TABLE_COURSES, where);
 		Assert.assertEquals("Course has not been removed", 0, entities.size());
 		
-		where = "idcourse = " + id;
+		/*where = "idcourse = " + id;
 		entities = db.getEntityList(Global.DB_TABLE_NOTICES_COURSES, where);
-		Assert.assertEquals("Relations has not been removed", 0, entities.size());
+		Assert.assertEquals("Relations has not been removed", 0, entities.size());*/
 	}
-
-	/**
-	 * Test method for {@link es.ugr.swad.swadroid.model.DataBaseHelper#removeNotice(int)}.
-	 */
-	public void testRemoveNotice() {
-		int id = n.getId();
-		String where;
-		
-		dbHelper.removeNotice(id);
-		where = "id = " + id;
-		entities = db.getEntityList(Global.DB_TABLE_NOTICES, where);
-		Assert.assertEquals("Notice has not been removed", 0, entities.size());
-		
-		where = "idnotice = " + id;
-		entities = db.getEntityList(Global.DB_TABLE_NOTICES_COURSES, where);
-		Assert.assertEquals("Relations has not been removed", 0, entities.size());
-	}
-
 }

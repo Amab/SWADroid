@@ -19,7 +19,7 @@
     <string name="loginTitle_menu">Conectar</string>
     <string name="loginProgressTitle">Identificación</string>
     <string name="loginProgressDescription">Conectando...</string>
-    <string name="errorMsgWorkaroundEmulator">Mierda. Ese bug del emulador de Android ha vuelto a aparecer. Reintentando...</string>
+    <string name="coursesProgressTitle">Asignaturas</string><string name="coursesProgressDescription">Obteniendo asignaturas...</string><string name="notificationsProgressTitle">Notificaciones</string><string name="notificationsProgressDescription">Obteniendo nuevas notificaciones</string><string name="errorMsgWorkaroundEmulator">Mierda. Ese bug del emulador de Android ha vuelto a aparecer. Reintentando...</string>
     <string name="errorMsgLaunchingActivity">Ha ocurrido un error durante la ejecución de la operación</string><string name="errorMsgNoConnection">No hay conexión</string>
     <string name="errorCopyMsg_DB">Error copiando base de datos</string><string name="upgradeMsg_DB">Actualizando base de datos...</string>
 <string name="loginSuccessfulMsg">Conectado</string>

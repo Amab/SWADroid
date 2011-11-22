@@ -104,6 +104,9 @@ public class Course extends Model {
 		return "Course [name=" + name + ", getId()=" + getId() + "]";
 	}
 
+	/* (non-Javadoc)
+	 * @see org.ksoap2.serialization.KvmSerializable#getProperty(int)
+	 */
 	public Object getProperty(int param) {
 		Object object = null;
         switch(param)
@@ -115,10 +118,16 @@ public class Course extends Model {
         return object;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.ksoap2.serialization.KvmSerializable#getPropertyCount()
+	 */
 	public int getPropertyCount() {
 		return 2;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.ksoap2.serialization.KvmSerializable#getPropertyInfo(int, java.util.Hashtable, org.ksoap2.serialization.PropertyInfo)
+	 */
 	public void getPropertyInfo(int param, Hashtable arg1, PropertyInfo propertyInfo) {
 		switch(param){
 	        case 0:
@@ -132,6 +141,9 @@ public class Course extends Model {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.ksoap2.serialization.KvmSerializable#setProperty(int, java.lang.Object)
+	 */
 	public void setProperty(int param, Object obj) {
 		switch(param)
 		{

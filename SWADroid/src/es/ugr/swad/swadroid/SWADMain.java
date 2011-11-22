@@ -35,7 +35,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
-import es.ugr.swad.swadroid.modules.Courses;
+import es.ugr.swad.swadroid.model.Notification;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
 
 /**
@@ -102,11 +102,6 @@ public class SWADMain extends ListActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-	        case R.id.login_menu:
-	            Intent loginActivity = new Intent(getBaseContext(),
-	                    Courses.class);
-	            startActivityForResult(loginActivity, Global.COURSES_REQUEST_CODE);
-	            return true;
             case R.id.preferences_menu:
             	viewPreferences();
                 return true;
@@ -136,8 +131,20 @@ public class SWADMain extends ListActivity {
 		// Get the item that was clicked
 		Object o = this.getListAdapter().getItem(position);
 		String keyword = o.toString();
-		Toast.makeText(this, keyword + " aún no implementado", Toast.LENGTH_LONG)
-				.show();
+		
+		switch(position)
+		{
+			case 0:
+				Intent notificationsActivity = new Intent(getBaseContext(),
+	                Notification.class);
+				startActivityForResult(notificationsActivity, Global.NOTIFICATIONS_REQUEST_CODE);
+				break;
+				
+			case 1:
+				Toast.makeText(this, keyword + " aún no implementado", Toast.LENGTH_LONG)
+					.show();
+				break;
+		}
 	}
 
 	/* (non-Javadoc)
