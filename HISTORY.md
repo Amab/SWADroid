@@ -1,3 +1,7 @@
+## 0.5.1 (2011-09-26)
+
+* Fixed bug in reply messages function
+
 ## 0.5 (2011-09-26)
 
 * Added messages module
