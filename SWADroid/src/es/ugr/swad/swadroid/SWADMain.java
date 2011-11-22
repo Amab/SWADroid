@@ -44,10 +44,6 @@ import es.ugr.swad.swadroid.ssl.SecureConnection;
  */
 public class SWADMain extends MenuExpandableListActivity {
     /**
-     * Application preferences.
-     */
-    protected static Preferences prefs = new Preferences();
-    /**
      * Array of strings for main ListView
      */
     protected String[] functions;

@@ -38,14 +38,27 @@ import android.widget.Toast;
  */
 public class MenuExpandableListActivity extends ExpandableListActivity {
     /**
+     * Application preferences.
+     */
+    protected static Preferences prefs = new Preferences();
+    /**
      * Database Helper.
      */
     protected static DataBaseHelper dbHelper;   
     /**
      * Database Framework.
      */
-    protected static DataFramework db;    
+    protected static DataFramework db;  
     
+    /* (non-Javadoc)
+	 * @see android.app.Activity#onStart()
+	 */
+	@Override
+	protected void onStart() {
+		super.onStart();
+        prefs.getPreferences(getBaseContext());
+	}
+	
 	/**
      * Shows Preferences screen
      */
@@ -82,7 +95,7 @@ public class MenuExpandableListActivity extends ExpandableListActivity {
      */
     protected void cleanDatabase() {
     	dbHelper.cleanTables();
-    	//showDialog(R.string.cleanDatabaseTitle_menu, R.string.cleanDatabaseMsg);
+    	prefs.setLastCourseSelected(0);
     	Toast.makeText(this, R.string.cleanDatabaseMsg, Toast.LENGTH_LONG).show();
     	Log.i(Global.APP_TAG, getString(R.string.cleanDatabaseMsg));
     }
