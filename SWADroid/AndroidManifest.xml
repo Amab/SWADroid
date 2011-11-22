@@ -22,6 +22,8 @@
     <activity android:name=".modules.Courses" android:theme="@android:style/Theme.Translucent.NoTitleBar"><activity android:name=".modules.Courses" android:theme="@android:style/Theme.Dialog"></activity></activity>
     <activity android:label="@string/notificationsModuleLabel" android:name=".modules.notifications.Notifications" android:theme="@android:style/Theme.NoTitleBar">
     </activity><activity android:name=".modules.tests.Tests" android:theme="@android:style/Theme.NoTitleBar" android:label="@string/testsModuleLabel"></activity>
+    <activity android:name=".modules.tests.TestsDownload" android:theme="@android:style/Theme.NoTitleBar" android:label="@string/testsModuleLabel"></activity>
+    <activity android:theme="@android:style/Theme.NoTitleBar" android:name=".modules.tests.TestsMake" android:label="@string/testsModuleLabel"></activity>
     
 </application>
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>

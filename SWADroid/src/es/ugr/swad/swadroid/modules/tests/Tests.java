@@ -34,6 +34,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
+import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.modules.Module;
 
@@ -57,9 +58,17 @@ public class Tests extends Module {
 		ListView list;
 		String[] items = getResources().getStringArray(R.array.testMenuItems);
 		OnItemClickListener clickListener = new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> av, View v, int arg2,
-					long arg3) {
-				
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Intent activity;
+				switch(position) {
+					case 0: activity = new Intent(getBaseContext(), TestsDownload.class);
+							startActivityForResult(activity, Global.TESTS_DOWNLOAD_REQUEST_CODE);
+							break;
+							
+					case 1: activity = new Intent(getBaseContext(), TestsMake.class);
+							startActivityForResult(activity, Global.TESTS_MAKE_REQUEST_CODE);
+							break;
+				}
 				
 			}    	
         };
