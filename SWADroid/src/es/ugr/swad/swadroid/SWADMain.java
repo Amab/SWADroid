@@ -108,9 +108,9 @@ public class SWADMain extends ExpandableListActivity {
     }
 
     /**
-     * Shows initial dialog on first run.
+     * Shows configuration dialog on first run.
      */
-    public void showInitialDialog() {
+    public void showConfigurationDialog() {
     	new AlertDialog.Builder(this)
     		   .setTitle(R.string.initialDialogTitle)
     	       .setMessage(R.string.firstRunMsg)
@@ -125,6 +125,18 @@ public class SWADMain extends ExpandableListActivity {
     	                dialog.cancel();
     	           }
     	       }).show();
+    }
+    
+    /**
+     * Shows initial dialog after application upgrade.
+     */
+    public void showInitialDialog() {
+    	new AlertDialog.Builder(this)
+    		   .setTitle(R.string.initialDialogTitle)
+    	       .setMessage(R.string.upgradeMsg)
+    	       .setCancelable(false)
+               .setNeutralButton(R.string.close_dialog, null)
+    	       .show();
     }
 
 	/* (non-Javadoc)
@@ -292,8 +304,12 @@ public class SWADMain extends ExpandableListActivity {
             lastVersion = prefs.getLastVersion();
             currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
             if(lastVersion == 0) {
-            	showInitialDialog();
+            	showConfigurationDialog();
             	prefs.setLastVersion(currentVersion);
+            } else if(currentVersion > lastVersion) {
+            	dbHelper.emptyTable(Global.DB_TABLE_NOTIFICATIONS);
+            	prefs.setLastVersion(currentVersion);
+            	showInitialDialog();
             }
         } catch (Exception ex) {
             Log.e(ex.getClass().getSimpleName(), ex.getMessage());
