@@ -150,7 +150,7 @@ public class DataBaseHelper {
 					
 			if(t != null) {
 				o = new TestTag(id,
-					t.getQstCod(),
+					t.getQstCodList(),
 					ent.getString("tagTxt"),
 					ent.getInt("tagInd"));
 			} else {
@@ -163,9 +163,11 @@ public class DataBaseHelper {
 					ent.getInt("max"),
 					ent.getString("feedback"),
 					ent.getLong("editTime"));
-		} else if(table.equals(Global.DB_TABLE_TEST_QUESTION_TAGS)) {			
+		} else if(table.equals(Global.DB_TABLE_TEST_QUESTION_TAGS)) {
+			ArrayList<Integer> l = new ArrayList<Integer>();
+			l.add(ent.getInt("qstCod"));
 			o = new TestTag(ent.getInt("tagCod"),  
-					ent.getInt("qstCod"),
+					l,
 					null,  
 					ent.getInt("tagInd"));
 		}
@@ -325,6 +327,7 @@ public class DataBaseHelper {
 	public void insertTestTag(TestTag t)
     {
 		List<Entity> rows = db.getEntityList(Global.DB_TABLE_TEST_TAGS, "id = " + t.getId());
+		
 		if(rows.isEmpty()) {
 			Entity ent = new Entity(Global.DB_TABLE_TEST_TAGS);
 			
@@ -332,11 +335,13 @@ public class DataBaseHelper {
 			ent.setValue("tagTxt", t.getTagTxt());
 			ent.save();
 			
-			ent = new Entity(Global.DB_TABLE_TEST_QUESTION_TAGS);
-			ent.setValue("qstCod", t.getQstCod());
-			ent.setValue("tagCod", t.getId());
-			ent.setValue("tagInd", t.getTagInd());
-			ent.save();
+			for(Integer i : t.getQstCodList()) {			
+				ent = new Entity(Global.DB_TABLE_TEST_QUESTION_TAGS);
+				ent.setValue("qstCod", i);
+				ent.setValue("tagCod", t.getId());
+				ent.setValue("tagInd", t.getTagInd());
+				ent.save();
+			}
 		} else {
 			throw new SQLException();
 		}
@@ -474,20 +479,18 @@ public class DataBaseHelper {
     {
 		List<Entity> rows = db.getEntityList(Global.DB_TABLE_TEST_TAGS, "id = " + prev.getId());
 		Entity ent = rows.get(0);
+		List<Integer> qstCodList = actual.getQstCodList();
 		
 		ent.setValue("id", actual.getId());
 		ent.setValue("tagTxt", actual.getTagTxt());
 		ent.save();
-
-		rows = db.getEntityList(Global.DB_TABLE_TEST_QUESTION_TAGS, "tagCod = " + prev.getId());
-		Iterator<Entity> iter = rows.iterator();
-		while (iter.hasNext()) {
-		  ent = iter.next();
-		  ent.setValue("tagCod", actual.getId());
-		  ent.setValue("qstCod", actual.getQstCod());
-		  ent.setValue("tagInd", actual.getTagInd());
-		  ent.save();
+		
+		for(Integer i : qstCodList) {
+			db.getDB().execSQL("INSERT OR IGNORE INTO " + Global.DB_TABLE_TEST_QUESTION_TAGS + " VALUES (NULL,"
+					+ i + "," + actual.getId() + "," + actual.getTagInd() + ");");			
 		}
+
+		
     }
 	
 	/**
@@ -540,13 +543,6 @@ public class DataBaseHelper {
 		List<Entity> rows = db.getEntityList(table, "id = " + id);
 		Entity ent = rows.get(0);		
 		ent.delete();
-		
-		/*rows = db.getEntityList(Global.DB_TABLE_NOTICES_COURSES, "idcourse = " + id);
-		Iterator<Entity> iter = rows.iterator();
-		while (iter.hasNext()) {
-		  ent = iter.next();
-		  ent.delete();
-		}*/
     }
 	
 	/**
@@ -630,14 +626,27 @@ public class DataBaseHelper {
 		String orderby = " GROUP BY T.id ORDER BY Q.tagInd ASC";
 		Cursor dbCursor = db.getDB().rawQuery(select + tables + where + orderby, null);
 		List<TestTag> result = new ArrayList<TestTag>();
+		List<Integer> qstCodList;
+		int idOld = -1;
+		TestTag t = null;
 		
-		while(dbCursor.moveToNext()) {			
+		while(dbCursor.moveToNext()) {
 			int id = dbCursor.getInt(0);
-			String tagTxt = dbCursor.getString(1);
-			int qstCod = dbCursor.getInt(2);
-			int tagInd = dbCursor.getInt(3);
 			
-			result.add(new TestTag(id, qstCod, tagTxt, tagInd));
+			if(id != idOld) {
+				qstCodList = new ArrayList<Integer>();
+				
+				String tagTxt = dbCursor.getString(1);
+				qstCodList.add(dbCursor.getInt(2));
+				int tagInd = dbCursor.getInt(3);
+				
+				t = new TestTag(id, qstCodList, tagTxt, tagInd);
+				
+				result.add(t);
+				idOld = id;
+			} else {
+				t.addQstCod(dbCursor.getInt(2));
+			}
 		}
         
         return result;
@@ -656,7 +665,7 @@ public class DataBaseHelper {
 		String tables = " FROM " + Global.DB_TABLE_TEST_QUESTIONS + " AS Q, "
 			+ Global.DB_TABLE_TEST_QUESTIONS_COURSE + " AS C, "
 			+ Global.DB_TABLE_TEST_QUESTION_TAGS + " AS T";
-		String where = " WHERE Q.id=C.qstCod AND C.crsCod=" + selectedCourseCode;
+		String where = " WHERE Q.id=C.qstCod AND Q.id=T.qstCod AND C.crsCod=" + selectedCourseCode;
 		String orderby = " ORDER BY RANDOM()";
 		String limit = " LIMIT " + maxQuestions;
 		Cursor dbCursorQuestions, dbCursorAnswers;
@@ -666,13 +675,14 @@ public class DataBaseHelper {
 		int answerTypesListSize = answerTypesList.size();
 		
 		if(!tagsList.get(0).getTagTxt().equals("all")) {
-			where += " AND ";
+			where += " AND (";
 			for(int i=0; i<tagsListSize; i++) {
 				where += "T.tagCod=" + tagsList.get(i).getId();
 				if(i < tagsListSize-1) {
 					where +=  " OR ";
 				}
 			}
+			where += ")";
 			
 			if(!answerTypesList.get(0).equals("all")) {
 				where +=  " AND ";
@@ -774,12 +784,51 @@ public class DataBaseHelper {
     }
 	
 	/**
+	 * Begin a database transaction
+	 */
+	public void beginTransaction() {
+		db.getDB().execSQL("BEGIN;");
+	}
+	/**
+	 * End a database transaction
+	 */
+	public void endTransaction() {
+		db.getDB().execSQL("END;");
+	}
+	
+	/**
+	 * Compact the database
+	 */
+	public void compactDB() {
+		db.getDB().execSQL("VACUUM;");
+	}
+	
+	/**
+	 * Initializes the database structure for the first use
+	 */
+	public void initializeDB() {
+		db.getDB().execSQL("CREATE UNIQUE INDEX " + Global.DB_TABLE_TEST_QUESTION_TAGS + "_unique on " 
+				+ Global.DB_TABLE_TEST_QUESTION_TAGS + "(qstCod, tagCod);");
+	}
+	
+	/**
      * Upgrades the database structure
 	 * @throws IOException 
 	 * @throws XmlPullParserException 
      */
     public void upgradeDB(Context context) throws XmlPullParserException, IOException {    	
-    	db.getDB().execSQL("CREATE TEMPORARY TABLE __"
+    	emptyTable(Global.DB_TABLE_TEST_QUESTION_ANSWERS);
+    	emptyTable(Global.DB_TABLE_TEST_QUESTION_TAGS);
+    	emptyTable(Global.DB_TABLE_TEST_QUESTIONS_COURSE);
+    	emptyTable(Global.DB_TABLE_TEST_ANSWERS);
+    	emptyTable(Global.DB_TABLE_TEST_CONFIG);
+    	emptyTable(Global.DB_TABLE_TEST_QUESTIONS);
+    	emptyTable(Global.DB_TABLE_TEST_TAGS);
+    	
+    	initializeDB();
+    	compactDB();
+    	
+    	/*db.getDB().execSQL("CREATE TEMPORARY TABLE __"
                 + Global.DB_TABLE_NOTIFICATIONS
                 + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, id INTEGER, eventType TEXT, eventTime TEXT,"
                 + " userSurname1 TEXT, userSurname2 TEXT, userFirstname TEXT, location TEXT, summary TEXT," 
@@ -803,6 +852,6 @@ public class DataBaseHelper {
     	db.getDB().execSQL("INSERT INTO " + Global.DB_TABLE_NOTIFICATIONS + " SELECT _id, id, eventType, eventTime, "
                 + "userSurname1, userSurname2, userFirstname, location, summary, status, content FROM __"
                 + Global.DB_TABLE_NOTIFICATIONS + ";"
-                + "DROP TABLE __" + Global.DB_TABLE_NOTIFICATIONS + ";");
+                + "DROP TABLE __" + Global.DB_TABLE_NOTIFICATIONS + ";");*/
     }
 }
