@@ -61,6 +61,7 @@ public class CheckedAnswersArrayAdapter extends ArrayAdapter<TestAnswer> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		CheckedTextView tt;
 		final ListView lv = (ListView) parent;
+		final int rbPosition = position;
 		TestAnswer a = items.get(position);
         
 		if (convertView == null) {
@@ -83,18 +84,14 @@ public class CheckedAnswersArrayAdapter extends ArrayAdapter<TestAnswer> {
 			tt.setOnClickListener(new OnClickListener() {				
 				public void onClick(View v) {
 					CheckedTextView rb = (CheckedTextView) v;					
-					int childCount = lv.getChildCount();
-					int itemPos = 0;
+					int childCount = lv.getCount();
 					boolean checked = rb.isChecked();
 					
 					for(int i=0; i<childCount; i++) {
 						lv.setItemChecked(i, false);
-						if(rb == lv.getChildAt(i)) {
-							itemPos = i;
-						}
 					}
 					
-					lv.setItemChecked(itemPos, !checked);
+					lv.setItemChecked(rbPosition, !checked);
 				}
 			});			
 		}

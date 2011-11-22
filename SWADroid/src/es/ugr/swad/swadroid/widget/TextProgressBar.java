@@ -69,4 +69,9 @@ public class TextProgressBar extends ProgressBar {
 		textPaint.setColor(color);
 		drawableStateChanged();
 	}
+
+	public void setTextSize(float size) {
+		textPaint.setTextSize(size);
+		drawableStateChanged();
+	}
 }
