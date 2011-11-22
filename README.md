@@ -2,6 +2,7 @@
 
 Android client for e-learning platform SWAD. This project is currently under heavy development.
 
+[Download APK][apk]
 
 ## Content
 
@@ -53,3 +54,4 @@ The Github team has also been kind enough to write up some great [documentation]
 [ksoap2-author]: https://github.com/mosabua
 [androiddataframework-library]: http://code.google.com/p/androiddataframework/
 [androiddataframework-author]: http://www.javielinux.com/quiensoy.php
+[apk]: https://github.com/Amab/SWADroid/SWADroid.apk/qr_code
