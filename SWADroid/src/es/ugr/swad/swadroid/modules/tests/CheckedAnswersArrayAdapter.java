@@ -20,6 +20,7 @@ package es.ugr.swad.swadroid.modules.tests;
 
 import java.util.List;
 
+import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.TestAnswer;
 import android.content.Context;
 import android.graphics.Color;
@@ -63,10 +64,14 @@ public class CheckedAnswersArrayAdapter extends ArrayAdapter<TestAnswer> {
 		CheckedTextView tt = (CheckedTextView) convertView.findViewById(android.R.id.text1);
 		tt.setText(Html.fromHtml(a.getAnswer()));
 		
-		if(evaluated && feedback.equals("eachGoodBad") && a.getCorrect()) {
-			tt.setTextColor(Color.BLUE);
-		} else {
-			tt.setTextColor(Color.BLACK);
+		if(evaluated) {
+			tt.setOnClickListener(null);
+			
+			if(feedback.equals("eachGoodBad") && a.getCorrect()) {
+				tt.setTextColor(context.getResources().getColor(R.color.green));
+			} else {
+				tt.setTextColor(Color.BLACK);
+			}
 		}
          
         return convertView;

@@ -31,7 +31,8 @@
 	<string name="notificationsEmptyListMsg">No se ha descargado ninguna notificación.\n\nPara descargar las
 		notificaciones más recientes pulse el icono de la esquina superior derecha de la pantalla.</string>
 	<string name="testsDownloadProgressTitle">Tests</string>
-	<string name="testsDownloadProgressDescription">Sincronizando preguntas de test...</string>
+	<string name="testsDownloadProgressDescription">Sincronizando preguntas de test.\n\nDependiendo del número de
+		preguntas a sincronizar, el procesamiento de los datos puede tardar unos minutos.\n\nPor favor, espere...</string>
 	<string name="errorMsgWorkaroundEmulator">Mierda. Ese bug del emulador de Android ha vuelto a
 		aparecer. Reintentando...</string>
 	<string name="errorMsgLaunchingActivity">Ha ocurrido un error durante la ejecución de la

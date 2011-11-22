@@ -172,7 +172,7 @@ public class TestsConfigDownload extends Module {
 			IOException, XmlPullParserException, SoapFault,
 			IllegalAccessException, InstantiationException {
 		
-		//Calculates next timestamp to be requested
+		//Calculates next timestamp to be requested		
 		Long timestamp = new Long(dbHelper.getTimeOfLastTestUpdate(selectedCourseCode));
 		timestamp++;
 		
