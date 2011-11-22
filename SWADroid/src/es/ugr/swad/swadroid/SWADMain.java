@@ -173,7 +173,7 @@ public class SWADMain extends ListActivity {
             Window w = getWindow();
             w.requestFeature(Window.FEATURE_LEFT_ICON);
             setContentView(R.layout.main);
-            w.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.swadroid);   
+            w.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.ic_launcher_swadroid);   
             
             functions = getResources().getStringArray(R.array.functions);
             setListAdapter(new ArrayAdapter<String>(this, R.layout.functions_list_item, functions));
