@@ -29,6 +29,7 @@ import android.app.AlertDialog;
 import android.app.ExpandableListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -133,6 +134,18 @@ public class SWADMain extends ExpandableListActivity {
                .setNeutralButton(R.string.close_dialog, null)
     	       .show();
     }
+    
+    /**
+     * Shows a dialog.
+     */
+    public void showDialog(int title, int message) {
+    	new AlertDialog.Builder(this)
+    		   .setTitle(title)
+    	       .setMessage(message)
+    	       .setCancelable(false)
+               .setNeutralButton(R.string.close_dialog, null)
+    	       .show();
+    }
 
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onCreateOptionsMenu()
@@ -150,6 +163,22 @@ public class SWADMain extends ExpandableListActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+	        case R.id.share_menu:
+	        	Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+	        	sharingIntent.setType("text/plain");
+	        	sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "SWADroid");
+	        	sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, getString(R.string.shareBodyMsg));
+	        	startActivity(Intent.createChooser(sharingIntent, getString(R.string.shareTitle_menu)));
+	            return true;
+	        case R.id.rate_menu:
+	        	Intent rateIntent = new Intent(Intent.ACTION_VIEW);
+	        	rateIntent.setData(Uri.parse(getString(R.string.marketURL)));
+	        	startActivity(rateIntent);
+	            return true;
+	        case R.id.clean_database_menu:
+	        	dbHelper.cleanTables();
+	        	showDialog(R.string.cleanDatabaseTitle_menu, R.string.cleanDatabaseMsg);
+	            return true;
             case R.id.preferences_menu:
             	viewPreferences();
                 return true;
@@ -178,7 +207,6 @@ public class SWADMain extends ExpandableListActivity {
 			activity = new Intent(getBaseContext(), Tests.class);
 			startActivityForResult(activity, Global.TESTS_REQUEST_CODE);
 		} else if(keyword.equals(getString(R.string.messagesModuleLabel))) {
-			//Toast.makeText(this, "Opción en desarrollo", Toast.LENGTH_SHORT).show();
 			activity = new Intent(getBaseContext(), Messages.class);
 			activity.putExtra("notificationCode", new Long(0));
 			startActivityForResult(activity, Global.MESSAGES_REQUEST_CODE);

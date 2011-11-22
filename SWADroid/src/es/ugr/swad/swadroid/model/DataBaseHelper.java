@@ -784,6 +784,22 @@ public class DataBaseHelper {
     }
 	
 	/**
+	 * Clean data of all tables from database
+	 */
+	public void cleanTables()
+    {
+		emptyTable(Global.DB_TABLE_NOTIFICATIONS);
+		emptyTable(Global.DB_TABLE_COURSES);
+		emptyTable(Global.DB_TABLE_TEST_QUESTION_ANSWERS);
+    	emptyTable(Global.DB_TABLE_TEST_QUESTION_TAGS);
+    	emptyTable(Global.DB_TABLE_TEST_QUESTIONS_COURSE);
+    	emptyTable(Global.DB_TABLE_TEST_ANSWERS);
+    	emptyTable(Global.DB_TABLE_TEST_CONFIG);
+    	emptyTable(Global.DB_TABLE_TEST_QUESTIONS);
+    	emptyTable(Global.DB_TABLE_TEST_TAGS);
+    }
+	
+	/**
 	 * Begin a database transaction
 	 */
 	public void beginTransaction() {
@@ -817,20 +833,13 @@ public class DataBaseHelper {
 	 * @throws XmlPullParserException 
      */
     public void upgradeDB(Context context) throws XmlPullParserException, IOException {    	
-    	emptyTable(Global.DB_TABLE_TEST_QUESTION_ANSWERS);
-    	emptyTable(Global.DB_TABLE_TEST_QUESTION_TAGS);
-    	emptyTable(Global.DB_TABLE_TEST_QUESTIONS_COURSE);
-    	emptyTable(Global.DB_TABLE_TEST_ANSWERS);
-    	emptyTable(Global.DB_TABLE_TEST_CONFIG);
-    	emptyTable(Global.DB_TABLE_TEST_QUESTIONS);
-    	emptyTable(Global.DB_TABLE_TEST_TAGS);
-    	
-    	initializeDB();
-    	compactDB();
+    	//cleanTables();    	
+    	//initializeDB();
+    	//compactDB();
     	
     	/*db.getDB().execSQL("CREATE TEMPORARY TABLE __"
                 + Global.DB_TABLE_NOTIFICATIONS
-                + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, id INTEGER, eventType TEXT, eventTime TEXT,"
+                + " (_id INTEGER PRIMARY KEY AUTOINanCREMENT, id INTEGER, eventType TEXT, eventTime TEXT,"
                 + " userSurname1 TEXT, userSurname2 TEXT, userFirstname TEXT, location TEXT, summary TEXT," 
                 + "status TEXT, content TEXT); "
                 + "INSERT INTO __" + Global.DB_TABLE_NOTIFICATIONS + " SELECT _id, id, eventType, eventTime, "

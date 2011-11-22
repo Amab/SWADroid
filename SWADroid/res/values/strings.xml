@@ -20,9 +20,13 @@
 	<string name="saveSummary_preferences">Save actual preferences</string>
 	<string name="saveTitle_preferences">Save preferences</string>
 	<string name="preferencesTitle_menu">Preferences</string>
+	<string name="shareTitle_menu">Share SWADroid</string>
+	<string name="rateTitle_menu">Rate</string>
+	<string name="cleanDatabaseTitle_menu">Clean database</string>
 	<string name="about_preferences">About</string>
 	<string name="versionTitle_preferences">Application version</string>
-	<string name="author_preferences">Programmed by Juan Miguel Boyero Corral</string>
+	<string name="author_preferences">Coordinated by Antonio Cañas Vargas
+		\nProgrammed by Juan Miguel Boyero Corral</string>
 	<string name="organization_preferences">University of Granada</string>
 	<string name="loginTitle_menu">Login</string>
 	<string name="loginProgressTitle">Login</string>
@@ -105,4 +109,17 @@
 	<string name="message_subject_title">Subject</string>
 	<string name="message_body_title">Message</string>
 	<string name="sendMsg">Send</string>
+	<string name="cleanDatabaseMsg">The database has been cleaned</string>
+	<string name="shareBodyMsg">I\'m using #SWADroid in my Android mobile for access to
+		the e-learning platform SWAD.\nGet it for free here:
+		 https://market.android.com/details?id=es.ugr.swad.swadroid</string>
+	<string name="marketURL">market://details?id=es.ugr.swad.swadroid</string>
+	<string name="twitterURL">https://twitter.com/#!/SWADroid</string>
+	<string name="facebookURL">https://www.facebook.com/SWADroid</string>
+	<string name="mailingListURL">https://groups.google.com/forum/#!forum/swadroid</string>
+	<string name="twitterTitle">Twitter</string>
+	<string name="twitterUser">\@SWADroid</string>
+	<string name="facebookTitle">Facebook</string>
+	<string name="mailingListTitle">Mailing list</string>
+	<string name="marketTitle">Android Market</string>
 </resources>
