@@ -33,6 +33,14 @@ public class Global {
      */
     private static boolean logged;
     /**
+     * Time of application's last login
+     */
+    private static long lastLoginTime;
+    /**
+     * Time to force relogin
+     */
+    public static final int RELOGIN_TIME = 86400000; //24h
+    /**
      * Request code for Login module.
      */
     public static final int LOGIN_REQUEST_CODE = 1;
@@ -123,6 +131,20 @@ public class Global {
 		Global.logged = logged;
 	}
 	
+	/**
+	 * Gets start time of application
+	 * @return Start time of application
+	 */
+	public static long getLastLoginTime() {
+		return lastLoginTime;
+	}
+	/**
+	 * Sets start time of application
+	 * @param l Start time of application
+	 */
+	public static void setLastLoginTime(long l) {
+		Global.lastLoginTime = l;
+	}
 	/**
 	 * Function to parse from Integer to Boolean
 	 * @param n Integer to be parsed

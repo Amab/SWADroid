@@ -97,7 +97,8 @@ public class Login extends Module {
     protected void requestService()
             throws NoSuchAlgorithmException, IOException, XmlPullParserException, SoapFault, IllegalAccessException, InstantiationException {
 
-    	if(!Global.isLogged())
+    	//If the application isn't logged or last login time > Global.RELOGIN_TIME, force login
+    	if(!Global.isLogged() || (System.currentTimeMillis()-Global.getLastLoginTime() > Global.RELOGIN_TIME))
     	{
 	        //Encrypts user password with SHA-512 and encodes it to Base64UrlSafe   	
 	        md = MessageDigest.getInstance("SHA-512");
@@ -124,6 +125,9 @@ public class Login extends Module {
 		        User.setUserSurname2(ks.getProperty(5).toString());
 		        User.setUserFirstName(ks.getProperty(6).toString());
 		        User.setUserTypeName(ks.getProperty(7).toString());
+		        
+		        //Update application last login time
+		        Global.setLastLoginTime(System.currentTimeMillis());
 	        }
     	}
     	
@@ -136,6 +140,7 @@ public class Login extends Module {
     		Log.d(TAG, "userSurname2=" + User.getUserSurname2());
     		Log.d(TAG, "userFirstName=" + User.getUserFirstName());
     		Log.d(TAG, "userTypeName=" + User.getUserTypeName());
+    		Log.d(TAG, "lastLoginTime=" + Global.getLastLoginTime());
     	}
     	
         //Request finalized without errors
