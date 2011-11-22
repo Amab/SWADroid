@@ -214,11 +214,24 @@ public class TestQuestion extends Model {
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + ((answerType == null) ? 0 : answerType.hashCode());
-		result = prime * result + ((answers == null) ? 0 : answers.hashCode());
+		result = prime * result
+				+ ((answerType == null) ? 0 : answerType.hashCode());
+		result = prime * result + (int) (crsCod ^ (crsCod >>> 32));
 		result = prime * result + (shuffle ? 1231 : 1237);
 		result = prime * result + ((stem == null) ? 0 : stem.hashCode());
 		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		return true;
 	}
 
 	/* (non-Javadoc)

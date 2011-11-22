@@ -202,8 +202,6 @@ public class TestAnswer extends Model {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (!super.equals(obj))
-			return false;
 		if (getClass() != obj.getClass())
 			return false;
 		TestAnswer other = (TestAnswer) obj;
