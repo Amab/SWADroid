@@ -5,6 +5,7 @@
 	<string name="notificationsModuleLabel">Notifications</string>
 	<string name="coursesModuleLabel">Courses</string>
 	<string name="testsModuleLabel">Tests</string>
+	<string name="messageModuleLabel">Send message</string>
 	<string name="title_error_dialog">ERROR</string>
 	<string name="close_dialog">Close</string>
 	<string name="set_preferences">Preferences</string>
