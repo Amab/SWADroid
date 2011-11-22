@@ -1,4 +1,4 @@
-## 0.4 (2011-06-08)
+## 0.4 (2011-06-13)
 
 * Added tests module
 * Updated ksoap2-android library
