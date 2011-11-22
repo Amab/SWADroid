@@ -49,14 +49,6 @@ public class Global {
      */
     public static final int NOTIFICATIONS_REQUEST_CODE = 3;
     /**
-     * Student type constant
-     */
-    public static String STUDENT_TYPE = "student";
-    /**
-     * Teacher type constant
-     */
-    public static String TEACHER_TYPE = "teacher";
-    /**
      * Class Module's tag name for Logcat
      */
     public static final String MODULE_TAG = "Module";
