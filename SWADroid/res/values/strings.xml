@@ -26,6 +26,8 @@
 	<string name="loginProgressDescription">Connecting...</string>
 	<string name="notificationsProgressTitle">Notifications</string>
 	<string name="notificationsProgressDescription">Retrieving new notifications</string>
+	<string name="testsDownloadProgressTitle">Tests</string>
+	<string name="testsDownloadProgressDescription">Obtaining test questions...</string>
 	<string name="coursesProgressTitle">Courses</string>
 	<string name="coursesProgressDescription">Retrieving courses...</string>
 	<string name="errorMsgLaunchingActivity">An error occurred during the execution of the
@@ -51,6 +53,11 @@
 	<string name="noContentMsg">No content</string>
 	<string name="yesMsg">Yes</string>
 	<string name="noMsg">No</string>
+	<string name="acceptMsg">Ok</string>
+	<string name="cancelMsg">Cancel</string>
+	<string name="selectCourseTitle">Select course</string>
+	<string name="noCourseSelectedMsg">You must select a course to download tests</string>
+	<string name="forbiddenCourseTestsDownloadMsg">The teacher of this course does not allows the tests download</string>
 	<string name="initialDialogTitle">IMPORTANT</string>
 	<string name="firstRunMsg">Before using the application for the first time you
 		must enter the user name and password for SWAD at the setup
@@ -59,18 +66,8 @@
 	</string>
 	<string name="upgradeMsg">Due to changes in the database all notifications
 		data have been deleted.\n\nSorry.</string>
+	<string name="errorBadLoginMsg">Incorrect user or password</string>
 	<string name="errorServerResponseMsg">Error in server response</string>
 	<string name="errorConnectionMsg">Error while connecting to server</string>
 	<string name="errorTimeoutMsg">Timeout trying to connect to the server</string>
-
-
-
-
-
-
-
-
-
-
-
 </resources>

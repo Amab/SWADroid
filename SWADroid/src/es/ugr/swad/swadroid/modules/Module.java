@@ -457,7 +457,7 @@ public abstract class Module extends Activity {
                 .setNeutralButton(R.string.close_dialog,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Module.this.finish();
+                        finish();
                     }
                 })
                 .setIcon(R.drawable.erroricon).show();
@@ -501,27 +501,29 @@ public abstract class Module extends Activity {
      */
     protected class Connect extends AsyncTask<String, Void, Void> {
         /**
-         * Progress dialog.
+         * Progress dialog
          */
         ProgressDialog dialog = new ProgressDialog(Module.this);
         /**
-         * Exception pointer.
+         * Exception pointer
          */
         Exception e = null;
         String progressDescription;
         int progressTitle;
-        boolean showDialog;
+        boolean showDialog, isLoginModule;
 
 		/**
          * Shows progress dialog and connects to SWAD in background
 		 * @param progressDescription Description to be showed in dialog
 		 * @param progressTitle Title to be showed in dialog
 		 */
-		public Connect(boolean showDialog, String progressDescription, int progressTitle) {
+		public Connect(boolean showDialog, String progressDescription, int progressTitle, Boolean... isLogin) {
 			super();
 			this.progressDescription = progressDescription;
 			this.progressTitle = progressTitle;
 			this.showDialog = showDialog;
+			assert isLogin.length <= 1;
+		    this.isLoginModule = isLogin.length > 0 ? isLogin[0].booleanValue() : false;
 		}
 
 		/* (non-Javadoc)
@@ -584,11 +586,16 @@ public abstract class Module extends Activity {
                  */
                 if(e instanceof SoapFault) {
                     SoapFault es = (SoapFault) e;
+            		
+            		if(isLoginModule)
+            			errorMsg = getString(R.string.errorBadLoginMsg);
+            		else
+            			errorMsg = es.getMessage();
                     
             		if(isDebuggable)
-            			Log.e(es.getClass().getSimpleName(), es.getMessage());
+            			Log.e(e.getClass().getSimpleName(), errorMsg);
             		
-                    error(es.getMessage());
+        			error(errorMsg);
                 } else if (e instanceof XmlPullParserException) {
                 	errorMsg = getString(R.string.errorServerResponseMsg);
                 	
