@@ -20,6 +20,7 @@
 package es.ugr.swad.swadroid.modules;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 import es.ugr.swad.swadroid.Base64;
 import es.ugr.swad.swadroid.Global;
@@ -73,7 +74,9 @@ public class Login extends Module {
     	String progressDescription = getString(R.string.loginProgressDescription);
     	int progressTitle = R.string.loginProgressTitle;
     	Connect con = new Connect(false, progressDescription, progressTitle, true);
-    	Toast.makeText(this, progressDescription, Toast.LENGTH_LONG).show();
+    	
+    	if(!Global.isLogged())
+    		Toast.makeText(this, progressDescription, Toast.LENGTH_LONG).show();
     	
         con.execute();
     }
@@ -117,15 +120,22 @@ public class Login extends Module {
 		        User.setUserSurname2(ks.getProperty(5).toString());
 		        User.setUserFirstName(ks.getProperty(6).toString());
 		        User.setUserTypeName(ks.getProperty(7).toString());
-		        
-		        //Request finalized without errors
-		        setResult(RESULT_OK);
 	        }
-    	} else {
-    		 //Request finalized without errors
-	        setResult(RESULT_OK);
     	}
     	
+    	if(isDebuggable) {
+    		Log.d(Global.LOGIN_TAG, "userCode=" + User.getUserCode());
+    		Log.d(Global.LOGIN_TAG, "userTypeCode=" + User.getUserTypeCode());
+    		Log.d(Global.LOGIN_TAG, "wsKey=" + User.getWsKey());
+    		Log.d(Global.LOGIN_TAG, "userID=" + User.getUserID());
+    		Log.d(Global.LOGIN_TAG, "userSurname1=" + User.getUserSurname1());
+    		Log.d(Global.LOGIN_TAG, "userSurname2=" + User.getUserSurname2());
+    		Log.d(Global.LOGIN_TAG, "userFirstName=" + User.getUserFirstName());
+    		Log.d(Global.LOGIN_TAG, "userTypeName=" + User.getUserTypeName());
+    	}
+    	
+        //Request finalized without errors
+        setResult(RESULT_OK);
         finish();
 	}
 

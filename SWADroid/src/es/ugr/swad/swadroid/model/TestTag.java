@@ -48,12 +48,23 @@ public class TestTag extends Model {
 	 * @param id tag id
 	 * @param tagTxt Tag text
 	 */
+	public TestTag(int id, String tagTxt) {
+		super(id);
+		this.tagTxt = tagTxt;
+	}
+
+	/**
+	 * Constructor
+	 * @param id tag id
+	 * @param qstCod question id
+	 * @param tagTxt Tag text
+	 */
 	public TestTag(int id, int qstCod, String tagTxt) {
 		super(id);
 		this.qstCod = qstCod;
 		this.tagTxt = tagTxt;
 	}
-
+	
 	/**
 	 * Gets tag text
 	 * @return Tag text
@@ -93,28 +104,8 @@ public class TestTag extends Model {
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + ((tagTxt == null) ? 0 : tagTxt.hashCode());
+		result = prime * result + qstCod;
 		return result;
-	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		TestTag other = (TestTag) obj;
-		if (tagTxt == null) {
-			if (other.tagTxt != null)
-				return false;
-		} else if (!tagTxt.equals(other.tagTxt))
-			return false;
-		return true;
 	}
 
 	/* (non-Javadoc)
@@ -122,7 +113,8 @@ public class TestTag extends Model {
 	 */
 	@Override
 	public String toString() {
-		return "TestTag [tagTxt=" + tagTxt + ", getId()=" + getId() + "]";
+		return "TestTag [qstCod=" + qstCod + ", tagTxt=" + tagTxt
+				+ ", getId()=" + getId() + "]";
 	}
 
 	/* (non-Javadoc)

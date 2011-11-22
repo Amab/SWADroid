@@ -5,7 +5,7 @@
 		<item>Tests</item>
 	</string-array>
 	<string-array name="testMenuItems">
-		<item>Download/Update tests</item>
+		<item>Syncronize questions</item>
 		<item>Make test</item>
 	</string-array>
 </resources>

@@ -51,27 +51,39 @@ public class Global {
     /**
      * Request code for Tests module.
      */
-    public static final int TESTS_DOWNLOAD_REQUEST_CODE = 5;
+    public static final int TESTS_CONFIG_DOWNLOAD_REQUEST_CODE = 5;
     /**
      * Request code for Tests module.
      */
-    public static final int TESTS_MAKE_REQUEST_CODE = 6;
+    public static final int TESTS_QUESTIONS_DOWNLOAD_REQUEST_CODE = 6;
+    /**
+     * Request code for Tests module.
+     */
+    public static final int TESTS_MAKE_REQUEST_CODE = 7;
+    /**
+     * Prefix tag name for Logcat
+     */
+    private static final String APP_TAG = "SWADroid";
     /**
      * Class Module's tag name for Logcat
      */
-    public static final String MODULE_TAG = "Module";
+    public static final String MODULE_TAG = APP_TAG + " Module";
     /**
      * Login tag name for Logcat
      */
-    public static final String LOGIN_TAG = "Login";
+    public static final String LOGIN_TAG = APP_TAG + " Login";
+    /**
+     * Courses tag name for Logcat
+     */
+    public static final String COURSES_TAG = APP_TAG + " Courses";
     /**
      * Notifications tag name for Logcat
      */
-    public static final String NOTIFICATIONS_TAG = "Notifications";
+    public static final String NOTIFICATIONS_TAG = APP_TAG + " Notifications";
     /**
      * Tests tag name for Logcat
      */
-    public static final String TESTS_TAG = "Tests";
+    public static final String TESTS_TAG = APP_TAG + " Tests";
     /**
      * Table name for courses
      */
@@ -137,7 +149,7 @@ public class Global {
 	 * @return true if n==0, false in other case
 	 */
 	public static boolean parseIntBool(int n) {
-		return n==0 ? true : false;
+		return n!=0;
 	}
 	
 	/**

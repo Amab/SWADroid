@@ -116,31 +116,6 @@ public class PairTable<FIRST, SECOND> extends Model {
 	}
 
 	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		PairTable other = (PairTable) obj;
-		if (table == null) {
-			if (other.table != null)
-				return false;
-		} else if (!table.equals(other.table))
-			return false;
-		if (values == null) {
-			if (other.values != null)
-				return false;
-		} else if (!values.equals(other.values))
-			return false;
-		return true;
-	}
-
-	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

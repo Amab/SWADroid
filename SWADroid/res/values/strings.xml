@@ -25,16 +25,15 @@
 	<string name="loginProgressTitle">Login</string>
 	<string name="loginProgressDescription">Connecting...</string>
 	<string name="notificationsProgressTitle">Notifications</string>
-	<string name="notificationsProgressDescription">Retrieving new notifications</string>
+	<string name="notificationsProgressDescription">Retrieving new notifications...</string>
 	<string name="testsDownloadProgressTitle">Tests</string>
-	<string name="testsDownloadProgressDescription">Obtaining test questions...</string>
+	<string name="testsDownloadProgressDescription">Synchronizing test questions...</string>
 	<string name="coursesProgressTitle">Courses</string>
 	<string name="coursesProgressDescription">Retrieving courses...</string>
 	<string name="errorMsgLaunchingActivity">An error occurred during the execution of the
 		operation</string>
 	<string name="errorMsgWorkaroundEmulator">Damn. That Android emulator bug appeared again.
 		Retrying...</string>
-
 	<string name="errorCopyMsg_DB">Error copying database</string>
 	<string name="errorMsgNoConnection">No connection found</string>
 	<string name="upgradeMsg_DB">Upgrading database...</string>
@@ -57,7 +56,9 @@
 	<string name="cancelMsg">Cancel</string>
 	<string name="selectCourseTitle">Select course</string>
 	<string name="noCourseSelectedMsg">You must select a course to download tests</string>
-	<string name="forbiddenCourseTestsDownloadMsg">The teacher of this course does not allows the tests download</string>
+	<string name="noQuestionsAvailableTestsDownloadMsg">There are no questions available for this course</string>
+	<string name="noQuestionsPluggableTestsDownloadMsg">the teacher does not allows the questions download</string>
+	<string name="questionsTestsDownloadSuccesfulMsg">Questions downloaded successfully</string>
 	<string name="initialDialogTitle">IMPORTANT</string>
 	<string name="firstRunMsg">Before using the application for the first time you
 		must enter the user name and password for SWAD at the setup

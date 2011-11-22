@@ -61,8 +61,8 @@ public class Tests extends Module {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Intent activity;
 				switch(position) {
-					case 0: activity = new Intent(getBaseContext(), TestsDownload.class);
-							startActivityForResult(activity, Global.TESTS_DOWNLOAD_REQUEST_CODE);
+					case 0: activity = new Intent(getBaseContext(), TestsConfigDownload.class);
+							startActivityForResult(activity, Global.TESTS_CONFIG_DOWNLOAD_REQUEST_CODE);
 							break;
 							
 					case 1: activity = new Intent(getBaseContext(), TestsMake.class);
@@ -86,14 +86,6 @@ public class Tests extends Module {
         list = (ListView)this.findViewById(R.id.listItems);
         list.setAdapter(adapter);
         list.setOnItemClickListener(clickListener);
-	}
-
-	/* (non-Javadoc)
-	 * @see es.ugr.swad.swadroid.modules.Module#onActivityResult(int, int, android.content.Intent)
-	 */
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 	/* (non-Javadoc)
