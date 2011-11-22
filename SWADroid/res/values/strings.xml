@@ -26,6 +26,8 @@
 	<string name="loginProgressDescription">Connecting...</string>
 	<string name="notificationsProgressTitle">Notifications</string>
 	<string name="notificationsProgressDescription">Retrieving new notifications...</string>
+	<string name="notificationsEmptyListMsg">Did not download any notification.\n\nTo download most recent
+		notifications click the icon in the upper right of the screen.</string>
 	<string name="testsDownloadProgressTitle">Tests</string>
 	<string name="testsDownloadProgressDescription">Synchronizing test questions...</string>
 	<string name="coursesProgressTitle">Courses</string>
