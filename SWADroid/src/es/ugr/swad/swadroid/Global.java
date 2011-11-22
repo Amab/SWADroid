@@ -72,4 +72,8 @@ public class Global {
      * Table name for for relationship between test's questions and tags
      */ 
     public static final String DB_TABLE_TEST_QUESTIONS_TAGS = "tst_questions_tags";
+    /*
+     * Class Module's tag name for Logcat
+     */
+    public static final String MODULE_TAG = "Module";
 }
