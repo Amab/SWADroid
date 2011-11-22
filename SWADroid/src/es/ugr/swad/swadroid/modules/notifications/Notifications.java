@@ -39,6 +39,8 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -79,9 +81,23 @@ public class Notifications extends Module {
 		ImageButton updateButton;
 		ImageView image;
 		TextView text;
+		ListView list;
+		OnItemClickListener clickListener = new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> av, View v, int arg2,
+					long arg3) {
+				
+				TextView content = (TextView) v.findViewById(R.id.eventText);
+				if(content.getVisibility() == View.VISIBLE)
+				{
+					content.setVisibility(View.GONE);
+				} else {
+					content.setVisibility(View.VISIBLE);
+				}
+			}    	
+        };
 		
 		super.onCreate(savedInstanceState);
-        setContentView(R.layout.notifications);
+        setContentView(R.layout.list_items);
         
         image = (ImageView)this.findViewById(R.id.moduleIcon);
         image.setBackgroundResource(R.drawable.notif);
@@ -98,7 +114,10 @@ public class Notifications extends Module {
         //dbHelper.emptyTable(Global.DB_TABLE_NOTIFICATIONS);
         dbCursor = dbHelper.getDb().getCursor(Global.DB_TABLE_NOTIFICATIONS, selection, orderby);
         adapter = new NotificationsCursorAdapter(this, dbCursor);
-        setListAdapter(adapter);
+        
+        list = (ListView)this.findViewById(R.id.listItems);
+        list.setAdapter(adapter);
+        list.setOnItemClickListener(clickListener);
         
         setMETHOD_NAME("getNotifications");
 	}
@@ -110,22 +129,6 @@ public class Notifications extends Module {
 	public void onRefreshClick(View v)
 	{
 		runConnection();
-	}
-
-	/* (non-Javadoc)
-	 * @see android.app.ListActivity#onListItemClick(android.widget.ListView, android.view.View, int, long)
-	 */
-	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {		
-		super.onListItemClick(l, v, position, id);	
-		
-		TextView content = (TextView) v.findViewById(R.id.eventText);
-		if(content.getVisibility() == View.VISIBLE)
-		{
-			content.setVisibility(View.GONE);
-		} else {
-			content.setVisibility(View.VISIBLE);
-		}
 	}
 
 	/* (non-Javadoc)
