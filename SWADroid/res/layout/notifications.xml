@@ -17,8 +17,8 @@
     
     <ListView
        	android:id="@+id/android:list"
+       	android:cacheColorHint="@color/background"
        	android:layout_width="match_parent"
-       	android:layout_height="wrap_content"
-       	android:listSelector="@android:color/transparent">
+       	android:layout_height="wrap_content">
     </ListView>
 </LinearLayout>
