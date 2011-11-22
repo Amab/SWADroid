@@ -18,11 +18,13 @@
  */
 package es.ugr.swad.swadroid.model;
 
+import org.ksoap2.serialization.KvmSerializable;
+
 /**
  * Superclass for encapsulate common behavior of all Models.
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com> *
  */
-public class Model {
+public abstract class Model implements KvmSerializable {
 	/**
 	 * Model identifier
 	 */
