@@ -91,6 +91,10 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
      */
     private static final String FACEBOOKPREF = "facebookPref";
     /**
+     * Google Plus preference name.
+     */
+    private static final String GOOGLEPLUSPREF = "googlePlusPref";
+    /**
      * Mailing list preference name.
      */
     private static final String MAILINGLISTPREF = "mailingListPref";
@@ -122,6 +126,10 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
      * Facebook preference
      */
     private Preference facebookPref;
+    /**
+     * Google Plus preference
+     */
+    private Preference googlePlusPref;
     /**
      * Mailing list preference
      */
@@ -237,6 +245,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         ratePref = findPreference(RATEPREF);
         twitterPref = findPreference(TWITTERPREF);
         facebookPref = findPreference(FACEBOOKPREF);
+        googlePlusPref = findPreference(GOOGLEPLUSPREF);
         mailingListPref = findPreference(MAILINGLISTPREF);
         sharePref = findPreference(SHAREPREF);
         
@@ -245,6 +254,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         ratePref.setOnPreferenceChangeListener(this);
         twitterPref.setOnPreferenceChangeListener(this);
         facebookPref.setOnPreferenceChangeListener(this);
+        googlePlusPref.setOnPreferenceChangeListener(this);
         mailingListPref.setOnPreferenceChangeListener(this);
         sharePref.setOnPreferenceChangeListener(this);
         
@@ -302,6 +312,18 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
             public boolean onPreferenceClick(Preference preference) {
             	Intent urlIntent = new Intent(Intent.ACTION_VIEW);
             	urlIntent.setData(Uri.parse(getString(R.string.facebookURL)));
+	        	startActivity(urlIntent);
+                return true;
+            }
+        });
+        googlePlusPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            /**
+             * Called when a preference is selected.
+             * @param preference Preference selected.
+             */
+            public boolean onPreferenceClick(Preference preference) {
+            	Intent urlIntent = new Intent(Intent.ACTION_VIEW);
+            	urlIntent.setData(Uri.parse(getString(R.string.googlePlusURL)));
 	        	startActivity(urlIntent);
                 return true;
             }
