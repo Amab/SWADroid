@@ -63,12 +63,15 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 		boolean dbExist = checkDataBase();
 		if(dbExist){
 			//do nothing - database already exist
+			Log.d("createDataBase", "Database already exists.");
 		}else{
 			//By calling this method and empty database will be created into the default system path
 			//of your application so we are gonna be able to overwrite that database with our database.
 			this.getReadableDatabase();
 			try {
+				Log.d("createDataBase", "Creating database...");
 				copyDataBase();
+				Log.d("createDataBase", "Database created successfully.");
 			} catch (IOException e) {
 				throw new Error(context.getString(R.string.errorCopyMsg_DB));
 			}
@@ -78,14 +81,19 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 	/**
 	 * Check if the database already exist to avoid re-copying the file each time you open the application.
 	 * @return true if it exists, false if it doesn't
+	 * @throws IOException 
 	 */
-	private boolean checkDataBase(){
+	private boolean checkDataBase() throws IOException{
 		SQLiteDatabase checkDB = null;
 		try{
+			Log.d("checkDataBase", "Checking database...");
 			String myPath = DB_PATH + DB_NAME;
 			checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
+			Log.d("checkDataBase", "Database already exists.");
 		}catch(SQLiteException e){
-			//database does't exist yet.
+			//database doesn't exist yet.
+			Log.d("checkDataBase", "Database doesn't exist yet.");
+			createDataBase();
 		}
 
 		if(checkDB != null){
@@ -101,28 +109,40 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 	 * @throws IOException
 	 **/
 	private void copyDataBase() throws IOException{
+		Log.d("copyDataBase", "Copying database to destination...");
+		
 		//Open your local db as the input stream
 		InputStream myInput = context.getAssets().open(DB_NAME);
 		// Path to the just created empty db
 		String outFileName = DB_PATH + DB_NAME;
 		//Open the empty db as the output stream
 		OutputStream myOutput = new FileOutputStream(outFileName);
+		
 		//transfer bytes from the inputfile to the outputfile
 		byte[] buffer = new byte[1024];
 		int length;
 		while ((length = myInput.read(buffer))>0){
 			myOutput.write(buffer, 0, length);
 		}
+		
 		//Close the streams
 		myOutput.flush();
 		myOutput.close();
 		myInput.close();
+		
+		Log.d("copyDataBase", "Database successfully copied.");
 	}
 	
-	public void openDataBase() throws SQLException{
+	public void openDataBase() throws SQLException, IOException {
+		Log.d("openDataBase", "Opening database...");
+		
+		checkDataBase();
+		
 		//Open the database
 		String myPath = DB_PATH + DB_NAME;
 		swadroidDataBase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
+		
+		Log.d("openDataBase", "Database successfully opened.");
 	}
 	
 	@Override
@@ -304,10 +324,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 		String command = "INSERT INTO "
 						+ Global.DB_TABLE_COURSES
 						+ " (_id, name) VALUES ("
-						+ c.getId() + ", "
+						+ c.getId() + ", \'"
 						+ c.getName()
-									+ ")";
-        
+									+ "\')";
+        Log.d("DB", command);
 		swadroidDataBase.execSQL(command, null);
     }
 	
@@ -321,9 +341,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 						+ Global.DB_TABLE_NOTICES
 						+ " (_id, timestamp, description) VALUES ("
 						+ n.getId() + ", "
-						+ n.getTimestamp() + ", "
+						+ n.getTimestamp() + ", \'"
 						+ n.getDescription()
-											+ ")";
+											+ "\')";
         
 		swadroidDataBase.execSQL(command, null);
     }
@@ -338,11 +358,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 						+ Global.DB_TABLE_STUDENTS
 						+ " (_id, dni, firstname, surname1, surname2) VALUES ("
 						+ s.getId() + ", "
-						+ s.getDni() + ", "
-						+ s.getFirstName() + ", "
-						+ s.getSurname1() + ", "
+						+ s.getDni() + ", \'"
+						+ s.getFirstName() + "\', \'"
+						+ s.getSurname1() + "\', \'"
 						+ s.getSurname2()
-											+ ")";
+											+ "\')";
         
 		swadroidDataBase.execSQL(command, null);
     }
@@ -356,8 +376,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 		String command = "INSERT INTO "
 						+ Global.DB_TABLE_TEST_ANSWERS
 						+ " (_id, answer, correct) VALUES ("
-						+ a.getId() + ", "
-						+ a.getAnswer() + ", "
+						+ a.getId() + ", \'"
+						+ a.getAnswer() + "\', "
 						+ parseBoolInt(a.getCorrect())
 													+ ")";
         
@@ -375,8 +395,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 						+ " (_id, anstype, numhits, question, score, shuffle) VALUES ("
 						+ q.getId() + ", "
 						+ q.getAnstype() + ", "
-						+ q.getNumhits() + ", "
-						+ q.getQuestion() + ", "
+						+ q.getNumhits() + ", \'"
+						+ q.getQuestion() + "\', "
 						+ q.getScore() + ", "
 						+ parseBoolString(q.getShuffle())
 														+ ")";
@@ -393,10 +413,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 		String command = "INSERT INTO "
 						+ Global.DB_TABLE_MSG_CONTENT
 						+ " (msgcod, subject, content) VALUES ("
-						+ m.getId() + ", "
-						+ m.getSubject() + ", "
+						+ m.getId() + ", \'"
+						+ m.getSubject() + "\', \'"
 						+ m.getContent()
-										+ ")";
+										+ "\')";
         
 		swadroidDataBase.execSQL(command, null);
     }
