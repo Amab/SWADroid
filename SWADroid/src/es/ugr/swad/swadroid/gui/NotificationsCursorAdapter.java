@@ -55,7 +55,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {		
 		long unixTime;
-		String type, sender, from, dateTitle, summaryText;
+		String type, sender, from, dateTitle, summaryTitle, summaryText;
     	Date d;
     	
         TextView eventType = (TextView) view.findViewById(R.id.eventType);
@@ -108,8 +108,9 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         	location.setText(cursor.getString(cursor.getColumnIndex("location")));
         }
         if(summary != null){
+        	summaryTitle = context.getString(R.string.content);
         	summaryText = cursor.getString(cursor.getColumnIndex("summary"));
-        	summary.setText(Html.fromHtml(summaryText));
+        	summary.setText(summaryTitle + ":\n" + Html.fromHtml(summaryText));
         }
 	}
 
