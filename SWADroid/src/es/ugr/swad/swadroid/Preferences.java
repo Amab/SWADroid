@@ -24,10 +24,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
 import android.preference.Preference.OnPreferenceClickListener;
+import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.widget.Toast;
 
 /**
@@ -43,7 +42,14 @@ public class Preferences extends PreferenceActivity {
      * User password.
      */
     private String userPassword;
+    /**
+     * Old user identifier
+     */
     private String oldUserID;
+
+	/**
+     * Old user password 
+     */
     private String oldUserPassword;
 
     /**
@@ -61,6 +67,22 @@ public class Preferences extends PreferenceActivity {
     public String getUserPassword() {
         return userPassword;
     }
+
+    /**
+     * Gets old user identifier
+	 * @return Old user identifier
+	 */
+	public String getOldUserID() {
+		return oldUserID;
+	}
+
+	/**
+	 * Gets old user password
+	 * @return Old user password
+	 */
+	public String getOldUserPassword() {
+		return oldUserPassword;
+	}
 
     /**
      * Initializes preferences of activity.
