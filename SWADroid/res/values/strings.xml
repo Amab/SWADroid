@@ -21,7 +21,7 @@
 	<string name="preferencesTitle_menu">Preferences</string>
 	<string name="about_preferences">About</string>
 	<string name="versionTitle_preferences">Application version</string>
-	<string name="author_preferences">Juan Miguel Boyero Corral</string>
+	<string name="author_preferences">Programmed by Juan Miguel Boyero Corral</string>
 	<string name="organization_preferences">University of Granada</string>
 	<string name="loginTitle_menu">Login</string>
 	<string name="loginProgressTitle">Login</string>

@@ -21,7 +21,7 @@
 	<string name="preferencesTitle_menu">Configuración</string>
 	<string name="about_preferences">Acerca de</string>
 	<string name="versionTitle_preferences">Versión de la aplicación</string>
-	<string name="author_preferences">Juan Miguel Boyero Corral</string>
+	<string name="author_preferences">Programado por Juan Miguel Boyero Corral</string>
 	<string name="organization_preferences">Universidad de Granada</string>
 	<string name="loginTitle_menu">Conectar</string>
 	<string name="loginProgressTitle">Identificación</string>
