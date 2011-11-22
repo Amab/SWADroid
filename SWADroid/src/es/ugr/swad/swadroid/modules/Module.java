@@ -32,11 +32,8 @@ import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import java.io.IOException;
-import java.util.ArrayList;
-
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
-import org.ksoap2.serialization.KvmSerializable;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
@@ -78,7 +75,7 @@ public class Module extends Activity {
     /**
      * Webservice result.
      */
-    ArrayList<Object> result;
+    Object result;
     /**
      * Shows error messages.
      */
@@ -184,7 +181,7 @@ public class Module extends Activity {
      * Gets webservice result.
      * @return Webservice result.
      */
-    public ArrayList<Object> getResult() {
+    public Object getResult() {
         return result;
     }
 
@@ -192,7 +189,7 @@ public class Module extends Activity {
      * Sets webservice result.
      * @param result Webservice result.
      */
-    public void setResult(ArrayList<Object> result) {
+    public void setResult(Object result) {
         this.result = result;
     }
 
@@ -233,7 +230,7 @@ public class Module extends Activity {
      */
 	protected void createRequest() {
         request = new SoapObject(NAMESPACE, METHOD_NAME);
-        result = new ArrayList<Object>();
+        result = null;
     }
 
     /**
@@ -247,31 +244,41 @@ public class Module extends Activity {
 
     /**
      * Sends request to webservice.
+     * @param cl Class to be mapped
      * @throws IOException
-     * @throws XmlPullParserException
      * @throws SoapFault
+     * @throws InstantiationException 
+     * @throws IllegalAccessException 
      */
-    protected void sendRequest() throws IOException, XmlPullParserException, SoapFault {
-        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-        envelope.setOutputSoapObject(request);
+    protected void sendRequest(Class cl)
+    	throws IOException, SoapFault, IllegalAccessException, InstantiationException {
+    	
+    	int numRetrys = 1;
+        Object res;
         HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        
+        envelope.setOutputSoapObject(request);
+        envelope.dotNet = false;
+        envelope.addMapping(NAMESPACE, cl.getName(),cl.newInstance().getClass());
         
         //If an XmlPullParserException occurs, retry once in order to workaround an Android emulator bug
-        try {
-        	androidHttpTransport.call(SOAP_ACTION, envelope);
-        } catch(XmlPullParserException ex) {
-        	Log.e(Global.MODULE_TAG, ex.getLocalizedMessage());
-        	ex.printStackTrace();
-        	Log.e(Global.MODULE_TAG, getString(R.string.errorMsgWorkaroundEmulator));
-        	androidHttpTransport.call(SOAP_ACTION, envelope);
-        }
-        
-        KvmSerializable ks = (KvmSerializable)envelope.bodyIn;
-        //KvmSerializable ks = (KvmSerializable)envelope.getResponse();
-        for(int i=0;i<ks.getPropertyCount();i++)
-        {
-           result.add(ks.getProperty(i)); //if complex type is present then you can cast this to SoapObject and if primitive type is returned you can use toString() to get actual value.
-        }
+        do {
+	        try {
+	        	androidHttpTransport.call(SOAP_ACTION, envelope);
+	        	
+	        	res = envelope.getResponse();
+	        	if(res instanceof SoapFault) {
+	        		result = null;
+	        	} else {
+	        		result = res;
+	        	}
+	        } catch(XmlPullParserException ex) {
+	        	Log.e(Global.MODULE_TAG, getString(R.string.errorMsgWorkaroundEmulator));
+	        	Log.e(Global.MODULE_TAG, ex.getLocalizedMessage());
+	        	ex.printStackTrace();
+	        }
+        } while(numRetrys-- > 0);
     }
     
     /**
