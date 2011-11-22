@@ -9,6 +9,7 @@ Android client for e-learning platform SWAD.
 * Mailing list: <https://groups.google.com/forum/#!forum/swadroid>
 * Twitter: <http://twitter.com/SWADroid>
 * Facebook: <https://www.facebook.com/SWADroid>
+* Google+: <https://plus.google.com/115615684349730524355/posts>
 
 ## Content
 
