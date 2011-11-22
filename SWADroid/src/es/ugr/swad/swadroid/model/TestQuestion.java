@@ -25,69 +25,113 @@ import java.util.List;
 
 import org.ksoap2.serialization.PropertyInfo;
 
+import es.ugr.swad.swadroid.Global;
+
 /**
  * Clas for store a test question
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class TestQuestion extends Model {
 	/**
+	 * Course code
+	 */
+	private int crsCod;
+	/**
 	 * Question's text
 	 */
-	private String question;
+	private String stem;
+	/**
+	 * Time of last edition
+	 */
+	private int editTime;
 	/**
 	 * Answer type
 	 */
 	private String anstype;
 	/**
-	 * Number of hits
-	 */
-	private int numhits;
-	/**
 	 * Flag to shuffle answers in test
 	 */
 	private boolean shuffle;
 	/**
-	 * Test score
-	 */
-	private float score;
-	/**
 	 * Question's answers
 	 */
 	private List<TestAnswer> answers;
+	private static PropertyInfo PI_id = new PropertyInfo();
+	private static PropertyInfo PI_stem = new PropertyInfo();
+	private static PropertyInfo PI_editTime = new PropertyInfo();
+	private static PropertyInfo PI_ansType = new PropertyInfo();
+	private static PropertyInfo PI_shuffle = new PropertyInfo();
+    private static PropertyInfo[] PI_PROP_ARRAY =
+    {
+    	PI_id,
+    	PI_stem,
+    	PI_editTime,
+    	PI_ansType,
+    	PI_shuffle
+    };
 	
 	/**
 	 * @param id Test identifier
-	 * @param question Question's text
+	 * @param crsCod Course code
+	 * @param stem Question's text
 	 * @param anstype Answer type
-	 * @param numhits Number of hits
 	 * @param shuffle Flag to shuffle answers in test
-	 * @param score Test score
 	 */
-	public TestQuestion(int id, String question, String anstype, int numhits,
-			boolean shuffle, float score) {
+	public TestQuestion(int id, int crsCod, String stem, String anstype, boolean shuffle) {
 		super(id);
-		this.question = question;
+		this.crsCod = crsCod;
+		this.stem = stem;
 		this.anstype = anstype;
-		this.numhits = numhits;
 		this.shuffle = shuffle;
-		this.score = score;
 		this.answers = new ArrayList<TestAnswer>();
+	}
+
+	/**
+	 * Gets question code
+	 * @return Question code
+	 */
+	public int getCrsCod() {
+		return crsCod;
+	}
+
+	/**
+	 * Sets question code
+	 * @param crsCod Question code
+	 */
+	public void setCrsCod(int crsCod) {
+		this.crsCod = crsCod;
 	}
 
 	/**
 	 * Gets question's text
 	 * @return Question's text
 	 */
-	public String getQuestion() {
-		return question;
+	public String getStem() {
+		return stem;
+	}
+
+	/**
+	 * Gets time of last edition
+	 * @return Time of last edition
+	 */
+	public int getEditTime() {
+		return editTime;
+	}
+
+	/**
+	 * Sets time of last edition
+	 * @param editTime Time of last edition
+	 */
+	public void setEditTime(int editTime) {
+		this.editTime = editTime;
 	}
 
 	/**
 	 * Sets question's text
-	 * @param question Question's text
+	 * @param stem Question's text
 	 */
-	public void setQuestion(String question) {
-		this.question = question;
+	public void setStem(String stem) {
+		this.stem = stem;
 	}
 
 	/**
@@ -107,22 +151,6 @@ public class TestQuestion extends Model {
 	}
 
 	/**
-	 * Gets number of hits
-	 * @return Number of hits
-	 */
-	public int getNumhits() {
-		return numhits;
-	}
-
-	/**
-	 * Sets number of hits
-	 * @param numhits Number of hits
-	 */
-	public void setNumhits(int numhits) {
-		this.numhits = numhits;
-	}
-
-	/**
 	 * Gets shuffle flag
 	 * @return Shuffle flag
 	 */
@@ -136,22 +164,6 @@ public class TestQuestion extends Model {
 	 */
 	public void setShuffle(boolean shuffle) {
 		this.shuffle = shuffle;
-	}
-
-	/**
-	 * Gets test score
-	 * @return Test score
-	 */
-	public float getScore() {
-		return score;
-	}
-
-	/**
-	 * Sets test score
-	 * @param score Test score
-	 */
-	public void setScore(float score) {
-		this.score = score;
 	}
 
 	/**
@@ -193,23 +205,128 @@ public class TestQuestion extends Model {
 		return corrects;
 	}
 
-	public Object getProperty(int arg0) {
-		// TODO Auto-generated method stub
-		return null;
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((anstype == null) ? 0 : anstype.hashCode());
+		result = prime * result + ((answers == null) ? 0 : answers.hashCode());
+		result = prime * result + editTime;
+		result = prime * result + (shuffle ? 1231 : 1237);
+		result = prime * result + ((stem == null) ? 0 : stem.hashCode());
+		return result;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TestQuestion other = (TestQuestion) obj;
+		if (anstype == null) {
+			if (other.anstype != null)
+				return false;
+		} else if (!anstype.equals(other.anstype))
+			return false;
+		if (answers == null) {
+			if (other.answers != null)
+				return false;
+		} else if (!answers.equals(other.answers))
+			return false;
+		if (editTime != other.editTime)
+			return false;
+		if (shuffle != other.shuffle)
+			return false;
+		if (stem == null) {
+			if (other.stem != null)
+				return false;
+		} else if (!stem.equals(other.stem))
+			return false;
+		return true;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "TestQuestion [stem=" + stem + ", editTime=" + editTime
+				+ ", anstype=" + anstype + ", shuffle=" + shuffle
+				+ ", answers=" + answers + ", getId()=" + getId() + "]";
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.ksoap2.serialization.KvmSerializable#getProperty(int)
+	 */
+	public Object getProperty(int param) {
+		Object object = null;
+        switch(param)
+        {
+            case 0 : object = this.getId();break;
+            case 1 : object = stem;break;
+            case 2 : object = editTime;break;
+            case 3 : object = anstype;break;
+            case 4 : object = shuffle;break;
+        }
+        
+        return object;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.ksoap2.serialization.KvmSerializable#getPropertyCount()
+	 */
 	public int getPropertyCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 5;
 	}
 
-	public void getPropertyInfo(int arg0, Hashtable arg1, PropertyInfo arg2) {
-		// TODO Auto-generated method stub
-		
+	/* (non-Javadoc)
+	 * @see org.ksoap2.serialization.KvmSerializable#getPropertyInfo(int, java.util.Hashtable, org.ksoap2.serialization.PropertyInfo)
+	 */
+	public void getPropertyInfo(int param, Hashtable arg1, PropertyInfo propertyInfo) {
+		switch(param){
+	        case 0:
+	            propertyInfo.type = PropertyInfo.INTEGER_CLASS;
+	            propertyInfo.name = "id";
+	            break;   
+	        case 1:
+	            propertyInfo.type = PropertyInfo.STRING_CLASS;
+	            propertyInfo.name = "stem";
+	            break;  
+	        case 2:
+	            propertyInfo.type = PropertyInfo.INTEGER_CLASS;
+	            propertyInfo.name = "editTime";
+	            break;  
+	        case 3:
+	            propertyInfo.type = PropertyInfo.STRING_CLASS;
+	            propertyInfo.name = "anstype";
+	            break;  
+	        case 4:
+	            propertyInfo.type = PropertyInfo.STRING_CLASS;
+	            propertyInfo.name = "shuffle";
+	            break;
+		}
 	}
 
-	public void setProperty(int arg0, Object arg1) {
-		// TODO Auto-generated method stub
-		
+	/* (non-Javadoc)
+	 * @see org.ksoap2.serialization.KvmSerializable#setProperty(int, java.lang.Object)
+	 */
+	public void setProperty(int param, Object obj) {
+		switch(param)
+		{
+			case 0  : this.setId((Integer)obj); break;
+			case 1  : stem = (String)obj; break;
+			case 2  : editTime = (Integer)obj; break;
+			case 3  : anstype = (String)obj; break;
+			case 4  : shuffle = Global.parseStringBool((String)obj); break;
+		}    
 	}
 }
