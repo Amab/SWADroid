@@ -1,5 +1,10 @@
 ## 0.3.3 (2001-03-27)
 
+* Improved GUI
+* Fixed minor errors on error messages
+
+## 0.3.3 (2001-03-27)
+
 * Redesigned GUI
 
 ## 0.3.2 (2011-03-24)
