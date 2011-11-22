@@ -97,7 +97,9 @@ public class Courses extends Module {
                 String name = pii.getProperty(1).toString();
                 Course c = new Course(id, name);
                 dbHelper.insertCourse(c);
-                Log.d("Courses", c.toString());
+                
+        		if(isDebuggable)
+        			Log.d("Courses", c.toString());
             }
             
 	        //Request finalized without errors
