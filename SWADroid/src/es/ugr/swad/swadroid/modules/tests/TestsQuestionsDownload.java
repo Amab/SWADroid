@@ -97,8 +97,7 @@ public class TestsQuestionsDownload extends Module {
 
 	    if (result != null) {
 	        //Stores tests data returned by webservice response
-	    	@SuppressWarnings("rawtypes")
-			Vector res = (Vector) result;
+			Vector<?> res = (Vector<?>) result;
 
             SoapObject tagsListObject = (SoapObject)res.get(0);
             SoapObject questionsListObject = (SoapObject)res.get(1);
