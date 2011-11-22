@@ -36,6 +36,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.Model;
@@ -73,6 +74,10 @@ public class TestsConfigDownload extends Module {
      * Tests tag name for Logcat
      */
     public static final String TAG = Global.APP_TAG + " TestsConfigDownload";
+    /**
+     * Application preferences.
+     */
+    protected static Preferences prefs = new Preferences(); 
 	
 	/* (non-Javadoc)
 	 * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
@@ -91,6 +96,7 @@ public class TestsConfigDownload extends Module {
 		Intent activity;
 		
 		super.onStart();
+		prefs.getPreferences(getBaseContext());
 		activity = new Intent(getBaseContext(), Courses.class);
 		Toast.makeText(getBaseContext(), R.string.coursesProgressDescription, Toast.LENGTH_LONG).show();
 		startActivityForResult(activity, Global.COURSES_REQUEST_CODE);		
@@ -101,10 +107,12 @@ public class TestsConfigDownload extends Module {
 	 */
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		int lastCourseSelected;
 		OnClickListener singleChoiceItemsClickListener = new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				Course c = (Course) listCourses.get(whichButton);
 				selectedCourseCode = c.getId();
+				prefs.setLastCourseSelected(whichButton);
 				
 				if(isDebuggable) {
 					Integer s = whichButton;
@@ -151,7 +159,10 @@ public class TestsConfigDownload extends Module {
 	            	final AlertDialog.Builder alert = new AlertDialog.Builder(this);
 	            	dbCursor = dbHelper.getDb().getCursor(Global.DB_TABLE_COURSES);
 	            	listCourses = dbHelper.getAllRows(Global.DB_TABLE_COURSES);
-	        		alert.setSingleChoiceItems(dbCursor, 0, "name", singleChoiceItemsClickListener);
+	    			lastCourseSelected = prefs.getLastCourseSelected();
+	        		alert.setSingleChoiceItems(dbCursor, lastCourseSelected, "name",
+	        				singleChoiceItemsClickListener);
+	        		
 	        		alert.setTitle(R.string.selectCourseTitle);
 	        		alert.setPositiveButton(R.string.acceptMsg, positiveClickListener);
 	        		alert.setNegativeButton(R.string.cancelMsg, negativeClickListener);	        		
