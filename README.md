@@ -30,9 +30,9 @@ Copyright (C) 2010, Juan Miguel Boyero Corral
 it under the same terms as [GPLv3][gplv3] license.
 
 [![Copyright and License](http://www.gnu.org/graphics/lgplv3-88x31.png)][lgplv3]
-SWADroid uses [Android DataFrameWork][androiddataframework-library] library developed by [Javier Pérez Pacheco][androiddataframework-author] licensed under [LGPLv3][lgplv3].
+SWADroid uses [Android DataFrameWork][androiddataframework-library] library developed by [Javier Pérez Pacheco][androiddataframework-author] and licensed under [LGPLv3][lgplv3].
 
-SWADroid uses [ksoap2-android][ksoap2-library] library developed by [Manfred Moser][ksoap2-author] licensed under [MIT][mit].
+SWADroid uses [ksoap2-android][ksoap2-library] library developed by [Manfred Moser][ksoap2-author] and licensed under [MIT][mit].
 
 
 ## Contributing
