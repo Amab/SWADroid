@@ -474,10 +474,6 @@ public class Test extends Model {
 				}
 			}
 			
-			if(score < 0) {
-				score = new Float(0);
-			}
-			
 			questionsScore.set(i, score*CORRECT_ANSWER_SCORE);
 			totalScore += score*CORRECT_ANSWER_SCORE;
 		}
