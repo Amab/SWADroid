@@ -46,6 +46,8 @@
 	<string name="evaluation">Evaluación</string>
 	<string name="fromMsg">De</string>
 	<string name="dateMsg">Fecha</string>
+	<string name="noSubjectMsg">Sin asunto</string>
+	<string name="noContentMsg">Sin contenido</string>
 	<string name="yesMsg">Sí</string>
 	<string name="noMsg">No</string>
 	<string name="firstRunMsg">Antes de usar la aplicación por primera vez debe

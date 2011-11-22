@@ -78,19 +78,19 @@ public final class R {
         public static final int coursesProgressDescription=0x7f07001b;
         public static final int coursesProgressTitle=0x7f07001a;
         public static final int dateMsg=0x7f07002b;
-        public static final int errorConnectionMsg=0x7f070032;
+        public static final int errorConnectionMsg=0x7f070034;
         public static final int errorCopyMsg_DB=0x7f07001e;
         public static final int errorMsgLaunchingActivity=0x7f07001c;
         public static final int errorMsgNoConnection=0x7f07001f;
         public static final int errorMsgWorkaroundEmulator=0x7f07001d;
-        public static final int errorServerResponseMsg=0x7f070031;
-        public static final int errorTimeoutMsg=0x7f070033;
+        public static final int errorServerResponseMsg=0x7f070033;
+        public static final int errorTimeoutMsg=0x7f070035;
         public static final int evaluation=0x7f070029;
         public static final int examAnnouncement=0x7f070022;
-        public static final int firstRunMsg=0x7f07002f;
+        public static final int firstRunMsg=0x7f070031;
         public static final int forumReply=0x7f070026;
         public static final int fromMsg=0x7f07002a;
-        public static final int initialDialogTitle=0x7f07002e;
+        public static final int initialDialogTitle=0x7f070030;
         public static final int loginModuleLabel=0x7f070001;
         public static final int loginProgressDescription=0x7f070017;
         public static final int loginProgressTitle=0x7f070016;
@@ -99,7 +99,9 @@ public final class R {
         public static final int marksFile=0x7f070023;
         public static final int message=0x7f070025;
         public static final int messages=0x7f070028;
-        public static final int noMsg=0x7f07002d;
+        public static final int noContentMsg=0x7f07002d;
+        public static final int noMsg=0x7f07002f;
+        public static final int noSubjectMsg=0x7f07002c;
         public static final int notice=0x7f070024;
         public static final int notificationsModuleLabel=0x7f070002;
         public static final int notificationsProgressDescription=0x7f070019;
@@ -111,7 +113,7 @@ public final class R {
         public static final int set_preferences=0x7f070007;
         public static final int testsModuleLabel=0x7f070004;
         public static final int title_error_dialog=0x7f070005;
-        public static final int upgradeMsg=0x7f070030;
+        public static final int upgradeMsg=0x7f070032;
         public static final int upgradeMsg_DB=0x7f070020;
         public static final int userIDName_preferences=0x7f070009;
         public static final int userIDSummary_preferences=0x7f07000a;
@@ -121,7 +123,7 @@ public final class R {
         public static final int userPasswordTitle_preferences=0x7f07000e;
         public static final int user_preferences=0x7f070008;
         public static final int versionTitle_preferences=0x7f070014;
-        public static final int yesMsg=0x7f07002c;
+        public static final int yesMsg=0x7f07002e;
     }
     public static final class xml {
         public static final int preferences=0x7f040000;
