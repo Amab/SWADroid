@@ -151,13 +151,10 @@ public class TestsQuestionsDownload extends Module {
 		    			Log.d(TAG, "UPDATED: " + q.toString());
 	            }
 	        }
-	        
-	        dbHelper.endTransaction();	        
+	                
 			Log.i(TAG, "Retrieved " + listSize + " questions");
             
-			//Read answers info from webservice response
-			dbHelper.beginTransaction();
-			
+			//Read answers info from webservice response			
 	    	listSize = answersListObject.getPropertyCount();
 	        for (int i = 0; i < listSize; i++) {
 	            SoapObject pii = (SoapObject)answersListObject.getProperty(i);
@@ -184,12 +181,9 @@ public class TestsQuestionsDownload extends Module {
             	}
 	        }
 	        
-	        dbHelper.endTransaction();
 			Log.i(TAG, "Retrieved " + listSize + " answers");
             
-			//Read relationships between questions and tags from webservice response
-			dbHelper.beginTransaction();
-			
+			//Read relationships between questions and tags from webservice response			
 	    	listSize = questionTagsListObject.getPropertyCount();
 	        for (int i = 0; i < listSize; i++) {
 	            SoapObject pii = (SoapObject)questionTagsListObject.getProperty(i);
@@ -220,7 +214,6 @@ public class TestsQuestionsDownload extends Module {
 	            }
 	        }
 		    
-		    dbHelper.endTransaction();
 			Log.i(TAG, "Retrieved " + listSize + " relationships between questions and tags");
 			
 			//Update last time test was updated
@@ -228,6 +221,7 @@ public class TestsQuestionsDownload extends Module {
 			Test testConfig = oldTestConfigDB;
 			testConfig.setEditTime(System.currentTimeMillis() / 1000L);
 			dbHelper.updateTestConfig(oldTestConfigDB, testConfig);
+		    dbHelper.endTransaction();
 	    }
         
         //Request finalized without errors

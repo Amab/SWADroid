@@ -185,6 +185,8 @@ public class Notifications extends Module {
 	    sendRequest(Notification.class, false);
 	
 	    if (result != null) {
+	    	dbHelper.beginTransaction();
+	    	
 	        //Stores notifications data returned by webservice response
 			Vector<?> res = (Vector<?>) result;
 	    	SoapObject soap = (SoapObject) res.get(1);
@@ -213,6 +215,8 @@ public class Notifications extends Module {
 			
 			//Clear old notifications to control database size
 			dbHelper.clearOldNotifications(SIZE_LIMIT);
+			
+			dbHelper.endTransaction();
 	    }
 	}
 
