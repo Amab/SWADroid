@@ -22,7 +22,7 @@
     </application>
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
     
-<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="7"></uses-sdk>
+<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="9"></uses-sdk>
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
 <supports-screens android:normalScreens="true" android:resizeable="true" android:smallScreens="true" android:anyDensity="true" android:largeScreens="true"></supports-screens>
 </manifest>
