@@ -130,16 +130,16 @@ public final class R {
     public static final class layout {
         public static final int action_bar=0x7f030000;
         public static final int image_list_item=0x7f030001;
-        public static final int list_item_multiple_choice=0x7f030002;
-        public static final int list_item_single_choice=0x7f030003;
-        public static final int list_items=0x7f030004;
-        public static final int main=0x7f030005;
-        public static final int messages_dialog=0x7f030006;
-        public static final int notifications_list_item=0x7f030007;
-        public static final int number_picker=0x7f030008;
-        public static final int simple_list_item=0x7f030009;
-        public static final int tests_answer_types=0x7f03000a;
-        public static final int tests_make_main=0x7f03000b;
+        public static final int layout_with_action_bar=0x7f030002;
+        public static final int list_item_multiple_choice=0x7f030003;
+        public static final int list_item_single_choice=0x7f030004;
+        public static final int list_items=0x7f030005;
+        public static final int main=0x7f030006;
+        public static final int messages_dialog=0x7f030007;
+        public static final int notifications_list_item=0x7f030008;
+        public static final int number_picker=0x7f030009;
+        public static final int simple_list_item=0x7f03000a;
+        public static final int tests_answer_types=0x7f03000b;
         public static final int tests_make_questions=0x7f03000c;
         public static final int tests_make_results=0x7f03000d;
         public static final int tests_num_questions=0x7f03000e;

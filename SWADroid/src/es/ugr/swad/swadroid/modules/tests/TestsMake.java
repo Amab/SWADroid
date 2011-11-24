@@ -625,7 +625,7 @@ public class TestsMake extends Module {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {		
 		super.onCreate(savedInstanceState);
-		setLayout(R.layout.tests_make_main);
+		setLayout(R.layout.layout_with_action_bar);
 		
 		coursesDialogSingleChoiceItemsClickListener = new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
