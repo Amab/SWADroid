@@ -41,10 +41,12 @@ import android.widget.TextView;
  */
 public class NotificationsCursorAdapter extends CursorAdapter {
 	private boolean [] contentVisible;
+	Context ctx;
 	
 	public NotificationsCursorAdapter(Context context, Cursor c) {
 		super(context, c);
 		
+		ctx = context;
 		int numRows = c.getCount();
 
 		contentVisible = new boolean[numRows];
@@ -195,7 +197,22 @@ public class NotificationsCursorAdapter extends CursorAdapter {
 	}
 
 	public void toggleContentVisibility(int position) {
-		contentVisible[position] = !contentVisible[position];
-		this.notifyDataSetChanged();
+		String viewType, marksType;
+		View view = this.getView(position, null, null);
+		TextView eventType = (TextView) view.findViewById(R.id.eventType);
+		
+		viewType = String.valueOf(eventType.getText());
+		marksType = ctx.getString(R.string.marksFile);
+
+		if(viewType.equals(marksType)) {
+			TextView content = (TextView) view.findViewById(R.id.eventText);
+			
+			Intent activity = new Intent(ctx.getApplicationContext(), Marks.class);
+			activity.putExtra("content", content.getText().toString());
+			ctx.startActivity(activity);
+		} else {
+			contentVisible[position] = !contentVisible[position];
+			this.notifyDataSetChanged();
+		}
 	}
 }
