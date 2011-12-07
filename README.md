@@ -10,6 +10,7 @@ Android client for e-learning platform SWAD.
 * Twitter: <http://twitter.com/SWADroid>
 * Facebook: <https://www.facebook.com/SWADroid>
 * Google+: <https://plus.google.com/115615684349730524355/posts>
+* Blog: <http://swadroid.wordpress.com>
 
 ## Content
 
