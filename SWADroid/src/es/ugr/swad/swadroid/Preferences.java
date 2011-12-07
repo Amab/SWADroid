@@ -99,6 +99,10 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
      */
     private static final String MAILINGLISTPREF = "mailingListPref";
     /**
+     * Blog preference name.
+     */
+    private static final String BLOGPREF = "blogPref";
+    /**
      * Share preference name.
      */
     private static final String SHAREPREF = "sharePref";
@@ -134,6 +138,10 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
      * Mailing list preference
      */
     private Preference mailingListPref;
+    /**
+     * Blog preference
+     */
+    private Preference blogPref;
     /**
      * Sare preference
      */
@@ -247,6 +255,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         facebookPref = findPreference(FACEBOOKPREF);
         googlePlusPref = findPreference(GOOGLEPLUSPREF);
         mailingListPref = findPreference(MAILINGLISTPREF);
+        blogPref = findPreference(BLOGPREF);
         sharePref = findPreference(SHAREPREF);
         
         userIDPref.setOnPreferenceChangeListener(this);
@@ -256,6 +265,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         facebookPref.setOnPreferenceChangeListener(this);
         googlePlusPref.setOnPreferenceChangeListener(this);
         mailingListPref.setOnPreferenceChangeListener(this);
+        blogPref.setOnPreferenceChangeListener(this);
         sharePref.setOnPreferenceChangeListener(this);
         
         userIDPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -336,6 +346,18 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
             public boolean onPreferenceClick(Preference preference) {
             	Intent urlIntent = new Intent(Intent.ACTION_VIEW);
             	urlIntent.setData(Uri.parse(getString(R.string.mailingListURL)));
+	        	startActivity(urlIntent);
+                return true;
+            }
+        });
+        blogPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            /**
+             * Called when a preference is selected.
+             * @param preference Preference selected.
+             */
+            public boolean onPreferenceClick(Preference preference) {
+            	Intent urlIntent = new Intent(Intent.ACTION_VIEW);
+            	urlIntent.setData(Uri.parse(getString(R.string.blogURL)));
 	        	startActivity(urlIntent);
                 return true;
             }

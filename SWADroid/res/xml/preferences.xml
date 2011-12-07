@@ -44,6 +44,11 @@
                 android:title="@string/mailingListTitle"
                 android:key="mailingListPref" />
         <Preference
+                android:summary="@string/blogURL"
+                android:defaultValue=""
+                android:title="@string/blogTitle"
+                android:key="blogPref" />
+        <Preference
                 android:summary="@string/shareBodyMsg"
                 android:defaultValue=""
                 android:title="@string/shareTitle_menu"

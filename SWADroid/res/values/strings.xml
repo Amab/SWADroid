@@ -118,10 +118,12 @@
 	<string name="facebookURL">https://www.facebook.com/SWADroid</string>
 	<string name="googlePlusURL">https://plus.google.com/115615684349730524355/posts</string>
 	<string name="mailingListURL">https://groups.google.com/forum/#!forum/swadroid</string>
-	<string name="twitterTitle">Twitter</string>
+	<string name="blogURL">http://swadroid.wordpress.com</string><string name="twitterTitle">Twitter</string>
 	<string name="twitterUser">\@SWADroid</string>
 	<string name="facebookTitle">Facebook</string>
 	<string name="googlePlusTitle">Google+</string>
 	<string name="mailingListTitle">Mailing list</string>
-	<string name="marketTitle">Android Market</string>
+	<string name="blogTitle">Blog</string><string name="marketTitle">Android Market</string>
+	
+	
 </resources>
