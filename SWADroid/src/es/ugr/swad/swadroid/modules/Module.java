@@ -23,6 +23,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.ConnectivityManager;
@@ -448,7 +449,7 @@ public abstract class Module extends MenuActivity {
      * Shows an error message.
      * @param message Error message to show.
      */
-    /*protected void error(String message) {
+    protected void error(String message) {
         errorDialog = new AlertDialog
                 .Builder(this)
                 .setTitle(R.string.title_error_dialog)
@@ -460,7 +461,7 @@ public abstract class Module extends MenuActivity {
                     }
                 })
                 .setIcon(R.drawable.erroricon).show();
-    }*/
+    }
 
 	/**
      * Shows progress dialog when connecting to SWAD
@@ -559,7 +560,7 @@ public abstract class Module extends MenuActivity {
             		if(isLoginModule)
             			errorMsg = getString(R.string.errorBadLoginMsg);
             		else
-            			errorMsg = es.getMessage();
+            			errorMsg = "Server error: " + es.getMessage();
                 } else if (e instanceof XmlPullParserException) {
                 	errorMsg = getString(R.string.errorServerResponseMsg);
                 } else if (e instanceof IOException) {
