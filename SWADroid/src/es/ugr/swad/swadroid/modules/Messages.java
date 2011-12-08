@@ -149,6 +149,9 @@ public class Messages extends Module {
 		messageDialog.dismiss();
 	}
 
+	/**
+	 * Reads user input
+	 */
 	private void readData() {
 		EditText rcv = (EditText) messageDialog.findViewById(R.id.message_receivers_text);
 		receivers = rcv.getText().toString();
