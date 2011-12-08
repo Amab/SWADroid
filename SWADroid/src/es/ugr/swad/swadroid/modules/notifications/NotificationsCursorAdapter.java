@@ -43,6 +43,11 @@ public class NotificationsCursorAdapter extends CursorAdapter {
 	private boolean [] contentVisible;
 	Context ctx;
 	
+	/**
+	 * Constructor
+	 * @param context Application context
+	 * @param c Database cursor
+	 */
 	public NotificationsCursorAdapter(Context context, Cursor c) {
 		super(context, c);
 		
@@ -55,6 +60,12 @@ public class NotificationsCursorAdapter extends CursorAdapter {
 		}
 	}
 
+	/**
+	 * Constructor
+	 * @param context Application context
+	 * @param c Database cursor
+	 * @param autoRequery Flag to set autoRequery function
+	 */
 	public NotificationsCursorAdapter(Context context, Cursor c,
 			boolean autoRequery) {
 		
@@ -196,6 +207,11 @@ public class NotificationsCursorAdapter extends CursorAdapter {
 		return v;
 	}
 
+	/**
+	 * If the notification is not a mark, shows or hides its content
+	 * If the notification is a mark, launches a WebView activity to show it
+	 * @param position Notification position in the ListView
+	 */
 	public void toggleContentVisibility(int position) {
 		String viewType, marksType;
 		View view = this.getView(position, null, null);
