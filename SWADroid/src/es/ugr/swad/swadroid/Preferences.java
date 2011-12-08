@@ -205,6 +205,11 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 		editor.commit();
 	}
 
+	/**
+	 * Generates the stars sequence to be showed on password field
+	 * @param size Length of the stars sequence
+	 * @return
+	 */
 	private String getStarsSequence(int size)
 	 {
 		 String stars = "";
@@ -383,7 +388,10 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 			e.printStackTrace();
 		}
     }
-
+    
+    /* (non-Javadoc)
+	 * @see android.app.Activity#onPreferenceChange()
+	 */
 	public boolean onPreferenceChange(Preference preference, Object newValue) {
 		 	String key = preference.getKey();
 		 	Notifications n = new Notifications();
@@ -417,6 +425,9 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         userPasswordPref.setSummary(stars);
 	}
 	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onPause()
+	 */
 	@Override
     protected void onPause() {
         super.onPause();
