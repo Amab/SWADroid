@@ -40,10 +40,10 @@
 	<string name="testsDownloadProgressTitle">Tests</string>
 	<string name="testsDownloadProgressDescription">Sincronizando preguntas de test.\n\nDependiendo del número de
 		preguntas a sincronizar, el procesamiento de los datos puede tardar unos minutos.\n\nPor favor, espere...</string>
-	<string name="errorMsgWorkaroundEmulator">Mierda. Ese bug del emulador de Android ha vuelto a
-		aparecer. Reintentando...</string>
 	<string name="errorMsgLaunchingActivity">Ha ocurrido un error durante la ejecución de la
-		operación</string>
+		operación</string><string name="errorMsgWorkaroundEmulator">Mierda. Ese bug del emulador de Android ha vuelto a
+		aparecer. Reintentando...</string>
+	
 	<string name="errorMsgNoConnection">No hay conexión</string>
 	<string name="errorCopyMsg_DB">Error copiando base de datos</string>
 	<string name="upgradeMsg_DB">Actualizando base de datos...</string>
@@ -116,5 +116,5 @@
 	<string name="shareBodyMsg">Estoy usando #SWADroid en mi Android para acceder a la
 		plataforma de teleformación SWAD.\nObtenlo gratis aquí:
 		 https://market.android.com/details?id=es.ugr.swad.swadroid</string>
-	<string name="mailingListTitle">Lista de correo</string>
+	<string name="twitterTitle">Twitter</string><string name="facebookTitle">Facebook</string><string name="googlePlusTitle">Google+</string><string name="mailingListTitle">Lista de correo</string><string name="blogTitle">Blog</string><string name="marketTitle">Android Market</string>
 </resources>
