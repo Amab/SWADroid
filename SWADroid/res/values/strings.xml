@@ -31,21 +31,21 @@
 	<string name="loginTitle_menu">Login</string>
 	<string name="loginProgressTitle">Login</string>
 	<string name="loginProgressDescription">Connecting...</string>
-	<string name="notificationsProgressTitle">Notifications</string>
+	<string name="coursesProgressTitle">Courses</string><string name="coursesProgressDescription">Retrieving courses...</string><string name="notificationsProgressTitle">Notifications</string>
 	<string name="notificationsProgressDescription">Retrieving new notifications...</string>
 	<string name="notificationsEmptyListMsg">Did not download any notification.\n\nTo download most recent
 		notifications click the icon in the upper right of the screen.</string><string name="notificationsDownloadedMsg">Notifications downloaded</string>
 	<string name="testsDownloadProgressTitle">Tests</string>
 	<string name="testsDownloadProgressDescription">Synchronizing test questions.\n\nDepending of the number of
 		questions to synchronize, the data processing can take several minutes.\n\nPlease wait...</string>
-	<string name="coursesProgressTitle">Courses</string>
-	<string name="coursesProgressDescription">Retrieving courses...</string>
+	
+	
 	<string name="errorMsgLaunchingActivity">An error occurred during the execution of the
 		operation</string>
 	<string name="errorMsgWorkaroundEmulator">Damn. That Android emulator bug appeared again.
 		Retrying...</string>
-	<string name="errorCopyMsg_DB">Error copying database</string>
-	<string name="errorMsgNoConnection">No connection found</string>
+	<string name="errorMsgNoConnection">No connection found</string><string name="errorCopyMsg_DB">Error copying database</string>
+	
 	<string name="upgradeMsg_DB">Upgrading database...</string>
 	<string name="loginSuccessfulMsg">Login successful</string>
 	<string name="examAnnouncement">Exam announcement</string>
@@ -118,8 +118,8 @@
 	<string name="facebookURL">https://www.facebook.com/SWADroid</string>
 	<string name="googlePlusURL">https://plus.google.com/115615684349730524355/posts</string>
 	<string name="mailingListURL">https://groups.google.com/forum/#!forum/swadroid</string>
-	<string name="blogURL">http://swadroid.wordpress.com</string><string name="twitterTitle">Twitter</string>
-	<string name="twitterUser">\@SWADroid</string>
+	<string name="blogURL">http://swadroid.wordpress.com</string>
+	<string name="twitterUser">\@SWADroid</string><string name="twitterTitle">Twitter</string>
 	<string name="facebookTitle">Facebook</string>
 	<string name="googlePlusTitle">Google+</string>
 	<string name="mailingListTitle">Mailing list</string>
