@@ -156,6 +156,9 @@ public class MenuActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    /* (non-Javadoc)
+	 * @see android.app.Activity#onCreate()
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

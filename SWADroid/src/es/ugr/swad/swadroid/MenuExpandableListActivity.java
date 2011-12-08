@@ -155,7 +155,10 @@ public class MenuExpandableListActivity extends ExpandableListActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
+    
+    /* (non-Javadoc)
+	 * @see android.app.Activity#onCreate()
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

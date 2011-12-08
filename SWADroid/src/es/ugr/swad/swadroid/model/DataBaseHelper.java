@@ -40,12 +40,22 @@ import es.ugr.swad.swadroid.Global;
  *
  */
 public class DataBaseHelper {
+	/**
+	 * Field for access to the database backend
+	 */
 	private DataFramework db;
 	
+	/**
+	 * Constructor
+	 * @param database Previously instantiated DataFramework object
+	 */
     public DataBaseHelper(DataFramework database) {
     	db = database;
 	}
 	
+    /**
+     * Closes the database
+     */
 	public synchronized void close() {
 		db.close();
 	}
@@ -66,6 +76,11 @@ public class DataBaseHelper {
 		this.db = db;
 	}
 	
+	/**
+	 * Selects the appropriated parameters for access a table
+	 * @param table Table to be accessed
+	 * @return A pair of strings containing the selected parameters
+	 */
 	private Pair<String, String> selectParamsPairTable(String table) {  
 		String firstParam = null;
 		String secondParam = null;
