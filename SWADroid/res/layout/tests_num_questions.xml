@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+    <include layout="@layout/action_bar"/>    
+ 
+	<TextView
+		android:id="@+id/testNumQuestionsText"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_above="@+id/testNumQuestionsNumberPicker"
+		android:gravity="center"
+		android:padding="20dip"
+		android:textColor="@color/foreground1"
+		android:textSize="20sp"
+		android:text="@string/testNumQuestionsMsg"/>
+   
+	<es.ugr.swad.swadroid.widget.NumberPicker
+	    android:id="@+id/testNumQuestionsNumberPicker"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_centerInParent="true"
+	    android:textSize="24sp" />
+   
+	<Button 
+	  android:id="@+id/testNumQuestionsAcceptButton"
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:layout_alignParentBottom="true"
+	  android:text="@string/acceptMsg"/>
+</RelativeLayout>
