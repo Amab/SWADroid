@@ -220,15 +220,15 @@ public class NotificationsCursorAdapter extends CursorAdapter {
 		viewType = String.valueOf(eventType.getText());
 		marksType = ctx.getString(R.string.marksFile);
 
-		if(viewType.equals(marksType)) {
+		/*if(viewType.equals(marksType)) {
 			TextView content = (TextView) view.findViewById(R.id.eventText);
 			
 			Intent activity = new Intent(ctx.getApplicationContext(), Marks.class);
 			activity.putExtra("content", content.getText().toString());
 			ctx.startActivity(activity);
-		} else {
+		} else {*/
 			contentVisible[position] = !contentVisible[position];
 			this.notifyDataSetChanged();
-		}
+		//}
 	}
 }
