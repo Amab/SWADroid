@@ -1,3 +1,7 @@
+## 0.7 (2012-01-10)
+
+* Added marks function in notifications module
+
 ## 0.6.2 (2011-12-09)
 
 * Added Blog URL to preferences screen
