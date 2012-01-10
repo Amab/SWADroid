@@ -1,3 +1,11 @@
+## 0.6.2 (2011-12-09)
+
+* Added Blog URL to preferences screen
+* Added Catalan language by Francisco Manuel Herrero Pérez
+* Updated ksoap2-android library
+* Reinitialized last course selected on database cleaning
+* Minor changes on error messages
+
 ## 0.6.1 (2011-11-16)
 
 * Added Google+ account to preferences screen
