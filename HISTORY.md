@@ -1,3 +1,8 @@
+## 0.7.1 (2012-01-11)
+
+* Fixed rendering errors in marks function
+* Improved rendering speed in marks function
+
 ## 0.7 (2012-01-10)
 
 * Added marks function in notifications module
