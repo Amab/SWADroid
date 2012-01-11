@@ -20,6 +20,8 @@ package es.ugr.swad.swadroid.modules.notifications;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.webkit.WebSettings;
+import android.webkit.WebSettings.RenderPriority;
 import android.webkit.WebView;
 
 /**
@@ -35,6 +37,8 @@ public class Marks extends Activity {
 		setContentView(webview);
 		
 		String content = this.getIntent().getStringExtra("content");
-		webview.loadData(content, "text/html", null);
+		webview.getSettings().setRenderPriority(RenderPriority.HIGH);
+		webview.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+		webview.loadDataWithBaseURL("", content, "text/html", "utf-8", "");
 	}	
 }
