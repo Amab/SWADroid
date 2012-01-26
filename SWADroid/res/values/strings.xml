@@ -123,7 +123,7 @@
 	<string name="facebookTitle">Facebook</string>
 	<string name="googlePlusTitle">Google+</string>
 	<string name="mailingListTitle">Mailing list</string>
-	<string name="blogTitle">Blog</string><string name="marketTitle">Android Market</string>
+	<string name="blogTitle">Blog</string><string name="marketTitle">Android Market</string><string name="notificationsAlertTitle">New notifications</string><string name="notificationsAlertMsg">new notifications</string>
 	
 	
 </resources>
