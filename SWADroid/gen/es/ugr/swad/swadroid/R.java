@@ -210,6 +210,8 @@ public final class R {
         public static final int noQuestionsPluggableTestsDownloadMsg=0x7f070045;
         public static final int noSubjectMsg=0x7f070039;
         public static final int notice=0x7f07002e;
+        public static final int notificationsAlertMsg=0x7f070073;
+        public static final int notificationsAlertTitle=0x7f070072;
         public static final int notificationsDownloadedMsg=0x7f070023;
         public static final int notificationsEmptyListMsg=0x7f070022;
         public static final int notificationsModuleLabel=0x7f070002;
