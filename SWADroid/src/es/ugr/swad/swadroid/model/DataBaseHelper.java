@@ -122,7 +122,7 @@ public class DataBaseHelper {
 					ent.getInt(params.getFirst()),
 					ent.getInt(params.getSecond()));
 		} else if(table.equals(Global.DB_TABLE_NOTIFICATIONS)) {			
-			o = new Notification(ent.getInt("id"),
+			o = new SWADNotification(ent.getInt("id"),
 					ent.getString("eventType"), 
 					ent.getLong("eventTime"), 
 					ent.getString("userSurname1"), 
@@ -272,7 +272,7 @@ public class DataBaseHelper {
 	 * Inserts a notification in database
 	 * @param n Notification to be inserted
 	 */
-	public void insertNotification(Notification n)
+	public void insertNotification(SWADNotification n)
     {
 		Entity ent = new Entity(Global.DB_TABLE_NOTIFICATIONS);
 		
@@ -413,7 +413,7 @@ public class DataBaseHelper {
 	 * @param prev Notification to be updated
 	 * @param actual Updated notification
 	 */
-	public void updateNotification(Notification prev, Notification actual)
+	public void updateNotification(SWADNotification prev, SWADNotification actual)
     {
 		List<Entity> rows = db.getEntityList(Global.DB_TABLE_NOTIFICATIONS, "id = " + prev.getId());
 		Entity ent = rows.get(0);
