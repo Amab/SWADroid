@@ -117,4 +117,6 @@
 		plataforma de teleformación SWAD.\nObtenlo gratis aquí:
 		 https://market.android.com/details?id=es.ugr.swad.swadroid</string>
 	<string name="twitterTitle">Twitter</string><string name="facebookTitle">Facebook</string><string name="googlePlusTitle">Google+</string><string name="mailingListTitle">Lista de correo</string><string name="blogTitle">Blog</string><string name="marketTitle">Android Market</string>
+	<string name="notificationsAlertTitle">Nuevas notificaciones</string>
+	<string name="notificationsAlertMsg">nuevas notificaciones</string>
 </resources>

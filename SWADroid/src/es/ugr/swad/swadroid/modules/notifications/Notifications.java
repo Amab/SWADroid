@@ -32,9 +32,13 @@ import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.model.User;
-import es.ugr.swad.swadroid.model.Notification;
+import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.modules.Module;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
@@ -73,6 +77,14 @@ public class Notifications extends Module {
 	 * Cursor orderby parameter
 	 */
     private String orderby = "eventTime DESC";
+    /**
+     * Notifications counter
+     */
+    private int notifCount;
+    /**
+     * Unique identifier for notification alerts
+     */
+    private int NOTIF_ALERT_ID = 1982;
     /**
      * Notifications tag name for Logcat
      */
@@ -173,7 +185,7 @@ public class Notifications extends Module {
 	protected void requestService() throws NoSuchAlgorithmException,
 			IOException, XmlPullParserException, SoapFault,
 			IllegalAccessException, InstantiationException {
-        
+		
 		//Calculates next timestamp to be requested
 		Long timestamp = new Long(dbHelper.getFieldOfLastNotification("eventTime"));
 		timestamp++;
@@ -182,7 +194,7 @@ public class Notifications extends Module {
 	    createRequest();
 	    addParam("wsKey", User.getWsKey());
 	    addParam("beginTime", timestamp);
-	    sendRequest(Notification.class, false);
+	    sendRequest(SWADNotification.class, false);
 	
 	    if (result != null) {
 	    	dbHelper.beginTransaction();
@@ -190,8 +202,8 @@ public class Notifications extends Module {
 	        //Stores notifications data returned by webservice response
 			Vector<?> res = (Vector<?>) result;
 	    	SoapObject soap = (SoapObject) res.get(1);
-	    	int csSize = soap.getPropertyCount();
-	        for (int i = 0; i < csSize; i++) {
+	    	notifCount = soap.getPropertyCount();
+	        for (int i = 0; i < notifCount; i++) {
 	            SoapObject pii = (SoapObject)soap.getProperty(i);
 		    	Long notificationCode = new Long(pii.getProperty("notificationCode").toString());
 	            String eventType = pii.getProperty("eventType").toString();
@@ -203,7 +215,7 @@ public class Notifications extends Module {
 	            String summary = pii.getProperty("summary").toString();
 	            Integer status = new Integer(pii.getProperty("status").toString());
 	            String content = pii.getProperty("content").toString();
-	            Notification n = new Notification(notificationCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, location, summary, status, content);
+	            SWADNotification n = new SWADNotification(notificationCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, location, summary, status, content);
 	            dbHelper.insertNotification(n);
 	            
 	    		if(isDebuggable)
@@ -211,13 +223,53 @@ public class Notifications extends Module {
 	        }
 	        
 	        //Request finalized without errors
-	        Log.i(TAG, "Retrieved " + csSize + " notifications");
+	        Log.i(TAG, "Retrieved " + notifCount + " notifications");
 			
 			//Clear old notifications to control database size
 			dbHelper.clearOldNotifications(SIZE_LIMIT);
 			
 			dbHelper.endTransaction();
 	    }
+	}
+	
+	protected void alertNotif() {
+		if(notifCount > 0) {
+			//Obtain a reference to the notification service
+			String ns = Context.NOTIFICATION_SERVICE;
+			NotificationManager notManager =
+			    (NotificationManager) getSystemService(ns);
+			
+			//Configure the alert
+			int icon = R.drawable.ic_launcher_swadroid;
+			long hour = System.currentTimeMillis();
+			 
+			Notification notif =
+			    new Notification(icon, getString(R.string.notificationsAlertTitle), hour);
+			
+			//Configure the Intent
+			Context context = getApplicationContext();
+			 
+			Intent notIntent = new Intent(context,
+			    Notifications.class);
+			 
+			PendingIntent contIntent = PendingIntent.getActivity(
+			    context, 0, notIntent, 0);
+			 
+			notif.setLatestEventInfo(
+			    context, getString(R.string.notificationsAlertTitle), notifCount + " " + 
+			    		getString(R.string.notificationsAlertMsg), contIntent);
+			
+			//AutoCancel: alert disappears when pushed
+			notif.flags |= Notification.FLAG_AUTO_CANCEL;
+			 
+			//Add sound, vibration and lights
+			notif.defaults |= Notification.DEFAULT_SOUND;
+			//notif.defaults |= Notification.DEFAULT_VIBRATE;
+			notif.defaults |= Notification.DEFAULT_LIGHTS;
+			
+			//Send alert
+			notManager.notify(NOTIF_ALERT_ID, notif);
+		}
 	}
 
 	/* (non-Javadoc)
@@ -238,6 +290,8 @@ public class Notifications extends Module {
 	protected void postConnect() {		
 		refreshScreen();
 		Toast.makeText(this, R.string.notificationsDownloadedMsg, Toast.LENGTH_SHORT).show();
+		
+		alertNotif();
 	}
 	
 	/**
