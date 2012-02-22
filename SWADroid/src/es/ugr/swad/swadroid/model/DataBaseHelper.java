@@ -28,6 +28,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
+import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 import com.android.dataframework.DataFramework;
@@ -122,7 +123,7 @@ public class DataBaseHelper {
 					ent.getInt(params.getFirst()),
 					ent.getInt(params.getSecond()));
 		} else if(table.equals(Global.DB_TABLE_NOTIFICATIONS)) {			
-			o = new Notification(ent.getInt("id"),
+			o = new SWADNotification(ent.getInt("id"),
 					ent.getString("eventType"), 
 					ent.getLong("eventTime"), 
 					ent.getString("userSurname1"), 
@@ -272,7 +273,7 @@ public class DataBaseHelper {
 	 * Inserts a notification in database
 	 * @param n Notification to be inserted
 	 */
-	public void insertNotification(Notification n)
+	public void insertNotification(SWADNotification n)
     {
 		Entity ent = new Entity(Global.DB_TABLE_NOTIFICATIONS);
 		
@@ -413,7 +414,7 @@ public class DataBaseHelper {
 	 * @param prev Notification to be updated
 	 * @param actual Updated notification
 	 */
-	public void updateNotification(Notification prev, Notification actual)
+	public void updateNotification(SWADNotification prev, SWADNotification actual)
     {
 		List<Entity> rows = db.getEntityList(Global.DB_TABLE_NOTIFICATIONS, "id = " + prev.getId());
 		Entity ent = rows.get(0);
@@ -495,17 +496,19 @@ public class DataBaseHelper {
 		List<Entity> rows = db.getEntityList(Global.DB_TABLE_TEST_TAGS, "id = " + prev.getId());
 		Entity ent = rows.get(0);
 		List<Integer> qstCodList = actual.getQstCodList();
+		SQLiteStatement st = db.getDB().compileStatement("INSERT OR IGNORE INTO " +
+				Global.DB_TABLE_TEST_QUESTION_TAGS + " VALUES (NULL, ?, ?, ?);");
 		
 		ent.setValue("id", actual.getId());
 		ent.setValue("tagTxt", actual.getTagTxt());
 		ent.save();
 		
 		for(Integer i : qstCodList) {
-			db.getDB().execSQL("INSERT OR IGNORE INTO " + Global.DB_TABLE_TEST_QUESTION_TAGS + " VALUES (NULL,"
-					+ i + "," + actual.getId() + "," + actual.getTagInd() + ");");			
-		}
-
-		
+			st.bindLong(1, i);
+			st.bindLong(2, actual.getId());
+			st.bindLong(3, actual.getTagInd());
+			st.executeInsert();	
+		}		
     }
 	
 	/**
@@ -634,12 +637,13 @@ public class DataBaseHelper {
 	 */
 	public List<TestTag> getOrderedCourseTags(long selectedCourseCode)
     {
-		String select = "SELECT DISTINCT T.id, T.tagTxt, Q.qstCod, Q.tagInd";
-		String tables = " FROM " + Global.DB_TABLE_TEST_TAGS + " AS T, " + Global.DB_TABLE_TEST_QUESTION_TAGS
+		String[] columns = {"T.id", "T.tagTxt", "Q.qstCod", "Q.tagInd"};
+		String tables = Global.DB_TABLE_TEST_TAGS + " AS T, " + Global.DB_TABLE_TEST_QUESTION_TAGS
 			+ " AS Q, "	+ Global.DB_TABLE_TEST_QUESTIONS_COURSE + " AS C";
-		String where = " WHERE T.id=Q.tagCod AND Q.qstCod=C.qstCod AND C.crsCod=" + selectedCourseCode;
-		String orderby = " GROUP BY T.id ORDER BY Q.tagInd ASC";
-		Cursor dbCursor = db.getDB().rawQuery(select + tables + where + orderby, null);
+		String where = "T.id=Q.tagCod AND Q.qstCod=C.qstCod AND C.crsCod=" + selectedCourseCode;
+		String orderBy = "Q.tagInd ASC";
+		String groupBy = "T.id";
+		Cursor dbCursor = db.getDB().query(tables, columns, where, null, groupBy, null, orderBy);
 		List<TestTag> result = new ArrayList<TestTag>();
 		List<Integer> qstCodList;
 		int idOld = -1;

@@ -26,7 +26,7 @@ import org.ksoap2.serialization.PropertyInfo;
  * Class for store a notification
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com> *
  */
-public class Notification extends Model {
+public class SWADNotification extends Model {
 	/**
 	 * Notification type
 	 */
@@ -99,7 +99,7 @@ public class Notification extends Model {
 	 * @param summary Notification summary
 	 * @param status Notification summary
 	 */
-	public Notification(long id, String eventType, long eventTime,
+	public SWADNotification(long id, String eventType, long eventTime,
 			String userSurname1, String userSurname2, String userFirstName,
 			String location, String summary, int status, String content) {
 		
