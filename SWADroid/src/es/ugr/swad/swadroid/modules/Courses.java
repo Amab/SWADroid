@@ -127,8 +127,8 @@ public class Courses extends Module {
                 Course c = new Course(id, name);
                	coursesSWAD.add(c);
                 
-        		if(isDebuggable)
-        			Log.d(TAG, c.toString());
+        		/*if(isDebuggable)
+        			Log.d(TAG, c.toString());*/
             }
             
             Log.i(TAG, "Retrieved " + csSize + " courses");
