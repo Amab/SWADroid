@@ -20,8 +20,6 @@
 package es.ugr.swad.swadroid.modules;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
 import es.ugr.swad.swadroid.Base64;
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
@@ -79,8 +77,8 @@ public class Login extends Module {
     	int progressTitle = R.string.loginProgressTitle;
     	Connect con = new Connect(false, progressDescription, progressTitle, true);
     	
-    	if(!Global.isLogged())
-    		Toast.makeText(this, progressDescription, Toast.LENGTH_LONG).show();
+    	/*if(!Global.isLogged())
+    		Toast.makeText(this, progressDescription, Toast.LENGTH_LONG).show();*/
     	
         con.execute();
     }
@@ -136,7 +134,7 @@ public class Login extends Module {
 	        }
     	}
     	
-    	if(isDebuggable) {
+    	/*if(isDebuggable) {
     		Log.d(TAG, "userCode=" + User.getUserCode());
     		Log.d(TAG, "userTypeCode=" + User.getUserTypeCode());
     		Log.d(TAG, "wsKey=" + User.getWsKey());
@@ -146,7 +144,7 @@ public class Login extends Module {
     		Log.d(TAG, "userFirstName=" + User.getUserFirstName());
     		Log.d(TAG, "userTypeName=" + User.getUserTypeName());
     		Log.d(TAG, "lastLoginTime=" + Global.getLastLoginTime());
-    	}
+    	}*/
     	
         //Request finalized without errors
         setResult(RESULT_OK);
