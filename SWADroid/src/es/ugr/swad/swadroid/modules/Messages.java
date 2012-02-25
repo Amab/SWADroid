@@ -72,19 +72,19 @@ public class Messages extends Module {
 	private OnClickListener positiveClickListener = new OnClickListener() {
 		public void onClick(View v) {
 			try {										
-				if(isDebuggable) {
+				/*if(isDebuggable) {
 					Log.d(TAG, "notificationCode = " + Long.toString(notificationCode));
-				}
+				}*/
 
 				runConnection();
 			} catch (Exception ex) {
             	String errorMsg = getString(R.string.errorServerResponseMsg);
 				error(errorMsg);
 				
-        		if(isDebuggable) {
+        		/*if(isDebuggable) {
         			Log.e(ex.getClass().getSimpleName(), errorMsg);        		
         			ex.printStackTrace();
-        		}
+        		}*/
 	        }				
 		}
 	};
