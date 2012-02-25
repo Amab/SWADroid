@@ -2,6 +2,7 @@
 
 * Added notification alerts on status bar
 * Added navigation ability for HTML links in notifications
+* Added WebView activity for all notifications
 * Improved query statements
 
 ## 0.7.1 (2012-01-11)

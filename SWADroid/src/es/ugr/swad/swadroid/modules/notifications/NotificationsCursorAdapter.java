@@ -76,9 +76,9 @@ public class NotificationsCursorAdapter extends CursorAdapter {
 	public void bindView(View view, Context context, Cursor cursor) {
 		final Context ctx = context;
 		final Long notificationCode = cursor.getLong(cursor.getColumnIndex("id"));
-		final Cursor curs = cursor;
 		long unixTime;
-		String type, sender, senderFirstname, senderSurname1, senderSurname2, summaryText, contentText;
+		String type, sender, senderFirstname, senderSurname1, senderSurname2, summaryText;
+		String contentText;
 		String[] dateContent;
     	Date d;    	
     	int numRows = cursor.getCount();
@@ -106,18 +106,6 @@ public class NotificationsCursorAdapter extends CursorAdapter {
 				ctx.startActivity(activity);
 			}        	
         };
-        
-        OnClickListener contentListener = new OnClickListener() {
-			public void onClick(View v) {
-				TextView content = (TextView) v.findViewById(R.id.eventText);
-				
-				if(content.getSelectionStart() == -1 && content.getSelectionEnd() == -1) {
-					toggleContentVisibility(curs.getPosition());
-				}
-			}        	
-        };
-        
-        content.setOnClickListener(contentListener);
         
         if(eventType != null) {
         	type = cursor.getString(cursor.getColumnIndex("eventType"));
@@ -225,23 +213,22 @@ public class NotificationsCursorAdapter extends CursorAdapter {
 	 * If the notification is a mark, launches a WebView activity to show it
 	 * @param position Notification position in the ListView
 	 */
-	public void toggleContentVisibility(int position) {
+	/*public void toggleContentVisibility(int position) {
 		String viewType, marksType;
 		View view = this.getView(position, null, null);
 		TextView eventType = (TextView) view.findViewById(R.id.eventType);
+		TextView content = (TextView) view.findViewById(R.id.eventText);
 		
 		viewType = String.valueOf(eventType.getText());
 		marksType = ctx.getString(R.string.marksFile);
 
-		if(viewType.equals(marksType)) {
-			TextView content = (TextView) view.findViewById(R.id.eventText);
-			
-			Intent activity = new Intent(ctx.getApplicationContext(), Marks.class);
+		if(viewType.equals(marksType)) {			
+			Intent activity = new Intent(ctx.getApplicationContext(), NotificationItem.class);
 			activity.putExtra("content", content.getText().toString());
 			ctx.startActivity(activity);
 		} else {			
 			contentVisible[position] = !contentVisible[position];			
 			this.notifyDataSetChanged();
 		}
-	}
+	}*/
 }
