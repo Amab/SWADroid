@@ -49,7 +49,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * Notifications module for get user's notifications
@@ -118,8 +117,21 @@ public class Notifications extends Module {
 		TextView text;
 		ListView list;
 		OnItemClickListener clickListener = new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> av, View v, int position, long rowId) {
-				adapter.toggleContentVisibility(position);
+			public void onItemClick(AdapterView<?> av, View v, int position, long rowId) 
+			{
+				//adapter.toggleContentVisibility(position);
+				TextView sender = (TextView) v.findViewById(R.id.eventSender);
+				TextView course = (TextView) v.findViewById(R.id.eventLocation);
+				TextView summary = (TextView) v.findViewById(R.id.eventSummary);
+				TextView content = (TextView) v.findViewById(R.id.eventText);			
+				Intent activity = new Intent(getApplicationContext(), NotificationItem.class);
+
+				activity.putExtra("sender", sender.getText().toString());
+				activity.putExtra("course", course.getText().toString());
+				activity.putExtra("summary", summary.getText().toString());
+				activity.putExtra("content", content.getText().toString());
+				
+				startActivity(activity);
 			}    	
         };
 		
@@ -165,7 +177,7 @@ public class Notifications extends Module {
 	 * @param v Actual view
 	 */
 	public void onRefreshClick(View v)
-	{
+	{        
 		runConnection();
 	}
 
@@ -218,8 +230,8 @@ public class Notifications extends Module {
 	            SWADNotification n = new SWADNotification(notificationCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, location, summary, status, content);
 	            dbHelper.insertNotification(n);
 	            
-	    		if(isDebuggable)
-	    			Log.d(TAG, n.toString());
+	    		/*if(isDebuggable)
+	    			Log.d(TAG, n.toString());*/
 	        }
 	        
 	        //Request finalized without errors
@@ -278,7 +290,7 @@ public class Notifications extends Module {
 	@Override
 	protected void connect() {
 		String progressDescription = getString(R.string.notificationsProgressDescription);
-    	int progressTitle = R.string.notificationsProgressTitle;
+    	int progressTitle = R.string.notificationsProgressTitle; 
   	    
         new Connect(true, progressDescription, progressTitle).execute();
 	}
@@ -287,9 +299,9 @@ public class Notifications extends Module {
 	 * @see es.ugr.swad.swadroid.modules.Module#postConnect()
 	 */
 	@Override
-	protected void postConnect() {		
+	protected void postConnect() {	        
 		refreshScreen();
-		Toast.makeText(this, R.string.notificationsDownloadedMsg, Toast.LENGTH_SHORT).show();
+		//Toast.makeText(this, R.string.notificationsDownloadedMsg, Toast.LENGTH_SHORT).show();
 		
 		alertNotif();
 	}
