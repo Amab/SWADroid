@@ -267,8 +267,8 @@ public abstract class Module extends MenuActivity {
 			e1.printStackTrace();
 		}
 		
-		if(isDebuggable)
-			Log.d(TAG, "onCreate()");
+		/*if(isDebuggable)
+			Log.d(TAG, "onCreate()");*/
         
 		super.onCreate(savedInstanceState);
         prefs.getPreferences(getBaseContext());
@@ -279,8 +279,8 @@ public abstract class Module extends MenuActivity {
 	 */
     @Override
     protected void onPause() { 
-		if(isDebuggable)			       
-			Log.d(TAG, "onPause()");
+		/*if(isDebuggable)			       
+			Log.d(TAG, "onPause()");*/
         
         super.onPause();
         if(errorDialog != null) {
@@ -293,8 +293,8 @@ public abstract class Module extends MenuActivity {
 	 */
 	@Override
 	protected void onDestroy() {
-		if(isDebuggable)
-			Log.d(TAG, "onDestroy()");
+		/*if(isDebuggable)
+			Log.d(TAG, "onDestroy()");*/
 		
 		super.onDestroy();
 	}
@@ -304,8 +304,8 @@ public abstract class Module extends MenuActivity {
 	 */
 	@Override
 	protected void onRestart() {
-		if(isDebuggable)
-			Log.d(TAG, "onRestart()");
+		/*if(isDebuggable)
+			Log.d(TAG, "onRestart()");*/
 		
 		super.onRestart();
 	}
@@ -315,8 +315,8 @@ public abstract class Module extends MenuActivity {
 	 */
 	@Override
 	protected void onResume() {
-		if(isDebuggable)
-			Log.d(TAG, "onResume()");
+		/*if(isDebuggable)
+			Log.d(TAG, "onResume()");*/
 		
 		super.onResume();
 	}
@@ -326,8 +326,8 @@ public abstract class Module extends MenuActivity {
 	 */
 	@Override
 	protected void onStart() {
-		if(isDebuggable)
-			Log.d(TAG, "onStart()");
+		/*if(isDebuggable)
+			Log.d(TAG, "onStart()");*/
 		
 		super.onStart();
 	}
@@ -337,8 +337,8 @@ public abstract class Module extends MenuActivity {
 	 */
 	@Override
 	protected void onStop() {
-		if(isDebuggable)
-			Log.d(TAG, "onStop()");
+		/*if(isDebuggable)
+			Log.d(TAG, "onStop()");*/
 		
 		super.onStop();
 	}
@@ -348,8 +348,8 @@ public abstract class Module extends MenuActivity {
 	 */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if(isDebuggable)
-			Log.d(TAG, "onActivityResult()");
+		/*if(isDebuggable)
+			Log.d(TAG, "onActivityResult()");*/
 		
         if (resultCode == Activity.RESULT_OK) {
             switch(requestCode) {
@@ -357,8 +357,8 @@ public abstract class Module extends MenuActivity {
                     Global.setLogged(true);
                     //Toast.makeText(getBaseContext(), R.string.loginSuccessfulMsg, Toast.LENGTH_SHORT).show();
                     
-            		if(isDebuggable)
-            			Log.d(TAG, getString(R.string.loginSuccessfulMsg));
+            		/*if(isDebuggable)
+            			Log.d(TAG, getString(R.string.loginSuccessfulMsg));*/
                     
                     if(!(this instanceof Login)) {
                     	connect();
@@ -501,8 +501,8 @@ public abstract class Module extends MenuActivity {
     	 */
         @Override
         protected void onPreExecute() { 
-    		if(isDebuggable)
-    			Log.d(TAG, "onPreExecute()");
+    		/*if(isDebuggable)
+    			Log.d(TAG, "onPreExecute()");*/
         	
         	if(showDialog) {
 	            dialog.setMessage(progressDescription);
@@ -542,8 +542,8 @@ public abstract class Module extends MenuActivity {
         protected void onPostExecute(Void unused) {  
         	String errorMsg = "";
         	
-    		if(isDebuggable)
-    			Log.d(TAG, "onPostExecute()");
+    		/*if(isDebuggable)
+    			Log.d(TAG, "onPostExecute()");*/
         	
         	if(dialog.isShowing()) {
         		dialog.dismiss();
@@ -573,9 +573,9 @@ public abstract class Module extends MenuActivity {
 
                 //Request finalized with errors 
         		error(errorMsg);               
-        		if(isDebuggable) {    		
+        		/*if(isDebuggable) {    		
         			e.printStackTrace();
-        		}
+        		}*/
         		
                 setResult(RESULT_CANCELED);
             } else {
