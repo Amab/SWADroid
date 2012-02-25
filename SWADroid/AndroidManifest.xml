@@ -25,7 +25,7 @@
     <activity android:label="@string/testsModuleLabel" android:theme="@android:style/Theme.Translucent.NoTitleBar" android:name=".modules.tests.TestsQuestionsDownload"><activity android:label="@string/testsModuleLabel" android:theme="@android:style/Theme.Translucent.NoTitleBar" android:name=".modules.tests.TestsQuestionsDownload"></activity></activity>
     <activity android:name=".modules.tests.TestsConfigDownload" android:label="@string/testsModuleLabel" android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity><activity android:theme="@android:style/Theme.NoTitleBar" android:label="@string/testsModuleLabel" android:configChanges="orientation" android:name=".modules.tests.TestsMake"></activity>
     <activity android:theme="@android:style/Theme.Translucent.NoTitleBar" android:name=".modules.Messages" android:label="@string/messagesModuleLabel" android:configChanges="keyboard|keyboardHidden|orientation"></activity>
-    <activity android:name=".modules.notifications.Marks" android:theme="@android:style/Theme.NoTitleBar" android:label="@string/notificationsModuleLabel"></activity>    
+    <activity android:name=".modules.notifications.NotificationItem" android:theme="@android:style/Theme.NoTitleBar" android:label="@string/notificationsModuleLabel"></activity>    
 </application>
 
 <uses-permission android:name="android.permission.INTERNET"></uses-permission>
