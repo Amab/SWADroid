@@ -96,6 +96,7 @@
   		android:textColor="@color/foreground1"
   		android:textSize="16sp"
   		android:padding="1dip"
+  		android:autoLink="web"
   		android:visibility="gone" />
  </LinearLayout>
 </LinearLayout>
