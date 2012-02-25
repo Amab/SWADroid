@@ -1,3 +1,9 @@
+## 0.7.2 (2012-02-22)
+
+* Added notification alerts on status bar
+* Added navigation ability for HTML links in notifications
+* Improved query statements
+
 ## 0.7.1 (2012-01-11)
 
 * Fixed rendering errors in marks function
