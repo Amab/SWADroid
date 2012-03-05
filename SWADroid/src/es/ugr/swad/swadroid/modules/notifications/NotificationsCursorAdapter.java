@@ -190,7 +190,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         	if(contentText.equals("anyType{}"))
         		contentText = context.getString(R.string.noContentMsg);
         		
-        	content.setText(Html.fromHtml(contentText));
+        	content.setText(contentText);
         	
         	if(contentVisible[cursor.getPosition()]) {
         		content.setVisibility(View.VISIBLE);
