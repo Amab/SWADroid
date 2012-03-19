@@ -232,12 +232,14 @@ public class SWADMain extends MenuExpandableListActivity {
             if(lastVersion == 0) {
             	showConfigurationDialog();
             	dbHelper.initializeDB();
+            	//prefs.upgradeCredentials();
             	prefs.setLastVersion(currentVersion);
 
             //If this is an upgrade, show upgrade dialog
             } else if(lastVersion < currentVersion) {
             	//showUpgradeDialog();
             	dbHelper.upgradeDB(this);
+            	//prefs.upgradeCredentials();
             	prefs.setLastVersion(currentVersion);
             }
         } catch (Exception ex) {
