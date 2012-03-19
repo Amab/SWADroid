@@ -101,6 +101,8 @@ public abstract class Module extends MenuActivity {
      */
     public static final String TAG = Global.APP_TAG + " Module";
     
+    private static KeepAliveHttpsTransportSE connection;
+    
     /**
      * Connects to SWAD and gets user data.
      * @throws NoSuchAlgorithmException
@@ -405,7 +407,7 @@ public abstract class Module extends MenuActivity {
     	 * Use of KeepAliveHttpsTransport deals with the problems with the Android ssl libraries having trouble
     	 * with certificates and certificate authorities somehow messing up connecting/needing reconnects.
     	 */
-        KeepAliveHttpsTransportSE connection = new KeepAliveHttpsTransportSE(URL, 443, "", TIMEOUT);
+        connection = new KeepAliveHttpsTransportSE(URL, 443, "", TIMEOUT);
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         System.setProperty("http.keepAlive", "false");
         envelope.setOutputSoapObject(request);
@@ -575,6 +577,9 @@ public abstract class Module extends MenuActivity {
         		error(errorMsg);               
         		/*if(isDebuggable) {    		
         			e.printStackTrace();
+        			connection.debug = true;
+        	        Log.d(TAG, connection.requestDump.toString());
+        	        Log.d(TAG, connection.responseDump.toString());
         		}*/
         		
                 setResult(RESULT_CANCELED);
