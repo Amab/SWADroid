@@ -161,7 +161,13 @@ public class Messages extends Module {
 		
 		EditText bd = (EditText) messageDialog.findViewById(R.id.message_body_text);
 		body = bd.getText().toString();
+		body = body.replaceAll("\n", "<br />");
+		body = body + "<br /><br />"+ getString(R.string.footMessageMsg) + " " + getString(R.string.app_name) +
+				"<br />" + getString(R.string.marketWebURL);
+		//body = body + "<br /><br />"+ getString(R.string.footMessageMsg) + " <a href=\"" +
+		//		getString(R.string.marketWebURL) + "\">" + getString(R.string.app_name) + "</a>";
 	}
+	
 	
 	/* (non-Javadoc)
 	 * @see es.ugr.swad.swadroid.modules.Module#requestService()
@@ -193,10 +199,8 @@ public class Messages extends Module {
                 String surname1 = pii.getProperty("userSurname1").toString();
                 String surname2 = pii.getProperty("userSurname2").toString();
                 
-                receiversNames += firstname + " " + surname1 + " " + surname2 + " (" + nickname + ")";                
-                if(i < csSize) {
-                	receiversNames += "\n";
-                }
+                receiversNames += "\n";
+                receiversNames += firstname + " " + surname1 + " " + surname2 + " (" + nickname + ")"; 
             }
         }
         
@@ -222,7 +226,7 @@ public class Messages extends Module {
 	 */
 	@Override
 	protected void postConnect() {
-		String messageSended =  getString(R.string.messageSendedMsg) + ":\n" + receiversNames;
+		String messageSended =  getString(R.string.messageSendedMsg) + ":" + receiversNames;
 		
 		Toast.makeText(this, messageSended, Toast.LENGTH_LONG).show();
 		Log.i(TAG, messageSended);

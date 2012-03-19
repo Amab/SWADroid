@@ -53,4 +53,4 @@ The Github team has also been kind enough to write up some great [documentation]
 [ksoap2-author]: https://github.com/mosabua
 [androiddataframework-library]: http://code.google.com/p/androiddataframework/
 [androiddataframework-author]: http://www.javielinux.com/quiensoy.php
-[apk]: https://market.android.com/details?id=es.ugr.swad.swadroid
+[apk]: https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid
