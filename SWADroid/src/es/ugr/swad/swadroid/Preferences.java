@@ -19,6 +19,10 @@
 
 package es.ugr.swad.swadroid;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+import es.ugr.swad.swadroid.Base64;
 import es.ugr.swad.swadroid.modules.notifications.Notifications;
 import android.content.Context;
 import android.content.Intent;
@@ -54,6 +58,10 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
      * User password.
      */
     private String userPassword;
+    /**
+     * Stars length
+     */
+    private int STARS_LENGTH = 8;
     /**
      * User password preference name.
      */
@@ -222,6 +230,39 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 		 return stars;
 	 }
 	
+	/**
+	 * Encrypts user password with SHA-512 and encodes it to Base64UrlSafe
+	 * @param password Password to be encrypted
+	 * @return Encrypted password
+	 * @throws NoSuchAlgorithmException 
+	 */
+	private String encryptPassword(String password) throws NoSuchAlgorithmException {
+		String p;
+		MessageDigest md = MessageDigest.getInstance("SHA-512");
+	    md.update(password.getBytes());
+	    p = new String(Base64.encodeBytes(md.digest()));
+	    p = p.replace('+','-').replace('/','_').replace('=', ' ').replaceAll("\\s+", "").trim();
+	    
+	    return p;
+	}
+	
+	/**
+	 * Upgrade password encryption
+	 * @throws NoSuchAlgorithmException
+	 */
+	public void upgradeCredentials() throws NoSuchAlgorithmException {
+		String stars = getStarsSequence(STARS_LENGTH);
+		
+		editor = prefs.edit();
+		userPassword = prefs.getString(USERPASSWORDPREF, "");
+        userPassword = encryptPassword(userPassword);
+     	editor.putString(USERPASSWORDPREF, userPassword);
+     	editor.commit();
+		
+        userIDPref.setSummary(prefs.getString(USERIDPREF, ""));
+        userPasswordPref.setSummary(stars);
+	}
+	
     /**
      * Initializes preferences of activity.
      * @param ctx Context of activity.
@@ -291,6 +332,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
              */
             public boolean onPreferenceClick(Preference preference) {
                 userPassword = prefs.getString(USERPASSWORDPREF, "");
+                //userPassword = encryptPassword(userPassword);
             	editor.putString(USERPASSWORDPREF, userPassword);
                 return true;
             }
@@ -405,7 +447,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 	        
 	        if(USERPASSWORDPREF.equals(key))
 	        {
-        		String stars = getStarsSequence(((String) newValue).length());
+        		String stars = getStarsSequence(STARS_LENGTH);
         		preference.setSummary(stars);	        	
 	        } else {
 	        	preference.setSummary((CharSequence) newValue);
@@ -420,7 +462,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 	@Override
 	protected void onResume() {
 		super.onResume();
-		String stars = getStarsSequence(prefs.getString(USERPASSWORDPREF, "").length());
+		String stars = getStarsSequence(STARS_LENGTH);
         userIDPref.setSummary(prefs.getString(USERIDPREF, ""));
         userPasswordPref.setSummary(stars);
 	}
