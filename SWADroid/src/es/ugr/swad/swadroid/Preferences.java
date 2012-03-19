@@ -464,7 +464,9 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 		super.onResume();
 		String stars = getStarsSequence(STARS_LENGTH);
         userIDPref.setSummary(prefs.getString(USERIDPREF, ""));
-        userPasswordPref.setSummary(stars);
+        
+        if(!prefs.getString(USERPASSWORDPREF, "").isEmpty())
+        	userPasswordPref.setSummary(stars);
 	}
 	
 	/* (non-Javadoc)
