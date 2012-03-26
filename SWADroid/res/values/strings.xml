@@ -6,6 +6,7 @@
 	<string name="coursesModuleLabel">Courses</string>
 	<string name="testsModuleLabel">Tests</string>
 	<string name="messagesModuleLabel">Send message</string>
+	<string name="noticesModuleLabel">Publish new notice</string>
 	<string name="title_error_dialog">ERROR</string>
 	<string name="close_dialog">Close</string>
 	<string name="set_preferences">Preferences</string>
@@ -108,6 +109,9 @@
 	<string name="message_receivers_title">Receivers (separated by comma)</string>
 	<string name="message_subject_title">Subject</string>
 	<string name="message_body_title">Message</string>
+	<string name="notice_body_title">Notice</string>
+	<string name="publishingNotice">Publishing notice...</string>
+	<string name="noticePublished">Notice published</string><string name="noticeSendError">Error while publishing the new notice</string>	
 	<string name="sendMsg">Send</string>
 	<string name="cleanDatabaseMsg">The database has been cleaned</string>
 	<string name="shareBodyMsg">I\'m using #SWADroid in my Android mobile for access to

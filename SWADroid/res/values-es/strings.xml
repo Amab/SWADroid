@@ -6,6 +6,7 @@
 	<string name="coursesModuleLabel">Asignaturas</string>
 	<string name="testsModuleLabel">Tests</string>
 	<string name="messagesModuleLabel">Enviar mensaje</string>
+	<string name="noticesModuleLabel">Publicar nuevo aviso</string>
 	<string name="title_error_dialog">ERROR</string>
 	<string name="close_dialog">Cerrar</string>
 	<string name="set_preferences">Configuración</string>
@@ -111,6 +112,9 @@
 	<string name="message_receivers_title">Destinatarios (separados por comas)</string>
 	<string name="message_subject_title">Asunto</string>
 	<string name="message_body_title">Mensaje</string>
+	<string name="notice_body_title">Aviso</string>
+	<string name="publishingNotice">Publicando aviso...</string>
+	<string name="noticePublished">Aviso publicado</string><string name="noticeSendError">Error al publicar el nuevo aviso</string>
 	<string name="sendMsg">Enviar</string>
 	<string name="cleanDatabaseMsg">Todos los datos de la base de datos han sido borrados</string>
 	<string name="shareBodyMsg">Estoy usando #SWADroid en mi Android para acceder a la
