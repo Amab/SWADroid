@@ -120,4 +120,5 @@
 	<string name="notificationsAlertTitle">Nuevas notificaciones</string>
 	<string name="notificationsAlertMsg">nuevas notificaciones</string>
 	<string name="footMessageMsg">Enviado desde</string>
+	<string name="marksMsg">Pulse sobre la notificación para ver la calificación.</string>
 </resources>
