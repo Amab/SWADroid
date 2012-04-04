@@ -198,7 +198,12 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         		contentMsgText = context.getString(R.string.marksMsg);
         		contentMsg.setText(contentMsgText);
         		contentVisible[cursor.getPosition()] = true;
+        	} else {
+        		contentMsgText = "";
+    			contentMsg.setText(contentMsgText);
+        		contentVisible[cursor.getPosition()] = false;
         	}
+        	
         	if(contentVisible[cursor.getPosition()]) {
         		contentMsg.setVisibility(View.VISIBLE);
         	} else {
