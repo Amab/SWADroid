@@ -101,6 +101,7 @@
         
     <ImageButton
     	android:id="@+id/refresh"
+		android:layout_toLeftOf="@+id/progress_refresh"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_alignWithParentIfMissing="true"
@@ -110,5 +111,16 @@
         android:src="@drawable/title_refresh"
         android:onClick="onRefreshClick"
         android:background="@drawable/title_button"
+        android:visibility="gone"/>
+    
+    <ProgressBar
+    	android:id="@+id/progress_refresh"
+		android:indeterminateDrawable="@drawable/rotate_refresh"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
         android:visibility="gone"/>
 </RelativeLayout>
