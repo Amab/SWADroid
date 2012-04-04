@@ -127,6 +127,11 @@ public abstract class Module extends MenuActivity {
     protected abstract void postConnect();
     
     /**
+     * Error handler 
+     */
+    protected abstract void onError();
+    
+    /**
      * Gets METHOD_NAME parameter.
      * @return METHOD_NAME parameter.
      */
@@ -573,7 +578,8 @@ public abstract class Module extends MenuActivity {
                 	errorMsg = e.getMessage();
                 }
 
-                //Request finalized with errors 
+                //Request finalized with errors        		
+        		onError(); 
         		error(errorMsg);               
         		/*if(isDebuggable) {    		
         			e.printStackTrace();
@@ -581,7 +587,6 @@ public abstract class Module extends MenuActivity {
         	        Log.d(TAG, connection.requestDump.toString());
         	        Log.d(TAG, connection.responseDump.toString());
         		}*/
-        		
                 setResult(RESULT_CANCELED);
             } else {
         		postConnect();
