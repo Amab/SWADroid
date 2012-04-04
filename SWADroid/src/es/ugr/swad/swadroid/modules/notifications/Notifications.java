@@ -48,6 +48,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 /**
@@ -136,6 +137,7 @@ public class Notifications extends Module {
         };
 		
 		super.onCreate(savedInstanceState);
+        
         setContentView(R.layout.list_items);
         
         image = (ImageView)this.findViewById(R.id.moduleIcon);
@@ -178,6 +180,12 @@ public class Notifications extends Module {
 	 */
 	public void onRefreshClick(View v)
 	{        
+    	ImageButton updateButton = (ImageButton)this.findViewById(R.id.refresh);
+        ProgressBar pb = (ProgressBar)this.findViewById(R.id.progress_refresh);
+        
+        updateButton.setVisibility(View.GONE);
+        pb.setVisibility(View.VISIBLE);
+        
 		runConnection();
 	}
 
@@ -291,8 +299,8 @@ public class Notifications extends Module {
 	protected void connect() {
 		String progressDescription = getString(R.string.notificationsProgressDescription);
     	int progressTitle = R.string.notificationsProgressTitle; 
-  	    
-        new Connect(true, progressDescription, progressTitle).execute();
+    	
+        new Connect(false, progressDescription, progressTitle).execute();
 	}
 
 	/* (non-Javadoc)
@@ -304,6 +312,24 @@ public class Notifications extends Module {
 		//Toast.makeText(this, R.string.notificationsDownloadedMsg, Toast.LENGTH_SHORT).show();
 		
 		alertNotif();
+		
+        ProgressBar pb = (ProgressBar)this.findViewById(R.id.progress_refresh);
+		ImageButton updateButton = (ImageButton)this.findViewById(R.id.refresh);
+		
+        pb.setVisibility(View.GONE);
+        updateButton.setVisibility(View.VISIBLE);
+	}
+	
+	/* (non-Javadoc)
+	 * @see es.ugr.swad.swadroid.modules.Module#onError()
+	 */
+	@Override
+	protected void onError() {
+        ProgressBar pb = (ProgressBar)this.findViewById(R.id.progress_refresh);
+		ImageButton updateButton = (ImageButton)this.findViewById(R.id.refresh);
+		
+        pb.setVisibility(View.GONE);
+        updateButton.setVisibility(View.VISIBLE);
 	}
 	
 	/**
