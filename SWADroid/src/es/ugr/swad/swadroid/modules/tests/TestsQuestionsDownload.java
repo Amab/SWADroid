@@ -247,4 +247,12 @@ public class TestsQuestionsDownload extends Module {
 		Toast.makeText(this, R.string.questionsTestsDownloadSuccesfulMsg, Toast.LENGTH_LONG).show();
         finish();
 	}
+	
+	/* (non-Javadoc)
+	 * @see es.ugr.swad.swadroid.modules.Module#onError()
+	 */
+	@Override
+	protected void onError() {
+
+	}
 }
