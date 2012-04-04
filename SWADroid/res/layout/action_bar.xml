@@ -111,6 +111,9 @@
         android:src="@drawable/title_refresh"
         android:onClick="onRefreshClick"
         android:background="@drawable/title_button"
+        android:scaleType="centerCrop"
+        android:paddingLeft="3dp"
+        android:paddingRight="5dp"
         android:visibility="gone"/>
     
     <ProgressBar
