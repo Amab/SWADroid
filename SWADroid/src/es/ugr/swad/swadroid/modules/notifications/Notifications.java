@@ -187,6 +187,8 @@ public class Notifications extends Module {
         pb.setVisibility(View.VISIBLE);
         
 		runConnection();
+		if(!isConnected)
+			onError();
 	}
 
 	/* (non-Javadoc)
