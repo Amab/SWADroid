@@ -198,9 +198,6 @@ public class SWADMain extends MenuExpandableListActivity {
                 new int[] {}
             ));
         
-        //TODO getExpandableListAdapter().getChildView(0, 2, false, null, null).setClickable(false);
-        
-        
         getExpandableListView().setOnChildClickListener(this);
     }
     
@@ -222,7 +219,7 @@ public class SWADMain extends MenuExpandableListActivity {
         
         text = (TextView)this.findViewById(R.id.moduleName);
         text.setText(R.string.app_name);
-        
+
         createMainMenu();
         
         try {            
