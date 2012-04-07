@@ -73,6 +73,10 @@ public class Global {
      */
     public static final int MESSAGES_REQUEST_CODE = 8;
     /**
+     * Request code for Notice module
+     */
+    public static final int NOTICES_REQUESET_CODE =  9;
+    /**
      * Prefix tag name for Logcat
      */
     public static final String APP_TAG = "SWADroid";
@@ -177,6 +181,7 @@ public class Global {
 	}
 	
 	/**
+	
 	 * Function to parse from Boolean to String
 	 * @param b Boolean to be parsed
 	 * @return "Y" if b==true, "N" in other case
