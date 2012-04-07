@@ -45,7 +45,6 @@ import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.model.User;
-import es.ugr.swad.swadroid.modules.Module.Connect;
 
 /**
  * Module for send messages.
@@ -125,7 +124,7 @@ public class Notices extends Module {
 		//String selectedCourseName = selectedCourse.getName();
 		
 		noticeDialog.setTitle(R.string.noticesModuleLabel);
-		//noticeDialog.setTitle(R.string.noticeModuleLabel + listCourses.get(selectedCourseCode));
+		//TODO noticeDialog.setTitle(R.string.noticeModuleLabel + listCourses.get(selectedCourseCode));
 		noticeDialog.setContentView(R.layout.notice_dialog);
 		noticeDialog.setCancelable(true);
 		
@@ -161,10 +160,6 @@ public class Notices extends Module {
 		addParam("body",body);
 		
 		sendRequest(User.class,false);
-		
-		if(result != null){
-			
-		}
 		
 		setResult(RESULT_OK);
 	}
@@ -227,8 +222,9 @@ public class Notices extends Module {
 			//After get the list of courses, a dialog is launched to choice the course
 			case Global.COURSES_REQUEST_CODE:
 				final AlertDialog.Builder coursesDialog = new AlertDialog.Builder(this);
-				dbCursor = dbHelper.getDb().getCursor(Global.DB_TABLE_COURSES);
-				listCourses = dbHelper.getAllRows(Global.DB_TABLE_COURSES);
+				
+				dbCursor = dbHelper.getDb().getCursor(Global.DB_TABLE_COURSES, "userRole>=3", "name");
+				listCourses = dbHelper.getAllRows(Global.DB_TABLE_COURSES, "userRole>=3", "name");
 				lastCourseSelected = prefs.getLastCourseSelected();
 				coursesDialog.setSingleChoiceItems(dbCursor, lastCourseSelected, "name", new DialogInterface.OnClickListener() {
 					
@@ -250,7 +246,6 @@ public class Notices extends Module {
 					public void onClick(DialogInterface dialog, int which) {
 						try {					
 							if(selectedCourseCode == 0) { 
-								//Toast.makeText(getBaseContext(), R.string.noCourseSelectedMsg, Toast.LENGTH_LONG).show();
 								Course c = (Course) listCourses.get(prefs.getLastCourseSelected());
 								selectedCourseCode = c.getId();
 							}
@@ -260,7 +255,6 @@ public class Notices extends Module {
 							}
 							dialog.dismiss();
 							launchNoticeDialog();
-							//runConnection();
 						} catch (Exception ex) {
 		                	String errorMsg = getString(R.string.errorServerResponseMsg);
 							error(errorMsg);
