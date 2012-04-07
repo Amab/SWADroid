@@ -67,7 +67,7 @@ public abstract class Module extends MenuActivity {
     /**
      * URL param for webservice request.
      */
-    String URL = "swad.ugr.es";
+    String URL; // = "swad.ugr.es";
     /**
      * Preferences of the activity.
      */
@@ -412,6 +412,7 @@ public abstract class Module extends MenuActivity {
     	 * Use of KeepAliveHttpsTransport deals with the problems with the Android ssl libraries having trouble
     	 * with certificates and certificate authorities somehow messing up connecting/needing reconnects.
     	 */
+    	URL = prefs.getServer();
         connection = new KeepAliveHttpsTransportSE(URL, 443, "", TIMEOUT);
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         System.setProperty("http.keepAlive", "false");
