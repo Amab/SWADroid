@@ -498,7 +498,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 	        	n.clearNotifications(this);
 	        	c.clearCourses(this);
 	        	Global.setPreferencesChanged();
-            	editor.commit();
+            		editor.commit();
 	        }
 	        
 	        return true;
