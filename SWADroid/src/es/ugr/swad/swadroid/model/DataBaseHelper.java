@@ -408,6 +408,7 @@ public class DataBaseHelper {
 		Entity ent = rows.get(0);
 		ent.setValue("id", actual.getId());
 		ent.setValue("name", actual.getName());
+		ent.setValue("userRole", actual.getUserRole());
 		ent.save();
     }
 	
