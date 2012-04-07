@@ -42,6 +42,7 @@ import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.Messages;
 import es.ugr.swad.swadroid.modules.notifications.Notifications;
 import es.ugr.swad.swadroid.modules.tests.Tests;
+import es.ugr.swad.swadroid.modules.Notices;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
 
 /**
@@ -125,6 +126,9 @@ public class SWADMain extends MenuExpandableListActivity {
 			activity = new Intent(getBaseContext(), Messages.class);
 			activity.putExtra("notificationCode", new Long(0));
 			startActivityForResult(activity, Global.MESSAGES_REQUEST_CODE);
+		} else if(keyword.equals(getString(R.string.noticesModuleLabel))){
+			activity = new Intent(getBaseContext(), Notices.class);
+			startActivityForResult(activity, Global.NOTICES_REQUESET_CODE);
 		}
 		
 		return true;
@@ -176,6 +180,11 @@ public class SWADMain extends MenuExpandableListActivity {
         map.put(IMAGE, getResources().getDrawable(R.drawable.msg));
         messagesData.add(map);
         
+        map = new HashMap<String,Object>();        
+        map.put(NAME, getString(R.string.noticesModuleLabel) );
+        map.put(IMAGE, getResources().getDrawable(R.drawable.note));
+        messagesData.add(map);
+        
         //Evaluation category
         map = new HashMap<String,Object>();
         map.put(NAME, getString(R.string.testsModuleLabel) );
@@ -216,7 +225,7 @@ public class SWADMain extends MenuExpandableListActivity {
         
         text = (TextView)this.findViewById(R.id.moduleName);
         text.setText(R.string.app_name);
-        
+
         createMainMenu();
         
         try {            

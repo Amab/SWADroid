@@ -20,6 +20,7 @@
 package es.ugr.swad.swadroid.modules;
 
 import android.os.Bundle;
+import android.util.Log;
 import es.ugr.swad.swadroid.Base64;
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
@@ -30,6 +31,7 @@ import java.security.NoSuchAlgorithmException;
 
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.KvmSerializable;
+import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
 /**
@@ -108,26 +110,26 @@ public class Login extends Module {
 	        md.update(prefs.getUserPassword().getBytes());
 	        userPassword = new String(Base64.encodeBytes(md.digest()));
 	        userPassword = userPassword.replace('+','-').replace('/','_').replace('=', ' ').replaceAll("\\s+", "").trim();
-	
+	        Log.i("Login", "pre send login");
 	        //Creates webservice request, adds required params and sends request to webservice
 	        createRequest();
 	        addParam("userID", prefs.getUserID());
 	        addParam("userPassword", userPassword);
 	        addParam("appKey", Global.getAppKey());
 	        sendRequest(User.class, true);
-	
+	        Log.i("Login", "sended login");
 	        if (result != null) {
-	        	KvmSerializable ks = (KvmSerializable) result;
+	        	SoapObject soap = (SoapObject) result;
 	        	
 		        //Stores user data returned by webservice response
-		        User.setUserCode(ks.getProperty(0).toString());
-		        User.setUserTypeCode(ks.getProperty(1).toString());
-		        User.setWsKey(ks.getProperty(2).toString());
-		        User.setUserID(ks.getProperty(3).toString());
-		        User.setUserSurname1(ks.getProperty(4).toString());
-		        User.setUserSurname2(ks.getProperty(5).toString());
-		        User.setUserFirstName(ks.getProperty(6).toString());
-		        User.setUserTypeName(ks.getProperty(7).toString());
+		        User.setUserCode(soap.getProperty("userCode").toString());
+		        User.setWsKey(soap.getProperty("wsKey").toString());
+		        User.setUserID(soap.getProperty("userID").toString());
+		        User.setUserSurname1(soap.getProperty("userSurname1").toString());
+		        User.setUserSurname2(soap.getProperty("userSurname2").toString());
+		        User.setUserFirstName(soap.getProperty("userFirstname").toString());
+		        int userRole =Integer.parseInt(soap.getProperty("userRole").toString());
+		        User.setUserRole(userRole);
 		        
 		        //Update application last login time
 		        Global.setLastLoginTime(System.currentTimeMillis());
@@ -136,13 +138,14 @@ public class Login extends Module {
     	
     	/*if(isDebuggable) {
     		Log.d(TAG, "userCode=" + User.getUserCode());
-    		Log.d(TAG, "userTypeCode=" + User.getUserTypeCode());
+    		//Log.d(TAG, "userTypeCode=" + User.getUserTypeCode());
     		Log.d(TAG, "wsKey=" + User.getWsKey());
     		Log.d(TAG, "userID=" + User.getUserID());
     		Log.d(TAG, "userSurname1=" + User.getUserSurname1());
     		Log.d(TAG, "userSurname2=" + User.getUserSurname2());
     		Log.d(TAG, "userFirstName=" + User.getUserFirstName());
-    		Log.d(TAG, "userTypeName=" + User.getUserTypeName());
+    		//Log.d(TAG, "userTypeName=" + User.getUserTypeName());
+    		Log.d(TAG, "userRole=" + String.valueOf(User.getUserRole()));
     		Log.d(TAG, "lastLoginTime=" + Global.getLastLoginTime());
     	}*/
     	
