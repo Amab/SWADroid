@@ -39,7 +39,7 @@
     <activity android:theme="@android:style/Theme.Translucent.NoTitleBar" android:name=".modules.Messages" android:label="@string/messagesModuleLabel" android:configChanges="keyboard|keyboardHidden|orientation"></activity>
     <activity android:name=".modules.notifications.NotificationItem" android:theme="@android:style/Theme.NoTitleBar" android:label="@string/notificationsModuleLabel"></activity>
     <activity android:theme="@android:style/Theme.Translucent.NoTitleBar" android:name=".modules.Notices" android:label="@string/noticesModuleLabel" android:configChanges="keyboard|keyboardHidden|orientation"></activity>    
-</application>
+
  
    	<provider android:name=".sync.DummyProvider"
 	    android:authorities="es.ugr.swad.content"
