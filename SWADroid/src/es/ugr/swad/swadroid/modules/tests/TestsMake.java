@@ -761,5 +761,12 @@ public class TestsMake extends Module {
 	protected void postConnect() {
 
 	}
+	
+	/* (non-Javadoc)
+	 * @see es.ugr.swad.swadroid.modules.Module#onError()
+	 */
+	@Override
+	protected void onError() {
 
+	}
 }

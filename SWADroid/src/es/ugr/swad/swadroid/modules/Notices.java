@@ -292,6 +292,11 @@ public class Notices extends Module {
         	finish();
         }
 	}
+	@Override
+	protected void onError() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 

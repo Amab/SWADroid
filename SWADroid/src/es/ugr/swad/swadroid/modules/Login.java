@@ -153,8 +153,19 @@ public class Login extends Module {
         setResult(RESULT_OK);
 	}
 
+    /* (non-Javadoc)
+	 * @see es.ugr.swad.swadroid.modules.Module#postConnect()
+	 */
 	@Override
 	protected void postConnect() {
         finish();
+	}
+	
+	/* (non-Javadoc)
+	 * @see es.ugr.swad.swadroid.modules.Module#onError()
+	 */
+	@Override
+	protected void onError() {
+		
 	}
 }

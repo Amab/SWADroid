@@ -172,4 +172,12 @@ public class Courses extends Module {
 	protected void postConnect() {
 		finish();
 	}
+	
+	/* (non-Javadoc)
+	 * @see es.ugr.swad.swadroid.modules.Module#onError()
+	 */
+	@Override
+	protected void onError() {
+		
+	}
 }
