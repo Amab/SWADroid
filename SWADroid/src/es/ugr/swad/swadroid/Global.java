@@ -30,7 +30,7 @@ public class Global {
 	/**
 	 * SWAD application key
 	 */
-	private static final String AppKey = "cuerre-aguilerin";
+	private static final String AppKey = "";
 	/**
 	 * Server URL
 	 */
@@ -164,7 +164,6 @@ public class Global {
 	 * Teacher userTypeCode for getUsers web service.
 	 */
 	public static final int TEACHER_TYPE_CODE = 3;
-
 	/**
 	 * Gets the SWAD application key
 	 * @return SWAD application key

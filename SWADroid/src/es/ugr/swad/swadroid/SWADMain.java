@@ -355,8 +355,8 @@ public class SWADMain extends MenuExpandableListActivity {
 		try {            
 			//Initialize database
 			/*db = DataFramework.getInstance();
-            db.open(this, this.getPackageName());
-            dbHelper = new DataBaseHelper(db);*/
+            		  db.open(this, this.getPackageName());
+            		  dbHelper = new DataBaseHelper(db);*/
 
 			//Initialize preferences
 			prefs.getPreferences(getBaseContext()); 
@@ -479,5 +479,4 @@ public class SWADMain extends MenuExpandableListActivity {
 		Toast.makeText(getBaseContext(), R.string.coursesProgressDescription, Toast.LENGTH_LONG).show();
 		startActivityForResult(activity,Global.COURSES_REQUEST_CODE);
 	}
-
 }
