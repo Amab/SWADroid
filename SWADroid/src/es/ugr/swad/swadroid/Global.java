@@ -28,6 +28,10 @@ public class Global {
 	 * SWAD application key
 	 */
 	private static final String AppKey = "";
+	/**
+	 * Server URL
+	 */
+	private static final String DEFAULT_SERVER = "swad.ugr.es";
     /**
      * User logged flag
      */
@@ -123,6 +127,13 @@ public class Global {
 	 */
 	public static String getAppKey() {
 		return AppKey;
+	}    
+	/**
+	 * Gets the server URL
+	 * @return Server URL
+	 */
+	public static String getDefaultServer() {
+		return DEFAULT_SERVER;
 	}
 	/**
 	 * Checks if user is already logged on SWAD
