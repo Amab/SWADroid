@@ -38,6 +38,10 @@ public class ImageExpandableListAdapter extends SimpleExpandableListAdapter {
 	final String NAME = "listText";
     final String IMAGE = "listIcon";
     final LayoutInflater layoutInflater;
+    List<? extends Map<String, ?>> groupData;
+    List<? extends List<? extends Map<String, ?>>> childData;
+    Context context;
+ 
     
 	public ImageExpandableListAdapter(Context context,
 			List<? extends Map<String, ?>> groupData, int expandedGroupLayout,
@@ -48,7 +52,8 @@ public class ImageExpandableListAdapter extends SimpleExpandableListAdapter {
 	
 		super(context, groupData, expandedGroupLayout, groupFrom,
 				groupTo, childData, childLayout, childFrom, childTo);
-		
+		this.groupData = groupData;
+		this.childData = childData;
 		layoutInflater = LayoutInflater.from(context);
 	}
 
@@ -93,4 +98,21 @@ public class ImageExpandableListAdapter extends SimpleExpandableListAdapter {
     public View newChildView(boolean isLastChild, ViewGroup parent) {
          return layoutInflater.inflate(R.layout.image_list_item, parent, false);
     }
+	
+	/**
+	 * Removes the child which located at childPosition under the group located at groupPosition. 
+	 * If it is removed, it will not be shown.
+	 * @param groupPosition	
+	 * @param childPosition
+	 * @return true if the child was removed;
+	 * */
+	public boolean removeChild(int groupPosition,int childPosition){
+		
+		if(groupPosition>= getGroupCount() ||  childPosition>=getChildrenCount(groupPosition))
+			return false;
+		childData.get(groupPosition).remove(childPosition);
+		super.notifyDataSetChanged();
+		
+		return true;
+	}
 }

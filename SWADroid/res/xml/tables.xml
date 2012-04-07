@@ -3,6 +3,7 @@
   <table name="courses" to-string="%name%">
     <field name="id" obligatory="true" type="long"/>
     <field name="name" obligatory="true" type="text"/>
+    <field name="userRole" obligatory="true" type="integer"/>
   </table> 
   
   <table name="notifications" to-string="%name%" new-in-version="3">

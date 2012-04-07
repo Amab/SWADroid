@@ -7,3 +7,9 @@ capturas/
 iconos/
 gitstats/
 SWADroidTest/
+.DS_Store
+SWADroid/.DS_Store
+SWADroid/gen/es/ugr/swad/swadroid/BuildConfig.java
+SWADroid/gen/es/ugr/swad/swadroid/R.java
+
+

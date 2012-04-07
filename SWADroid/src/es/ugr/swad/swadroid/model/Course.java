@@ -31,13 +31,16 @@ public class Course extends Model {
 	 * Course name
 	 */
 	private String name;
+	private int userRole;
 	private static PropertyInfo PI_id = new PropertyInfo();
 	private static PropertyInfo PI_name = new PropertyInfo();
+	private static PropertyInfo PI_userRole = new PropertyInfo();
     @SuppressWarnings("unused")
 	private static PropertyInfo[] PI_PROP_ARRAY =
     {
     	PI_id,
-    	PI_name
+    	PI_name,
+    	PI_userRole
     };
 	
 	/**
@@ -45,9 +48,10 @@ public class Course extends Model {
 	 * @param id Course identifier
 	 * @param name Course name
 	 */
-	public Course(long id, String name) {
+	public Course(long id, String name, int userRole) {
 		super(id);
 		this.name = name;
+		this.userRole = userRole;
 	}
 
 	/**
@@ -65,6 +69,15 @@ public class Course extends Model {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	/**
+	 * Gets user role inside the course
+	 * @return user role (2 = student, 3 = teacher)
+	 */
+	public int getUserRole(){
+		return userRole;
+	}
+	
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
@@ -82,7 +95,7 @@ public class Course extends Model {
 	 */
 	@Override
 	public String toString() {
-		return "Course [name=" + name + ", getId()=" + getId() + "]";
+		return "Course [name=" + name + ", getId()=" + getId() + " getUserRole()="+ getUserRole()+"]";
 	}
 
 	/* (non-Javadoc)
@@ -94,6 +107,7 @@ public class Course extends Model {
         {
             case 0 : object = this.getId();break;
             case 1 : object = name;break;
+            case 2 : object = userRole;break;
         }
         
         return object;
@@ -103,7 +117,7 @@ public class Course extends Model {
 	 * @see org.ksoap2.serialization.KvmSerializable#getPropertyCount()
 	 */
 	public int getPropertyCount() {
-		return 2;
+		return 3;
 	}
 
 	/* (non-Javadoc)
@@ -118,7 +132,11 @@ public class Course extends Model {
 	        case 1:
 	            propertyInfo.type = PropertyInfo.STRING_CLASS;
 	            propertyInfo.name = "name";
-	            break;           
+	            break; 
+	        case 2:
+	        	propertyInfo.type = PropertyInfo.INTEGER_CLASS;
+	        	propertyInfo.name = "userRole";
+	        	break;
 		}
 	}
 
@@ -130,6 +148,7 @@ public class Course extends Model {
 		{
 			case 0  : this.setId((Long)obj); break;
 			case 1  : name = (String)obj; break;
+			case 2  : userRole = (Integer)obj; break;
 		}    
 	}
 }

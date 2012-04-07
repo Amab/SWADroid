@@ -33,10 +33,7 @@ public class User implements KvmSerializable {
      * User code.
      */
     private static String userCode;
-    /**
-     * Code of user type.
-     */
-    private static String userTypeCode;
+    
     /**
      * Webservices session key.
      */
@@ -58,28 +55,27 @@ public class User implements KvmSerializable {
      */
     private static String userFirstName;
     /**
-     * Name of the user type.
+     * User role. 1:guest 2: student 3: teacher
      */
-    private static String userTypeName;
+    private static int userRole;
+    
     private static PropertyInfo PI_userCode = new PropertyInfo();
-    private static PropertyInfo PI_userTypeCode = new PropertyInfo();
     private static PropertyInfo PI_wsKey = new PropertyInfo();
     private static PropertyInfo PI_userID = new PropertyInfo();
     private static PropertyInfo PI_userSurname1 = new PropertyInfo();
     private static PropertyInfo PI_userSurname2 = new PropertyInfo();
     private static PropertyInfo PI_userFirstName = new PropertyInfo();
-    private static PropertyInfo PI_userTypeName = new PropertyInfo();
+    private static PropertyInfo PI_userRole = new PropertyInfo();
     @SuppressWarnings("unused")
 	private static PropertyInfo[] PI_PROP_ARRAY =
     {
     	PI_userCode,
-    	PI_userTypeCode,
     	PI_wsKey,
     	PI_userID,
     	PI_userSurname1,
     	PI_userSurname2,
     	PI_userFirstName,
-    	PI_userTypeName
+    	PI_userRole
     };
 
     /**
@@ -99,15 +95,14 @@ public class User implements KvmSerializable {
      * @param userFirstName User name.
      * @param userTypeName Name of user type.
      */
-    public User(String userCode, String userTypeCode, String wsKey, String userID, String userSurname1, String userSurname2, String userFirstName, String userTypeName) {
+    public User(String userCode, String wsKey, String userID, String userSurname1, String userSurname2, String userFirstName, int userRole) {
         User.userCode = userCode;
-        User.userTypeCode = userTypeCode;
         User.wsKey = wsKey;
         User.userID = userID;
         User.userSurname1 = userSurname1;
         User.userSurname2 = userSurname2;
         User.userFirstName = userFirstName;
-        User.userTypeName = userTypeName;
+        User.userRole = userRole;
     }
 
     /**
@@ -189,39 +184,7 @@ public class User implements KvmSerializable {
     public static void setUserSurname2(String userSurname2) {
         User.userSurname2 = userSurname2;
     }
-
-    /**
-     * Gets Code of user type.
-     * @return Code of user type.
-     */
-    public static String getUserTypeCode() {
-        return userTypeCode;
-    }
-
-    /**
-     * Sets Code of user type.
-     * @param userTypeCode Code of user type.
-     */
-    public static void setUserTypeCode(String userTypeCode) {
-        User.userTypeCode = userTypeCode;
-    }
-
-    /**
-     * Gets Name of user type.
-     * @return Name of user type.
-     */
-    public static String getUserTypeName() {
-        return userTypeName;
-    }
-
-    /**
-     * Sets Name of user type.
-     * @param userTypeName Name of user type.
-     */
-    public static void setUserTypeName(String userTypeName) {
-        User.userTypeName = userTypeName;
-    }
-
+    
     /**
      * Gets Webservices session key.
      * @return Webservices session key.
@@ -237,26 +200,42 @@ public class User implements KvmSerializable {
     public static void setWsKey(String wsKey) {
         User.wsKey = wsKey;
     }
+    
+    /**
+     * Gets user role
+     * @return user role 1:guest 2:student 3:teacher
+     * */
+    public static int getUserRole(){
+    	return userRole;
+    }
+    /**
+     * Sets user role
+     * @param userRole 
+     * */
+    //TODO check userRole is 1,2,3 
+    public static void setUserRole(int userRole){
+    	User.userRole = userRole;
+    }
+    
 
 	public Object getProperty(int param) {
 		Object object = null;
         switch(param)
         {
             case 0 : object = userCode;break;
-            case 1 : object = userTypeCode;break;
-            case 2 : object = wsKey;break;
-            case 3 : object = userID;break;
-            case 4 : object = userSurname1;break;
-            case 5 : object = userSurname2;break;
-            case 6 : object = userFirstName;break;
-            case 7 : object = userTypeName;break;
+            case 1 : object = wsKey;break;
+            case 2 : object = userID;break;
+            case 3 : object = userSurname1;break;
+            case 4 : object = userSurname2;break;
+            case 5 : object = userFirstName;break;
+            case 6 : object = userRole; break;
         }
         
         return object;
 	}
 
 	public int getPropertyCount() {		
-		return 8;
+		return 7;
 	}
 
 	public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo propertyInfo) {
@@ -267,32 +246,28 @@ public class User implements KvmSerializable {
             break;            
         case 1:
             propertyInfo.type = PropertyInfo.STRING_CLASS;
-            propertyInfo.name = "userTypeCode";
+            propertyInfo.name = "wsKey";
             break;            
         case 2:
             propertyInfo.type = PropertyInfo.STRING_CLASS;
-            propertyInfo.name = "wsKey";
+            propertyInfo.name = "userID";
             break;            
         case 3:
             propertyInfo.type = PropertyInfo.STRING_CLASS;
-            propertyInfo.name = "userID";
-            break;            
-        case 4:
-            propertyInfo.type = PropertyInfo.STRING_CLASS;
             propertyInfo.name = "userSurname1";
             break;              
-        case 5:
+        case 4:
             propertyInfo.type = PropertyInfo.STRING_CLASS;
             propertyInfo.name = "userSurname2";
             break;             
-        case 6:
+        case 5:
             propertyInfo.type = PropertyInfo.STRING_CLASS;
             propertyInfo.name = "userFirstName";
-            break;             
-        case 7:
-            propertyInfo.type = PropertyInfo.STRING_CLASS;
-            propertyInfo.name = "userTypeName";
-            break;           
+            break;
+        case 6:
+            propertyInfo.type = PropertyInfo.INTEGER_CLASS;
+            propertyInfo.name = "userRole";
+            break;   
 		}
 	}
 
@@ -300,13 +275,12 @@ public class User implements KvmSerializable {
 		switch(param)
 		{
 			case 0  : userCode     	= (String)obj; break;
-			case 1  : userTypeCode 	= (String)obj; break;
 			case 2  : wsKey     	= (String)obj; break;
 			case 3  : userID     	= (String)obj; break;
 			case 4  : userSurname1  = (String)obj; break;
 			case 5  : userSurname2  = (String)obj; break;
 			case 6  : userFirstName = (String)obj; break;
-			case 7  : userTypeName  = (String)obj; break;
+			case 8  : userRole		= (Integer)obj; break;
 		}    
 	}
 	
