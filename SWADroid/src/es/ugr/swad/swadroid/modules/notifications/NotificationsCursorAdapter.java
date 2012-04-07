@@ -49,7 +49,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
 	 * @param c Database cursor
 	 */
 	public NotificationsCursorAdapter(Context context, Cursor c) {
-		super(context, c);
+		super(context, c, true);
 		
 		ctx = context;
 		int numRows = c.getCount();
@@ -77,8 +77,9 @@ public class NotificationsCursorAdapter extends CursorAdapter {
 		final Context ctx = context;
 		final Long notificationCode = cursor.getLong(cursor.getColumnIndex("id"));
 		long unixTime;
-		String type, sender, senderFirstname, senderSurname1, senderSurname2, summaryText;
-		String contentText;
+		String type = "";
+		String sender, senderFirstname, senderSurname1, senderSurname2, summaryText;
+		String contentText, contentMsgText;
 		String[] dateContent;
     	Date d;    	
     	int numRows = cursor.getCount();
@@ -95,6 +96,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         TextView location = (TextView) view.findViewById(R.id.eventLocation);
         final TextView summary = (TextView) view.findViewById(R.id.eventSummary);
         TextView content = (TextView) view.findViewById(R.id.eventText);
+        TextView contentMsg = (TextView) view.findViewById(R.id.eventMsg);
         ImageView notificationIcon = (ImageView) view.findViewById(R.id.notificationIcon);
         ImageView messageReplyButton = (ImageView) view.findViewById(R.id.messageReplyButton);
         
@@ -172,7 +174,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         	eventSender.setText(sender);
         }
         if(location != null) {
-        	location.setText(cursor.getString(cursor.getColumnIndex("location")));
+        	location.setText(Html.fromHtml(cursor.getString(cursor.getColumnIndex("location"))));
         }
         if(summary != null){   
         	summaryText = cursor.getString(cursor.getColumnIndex("summary"));
@@ -189,13 +191,23 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         	//Empty field checking
         	if(contentText.equals("anyType{}"))
         		contentText = context.getString(R.string.noContentMsg);
-        		
-        	content.setText(contentText);
+        	
+    		content.setText(contentText);
+        	
+        	if(type.equals(context.getString(R.string.marksFile))) {
+        		contentMsgText = context.getString(R.string.marksMsg);
+        		contentMsg.setText(contentMsgText);
+        		contentVisible[cursor.getPosition()] = true;
+        	} else {
+        		contentMsgText = "";
+    			contentMsg.setText(contentMsgText);
+        		contentVisible[cursor.getPosition()] = false;
+        	}
         	
         	if(contentVisible[cursor.getPosition()]) {
-        		content.setVisibility(View.VISIBLE);
+        		contentMsg.setVisibility(View.VISIBLE);
         	} else {
-        		content.setVisibility(View.GONE);
+        		contentMsg.setVisibility(View.GONE);
         	}
         }
 	}

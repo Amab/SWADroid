@@ -118,16 +118,17 @@
 		the e-learning platform SWAD.\nGet it for free here:
 		 https://market.android.com/details?id=es.ugr.swad.swadroid</string>
 	<string name="marketURL">market://details?id=es.ugr.swad.swadroid</string>
-	<string name="marketWebURL">https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid</string><string name="twitterURL">https://twitter.com/#!/SWADroid</string>
+	<string name="marketWebURL">http://goo.gl/Wgo1y</string><string name="twitterURL">https://twitter.com/#!/SWADroid</string>
 	<string name="facebookURL">https://www.facebook.com/SWADroid</string>
-	<string name="googlePlusURL">https://plus.google.com/115615684349730524355/posts</string>
-	<string name="mailingListURL">https://groups.google.com/forum/#!forum/swadroid</string>
+	<string name="googlePlusURL">http://goo.gl/kuezQ</string>
+	<string name="mailingListURL">http://goo.gl/3A5iO</string>
 	<string name="blogURL">http://swadroid.wordpress.com</string>
 	<string name="twitterUser">\@SWADroid</string><string name="twitterTitle">Twitter</string>
 	<string name="facebookTitle">Facebook</string>
 	<string name="googlePlusTitle">Google+</string>
 	<string name="mailingListTitle">Mailing list</string>
 	<string name="blogTitle">Blog</string><string name="marketTitle">Android Market</string><string name="notificationsAlertTitle">New notifications</string><string name="notificationsAlertMsg">new notifications</string><string name="footMessageMsg">Sended from</string>
+	<string name="marksMsg">Click on the notification to view the mark.</string>
 	
 	
 	
