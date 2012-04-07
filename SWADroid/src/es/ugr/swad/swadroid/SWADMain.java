@@ -23,7 +23,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.accounts.Account;
+import android.accounts.AccountAuthenticatorResponse;
+import android.accounts.AccountManager;
 import android.app.AlertDialog;
+import android.content.ContentProvider;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,6 +38,7 @@ import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
+import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.Messages;
 import es.ugr.swad.swadroid.modules.notifications.Notifications;
 import es.ugr.swad.swadroid.modules.tests.Tests;
@@ -199,6 +205,7 @@ public class SWADMain extends MenuExpandableListActivity {
         int lastVersion, currentVersion;
 		ImageView image;
 		TextView text;
+		ContentResolver cr;
 		
     	//Initialize screen
         super.onCreate(icicle);
@@ -227,7 +234,7 @@ public class SWADMain extends MenuExpandableListActivity {
             //Check if this is the first run after an install or upgrade
             lastVersion = prefs.getLastVersion();
             currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
-
+            
             //If this is the first run, show configuration dialog
             if(lastVersion == 0) {
             	showConfigurationDialog();
