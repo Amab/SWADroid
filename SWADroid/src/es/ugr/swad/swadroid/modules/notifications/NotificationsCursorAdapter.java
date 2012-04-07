@@ -80,8 +80,9 @@ public class NotificationsCursorAdapter extends CursorAdapter {
 		String type = "";
 		String sender, senderFirstname, senderSurname1, senderSurname2, summaryText;
 		String contentText, contentMsgText;
-		String[] dateContent;
-    	Date d;    	
+    	Date d;
+    	java.text.DateFormat dateShortFormat = android.text.format.DateFormat.getDateFormat(context);
+    	java.text.DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(context);
     	int numRows = cursor.getCount();
     	
     	if(contentVisible.length == 0) {
@@ -153,9 +154,8 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         if((eventDate != null) && (eventTime != null)){
         	unixTime = Long.parseLong(cursor.getString(cursor.getColumnIndex("eventTime")));
         	d = new Date(unixTime * 1000);
-        	dateContent = d.toLocaleString().split(" ");
-        	eventDate.setText(dateContent[0]);
-        	eventTime.setText(dateContent[1]);
+        	eventDate.setText(dateShortFormat.format(d));
+        	eventTime.setText(timeFormat.format(d));
         }
         if(eventSender != null){
         	sender = "";
