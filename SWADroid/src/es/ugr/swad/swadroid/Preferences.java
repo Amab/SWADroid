@@ -59,6 +59,10 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
      */
     private String userPassword;
     /**
+     * Server.
+     */
+    private String server;
+    /**
      * Stars length
      */
     private int STARS_LENGTH = 8;
@@ -115,6 +119,10 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
      */
     private static final String SHAREPREF = "sharePref";
     /**
+     * Server preference name.
+     */
+    private static final String SERVERPREF = "serverPref";
+    /**
      * User ID preference
      */
     private Preference userIDPref;
@@ -151,9 +159,13 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
      */
     private Preference blogPref;
     /**
-     * Sare preference
+     * Share preference
      */
     private Preference sharePref;
+    /**
+     * Server preference
+     */
+    private Preference serverPref;
     /**
      * Preferences editor
      */
@@ -173,6 +185,14 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
      */
     public String getUserPassword() {
         return userPassword;
+    }
+
+    /**
+     * Gets server URL.
+     * @return Server URL.
+     */
+    public String getServer() {
+        return server;
     }
 
 	/**
@@ -272,6 +292,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         userID = prefs.getString(USERIDPREF, "");
         userPassword = prefs.getString(USERPASSWORDPREF, "");
+        server = prefs.getString(SERVERPREF, Global.getDefaultServer());
         lastVersion = prefs.getInt(LASTVERSIONPREF, 0);
         lastCourseSelected = prefs.getInt(LASTCOURSESELECTEDPREF, 0);
     }
@@ -289,6 +310,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 
         userID = prefs.getString(USERIDPREF, "");
         userPassword = prefs.getString(USERPASSWORDPREF, "");
+        server = prefs.getString(SERVERPREF, Global.getDefaultServer());
         lastVersion = prefs.getInt(LASTVERSIONPREF, 0);
         lastCourseSelected = prefs.getInt(LASTCOURSESELECTEDPREF, 0);
         editor = prefs.edit();
@@ -303,6 +325,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         mailingListPref = findPreference(MAILINGLISTPREF);
         blogPref = findPreference(BLOGPREF);
         sharePref = findPreference(SHAREPREF);
+        serverPref = findPreference(SERVERPREF);
         
         userIDPref.setOnPreferenceChangeListener(this);
         userPasswordPref.setOnPreferenceChangeListener(this);
@@ -313,6 +336,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         mailingListPref.setOnPreferenceChangeListener(this);
         blogPref.setOnPreferenceChangeListener(this);
         sharePref.setOnPreferenceChangeListener(this);
+        serverPref.setOnPreferenceChangeListener(this);
         
         userIDPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             /**
@@ -417,12 +441,24 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
             public boolean onPreferenceClick(Preference preference) {
             	Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
 	        	sharingIntent.setType("text/plain");
-	        	sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "SWADroid");
+	        	sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.app_name));
 	        	sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, getString(R.string.shareBodyMsg));
 	        	startActivity(Intent.createChooser(sharingIntent, getString(R.string.shareTitle_menu)));
                 return true;
             }
-        });
+        });        
+        serverPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            /**
+             * Called when a preference is selected.
+             * @param preference Preference selected.
+             */
+            public boolean onPreferenceClick(Preference preference) {
+            	server = prefs.getString(SERVERPREF, Global.getDefaultServer());
+            	editor.putString(SERVERPREF, server);
+                return true;
+            }
+        });        
+        serverPref.setSummary(prefs.getString(SERVERPREF, Global.getDefaultServer()));
         
         try {
 			currentVersionPref.setSummary(getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
@@ -453,6 +489,12 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 	        	preference.setSummary((CharSequence) newValue);
 	        }
 	        
+	        if (SERVERPREF.equals(key) || SERVERPREF.equals(key)) {
+	        	Global.setLogged(false);
+	        	n.clearNotifications(this);
+            	editor.commit();
+	        }
+	        
 	        return true;
 	}
 
@@ -465,8 +507,10 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 		String stars = getStarsSequence(STARS_LENGTH);
         userIDPref.setSummary(prefs.getString(USERIDPREF, ""));
         
-        if(!prefs.getString(USERPASSWORDPREF, "").isEmpty())
+        if(!prefs.getString(USERPASSWORDPREF, "").equals(""))
         	userPasswordPref.setSummary(stars);
+        
+        serverPref.setSummary(prefs.getString(SERVERPREF, Global.getDefaultServer()));
 	}
 	
 	/* (non-Javadoc)

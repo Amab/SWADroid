@@ -27,13 +27,11 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
-import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.Messages;
 import es.ugr.swad.swadroid.modules.notifications.Notifications;
 import es.ugr.swad.swadroid.modules.tests.Tests;
@@ -237,7 +235,7 @@ public class SWADMain extends MenuExpandableListActivity {
             //Check if this is the first run after an install or upgrade
             lastVersion = prefs.getLastVersion();
             currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
-
+            
             //If this is the first run, show configuration dialog
             if(lastVersion == 0) {
             	showConfigurationDialog();
@@ -253,7 +251,6 @@ public class SWADMain extends MenuExpandableListActivity {
             	prefs.setLastVersion(currentVersion);
             }
         } catch (Exception ex) {
-            Log.e(ex.getClass().getSimpleName(), ex.getMessage());
             error(ex.getMessage());
             ex.printStackTrace();
         }

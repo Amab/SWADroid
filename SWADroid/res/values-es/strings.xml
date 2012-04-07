@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
 	<string name="app_name">SWADroid</string>
+	<string name="serverName_preferences">Servidor</string>
+	<string name="serverSummary_preferences">Servidor (sin http://)</string>
+	<string name="serverTitle_preferences">Servidor</string>
 	<string name="loginModuleLabel">Conectar</string>
 	<string name="notificationsModuleLabel">Notificaciones</string>
 	<string name="coursesModuleLabel">Asignaturas</string>
