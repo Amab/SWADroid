@@ -122,16 +122,17 @@ public class Courses extends Module {
         	int csSize = soap.getPropertyCount();
             for (int i = 0; i < csSize; i++) {
                 SoapObject pii = (SoapObject)soap.getProperty(i);
-                long id = Long.parseLong(pii.getProperty(0).toString());
-                String name = pii.getProperty(1).toString();
-                Course c = new Course(id, name);
+                long id = Long.parseLong(pii.getProperty("courseCode").toString());
+                String name = pii.getProperty("courseName").toString();
+                int userRole = Integer.parseInt(pii.getProperty("userRole").toString());
+                Course c = new Course(id, name, userRole);
                	coursesSWAD.add(c);
                 
         		/*if(isDebuggable)
         			Log.d(TAG, c.toString());*/
             }
             
-            Log.i(TAG, "Retrieved " + csSize + " courses");
+            Log.i(TAG, "Retrieved " + csSize + " courses"); 
 
             //Obtain old unregistered courses
             obsoleteCourses.addAll(coursesDB);

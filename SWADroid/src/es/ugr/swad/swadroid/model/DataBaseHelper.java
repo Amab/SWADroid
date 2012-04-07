@@ -113,7 +113,8 @@ public class DataBaseHelper {
 		
 		if(table.equals(Global.DB_TABLE_COURSES)) {
 			o = new Course(ent.getInt("id"),
-							ent.getString("name"));
+							ent.getString("name"),
+							ent.getInt("userRole"));
 		} else if(table.equals(Global.DB_TABLE_TEST_QUESTIONS_COURSE) ||
 				table.equals(Global.DB_TABLE_TEST_QUESTION_ANSWERS)) {
 			
@@ -266,6 +267,7 @@ public class DataBaseHelper {
 		Entity ent = new Entity(Global.DB_TABLE_COURSES);
 		ent.setValue("id", c.getId());
 		ent.setValue("name", c.getName());
+		ent.setValue("userRole", c.getUserRole());
 		ent.save();
     }
 	
