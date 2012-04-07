@@ -31,7 +31,7 @@ public class Global {
 	/**
 	 * SWAD application key
 	 */
-	private static final String AppKey = "HTC-Desire";
+	private static final String AppKey = "";
 	/**
 	 * Server URL
 	 */
@@ -189,7 +189,6 @@ public class Global {
      * Code to access to the documents in share area 
      * */
     public static int SHARE_AREA_CODE= 2;
-
 	/**
 	 * Gets the SWAD application key
 	 * @return SWAD application key
