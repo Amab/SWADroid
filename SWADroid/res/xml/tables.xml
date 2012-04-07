@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<database name="swadroid_db" version="8">  
+<database name="swadroid_db" version="9">  
   <table name="courses" to-string="%name%">
     <field name="id" obligatory="true" type="long"/>
     <field name="name" obligatory="true" type="text"/>
-    <field name="userRole" obligatory="true" type="integer"/>
+    <field name="userRole" obligatory="true" type="integer" new-in-version="9"/>
   </table> 
   
   <table name="notifications" to-string="%name%" new-in-version="3">
