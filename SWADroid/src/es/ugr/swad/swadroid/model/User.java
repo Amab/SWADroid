@@ -139,7 +139,7 @@ public class User implements KvmSerializable {
 
     /**
      * Gets user identifier.
-     * @return Uer identifier.
+     * @return User identifier.
      */
     public static String getUserID() {
         return userID;
