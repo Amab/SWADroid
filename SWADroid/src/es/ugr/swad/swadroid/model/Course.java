@@ -87,6 +87,7 @@ public class Course extends Model {
 		final int prime = 31;
 		int result = super.hashCode();
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + userRole;
 		return result;
 	}
 
@@ -151,4 +152,14 @@ public class Course extends Model {
 			case 2  : userRole = (Integer)obj; break;
 		}    
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!super.equals(obj)) return false;
+		Course other = (Course) obj;
+		if(name.compareTo(other.getName()) != 0) return false;
+		if(userRole != other.getUserRole())	return false;
+		return true; 
+	}
+	
 }
