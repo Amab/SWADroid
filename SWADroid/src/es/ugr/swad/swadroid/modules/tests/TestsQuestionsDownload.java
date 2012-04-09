@@ -91,7 +91,6 @@ public class TestsQuestionsDownload extends Module {
 		sendRequest(Test.class, false);
 
 		if (result != null) {
-			//Stores tests data returned by webservice response
 			Vector<?> res = (Vector<?>) result;
 
 			SoapObject tagsListObject = (SoapObject)res.get(0);

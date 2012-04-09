@@ -74,8 +74,7 @@ public class TestsConfigDownload extends Module {
 	protected void onStart() {
 		super.onStart();
 		prefs.getPreferences(getBaseContext());
-		try {					
-
+		try {
 			if(isDebuggable) {
 				Log.d(TAG, "selectedCourseCode = " + Long.toString(Global.getSelectedCourseCode()));
 			}
@@ -89,7 +88,7 @@ public class TestsConfigDownload extends Module {
 				Log.e(ex.getClass().getSimpleName(), errorMsg);        		
 				ex.printStackTrace();
 			}
-		}		
+		}
 	}
 
 
@@ -114,7 +113,6 @@ public class TestsConfigDownload extends Module {
 		if (result != null) {
 			//Stores tests data returned by webservice response
 			Vector<?> res = (Vector<?>) result;
-
 			Integer pluggable = new Integer(res.get(0).toString());
 			isPluggable = Global.parseIntBool(pluggable);
 			numQuestions = new Integer(res.get(1).toString());
