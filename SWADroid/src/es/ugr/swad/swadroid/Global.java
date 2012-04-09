@@ -27,7 +27,7 @@ public class Global {
 	/**
 	 * SWAD application key
 	 */
-	private static final String AppKey = "";
+	private static final String AppKey = "HTC-Desire";
 	/**
 	 * Server URL
 	 */
@@ -40,6 +40,11 @@ public class Global {
      * Time of application's last login
      */
     private static long lastLoginTime;
+    
+    /**
+     * Code of the chosen course. All next actions are referred to this course.
+     */
+    private static long selectedCourseCode = -1;
     /**
      * Time to force relogin
      */
@@ -199,5 +204,19 @@ public class Global {
 	 */
 	public static String parseBoolString(boolean b) {
 		return b ? "Y" : "N";
+	}
+	/**
+	 * Gets code of actual course
+	 * return -1 if no course chosen; code of actual course in other case
+	 * */
+	public static long getSelectedCourseCode(){
+		return selectedCourseCode;
+	}
+	/**
+	 * Sets code of actual course
+	 * @param courseCode. Code of the chosen course. It should be courseCode>0. Otherwise nothing will change
+	 * */
+	public static void setSelectedCourseCode(long actualCourseCode){
+		if(actualCourseCode >0) selectedCourseCode = actualCourseCode;
 	}
 }
