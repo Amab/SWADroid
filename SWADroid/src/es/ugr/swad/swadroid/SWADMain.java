@@ -19,6 +19,7 @@
 
 package es.ugr.swad.swadroid;
 
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -441,6 +442,7 @@ public class SWADMain extends MenuExpandableListActivity {
 			courseCode = courseSelected.getId();
 			Global.setSelectedCourseCode(courseCode);
 			int userRole = courseSelected.getUserRole();
+
 			if(userRole == 3 && actualRole != 3) createTeacherMenu();
 			if(userRole == 2 && actualRole != 2) createStudentMenu();
 		}
