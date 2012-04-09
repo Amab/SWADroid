@@ -19,6 +19,7 @@
 
 package es.ugr.swad.swadroid;
 
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,6 +49,9 @@ import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.Groups;
+import es.ugr.swad.swadroid.model.Course;
+import es.ugr.swad.swadroid.model.DataBaseHelper;
+import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.modules.Messages;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.modules.Notices;
@@ -383,7 +387,6 @@ public class SWADMain extends MenuExpandableListActivity {
 			courseCode = courseSelected.getId();
 			Global.setSelectedCourseCode(courseCode);
 			createMenu();
-
 		}
 
 		@Override
@@ -567,5 +570,4 @@ public class SWADMain extends MenuExpandableListActivity {
 		}
 		currentRole = Global.TEACHER_TYPE_CODE;
 	}
-
 }
