@@ -25,8 +25,6 @@ import java.util.List;
 import org.ksoap2.SoapFault;
 import org.xmlpull.v1.XmlPullParserException;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -42,7 +40,6 @@ import android.widget.Toast;
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.model.User;
 
@@ -55,10 +52,7 @@ public class Notices extends Module {
      * Messages tag name for Logcat
      */
     public static final String TAG = Global.APP_TAG + " Notice";
-    /**
-     * Course code
-     */
-    private Long courseCode;
+
     /**
      * Notice's body
     */
@@ -70,15 +64,6 @@ public class Notices extends Module {
      */
     protected static Preferences prefs = new Preferences();
 	
-    /**
-	 * Cursor for database access
-	 */
-	private Cursor dbCursor;
-    
-	/**
-	 * User courses list
-	 */
-	private List<Model>listCourses;
 	/**
 	 * Selected course code
 	 */
@@ -120,11 +105,7 @@ public class Notices extends Module {
 		noticeDialog = new Dialog(this);
 		Button acceptButton, cancelButton;
 		
-		//Course selectedCourse = (Course)listCourses.get(selectedCourseCode);
-		//String selectedCourseName = selectedCourse.getName();
-		
 		noticeDialog.setTitle(R.string.noticesModuleLabel);
-		//TODO noticeDialog.setTitle(R.string.noticeModuleLabel + listCourses.get(selectedCourseCode));
 		noticeDialog.setContentView(R.layout.notice_dialog);
 		noticeDialog.setCancelable(true);
 		
@@ -198,7 +179,7 @@ public class Notices extends Module {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		//noticeDialog.dismiss();
+		noticeDialog.dismiss();
 	}
 
 	@Override
@@ -207,91 +188,11 @@ public class Notices extends Module {
 		
 		super.onStart();
 		prefs.getPreferences(getBaseContext());
-		activity = new Intent(getBaseContext(), Courses.class );
-		Toast.makeText(getBaseContext(), R.string.coursesProgressDescription, Toast.LENGTH_LONG).show();
-		startActivityForResult(activity,Global.COURSES_REQUEST_CODE);
+		selectedCourseCode = Global.getSelectedCourseCode();
+		launchNoticeDialog();
 	}
 
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		int lastCourseSelected;
-		
-		super.onActivityResult(requestCode, resultCode, data);
-		if(resultCode == Activity.RESULT_OK){
-			switch(requestCode){
-			//After get the list of courses, a dialog is launched to choice the course
-			case Global.COURSES_REQUEST_CODE:
-				final AlertDialog.Builder coursesDialog = new AlertDialog.Builder(this);
-				
-				dbCursor = dbHelper.getDb().getCursor(Global.DB_TABLE_COURSES, "userRole>=3", "name");
-				listCourses = dbHelper.getAllRows(Global.DB_TABLE_COURSES, "userRole>=3", "name");
-				lastCourseSelected = prefs.getLastCourseSelected();
-				coursesDialog.setSingleChoiceItems(dbCursor, lastCourseSelected, "name", new DialogInterface.OnClickListener() {
-					
-					public void onClick(DialogInterface dialog, int whichButton) {
-						Course c = (Course) listCourses.get(whichButton);
-						selectedCourseCode = c.getId();
-						prefs.setLastCourseSelected(whichButton);
-						
-						if(isDebuggable){
-							Integer s = whichButton;
-							Log.i(TAG, "singleChoice = " + s.toString());
-						}
-						
-					}
-				});
-				coursesDialog.setTitle(R.string.selectCourseTitle);
-				coursesDialog.setPositiveButton(R.string.acceptMsg, new DialogInterface.OnClickListener() {
-					
-					public void onClick(DialogInterface dialog, int which) {
-						try {					
-							if(selectedCourseCode == 0) { 
-								Course c = (Course) listCourses.get(prefs.getLastCourseSelected());
-								selectedCourseCode = c.getId();
-							}
-							
-							if(isDebuggable) {
-								Log.i(TAG, "selectedCourseCode = " + Long.toString(selectedCourseCode));
-							}
-							dialog.dismiss();
-							launchNoticeDialog();
-						} catch (Exception ex) {
-		                	String errorMsg = getString(R.string.errorServerResponseMsg);
-							error(errorMsg);
-							
-			        		if(isDebuggable) {
-			        			Log.e(ex.getClass().getSimpleName(), errorMsg);        		
-			        			ex.printStackTrace();
-			        		}
-				        }
-					}
-				});
-				coursesDialog.setNegativeButton(R.string.cancelMsg, new DialogInterface.OnClickListener() {
-					
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.cancel();
-						setResult(RESULT_CANCELED);
-						finish();
-					}
-				});
-				coursesDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-					
-					public void onCancel(DialogInterface dialog) {
-						//dialog.cancel();
-						setResult(RESULT_CANCELED);
-						finish();
-						
-					}
-				});
-				coursesDialog.show();
-				break;
-			}
-			
-		} else {
-        	setResult(RESULT_CANCELED);
-        	finish();
-        }
-	}
+
 	@Override
 	protected void onError() {
 		// TODO Auto-generated method stub
