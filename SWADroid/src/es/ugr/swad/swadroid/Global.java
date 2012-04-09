@@ -30,7 +30,7 @@ public class Global {
 	/**
 	 * SWAD application key
 	 */
-	private static final String AppKey = "";
+	private static final String AppKey = "HTC-Desire";
 	/**
 	 * Server URL
 	 */
@@ -271,6 +271,7 @@ public class Global {
 	public static void setSelectedCourseCode(long actualCourseCode){
 		if(actualCourseCode >0) selectedCourseCode = actualCourseCode;
 	}
+<<<<<<< HEAD
 
 	public static boolean isPreferencesChanged(){
 		return preferencesChanged;
@@ -282,4 +283,6 @@ public class Global {
 	public static void setPreferencesChanged(boolean newState){
 		preferencesChanged = newState;
 	}
+=======
+>>>>>>> Adapted all Modules to work with a global actual course. It is
 }
