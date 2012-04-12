@@ -45,6 +45,11 @@ public class Global {
      * Code of the chosen course. All next actions are referred to this course.
      */
     private static long selectedCourseCode = -1;
+    
+    /**
+     * Indicates if there are changes on db
+     * */
+    private static boolean preferencesChanged = false;
     /**
      * Time to force relogin
      */
@@ -218,5 +223,16 @@ public class Global {
 	 * */
 	public static void setSelectedCourseCode(long actualCourseCode){
 		if(actualCourseCode >0) selectedCourseCode = actualCourseCode;
+	}
+	
+	public static boolean isPreferencesChanged(){
+		return preferencesChanged;
+	}
+	
+	public static void setPreferencesChanged(){
+		preferencesChanged = true;
+	}
+	public static void setPreferencesChanged(boolean newState){
+		preferencesChanged = newState;
 	}
 }

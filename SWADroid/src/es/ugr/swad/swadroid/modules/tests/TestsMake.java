@@ -647,7 +647,9 @@ public class TestsMake extends Module {
 		super.onStart();
 		prefs.getPreferences(getBaseContext());
 		String selection ="id=" + Long.toString(Global.getSelectedCourseCode());
-		if(dbHelper.getDb().getCursor(Global.DB_TABLE_TEST_CONFIG,selection,null).getCount() > 0) {			
+		Cursor dbCursor = dbHelper.getDb().getCursor(Global.DB_TABLE_TEST_CONFIG,selection,null);
+		startManagingCursor(dbCursor);
+		if(dbCursor.getCount() > 0) {			
 			if(isDebuggable) {
 				Log.d(TAG, "selectedCourseCode = " + Long.toString(Global.getSelectedCourseCode()));
 			}
