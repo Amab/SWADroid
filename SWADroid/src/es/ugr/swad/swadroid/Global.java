@@ -164,6 +164,7 @@ public class Global {
 	 * Teacher userTypeCode for getUsers web service.
 	 */
 	public static final int TEACHER_TYPE_CODE = 3;
+
 	/**
 	 * Gets the SWAD application key
 	 * @return SWAD application key
@@ -271,18 +272,14 @@ public class Global {
 	public static void setSelectedCourseCode(long actualCourseCode){
 		if(actualCourseCode >0) selectedCourseCode = actualCourseCode;
 	}
-<<<<<<< HEAD
 
 	public static boolean isPreferencesChanged(){
 		return preferencesChanged;
 	}
-
 	public static void setPreferencesChanged(){
 		preferencesChanged = true;
 	}
 	public static void setPreferencesChanged(boolean newState){
 		preferencesChanged = newState;
 	}
-=======
->>>>>>> Adapted all Modules to work with a global actual course. It is
 }
