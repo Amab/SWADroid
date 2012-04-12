@@ -300,7 +300,6 @@ public class Global {
 	public static boolean isPreferencesChanged(){
 		return preferencesChanged;
 	}
-
 	public static void setPreferencesChanged(){
 		preferencesChanged = true;
 	}

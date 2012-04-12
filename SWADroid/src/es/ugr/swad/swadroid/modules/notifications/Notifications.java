@@ -138,7 +138,6 @@ public class Notifications extends Module {
 		};
 
 		super.onCreate(savedInstanceState);
-
 		setContentView(R.layout.list_items);
 
 		image = (ImageView)this.findViewById(R.id.moduleIcon);
