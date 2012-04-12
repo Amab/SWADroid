@@ -52,6 +52,7 @@ import es.ugr.swad.swadroid.modules.Groups;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.model.Model;
+import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.Messages;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.modules.Notices;

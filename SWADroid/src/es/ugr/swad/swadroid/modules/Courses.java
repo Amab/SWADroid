@@ -28,6 +28,8 @@ import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
+import com.android.dataframework.DataFramework;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -215,6 +217,22 @@ public class Courses extends Module {
 			dbHelper.emptyTable(Global.DB_TABLE_COURSES);
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Removes all courses from database
+	 * @param context Database context
+	 */
+	public void clearCourses(Context context) {
+	    try {
+	       	DataFramework db = DataFramework.getInstance();
+			db.open(context, context.getPackageName());
+		    dbHelper = new DataBaseHelper(db);
+	        
+			dbHelper.emptyTable(Global.DB_TABLE_COURSES);
+		} catch (Exception e) {
+				e.printStackTrace();
 		}
 	}
 }
