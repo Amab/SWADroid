@@ -28,13 +28,17 @@ import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
+import com.android.dataframework.DataFramework;
+
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Course;
+import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.model.User;
 
@@ -117,6 +121,7 @@ public class Courses extends Module {
             List<Model> coursesSWAD = new ArrayList<Model>();
             List<Model> newCourses = new ArrayList<Model>();
             List<Model> obsoleteCourses = new ArrayList<Model>();
+            //List<Model> modifiedCourses = new ArrayList<Model>();
 			Vector<?> res = (Vector<?>) result;
         	SoapObject soap = (SoapObject) res.get(1);	
         	int csSize = soap.getPropertyCount();
@@ -134,13 +139,21 @@ public class Courses extends Module {
             
             Log.i(TAG, "Retrieved " + csSize + " courses"); 
 
-            //Obtain old unregistered courses
+            //Obtain old unregistered courses and modified courses
             obsoleteCourses.addAll(coursesDB);
             obsoleteCourses.removeAll(coursesSWAD);
             
             //Obtain new registered courses
             newCourses.addAll(coursesSWAD);
             newCourses.removeAll(coursesDB);
+            //modifiedCourses.addAll(newCourses);
+            newCourses.removeAll(obsoleteCourses);
+            
+            //modified courses
+           // modifiedCourses.removeAll(newCourses);
+            
+            //Only old unregistered courses
+            //obsoleteCourses.removeAll(modifiedCourses);
             
             //Delete old unregistered courses stuff
             csSize = obsoleteCourses.size();
@@ -159,6 +172,14 @@ public class Courses extends Module {
             }
 
             Log.i(TAG, "Added " + csSize + " new courses");
+            
+            //update modified courses
+         /*   csSize = modifiedCourses.size();
+            for(int i=0; i < csSize; ++i){
+            	Course c = (Course) newCourses.get(i);
+            	dbHelper.updateCourse(c.getId(), c);
+            }
+            Log.i(TAG, "Updated " + csSize + " courses");*/
             
 	        //Request finalized without errors
 	        setResult(RESULT_OK);
@@ -179,5 +200,21 @@ public class Courses extends Module {
 	@Override
 	protected void onError() {
 		
+	}
+	
+	/**
+	 * Removes all courses from database
+	 * @param context Database context
+	 */
+	public void clearCourses(Context context) {
+	    try {
+	       	DataFramework db = DataFramework.getInstance();
+			db.open(context, context.getPackageName());
+		    dbHelper = new DataBaseHelper(db);
+	        
+			dbHelper.emptyTable(Global.DB_TABLE_COURSES);
+		} catch (Exception e) {
+				e.printStackTrace();
+		}
 	}
 }
