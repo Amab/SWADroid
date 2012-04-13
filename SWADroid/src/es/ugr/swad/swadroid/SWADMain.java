@@ -19,19 +19,29 @@
 
 package es.ugr.swad.swadroid;
 
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.SimpleCursorAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
+import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
+import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.modules.Messages;
 import es.ugr.swad.swadroid.modules.notifications.Notifications;
 import es.ugr.swad.swadroid.modules.tests.Tests;
@@ -55,6 +65,18 @@ public class SWADMain extends MenuExpandableListActivity {
      * Function text field
      */
     final String IMAGE = "listIcon";
+    /**
+     * Code of selected course
+     * */
+    long courseCode;
+    /**
+	 * Cursor for database access
+	 */
+	private Cursor dbCursor;
+	/**
+	 * User courses list
+	 */
+	private List<Model>listCourses;
     
     /**
      * Gets the database helper
@@ -139,7 +161,7 @@ public class SWADMain extends MenuExpandableListActivity {
     /**
      * Create main menu with an expandable list
      */
-    private void createMainMenu()
+    private void createTeacherMenu()
     {
     	//Construct Expandable List
         final ArrayList<HashMap<String, Object>> headerData = new ArrayList<HashMap<String, Object>>();
@@ -198,6 +220,63 @@ public class SWADMain extends MenuExpandableListActivity {
         
         getExpandableListView().setOnChildClickListener(this);
     }
+    /**
+     * Create main menu with an expandable list
+     */
+    private void createStudentMenu()
+    {
+    	//Construct Expandable List
+        final ArrayList<HashMap<String, Object>> headerData = new ArrayList<HashMap<String, Object>>();
+
+        final HashMap<String, Object> messages = new HashMap<String, Object>();
+        messages.put(NAME, getString(R.string.messages));
+        messages.put(IMAGE, getResources().getDrawable(R.drawable.msg));
+        headerData.add( messages );
+
+        final HashMap<String, Object> evaluation = new HashMap<String, Object>();
+        evaluation.put(NAME, getString(R.string.evaluation));
+        evaluation.put(IMAGE, getResources().getDrawable(R.drawable.grades));
+        headerData.add( evaluation);
+
+        final ArrayList<ArrayList<HashMap<String, Object>>> childData = new ArrayList<ArrayList<HashMap<String, Object>>>();
+
+        final ArrayList<HashMap<String, Object>> messagesData = new ArrayList<HashMap<String, Object>>();
+        childData.add(messagesData);
+
+        final ArrayList<HashMap<String, Object>> evaluationData = new ArrayList<HashMap<String, Object>>();
+        childData.add(evaluationData);
+        
+        //Messages category
+        HashMap<String, Object> map = new HashMap<String,Object>();
+        map.put(NAME, getString(R.string.notificationsModuleLabel) );
+        map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
+        messagesData.add(map); 
+        
+        map = new HashMap<String,Object>();        
+        map.put(NAME, getString(R.string.messagesModuleLabel) );
+        map.put(IMAGE, getResources().getDrawable(R.drawable.msg));
+        messagesData.add(map);
+        
+        //Evaluation category
+        map = new HashMap<String,Object>();
+        map.put(NAME, getString(R.string.testsModuleLabel) );
+        map.put(IMAGE, getResources().getDrawable(R.drawable.test));
+        evaluationData.add(map);
+
+        setListAdapter( new ImageExpandableListAdapter(
+                this,
+                headerData,
+                R.layout.image_list_item,
+                new String[] { NAME },            // the name of the field data
+                new int[] { R.id.listText }, // the text field to populate with the field data
+                childData,
+                0,
+                null,
+                new int[] {}
+            ));
+        
+        getExpandableListView().setOnChildClickListener(this);
+    }
     
     /* (non-Javadoc)
 	 * @see android.app.Activity#onCreate()
@@ -217,8 +296,22 @@ public class SWADMain extends MenuExpandableListActivity {
         
         text = (TextView)this.findViewById(R.id.moduleName);
         text.setText(R.string.app_name);
+        
+        Spinner spinner = (Spinner) this.findViewById(R.id.spinner);
+        listCourses = dbHelper.getAllRows(Global.DB_TABLE_COURSES,"","name");
+        dbCursor =  dbHelper.getDb().getCursor(Global.DB_TABLE_COURSES,"","name");
+      //  if(dbCursor.getCount()==0)
+       
+        SimpleCursorAdapter adapter = new SimpleCursorAdapter (this,
+        							android.R.layout.simple_spinner_item, 
+        							dbCursor, 
+        							new String[]{"name"}, 
+        							new int[]{android.R.id.text1},0);
 
-        createMainMenu();
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new onItemSelectedListener());
+        //createMainMenu();
         
         try {            
             //Initialize database
@@ -254,5 +347,26 @@ public class SWADMain extends MenuExpandableListActivity {
             error(ex.getMessage());
             ex.printStackTrace();
         }
+    }
+
+    private class onItemSelectedListener implements OnItemSelectedListener{
+
+		@Override
+		public void onItemSelected(AdapterView<?> parent, View view, int position,
+				long id) {
+			Course courseSelected = (Course)listCourses.get(position);
+			courseCode = courseSelected.getId();
+			Global.setSelectedCourseCode(courseCode);
+			int userRole = courseSelected.getUserRole();
+			if(userRole == 3) createTeacherMenu();
+			if(userRole == 2) createStudentMenu();
+		}
+
+		@Override
+		public void onNothingSelected(AdapterView<?> arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+    	
     }
 }
