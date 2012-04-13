@@ -110,14 +110,12 @@ public class Login extends Module {
 	        md.update(prefs.getUserPassword().getBytes());
 	        userPassword = new String(Base64.encodeBytes(md.digest()));
 	        userPassword = userPassword.replace('+','-').replace('/','_').replace('=', ' ').replaceAll("\\s+", "").trim();
-	        Log.i("Login", "pre send login");
 	        //Creates webservice request, adds required params and sends request to webservice
 	        createRequest();
 	        addParam("userID", prefs.getUserID());
 	        addParam("userPassword", userPassword);
 	        addParam("appKey", Global.getAppKey());
 	        sendRequest(User.class, true);
-	        Log.i("Login", "sended login");
 	        if (result != null) {
 	        	SoapObject soap = (SoapObject) result;
 	        	

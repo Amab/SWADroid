@@ -68,18 +68,6 @@ import es.ugr.swad.swadroid.widget.TextProgressBar;
  */
 public class TestsMake extends Module {
 	/**
-	 * Cursor for database access
-	 */
-	private Cursor dbCursor;
-	/**
-	 * User courses list
-	 */
-	private List<Model>listCourses;
-	/**
-	 * Selected course code
-	 */
-	private long selectedCourseCode = 0;
-	/**
 	 * Test's number of questions
 	 */
 	private int numQuestions;
@@ -96,18 +84,6 @@ public class TestsMake extends Module {
 	 */
 	private List<String> answerTypesList;
 	/**
-	 * Click listener for courses dialog items
-	 */
-	private OnClickListener coursesDialogSingleChoiceItemsClickListener;
-	/**
-	 * Click listener for courses dialog accept button
-	 */
-	private OnClickListener coursesDialogPositiveClickListener;
-	/**
-	 * Click listener for courses dialog cancel button
-	 */
-	private OnClickListener coursesDialogNegativeClickListener;
-	/**
 	 * Click listener for courses dialog cancel button
 	 */
 	private OnItemClickListener tagsAnswersTypeItemClickListener;
@@ -115,10 +91,6 @@ public class TestsMake extends Module {
 	 * Adapter for answer TF questions
 	 */
 	private ArrayAdapter<String> tfAdapter;
-	/**
-	 * Course selection dialog
-	 */
-	private AlertDialog.Builder coursesDialog;
 	/**
 	 * Test question being showed
 	 */
@@ -183,7 +155,7 @@ public class TestsMake extends Module {
 		Button acceptButton;
 		final ListView checkBoxesList;
 		final TagsArrayAdapter tagsAdapter;
-		final List<TestTag> allTagsList = dbHelper.getOrderedCourseTags(selectedCourseCode);
+		final List<TestTag> allTagsList = dbHelper.getOrderedCourseTags(Global.getSelectedCourseCode());
 		
 		//Add "All tags" item in list's top
 		allTagsList.add(0, new TestTag(0, getResources().getString(R.string.allMsg), 0));
@@ -528,7 +500,7 @@ public class TestsMake extends Module {
 		List<TestQuestion> questions;
 		
 		//Generates the test
-		questions = dbHelper.getRandomCourseQuestionsByTagAndAnswerType(selectedCourseCode, tagsList, answerTypesList,
+		questions = dbHelper.getRandomCourseQuestionsByTagAndAnswerType(Global.getSelectedCourseCode(), tagsList, answerTypesList,
 				numQuestions);
 		if(!questions.isEmpty()) {			
 			test.setQuestions(questions);
@@ -626,47 +598,7 @@ public class TestsMake extends Module {
 	protected void onCreate(Bundle savedInstanceState) {		
 		super.onCreate(savedInstanceState);
 		setLayout(R.layout.layout_with_action_bar);
-		
-		coursesDialogSingleChoiceItemsClickListener = new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int whichButton) {
-				Course c = (Course) listCourses.get(whichButton);
-				selectedCourseCode = c.getId();
-				prefs.setLastCourseSelected(whichButton);
-				
-				if(isDebuggable) {
-					Integer s = whichButton;
-					Log.d(TAG, "singleChoice = " + s.toString());
-				}
-			}
-		};
-		coursesDialogPositiveClickListener = new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int whichButton) {				
-				if(selectedCourseCode != 0) {					
-					if(isDebuggable) {
-						Log.d(TAG, "selectedCourseCode = " + Long.toString(selectedCourseCode));
-					}
-						
-					test = (Test) dbHelper.getRow(Global.DB_TABLE_TEST_CONFIG, "id",
-							Long.toString(selectedCourseCode));
-					
-					if(test != null) {
-						setNumQuestions();
-					} else {
-						Toast.makeText(getBaseContext(), R.string.testNoQuestionsCourseMsg, Toast.LENGTH_LONG).show();
-						finish();
-					}
-				} else {
-					Toast.makeText(getBaseContext(), R.string.noCourseSelectedMsg, Toast.LENGTH_LONG).show();
-					finish();
-				}
-			}
-		};
-		coursesDialogNegativeClickListener = new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int whichButton) {
-				dialog.cancel();
-				finish();
-			}
-		};
+
 		tagsAnswersTypeItemClickListener = new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v, int position,
 					long id) {
@@ -697,11 +629,6 @@ public class TestsMake extends Module {
 			}			
 		};
 		
-		coursesDialog = new AlertDialog.Builder(this);		
-		coursesDialog.setTitle(R.string.selectCourseTitle);
-		coursesDialog.setPositiveButton(R.string.acceptMsg, coursesDialogPositiveClickListener);
-		coursesDialog.setNegativeButton(R.string.cancelMsg, coursesDialogNegativeClickListener);
-		
 		tfAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
 		tfAdapter.add(getString(R.string.trueMsg));
 		tfAdapter.add(getString(R.string.falseMsg));
@@ -719,21 +646,26 @@ public class TestsMake extends Module {
 		
 		super.onStart();
 		prefs.getPreferences(getBaseContext());
-		
-		if(dbHelper.getDb().getCursor(Global.DB_TABLE_TEST_CONFIG).getCount() > 0) {			
-			dbCursor = dbHelper.getDb().getCursor(Global.DB_TABLE_COURSES);
-			listCourses = dbHelper.getAllRows(Global.DB_TABLE_COURSES);
-			lastCourseSelected = prefs.getLastCourseSelected();
-			c = (Course) listCourses.get(lastCourseSelected);
-			selectedCourseCode = c.getId();
-			coursesDialog.setSingleChoiceItems(dbCursor, lastCourseSelected, "name",
-					coursesDialogSingleChoiceItemsClickListener);
+		String selection ="id=" + Long.toString(Global.getSelectedCourseCode());
+		if(dbHelper.getDb().getCursor(Global.DB_TABLE_TEST_CONFIG,selection,null).getCount() > 0) {			
+			if(isDebuggable) {
+				Log.d(TAG, "selectedCourseCode = " + Long.toString(Global.getSelectedCourseCode()));
+			}
+				
+			test = (Test) dbHelper.getRow(Global.DB_TABLE_TEST_CONFIG, "id",
+					Long.toString(Global.getSelectedCourseCode()));
 			
-			coursesDialog.show();
+			if(test != null) {
+				setNumQuestions();
+			} else {
+				Toast.makeText(getBaseContext(), R.string.testNoQuestionsCourseMsg, Toast.LENGTH_LONG).show();
+				finish();
+			}
 		} else {
 			Toast.makeText(getBaseContext(), R.string.testNoQuestionsMsg, Toast.LENGTH_LONG).show();
 			finish();
 		}		
+		
 	}
 
 	/* (non-Javadoc)

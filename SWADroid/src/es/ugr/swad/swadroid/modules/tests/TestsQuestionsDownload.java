@@ -48,10 +48,6 @@ import es.ugr.swad.swadroid.modules.Module;
  */
 public class TestsQuestionsDownload extends Module {
 	/**
-	 * Selected course code
-	 */
-	private long selectedCourseCode;
-	/**
 	 * Next timestamp to be requested
 	 */
 	private Long timestamp;
@@ -75,7 +71,6 @@ public class TestsQuestionsDownload extends Module {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		selectedCourseCode = getIntent().getLongExtra("selectedCourseCode", 0);
 		timestamp = getIntent().getLongExtra("timestamp", 0);
 		runConnection();	
 	}
@@ -91,7 +86,7 @@ public class TestsQuestionsDownload extends Module {
 		//Creates webservice request, adds required params and sends request to webservice
 	    createRequest();
 	    addParam("wsKey", User.getWsKey());
-	    addParam("courseCode", (int)selectedCourseCode);
+	    addParam("courseCode", (int)Global.getSelectedCourseCode());
 	    addParam("beginTime", timestamp);
 	    sendRequest(Test.class, false);
 
@@ -137,7 +132,7 @@ public class TestsQuestionsDownload extends Module {
 	            
 	            //If it's a new question, insert in database
 	            try {
-	            	dbHelper.insertTestQuestion(q, selectedCourseCode);
+	            	dbHelper.insertTestQuestion(q, Global.getSelectedCourseCode());
 		            
 		    		if(isDebuggable)
 		    			Log.d(TAG, "INSERTED: " + q.toString());
@@ -145,7 +140,7 @@ public class TestsQuestionsDownload extends Module {
 	            //If it's an updated question, update it's row in database
 	            } catch (SQLException e) {
 	            	TestQuestion old = (TestQuestion) questionsListDB.get(questionsListDB.indexOf(q));
-	            	dbHelper.updateTestQuestion(old, q, selectedCourseCode);
+	            	dbHelper.updateTestQuestion(old, q, Global.getSelectedCourseCode());
 		            
 		    		if(isDebuggable)
 		    			Log.d(TAG, "UPDATED: " + q.toString());
@@ -217,7 +212,7 @@ public class TestsQuestionsDownload extends Module {
 			Log.i(TAG, "Retrieved " + listSize + " relationships between questions and tags");
 			
 			//Update last time test was updated
-			Test oldTestConfigDB = (Test) dbHelper.getRow(Global.DB_TABLE_TEST_CONFIG, "id", Long.toString(selectedCourseCode));
+			Test oldTestConfigDB = (Test) dbHelper.getRow(Global.DB_TABLE_TEST_CONFIG, "id", Long.toString(Global.getSelectedCourseCode()));
 			Test testConfig = oldTestConfigDB;
 			testConfig.setEditTime(System.currentTimeMillis() / 1000L);
 			dbHelper.updateTestConfig(oldTestConfigDB, testConfig);
