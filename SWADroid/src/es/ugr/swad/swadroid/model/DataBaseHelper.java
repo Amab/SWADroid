@@ -411,6 +411,22 @@ public class DataBaseHelper {
 		ent.setValue("userRole", actual.getUserRole());
 		ent.save();
     }
+	/**
+	 * Updates a course in database
+	 * @param id Course code of course to be updated
+	 * @param actual Updated course
+	 */
+	public void updateCourse(long id, Course actual)
+    {
+		List<Entity> rows = db.getEntityList(Global.DB_TABLE_COURSES, "id = " + id);
+		if(!rows.isEmpty()){
+			Entity ent = rows.get(0);
+			ent.setValue("id", actual.getId());
+			ent.setValue("name", actual.getName());
+			ent.setValue("userRole", actual.getUserRole());
+			ent.save();
+		}
+    }
 	
 	/**
 	 * Updates a notification in database

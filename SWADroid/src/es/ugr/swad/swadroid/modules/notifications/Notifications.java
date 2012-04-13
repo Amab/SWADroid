@@ -96,6 +96,7 @@ public class Notifications extends Module {
     private void refreshScreen() {
     	//Refresh data on screen 
         dbCursor = dbHelper.getDb().getCursor(Global.DB_TABLE_NOTIFICATIONS, selection, orderby);
+        startManagingCursor(dbCursor);
         adapter.changeCursor(dbCursor);
         
         TextView text = (TextView) this.findViewById(R.id.listText);
@@ -153,6 +154,7 @@ public class Notifications extends Module {
         updateButton.setVisibility(View.VISIBLE);
         
         dbCursor = dbHelper.getDb().getCursor(Global.DB_TABLE_NOTIFICATIONS, selection, orderby);
+        startManagingCursor(dbCursor);
         adapter = new NotificationsCursorAdapter(this, dbCursor);
         
         list = (ListView)this.findViewById(R.id.listItems);
