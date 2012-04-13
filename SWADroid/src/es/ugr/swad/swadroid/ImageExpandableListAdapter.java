@@ -23,6 +23,7 @@ import java.util.Map;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -115,4 +116,14 @@ public class ImageExpandableListAdapter extends SimpleExpandableListAdapter {
 		
 		return true;
 	}
+	
+	
+	public boolean addChild(int groupPosition, int childPosition, Map<String,Object> child){
+		if(groupPosition>=getGroupCount())
+			return false;
+		super.notifyDataSetChanged();
+		return true;
+	}
+	
+
 }
