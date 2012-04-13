@@ -23,6 +23,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import es.ugr.swad.swadroid.Base64;
+import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.notifications.Notifications;
 import android.content.Context;
 import android.content.Intent;
@@ -473,11 +474,14 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 	public boolean onPreferenceChange(Preference preference, Object newValue) {
 		 	String key = preference.getKey();
 		 	Notifications n = new Notifications();
+		 	Courses c = new Courses();
 		 
 		 	//If preferences have changed, logout and save new preferences
 	        if (USERIDPREF.equals(key) || USERPASSWORDPREF.equals(key)) {
 	        	Global.setLogged(false);
 	        	n.clearNotifications(this);
+	        	c.clearCourses(this);
+	        	Global.setPreferencesChanged();
             	editor.commit();
 	        }
 	        
@@ -492,6 +496,8 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 	        if (SERVERPREF.equals(key) || SERVERPREF.equals(key)) {
 	        	Global.setLogged(false);
 	        	n.clearNotifications(this);
+	        	c.clearCourses(this);
+	        	Global.setPreferencesChanged();
             	editor.commit();
 	        }
 	        
