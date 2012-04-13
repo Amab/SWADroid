@@ -275,12 +275,12 @@ public class User implements KvmSerializable {
 		switch(param)
 		{
 			case 0  : userCode     	= (String)obj; break;
-			case 2  : wsKey     	= (String)obj; break;
-			case 3  : userID     	= (String)obj; break;
-			case 4  : userSurname1  = (String)obj; break;
-			case 5  : userSurname2  = (String)obj; break;
-			case 6  : userFirstName = (String)obj; break;
-			case 8  : userRole		= (Integer)obj; break;
+			case 1  : wsKey     	= (String)obj; break;
+			case 2  : userID     	= (String)obj; break;
+			case 3  : userSurname1  = (String)obj; break;
+			case 4  : userSurname2  = (String)obj; break;
+			case 5  : userFirstName = (String)obj; break;
+			case 6  : userRole		= (Integer)obj; break;
 		}    
 	}
 	
