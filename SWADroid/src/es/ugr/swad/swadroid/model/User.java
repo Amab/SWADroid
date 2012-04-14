@@ -21,267 +21,351 @@ package es.ugr.swad.swadroid.model;
 
 import java.util.Hashtable;
 
-import org.ksoap2.serialization.KvmSerializable;
 import org.ksoap2.serialization.PropertyInfo;
 
 /**
  * User data.
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  */
-public class User implements KvmSerializable {
-    /**
-     * User code.
-     */
-    private static String userCode;
-    
-    /**
-     * Webservices session key.
-     */
-    private static String wsKey;
-    /**
-     * User identifier.
-     */
-    private static String userID;
-    /**
-     * User first surname.
-     */
-    private static String userSurname1;
-    /**
-     * User last surname.
-     */
-    private static String userSurname2;
-    /**
-     * User name.
-     */
-    private static String userFirstName;
-    /**
-     * User role. 1:guest 2: student 3: teacher
-     */
-    private static int userRole;
-    
-    private static PropertyInfo PI_userCode = new PropertyInfo();
-    private static PropertyInfo PI_wsKey = new PropertyInfo();
-    private static PropertyInfo PI_userID = new PropertyInfo();
-    private static PropertyInfo PI_userSurname1 = new PropertyInfo();
-    private static PropertyInfo PI_userSurname2 = new PropertyInfo();
-    private static PropertyInfo PI_userFirstName = new PropertyInfo();
-    private static PropertyInfo PI_userRole = new PropertyInfo();
-    @SuppressWarnings("unused")
-	private static PropertyInfo[] PI_PROP_ARRAY =
-    {
-    	PI_userCode,
-    	PI_wsKey,
-    	PI_userID,
-    	PI_userSurname1,
-    	PI_userSurname2,
-    	PI_userFirstName,
-    	PI_userRole
-    };
+public class User extends Model {
+	/**
+	 * Code of user type.
+	 */
+	private int userTypeCode;
+	/**
+	 * Webservices session key.
+	 */
+	private String wsKey;
+	/**
+	 * User identifier.
+	 */
+	private String userID;
+	/**
+	 * User nickname.
+	 */
+	private String userNickname;
+	/**
+	 * User first surname.
+	 */
+	private String userSurname1;
+	/**
+	 * User last surname.
+	 */
+	private String userSurname2;
+	/**
+	 * User name.
+	 */
+	private String userFirstname;
+	/**
+	 * Name of the user type.
+	 */
+	private String userTypeName;
+	/**
+	 * Full path where user's picture is stored.
+	 */
+	private String photoPath;
+	/**
+	 * User role. 1:guest 2: student 3: teacher
+	 */
+	private int userRole;
 
-    /**
-     * Empty constructor.
-     */
-    public User() {
-    }
+	private static PropertyInfo PI_userTypeCode = new PropertyInfo();
+	private static PropertyInfo PI_wsKey = new PropertyInfo();
+	private static PropertyInfo PI_userID = new PropertyInfo();
+	private static PropertyInfo PI_userNickname = new PropertyInfo();
+	private static PropertyInfo PI_userSurname1 = new PropertyInfo();
+	private static PropertyInfo PI_userSurname2 = new PropertyInfo();
+	private static PropertyInfo PI_userFirstname = new PropertyInfo();
+	private static PropertyInfo PI_userTypeName = new PropertyInfo();
+	private static PropertyInfo PI_photoPath = new PropertyInfo();
+	private static PropertyInfo PI_userRole = new PropertyInfo();
 
-    /**
-     * Constructor.
-     * @param userCode User code.
-     * @param userTypeCode Code of user type.
-     * @param wsKey Webservices session key.
-     * @param userID User identifier.
-     * @param userSurname1 User first surname.
-     * @param userSurname2 User last surname.
-     * @param userFirstName User name.
-     * @param userTypeName Name of user type.
-     */
-    public User(String userCode, String wsKey, String userID, String userSurname1, String userSurname2, String userFirstName, int userRole) {
-        User.userCode = userCode;
-        User.wsKey = wsKey;
-        User.userID = userID;
-        User.userSurname1 = userSurname1;
-        User.userSurname2 = userSurname2;
-        User.userFirstName = userFirstName;
-        User.userRole = userRole;
-    }
+	@SuppressWarnings("unused")
+	private static PropertyInfo[] PI_PROP_ARRAY = {
+		PI_userTypeCode,
+		PI_wsKey,
+		PI_userID,
+		PI_userNickname,
+		PI_userSurname1,
+		PI_userSurname2,
+		PI_userFirstname,
+		PI_userTypeName,
+		PI_photoPath,
+		PI_userRole
+	};
 
-    /**
-     * Gets user code.
-     * @return User code.
-     */
-    public static String getUserCode() {
-        return userCode;
-    }
+	/**
+	 * Constructor.
+	 * @param id User code.
+	 * @param userTypeCode Code of user type.
+	 * @param wsKey Webservices session key.
+	 * @param userID User identifier.
+	 * @param userNickname User nickname.
+	 * @param userSurname1 User first surname.
+	 * @param userSurname2 User last surname.
+	 * @param userFirstname User name.
+	 * @param userTypeName Name of user type.
+	 * @param photoPath Full path where user's picture is stored.
+	 * @param userRole User role.
+	 */
+	public User(long id, int userTypeCode, String wsKey, String userID, String userNickname, String userSurname1, 
+			String userSurname2, String userFirstname, String userTypeName, String photoPath, int userRole) {
+		super(id);
+		this.userTypeCode	= userTypeCode;
+		this.wsKey			= wsKey;
+		this.userID			= userID;
+		this.userNickname	= userNickname;
+		this.userSurname1	= userSurname1;
+		this.userSurname2	= userSurname2;
+		this.userFirstname	= userFirstname;
+		this.userTypeName	= userTypeName;
+		this.photoPath		= photoPath;
+		this.userRole		= userRole;
+	}
 
-    /**
-     * Sets user code.
-     * @param userCode user code.
-     */
-    public static void setUserCode(String userCode) {
-        User.userCode = userCode;
-    }
+	/**
+	 * Gets user name.
+	 * @return User name.
+	 */
+	public String getUserFirstname() {
+		return userFirstname;
+	}
 
-    /**
-     * Gets user name.
-     * @return User name.
-     */
-    public static String getUserFirstName() {
-        return userFirstName;
-    }
+	/**
+	 * Sets user name.
+	 * @param userFirstname User name.
+	 */
+	public void setUserFirstname(String userFirstname) {
+		this.userFirstname = userFirstname;
+	}
 
-    /**
-     * Sets user name.
-     * @param userFirstName User name.
-     */
-    public static void setUserFirstName(String userFirstName) {
-        User.userFirstName = userFirstName;
-    }
+	/**
+	 * Gets user identifier.
+	 * @return User identifier.
+	 */
+	public String getUserID() {
+		return userID;
+	}
 
-    /**
-     * Gets user identifier.
-     * @return User identifier.
-     */
-    public static String getUserID() {
-        return userID;
-    }
+	/**
+	 * Sets user identifier.
+	 * @param userID User identifier.
+	 */
+	public void setUserID(String userID) {
+		this.userID = userID;
+	}
 
-    /**
-     * Sets user identifier.
-     * @param userID User identifier.
-     */
-    public static void setUserID(String userID) {
-        User.userID = userID;
-    }
+	/**
+	 * Gets user nickname.
+	 * @return User nickname.
+	 */
+	public String getUserNickname() {
+		return userNickname;
+	}
 
-    /**
-     * Gets user first surname.
-     * @return User first surname.
-     */
-    public static String getUserSurname1() {
-        return userSurname1;
-    }
+	/**
+	 * Sets user nickname.
+	 * @param userNickname User nickname.
+	 */
+	public void setUserNickname(String userNickname) {
+		this.userID = userNickname;
+	}
 
-    /**
-     * Sets user first surname.
-     * @param userSurname1 User first surname.
-     */
-    public static void setUserSurname1(String userSurname1) {
-        User.userSurname1 = userSurname1;
-    }
+	/**
+	 * Gets user first surname.
+	 * @return User first surname.
+	 */
+	public String getUserSurname1() {
+		return userSurname1;
+	}
 
-    /**
-     * Gets user last surname.
-     * @return User last surname.
-     */
-    public static String getUserSurname2() {
-        return userSurname2;
-    }
+	/**
+	 * Sets user first surname.
+	 * @param userSurname1 User first surname.
+	 */
+	public void setUserSurname1(String userSurname1) {
+		this.userSurname1 = userSurname1;
+	}
 
-    /**
-     * Sets user last surname.
-     * @param userSurname2 User last surname.
-     */
-    public static void setUserSurname2(String userSurname2) {
-        User.userSurname2 = userSurname2;
-    }
-    
-    /**
-     * Gets Webservices session key.
-     * @return Webservices session key.
-     */
-    public static String getWsKey() {
-        return wsKey;
-    }
+	/**
+	 * Gets user last surname.
+	 * @return User last surname.
+	 */
+	public String getUserSurname2() {
+		return userSurname2;
+	}
 
-    /**
-     * Sets Webservices session key.
-     * @param wsKey Webservices session key.
-     */
-    public static void setWsKey(String wsKey) {
-        User.wsKey = wsKey;
-    }
-    
-    /**
-     * Gets user role
-     * @return user role 1:guest 2:student 3:teacher
-     * */
-    public static int getUserRole(){
-    	return userRole;
-    }
-    /**
-     * Sets user role
-     * @param userRole 
-     * */
-    //TODO check userRole is 1,2,3 
-    public static void setUserRole(int userRole){
-    	User.userRole = userRole;
-    }
-    
+	/**
+	 * Sets user last surname.
+	 * @param userSurname2 User last surname.
+	 */
+	public void setUserSurname2(String userSurname2) {
+		this.userSurname2 = userSurname2;
+	}
+
+	/**
+	 * Gets Code of user type.
+	 * @return Code of user type.
+	 */
+	public int getUserTypeCode() {
+		return userTypeCode;
+	}
+
+	/**
+	 * Sets Code of user type.
+	 * @param userTypeCode Code of user type.
+	 */
+	public void setUserTypeCode(int userTypeCode) {
+		this.userTypeCode = userTypeCode;
+	}
+
+	/**
+	 * Gets Name of user type.
+	 * @return Name of user type.
+	 */
+	public String getUserTypeName() {
+		return userTypeName;
+	}
+
+	/**
+	 * Sets Name of user type.
+	 * @param userTypeName Name of user type.
+	 */
+	public void setUserTypeName(String userTypeName) {
+		this.userTypeName = userTypeName;
+	}
+
+	/**
+	 * Gets Full path where user's picture is stored.
+	 * @return the photoPath
+	 */
+	public String getPhotoPath() {
+		return photoPath;
+	}
+
+	/**
+	 * Sets Full path where user's picture is stored.
+	 * @param photoPath the photoPath to set
+	 */
+	public void setPhotoPath(String photoPath) {
+		this.photoPath = photoPath;
+	}
+
+	/**
+	 * Gets User role.
+	 * @return User role.
+	 */
+	public int getUserRole() {
+		return userRole;
+	}
+
+	/**
+	 * Sets User role.
+	 * @param userRole User role.
+	 */
+	//TODO check userRole is 1,2,3 
+	public void setUserRole(int userRole) {
+		this.userRole = userRole;
+	}
+
+	/**
+	 * Gets Webservices session key.
+	 * @return Webservices session key.
+	 */
+	public String getWsKey() {
+		return wsKey;
+	}
+
+	/**
+	 * Sets Webservices session key.
+	 * @param wsKey Webservices session key.
+	 */
+	public void setWsKey(String wsKey) {
+		this.wsKey = wsKey;
+	}
 
 	public Object getProperty(int param) {
 		Object object = null;
-        switch(param)
-        {
-            case 0 : object = userCode;break;
-            case 1 : object = wsKey;break;
-            case 2 : object = userID;break;
-            case 3 : object = userSurname1;break;
-            case 4 : object = userSurname2;break;
-            case 5 : object = userFirstName;break;
-            case 6 : object = userRole; break;
-        }
-        
-        return object;
+		switch(param)
+		{
+		case 0 : object = userTypeCode;		break;
+		case 1 : object = wsKey;			break;
+		case 2 : object = userID;			break;
+		case 3 : object = userNickname;		break;
+		case 4 : object = userSurname1;		break;
+		case 5 : object = userSurname2;		break;
+		case 6 : object = userFirstname;	break;
+		case 7 : object = userTypeName;		break;
+		case 8 : object = photoPath;		break;
+		case 9 : object = userRole;			break;
+		}
+
+		return object;
 	}
 
 	public int getPropertyCount() {		
-		return 7;
+		return 10;
 	}
 
 	public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo propertyInfo) {
 		switch(param){
-        case 0:
-            propertyInfo.type = PropertyInfo.STRING_CLASS;
-            propertyInfo.name = "userCode";
-            break;            
-        case 1:
-            propertyInfo.type = PropertyInfo.STRING_CLASS;
-            propertyInfo.name = "wsKey";
-            break;            
-        case 2:
-            propertyInfo.type = PropertyInfo.STRING_CLASS;
-            propertyInfo.name = "userID";
-            break;            
-        case 3:
-            propertyInfo.type = PropertyInfo.STRING_CLASS;
-            propertyInfo.name = "userSurname1";
-            break;              
-        case 4:
-            propertyInfo.type = PropertyInfo.STRING_CLASS;
-            propertyInfo.name = "userSurname2";
-            break;             
-        case 5:
-            propertyInfo.type = PropertyInfo.STRING_CLASS;
-            propertyInfo.name = "userFirstName";
-            break;
-        case 6:
-            propertyInfo.type = PropertyInfo.INTEGER_CLASS;
-            propertyInfo.name = "userRole";
-            break;   
+		case 0:
+			propertyInfo.type = PropertyInfo.INTEGER_CLASS;
+			propertyInfo.name = "userTypeCode";
+			break;            
+		case 1:
+			propertyInfo.type = PropertyInfo.STRING_CLASS;
+			propertyInfo.name = "wsKey";
+			break;            
+		case 2:
+			propertyInfo.type = PropertyInfo.STRING_CLASS;
+			propertyInfo.name = "userID";
+			break;           
+		case 3:
+			propertyInfo.type = PropertyInfo.STRING_CLASS;
+			propertyInfo.name = "userNickname";
+			break;
+		case 4:
+			propertyInfo.type = PropertyInfo.STRING_CLASS;
+			propertyInfo.name = "userSurname1";
+			break;            
+		case 5:
+			propertyInfo.type = PropertyInfo.STRING_CLASS;
+			propertyInfo.name = "userSurname2";
+			break;              
+		case 6:
+			propertyInfo.type = PropertyInfo.STRING_CLASS;
+			propertyInfo.name = "userFirstname";
+			break;             
+		case 7:
+			propertyInfo.type = PropertyInfo.STRING_CLASS;
+			propertyInfo.name = "userTypeName";
+			break;
+		case 8:
+			propertyInfo.type = PropertyInfo.STRING_CLASS;
+			propertyInfo.name = "photoPath";
+			break;
+		case 9:
+			propertyInfo.type = PropertyInfo.INTEGER_CLASS;
+			propertyInfo.name = "userRole";
+			break;
 		}
 	}
 
 	public void setProperty(int param, Object obj) {
-		switch(param)
-		{
-			case 0  : userCode     	= (String)obj; break;
-			case 1  : wsKey     	= (String)obj; break;
-			case 2  : userID     	= (String)obj; break;
-			case 3  : userSurname1  = (String)obj; break;
-			case 4  : userSurname2  = (String)obj; break;
-			case 5  : userFirstName = (String)obj; break;
-			case 6  : userRole		= (Integer)obj; break;
+		switch(param) {
+		case 0 : userTypeCode	= (Integer) obj; break;
+		case 1 : wsKey			= (String) obj; break;
+		case 2 : userID			= (String) obj; break;
+		case 3 : userNickname	= (String) obj; break;
+		case 4 : userSurname1	= (String) obj; break;
+		case 5 : userSurname2	= (String) obj; break;
+		case 6 : userFirstname	= (String) obj; break;
+		case 7 : userTypeName	= (String) obj; break;
+		case 8 : photoPath		= (String) obj; break;
+		case 9 : userRole		= (Integer) obj; break;
 		}    
 	}
-	
+
 }
