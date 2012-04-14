@@ -1,65 +1,257 @@
 <?xml version="1.0" encoding="utf-8"?>
-<database name="swadroid_db" version="9">  
-  <table name="courses" to-string="%name%">
-    <field name="id" obligatory="true" type="long"/>
-    <field name="name" obligatory="true" type="text"/>
-    <field name="userRole" obligatory="true" type="integer" new-in-version="9"/>
-  </table> 
-  
-  <table name="notifications" to-string="%name%" new-in-version="3">
-    <field name="id" obligatory="true" type="long"/>
-    <field name="eventType" obligatory="true" type="text"/>
-    <field name="eventTime" obligatory="true" type="text"/>
-    <field name="userSurname1" obligatory="true" type="text"/>
-    <field name="userSurname2" obligatory="true" type="text"/>
-    <field name="userFirstname" obligatory="true" type="text"/>
-    <field name="location" obligatory="true" type="text"/>
-    <field name="summary" obligatory="true" type="text"/>
-    <field name="status" obligatory="true" type="text" new-in-version="4"/>
-    <field name="content" obligatory="true" type="text" new-in-version="5"/>
-  </table>
-  
-  <table name="tst_config" to-string="%name%" new-in-version="6">
-    <field name="id" obligatory="true" type="long"/>
-    <field name="min" obligatory="true" type="integer"/>
-    <field name="def" obligatory="true" type="integer"/>
-    <field name="max" obligatory="true" type="integer"/>
-    <field name="feedback" obligatory="true" type="text"/>
-    <field name="editTime" obligatory="true" type="text" new-in-version="7"/>
-  </table>
-  
-  <table name="tst_questions" to-string="%name%" new-in-version="6">
-    <field name="id" obligatory="true" type="long"/>
-    <field name="ansType" obligatory="true" type="text"/>
-    <field name="shuffle" obligatory="true" type="text"/>
-    <field name="stem" obligatory="true" type="text"/>
-  </table>
-  
-  <table name="tst_answers" to-string="%name%" new-in-version="6">
-    <field name="ansInd" obligatory="true" type="integer" new-in-version="8"/>
-    <field name="answer" obligatory="true" type="text"/>
-    <field name="correct" obligatory="true" type="text"/>
-  </table>
-  
-  <table name="tst_tags" to-string="%name%" new-in-version="6">
-    <field name="id" obligatory="true" type="long"/>
-    <field name="tagTxt" obligatory="true" type="text"/>
-  </table>
-  
-  <table name="tst_question_tags" to-string="%name%" new-in-version="6">
-    <field name="qstCod" obligatory="true" type="foreign-key" foreign-table="tst_questions"/>
-    <field name="tagCod" obligatory="true" type="foreign-key" foreign-table="tst_tags"/>
-    <field name="tagInd" type="integer"/>
-  </table>
-  
-  <table name="tst_questions_course" to-string="%name%" new-in-version="6">
-    <field name="qstCod" obligatory="true" type="foreign-key" foreign-table="tst_questions"/>
-    <field name="crsCod" obligatory="true" type="foreign-key" foreign-table="courses"/>
-  </table>
-  
-  <table name="tst_question_answers" to-string="%name%" new-in-version="6">
-    <field name="qstCod" obligatory="true" type="foreign-key" foreign-table="tst_questions"/>
-    <field name="ansCod" obligatory="true" type="foreign-key" foreign-table="tst_answers"/>
-  </table>
-  
+<database
+    name="swadroid_db"
+    version="10" >
+
+    <table
+        name="courses"
+        to-string="%name%" >
+        <field
+            name="id"
+            obligatory="true"
+            type="long" />
+        <field
+            name="name"
+            obligatory="true"
+            type="text" />
+        <field
+            name="userRole"
+            new-in-version="9"
+            obligatory="true"
+            type="integer" />
+    </table>
+    <table
+        name="notifications"
+        new-in-version="3"
+        to-string="%name%" >
+        <field
+            name="id"
+            obligatory="true"
+            type="long" />
+        <field
+            name="eventType"
+            obligatory="true"
+            type="text" />
+        <field
+            name="eventTime"
+            obligatory="true"
+            type="text" />
+        <field
+            name="userSurname1"
+            obligatory="true"
+            type="text" />
+        <field
+            name="userSurname2"
+            obligatory="true"
+            type="text" />
+        <field
+            name="userFirstname"
+            obligatory="true"
+            type="text" />
+        <field
+            name="location"
+            obligatory="true"
+            type="text" />
+        <field
+            name="summary"
+            obligatory="true"
+            type="text" />
+        <field
+            name="status"
+            new-in-version="4"
+            obligatory="true"
+            type="text" />
+        <field
+            name="content"
+            new-in-version="5"
+            obligatory="true"
+            type="text" />
+    </table>
+    <table
+        name="tst_config"
+        new-in-version="6"
+        to-string="%name%" >
+        <field
+            name="id"
+            obligatory="true"
+            type="long" />
+        <field
+            name="min"
+            obligatory="true"
+            type="integer" />
+        <field
+            name="def"
+            obligatory="true"
+            type="integer" />
+        <field
+            name="max"
+            obligatory="true"
+            type="integer" />
+        <field
+            name="feedback"
+            obligatory="true"
+            type="text" />
+        <field
+            name="editTime"
+            new-in-version="7"
+            obligatory="true"
+            type="text" />
+    </table>
+    <table
+        name="tst_questions"
+        new-in-version="6"
+        to-string="%name%" >
+        <field
+            name="id"
+            obligatory="true"
+            type="long" />
+        <field
+            name="ansType"
+            obligatory="true"
+            type="text" />
+        <field
+            name="shuffle"
+            obligatory="true"
+            type="text" />
+        <field
+            name="stem"
+            obligatory="true"
+            type="text" />
+    </table>
+    <table
+        name="tst_answers"
+        new-in-version="6"
+        to-string="%name%" >
+        <field
+            name="ansInd"
+            new-in-version="8"
+            obligatory="true"
+            type="integer" />
+        <field
+            name="answer"
+            obligatory="true"
+            type="text" />
+        <field
+            name="correct"
+            obligatory="true"
+            type="text" />
+    </table>
+    <table
+        name="tst_tags"
+        new-in-version="6"
+        to-string="%name%" >
+        <field
+            name="id"
+            obligatory="true"
+            type="long" />
+        <field
+            name="tagTxt"
+            obligatory="true"
+            type="text" />
+    </table>
+    <table
+        name="tst_question_tags"
+        new-in-version="6"
+        to-string="%name%" >
+        <field
+            name="qstCod"
+            foreign-table="tst_questions"
+            obligatory="true"
+            type="foreign-key" />
+        <field
+            name="tagCod"
+            foreign-table="tst_tags"
+            obligatory="true"
+            type="foreign-key" />
+        <field
+            name="tagInd"
+            type="integer" />
+    </table>
+    <table
+        name="tst_questions_course"
+        new-in-version="6"
+        to-string="%name%" >
+        <field
+            name="qstCod"
+            foreign-table="tst_questions"
+            obligatory="true"
+            type="foreign-key" />
+        <field
+            name="crsCod"
+            foreign-table="courses"
+            obligatory="true"
+            type="foreign-key" />
+    </table>
+    <table
+        name="tst_question_answers"
+        new-in-version="6"
+        to-string="%name%" >
+        <field
+            name="qstCod"
+            foreign-table="tst_questions"
+            obligatory="true"
+            type="foreign-key" />
+        <field
+            name="ansCod"
+            foreign-table="tst_answers"
+            obligatory="true"
+            type="foreign-key" />
+    </table>
+    <table
+        name="users"
+        new-in-version="10"
+        to-string="%name%" >
+        <field
+            name="userCode"
+            obligatory="true"
+            type="integer" />
+        <field
+            name="userID"
+            obligatory="true"
+            type="text" />
+        <field
+            name="userNickname"
+            obligatory="true"
+            type="text" />
+        <field
+            name="userSurname1"
+            obligatory="true"
+            type="text" />
+        <field
+            name="userSurname2"
+            obligatory="true"
+            type="text" />
+        <field
+            name="userFirstname"
+            obligatory="true"
+            type="text" />
+        <field
+            name="photoPath"
+            obligatory="true"
+            type="text" />
+        <field
+            name="userTypeCode"
+            obligatory="true"
+            type="integer" />
+        <field
+            name="userRole"
+            obligatory="true"
+            type="integer" />
+    </table>
+    <table
+        name="users_courses"
+        new-in-version="10"
+        to-string="%name%" >
+        <field
+            name="userCode"
+            foreign-table="users"
+            obligatory="true"
+            type="foreign-key" />
+        <field
+            name="crsCod"
+            foreign-table="courses"
+            obligatory="true"
+            type="foreign-key" />
+    </table>
+
 </database>
