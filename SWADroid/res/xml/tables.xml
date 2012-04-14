@@ -253,5 +253,4 @@
             obligatory="true"
             type="foreign-key" />
     </table>
-
 </database>
