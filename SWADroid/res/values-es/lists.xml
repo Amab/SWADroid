@@ -1,20 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string-array name="functions">
-		<item>Notificaciones</item>
-		<item>Tests</item>
-	</string-array>
-	<string-array name="testMenuItems">
-		<item>Sincronizar preguntas</item>
-		<item>Realizar test</item>
-	</string-array>
-	<string-array name="testAnswerTypesNames">
-		<item>Todos</item><item>Verdadero/Falso</item>
-		<item>Elección única</item>
-		<item>Elección múltiple</item>
-		<item>Texto</item>
-		<item>Nº entero</item>
-		<item>Nº real</item>
-		
-	</string-array>
+
+    <string-array name="functions">
+        <item>Notificaciones</item>
+        <item>Tests</item>
+    </string-array>
+    <string-array name="testMenuItems">
+        <item>Sincronizar preguntas</item>
+        <item>Realizar test</item>
+    </string-array>
+    <string-array name="testAnswerTypesNames">
+        <item>Todos</item>
+        <item>Verdadero/Falso</item>
+        <item>Elección única</item>
+        <item>Elección múltiple</item>
+        <item>Texto</item>
+        <item>Nº entero</item>
+        <item>Nº real</item>
+    </string-array>
+    <string-array name="attendanceMenuItems">
+        <item>Escanear QRs</item>
+        <item>Modo manual</item>
+    </string-array>
+
 </resources>
