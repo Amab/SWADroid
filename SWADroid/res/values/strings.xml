@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-	<string name="app_name">SWADroid</string>	
+	<string name="app_name">SWADroid</string>
 	<string name="serverName_preferences">Server</string>
 	<string name="serverSummary_preferences">Server (without http://)</string>
 	<string name="serverTitle_preferences">Server</string>
@@ -35,21 +35,22 @@
 	<string name="loginTitle_menu">Login</string>
 	<string name="loginProgressTitle">Login</string>
 	<string name="loginProgressDescription">Connecting...</string>
-	<string name="coursesProgressTitle">Courses</string><string name="coursesProgressDescription">Retrieving courses...</string><string name="notificationsProgressTitle">Notifications</string>
+	<string name="coursesProgressTitle">Courses</string>
+	<string name="coursesProgressDescription">Retrieving courses...</string>
+	<string name="notificationsProgressTitle">Notifications</string>
 	<string name="notificationsProgressDescription">Retrieving new notifications...</string>
 	<string name="notificationsEmptyListMsg">Did not download any notification.\n\nTo download most recent
-		notifications click the icon in the upper right of the screen.</string><string name="notificationsDownloadedMsg">Notifications downloaded</string>
+		notifications click the icon in the upper right of the screen.</string>
+	<string name="notificationsDownloadedMsg">Notifications downloaded</string>
 	<string name="testsDownloadProgressTitle">Tests</string>
 	<string name="testsDownloadProgressDescription">Synchronizing test questions.\n\nDepending of the number of
 		questions to synchronize, the data processing can take several minutes.\n\nPlease wait...</string>
-	
-	
 	<string name="errorMsgLaunchingActivity">An error occurred during the execution of the
 		operation</string>
 	<string name="errorMsgWorkaroundEmulator">Damn. That Android emulator bug appeared again.
 		Retrying...</string>
-	<string name="errorMsgNoConnection">No connection found</string><string name="errorCopyMsg_DB">Error copying database</string>
-	
+	<string name="errorMsgNoConnection">No connection found</string>
+	<string name="errorCopyMsg_DB">Error copying database</string>
 	<string name="upgradeMsg_DB">Upgrading database...</string>
 	<string name="loginSuccessfulMsg">Login successful</string>
 	<string name="examAnnouncement">Exam announcement</string>
@@ -98,9 +99,8 @@
 	<string name="firstRunMsg">Before using the application for the first time you
 		must enter the user name and password for SWAD at the setup
 		screen.\n\nYou can access to the setup screen from the application
-		menu anytime.\n\nDo you want to open the configuration screen now?
-	</string><string name="initialDialogTitle">IMPORTANT</string>
-	
+		menu anytime.\n\nDo you want to open the configuration screen now?</string>
+	<string name="initialDialogTitle">IMPORTANT</string>
 	<string name="upgradeMsg">Due to changes in the database all test questions
 		data have been deleted.\n\nSorry.</string>
 	<string name="errorBadLoginMsg">Incorrect user or password</string>
@@ -108,33 +108,42 @@
 	<string name="errorConnectionMsg">Error while connecting to server</string>
 	<string name="errorTimeoutMsg">Timeout trying to connect to the server</string>
 	<string name="sendingMessageMsg">Sending message...</string>
-	<string name="messageSendedMsg">Message sended successfully</string><string name="messageSendErrorMsg">Error while sending the message. Check the data in the message fields</string>
+	<string name="messageSendedMsg">Message sended successfully</string>
+	<string name="messageSendErrorMsg">Error while sending the message. Check the data in the message fields</string>
 	<string name="message_receivers_title">Receivers (separated by comma)</string>
 	<string name="message_subject_title">Subject</string>
 	<string name="message_body_title">Message</string>
 	<string name="notice_body_title">Notice</string>
 	<string name="publishingNotice">Publishing notice...</string>
-	<string name="noticePublished">Notice published</string><string name="noticeSendError">Error while publishing the new notice</string>	
+	<string name="noticePublished">Notice published</string>
+	<string name="noticeSendError">Error while publishing the new notice</string>
 	<string name="sendMsg">Send</string>
 	<string name="cleanDatabaseMsg">The database has been cleaned</string>
 	<string name="shareBodyMsg">I\'m using #SWADroid in my Android mobile for access to
 		the e-learning platform SWAD.\nGet it for free here:
-		 https://market.android.com/details?id=es.ugr.swad.swadroid</string>
+		https://market.android.com/details?id=es.ugr.swad.swadroid</string>
 	<string name="marketURL">market://details?id=es.ugr.swad.swadroid</string>
-	<string name="marketWebURL">http://goo.gl/Wgo1y</string><string name="twitterURL">https://twitter.com/#!/SWADroid</string>
+	<string name="marketWebURL">http://goo.gl/Wgo1y</string>
+	<string name="twitterURL">https://twitter.com/#!/SWADroid</string>
 	<string name="facebookURL">https://www.facebook.com/SWADroid</string>
 	<string name="googlePlusURL">http://goo.gl/kuezQ</string>
 	<string name="mailingListURL">http://goo.gl/3A5iO</string>
 	<string name="blogURL">http://swadroid.wordpress.com</string>
-	<string name="twitterUser">\@SWADroid</string><string name="twitterTitle">Twitter</string>
+	<string name="twitterUser">\@SWADroid</string>
+	<string name="twitterTitle">Twitter</string>
 	<string name="facebookTitle">Facebook</string>
 	<string name="googlePlusTitle">Google+</string>
 	<string name="mailingListTitle">Mailing list</string>
-	<string name="blogTitle">Blog</string><string name="marketTitle">Android Market</string><string name="notificationsAlertTitle">New notifications</string><string name="notificationsAlertMsg">new notifications</string><string name="footMessageMsg">Sended from</string>
+	<string name="blogTitle">Blog</string>
+	<string name="marketTitle">Android Market</string>
+	<string name="notificationsAlertTitle">New notifications</string>
+	<string name="notificationsAlertMsg">new notifications</string>
+	<string name="footMessageMsg">Sended from</string>
 	<string name="marksMsg">Click on the notification to view the mark.</string>
 	<string name="clickToGetCourses">Click here to get your courses</string>
-	
-	
-	
-	
+	<string name="attendanceModuleLabel">Rollcall</string>
+	<string name="users">Users</string>
+	<string name="usersDownloadProgressDescription">Synchronizing users.\n\nDepending of the number of
+		users to synchronize, the data processing can take several minutes.\n\nPlease wait...</string>
+	<string name="usersDownloadProgressTitle">Students</string>
 </resources>

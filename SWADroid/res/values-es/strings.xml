@@ -40,14 +40,15 @@
 	<string name="notificationsProgressTitle">Notificaciones</string>
 	<string name="notificationsProgressDescription">Obteniendo nuevas notificaciones...</string>
 	<string name="notificationsEmptyListMsg">No se ha descargado ninguna notificación.\n\nPara descargar las
-		notificaciones más recientes pulse el icono de la esquina superior derecha de la pantalla.</string><string name="notificationsDownloadedMsg">Notificaciones descargadas</string>
+		notificaciones más recientes pulse el icono de la esquina superior derecha de la pantalla.</string>
+	<string name="notificationsDownloadedMsg">Notificaciones descargadas</string>
 	<string name="testsDownloadProgressTitle">Tests</string>
 	<string name="testsDownloadProgressDescription">Sincronizando preguntas de test.\n\nDependiendo del número de
 		preguntas a sincronizar, el procesamiento de los datos puede tardar unos minutos.\n\nPor favor, espere...</string>
 	<string name="errorMsgLaunchingActivity">Ha ocurrido un error durante la ejecución de la
-		operación</string><string name="errorMsgWorkaroundEmulator">Mierda. Ese bug del emulador de Android ha vuelto a
-		aparecer. Reintentando...</string>
-	
+		operación</string>
+	<string name="errorMsgWorkaroundEmulator">Mierda. Ese bug del emulador de Android ha vuelto a
+		aparecer. Reintentando...</string>	
 	<string name="errorMsgNoConnection">No hay conexión</string>
 	<string name="errorCopyMsg_DB">Error copiando base de datos</string>
 	<string name="upgradeMsg_DB">Actualizando base de datos...</string>
@@ -111,7 +112,8 @@
 	<string name="errorTimeoutMsg">Tiempo de espera agotado intentando conectar con el
 		servidor</string>
 	<string name="sendingMessageMsg">Enviando mensaje...</string>
-	<string name="messageSendedMsg">Mensaje enviado</string><string name="messageSendErrorMsg">Error al enviar el mensaje. Compruebe los datos introducidos</string>
+	<string name="messageSendedMsg">Mensaje enviado</string>
+	<string name="messageSendErrorMsg">Error al enviar el mensaje. Compruebe los datos introducidos</string>
 	<string name="message_receivers_title">Destinatarios (separados por comas)</string>
 	<string name="message_subject_title">Asunto</string>
 	<string name="message_body_title">Mensaje</string>
@@ -123,10 +125,20 @@
 	<string name="shareBodyMsg">Estoy usando #SWADroid en mi Android para acceder a la
 		plataforma de teleformación SWAD.\nObtenlo gratis aquí:
 		 https://market.android.com/details?id=es.ugr.swad.swadroid</string>
-	<string name="twitterTitle">Twitter</string><string name="facebookTitle">Facebook</string><string name="googlePlusTitle">Google+</string><string name="mailingListTitle">Lista de correo</string><string name="blogTitle">Blog</string><string name="marketTitle">Android Market</string>
+	<string name="twitterTitle">Twitter</string>
+	<string name="facebookTitle">Facebook</string>
+	<string name="googlePlusTitle">Google+</string>
+	<string name="mailingListTitle">Lista de correo</string>
+	<string name="blogTitle">Blog</string>
+	<string name="marketTitle">Android Market</string>
 	<string name="notificationsAlertTitle">Nuevas notificaciones</string>
 	<string name="notificationsAlertMsg">nuevas notificaciones</string>
 	<string name="footMessageMsg">Enviado desde</string>
 	<string name="marksMsg">Pulse sobre la notificación para ver la calificación.</string>
 	<string name="clickToGetCourses">Pulse aquí para conseguir sus asignaturas</string>
+	<string name="attendanceModuleLabel">Pasar lista</string>
+	<string name="users">Usuarios</string>
+	<string name="usersDownloadProgressTitle">Estudiantes</string>
+	<string name="usersDownloadProgressDescription">Sincronizando estudiantes.\n\nDependiendo del número de
+		estudiantes a sincronizar, el procesamiento de los datos puede tardar unos minutos.\n\nPor favor, espere...</string>
 </resources>
