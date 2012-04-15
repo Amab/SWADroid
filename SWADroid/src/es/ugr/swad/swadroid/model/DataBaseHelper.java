@@ -278,12 +278,13 @@ public class DataBaseHelper {
 	 * Gets the user that matches userId and selectedCourseCode
 	 * @param userId User's DNI (national identity)
 	 * @param selectedCourseCode Course code to be referenced
-	 * @return The requested user, or null if the user does not exist or is not enrolled in the selected course
+	 * @return True if user is enrolled in the selected course. False otherwise
 	 */
-	public User getUser(String userID, long selectedCourseCode) {
+	public boolean getUserCourse(String userID, long selectedCourseCode) {
+		boolean enrolled = false;
 		User u = (User) getRow(Global.DB_TABLE_USERS, "userID", userID);
 
-		/*if (u != null) {
+		if (u != null) {
 			String sentencia = "SELECT userCode AS _id, crsCod" +
 					" FROM " + Global.DB_TABLE_USERS_COURSES + 
 					" WHERE userCode = ? AND crsCod = ?" +
@@ -294,13 +295,14 @@ public class DataBaseHelper {
 					String.valueOf(selectedCourseCode)
 			});
 
-			// Return null if the user is not enrolled in the selected course
-			if (!c.moveToFirst()) {
-				u = null;
+			if (c.moveToFirst()) {
+				enrolled = true;
 			} 
 			c.close();
-		}*/
-		return u;		
+		} else
+			enrolled = false;
+		
+		return enrolled;
 	}
 
 	/**
@@ -445,7 +447,7 @@ public class DataBaseHelper {
 	/**
 	 * Inserts a user in database
 	 * @param u User to be inserted
-	 * @return True if user doesn't exist in database and is inserted. False otherwise.
+	 * @return True if user does not exist in database and is inserted. False otherwise.
 	 */
 	public boolean insertUser(User u) {
 		List<Entity> rows = db.getEntityList(Global.DB_TABLE_USERS, "userCode = " + u.getId());
@@ -461,6 +463,27 @@ public class DataBaseHelper {
 			ent.setValue("photoPath", u.getPhotoPath());
 			ent.setValue("userTypeCode", u.getUserTypeCode());
 			ent.setValue("userRole", u.getUserRole());
+			ent.save();
+			return true;
+		} else
+			return false;
+	}
+
+	/**
+	 * Inserts a new record in database indicating that the user belongs to the course
+	 * @param u User to be inserted
+	 * @param selectedCourseCode Course code to be referenced
+	 * @return True if record does not exist in database and is inserted. False otherwise.
+	 */
+	public boolean insertUserCourse(User u, long selectedCourseCode) {
+		// TODO Auto-generated method stub
+		List<Entity> rows = db.getEntityList(Global.DB_TABLE_USERS_COURSES, 
+				"userCode = " + u.getId() + " AND crsCod = " + selectedCourseCode);
+
+		if(rows.isEmpty()) {
+			Entity ent = new Entity(Global.DB_TABLE_USERS_COURSES);
+			ent.setValue("userCode", u.getId());
+			ent.setValue("crsCod", selectedCourseCode);
 			ent.save();
 			return true;
 		} else
