@@ -219,20 +219,4 @@ public class Courses extends Module {
 			e.printStackTrace();
 		}
 	}
-	
-	/**
-	 * Removes all courses from database
-	 * @param context Database context
-	 */
-	public void clearCourses(Context context) {
-	    try {
-	       	DataFramework db = DataFramework.getInstance();
-			db.open(context, context.getPackageName());
-		    dbHelper = new DataBaseHelper(db);
-	        
-			dbHelper.emptyTable(Global.DB_TABLE_COURSES);
-		} catch (Exception e) {
-				e.printStackTrace();
-		}
-	}
 }

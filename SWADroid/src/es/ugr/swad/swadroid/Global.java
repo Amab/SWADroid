@@ -30,7 +30,7 @@ public class Global {
 	/**
 	 * SWAD application key
 	 */
-	private static final String AppKey = "HTC-Desire";
+	private static final String AppKey = "";
 	/**
 	 * Server URL
 	 */
