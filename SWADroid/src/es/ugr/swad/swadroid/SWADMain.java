@@ -295,7 +295,7 @@ public class SWADMain extends MenuExpandableListActivity {
 
 		map = new HashMap<String,Object>();        
 		map.put(NAME, getString(R.string.messagesModuleLabel) );
-		map.put(IMAGE, getResources().getDrawable(R.drawable.newmsg));
+		map.put(IMAGE, getResources().getDrawable(R.drawable.msg_write));
 		messagesData.add(map);
 
 		map = new HashMap<String,Object>();        
