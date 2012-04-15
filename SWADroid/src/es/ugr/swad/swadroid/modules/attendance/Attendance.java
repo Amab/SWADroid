@@ -43,11 +43,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.dataframework.DataFramework;
-import com.google.zxing.client.android.swadroid.model.DataBaseHelper;
-import com.google.zxing.client.android.swadroid.model.User;
 
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.model.DataBaseHelper;
+import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.Module;
 
 /**
@@ -59,6 +59,7 @@ public class Attendance extends Module {
 	private AlertDialog mAlertDialog;
 	private List<ListItemModel> listModel;
 	private ArrayList<String> listaDnis = null;
+	private ArrayList<Boolean> enrolledStudents = null;
 	private long selectedCourseCode;
 	/**
 	 * Database Helper.
@@ -135,6 +136,7 @@ public class Attendance extends Module {
 					Toast.makeText(getApplicationContext(), "No se han detectado codigos validos", Toast.LENGTH_SHORT).show();
 				else if (!listaDnis.isEmpty()) {
 					listModel = new ArrayList<ListItemModel>();
+					enrolledStudents = new ArrayList<Boolean>();
 
 					// Initialize database
 					try {
@@ -148,19 +150,24 @@ public class Attendance extends Module {
 
 					// utilizar aqui el dni para buscar el usuario, y si existe en el grupo seleccionado, ponerlo como marcado
 					for (String dni: listaDnis) {
-						User u = dbHelper.getUser(dni, selectedCourseCode);
+						User u = (User) dbHelper.getRow(Global.DB_TABLE_USERS, "userID", dni);
 						String userName;
 
 						if (u != null) {
 							userName = u.getUserFirstname() + " " + u.getUserSurname1() + " " + u.getUserSurname2();
 							// We put the default photo for each item in the list
 							listModel.add(new ListItemModel(userName, R.drawable.usr_bl));
+							// Comprobamos si el alumno pertenece a la asignatura, y lo marcamos en consecuencia
+							// añadimos a la lista el resultado de si pertenece o no a la asignatura
+							enrolledStudents.add(dbHelper.getUserCourse(dni, selectedCourseCode));
 						}
 					}
 					// Marcamos como asistentes a todos los escaneados (cambiar cuando pueda comprobarse el grupo)
 					// Mark as attending all scans (change when the group can be checked)
-					for (ListItemModel i: listModel)
-						i.setSelected(true);
+					int listSize = listModel.size();
+					for (int i=0; i < listSize; i++) {
+						listModel.get(i).setSelected(enrolledStudents.get(i));
+					}
 
 					ArrayAdapter<ListItemModel> modeAdapter = new InteractiveArrayAdapter(this, listModel);		
 					lv = new ListView(this);
@@ -179,28 +186,6 @@ public class Attendance extends Module {
 			}
 			break;
 		}
-
-		/*String dni_escaneado = intent.getStringExtra("SCAN_RESULT");
-				String formato = intent.getStringExtra("SCAN_RESULT_FORMAT");
-
-				if (!formato.contentEquals("QR_CODE"))
-					Toast.makeText(
-							getApplicationContext(),
-							"ERROR: el codigo detectado no es un codigo QR valido",
-							Toast.LENGTH_SHORT).show();
-				else if (!Util.isValidDni(dni_escaneado))
-					Toast.makeText(
-							getApplicationContext(),
-							"ERROR: el codigo detectado no contiene un DNI valido",
-							Toast.LENGTH_SHORT).show();
-				else {
-					Toast.makeText(getApplicationContext(), "DNI valido: " + dni_escaneado, Toast.LENGTH_SHORT).show();
-					listaDnis.add(dni_escaneado);
-				}
-				break;*/
-		/*			}
-		} else {
-		}*/
 	}
 
 	public void prepareAlertDialog() {
