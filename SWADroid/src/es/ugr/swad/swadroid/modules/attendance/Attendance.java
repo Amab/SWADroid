@@ -109,7 +109,7 @@ public class Attendance extends Module {
 		setContentView(R.layout.list_items);
 
 		image = (ImageView) this.findViewById(R.id.moduleIcon);
-		image.setBackgroundResource(R.drawable.attendance);
+		image.setBackgroundResource(R.drawable.rollcall);
 
 		text = (TextView) this.findViewById(R.id.moduleName);
 		text.setText(R.string.attendanceModuleLabel);
