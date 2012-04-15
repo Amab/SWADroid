@@ -163,7 +163,6 @@ public class AttendanceConfigDownload extends Module {
 				break;
 			case Global.SCAN_QR_REQUEST_CODE:
 				// Propagate the scan result to the previous activity
-				intent.putExtra("selectedCourseCode", selectedCourseCode);
 				setResult(resultCode, intent);
 				finish();
 				break;
@@ -239,6 +238,8 @@ public class AttendanceConfigDownload extends Module {
 							);
 					if (dbHelper.insertUser(u))
 						insertedUsersCount++;
+					
+					dbHelper.insertUserCourse(u, selectedCourseCode);
 				}	// end for (int i=0; i < usersCount; i++)
 
 				//Request finalized without errors
@@ -275,6 +276,7 @@ public class AttendanceConfigDownload extends Module {
 		Intent activity = new Intent("es.ugr.swad.swadroid.android.SCAN");
 		activity.putExtra("SCAN_MODE", "QR_CODE_MODE");
 		activity.putExtra("SCAN_FORMATS", "QR_CODE");
+		activity.putExtra("selectedCourseCode", selectedCourseCode);
 		// pasar a CaptureActivity selectedCourseCode + cualquier otra informacion que necesite
 		// recibir esta informacion adecuadamente en CaptureActivity y trabajar a partir de ella (ej: lista 
 		//de alumnos -> comprobar al escanear un QR si pertenece a la lista)
