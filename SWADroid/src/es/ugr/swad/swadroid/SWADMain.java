@@ -295,7 +295,7 @@ public class SWADMain extends MenuExpandableListActivity {
 
 		map = new HashMap<String,Object>();        
 		map.put(NAME, getString(R.string.messagesModuleLabel) );
-		map.put(IMAGE, getResources().getDrawable(R.drawable.msg));
+		map.put(IMAGE, getResources().getDrawable(R.drawable.newmsg));
 		messagesData.add(map);
 
 		map = new HashMap<String,Object>();        
@@ -312,7 +312,7 @@ public class SWADMain extends MenuExpandableListActivity {
 		//Attendance category
 		map = new HashMap<String,Object>();
 		map.put(NAME, getString(R.string.attendanceModuleLabel));
-		map.put(IMAGE, getResources().getDrawable(R.drawable.attendance));
+		map.put(IMAGE, getResources().getDrawable(R.drawable.rollcall));
 		attendanceData.add(map);
 
 		setListAdapter( new ImageExpandableListAdapter(
