@@ -30,7 +30,7 @@ public class Global {
 	/**
 	 * SWAD application key
 	 */
-	private static final String AppKey = "cuerre-aguilerin";
+	private static final String AppKey = "HTC-Desire";
 	/**
 	 * Server URL
 	 */
@@ -276,7 +276,6 @@ public class Global {
 	public static boolean isPreferencesChanged(){
 		return preferencesChanged;
 	}
-
 	public static void setPreferencesChanged(){
 		preferencesChanged = true;
 	}
