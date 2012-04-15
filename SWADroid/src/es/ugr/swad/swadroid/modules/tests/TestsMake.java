@@ -661,8 +661,7 @@ public class TestsMake extends Module {
 		} else {
 			Toast.makeText(getBaseContext(), R.string.testNoQuestionsMsg, Toast.LENGTH_LONG).show();
 			finish();
-		}		
-
+		}
 	}
 
 	/* (non-Javadoc)

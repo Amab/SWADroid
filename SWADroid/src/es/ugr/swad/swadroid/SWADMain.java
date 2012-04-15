@@ -19,6 +19,7 @@
 
 package es.ugr.swad.swadroid;
 
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +32,10 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
+<<<<<<< HEAD
+=======
+import android.view.KeyEvent;
+>>>>>>> Different views for students and teachers are now functional, even on
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -48,8 +53,11 @@ import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.Messages;
 import es.ugr.swad.swadroid.modules.Module;
+<<<<<<< HEAD
 import es.ugr.swad.swadroid.modules.Notices;
 import es.ugr.swad.swadroid.modules.attendance.Attendance;
+=======
+>>>>>>> Different views for students and teachers are now functional, even on
 import es.ugr.swad.swadroid.modules.notifications.Notifications;
 import es.ugr.swad.swadroid.modules.tests.Tests;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
@@ -84,6 +92,7 @@ public class SWADMain extends MenuExpandableListActivity {
 	 * User courses list
 	 */
 	private List<Model>listCourses;
+<<<<<<< HEAD
 	/**
 	 * Tests tag name for Logcat
 	 */
@@ -100,12 +109,30 @@ public class SWADMain extends MenuExpandableListActivity {
 
 	/**
 	 * Gets the database helper
+=======
+    /**
+     * Tests tag name for Logcat
+     */
+    public static final String TAG = Global.APP_TAG + " SwadMain";
+    /**
+     * Indicates if it is the first run
+     * */
+    public boolean firstRun = false;
+    
+    /**
+     * Actual role 2 - student 3 - teacher -1 - none role was chosen 
+     * */
+    public static int actualRole = -1;
+    /**
+     * Gets the database helper
+>>>>>>> Different views for students and teachers are now functional, even on
 	 * @return the database helper
 	 */
 	public static DataBaseHelper getDbHelper() {
 		return dbHelper;
 	}
 
+<<<<<<< HEAD
 	/**
 	 * Shows configuration dialog on first run.
 	 */
@@ -138,6 +165,40 @@ public class SWADMain extends MenuExpandableListActivity {
 		.setNeutralButton(R.string.close_dialog, null)
 		.show();
 	}
+=======
+    /**
+     * Shows configuration dialog on first run.
+     */
+    public void showConfigurationDialog() {
+    	new AlertDialog.Builder(this)
+    		   .setTitle(R.string.initialDialogTitle)
+    	       .setMessage(R.string.firstRunMsg)
+    	       .setCancelable(false)
+    	       .setPositiveButton(R.string.yesMsg, new DialogInterface.OnClickListener() {
+    	           public void onClick(DialogInterface dialog, int id) {
+    	        	   viewPreferences();
+    	           }
+    	       })
+    	       .setNegativeButton(R.string.noMsg, new DialogInterface.OnClickListener() {
+    	           public void onClick(DialogInterface dialog, int id) {
+    	                dialog.cancel();
+    	                createSpinnerAdapter();
+    	           }
+    	       }).show();
+    }
+    
+    /**
+     * Shows initial dialog after application upgrade.
+     */
+    public void showUpgradeDialog() {
+    	new AlertDialog.Builder(this)
+    		   .setTitle(R.string.initialDialogTitle)
+    	       .setMessage(R.string.upgradeMsg)
+    	       .setCancelable(false)
+               .setNeutralButton(R.string.close_dialog, null)
+    	       .show();
+    }
+>>>>>>> Different views for students and teachers are now functional, even on
 
 	/* (non-Javadoc)
 	 * @see android.app.ExpandableListActivity#onChildClick(android.widget.ExpandableListView, android.view.View, int, int, long)
@@ -175,6 +236,7 @@ public class SWADMain extends MenuExpandableListActivity {
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onStart()
 	 */
+<<<<<<< HEAD
 	@Override
 	protected void onStart() {
 		super.onStart();
@@ -334,6 +396,153 @@ public class SWADMain extends MenuExpandableListActivity {
 	}
 
 	/* (non-Javadoc)
+=======
+    @Override
+    protected void onStart() {
+    	
+        super.onStart();
+        prefs.getPreferences(getBaseContext());
+        Log.i(TAG, "on start");
+    	if(Global.isPreferencesChanged()){
+    		getActualCourses();
+    		Global.setPreferencesChanged(false);
+    	}
+    }
+
+	/**
+     * Create main menu with an expandable list
+     */
+    private void createStudentMenu()
+    {
+    	if(getExpandableListAdapter() == null || actualRole==-1){
+    		actualRole = 2;
+	    	//Construct Expandable List
+	        final ArrayList<HashMap<String, Object>> headerData = new ArrayList<HashMap<String, Object>>();
+	
+	        final HashMap<String, Object> messages = new HashMap<String, Object>();
+	        messages.put(NAME, getString(R.string.messages));
+	        messages.put(IMAGE, getResources().getDrawable(R.drawable.msg));
+	        headerData.add( messages );
+	
+	        final HashMap<String, Object> evaluation = new HashMap<String, Object>();
+	        evaluation.put(NAME, getString(R.string.evaluation));
+	        evaluation.put(IMAGE, getResources().getDrawable(R.drawable.grades));
+	        headerData.add( evaluation);
+	
+	        final ArrayList<ArrayList<HashMap<String, Object>>> childData = new ArrayList<ArrayList<HashMap<String, Object>>>();
+	
+	        final ArrayList<HashMap<String, Object>> messagesData = new ArrayList<HashMap<String, Object>>();
+	        childData.add(messagesData);
+	
+	        final ArrayList<HashMap<String, Object>> evaluationData = new ArrayList<HashMap<String, Object>>();
+	        childData.add(evaluationData);
+	        
+	        //Messages category
+	        HashMap<String, Object> map = new HashMap<String,Object>();
+	        map.put(NAME, getString(R.string.notificationsModuleLabel) );
+	        map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
+	        messagesData.add(map); 
+	        
+	        map = new HashMap<String,Object>();        
+	        map.put(NAME, getString(R.string.messagesModuleLabel) );
+	        map.put(IMAGE, getResources().getDrawable(R.drawable.msg));
+	        messagesData.add(map);
+	        
+	        //Evaluation category
+	        map = new HashMap<String,Object>();
+	        map.put(NAME, getString(R.string.testsModuleLabel) );
+	        map.put(IMAGE, getResources().getDrawable(R.drawable.test));
+	        evaluationData.add(map);
+	
+	        setListAdapter( new ImageExpandableListAdapter(
+	                this,
+	                headerData,
+	                R.layout.image_list_item,
+	                new String[] { NAME },            // the name of the field data
+	                new int[] { R.id.listText }, // the text field to populate with the field data
+	                childData,
+	                0,
+	                null,
+	                new int[] {}
+	            ));
+	        
+	        getExpandableListView().setOnChildClickListener(this);
+    	}else{
+    		if(actualRole == 3){
+    			((ImageExpandableListAdapter) getExpandableListAdapter()).removeChild(0, 2);
+    			actualRole = 2;
+    		}
+    	}
+    }
+    /**
+     * Create main menu with an expandable list
+     */
+    private void createTeacherMenu()
+    {
+    	//if(getExpandableListAdapter() == null || actualRole==-1){ //first, how to add a new child 
+    		actualRole = 3;
+	    	//Construct Expandable List
+	        final ArrayList<HashMap<String, Object>> headerData = new ArrayList<HashMap<String, Object>>();
+	
+	        final HashMap<String, Object> messages = new HashMap<String, Object>();
+	        messages.put(NAME, getString(R.string.messages));
+	        messages.put(IMAGE, getResources().getDrawable(R.drawable.msg));
+	        headerData.add( messages );
+	
+	        final HashMap<String, Object> evaluation = new HashMap<String, Object>();
+	        evaluation.put(NAME, getString(R.string.evaluation));
+	        evaluation.put(IMAGE, getResources().getDrawable(R.drawable.grades));
+	        headerData.add( evaluation);
+	
+	        final ArrayList<ArrayList<HashMap<String, Object>>> childData = new ArrayList<ArrayList<HashMap<String, Object>>>();
+	
+	        final ArrayList<HashMap<String, Object>> messagesData = new ArrayList<HashMap<String, Object>>();
+	        childData.add(messagesData);
+	
+	        final ArrayList<HashMap<String, Object>> evaluationData = new ArrayList<HashMap<String, Object>>();
+	        childData.add(evaluationData);
+	        
+	        //Messages category
+	        HashMap<String, Object> map = new HashMap<String,Object>();
+	        map.put(NAME, getString(R.string.notificationsModuleLabel) );
+	        map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
+	        messagesData.add(map); 
+	        
+	        map = new HashMap<String,Object>();        
+	        map.put(NAME, getString(R.string.messagesModuleLabel) );
+	        map.put(IMAGE, getResources().getDrawable(R.drawable.msg));
+	        messagesData.add(map);
+	        
+	        map = new HashMap<String,Object>();        
+	        map.put(NAME, getString(R.string.noticesModuleLabel) );
+	        map.put(IMAGE, getResources().getDrawable(R.drawable.note));
+	        messagesData.add(map);
+	        
+	        //Evaluation category
+	        map = new HashMap<String,Object>();
+	        map.put(NAME, getString(R.string.testsModuleLabel) );
+	        map.put(IMAGE, getResources().getDrawable(R.drawable.test));
+	        evaluationData.add(map);
+	        setListAdapter( new ImageExpandableListAdapter(
+	                this,
+	                headerData,
+	                R.layout.image_list_item,
+	                new String[] { NAME },            // the name of the field data
+	                new int[] { R.id.listText }, // the text field to populate with the field data
+	                childData,
+	                0,
+	                null,
+	                new int[] {}
+	            ));
+	        
+	        getExpandableListView().setOnChildClickListener(this);
+    	/*}else{
+
+    	}*/
+    }
+    
+    /* (non-Javadoc)
+>>>>>>> Different views for students and teachers are now functional, even on
 	 * @see android.app.Activity#onCreate()
 	 */
 	@Override
@@ -341,6 +550,7 @@ public class SWADMain extends MenuExpandableListActivity {
 		int lastVersion, currentVersion;
 		ImageView image;
 		TextView text;
+<<<<<<< HEAD
 
 		//Initialize screen
 		super.onCreate(icicle);
@@ -355,8 +565,8 @@ public class SWADMain extends MenuExpandableListActivity {
 		try {            
 			//Initialize database
 			/*db = DataFramework.getInstance();
-            db.open(this, this.getPackageName());
-            dbHelper = new DataBaseHelper(db);*/
+            		  db.open(this, this.getPackageName());
+            		  dbHelper = new DataBaseHelper(db);*/
 
 			//Initialize preferences
 			prefs.getPreferences(getBaseContext()); 
@@ -397,6 +607,65 @@ public class SWADMain extends MenuExpandableListActivity {
 	}
 
 	@Override
+=======
+		
+    	//Initialize screen
+        super.onCreate(icicle);
+        setContentView(R.layout.main);
+        
+        image = (ImageView)this.findViewById(R.id.moduleIcon);
+        image.setBackgroundResource(R.drawable.ic_launcher_swadroid);
+        
+        text = (TextView)this.findViewById(R.id.moduleName);
+        text.setText(R.string.app_name);
+
+        
+        try {            
+            //Initialize database
+            /*db = DataFramework.getInstance();
+            db.open(this, this.getPackageName());
+            dbHelper = new DataBaseHelper(db);*/
+            
+            //Initialize preferences
+            prefs.getPreferences(getBaseContext()); 
+            
+            //Initialize HTTPS connections 
+            SecureConnection.initSecureConnection(); 
+            
+            //Check if this is the first run after an install or upgrade
+            lastVersion = prefs.getLastVersion();
+            currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+            
+            //If this is the first run, show configuration dialog
+            if(lastVersion == 0) {
+            	showConfigurationDialog();
+            	dbHelper.initializeDB();
+            	//prefs.upgradeCredentials();
+            	prefs.setLastVersion(currentVersion);
+            	firstRun = true;
+
+            //If this is an upgrade, show upgrade dialog
+            } else if(lastVersion < currentVersion) {
+            	//showUpgradeDialog();
+            	dbHelper.upgradeDB(this);
+            	//prefs.upgradeCredentials();
+            	prefs.setLastVersion(currentVersion);
+            }
+        } catch (Exception ex) {
+            error(ex.getMessage());
+            ex.printStackTrace();
+        } 
+        if(!firstRun && Module.connectionAvailable(this)){
+        	Log.i(TAG, " obtienen asignaturas");
+        	Intent activity;
+        	activity = new Intent(getBaseContext(), Courses.class );
+    		startActivityForResult(activity,Global.COURSES_REQUEST_CODE);
+        }
+        createSpinnerAdapter();
+    }
+    
+    @Override
+>>>>>>> Different views for students and teachers are now functional, even on
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
@@ -411,16 +680,26 @@ public class SWADMain extends MenuExpandableListActivity {
 	}
 
 	private void createSpinnerAdapter(){
+<<<<<<< HEAD
 		Spinner spinner = (Spinner) this.findViewById(R.id.spinner);
 		listCourses = dbHelper.getAllRows(Global.DB_TABLE_COURSES,"","name");
 		dbCursor =  dbHelper.getDb().getCursor(Global.DB_TABLE_COURSES,"","name");
 		startManagingCursor(dbCursor);
 		if(listCourses.size() != 0){
 			SimpleCursorAdapter adapter = new SimpleCursorAdapter (this,
+=======
+        Spinner spinner = (Spinner) this.findViewById(R.id.spinner);
+        listCourses = dbHelper.getAllRows(Global.DB_TABLE_COURSES,"","name");
+        dbCursor =  dbHelper.getDb().getCursor(Global.DB_TABLE_COURSES,"","name");
+        startManagingCursor(dbCursor);
+        if(listCourses.size() != 0){
+	        SimpleCursorAdapter adapter = new SimpleCursorAdapter (this,
+>>>>>>> Different views for students and teachers are now functional, even on
 					android.R.layout.simple_spinner_item, 
 					dbCursor, 
 					new String[]{"name"}, 
 					new int[]{android.R.id.text1});
+<<<<<<< HEAD
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			spinner.setAdapter(adapter);
 			spinner.setOnItemSelectedListener(new onItemSelectedListener());
@@ -433,6 +712,20 @@ public class SWADMain extends MenuExpandableListActivity {
 	}
 
 	private class onItemSelectedListener implements OnItemSelectedListener{
+=======
+	        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			spinner.setAdapter(adapter);
+			spinner.setOnItemSelectedListener(new onItemSelectedListener());
+        } else {
+        	ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, new String[]{getString(R.string.clickToGetCourses)});
+        	spinner.setAdapter(adapter);
+        }
+		spinner.setOnTouchListener(Spinner_OnTouch);
+    	
+    }
+
+    private class onItemSelectedListener implements OnItemSelectedListener{
+>>>>>>> Different views for students and teachers are now functional, even on
 
 		@Override
 		public void onItemSelected(AdapterView<?> parent, View view, int position,
@@ -441,6 +734,10 @@ public class SWADMain extends MenuExpandableListActivity {
 			courseCode = courseSelected.getId();
 			Global.setSelectedCourseCode(courseCode);
 			int userRole = courseSelected.getUserRole();
+<<<<<<< HEAD
+
+=======
+>>>>>>> Different views for students and teachers are now functional, even on
 			if(userRole == 3 && actualRole != 3) createTeacherMenu();
 			if(userRole == 2 && actualRole != 2) createStudentMenu();
 		}
@@ -471,6 +768,7 @@ public class SWADMain extends MenuExpandableListActivity {
 			}
 			return true;
 		}
+<<<<<<< HEAD
 	};
 
 	private void getActualCourses(){
@@ -479,5 +777,36 @@ public class SWADMain extends MenuExpandableListActivity {
 		Toast.makeText(getBaseContext(), R.string.coursesProgressDescription, Toast.LENGTH_LONG).show();
 		startActivityForResult(activity,Global.COURSES_REQUEST_CODE);
 	}
-
+=======
+    	
+    }
+    private View.OnTouchListener Spinner_OnTouch = new View.OnTouchListener() {
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+            	
+            	if(dbHelper.getAllRows(Global.DB_TABLE_COURSES).size()==0){
+            		if(Module.connectionAvailable(getBaseContext()))
+            			getActualCourses();
+            		//else
+            			
+            	}else{
+            		v.performClick();
+            	}
+            	
+               Log.i(TAG, "on touch");
+              
+            }
+            return true;
+		}
+    };
+    
+    private void getActualCourses(){
+    	Intent activity;
+    	activity = new Intent(getBaseContext(), Courses.class );
+		Toast.makeText(getBaseContext(), R.string.coursesProgressDescription, Toast.LENGTH_LONG).show();
+		startActivityForResult(activity,Global.COURSES_REQUEST_CODE);
+    }
+    
+>>>>>>> Different views for students and teachers are now functional, even on
 }
