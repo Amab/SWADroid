@@ -108,6 +108,10 @@ public class Global {
 	 * Request code for Attendance module.
 	 */
 	public static final int SCAN_QR_REQUEST_CODE = 12;
+    /**
+     * Request code for Directory Tree Download module
+     * */
+    public static final int DIRECTORY_TREE_REQUEST_CODE = 13;
 	/**
 	 * Prefix tag name for Logcat
 	 */
@@ -157,6 +161,14 @@ public class Global {
 	 */
 	public static final String DB_TABLE_USERS_COURSES = "users_courses";
 	/**
+	 * Table name for groups
+	 * */
+	public static final String DB_TABLE_GROUPS = "groups";
+	/**
+	 * Table name for relationship between groups and courses
+	 * */
+	public static final String DB_TABLE_GROUPS_COURSES = "group_course";
+	/**
 	 * Student userTypeCode for getUsers web service.
 	 */
 	public static final int STUDENT_TYPE_CODE = 2;
@@ -164,6 +176,14 @@ public class Global {
 	 * Teacher userTypeCode for getUsers web service.
 	 */
 	public static final int TEACHER_TYPE_CODE = 3;
+    /**
+     * Code to access to the documents in documents area 
+     * */
+    public static int DOCUMENTS_AREA_CODE= 1;
+    /**
+     * Code to access to the documents in share area 
+     * */
+    public static int SHARE_AREA_CODE= 2;
 
 	/**
 	 * Gets the SWAD application key
