@@ -20,7 +20,6 @@
 package es.ugr.swad.swadroid.modules.notifications;
 
 import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.accounts.OperationCanceledException;
 import android.app.Service;
 import android.content.AbstractThreadedSyncAdapter;
@@ -38,48 +37,48 @@ import android.util.Log;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class NotificationsSyncAdapterService extends Service {
-	 private static final String TAG = "NotificationsSyncAdapterService";
-	 private static SyncAdapterImpl sSyncAdapter = null;
-	 private static ContentResolver mContentResolver = null;
-	 
-	 public NotificationsSyncAdapterService() {
-	  super();
-	 }
-	 
-	 private static class SyncAdapterImpl extends AbstractThreadedSyncAdapter {
-	  private Context mContext;
-	 
-	  public SyncAdapterImpl(Context context) {
-	   super(context, true);
-	   mContext = context;
-	  }
-	 
-	  @Override
-	  public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
-	   try {
-		   NotificationsSyncAdapterService.performSync(mContext, account, extras, authority, provider, syncResult);
-	   } catch (OperationCanceledException e) {
-	   }
-	  }
-	 }
-	 
-	 @Override
-	 public IBinder onBind(Intent intent) {
-	  IBinder ret = null;
-	  ret = getSyncAdapter().getSyncAdapterBinder();
-	  return ret;
-	 }
-	 
-	 private SyncAdapterImpl getSyncAdapter() {
-	  if (sSyncAdapter == null)
-	   sSyncAdapter = new SyncAdapterImpl(this);
-	  return sSyncAdapter;
-	 }
-	 
-	 private static void performSync(Context context, Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
-	   throws OperationCanceledException {
-	  mContentResolver = context.getContentResolver();
-	  Log.i(TAG, "performSync: " + account.toString());
-	  //This is where the magic will happen!
-	 }
+	private static final String TAG = "NotificationsSyncAdapterService";
+	private static SyncAdapterImpl sSyncAdapter = null;
+	private static ContentResolver mContentResolver = null;
+
+	public NotificationsSyncAdapterService() {
+		super();
 	}
+
+	private static class SyncAdapterImpl extends AbstractThreadedSyncAdapter {
+		private Context mContext;
+
+		public SyncAdapterImpl(Context context) {
+			super(context, true);
+			mContext = context;
+		}
+
+		@Override
+		public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
+			try {
+				NotificationsSyncAdapterService.performSync(mContext, account, extras, authority, provider, syncResult);
+			} catch (OperationCanceledException e) {
+			}
+		}
+	}
+
+	@Override
+	public IBinder onBind(Intent intent) {
+		IBinder ret = null;
+		ret = getSyncAdapter().getSyncAdapterBinder();
+		return ret;
+	}
+
+	private SyncAdapterImpl getSyncAdapter() {
+		if (sSyncAdapter == null)
+			sSyncAdapter = new SyncAdapterImpl(this);
+		return sSyncAdapter;
+	}
+
+	private static void performSync(Context context, Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
+			throws OperationCanceledException {
+		mContentResolver = context.getContentResolver();
+		Log.i(TAG, "performSync: " + account.toString());
+		//This is where the magic will happen!
+	}
+}

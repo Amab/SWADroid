@@ -230,10 +230,6 @@
             obligatory="true"
             type="text" />
         <field
-            name="userTypeCode"
-            obligatory="true"
-            type="integer" />
-        <field
             name="userRole"
             obligatory="true"
             type="integer" />
