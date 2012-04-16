@@ -42,7 +42,7 @@ import es.ugr.swad.swadroid.model.User;
 
 /**
  * Module for send messages.
- * @author Helena Rodriguez Gijon <helena.rodriguez.gijon@gmail.com>
+ * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  */
 public class Notices extends Module {

@@ -25,6 +25,7 @@ import es.ugr.swad.swadroid.model.User;
  * Global data of application.
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
+ * @author Helena Rodríguez Gijón <hrgijon@gmail.com>
  */
 public class Global {
 	/**
@@ -112,6 +113,10 @@ public class Global {
      * Request code for Directory Tree Download module
      * */
     public static final int DIRECTORY_TREE_REQUEST_CODE = 13;
+    /**
+     * Request code for Directory Tree Download module
+     * */
+    public static final int GROUPS_REQUEST_CODE = 14;
 	/**
 	 * Prefix tag name for Logcat
 	 */

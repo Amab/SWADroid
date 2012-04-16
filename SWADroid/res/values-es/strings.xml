@@ -142,4 +142,8 @@
     <string name="usersDownloadProgressTitle">Estudiantes</string>
     <string name="usersDownloadProgressDescription">Sincronizando estudiantes.\n\nDependiendo del número de
 		estudiantes a sincronizar, el procesamiento de los datos puede tardar unos minutos.\n\nPor favor, espere...</string>
+		<string name="documentsDownloadModuleLabel">Documentos</string><string name = "documentsDownloadProgressDescription">Obteniendo archivos..</string>
+	<string name="sharedsDownloadModuleLabel">Zona común</string>
+	<string name="connectionRequired">Para esta funcionalidad se necesita conexión a Internet</string>
+	<string name="course">Asignatura</string>	
 </resources>
