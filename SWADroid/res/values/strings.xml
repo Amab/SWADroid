@@ -147,4 +147,8 @@
     <string name="usersDownloadProgressDescription">Synchronizing users.\n\nDepending of the number of
 		users to synchronize, the data processing can take several minutes.\n\nPlease wait...</string>
     <string name="usersDownloadProgressTitle">Students</string>
+    	<string name="documentsDownloadModuleLabel">Documents</string><string name = "documentsDownloadProgressDescription">Getting files..</string>
+	<string name="sharedsDownloadModuleLabel">Shared area</string>
+	<string name="connectionRequired">Internet connection is required for this functionality</string>
+	<string name="course">Course</string>
 </resources>

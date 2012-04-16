@@ -39,6 +39,7 @@ import es.ugr.swad.swadroid.Global;
 /**
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
+ * @author Helena Rodríguez Gijón <hrgijon@gmail.com>
  */
 public class DataBaseHelper {
 	/**
@@ -443,7 +444,7 @@ public class DataBaseHelper {
 		ent.setValue(params.getSecond(), p.getSecond());
 		ent.save();
 	}
-
+	
 	/**
 	 * Inserts a user in database
 	 * @param u User to be inserted
@@ -467,6 +468,27 @@ public class DataBaseHelper {
 			return true;
 		} else
 			return false;
+	}
+	
+	/**
+	 * Inserts a test question in database
+	 * @param q Test question to be inserted
+	 * @param selectedCourseCode Course code to be referenced
+	 */
+	public void insertGroup(Group g, long selectedCourseCode)
+	{
+		Entity ent = new Entity(Global.DB_TABLE_GROUPS);
+
+		ent.setValue("groupCode", g.getId());
+		ent.setValue("groupName", g.getGroupName());
+		ent.setValue("groupTypeCode", g.getGroupTypeCode());
+		ent.setValue("groupTypeName", g.getGroupTypeName());
+		ent.save();
+
+		ent = new Entity(Global.DB_TABLE_GROUPS_COURSES) ;
+		ent.setValue("grpCod", g.getId());
+		ent.setValue("crsCod", selectedCourseCode);
+		ent.save();
 	}
 
 	/**

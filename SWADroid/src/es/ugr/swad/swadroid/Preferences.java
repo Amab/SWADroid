@@ -78,7 +78,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
     /**
      * Last course selected
      */
-    private int lastCourseSelected; 
+    private int lastCourseSelected = -1; 
     /**
      * Last application version preference name.
      */

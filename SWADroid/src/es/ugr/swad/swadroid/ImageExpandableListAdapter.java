@@ -122,12 +122,9 @@ public class ImageExpandableListAdapter extends SimpleExpandableListAdapter {
 	
 	
 	public boolean addChild(int groupPosition, int childPosition, HashMap<String,Object> child){
-		Log.i("Adapter", "add child");
-
 		if(groupPosition>=getGroupCount())
 			return false;
 		childData.get(groupPosition).add(child);
-		Log.i("Adapter", "add child");
 		super.notifyDataSetChanged();
 		return true;
 	}
