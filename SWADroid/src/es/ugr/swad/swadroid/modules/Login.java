@@ -28,7 +28,6 @@ import org.ksoap2.serialization.KvmSerializable;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.os.Bundle;
-import android.util.Log;
 import es.ugr.swad.swadroid.Base64;
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
@@ -125,17 +124,27 @@ public class Login extends Module {
 			if (result != null) {
 				KvmSerializable ks = (KvmSerializable) result;
 
+				/*Log.i(TAG, "count=" + ks.getPropertyCount());
+				Log.i(TAG, "property[0]=" + ks.getProperty(0));
+				Log.i(TAG, "property[1]=" + ks.getProperty(1));
+				Log.i(TAG, "property[2]=" + ks.getProperty(2));
+				Log.i(TAG, "property[3]=" + ks.getProperty(3));
+				Log.i(TAG, "property[4]=" + ks.getProperty(4));
+				Log.i(TAG, "property[5]=" + ks.getProperty(5));
+				Log.i(TAG, "property[6]=" + ks.getProperty(6));
+				Log.i(TAG, "property[7]=" + ks.getProperty(7));
+				Log.i(TAG, "property[8]=" + ks.getProperty(8));
+				 */
+
 				//Stores user data returned by webservice response
 				loggedUser = new User(
 						Long.parseLong(ks.getProperty(0).toString()),	// id
-						Integer.parseInt(ks.getProperty(1).toString()),	// userTypeCode
 						ks.getProperty(2).toString(),					// wsKey
 						ks.getProperty(3).toString(),					// userID
 						null,											// userNickname
 						ks.getProperty(4).toString(),					// userSurname1
 						ks.getProperty(5).toString(),					// userSurname2
 						ks.getProperty(6).toString(),					// userFirstName
-						ks.getProperty(7).toString(),					// userTypeName
 						null,											// photoPath
 						Integer.parseInt(ks.getProperty(8).toString())	// userRole
 						);
@@ -148,14 +157,13 @@ public class Login extends Module {
 		}
 
 		/*if(isDebuggable) {
-			Log.d(TAG, "userTypeCode=" + loggedUser.getUserTypeCode());
+			Log.d(TAG, "id=" + loggedUser.getId());
 			Log.d(TAG, "wsKey=" + loggedUser.getWsKey());
 			Log.d(TAG, "userID=" + loggedUser.getUserID());
 			Log.d(TAG, "userNickname=" + loggedUser.getUserNickname());
 			Log.d(TAG, "userSurname1=" + loggedUser.getUserSurname1());
 			Log.d(TAG, "userSurname2=" + loggedUser.getUserSurname2());
 			Log.d(TAG, "userFirstName=" + loggedUser.getUserFirstname());
-			Log.d(TAG, "userTypeName=" + loggedUser.getUserTypeName());
 			Log.d(TAG, "userRole=" + loggedUser.getUserRole());
 			Log.d(TAG, "lastLoginTime=" + Global.getLastLoginTime());
 		}*/

@@ -178,79 +178,63 @@ public class AttendanceConfigDownload extends Module {
 	 */
 	@Override
 	protected void requestService() throws NoSuchAlgorithmException, IOException, XmlPullParserException, SoapFault, IllegalAccessException, InstantiationException {
-		int userTypeCode = Global.STUDENT_TYPE_CODE;
+		int userRole = Global.STUDENT_TYPE_CODE;
 		String empty = "anyType{}";
 
-		// Check if user is logged as teacher
-		if (Global.getLoggedUser().getUserRole() == Global.TEACHER_TYPE_CODE) {
-			//Creates webservice request, adds required params and sends request to webservice
-			createRequest();
-			addParam("wsKey", Global.getLoggedUser().getWsKey());
-			addParam("courseCode", (int) selectedCourseCode);
-			addParam("groupCode", 0);		// All groups
-			addParam("userRole", userTypeCode);
-			sendRequest(User.class, false);
+		//Creates webservice request, adds required params and sends request to webservice
+		createRequest();
+		addParam("wsKey", Global.getLoggedUser().getWsKey());
+		addParam("courseCode", (int) selectedCourseCode);
+		addParam("groupCode", 0);		// All groups
+		addParam("userRole", userRole);
+		sendRequest(User.class, false);
 
-			if (result != null) {
-				dbHelper.beginTransaction();
+		if (result != null) {
+			dbHelper.beginTransaction();
 
-				//Stores users data returned by webservice response
-				Vector<?> res = (Vector<?>) result;
-				SoapObject soap = (SoapObject) res.get(1);
-				usersCount = soap.getPropertyCount();
-				for (int i = 0; i < usersCount; i++) {
-					SoapObject pii = (SoapObject) soap.getProperty(i);
-					Long userCode = new Long(pii.getProperty("userCode").toString());
-					String userID = pii.getProperty("userID").toString();
-					String userNickname = pii.getProperty("userNickname").toString();
-					String userSurname1 = pii.getProperty("userSurname1").toString();
-					String userSurname2 = pii.getProperty("userSurname2").toString();
-					String userFirstName = pii.getProperty("userFirstname").toString();
-					String userTypeName = userTypeCode == Global.TEACHER_TYPE_CODE ? "teacher" : "student";
+			//Stores users data returned by webservice response
+			Vector<?> res = (Vector<?>) result;
+			SoapObject soap = (SoapObject) res.get(1);
+			usersCount = soap.getPropertyCount();
+			for (int i = 0; i < usersCount; i++) {
+				SoapObject pii = (SoapObject) soap.getProperty(i);
+				Long userCode = new Long(pii.getProperty("userCode").toString());
+				String userID = pii.getProperty("userID").toString();
+				String userNickname = pii.getProperty("userNickname").toString();
+				String userSurname1 = pii.getProperty("userSurname1").toString();
+				String userSurname2 = pii.getProperty("userSurname2").toString();
+				String userFirstName = pii.getProperty("userFirstname").toString();
 
-					/*if(isDebuggable) {
-						Log.d(TAG, "userCode=" + userCode);
-						Log.d(TAG, "userID=" + userID);
-						Log.d(TAG, "userNickname=" + userNickname);
-						Log.d(TAG, "userSurname1=" + userSurname1);
-						Log.d(TAG, "userSurname2=" + userSurname2);
-						Log.d(TAG, "userFirstName=" + userFirstName);
-						Log.d(TAG, "userTypeName=" + userTypeName);
-					}*/
+				if (userNickname.equals(empty)) userNickname = null;
+				if (userSurname1.equals(empty)) userSurname1 = null;
+				if (userSurname2.equals(empty)) userSurname2 = null;
+				if (userFirstName.equals(empty)) userFirstName = null;
 
-					if (userNickname.equals(empty)) userNickname = null;
-					if (userSurname1.equals(empty)) userSurname1 = null;
-					if (userSurname2.equals(empty)) userSurname2 = null;
-					if (userFirstName.equals(empty)) userFirstName = null;
+				User u = new User(
+						userCode,			// id
+						null,				// wsKey
+						userID,
+						userNickname,
+						userSurname1,
+						userSurname2,
+						userFirstName,
+						null,				// photoPath
+						userRole
+						);
+				if (dbHelper.insertUser(u))
+					insertedUsersCount++;
 
-					User u = new User(
-							userCode,			// id
-							userTypeCode,
-							null,				// wsKey
-							userID,
-							userNickname,
-							userSurname1,
-							userSurname2,
-							userFirstName,
-							userTypeName,
-							null,				// photoPath
-							userTypeCode		// userRole
-							);
-					if (dbHelper.insertUser(u))
-						insertedUsersCount++;
-					
-					dbHelper.insertUserCourse(u, selectedCourseCode);
-				}	// end for (int i=0; i < usersCount; i++)
-
-				//Request finalized without errors
-				Log.i(TAG, "Retrieved " + usersCount + " users");
-
-				dbHelper.endTransaction();
-			}	// end if (result != null)
+				dbHelper.insertUserCourse(u, selectedCourseCode);
+			}	// end for (int i=0; i < usersCount; i++)
 
 			//Request finalized without errors
-			setResult(RESULT_OK);
-		}
+			Log.i(TAG, "Retrieved " + usersCount + " users");
+
+			dbHelper.endTransaction();
+		}	// end if (result != null)
+
+		//Request finalized without errors
+		setResult(RESULT_OK);
 	}
 
 	/* (non-Javadoc)

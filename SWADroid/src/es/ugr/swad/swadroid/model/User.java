@@ -30,10 +30,6 @@ import org.ksoap2.serialization.PropertyInfo;
  */
 public class User extends Model {
 	/**
-	 * Code of user type.
-	 */
-	private int userTypeCode;
-	/**
 	 * Webservices session key.
 	 */
 	private String wsKey;
@@ -58,10 +54,6 @@ public class User extends Model {
 	 */
 	private String userFirstname;
 	/**
-	 * Name of the user type.
-	 */
-	private String userTypeName;
-	/**
 	 * Full path where user's picture is stored.
 	 */
 	private String photoPath;
@@ -70,27 +62,23 @@ public class User extends Model {
 	 */
 	private int userRole;
 
-	private static PropertyInfo PI_userTypeCode = new PropertyInfo();
 	private static PropertyInfo PI_wsKey = new PropertyInfo();
 	private static PropertyInfo PI_userID = new PropertyInfo();
 	private static PropertyInfo PI_userNickname = new PropertyInfo();
 	private static PropertyInfo PI_userSurname1 = new PropertyInfo();
 	private static PropertyInfo PI_userSurname2 = new PropertyInfo();
 	private static PropertyInfo PI_userFirstname = new PropertyInfo();
-	private static PropertyInfo PI_userTypeName = new PropertyInfo();
 	private static PropertyInfo PI_photoPath = new PropertyInfo();
 	private static PropertyInfo PI_userRole = new PropertyInfo();
 
 	@SuppressWarnings("unused")
 	private static PropertyInfo[] PI_PROP_ARRAY = {
-		PI_userTypeCode,
 		PI_wsKey,
 		PI_userID,
 		PI_userNickname,
 		PI_userSurname1,
 		PI_userSurname2,
 		PI_userFirstname,
-		PI_userTypeName,
 		PI_photoPath,
 		PI_userRole
 	};
@@ -98,28 +86,24 @@ public class User extends Model {
 	/**
 	 * Constructor.
 	 * @param id User code.
-	 * @param userTypeCode Code of user type.
 	 * @param wsKey Webservices session key.
 	 * @param userID User identifier.
 	 * @param userNickname User nickname.
 	 * @param userSurname1 User first surname.
 	 * @param userSurname2 User last surname.
 	 * @param userFirstname User name.
-	 * @param userTypeName Name of user type.
 	 * @param photoPath Full path where user's picture is stored.
 	 * @param userRole User role.
 	 */
-	public User(long id, int userTypeCode, String wsKey, String userID, String userNickname, String userSurname1, 
-			String userSurname2, String userFirstname, String userTypeName, String photoPath, int userRole) {
+	public User(long id, String wsKey, String userID, String userNickname, String userSurname1, 
+			String userSurname2, String userFirstname, String photoPath, int userRole) {
 		super(id);
-		this.userTypeCode	= userTypeCode;
 		this.wsKey			= wsKey;
 		this.userID			= userID;
 		this.userNickname	= userNickname;
 		this.userSurname1	= userSurname1;
 		this.userSurname2	= userSurname2;
 		this.userFirstname	= userFirstname;
-		this.userTypeName	= userTypeName;
 		this.photoPath		= photoPath;
 		this.userRole		= userRole;
 	}
@@ -205,38 +189,6 @@ public class User extends Model {
 	}
 
 	/**
-	 * Gets Code of user type.
-	 * @return Code of user type.
-	 */
-	public int getUserTypeCode() {
-		return userTypeCode;
-	}
-
-	/**
-	 * Sets Code of user type.
-	 * @param userTypeCode Code of user type.
-	 */
-	public void setUserTypeCode(int userTypeCode) {
-		this.userTypeCode = userTypeCode;
-	}
-
-	/**
-	 * Gets Name of user type.
-	 * @return Name of user type.
-	 */
-	public String getUserTypeName() {
-		return userTypeName;
-	}
-
-	/**
-	 * Sets Name of user type.
-	 * @param userTypeName Name of user type.
-	 */
-	public void setUserTypeName(String userTypeName) {
-		this.userTypeName = userTypeName;
-	}
-
-	/**
 	 * Gets Full path where user's picture is stored.
 	 * @return the photoPath
 	 */
@@ -289,64 +241,54 @@ public class User extends Model {
 		Object object = null;
 		switch(param)
 		{
-		case 0 : object = userTypeCode;		break;
-		case 1 : object = wsKey;			break;
-		case 2 : object = userID;			break;
-		case 3 : object = userNickname;		break;
-		case 4 : object = userSurname1;		break;
-		case 5 : object = userSurname2;		break;
-		case 6 : object = userFirstname;	break;
-		case 7 : object = userTypeName;		break;
-		case 8 : object = photoPath;		break;
-		case 9 : object = userRole;			break;
+		case 0 : object = wsKey;			break;
+		case 1 : object = userID;			break;
+		case 2 : object = userNickname;		break;
+		case 3 : object = userSurname1;		break;
+		case 4 : object = userSurname2;		break;
+		case 5 : object = userFirstname;	break;
+		case 6 : object = photoPath;		break;
+		case 7 : object = userRole;			break;
 		}
 
 		return object;
 	}
 
 	public int getPropertyCount() {		
-		return 10;
+		return 8;
 	}
 
 	public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo propertyInfo) {
 		switch(param){
 		case 0:
-			propertyInfo.type = PropertyInfo.INTEGER_CLASS;
-			propertyInfo.name = "userTypeCode";
-			break;            
-		case 1:
 			propertyInfo.type = PropertyInfo.STRING_CLASS;
 			propertyInfo.name = "wsKey";
 			break;            
-		case 2:
+		case 1:
 			propertyInfo.type = PropertyInfo.STRING_CLASS;
 			propertyInfo.name = "userID";
 			break;           
-		case 3:
+		case 2:
 			propertyInfo.type = PropertyInfo.STRING_CLASS;
 			propertyInfo.name = "userNickname";
 			break;
-		case 4:
+		case 3:
 			propertyInfo.type = PropertyInfo.STRING_CLASS;
 			propertyInfo.name = "userSurname1";
 			break;            
-		case 5:
+		case 4:
 			propertyInfo.type = PropertyInfo.STRING_CLASS;
 			propertyInfo.name = "userSurname2";
 			break;              
-		case 6:
+		case 5:
 			propertyInfo.type = PropertyInfo.STRING_CLASS;
 			propertyInfo.name = "userFirstname";
 			break;             
-		case 7:
-			propertyInfo.type = PropertyInfo.STRING_CLASS;
-			propertyInfo.name = "userTypeName";
-			break;
-		case 8:
+		case 6:
 			propertyInfo.type = PropertyInfo.STRING_CLASS;
 			propertyInfo.name = "photoPath";
 			break;
-		case 9:
+		case 7:
 			propertyInfo.type = PropertyInfo.INTEGER_CLASS;
 			propertyInfo.name = "userRole";
 			break;
@@ -355,16 +297,14 @@ public class User extends Model {
 
 	public void setProperty(int param, Object obj) {
 		switch(param) {
-		case 0 : userTypeCode	= (Integer) obj; break;
-		case 1 : wsKey			= (String) obj; break;
-		case 2 : userID			= (String) obj; break;
-		case 3 : userNickname	= (String) obj; break;
-		case 4 : userSurname1	= (String) obj; break;
-		case 5 : userSurname2	= (String) obj; break;
-		case 6 : userFirstname	= (String) obj; break;
-		case 7 : userTypeName	= (String) obj; break;
-		case 8 : photoPath		= (String) obj; break;
-		case 9 : userRole		= (Integer) obj; break;
+		case 0 : wsKey			= (String) obj; break;
+		case 1 : userID			= (String) obj; break;
+		case 2 : userNickname	= (String) obj; break;
+		case 3 : userSurname1	= (String) obj; break;
+		case 4 : userSurname2	= (String) obj; break;
+		case 5 : userFirstname	= (String) obj; break;
+		case 6 : photoPath		= (String) obj; break;
+		case 7 : userRole		= (Integer) obj; break;
 		}    
 	}
 
