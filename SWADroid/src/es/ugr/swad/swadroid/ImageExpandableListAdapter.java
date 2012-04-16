@@ -20,12 +20,10 @@ package es.ugr.swad.swadroid;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,20 +38,20 @@ import android.widget.TextView;
  */
 public class ImageExpandableListAdapter extends SimpleExpandableListAdapter {
 	final String NAME = "listText";
-    final String IMAGE = "listIcon";
-    final LayoutInflater layoutInflater;
-    ArrayList<HashMap<String, Object>> groupData;
-    ArrayList<ArrayList<HashMap<String, Object>>> childData;
-    Context context;
- 
-    
+	final String IMAGE = "listIcon";
+	final LayoutInflater layoutInflater;
+	ArrayList<HashMap<String, Object>> groupData;
+	ArrayList<ArrayList<HashMap<String, Object>>> childData;
+	Context context;
+
+
 	public ImageExpandableListAdapter(Context context,
 			ArrayList<HashMap<String, Object>> groupData, int expandedGroupLayout,
 			String[] groupFrom, int[] groupTo,
 			ArrayList<ArrayList<HashMap<String, Object>>> childData,
 			int childLayout, String[] childFrom,
 			int[] childTo) {		
-	
+
 		super(context, groupData, expandedGroupLayout, groupFrom,
 				groupTo, childData, childLayout, childFrom, childTo);
 		this.groupData = groupData;
@@ -61,48 +59,48 @@ public class ImageExpandableListAdapter extends SimpleExpandableListAdapter {
 		layoutInflater = LayoutInflater.from(context);
 	}
 
-    /* (non-Javadoc)
+	/* (non-Javadoc)
 	 * @see android.widget.SimpleExpandableListAdapter#getGroupView(int, boolean, android.view.View, android.view.ViewGroup)
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded,
 			View convertView, ViewGroup parent) {
-		
+
 		final View v = super.getGroupView(groupPosition, isExpanded, convertView, parent);
 
-        // Populate your custom view here
-        ((TextView)v.findViewById(R.id.listText)).setText( (String) ((Map<String,Object>)getGroup(groupPosition)).get(NAME) );
-        ((ImageView)v.findViewById(R.id.listIcon)).setImageDrawable( (Drawable) ((Map<String,Object>)getGroup(groupPosition)).get(IMAGE) );
+		// Populate your custom view here
+		((TextView)v.findViewById(R.id.listText)).setText( (String) ((Map<String,Object>)getGroup(groupPosition)).get(NAME) );
+		((ImageView)v.findViewById(R.id.listIcon)).setImageDrawable( (Drawable) ((Map<String,Object>)getGroup(groupPosition)).get(IMAGE) );
 
-        return v;
+		return v;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        final View v = super.getChildView(groupPosition, childPosition, isLastChild, convertView, parent);
+	public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+		final View v = super.getChildView(groupPosition, childPosition, isLastChild, convertView, parent);
 
-        // Populate your custom view here
-        ((TextView)v.findViewById(R.id.listText)).setText( (String) ((Map<String,Object>)getChild(groupPosition, childPosition)).get(NAME) );
-        ((ImageView)v.findViewById(R.id.listIcon)).setImageDrawable( (Drawable) ((Map<String,Object>)getChild(groupPosition, childPosition)).get(IMAGE) );
+		// Populate your custom view here
+		((TextView)v.findViewById(R.id.listText)).setText( (String) ((Map<String,Object>)getChild(groupPosition, childPosition)).get(NAME) );
+		((ImageView)v.findViewById(R.id.listIcon)).setImageDrawable( (Drawable) ((Map<String,Object>)getChild(groupPosition, childPosition)).get(IMAGE) );
 
-        return v;
-    }
+		return v;
+	}
 
 	/* (non-Javadoc)
 	 * @see android.widget.SimpleExpandableListAdapter#newGroupView(boolean, android.view.ViewGroup)
 	 */
 	@Override
 	public View newGroupView(boolean isExpanded, ViewGroup parent) {
-		 return layoutInflater.inflate(R.layout.image_list_item, parent, false);
+		return layoutInflater.inflate(R.layout.image_list_item, parent, false);
 	}
 
 	@Override
-    public View newChildView(boolean isLastChild, ViewGroup parent) {
-         return layoutInflater.inflate(R.layout.image_list_item, parent, false);
-    }
-	
+	public View newChildView(boolean isLastChild, ViewGroup parent) {
+		return layoutInflater.inflate(R.layout.image_list_item, parent, false);
+	}
+
 	/**
 	 * Removes the child which located at childPosition under the group located at groupPosition. 
 	 * If it is removed, it will not be shown.
@@ -111,16 +109,16 @@ public class ImageExpandableListAdapter extends SimpleExpandableListAdapter {
 	 * @return true if the child was removed;
 	 * */
 	public boolean removeChild(int groupPosition,int childPosition){
-		
+
 		if(groupPosition>= getGroupCount() ||  childPosition>=getChildrenCount(groupPosition))
 			return false;
 		childData.get(groupPosition).remove(childPosition);
 		super.notifyDataSetChanged();
-		
+
 		return true;
 	}
-	
-	
+
+
 	public boolean addChild(int groupPosition, int childPosition, HashMap<String,Object> child){
 		if(groupPosition>=getGroupCount())
 			return false;
@@ -128,7 +126,7 @@ public class ImageExpandableListAdapter extends SimpleExpandableListAdapter {
 		super.notifyDataSetChanged();
 		return true;
 	}
-	
+
 	public boolean addGroup(int groupPosition,HashMap<String,Object> group, ArrayList<HashMap<String,Object>> childs){
 		if(groupPosition >= getGroupCount()){
 			groupData.add(groupPosition, group);
@@ -144,7 +142,7 @@ public class ImageExpandableListAdapter extends SimpleExpandableListAdapter {
 		super.notifyDataSetChanged();
 		return true;
 	}
-	
+
 	public boolean removeGroup(int groupPosition){
 		if(groupPosition >= getGroupCount())
 			return false;
@@ -156,6 +154,6 @@ public class ImageExpandableListAdapter extends SimpleExpandableListAdapter {
 			super.notifyDataSetChanged();
 			return true;
 		}
-		
+
 	}
 }

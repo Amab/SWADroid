@@ -8,9 +8,7 @@ import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
-
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
@@ -32,8 +30,8 @@ public class DirectoryTreeDownload extends Module {
 
 	@Override
 	protected void requestService() throws NoSuchAlgorithmException,
-			IOException, XmlPullParserException, SoapFault,
-			IllegalAccessException, InstantiationException {
+	IOException, XmlPullParserException, SoapFault,
+	IllegalAccessException, InstantiationException {
 		createRequest();
 		addParam("wsKey", Global.getLoggedUser().getWsKey());
 		addParam("courseCode", (int)Global.getSelectedCourseCode());
@@ -43,7 +41,7 @@ public class DirectoryTreeDownload extends Module {
 		if(result!=null){
 			SoapObject soapObject = (SoapObject) result;
 			String tree = soapObject.getProperty("tree").toString();
-			
+
 			//directoryTree = new DirectoryTree();
 			setResult(RESULT_OK);
 		}
@@ -63,7 +61,7 @@ public class DirectoryTreeDownload extends Module {
 	protected void postConnect() {
 		//Toast.makeText(this, "got directory tree", Toast.LENGTH_LONG).show();
 		//Log.i(TAG, "directory tree");
-		
+
 		finish();
 
 	}

@@ -194,14 +194,12 @@ public class DataBaseHelper {
 					ent.getInt("tagInd"));
 		} else if(table.equals(Global.DB_TABLE_USERS)) {
 			o = new User(ent.getInt("userCode"),
-					ent.getInt("userTypeCode"),
 					null,								// wsKey
 					ent.getString("userID"),
 					ent.getString("userNickname"),
 					ent.getString("userSurname1"),
 					ent.getString("userSurname2"),
 					ent.getString("userFirstname"),
-					null,								// userTypeName
 					ent.getString("photoPath"),
 					ent.getInt("userRole"));			
 		}
@@ -302,7 +300,7 @@ public class DataBaseHelper {
 			c.close();
 		} else
 			enrolled = false;
-		
+
 		return enrolled;
 	}
 
@@ -444,7 +442,7 @@ public class DataBaseHelper {
 		ent.setValue(params.getSecond(), p.getSecond());
 		ent.save();
 	}
-	
+
 	/**
 	 * Inserts a user in database
 	 * @param u User to be inserted
@@ -462,14 +460,13 @@ public class DataBaseHelper {
 			ent.setValue("userSurname2", u.getUserSurname2());
 			ent.setValue("userFirstname", u.getUserFirstname());
 			ent.setValue("photoPath", u.getPhotoPath());
-			ent.setValue("userTypeCode", u.getUserTypeCode());
 			ent.setValue("userRole", u.getUserRole());
 			ent.save();
 			return true;
 		} else
 			return false;
 	}
-	
+
 	/**
 	 * Inserts a test question in database
 	 * @param q Test question to be inserted
@@ -498,7 +495,6 @@ public class DataBaseHelper {
 	 * @return True if record does not exist in database and is inserted. False otherwise.
 	 */
 	public boolean insertUserCourse(User u, long selectedCourseCode) {
-		// TODO Auto-generated method stub
 		List<Entity> rows = db.getEntityList(Global.DB_TABLE_USERS_COURSES, 
 				"userCode = " + u.getId() + " AND crsCod = " + selectedCourseCode);
 
@@ -702,7 +698,6 @@ public class DataBaseHelper {
 		ent.setValue("userSurname2", actual.getUserSurname2());
 		ent.setValue("userFirstname", actual.getUserFirstname());
 		ent.setValue("photoPath", actual.getPhotoPath());
-		ent.setValue("userTypeCode", actual.getUserTypeCode());
 		ent.setValue("userRole", actual.getUserRole());
 		ent.save();
 	}
