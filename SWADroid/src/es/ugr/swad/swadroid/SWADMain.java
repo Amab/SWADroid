@@ -46,6 +46,7 @@ import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.modules.Courses;
+import es.ugr.swad.swadroid.modules.Groups;
 import es.ugr.swad.swadroid.modules.Messages;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.modules.Notices;
@@ -215,9 +216,12 @@ public class SWADMain extends MenuExpandableListActivity {
 			activity = new Intent(getBaseContext(), Attendance.class);
 			startActivityForResult(activity, Global.ATTENDANCE_REQUEST_CODE);
 		} else if(keyword.equals(getString(R.string.documentsDownloadModuleLabel))){
-			activity = new Intent(getBaseContext(),DirectoryTreeDownload.class);
+			activity = new Intent(getBaseContext(),Groups.class);
+			//activity.putExtra("treeCode",Global.DOCUMENTS_AREA_CODE);
+			startActivityForResult(activity,Global.GROUPS_REQUEST_CODE);
+		/*	activity = new Intent(getBaseContext(),DirectoryTreeDownload.class);
 			activity.putExtra("treeCode",Global.DOCUMENTS_AREA_CODE);
-			startActivityForResult(activity,Global.DIRECTORY_TREE_REQUEST_CODE);
+			startActivityForResult(activity,Global.DIRECTORY_TREE_REQUEST_CODE);*/
 		}else if(keyword.equals(getString(R.string.sharedsDownloadModuleLabel))){
 			activity = new Intent(getBaseContext(),DirectoryTreeDownload.class);
 			activity.putExtra("treeCode",Global.SHARE_AREA_CODE);
@@ -234,7 +238,6 @@ public class SWADMain extends MenuExpandableListActivity {
 	protected void onStart() {
 		super.onStart();
 		prefs.getPreferences(getBaseContext());
-		Log.i(TAG, "on start");
 		if(!Global.isPreferencesChanged()){
 			createSpinnerAdapter();
 			if(!firstRun){
@@ -299,7 +302,6 @@ public class SWADMain extends MenuExpandableListActivity {
 				dbHelper.upgradeDB(this);
 				//prefs.upgradeCredentials();
 				prefs.setLastVersion(currentVersion);
-				Log.i(TAG, "global" + String.valueOf(Global.getSelectedCourseCode()));
 			}
 			listCourses = dbHelper.getAllRows(Global.DB_TABLE_COURSES,"","name");
 			if(listCourses.size() >0){
@@ -309,7 +311,6 @@ public class SWADMain extends MenuExpandableListActivity {
 				Global.setSelectedCourseCode(-1);
 			}
 			currentRole = -1;
-			Log.i(TAG, String.valueOf(Global.getSelectedCourseCode()));
 		} catch (Exception ex) {
 			error(ex.getMessage());
 			ex.printStackTrace();
