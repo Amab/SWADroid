@@ -18,6 +18,8 @@
  */
 package es.ugr.swad.swadroid;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,21 +35,22 @@ import android.widget.TextView;
 
 /**
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ * @author Helena Rodríguez Gijón <hrgijon@gmail.com>
  *
  */
 public class ImageExpandableListAdapter extends SimpleExpandableListAdapter {
 	final String NAME = "listText";
     final String IMAGE = "listIcon";
     final LayoutInflater layoutInflater;
-    List<? extends Map<String, ?>> groupData;
-    List<? extends List<? extends Map<String, ?>>> childData;
+    ArrayList<HashMap<String, Object>> groupData;
+    ArrayList<ArrayList<HashMap<String, Object>>> childData;
     Context context;
  
     
 	public ImageExpandableListAdapter(Context context,
-			List<? extends Map<String, ?>> groupData, int expandedGroupLayout,
+			ArrayList<HashMap<String, Object>> groupData, int expandedGroupLayout,
 			String[] groupFrom, int[] groupTo,
-			List<? extends List<? extends Map<String, ?>>> childData,
+			ArrayList<ArrayList<HashMap<String, Object>>> childData,
 			int childLayout, String[] childFrom,
 			int[] childTo) {		
 	
@@ -118,12 +121,44 @@ public class ImageExpandableListAdapter extends SimpleExpandableListAdapter {
 	}
 	
 	
-	public boolean addChild(int groupPosition, int childPosition, Map<String,Object> child){
+	public boolean addChild(int groupPosition, int childPosition, HashMap<String,Object> child){
+		Log.i("Adapter", "add child");
+
 		if(groupPosition>=getGroupCount())
 			return false;
+		childData.get(groupPosition).add(child);
+		Log.i("Adapter", "add child");
 		super.notifyDataSetChanged();
 		return true;
 	}
 	
-
+	public boolean addGroup(int groupPosition,HashMap<String,Object> group, ArrayList<HashMap<String,Object>> childs){
+		if(groupPosition >= getGroupCount()){
+			groupData.add(groupPosition, group);
+			final ArrayList<HashMap<String, Object>> groupData = new ArrayList<HashMap<String, Object>>();
+			childData.add(groupPosition, groupData);
+			childData.get(groupPosition).addAll(childs);
+		}else{
+			groupData.add(getGroupCount(), group);
+			final ArrayList<HashMap<String, Object>> groupData = new ArrayList<HashMap<String, Object>>();
+			childData.add(getGroupCount()-1, groupData);
+			childData.get(getGroupCount()-1).addAll(childs);
+		}
+		super.notifyDataSetChanged();
+		return true;
+	}
+	
+	public boolean removeGroup(int groupPosition){
+		if(groupPosition >= getGroupCount())
+			return false;
+		else{
+			int childSize = childData.get(groupPosition).size();
+			for(int i=0; i<childSize;++i)
+				removeChild(groupPosition,i);
+			groupData.remove(groupPosition);
+			super.notifyDataSetChanged();
+			return true;
+		}
+		
+	}
 }

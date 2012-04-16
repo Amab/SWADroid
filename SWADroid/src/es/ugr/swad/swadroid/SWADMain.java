@@ -50,6 +50,7 @@ import es.ugr.swad.swadroid.modules.Messages;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.modules.Notices;
 import es.ugr.swad.swadroid.modules.attendance.Attendance;
+import es.ugr.swad.swadroid.modules.downloads.DirectoryTreeDownload;
 import es.ugr.swad.swadroid.modules.notifications.Notifications;
 import es.ugr.swad.swadroid.modules.tests.Tests;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
@@ -58,6 +59,7 @@ import es.ugr.swad.swadroid.ssl.SecureConnection;
  * Main class of the application.
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
+ * @author Helena Rodríguez Gijon <hrgijon@gmail.com>
  */
 public class SWADMain extends MenuExpandableListActivity {
 	/**
@@ -91,12 +93,57 @@ public class SWADMain extends MenuExpandableListActivity {
 	/**
 	 * Indicates if it is the first run
 	 * */
-	public boolean firstRun = false;
+	private boolean firstRun = false;
 
 	/**
 	 * Actual role 2 - student 3 - teacher -1 - none role was chosen 
 	 * */
-	public static int actualRole = -1;
+	private int currentRole = -1;
+	/**
+	 * Group position inside the main menu for Messages group
+	 * */
+	private int MESSAGES_GROUP = 0;
+	/**
+	 * Group position inside the main menu for Evaluation group
+	 * */
+	private int EVALUATION_GROUP = 1;
+	/**
+	 * Group position inside the main menu for Course group
+	 * */
+	private int COURSE_GROUP = 2;
+	/**
+	 * Group position inside the main menu for User group
+	 * */
+	private int USERS_GROUP = 3;
+	/**
+	 * Child position inside the messages menu for Notification
+	 * */
+	private int NOTIFICATION_CHILD = 0;
+	/**
+	 * Child position inside the messages menu for Send message
+	 * */
+	private int SEND_MESSAGES_CHILD = 1;
+	/**
+	 * Child position inside the messages menu for Publish Note
+	 * */
+	private int PUBLISH_NOTE_CHILD = 2;
+	/**
+	 * Child position inside the evaluation menu for Tests
+	 * */
+	private int TESTS_CHILD = 0;
+	/**
+	 * Child position inside the course menu for Documents
+	 * */
+	private int DOCUMENTS_CHILD = 0;
+	/**
+	 * Child position inside the course menu for Shared area
+	 * */
+	private int SHARED_AREA_CHILD = 1;
+	/**
+	 * Child position inside the users menu for Rollcall
+	 * */
+	private int ROLLCALL_CHILD = 0;
+	
 
 	/**
 	 * Gets the database helper
@@ -167,6 +214,14 @@ public class SWADMain extends MenuExpandableListActivity {
 		} else if(keyword.equals(getString(R.string.attendanceModuleLabel))) {
 			activity = new Intent(getBaseContext(), Attendance.class);
 			startActivityForResult(activity, Global.ATTENDANCE_REQUEST_CODE);
+		} else if(keyword.equals(getString(R.string.documentsDownloadModuleLabel))){
+			activity = new Intent(getBaseContext(),DirectoryTreeDownload.class);
+			activity.putExtra("treeCode",Global.DOCUMENTS_AREA_CODE);
+			startActivityForResult(activity,Global.DIRECTORY_TREE_REQUEST_CODE);
+		}else if(keyword.equals(getString(R.string.sharedsDownloadModuleLabel))){
+			activity = new Intent(getBaseContext(),DirectoryTreeDownload.class);
+			activity.putExtra("treeCode",Global.SHARE_AREA_CODE);
+			startActivityForResult(activity,Global.DIRECTORY_TREE_REQUEST_CODE);
 		}
 
 		return true;
@@ -180,158 +235,19 @@ public class SWADMain extends MenuExpandableListActivity {
 		super.onStart();
 		prefs.getPreferences(getBaseContext());
 		Log.i(TAG, "on start");
-		if(Global.isPreferencesChanged()){
+		if(!Global.isPreferencesChanged()){
+			createSpinnerAdapter();
+			if(!firstRun){
+				courseCode = Global.getSelectedCourseCode();
+				createMenu();
+			}
+		}else{
 			getActualCourses();
 			Global.setPreferencesChanged(false);
 		}
 	}
 
-	/**
-	 * Create main menu with an expandable list
-	 */
-	private void createStudentMenu()
-	{
-		if(getExpandableListAdapter() == null || actualRole==-1){
-			actualRole = 2;
-			//Construct Expandable List
-			final ArrayList<HashMap<String, Object>> headerData = new ArrayList<HashMap<String, Object>>();
 
-			final HashMap<String, Object> messages = new HashMap<String, Object>();
-			messages.put(NAME, getString(R.string.messages));
-			messages.put(IMAGE, getResources().getDrawable(R.drawable.msg));
-			headerData.add( messages );
-
-			final HashMap<String, Object> evaluation = new HashMap<String, Object>();
-			evaluation.put(NAME, getString(R.string.evaluation));
-			evaluation.put(IMAGE, getResources().getDrawable(R.drawable.grades));
-			headerData.add( evaluation);
-
-			final ArrayList<ArrayList<HashMap<String, Object>>> childData = new ArrayList<ArrayList<HashMap<String, Object>>>();
-
-			final ArrayList<HashMap<String, Object>> messagesData = new ArrayList<HashMap<String, Object>>();
-			childData.add(messagesData);
-
-			final ArrayList<HashMap<String, Object>> evaluationData = new ArrayList<HashMap<String, Object>>();
-			childData.add(evaluationData);
-
-			//Messages category
-			HashMap<String, Object> map = new HashMap<String,Object>();
-			map.put(NAME, getString(R.string.notificationsModuleLabel) );
-			map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
-			messagesData.add(map); 
-
-			map = new HashMap<String,Object>();        
-			map.put(NAME, getString(R.string.messagesModuleLabel) );
-			map.put(IMAGE, getResources().getDrawable(R.drawable.msg));
-			messagesData.add(map);
-
-			//Evaluation category
-			map = new HashMap<String,Object>();
-			map.put(NAME, getString(R.string.testsModuleLabel) );
-			map.put(IMAGE, getResources().getDrawable(R.drawable.test));
-			evaluationData.add(map);
-
-			setListAdapter( new ImageExpandableListAdapter(
-					this,
-					headerData,
-					R.layout.image_list_item,
-					new String[] { NAME },            // the name of the field data
-					new int[] { R.id.listText }, // the text field to populate with the field data
-					childData,
-					0,
-					null,
-					new int[] {}
-					));
-
-			getExpandableListView().setOnChildClickListener(this);
-		}else{
-			if(actualRole == 3){
-				((ImageExpandableListAdapter) getExpandableListAdapter()).removeChild(0, 2);
-				actualRole = 2;
-			}
-		}
-	}
-	/**
-	 * Create main menu with an expandable list
-	 */
-	private void createTeacherMenu()
-	{
-		//if(getExpandableListAdapter() == null || actualRole==-1){ //first, how to add a new child 
-		actualRole = 3;
-		//Construct Expandable List
-		final ArrayList<HashMap<String, Object>> headerData = new ArrayList<HashMap<String, Object>>();
-
-		final HashMap<String, Object> messages = new HashMap<String, Object>();
-		messages.put(NAME, getString(R.string.messages));
-		messages.put(IMAGE, getResources().getDrawable(R.drawable.msg));
-		headerData.add( messages );
-
-		final HashMap<String, Object> evaluation = new HashMap<String, Object>();
-		evaluation.put(NAME, getString(R.string.evaluation));
-		evaluation.put(IMAGE, getResources().getDrawable(R.drawable.grades));
-		headerData.add( evaluation);
-
-		final HashMap<String, Object> users = new HashMap<String, Object>();
-		users.put(NAME, getString(R.string.users));
-		users.put(IMAGE, getResources().getDrawable(R.drawable.users));
-		headerData.add(users);
-
-		final ArrayList<ArrayList<HashMap<String, Object>>> childData = new ArrayList<ArrayList<HashMap<String, Object>>>();
-
-		final ArrayList<HashMap<String, Object>> messagesData = new ArrayList<HashMap<String, Object>>();
-		childData.add(messagesData);
-
-		final ArrayList<HashMap<String, Object>> evaluationData = new ArrayList<HashMap<String, Object>>();
-		childData.add(evaluationData);
-
-		final ArrayList<HashMap<String, Object>> attendanceData = new ArrayList<HashMap<String, Object>>();
-		childData.add(attendanceData);
-
-		//Messages category
-		HashMap<String, Object> map = new HashMap<String,Object>();
-		map.put(NAME, getString(R.string.notificationsModuleLabel) );
-		map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
-		messagesData.add(map); 
-
-		map = new HashMap<String,Object>();        
-		map.put(NAME, getString(R.string.messagesModuleLabel) );
-		map.put(IMAGE, getResources().getDrawable(R.drawable.msg_write));
-		messagesData.add(map);
-
-		map = new HashMap<String,Object>();        
-		map.put(NAME, getString(R.string.noticesModuleLabel) );
-		map.put(IMAGE, getResources().getDrawable(R.drawable.note));
-		messagesData.add(map);
-
-		//Evaluation category
-		map = new HashMap<String,Object>();
-		map.put(NAME, getString(R.string.testsModuleLabel) );
-		map.put(IMAGE, getResources().getDrawable(R.drawable.test));
-		evaluationData.add(map);
-
-		//Attendance category
-		map = new HashMap<String,Object>();
-		map.put(NAME, getString(R.string.attendanceModuleLabel));
-		map.put(IMAGE, getResources().getDrawable(R.drawable.rollcall));
-		attendanceData.add(map);
-
-		setListAdapter( new ImageExpandableListAdapter(
-				this,
-				headerData,
-				R.layout.image_list_item,
-				new String[] { NAME },            // the name of the field data
-				new int[] { R.id.listText }, // the text field to populate with the field data
-				childData,
-				0,
-				null,
-				new int[] {}
-				));
-
-		getExpandableListView().setOnChildClickListener(this);
-		/*}else{
-
-    	}*/
-	}
 
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onCreate()
@@ -375,6 +291,7 @@ public class SWADMain extends MenuExpandableListActivity {
 				//prefs.upgradeCredentials();
 				prefs.setLastVersion(currentVersion);
 				firstRun = true;
+				Global.setSelectedCourseCode(-1);
 
 				//If this is an upgrade, show upgrade dialog
 			} else if(lastVersion < currentVersion) {
@@ -382,18 +299,25 @@ public class SWADMain extends MenuExpandableListActivity {
 				dbHelper.upgradeDB(this);
 				//prefs.upgradeCredentials();
 				prefs.setLastVersion(currentVersion);
+				Log.i(TAG, "global" + String.valueOf(Global.getSelectedCourseCode()));
 			}
+			listCourses = dbHelper.getAllRows(Global.DB_TABLE_COURSES,"","name");
+			if(listCourses.size() >0){
+				Course c =(Course) listCourses.get(prefs.getLastCourseSelected());
+				Global.setSelectedCourseCode(c.getId());
+			}else{
+				Global.setSelectedCourseCode(-1);
+			}
+			currentRole = -1;
+			Log.i(TAG, String.valueOf(Global.getSelectedCourseCode()));
 		} catch (Exception ex) {
 			error(ex.getMessage());
 			ex.printStackTrace();
 		} 
-		if(!firstRun && Module.connectionAvailable(this)){
-			Log.i(TAG, " obtienen asignaturas");
-			Intent activity;
-			activity = new Intent(getBaseContext(), Courses.class );
-			startActivityForResult(activity,Global.COURSES_REQUEST_CODE);
-		}
-		createSpinnerAdapter();
+		/*if(!firstRun && Module.connectionAvailable(this)){
+			getActualCourses();
+		}*/
+
 	}
 
 	@Override
@@ -405,6 +329,7 @@ public class SWADMain extends MenuExpandableListActivity {
 			//After get the list of courses, a dialog is launched to choice the course
 			case Global.COURSES_REQUEST_CODE:
 				createSpinnerAdapter();
+				createMenu();
 				break;
 			}
 		}
@@ -437,12 +362,12 @@ public class SWADMain extends MenuExpandableListActivity {
 		@Override
 		public void onItemSelected(AdapterView<?> parent, View view, int position,
 				long id) {
+			prefs.setLastCourseSelected(position);
 			Course courseSelected = (Course)listCourses.get(position);
 			courseCode = courseSelected.getId();
 			Global.setSelectedCourseCode(courseCode);
-			int userRole = courseSelected.getUserRole();
-			if(userRole == 3 && actualRole != 3) createTeacherMenu();
-			if(userRole == 2 && actualRole != 2) createStudentMenu();
+			createMenu();
+
 		}
 
 		@Override
@@ -466,8 +391,6 @@ public class SWADMain extends MenuExpandableListActivity {
 					v.performClick();
 				}
 
-				Log.i(TAG, "on touch");
-
 			}
 			return true;
 		}
@@ -478,6 +401,154 @@ public class SWADMain extends MenuExpandableListActivity {
 		activity = new Intent(getBaseContext(), Courses.class );
 		Toast.makeText(getBaseContext(), R.string.coursesProgressDescription, Toast.LENGTH_LONG).show();
 		startActivityForResult(activity,Global.COURSES_REQUEST_CODE);
+	}
+	
+	private void createMenu(){
+		Log.i(TAG, String.valueOf(Global.getSelectedCourseCode()));
+		
+		if(listCourses != null){
+			Course courseSelected;
+			if(Global.getSelectedCourseCode()!=-1){
+				String where = "id="+String.valueOf(Global.getSelectedCourseCode());
+				courseSelected = (Course) dbHelper.getAllRows(Global.DB_TABLE_COURSES, where, "name").get(0);
+			}else{
+				courseSelected = (Course) listCourses.get(0);
+				Global.setSelectedCourseCode(courseSelected.getId());
+				prefs.setLastCourseSelected(0);
+			}
+			
+			if(courseSelected != null){
+				if(getExpandableListAdapter() == null)
+					createBaseMenu();
+				int userRole = courseSelected.getUserRole();
+				Log.i(TAG, "userRole" +String.valueOf(userRole));
+				Log.i(TAG, "actual" + String.valueOf(currentRole));
+				if(userRole == Global.TEACHER_TYPE_CODE && currentRole != Global.TEACHER_TYPE_CODE) 
+					changeToTeacherMenu();
+				if(userRole == Global.STUDENT_TYPE_CODE && currentRole != Global.STUDENT_TYPE_CODE) 
+					changeToStudentMenu();
+			}
+		}
+	}
+	
+	/**
+	 * Creates base menu. The menu base is common for students and teachers.
+	 * Sets currentRole to student role
+	 * */
+	private void createBaseMenu(){
+		if(getExpandableListAdapter() == null || currentRole==-1){
+			//the menu base is equal to students menu. 
+			currentRole = Global.STUDENT_TYPE_CODE; 
+			//Construct Expandable List
+			final ArrayList<HashMap<String, Object>> headerData = new ArrayList<HashMap<String, Object>>();
+
+			final HashMap<String, Object> messages = new HashMap<String, Object>();
+			messages.put(NAME, getString(R.string.messages));
+			messages.put(IMAGE, getResources().getDrawable(R.drawable.msg));
+			headerData.add( messages );
+
+			final HashMap<String, Object> evaluation = new HashMap<String, Object>();
+			evaluation.put(NAME, getString(R.string.evaluation));
+			evaluation.put(IMAGE, getResources().getDrawable(R.drawable.grades));
+			headerData.add( evaluation);
+			
+			final HashMap<String, Object> courses = new HashMap<String,Object>();
+	        courses.put(NAME, getString(R.string.course));
+	        courses.put(IMAGE, getResources().getDrawable(R.drawable.blackboard));
+	        headerData.add(courses);
+
+			final ArrayList<ArrayList<HashMap<String, Object>>> childData = new ArrayList<ArrayList<HashMap<String, Object>>>();
+
+			final ArrayList<HashMap<String, Object>> messagesData = new ArrayList<HashMap<String, Object>>();
+			childData.add(messagesData);
+
+			final ArrayList<HashMap<String, Object>> evaluationData = new ArrayList<HashMap<String, Object>>();
+			childData.add(evaluationData);
+			
+	        final ArrayList<HashMap<String,Object>> documentsData = new ArrayList<HashMap<String, Object>>();
+	        childData.add(documentsData);
+
+			//Messages category
+			HashMap<String, Object> map = new HashMap<String,Object>();
+			map.put(NAME, getString(R.string.notificationsModuleLabel) );
+			map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
+			messagesData.add(map); 
+
+			map = new HashMap<String,Object>();        
+			map.put(NAME, getString(R.string.messagesModuleLabel) );
+			map.put(IMAGE, getResources().getDrawable(R.drawable.msg_write));
+			messagesData.add(map);
+
+			//Evaluation category
+			map = new HashMap<String,Object>();
+			map.put(NAME, getString(R.string.testsModuleLabel) );
+			map.put(IMAGE, getResources().getDrawable(R.drawable.test));
+			evaluationData.add(map);
+
+		      //Documents category
+	        map = new HashMap<String,Object>();
+	        map.put(NAME, getString(R.string.documentsDownloadModuleLabel));
+	        map.put(IMAGE,  getResources().getDrawable(R.drawable.folder));
+	        documentsData.add(map);
+	      //shared area category
+	        map = new HashMap<String,Object>();
+	        map.put(NAME, getString(R.string.sharedsDownloadModuleLabel));
+	        map.put(IMAGE,  getResources().getDrawable(R.drawable.folderusers));
+	        documentsData.add(map);
+			setListAdapter( new ImageExpandableListAdapter(
+					this,
+					headerData,
+					R.layout.image_list_item,
+					new String[] { NAME },            // the name of the field data
+					new int[] { R.id.listText }, // the text field to populate with the field data
+					childData,
+					0,
+					null,
+					new int[] {}
+					));
+
+			getExpandableListView().setOnChildClickListener(this);
+		}
+	}
+	
+	/**
+	 * Adapts the current menu to students view. Removes options unique to teachers and adds options unique to students
+	 */
+	private void changeToStudentMenu()
+	{
+			if(currentRole == Global.TEACHER_TYPE_CODE){
+				//Removes Publish Note from messages menu
+				((ImageExpandableListAdapter) getExpandableListAdapter()).removeChild(MESSAGES_GROUP, PUBLISH_NOTE_CHILD);
+				//Removes completely users menu 
+				((ImageExpandableListAdapter) getExpandableListAdapter()).removeGroup(USERS_GROUP);
+				
+			}
+			currentRole = Global.STUDENT_TYPE_CODE;
+	}
+	/**
+	 * Adapts the current menu to teachers view. Removes options unique to students and adds options unique to teachers
+	 */
+	private void changeToTeacherMenu()
+	{
+			if(currentRole == Global.STUDENT_TYPE_CODE){
+				HashMap<String, Object> map  = new HashMap<String,Object>();        
+				map.put(NAME, getString(R.string.noticesModuleLabel) );
+				map.put(IMAGE, getResources().getDrawable(R.drawable.note));
+				((ImageExpandableListAdapter) getExpandableListAdapter()).addChild(MESSAGES_GROUP,PUBLISH_NOTE_CHILD, map);
+				
+				final HashMap<String, Object> users = new HashMap<String, Object>();
+                users.put(NAME, getString(R.string.users));
+                users.put(IMAGE, getResources().getDrawable(R.drawable.users));
+                ArrayList<HashMap<String,Object>> child = new ArrayList<HashMap<String, Object>>();  
+                map = new HashMap<String,Object>();
+	            map.put(NAME, getString(R.string.attendanceModuleLabel));
+	            map.put(IMAGE, getResources().getDrawable(R.drawable.rollcall));
+	            child.add(map);
+	            ((ImageExpandableListAdapter) getExpandableListAdapter()).addGroup(USERS_GROUP, users, child);
+	 				
+				
+			}
+			currentRole = Global.TEACHER_TYPE_CODE;
 	}
 
 }
