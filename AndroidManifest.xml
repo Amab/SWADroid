@@ -127,6 +127,16 @@
             android:label="@string/noticesModuleLabel"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
+        <activity 
+            android:name=".modules.downloads.DirectoryTreeDownload" 
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" 
+            android:label="@string/documentsDownloadModuleLabel">
+        </activity>
+        <activity 
+            android:name=".modules.Groups" 
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" 
+            android:label="@string/documentsDownloadModuleLabel">
+        </activity>
 
         <provider
             android:name=".sync.DummyProvider"
