@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+    <include layout="@layout/action_bar"/>    
+ 
+	<TextView
+	  android:id="@+id/listText"
+	  android:layout_width="fill_parent"
+	  android:layout_height="wrap_content"
+	  android:padding="20dip"
+	  android:textColor="@color/foreground1"
+	  android:textSize="24sp"
+      android:visibility="gone">
+	</TextView>
+    
+    <ListView
+       	android:id="@+id/listItems"
+       	android:cacheColorHint="@color/background"
+       	android:layout_width="match_parent"
+       	android:layout_height="wrap_content">
+    </ListView>
+</LinearLayout>

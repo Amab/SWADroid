@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array name="functions">
+		<item>Notificacions</item>
+		<item>Tests</item>
+	</string-array>
+	<string-array name="testMenuItems">
+		<item>Sincronitzar preguntas</item>
+		<item>Realitzar test</item>
+	</string-array>
+	<string-array name="testAnswerTypesNames">
+		<item>Tots</item><item>Veritable/Fals</item>
+		<item>Elecció única</item>
+		<item>Elecció múltiple</item>
+		<item>Text</item>
+		<item>Nº enter</item>
+		<item>Nº real</item>
+		
+	</string-array>
+</resources>
