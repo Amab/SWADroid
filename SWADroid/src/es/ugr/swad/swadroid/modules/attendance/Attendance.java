@@ -69,8 +69,6 @@ public class Attendance extends Module {
 	 * Database Framework.
 	 */
 	protected static DataFramework db;  
-
-
 	/**
 	 * Array adapter for showing menu options
 	 */
@@ -128,7 +126,7 @@ public class Attendance extends Module {
 				// Show a dialog with the list of ID cards scanned
 				listaDnis = intent.getStringArrayListExtra("lista_dnis");
 
-				selectedCourseCode = intent.getLongExtra("selectedCourseCode", 0);
+				selectedCourseCode = Global.getSelectedCourseCode();
 
 				Log.i(TAG, "selectedCourseCode=" + selectedCourseCode);
 
