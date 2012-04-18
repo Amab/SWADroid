@@ -42,6 +42,7 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.model.Model;
@@ -338,8 +339,8 @@ public class SWADMain extends MenuExpandableListActivity {
 
 	private void createSpinnerAdapter(){
 		Spinner spinner = (Spinner) this.findViewById(R.id.spinner);
-		listCourses = dbHelper.getAllRows(Global.DB_TABLE_COURSES,"","name");
-		dbCursor =  dbHelper.getDb().getCursor(Global.DB_TABLE_COURSES,"","name");
+		listCourses = dbHelper.getAllRows(Global.DB_TABLE_COURSES, null, "name");
+		dbCursor =  dbHelper.getDb().getCursor(Global.DB_TABLE_COURSES, null, "name");
 		startManagingCursor(dbCursor);
 		if(listCourses.size() != 0){
 			SimpleCursorAdapter adapter = new SimpleCursorAdapter (this,
@@ -407,7 +408,7 @@ public class SWADMain extends MenuExpandableListActivity {
 	private void createMenu(){
 		Log.i(TAG, String.valueOf(Global.getSelectedCourseCode()));
 
-		if(listCourses != null){
+		if(listCourses.size() != 0){
 			Course courseSelected;
 			if(Global.getSelectedCourseCode()!=-1){
 				String where = "id="+String.valueOf(Global.getSelectedCourseCode());

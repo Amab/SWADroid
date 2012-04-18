@@ -242,11 +242,13 @@ public class DataBaseHelper {
 		List<Entity> rows = db.getEntityList(table, where, orderby);
 		Model row;
 
-		Iterator<Entity> iter = rows.iterator();
-		while (iter.hasNext()) {
-			Entity ent = iter.next();
-			row = createObjectByTable(table, ent);
-			result.add(row);
+		if (rows != null) {
+			Iterator<Entity> iter = rows.iterator();
+			while (iter.hasNext()) {
+				Entity ent = iter.next();
+				row = createObjectByTable(table, ent);
+				result.add(row);
+			}
 		}
 
 		return result;
