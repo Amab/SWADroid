@@ -20,20 +20,15 @@ package es.ugr.swad.swadroid.modules.notifications;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Vector;
-
 import org.ksoap2.SoapFault;
-import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
+import android.accounts.Account;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -48,7 +43,6 @@ import com.android.dataframework.DataFramework;
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
-import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.modules.Module;
 
 /**
@@ -60,7 +54,7 @@ public class Notifications extends Module {
 	/**
 	 * Max size to store notifications 
 	 */
-	private static final int SIZE_LIMIT = 25;
+	//private static final int SIZE_LIMIT = 25;
 	/**
 	 * Notifications adapter for showing the data
 	 */
@@ -80,15 +74,23 @@ public class Notifications extends Module {
 	/**
 	 * Notifications counter
 	 */
-	private int notifCount;
+	//private int notifCount;
 	/**
 	 * Unique identifier for notification alerts
 	 */
-	private int NOTIF_ALERT_ID = 1982;
+	//private int NOTIF_ALERT_ID = 1982;
 	/**
 	 * Notifications tag name for Logcat
 	 */
 	public static final String TAG = Global.APP_TAG + " Notifications";
+	/**
+	 * Account type
+	 */
+	private static String accountType = "es.ugr.swad.swadroid";
+	/**
+	 * Synchronization authority
+	 */
+	private static String authority = "es.ugr.swad.swadroid.content";
 
 	/**
 	 * Refreshes data on screen
@@ -125,14 +127,13 @@ public class Notifications extends Module {
 				TextView sender = (TextView) v.findViewById(R.id.eventSender);
 				TextView course = (TextView) v.findViewById(R.id.eventLocation);
 				TextView summary = (TextView) v.findViewById(R.id.eventSummary);
-				TextView content = (TextView) v.findViewById(R.id.eventText);			
+				TextView content = (TextView) v.findViewById(R.id.eventText);	
+				
 				Intent activity = new Intent(getApplicationContext(), NotificationItem.class);
-
 				activity.putExtra("sender", sender.getText().toString());
 				activity.putExtra("course", course.getText().toString());
 				activity.putExtra("summary", summary.getText().toString());
 				activity.putExtra("content", content.getText().toString());
-
 				startActivity(activity);
 			}    	
 		};
@@ -198,6 +199,8 @@ public class Notifications extends Module {
 	@Override
 	protected void onResume() {		
 		super.onResume();		
+		 
+
 		refreshScreen();
 	}
 
@@ -208,9 +211,13 @@ public class Notifications extends Module {
 	protected void requestService() throws NoSuchAlgorithmException,
 	IOException, XmlPullParserException, SoapFault,
 	IllegalAccessException, InstantiationException {
-
+		
+		//Call synchronization service
+		Account account = new Account(getString(R.string.app_name), accountType);
+		ContentResolver.requestSync(account, authority, null);
+		
 		//Calculates next timestamp to be requested
-		Long timestamp = new Long(dbHelper.getFieldOfLastNotification("eventTime"));
+		/*Long timestamp = new Long(dbHelper.getFieldOfLastNotification("eventTime"));
 		timestamp++;
 
 		//Creates webservice request, adds required params and sends request to webservice
@@ -243,7 +250,7 @@ public class Notifications extends Module {
 
 				/*if(isDebuggable)
 	    			Log.d(TAG, n.toString());*/
-			}
+			/*}
 
 			//Request finalized without errors
 			Log.i(TAG, "Retrieved " + notifCount + " notifications");
@@ -252,10 +259,10 @@ public class Notifications extends Module {
 			dbHelper.clearOldNotifications(SIZE_LIMIT);
 
 			dbHelper.endTransaction();
-		}
+		}*/
 	}
 
-	protected void alertNotif() {
+	/*protected void alertNotif() {
 		if(notifCount > 0) {
 			//Obtain a reference to the notification service
 			String ns = Context.NOTIFICATION_SERVICE;
@@ -293,7 +300,7 @@ public class Notifications extends Module {
 			//Send alert
 			notManager.notify(NOTIF_ALERT_ID, notif);
 		}
-	}
+	}*/
 
 	/* (non-Javadoc)
 	 * @see es.ugr.swad.swadroid.modules.Module#connect()
@@ -314,7 +321,7 @@ public class Notifications extends Module {
 		refreshScreen();
 		//Toast.makeText(this, R.string.notificationsDownloadedMsg, Toast.LENGTH_SHORT).show();
 
-		alertNotif();
+		//alertNotif();
 
 		ProgressBar pb = (ProgressBar)this.findViewById(R.id.progress_refresh);
 		ImageButton updateButton = (ImageButton)this.findViewById(R.id.refresh);
