@@ -488,7 +488,8 @@ public abstract class Module extends MenuActivity {
         boolean showDialog, isLoginModule;
 
 		/**
-		 * Shows progress dialog and connects to SWAD in background
+		 * Shows progress dialog and connects to SWAD in bac
+	  Log.i(TAG, "performSync: " + account.toString());kground
 		 * @param showDialog Flag for show a progress dialog or not
 		 * @param progressDescription Description to be showed in dialog
 		 * @param progressTitle Title to be showed in dialog

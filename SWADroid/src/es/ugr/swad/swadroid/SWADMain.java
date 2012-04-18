@@ -61,6 +61,7 @@ import es.ugr.swad.swadroid.modules.downloads.DirectoryTreeDownload
 import es.ugr.swad.swadroid.modules.notifications.Notifications;
 import es.ugr.swad.swadroid.modules.tests.Tests;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
+import es.ugr.swad.swadroid.sync.AccountAuthenticator;
 
 /**
  * Main class of the application.
@@ -288,7 +289,7 @@ public class SWADMain extends MenuExpandableListActivity {
 
 			//Initialize HTTPS connections 
 			SecureConnection.initSecureConnection(); 
-
+			
 			//Check if this is the first run after an install or upgrade
 			lastVersion = prefs.getLastVersion();
 			currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
@@ -298,6 +299,11 @@ public class SWADMain extends MenuExpandableListActivity {
 				showConfigurationDialog();
 				dbHelper.initializeDB();
 				//prefs.upgradeCredentials();
+				
+				//Configure automatic synchronization
+				Intent activity = new Intent(getBaseContext(), AccountAuthenticator.class);
+				startActivity(activity);
+				
 				prefs.setLastVersion(currentVersion);
 				firstRun = true;
 				Global.setSelectedCourseCode(-1);
@@ -307,6 +313,11 @@ public class SWADMain extends MenuExpandableListActivity {
 				//showUpgradeDialog();
 				dbHelper.upgradeDB(this);
 				//prefs.upgradeCredentials();
+
+				//Configure automatic synchronization
+				Intent activity = new Intent(getBaseContext(), AccountAuthenticator.class);
+				startActivity(activity);
+				
 				prefs.setLastVersion(currentVersion);
 			}
 			listCourses = dbHelper.getAllRows(Global.DB_TABLE_COURSES,"","name");

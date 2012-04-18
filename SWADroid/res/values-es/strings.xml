@@ -162,5 +162,5 @@
     <string name="scan_not_valid_code">Código QR no válido</string>
     <string name="scan_data_not_found">No existen datos de este alumno</string>
     <string name="scan_no_codes">No se ha detectado ningún código QR válido</string>
-    <string name="usersPresent">Estudiantes presentes</string>n
+    <string name="usersPresent">Estudiantes presentes</string>
 </resources>

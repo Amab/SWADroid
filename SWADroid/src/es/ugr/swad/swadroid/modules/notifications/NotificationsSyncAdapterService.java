@@ -19,12 +19,35 @@
 
 package es.ugr.swad.swadroid.modules.notifications;
 
+import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Vector;
+
+import org.ksoap2.SoapEnvelope;
+import org.ksoap2.SoapFault;
+import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapSerializationEnvelope;
+import org.ksoap2.transport.KeepAliveHttpsTransportSE;
+import org.xmlpull.v1.XmlPullParserException;
+
+import com.android.dataframework.DataFramework;
+
+import es.ugr.swad.swadroid.Base64;
+import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Preferences;
+import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.model.DataBaseHelper;
+import es.ugr.swad.swadroid.model.SWADNotification;
+
 import android.accounts.Account;
 import android.accounts.OperationCanceledException;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SyncResult;
