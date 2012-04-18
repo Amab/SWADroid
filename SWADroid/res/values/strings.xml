@@ -147,8 +147,17 @@
     <string name="usersDownloadProgressDescription">Synchronizing users.\n\nDepending of the number of
 		users to synchronize, the data processing can take several minutes.\n\nPlease wait...</string>
     <string name="usersDownloadProgressTitle">Students</string>
-    	<string name="documentsDownloadModuleLabel">Documents</string><string name = "documentsDownloadProgressDescription">Getting files..</string>
-	<string name="sharedsDownloadModuleLabel">Shared area</string>
-	<string name="connectionRequired">Internet connection is required for this functionality</string>
-	<string name="course">Course</string>
+    <string name="documentsDownloadModuleLabel">Documents</string>
+    <string name="documentsDownloadProgressDescription">Getting files..</string>
+    <string name="sharedsDownloadModuleLabel">Shared area</string>
+    <string name="connectionRequired">Internet connection is required for this functionality</string>
+    <string name="course">Course</string>
+    <string name="msg_default_format">Format</string>
+    <string name="msg_default_type">Type</string>
+    <string name="msg_default_time">Time</string>
+    <string name="msg_default_meta">Metadata</string>
+    <string name="button_google_shopper">Google Shopper</string>
+    <string name="msg_default_status">Place a barcode inside the viewfinder rectangle to scan it.</string>
+    <string name="msg_camera_framework_bug">Sorry, the Android camera encountered a problem. You may need to restart the device.</string>
+    <string name="button_ok">OK</string>
 </resources>
