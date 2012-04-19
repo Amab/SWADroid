@@ -89,7 +89,10 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 	private InactivityTimer inactivityTimer;
 	private BeepManager beepManager;
 
-	private HashSet<String> listaDnis;
+	private HashSet<String> idList;
+	private static final int TEXT_SIZE = 18;
+	private static final int IMAGE_WIDTH = 120;
+	private static final int IMAGE_HEIGHT = 160;
 	/**
 	 * Database Helper.
 	 */
@@ -122,12 +125,12 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		hasSurface = false;
 		inactivityTimer = new InactivityTimer(this);
 
-		listaDnis = new HashSet<String>();
+		idList = new HashSet<String>();
 
 		// Initialize database
 		try {
 			db = DataFramework.getInstance();
-			db.open(this, "es.ugr.swad.swadroid");
+			db.open(this, getPackageName());
 			dbHelper = new DataBaseHelper(db);
 		} catch (Exception ex) {
 			Log.e(ex.getClass().getSimpleName(), ex.getMessage());
@@ -177,11 +180,9 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		characterSet = null;
 
 		if (intent != null) {
-
 			String action = intent.getAction();
 
 			if (Intents.Scan.ACTION.equals(action)) {
-
 				// Scan the formats the intent requested, and return the result to the calling activity.
 				source = IntentSource.NATIVE_APP_INTENT;
 				decodeFormats = DecodeFormatManager.parseDecodeFormats(intent);
@@ -193,16 +194,12 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 						cameraManager.setManualFramingRect(width, height);
 					}
 				}
-
 				String customPromptMessage = intent.getStringExtra(Intents.Scan.PROMPT_MESSAGE);
 				if (customPromptMessage != null) {
 					statusView.setText(customPromptMessage);
 				}
-
 			}
-
 			characterSet = intent.getStringExtra(Intents.Scan.CHARACTER_SET);
-
 		}
 	}
 
@@ -234,8 +231,8 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			if (source == IntentSource.NATIVE_APP_INTENT) {
 				Intent intent = getIntent();
-				ArrayList<String> dnis = new ArrayList<String>(listaDnis);
-				intent.putStringArrayListExtra("lista_dnis", dnis);
+				ArrayList<String> ids = new ArrayList<String>(idList);
+				intent.putStringArrayListExtra("id_list", ids);
 				setResult(RESULT_OK, intent);
 				finish();
 				return true;
@@ -298,80 +295,79 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 	 * @param barcode   A greyscale bitmap of the camera data which was decoded.
 	 */
 	public void handleDecode(Result rawResult, Bitmap barcode) {
-		String content = rawResult.toString();
-		User u = null;
-		String mensaje;
-		int icono;
-		int sonido;
-		Boolean validDni = Util.isValidDni(content);
-		Boolean validNickname = Util.isValidNickname(content);
+		String qrContent = rawResult.toString();
+		String messageResult;
+		int iconResult;
+		int soundResult;
+		Boolean validDni = Util.isValidDni(qrContent);
+		Boolean validNickname = Util.isValidNickname(qrContent);
 
 		inactivityTimer.onActivity();
 		lastResult = rawResult;
 
-		if (validDni || validNickname) {
-			if (validDni)
-				u = (User) dbHelper.getRow(Global.DB_TABLE_USERS, "userID", content);
-			else
-				u = (User) dbHelper.getRow(Global.DB_TABLE_USERS, "userNickname", content);
+		if (validDni || validNickname) {			
+			String fieldName = (validDni) ? "userID" : "userNickname";			
+			User u = (User) dbHelper.getRow(Global.DB_TABLE_USERS, fieldName, qrContent);
 
 			if (u != null) {
-				listaDnis.add(u.getUserID());
+				idList.add(u.getUserID());
 
-				// comprobar si pertenece a la asignatura
+				// Check if the specified user is enrolled in the selected course
 				if (dbHelper.getUserCourse(u.getUserID(), Global.getSelectedCourseCode())) {
-					mensaje = "El alumno SI pertenece a la asignatura";
-					icono = R.drawable.ok;
-					sonido = sounds[0]; // Positive sound
+					messageResult = getString(R.string.scan_valid_student);
+					iconResult = R.drawable.ok;
+					soundResult = sounds[0]; // Positive sound
 				} else {
-					// Mostrar mensaje indicando que el alumno no pertenece a la asignatura
-					mensaje = "El alumno NO pertenece a la asignatura";
-					icono = R.drawable.notok;
-					sonido = sounds[1]; // Negative sound
+					messageResult = getString(R.string.scan_not_valid_student);
+					iconResult = R.drawable.notok;
+					soundResult = sounds[1]; // Negative sound
 				}
-				mensaje += "\n"
-						+ "DNI: " + u.getUserID() + "\n"
-						+ "Nombre: " + u.getUserFirstname() + " " + u.getUserSurname1() + " " + u.getUserSurname2();			
+				messageResult += "\n\n"
+						+ getString(R.string.scan_id) + ": " + u.getUserID() + "\n"
+						+ getString(R.string.scan_name) + ": " + u.getUserFirstname() + " " 
+						+ u.getUserSurname1() + " " + u.getUserSurname2();			
 			} else {
-				// No existe ningun usuario con ese dni o nickname
-				mensaje = "No existen datos de este alumno";
-				icono = R.drawable.notok;
-				sonido = sounds[1]; // Negative sound
+				// There is no user with that ID or nickname
+				messageResult = getString(R.string.scan_data_not_found);
+				iconResult = R.drawable.notok;
+				soundResult = sounds[1]; // Negative sound
 			}
 		} else {
-			mensaje = "No se detecta ningun DNI/nickname valido";
-			icono = R.drawable.notok;
-			sonido = sounds[1]; // Negative sound
+			// Not detected any valid ID or nickname 
+			messageResult = getString(R.string.scan_not_valid_code);
+			iconResult = R.drawable.notok;
+			soundResult = sounds[1]; // Negative sound
 		}
 
-		// Reproducir el sonido adecuado
-		beepManager = new BeepManager(this, sonido);
-		beepManager.playBeepSoundAndVibrate();
 		drawResultPoints(barcode, rawResult);
 
-		// Mostrar foto del alumno
+		// Play the appropriate sound
+		beepManager = new BeepManager(this, soundResult);
+		beepManager.playBeepSoundAndVibrate();		
+
+		// Show photo of student
 		LayoutInflater inflater = getLayoutInflater();
 		View layout = inflater.inflate(R.layout.toast_layout, (ViewGroup) findViewById(R.id.toast_layout_root));
 
 		ImageView image = (ImageView) layout.findViewById(R.id.image);
 		image.setImageResource(R.drawable.usr_bl);
 		Bitmap bMap = BitmapFactory.decodeResource(image.getResources(), R.drawable.usr_bl);
-		Bitmap bMapScaled = Bitmap.createScaledBitmap(bMap, 120, 160, true);
+		Bitmap bMapScaled = Bitmap.createScaledBitmap(bMap, IMAGE_WIDTH, IMAGE_HEIGHT, true);
 		image.setImageBitmap(bMapScaled);
 
-		// Mostrar icono adecuado
+		// Show appropriate icon
 		ImageView icon = (ImageView) layout.findViewById(R.id.icon);
-		icon.setImageResource(icono);
+		icon.setImageResource(iconResult);
 
-		// Mostrar mensaje adecuado
+		// Show appropriate message
 		TextView toastText = (TextView) layout.findViewById(R.id.text);
-		toastText.setText(mensaje);
+		toastText.setText(messageResult);
 		toastText.setGravity(Gravity.CENTER_VERTICAL);
-		toastText.setTextSize(20);
+		toastText.setTextSize(TEXT_SIZE);
 
 		Toast toast = new Toast(getApplicationContext());
 		toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-		toast.setDuration(Toast.LENGTH_LONG);
+		toast.setDuration(Toast.LENGTH_SHORT);
 		toast.setView(layout);
 		toast.show();
 

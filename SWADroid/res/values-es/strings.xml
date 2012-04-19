@@ -155,4 +155,12 @@
     <string name="msg_default_status">Coloque un código de barras en el interior del rectángulo del visor para escanear.</string>
     <string name="msg_camera_framework_bug">Lo sentimos, la cámara de Android ha encontrado un problema. Es posible que necesite reiniciar el dispositivo.</string>
     <string name="button_ok">OK</string>
+    <string name="scan_valid_student">Alumno de esta asignatura</string>
+    <string name="scan_not_valid_student">Alumno de otra asignatura</string>
+    <string name="scan_name">Nombre</string>
+    <string name="scan_id">DNI</string>
+    <string name="scan_not_valid_code">Código QR no válido</string>
+    <string name="scan_data_not_found">No existen datos de este alumno</string>
+    <string name="scan_no_codes">No se ha detectado ningún código QR válido</string>
+    <string name="usersPresent">Estudiantes presentes</string>
 </resources>
