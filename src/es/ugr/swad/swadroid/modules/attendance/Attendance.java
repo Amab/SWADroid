@@ -33,7 +33,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -123,16 +122,12 @@ public class Attendance extends Module {
 		switch(requestCode) {
 		case Global.ATTENDANCE_CONFIG_DOWNLOAD_REQUEST_CODE:
 			if (resultCode == Activity.RESULT_OK) {
-				// Show a dialog with the list of ID cards scanned
 				listaDnis = intent.getStringArrayListExtra("lista_dnis");
-
 				selectedCourseCode = Global.getSelectedCourseCode();
 
-				Log.i(TAG, "selectedCourseCode=" + selectedCourseCode);
-
-				if (listaDnis == null)
-					Toast.makeText(getApplicationContext(), "No se han detectado codigos validos", Toast.LENGTH_SHORT).show();
-				else if (!listaDnis.isEmpty()) {
+				if (listaDnis.isEmpty())
+					Toast.makeText(this, "Ningun codigo valido detectado", Toast.LENGTH_LONG).show();
+				else {
 					listModel = new ArrayList<ListItemModel>();
 					enrolledStudents = new ArrayList<Boolean>();
 
@@ -146,22 +141,17 @@ public class Attendance extends Module {
 						ex.printStackTrace();
 					}
 
-					// utilizar aqui el dni para buscar el usuario, y si existe en el grupo seleccionado, ponerlo como marcado
 					for (String dni: listaDnis) {
-						User u = (User) dbHelper.getRow(Global.DB_TABLE_USERS, "userID", dni);
-						String userName;
-
+						User u = (User) dbHelper.getRow(Global.DB_TABLE_USERS, "userID", dni);						
 						if (u != null) {
-							userName = u.getUserFirstname() + " " + u.getUserSurname1() + " " + u.getUserSurname2();
+							String userName = u.getUserFirstname() + " " + u.getUserSurname1() + " " + u.getUserSurname2();
 							// We put the default photo for each item in the list
 							listModel.add(new ListItemModel(userName, R.drawable.usr_bl));
-							// Comprobamos si el alumno pertenece a la asignatura, y lo marcamos en consecuencia
-							// añadimos a la lista el resultado de si pertenece o no a la asignatura
+							// Check if the specified user is enrolled in the selected course
 							enrolledStudents.add(dbHelper.getUserCourse(dni, selectedCourseCode));
 						}
 					}
-					// Marcamos como asistentes a todos los escaneados (cambiar cuando pueda comprobarse el grupo)
-					// Mark as attending all scans (change when the group can be checked)
+					// Mark as attending the students enrolled in selected course
 					int listSize = listModel.size();
 					for (int i=0; i < listSize; i++) {
 						listModel.get(i).setSelected(enrolledStudents.get(i));
@@ -171,14 +161,8 @@ public class Attendance extends Module {
 					lv = new ListView(this);
 					lv.setAdapter(modeAdapter);
 
-					lv.setOnItemClickListener(new OnItemClickListener() {
-						public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-							// When clicked, show a toast with the TextView text
-							Toast.makeText(getApplicationContext(), ((TextView) view).getText(), Toast.LENGTH_SHORT).show();
-						}
-					});
-
 					prepareAlertDialog();
+					// Show a dialog with the list of students
 					mAlertDialog.show();
 				}
 			}
@@ -187,8 +171,6 @@ public class Attendance extends Module {
 	}
 
 	public void prepareAlertDialog() {
-		WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-
 		AlertDialog.Builder mBuider = new AlertDialog.Builder(this);
 		mBuider.setTitle("Estudiantes asistentes");
 		mBuider.setPositiveButton("Enviar", new DialogInterface.OnClickListener() {
@@ -204,8 +186,6 @@ public class Attendance extends Module {
 		});
 		mBuider.setView(lv);
 		mAlertDialog = mBuider.create();
-
-		lp.copyFrom(mAlertDialog.getWindow().getAttributes());
 	}
 
 	/* (non-Javadoc)
