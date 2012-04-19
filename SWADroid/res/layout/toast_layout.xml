@@ -4,16 +4,15 @@
     android:layout_height="fill_parent"
     android:background="#DAAA"
     android:orientation="vertical"
-    android:padding="10dp" >
+    android:padding="10dip" >
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="#DAAA"
+        android:gravity="center_horizontal"
         android:orientation="horizontal"
-        android:padding="10dp"
-        android:gravity="center_horizontal" >
+        android:padding="10dip" >
 
         <ImageView
             android:id="@+id/image"
@@ -24,8 +23,7 @@
         <ImageView
             android:id="@+id/icon"
             android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:layout_marginRight="10dip" />
+            android:layout_height="fill_parent" />
     </LinearLayout>
 
     <TextView
