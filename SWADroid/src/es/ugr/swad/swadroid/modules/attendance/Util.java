@@ -43,17 +43,10 @@ public class Util {
 	}
 
 	public static boolean isValidDni(String dni) {
-		//String patronDni = "^\\d{8}[A-Z]$";
-		//String patronDni = "^\\d{8}$";			// 8 digitos
-		//String patronDni = "^\\d{1,16}$";			// 1-16 digitos
-		String patronDni = "^[A-Z]?\\d{1,16}[A-Z]?$";	// (0 � 1 letra) + (1 a 16 d�gitos) + (0 � 1 letra)
+		String patronDni = "^[A-Z]?\\d{1,16}[A-Z]?$";	// (0 or 1 letter) + (1 to 16 digits) + (0 or 1 letter)
 
 		Pattern pattern = Pattern.compile(patronDni, Pattern.CASE_INSENSITIVE);
-		//Log.i("ZXing_ATTENDANCE_UTIL", "patron=" + pattern.pattern());
-		//Log.i("ZXing_ATTENDANCE_UTIL", "dni=" + dni);
 		Matcher matcher = pattern.matcher(dni);
-
-		//Log.i("ZXing_ATTENDANCE_UTIL", "matcher=" + matcher.matches());
 
 		return matcher.matches();
 		/*if (matcher.matches())
@@ -75,7 +68,7 @@ public class Util {
 	}
 
 	public static boolean isValidNickname(String nickname) {
-		String patronNickname = "[a-zA-Z_0-9]{1,30}";	// de 1 a 30 letras, subrayado o numeros
+		String patronNickname = "[a-zA-Z_0-9]{1,30}";	// 1 to 30 letters, underscored or digits
 
 		Pattern pattern = Pattern.compile(patronNickname, Pattern.CASE_INSENSITIVE);
 

@@ -20,6 +20,8 @@ public class InteractiveArrayAdapter extends ArrayAdapter<ListItemModel> {
 
 	private final List<ListItemModel> list;
 	private final Activity context;
+	private static final int IMAGE_WIDTH = 60;
+	private static final int IMAGE_HEIGHT = 80;
 
 	public static final String TAG = Global.APP_TAG + " InteractiveArrayAdapter";
 
@@ -66,10 +68,10 @@ public class InteractiveArrayAdapter extends ArrayAdapter<ListItemModel> {
 
 		holder.image.setImageResource(list.get(position).getImageId());
 		Bitmap bMap = BitmapFactory.decodeResource(holder.image.getResources(), list.get(position).getImageId());
-		Bitmap bMapScaled = Bitmap.createScaledBitmap(bMap, 60, 80, true);
+		Bitmap bMapScaled = Bitmap.createScaledBitmap(bMap, IMAGE_WIDTH, IMAGE_HEIGHT, true);
 		holder.image.setImageBitmap(bMapScaled);
 		
-		holder.text.setText(list.get(position).getName());
+		holder.text.setText(list.get(position).toString());
 		holder.checkbox.setChecked(list.get(position).isSelected());
 
 		return view;

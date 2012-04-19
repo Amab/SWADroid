@@ -30,7 +30,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
@@ -118,7 +117,7 @@ public class AttendanceConfigDownload extends Module {
 		int userRole = Global.STUDENT_TYPE_CODE;
 		String empty = "anyType{}";
 
-		//Creates webservice request, adds required params and sends request to webservice
+		// Creates webservice request, adds required params and sends request to webservice
 		createRequest();
 		addParam("wsKey", Global.getLoggedUser().getWsKey());
 		addParam("courseCode", (int) Global.getSelectedCourseCode());
@@ -129,7 +128,7 @@ public class AttendanceConfigDownload extends Module {
 		if (result != null) {
 			dbHelper.beginTransaction();
 
-			//Stores users data returned by webservice response
+			// Stores users data returned by webservice response
 			Vector<?> res = (Vector<?>) result;
 			SoapObject soap = (SoapObject) res.get(1);
 			usersCount = soap.getPropertyCount();
@@ -164,13 +163,12 @@ public class AttendanceConfigDownload extends Module {
 				dbHelper.insertUserCourse(u, Global.getSelectedCourseCode());
 			}	// end for (int i=0; i < usersCount; i++)
 
-			//Request finalized without errors
 			Log.i(TAG, "Retrieved " + usersCount + " users");
 
 			dbHelper.endTransaction();
 		}	// end if (result != null)
 
-		//Request finalized without errors
+		// Request finalized without errors
 		setResult(RESULT_OK);
 	}
 
@@ -191,7 +189,6 @@ public class AttendanceConfigDownload extends Module {
 	@Override
 	protected void postConnect() {
 		Log.i(TAG, "Added " + insertedUsersCount + " new users");
-		Toast.makeText(this, "La asignatura seleccionada tiene " + usersCount + " estudiantes", Toast.LENGTH_LONG).show();
 
 		Intent activity = new Intent("es.ugr.swad.swadroid.android.SCAN");
 		activity.putExtra("SCAN_MODE", "QR_CODE_MODE");
