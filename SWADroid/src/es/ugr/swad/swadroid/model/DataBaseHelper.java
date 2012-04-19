@@ -276,7 +276,7 @@ public class DataBaseHelper {
 	}
 
 	/**
-	 * Gets the user that matches userId and selectedCourseCode
+	 * Checks if the specified user is enrolled in the selected course
 	 * @param userId User's DNI (national identity)
 	 * @param selectedCourseCode Course code to be referenced
 	 * @return True if user is enrolled in the selected course. False otherwise
