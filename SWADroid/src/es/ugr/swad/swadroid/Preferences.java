@@ -192,7 +192,12 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
      * Gets server URL.
      * @return Server URL.
      */
-    public String getServer() {
+    public String getServer() {    	
+    	if(server.isEmpty()) {
+    		server = Global.getDefaultServer();
+    		serverPref.setSummary(server);
+    	}
+    	
         return server;
     }
 
@@ -459,7 +464,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
                 return true;
             }
         });        
-        serverPref.setSummary(prefs.getString(SERVERPREF, Global.getDefaultServer()));
+        serverPref.setSummary(server);
         
         try {
 			currentVersionPref.setSummary(getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
@@ -516,7 +521,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         if(!prefs.getString(USERPASSWORDPREF, "").equals(""))
         	userPasswordPref.setSummary(stars);
         
-        serverPref.setSummary(prefs.getString(SERVERPREF, Global.getDefaultServer()));
+        serverPref.setSummary(server);
 	}
 	
 	/* (non-Javadoc)

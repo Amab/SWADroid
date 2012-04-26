@@ -214,7 +214,7 @@ public class Notifications extends Module {
 		
 		//Call synchronization service
 		Account account = new Account(getString(R.string.app_name), accountType);
-		ContentResolver.requestSync(account, authority, null);
+		ContentResolver.requestSync(account, authority, new Bundle());
 		
 		//Calculates next timestamp to be requested
 		/*Long timestamp = new Long(dbHelper.getFieldOfLastNotification("eventTime"));
