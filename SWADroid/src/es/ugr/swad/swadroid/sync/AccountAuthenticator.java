@@ -27,7 +27,7 @@ public class AccountAuthenticator extends AccountAuthenticatorActivity {
 		Account account = new Account(getString(R.string.app_name), accountType);
 		AccountManager am = AccountManager.get(this);
 		boolean accountCreated = am.addAccountExplicitly(account, getString(R.string.app_name), null);
-		 
+		
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 		 if (accountCreated) {  //Pass the new account back to the account manager
