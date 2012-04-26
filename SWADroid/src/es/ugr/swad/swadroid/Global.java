@@ -31,11 +31,11 @@ public class Global {
 	/**
 	 * SWAD application key
 	 */
-	private static final String AppKey = "";
+	private static final String AppKey = "HTC-Desire";
 	/**
 	 * Server URL
 	 */
-	private static final String DEFAULT_SERVER = "swad.ugr.es";
+	private static final String DEFAULT_SERVER = "";
 	/**
 	 * User logged flag
 	 */
