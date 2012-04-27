@@ -524,6 +524,7 @@ public class DataBaseHelper {
 		ent.setValue("userRole", actual.getUserRole());
 		ent.save();
 	}
+
 	/**
 	 * Updates a course in database
 	 * @param id Course code of course to be updated

@@ -31,7 +31,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -49,15 +49,11 @@ import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.Groups;
-import es.ugr.swad.swadroid.model.Course;
-import es.ugr.swad.swadroid.model.DataBaseHelper;
-import es.ugr.swad.swadroid.model.Model;
-import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.Messages;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.modules.Notices;
 import es.ugr.swad.swadroid.modules.attendance.Attendance;
-import es.ugr.swad.swadroid.modules.downloads.DirectoryTreeDownload
+import es.ugr.swad.swadroid.modules.downloads.DirectoryTreeDownload;
 import es.ugr.swad.swadroid.modules.notifications.Notifications;
 import es.ugr.swad.swadroid.modules.tests.Tests;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
@@ -281,15 +277,15 @@ public class SWADMain extends MenuExpandableListActivity {
 		try {            
 			//Initialize database
 			/*db = DataFramework.getInstance();
-            		  db.open(this, this.getPackageName());
-            		  dbHelper = new DataBaseHelper(db);*/
+            db.open(this, this.getPackageName());
+            dbHelper = new DataBaseHelper(db);*/
 
 			//Initialize preferences
 			prefs.getPreferences(getBaseContext()); 
 
 			//Initialize HTTPS connections 
-			SecureConnection.initSecureConnection(); 
-			
+			SecureConnection.initSecureConnection();
+
 			//Check if this is the first run after an install or upgrade
 			lastVersion = prefs.getLastVersion();
 			currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
@@ -303,7 +299,7 @@ public class SWADMain extends MenuExpandableListActivity {
 				//Configure automatic synchronization
 				Intent activity = new Intent(getBaseContext(), AccountAuthenticator.class);
 				startActivity(activity);
-				
+
 				prefs.setLastVersion(currentVersion);
 				firstRun = true;
 				Global.setSelectedCourseCode(-1);
@@ -317,7 +313,7 @@ public class SWADMain extends MenuExpandableListActivity {
 				//Configure automatic synchronization
 				Intent activity = new Intent(getBaseContext(), AccountAuthenticator.class);
 				startActivity(activity);
-				
+
 				prefs.setLastVersion(currentVersion);
 			}
 			listCourses = dbHelper.getAllRows(Global.DB_TABLE_COURSES,"","name");
@@ -399,10 +395,7 @@ public class SWADMain extends MenuExpandableListActivity {
 			courseCode = courseSelected.getId();
 			Global.setSelectedCourseCode(courseCode);
 			createMenu();
-			int userRole = courseSelected.getUserRole();
 
-			if(userRole == 3 && actualRole != 3) createTeacherMenu();
-			if(userRole == 2 && actualRole != 2) createStudentMenu();
 		}
 
 		@Override
@@ -586,33 +579,5 @@ public class SWADMain extends MenuExpandableListActivity {
 		}
 		currentRole = Global.TEACHER_TYPE_CODE;
 	}
-    	
-    }
-    private View.OnTouchListener Spinner_OnTouch = new View.OnTouchListener() {
-		@Override
-		public boolean onTouch(View v, MotionEvent event) {
-            if (event.getAction() == MotionEvent.ACTION_UP) {
-            	
-            	if(dbHelper.getAllRows(Global.DB_TABLE_COURSES).size()==0){
-            		if(Module.connectionAvailable(getBaseContext()))
-            			getActualCourses();
-            		//else
-            			
-            	}else{
-            		v.performClick();
-            	}
-            	
-               Log.i(TAG, "on touch");
-              
-            }
-            return true;
-		}
-    };
-    
-    private void getActualCourses(){
-    	Intent activity;
-    	activity = new Intent(getBaseContext(), Courses.class );
-		Toast.makeText(getBaseContext(), R.string.coursesProgressDescription, Toast.LENGTH_LONG).show();
-		startActivityForResult(activity,Global.COURSES_REQUEST_CODE);
-    }
+
 }
