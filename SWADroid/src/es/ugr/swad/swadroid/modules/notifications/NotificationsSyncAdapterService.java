@@ -66,66 +66,21 @@ import android.util.Log;
 public class NotificationsSyncAdapterService extends Service {
 	private static final String TAG = "NotificationsSyncAdapterService";
 	private static SyncAdapterImpl sSyncAdapter = null;
+	private static int notifCount;
+	private static int NOTIF_ALERT_ID = 1982;
+	private static final int SIZE_LIMIT = 25;
+	private static Preferences prefs;
+	private static DataFramework db;
+	private static DataBaseHelper dbHelper;
+	private static String METHOD_NAME = "";
+	private static String NAMESPACE = "urn:swad";
+	private static String SOAP_ACTION = "";
+	private static SoapObject request;
+	private static Object result;
 
 	public NotificationsSyncAdapterService() {
 		super();
 	}
-
-	private static class SyncAdapterImpl extends AbstractThreadedSyncAdapter {
-		private Context mContext;
-
-		public SyncAdapterImpl(Context context) {
-			super(context, true);
-			mContext = context;
-		}
-
-		@Override
-		public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
-			try {
-				NotificationsSyncAdapterService.performSync(mContext, account, extras, authority, provider, syncResult);
-			} catch (OperationCanceledException e) {
-			}
-		}
-	}
-
-	@Override
-	public IBinder onBind(Intent intent) {
-		IBinder ret = null;
-		ret = getSyncAdapter().getSyncAdapterBinder();
-		return ret;
-	}
-
-	private SyncAdapterImpl getSyncAdapter() {
-		if (sSyncAdapter == null)
-			sSyncAdapter = new SyncAdapterImpl(this);
-		return sSyncAdapter;
-	}
-
-	private static void performSync(Context context, Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
-			throws OperationCanceledException {
-		mContentResolver = context.getContentResolver();
-		Log.i(TAG, "performSync: " + account.toString());
-		//This is where the magic will happen!
-    	/**
-    	 * Use of KeepAliveHttpsTransport deals with the problems with the Android ssl libraries having trouble
-    	 * with certificates and certificate authorities somehow messing up connecting/needing reconnects.
-    	 */
-    	URL = prefs.getServer();
-        connection = new KeepAliveHttpsTransportSE(URL, 443, "", TIMEOUT);
-        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-        System.setProperty("http.keepAlive", "false");
-        envelope.setOutputSoapObject(request);
-        //connection.debug = true;
-    	connection.call(SOAP_ACTION, envelope);
-        //Log.d(TAG, connection.requestDump.toString());
-        //Log.d(TAG, connection.responseDump.toString());
-    	
-    	if(simple && !(envelope.getResponse() instanceof SoapFault)) {
-    		result = envelope.bodyIn;
-    	} else {
-    		result = envelope.getResponse();
-    	}
-     }
 	 
 	 private static class SyncAdapterImpl extends AbstractThreadedSyncAdapter {
 	  private Context mContext;
@@ -134,6 +89,7 @@ public class NotificationsSyncAdapterService extends Service {
 	   super(context, true);
 	   mContext = context;
 	   prefs = new Preferences();
+	   
 	   try {
 		  db = DataFramework.getInstance();
 		  db.open(mContext, mContext.getPackageName());		  
@@ -167,10 +123,84 @@ public class NotificationsSyncAdapterService extends Service {
 	  return sSyncAdapter;
 	 }
 	 
+	 protected static void alertNotif(Context context) {
+			if(notifCount > 0) {
+				//Obtain a reference to the notification service
+				String ns = Context.NOTIFICATION_SERVICE;
+				NotificationManager notManager =
+						(NotificationManager) context.getSystemService(ns);
+
+				//Configure the alert
+				int icon = R.drawable.ic_launcher_swadroid;
+				long hour = System.currentTimeMillis();
+
+				Notification notif =
+						new Notification(icon, context.getString(R.string.notificationsAlertTitle), hour);
+
+				//Configure the Intent
+				Intent notIntent = new Intent(context,
+						Notifications.class);
+
+				PendingIntent contIntent = PendingIntent.getActivity(
+						context, 0, notIntent, 0);
+
+				notif.setLatestEventInfo(
+						context, context.getString(R.string.notificationsAlertTitle), notifCount + " " + 
+								context.getString(R.string.notificationsAlertMsg), contIntent);
+
+				//AutoCancel: alert disappears when pushed
+				notif.flags |= Notification.FLAG_AUTO_CANCEL;
+
+				//Add sound, vibration and lights
+				notif.defaults |= Notification.DEFAULT_SOUND;
+				//notif.defaults |= Notification.DEFAULT_VIBRATE;
+				notif.defaults |= Notification.DEFAULT_LIGHTS;
+
+				//Send alert
+				notManager.notify(NOTIF_ALERT_ID, notif);
+			}
+		}
+	 
+	 protected static void createRequest() {
+	        request = new SoapObject(NAMESPACE, METHOD_NAME);
+	        result = null;
+	 }
+	 
+	 protected static void addParam(String param, Object value) {
+	        request.addProperty(param, value);
+	 }
+	 
+	 protected static void sendRequest(boolean simple)
+		    	throws IOException, SoapFault, IllegalAccessException, InstantiationException, XmlPullParserException {
+
+		    	/**
+		    	 * Use of KeepAliveHttpsTransport deals with the problems with the Android ssl libraries having trouble
+		    	 * with certificates and certificate authorities somehow messing up connecting/needing reconnects.
+		    	 */
+		    	String URL = prefs.getServer();
+		    	int TIMEOUT = 10000;
+		    	KeepAliveHttpsTransportSE connection;
+		    	
+		        connection = new KeepAliveHttpsTransportSE(URL, 443, "", TIMEOUT);
+		        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+		        System.setProperty("http.keepAlive", "false");
+		        envelope.setOutputSoapObject(request);
+		        //connection.debug = true;
+		    	connection.call(SOAP_ACTION, envelope);
+		        //Log.d(TAG, connection.requestDump.toString());
+		        //Log.d(TAG, connection.responseDump.toString());
+		    	
+		    	if(simple && !(envelope.getResponse() instanceof SoapFault)) {
+		    		result = envelope.bodyIn;
+		    	} else {
+		    		result = envelope.getResponse();
+		    	}
+		    }
+	 
 	 private static void performSync(Context context, Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
-	   throws OperationCanceledException, SoapFault, IOException, IllegalAccessException, InstantiationException, XmlPullParserException, NoSuchAlgorithmException, KeyManagementException {
-		 
-		//Initialize HTTPS connections 
+	   throws OperationCanceledException, SoapFault, IOException, IllegalAccessException, InstantiationException, XmlPullParserException, NoSuchAlgorithmException, KeyManagementException {		 
+
+		 //Initialize HTTPS connections 
 		SecureConnection.initSecureConnection();
 		
 		//If last login time > Global.RELOGIN_TIME, force login
@@ -199,14 +229,12 @@ public class NotificationsSyncAdapterService extends Service {
 				//Stores user data returned by webservice response
 				User loggedUser = new User(
 						Long.parseLong(ks.getProperty(0).toString()),	// id
-						Integer.parseInt(ks.getProperty(1).toString()),	// userTypeCode
 						ks.getProperty(2).toString(),					// wsKey
 						ks.getProperty(3).toString(),					// userID
 						null,											// userNickname
 						ks.getProperty(4).toString(),					// userSurname1
 						ks.getProperty(5).toString(),					// userSurname2
 						ks.getProperty(6).toString(),					// userFirstName
-						ks.getProperty(7).toString(),					// userTypeName
 						null,											// photoPath
 						Integer.parseInt(ks.getProperty(8).toString())	// userRole
 						);
@@ -270,5 +298,4 @@ public class NotificationsSyncAdapterService extends Service {
 			alertNotif(context);
 		 }
 	 }
-	}
 }
