@@ -323,6 +323,13 @@ public final class R {
         public static final int saveMsg_preferences=0x7f090014;
         public static final int saveSummary_preferences=0x7f090015;
         public static final int saveTitle_preferences=0x7f090016;
+        public static final int scan_data_not_found=0x7f090096;
+        public static final int scan_id=0x7f090094;
+        public static final int scan_name=0x7f090093;
+        public static final int scan_no_codes=0x7f090097;
+        public static final int scan_not_valid_code=0x7f090095;
+        public static final int scan_not_valid_student=0x7f090092;
+        public static final int scan_valid_student=0x7f090091;
         public static final int selectCourseTitle=0x7f090046;
         public static final int sendMsg=0x7f09006a;
         public static final int sendingMessageMsg=0x7f090060;
@@ -369,6 +376,7 @@ public final class R {
         public static final int users=0x7f090081;
         public static final int usersDownloadProgressDescription=0x7f090082;
         public static final int usersDownloadProgressTitle=0x7f090083;
+        public static final int usersPresent=0x7f090098;
         public static final int versionTitle_preferences=0x7f09001c;
         public static final int yesMsg=0x7f09003f;
     }
