@@ -650,7 +650,7 @@ public class TestsMake extends Module {
 			}
 
 			test = (Test) dbHelper.getRow(Global.DB_TABLE_TEST_CONFIG, "id",
-					Long.toString(Global.getSelectedCourseCode()));
+		
 			if(test != null) {
 				setNumQuestions();
 			} else {
@@ -658,8 +658,7 @@ public class TestsMake extends Module {
 				finish();
 			}
 		} else {
-			Toast.makeText(getBaseContext(), R.string.testNoQuestionsMsg, Toast.LENGTH_LONG).show();
-			finish();
+			Toast.makeText(getBaseContext(), R.string.testNoQuestionsMsg, Toast.LENGTH_LONG).show();		
 		}
 
 	}
