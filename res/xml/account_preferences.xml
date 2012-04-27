@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+            android:title="General Settings" />
+ 
+    <PreferenceScreen
+        android:key="account_settings"
+        android:title="Account Settings"
+        android:summary="Sync frequency, notifications, etc.">
+        <intent
+            android:action="es.ugr.swad.swadroid.Preferences.ACCOUNT_SETUP"
+            android:targetPackage="es.ugr.swad.swadroid"
+            android:targetClass="es.ugr.swad.swadroid.Preferences" />
+    </PreferenceScreen>
+</PreferenceScreen>

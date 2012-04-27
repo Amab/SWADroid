@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="functions">
+        <item>Notices</item>
+        <item>Tests</item>
+    </string-array>
+    <string-array name="testMenuItems">
+        <item>Syncronize questions</item>
+        <item>Make test</item>
+    </string-array>
+    <string-array name="testAnswerTypes">
+        <item>All</item>
+        <item>TF</item>
+        <item>uniqueChoice</item>
+        <item>multipleChoice</item>
+        <item>text</item>
+        <item>int</item>
+        <item>float</item>
+    </string-array>
+    <string-array name="testAnswerTypesNames">
+        <item>All</item>
+        <item>True/False</item>
+        <item>Unique choice</item>
+        <item>Multiple choice</item>
+        <item>Text</item>
+        <item>Integer</item>
+        <item>Float</item>
+    </string-array>
+    <string-array name="attendanceMenuItems">
+        <item>Scan QRs</item>
+        <item>Manual mode</item>
+    </string-array>
+
+</resources>
