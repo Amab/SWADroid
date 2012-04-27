@@ -189,6 +189,7 @@ public class Global {
      * Code to access to the documents in share area 
      * */
     public static int SHARE_AREA_CODE= 2;
+
 	/**
 	 * Gets the SWAD application key
 	 * @return SWAD application key
@@ -300,6 +301,7 @@ public class Global {
 	public static boolean isPreferencesChanged(){
 		return preferencesChanged;
 	}
+
 	public static void setPreferencesChanged(){
 		preferencesChanged = true;
 	}

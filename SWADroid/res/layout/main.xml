@@ -12,10 +12,19 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:prompt="@string/selectCourseTitle" />
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
     <ExpandableListView
         android:id="@+id/android:list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:cacheColorHint="@color/background" >
     </ExpandableListView>
+<<<<<<< HEAD
 </LinearLayout>
+=======
+
+</LinearLayout>
+>>>>>>> master

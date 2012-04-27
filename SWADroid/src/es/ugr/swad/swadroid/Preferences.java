@@ -463,7 +463,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
             	editor.putString(SERVERPREF, server);
                 return true;
             }
-        });        
+        }); 
         serverPref.setSummary(server);
         
         try {
@@ -519,9 +519,8 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         userIDPref.setSummary(prefs.getString(USERIDPREF, ""));
         
         if(!prefs.getString(USERPASSWORDPREF, "").equals(""))
-        	userPasswordPref.setSummary(stars);
-        
-        serverPref.setSummary(server);
+        	userPasswordPref.setSummary(stars);        
+        	serverPref.setSummary(server);
 	}
 	
 	/* (non-Javadoc)
