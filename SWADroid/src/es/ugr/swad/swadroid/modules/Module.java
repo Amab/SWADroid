@@ -582,9 +582,9 @@ public abstract class Module extends MenuActivity {
 
                 //Request finalized with errors        		
         		onError(); 
-        		error(errorMsg);   
-        		/*if(isDebuggable) {    		
-        			e.printStackTrace();
+        		error(errorMsg); 
+        		e.printStackTrace();
+        		/*if(isDebuggable) { 
         			connection.debug = true;
         	        Log.d(TAG, connection.requestDump.toString());
         	        Log.d(TAG, connection.responseDump.toString());
