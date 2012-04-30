@@ -240,6 +240,7 @@ public class NotificationsSyncAdapterService extends Service {
 						);
 
 				Global.setLoggedUser(loggedUser);
+				Global.setLogged(true);
 
 				//Update application last login time
 				Global.setLastLoginTime(System.currentTimeMillis());

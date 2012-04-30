@@ -193,9 +193,8 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
      * @return Server URL.
      */
     public String getServer() {    	
-    	if(server.isEmpty()) {
+    	if(server.equals("")) {
     		server = Global.getDefaultServer();
-    		serverPref.setSummary(server);
     	}
     	
         return server;
@@ -520,7 +519,8 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         
         if(!prefs.getString(USERPASSWORDPREF, "").equals(""))
         	userPasswordPref.setSummary(stars);        
-        	serverPref.setSummary(server);
+        
+        serverPref.setSummary(server);
 	}
 	
 	/* (non-Javadoc)
