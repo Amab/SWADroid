@@ -20,48 +20,27 @@ package es.ugr.swad.swadroid.modules.tests;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
 import java.util.Vector;
 
 import org.ksoap2.SoapFault;
 import org.xmlpull.v1.XmlPullParserException;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.model.Course;
-import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.model.Test;
-import es.ugr.swad.swadroid.model.User;
-import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.Module;
 
 /**
  * Tests module for download and update questions
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  */
 public class TestsConfigDownload extends Module {
-	/**
-	 * Cursor for database access
-	 */
-	private Cursor dbCursor;
-	/**
-	 * User courses list
-	 */
-	private List<Model>listCourses;
-	/**
-	 * Selected course code
-	 */
-	private long selectedCourseCode = 0;
 	/**
 	 * Flag for detect if the teacher allows questions download
 	 */
@@ -70,22 +49,22 @@ public class TestsConfigDownload extends Module {
 	 * Number of available questions
 	 */
 	private int numQuestions;
-    /**
-     * Tests tag name for Logcat
-     */
-    public static final String TAG = Global.APP_TAG + " TestsConfigDownload";
-    /**
-     * Application preferences.
-     */
-    protected static Preferences prefs = new Preferences(); 
-	
+	/**
+	 * Tests tag name for Logcat
+	 */
+	public static final String TAG = Global.APP_TAG + " TestsConfigDownload";
+	/**
+	 * Application preferences.
+	 */
+	protected static Preferences prefs = new Preferences(); 
+
 	/* (non-Javadoc)
 	 * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {		
 		super.onCreate(savedInstanceState);
-        setMETHOD_NAME("getTestConfig");
+		setMETHOD_NAME("getTestConfig");
 	}
 
 	/* (non-Javadoc)
@@ -93,153 +72,91 @@ public class TestsConfigDownload extends Module {
 	 */
 	@Override
 	protected void onStart() {
-		Intent activity;
-		
 		super.onStart();
 		prefs.getPreferences(getBaseContext());
-		activity = new Intent(getBaseContext(), Courses.class);
-		Toast.makeText(getBaseContext(), R.string.coursesProgressDescription, Toast.LENGTH_LONG).show();
-		startActivityForResult(activity, Global.COURSES_REQUEST_CODE);		
+
+		try {	
+			if(isDebuggable) {
+				Log.d(TAG, "selectedCourseCode = " + Long.toString(Global.getSelectedCourseCode()));
+			}
+
+			runConnection();
+		} catch (Exception ex) {
+			String errorMsg = getString(R.string.errorServerResponseMsg);
+			error(errorMsg);
+
+			if(isDebuggable) {
+				Log.e(ex.getClass().getSimpleName(), errorMsg);        		
+				ex.printStackTrace();
+			}
+		}
 	}
 
-	/* (non-Javadoc)
-	 * @see es.ugr.swad.swadroid.modules.Module#onActivityResult(int, int, android.content.Intent)
-	 */
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		int lastCourseSelected;
-		OnClickListener singleChoiceItemsClickListener = new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int whichButton) {
-				Course c = (Course) listCourses.get(whichButton);
-				selectedCourseCode = c.getId();
-				prefs.setLastCourseSelected(whichButton);
-				
-				if(isDebuggable) {
-					Integer s = whichButton;
-					Log.d(TAG, "singleChoice = " + s.toString());
-				}
-			}
-		};
-		OnClickListener positiveClickListener = new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int whichButton) {
-				try {					
-					if(selectedCourseCode == 0) {
-						//Toast.makeText(getBaseContext(), R.string.noCourseSelectedMsg, Toast.LENGTH_LONG).show();
-						Course c = (Course) listCourses.get(0);
-						selectedCourseCode = c.getId();
-					}
-					
-					if(isDebuggable) {
-						Log.d(TAG, "selectedCourseCode = " + Long.toString(selectedCourseCode));
-					}
-
-					runConnection();
-				} catch (Exception ex) {
-                	String errorMsg = getString(R.string.errorServerResponseMsg);
-					error(errorMsg);
-					
-	        		if(isDebuggable) {
-	        			Log.e(ex.getClass().getSimpleName(), errorMsg);        		
-	        			ex.printStackTrace();
-	        		}
-		        }
-			}
-		};
-		OnClickListener negativeClickListener = new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int whichButton) {
-				dialog.cancel();
-				finish();
-			}
-		};
-			
-		super.onActivityResult(requestCode, resultCode, data);
-		if (resultCode == Activity.RESULT_OK) {
-            switch(requestCode) {
-	            case Global.COURSES_REQUEST_CODE:
-	            	final AlertDialog.Builder alert = new AlertDialog.Builder(this);
-	            	dbCursor = dbHelper.getDb().getCursor(Global.DB_TABLE_COURSES);
-	            	listCourses = dbHelper.getAllRows(Global.DB_TABLE_COURSES);
-	    			lastCourseSelected = prefs.getLastCourseSelected();
-	        		alert.setSingleChoiceItems(dbCursor, lastCourseSelected, "name",
-	        				singleChoiceItemsClickListener);
-	        		
-	        		alert.setTitle(R.string.selectCourseTitle);
-	        		alert.setPositiveButton(R.string.acceptMsg, positiveClickListener);
-	        		alert.setNegativeButton(R.string.cancelMsg, negativeClickListener);	        		
-	        		alert.show();
-	            	break;
-            }
-        } else {
-        	setResult(RESULT_CANCELED);
-        	finish();
-        }
-	}
 
 	/* (non-Javadoc)
 	 * @see es.ugr.swad.swadroid.modules.Module#requestService()
 	 */
 	@Override
 	protected void requestService() throws NoSuchAlgorithmException,
-			IOException, XmlPullParserException, SoapFault,
-			IllegalAccessException, InstantiationException {
-		
-		//Calculates next timestamp to be requested		
-		Long timestamp = new Long(dbHelper.getTimeOfLastTestUpdate(selectedCourseCode));
-		timestamp++;
-		
-		//Creates webservice request, adds required params and sends request to webservice
-	    createRequest();
-	    addParam("wsKey", User.getWsKey());
-	    addParam("courseCode", (int)selectedCourseCode);
-	    sendRequest(Test.class, false);
+	IOException, XmlPullParserException, SoapFault,
+	IllegalAccessException, InstantiationException {
 
-	    if (result != null) {
-	        //Stores tests data returned by webservice response
+		//Calculates next timestamp to be requested		
+		Long timestamp = new Long(dbHelper.getTimeOfLastTestUpdate(Global.getSelectedCourseCode()));
+		timestamp++;
+
+		//Creates webservice request, adds required params and sends request to webservice
+		createRequest();
+		addParam("wsKey", Global.getLoggedUser().getWsKey());
+		addParam("courseCode", (int)Global.getSelectedCourseCode());
+		sendRequest(Test.class, false);
+
+		if (result != null) {
+			//Stores tests data returned by webservice response
 			Vector<?> res = (Vector<?>) result;
 
-	    	Integer pluggable = new Integer(res.get(0).toString());
-	    	isPluggable = Global.parseIntBool(pluggable);
-	    	numQuestions = new Integer(res.get(1).toString());
-	    	
-            //If there are no available questions, notify to user
-            if(numQuestions == 0) {
-            	Log.i(TAG, getString(R.string.noQuestionsAvailableTestsDownloadMsg));
-            	
-            //If the teacher doesn't allows questions download, notify to user
-	    	} else if(!isPluggable) {
-            	Log.i(TAG, getString(R.string.noQuestionsPluggableTestsDownloadMsg));
-            	
-	    	//If there are questions and the teacher allows their download, process the questions data
-            } else {
-    	    	Integer minQuestions = new Integer(res.get(2).toString());
-                Integer defQuestions = new Integer(res.get(3).toString());
-                Integer maxQuestions = new Integer(res.get(4).toString());
-                String feedback = res.get(5).toString();
-                Test tDB = (Test) dbHelper.getRow(Global.DB_TABLE_TEST_CONFIG, "id",
-                		Long.toString(selectedCourseCode));
-                
-                //If not exists a test configuration for this course, insert to database
-                if(tDB == null) {
-                	Test t = new Test(selectedCourseCode, minQuestions, defQuestions, maxQuestions, feedback);
-                	dbHelper.insertTestConfig(t);
-                }
-                
-                if(isDebuggable) {
-                	Log.d(TAG, "minQuestions=" + minQuestions);
-                	Log.d(TAG, "defQuestions=" + defQuestions);
-                	Log.d(TAG, "maxQuestions=" + maxQuestions);
-                	Log.d(TAG, "feedback=" + feedback);
-                }
-                
-                Intent activity = new Intent(getBaseContext(), TestsQuestionsDownload.class);
-        		activity.putExtra("selectedCourseCode", selectedCourseCode);
-        		activity.putExtra("timestamp", timestamp);
+			Integer pluggable = new Integer(res.get(0).toString());
+			isPluggable = Global.parseIntBool(pluggable);
+			numQuestions = new Integer(res.get(1).toString());
+
+			//If there are no available questions, notify to user
+			if(numQuestions == 0) {
+				Log.i(TAG, getString(R.string.noQuestionsAvailableTestsDownloadMsg));
+
+				//If the teacher doesn't allows questions download, notify to user
+			} else if(!isPluggable) {
+				Log.i(TAG, getString(R.string.noQuestionsPluggableTestsDownloadMsg));
+
+				//If there are questions and the teacher allows their download, process the questions data
+			} else {
+				Integer minQuestions = new Integer(res.get(2).toString());
+				Integer defQuestions = new Integer(res.get(3).toString());
+				Integer maxQuestions = new Integer(res.get(4).toString());
+				String feedback = res.get(5).toString();
+				Test tDB = (Test) dbHelper.getRow(Global.DB_TABLE_TEST_CONFIG, "id",
+						Long.toString(Global.getSelectedCourseCode()));
+
+				//If not exists a test configuration for this course, insert to database
+				if(tDB == null) {
+					Test t = new Test(Global.getSelectedCourseCode(), minQuestions, defQuestions, maxQuestions, feedback);
+					dbHelper.insertTestConfig(t);
+				}
+
+				if(isDebuggable) {
+					Log.d(TAG, "minQuestions=" + minQuestions);
+					Log.d(TAG, "defQuestions=" + defQuestions);
+					Log.d(TAG, "maxQuestions=" + maxQuestions);
+					Log.d(TAG, "feedback=" + feedback);
+				}
+
+				Intent activity = new Intent(getBaseContext(), TestsQuestionsDownload.class);
+				activity.putExtra("timestamp", timestamp);
 				startActivityForResult(activity, Global.TESTS_QUESTIONS_DOWNLOAD_REQUEST_CODE);
-		    }
-	    }
-        
-        //Request finalized without errors
-        setResult(RESULT_OK);
+			}
+		}
+
+		//Request finalized without errors
+		setResult(RESULT_OK);
 	}
 
 	/* (non-Javadoc)
@@ -248,9 +165,9 @@ public class TestsConfigDownload extends Module {
 	@Override
 	protected void connect() {
 		String progressDescription = getString(R.string.testsDownloadProgressDescription);
-    	int progressTitle = R.string.testsDownloadProgressTitle;
-  	    
-        new Connect(false, progressDescription, progressTitle).execute();
+		int progressTitle = R.string.testsDownloadProgressTitle;
+
+		new Connect(false, progressDescription, progressTitle).execute();
 	}
 
 	/* (non-Javadoc)
@@ -261,9 +178,17 @@ public class TestsConfigDownload extends Module {
 		if(numQuestions == 0) {
 			Toast.makeText(this, R.string.noQuestionsAvailableTestsDownloadMsg, Toast.LENGTH_LONG).show();		
 		} else if(!isPluggable) {
-        	Toast.makeText(this, R.string.noQuestionsPluggableTestsDownloadMsg, Toast.LENGTH_LONG).show();
+			Toast.makeText(this, R.string.noQuestionsPluggableTestsDownloadMsg, Toast.LENGTH_LONG).show();
 		}
-		
-        finish();
+
+		finish();
+	}
+
+	/* (non-Javadoc)
+	 * @see es.ugr.swad.swadroid.modules.Module#onError()
+	 */
+	@Override
+	protected void onError() {
+
 	}
 }

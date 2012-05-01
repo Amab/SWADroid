@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"> 
-    <include layout="@layout/action_bar"/>
-    
+    android:background="@color/background"
+    android:orientation="vertical" >
+
+    <include layout="@layout/action_bar" />
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:prompt="@string/selectCourseTitle" />
+
     <ExpandableListView
-       	android:id="@+id/android:list"
-       	android:cacheColorHint="@color/background"
-       	android:layout_width="match_parent"
-       	android:layout_height="wrap_content">
+        android:id="@+id/android:list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:cacheColorHint="@color/background" >
     </ExpandableListView>
+
 </LinearLayout>

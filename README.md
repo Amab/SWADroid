@@ -36,6 +36,13 @@ SWADroid uses [Android DataFrameWork][androiddataframework-library] library deve
 
 SWADroid uses [ksoap2-android][ksoap2-library] library developed by [Manfred Moser][ksoap2-author] and licensed under [MIT][mit].
 
+[![Copyright and License](http://www.apache.org/images/feather-small.gif)][apache2]
+SWADroid uses [ZXing][zxing-library] library developed by [Sean Owen][zxing-author] and licensed under [Apache License 2.0][apache2]
+
+## Contributors
+
+* Helena Rodríguez Gijón
+* Antonio Aguilera Malagón
 
 ## Contributing
 
@@ -53,4 +60,7 @@ The Github team has also been kind enough to write up some great [documentation]
 [ksoap2-author]: https://github.com/mosabua
 [androiddataframework-library]: http://code.google.com/p/androiddataframework/
 [androiddataframework-author]: http://www.javielinux.com/quiensoy.php
-[apk]: https://market.android.com/details?id=es.ugr.swad.swadroid
+[zxing-library]: http://code.google.com/p/zxing/
+[zxing-author]: https://github.com/srowen
+[apache2]: http://www.apache.org/licenses/LICENSE-2.0
+[apk]: https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid
