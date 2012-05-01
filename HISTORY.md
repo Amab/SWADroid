@@ -1,3 +1,22 @@
+## 0.8 (2012-05-01)
+
+* Added automatic synchronization of notifications
+* Added server URL configuration in preferences
+* Added notices publishingAdded function to publish new notices (yellow notes) (only teachers)
+* Integrated new SWAD roles system
+* Adapted all Modules to work with a global actual course
+* Improved visualization of notifications
+* Integrated ZXing library for attendance module
+* Added error handler for all modules
+* Added rotating refresh image when updating notifications
+* Updated ksoap2-android library
+* Updated minimum SDK version to 7 (Android 2.1)
+* Updated Market link
+* Fixed date and time format
+* Fixed uninplemented method error isEmpty() on earlier API versions
+* Fixed HTML bug in location field of notifications
+* Fixed br tag bug in notifications
+
 ## 0.7.2 (2012-02-22)
 
 * Added notification alerts on status bar
