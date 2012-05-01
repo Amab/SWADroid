@@ -226,6 +226,7 @@ public final class R {
         public static final int klaxon=0x7f050001;
     }
     public static final class string {
+        public static final int NoNotificationsMsg=0x7f090099;
         public static final int about_preferences=0x7f09001b;
         public static final int acceptMsg=0x7f090043;
         public static final int allMsg=0x7f090045;
