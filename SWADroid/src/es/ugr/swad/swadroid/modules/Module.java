@@ -91,7 +91,7 @@ public abstract class Module extends MenuActivity {
     /**
      * Connection timeout in milliseconds
      */
-    private static int TIMEOUT = 10000;
+    private static int TIMEOUT = 60000;
     /**
      * Application debuggable flag
      */
