@@ -77,6 +77,8 @@ public class NotificationsSyncAdapterService extends Service {
 	private static String SOAP_ACTION = "";
 	private static SoapObject request;
 	private static Object result;
+	public static final String START_SYNC = "es.ugr.swad.swadroid.sync.start";
+	public static final String STOP_SYNC = "es.ugr.swad.swadroid.sync.stop";
 
 	public NotificationsSyncAdapterService() {
 		super();
@@ -105,6 +107,11 @@ public class NotificationsSyncAdapterService extends Service {
 		   prefs.getPreferences(mContext);
 		   NotificationsSyncAdapterService.performSync(mContext, account, extras, authority, provider, syncResult);	   
 	   } catch (Exception e) {
+		    //Notify synchronization stop
+			Intent stopIntent = new Intent();
+			stopIntent.setAction(STOP_SYNC);
+		    mContext.sendBroadcast(stopIntent);
+		    
 			e.printStackTrace();		
 	   }
 	  }
@@ -135,7 +142,7 @@ public class NotificationsSyncAdapterService extends Service {
 				long hour = System.currentTimeMillis();
 
 				Notification notif =
-						new Notification(icon, context.getString(R.string.notificationsAlertTitle), hour);
+						new Notification(icon, context.getString(R.string.app_name), hour);
 
 				//Configure the Intent
 				Intent notIntent = new Intent(context,
@@ -145,7 +152,7 @@ public class NotificationsSyncAdapterService extends Service {
 						context, 0, notIntent, 0);
 
 				notif.setLatestEventInfo(
-						context, context.getString(R.string.notificationsAlertTitle), notifCount + " " + 
+						context, context.getString(R.string.app_name), notifCount + " " + 
 								context.getString(R.string.notificationsAlertMsg), contIntent);
 
 				//AutoCancel: alert disappears when pushed
@@ -200,6 +207,11 @@ public class NotificationsSyncAdapterService extends Service {
 	 private static void performSync(Context context, Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
 	   throws OperationCanceledException, SoapFault, IOException, IllegalAccessException, InstantiationException, XmlPullParserException, NoSuchAlgorithmException, KeyManagementException {		 
 
+		 //Notify synchronization start
+		 Intent startIntent = new Intent();
+		 startIntent.setAction(START_SYNC);
+	     context.sendBroadcast(startIntent);
+		 
 		 //Initialize HTTPS connections 
 		SecureConnection.initSecureConnection();
 		
@@ -297,6 +309,11 @@ public class NotificationsSyncAdapterService extends Service {
 			}
 			
 			alertNotif(context);
-		 }
+		}
+		
+		//Notify synchronization stop
+		Intent stopIntent = new Intent();
+		stopIntent.setAction(STOP_SYNC);
+	    context.sendBroadcast(stopIntent);
 	 }
 }

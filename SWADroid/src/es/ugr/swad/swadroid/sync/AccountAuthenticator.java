@@ -42,8 +42,8 @@ public class AccountAuthenticator extends AccountAuthenticatorActivity {
     	  ContentResolver.setMasterSyncAutomatically(true);
     	  ContentResolver.setSyncAutomatically(account, authority, true);
 		 }
-		 finish();
 		}
+		finish();
 	}
 	
 }

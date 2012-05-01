@@ -24,11 +24,14 @@ import org.ksoap2.SoapFault;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.accounts.Account;
+import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -91,6 +94,7 @@ public class Notifications extends Module {
 	 * Synchronization authority
 	 */
 	private static String authority = "es.ugr.swad.swadroid.content";
+	private static SyncReceiver receiver;
 
 	/**
 	 * Refreshes data on screen
@@ -174,6 +178,7 @@ public class Notifications extends Module {
 		}
 
 		setMETHOD_NAME("getNotifications");
+		receiver = new SyncReceiver(this);
 	}
 
 	/**
@@ -198,10 +203,20 @@ public class Notifications extends Module {
 	 */
 	@Override
 	protected void onResume() {		
-		super.onResume();		
-		 
+		super.onResume();
+		
+		IntentFilter intentFilter = new IntentFilter();
+	    intentFilter.addAction(NotificationsSyncAdapterService.START_SYNC);
+	    intentFilter.addAction(NotificationsSyncAdapterService.STOP_SYNC);
+	    registerReceiver(receiver, intentFilter);
 
 		refreshScreen();
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		unregisterReceiver(receiver);
 	}
 
 	/* (non-Javadoc)
@@ -323,11 +338,11 @@ public class Notifications extends Module {
 
 		//alertNotif();
 
-		ProgressBar pb = (ProgressBar)this.findViewById(R.id.progress_refresh);
+		/*ProgressBar pb = (ProgressBar)this.findViewById(R.id.progress_refresh);
 		ImageButton updateButton = (ImageButton)this.findViewById(R.id.refresh);
 
 		pb.setVisibility(View.GONE);
-		updateButton.setVisibility(View.VISIBLE);
+		updateButton.setVisibility(View.VISIBLE);*/
 	}
 
 	/* (non-Javadoc)
@@ -356,5 +371,36 @@ public class Notifications extends Module {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * Synchronization callback. Is called when synchronization starts and stops
+	 * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+	 *
+	 */
+	private class SyncReceiver extends BroadcastReceiver {
+	    private Notifications mActivity;
+
+	    public SyncReceiver(Notifications activity) {
+	        mActivity = activity;
+	    }
+
+	    @Override
+	    public void onReceive(Context context, Intent intent) {
+	        if (intent.getAction().equals(NotificationsSyncAdapterService.START_SYNC)) {
+	            Log.i(TAG, "Started sync");
+	        }
+	        else if (intent.getAction().equals(NotificationsSyncAdapterService.STOP_SYNC)) {
+	            Log.i(TAG, "Stopped sync");
+	            
+	            ProgressBar pb = (ProgressBar)mActivity.findViewById(R.id.progress_refresh);
+	    		ImageButton updateButton = (ImageButton)mActivity.findViewById(R.id.refresh);
+
+	    		pb.setVisibility(View.GONE);
+	    		updateButton.setVisibility(View.VISIBLE);
+	    		
+	            refreshScreen();
+	        }
+	    }
 	}
 }
