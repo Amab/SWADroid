@@ -67,7 +67,7 @@ public abstract class Module extends MenuActivity {
     /**
      * URL param for webservice request.
      */
-    String URL = "swad.ugr.es";
+    String URL; // = "swad.ugr.es";
     /**
      * Preferences of the activity.
      */
@@ -101,6 +101,8 @@ public abstract class Module extends MenuActivity {
      */
     public static final String TAG = Global.APP_TAG + " Module";
     
+    private static KeepAliveHttpsTransportSE connection;
+    
     /**
      * Connects to SWAD and gets user data.
      * @throws NoSuchAlgorithmException
@@ -123,6 +125,11 @@ public abstract class Module extends MenuActivity {
      * Launches action after executing connect() method 
      */
     protected abstract void postConnect();
+    
+    /**
+     * Error handler 
+     */
+    protected abstract void onError();
     
     /**
      * Gets METHOD_NAME parameter.
@@ -405,7 +412,8 @@ public abstract class Module extends MenuActivity {
     	 * Use of KeepAliveHttpsTransport deals with the problems with the Android ssl libraries having trouble
     	 * with certificates and certificate authorities somehow messing up connecting/needing reconnects.
     	 */
-        KeepAliveHttpsTransportSE connection = new KeepAliveHttpsTransportSE(URL, 443, "", TIMEOUT);
+    	URL = prefs.getServer();
+        connection = new KeepAliveHttpsTransportSE(URL, 443, "", TIMEOUT);
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         System.setProperty("http.keepAlive", "false");
         envelope.setOutputSoapObject(request);
@@ -480,7 +488,8 @@ public abstract class Module extends MenuActivity {
         boolean showDialog, isLoginModule;
 
 		/**
-		 * Shows progress dialog and connects to SWAD in background
+		 * Shows progress dialog and connects to SWAD in bac
+	  Log.i(TAG, "performSync: " + account.toString());kground
 		 * @param showDialog Flag for show a progress dialog or not
 		 * @param progressDescription Description to be showed in dialog
 		 * @param progressTitle Title to be showed in dialog
@@ -571,12 +580,15 @@ public abstract class Module extends MenuActivity {
                 	errorMsg = e.getMessage();
                 }
 
-                //Request finalized with errors 
-        		error(errorMsg);               
-        		/*if(isDebuggable) {    		
-        			e.printStackTrace();
+                //Request finalized with errors        		
+        		onError(); 
+        		error(errorMsg); 
+        		e.printStackTrace();
+        		/*if(isDebuggable) { 
+        			connection.debug = true;
+        	        Log.d(TAG, connection.requestDump.toString());
+        	        Log.d(TAG, connection.responseDump.toString());
         		}*/
-        		
                 setResult(RESULT_CANCELED);
             } else {
         		postConnect();

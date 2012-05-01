@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sync-adapter xmlns:android="http://schemas.android.com/apk/res/android"
+    android:contentAuthority="es.ugr.swad.swadroid.content"
+    android:accountType="es.ugr.swad.swadroid"/>
