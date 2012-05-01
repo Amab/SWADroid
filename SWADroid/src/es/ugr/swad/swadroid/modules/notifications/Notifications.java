@@ -20,10 +20,16 @@ package es.ugr.swad.swadroid.modules.notifications;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Vector;
+
 import org.ksoap2.SoapFault;
+import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.accounts.Account;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -40,12 +46,14 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.dataframework.DataFramework;
 
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
+import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.modules.Module;
 
 /**
@@ -57,7 +65,7 @@ public class Notifications extends Module {
 	/**
 	 * Max size to store notifications 
 	 */
-	//private static final int SIZE_LIMIT = 25;
+	private static final int SIZE_LIMIT = 25;
 	/**
 	 * Notifications adapter for showing the data
 	 */
@@ -77,11 +85,11 @@ public class Notifications extends Module {
 	/**
 	 * Notifications counter
 	 */
-	//private int notifCount;
+	private int notifCount;
 	/**
 	 * Unique identifier for notification alerts
 	 */
-	//private int NOTIF_ALERT_ID = 1982;
+	private int NOTIF_ALERT_ID = 1982;
 	/**
 	 * Notifications tag name for Logcat
 	 */
@@ -94,7 +102,14 @@ public class Notifications extends Module {
 	 * Synchronization authority
 	 */
 	private static String authority = "es.ugr.swad.swadroid.content";
+	/**
+	 * Synchronization receiver
+	 */
 	private static SyncReceiver receiver;
+	/**
+	 * Synchronization account
+	 */
+	private static Account account;
 
 	/**
 	 * Refreshes data on screen
@@ -179,6 +194,7 @@ public class Notifications extends Module {
 
 		setMETHOD_NAME("getNotifications");
 		receiver = new SyncReceiver(this);
+		account = new Account(getString(R.string.app_name), accountType);
 	}
 
 	/**
@@ -227,57 +243,59 @@ public class Notifications extends Module {
 	IOException, XmlPullParserException, SoapFault,
 	IllegalAccessException, InstantiationException {
 		
-		//Call synchronization service
-		Account account = new Account(getString(R.string.app_name), accountType);
-		ContentResolver.requestSync(account, authority, new Bundle());
-		
-		//Calculates next timestamp to be requested
-		/*Long timestamp = new Long(dbHelper.getFieldOfLastNotification("eventTime"));
-		timestamp++;
-
-		//Creates webservice request, adds required params and sends request to webservice
-		createRequest();
-		addParam("wsKey", Global.getLoggedUser().getWsKey());
-		addParam("beginTime", timestamp);
-		sendRequest(SWADNotification.class, false);
-
-		if (result != null) {
-			dbHelper.beginTransaction();
-
-			//Stores notifications data returned by webservice response
-			Vector<?> res = (Vector<?>) result;
-			SoapObject soap = (SoapObject) res.get(1);
-			notifCount = soap.getPropertyCount();
-			for (int i = 0; i < notifCount; i++) {
-				SoapObject pii = (SoapObject)soap.getProperty(i);
-				Long notificationCode = new Long(pii.getProperty("notificationCode").toString());
-				String eventType = pii.getProperty("eventType").toString();
-				Long eventTime = new Long(pii.getProperty("eventTime").toString());
-				String userSurname1 = pii.getProperty("userSurname1").toString();
-				String userSurname2 = pii.getProperty("userSurname2").toString();
-				String userFirstName = pii.getProperty("userFirstname").toString();
-				String location = pii.getProperty("location").toString();
-				String summary = pii.getProperty("summary").toString();
-				Integer status = new Integer(pii.getProperty("status").toString());
-				String content = pii.getProperty("content").toString();
-				SWADNotification n = new SWADNotification(notificationCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, location, summary, status, content);
-				dbHelper.insertNotification(n);
-
-				/*if(isDebuggable)
-	    			Log.d(TAG, n.toString());*/
-			/*}
-
-			//Request finalized without errors
-			Log.i(TAG, "Retrieved " + notifCount + " notifications");
-
-			//Clear old notifications to control database size
-			dbHelper.clearOldNotifications(SIZE_LIMIT);
-
-			dbHelper.endTransaction();
-		}*/
+		account = new Account(getString(R.string.app_name), accountType);
+		if(ContentResolver.getSyncAutomatically(account, authority)) {
+			//Call synchronization service
+			ContentResolver.requestSync(account, authority, new Bundle());
+		} else {
+			//Calculates next timestamp to be requested
+			Long timestamp = new Long(dbHelper.getFieldOfLastNotification("eventTime"));
+			timestamp++;
+	
+			//Creates webservice request, adds required params and sends request to webservice
+			createRequest();
+			addParam("wsKey", Global.getLoggedUser().getWsKey());
+			addParam("beginTime", timestamp);
+			sendRequest(SWADNotification.class, false);
+	
+			if (result != null) {
+				dbHelper.beginTransaction();
+	
+				//Stores notifications data returned by webservice response
+				Vector<?> res = (Vector<?>) result;
+				SoapObject soap = (SoapObject) res.get(1);
+				notifCount = soap.getPropertyCount();
+				for (int i = 0; i < notifCount; i++) {
+					SoapObject pii = (SoapObject)soap.getProperty(i);
+					Long notificationCode = new Long(pii.getProperty("notificationCode").toString());
+					String eventType = pii.getProperty("eventType").toString();
+					Long eventTime = new Long(pii.getProperty("eventTime").toString());
+					String userSurname1 = pii.getProperty("userSurname1").toString();
+					String userSurname2 = pii.getProperty("userSurname2").toString();
+					String userFirstName = pii.getProperty("userFirstname").toString();
+					String location = pii.getProperty("location").toString();
+					String summary = pii.getProperty("summary").toString();
+					Integer status = new Integer(pii.getProperty("status").toString());
+					String content = pii.getProperty("content").toString();
+					SWADNotification n = new SWADNotification(notificationCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, location, summary, status, content);
+					dbHelper.insertNotification(n);
+	
+					/*if(isDebuggable)
+		    			Log.d(TAG, n.toString());*/
+				}
+	
+				//Request finalized without errors
+				Log.i(TAG, "Retrieved " + notifCount + " notifications");
+	
+				//Clear old notifications to control database size
+				dbHelper.clearOldNotifications(SIZE_LIMIT);
+	
+				dbHelper.endTransaction();
+			}
+		}
 	}
 
-	/*protected void alertNotif() {
+	protected void alertNotif() {
 		if(notifCount > 0) {
 			//Obtain a reference to the notification service
 			String ns = Context.NOTIFICATION_SERVICE;
@@ -314,8 +332,10 @@ public class Notifications extends Module {
 
 			//Send alert
 			notManager.notify(NOTIF_ALERT_ID, notif);
+		} else {
+			Toast.makeText(this, R.string.NoNotificationsMsg, Toast.LENGTH_SHORT).show();
 		}
-	}*/
+	}
 
 	/* (non-Javadoc)
 	 * @see es.ugr.swad.swadroid.modules.Module#connect()
@@ -336,13 +356,15 @@ public class Notifications extends Module {
 		refreshScreen();
 		//Toast.makeText(this, R.string.notificationsDownloadedMsg, Toast.LENGTH_SHORT).show();
 
-		//alertNotif();
-
-		/*ProgressBar pb = (ProgressBar)this.findViewById(R.id.progress_refresh);
-		ImageButton updateButton = (ImageButton)this.findViewById(R.id.refresh);
-
-		pb.setVisibility(View.GONE);
-		updateButton.setVisibility(View.VISIBLE);*/
+		if(!ContentResolver.getSyncAutomatically(account, authority)) {
+			alertNotif();
+	
+			ProgressBar pb = (ProgressBar)this.findViewById(R.id.progress_refresh);
+			ImageButton updateButton = (ImageButton)this.findViewById(R.id.refresh);
+	
+			pb.setVisibility(View.GONE);
+			updateButton.setVisibility(View.VISIBLE);
+		}
 	}
 
 	/* (non-Javadoc)
