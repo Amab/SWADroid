@@ -39,6 +39,11 @@ SWADroid uses [ksoap2-android][ksoap2-library] library developed by [Manfred Mos
 [![Copyright and License](http://www.apache.org/images/feather-small.gif)][apache2]
 SWADroid uses [ZXing][zxing-library] library developed by [Sean Owen][zxing-author] and licensed under [Apache License 2.0][apache2]
 
+## Contributors
+
+* Helena Rodríguez Gijón
+* Antonio Aguilera Malagón
+
 ## Contributing
 
 SWADroid is an open source project.  I encourage contributions.
