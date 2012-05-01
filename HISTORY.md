@@ -2,7 +2,7 @@
 
 * Added automatic synchronization of notifications
 * Added server URL configuration in preferences
-* Added notices publishingAdded function to publish new notices (yellow notes) (only teachers)
+* Added function to publish new notices (yellow notes) (only teachers)
 * Integrated new SWAD roles system
 * Adapted all Modules to work with a global actual course
 * Improved visualization of notifications
