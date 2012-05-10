@@ -42,8 +42,8 @@ public class DirectoryTreeDownload extends Module {
 			SoapObject soapObject = (SoapObject) result;
 			String tree = soapObject.getProperty("tree").toString();
 
-			//directoryTree = new DirectoryTree();
-			setResult(RESULT_OK);
+			this.getIntent().putExtra("tree", tree);
+			setResult(RESULT_OK, this.getIntent());
 		}
 	}
 

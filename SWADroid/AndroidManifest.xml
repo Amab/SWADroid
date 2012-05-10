@@ -146,6 +146,11 @@
             android:label="@string/documentsDownloadModuleLabel"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
+        <activity
+            android:name=".modules.downloads.DownloadsManager"
+            android:label="@string/documentsDownloadModuleLabel"
+            android:theme="@android:style/Theme.NoTitleBar" >
+        </activity>
 
         <provider
             android:name=".sync.DummyProvider"
