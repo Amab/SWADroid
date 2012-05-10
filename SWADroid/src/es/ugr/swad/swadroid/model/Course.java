@@ -25,6 +25,7 @@ import org.ksoap2.serialization.PropertyInfo;
 /**
  * Class for store a course
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ * @author Helena Rodríguez Gijón <hrgijon@gmail.com>
  */
 public class Course extends Model {
 	/**
@@ -32,15 +33,21 @@ public class Course extends Model {
 	 */
 	private String name;
 	private int userRole;
+	private String shortName;
+	private String fullName;
 	private static PropertyInfo PI_id = new PropertyInfo();
 	private static PropertyInfo PI_name = new PropertyInfo();
 	private static PropertyInfo PI_userRole = new PropertyInfo();
+	private static PropertyInfo PI_shortName = new PropertyInfo();
+	private static PropertyInfo PI_fullName = new PropertyInfo();
     @SuppressWarnings("unused")
 	private static PropertyInfo[] PI_PROP_ARRAY =
     {
     	PI_id,
     	PI_name,
-    	PI_userRole
+    	PI_userRole,
+    	PI_shortName,
+    	PI_fullName
     };
 	
 	/**
@@ -48,10 +55,12 @@ public class Course extends Model {
 	 * @param id Course identifier
 	 * @param name Course name
 	 */
-	public Course(long id, String name, int userRole) {
+	public Course(long id, String name, int userRole, String shortName, String fullName) {
 		super(id);
 		this.name = name;
 		this.userRole = userRole;
+		this.shortName = shortName;
+		this.fullName = fullName;
 	}
 
 	/**
@@ -77,6 +86,38 @@ public class Course extends Model {
 	public int getUserRole(){
 		return userRole;
 	}
+	/**
+	 * Gets short course name
+	 * @return Short course name
+	 */
+	public String getShortName() {
+		return shortName;
+	}
+	
+	/**
+	 * Sets short course name
+	 * @param shortName short course name
+	 */
+	public void setShortName(String shortName) {
+		this.shortName = shortName;
+	}
+	/**
+	 * Gets short course name
+	 * @return Full course name
+	 */
+	public String getFullName() {
+		return fullName;
+	}
+	
+	/**
+	 * Sets short course name
+	 * @param shortName short course name
+	 */
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+	
+	
 	
 
 	/* (non-Javadoc)
@@ -88,6 +129,8 @@ public class Course extends Model {
 		int result = super.hashCode();
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + userRole;
+		result = prime * result + ((shortName == null) ? 0 : shortName.hashCode());
+		result = prime * result + ((fullName == null) ? 0 : fullName.hashCode());
 		return result;
 	}
 
@@ -96,7 +139,7 @@ public class Course extends Model {
 	 */
 	@Override
 	public String toString() {
-		return "Course [name=" + name + ", getId()=" + getId() + " getUserRole()="+ getUserRole()+"]";
+		return "Course [name=" + name + ", getId()=" + getId() + " getUserRole()="+ getUserRole()+ "getShortName="+ shortName + "getFullName="+ fullName +"]";
 	}
 
 	/* (non-Javadoc)
@@ -109,6 +152,8 @@ public class Course extends Model {
             case 0 : object = this.getId();break;
             case 1 : object = name;break;
             case 2 : object = userRole;break;
+            case 3 : object = shortName;break;
+            case 4 : object = fullName;break;
         }
         
         return object;
@@ -118,7 +163,7 @@ public class Course extends Model {
 	 * @see org.ksoap2.serialization.KvmSerializable#getPropertyCount()
 	 */
 	public int getPropertyCount() {
-		return 3;
+		return 5;
 	}
 
 	/* (non-Javadoc)
@@ -138,6 +183,15 @@ public class Course extends Model {
 	        	propertyInfo.type = PropertyInfo.INTEGER_CLASS;
 	        	propertyInfo.name = "userRole";
 	        	break;
+	        case 3:
+	            propertyInfo.type = PropertyInfo.STRING_CLASS;
+	            propertyInfo.name = "shortName";
+	            break;
+	        case 4:
+	            propertyInfo.type = PropertyInfo.STRING_CLASS;
+	            propertyInfo.name = "fullName";
+	            break;    
+	      
 		}
 	}
 
@@ -150,6 +204,9 @@ public class Course extends Model {
 			case 0  : this.setId((Long)obj); break;
 			case 1  : name = (String)obj; break;
 			case 2  : userRole = (Integer)obj; break;
+			case 3  : shortName = (String)obj; break;
+			case 4  : fullName = (String)obj; break;
+		
 		}    
 	}
 
@@ -159,6 +216,8 @@ public class Course extends Model {
 		Course other = (Course) obj;
 		if(name.compareTo(other.getName()) != 0) return false;
 		if(userRole != other.getUserRole())	return false;
+		if(shortName.compareTo(other.getShortName()) != 0) return false;
+		if(fullName.compareTo(other.getFullName()) != 0) return false;
 		return true; 
 	}
 	

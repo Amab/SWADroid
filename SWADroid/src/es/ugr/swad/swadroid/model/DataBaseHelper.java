@@ -118,7 +118,9 @@ public class DataBaseHelper {
 		if(table.equals(Global.DB_TABLE_COURSES)) {
 			o = new Course(ent.getInt("id"),
 					ent.getString("name"),
-					ent.getInt("userRole"));
+					ent.getInt("userRole"),
+					ent.getString("shortName"),
+					ent.getString("fullName"));
 		} else if(table.equals(Global.DB_TABLE_TEST_QUESTIONS_COURSE) ||
 				table.equals(Global.DB_TABLE_TEST_QUESTION_ANSWERS) ||
 				table.equals(Global.DB_TABLE_USERS_COURSES)) {

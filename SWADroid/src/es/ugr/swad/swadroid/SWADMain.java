@@ -309,6 +309,9 @@ public class SWADMain extends MenuExpandableListActivity {
 				firstRun = true;
 				Global.setSelectedCourseCode(-1);
 
+				Global.setSelectedCourseShortName("");
+				Global.setSelectedCourseFullName("");
+
 				//If this is an upgrade, show upgrade dialog
 			} else if(lastVersion < currentVersion) {
 				//showUpgradeDialog();
@@ -325,8 +328,13 @@ public class SWADMain extends MenuExpandableListActivity {
 			if(listCourses.size() >0){
 				Course c =(Course) listCourses.get(prefs.getLastCourseSelected());
 				Global.setSelectedCourseCode(c.getId());
+				Global.setSelectedCourseShortName(c.getShortName());
+				Global.setSelectedCourseFullName(c.getFullName());
+				
 			}else{
 				Global.setSelectedCourseCode(-1);
+				Global.setSelectedCourseShortName("");
+				Global.setSelectedCourseFullName("");
 				if(!firstRun && Module.connectionAvailable(this)) getActualCourses(); //at the first run, this will be launched after the preferences menu 
 			}
 			currentRole = -1;
@@ -399,6 +407,8 @@ public class SWADMain extends MenuExpandableListActivity {
 			Course courseSelected = (Course)listCourses.get(position);
 			courseCode = courseSelected.getId();
 			Global.setSelectedCourseCode(courseCode);
+			Global.setSelectedCourseShortName(courseSelected.getShortName());
+			Global.setSelectedCourseFullName(courseSelected.getFullName());
 			createMenu();
 
 		}
@@ -445,6 +455,8 @@ public class SWADMain extends MenuExpandableListActivity {
 			}else{
 				courseSelected = (Course) listCourses.get(0);
 				Global.setSelectedCourseCode(courseSelected.getId());
+				Global.setSelectedCourseShortName(courseSelected.getShortName());
+				Global.setSelectedCourseFullName(courseSelected.getFullName());
 				prefs.setLastCourseSelected(0);
 			}
 
