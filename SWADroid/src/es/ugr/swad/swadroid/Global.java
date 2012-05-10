@@ -31,7 +31,7 @@ public class Global {
 	/**
 	 * SWAD application key
 	 */
-	private static final String AppKey = "";
+	private static final String AppKey = "HTC-Desire";
 	/**
 	 * Server URL
 	 */
@@ -52,6 +52,15 @@ public class Global {
 	 * Code of the chosen course. All next actions are referred to this course.
 	 */
 	private static long selectedCourseCode = -1;
+	/**
+	 * Short name of the chosen course.
+	 * */
+	private static String selectedCourseShortName;
+	/**
+	 * Short name of the full course.
+	 * */
+	private static String selectedCourseFullName;
+		
 
 	/**
 	 * Indicates if there are changes on db
@@ -311,5 +320,14 @@ public class Global {
 	}
 	public static void setPreferencesChanged(boolean newState){
 		preferencesChanged = newState;
+	}
+	
+	public static void setSelectedCourseShortName(String actualCourseShortName){
+		selectedCourseShortName = actualCourseShortName;
+		
+	}
+	public static void setSelectedCourseFullName(String actualCourseFullName){
+		selectedCourseFullName = actualCourseFullName;
+		
 	}
 }

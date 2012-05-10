@@ -47,7 +47,8 @@ import es.ugr.swad.swadroid.model.Model;
 /**
  * Courses module for get user's courses
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
- * @author Antonio Aguilera Malagon <aguilerin@gmail.com> *
+ * @author Antonio Aguilera Malagon <aguilerin@gmail.com> 
+ * @author Helena Rodríguez Gijón <hrgijon@gmail.com>
  */
 public class Courses extends Module {
 	/**
@@ -132,7 +133,9 @@ public class Courses extends Module {
 				long id = Long.parseLong(pii.getProperty("courseCode").toString());
 				String name = pii.getProperty("courseName").toString();
 				int userRole = Integer.parseInt(pii.getProperty("userRole").toString());
-				Course c = new Course(id, name, userRole);
+				String shortName = pii.getProperty("courseShortName").toString();
+				String fullName = pii.getProperty("courseFullName").toString();
+				Course c = new Course(id, name, userRole,shortName, fullName);
 				coursesSWAD.add(c);
 
 				/*if(isDebuggable)

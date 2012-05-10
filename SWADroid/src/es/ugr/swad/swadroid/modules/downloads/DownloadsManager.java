@@ -29,6 +29,7 @@ import android.widget.TextView;
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.MenuActivity;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.model.Course;
 
 
 /**
@@ -56,11 +57,20 @@ public class DownloadsManager extends MenuActivity {
      * Downloads tag name for Logcat
      */
     public static final String TAG = Global.APP_TAG + " Downloads";
+    
+    /**
+     * Course name
+     * */
+    private String courseName;
 
 	@Override
 	protected void onStart() {
-		// TODO Auto-generated method stub
 		super.onStart();
+		
+		Course courseSelected = ((Course) dbHelper.getRow(Global.DB_TABLE_COURSES, "id",String.valueOf( Global.getSelectedCourseCode())));
+		
+		courseName =courseSelected.getName();
+		
 		Intent activity;
 		activity = new Intent(getBaseContext(),DirectoryTreeDownload.class);
 		activity.putExtra("treeCode",downloadsCode);
@@ -111,13 +121,12 @@ public class DownloadsManager extends MenuActivity {
 		TextView text2;
 		text2= (TextView) this.findViewById(R.id.path);
 		text2.setText(R.string.blogTitle);
-		text2.setText("Asignatura de Prueba /Tema 1/Sobre SWAD");
+		
 		navigator = new DirectoryNavigator(tree);
 		GridView grid = (GridView) this.findViewById(R.id.gridview);
 		ArrayList<DirectoryItem> r = (ArrayList<DirectoryItem>) navigator.goToRoot();
-	
+		text2.setText(courseName + " "+navigator.getPath());
 		grid.setAdapter(new NodeAdapter(this,r));
-		//grid.setAdapter(new ImageAdapter(this, r));
 	}
 
 

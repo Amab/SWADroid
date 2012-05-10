@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <database
     name="swadroid_db"
-    version="10" >
+    version="11" >
 
     <table
         name="courses"
@@ -19,6 +19,16 @@
             new-in-version="9"
             obligatory="true"
             type="integer" />
+        <field
+            name="shortName"
+            new-in-version="11"
+            obligatory="true"
+            type="text" />
+        <field
+            name="fullName"
+            new-in-version="11"
+            obligatory="true"
+            type="text" />
     </table>
     <table
         name="notifications"
