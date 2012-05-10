@@ -1,6 +1,6 @@
 package es.ugr.swad.swadroid.modules.downloads;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -12,9 +12,9 @@ import android.widget.TextView;
 import es.ugr.swad.swadroid.R;
 
 public class NodeAdapter extends BaseAdapter {
-	private List<DirectoryItem> list;
+	private ArrayList<DirectoryItem> list;
 	private Activity mContext;
-	public NodeAdapter(Activity c, List<DirectoryItem> list){
+	public NodeAdapter(Activity c, ArrayList<DirectoryItem> list){
 		mContext = c;
 		this.list = list;
 	}
@@ -53,6 +53,9 @@ public class NodeAdapter extends BaseAdapter {
 				icon.setImageResource(R.drawable.file);
 			}
 			
+		}else
+		{
+			view = convertView;
 		}
 		return view;
 	}
