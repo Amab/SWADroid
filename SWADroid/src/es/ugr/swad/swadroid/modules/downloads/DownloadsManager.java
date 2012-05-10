@@ -21,14 +21,8 @@ package es.ugr.swad.swadroid.modules.downloads;
 import java.util.ArrayList;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -120,66 +114,11 @@ public class DownloadsManager extends MenuActivity {
 		text2.setText("Asignatura de Prueba /Tema 1/Sobre SWAD");
 		navigator = new DirectoryNavigator(tree);
 		GridView grid = (GridView) this.findViewById(R.id.gridview);
-		/*ArrayList<DirectoryItem> n = new ArrayList<DirectoryItem>();
-		DirectoryItem tema1 = new DirectoryItem("Tema 1","dir","url",2,21234);
-		DirectoryItem SobreSwad = new DirectoryItem("Sobre SWAD","dir","url",2,21234);
-		DirectoryItem LogoS = new DirectoryItem("Logo de SWAD","file","url",2,21234);
-		DirectoryItem LogoP = new DirectoryItem("Logo de Prado","dir","url",2,21234);
-		n.add(tema1);
-		n.add(SobreSwad);
-		n.add(LogoS);
-		n.add(LogoP);*/
 		ArrayList<DirectoryItem> r = (ArrayList<DirectoryItem>) navigator.goToRoot();
+	
 		grid.setAdapter(new NodeAdapter(this,r));
-		//grid.setAdapter(new ImageAdapter(this));
+		//grid.setAdapter(new ImageAdapter(this, r));
 	}
-	/*public class ImageAdapter extends BaseAdapter{
-		Context mContext;
-		public static final int ACTIVITY_CREATE = 10;
-		public ImageAdapter(Context c){
-			mContext = c;
-		}
-		@Override
-		public int getCount() {
-			// TODO Auto-generated method stub
-			return 3;
-		}
 
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			// TODO Auto-generated method stub
-			View v;
-			if(convertView==null){
-				LayoutInflater li = getLayoutInflater();
-				v = li.inflate(R.layout.grid_item , null);
-				TextView tv = (TextView)v.findViewById(R.id.icon_text);
-				//if(position ==0)tv.setText("Tema 1");
-				//if(position == 0)tv.setText("Sobre SWAD");
-				if(position == 0)tv.setText("Logo de SWAD");
-				if(position == 1)tv.setText("Logo de PRADO");
-				if(position == 2)tv.setText("SWAD_mejoras futuras");
-				
-				ImageView iv = (ImageView)v.findViewById(R.id.icon_image);
-				//if(position == 0)iv.setImageResource(R.drawable.folder);
-				if(position==1 || position ==0) iv.setImageResource(R.drawable.file);
-				if(position==2) iv.setImageResource(R.drawable.imgres);
-			}
-			else
-			{
-				v = convertView;
-			}
-			return v;
-		}
-		@Override
-		public Object getItem(int position) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-		@Override
-		public long getItemId(int position) {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-	}*/
 
 }
