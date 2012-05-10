@@ -56,6 +56,7 @@ import es.ugr.swad.swadroid.modules.Messages;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.modules.Notices;
 import es.ugr.swad.swadroid.modules.attendance.Attendance;
+import es.ugr.swad.swadroid.modules.downloads.DownloadsManager;
 import es.ugr.swad.swadroid.modules.downloads.DirectoryTreeDownload;
 import es.ugr.swad.swadroid.modules.notifications.Notifications;
 import es.ugr.swad.swadroid.modules.tests.Tests;
@@ -222,16 +223,17 @@ public class SWADMain extends MenuExpandableListActivity {
 			activity = new Intent(getBaseContext(), Attendance.class);
 			startActivityForResult(activity, Global.ATTENDANCE_REQUEST_CODE);
 		} else if(keyword.equals(getString(R.string.documentsDownloadModuleLabel))){
-			activity = new Intent(getBaseContext(),Groups.class);
-			//activity.putExtra("treeCode",Global.DOCUMENTS_AREA_CODE);
-			startActivityForResult(activity,Global.GROUPS_REQUEST_CODE);
-			/*	activity = new Intent(getBaseContext(),DirectoryTreeDownload.class);
-			activity.putExtra("treeCode",Global.DOCUMENTS_AREA_CODE);
-			startActivityForResult(activity,Global.DIRECTORY_TREE_REQUEST_CODE);*/
+			activity = new Intent(getBaseContext(), DownloadsManager.class);
+			activity.putExtra("downloadsCode", Global.DOCUMENTS_AREA_CODE);
+			startActivityForResult(activity,Global.DOWNLOADSMANAGER_REQUEST_CODE);
+			
 		}else if(keyword.equals(getString(R.string.sharedsDownloadModuleLabel))){
-			activity = new Intent(getBaseContext(),DirectoryTreeDownload.class);
+			activity = new Intent(getBaseContext(), DownloadsManager.class);
+			activity.putExtra("downloadsCode", Global.SHARE_AREA_CODE);
+			startActivityForResult(activity,Global.DOWNLOADSMANAGER_REQUEST_CODE);
+			/*activity = new Intent(getBaseContext(),DirectoryTreeDownload.class);
 			activity.putExtra("treeCode",Global.SHARE_AREA_CODE);
-			startActivityForResult(activity,Global.DIRECTORY_TREE_REQUEST_CODE);
+			startActivityForResult(activity,Global.DIRECTORY_TREE_REQUEST_CODE);*/
 		}
 
 		return true;
@@ -478,12 +480,12 @@ public class SWADMain extends MenuExpandableListActivity {
 			evaluation.put(NAME, getString(R.string.evaluation));
 			evaluation.put(IMAGE, getResources().getDrawable(R.drawable.grades));
 			headerData.add( evaluation);
-
-			/*//DISABLE until it will be functional
+			
+			//DISABLE until it will be functional
 			final HashMap<String, Object> courses = new HashMap<String,Object>();
 			courses.put(NAME, getString(R.string.course));
 			courses.put(IMAGE, getResources().getDrawable(R.drawable.blackboard));
-			headerData.add(courses);*/
+			headerData.add(courses);
 
 			final ArrayList<ArrayList<HashMap<String, Object>>> childData = new ArrayList<ArrayList<HashMap<String, Object>>>();
 
@@ -493,9 +495,9 @@ public class SWADMain extends MenuExpandableListActivity {
 			final ArrayList<HashMap<String, Object>> evaluationData = new ArrayList<HashMap<String, Object>>();
 			childData.add(evaluationData);
 
-			/*//DISABLE until it will be functional
+			//DISABLE until it will be functional
 			final ArrayList<HashMap<String,Object>> documentsData = new ArrayList<HashMap<String, Object>>();
-			childData.add(documentsData);*/
+			childData.add(documentsData);
 
 			//Messages category
 			HashMap<String, Object> map = new HashMap<String,Object>();
@@ -514,7 +516,7 @@ public class SWADMain extends MenuExpandableListActivity {
 			map.put(IMAGE, getResources().getDrawable(R.drawable.test));
 			evaluationData.add(map);
 
-			/*//DISABLE until it will be functional
+			//DISABLE until it will be functional
 			//Documents category
 			map = new HashMap<String,Object>();
 			map.put(NAME, getString(R.string.documentsDownloadModuleLabel));
@@ -524,7 +526,7 @@ public class SWADMain extends MenuExpandableListActivity {
 			map = new HashMap<String,Object>();
 			map.put(NAME, getString(R.string.sharedsDownloadModuleLabel));
 			map.put(IMAGE,  getResources().getDrawable(R.drawable.folderusers));
-			documentsData.add(map);*/
+			documentsData.add(map);
 			setListAdapter( new ImageExpandableListAdapter(
 					this,
 					headerData,
@@ -550,8 +552,8 @@ public class SWADMain extends MenuExpandableListActivity {
 			//Removes Publish Note from messages menu
 			((ImageExpandableListAdapter) getExpandableListAdapter()).removeChild(MESSAGES_GROUP, PUBLISH_NOTE_CHILD);
 			//Removes completely users menu 
-			/*//DISABLE until it will be functional
-			((ImageExpandableListAdapter) getExpandableListAdapter()).removeGroup(USERS_GROUP);*/
+			//DISABLE until it will be functional
+			((ImageExpandableListAdapter) getExpandableListAdapter()).removeGroup(USERS_GROUP);
 
 		}
 		currentRole = Global.STUDENT_TYPE_CODE;
@@ -567,7 +569,7 @@ public class SWADMain extends MenuExpandableListActivity {
 			map.put(IMAGE, getResources().getDrawable(R.drawable.note));
 			((ImageExpandableListAdapter) getExpandableListAdapter()).addChild(MESSAGES_GROUP,PUBLISH_NOTE_CHILD, map);
 
-			/*//DISABLE until it will be functional
+			//DISABLE until it will be functional
 			final HashMap<String, Object> users = new HashMap<String, Object>();
 			users.put(NAME, getString(R.string.users));
 			users.put(IMAGE, getResources().getDrawable(R.drawable.users));
@@ -576,7 +578,7 @@ public class SWADMain extends MenuExpandableListActivity {
 			map.put(NAME, getString(R.string.attendanceModuleLabel));
 			map.put(IMAGE, getResources().getDrawable(R.drawable.rollcall));
 			child.add(map);
-			((ImageExpandableListAdapter) getExpandableListAdapter()).addGroup(USERS_GROUP, users, child);*/
+			((ImageExpandableListAdapter) getExpandableListAdapter()).addGroup(USERS_GROUP, users, child);
 
 
 		}

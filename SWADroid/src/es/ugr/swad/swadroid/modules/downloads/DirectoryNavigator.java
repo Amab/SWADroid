@@ -14,7 +14,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 /**
- * 	Class used to navigate arround the XML file. That XML file contains the 
+ * 	Class used to navigate around the XML file. That XML file contains the 
  	information of all the directory.
  * 	@author Sergio Ropero Oliver. <sro0000@gmail.com>
  * 	@version 1.0
@@ -40,14 +40,14 @@ public class DirectoryNavigator
      * @return Return a list of items that are inside the subdirectory.
      * @throws InvalidPath When the directory don't exist.
      */
-    public List<DirectoryItem> subDirectory(String subDirectory) throws InvalidPath
+    public ArrayList<DirectoryItem> subDirectory(String subDirectory) throws InvalidPath
     {
         //We increase the path.
         path.add(subDirectory);
         
         Node node = goToDirectory();
         
-        List<DirectoryItem> itemsToShow;
+        ArrayList<DirectoryItem> itemsToShow;
         itemsToShow = new ArrayList<DirectoryItem>(getItems(node));
         
         return itemsToShow;
@@ -56,7 +56,7 @@ public class DirectoryNavigator
     /**
      * Travel to the parent directory.
      * @return Return a list of items that are inside the parent directory.
-     * @throws InvalidPath When the directory don't exist.
+     * @throws InvalidPath When the directory does not exist.
      */
     public List<DirectoryItem> parentDirectory() throws InvalidPath
     {
@@ -214,6 +214,7 @@ public class DirectoryNavigator
 
 	        //We put the actual node in the root Element.
 	        actualNode = dom.getDocumentElement();
+	        System.out.println("XML: " + XMLinfo);
 	        System.out.println(path.size());
 	        //We change the current node.
 	        for(int i=0; i<path.size(); i++)
@@ -271,6 +272,9 @@ public class DirectoryNavigator
 	{
 		path.add(directory);
 	}
+	
+	//TODO List<DirectoryItem> getActual
+	//public List<DirectoryItem> getActual(){}
 }
 
 /**

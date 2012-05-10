@@ -117,6 +117,10 @@ public class Global {
      * Request code for Directory Tree Download module
      * */
     public static final int GROUPS_REQUEST_CODE = 14;
+    /**
+     * Request code for Downloads Manager
+     * */
+    public static final int DOWNLOADSMANAGER_REQUEST_CODE = 15;
 	/**
 	 * Prefix tag name for Logcat
 	 */
