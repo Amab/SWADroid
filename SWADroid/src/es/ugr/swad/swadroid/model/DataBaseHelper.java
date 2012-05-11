@@ -318,6 +318,8 @@ public class DataBaseHelper {
 		ent.setValue("id", c.getId());
 		ent.setValue("name", c.getName());
 		ent.setValue("userRole", c.getUserRole());
+		ent.setValue("shortName", c.getShortName());
+		ent.setValue("fullName", c.getFullName());
 		ent.save();
 	}
 
@@ -524,6 +526,8 @@ public class DataBaseHelper {
 		ent.setValue("id", actual.getId());
 		ent.setValue("name", actual.getName());
 		ent.setValue("userRole", actual.getUserRole());
+		ent.setValue("shortName", actual.getShortName());
+		ent.setValue("fullName", actual.getFullName());
 		ent.save();
 	}
 
@@ -540,6 +544,8 @@ public class DataBaseHelper {
 			ent.setValue("id", actual.getId());
 			ent.setValue("name", actual.getName());
 			ent.setValue("userRole", actual.getUserRole());
+			ent.setValue("shortName", actual.getShortName());
+			ent.setValue("fullName", actual.getFullName());
 			ent.save();
 		}
 	}

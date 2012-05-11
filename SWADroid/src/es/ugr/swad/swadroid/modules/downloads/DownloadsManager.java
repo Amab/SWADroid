@@ -69,6 +69,11 @@ public class DownloadsManager extends MenuActivity {
     private String courseName;
     
     GridView grid;
+    
+    ImageView moduleIcon = null;
+	TextView moduleText = null;
+	
+	TextView actualPathText;
 
 	@Override
 	protected void onStart() {
@@ -116,32 +121,31 @@ public class DownloadsManager extends MenuActivity {
 	}
 	
 	private void setMainView(){
-		ImageView image;
-		TextView text;
-		
-		if(downloadsCode == Global.DOCUMENTS_AREA_CODE){
-	        image = (ImageView)this.findViewById(R.id.moduleIcon);
-	        image.setBackgroundResource(R.drawable.folder);
-	        
-	        text = (TextView)this.findViewById(R.id.moduleName);
-	        text.setText(R.string.documentsDownloadModuleLabel);		
-		}else{ //SHARE_AREA_CODE
-	        image = (ImageView)this.findViewById(R.id.moduleIcon);
-	        image.setBackgroundResource(R.drawable.folderusers);
-	        
-	        text = (TextView)this.findViewById(R.id.moduleName);
-	        text.setText(R.string.sharedsDownloadModuleLabel);				
+		if(moduleIcon == null){
+			if(downloadsCode == Global.DOCUMENTS_AREA_CODE){
+		        moduleIcon = (ImageView)this.findViewById(R.id.moduleIcon);
+		        moduleIcon.setBackgroundResource(R.drawable.folder);
+		        
+		        moduleText = (TextView)this.findViewById(R.id.moduleName);
+		        moduleText.setText(R.string.documentsDownloadModuleLabel);		
+			}else{ //SHARE_AREA_CODE
+				moduleIcon = (ImageView)this.findViewById(R.id.moduleIcon);
+				moduleIcon.setBackgroundResource(R.drawable.folderusers);
+		        
+				moduleText = (TextView)this.findViewById(R.id.moduleName);
+				moduleText.setText(R.string.sharedsDownloadModuleLabel);				
+			}
 		}
 		
-		TextView text2;
-		text2= (TextView) this.findViewById(R.id.path);
-		text2.setText(R.string.blogTitle);
+		
+		actualPathText= (TextView) this.findViewById(R.id.path);
 		
 		navigator = new DirectoryNavigator(tree);
 		//GridView 
 		ArrayList<DirectoryItem> r = (ArrayList<DirectoryItem>) navigator.goToRoot();
 		String path = Global.getSelectedCourseShortName() ;
-		text2.setText(courseName+ " "+navigator.getPath());
+		
+		actualPathText.setText(courseName+ " "+navigator.getPath());
 		grid.setAdapter(new NodeAdapter(this,r));
 	}
 	
@@ -154,10 +158,11 @@ public class DownloadsManager extends MenuActivity {
 
 	    public void onItemSelected(AdapterView<?> parent,
 	        View view, int pos, long id) {
-	      Toast.makeText(parent.getContext(), "The planet is " +
-	          parent.getItemAtPosition(pos).toString(), Toast.LENGTH_LONG).show();
+	      
 	      String path = parent.getItemAtPosition(pos).toString();
+	      
 	      ArrayList<DirectoryItem> newBrowser = navigator.subDirectory(path);
+	      actualPathText.setText(courseName+ " "+navigator.getPath());
 	      ((NodeAdapter)grid.getAdapter()).change(newBrowser);
 	    }
 
