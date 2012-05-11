@@ -12,7 +12,7 @@ import android.widget.TextView;
 import es.ugr.swad.swadroid.R;
 /**
  * Adapter to populate browser of files with the information received from SWAD
- * @author Helena Rodríguez Gijon <hrgijon@gmail.com>
+ * @author Helena Rodríguez Gijón <hrgijon@gmail.com>
  * */
 
 public class NodeAdapter extends BaseAdapter {
@@ -21,6 +21,11 @@ public class NodeAdapter extends BaseAdapter {
 	public NodeAdapter(Activity c, ArrayList<DirectoryItem> list){
 		mContext = c;
 		this.list = list;
+	}
+	
+	static class ViewHolder{
+		TextView text;
+		ImageView image;
 	}
 	
 	@Override
@@ -42,26 +47,35 @@ public class NodeAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		View view = null;
+		ViewHolder holder;
+		
 		if(convertView == null){
-			DirectoryItem node = list.get(position);
 			LayoutInflater inflator = mContext.getLayoutInflater();
-			view = inflator.inflate(R.layout.grid_item, null);
-			TextView text = (TextView) view.findViewById(R.id.icon_text);
-			text.setText(node.getName());
+			convertView = inflator.inflate(R.layout.grid_item, null);
 			
-			ImageView icon = (ImageView) view.findViewById(R.id.icon_image);
-			if(node.isFolder()){
-				icon.setImageResource(R.drawable.folder);
-			}else{
-				icon.setImageResource(R.drawable.file);
-			}
+			holder = new ViewHolder();
+			holder.text = (TextView) convertView.findViewById(R.id.icon_text);
+			holder.image =  (ImageView) convertView.findViewById(R.id.icon_image);
 			
-		}else
-		{
-			view = convertView;
+			convertView.setTag(holder);
+		}else{
+			holder= (ViewHolder) convertView.getTag();
 		}
-		return view;
+		
+		holder.text.setText(((DirectoryItem)list.get(position)).getName());
+		
+		if(((DirectoryItem)list.get(position)).isFolder()){
+			holder.image.setImageResource(R.drawable.folder);
+		}else{
+			holder.image.setImageResource(R.drawable.file);
+		}
+		
+		return convertView;
+	}
+	
+	public void change(ArrayList<DirectoryItem> newBrowser){
+		list = newBrowser;
+		notifyDataSetInvalidated();	
 	}
 
 }

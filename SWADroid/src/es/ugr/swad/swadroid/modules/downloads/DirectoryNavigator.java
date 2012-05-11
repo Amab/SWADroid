@@ -215,7 +215,7 @@ public class DirectoryNavigator
 	        //We put the actual node in the root Element.
 	        actualNode = dom.getDocumentElement();
 	        System.out.println("XML: " + XMLinfo);
-	        System.out.println(path.size());
+	        System.out.println("path size "+path.size());
 	        //We change the current node.
 	        for(int i=0; i<path.size(); i++)
 	        {

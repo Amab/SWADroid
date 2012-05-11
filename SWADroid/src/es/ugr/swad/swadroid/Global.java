@@ -31,7 +31,7 @@ public class Global {
 	/**
 	 * SWAD application key
 	 */
-	private static final String AppKey = "HTC-Desire";
+	private static final String AppKey = "";
 	/**
 	 * Server URL
 	 */
@@ -328,6 +328,14 @@ public class Global {
 	}
 	public static void setSelectedCourseFullName(String actualCourseFullName){
 		selectedCourseFullName = actualCourseFullName;
+		
+	}
+	public static String getSelectedCourseShortName(){
+		return selectedCourseShortName;
+		
+	}
+	public static String getSelectedCourseFullName(){
+		return selectedCourseFullName;
 		
 	}
 }

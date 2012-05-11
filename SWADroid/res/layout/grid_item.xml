@@ -19,6 +19,8 @@ android:layout_width="wrap_content"
 android:layout_height="wrap_content"
 android:text="TextView"
 android:gravity="center_horizontal"
-android:textColorHighlight="#656565">
+android:textColorHighlight="#656565"
+android:textColor="@android:color/black"
+>
 </TextView>
 </LinearLayout>
