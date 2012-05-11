@@ -23,9 +23,14 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.MenuActivity;
 import es.ugr.swad.swadroid.R;
@@ -62,6 +67,8 @@ public class DownloadsManager extends MenuActivity {
      * Course name
      * */
     private String courseName;
+    
+    GridView grid;
 
 	@Override
 	protected void onStart() {
@@ -69,7 +76,7 @@ public class DownloadsManager extends MenuActivity {
 		
 		Course courseSelected = ((Course) dbHelper.getRow(Global.DB_TABLE_COURSES, "id",String.valueOf( Global.getSelectedCourseCode())));
 		
-		courseName =courseSelected.getName();
+		courseName =courseSelected.getShortName();
 		
 		Intent activity;
 		activity = new Intent(getBaseContext(),DirectoryTreeDownload.class);
@@ -80,8 +87,17 @@ public class DownloadsManager extends MenuActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.navigation);
 		downloadsCode = getIntent().getIntExtra("downloadsCode", Global.DOCUMENTS_AREA_CODE);
-
+		grid = (GridView) this.findViewById(R.id.gridview);
+		grid.setOnItemClickListener((new OnItemClickListener() {
+	        public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+	        	TextView text = (TextView) v.findViewById(R.id.icon_text);
+	        	String path = text.getText().toString();//parent.getItemAtPosition(position).toString();
+		      ArrayList<DirectoryItem> newBrowser = navigator.subDirectory(path);
+		      ((NodeAdapter)grid.getAdapter()).change(newBrowser);
+	        }
+	    }));
 		
 	}
 
@@ -102,7 +118,6 @@ public class DownloadsManager extends MenuActivity {
 	private void setMainView(){
 		ImageView image;
 		TextView text;
-		setContentView(R.layout.navigation);
 		
 		if(downloadsCode == Global.DOCUMENTS_AREA_CODE){
 	        image = (ImageView)this.findViewById(R.id.moduleIcon);
@@ -123,10 +138,32 @@ public class DownloadsManager extends MenuActivity {
 		text2.setText(R.string.blogTitle);
 		
 		navigator = new DirectoryNavigator(tree);
-		GridView grid = (GridView) this.findViewById(R.id.gridview);
+		//GridView 
 		ArrayList<DirectoryItem> r = (ArrayList<DirectoryItem>) navigator.goToRoot();
-		text2.setText(courseName + " "+navigator.getPath());
+		String path = Global.getSelectedCourseShortName() ;
+		text2.setText(courseName+ " "+navigator.getPath());
 		grid.setAdapter(new NodeAdapter(this,r));
+	}
+	
+	
+	/*private OnClickListener homeClickListener = new OnClickListener(){
+		
+	}*/
+	
+	public class GridViewOnItemSelectedListener implements OnItemSelectedListener {
+
+	    public void onItemSelected(AdapterView<?> parent,
+	        View view, int pos, long id) {
+	      Toast.makeText(parent.getContext(), "The planet is " +
+	          parent.getItemAtPosition(pos).toString(), Toast.LENGTH_LONG).show();
+	      String path = parent.getItemAtPosition(pos).toString();
+	      ArrayList<DirectoryItem> newBrowser = navigator.subDirectory(path);
+	      ((NodeAdapter)grid.getAdapter()).change(newBrowser);
+	    }
+
+	    public void onNothingSelected(AdapterView parent) {
+	      // Do nothing.
+	    }
 	}
 
 
