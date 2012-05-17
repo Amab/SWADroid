@@ -63,12 +63,7 @@ public class DownloadsManager extends MenuActivity {
      */
     public static final String TAG = Global.APP_TAG + " Downloads";
     
-    /**
-     * Course name
-     * */
-    private String courseName;
-    
-    GridView grid;
+    private GridView grid;
     
     ImageView moduleIcon = null;
 	TextView moduleText = null;
@@ -78,11 +73,6 @@ public class DownloadsManager extends MenuActivity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		
-		Course courseSelected = ((Course) dbHelper.getRow(Global.DB_TABLE_COURSES, "id",String.valueOf( Global.getSelectedCourseCode())));
-		
-		courseName =courseSelected.getShortName();
-		
 		Intent activity;
 		activity = new Intent(getBaseContext(),DirectoryTreeDownload.class);
 		activity.putExtra("treeCode",downloadsCode);
@@ -98,8 +88,12 @@ public class DownloadsManager extends MenuActivity {
 		grid.setOnItemClickListener((new OnItemClickListener() {
 	        public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 	        	TextView text = (TextView) v.findViewById(R.id.icon_text);
-	        	String path = text.getText().toString();//parent.getItemAtPosition(position).toString();
-		      ArrayList<DirectoryItem> newBrowser = navigator.subDirectory(path);
+	        	String path = text.getText().toString();
+		      
+	        	ArrayList<DirectoryItem> newBrowser = navigator.subDirectory(path);
+	        	((NodeAdapter)grid.getAdapter()).change(newBrowser);
+	        	actualPathText.setText(navigator.getPath());
+				
 		      ((NodeAdapter)grid.getAdapter()).change(newBrowser);
 	        }
 	    }));
@@ -143,9 +137,10 @@ public class DownloadsManager extends MenuActivity {
 		navigator = new DirectoryNavigator(tree);
 		//GridView 
 		ArrayList<DirectoryItem> r = (ArrayList<DirectoryItem>) navigator.goToRoot();
-		String path = Global.getSelectedCourseShortName() ;
+	
+		String path = navigator.getPath() ;
+		actualPathText.setText(path);
 		
-		actualPathText.setText(courseName+ " "+navigator.getPath());
 		grid.setAdapter(new NodeAdapter(this,r));
 	}
 	
@@ -154,22 +149,24 @@ public class DownloadsManager extends MenuActivity {
 		
 	}*/
 	
-	public class GridViewOnItemSelectedListener implements OnItemSelectedListener {
+/*	public class GridViewOnItemSelectedListener implements OnItemSelectedListener {
 
 	    public void onItemSelected(AdapterView<?> parent,
 	        View view, int pos, long id) {
 	      
-	      String path = parent.getItemAtPosition(pos).toString();
+	      String directoryName = parent.getItemAtPosition(pos).toString();
 	      
-	      ArrayList<DirectoryItem> newBrowser = navigator.subDirectory(path);
-	      actualPathText.setText(courseName+ " "+navigator.getPath());
+	      ArrayList<DirectoryItem> newBrowser = navigator.subDirectory(directoryName);
+	      String path = navigator.getPath();
+	      actualPathText.setText(path);
+			
 	      ((NodeAdapter)grid.getAdapter()).change(newBrowser);
 	    }
 
 	    public void onNothingSelected(AdapterView parent) {
 	      // Do nothing.
 	    }
-	}
+	}*/
 
 
 }
