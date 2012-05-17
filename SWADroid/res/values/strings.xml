@@ -21,7 +21,7 @@
     <string name="userPasswordSummary_preferences">Password</string>
     <string name="userPasswordTitle_preferences">Password</string>
     <string name="saveMsg_preferences">Preferences have been saved</string>
-    <string name="saveSummary_preferences">Save actual preferences</string>
+    <string name="saveSummary_preferences">Save current preferences</string>
     <string name="saveTitle_preferences">Save preferences</string>
     <string name="preferencesTitle_menu">Preferences</string>
     <string name="shareTitle_menu">Share SWADroid</string>

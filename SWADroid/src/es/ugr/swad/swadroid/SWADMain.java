@@ -104,7 +104,7 @@ public class SWADMain extends MenuExpandableListActivity {
 	private boolean firstRun = false;
 
 	/**
-	 * Actual role 2 - student 3 - teacher -1 - none role was chosen 
+	 * Current role 2 - student 3 - teacher -1 - none role was chosen 
 	 * */
 	private int currentRole = -1;
 	/**
@@ -253,7 +253,7 @@ public class SWADMain extends MenuExpandableListActivity {
 				createMenu();
 			}
 		}else{
-			getActualCourses();
+			getCurrentCourses();
 			Global.setPreferencesChanged(false);
 		}
 	}
@@ -335,7 +335,7 @@ public class SWADMain extends MenuExpandableListActivity {
 				Global.setSelectedCourseCode(-1);
 				Global.setSelectedCourseShortName("");
 				Global.setSelectedCourseFullName("");
-				if(!firstRun && Module.connectionAvailable(this)) getActualCourses(); //at the first run, this will be launched after the preferences menu 
+				if(!firstRun && Module.connectionAvailable(this)) getCurrentCourses(); //at the first run, this will be launched after the preferences menu 
 			}
 			currentRole = -1;
 		} catch (Exception ex) {
@@ -427,7 +427,7 @@ public class SWADMain extends MenuExpandableListActivity {
 
 				if(dbHelper.getAllRows(Global.DB_TABLE_COURSES).size()==0){
 					if(Module.connectionAvailable(getBaseContext()))
-						getActualCourses();
+						getCurrentCourses();
 					//else
 
 				}else{
@@ -439,7 +439,7 @@ public class SWADMain extends MenuExpandableListActivity {
 		}
 	};
 
-	private void getActualCourses(){
+	private void getCurrentCourses(){
 		Intent activity;
 		activity = new Intent(getBaseContext(), Courses.class );
 		Toast.makeText(getBaseContext(), R.string.coursesProgressDescription, Toast.LENGTH_LONG).show();
