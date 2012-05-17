@@ -117,7 +117,7 @@ public class DirectoryNavigator
     	NodeList childs = node.getChildNodes();
     	
     	DirectoryItem item;
-    	System.out.println(childs.getLength());
+    	System.out.println("Num of childs"+childs.getLength());
     	for(int i=0; i<childs.getLength(); i++)
     	{
     		Node currentChild = childs.item(i);
@@ -133,7 +133,6 @@ public class DirectoryNavigator
     		{
     			if(childs.item(i).getNodeName().equals("file"))
     			{
-    				String fullName;
     				
     				String name = "";
     				String type = "";
@@ -143,12 +142,10 @@ public class DirectoryNavigator
     				
     				//PARSE THE NAME SEPARING NAME AND EXTENSION
         			NamedNodeMap attributes = currentChild.getAttributes();
-            		fullName = attributes.getNamedItem("name").getNodeValue();
-            		int lastDot = fullName.lastIndexOf(".");
-    				name = fullName.substring(0, lastDot);
-    				type = fullName.substring(lastDot+1, fullName.length());
+            		name = attributes.getNamedItem("name").getNodeValue();
+            		
     				System.out.println("Name:  "+name);
-    				System.out.println("Type: "+type);
+    				
     				
     				//WE GET THE REST OF THE INFO
     				NodeList fileData = currentChild.getChildNodes();
@@ -161,6 +158,11 @@ public class DirectoryNavigator
     					{
     						url = data.getFirstChild().getNodeValue();
 							System.out.println("Url: "+url);
+							//from the url, gets the type
+							int lastDot = url.lastIndexOf(".");
+		    				type = url.substring(lastDot+1, url.length());
+		    				
+		    				System.out.println("Type: "+type);
     					}
     					else
     					{
