@@ -24,149 +24,177 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.MenuActivity;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.model.Course;
-
 
 /**
- * Activity to navigate through the directory tree of documents and to manage the downloads of documents
+ * Activity to navigate through the directory tree of documents and to manage
+ * the downloads of documents
+ * 
  * @author Helena Rodríguez Gijon <hrgijon@gmail.com>
  * */
 public class DownloadsManager extends MenuActivity {
 	/**
-	 * Class that contains the directory tree and gives information of each level
+	 * Class that contains the directory tree and gives information of each
+	 * level
 	 * */
-	private DirectoryNavigator	navigator;
-	
+	private DirectoryNavigator navigator;
+
 	/**
-	 * Specifies whether to display the documents or the shared area of the subject
-	 * 1 specifies documents area
-	 * 2 specifies shared area
+	 * Specifies whether to display the documents or the shared area of the
+	 * subject 1 specifies documents area 2 specifies shared area
 	 * */
 	private int downloadsCode = 0;
 	/**
-	 * String that contains the xml files recevied from the web service 
+	 * String that contains the xml files recevied from the web service
 	 * */
 	private String tree;
-	
-    /**
-     * Downloads tag name for Logcat
-     */
-    public static final String TAG = Global.APP_TAG + " Downloads";
-    
-    private GridView grid;
-    
-    ImageView moduleIcon = null;
-	TextView moduleText = null;
-	
-	TextView actualPathText;
+
+	/**
+	 * Downloads tag name for Logcat
+	 */
+	public static final String TAG = Global.APP_TAG + " Downloads";
+
+	/**
+	 * Indicates whether the refresh button was pressed
+	 * */
+	private boolean refresh = false;
+	private GridView grid;
+
+	private ImageView moduleIcon = null;
+	private TextView moduleText = null;
+	private TextView currentPathText;
 
 	@Override
 	protected void onStart() {
 		super.onStart();
 		Intent activity;
-		activity = new Intent(getBaseContext(),DirectoryTreeDownload.class);
-		activity.putExtra("treeCode",downloadsCode);
-		startActivityForResult(activity,Global.DIRECTORY_TREE_REQUEST_CODE);
+		activity = new Intent(getBaseContext(), DirectoryTreeDownload.class);
+		activity.putExtra("treeCode", downloadsCode);
+		startActivityForResult(activity, Global.DIRECTORY_TREE_REQUEST_CODE);
 	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.navigation);
-		downloadsCode = getIntent().getIntExtra("downloadsCode", Global.DOCUMENTS_AREA_CODE);
+		downloadsCode = getIntent().getIntExtra("downloadsCode",
+				Global.DOCUMENTS_AREA_CODE);
 		grid = (GridView) this.findViewById(R.id.gridview);
 		grid.setOnItemClickListener((new OnItemClickListener() {
-	        public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-	        	TextView text = (TextView) v.findViewById(R.id.icon_text);
-	        	String path = text.getText().toString();
-		      
-	        	ArrayList<DirectoryItem> newBrowser = navigator.subDirectory(path);
-	        	((NodeAdapter)grid.getAdapter()).change(newBrowser);
-	        	actualPathText.setText(navigator.getPath());
-				
-		      ((NodeAdapter)grid.getAdapter()).change(newBrowser);
-	        }
-	    }));
-		
+			public void onItemClick(AdapterView<?> parent, View v,
+					int position, long id) {
+				TextView text = (TextView) v.findViewById(R.id.icon_text);
+				String chosenNodeName = text.getText().toString();
+				updateView(navigator.goToSubDirectory(chosenNodeName));
+			}
+		}));
+
+		ImageButton homeButton = (ImageButton) this
+				.findViewById(R.id.home_button);
+		homeButton.setOnClickListener((new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				updateView(navigator.goToRoot());
+			}
+
+		}));
+
+		ImageButton parentButton = (ImageButton) this
+				.findViewById(R.id.parent_button);
+		parentButton.setOnClickListener((new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				updateView(navigator.goToParentDirectory());
+			}
+
+		}));
+
+		ImageButton refreshButton = (ImageButton) this
+				.findViewById(R.id.refresh_button);
+		refreshButton.setOnClickListener((new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				refresh = true;
+				Intent activity;
+				activity = new Intent(getBaseContext(), DirectoryTreeDownload.class);
+				activity.putExtra("treeCode", downloadsCode);
+				startActivityForResult(activity, Global.DIRECTORY_TREE_REQUEST_CODE);
+
+			}
+
+		}));
+
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if(resultCode == Activity.RESULT_OK){
-			switch(requestCode){
-			//After get the list of courses, a dialog is launched to choice the course
+		if (resultCode == Activity.RESULT_OK) {
+			switch (requestCode) {
+			// After get the list of courses, a dialog is launched to choice the
+			// course
 			case Global.DIRECTORY_TREE_REQUEST_CODE:
 				tree = data.getStringExtra("tree");
-				setMainView();
+				if (!refresh)
+					setMainView();
+				else {
+					refresh = false;
+					refresh();
+				}
 				break;
 			}
 		}
 	}
-	
-	private void setMainView(){
-		if(moduleIcon == null){
-			if(downloadsCode == Global.DOCUMENTS_AREA_CODE){
-		        moduleIcon = (ImageView)this.findViewById(R.id.moduleIcon);
-		        moduleIcon.setBackgroundResource(R.drawable.folder);
-		        
-		        moduleText = (TextView)this.findViewById(R.id.moduleName);
-		        moduleText.setText(R.string.documentsDownloadModuleLabel);		
-			}else{ //SHARE_AREA_CODE
-				moduleIcon = (ImageView)this.findViewById(R.id.moduleIcon);
+
+	private void setMainView() {
+		if (moduleIcon == null) {
+			if (downloadsCode == Global.DOCUMENTS_AREA_CODE) {
+				moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
+				moduleIcon.setBackgroundResource(R.drawable.folder);
+
+				moduleText = (TextView) this.findViewById(R.id.moduleName);
+				moduleText.setText(R.string.documentsDownloadModuleLabel);
+			} else { // SHARE_AREA_CODE
+				moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
 				moduleIcon.setBackgroundResource(R.drawable.folderusers);
-		        
-				moduleText = (TextView)this.findViewById(R.id.moduleName);
-				moduleText.setText(R.string.sharedsDownloadModuleLabel);				
+
+				moduleText = (TextView) this.findViewById(R.id.moduleName);
+				moduleText.setText(R.string.sharedsDownloadModuleLabel);
 			}
 		}
-		
-		
-		actualPathText= (TextView) this.findViewById(R.id.path);
-		
+
+		currentPathText = (TextView) this.findViewById(R.id.path);
+
 		navigator = new DirectoryNavigator(tree);
-		//GridView 
-		ArrayList<DirectoryItem> r = (ArrayList<DirectoryItem>) navigator.goToRoot();
-	
-		String path = navigator.getPath() ;
-		actualPathText.setText(path);
-		
-		grid.setAdapter(new NodeAdapter(this,r));
+		// GridView
+		ArrayList<DirectoryItem> items = (ArrayList<DirectoryItem>) navigator
+				.goToRoot();
+		currentPathText.setText(navigator.getPath());
+		grid.setAdapter(new NodeAdapter(this, items));
 	}
-	
-	
-	/*private OnClickListener homeClickListener = new OnClickListener(){
-		
-	}*/
-	
-/*	public class GridViewOnItemSelectedListener implements OnItemSelectedListener {
 
-	    public void onItemSelected(AdapterView<?> parent,
-	        View view, int pos, long id) {
-	      
-	      String directoryName = parent.getItemAtPosition(pos).toString();
-	      
-	      ArrayList<DirectoryItem> newBrowser = navigator.subDirectory(directoryName);
-	      String path = navigator.getPath();
-	      actualPathText.setText(path);
-			
-	      ((NodeAdapter)grid.getAdapter()).change(newBrowser);
-	    }
+	private void refresh() {
+		navigator.refresh(tree);
 
-	    public void onNothingSelected(AdapterView parent) {
-	      // Do nothing.
-	    }
-	}*/
+	}
 
+	private void updateView(ArrayList<DirectoryItem> items) {
+		currentPathText.setText(navigator.getPath());
+		((NodeAdapter) grid.getAdapter()).change(items);
+
+	}
 
 }

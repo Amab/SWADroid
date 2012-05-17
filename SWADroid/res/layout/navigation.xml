@@ -16,7 +16,9 @@
 		android:background="@color/title_background"
 		android:textColor="@android:color/white"
 		android:textSize="18sp"
-		android:textStyle="bold" >
+		android:textStyle="bold" 
+		android:ellipsize="start"
+		android:singleLine="true">
 	</TextView>
     
 	<include layout="@layout/navigation_bar" />

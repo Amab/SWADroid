@@ -297,18 +297,18 @@ public class Global {
 		return b ? "Y" : "N";
 	}
 	/**
-	 * Gets code of actual course
-	 * return -1 if no course chosen; code of actual course in other case
+	 * Gets code of current course
+	 * return -1 if no course chosen; code of current course in other case
 	 * */
 	public static long getSelectedCourseCode(){
 		return selectedCourseCode;
 	}
 	/**
-	 * Sets code of actual course
+	 * Sets code of current course
 	 * @param courseCode. Code of the chosen course. It should be courseCode>0. Otherwise nothing will change
 	 * */
-	public static void setSelectedCourseCode(long actualCourseCode){
-		if(actualCourseCode >0) selectedCourseCode = actualCourseCode;
+	public static void setSelectedCourseCode(long currentCourseCode){
+		if(currentCourseCode >0) selectedCourseCode = currentCourseCode;
 	}
 
 	public static boolean isPreferencesChanged(){
@@ -322,12 +322,12 @@ public class Global {
 		preferencesChanged = newState;
 	}
 	
-	public static void setSelectedCourseShortName(String actualCourseShortName){
-		selectedCourseShortName = actualCourseShortName;
+	public static void setSelectedCourseShortName(String currentCourseShortName){
+		selectedCourseShortName = currentCourseShortName;
 		
 	}
-	public static void setSelectedCourseFullName(String actualCourseFullName){
-		selectedCourseFullName = actualCourseFullName;
+	public static void setSelectedCourseFullName(String currentCourseFullName){
+		selectedCourseFullName = currentCourseFullName;
 		
 	}
 	public static String getSelectedCourseShortName(){
