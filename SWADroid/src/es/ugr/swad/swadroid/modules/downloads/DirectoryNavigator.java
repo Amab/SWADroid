@@ -160,6 +160,7 @@ public class DirectoryNavigator
     				String url = "";
     				int size = -1;
     				int date = -1;
+    				long fileCode = -1;
     				
     				//PARSE THE NAME SEPARING NAME AND EXTENSION
         			NamedNodeMap attributes = currentChild.getAttributes();
@@ -181,8 +182,10 @@ public class DirectoryNavigator
 							System.out.println("Url: "+url);
 							//from the url, gets the type
 							int lastDot = url.lastIndexOf(".");
-		    				type = url.substring(lastDot+1, url.length());
-		    				
+							if(lastDot != -1)
+								type = url.substring(lastDot+1, url.length());
+							else
+								type = "unknown";
 		    				System.out.println("Type: "+type);
     					}
     					else
@@ -198,12 +201,17 @@ public class DirectoryNavigator
     							{
     								date = Integer.parseInt(data.getFirstChild().getNodeValue());
         							System.out.println("Date: "+date);
+    							}else{
+    								if(tag.equals("fileCode"))
+    									fileCode = Long.parseLong(data.getFirstChild().getNodeName());
+    									System.out.println("FileCode "+ fileCode);
     							}
     						}
     					}
     				}
     				
-    				item = new DirectoryItem(name,type,url,size,date);
+    				item = new DirectoryItem(name,type,url,size,date); //TODO it should be replaced with the next constructor when the fields fileCode is added to the web service getDirectoryTree
+    				//item = new DirectoryItem(name,type,url,size,date,fileCode);
     	    		items.add(item);
     			}
     		}
