@@ -52,7 +52,12 @@ public class DownloadsManager extends MenuActivity {
 	 * Specifies whether to display the documents or the shared area of the
 	 * subject 1 specifies documents area 2 specifies shared area
 	 * */
-	private int downloadsCode = 0;
+	private int downloadsAreaCode = 0;
+	/**
+	 * Specifies chosen group to show its documents
+	 * 0 - 
+	 * */
+	private int chosenGroupCode = 0;
 	/**
 	 * String that contains the xml files recevied from the web service
 	 * */
@@ -72,13 +77,14 @@ public class DownloadsManager extends MenuActivity {
 	private ImageView moduleIcon = null;
 	private TextView moduleText = null;
 	private TextView currentPathText;
+	private TextView moduleCourseName = null;
 
 	@Override
 	protected void onStart() {
 		super.onStart();
 		Intent activity;
 		activity = new Intent(getBaseContext(), DirectoryTreeDownload.class);
-		activity.putExtra("treeCode", downloadsCode);
+		activity.putExtra("treeCode", downloadsAreaCode);
 		startActivityForResult(activity, Global.DIRECTORY_TREE_REQUEST_CODE);
 	}
 
@@ -86,8 +92,9 @@ public class DownloadsManager extends MenuActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.navigation);
-		downloadsCode = getIntent().getIntExtra("downloadsCode",
+		downloadsAreaCode = getIntent().getIntExtra("downloadsAreaCode",
 				Global.DOCUMENTS_AREA_CODE);
+		
 		grid = (GridView) this.findViewById(R.id.gridview);
 		grid.setOnItemClickListener((new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v,
@@ -130,7 +137,7 @@ public class DownloadsManager extends MenuActivity {
 				refresh = true;
 				Intent activity;
 				activity = new Intent(getBaseContext(), DirectoryTreeDownload.class);
-				activity.putExtra("treeCode", downloadsCode);
+				activity.putExtra("treeCode", downloadsAreaCode);
 				startActivityForResult(activity, Global.DIRECTORY_TREE_REQUEST_CODE);
 
 			}
@@ -161,7 +168,9 @@ public class DownloadsManager extends MenuActivity {
 
 	private void setMainView() {
 		if (moduleIcon == null) {
-			if (downloadsCode == Global.DOCUMENTS_AREA_CODE) {
+		//	moduleCourseName = (TextView) this.findViewById(R.id.moduleCourseName);
+		//	moduleCourseName.setText(Global.getSelectedCourseFullName());
+			if (downloadsAreaCode == Global.DOCUMENTS_AREA_CODE) {
 				moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
 				moduleIcon.setBackgroundResource(R.drawable.folder);
 
