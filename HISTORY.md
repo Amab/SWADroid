@@ -1,3 +1,8 @@
+## 0.8.1 (2012-05-20)
+
+* Fixed closed cursor access exception on Android 4.x platforms
+* Added message replys from open notifications
+
 ## 0.8 (2012-05-01)
 
 * Added automatic synchronization of notifications
