@@ -90,6 +90,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
     	}
     	
     	view.setScrollContainer(false);
+    	TextView eventCode = (TextView) view.findViewById(R.id.eventCode);
         TextView eventType = (TextView) view.findViewById(R.id.eventType);
         TextView eventDate = (TextView) view.findViewById(R.id.eventDate);
         TextView eventTime = (TextView) view.findViewById(R.id.eventTime);
@@ -111,6 +112,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         };
         
         if(eventType != null) {
+        	eventCode.setText(notificationCode.toString());
         	type = cursor.getString(cursor.getColumnIndex("eventType"));
         	messageReplyButton.setVisibility(View.GONE);
         	

@@ -114,8 +114,9 @@ public class Notifications extends Module {
 	/**
 	 * Refreshes data on screen
 	 */
-	private void refreshScreen() {
+	private void refreshScreen() {		
 		//Refresh data on screen 
+		stopManagingCursor(dbCursor);
 		dbCursor = dbHelper.getDb().getCursor(Global.DB_TABLE_NOTIFICATIONS, selection, orderby);
 		startManagingCursor(dbCursor);
 		adapter.changeCursor(dbCursor);
@@ -143,12 +144,14 @@ public class Notifications extends Module {
 			public void onItemClick(AdapterView<?> av, View v, int position, long rowId) 
 			{
 				//adapter.toggleContentVisibility(position);
+				TextView code = (TextView) v.findViewById(R.id.eventCode);
 				TextView sender = (TextView) v.findViewById(R.id.eventSender);
 				TextView course = (TextView) v.findViewById(R.id.eventLocation);
 				TextView summary = (TextView) v.findViewById(R.id.eventSummary);
 				TextView content = (TextView) v.findViewById(R.id.eventText);	
 				
 				Intent activity = new Intent(getApplicationContext(), NotificationItem.class);
+				activity.putExtra("notificationCode", code.getText().toString());
 				activity.putExtra("sender", sender.getText().toString());
 				activity.putExtra("course", course.getText().toString());
 				activity.putExtra("summary", summary.getText().toString());
@@ -220,7 +223,7 @@ public class Notifications extends Module {
 	@Override
 	protected void onResume() {		
 		super.onResume();
-		
+
 		IntentFilter intentFilter = new IntentFilter();
 	    intentFilter.addAction(NotificationsSyncAdapterService.START_SYNC);
 	    intentFilter.addAction(NotificationsSyncAdapterService.STOP_SYNC);
