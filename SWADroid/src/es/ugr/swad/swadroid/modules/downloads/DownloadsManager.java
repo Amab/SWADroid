@@ -18,11 +18,16 @@
  */
 package es.ugr.swad.swadroid.modules.downloads;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -101,7 +106,45 @@ public class DownloadsManager extends MenuActivity {
 					int position, long id) {
 				TextView text = (TextView) v.findViewById(R.id.icon_text);
 				String chosenNodeName = text.getText().toString();
-				updateView(navigator.goToSubDirectory(chosenNodeName));
+				
+				Long fileCode = navigator.getFileCode(chosenNodeName);
+				if(fileCode == -1) //it is a directory therefore navigates into it
+					updateView(navigator.goToSubDirectory(chosenNodeName));
+				else{ //it is a files therefore starts the download and notifies it. 
+					//TODO identify the correct directory to place the file
+					//FileDownloader downloader = new FileDownloader(this.getApplicationContext().getFilesDir());
+					String PATH = "/data/data/es.ugr.swad.swadroid/";
+					FileDownloader downloader = new FileDownloader(new File(PATH));
+					String url = navigator.getURLFile(chosenNodeName);
+					
+					boolean downloadDone = false; 
+					try {
+						File path = downloader.get(url);
+						downloadDone = true;
+					} catch (MalformedURLException e) {
+						// TODO Auto-generated catch block
+						//e.printStackTrace();
+						Log.i(TAG, "Incorrect URL");
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						//e.printStackTrace();
+						Log.i(TAG, "Files does not exits or the url is obsolete");
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						Log.i(TAG, "Error conection");
+						e.printStackTrace();
+					}
+					
+					if(downloadDone){
+						Intent activity;
+						activity = new Intent(getBaseContext(), NotifyDownload.class);
+						activity.putExtra("fileCode", fileCode);
+						startActivityForResult(activity, Global.NOTIFYDOWNLOAD_REQUEST_CODE);
+						//TODO we must only wait , if a confirmation is needed
+						//startActivity(activity);
+					}
+					
+				}
 			}
 		}));
 
@@ -161,6 +204,9 @@ public class DownloadsManager extends MenuActivity {
 					refresh = false;
 					refresh();
 				}
+				break;
+			case Global.NOTIFYDOWNLOAD_REQUEST_CODE:
+				Log.i(TAG, "Correct download notification");
 				break;
 			}
 		}
