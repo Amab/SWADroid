@@ -130,6 +130,11 @@ public class Global {
      * Request code for Downloads Manager
      * */
     public static final int DOWNLOADSMANAGER_REQUEST_CODE = 15;
+    
+    /**
+     * Request code for Notify Download
+     * */
+    public static final int NOTIFYDOWNLOAD_REQUEST_CODE = 15;
 	/**
 	 * Prefix tag name for Logcat
 	 */

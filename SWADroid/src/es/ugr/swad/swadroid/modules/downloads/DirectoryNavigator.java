@@ -38,10 +38,15 @@ import org.xml.sax.InputSource;
  * 	@author Helena Rodríguez Gijón <hrgijon@gmail.com> 
  * 	@version 1.0
  */
+
+//TODO look for a more efficient navigation
 public class DirectoryNavigator
 {
     private String XMLinfo;
+    
     private ArrayList<String> path;
+    
+    private ArrayList<DirectoryItem> currentItems;
  
     /**
      * Constructor.
@@ -66,10 +71,11 @@ public class DirectoryNavigator
         
         Node node = goToDirectory();
         
-        ArrayList<DirectoryItem> itemsToShow;
-        itemsToShow = new ArrayList<DirectoryItem>(getItems(node));
-        
-        return itemsToShow;
+        //ArrayList<DirectoryItem> itemsToShow;
+        //itemsToShow = new ArrayList<DirectoryItem>(getItems(node));
+        currentItems= new ArrayList<DirectoryItem>(getItems(node));
+        //return itemsToShow;
+        return currentItems;
     }
         
     /**
@@ -85,11 +91,14 @@ public class DirectoryNavigator
 	        //We decrease the path.
 	        path.remove(path.size()-1);
 	        Node node = goToDirectory();
-	        itemsToShow = new ArrayList<DirectoryItem>(getItems(node));
+	        //itemsToShow = new ArrayList<DirectoryItem>(getItems(node));
+	        currentItems = new ArrayList<DirectoryItem>(getItems(node));
     	}else
     		itemsToShow = goToRoot();
+    		//currentItems = goToRoot();
     		
-        return itemsToShow;
+        //return itemsToShow;
+        return currentItems;
     }
     
     /**
@@ -103,10 +112,13 @@ public class DirectoryNavigator
     	
     	Node node = goToDirectory();
 
-    	ArrayList<DirectoryItem> itemsToShow;
-    	itemsToShow = new ArrayList<DirectoryItem>(getItems(node));
+    	//ArrayList<DirectoryItem> itemsToShow;
+    	//itemsToShow = new ArrayList<DirectoryItem>(getItems(node));
     	
-        return itemsToShow;
+       // return itemsToShow;
+        
+        currentItems = new ArrayList<DirectoryItem>(getItems(node));
+        return currentItems;
     }
     
     /**
@@ -120,10 +132,13 @@ public class DirectoryNavigator
       	
     	Node node = goToDirectory();
     	
-    	ArrayList<DirectoryItem> itemsToShow;
-    	itemsToShow = new ArrayList<DirectoryItem>(getItems(node));
+    	//ArrayList<DirectoryItem> itemsToShow;
+    	//itemsToShow = new ArrayList<DirectoryItem>(getItems(node));
     	
-        return itemsToShow;
+        //return itemsToShow;
+        
+        currentItems = new ArrayList<DirectoryItem>(getItems(node));
+        return currentItems;
     }
     
     /**
@@ -306,6 +321,68 @@ public class DirectoryNavigator
 	
 	//TODO List<DirectoryItem> getcurrent
 	//public List<DirectoryItem> getcurrent(){}
+	
+	/**
+	 *Searches for a node in the current directory with the given name
+	 *@param name Name of the node located on the current directory.
+	 *@returns -1 in case it does not exists any node with the given name
+     * 			directoryItem with the given name
+	 * */
+	private DirectoryItem getDirectoryItem(String name){
+		DirectoryItem node = null;
+		
+		boolean found = false;
+		int i=0;
+		while(!found && i<currentItems.size()){
+			node = currentItems.get(i);
+			String nameItem = node.getName();
+			if(nameItem.compareTo(name) == 0){
+				found = true;
+			}else{
+				++i;
+			}
+		}
+		
+		return node;
+	}
+	
+    /**
+     * Identifies the node with name @a name and gets its file code in case the node is a file. In case the node is a directory returns -1
+     * @param name Name of the node located on the current directory.
+     * @returns -1 in case the node is a directory or it does not exists any node with the given name
+     * 			fileCode in case the node is a file
+     */
+	public long getFileCode(String name){
+		long fileCode = -1;
+		
+		DirectoryItem node = getDirectoryItem(name);
+		if(node != null){
+			fileCode = node.getFileCode();
+		}
+		
+		return fileCode;
+		
+	}
+	
+    /**
+     * Identifies the node with name @a name and gets its file code in case the node is a file. In case the node is a directory returns -1
+     * @param name Name of the node located on the current directory.
+     * @returns null in case the node is a directory or it does not exists any node with the given name
+     * 			URL String that contains the url address to download the chosen file
+     */
+	public String getURLFile(String name){
+		String url = null;
+		
+		DirectoryItem node = getDirectoryItem(name);
+		if(node != null){
+			url = node.getUrl();
+		}
+		
+		return url;
+		
+	}
+	
+	
 }
 
 /**
