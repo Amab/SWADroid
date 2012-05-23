@@ -27,6 +27,7 @@ import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -137,6 +138,14 @@ public class Messages extends Module {
 			subjectText.setText("Re: " + subject);
 			receiversText.setVisibility(View.GONE);
 		}
+		
+		messageDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+
+			public void onCancel(DialogInterface dialog) {
+				setResult(RESULT_CANCELED);
+				finish();
+			}
+		});
 
 		messageDialog.show();
 	}
