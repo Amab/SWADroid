@@ -2,6 +2,8 @@ package es.ugr.swad.swadroid.modules;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import org.ksoap2.SoapFault;
@@ -14,6 +16,7 @@ import android.widget.Toast;
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.Group;
+import es.ugr.swad.swadroid.model.Model;
 
 /**
  * Groups module gets user's groups inside the current course
@@ -34,9 +37,15 @@ public class Groups extends Module {
 		
 		if(result != null){
 			
+			//Stores groups data returned by webservice response
+			List<Model> groupsSWAD = new ArrayList<Model>();
+			
+			
 			Vector<?> res = (Vector <?>) result;
 			SoapObject soap = (SoapObject) res.get(1);	
 			int csSize = soap.getPropertyCount();
+			
+			
 			for (int i = 0; i < csSize; i++) {
 				SoapObject pii = (SoapObject)soap.getProperty(i);
 				long id = Long.parseLong(pii.getProperty("groupCode").toString());
@@ -44,13 +53,30 @@ public class Groups extends Module {
 				int groupTypeCode = Integer.parseInt(pii.getProperty("groupTypeCode").toString());
 				String groupTypeName = pii.getProperty("groupTypeName").toString();
 				Group g = new Group(id,groupName,groupTypeCode,groupTypeName);
-				//coursesSWAD.add(c);
-
+				
+				groupsSWAD.add(g);
+				
 				if(isDebuggable){
 					Log.i(TAG, g.toString());
         		}
 			}
+
+			//TODO remove obsolete groups
+			for(int i = 0; i < groupsSWAD.size(); ++i){
+				Group g = (Group) groupsSWAD.get(i);
+				//boolean isAdded = dbHelper.insertGroup(g,Global.getSelectedCourseCode());
+				//if(!isAdded){
+				if(!dbHelper.insertGroup(g,Global.getSelectedCourseCode())){
+					Log.i(TAG, "group to update");
+					dbHelper.updateGroup(g.getId(), Global.getSelectedCourseCode(), g);
+					Log.i(TAG, "group updated");
+				}
+			}
+			//Request finalized without errors
+			setResult(RESULT_OK);
 		}
+		
+		
 		
 		
 	}
