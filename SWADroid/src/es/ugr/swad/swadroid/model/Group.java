@@ -16,7 +16,6 @@ public class Group extends Model {
 	private int groupTypeCode;
 	private String groupTypeName;
 	
-	
 	private static PropertyInfo PI_id = new PropertyInfo();
 	private static PropertyInfo PI_groupName = new PropertyInfo();
 	private static PropertyInfo PI_groupTypeCode = new PropertyInfo();
@@ -28,8 +27,7 @@ public class Group extends Model {
     	PI_id,
     	PI_groupName,
     	PI_groupTypeCode,
-    	PI_groupTypeName
-    
+    	PI_groupTypeName,
     };
 	
 	
@@ -116,6 +114,7 @@ public class Group extends Model {
 	public int getGroupTypeCode(){
 		return groupTypeCode;
 	}
+	
 
 	@Override
 	public int hashCode() {

@@ -478,20 +478,33 @@ public class DataBaseHelper {
 	 * @param q Test question to be inserted
 	 * @param selectedCourseCode Course code to be referenced
 	 */
-	public void insertGroup(Group g, long selectedCourseCode)
+	public boolean insertGroup(Group g, long courseCode)
 	{
-		Entity ent = new Entity(Global.DB_TABLE_GROUPS);
+		List<Entity> rows = db.getEntityList(Global.DB_TABLE_GROUPS, "groupCode = " + g.getId());
 
-		ent.setValue("groupCode", g.getId());
-		ent.setValue("groupName", g.getGroupName());
-		ent.setValue("groupTypeCode", g.getGroupTypeCode());
-		ent.setValue("groupTypeName", g.getGroupTypeName());
-		ent.save();
-
-		ent = new Entity(Global.DB_TABLE_GROUPS_COURSES) ;
-		ent.setValue("grpCod", g.getId());
-		ent.setValue("crsCod", selectedCourseCode);
-		ent.save();
+		if(rows.isEmpty()) {
+			Entity ent = new Entity(Global.DB_TABLE_GROUPS);
+	
+			ent.setValue("groupCode", g.getId());
+			ent.setValue("groupName", g.getGroupName());
+			ent.setValue("groupTypeCode", g.getGroupTypeCode());
+			ent.setValue("groupTypeName", g.getGroupTypeName());
+			ent.save();
+			
+			rows = db.getEntityList(Global.DB_TABLE_GROUPS_COURSES,"grpCod =" + g.getId());
+			if(rows.isEmpty()){
+				ent = new Entity(Global.DB_TABLE_GROUPS_COURSES);
+				ent.setValue("grpCod", g.getId());
+				ent.setValue("crsCod", courseCode);
+				ent.save();	
+			}else{ 
+				rows.get(0).setValue("crsCod", courseCode);
+				rows.get(0).save();
+			}
+			
+			return true;
+		} else 	
+			return false;	
 	}
 
 	/**
@@ -711,6 +724,38 @@ public class DataBaseHelper {
 		ent.setValue("userRole", actual.getUserRole());
 		ent.save();
 	}
+	
+	/**
+	 * Updates a Group and the relationship between Groups and Courses
+	 * @param groupCode code of the group to be updated
+	 * @param courseCode current code of the course related to the group
+	 * @param currentGroup updated group
+	 * */
+	public boolean updateGroup(long groupCode, long courseCode, Group currentGroup){
+		List<Entity> rows = db.getEntityList(Global.DB_TABLE_GROUPS, "groupCode =" + groupCode);
+		if(!rows.isEmpty()){
+			Entity ent = rows.get(0);
+			
+			//ent.setValue("groupCode", g.getId());
+			ent.setValue("groupName", currentGroup.getGroupName());
+			ent.setValue("groupTypeCode", currentGroup.getGroupTypeCode());
+			ent.setValue("groupTypeName", currentGroup.getGroupTypeName());
+			ent.save();
+			
+			rows = db.getEntityList(Global.DB_TABLE_GROUPS_COURSES,"grpCod =" + groupCode);
+			if(rows.isEmpty()){
+				ent = new Entity(Global.DB_TABLE_GROUPS_COURSES);
+				ent.setValue("grpCod", groupCode);
+				ent.setValue("crsCod", courseCode);
+				ent.save();	
+			}else{ 
+				rows.get(0).setValue("crsCod", courseCode);
+				rows.get(0).save();
+			}
+			return true;
+		}else
+			return false;
+	}
 
 	/**
 	 * Removes a User from database
@@ -729,6 +774,19 @@ public class DataBaseHelper {
 		List<Entity> rows = db.getEntityList(table, "id = " + id);
 		Entity ent = rows.get(0);		
 		ent.delete();
+	}
+	/**
+	 * Removes all rows from a database table where fieldName has the given value as value
+	 * @param fieldName Name field to search
+	 * @param value Value field of row to be removed
+	 */
+	public void removeAllRow(String table, String fieldName ,long value)
+	{
+		List<Entity> rows = db.getEntityList(table, fieldName + "= " + value);
+		for(int i = 0; i < rows.size(); ++i){
+			Entity ent = rows.get(i);		
+			ent.delete();
+		}
 	}
 
 	/**
@@ -986,6 +1044,9 @@ public class DataBaseHelper {
 		emptyTable(Global.DB_TABLE_TEST_TAGS);
 		emptyTable(Global.DB_TABLE_USERS_COURSES);
 		emptyTable(Global.DB_TABLE_USERS);
+		emptyTable(Global.DB_TABLE_GROUPS);
+		emptyTable(Global.DB_TABLE_GROUPS_COURSES);
+		
 		compactDB();
 	}
 

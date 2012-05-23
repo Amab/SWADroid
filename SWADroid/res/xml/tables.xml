@@ -259,4 +259,40 @@
             obligatory="true"
             type="foreign-key" />
     </table>
+        <table
+        name="groups"
+        new-in-version="11"
+        to-string="%name%" >
+        <field
+            name="groupCode"
+            obligatory="true"
+            type="integer" />
+        <field
+            name="groupName"
+            obligatory="true"
+            type="text" />
+        <field
+            name="groupTypeCode"
+            obligatory="true"
+            type="integer" />
+        <field
+            name="groupTypeName"
+            obligatory="true"
+            type="text" />   
+    </table>
+    <table
+        name="group_course"
+        new-in-version="11"
+        to-string="%name%" >
+        <field
+            name="grpCod"
+            foreign-table="groups"
+            obligatory="true"
+            type="foreign-key" />
+        <field
+            name="crsCod"
+            foreign-table="courses"
+            obligatory="true"
+            type="foreign-key" />
+    </table>
 </database>
