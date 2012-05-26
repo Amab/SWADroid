@@ -112,6 +112,12 @@ public class Attendance extends Module {
 		text = (TextView) this.findViewById(R.id.moduleName);
 		text.setText(R.string.attendanceModuleLabel);
 
+		this.findViewById(R.id.courseSelectedText).setVisibility(View.VISIBLE);
+		this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
+		
+		text = (TextView) this.findViewById(R.id.courseSelectedText);
+		text.setText(Global.getSelectedCourseShortName());
+		
 		adapter = new ArrayAdapter<String>(this, R.layout.simple_list_item, R.id.listText, items);
 		list = (ListView) this.findViewById(R.id.listItems);
 		list.setAdapter(adapter);
