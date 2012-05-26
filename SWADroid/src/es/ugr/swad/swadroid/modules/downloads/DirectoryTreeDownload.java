@@ -22,7 +22,7 @@ import es.ugr.swad.swadroid.modules.Module;
 
 public class DirectoryTreeDownload extends Module {
 	private int treeCode; //documents of course or common zone of course
-	private int group = 0; // documents of the course
+	private long group = 0; // documents of the course
 	//TODO esta clase tiene q cambiar
 	public class DirectoryTree{
 		String tree;
@@ -82,6 +82,7 @@ public class DirectoryTreeDownload extends Module {
 	protected void onStart() {
 		super.onStart();
 		treeCode = getIntent().getIntExtra("treeCode", Global.DOCUMENTS_AREA_CODE); 
+		group = getIntent().getLongExtra("groupCode", 0);
 		runConnection();
 		if(!isConnected){
 			setResult(RESULT_CANCELED);

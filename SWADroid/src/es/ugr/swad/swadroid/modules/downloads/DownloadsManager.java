@@ -23,6 +23,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.List;
+
+import com.android.dataframework.DataFramework;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -32,13 +35,20 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.ArrayAdapter;
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.MenuActivity;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.model.Course;
+import es.ugr.swad.swadroid.model.DataBaseHelper;
+import es.ugr.swad.swadroid.model.Group;
+import es.ugr.swad.swadroid.modules.Groups;
 
 /**
  * Activity to navigate through the directory tree of documents and to manage
@@ -74,6 +84,25 @@ public class DownloadsManager extends MenuActivity {
 	public static final String TAG = Global.APP_TAG + " Downloads";
 
 	/**
+	 * Database Helper.
+	 */
+	protected static DataBaseHelper dbHelper;    
+	/**
+	 * Database Framework.
+	 */
+	protected static DataFramework db; 
+	
+	/**
+	 * List of group of the selected course to which the user belongs
+	 * */
+	private List<Group> groups;
+	
+	/**
+	 * Indicates if the groups has been requested
+	 * */
+	private boolean groupsRequested = false;
+	
+	/**
 	 * Indicates whether the refresh button was pressed
 	 * */
 	private boolean refresh = false;
@@ -87,22 +116,29 @@ public class DownloadsManager extends MenuActivity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		Intent activity;
-		activity = new Intent(getBaseContext(), DirectoryTreeDownload.class);
-		activity.putExtra("treeCode", downloadsAreaCode);
-		startActivityForResult(activity, Global.DIRECTORY_TREE_REQUEST_CODE);
+		requestDirectoryTree();
 	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		// Initialize database
+		try {
+			db = DataFramework.getInstance();
+			db.open(this, getPackageName());
+			dbHelper = new DataBaseHelper(db);
+		} catch (Exception ex) {
+			Log.e(ex.getClass().getSimpleName(), ex.getMessage());
+			ex.printStackTrace();
+		}
+		
 		setContentView(R.layout.navigation);
 		
 		this.findViewById(R.id.courseSelectedText).setVisibility(View.VISIBLE);
 		this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
 		
 		TextView courseNameText = (TextView) this.findViewById(R.id.courseSelectedText);
-		courseNameText.setText(Global.getSelectedCourseShortName());
 		
 		downloadsAreaCode = getIntent().getIntExtra("downloadsAreaCode",
 				Global.DOCUMENTS_AREA_CODE);
@@ -185,10 +221,7 @@ public class DownloadsManager extends MenuActivity {
 			public void onClick(View v) {
 
 				refresh = true;
-				Intent activity;
-				activity = new Intent(getBaseContext(), DirectoryTreeDownload.class);
-				activity.putExtra("treeCode", downloadsAreaCode);
-				startActivityForResult(activity, Global.DIRECTORY_TREE_REQUEST_CODE);
+				requestDirectoryTree();
 
 			}
 
@@ -215,7 +248,12 @@ public class DownloadsManager extends MenuActivity {
 			case Global.NOTIFYDOWNLOAD_REQUEST_CODE:
 				Log.i(TAG, "Correct download notification");
 				break;
+			case Global.GROUPS_REQUEST_CODE:
+				groupsRequested = true;
+				this.loadGroupsSpinner();
+				break;	
 			}
+			
 		}
 	}
 
@@ -257,6 +295,70 @@ public class DownloadsManager extends MenuActivity {
 		currentPathText.setText(navigator.getPath());
 		((NodeAdapter) grid.getAdapter()).change(items);
 
+	}
+	/**
+	 * If there are not groups to which the user belong in the database, it makes the request
+	 * */
+	private void loadGroupsSpinner(){
+		groups = dbHelper.getGroups(Global.getSelectedCourseCode());
+		if(!groups.isEmpty() ){ //there are groups in the selected course, therefore the groups spinner should be loaded
+			this.findViewById(R.id.courseSelectedText).setVisibility(View.GONE);
+			Spinner groupsSpinner = (Spinner)this.findViewById(R.id.groupSpinner);
+			groupsSpinner.setVisibility(View.VISIBLE);
+			
+			ArrayList<String> spinnerNames = new ArrayList<String>(groups.size()+1);
+			spinnerNames.add("Course " + Global.getSelectedCourseShortName());
+			for(int i=0;i<groups.size();++i){
+				Group g = groups.get(i);
+				spinnerNames.add("Group " + g.getGroupTypeName() + " "+ g.getGroupName() );
+			}
+			
+			ArrayAdapter<String> adapter = new ArrayAdapter<String> (this,android.R.layout.simple_spinner_item,spinnerNames);
+			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			groupsSpinner.setAdapter(adapter);
+			groupsSpinner.setOnItemSelectedListener(new onItemSelectedListener());
+			
+		}else{
+			if(groupsRequested){ //there are not groups in the selected course, therefore only the course name should be loaded
+				this.findViewById(R.id.courseSelectedText).setVisibility(View.VISIBLE);
+				this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
+				
+				TextView courseNameText = (TextView) this.findViewById(R.id.courseSelectedText);
+				courseNameText.setText(Global.getSelectedCourseShortName());
+			}else{ //there are not groups because they have not been requested
+				Intent activity = new Intent(getBaseContext(),Groups.class);
+				startActivityForResult(activity,Global.GROUPS_REQUEST_CODE);
+			}
+		}
+	}
+	
+	private class onItemSelectedListener implements OnItemSelectedListener{
+
+		@Override
+		public void onItemSelected(AdapterView<?> parent, View view, int position,
+				long id) {
+			//if the position is 0, it is chosen the whole course. Otherwise a group has been chosen
+			long newGroupCode = position==0? 0 : groups.get(position).getId();
+			if(chosenGroupCode != newGroupCode){
+				requestDirectoryTree();
+			}	
+
+		}
+
+		@Override
+		public void onNothingSelected(AdapterView<?> arg0) {
+			// TODO Auto-generated method stub
+
+		}
+
+	}
+	
+	private void requestDirectoryTree(){
+		Intent activity;
+		activity = new Intent(getBaseContext(), DirectoryTreeDownload.class);
+		activity.putExtra("treeCode", downloadsAreaCode);
+	//	activity.putExtra("groupCode", chosenGroupCode);
+		startActivityForResult(activity, Global.DIRECTORY_TREE_REQUEST_CODE);
 	}
 
 }

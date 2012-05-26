@@ -309,6 +309,25 @@ public class DataBaseHelper {
 	}
 
 	/**
+	 * Gets the groups that owns the selected course 
+	 * @param courseCode Course code to be referenced
+	 * @return Cursor access to the groups
+	 * */
+	public List<Group> getGroups(long courseCode){
+		String select = "SELECT grpCod FROM " + Global.DB_TABLE_GROUPS_COURSES + " WHERE crsCod = " + courseCode +";";  
+		Cursor groupCodes = db.getDB().rawQuery(select, null);
+		
+		List<Group> groups = new ArrayList<Group>(groupCodes.getCount());
+
+		while (groupCodes.moveToNext()){
+			Group group = (Group)this.getRow(Global.DB_TABLE_GROUPS, "groupCode", String.valueOf(groupCodes.getInt(0)));
+			groups.add(group);
+		}	
+		return groups;
+	}
+	
+	
+	/**
 	 * Inserts a course in database
 	 * @param c Course to be inserted
 	 */

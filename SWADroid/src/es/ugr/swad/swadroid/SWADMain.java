@@ -223,12 +223,9 @@ public class SWADMain extends MenuExpandableListActivity {
 			activity = new Intent(getBaseContext(), Attendance.class);
 			startActivityForResult(activity, Global.ATTENDANCE_REQUEST_CODE);
 		} else if(keyword.equals(getString(R.string.documentsDownloadModuleLabel))){
-			activity = new Intent(getBaseContext(),Groups.class);
-			startActivityForResult(activity,Global.GROUPS_REQUEST_CODE);
-			
-			//activity = new Intent(getBaseContext(), DownloadsManager.class);
-			//activity.putExtra("downloadsAreaCode", Global.DOCUMENTS_AREA_CODE);
-			//startActivityForResult(activity,Global.DOWNLOADSMANAGER_REQUEST_CODE);
+			activity = new Intent(getBaseContext(), DownloadsManager.class);
+			activity.putExtra("downloadsAreaCode", Global.DOCUMENTS_AREA_CODE);
+			startActivityForResult(activity,Global.DOWNLOADSMANAGER_REQUEST_CODE);
 			
 		}else if(keyword.equals(getString(R.string.sharedsDownloadModuleLabel))){
 			activity = new Intent(getBaseContext(), DownloadsManager.class);
