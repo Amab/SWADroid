@@ -7,6 +7,7 @@
     android:orientation="vertical" >
 
     <include layout="@layout/action_bar" />
+    <include layout="@layout/course_or_group_name"/>
 	
     <TextView
 		android:id="@+id/path"

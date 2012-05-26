@@ -60,6 +60,7 @@ import es.ugr.swad.swadroid.widget.TextProgressBar;
 /**
  * Tests module for evaluate user skills in a course
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ * @author Helena Rodríguez Gijon <hrgijon@gmail.com>
  */
 public class TestsMake extends Module {
 	/**
@@ -114,6 +115,13 @@ public class TestsMake extends Module {
 
 		text = (TextView)this.findViewById(R.id.moduleName);
 		text.setText(R.string.testsModuleLabel);
+		
+		this.findViewById(R.id.courseSelectedText).setVisibility(View.VISIBLE);
+		this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
+		
+		text = (TextView) this.findViewById(R.id.courseSelectedText);
+		text.setText(Global.getSelectedCourseShortName());
+		
 	}
 
 	/**

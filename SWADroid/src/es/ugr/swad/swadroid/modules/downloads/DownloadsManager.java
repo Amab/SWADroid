@@ -97,6 +97,13 @@ public class DownloadsManager extends MenuActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.navigation);
+		
+		this.findViewById(R.id.courseSelectedText).setVisibility(View.VISIBLE);
+		this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
+		
+		TextView courseNameText = (TextView) this.findViewById(R.id.courseSelectedText);
+		courseNameText.setText(Global.getSelectedCourseShortName());
+		
 		downloadsAreaCode = getIntent().getIntExtra("downloadsAreaCode",
 				Global.DOCUMENTS_AREA_CODE);
 		

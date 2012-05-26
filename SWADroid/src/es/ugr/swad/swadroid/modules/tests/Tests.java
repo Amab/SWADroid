@@ -41,6 +41,7 @@ import es.ugr.swad.swadroid.modules.Module;
 /**
  * Tests module for download questions and evaluate user skills in a course
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ * @author Helena Rodríguez Gijon <hrgijon@gmail.com>
  */
 public class Tests extends Module {
 	/**
@@ -90,6 +91,12 @@ public class Tests extends Module {
         list = (ListView)this.findViewById(R.id.listItems);
         list.setAdapter(adapter);
         list.setOnItemClickListener(clickListener);
+        
+		this.findViewById(R.id.courseSelectedText).setVisibility(View.VISIBLE);
+		this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
+        
+        text = (TextView) this.findViewById(R.id.courseSelectedText);
+		text.setText(Global.getSelectedCourseShortName());
 	}
 
 	/* (non-Javadoc)

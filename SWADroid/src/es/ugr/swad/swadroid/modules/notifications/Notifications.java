@@ -45,6 +45,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,7 +60,8 @@ import es.ugr.swad.swadroid.modules.Module;
 /**
  * Notifications module for get user's notifications
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
- * @author Antonio Aguilera Malagon <aguilerin@gmail.com> *
+ * @author Antonio Aguilera Malagon <aguilerin@gmail.com> 
+ * @author Helena Rodríguez Gijon <hrgijon@gmail.com>
  */
 public class Notifications extends Module {
 	/**
@@ -162,7 +164,11 @@ public class Notifications extends Module {
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.list_items);
-
+		
+		this.findViewById(R.id.courseSelectedText).setVisibility(View.GONE);
+		this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
+		
+		
 		image = (ImageView)this.findViewById(R.id.moduleIcon);
 		image.setBackgroundResource(R.drawable.notif);
 
