@@ -116,7 +116,13 @@ public class DownloadsManager extends MenuActivity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		requestDirectoryTree();
+		if(groupsRequested){
+			requestDirectoryTree();
+		}else{
+			Intent activity = new Intent(getBaseContext(),Groups.class);
+			startActivityForResult(activity,Global.GROUPS_REQUEST_CODE);
+		}
+		
 	}
 
 	@Override
@@ -134,11 +140,6 @@ public class DownloadsManager extends MenuActivity {
 		}
 		
 		setContentView(R.layout.navigation);
-		
-		this.findViewById(R.id.courseSelectedText).setVisibility(View.VISIBLE);
-		this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
-		
-		TextView courseNameText = (TextView) this.findViewById(R.id.courseSelectedText);
 		
 		downloadsAreaCode = getIntent().getIntExtra("downloadsAreaCode",
 				Global.DOCUMENTS_AREA_CODE);
@@ -222,7 +223,6 @@ public class DownloadsManager extends MenuActivity {
 
 				refresh = true;
 				requestDirectoryTree();
-
 			}
 
 		}));
@@ -251,6 +251,7 @@ public class DownloadsManager extends MenuActivity {
 			case Global.GROUPS_REQUEST_CODE:
 				groupsRequested = true;
 				this.loadGroupsSpinner();
+				requestDirectoryTree();
 				break;	
 			}
 			
@@ -259,8 +260,6 @@ public class DownloadsManager extends MenuActivity {
 
 	private void setMainView() {
 		if (moduleIcon == null) {
-		//	moduleCourseName = (TextView) this.findViewById(R.id.moduleCourseName);
-		//	moduleCourseName.setText(Global.getSelectedCourseFullName());
 			if (downloadsAreaCode == Global.DOCUMENTS_AREA_CODE) {
 				moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
 				moduleIcon.setBackgroundResource(R.drawable.folder);
@@ -307,10 +306,10 @@ public class DownloadsManager extends MenuActivity {
 			groupsSpinner.setVisibility(View.VISIBLE);
 			
 			ArrayList<String> spinnerNames = new ArrayList<String>(groups.size()+1);
-			spinnerNames.add("Course " + Global.getSelectedCourseShortName());
+			spinnerNames.add(getString(R.string.course)+"-" + Global.getSelectedCourseShortName());
 			for(int i=0;i<groups.size();++i){
 				Group g = groups.get(i);
-				spinnerNames.add("Group " + g.getGroupTypeName() + " "+ g.getGroupName() );
+				spinnerNames.add(getString(R.string.group)+"-" + g.getGroupTypeName() + " "+ g.getGroupName() );
 			}
 			
 			ArrayAdapter<String> adapter = new ArrayAdapter<String> (this,android.R.layout.simple_spinner_item,spinnerNames);
@@ -325,9 +324,6 @@ public class DownloadsManager extends MenuActivity {
 				
 				TextView courseNameText = (TextView) this.findViewById(R.id.courseSelectedText);
 				courseNameText.setText(Global.getSelectedCourseShortName());
-			}else{ //there are not groups because they have not been requested
-				Intent activity = new Intent(getBaseContext(),Groups.class);
-				startActivityForResult(activity,Global.GROUPS_REQUEST_CODE);
 			}
 		}
 	}
@@ -357,7 +353,7 @@ public class DownloadsManager extends MenuActivity {
 		Intent activity;
 		activity = new Intent(getBaseContext(), DirectoryTreeDownload.class);
 		activity.putExtra("treeCode", downloadsAreaCode);
-	//	activity.putExtra("groupCode", chosenGroupCode);
+		activity.putExtra("groupCode", chosenGroupCode);
 		startActivityForResult(activity, Global.DIRECTORY_TREE_REQUEST_CODE);
 	}
 

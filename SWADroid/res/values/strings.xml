@@ -175,4 +175,5 @@
     <string name="home_icon">Shows home folder</string>
     <string name="parent_icon">Shows upper folder</string>
     <string name="refresh_icon">Updates</string>
+    <string name="group">Group</string>
 </resources>

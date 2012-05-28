@@ -129,4 +129,5 @@ Es muss mindestens ein Antworttyp ausgewählt werden</string>
 	<string name="home_icon">Zeigt home Ordner</string>
     <string name="parent_icon">Zeigt oberen Ordner</string>
     <string name="refresh_icon">Updates</string>
+    <string name="Group">Gruppe</string>
 </resources>
