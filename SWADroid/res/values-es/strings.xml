@@ -169,5 +169,6 @@
     <string name="NoNotificationsMsg">No hay nuevas notificaciones</string>
     <string name="home_icon">Muestra la carpeta inicial</string>
     <string name="parent_icon">Muestra la carpeta superior a la actual</string>
-    <string name="refresh_icon">Updates</string>
+    <string name="refresh_icon">Actualizar</string>
+    <string name="group">Grupo</string>
 </resources>

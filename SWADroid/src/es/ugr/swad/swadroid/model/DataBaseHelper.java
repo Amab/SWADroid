@@ -96,7 +96,10 @@ public class DataBaseHelper {
 		} else if(table.equals(Global.DB_TABLE_USERS_COURSES)) {
 			firstParam = "userCode";
 			secondParam = "crsCod";
-		} else {
+		}else if(table.equals(Global.DB_TABLE_GROUPS_COURSES)){
+			firstParam = "grpCod";
+			secondParam = "crsCod";
+		}else {
 			Log.e("selectParamsPairTable", "Table " + table + " not exists");
 		}
 
@@ -123,7 +126,7 @@ public class DataBaseHelper {
 					ent.getString("fullName"));
 		} else if(table.equals(Global.DB_TABLE_TEST_QUESTIONS_COURSE) ||
 				table.equals(Global.DB_TABLE_TEST_QUESTION_ANSWERS) ||
-				table.equals(Global.DB_TABLE_USERS_COURSES)) {
+				table.equals(Global.DB_TABLE_USERS_COURSES) || table.equals(Global.DB_TABLE_GROUPS_COURSES)) {
 
 			params = selectParamsPairTable(table);
 
@@ -204,6 +207,11 @@ public class DataBaseHelper {
 					ent.getString("userFirstname"),
 					ent.getString("photoPath"),
 					ent.getInt("userRole"));			
+		} else if (table.equals(Global.DB_TABLE_GROUPS)){
+			o = new Group(ent.getLong("groupCode"),
+					ent.getString("groupName"),
+					ent.getInt("groupTypeCode"),
+					ent.getString("groupTypeName"));
 		}
 
 		return o;
