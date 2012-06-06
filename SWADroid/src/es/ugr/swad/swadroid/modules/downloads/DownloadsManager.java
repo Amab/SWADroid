@@ -28,11 +28,16 @@ import java.util.List;
 import com.android.dataframework.DataFramework;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -42,6 +47,8 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
+import android.webkit.MimeTypeMap;
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.MenuActivity;
 import es.ugr.swad.swadroid.R;
@@ -106,18 +113,31 @@ public class DownloadsManager extends MenuActivity {
 	 * Indicates whether the refresh button was pressed
 	 * */
 	private boolean refresh = false;
+	
+	/**
+	 * Path to the directory where files will be located
+	 * */
+	private String directoryPath = null; 
+	
 	private GridView grid;
 
 	private ImageView moduleIcon = null;
 	private TextView moduleText = null;
 	private TextView currentPathText;
 	private TextView moduleCourseName = null;
+	
+	private AlertDialog fileOptions = null;
+	
+	String chosenNodeName = null;
+	String fileName = null;
+	
 
 	@Override
 	protected void onStart() {
 		super.onStart();
 		if(groupsRequested){
-			requestDirectoryTree();
+			if(navigator == null)
+				requestDirectoryTree();
 		}else{
 			Intent activity = new Intent(getBaseContext(),Groups.class);
 			startActivityForResult(activity,Global.GROUPS_REQUEST_CODE);
@@ -141,52 +161,73 @@ public class DownloadsManager extends MenuActivity {
 		
 		setContentView(R.layout.navigation);
 		
+		checkMediaAvailability();
+		
 		downloadsAreaCode = getIntent().getIntExtra("downloadsAreaCode",
 				Global.DOCUMENTS_AREA_CODE);
+		
+		final CharSequence[] items = {getString(R.string.openFile) , getString(R.string.downloadFile) , getString(R.string.deleteFile) };
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(getString(R.string.fileOptions));
+		builder.setItems(items, new DialogInterface.OnClickListener() {
+		    public void onClick(DialogInterface dialog, int item) {
+		    	switch(item){
+			    	case 0:
+			    		openFileDefaultApp(directoryPath+File.separator+fileName);
+			    		break;
+			    	case 1:
+			    		createNotification(directoryPath,navigator.getURLFile(chosenNodeName));
+			    		break;
+			    	case 2:
+			    		File f =  new File(directoryPath, fileName);
+			    		if(f.exists()){
+			    			f.delete();
+			    			 Toast.makeText(getApplicationContext(),"File " + fileName +"has been deleted", Toast.LENGTH_SHORT).show();
+			    		}else{
+			    			 Toast.makeText(getApplicationContext(),"File " + fileName +"has not been deleted because it does not exits", Toast.LENGTH_SHORT).show();
+					    		
+			    		}
+			    		break;
+		    		
+		    	}
+		    }
+		});
+		final AlertDialog fileOptions = builder.create();
+		
 		
 		grid = (GridView) this.findViewById(R.id.gridview);
 		grid.setOnItemClickListener((new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v,
 					int position, long id) {
 				TextView text = (TextView) v.findViewById(R.id.icon_text);
-				String chosenNodeName = text.getText().toString();
-				
+				chosenNodeName = text.getText().toString();
+				fileName = navigator.getFileName(chosenNodeName);
+
 				Long fileCode = navigator.getFileCode(chosenNodeName);
 				if(fileCode == -1) //it is a directory therefore navigates into it
 					updateView(navigator.goToSubDirectory(chosenNodeName));
 				else{ //it is a files therefore starts the download and notifies it. 
-					//TODO identify the correct directory to place the file
-					//FileDownloader downloader = new FileDownloader(this.getApplicationContext().getFilesDir());
-					String PATH = "/data/data/es.ugr.swad.swadroid/";
-					FileDownloader downloader = new FileDownloader(new File(PATH));
-					String url = navigator.getURLFile(chosenNodeName);
+
 					
-					boolean downloadDone = false; 
-					try {
-						File path = downloader.get(url);
-						downloadDone = true;
-					} catch (MalformedURLException e) {
-						// TODO Auto-generated catch block
-						//e.printStackTrace();
-						Log.i(TAG, "Incorrect URL");
-					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
-						//e.printStackTrace();
-						Log.i(TAG, "Files does not exits or the url is obsolete");
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						Log.i(TAG, "Error conection");
-						e.printStackTrace();
-					}
-					
-					if(downloadDone){
+					directoryPath = getDirectoryPath();
+					File f = new File(directoryPath, fileName);
+					if(!f.exists())
+						createNotification(directoryPath,navigator.getURLFile(chosenNodeName));
+					else{
+						fileOptions.show();
+						//openFileDefaultApp(directoryPath+File.separator+fileName);
+						
+					}					
+					//TODO activate request for notification download file when it is available 
+/*					if(downloadDone){
 						Intent activity;
 						activity = new Intent(getBaseContext(), NotifyDownload.class);
 						activity.putExtra("fileCode", fileCode);
 						startActivityForResult(activity, Global.NOTIFYDOWNLOAD_REQUEST_CODE);
 						//TODO we must only wait , if a confirmation is needed
 						//startActivity(activity);
-					}
+					}*/
 					
 				}
 			}
@@ -199,6 +240,7 @@ public class DownloadsManager extends MenuActivity {
 			@Override
 			public void onClick(View v) {
 				updateView(navigator.goToRoot());
+				directoryPath = getDirectoryPath();
 			}
 
 		}));
@@ -210,6 +252,7 @@ public class DownloadsManager extends MenuActivity {
 			@Override
 			public void onClick(View v) {
 				updateView(navigator.goToParentDirectory());
+				directoryPath = getDirectoryPath();
 			}
 
 		}));
@@ -336,6 +379,7 @@ public class DownloadsManager extends MenuActivity {
 			//if the position is 0, it is chosen the whole course. Otherwise a group has been chosen
 			long newGroupCode = position==0? 0 : groups.get(position).getId();
 			if(chosenGroupCode != newGroupCode){
+				chosenGroupCode = (int)newGroupCode;
 				requestDirectoryTree();
 			}	
 
@@ -356,5 +400,100 @@ public class DownloadsManager extends MenuActivity {
 		activity.putExtra("groupCode", chosenGroupCode);
 		startActivityForResult(activity, Global.DIRECTORY_TREE_REQUEST_CODE);
 	}
+	
+	/**
+	 * It checks if the external storage is available 
+	 * @return 0 - if external storage can not be read either wrote
+	 * 			1 - if external storage can only be read
+	 * 			2 - if external storage can be read and wrote
+	 * */
 
+	private int checkMediaAvailability(){
+		boolean mExternalStorageAvailable = false;
+		boolean mExternalStorageWriteable = false;
+		String state = Environment.getExternalStorageState();
+		int returnValue = 0;
+		if (Environment.MEDIA_MOUNTED.equals(state)) {
+		    // We can read and write the media
+		    mExternalStorageAvailable = mExternalStorageWriteable = true;
+		    Toast.makeText(this, "External Storage can be read and wrote", Toast.LENGTH_LONG).show();
+		    returnValue = 2;
+		} else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+		    // We can only read the media
+		    mExternalStorageAvailable = true;
+		    mExternalStorageWriteable = false;
+		    Toast.makeText(this,"External Storage can only be read", Toast.LENGTH_LONG).show();
+		    returnValue = 1;
+		} else {
+		    // Something else is wrong. It may be one of many other states, but all we need
+		    //  to know is we can neither read nor write
+		    mExternalStorageAvailable = mExternalStorageWriteable = false;
+		    Toast.makeText(this, "External Storage can not be read either wrote", Toast.LENGTH_LONG).show();
+		    returnValue = 0;
+		}
+		return returnValue;
+	}
+	
+	/**
+	 * it gets the directory path where the files will be located.This will be /$EXTERNAL_STORAGE/SWADroid/courseCode shortName Course. This directory is created in case it does not exist
+	 * */
+	private String getDirectoryPath(){
+		String path = null;
+		String swadroidDirName = Environment.getExternalStorageDirectory()+File.separator+getString(R.string.app_name);
+		String courseDirName = swadroidDirName +File.separator + Global.getSelectedCourseCode()+ File.separator +String.valueOf(chosenGroupCode)+navigator.getPath();
+		if(checkMediaAvailability() == 2){
+			File courseDir = new File(courseDirName);
+			if(courseDir.exists()){
+				path = courseDirName;
+			}else if(courseDir.mkdirs())
+					path = courseDirName;
+				
+			
+			/*if(courseDir.exists()){
+				path = courseDirName;
+			}else {
+				File mainDir = new File(swadroidDirName);
+				if(!mainDir.exists()){
+					
+				}
+			}
+			
+			
+			File mainDir = new File(swadroidDirName);
+			boolean mainDirB = mainDir.exists();
+			
+			if(!mainDirB){
+				boolean mainDirCreated = mainDir.mkdir();
+			//if(!mainDir.exists()){
+				if(mainDirCreated){
+				//if(mainDir.mkdir()){
+					String courseDirName = swadroidDirName +
+					
+					if(!courseDir.exists())
+						if(courseDir.mkdir())
+							path = new String(courseDirName);
+				}
+			}*/
+		}
+		return path;
+	}
+	
+	private void createNotification(String directory, String url){
+		if(downloadsAreaCode == Global.DOCUMENTS_AREA_CODE)
+			new FileDownloaderAsyncTask(getApplicationContext(),false).execute(directory,url);
+		if(downloadsAreaCode == Global.SHARE_AREA_CODE)
+			new FileDownloaderAsyncTask(getApplicationContext(),true).execute(directory,url);
+	}
+	private void openFileDefaultApp(String absolutePath){
+		File file = new File(absolutePath);
+		if(file.exists()){
+			Intent intent = new Intent();
+			intent.setAction(android.content.Intent.ACTION_VIEW);
+			int lastDotIndex = absolutePath.lastIndexOf(".");
+			String extension = absolutePath.substring(lastDotIndex+1);
+			String MIME = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+			intent.setDataAndType(Uri.fromFile(file), MIME);
+			startActivity(intent);
+		}
+	}
 }

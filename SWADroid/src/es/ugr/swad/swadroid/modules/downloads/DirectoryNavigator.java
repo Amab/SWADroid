@@ -375,14 +375,38 @@ public class DirectoryNavigator
 		
 		DirectoryItem node = getDirectoryItem(name);
 		if(node != null){
+			//TODO  disable the simulated url
 			url = node.getUrl();
+			//url = setSimulateURL();
 		}
 		
 		return url;
 		
 	}
 	
+	//TODO we use this method only to simulate the download while the web service is not available
+	public String setSimulateURL(){
+		return "http://swad.ugr.es/logo/swad24x24.gif";
+	}
 	
+
+	
+	private String getFilenNameFromURL(String url){
+		int slashIndex = url.lastIndexOf("/");
+		if(slashIndex == url.length() - 1)
+			return null;
+		else
+			return url.substring(slashIndex + 1);			
+	}
+	
+	/**
+	 * */
+	// TODO it should not be needed because name of the node and name of the file should be equal. 
+	public String getFileName(String name){
+		String url = getURLFile(name);
+		return getFilenNameFromURL(url);
+		
+	}
 }
 
 /**

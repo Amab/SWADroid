@@ -171,4 +171,11 @@
     <string name="parent_icon">Muestra la carpeta superior a la actual</string>
     <string name="refresh_icon">Actualizar</string>
     <string name="group">Grupo</string>
+    <string name="notificationDownloadTitle">Descargando..</string>
+    <string name="complete">completo</string>
+    <string name="fileOptions">Opciones de fichero</string>
+    <string name="openFile">Abrir</string>
+    <string name="downloadFile">Volver a descargar</string>
+    <string name="deleteFile">Borrar</string>
+    
 </resources>
