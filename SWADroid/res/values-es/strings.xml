@@ -177,5 +177,8 @@
     <string name="openFile">Abrir</string>
     <string name="downloadFile">Volver a descargar</string>
     <string name="deleteFile">Borrar</string>
+    <string name="vacants">Vacantes</string>
+	<string name="numStudent">Nº de estud.</string>
+	<string name="maxStudent">Máx.estud</string>
     
 </resources>

@@ -130,4 +130,7 @@ Es muss mindestens ein Antworttyp ausgewählt werden</string>
     <string name="parent_icon">Zeigt oberen Ordner</string>
     <string name="refresh_icon">Updates</string>
     <string name="Group">Gruppe</string>
+    <string name="vacants">Frei</string>
+	<string name="numStudent">Anzahl der Stud.</string>
+	<string name="maxStudent">Max. Stud</string>
 </resources>

@@ -181,13 +181,9 @@ public class DownloadsManager extends MenuActivity {
 			    		break;
 			    	case 2:
 			    		File f =  new File(directoryPath, fileName);
-			    		if(f.exists()){
+			    		if(f.exists())
 			    			f.delete();
-			    			 Toast.makeText(getApplicationContext(),"File " + fileName +"has been deleted", Toast.LENGTH_SHORT).show();
-			    		}else{
-			    			 Toast.makeText(getApplicationContext(),"File " + fileName +"has not been deleted because it does not exits", Toast.LENGTH_SHORT).show();
-					    		
-			    		}
+			    		//TODO change icon file to show the file is not downloaded	
 			    		break;
 		    		
 		    	}
@@ -216,7 +212,6 @@ public class DownloadsManager extends MenuActivity {
 						createNotification(directoryPath,navigator.getURLFile(chosenNodeName));
 					else{
 						fileOptions.show();
-						//openFileDefaultApp(directoryPath+File.separator+fileName);
 						
 					}					
 					//TODO activate request for notification download file when it is available 
