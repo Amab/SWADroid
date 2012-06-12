@@ -182,4 +182,7 @@
     <string name="openFile">Open</string>
     <string name="downloadFile">Download again</string>
     <string name="deleteFile">Delete</string>
+    <string name="vacants">Vacants</string>
+	<string name="numStudent">No. of stud.</string>
+	<string name="maxStudent">Max.stud.</string>
 </resources>
