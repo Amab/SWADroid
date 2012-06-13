@@ -133,4 +133,6 @@ Es muss mindestens ein Antworttyp ausgewählt werden</string>
     <string name="vacants">Frei</string>
 	<string name="numStudent">Anzahl der Stud.</string>
 	<string name="maxStudent">Max. Stud</string>
+	<string name="enrollment">Einschreibung</string>
+	<string name="myGroupsModuleLabel">Meine Gruppen</string>
 </resources>

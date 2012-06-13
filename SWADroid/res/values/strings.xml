@@ -185,4 +185,7 @@
     <string name="vacants">Vacants</string>
 	<string name="numStudent">No. of stud.</string>
 	<string name="maxStudent">Max.stud.</string>
+	<string name="enrollment">Enrollment</string>
+	<string name="myGroupsModuleLabel">My groups</string>
+	
 </resources>

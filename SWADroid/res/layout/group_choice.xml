@@ -12,10 +12,12 @@
 	  android:padding="20dip"
 	  android:textColor="@color/foreground1"
 	  android:textSize="24sp"
-      android:visibility="gone">
+      android:visibility="gone"
+      android:text="@string/myGroupsModuleLabel">
 	</TextView>
 	
     <include android:id="@+id/courseNameLayout" layout="@layout/course_or_group_name"/>
+   
     <ExpandableListView
         android:id="@+id/android:list"
         android:layout_width="match_parent"
