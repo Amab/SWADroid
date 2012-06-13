@@ -58,6 +58,7 @@ import es.ugr.swad.swadroid.modules.Notices;
 import es.ugr.swad.swadroid.modules.attendance.Attendance;
 import es.ugr.swad.swadroid.modules.downloads.DownloadsManager;
 import es.ugr.swad.swadroid.modules.downloads.DirectoryTreeDownload;
+import es.ugr.swad.swadroid.modules.groups.MyGroupsManager;
 import es.ugr.swad.swadroid.modules.notifications.Notifications;
 import es.ugr.swad.swadroid.modules.tests.Tests;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
@@ -120,9 +121,13 @@ public class SWADMain extends MenuExpandableListActivity {
 	 * */
 	private int COURSE_GROUP = 2;
 	/**
+	 * Group position inside the main menu for Enrollment group
+	 * */
+	private int ENROLLMENT_GROUP = 3;
+	/**
 	 * Group position inside the main menu for User group
 	 * */
-	private int USERS_GROUP = 3;
+	private int USERS_GROUP = 4;
 	/**
 	 * Child position inside the messages menu for Notification
 	 * */
@@ -151,7 +156,10 @@ public class SWADMain extends MenuExpandableListActivity {
 	 * Child position inside the users menu for Rollcall
 	 * */
 	private int ROLLCALL_CHILD = 0;
-
+	/**
+	 * Child position inside the enrollment menu for My Groups
+	 * */
+	private int MYGROUPS_CHILD = 0;
 
 	/**
 	 * Gets the database helper
@@ -234,6 +242,9 @@ public class SWADMain extends MenuExpandableListActivity {
 			/*activity = new Intent(getBaseContext(),DirectoryTreeDownload.class);
 			activity.putExtra("treeCode",Global.SHARE_AREA_CODE);
 			startActivityForResult(activity,Global.DIRECTORY_TREE_REQUEST_CODE);*/
+		}else if(keyword.equals(getString(R.string.myGroupsModuleLabel))){
+			activity = new Intent(getBaseContext(), MyGroupsManager.class);
+			startActivityForResult(activity,Global.MYGROUPSMANAGER_REQUEST_CODE);
 		}
 
 		return true;
@@ -495,11 +506,15 @@ public class SWADMain extends MenuExpandableListActivity {
 			evaluation.put(IMAGE, getResources().getDrawable(R.drawable.grades));
 			headerData.add( evaluation);
 			
-			//DISABLE until it will be functional
 			final HashMap<String, Object> courses = new HashMap<String,Object>();
 			courses.put(NAME, getString(R.string.course));
 			courses.put(IMAGE, getResources().getDrawable(R.drawable.blackboard));
 			headerData.add(courses);
+			
+			final HashMap<String, Object> enrolment = new HashMap<String,Object>();
+			enrolment.put(NAME, getString(R.string.enrollment));
+			//enrolment.put(IMAGE, getResources().getDrawable(R.drawable.blackboard));
+			headerData.add(enrolment);
 
 			final ArrayList<ArrayList<HashMap<String, Object>>> childData = new ArrayList<ArrayList<HashMap<String, Object>>>();
 
@@ -512,6 +527,9 @@ public class SWADMain extends MenuExpandableListActivity {
 			//DISABLE until it will be functional
 			final ArrayList<HashMap<String,Object>> documentsData = new ArrayList<HashMap<String, Object>>();
 			childData.add(documentsData);
+			
+			final ArrayList<HashMap<String,Object>> enrollmentData = new ArrayList<HashMap<String, Object>>();
+			childData.add(enrollmentData);
 
 			//Messages category
 			HashMap<String, Object> map = new HashMap<String,Object>();
@@ -541,6 +559,13 @@ public class SWADMain extends MenuExpandableListActivity {
 			map.put(NAME, getString(R.string.sharedsDownloadModuleLabel));
 			map.put(IMAGE,  getResources().getDrawable(R.drawable.folderusers));
 			documentsData.add(map);
+			
+			
+			map = new HashMap<String,Object>();
+			map.put(NAME, getString(R.string.myGroupsModuleLabel));
+			//map.put(IMAGE,  getResources().getDrawable(R.drawable.folder));
+			enrollmentData.add(map);
+			
 			setListAdapter( new ImageExpandableListAdapter(
 					this,
 					headerData,

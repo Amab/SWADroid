@@ -109,4 +109,6 @@
 	<string name="vacants">Vacants</string>
 	<!-- <string name="numStudent">Nombre d'estud.</string> -->
 	<!-- <string name="maxStudent">Màxim d'estud.</string> -->
+	<string name="enrollment">Inscripció</string>
+	<string name="myGroupsModuleLabel">Els meus grups</string>
 </resources>
