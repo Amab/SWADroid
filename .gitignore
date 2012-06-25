@@ -1,0 +1,8 @@
+bin/
+default.properties
+.classpath
+.project
+.settings/
+gen/es/ugr/swad/swadroid/BuildConfig.java
+gen/es/ugr/swad/swadroid/R.java
+gen/com/google/zxing/client/android/R.java

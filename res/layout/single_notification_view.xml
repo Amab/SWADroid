@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical" >
+    <include layout="@layout/action_bar"/>  
+
+    <TextView
+        android:id="@+id/senderNameText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+  		android:textColor="@color/foreground1"
+  		android:textStyle="italic"
+  		android:textSize="16sp"
+  		android:layout_marginLeft="9dip" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/courseNameText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+  		android:textColor="@color/foreground1"
+  		android:textStyle="italic"
+  		android:textSize="16sp"
+  		android:layout_marginLeft="9dip" />
+
+    <TextView
+        android:id="@+id/summaryText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+  		android:textColor="@color/foreground1"
+  		android:textStyle="bold"
+  		android:textSize="16sp"
+  		android:layout_marginLeft="9dip" />
+
+    <WebView
+        android:id="@+id/contentWebView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>
