@@ -73,21 +73,21 @@ public class SWADNotification extends Model {
 	private static PropertyInfo PI_summary = new PropertyInfo();
 	private static PropertyInfo PI_status = new PropertyInfo();
 	private static PropertyInfo PI_content = new PropertyInfo();
-	@SuppressWarnings("unused")
+    @SuppressWarnings("unused")
 	private static PropertyInfo[] PI_PROP_ARRAY =
-{
-		PI_id,
-		PI_eventType,
-		PI_eventTime,
-		PI_userSurname1,
-		PI_userSurname2,
-		PI_userFirstName,
-		PI_location,
-		PI_summary,
-		PI_status,
-		PI_content
-};
-
+    {
+    	PI_id,
+    	PI_eventType,
+    	PI_eventTime,
+    	PI_userSurname1,
+    	PI_userSurname2,
+    	PI_userFirstName,
+    	PI_location,
+    	PI_summary,
+    	PI_status,
+    	PI_content
+    };
+	
 	/**
 	 * @param id Notification id
 	 * @param eventType Notification type
@@ -102,7 +102,7 @@ public class SWADNotification extends Model {
 	public SWADNotification(long id, String eventType, long eventTime,
 			String userSurname1, String userSurname2, String userFirstName,
 			String location, String summary, int status, String content) {
-
+		
 		super(id);
 		this.eventType = eventType;
 		this.eventTime = eventTime;
@@ -300,21 +300,21 @@ public class SWADNotification extends Model {
 	 */
 	public Object getProperty(int param) {
 		Object object = null;
-		switch(param)
-		{
-		case 0 : object = this.getId();break;
-		case 1 : object = eventType;break;
-		case 2 : object = eventTime;break;
-		case 3 : object = userSurname1;break;
-		case 4 : object = userSurname2;break;
-		case 5 : object = userFirstName;break;
-		case 6 : object = location;break;
-		case 7 : object = summary;break;
-		case 8 : object = status;break;
-		case 9 : object = content;break;
-		}
-
-		return object;
+	    switch(param)
+	    {
+	        case 0 : object = this.getId();break;
+	        case 1 : object = eventType;break;
+	        case 2 : object = eventTime;break;
+	        case 3 : object = userSurname1;break;
+	        case 4 : object = userSurname2;break;
+	        case 5 : object = userFirstName;break;
+	        case 6 : object = location;break;
+	        case 7 : object = summary;break;
+	        case 8 : object = status;break;
+	        case 9 : object = content;break;
+	    }
+	    
+	    return object;
 	}
 
 	/* (non-Javadoc)
@@ -329,46 +329,46 @@ public class SWADNotification extends Model {
 	 */
 	public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo propertyInfo) {
 		switch(param){
-		case 0:
-			propertyInfo.type = PropertyInfo.LONG_CLASS;
-			propertyInfo.name = "id";
-			break;   
-		case 1:
-			propertyInfo.type = PropertyInfo.STRING_CLASS;
-			propertyInfo.name = "eventType";
-			break;    
-		case 2:
-			propertyInfo.type = PropertyInfo.LONG_CLASS;
-			propertyInfo.name = "eventTime";
-			break;    
-		case 3:
-			propertyInfo.type = PropertyInfo.STRING_CLASS;
-			propertyInfo.name = "userSurname1";
-			break;    
-		case 4:
-			propertyInfo.type = PropertyInfo.STRING_CLASS;
-			propertyInfo.name = "userSurname2";
-			break;    
-		case 5:
-			propertyInfo.type = PropertyInfo.STRING_CLASS;
-			propertyInfo.name = "userFirstName";
-			break;    
-		case 6:
-			propertyInfo.type = PropertyInfo.STRING_CLASS;
-			propertyInfo.name = "location";
-			break;    
-		case 7:
-			propertyInfo.type = PropertyInfo.STRING_CLASS;
-			propertyInfo.name = "summary";
-			break;
-		case 8:
-			propertyInfo.type = PropertyInfo.INTEGER_CLASS;
-			propertyInfo.name = "status";
-			break;
-		case 9:
-			propertyInfo.type = PropertyInfo.STRING_CLASS;
-			propertyInfo.name = "content";
-			break;
+	        case 0:
+	            propertyInfo.type = PropertyInfo.LONG_CLASS;
+	            propertyInfo.name = "id";
+	            break;   
+	        case 1:
+	            propertyInfo.type = PropertyInfo.STRING_CLASS;
+	            propertyInfo.name = "eventType";
+	            break;    
+	        case 2:
+	            propertyInfo.type = PropertyInfo.LONG_CLASS;
+	            propertyInfo.name = "eventTime";
+	            break;    
+	        case 3:
+	            propertyInfo.type = PropertyInfo.STRING_CLASS;
+	            propertyInfo.name = "userSurname1";
+	            break;    
+	        case 4:
+	            propertyInfo.type = PropertyInfo.STRING_CLASS;
+	            propertyInfo.name = "userSurname2";
+	            break;    
+	        case 5:
+	            propertyInfo.type = PropertyInfo.STRING_CLASS;
+	            propertyInfo.name = "userFirstName";
+	            break;    
+	        case 6:
+	            propertyInfo.type = PropertyInfo.STRING_CLASS;
+	            propertyInfo.name = "location";
+	            break;    
+	        case 7:
+	            propertyInfo.type = PropertyInfo.STRING_CLASS;
+	            propertyInfo.name = "summary";
+	            break;
+	        case 8:
+	            propertyInfo.type = PropertyInfo.INTEGER_CLASS;
+	            propertyInfo.name = "status";
+	            break;
+	        case 9:
+	            propertyInfo.type = PropertyInfo.STRING_CLASS;
+	            propertyInfo.name = "content";
+	            break;
 		}
 	}
 
@@ -378,16 +378,16 @@ public class SWADNotification extends Model {
 	public void setProperty(int param, Object obj) {
 		switch(param)
 		{
-		case 0  : this.setId((Long)obj); break;
-		case 1  : eventType = (String)obj; break;
-		case 2  : eventTime = (Long)obj; break;
-		case 3  : userSurname1 = (String)obj; break;
-		case 4  : userSurname2 = (String)obj; break;
-		case 5  : userFirstName = (String)obj; break;
-		case 6  : location = (String)obj; break;
-		case 7  : summary = (String)obj; break;
-		case 8  : status = (Integer)obj; break;
-		case 9  : content = (String)obj; break;
+			case 0  : this.setId((Long)obj); break;
+			case 1  : eventType = (String)obj; break;
+			case 2  : eventTime = (Long)obj; break;
+			case 3  : userSurname1 = (String)obj; break;
+			case 4  : userSurname2 = (String)obj; break;
+			case 5  : userFirstName = (String)obj; break;
+			case 6  : location = (String)obj; break;
+			case 7  : summary = (String)obj; break;
+			case 8  : status = (Integer)obj; break;
+			case 9  : content = (String)obj; break;
 		}    
 	}
 }

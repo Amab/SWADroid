@@ -15,45 +15,45 @@ public class Group extends Model {
 	private String groupName;
 	private int groupTypeCode;
 	private String groupTypeName;
-
-
+	
+	
 	private static PropertyInfo PI_id = new PropertyInfo();
 	private static PropertyInfo PI_groupName = new PropertyInfo();
 	private static PropertyInfo PI_groupTypeCode = new PropertyInfo();
 	private static PropertyInfo PI_groupTypeName = new PropertyInfo();
-
-	@SuppressWarnings("unused")
+	
+    @SuppressWarnings("unused")
 	private static PropertyInfo[] PI_PROP_ARRAY =
-{
-		PI_id,
-		PI_groupName,
-		PI_groupTypeCode,
-		PI_groupTypeName
-
-};
-
-
+    {
+    	PI_id,
+    	PI_groupName,
+    	PI_groupTypeCode,
+    	PI_groupTypeName
+    
+    };
+	
+	
 	public Group(long id,String groupName, int groupTypeCode, String groupTypeName) {
 		super(id);
 		this.groupName = groupName;
 		this.groupTypeCode = groupTypeCode;
 		this.groupTypeName = groupTypeName;
-
+		
 	}
-
+	
 	@Override
 	public Object getProperty(int param) {
 		Object object = null;
-		switch(param)
-		{
-		case 0 : object = this.getId();break;
-		case 1 : object = groupName;break;
-		case 2 : object = groupTypeCode;break;
-		case 3 : object = groupTypeName;break;
+	    switch(param)
+	    {
+	        case 0 : object = this.getId();break;
+	        case 1 : object = groupName;break;
+	        case 2 : object = groupTypeCode;break;
+	        case 3 : object = groupTypeName;break;
 
-		}
-
-		return object;
+	    }
+	    
+	    return object;
 	}
 
 	@Override
@@ -64,22 +64,22 @@ public class Group extends Model {
 	@Override
 	public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo propertyInfo) {
 		switch(param){
-		case 0:
-			propertyInfo.type = PropertyInfo.LONG_CLASS;
-			propertyInfo.name = "id";
-			break;   
-		case 1:
-			propertyInfo.type = PropertyInfo.STRING_CLASS;
-			propertyInfo.name = "groupName";
-			break; 
-		case 2:
-			propertyInfo.type = PropertyInfo.INTEGER_CLASS;
-			propertyInfo.name = "groupTypeCode";
-			break;
-		case 3:
-			propertyInfo.type = PropertyInfo.INTEGER_CLASS;
-			propertyInfo.name = "groupTypeName";
-			break;
+        case 0:
+            propertyInfo.type = PropertyInfo.LONG_CLASS;
+            propertyInfo.name = "id";
+            break;   
+        case 1:
+            propertyInfo.type = PropertyInfo.STRING_CLASS;
+            propertyInfo.name = "groupName";
+            break; 
+        case 2:
+        	propertyInfo.type = PropertyInfo.INTEGER_CLASS;
+        	propertyInfo.name = "groupTypeCode";
+        	break;
+        case 3:
+        	propertyInfo.type = PropertyInfo.INTEGER_CLASS;
+        	propertyInfo.name = "groupTypeName";
+        	break;
 		}
 	}
 
@@ -87,10 +87,10 @@ public class Group extends Model {
 	public void setProperty(int param, Object obj) {
 		switch(param)
 		{
-		case 0  : this.setId((Long)obj); break;
-		case 1  : groupName = (String)obj; break;
-		case 2  : groupTypeCode = (Integer)obj; break;
-		case 3  : groupTypeName = (String)obj; break;
+			case 0  : this.setId((Long)obj); break;
+			case 1  : groupName = (String)obj; break;
+			case 2  : groupTypeCode = (Integer)obj; break;
+			case 3  : groupTypeName = (String)obj; break;
 		}    
 
 	}
@@ -99,20 +99,20 @@ public class Group extends Model {
 	public String toString() {
 		return "Group [name="+groupTypeName+" : " +groupName+", getId()="+getId()+", getGroupTypeCode()=" + getGroupTypeCode();
 	}
-
-
+	
+	
 	public String getGroupName(){
 		return groupName;
 	}
-
+	
 	public String getGroupTypeName(){
 		return groupTypeName;
 	}
-
+	
 	public String getGroupCompleteName(){
 		return groupTypeName + ":" + groupName;
 	}
-
+	
 	public int getGroupTypeCode(){
 		return groupTypeCode;
 	}
@@ -152,7 +152,7 @@ public class Group extends Model {
 			return false;
 		return true;
 	}
-
-
+	
+	
 
 }

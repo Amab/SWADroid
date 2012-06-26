@@ -26,11 +26,15 @@ import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.accounts.Account;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
@@ -42,6 +46,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.dataframework.DataFramework;
 
@@ -89,12 +94,29 @@ public class Notifications extends Module {
 	 * Notifications tag name for Logcat
 	 */
 	public static final String TAG = Global.APP_TAG + " Notifications";
+	/**
+	 * Account type
+	 */
+	private static String accountType = "es.ugr.swad.swadroid";
+	/**
+	 * Synchronization authority
+	 */
+	private static String authority = "es.ugr.swad.swadroid.content";
+	/**
+	 * Synchronization receiver
+	 */
+	private static SyncReceiver receiver;
+	/**
+	 * Synchronization account
+	 */
+	private static Account account;
 
 	/**
 	 * Refreshes data on screen
 	 */
-	private void refreshScreen() {
+	private void refreshScreen() {		
 		//Refresh data on screen 
+		stopManagingCursor(dbCursor);
 		dbCursor = dbHelper.getDb().getCursor(Global.DB_TABLE_NOTIFICATIONS, selection, orderby);
 		startManagingCursor(dbCursor);
 		adapter.changeCursor(dbCursor);
@@ -122,23 +144,23 @@ public class Notifications extends Module {
 			public void onItemClick(AdapterView<?> av, View v, int position, long rowId) 
 			{
 				//adapter.toggleContentVisibility(position);
+				TextView code = (TextView) v.findViewById(R.id.eventCode);
 				TextView sender = (TextView) v.findViewById(R.id.eventSender);
 				TextView course = (TextView) v.findViewById(R.id.eventLocation);
 				TextView summary = (TextView) v.findViewById(R.id.eventSummary);
-				TextView content = (TextView) v.findViewById(R.id.eventText);			
+				TextView content = (TextView) v.findViewById(R.id.eventText);	
+				
 				Intent activity = new Intent(getApplicationContext(), NotificationItem.class);
-
+				activity.putExtra("notificationCode", code.getText().toString());
 				activity.putExtra("sender", sender.getText().toString());
 				activity.putExtra("course", course.getText().toString());
 				activity.putExtra("summary", summary.getText().toString());
 				activity.putExtra("content", content.getText().toString());
-
 				startActivity(activity);
 			}    	
 		};
 
 		super.onCreate(savedInstanceState);
-
 		setContentView(R.layout.list_items);
 
 		image = (ImageView)this.findViewById(R.id.moduleIcon);
@@ -174,6 +196,8 @@ public class Notifications extends Module {
 		}
 
 		setMETHOD_NAME("getNotifications");
+		receiver = new SyncReceiver(this);
+		account = new Account(getString(R.string.app_name), accountType);
 	}
 
 	/**
@@ -198,8 +222,20 @@ public class Notifications extends Module {
 	 */
 	@Override
 	protected void onResume() {		
-		super.onResume();		
+		super.onResume();
+
+		IntentFilter intentFilter = new IntentFilter();
+	    intentFilter.addAction(NotificationsSyncAdapterService.START_SYNC);
+	    intentFilter.addAction(NotificationsSyncAdapterService.STOP_SYNC);
+	    registerReceiver(receiver, intentFilter);
+
 		refreshScreen();
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		unregisterReceiver(receiver);
 	}
 
 	/* (non-Javadoc)
@@ -209,50 +245,56 @@ public class Notifications extends Module {
 	protected void requestService() throws NoSuchAlgorithmException,
 	IOException, XmlPullParserException, SoapFault,
 	IllegalAccessException, InstantiationException {
-
-		//Calculates next timestamp to be requested
-		Long timestamp = new Long(dbHelper.getFieldOfLastNotification("eventTime"));
-		timestamp++;
-
-		//Creates webservice request, adds required params and sends request to webservice
-		createRequest();
-		addParam("wsKey", Global.getLoggedUser().getWsKey());
-		addParam("beginTime", timestamp);
-		sendRequest(SWADNotification.class, false);
-
-		if (result != null) {
-			dbHelper.beginTransaction();
-
-			//Stores notifications data returned by webservice response
-			Vector<?> res = (Vector<?>) result;
-			SoapObject soap = (SoapObject) res.get(1);
-			notifCount = soap.getPropertyCount();
-			for (int i = 0; i < notifCount; i++) {
-				SoapObject pii = (SoapObject)soap.getProperty(i);
-				Long notificationCode = new Long(pii.getProperty("notificationCode").toString());
-				String eventType = pii.getProperty("eventType").toString();
-				Long eventTime = new Long(pii.getProperty("eventTime").toString());
-				String userSurname1 = pii.getProperty("userSurname1").toString();
-				String userSurname2 = pii.getProperty("userSurname2").toString();
-				String userFirstName = pii.getProperty("userFirstname").toString();
-				String location = pii.getProperty("location").toString();
-				String summary = pii.getProperty("summary").toString();
-				Integer status = new Integer(pii.getProperty("status").toString());
-				String content = pii.getProperty("content").toString();
-				SWADNotification n = new SWADNotification(notificationCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, location, summary, status, content);
-				dbHelper.insertNotification(n);
-
-				/*if(isDebuggable)
-	    			Log.d(TAG, n.toString());*/
+		
+		account = new Account(getString(R.string.app_name), accountType);
+		if(ContentResolver.getSyncAutomatically(account, authority)) {
+			//Call synchronization service
+			ContentResolver.requestSync(account, authority, new Bundle());
+		} else {
+			//Calculates next timestamp to be requested
+			Long timestamp = new Long(dbHelper.getFieldOfLastNotification("eventTime"));
+			timestamp++;
+	
+			//Creates webservice request, adds required params and sends request to webservice
+			createRequest();
+			addParam("wsKey", Global.getLoggedUser().getWsKey());
+			addParam("beginTime", timestamp);
+			sendRequest(SWADNotification.class, false);
+	
+			if (result != null) {
+				dbHelper.beginTransaction();
+	
+				//Stores notifications data returned by webservice response
+				Vector<?> res = (Vector<?>) result;
+				SoapObject soap = (SoapObject) res.get(1);
+				notifCount = soap.getPropertyCount();
+				for (int i = 0; i < notifCount; i++) {
+					SoapObject pii = (SoapObject)soap.getProperty(i);
+					Long notificationCode = new Long(pii.getProperty("notificationCode").toString());
+					String eventType = pii.getProperty("eventType").toString();
+					Long eventTime = new Long(pii.getProperty("eventTime").toString());
+					String userSurname1 = pii.getProperty("userSurname1").toString();
+					String userSurname2 = pii.getProperty("userSurname2").toString();
+					String userFirstName = pii.getProperty("userFirstname").toString();
+					String location = pii.getProperty("location").toString();
+					String summary = pii.getProperty("summary").toString();
+					Integer status = new Integer(pii.getProperty("status").toString());
+					String content = pii.getProperty("content").toString();
+					SWADNotification n = new SWADNotification(notificationCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, location, summary, status, content);
+					dbHelper.insertNotification(n);
+	
+					/*if(isDebuggable)
+		    			Log.d(TAG, n.toString());*/
+				}
+	
+				//Request finalized without errors
+				Log.i(TAG, "Retrieved " + notifCount + " notifications");
+	
+				//Clear old notifications to control database size
+				dbHelper.clearOldNotifications(SIZE_LIMIT);
+	
+				dbHelper.endTransaction();
 			}
-
-			//Request finalized without errors
-			Log.i(TAG, "Retrieved " + notifCount + " notifications");
-
-			//Clear old notifications to control database size
-			dbHelper.clearOldNotifications(SIZE_LIMIT);
-
-			dbHelper.endTransaction();
 		}
 	}
 
@@ -293,6 +335,8 @@ public class Notifications extends Module {
 
 			//Send alert
 			notManager.notify(NOTIF_ALERT_ID, notif);
+		} else {
+			Toast.makeText(this, R.string.NoNotificationsMsg, Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -315,13 +359,15 @@ public class Notifications extends Module {
 		refreshScreen();
 		//Toast.makeText(this, R.string.notificationsDownloadedMsg, Toast.LENGTH_SHORT).show();
 
-		alertNotif();
-
-		ProgressBar pb = (ProgressBar)this.findViewById(R.id.progress_refresh);
-		ImageButton updateButton = (ImageButton)this.findViewById(R.id.refresh);
-
-		pb.setVisibility(View.GONE);
-		updateButton.setVisibility(View.VISIBLE);
+		if(!ContentResolver.getSyncAutomatically(account, authority)) {
+			alertNotif();
+	
+			ProgressBar pb = (ProgressBar)this.findViewById(R.id.progress_refresh);
+			ImageButton updateButton = (ImageButton)this.findViewById(R.id.refresh);
+	
+			pb.setVisibility(View.GONE);
+			updateButton.setVisibility(View.VISIBLE);
+		}
 	}
 
 	/* (non-Javadoc)
@@ -350,5 +396,36 @@ public class Notifications extends Module {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * Synchronization callback. Is called when synchronization starts and stops
+	 * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+	 *
+	 */
+	private class SyncReceiver extends BroadcastReceiver {
+	    private Notifications mActivity;
+
+	    public SyncReceiver(Notifications activity) {
+	        mActivity = activity;
+	    }
+
+	    @Override
+	    public void onReceive(Context context, Intent intent) {
+	        if (intent.getAction().equals(NotificationsSyncAdapterService.START_SYNC)) {
+	            Log.i(TAG, "Started sync");
+	        }
+	        else if (intent.getAction().equals(NotificationsSyncAdapterService.STOP_SYNC)) {
+	            Log.i(TAG, "Stopped sync");
+	            
+	            ProgressBar pb = (ProgressBar)mActivity.findViewById(R.id.progress_refresh);
+	    		ImageButton updateButton = (ImageButton)mActivity.findViewById(R.id.refresh);
+
+	    		pb.setVisibility(View.GONE);
+	    		updateButton.setVisibility(View.VISIBLE);
+	    		
+	            refreshScreen();
+	        }
+	    }
 	}
 }

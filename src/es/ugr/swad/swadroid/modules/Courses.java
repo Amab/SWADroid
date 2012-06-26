@@ -28,6 +28,8 @@ import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
+import com.android.dataframework.DataFramework;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;

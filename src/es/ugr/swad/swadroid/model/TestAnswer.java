@@ -56,16 +56,16 @@ public class TestAnswer extends Model {
 	private static PropertyInfo PI_correctAnswered = new PropertyInfo();
 	private static PropertyInfo PI_answer = new PropertyInfo();
 	private static PropertyInfo PI_ansInd = new PropertyInfo();
-	@SuppressWarnings("unused")
+    @SuppressWarnings("unused")
 	private static PropertyInfo[] PI_PROP_ARRAY =
-{
-		PI_id,
-		PI_correct,
-		PI_correctAnswered,
-		PI_answer,
-		PI_ansInd
-};
-
+    {
+    	PI_id,
+    	PI_correct,
+    	PI_correctAnswered,
+    	PI_answer,
+    	PI_ansInd
+    };
+	
 	/**
 	 * Constructor
 	 * @param id Answer id
@@ -236,16 +236,16 @@ public class TestAnswer extends Model {
 	 */
 	public Object getProperty(int param) {
 		Object object = null;
-		switch(param)
-		{
-		case 0 : object = this.getId();break;
-		case 1 : object = correct;break;
-		case 2 : object = correctAnswered;break;
-		case 3 : object = answer;break;
-		case 4 : object = ansInd;break;
-		}
-
-		return object;
+        switch(param)
+        {
+            case 0 : object = this.getId();break;
+            case 1 : object = correct;break;
+            case 2 : object = correctAnswered;break;
+            case 3 : object = answer;break;
+            case 4 : object = ansInd;break;
+        }
+        
+        return object;
 	}
 
 	/* (non-Javadoc)
@@ -260,26 +260,26 @@ public class TestAnswer extends Model {
 	 */
 	public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo propertyInfo) {
 		switch(param){
-		case 0:
-			propertyInfo.type = PropertyInfo.LONG_CLASS;
-			propertyInfo.name = "id";
-			break;   
-		case 1:
-			propertyInfo.type = PropertyInfo.BOOLEAN_CLASS;
-			propertyInfo.name = "correct";
-			break;    
-		case 2:
-			propertyInfo.type = PropertyInfo.BOOLEAN_CLASS;
-			propertyInfo.name = "correctAnswered";
-			break;    
-		case 3:
-			propertyInfo.type = PropertyInfo.STRING_CLASS;
-			propertyInfo.name = "answer";
-			break;      
-		case 4:
-			propertyInfo.type = PropertyInfo.INTEGER_CLASS;
-			propertyInfo.name = "ansInd";
-			break;        
+	        case 0:
+	            propertyInfo.type = PropertyInfo.LONG_CLASS;
+	            propertyInfo.name = "id";
+	            break;   
+	        case 1:
+	            propertyInfo.type = PropertyInfo.BOOLEAN_CLASS;
+	            propertyInfo.name = "correct";
+	            break;    
+	        case 2:
+	            propertyInfo.type = PropertyInfo.BOOLEAN_CLASS;
+	            propertyInfo.name = "correctAnswered";
+	            break;    
+	        case 3:
+	            propertyInfo.type = PropertyInfo.STRING_CLASS;
+	            propertyInfo.name = "answer";
+	            break;      
+	        case 4:
+	            propertyInfo.type = PropertyInfo.INTEGER_CLASS;
+	            propertyInfo.name = "ansInd";
+	            break;        
 		}
 	}
 
@@ -289,11 +289,11 @@ public class TestAnswer extends Model {
 	public void setProperty(int param, Object obj) {
 		switch(param)
 		{
-		case 0  : this.setId((Integer)obj); break;
-		case 1  : correct = (Boolean) obj; break;
-		case 2  : correctAnswered = (Boolean) obj; break;
-		case 3  : answer = (String) obj; break;
-		case 4  : ansInd = (Integer) obj; break;
+			case 0  : this.setId((Integer)obj); break;
+			case 1  : correct = (Boolean) obj; break;
+			case 2  : correctAnswered = (Boolean) obj; break;
+			case 3  : answer = (String) obj; break;
+			case 4  : ansInd = (Integer) obj; break;
 		}    
 	}
 }

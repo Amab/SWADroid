@@ -2,15 +2,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="es.ugr.swad.swadroid"
     android:installLocation="auto"
-    android:versionCode="32"
-    android:versionName="0.7.2" >
+    android:versionCode="37"
+    android:versionName="0.8.1" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
-    <uses-permission android:name="android.permission.CAMERA" />
+    <!-- <uses-permission android:name="android.permission.CAMERA" /> -->
 
     <uses-sdk
         android:minSdkVersion="7"
@@ -126,6 +129,12 @@
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:label="@string/noticesModuleLabel"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>        
+        
+        <activity
+            android:name=".sync.AccountAuthenticator"
+            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name=".modules.downloads.DirectoryTreeDownload"
@@ -140,8 +149,8 @@
 
         <provider
             android:name=".sync.DummyProvider"
-            android:authorities="es.ugr.swad.content"
-            android:label="DummyProvider"
+            android:authorities="es.ugr.swad.swadroid.content"
+            android:label="SWADroid"
             android:syncable="true" />
 
         <service

@@ -29,8 +29,11 @@
     <string name="cleanDatabaseTitle_menu">Clean database</string>
     <string name="about_preferences">About</string>
     <string name="versionTitle_preferences">Application version</string>
-    <string name="author_preferences">Coordinated by Antonio Cañas Vargas
-		\nProgrammed by Juan Miguel Boyero Corral</string>
+    <string name="author_preferences">Coordinator: Antonio Cañas Vargas
+		\nProgrammers:
+		\nJuan Miguel Boyero Corral		
+		\nHelena Rodríguez Gijón		
+		\nAntonio Aguilera Malagón</string>
     <string name="organization_preferences">University of Granada</string>
     <string name="loginTitle_menu">Login</string>
     <string name="loginProgressTitle">Login</string>
@@ -168,4 +171,5 @@
     <string name="scan_data_not_found">No data on this student</string>
     <string name="scan_no_codes">Not detect any valid QR code</string>
     <string name="usersPresent">Present students</string>
+    <string name="NoNotificationsMsg">There is no new notifications</string>
 </resources>
