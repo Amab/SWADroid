@@ -27,9 +27,5 @@
         <item>Integer</item>
         <item>Float</item>
     </string-array>
-    <string-array name="attendanceMenuItems">
-        <item>Scan QRs</item>
-        <item>Manual mode</item>
-    </string-array>
 
 </resources>

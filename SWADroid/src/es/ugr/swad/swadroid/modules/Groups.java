@@ -8,88 +8,130 @@ import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 import es.ugr.swad.swadroid.Global;
-import es.ugr.swad.swadroid.model.Course;
+import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Group;
 
 /**
  * Groups module gets user's groups inside the current course
  * and stores them in the database
- * @author Helena Rodríguez Gijón <hrgijon@gmail.com>
+ * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
+ * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  */
 public class Groups extends Module {
-
+	/**
+	 * Groups counter
+	 */
+	private int numGroups;
+	/**
+	 * Groups tag name for Logcat
+	 */
+	public static final String TAG = Global.APP_TAG + " Groups";
 
 	@Override
-	protected void requestService() throws NoSuchAlgorithmException,
-			IOException, XmlPullParserException, SoapFault,
-			IllegalAccessException, InstantiationException {
-		createRequest();
-		addParam("wsKey", Global.getLoggedUser().getWsKey());
-		addParam("courseCode", (int)Global.getSelectedCourseCode());
-		sendRequest(Group.class,false);
-		
-		if(result != null){
-			
-			Vector<?> res = (Vector <?>) result;
-			SoapObject soap = (SoapObject) res.get(1);	
-			int csSize = soap.getPropertyCount();
-			for (int i = 0; i < csSize; i++) {
-				SoapObject pii = (SoapObject)soap.getProperty(i);
-				long id = Long.parseLong(pii.getProperty("groupCode").toString());
-				String groupName = pii.getProperty("groupName").toString();
-				int groupTypeCode = Integer.parseInt(pii.getProperty("groupTypeCode").toString());
-				String groupTypeName = pii.getProperty("groupTypeName").toString();
-				Group g = new Group(id,groupName,groupTypeCode,groupTypeName);
-				//coursesSWAD.add(c);
-
-				if(isDebuggable){
-					Log.i(TAG, g.toString());
-        		}
-			}
+	protected void runConnection() {
+		super.runConnection();
+		if (!isConnected) {
+			setResult(RESULT_CANCELED);
+			finish();
 		}
-		
-		
 	}
 
+	/* (non-Javadoc)
+	 * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
+	 */
 	@Override
-	protected void connect() {
-		 Toast.makeText(this,"Getting Groups", Toast.LENGTH_LONG).show();
-		Connect con = new Connect(false,null,0);
-		con.execute();
-	}
-
-	@Override
-	protected void postConnect() {
-		Toast.makeText(this, "got groups", Toast.LENGTH_LONG).show();
-		Log.i(TAG, "got groups");
-		finish();
-	}
-
-	@Override
-	protected void onError() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {		
 		super.onCreate(savedInstanceState);
 		setMETHOD_NAME("getGroups");
 	}
 
 	@Override
 	protected void onStart() {
-		super.onStart();
-		runConnection();
-		if(!isConnected){
+		super.onStart();      
+		try {
+			runConnection();
+		} catch (Exception ex) {
+			String errorMsg = getString(R.string.errorServerResponseMsg);
+			error(errorMsg);
+
+			if(isDebuggable) {
+				Log.e(ex.getClass().getSimpleName(), errorMsg);        		
+				ex.printStackTrace();
+			}
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see es.ugr.swad.swadroid.modules.Module#onActivityResult(int, int, android.content.Intent)
+	 */
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == Activity.RESULT_CANCELED) {
 			setResult(RESULT_CANCELED);
 			finish();
 		}
-		
 	}
 
+	@Override
+	protected void connect() {
+		String progressDescription = getString(R.string.groupsProgressDescription);
+		int progressTitle = R.string.groupsProgressTitle;
+
+		new Connect(true, progressDescription, progressTitle).execute();
+	}
+
+	@Override
+	protected void requestService() throws NoSuchAlgorithmException, IOException, XmlPullParserException, SoapFault, IllegalAccessException, InstantiationException {
+		// Creates webservice request, adds required params and sends request to webservice
+		createRequest();
+		addParam("wsKey", Global.getLoggedUser().getWsKey());
+		Log.i(TAG, "selectedCourseCode=" + Global.getSelectedCourseCode());
+		addParam("courseCode", Integer.valueOf(String.valueOf(Global.getSelectedCourseCode())));
+		sendRequest(Group.class, false);
+
+		if (result != null) {
+			// Stores users data returned by webservice response
+			Vector<?> res = (Vector<?>) result;
+			SoapObject soap = (SoapObject) res.get(1);
+			numGroups = soap.getPropertyCount();
+			for (int i = 0; i < numGroups; i++) {
+				SoapObject pii = (SoapObject) soap.getProperty(i);
+				long groupCode = new Long(pii.getProperty("groupCode").toString());
+				String groupName = pii.getProperty("groupName").toString();
+				int groupTypeCode = Integer.parseInt(pii.getProperty("groupTypeCode").toString());
+				String groupTypeName = pii.getProperty("groupTypeName").toString();
+
+				Group g = new Group(
+						groupCode,
+						groupName,
+						groupTypeCode,
+						groupTypeName);
+
+				dbHelper.insertGroup(g, Global.getSelectedCourseCode());
+				Log.d(TAG, g.toString());
+			}	// end for (int i=0; i < usersCount; i++)
+
+			if(isDebuggable) {
+				Log.d(TAG, "Retrieved " + numGroups + " groups");
+			}
+		} // end if (result != null)
+
+		// Request finalized without errors
+		setResult(RESULT_OK);
+	}
+
+	@Override
+	protected void postConnect() {
+		finish();
+	}
+
+	@Override
+	protected void onError() {
+	}
 }

@@ -197,6 +197,17 @@ public class User extends Model {
 	}
 
 	/**
+	 * Gets File name where user's picture is stored.
+	 * @return the photoPath
+	 */
+	public String getPhotoFileName() {
+		if (photoPath == null || photoPath == "")
+			return null;
+		else
+			return photoPath.substring(photoPath.lastIndexOf('/')+1);
+	}
+
+	/**
 	 * Sets Full path where user's picture is stored.
 	 * @param photoPath the photoPath to set
 	 */

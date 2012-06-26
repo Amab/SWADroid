@@ -42,7 +42,7 @@ public abstract class Model implements KvmSerializable {
 	public long getId() {
 		return id;
 	}
-	
+
 	/**
 	 * Sets model identifier
 	 * @param id Model identifier

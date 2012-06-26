@@ -16,8 +16,7 @@
 -->
 
 <resources>
-
-    <color name="red">#a00000</color>
+    <color name="red">#ff0000</color>
     <color name="green">#339900</color>
     <color name="title_background">#81bef7</color>
     <color name="title_text">#ffffffff</color>

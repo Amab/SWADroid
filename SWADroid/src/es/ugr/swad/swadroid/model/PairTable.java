@@ -55,7 +55,7 @@ public class PairTable<FIRST, SECOND> extends Model {
 	public Pair<FIRST, SECOND> getValues() {
 		return values;
 	}
-	
+
 	/**
 	 * Gets first value
 	 * @return First value
@@ -63,7 +63,7 @@ public class PairTable<FIRST, SECOND> extends Model {
 	public FIRST getFirst() {
 		return this.values.getFirst();
 	}
-	
+
 	/**
 	 * Gets second value
 	 * @return Second value
@@ -71,7 +71,7 @@ public class PairTable<FIRST, SECOND> extends Model {
 	public SECOND getSecond() {
 		return this.values.getSecond();
 	}
-	
+
 	/**
 	 * Sets first value
 	 * param first First value
@@ -136,11 +136,11 @@ public class PairTable<FIRST, SECOND> extends Model {
 
 	public void getPropertyInfo(int arg0, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo arg2) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void setProperty(int arg0, Object arg1) {
 		// TODO Auto-generated method stub
-		
+
 	}	
 }
