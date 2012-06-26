@@ -58,16 +58,16 @@ public class TestQuestion extends Model {
 	private static PropertyInfo PI_editTime = new PropertyInfo();
 	private static PropertyInfo PI_ansType = new PropertyInfo();
 	private static PropertyInfo PI_shuffle = new PropertyInfo();
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static PropertyInfo[] PI_PROP_ARRAY =
-    {
-    	PI_id,
-    	PI_stem,
-    	PI_editTime,
-    	PI_ansType,
-    	PI_shuffle
-    };
-	
+{
+		PI_id,
+		PI_stem,
+		PI_editTime,
+		PI_ansType,
+		PI_shuffle
+};
+
 	/**
 	 * @param id Test identifier
 	 * @param stem Question's text
@@ -81,7 +81,7 @@ public class TestQuestion extends Model {
 		this.shuffle = shuffle;
 		this.answers = new ArrayList<TestAnswer>();
 	}
-	
+
 	/**
 	 * @param id Test identifier
 	 * @param selectedCourseCode Course code
@@ -177,7 +177,7 @@ public class TestQuestion extends Model {
 	public void setAnswers(List<TestAnswer> answers) {
 		this.answers = answers;
 	}
-	
+
 	/**
 	 * Gets correct answer for this test
 	 * @return Correct test's answer
@@ -186,18 +186,18 @@ public class TestQuestion extends Model {
 		List<TestAnswer> corrects = new ArrayList<TestAnswer>();
 		TestAnswer current = null;
 		Iterator<TestAnswer> it = this.answers.iterator();
-		
+
 		while(it.hasNext()) {
 			current = it.next();
 			if(current.getCorrect()) {
 				corrects.add(current);
 			}
 		}
-		
+
 		if(corrects.isEmpty()) {
 			corrects = null;
 		}
-		
+
 		return corrects;
 	}
 
@@ -243,21 +243,21 @@ public class TestQuestion extends Model {
 		return "TestQuestion [stem=" + stem + ", anstype=" + answerType + ", shuffle=" + shuffle
 				+ ", answers=" + answers + ", getId()=" + getId() + "]";
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.ksoap2.serialization.KvmSerializable#getProperty(int)
 	 */
 	public Object getProperty(int param) {
 		Object object = null;
-        switch(param)
-        {
-            case 0 : object = this.getId();break;
-            case 1 : object = stem;break;
-            case 2 : object = answerType;break;
-            case 3 : object = shuffle;break;
-        }
-        
-        return object;
+		switch(param)
+		{
+		case 0 : object = this.getId();break;
+		case 1 : object = stem;break;
+		case 2 : object = answerType;break;
+		case 3 : object = shuffle;break;
+		}
+
+		return object;
 	}
 
 	/* (non-Javadoc)
@@ -272,22 +272,22 @@ public class TestQuestion extends Model {
 	 */
 	public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo propertyInfo) {
 		switch(param){
-	        case 0:
-	            propertyInfo.type = PropertyInfo.LONG_CLASS;
-	            propertyInfo.name = "id";
-	            break;   
-	        case 1:
-	            propertyInfo.type = PropertyInfo.STRING_CLASS;
-	            propertyInfo.name = "stem";
-	            break;  
-	        case 2:
-	            propertyInfo.type = PropertyInfo.STRING_CLASS;
-	            propertyInfo.name = "anstype";
-	            break;  
-	        case 3:
-	            propertyInfo.type = PropertyInfo.STRING_CLASS;
-	            propertyInfo.name = "shuffle";
-	            break;
+		case 0:
+			propertyInfo.type = PropertyInfo.LONG_CLASS;
+			propertyInfo.name = "id";
+			break;   
+		case 1:
+			propertyInfo.type = PropertyInfo.STRING_CLASS;
+			propertyInfo.name = "stem";
+			break;  
+		case 2:
+			propertyInfo.type = PropertyInfo.STRING_CLASS;
+			propertyInfo.name = "anstype";
+			break;  
+		case 3:
+			propertyInfo.type = PropertyInfo.STRING_CLASS;
+			propertyInfo.name = "shuffle";
+			break;
 		}
 	}
 
@@ -297,10 +297,10 @@ public class TestQuestion extends Model {
 	public void setProperty(int param, Object obj) {
 		switch(param)
 		{
-			case 0  : this.setId((Long)obj); break;
-			case 1  : stem = (String)obj; break;
-			case 2  : answerType = (String)obj; break;
-			case 3  : shuffle = Global.parseStringBool((String)obj); break;
+		case 0  : this.setId((Long)obj); break;
+		case 1  : stem = (String)obj; break;
+		case 2  : answerType = (String)obj; break;
+		case 3  : shuffle = Global.parseStringBool((String)obj); break;
 		}    
 	}
 }

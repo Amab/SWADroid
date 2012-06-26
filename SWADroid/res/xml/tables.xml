@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <database
     name="swadroid_db"
-    version="10" >
+    version="11" >
 
     <table
         name="courses"
@@ -248,5 +248,97 @@
             foreign-table="courses"
             obligatory="true"
             type="foreign-key" />
+        <field
+            name="grpCod"
+            new-in-version="11"
+            obligatory="true"
+            type="foreign-key" />
     </table>
+    <table
+        name="groups"
+        new-in-version="11"
+        to-string="%name%" >
+        <field
+            name="groupCode"
+            obligatory="true"
+            type="integer" />
+        <field
+            name="groupName"
+            obligatory="true"
+            type="text" />
+        <field
+            name="groupTypeCode"
+            obligatory="true"
+            type="integer" />
+        <field
+            name="groupTypeName"
+            obligatory="true"
+            type="text" />
+    </table>
+    <table
+        name="group_course"
+        new-in-version="11"
+        to-string="%name%" >
+        <field
+            name="grpCod"
+            foreign-table="groups"
+            obligatory="true"
+            type="foreign-key" />
+        <field
+            name="crsCod"
+            foreign-table="courses"
+            obligatory="true"
+            type="foreign-key" />
+    </table>
+    <table
+        name="practice_sessions"
+        new-in-version="11"
+        to-string="%name%" >
+        <field
+            name="crsCod"
+            foreign-table="courses"
+            obligatory="true"
+            type="foreign-key" />
+        <field
+            name="grpCod"
+            foreign-table="groups"
+            obligatory="true"
+            type="foreign-key" />
+        <field
+            name="startDate"
+            obligatory="true"
+            type="text" />
+        <field
+            name="endDate"
+            obligatory="true"
+            type="text" />
+        <field
+            name="site"
+            obligatory="false"
+            type="text" />
+        <field
+            name="description"
+            obligatory="false"
+            type="text" />
+    </table>
+    <table
+        name="rollcall"
+        new-in-version="11"
+        to-string="%name%" >
+        <field
+            name="sessCod"
+            foreign-table="practice_sessions"
+            obligatory="true"
+            type="foreign-key" />
+        <field
+            name="usrCod"
+            foreign-table="users"
+            obligatory="true"
+            type="foreign-key" />
+        <field
+            name="comments"
+            obligatory="false"
+            type="text" />
+    </table>
+
 </database>

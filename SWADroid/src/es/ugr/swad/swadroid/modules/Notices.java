@@ -26,7 +26,6 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -182,8 +181,6 @@ public class Notices extends Module {
 
 	@Override
 	protected void onStart() {
-		Intent activity;
-
 		super.onStart();
 		prefs.getPreferences(getBaseContext());
 		selectedCourseCode = Global.getSelectedCourseCode();
@@ -196,7 +193,5 @@ public class Notices extends Module {
 		// TODO Auto-generated method stub
 
 	}
-
-
 
 }

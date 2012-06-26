@@ -74,8 +74,8 @@ public class TestsConfigDownload extends Module {
 	protected void onStart() {
 		super.onStart();
 		prefs.getPreferences(getBaseContext());
+		try {					
 
-		try {	
 			if(isDebuggable) {
 				Log.d(TAG, "selectedCourseCode = " + Long.toString(Global.getSelectedCourseCode()));
 			}
@@ -89,7 +89,7 @@ public class TestsConfigDownload extends Module {
 				Log.e(ex.getClass().getSimpleName(), errorMsg);        		
 				ex.printStackTrace();
 			}
-		}
+		}	
 	}
 
 
