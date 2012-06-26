@@ -20,10 +20,14 @@ package es.ugr.swad.swadroid.modules.notifications;
 
 import es.ugr.swad.swadroid.MenuActivity;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.modules.Messages;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebSettings.RenderPriority;
 import android.webkit.WebView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -32,6 +36,12 @@ import android.widget.TextView;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class NotificationItem extends MenuActivity {
+	Long notificationCode;
+	String sender;
+	String course;
+	String summary;
+	String content;
+	
 	private String fixLinks(String body) {
 	    String regex = "(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
 	    body = body.replaceAll(regex, "<a href=\"$0\">$0</a>");
@@ -41,12 +51,9 @@ public class NotificationItem extends MenuActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		TextView text, senderTextView, courseTextView, summaryTextView;
-		ImageView image;
+		ImageView image, imageSep;
+		ImageButton replyButton;
 		WebView webview;
-		String sender = this.getIntent().getStringExtra("sender");
-		String course = this.getIntent().getStringExtra("course");
-		String summary = this.getIntent().getStringExtra("summary");
-		String content = this.getIntent().getStringExtra("content");
 		
 		super.onCreate(savedInstanceState);		
 		setContentView(R.layout.single_notification_view);
@@ -60,7 +67,18 @@ public class NotificationItem extends MenuActivity {
         image.setBackgroundResource(R.drawable.notif);
         
         text = (TextView)this.findViewById(R.id.moduleName);
-        text.setText(R.string.notificationsModuleLabel);   
+        text.setText(R.string.notificationsModuleLabel);
+        
+        imageSep = (ImageView)this.findViewById(R.id.title_sep_4);
+        imageSep.setVisibility(View.VISIBLE);
+
+		replyButton = (ImageButton)this.findViewById(R.id.messageReplyButton);
+		replyButton.setVisibility(View.VISIBLE);
+		
+		sender = this.getIntent().getStringExtra("sender");
+		course = this.getIntent().getStringExtra("course");
+		summary = this.getIntent().getStringExtra("summary");
+		content = this.getIntent().getStringExtra("content");
         
 	    senderTextView.setText(sender);         
 	    courseTextView.setText(course); 
@@ -70,5 +88,18 @@ public class NotificationItem extends MenuActivity {
 		webview.getSettings().setRenderPriority(RenderPriority.HIGH);
 		webview.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);		
 		webview.loadDataWithBaseURL("", content, "text/html", "utf-8", "");
-	}	
+	}
+	
+	/**
+	 * Launches an action when reply message button is pushed
+	 * @param v Actual view
+	 */
+	public void onReplyMessageClick(View v)
+	{
+		notificationCode = Long.valueOf(this.getIntent().getStringExtra("notificationCode"));
+		Intent activity = new Intent(this, Messages.class);
+		activity.putExtra("notificationCode", notificationCode);
+		activity.putExtra("summary", summary);
+		startActivity(activity);
+	}
 }

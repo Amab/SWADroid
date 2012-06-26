@@ -19,6 +19,7 @@
 
 package es.ugr.swad.swadroid;
 
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +31,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.Spanned;
+import android.text.SpannedString;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -56,6 +60,7 @@ import es.ugr.swad.swadroid.modules.downloads.DirectoryTreeDownload;
 import es.ugr.swad.swadroid.modules.notifications.Notifications;
 import es.ugr.swad.swadroid.modules.tests.Tests;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
+import es.ugr.swad.swadroid.sync.AccountAuthenticator;
 
 /**
  * Main class of the application.
@@ -91,7 +96,7 @@ public class SWADMain extends MenuExpandableListActivity {
 	/**
 	 * Tests tag name for Logcat
 	 */
-	public static final String TAG = Global.APP_TAG + " SwadMain";
+	public static final String TAG = Global.APP_TAG;
 	/**
 	 * Indicates if it is the first run
 	 * */
@@ -282,7 +287,7 @@ public class SWADMain extends MenuExpandableListActivity {
 			prefs.getPreferences(getBaseContext()); 
 
 			//Initialize HTTPS connections 
-			SecureConnection.initSecureConnection(); 
+			SecureConnection.initSecureConnection();
 
 			//Check if this is the first run after an install or upgrade
 			lastVersion = prefs.getLastVersion();
@@ -293,6 +298,11 @@ public class SWADMain extends MenuExpandableListActivity {
 				showConfigurationDialog();
 				dbHelper.initializeDB();
 				//prefs.upgradeCredentials();
+				
+				//Configure automatic synchronization
+				Intent activity = new Intent(getBaseContext(), AccountAuthenticator.class);
+				startActivity(activity);
+
 				prefs.setLastVersion(currentVersion);
 				firstRun = true;
 				Global.setSelectedCourseCode(-1);
@@ -302,6 +312,11 @@ public class SWADMain extends MenuExpandableListActivity {
 				//showUpgradeDialog();
 				dbHelper.upgradeDB(this);
 				//prefs.upgradeCredentials();
+
+				//Configure automatic synchronization
+				Intent activity = new Intent(getBaseContext(), AccountAuthenticator.class);
+				startActivity(activity);
+
 				prefs.setLastVersion(currentVersion);
 			}
 			listCourses = dbHelper.getAllRows(Global.DB_TABLE_COURSES,"","name");
@@ -310,6 +325,7 @@ public class SWADMain extends MenuExpandableListActivity {
 				Global.setSelectedCourseCode(c.getId());
 			}else{
 				Global.setSelectedCourseCode(-1);
+				if(!firstRun && Module.connectionAvailable(this)) getActualCourses(); //at the first run, this will be launched after the preferences menu 
 			}
 			currentRole = -1;
 		} catch (Exception ex) {
@@ -351,6 +367,19 @@ public class SWADMain extends MenuExpandableListActivity {
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			spinner.setAdapter(adapter);
 			spinner.setOnItemSelectedListener(new onItemSelectedListener());
+			if(Global.getSelectedCourseCode()!=-1){
+				boolean found = false;
+				int i=0;
+				while(!found && i <listCourses.size()){
+					if(listCourses.get(i).getId() == Global.getSelectedCourseCode()){
+						found=true;
+					}else{
+						++i;
+					}
+				}
+				if(i<listCourses.size())
+					spinner.setSelection(i);
+			}
 		} else {
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, new String[]{getString(R.string.clickToGetCourses)});
 			spinner.setAdapter(adapter);
@@ -406,8 +435,6 @@ public class SWADMain extends MenuExpandableListActivity {
 	}
 
 	private void createMenu(){
-		Log.i(TAG, String.valueOf(Global.getSelectedCourseCode()));
-
 		if(listCourses.size() != 0){
 			Course courseSelected;
 			if(Global.getSelectedCourseCode()!=-1){
@@ -423,8 +450,6 @@ public class SWADMain extends MenuExpandableListActivity {
 				if(getExpandableListAdapter() == null)
 					createBaseMenu();
 				int userRole = courseSelected.getUserRole();
-				Log.i(TAG, "userRole" +String.valueOf(userRole));
-				Log.i(TAG, "actual" + String.valueOf(currentRole));
 				if(userRole == Global.TEACHER_TYPE_CODE && currentRole != Global.TEACHER_TYPE_CODE) 
 					changeToTeacherMenu();
 				if(userRole == Global.STUDENT_TYPE_CODE && currentRole != Global.STUDENT_TYPE_CODE) 
@@ -454,10 +479,11 @@ public class SWADMain extends MenuExpandableListActivity {
 			evaluation.put(IMAGE, getResources().getDrawable(R.drawable.grades));
 			headerData.add( evaluation);
 
+			/*//DISABLE until it will be functional
 			final HashMap<String, Object> courses = new HashMap<String,Object>();
 			courses.put(NAME, getString(R.string.course));
 			courses.put(IMAGE, getResources().getDrawable(R.drawable.blackboard));
-			headerData.add(courses);
+			headerData.add(courses);*/
 
 			final ArrayList<ArrayList<HashMap<String, Object>>> childData = new ArrayList<ArrayList<HashMap<String, Object>>>();
 
@@ -467,8 +493,9 @@ public class SWADMain extends MenuExpandableListActivity {
 			final ArrayList<HashMap<String, Object>> evaluationData = new ArrayList<HashMap<String, Object>>();
 			childData.add(evaluationData);
 
+			/*//DISABLE until it will be functional
 			final ArrayList<HashMap<String,Object>> documentsData = new ArrayList<HashMap<String, Object>>();
-			childData.add(documentsData);
+			childData.add(documentsData);*/
 
 			//Messages category
 			HashMap<String, Object> map = new HashMap<String,Object>();
@@ -487,6 +514,7 @@ public class SWADMain extends MenuExpandableListActivity {
 			map.put(IMAGE, getResources().getDrawable(R.drawable.test));
 			evaluationData.add(map);
 
+			/*//DISABLE until it will be functional
 			//Documents category
 			map = new HashMap<String,Object>();
 			map.put(NAME, getString(R.string.documentsDownloadModuleLabel));
@@ -496,7 +524,7 @@ public class SWADMain extends MenuExpandableListActivity {
 			map = new HashMap<String,Object>();
 			map.put(NAME, getString(R.string.sharedsDownloadModuleLabel));
 			map.put(IMAGE,  getResources().getDrawable(R.drawable.folderusers));
-			documentsData.add(map);
+			documentsData.add(map);*/
 			setListAdapter( new ImageExpandableListAdapter(
 					this,
 					headerData,
@@ -522,7 +550,8 @@ public class SWADMain extends MenuExpandableListActivity {
 			//Removes Publish Note from messages menu
 			((ImageExpandableListAdapter) getExpandableListAdapter()).removeChild(MESSAGES_GROUP, PUBLISH_NOTE_CHILD);
 			//Removes completely users menu 
-			((ImageExpandableListAdapter) getExpandableListAdapter()).removeGroup(USERS_GROUP);
+			/*//DISABLE until it will be functional
+			((ImageExpandableListAdapter) getExpandableListAdapter()).removeGroup(USERS_GROUP);*/
 
 		}
 		currentRole = Global.STUDENT_TYPE_CODE;
@@ -538,6 +567,7 @@ public class SWADMain extends MenuExpandableListActivity {
 			map.put(IMAGE, getResources().getDrawable(R.drawable.note));
 			((ImageExpandableListAdapter) getExpandableListAdapter()).addChild(MESSAGES_GROUP,PUBLISH_NOTE_CHILD, map);
 
+			/*//DISABLE until it will be functional
 			final HashMap<String, Object> users = new HashMap<String, Object>();
 			users.put(NAME, getString(R.string.users));
 			users.put(IMAGE, getResources().getDrawable(R.drawable.users));
@@ -546,7 +576,7 @@ public class SWADMain extends MenuExpandableListActivity {
 			map.put(NAME, getString(R.string.attendanceModuleLabel));
 			map.put(IMAGE, getResources().getDrawable(R.drawable.rollcall));
 			child.add(map);
-			((ImageExpandableListAdapter) getExpandableListAdapter()).addGroup(USERS_GROUP, users, child);
+			((ImageExpandableListAdapter) getExpandableListAdapter()).addGroup(USERS_GROUP, users, child);*/
 
 
 		}

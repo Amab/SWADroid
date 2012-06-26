@@ -126,4 +126,28 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:visibility="gone"/>
+    
+    <ImageView
+    	android:id="@+id/title_sep_4"
+		android:layout_toLeftOf="@+id/messageReplyButton"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:background="@color/title_separator"
+        android:visibility="gone"/>
+    
+    <ImageButton
+		android:id="@+id/messageReplyButton"
+		android:layout_width="wrap_content"
+		android:layout_height="match_parent"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:onClick="onReplyMessageClick"
+		android:background="@drawable/message_reply"
+		android:clickable="true"
+  		android:visibility="gone" />
 </RelativeLayout>

@@ -91,7 +91,7 @@ public abstract class Module extends MenuActivity {
     /**
      * Connection timeout in milliseconds
      */
-    private static int TIMEOUT = 10000;
+    private static int TIMEOUT = 60000;
     /**
      * Application debuggable flag
      */
@@ -488,7 +488,8 @@ public abstract class Module extends MenuActivity {
         boolean showDialog, isLoginModule;
 
 		/**
-		 * Shows progress dialog and connects to SWAD in background
+		 * Shows progress dialog and connects to SWAD in bac
+	  Log.i(TAG, "performSync: " + account.toString());kground
 		 * @param showDialog Flag for show a progress dialog or not
 		 * @param progressDescription Description to be showed in dialog
 		 * @param progressTitle Title to be showed in dialog
@@ -581,9 +582,9 @@ public abstract class Module extends MenuActivity {
 
                 //Request finalized with errors        		
         		onError(); 
-        		error(errorMsg);               
-        		/*if(isDebuggable) {    		
-        			e.printStackTrace();
+        		error(errorMsg); 
+        		e.printStackTrace();
+        		/*if(isDebuggable) { 
         			connection.debug = true;
         	        Log.d(TAG, connection.requestDump.toString());
         	        Log.d(TAG, connection.responseDump.toString());
