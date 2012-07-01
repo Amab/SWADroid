@@ -1,3 +1,7 @@
+## 0.9 (2012-07-01)
+
+* Added RollCall module
+
 ## 0.8.1 (2012-05-20)
 
 * Fixed closed cursor access exception on Android 4.x platforms

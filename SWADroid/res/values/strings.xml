@@ -30,8 +30,8 @@
     <string name="about_preferences">About</string>
     <string name="versionTitle_preferences">Application version</string>
     <string name="author_preferences">Coordinator: Antonio Cañas Vargas
-		\nProgrammers:
-		\nJuan Miguel Boyero Corral		
+		\nProgrammers: 
+		Juan Miguel Boyero Corral		
 		\nHelena Rodríguez Gijón		
 		\nAntonio Aguilera Malagón</string>
     <string name="organization_preferences">University of Granada</string>
@@ -145,11 +145,7 @@
     <string name="footMessageMsg">Sended from</string>
     <string name="marksMsg">Click on the notification to view the mark.</string>
     <string name="clickToGetCourses">Click here to get your courses</string>
-    <string name="attendanceModuleLabel">Rollcall</string>
     <string name="users">Users</string>
-    <string name="usersDownloadProgressDescription">Synchronizing users.\n\nDepending of the number of
-		users to synchronize, the data processing can take several minutes.\n\nPlease wait...</string>
-    <string name="usersDownloadProgressTitle">Students</string>
     <string name="documentsDownloadModuleLabel">Documents</string>
     <string name="documentsDownloadProgressDescription">Getting files..</string>
     <string name="sharedsDownloadModuleLabel">Shared area</string>
@@ -159,7 +155,6 @@
     <string name="msg_default_type">Type</string>
     <string name="msg_default_time">Time</string>
     <string name="msg_default_meta">Metadata</string>
-    <string name="button_google_shopper">Google Shopper</string>
     <string name="msg_default_status">Place a barcode inside the viewfinder rectangle to scan it.</string>
     <string name="msg_camera_framework_bug">Sorry, the Android camera encountered a problem. You may need to restart the device.</string>
     <string name="button_ok">OK</string>
@@ -170,6 +165,73 @@
     <string name="scan_not_valid_code">QR code invalid</string>
     <string name="scan_data_not_found">No data on this student</string>
     <string name="scan_no_codes">Not detect any valid QR code</string>
-    <string name="usersPresent">Present students</string>
+    <string name="scan_no_photos">Failed to save the photos of students</string>
+    <string name="noStudentsAvailableMsg">There are no students in this subject</string>
+    <string name="studentsUpdated">students updated</string>
+    <string name="scan_no_students">No students found\n
+Try "Update students"</string>
+    <string name="photoContentDescription">Photo of student</string>
+    <string name="noCameraFound">The device has no camera</string>
+    <string name="saveMsg">Save</string>
+    <string name="addSessionTitle_menu">New practice session</string>
+    <string name="groupsProgressDescription">Retrieving groups...</string>
+    <string name="groupsProgressTitle">Groups</string>
+    <string name="noGroupsAvailableMsg">No practice groups for selected subject</string>
+    <string name="groupsUpdated">Groups updated</string>
+    <string name="sessionCourseText">Course</string>
+    <string name="sessionGroupText">Group</string>
+    <string name="sessionEndText">End</string>
+    <string name="sessionButtonCreate">Create</string>
+    <string name="sessionSiteText">Site (optional)</string>
+    <string name="sessionButtonCancel">Cancel</string>
+    <string name="sessionStartText">Start</string>
+    <string name="sessionDescriptionText">Description (optional)</string>
+    <string name="sessionModuleLabel">New practice session</string>
+    <string name="confirmExitMsg">Are you sure you want to exit without saving changes?</string>
+    <string name="selectGroupTitle">Select group</string>
+    <string name="clickToGetGroups">Click here to get your groups</string>
+    <string name="sessionNotCreated">Practice session already exists</string>
+    <string name="sessionCreated">Practice session created successfully</string>
+    <string name="sessionChoose">Choose the practice session</string>
+    <string name="sendingState">Sending to SWAD: </string>
+    <string name="sendingStatePending">Pending</string>
+    <string name="sendingStateSent">Sent</string>
+    <string name="session">Session: </string>
+    <string name="noPracticeSessionsAvailableMsg">There are no practice sessions of selected group in the database</string>
+    <string name="sessionNoStudentsMsg">No student has attended this session</string>
+    <string name="studentsHistoryModuleLabel">History of students</string>
+    <string name="sessionsTitle">Practice sessions</string>
+    <string name="group">Group</string>
+    <string name="noSessionsAvailableMsg">There are no practice sessions in the database</string>
+    <string name="listSampleModuleLabel">Sample</string>
+    <string name="rollcallModuleLabel">Rollcall</string>
+    <string name="studentsTitle">Students</string>
+    <string name="studentsDownloadProgressDescription">Synchronizing users.\n\nDepending of the number of
+		users to synchronize, the data processing can take several minutes.\n\nPlease wait...</string>
+    <string name="studentsList">Students list</string>
+    <string name="studentsDownloadProgressTitle">Students</string>
+    <string name="studentsPresent">Present students</string>
+    <string name="studentsUpdate">Update</string>
+    <string name="newTitle">New</string>
+    <string name="rollcallScanQR">Scan QR</string>
+    <string name="rollcallManual">Manual mode</string>
+    <string name="sessionsSelect">Check sessions</string>
+    <string name="studentsSelect">Check students</string>
+    <string name="rollcallErrorNoConnection">No connection to the server.
+Rollcall data saved in database.</string>
+    <string name="rollcallHistoryModuleLabel">History of sessions</string>
+    <string name="rollcallNoStudentsSelected">No students selected</string>
+    <string name="rollcallNoPracticeSessions">There are no practice sessions defined for the subject and selected group.
+Select: Practice sessions - New</string>
+    <string name="rollcallSaved">Rollcall data stored properly</string>
+    <string name="rollcallWebServiceNotAvailable">The web service to send SWAD rollcall data is not available.</string>
+    <string name="rollcallEvent">Rollcall event</string>
     <string name="NoNotificationsMsg">There is no new notifications</string>
+    <string name="firstRollcallRunMsg">Due to malfunction getGroups method is not possible to know which subject
+belong downloaded practice groups. Therefore, until the error is resolved,
+is only allowed to use the application with a single subject.\n\nThe selected subject
+must have practice groups defined in SWAD.\n\nYou can delete this
+configuration anytime using the "Clean Database" option\n\nDo you want to continue?</string>
+    <string name="noRollcallAllowedMsg">Rollcall for the selected subject is not allowed. Try "Clean database"</string>
+    <string name="froyoFunctionMsg">This function needs Android 2.2 or higher</string>
 </resources>

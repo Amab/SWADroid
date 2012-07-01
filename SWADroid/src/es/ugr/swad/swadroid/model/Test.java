@@ -74,15 +74,15 @@ public class Test extends Model {
 	private static PropertyInfo PI_def = new PropertyInfo();
 	private static PropertyInfo PI_max = new PropertyInfo();
 	private static PropertyInfo PI_feedback = new PropertyInfo();
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static PropertyInfo[] PI_PROP_ARRAY =
-    {
-    	PI_min,
-    	PI_def,
-    	PI_max,
-    	PI_feedback
-    };
-	
+{
+		PI_min,
+		PI_def,
+		PI_max,
+		PI_feedback
+};
+
 	/**
 	 * Constructor from fields
 	 * @param selectedCourseCode Code of test's course
@@ -100,7 +100,7 @@ public class Test extends Model {
 		this.totalScore = 0;
 		this.questionsScore = new ArrayList<Float>();
 	}
-	
+
 	/**
 	 * Constructor from fields
 	 * @param crsCode Code of test's course
@@ -237,7 +237,7 @@ public class Test extends Model {
 	public void setQuestionScore(int pos, Float score) {		
 		this.questionsScore.set(pos, score);
 	}
-	
+
 	/**
 	 * Gets the questions list
 	 * @return The questions list
@@ -287,7 +287,7 @@ public class Test extends Model {
 	public void setEvaluated(boolean evaluated) {
 		this.evaluated = evaluated;
 	}
-	
+
 	/**
 	 * Initializes questions's score and total score
 	 */
@@ -295,12 +295,12 @@ public class Test extends Model {
 		evaluated = false;
 		totalScore = 0;
 		questionsScore.clear();
-		
+
 		for(int i=0; i<this.questions.size(); i++) {
 			this.questionsScore.add(new Float(0));
 		}
 	}
-	
+
 	/**
 	 * Prepares a string for evaluate() method
 	 * @param s String to be prepared
@@ -309,22 +309,22 @@ public class Test extends Model {
 	private String prepareString(String s) {
 		//Remove spaces
 		StringTokenizer tokens = new StringTokenizer(s);
-        StringBuilder buff = new StringBuilder();
-        while (tokens.hasMoreTokens()) {
-            buff.append(" ").append(tokens.nextToken());
-        }
-        s = buff.toString().trim();
-        
-        //Remove accents
+		StringBuilder buff = new StringBuilder();
+		while (tokens.hasMoreTokens()) {
+			buff.append(" ").append(tokens.nextToken());
+		}
+		s = buff.toString().trim();
+
+		//Remove accents
 		s = s.replace('á', 'a');
 		s = s.replace('é', 'e');
 		s = s.replace('í', 'i');
 		s = s.replace('ó', 'o');
 		s = s.replace('ú', 'u');
-		
+
 		return s;
 	}
-	
+
 	/**
 	 * Calculates total score and individual question's score of the test
 	 */
@@ -337,7 +337,7 @@ public class Test extends Model {
 		List<TestAnswer> la;
 		String answerType, userAnswerText, answerText;
 		boolean noneSelected;
-		
+
 		prepareEvaluation();
 		for(int i=0; i<questions.size(); i++) {
 			q = questions.get(i);
@@ -348,10 +348,10 @@ public class Test extends Model {
 			falseAnswers = 0;
 			correctUserAnswers = 0;
 			errors = 0;
-			
+
 			if(answerType.equals("float")) {
 				a = la.get(0);
-				
+
 				userAnswerText = a.getUserAnswer();				
 				if(!userAnswerText.equals("")) {
 					userFloatAnswer = new Float(userAnswerText);				
@@ -359,13 +359,13 @@ public class Test extends Model {
 					maxFloatRange = new Float(la.get(1).getAnswer());
 					a.setCorrectAnswered((userFloatAnswer >= minFloatRange) && (userFloatAnswer <= maxFloatRange));
 				}
-				
+
 				if(a.isCorrectAnswered()) {
 					correctUserAnswers++;
 				} else {
 					errors++;
 				}
-				
+
 				if(userAnswerText.equals("")) {
 					score = new Float(0);
 				} else {
@@ -380,13 +380,13 @@ public class Test extends Model {
 				} else {
 					a.setCorrectAnswered(!a.getAnswer().equals(a.getUserAnswer()));
 				}
-				
+
 				if(a.isCorrectAnswered()) {
 					correctUserAnswers++;
 				} else {
 					errors++;
 				}
-				
+
 				if(userAnswerText.equals("")) {
 					score = new Float(0);
 				} else {
@@ -395,13 +395,13 @@ public class Test extends Model {
 			} else if(answerType.equals("int")) {
 				a = la.get(0);userAnswerText = a.getUserAnswer();				
 				a.setCorrectAnswered(a.getAnswer().equals(a.getUserAnswer()));
-				
+
 				if(a.isCorrectAnswered()) {
 					correctUserAnswers++;
 				} else {
 					errors++;
 				}
-				
+
 				if(userAnswerText.equals("")) {
 					score = new Float(0);
 				} else {
@@ -411,22 +411,22 @@ public class Test extends Model {
 				a = la.get(0);
 				userAnswerText = prepareString(a.getUserAnswer());
 				a.setCorrectAnswered(false);
-				
+
 				for(TestAnswer ans : la) {
 					answerText = prepareString(ans.getAnswer());
-					
+
 					if(userAnswerText.equalsIgnoreCase(answerText)) {
 						a.setCorrectAnswered(true);
 						break;
 					}
 				}
-				
+
 				if(a.isCorrectAnswered()) {
 					correctUserAnswers++;
 				} else {
 					errors++;
 				}
-				
+
 				if(userAnswerText.equals("")) {
 					score = new Float(0);
 				} else {
@@ -436,14 +436,14 @@ public class Test extends Model {
 				totalAnswers = la.size();
 				a = la.get(0);
 				a.setCorrectAnswered(false);
-				
+
 				for(TestAnswer ans : la) {
 					if(ans.getCorrect() && ans.getAnswer().equals(a.getUserAnswer())) {
 						a.setCorrectAnswered(true);
 						break;
 					}
 				}				
-				
+
 				if(a.isCorrectAnswered()) {
 					correctUserAnswers++;
 				} else {
@@ -475,7 +475,7 @@ public class Test extends Model {
 						}
 					}
 				}
-				
+
 				if(noneSelected) {
 					score = new Float(0);
 				} else {
@@ -486,11 +486,11 @@ public class Test extends Model {
 					}
 				}
 			}
-			
+
 			questionsScore.set(i, score*CORRECT_ANSWER_SCORE);
 			totalScore += score*CORRECT_ANSWER_SCORE;
 		}
-		
+
 		evaluated = true;
 	}
 
@@ -512,15 +512,15 @@ public class Test extends Model {
 	 */
 	public Object getProperty(int param) {
 		Object object = null;
-        switch(param)
-        {
-            case 1 : object = min;break;
-            case 2 : object = def;break;
-            case 3 : object = max;break;
-            case 4 : object = feedback;break;
-        }
-        
-        return object;
+		switch(param)
+		{
+		case 1 : object = min;break;
+		case 2 : object = def;break;
+		case 3 : object = max;break;
+		case 4 : object = feedback;break;
+		}
+
+		return object;
 	}
 
 	/* (non-Javadoc)
@@ -535,22 +535,22 @@ public class Test extends Model {
 	 */
 	public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo propertyInfo) {
 		switch(param){
-	        case 0:
-	            propertyInfo.type = PropertyInfo.INTEGER_CLASS;
-	            propertyInfo.name = "min";
-	            break;  
-	        case 1:
-	            propertyInfo.type = PropertyInfo.INTEGER_CLASS;
-	            propertyInfo.name = "def";
-	            break;  
-	        case 2:
-	            propertyInfo.type = PropertyInfo.INTEGER_CLASS;
-	            propertyInfo.name = "max";
-	            break;   
-	        case 3:
-	            propertyInfo.type = PropertyInfo.STRING_CLASS;
-	            propertyInfo.name = "feedback";
-	            break;           
+		case 0:
+			propertyInfo.type = PropertyInfo.INTEGER_CLASS;
+			propertyInfo.name = "min";
+			break;  
+		case 1:
+			propertyInfo.type = PropertyInfo.INTEGER_CLASS;
+			propertyInfo.name = "def";
+			break;  
+		case 2:
+			propertyInfo.type = PropertyInfo.INTEGER_CLASS;
+			propertyInfo.name = "max";
+			break;   
+		case 3:
+			propertyInfo.type = PropertyInfo.STRING_CLASS;
+			propertyInfo.name = "feedback";
+			break;           
 		}
 	}
 
@@ -560,10 +560,10 @@ public class Test extends Model {
 	public void setProperty(int param, Object obj) {
 		switch(param)
 		{
-			case 0  : min = (Integer)obj; break;
-			case 1  : def = (Integer)obj; break;
-			case 2  : max = (Integer)obj; break;
-			case 3  : feedback = (String)obj; break;
+		case 0  : min = (Integer)obj; break;
+		case 1  : def = (Integer)obj; break;
+		case 2  : max = (Integer)obj; break;
+		case 3  : feedback = (String)obj; break;
 		}    
 	}
 }
