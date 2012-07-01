@@ -279,7 +279,7 @@ public class TestAnswer extends Model {
 		case 4:
 			propertyInfo.type = PropertyInfo.INTEGER_CLASS;
 			propertyInfo.name = "ansInd";
-			break;  
+			break;        
 		}
 	}
 

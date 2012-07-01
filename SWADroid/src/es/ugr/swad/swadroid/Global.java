@@ -99,7 +99,7 @@ public class Global {
 	/**
 	 * Request code for Notice module
 	 */
-	public static final int NOTICES_REQUESET_CODE =  9;
+	public static final int NOTICES_REQUEST_CODE =  9;
 	/**
 	 * Request code for Rollcall module.
 	 */

@@ -68,4 +68,5 @@
             android:summary="@string/author_preferences"
             android:title="@string/organization_preferences" />
     </PreferenceCategory>
+
 </PreferenceScreen>

@@ -234,13 +234,19 @@ public class SWADMain extends MenuExpandableListActivity {
 			startActivityForResult(activity, Global.TESTS_REQUEST_CODE);
 		} else if(keyword.equals(getString(R.string.messagesModuleLabel))) {
 			activity = new Intent(getBaseContext(), Messages.class);
-			activity.putExtra("notificationCode", new Long(0));
+			activity.putExtra("notificationCode", Long.valueOf(0));
 			startActivityForResult(activity, Global.MESSAGES_REQUEST_CODE);
 		} else if(keyword.equals(getString(R.string.noticesModuleLabel))){
 			activity = new Intent(getBaseContext(), Notices.class);
-			startActivityForResult(activity, Global.NOTICES_REQUESET_CODE);
+			startActivityForResult(activity, Global.NOTICES_REQUEST_CODE);
 		} else if(keyword.equals(getString(R.string.rollcallModuleLabel))) {
-			getActualGroups();
+			//This module requires Android 2.2 or higher
+			if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.FROYO) {
+				getActualGroups();
+			} else {
+				//If Android version < 2.2 show error message
+				error(getString(R.string.froyoFunctionMsg) + "\n(actual: " + android.os.Build.VERSION.RELEASE + ")");
+			}
 		} else if(keyword.equals(getString(R.string.documentsDownloadModuleLabel))){
 			activity = new Intent(getBaseContext(),Groups.class);
 			//activity.putExtra("treeCode",Global.DOCUMENTS_AREA_CODE);
@@ -306,7 +312,7 @@ public class SWADMain extends MenuExpandableListActivity {
 			prefs.getPreferences(getBaseContext()); 
 
 			//Initialize HTTPS connections 
-			SecureConnection.initSecureConnection();
+			SecureConnection.initSecureConnection(); 
 
 			//Check if this is the first run after an install or upgrade
 			lastVersion = prefs.getLastVersion();
@@ -348,7 +354,7 @@ public class SWADMain extends MenuExpandableListActivity {
 			}else{
 				Global.setSelectedCourseCode(-1);
 				if(!firstRun && Module.connectionAvailable(this))
-					getActualCourses(); //at the first run, this will be launched after the preferences menu
+					getActualCourses(); //at the first run, this will be launched after the preferences menu 
 			}
 			currentRole = -1;
 		} catch (Exception ex) {
@@ -514,7 +520,7 @@ public class SWADMain extends MenuExpandableListActivity {
 				Log.i(TAG, "actual" + String.valueOf(currentRole));
 				if(userRole == Global.TEACHER_ROLE && currentRole != Global.TEACHER_ROLE) 
 					changeToTeacherMenu();
-				if(userRole == Global.STUDENT_ROLE && currentRole != Global.STUDENT_ROLE)
+				if(userRole == Global.STUDENT_ROLE && currentRole != Global.STUDENT_ROLE) 
 					changeToStudentMenu();
 			}
 		}
@@ -528,7 +534,6 @@ public class SWADMain extends MenuExpandableListActivity {
 		if(getExpandableListAdapter() == null || currentRole==-1){
 			//the menu base is equal to students menu. 
 			currentRole = Global.STUDENT_ROLE; 
-
 			//Construct Expandable List
 			final ArrayList<HashMap<String, Object>> headerData = new ArrayList<HashMap<String, Object>>();
 
