@@ -16,6 +16,7 @@
 
 package com.google.zxing.client.android;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,6 +34,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -56,7 +58,7 @@ import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.model.User;
-import es.ugr.swad.swadroid.modules.attendance.Util;
+import es.ugr.swad.swadroid.modules.rollcall.Util;
 
 /**
  * This activity opens the camera and does the actual scanning on a background thread. It draws a
@@ -68,10 +70,14 @@ import es.ugr.swad.swadroid.modules.attendance.Util;
  * @author Antonio Aguilera Malagon (aguilerin@gmail.com)
  */
 public class CaptureActivity extends Activity implements SurfaceHolder.Callback {
+	/**
+	 * Text size in scan window
+	 * */
+	private static int SCAN_TEXT_SIZE = 18;
 
 	private static final String TAG = CaptureActivity.class.getSimpleName();
 
-	private static final long BULK_MODE_SCAN_DELAY_MS = 1000L;
+	private static final long BULK_MODE_SCAN_DELAY_MS = 3000L;
 
 	private static final int[] sounds = { R.raw.beep, R.raw.klaxon };
 
@@ -90,9 +96,6 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 	private BeepManager beepManager;
 
 	private HashSet<String> idList;
-	private static final int TEXT_SIZE = 18;
-	private static final int IMAGE_WIDTH = 120;
-	private static final int IMAGE_HEIGHT = 160;
 	/**
 	 * Database Helper.
 	 */
@@ -222,8 +225,8 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 	@Override
 	protected void onDestroy() {
 		inactivityTimer.shutdown();
-		super.onDestroy();
 		dbHelper.close();
+		super.onDestroy();
 	}
 
 	@Override
@@ -295,25 +298,29 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 	 * @param barcode   A greyscale bitmap of the camera data which was decoded.
 	 */
 	public void handleDecode(Result rawResult, Bitmap barcode) {
-		String qrContent = rawResult.toString();
 		String messageResult;
 		int iconResult;
 		int soundResult;
+		User u = null;
+		Bitmap bMap;
+		Bitmap bMapScaled;
+		String qrContent = rawResult.toString();
 		Boolean validDni = Util.isValidDni(qrContent);
 		Boolean validNickname = Util.isValidNickname(qrContent);
+		int widthScale, heightScale, bMapScaledWidth, bMapScaledHeight;
 
 		inactivityTimer.onActivity();
 		lastResult = rawResult;
 
 		if (validDni || validNickname) {			
 			String fieldName = (validDni) ? "userID" : "userNickname";			
-			User u = (User) dbHelper.getRow(Global.DB_TABLE_USERS, fieldName, qrContent);
+			u = (User) dbHelper.getRow(Global.DB_TABLE_USERS, fieldName, qrContent);
 
 			if (u != null) {
 				idList.add(u.getUserID());
 
 				// Check if the specified user is enrolled in the selected course
-				if (dbHelper.getUserCourse(u.getUserID(), Global.getSelectedCourseCode())) {
+				if (dbHelper.isUserEnrolledCourse(u.getUserID(), Global.getSelectedCourseCode())) {
 					messageResult = getString(R.string.scan_valid_student);
 					iconResult = R.drawable.ok;
 					soundResult = sounds[0]; // Positive sound
@@ -325,7 +332,7 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 				messageResult += "\n\n"
 						+ getString(R.string.scan_id) + ": " + u.getUserID() + "\n"
 						+ getString(R.string.scan_name) + ": " + u.getUserFirstname() + " " 
-						+ u.getUserSurname1() + " " + u.getUserSurname2();			
+						+ u.getUserSurname1() + " " + u.getUserSurname2();
 			} else {
 				// There is no user with that ID or nickname
 				messageResult = getString(R.string.scan_data_not_found);
@@ -348,12 +355,29 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		// Show photo of student
 		LayoutInflater inflater = getLayoutInflater();
 		View layout = inflater.inflate(R.layout.toast_layout, (ViewGroup) findViewById(R.id.toast_layout_root));
-
 		ImageView image = (ImageView) layout.findViewById(R.id.image);
-		image.setImageResource(R.drawable.usr_bl);
-		Bitmap bMap = BitmapFactory.decodeResource(image.getResources(), R.drawable.usr_bl);
-		Bitmap bMapScaled = Bitmap.createScaledBitmap(bMap, IMAGE_WIDTH, IMAGE_HEIGHT, true);
-		image.setImageBitmap(bMapScaled);
+
+		if (u != null) {
+			String photoPath = getExternalFilesDir(null) + "/" + u.getPhotoFileName();
+			File photoFile = new File(photoPath);
+			if (photoFile.exists()) {
+				bMap = BitmapFactory.decodeFile(photoPath);
+			} else {
+				// If photoFile does not exist (has been deleted), show default photo
+				bMap = BitmapFactory.decodeStream(image.getResources().openRawResource(R.raw.usr_bl));
+			}
+
+			// Calculate the dimensions of the image to display as a function of the resolution of the screen
+			Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+
+			widthScale = 1000;
+			heightScale = 600;
+			bMapScaledWidth = (bMap.getWidth() * display.getWidth()) / widthScale;
+			bMapScaledHeight = (bMap.getHeight() * display.getHeight()) / heightScale;
+
+			bMapScaled = Bitmap.createScaledBitmap(bMap, bMapScaledWidth, bMapScaledHeight, true);
+			image.setImageBitmap(bMapScaled);
+		}
 
 		// Show appropriate icon
 		ImageView icon = (ImageView) layout.findViewById(R.id.icon);
@@ -363,7 +387,7 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		TextView toastText = (TextView) layout.findViewById(R.id.text);
 		toastText.setText(messageResult);
 		toastText.setGravity(Gravity.CENTER_VERTICAL);
-		toastText.setTextSize(TEXT_SIZE);
+		toastText.setTextSize(SCAN_TEXT_SIZE);
 
 		Toast toast = new Toast(getApplicationContext());
 		toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);

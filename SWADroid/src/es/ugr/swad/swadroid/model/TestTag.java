@@ -44,13 +44,13 @@ public class TestTag extends Model {
 	private static PropertyInfo PI_id = new PropertyInfo();
 	private static PropertyInfo PI_tagText = new PropertyInfo();
 	private static PropertyInfo PI_tagInd = new PropertyInfo();
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static PropertyInfo[] PI_PROP_ARRAY =
-    {
-    	PI_id,
-    	PI_tagText,
-    	PI_tagInd
-    };
+{
+		PI_id,
+		PI_tagText,
+		PI_tagInd
+};
 
 	/**
 	 * Constructor
@@ -77,7 +77,7 @@ public class TestTag extends Model {
 		this.tagTxt = tagTxt;
 		this.tagInd = tagInd;
 	}
-	
+
 	/**
 	 * Gets tag text
 	 * @return Tag text
@@ -135,14 +135,14 @@ public class TestTag extends Model {
 	 */
 	public Object getProperty(int param) {
 		Object object = null;
-        switch(param)
-        {
-            case 0 : object = this.getId();break;
-            case 1 : object = tagTxt;break;
-            case 2 : object = tagInd;break;
-        }
-        
-        return object;
+		switch(param)
+		{
+		case 0 : object = this.getId();break;
+		case 1 : object = tagTxt;break;
+		case 2 : object = tagInd;break;
+		}
+
+		return object;
 	}
 
 	/* (non-Javadoc)
@@ -157,18 +157,18 @@ public class TestTag extends Model {
 	 */
 	public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo propertyInfo) {
 		switch(param){
-	        case 0:
-	            propertyInfo.type = PropertyInfo.LONG_CLASS;
-	            propertyInfo.name = "id";
-	            break;   
-	        case 1:
-	            propertyInfo.type = PropertyInfo.STRING_CLASS;
-	            propertyInfo.name = "tagTxt";
-	            break;           
-	        case 2:
-	            propertyInfo.type = PropertyInfo.INTEGER_CLASS;
-	            propertyInfo.name = "tagInd";
-	            break;           
+		case 0:
+			propertyInfo.type = PropertyInfo.LONG_CLASS;
+			propertyInfo.name = "id";
+			break;   
+		case 1:
+			propertyInfo.type = PropertyInfo.STRING_CLASS;
+			propertyInfo.name = "tagTxt";
+			break;           
+		case 2:
+			propertyInfo.type = PropertyInfo.INTEGER_CLASS;
+			propertyInfo.name = "tagInd";
+			break;           
 		}
 	}
 
@@ -178,9 +178,9 @@ public class TestTag extends Model {
 	public void setProperty(int param, Object obj) {
 		switch(param)
 		{
-			case 0  : this.setId((Long)obj); break;
-			case 1  : tagTxt = (String)obj; break;
-			case 2  : tagInd = (Integer)obj; break;
+		case 0  : this.setId((Long)obj); break;
+		case 1  : tagTxt = (String)obj; break;
+		case 2  : tagInd = (Integer)obj; break;
 		}    
 	}
 
@@ -199,7 +199,7 @@ public class TestTag extends Model {
 	public void setQstCodList(List<Integer> qstCodList) {
 		this.qstCodList = qstCodList;
 	}
-	
+
 	/**
 	 * Gets the question code in position i
 	 * @param i Position of question code
@@ -208,7 +208,7 @@ public class TestTag extends Model {
 	public Integer getQstCod(int i) {
 		return this.qstCodList.get(i);
 	}
-	
+
 	/**
 	 * Adds a question code to the list
 	 * @param qstCod Question code to be added
@@ -217,7 +217,7 @@ public class TestTag extends Model {
 		if(this.qstCodList == null) {
 			this.qstCodList = new ArrayList<Integer>();
 		}
-		
+
 		this.qstCodList.add(qstCod);
 	}
 }

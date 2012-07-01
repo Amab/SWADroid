@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 SWADroid/bin/
 SWADroid/default.properties
 SWADroid/.classpath
@@ -11,3 +12,13 @@ SWADroid/.DS_Store
 SWADroid/gen/es/ugr/swad/swadroid/BuildConfig.java
 SWADroid/gen/es/ugr/swad/swadroid/R.java
 SWADroid/gen/com/google/zxing/client/android/R.java
+=======
+bin/
+default.properties
+.classpath
+.project
+.settings/
+gen/es/ugr/swad/swadroid/BuildConfig.java
+gen/es/ugr/swad/swadroid/R.java
+gen/com/google/zxing/client/android/R.java
+>>>>>>> aguilerin/master
