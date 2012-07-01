@@ -206,7 +206,7 @@ public class DataBaseHelper {
 					ent.getString("userSurname2"),
 					ent.getString("userFirstname"),
 					ent.getString("photoPath"),
-					ent.getInt("userRole"));
+					ent.getInt("userRole"));			
 		} else if(table.equals(Global.DB_TABLE_GROUPS)) {
 			o = new Group(ent.getInt("groupCode"),
 					ent.getString("groupName"),
@@ -1254,11 +1254,13 @@ public class DataBaseHelper {
 		emptyTable(Global.DB_TABLE_ROLLCALL);
 		compactDB();
 
-		// Removes users photos from external storage
-		File dir = db.getContext().getExternalFilesDir(null);
-		String [] children = dir.list();
-		for (int i=0; i < children.length; i++)
-			new File(dir, children[i]).delete();
+		// Removes users photos from external storage (Android 2.2 or higher only)
+		if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.FROYO) {
+			File dir = db.getContext().getExternalFilesDir(null);
+			String [] children = dir.list();
+			for (int i=0; i < children.length; i++)
+				new File(dir, children[i]).delete();
+			}
 	}
 
 	/**

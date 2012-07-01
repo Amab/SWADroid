@@ -312,7 +312,8 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		inactivityTimer.onActivity();
 		lastResult = rawResult;
 
-		if (validDni || validNickname) {
+		if (validDni || validNickname) {			
+			String fieldName = (validDni) ? "userID" : "userNickname";			
 			u = (User) dbHelper.getRow(Global.DB_TABLE_USERS, fieldName, qrContent);
 
 			if (u != null) {

@@ -442,7 +442,7 @@ public class Test extends Model {
 						a.setCorrectAnswered(true);
 						break;
 					}
-				}
+				}				
 
 				if(a.isCorrectAnswered()) {
 					correctUserAnswers++;
@@ -550,7 +550,7 @@ public class Test extends Model {
 		case 3:
 			propertyInfo.type = PropertyInfo.STRING_CLASS;
 			propertyInfo.name = "feedback";
-			break;
+			break;           
 		}
 	}
 

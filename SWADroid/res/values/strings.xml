@@ -233,4 +233,5 @@ is only allowed to use the application with a single subject.\n\nThe selected su
 must have practice groups defined in SWAD.\n\nYou can delete this
 configuration anytime using the "Clean Database" option\n\nDo you want to continue?</string>
     <string name="noRollcallAllowedMsg">Rollcall for the selected subject is not allowed. Try "Clean database"</string>
+    <string name="froyoFunctionMsg">This function needs Android 2.2 or higher</string>
 </resources>

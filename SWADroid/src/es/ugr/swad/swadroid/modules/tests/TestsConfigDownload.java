@@ -89,7 +89,7 @@ public class TestsConfigDownload extends Module {
 				Log.e(ex.getClass().getSimpleName(), errorMsg);        		
 				ex.printStackTrace();
 			}
-		}	
+		}		
 	}
 
 

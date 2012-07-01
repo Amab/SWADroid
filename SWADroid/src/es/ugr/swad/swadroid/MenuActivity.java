@@ -17,6 +17,7 @@
  *  along with SWADroid.  If not, see <http://www.gnu.org/licenses/>.
  */
 package es.ugr.swad.swadroid;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -77,7 +78,7 @@ public class MenuActivity extends Activity {
 		sharingIntent.setType("text/plain");
 		sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "SWADroid");
 		sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, getString(R.string.shareBodyMsg));
-		startActivity(Intent.createChooser(sharingIntent, getString(R.string.shareTitle_menu)));
+		startActivity(Intent.createChooser(sharingIntent, getString(R.string.shareTitle_menu)));		
 		Log.d(Global.APP_TAG, "shareApplication()");
 	}
 
@@ -171,6 +172,7 @@ public class MenuActivity extends Activity {
 			db = DataFramework.getInstance();
 			db.open(this, this.getPackageName());
 			dbHelper = new DataBaseHelper(db);
+
 		} catch (Exception ex) {
 			Log.e(ex.getClass().getSimpleName(), ex.getMessage());
 			error(ex.getMessage());

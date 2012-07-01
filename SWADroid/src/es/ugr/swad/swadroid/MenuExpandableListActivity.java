@@ -78,7 +78,7 @@ public class MenuExpandableListActivity extends ExpandableListActivity {
 		sharingIntent.setType("text/plain");
 		sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "SWADroid");
 		sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, getString(R.string.shareBodyMsg));
-		startActivity(Intent.createChooser(sharingIntent, getString(R.string.shareTitle_menu)));
+		startActivity(Intent.createChooser(sharingIntent, getString(R.string.shareTitle_menu)));		
 		Log.d(Global.APP_TAG, "shareApplication()");
 	}
 
@@ -172,6 +172,7 @@ public class MenuExpandableListActivity extends ExpandableListActivity {
 			db = DataFramework.getInstance();
 			db.open(this, this.getPackageName());
 			dbHelper = new DataBaseHelper(db);
+
 		} catch (Exception ex) {
 			Log.e(ex.getClass().getSimpleName(), ex.getMessage());
 			error(ex.getMessage());

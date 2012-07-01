@@ -19,4 +19,5 @@
         android:layout_height="wrap_content"
         android:cacheColorHint="@color/background" >
     </ExpandableListView>
+
 </LinearLayout>

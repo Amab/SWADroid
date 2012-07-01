@@ -168,7 +168,7 @@ public class TestTag extends Model {
 		case 2:
 			propertyInfo.type = PropertyInfo.INTEGER_CLASS;
 			propertyInfo.name = "tagInd";
-			break;
+			break;           
 		}
 	}
 
