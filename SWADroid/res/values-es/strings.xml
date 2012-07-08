@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">SWADroid</string>
     <string name="serverName_preferences">Servidor</string>
-    <string name="serverSummary_preferences">Servidor (sin http://)</string>
+    <string name="serverSummary_preferences">Servidor (sin http://, vacío para servidor por defecto)</string>
     <string name="serverTitle_preferences">Servidor</string>
     <string name="loginModuleLabel">Conectar</string>
     <string name="notificationsModuleLabel">Notificaciones</string>
@@ -111,9 +111,8 @@
 		molestias.</string>
     <string name="errorBadLoginMsg">Usuario o contraseña incorrectos</string>
     <string name="errorServerResponseMsg">Error en respuesta del servidor</string>
-    <string name="errorConnectionMsg">Error durante la conexión con el servidor</string>
-    <string name="errorTimeoutMsg">Tiempo de espera agotado intentando conectar con el
-		servidor</string>
+    <string name="errorConnectionMsg">Error durante la conexión con el servidor.\nPor favor, compruebe que la URL del servidor en la ventana de configuración es correcta.\nSi tiene dudas, deje el campo vacío para establecer el servidor por defecto.</string>
+    <string name="errorTimeoutMsg">Tiempo de espera agotado intentando conectar con el servidor</string>
     <string name="sendingMessageMsg">Enviando mensaje...</string>
     <string name="messageSendedMsg">Mensaje enviado</string>
     <string name="messageSendErrorMsg">Error al enviar el mensaje. Compruebe los datos introducidos</string>
