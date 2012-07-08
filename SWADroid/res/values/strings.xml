@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">SWADroid</string>
     <string name="serverName_preferences">Server</string>
-    <string name="serverSummary_preferences">Server (without http://)</string>
+    <string name="serverSummary_preferences">Server (without http://, empty for default server)</string>
     <string name="serverTitle_preferences">Server</string>
     <string name="loginModuleLabel">Login</string>
     <string name="notificationsModuleLabel">Notifications</string>
@@ -109,7 +109,7 @@
 		data have been deleted.\n\nSorry.</string>
     <string name="errorBadLoginMsg">Incorrect user or password</string>
     <string name="errorServerResponseMsg">Error in server response</string>
-    <string name="errorConnectionMsg">Error while connecting to server</string>
+    <string name="errorConnectionMsg">Error while connecting to the server.\nPlease check that the URL of the server in preferences is correct.\nIf you are unsure, leave empty to set the default server.</string>
     <string name="errorTimeoutMsg">Timeout trying to connect to the server</string>
     <string name="sendingMessageMsg">Sending message...</string>
     <string name="messageSendedMsg">Message sended successfully</string>
