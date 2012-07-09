@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="es.ugr.swad.swadroid"
     android:installLocation="auto"
-    android:versionCode="38"
-    android:versionName="0.9" >
+    android:versionCode="39"
+    android:versionName="0.9.1" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -18,7 +18,7 @@
 
     <uses-sdk
         android:minSdkVersion="7"
-        android:targetSdkVersion="15" >
+        android:targetSdkVersion="16" >
     </uses-sdk>
 
     <supports-screens
@@ -26,9 +26,9 @@
         android:largeScreens="true"
         android:normalScreens="true"
         android:resizeable="true"
-        android:smallScreens="true" >
+        android:smallScreens="true"
+    	android:xlargeScreens="true">
     </supports-screens>
-    <!-- android:xlargeScreens="true" -->
 
     <application
         android:icon="@drawable/ic_launcher_swadroid"
@@ -113,10 +113,6 @@
             android:name=".modules.Courses"
             android:label="@string/coursesModuleLabel"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
-            <activity
-                android:name=".modules.Courses"
-                android:theme="@android:style/Theme.Dialog" >
-            </activity>
         </activity>
         <activity
             android:name=".modules.notifications.Notifications"
@@ -171,11 +167,11 @@
             android:label="@string/documentsDownloadModuleLabel"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
-        <activity
+       <!-- <activity
             android:name=".modules.Groups"
             android:label="@string/documentsDownloadModuleLabel"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
-        </activity>
+        </activity> -->
 
         <provider
             android:name=".sync.DummyProvider"
