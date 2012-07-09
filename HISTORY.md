@@ -1,3 +1,9 @@
+## 0.9.1 (2012-07-09)
+
+* Added DNI with letter (first and last) support and DNI with zeros support
+* Added Android 4.1 compatibility
+* Fixed xlarge screens support (accidentally removed during last merge)
+
 ## 0.9 (2012-07-01)
 
 * Added RollCall module
