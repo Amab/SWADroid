@@ -1,3 +1,7 @@
+## 0.9.2 (2012-07-10)
+
+* camera.autofocus feature marked as optional in order to fix device incompatibilities
+
 ## 0.9.1 (2012-07-09)
 
 * Added DNI with letter (first and last) support and DNI with zeros support
