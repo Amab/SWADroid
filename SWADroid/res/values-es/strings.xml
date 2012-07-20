@@ -110,6 +110,7 @@
 		datos de las preguntas de test han sido borrados.\n\nDisculpe las
 		molestias.</string>
     <string name="errorBadLoginMsg">Usuario o contraseña incorrectos</string>
+    <string name="errorBadAppKeyMsg">Clave de aplicación incorrecta. Por favor, contacte con el desarrollador.</string>
     <string name="errorServerResponseMsg">Error en respuesta del servidor</string>
     <string name="errorConnectionMsg">Error durante la conexión con el servidor.\nPor favor, compruebe que la URL del servidor en la ventana de configuración es correcta.\nSi tiene dudas, deje el campo vacío para establecer el servidor por defecto.</string>
     <string name="errorTimeoutMsg">Tiempo de espera agotado intentando conectar con el servidor</string>
@@ -125,9 +126,9 @@
     <string name="noticeSendError">Error al publicar el nuevo aviso</string>
     <string name="sendMsg">Enviar</string>
     <string name="cleanDatabaseMsg">Todos los datos de la base de datos han sido borrados</string>
-    <string name="shareBodyMsg">Estoy usando #SWADroid en mi Android para acceder a la
+    <string name="shareBodyMsg">Estoy usando @SWADroid en mi Android para acceder a la
 		plataforma de teleformación SWAD.\nObtenlo gratis aquí:
-		 https://market.android.com/details?id=es.ugr.swad.swadroid</string>
+		 https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid</string>
     <string name="twitterTitle">Twitter</string>
     <string name="facebookTitle">Facebook</string>
     <string name="googlePlusTitle">Google+</string>
@@ -228,4 +229,5 @@ debe tener definidos los grupos de prácticas en SWAD.\n\nEn cualquier momento p
 configuración mediante la opción "Limpiar base de datos" del menú\n\n¿Desea continuar?</string>
     <string name="noRollcallAllowedMsg">No se permite pasar lista para la asignatura seleccionada. Intente "Limpiar base de datos"</string>
     <string name="froyoFunctionMsg">Esta función requiere Android 2.2 o superior</string>
+    
 </resources>
