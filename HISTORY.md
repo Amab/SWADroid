@@ -1,3 +1,9 @@
+## 0.9.3 (2012-07-20)
+
+* Added folders support in server URL
+* Updated ksoap2-android library
+* Improved error messages
+
 ## 0.9.2 (2012-07-10)
 
 * camera.autofocus feature marked as optional in order to fix device incompatibilities
