@@ -408,18 +408,32 @@ public abstract class Module extends MenuActivity {
     protected void sendRequest(Class<?> cl, boolean simple)
     	throws IOException, SoapFault, IllegalAccessException, InstantiationException, XmlPullParserException {
 
+    	//Variables for URL splitting
+    	String delimiter = "/";
+    	String PATH;
+    	String[] URLArray;
+    	
+    	//Split URL 
+    	URLArray = prefs.getServer().split(delimiter, 2);
+    	URL = URLArray[0];
+    	if(URLArray.length == 2) {
+    		PATH = delimiter + URLArray[1];
+    	} else {
+    		PATH = "";
+    	}
+    	
     	/**
     	 * Use of KeepAliveHttpsTransport deals with the problems with the Android ssl libraries having trouble
     	 * with certificates and certificate authorities somehow messing up connecting/needing reconnects.
     	 */
-    	URL = prefs.getServer();
-        connection = new KeepAliveHttpsTransportSE(URL, 443, "", TIMEOUT);
+        connection = new KeepAliveHttpsTransportSE(URL, 443, PATH, TIMEOUT);
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         System.setProperty("http.keepAlive", "false");
         envelope.setOutputSoapObject(request);
         envelope.addMapping(NAMESPACE, cl.getSimpleName(), cl);
         //connection.debug = true;
     	connection.call(SOAP_ACTION, envelope);
+		//Log.d(TAG, connection.getHost() + " " + connection.getPath() + " " + connection.getPort());
         //Log.d(TAG, connection.requestDump.toString());
         //Log.d(TAG, connection.responseDump.toString());
     	
@@ -566,8 +580,10 @@ public abstract class Module extends MenuActivity {
                 if(e instanceof SoapFault) {
                     SoapFault es = (SoapFault) e;
             		
-            		if(isLoginModule)
+            		if(es.faultstring.equals("Bad log in"))
             			errorMsg = getString(R.string.errorBadLoginMsg);
+            		else if(es.faultstring.equals("Unknown application key"))
+            			errorMsg = getString(R.string.errorBadAppKeyMsg);
             		else
             			errorMsg = "Server error: " + es.getMessage();
                 } else if (e instanceof XmlPullParserException) {
@@ -584,11 +600,9 @@ public abstract class Module extends MenuActivity {
         		onError(); 
         		error(errorMsg); 
         		e.printStackTrace();
-        		/*if(isDebuggable) { 
-        			connection.debug = true;
-        	        Log.d(TAG, connection.requestDump.toString());
-        	        Log.d(TAG, connection.responseDump.toString());
-        		}*/
+        		//Log.d(TAG, connection.getHost() + " " + connection.getPath() + " " + connection.getPort());
+        		//Log.d(TAG, connection.requestDump.toString());
+                //Log.d(TAG, connection.responseDump.toString());
                 setResult(RESULT_CANCELED);
             } else {
         		postConnect();

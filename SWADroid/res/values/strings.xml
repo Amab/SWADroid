@@ -108,6 +108,7 @@
     <string name="upgradeMsg">Due to changes in the database all test questions
 		data have been deleted.\n\nSorry.</string>
     <string name="errorBadLoginMsg">Incorrect user or password</string>
+    <string name="errorBadAppKeyMsg">Unknown apllication key. Please contact the developer.</string>
     <string name="errorServerResponseMsg">Error in server response</string>
     <string name="errorConnectionMsg">Error while connecting to the server.\nPlease check that the URL of the server in preferences is correct.\nIf you are unsure, leave empty to set the default server.</string>
     <string name="errorTimeoutMsg">Timeout trying to connect to the server</string>
@@ -123,9 +124,9 @@
     <string name="noticeSendError">Error while publishing the new notice</string>
     <string name="sendMsg">Send</string>
     <string name="cleanDatabaseMsg">The database has been cleaned</string>
-    <string name="shareBodyMsg">I\'m using #SWADroid in my Android mobile for access to
+    <string name="shareBodyMsg">I\'m using @SWADroid in my Android mobile for access to
 		the e-learning platform SWAD.\nGet it for free here:
-		 https://market.android.com/details?id=es.ugr.swad.swadroid</string>
+		 https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid</string>
     <string name="marketURL">market://details?id=es.ugr.swad.swadroid</string>
     <string name="marketWebURL">http://goo.gl/Wgo1y</string>
     <string name="twitterURL">https://twitter.com/#!/SWADroid</string>
