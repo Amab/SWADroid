@@ -19,7 +19,6 @@
 
 package es.ugr.swad.swadroid;
 
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,9 +30,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.Spanned;
-import android.text.SpannedString;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -46,7 +42,6 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.model.Model;
@@ -55,12 +50,12 @@ import es.ugr.swad.swadroid.modules.Groups;
 import es.ugr.swad.swadroid.modules.Messages;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.modules.Notices;
-import es.ugr.swad.swadroid.modules.attendance.Attendance;
 import es.ugr.swad.swadroid.modules.downloads.DownloadsManager;
 import es.ugr.swad.swadroid.modules.downloads.DirectoryTreeDownload;
-import es.ugr.swad.swadroid.modules.groups.MyGroupsManager;
 import es.ugr.swad.swadroid.modules.notifications.Notifications;
+import es.ugr.swad.swadroid.modules.rollcall.Rollcall;
 import es.ugr.swad.swadroid.modules.tests.Tests;
+import es.ugr.swad.swadroid.modules.groups.MyGroupsManager;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
 import es.ugr.swad.swadroid.sync.AccountAuthenticator;
 
@@ -68,7 +63,7 @@ import es.ugr.swad.swadroid.sync.AccountAuthenticator;
  * Main class of the application.
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
- * @author Helena Rodríguez Gijon <hrgijon@gmail.com>
+ * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */
 public class SWADMain extends MenuExpandableListActivity {
 	/**
@@ -202,6 +197,32 @@ public class SWADMain extends MenuExpandableListActivity {
 		.show();
 	}
 
+	/**
+	 * Shows rollcall dialog on first run.
+	 */
+	public void showRollcallDialog() {
+		new AlertDialog.Builder(this)
+		.setTitle(R.string.initialDialogTitle)
+		.setMessage(R.string.firstRollcallRunMsg)
+		.setCancelable(false)
+		.setPositiveButton(R.string.yesMsg, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				long selectedCourse = Global.getSelectedCourseCode();
+				// Set rollcall course
+				Global.setSelectedRollcallCourseCode(selectedCourse);
+				prefs.setRollcallCourseSelected(selectedCourse);
+				// Call getGroups
+				Intent activity = new Intent(getBaseContext(), Groups.class);
+				startActivityForResult(activity, Global.GROUPS_REQUEST_CODE);
+			}
+		})
+		.setNegativeButton(R.string.noMsg, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+			}
+		}).show();
+	}
+
 	/* (non-Javadoc)
 	 * @see android.app.ExpandableListActivity#onChildClick(android.widget.ExpandableListView, android.view.View, int, int, long)
 	 */
@@ -222,14 +243,19 @@ public class SWADMain extends MenuExpandableListActivity {
 			startActivityForResult(activity, Global.TESTS_REQUEST_CODE);
 		} else if(keyword.equals(getString(R.string.messagesModuleLabel))) {
 			activity = new Intent(getBaseContext(), Messages.class);
-			activity.putExtra("notificationCode", new Long(0));
+			activity.putExtra("notificationCode", Long.valueOf(0));
 			startActivityForResult(activity, Global.MESSAGES_REQUEST_CODE);
 		} else if(keyword.equals(getString(R.string.noticesModuleLabel))){
 			activity = new Intent(getBaseContext(), Notices.class);
-			startActivityForResult(activity, Global.NOTICES_REQUESET_CODE);
-		} else if(keyword.equals(getString(R.string.attendanceModuleLabel))) {
-			activity = new Intent(getBaseContext(), Attendance.class);
-			startActivityForResult(activity, Global.ATTENDANCE_REQUEST_CODE);
+			startActivityForResult(activity, Global.NOTICES_REQUEST_CODE);
+		} else if(keyword.equals(getString(R.string.rollcallModuleLabel))) {
+			//This module requires Android 2.2 or higher
+			if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.FROYO) {
+				getActualGroups();
+			} else {
+				//If Android version < 2.2 show error message
+				error(getString(R.string.froyoFunctionMsg) + "\n(actual: " + android.os.Build.VERSION.RELEASE + ")");
+			}
 		} else if(keyword.equals(getString(R.string.documentsDownloadModuleLabel))){
 			activity = new Intent(getBaseContext(), DownloadsManager.class);
 			activity.putExtra("downloadsAreaCode", Global.DOCUMENTS_AREA_CODE);
@@ -267,9 +293,8 @@ public class SWADMain extends MenuExpandableListActivity {
 			getCurrentCourses();
 			Global.setPreferencesChanged(false);
 		}
+		Global.setSelectedRollcallCourseCode(prefs.getRollcallCourseSelected());
 	}
-
-
 
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onCreate()
@@ -290,6 +315,7 @@ public class SWADMain extends MenuExpandableListActivity {
 		text = (TextView)this.findViewById(R.id.moduleName);
 		text.setText(R.string.app_name);
 
+		
 		try {            
 			//Initialize database
 			/*db = DataFramework.getInstance();
@@ -306,12 +332,15 @@ public class SWADMain extends MenuExpandableListActivity {
 			lastVersion = prefs.getLastVersion();
 			currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
 
+			// Get rollcall course
+			Global.setSelectedRollcallCourseCode(prefs.getRollcallCourseSelected());
+
 			//If this is the first run, show configuration dialog
 			if(lastVersion == 0) {
 				showConfigurationDialog();
 				dbHelper.initializeDB();
 				//prefs.upgradeCredentials();
-				
+
 				//Configure automatic synchronization
 				Intent activity = new Intent(getBaseContext(), AccountAuthenticator.class);
 				startActivity(activity);
@@ -361,7 +390,6 @@ public class SWADMain extends MenuExpandableListActivity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
 		if(resultCode == Activity.RESULT_OK){
 			switch(requestCode){
@@ -371,6 +399,16 @@ public class SWADMain extends MenuExpandableListActivity {
 				createMenu();
 				break;
 			case Global.GROUPS_REQUEST_CODE:
+				// Check if course has practice groups
+				Cursor c = dbHelper.getPracticeGroups(Global.getSelectedCourseCode());
+				startManagingCursor(c);
+
+				if (c.getCount() > 0) {
+					Intent activity  = new Intent(getBaseContext(), Rollcall.class);
+					startActivityForResult(activity, Global.ROLLCALL_REQUEST_CODE);
+				} else {
+					error(getString(R.string.noGroupsAvailableMsg));
+				}
 				break;
 			}
 		}
@@ -390,17 +428,17 @@ public class SWADMain extends MenuExpandableListActivity {
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			spinner.setAdapter(adapter);
 			spinner.setOnItemSelectedListener(new onItemSelectedListener());
-			if(Global.getSelectedCourseCode()!=-1){
+			if(Global.getSelectedCourseCode() != -1) {
 				boolean found = false;
-				int i=0;
-				while(!found && i <listCourses.size()){
-					if(listCourses.get(i).getId() == Global.getSelectedCourseCode()){
-						found=true;
-					}else{
+				int i = 0;
+				while (!found && i < listCourses.size()) {
+					if (listCourses.get(i).getId() == Global.getSelectedCourseCode()) {
+						found = true;
+					} else {
 						++i;
 					}
 				}
-				if(i<listCourses.size())
+				if (i < listCourses.size())
 					spinner.setSelection(i);
 			}
 		} else {
@@ -408,11 +446,9 @@ public class SWADMain extends MenuExpandableListActivity {
 			spinner.setAdapter(adapter);
 		}
 		spinner.setOnTouchListener(Spinner_OnTouch);
-
 	}
 
 	private class onItemSelectedListener implements OnItemSelectedListener{
-
 		@Override
 		public void onItemSelected(AdapterView<?> parent, View view, int position,
 				long id) {
@@ -423,16 +459,14 @@ public class SWADMain extends MenuExpandableListActivity {
 			Global.setSelectedCourseShortName(courseSelected.getShortName());
 			Global.setSelectedCourseFullName(courseSelected.getFullName());
 			createMenu();
-
 		}
 
 		@Override
 		public void onNothingSelected(AdapterView<?> arg0) {
 			// TODO Auto-generated method stub
-
 		}
-
 	}
+
 	private View.OnTouchListener Spinner_OnTouch = new View.OnTouchListener() {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
@@ -446,7 +480,6 @@ public class SWADMain extends MenuExpandableListActivity {
 				}else{
 					v.performClick();
 				}
-
 			}
 			return true;
 		}
@@ -457,6 +490,37 @@ public class SWADMain extends MenuExpandableListActivity {
 		activity = new Intent(getBaseContext(), Courses.class );
 		Toast.makeText(getBaseContext(), R.string.coursesProgressDescription, Toast.LENGTH_LONG).show();
 		startActivityForResult(activity,Global.COURSES_REQUEST_CODE);
+	}
+
+	private void getActualGroups() {
+		long courseCode = Global.getSelectedCourseCode();
+		long rollcallCourseCode = Global.getSelectedRollcallCourseCode();
+
+		/* Due to malfunction getGroups method is not possible to know which subject belong downloaded 
+		 * practice groups. Therefore, until the error is resolved, is only allowed to use the application 
+		 * with a single subject. 
+		 * The selected subject must have practice groups defined in SWAD.
+		 * You can delete this configuration anytime using the "Clean Database" option */
+
+		// If this is the first call to Rollcall, show information dialog
+		if (rollcallCourseCode == -1) {
+			showRollcallDialog();
+		}
+		// If the selected course is the rollcall course, go to rollcall activity
+		else if (rollcallCourseCode == courseCode) {
+			Cursor c = dbHelper.getPracticeGroups(Global.getSelectedCourseCode());
+
+			if (c.getCount() > 0) {
+				Intent activity  = new Intent(getBaseContext(), Rollcall.class);
+				startActivityForResult(activity, Global.ROLLCALL_REQUEST_CODE);
+			} else {
+				error(getString(R.string.noGroupsAvailableMsg));
+			}
+		}
+		// Otherwise show error message
+		else {
+			error(getString(R.string.noRollcallAllowedMsg));
+		}
 	}
 
 	private void createMenu(){
@@ -591,9 +655,7 @@ public class SWADMain extends MenuExpandableListActivity {
 			//Removes Publish Note from messages menu
 			((ImageExpandableListAdapter) getExpandableListAdapter()).removeChild(MESSAGES_GROUP, PUBLISH_NOTE_CHILD);
 			//Removes completely users menu 
-			//DISABLE until it will be functional
 			((ImageExpandableListAdapter) getExpandableListAdapter()).removeGroup(USERS_GROUP);
-
 		}
 		currentRole = Global.STUDENT_TYPE_CODE;
 	}
@@ -608,13 +670,14 @@ public class SWADMain extends MenuExpandableListActivity {
 			map.put(IMAGE, getResources().getDrawable(R.drawable.note));
 			((ImageExpandableListAdapter) getExpandableListAdapter()).addChild(MESSAGES_GROUP,PUBLISH_NOTE_CHILD, map);
 
-			//DISABLE until it will be functional
 			final HashMap<String, Object> users = new HashMap<String, Object>();
 			users.put(NAME, getString(R.string.users));
 			users.put(IMAGE, getResources().getDrawable(R.drawable.users));
+
 			ArrayList<HashMap<String,Object>> child = new ArrayList<HashMap<String, Object>>();  
+
 			map = new HashMap<String,Object>();
-			map.put(NAME, getString(R.string.attendanceModuleLabel));
+			map.put(NAME, getString(R.string.rollcallModuleLabel));
 			map.put(IMAGE, getResources().getDrawable(R.drawable.rollcall));
 			child.add(map);
 			((ImageExpandableListAdapter) getExpandableListAdapter()).addGroup(USERS_GROUP, users, child);
@@ -623,5 +686,4 @@ public class SWADMain extends MenuExpandableListActivity {
 		}
 		currentRole = Global.TEACHER_TYPE_CODE;
 	}
-
 }

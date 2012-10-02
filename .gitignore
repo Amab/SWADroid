@@ -11,4 +11,5 @@ SWADroid/.DS_Store
 SWADroid/gen/es/ugr/swad/swadroid/BuildConfig.java
 SWADroid/gen/es/ugr/swad/swadroid/R.java
 SWADroid/gen/com/google/zxing/client/android/R.java
-.DS_Store
+gen/com/google/zxing/client/android/R.java
+src

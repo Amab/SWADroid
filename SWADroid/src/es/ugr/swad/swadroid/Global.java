@@ -25,7 +25,7 @@ import es.ugr.swad.swadroid.model.User;
  * Global data of application.
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
- * @author Helena Rodríguez Gijón <hrgijon@gmail.com>
+ * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */
 public class Global {
 	/**
@@ -62,6 +62,10 @@ public class Global {
 	private static String selectedCourseFullName;
 		
 
+	/**
+	 * Code of the chosen course for rollcall. All next actions are referred to this course.
+	 */
+	private static long selectedRollcallCourseCode = -1;
 	/**
 	 * Indicates if there are changes on db
 	 * */
@@ -105,39 +109,55 @@ public class Global {
 	/**
 	 * Request code for Notice module
 	 */
-	public static final int NOTICES_REQUESET_CODE =  9;
+	public static final int NOTICES_REQUEST_CODE =  9;
 	/**
-	 * Request code for Attendance module.
+	 * Request code for Rollcall module.
 	 */
-	public static final int ATTENDANCE_REQUEST_CODE = 10;
+	public static final int ROLLCALL_REQUEST_CODE = 10;
 	/**
-	 * Request code for Attendance module.
-	 */
-	public static final int ATTENDANCE_CONFIG_DOWNLOAD_REQUEST_CODE = 11;
-	/**
-	 * Request code for Attendance module.
+	 * Request code for Scan QR module.
 	 */
 	public static final int SCAN_QR_REQUEST_CODE = 12;
-    /**
-     * Request code for Directory Tree Download module
-     * */
-    public static final int DIRECTORY_TREE_REQUEST_CODE = 13;
-    /**
-     * Request code for Directory Tree Download module
-     * */
-    public static final int GROUPS_REQUEST_CODE = 14;
+	/**
+	 * Request code for Directory Tree Download module
+	 * */
+	public static final int DIRECTORY_TREE_REQUEST_CODE = 13;
+	/**
+	 * Request code for Directory Tree Download module
+	 * */
+	public static final int GROUPS_REQUEST_CODE = 14;
+	/**
+	 * Request code for Rollcall Config Download module.
+	 */
+	public static final int ROLLCALL_CONFIG_DOWNLOAD_REQUEST_CODE = 15;
+	/**
+	 * Request code for Rollcall History module.
+	 */
+	public static final int ROLLCALL_HISTORY_REQUEST_CODE = 16;
+	/**
+	 * Request code for Students List module.
+	 */
+	public static final int STUDENTS_LIST_REQUEST_CODE = 17;
+	/**
+	 * Request code for Students History module.
+	 */
+	public static final int STUDENTS_HISTORY_REQUEST_CODE = 18;
+	/**
+	 * Request code for Sessions List module.
+	 */
+	public static final int SESSIONS_LIST_REQUEST_CODE = 19;
     /**
      * Request code for Downloads Manager
      * */
-    public static final int DOWNLOADSMANAGER_REQUEST_CODE = 15;
+    public static final int DOWNLOADSMANAGER_REQUEST_CODE = 20;
     /**
      * Request code for Notify Download
      * */
-    public static final int NOTIFYDOWNLOAD_REQUEST_CODE = 16;
+    public static final int NOTIFYDOWNLOAD_REQUEST_CODE = 21;
     /**
      * Request code for MyGroups Manager
      * */
-    public static final int MYGROUPSMANAGER_REQUEST_CODE= 17;
+    public static final int MYGROUPSMANAGER_REQUEST_CODE= 22;
 	/**
 	 * Prefix tag name for Logcat
 	 */
@@ -195,7 +215,15 @@ public class Global {
 	 * */
 	public static final String DB_TABLE_GROUPS_COURSES = "group_course";
 	/**
-	 * Student userTypeCode for getUsers web service.
+	 * Table name for practice sessions
+	 * */
+	public static final String DB_TABLE_PRACTICE_SESSIONS = "practice_sessions";
+	/**
+	 * Table name for rollcall
+	 * */
+	public static final String DB_TABLE_ROLLCALL = "rollcall";
+	/**
+	 * Student userRole for getUsers web service.
 	 */
 	public static final int STUDENT_TYPE_CODE = 2;
 	/**
@@ -296,7 +324,6 @@ public class Global {
 	}
 
 	/**
-
 	 * Function to parse from Boolean to String
 	 * @param b Boolean to be parsed
 	 * @return "Y" if b==true, "N" in other case
@@ -346,4 +373,20 @@ public class Global {
 		return selectedCourseFullName;
 		
 	}
+		/**
+	 * Gets code of actual rollcall course
+	 * return -1 if no rollcall course chosen; code of actual rollcall course in other case
+	 * */
+	public static long getSelectedRollcallCourseCode() {
+		return selectedRollcallCourseCode;
+	}
+
+	/**
+	 * Sets code of actual rollcall course
+	 * @param actualCourseCode. Code of the chosen rollcall course. It should be actualCourseCode>0. Otherwise nothing will change
+	 * */
+	public static void setSelectedRollcallCourseCode(long actualCourseCode) {
+		selectedRollcallCourseCode = actualCourseCode;
+	}
+	
 }

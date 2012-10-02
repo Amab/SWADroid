@@ -5,38 +5,49 @@ import java.util.Hashtable;
 import org.ksoap2.serialization.PropertyInfo;
 
 /**
- * Class for store a group. A group is relate to a course
- * @author Helena Rodríguez Gijón <hrgijon@gmail.com>
+ * Class for store a group. A group is related to a course
+ * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
+ * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  */
 public class Group extends Model {
 	/**
-	 * TODO Documentar
-	 * */
+	 * Group name.
+	 */
 	private String groupName;
+	/**
+	 * Identifier of the group type that owns this group.
+	 */
 	private int groupTypeCode;
+	/**
+	 * Group type name.
+	 */
 	private String groupTypeName;
 	
 	private static PropertyInfo PI_id = new PropertyInfo();
 	private static PropertyInfo PI_groupName = new PropertyInfo();
 	private static PropertyInfo PI_groupTypeCode = new PropertyInfo();
 	private static PropertyInfo PI_groupTypeName = new PropertyInfo();
-	
-    @SuppressWarnings("unused")
-	private static PropertyInfo[] PI_PROP_ARRAY =
-    {
-    	PI_id,
-    	PI_groupName,
-    	PI_groupTypeCode,
-    	PI_groupTypeName,
-    };
-	
-	
-	public Group(long id,String groupName, int groupTypeCode, String groupTypeName) {
+
+	@SuppressWarnings("unused")
+	private static PropertyInfo[] PI_PROP_ARRAY = {
+		PI_id,
+		PI_groupName,
+		PI_groupTypeCode,
+		PI_groupTypeName
+	};
+
+	/**
+	 * Constructor.
+	 * @param id Group code.
+	 * @param groupName Group name.
+	 * @param groupTypeCode Identifier of the group type that owns this group.
+	 * @param groupTypeName Group type name.
+	 */
+	public Group(long id, String groupName, int groupTypeCode, String groupTypeName) {
 		super(id);
-		this.groupName = groupName;
-		this.groupTypeCode = groupTypeCode;
-		this.groupTypeName = groupTypeName;
-		
+		this.groupName		= groupName;
+		this.groupTypeCode	= groupTypeCode;
+		this.groupTypeName	= groupTypeName;
 	}
 	
 	@Override
@@ -151,7 +162,5 @@ public class Group extends Model {
 			return false;
 		return true;
 	}
-	
-	
 
 }

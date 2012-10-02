@@ -32,6 +32,7 @@ import es.ugr.swad.swadroid.Base64;
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
+import es.ugr.swad.swadroid.modules.rollcall.Util;
 
 /**
  * Login module for connect to SWAD.
@@ -47,6 +48,10 @@ public class Login extends Module {
 	 * Digest for user password.
 	 */
 	private MessageDigest md;
+	/**
+	 * User ID.
+	 */
+	private String userID;
 	/**
 	 * User password.
 	 */
@@ -87,7 +92,15 @@ public class Login extends Module {
     		Toast.makeText(this, progressDescription, Toast.LENGTH_LONG).show();*/
 
 		con.execute();
-	}
+	} 
+	
+	public static boolean isInteger(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException nfe) {}
+        return false;
+    }
 
 	/**
 	 * Connects to SWAD and gets user data.
@@ -109,14 +122,34 @@ public class Login extends Module {
 		//If the application isn't logged, force login
 		if(!Global.isLogged())
 		{
+			//Remove left and right spaces
+			userID = prefs.getUserID().trim();
+			
+			//If the user ID is a DNI
+			if(Util.isValidDni(userID)) {
+				//If the DNI has no letter, remove left zeros
+				if(isInteger(userID)) {
+					userID = String.valueOf(Integer.parseInt(userID));
+					
+				//If the first position is a char, remove it
+				} else if(isInteger(userID.substring(1))) {
+					userID = String.valueOf(Integer.parseInt(userID.substring(1)));
+					
+				//If the last position is a char, remove it
+				} else {
+					userID = String.valueOf(Integer.parseInt(userID.substring(0, userID.length()-1)));
+				}
+			}
+			
 			//Encrypts user password with SHA-512 and encodes it to Base64UrlSafe   	
 			md = MessageDigest.getInstance("SHA-512");
 			md.update(prefs.getUserPassword().getBytes());
 			userPassword = new String(Base64.encodeBytes(md.digest()));
 			userPassword = userPassword.replace('+','-').replace('/','_').replace('=', ' ').replaceAll("\\s+", "").trim();
+
 			//Creates webservice request, adds required params and sends request to webservice
 			createRequest();
-			addParam("userID", prefs.getUserID());
+			addParam("userID", userID);
 			addParam("userPassword", userPassword);
 			addParam("appKey", Global.getAppKey());
 			sendRequest(User.class, true);

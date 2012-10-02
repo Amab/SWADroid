@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="es.ugr.swad.swadroid"
     android:installLocation="auto"
-    android:versionCode="37"
-    android:versionName="0.8.1" >
+    android:versionCode="41"
+    android:versionName="0.9.3" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -14,11 +14,13 @@
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!-- <uses-permission android:name="android.permission.CAMERA" /> -->
+    <uses-permission android:name="android.permission.CAMERA" />
+ 
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
 
     <uses-sdk
         android:minSdkVersion="7"
-        android:targetSdkVersion="15" >
+        android:targetSdkVersion="16" >
     </uses-sdk>
 
     <supports-screens
@@ -57,14 +59,44 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
-            android:name=".modules.attendance.Attendance"
-            android:label="@string/attendanceModuleLabel"
+            android:name=".modules.rollcall.Rollcall"
+            android:label="@string/rollcallModuleLabel"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
-            android:name=".modules.attendance.AttendanceConfigDownload"
-            android:label="@string/attendanceModuleLabel"
+            android:name=".modules.rollcall.RollcallConfigDownload"
+            android:label="@string/rollcallModuleLabel"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>
+        <activity
+            android:name=".modules.rollcall.sessions.NewPracticeSession"
+            android:label="@string/sessionModuleLabel"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>
+        <activity
+            android:name=".modules.rollcall.sessions.SessionsHistory"
+            android:label="@string/rollcallHistoryModuleLabel"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>
+        <activity
+            android:name=".modules.rollcall.sessions.SessionsList"
+            android:label="@string/sessionModuleLabel"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>
+        <activity
+            android:name=".modules.rollcall.students.StudentsHistory"
+            android:label="@string/studentsHistoryModuleLabel"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>
+        <activity
+            android:name=".modules.rollcall.students.StudentsList"
+            android:label="@string/sessionModuleLabel"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>
+        <activity
+            android:name=".modules.Groups"
+            android:label="@string/rollcallModuleLabel"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
@@ -83,10 +115,6 @@
             android:name=".modules.Courses"
             android:label="@string/coursesModuleLabel"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
-            <activity
-                android:name=".modules.Courses"
-                android:theme="@android:style/Theme.Dialog" >
-            </activity>
         </activity>
         <activity
             android:name=".modules.notifications.Notifications"
@@ -139,11 +167,6 @@
         </activity>
         <activity
             android:name=".modules.downloads.DirectoryTreeDownload"
-            android:label="@string/documentsDownloadModuleLabel"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
-        </activity>
-        <activity
-            android:name=".modules.Groups"
             android:label="@string/documentsDownloadModuleLabel"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>

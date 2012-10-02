@@ -25,7 +25,7 @@ import org.ksoap2.serialization.PropertyInfo;
 /**
  * Class for store a course
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
- * @author Helena Rodríguez Gijón <hrgijon@gmail.com>
+ * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */
 public class Course extends Model {
 	/**

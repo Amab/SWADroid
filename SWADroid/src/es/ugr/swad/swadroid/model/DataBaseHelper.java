@@ -18,8 +18,12 @@
  */
 package es.ugr.swad.swadroid.model;
 
+import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 
@@ -28,6 +32,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
@@ -39,7 +44,7 @@ import es.ugr.swad.swadroid.Global;
 /**
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
- * @author Helena Rodríguez Gijón <hrgijon@gmail.com>
+ * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */
 public class DataBaseHelper {
 	/**
@@ -212,6 +217,25 @@ public class DataBaseHelper {
 					ent.getString("groupName"),
 					ent.getInt("groupTypeCode"),
 					ent.getString("groupTypeName"));
+		} else if(table.equals(Global.DB_TABLE_GROUPS)) {
+			o = new Group(ent.getInt("groupCode"),
+					ent.getString("groupName"),
+					ent.getInt("groupTypeCode"),
+					ent.getString("groupTypeName"));
+		} else if(table.equals(Global.DB_TABLE_PRACTICE_SESSIONS)) {
+			SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+
+			try {
+				o = new PracticeSession(ent.getId(),
+						ent.getInt("crsCod"),
+						ent.getInt("grpCod"),
+						format.parse(ent.getString("startDate")),
+						format.parse(ent.getString("endDate")),
+						ent.getString("site"),
+						ent.getString("description"));
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
 		}
 
 		return o;
@@ -286,12 +310,164 @@ public class DataBaseHelper {
 	}
 
 	/**
+	 * Gets the id of users enrolled in the selected course
+	 * @param courseCode Course code to be referenced
+	 * @return A list of User's id
+	 */
+	public List<Long> getUsersCourse(long courseCode) {
+		List<Long> result = new ArrayList<Long>();
+
+		List<Entity> rows = db.getEntityList(Global.DB_TABLE_USERS_COURSES, "crsCod = '" + courseCode + "'");
+		if (rows != null) {
+			Iterator<Entity> iter = rows.iterator();
+			while (iter.hasNext()) {
+				Entity ent = iter.next();
+				result.add(ent.getLong("userCode"));
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Gets the actual practice session in progress for the selected course and group
+	 * @param courseCode Course code to be referenced
+	 * @param groupId Group code to be referenced
+	 * @return The practice session in progress if any, or null otherwise
+	 */
+	public PracticeSession getPracticeSessionInProgress(long courseCode, long groupId) {
+		String table = Global.DB_TABLE_PRACTICE_SESSIONS;
+		Calendar cal = Calendar.getInstance();
+		Calendar startDate = Calendar.getInstance();
+		Calendar endDate = Calendar.getInstance();
+
+		List<Entity> rows = db.getEntityList(table, "crsCod = " + courseCode + " AND grpCod = " + groupId);
+		PracticeSession ps = null;
+
+		if (rows != null) {
+			Iterator<Entity> iter = rows.iterator();
+			while (iter.hasNext()) {
+				Entity ent = iter.next();
+				ps = (PracticeSession) createObjectByTable(table, ent);
+				startDate.setTime(ps.getSessionStartDate());
+				endDate.setTime(ps.getSessionEndDate());
+
+				if (cal.after(startDate) && cal.before(endDate)) {
+					return ps;
+				}
+			}			
+		}
+		return null;
+	}
+
+	/**
+	 * Gets practice sessions for the selected course and group
+	 * @param courseCode Course code to be referenced
+	 * @param groupId Group code to be referenced
+	 * @return The list of practice sessions
+	 */
+	public List<PracticeSession> getPracticeSessions(long courseCode, long groupId) {
+		List<PracticeSession> sessions = new ArrayList<PracticeSession>();
+		String table = Global.DB_TABLE_PRACTICE_SESSIONS;
+		String where = "crsCod = " + courseCode + " AND grpCod = " + groupId;
+
+		List<Entity> rows = db.getEntityList(table, where, "startDate asc");
+		PracticeSession ps = null;
+
+		if (rows != null) {
+			Iterator<Entity> iter = rows.iterator();
+			while (iter.hasNext()) {
+				Entity ent = iter.next();
+				ps = (PracticeSession) createObjectByTable(table, ent);
+				sessions.add(ps);
+			}			
+		}
+		return sessions;
+	}
+
+	public Group getGroup(long groupId) {
+		String table = Global.DB_TABLE_GROUPS;
+		List<Entity> rows = db.getEntityList(table, "groupCode = " + groupId);
+
+		if (rows != null) {
+			Iterator<Entity> iter = rows.iterator();
+			while (iter.hasNext()) {
+				Entity ent = iter.next();
+				return (Group) createObjectByTable(table, ent);			}			
+		}
+		return null;
+	}
+
+	/**
+	 * Gets the group codes in the selected course
+	 * @param courseCode Course code to be referenced
+	 * @return A list of User's id
+	 */
+	public List<Long> getGroupsCourse(long courseCode) {
+		List<Long> result = new ArrayList<Long>();
+
+		//List<Entity> rows = db.getEntityList(Global.DB_TABLE_GROUPS_COURSES, "crsCod = '" + courseCode + "'");
+		List<Entity> rows = db.getEntityList(Global.DB_TABLE_GROUPS, "groupTypeCode = '4321'");
+		if (rows != null) {
+			Iterator<Entity> iter = rows.iterator();
+			while (iter.hasNext()) {
+				Entity ent = iter.next();
+				//result.add(ent.getLong("grpCod"));
+				result.add(ent.getLong("groupCode"));
+			}
+		}
+
+		return result;
+	}
+
+	/**
+	 * Gets the practice groups in the selected course
+	 * @param courseCode Course code to be referenced
+	 * @return Cursor access to the practice groups
+	 */
+	public Cursor getPracticeGroups(long courseCode) {
+		String select = "SELECT " +
+				"g._id, g.groupCode, g.groupName" +
+				" FROM " +
+				Global.DB_TABLE_GROUPS + " g, " + Global.DB_TABLE_GROUPS_COURSES + " gc" +
+				" WHERE " +
+				"g.groupCode = gc.grpCod AND g.groupTypeCode = 4321 AND gc.crsCod = ?";
+
+		SQLiteDatabase db = DataFramework.getInstance().getDB();
+		return db.rawQuery(select, new String [] { String.valueOf(courseCode) });
+	}
+
+	/**
+	 * Gets the user codes of students in the selected session
+	 * @param sessionId Session code to be referenced
+	 * @return A list of User's id
+	 */
+	public List<Long> getStudentsAtSession(long sessionId) {
+		List<Long> result = new ArrayList<Long>();
+
+		List<Entity> rows = db.getEntityList(Global.DB_TABLE_ROLLCALL, "sessCod = " + sessionId);
+		if (rows != null) {
+			Iterator<Entity> iter = rows.iterator();
+			while (iter.hasNext()) {
+				Entity ent = iter.next();
+				result.add(ent.getLong("usrCod"));
+			}
+		}
+		return result;		
+	}
+
+	public boolean hasAttendedSession(long userCode, long sessionId) {
+		List<Entity> rows = db.getEntityList(Global.DB_TABLE_ROLLCALL, "usrCod = " + userCode + " AND sessCod = " + sessionId);
+
+		return (rows.size() > 0);
+	}
+
+	/**
 	 * Checks if the specified user is enrolled in the selected course
 	 * @param userId User's DNI (national identity)
 	 * @param selectedCourseCode Course code to be referenced
 	 * @return True if user is enrolled in the selected course. False otherwise
 	 */
-	public boolean getUserCourse(String userID, long selectedCourseCode) {
+	public boolean isUserEnrolledCourse(String userID, long selectedCourseCode) {
 		boolean enrolled = false;
 		User u = (User) getRow(Global.DB_TABLE_USERS, "userID", userID);
 
@@ -477,45 +653,55 @@ public class DataBaseHelper {
 	}
 
 	/**
-	 * Inserts a user in database
+	 * Inserts a user in database or updates it if already exists
 	 * @param u User to be inserted
-	 * @return True if user does not exist in database and is inserted. False otherwise.
 	 */
-	public boolean insertUser(User u) {
+	public void insertUser(User u) {
+		Entity ent;
 		List<Entity> rows = db.getEntityList(Global.DB_TABLE_USERS, "userCode = " + u.getId());
 
 		if(rows.isEmpty()) {
-			Entity ent = new Entity(Global.DB_TABLE_USERS);
-			ent.setValue("userCode", u.getId());
-			ent.setValue("userID", u.getUserID());
-			ent.setValue("userNickname", u.getUserNickname());
-			ent.setValue("userSurname1", u.getUserSurname1());
-			ent.setValue("userSurname2", u.getUserSurname2());
-			ent.setValue("userFirstname", u.getUserFirstname());
-			ent.setValue("photoPath", u.getPhotoPath());
-			ent.setValue("userRole", u.getUserRole());
-			ent.save();
-			return true;
-		} else
-			return false;
+			ent = new Entity(Global.DB_TABLE_USERS);
+		} else {
+			// If user exists and has photo, delete the old photo file
+			if (u.getPhotoFileName() != null) {
+				File file = new File(db.getContext().getExternalFilesDir(null), u.getPhotoFileName());
+				file.delete();
+			}
+			ent = rows.get(0);
+		}
+		ent.setValue("userCode", u.getId());
+		ent.setValue("userID", u.getUserID());
+		ent.setValue("userNickname", u.getUserNickname());
+		ent.setValue("userSurname1", u.getUserSurname1());
+		ent.setValue("userSurname2", u.getUserSurname2());
+		ent.setValue("userFirstname", u.getUserFirstname());
+		ent.setValue("photoPath", u.getPhotoPath());
+		ent.setValue("userRole", u.getUserRole());
+		ent.save();
 	}
 
 	/**
-	 * Inserts a test question in database
-	 * @param q Test question to be inserted
-	 * @param selectedCourseCode Course code to be referenced
+	 * Inserts a group in database
+	 * @param g Group to be inserted
+	 * @param courseCode Course code to be referenced
 	 */
-	public boolean insertGroup(Group g, long courseCode)
-	{
+	public boolean insertGroup(Group g, long courseCode) {
 		List<Entity> rows = db.getEntityList(Global.DB_TABLE_GROUPS, "groupCode = " + g.getId());
 
 		if(rows.isEmpty()) {
 			Entity ent = new Entity(Global.DB_TABLE_GROUPS);
-	
+
 			ent.setValue("groupCode", g.getId());
 			ent.setValue("groupName", g.getGroupName());
 			ent.setValue("groupTypeCode", g.getGroupTypeCode());
 			ent.setValue("groupTypeName", g.getGroupTypeName());
+			ent.save();
+
+			// TODO: Do not insert in groups_courses until getGroups is fixed
+			ent = new Entity(Global.DB_TABLE_GROUPS_COURSES) ;
+			ent.setValue("grpCod", g.getId());
+			ent.setValue("crsCod", courseCode);
 			ent.save();
 			
 			rows = db.getEntityList(Global.DB_TABLE_GROUPS_COURSES,"grpCod =" + g.getId());
@@ -530,28 +716,87 @@ public class DataBaseHelper {
 			}
 			
 			return true;
-		} else 	
-			return false;	
+		} else
+			return false;
 	}
 
 	/**
-	 * Inserts a new record in database indicating that the user belongs to the course
-	 * @param u User to be inserted
-	 * @param selectedCourseCode Course code to be referenced
-	 * @return True if record does not exist in database and is inserted. False otherwise.
+	 * Inserts the rollcall data of a student to a practice session in database
+	 * @param l User code of student
+	 * @param sessCode Practice session code
 	 */
-	public boolean insertUserCourse(User u, long selectedCourseCode) {
-		List<Entity> rows = db.getEntityList(Global.DB_TABLE_USERS_COURSES, 
-				"userCode = " + u.getId() + " AND crsCod = " + selectedCourseCode);
+	public void insertRollcallData(long l, long sessCode) {
+		List<Entity> rows = db.getEntityList(Global.DB_TABLE_ROLLCALL, "sessCod = " + sessCode + " AND usrCod = " + l);
 
-		if(rows.isEmpty()) {
-			Entity ent = new Entity(Global.DB_TABLE_USERS_COURSES);
-			ent.setValue("userCode", u.getId());
-			ent.setValue("crsCod", selectedCourseCode);
+		if (rows.isEmpty()) {
+			Entity ent = new Entity(Global.DB_TABLE_ROLLCALL);
+
+			ent.setValue("sessCod", sessCode);
+			ent.setValue("usrCod", l);
+			ent.save();
+		}
+	}
+	
+	/**
+	 * Inserts a practice session in database
+	 * @param courseCode Course code to be referenced
+	 * @param groupCode Group code to be referenced
+	 * @param startDate Start date-time of session
+	 * @param endDate End date-time of session
+	 * @param site Site where session takes place
+	 * @param description Optional description of practice session
+	 * @return True if practice session does not exist in database and is inserted. False otherwise.
+	 */
+	public boolean insertPracticeSession(long courseCode, long groupCode, String startDate, String endDate, String site, String description) {
+		String where = "crsCod = '" + courseCode + "' AND " +
+				"grpCod = '" + groupCode + "' AND " +
+				"startDate = '" + startDate + "' AND " +
+				"endDate = '" + endDate + "'";
+		List<Entity> rows = db.getEntityList(Global.DB_TABLE_PRACTICE_SESSIONS, where);
+
+		if (rows.isEmpty()) {
+			Entity ent = new Entity(Global.DB_TABLE_PRACTICE_SESSIONS);
+
+			ent.setValue("crsCod", courseCode);
+			ent.setValue("grpCod", groupCode);
+			ent.setValue("startDate", startDate);
+			ent.setValue("endDate", endDate);
+			if (site != null && site != "")
+				ent.setValue("site", site);
+			if (description != null && description != "")
+				ent.setValue("description", description);
 			ent.save();
 			return true;
-		} else
+		} else {
 			return false;
+		}
+	}
+
+
+	/**
+	 * Inserts a new record in database indicating that the user belongs 
+	 * to the course and group specified, or updates it if already exists
+	 * @param u User to be inserted
+	 * @param courseCode Course code to be referenced
+	 * @param groupCode Group code to be referenced
+	 */
+	public void insertUserCourse(User u, long courseCode, long groupCode) {
+		Entity ent;
+		String where = "userCode = " + u.getId() + " AND crsCod = " + courseCode;
+		List<Entity> rows = db.getEntityList(Global.DB_TABLE_USERS_COURSES, where);
+
+		if(rows.isEmpty()) {
+			ent = new Entity(Global.DB_TABLE_USERS_COURSES);
+		} else {
+			ent = rows.get(0);
+		}
+		ent.setValue("userCode", u.getId());
+		ent.setValue("crsCod", courseCode);
+		if (groupCode == 0)
+			ent.setValue("grpCod", null);
+		else
+			ent.setValue("grpCod", groupCode);
+		ent.save();
 	}
 
 	/**
@@ -785,11 +1030,37 @@ public class DataBaseHelper {
 	}
 
 	/**
-	 * Removes a User from database
+	 * Updates a group in database
+	 * @param prev Group to be updated
+	 * @param actual Updated group
+	 */
+	public void updateGroup(Group prev, Group actual) {
+		List<Entity> rows = db.getEntityList(Global.DB_TABLE_GROUPS, "id = " + prev.getId());
+		Entity ent = rows.get(0);
+		ent.setValue("groupCode", actual.getId());
+		ent.setValue("groupName", actual.getGroupName());
+		ent.setValue("groupTypeCode", actual.getGroupTypeCode());
+		ent.setValue("groupTypeName", actual.getGroupTypeName());
+		ent.save();
+	}
+
+	/**
+	 * Removes a User from database and user photo from external storage
 	 * @param u User to be removed
 	 */
 	public void removeUser(User u) {
 		removeRow(Global.DB_TABLE_USERS, u.getId());
+
+		File file = new File(db.getContext().getExternalFilesDir(null), u.getPhotoFileName());
+		file.delete();
+	}
+
+	/**
+	 * Removes a Group from database
+	 * @param g Group to be removed
+	 */
+	public void removeGroup(Group g) {
+		removeRow(Global.DB_TABLE_GROUPS, g.getId());
 	}
 
 	/**
@@ -1056,7 +1327,7 @@ public class DataBaseHelper {
 	}
 
 	/**
-	 * Clean data of all tables from database
+	 * Clean data of all tables from database. Removes users photos from external storage
 	 */
 	public void cleanTables()
 	{
@@ -1071,10 +1342,21 @@ public class DataBaseHelper {
 		emptyTable(Global.DB_TABLE_TEST_TAGS);
 		emptyTable(Global.DB_TABLE_USERS_COURSES);
 		emptyTable(Global.DB_TABLE_USERS);
-		emptyTable(Global.DB_TABLE_GROUPS);
 		emptyTable(Global.DB_TABLE_GROUPS_COURSES);
-		
+		emptyTable(Global.DB_TABLE_GROUPS);
+		emptyTable(Global.DB_TABLE_PRACTICE_SESSIONS);
+		emptyTable(Global.DB_TABLE_ROLLCALL);
 		compactDB();
+
+		// Removes users photos from external storage (Android 2.2 or higher only)
+		if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.FROYO) {
+			File dir = db.getContext().getExternalFilesDir(null);
+			if(dir != null){
+				String [] children = dir.list();
+				for (int i=0; i < children.length; i++)
+					new File(dir, children[i]).delete();
+				}
+		}
 	}
 
 	/**
@@ -1135,6 +1417,10 @@ public class DataBaseHelper {
     	deleteTable(Global.DB_TABLE_NOTIFICATIONS);
 		deleteTable(Global.DB_TABLE_USERS_COURSES);
 		deleteTable(Global.DB_TABLE_USERS);
+		deleteTable(Global.DB_TABLE_GROUPS_COURSES);
+		deleteTable(Global.DB_TABLE_GROUPS);
+		deleteTable(Global.DB_TABLE_PRACTICE_SESSIONS);
+		deleteTable(Global.DB_TABLE_ROLLCALL);
 
         db.createTables();
 

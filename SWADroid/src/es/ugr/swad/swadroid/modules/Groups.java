@@ -10,6 +10,8 @@ import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -17,15 +19,74 @@ import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.model.Model;
+import es.ugr.swad.swadroid.R;
 
 /**
  * Groups module gets user's groups inside the current course
  * and stores them in the database
- * @author Helena Rodríguez Gijón <hrgijon@gmail.com>
+ * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
+ * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  */
 public class Groups extends Module {
+	/**
+	 * Groups counter
+	 */
+	private int numGroups;
+	/**
+	 * Groups tag name for Logcat
+	 */
+	public static final String TAG = Global.APP_TAG + " Groups";
+	@Override
+	protected void runConnection() {
+		super.runConnection();
+		if (!isConnected) {
+			setResult(RESULT_CANCELED);
+			finish();
+		}
+	}
 
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setMETHOD_NAME("getGroups");
+	}
 
+	@Override
+	protected void onStart() {
+		super.onStart();      
+		try {
+			runConnection();
+		} catch (Exception ex) {
+			String errorMsg = getString(R.string.errorServerResponseMsg);
+			error(errorMsg);
+
+			if(isDebuggable) {
+				Log.e(ex.getClass().getSimpleName(), errorMsg);        		
+				ex.printStackTrace();
+			}
+		}
+	}
+	
+		/* (non-Javadoc)
+	 * @see es.ugr.swad.swadroid.modules.Module#onActivityResult(int, int, android.content.Intent)
+	 */
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == Activity.RESULT_CANCELED) {
+			setResult(RESULT_CANCELED);
+			finish();
+		}
+	}
+		@Override
+	protected void connect() {
+		String progressDescription = getString(R.string.groupsProgressDescription);
+		int progressTitle = R.string.groupsProgressTitle;
+
+		new Connect(true, progressDescription, progressTitle).execute();
+	}
+	
+	
 	@Override
 	protected void requestService() throws NoSuchAlgorithmException,
 			IOException, XmlPullParserException, SoapFault,
@@ -75,18 +136,9 @@ public class Groups extends Module {
 			//Request finalized without errors
 			setResult(RESULT_OK);
 		}
-		
-		
-		
-		
+
 	}
 
-	@Override
-	protected void connect() {
-		 Toast.makeText(this,"Getting Groups", Toast.LENGTH_LONG).show();
-		Connect con = new Connect(false,null,0);
-		con.execute();
-	}
 
 	@Override
 	protected void postConnect() {
@@ -101,21 +153,6 @@ public class Groups extends Module {
 
 	}
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setMETHOD_NAME("getGroups");
-	}
 
-	@Override
-	protected void onStart() {
-		super.onStart();
-		runConnection();
-		if(!isConnected){
-			setResult(RESULT_CANCELED);
-			finish();
-		}
-		
-	}
 
 }
