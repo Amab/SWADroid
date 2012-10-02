@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>  
+<?xml version="1.0" encoding="UTF-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="@color/background"
+    android:orientation="vertical">
     <include layout="@layout/action_bar"/>    
  
 	<TextView
@@ -17,11 +17,12 @@
 	</TextView>
 	
     <include android:id="@+id/courseNameLayout" layout="@layout/course_or_group_name"/>
-    
+
     <ListView
-       	android:id="@+id/listItems"
-       	android:cacheColorHint="@color/background"
-       	android:layout_width="match_parent"
-       	android:layout_height="wrap_content">
+        android:id="@+id/listItems"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:cacheColorHint="@color/background" >
     </ListView>
+
 </LinearLayout>

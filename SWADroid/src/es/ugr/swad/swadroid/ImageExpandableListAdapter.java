@@ -24,7 +24,6 @@ import java.util.Map;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +33,7 @@ import android.widget.TextView;
 
 /**
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
- * @author Helena Rodríguez Gijón <hrgijon@gmail.com>
+ * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  *
  */
 public class ImageExpandableListAdapter extends SimpleExpandableListAdapter {

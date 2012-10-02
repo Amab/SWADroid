@@ -1,3 +1,23 @@
+## 0.9.3 (2012-07-20)
+
+* Added folders support in server URL
+* Updated ksoap2-android library
+* Improved error messages
+
+## 0.9.2 (2012-07-10)
+
+* camera.autofocus feature marked as optional in order to fix device incompatibilities
+
+## 0.9.1 (2012-07-09)
+
+* Added DNI with letter (first and last) support and DNI with zeros support
+* Added Android 4.1 compatibility
+* Fixed xlarge screens support (accidentally removed during last merge)
+
+## 0.9 (2012-07-01)
+
+* Added RollCall module
+
 ## 0.8.1 (2012-05-20)
 
 * Fixed closed cursor access exception on Android 4.x platforms
