@@ -34,6 +34,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
+import android.os.Environment;
 import android.util.Log;
 
 import com.android.dataframework.DataFramework;
@@ -104,12 +105,28 @@ public class DataBaseHelper {
 		}else if(table.equals(Global.DB_TABLE_GROUPS_COURSES)){
 			firstParam = "grpCod";
 			secondParam = "crsCod";
+		}else if(table.equals(Global.DB_TABLE_GROUPS_GROUPTYPES)){
+			firstParam = "grpTypCod";
+			secondParam = "grpCod";
 		}else {
 			Log.e("selectParamsPairTable", "Table " + table + " not exists");
 		}
 
 		return new Pair<String, String>(firstParam, secondParam);
 	}
+	/**
+	 * Gets ParTable class from table
+	 * @param <T>
+	 * */
+/*	private <T> PairTable<T, T> getPairTable(String table, T firstValue, T secondValue){
+		PairTable<T,T> par;
+		if(table.equals(Global.DB_TABLE_GROUPS_GROUPTYPES)){
+			par = new PairTable<T,T>(table,firstValue,secondValue);
+		}
+		return new Pair<Class,Class>(firstClass,secondClass);
+	}*/
+	
+	
 
 	/**
 	 * Creates a Model's subclass object looking at the table selected
@@ -131,7 +148,7 @@ public class DataBaseHelper {
 					ent.getString("fullName"));
 		} else if(table.equals(Global.DB_TABLE_TEST_QUESTIONS_COURSE) ||
 				table.equals(Global.DB_TABLE_TEST_QUESTION_ANSWERS) ||
-				table.equals(Global.DB_TABLE_USERS_COURSES) || table.equals(Global.DB_TABLE_GROUPS_COURSES)) {
+				table.equals(Global.DB_TABLE_USERS_COURSES) || table.equals(Global.DB_TABLE_GROUPS_COURSES) || table.equals(Global.DB_TABLE_GROUPS_GROUPTYPES)) {
 
 			params = selectParamsPairTable(table);
 
@@ -213,15 +230,21 @@ public class DataBaseHelper {
 					ent.getString("photoPath"),
 					ent.getInt("userRole"));			
 		} else if (table.equals(Global.DB_TABLE_GROUPS)){
-			o = new Group(ent.getLong("groupCode"),
+			long groupTypeCode = getGroupTypeCodeFromGroup(ent.getLong("id"));
+			o = new Group(ent.getLong("id"),
 					ent.getString("groupName"),
-					ent.getInt("groupTypeCode"),
-					ent.getString("groupTypeName"));
-		} else if(table.equals(Global.DB_TABLE_GROUPS)) {
-			o = new Group(ent.getInt("groupCode"),
-					ent.getString("groupName"),
-					ent.getInt("groupTypeCode"),
-					ent.getString("groupTypeName"));
+					groupTypeCode,
+					ent.getInt("maxStudents"),
+					ent.getInt("students"),
+					ent.getInt("open"),
+					ent.getInt("fileZones"),
+					ent.getInt("membership"));
+		}else if (table.equals(Global.DB_TABLE_GROUP_TYPES)){
+			o = new GroupType(ent.getLong("id"),
+					ent.getString("groupTypeName"),
+					ent.getLong("courseCode"),
+					ent.getInt("mandatory"),
+					ent.getInt("multiple"));
 		} else if(table.equals(Global.DB_TABLE_PRACTICE_SESSIONS)) {
 			SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
@@ -294,6 +317,7 @@ public class DataBaseHelper {
 	 * @param fieldName Field's name
 	 * @param fieldValue Field's value
 	 * @return A Model's subclass object
+	 * 			or null if the row does not exist in the specified table
 	 */
 	public Model getRow(String table, String fieldName, String fieldValue)
 	{
@@ -383,30 +407,32 @@ public class DataBaseHelper {
 		}
 		return sessions;
 	}
-
+	
+	/**
+	 * Gets the group which code is given
+	 * @param groupId long that identifies uniquely the searched group
+	 * @return group with the referenced code in case it exits
+	 * 			null otherwise
+	 * */
 	public Group getGroup(long groupId) {
 		String table = Global.DB_TABLE_GROUPS;
-		List<Entity> rows = db.getEntityList(table, "groupCode = " + groupId);
-
-		if (rows != null) {
-			Iterator<Entity> iter = rows.iterator();
-			while (iter.hasNext()) {
-				Entity ent = iter.next();
-				return (Group) createObjectByTable(table, ent);			}			
-		}
-		return null;
+		List<Entity> rows =  db.getEntityList(table, "id = " + groupId);
+		Group g = null;
+		if (rows != null) 
+			g = (Group) createObjectByTable(table, rows.get(0));
+		return g;
 	}
 
 	/**
 	 * Gets the group codes in the selected course
 	 * @param courseCode Course code to be referenced
-	 * @return A list of User's id
+	 * @return A list of group codes belonging to the selected course 
 	 */
-	public List<Long> getGroupsCourse(long courseCode) {
+	public List<Long> getGroupCodesCourse(long courseCode) {
 		List<Long> result = new ArrayList<Long>();
 
-		//List<Entity> rows = db.getEntityList(Global.DB_TABLE_GROUPS_COURSES, "crsCod = '" + courseCode + "'");
-		List<Entity> rows = db.getEntityList(Global.DB_TABLE_GROUPS, "groupTypeCode = '4321'");
+		List<Entity> rows = db.getEntityList(Global.DB_TABLE_GROUPS_COURSES, "crsCod = '" + courseCode + "'");
+		//List<Entity> rows = db.getEntityList(Global.DB_TABLE_GROUPS, "groupTypeCode = '4321'");
 		if (rows != null) {
 			Iterator<Entity> iter = rows.iterator();
 			while (iter.hasNext()) {
@@ -418,7 +444,95 @@ public class DataBaseHelper {
 
 		return result;
 	}
+	/**
+	 * Gets the groups belonging to the selected type of group 
+	 * @param groupTypeCode group type code to be referenced
+	 * @return List of Groups 
+	 * */
+	public List <Group> getGroupsOfType(long groupTypeCode){
+		List <Group> groups = new ArrayList<Group>();
+		List <Long> groupCodes = getGroupsCodesOfType(groupTypeCode);
+		if(!groupCodes.isEmpty()){
+			Iterator<Long> iter = groupCodes.iterator();
+			while(iter.hasNext()){
+				groups.add((Group)getRow(Global.DB_TABLE_GROUPS,"id",String.valueOf(iter.next())));
+			}
+		}
+		
+		return groups;
+	}
+	
+	public Cursor getCursorGroupsOfType(long groupTypeCode){
+		String select = "SELECT * "+
+				" FROM " +
+				Global.DB_TABLE_GROUPS + " g, " + Global.DB_TABLE_GROUPS_GROUPTYPES + " ggt" +
+				" WHERE " +
+				"g.id = ggt.grpCod AND ggt.grpTypCod = ?";
 
+		SQLiteDatabase db = DataFramework.getInstance().getDB();
+		//TODO sustituir rawquery por getCursor(String table, String[] fields, String selection, 
+		//String[] selectionArgs, String groupby, String having, String orderby, String limit)
+		return db.rawQuery(select, new String [] { String.valueOf(groupTypeCode) });
+
+	}
+	
+	
+	public GroupType getGroupTypeFromGroup(long groupCode){
+		long groupTypeCode = getGroupTypeCodeFromGroup(groupCode);
+		return (GroupType) getRow(Global.DB_TABLE_GROUP_TYPES,"id",String.valueOf(groupTypeCode));
+		
+	}
+	/**
+	 * Gets the code of the group type belonging the group with the given group code
+	 * @param groupCode long that specifies the code of the group
+	 * @return group type code in case the given group belongs to a group type
+	 * 			-1 	 otherwise
+	 * */
+	public long getGroupTypeCodeFromGroup(long groupCode){
+		List<Entity> rows = db.getEntityList(Global.DB_TABLE_GROUPS_GROUPTYPES, "grpCod = '" + groupCode +"'");
+		long groupTypeCode = -1;
+		if(rows != null){
+			groupTypeCode = rows.get(0).getId();
+		}
+		return groupTypeCode;
+		
+	}
+
+	/**
+	 * Gets the codes of groups belonging the selected type of group
+	 * @param groupTypeCode group type code to be referenced
+	 * @return List of group codes 
+	 * */
+	private List<Long> getGroupsCodesOfType(long groupTypeCode){
+		List <Long> groupCodes = new ArrayList<Long>();
+		List<Entity> rows = db.getEntityList(Global.DB_TABLE_GROUPS_GROUPTYPES, "grpTypCod = '" + groupTypeCode +"'");
+		if(rows != null){
+			Iterator<Entity> iter = rows.iterator();
+			while(iter.hasNext()){
+				groupCodes.add(iter.next().getLong("grpCode"));
+			}
+		}
+		return groupCodes;
+	}
+	
+	/**
+	 * Get groups belonging to the referred course to which the logged user is enrolled 
+	 * @param courseCode course code to which the groups belong
+	 * @return List of the group 
+	 * */
+	public List<Group> getUserLoggedGroups(long courseCode){
+		List<Long> groupCodes = getGroupCodesCourse(courseCode);
+		List<Group> groups = new ArrayList<Group>();
+		if(!groupCodes.isEmpty()){
+			Iterator<Long> iter = groupCodes.iterator();
+			while(iter.hasNext()){
+				Group g = (Group) getRow(Global.DB_TABLE_GROUPS,"id",String.valueOf(iter.next()));
+				if(g.isMembership()) groups.add(g);
+			}
+		}
+		return groups;
+	}
+	
 	/**
 	 * Gets the practice groups in the selected course
 	 * @param courseCode Course code to be referenced
@@ -504,7 +618,7 @@ public class DataBaseHelper {
 		List<Group> groups = new ArrayList<Group>(groupCodes.getCount());
 
 		while (groupCodes.moveToNext()){
-			Group group = (Group)this.getRow(Global.DB_TABLE_GROUPS, "groupCode", String.valueOf(groupCodes.getInt(0)));
+			Group group = (Group)this.getRow(Global.DB_TABLE_GROUPS, "id", String.valueOf(groupCodes.getInt(0)));
 			groups.add(group);
 		}	
 		return groups;
@@ -651,7 +765,66 @@ public class DataBaseHelper {
 		ent.setValue(params.getSecond(), p.getSecond());
 		ent.save();
 	}
+	/**
+	 * Inserts a new row or updates an existing one in the table named @a tableName with the data that contains @a currentModel
+	 * @param tableName string with the table name
+	 * @param currentModel model with the new data
+	 * @param ents vector of entities. In case this param is given, the entities given will be modified
+	 * 
+	 * */
+	
+	public boolean insertEntity(String tableName, Model currentModel,Entity...ents){
+		boolean returnValue = true;
+		Entity ent;
+		if(ents.length>= 1){
+			ent = ents[0];
+		}else{
+			ent = new Entity(tableName);
+		}
+		if(tableName.equals(Global.DB_TABLE_GROUPS)){
+			Group g = (Group) currentModel;
+			ent.setValue("id", g.getId());
+			ent.setValue("groupName", g.getGroupName());
+			ent.setValue("maxStudent", g.getMaxStudents());
+			ent.setValue("students", g.getCurrentStudents());
+			ent.setValue("open", g.isOpen());
+			ent.setValue("fileZones", g.exitsDocumentsArea());
+			ent.setValue("membership", g.isMembership());
+			ent.save();
+		}
+		
+		if(tableName.equals(Global.DB_TABLE_GROUP_TYPES)){
+			GroupType gt = (GroupType) currentModel;
+			ent.setValue("id", gt.getId());
+			ent.setValue("groupTypeName", gt.getGroupTypeName());
+			ent.setValue("couseCode", gt.getCourseCode());
+			ent.setValue("mandatory", gt.isMandatory());
+			ent.setValue("multiple", gt.isMultiple());
+			ent.save();
+		}
+			
+		return returnValue;
+	}
+	/**
+	 * Inserts a relation in database
+	 * @param p Relation to be inserted
+	 */
+/*	public void insertPairTable(String table)
+	{
+		Pair<Class, Class> pairClass = selectParamsClassPairTable(table);
+		class T1 = pairClass.getFirst();
+		
+		Pair<String,String> pairParams = selectParamsPairTable(table);
+		PairTable<pairClass.getFirst(), pairClass.getSecond()> 
+		String table = p.getTable();
+		Pair<String, String> params = selectParamsPairTable(table);
 
+		Entity ent = new Entity(table);
+		ent.setValue(params.getFirst(), p.getFirst());
+		ent.setValue(params.getSecond(), p.getSecond());
+		ent.save();
+	}
+*/
 	/**
 	 * Inserts a user in database or updates it if already exists
 	 * @param u User to be inserted
@@ -665,7 +838,10 @@ public class DataBaseHelper {
 		} else {
 			// If user exists and has photo, delete the old photo file
 			if (u.getPhotoFileName() != null) {
-				File file = new File(db.getContext().getExternalFilesDir(null), u.getPhotoFileName());
+				File externalPath = Environment.getExternalStorageDirectory();
+				String packageName = db.getContext().getPackageName();
+				File file = new File(externalPath.getAbsolutePath() + "/Android/data/" + packageName+ "/", u.getPhotoFileName());
+				//File file = new File(db.getContext().getExternalFilesDir(null), u.getPhotoFileName());
 				file.delete();
 			}
 			ent = rows.get(0);
@@ -687,39 +863,75 @@ public class DataBaseHelper {
 	 * @param courseCode Course code to be referenced
 	 */
 	public boolean insertGroup(Group g, long courseCode) {
-		List<Entity> rows = db.getEntityList(Global.DB_TABLE_GROUPS, "groupCode = " + g.getId());
-
+		List<Entity> rows = db.getEntityList(Global.DB_TABLE_GROUPS, "id = " + g.getId());
+		boolean returnValue = true;
 		if(rows.isEmpty()) {
-			Entity ent = new Entity(Global.DB_TABLE_GROUPS);
-
-			ent.setValue("groupCode", g.getId());
-			ent.setValue("groupName", g.getGroupName());
-			ent.setValue("groupTypeCode", g.getGroupTypeCode());
-			ent.setValue("groupTypeName", g.getGroupTypeName());
-			ent.save();
-
-			// TODO: Do not insert in groups_courses until getGroups is fixed
-			ent = new Entity(Global.DB_TABLE_GROUPS_COURSES) ;
-			ent.setValue("grpCod", g.getId());
-			ent.setValue("crsCod", courseCode);
-			ent.save();
+			insertEntity(Global.DB_TABLE_GROUPS,g);
 			
-			rows = db.getEntityList(Global.DB_TABLE_GROUPS_COURSES,"grpCod =" + g.getId());
-			if(rows.isEmpty()){
-				ent = new Entity(Global.DB_TABLE_GROUPS_COURSES);
-				ent.setValue("grpCod", g.getId());
-				ent.setValue("crsCod", courseCode);
-				ent.save();	
-			}else{ 
-				rows.get(0).setValue("crsCod", courseCode);
-				rows.get(0).save();
-			}
+			Entity ent;
 			
-			return true;
+			long groupCode = g.getId();
+			rows = db.getEntityList(Global.DB_TABLE_GROUPS_COURSES,"grpCod =" + groupCode);
+			Course course = (Course) getRow(Global.DB_TABLE_COURSES,"id",String.valueOf(courseCode));
+			//course code is a foreign key. Therefore, to avoid a database error,
+			//it should not insert/modify rows in the relationship table if the course does not exists
+			if(course != null){ 
+				if(rows.isEmpty()){
+					PairTable<Long,Long> pair = new PairTable(Global.DB_TABLE_COURSES,courseCode,g.getId());
+					insertPairTable(pair);
+				}else{ 
+					rows.get(0).setValue("crsCod", courseCode);
+					rows.get(0).save();
+				}
+			}else returnValue = false;
+			
+			long groupTypeCode = g.getGroupTypeCode();
+			GroupType groupType = (GroupType) getRow(Global.DB_TABLE_GROUP_TYPES,"groupTypeCode",String.valueOf(groupTypeCode));
+			//group type code is a foreign key. Therefore, to avoid a database error,
+			//it should not insert/modify rows in the relationship table if the group type does not exists
+			if(groupType != null){
+				rows = db.getEntityList(Global.DB_TABLE_GROUPS_GROUPTYPES,"grpCod="+groupCode);
+				if(!rows.isEmpty()){
+					Pair<String,String> params = selectParamsPairTable(Global.DB_TABLE_GROUP_TYPES);
+					insertPairTable(new PairTable<Long,Long>(Global.DB_TABLE_GROUPS_GROUPTYPES,groupTypeCode,groupCode));
+					/*ent = new Entity(Global.DB_TABLE_GROUPS_GROUPTYPES);
+					ent.setValue("grpCod", groupCode);
+					ent.setValue("grpTypCod", groupTypeCode[0]);
+					ent.save();*/
+				}else{
+					PairTable<Integer,Integer> prev = new PairTable(Global.DB_TABLE_GROUPS_GROUPTYPES,rows.get(0).getValue("grpTypCod"),rows.get(0).getValue("grpCod"));
+					PairTable<Integer,Integer> current = new PairTable(Global.DB_TABLE_GROUPS_GROUPTYPES,groupTypeCode,groupCode);
+					updatePairTable(prev,current);
+					//rows.get(0).setValue("grpTypCod", groupTypeCode[0]);
+					//rows.get(0).save();
+				}
+			}else returnValue = false;
+			
+			return returnValue;
 		} else
 			return false;
 	}
 
+	/**
+	 * Insert a new group type in the database or updated if the group type exits already in the data base
+	 * @param gt Group Type to be inserted
+	 * */
+	public boolean insertGroupType(GroupType gt){
+		boolean returnValue = true;
+		GroupType row = (GroupType)getRow(Global.DB_TABLE_GROUP_TYPES,"id",String.valueOf(gt.getId()));
+		if(row == null){
+			Entity ent = new Entity(Global.DB_TABLE_GROUP_TYPES);
+
+			ent.setValue("id", gt.getId());
+			ent.setValue("groupTypeName", gt.getGroupTypeName());
+			ent.setValue("couseCode", gt.getCourseCode());
+			ent.setValue("mandatory", gt.isMandatory());
+			ent.setValue("multiple", gt.isMultiple());
+			ent.save();
+		}
+		return returnValue;
+	}
+	
 	/**
 	 * Inserts the rollcall data of a student to a practice session in database
 	 * @param l User code of student
@@ -965,17 +1177,19 @@ public class DataBaseHelper {
 	{
 		String table = prev.getTable();
 		String where;
-		Integer first = (Integer) prev.getFirst();
-		Integer second = (Integer) prev.getSecond();
+		//Integer first = (Integer) prev.getFirst();
+		//Integer second = (Integer) prev.getSecond();
 		Pair<String, String> params = selectParamsPairTable(table);
 
-		where = params.getFirst() + " = " + first + " AND " + params.getSecond() + " = " + second;
+		where = params.getFirst() + " = " + prev.getFirst() + " AND " + params.getSecond() + " = " + prev.getSecond();
 
 		List<Entity> rows = db.getEntityList(table, where);
-		Entity ent = rows.get(0);
-		ent.setValue(params.getFirst(), actual.getFirst());
-		ent.setValue(params.getSecond(), actual.getSecond());
-		ent.save();
+		if(!rows.isEmpty()){
+			Entity ent = rows.get(0);
+			ent.setValue(params.getFirst(), actual.getFirst());
+			ent.setValue(params.getSecond(), actual.getSecond());
+			ent.save();
+		}
 	}
 
 	/**
@@ -1003,30 +1217,67 @@ public class DataBaseHelper {
 	 * @param courseCode current code of the course related to the group
 	 * @param currentGroup updated group
 	 * */
-	public boolean updateGroup(long groupCode, long courseCode, Group currentGroup){
-		List<Entity> rows = db.getEntityList(Global.DB_TABLE_GROUPS, "groupCode =" + groupCode);
+	public boolean updateGroup(long groupCode, long courseCode, Group currentGroup, long ... groupTypeCode){
+		List<Entity> rows = db.getEntityList(Global.DB_TABLE_GROUPS, "id =" + groupCode);
 		if(!rows.isEmpty()){
 			Entity ent = rows.get(0);
-			
-			//ent.setValue("groupCode", g.getId());
+			boolean returnValue = true;
+			//ent.setValue("id", g.getId());
 			ent.setValue("groupName", currentGroup.getGroupName());
-			ent.setValue("groupTypeCode", currentGroup.getGroupTypeCode());
-			ent.setValue("groupTypeName", currentGroup.getGroupTypeName());
+			ent.setValue("maxStudent", currentGroup.getMaxStudents());
+			ent.setValue("students", currentGroup.getCurrentStudents());
+			ent.setValue("open", currentGroup.isOpen());
+			ent.setValue("fileZones", currentGroup.exitsDocumentsArea());
+			ent.setValue("membership", currentGroup.isMembership());
 			ent.save();
 			
 			rows = db.getEntityList(Global.DB_TABLE_GROUPS_COURSES,"grpCod =" + groupCode);
-			if(rows.isEmpty()){
-				ent = new Entity(Global.DB_TABLE_GROUPS_COURSES);
-				ent.setValue("grpCod", groupCode);
-				ent.setValue("crsCod", courseCode);
-				ent.save();	
-			}else{ 
-				rows.get(0).setValue("crsCod", courseCode);
-				rows.get(0).save();
+			Course course = (Course) getRow(Global.DB_TABLE_COURSES,"id",String.valueOf(courseCode));
+			//course code is a foreign key. Therefore, to avoid a database error,
+			//it should not insert/modify rows in the relationship table if the course does not exists
+			if(course != null){ 
+				if(rows.isEmpty()){
+					ent = new Entity(Global.DB_TABLE_GROUPS_COURSES);
+					ent.setValue("grpCod", groupCode);
+					ent.setValue("crsCod", courseCode);
+					ent.save();	
+				}else{ 
+					rows.get(0).setValue("crsCod", courseCode);
+					rows.get(0).save();
+				}
+			}else returnValue = false;
+			
+			if(groupTypeCode.length > 0){
+				GroupType groupType = (GroupType) getRow(Global.DB_TABLE_GROUP_TYPES,"id",String.valueOf(groupTypeCode[0]));
+				//group type code is a foreign key. Therefore, to avoid a database error,
+				//it should not insert/modify rows in the relationship table if the group type does not exists
+				if(groupType != null){
+					rows = db.getEntityList(Global.DB_TABLE_GROUPS_GROUPTYPES,"grpCod="+groupCode);
+					if(!rows.isEmpty()){
+						Pair<String,String> params = selectParamsPairTable(Global.DB_TABLE_GROUP_TYPES);
+						insertPairTable(new PairTable<Long,Long>(Global.DB_TABLE_GROUPS_GROUPTYPES,groupTypeCode[0],groupCode));
+						/*ent = new Entity(Global.DB_TABLE_GROUPS_GROUPTYPES);
+						ent.setValue("grpCod", groupCode);
+						ent.setValue("grpTypCod", groupTypeCode[0]);
+						ent.save();*/
+					}else{
+						PairTable<Integer,Integer> prev = new PairTable(Global.DB_TABLE_GROUPS_GROUPTYPES,rows.get(0).getValue("grpTypCod"),rows.get(0).getValue("grpCod"));
+						PairTable<Integer,Integer> current = new PairTable(Global.DB_TABLE_GROUPS_GROUPTYPES,groupTypeCode[0],groupCode);
+						updatePairTable(prev,current);
+						//rows.get(0).setValue("grpTypCod", groupTypeCode[0]);
+						//rows.get(0).save();
+					}
+				}else returnValue = false;
 			}
-			return true;
+			return returnValue;
 		}else
 			return false;
+	}
+	
+	private <T> boolean updateRelationship(Pair<String,String> tables, Pair<String,String> idsTables, String relationTable, Pair<String,T> remainField, Pair<String,T> changedField){
+		
+		
+		return true;
 	}
 
 	/**
@@ -1034,14 +1285,29 @@ public class DataBaseHelper {
 	 * @param prev Group to be updated
 	 * @param actual Updated group
 	 */
-	public void updateGroup(Group prev, Group actual) {
+	public void updateGroup(Group prev, Group currentGroup) {
 		List<Entity> rows = db.getEntityList(Global.DB_TABLE_GROUPS, "id = " + prev.getId());
-		Entity ent = rows.get(0);
-		ent.setValue("groupCode", actual.getId());
-		ent.setValue("groupName", actual.getGroupName());
-		ent.setValue("groupTypeCode", actual.getGroupTypeCode());
-		ent.setValue("groupTypeName", actual.getGroupTypeName());
-		ent.save();
+		if(!rows.isEmpty()){
+			insertEntity(Global.DB_TABLE_GROUPS,currentGroup,rows.get(0));
+		}
+		if(prev.getId() != currentGroup.getId()){
+			//in this case, the relationships with group types and courses should be updated
+			
+		}
+	}
+
+
+	/**
+	 * Updates an existing group type
+	 * */
+	private boolean updateGroupType(GroupType prv, GroupType current){
+		List<Entity> rows = db.getEntityList(Global.DB_TABLE_GROUP_TYPES, "id="+prv.getId());
+		boolean returnValue = true;
+		if(!rows.isEmpty()){
+			Entity ent = rows.get(0); //the group type with a given group type code is unique
+			insertEntity(Global.DB_TABLE_GROUP_TYPES,current,ent);
+		}else returnValue = false;
+		return returnValue;
 	}
 
 	/**
@@ -1051,7 +1317,10 @@ public class DataBaseHelper {
 	public void removeUser(User u) {
 		removeRow(Global.DB_TABLE_USERS, u.getId());
 
-		File file = new File(db.getContext().getExternalFilesDir(null), u.getPhotoFileName());
+		File externalPath = Environment.getExternalStorageDirectory();
+		String packageName = db.getContext().getPackageName();
+		File file = new File(externalPath.getAbsolutePath() + "/Android/data/" + packageName+ "/", u.getPhotoFileName());
+		//File file = new File(db.getContext().getExternalFilesDir(null), u.getPhotoFileName());
 		file.delete();
 	}
 
@@ -1061,6 +1330,10 @@ public class DataBaseHelper {
 	 */
 	public void removeGroup(Group g) {
 		removeRow(Global.DB_TABLE_GROUPS, g.getId());
+		
+		//Remove also relationships with courses and group types
+		removeAllRow(Global.DB_TABLE_GROUPS_GROUPTYPES,"grpCod",g.getId());
+		removeAllRow(Global.DB_TABLE_GROUPS_COURSES,"grpCod",g.getId());
 	}
 
 	/**
@@ -1346,11 +1619,16 @@ public class DataBaseHelper {
 		emptyTable(Global.DB_TABLE_GROUPS);
 		emptyTable(Global.DB_TABLE_PRACTICE_SESSIONS);
 		emptyTable(Global.DB_TABLE_ROLLCALL);
+		emptyTable(Global.DB_TABLE_GROUP_TYPES);
+		emptyTable(Global.DB_TABLE_GROUPS_GROUPTYPES);
 		compactDB();
 
 		// Removes users photos from external storage (Android 2.2 or higher only)
 		if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.FROYO) {
-			File dir = db.getContext().getExternalFilesDir(null);
+			File externalPath = Environment.getExternalStorageDirectory();
+			String packageName = db.getContext().getPackageName();
+			File dir = new File(externalPath.getAbsolutePath() + "/Android/data/" + packageName+ "/");
+			//File dir = db.getContext().getExternalFilesDir(null);
 			if(dir != null){
 				String [] children = dir.list();
 				for (int i=0; i < children.length; i++)
@@ -1396,6 +1674,7 @@ public class DataBaseHelper {
 		//cleanTables();    	
 		//initializeDB();
 		compactDB();
+		
 
 		/*db.getDB().execSQL("CREATE TEMPORARY TABLE __"
                 + Global.DB_TABLE_NOTIFICATIONS
@@ -1421,6 +1700,9 @@ public class DataBaseHelper {
 		deleteTable(Global.DB_TABLE_GROUPS);
 		deleteTable(Global.DB_TABLE_PRACTICE_SESSIONS);
 		deleteTable(Global.DB_TABLE_ROLLCALL);
+		deleteTable(Global.DB_TABLE_GROUP_TYPES);
+		deleteTable(Global.DB_TABLE_GROUPS_GROUPTYPES);
+		
 
         db.createTables();
 

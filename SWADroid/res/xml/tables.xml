@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <database
     name="swadroid_db"
-    version="12" >
+    version="13" >
 
     <table
         name="courses"
@@ -269,21 +269,50 @@
         new-in-version="11"
         to-string="%name%" >
         <field
-            name="groupCode"
+            name="id"
             obligatory="true"
             type="integer" />
+      <!--   <field
+            name="groupCode"
+            obligatory="true"
+            type="integer" />  renombrar una columna de nombre?-->
         <field
             name="groupName"
             obligatory="true"
             type="text" />
         <field
+            name="maxStudents"
+            new-in-version="13"
+            obligatory="true"
+            type="integer" />
+        <field
+            name="students"
+            new-in-version="13"
+            obligatory="true"
+            type="integer" />
+        <field
+            name="open"
+            new-in-version="13"
+            obligatory="true"
+            type="integer" />
+        <field
+            name="fileZones"
+            new-in-version="13"
+            obligatory="true"
+            type="integer" />
+        <field
+            name="membership"
+           	new-in-version="13"
+           	obligatory="true"
+           	type="integer"/>
+        <!-- <field
             name="groupTypeCode"
             obligatory="true"
             type="integer" />
         <field
             name="groupTypeName"
             obligatory="true"
-            type="text" />
+            type="text" />  -->
     </table>
     <table
         name="group_course"
@@ -297,6 +326,46 @@
         <field
             name="crsCod"
             foreign-table="courses"
+            obligatory="true"
+            type="foreign-key" />
+    </table>
+    <table 
+        name="group_types"
+        new-in-version="13"
+        to-string="%name%">
+        <field
+            name="id"
+            obligatory="true"
+            type="integer" />
+        <field
+            name="courseCode"
+            foreign-table="courses"
+            obligatory="true"
+            type="foreign-key"/>
+        <field
+            name="groupTypeName"
+            obligatory="true"
+            type="text"/>
+        <field
+            name="mandatory"
+            obligatory="true"
+            type="unsignedByte"/>
+       <field
+            name="multiple"
+            obligatory="true"
+            type="unsignedByte"/>
+    </table>
+    <table name="group_grouptypes"
+        new-in-version="13"
+        to-string="%name%">
+        <field
+            name="grpTypCod"
+            foreign-table="group_types"
+            obligatory="true"
+            type="foreign-key"/>
+        <field
+            name="grpCod"
+            foreign-table="groups"
             obligatory="true"
             type="foreign-key" />
     </table>

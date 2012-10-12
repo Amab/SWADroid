@@ -55,13 +55,14 @@ import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.model.Group;
+import es.ugr.swad.swadroid.model.GroupType;
 import es.ugr.swad.swadroid.modules.Groups;
 
 /**
  * Activity to navigate through the directory tree of documents and to manage
  * the downloads of documents
  * 
- * @author Helena Rodríguez Gijon <hrgijon@gmail.com>
+ * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  * */
 public class DownloadsManager extends MenuActivity {
 	/**
@@ -347,7 +348,8 @@ public class DownloadsManager extends MenuActivity {
 			spinnerNames.add(getString(R.string.course)+"-" + Global.getSelectedCourseShortName());
 			for(int i=0;i<groups.size();++i){
 				Group g = groups.get(i);
-				spinnerNames.add(getString(R.string.group)+"-" + g.getGroupTypeName() + " "+ g.getGroupName() );
+				GroupType gType = dbHelper.getGroupTypeFromGroup(g.getId());
+				spinnerNames.add(getString(R.string.group)+"-" + gType.getGroupTypeName() + " "+ g.getGroupName() );
 			}
 			
 			ArrayAdapter<String> adapter = new ArrayAdapter<String> (this,android.R.layout.simple_spinner_item,spinnerNames);

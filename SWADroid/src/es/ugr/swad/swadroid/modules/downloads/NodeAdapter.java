@@ -12,7 +12,7 @@ import android.widget.TextView;
 import es.ugr.swad.swadroid.R;
 /**
  * Adapter to populate browser of files with the information received from SWAD
- * @author Helena Rodríguez Gijón <hrgijon@gmail.com>
+ * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  * */
 
 public class NodeAdapter extends BaseAdapter {

@@ -4,9 +4,24 @@
     android:layout_height="match_parent"
     android:orientation="vertical" 
     >
-	<CheckBox android:id="@+id/checkBox"
+    <ImageView
+        android:id="@+id/padlockIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/padlockred"
+        android:layout_alignParentLeft="true"
+        />
+	<CheckBox android:id="@+id/checkBoxGroup"
 	    android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
+		android:layout_toRightOf="@id/padlockIcon"
 		android:text="Prueba"/>
+	<RadioButton android:id="@+id/radioButtonGroup"
+	    android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_toRightOf="@id/padlockIcon"
+		android:text="Prueba"
+		android:visibility="gone"
+	    />
 
 </RelativeLayout>
