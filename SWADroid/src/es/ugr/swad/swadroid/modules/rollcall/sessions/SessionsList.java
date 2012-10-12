@@ -106,7 +106,7 @@ public class SessionsList extends Module {
 		boolean existSessions = false;
 
 		// Get practice groups of selected course
-		List<Long> groupIdList = dbHelper.getGroupsCourse(courseCode);
+		List<Long> groupIdList = dbHelper.getGroupCodesCourse(courseCode);
 
 		ListView lv = new ListView(this);
 		SeparatedListAdapter adapter = new SeparatedListAdapter(this);
