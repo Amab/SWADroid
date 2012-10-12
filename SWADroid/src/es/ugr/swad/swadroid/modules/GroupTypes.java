@@ -14,28 +14,27 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
-import es.ugr.swad.swadroid.Global;
-import es.ugr.swad.swadroid.model.Course;
-import es.ugr.swad.swadroid.model.Group;
-import es.ugr.swad.swadroid.model.Model;
-import es.ugr.swad.swadroid.R;
 
+import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.model.Group;
+import es.ugr.swad.swadroid.model.GroupType;
+import es.ugr.swad.swadroid.model.Model;
+import es.ugr.swad.swadroid.modules.Module.Connect;
 /**
- * Groups module gets user's groups inside the current course
+ * Group type module to get the group types of a given course
  * and stores them in the database
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
- * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
- */
-public class Groups extends Module {
+ * */
+public class GroupTypes extends Module {
 	/**
-	 * Groups counter
-	 */
-	private int numGroups;
+	 * Group types name for Logcat
+	 * */
+	public static final String TAG = Global.APP_TAG + " Group Types";
 	/**
-	 * Groups tag name for Logcat
-	 */
-	public static final String TAG = Global.APP_TAG + " Groups";
+	 * Course code to which the request is related 
+	 * */
+	private long courseCode = -1;
 	@Override
 	protected void runConnection() {
 		super.runConnection();
@@ -44,13 +43,12 @@ public class Groups extends Module {
 			finish();
 		}
 	}
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setMETHOD_NAME("getGroups");
+		courseCode = getIntent().getLongExtra("courseCode", -1);
+		setMETHOD_NAME("getGroupTypes");
 	}
-
 	@Override
 	protected void onStart() {
 		super.onStart();      
@@ -66,10 +64,6 @@ public class Groups extends Module {
 			}
 		}
 	}
-	
-		/* (non-Javadoc)
-	 * @see es.ugr.swad.swadroid.modules.Module#onActivityResult(int, int, android.content.Intent)
-	 */
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -78,15 +72,6 @@ public class Groups extends Module {
 			finish();
 		}
 	}
-		@Override
-	protected void connect() {
-		String progressDescription = getString(R.string.groupsProgressDescription);
-		int progressTitle = R.string.groupsProgressTitle;
-
-		new Connect(true, progressDescription, progressTitle).execute();
-	}
-	
-	
 	@Override
 	protected void requestService() throws NoSuchAlgorithmException,
 			IOException, XmlPullParserException, SoapFault,
@@ -94,61 +79,58 @@ public class Groups extends Module {
 		createRequest();
 		addParam("wsKey", Global.getLoggedUser().getWsKey());
 		addParam("courseCode", (int)Global.getSelectedCourseCode());
-		sendRequest(Group.class,false);
+		sendRequest(GroupTypes.class,false);
 		
 		if(result != null){
-			
 			//Stores groups data returned by webservice response
 			List<Model> groupsSWAD = new ArrayList<Model>();
-			
 			
 			Vector<?> res = (Vector <?>) result;
 			SoapObject soap = (SoapObject) res.get(1);	
 			int csSize = soap.getPropertyCount();
 			
-			
 			for (int i = 0; i < csSize; i++) {
 				SoapObject pii = (SoapObject)soap.getProperty(i);
-				long id = Long.parseLong(pii.getProperty("groupCode").toString());
-				String groupName = pii.getProperty("groupName").toString();
-				long groupTypeCode = Integer.parseInt(pii.getProperty("groupTypeCode").toString());
-				int maxStudents = Integer.parseInt(pii.getProperty("maxStudent").toString());
-				int open = Integer.parseInt(pii.getProperty("open").toString());
-				int numStudents = Integer.parseInt(pii.getProperty("numStudents").toString());
-				int fileZones = Integer.parseInt(pii.getProperty("fileZones").toString());
-				int membership = Integer.parseInt(pii.getProperty("membership").toString());
-				Group g = new Group(id,groupName,groupTypeCode,maxStudents,open,numStudents,fileZones,membership);
+				long id = Long.parseLong(pii.getProperty("groupTypeCode").toString());
+				String groupTypeName = pii.getProperty("groupTypeName").toString();
+				int mandatory = Integer.parseInt(pii.getProperty("mandatory").toString());
+				int multiple = Integer.parseInt(pii.getProperty("multiple").toString());
+				GroupType g = new GroupType(id,groupTypeName,courseCode,mandatory,multiple);
 				
 				groupsSWAD.add(g);
 				
 				if(isDebuggable){
 					Log.i(TAG, g.toString());
-        		}
+	    		}
 			}
-
+	
 			//TODO remove obsolete groups
 			for(int i = 0; i < groupsSWAD.size(); ++i){
-				Group g = (Group) groupsSWAD.get(i);
+				GroupType g = (GroupType) groupsSWAD.get(i);
 				//boolean isAdded = dbHelper.insertGroup(g,Global.getSelectedCourseCode());
 				//if(!isAdded){
-				if(!dbHelper.insertGroup(g,Global.getSelectedCourseCode())){
-					Log.i(TAG, "group to update");
-					dbHelper.updateGroup(g.getId(), Global.getSelectedCourseCode(), g);
-					Log.i(TAG, "group updated");
+				if(!dbHelper.insertGroupType(g)){
+					setResult(RESULT_CANCELED);
 				}
 			}
 			//Request finalized without errors
 			setResult(RESULT_OK);
 		}
-
 	}
+	
 
+	@Override
+	protected void connect() {
+		String progressDescription = getString(R.string.groupTypesProgressDescription);
+		int progressTitle = R.string.groupTypesProgressTitle;
+
+		new Connect(true, progressDescription, progressTitle).execute();
+	}
 
 	@Override
 	protected void postConnect() {
-		Toast.makeText(this, "got groups", Toast.LENGTH_LONG).show();
-		Log.i(TAG, "got groups");
-		finish();
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
@@ -156,7 +138,5 @@ public class Groups extends Module {
 		// TODO Auto-generated method stub
 
 	}
-
-
 
 }

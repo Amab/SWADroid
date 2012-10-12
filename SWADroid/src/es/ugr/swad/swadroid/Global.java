@@ -215,6 +215,14 @@ public class Global {
 	 * */
 	public static final String DB_TABLE_GROUPS_COURSES = "group_course";
 	/**
+	 * Table name for group types
+	 * */
+	public static final String DB_TABLE_GROUP_TYPES = "group_types";
+	/**
+	 * Table name for relationship between groups and group types
+	 * */
+	public static final String DB_TABLE_GROUPS_GROUPTYPES = "group_grouptypes";
+	/**
 	 * Table name for practice sessions
 	 * */
 	public static final String DB_TABLE_PRACTICE_SESSIONS = "practice_sessions";

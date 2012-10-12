@@ -2,39 +2,33 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-          <ImageView
-            android:id="@+id/padlockIcon"
-            android:layout_width="wrap_content"
-    		android:layout_height="wrap_content"
-    		android:src="@drawable/shopper_icon"
-    		android:layout_alignParentLeft="true"
-         />
          <TextView
 			android:id="@+id/groupTypeText"
 			android:layout_height="wrap_content"
 			android:layout_width="wrap_content"
-			android:layout_toRightOf="@id/padlockIcon" />
+			android:layout_toRightOf="@id/padlockIcon" 
+			android:text="Group Type Name"/>
 
          <TextView
              android:id="@+id/vacantsText"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:layout_alignParentRight="true"
-             android:layout_below="@id/padlockIcon"
+             android:layout_below="@id/groupTypeText"
              android:text="@string/vacants" />
          <TextView
              android:id="@+id/numStudentText"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:layout_toLeftOf="@id/vacantsText"
-             android:layout_below="@id/padlockIcon"
+             android:layout_below="@id/groupTypeText"
              android:text="@string/numStudent" />
          <TextView
              android:id="@+id/maxStudentText"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:layout_toLeftOf="@id/numStudentText"
-             android:layout_below="@id/padlockIcon"
+             android:layout_below="@id/groupTypeText"
              android:text="@string/numStudent" />  
 
 </RelativeLayout>

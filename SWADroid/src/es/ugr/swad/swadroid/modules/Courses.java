@@ -46,7 +46,7 @@ import es.ugr.swad.swadroid.model.Model;
  * Courses module for get user's courses
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com> 
- * @author Helena Rodríguez Gijón <hrgijon@gmail.com>
+ * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */
 public class Courses extends Module {
 	/**
