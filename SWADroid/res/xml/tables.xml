@@ -11,10 +11,6 @@
             obligatory="true"
             type="long" />
         <field
-            name="name"
-            obligatory="true"
-            type="text" />
-        <field
             name="userRole"
             new-in-version="9"
             obligatory="true"
