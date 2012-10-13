@@ -25,6 +25,7 @@ import java.security.NoSuchAlgorithmException;
 
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.KvmSerializable;
+import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.os.Bundle;
@@ -156,7 +157,7 @@ public class Login extends Module {
 
 			if (result != null) {
 				KvmSerializable ks = (KvmSerializable) result;
-
+				SoapObject soap = (SoapObject)result;
 				/*Log.i(TAG, "count=" + ks.getPropertyCount());
 				Log.i(TAG, "property[0]=" + ks.getProperty(0));
 				Log.i(TAG, "property[1]=" + ks.getProperty(1));
@@ -171,15 +172,16 @@ public class Login extends Module {
 
 				//Stores user data returned by webservice response
 				loggedUser = new User(
-						Long.parseLong(ks.getProperty(0).toString()),	// id
-						ks.getProperty(2).toString(),					// wsKey
-						ks.getProperty(3).toString(),					// userID
-						null,											// userNickname
-						ks.getProperty(4).toString(),					// userSurname1
-						ks.getProperty(5).toString(),					// userSurname2
-						ks.getProperty(6).toString(),					// userFirstName
-						null,											// photoPath
-						Integer.parseInt(ks.getProperty(8).toString())	// userRole
+						Long.parseLong(ks.getProperty(0).toString()),					// id
+						soap.getProperty("wsKey").toString(),							// wsKey
+						soap.getProperty("userID").toString(),							// userID
+						//soap.getProperty("userNickname").toString(),					// userNickname
+						null,															// userNickname
+						soap.getProperty("userSurname1").toString(),					// userSurname1
+						soap.getProperty("userSurname2").toString(),					// userSurname2
+						soap.getProperty("userFirstname").toString(),					// userFirstname
+						soap.getProperty("userPhoto").toString(),						// photoPath
+						Integer.parseInt(soap.getProperty("userRole").toString())		// userRole
 						);
 
 				Global.setLoggedUser(loggedUser);
