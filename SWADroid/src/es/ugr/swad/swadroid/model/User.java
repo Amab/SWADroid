@@ -56,7 +56,7 @@ public class User extends Model {
 	/**
 	 * Full path where user's picture is stored.
 	 */
-	private String photoPath;
+	private String userPhoto;
 	/**
 	 * User role. 1:guest 2: student 3: teacher
 	 */
@@ -68,7 +68,7 @@ public class User extends Model {
 	private static PropertyInfo PI_userSurname1 = new PropertyInfo();
 	private static PropertyInfo PI_userSurname2 = new PropertyInfo();
 	private static PropertyInfo PI_userFirstname = new PropertyInfo();
-	private static PropertyInfo PI_photoPath = new PropertyInfo();
+	private static PropertyInfo PI_userPhoto = new PropertyInfo();
 	private static PropertyInfo PI_userRole = new PropertyInfo();
 
 	@SuppressWarnings("unused")
@@ -79,7 +79,7 @@ public class User extends Model {
 		PI_userSurname1,
 		PI_userSurname2,
 		PI_userFirstname,
-		PI_photoPath,
+		PI_userPhoto,
 		PI_userRole
 	};
 
@@ -92,11 +92,11 @@ public class User extends Model {
 	 * @param userSurname1 User first surname.
 	 * @param userSurname2 User last surname.
 	 * @param userFirstname User name.
-	 * @param photoPath Full path where user's picture is stored.
+	 * @param userPhoto Full path where user's picture is stored.
 	 * @param userRole User role.
 	 */
 	public User(long id, String wsKey, String userID, String userNickname, String userSurname1, 
-			String userSurname2, String userFirstname, String photoPath, int userRole) {
+			String userSurname2, String userFirstname, String userPhoto, int userRole) {
 		super(id);
 		this.wsKey			= wsKey;
 		this.userID			= userID;
@@ -104,7 +104,7 @@ public class User extends Model {
 		this.userSurname1	= userSurname1;
 		this.userSurname2	= userSurname2;
 		this.userFirstname	= userFirstname;
-		this.photoPath		= photoPath;
+		this.userPhoto		= userPhoto;
 		this.userRole		= userRole;
 	}
 
@@ -190,29 +190,29 @@ public class User extends Model {
 
 	/**
 	 * Gets Full path where user's picture is stored.
-	 * @return the photoPath
+	 * @return the userPhoto
 	 */
-	public String getPhotoPath() {
-		return photoPath;
+	public String getUserPhoto() {
+		return userPhoto;
 	}
 
 	/**
 	 * Gets File name where user's picture is stored.
-	 * @return the photoPath
+	 * @return the userPhoto
 	 */
 	public String getPhotoFileName() {
-		if (photoPath == null || photoPath == "")
+		if (userPhoto == null || userPhoto == "")
 			return null;
 		else
-			return photoPath.substring(photoPath.lastIndexOf('/')+1);
+			return userPhoto.substring(userPhoto.lastIndexOf('/')+1);
 	}
 
 	/**
 	 * Sets Full path where user's picture is stored.
-	 * @param photoPath the photoPath to set
+	 * @param userPhoto the userPhoto to set
 	 */
-	public void setPhotoPath(String photoPath) {
-		this.photoPath = photoPath;
+	public void setuserPhoto(String userPhoto) {
+		this.userPhoto = userPhoto;
 	}
 
 	/**
@@ -258,7 +258,7 @@ public class User extends Model {
 		case 3 : object = userSurname1;		break;
 		case 4 : object = userSurname2;		break;
 		case 5 : object = userFirstname;	break;
-		case 6 : object = photoPath;		break;
+		case 6 : object = userPhoto;		break;
 		case 7 : object = userRole;			break;
 		}
 
@@ -297,7 +297,7 @@ public class User extends Model {
 			break;             
 		case 6:
 			propertyInfo.type = PropertyInfo.STRING_CLASS;
-			propertyInfo.name = "photoPath";
+			propertyInfo.name = "userPhoto";
 			break;
 		case 7:
 			propertyInfo.type = PropertyInfo.INTEGER_CLASS;
@@ -314,7 +314,7 @@ public class User extends Model {
 		case 3 : userSurname1	= (String) obj; break;
 		case 4 : userSurname2	= (String) obj; break;
 		case 5 : userFirstname	= (String) obj; break;
-		case 6 : photoPath		= (String) obj; break;
+		case 6 : userPhoto		= (String) obj; break;
 		case 7 : userRole		= (Integer) obj; break;
 		}    
 	}
