@@ -331,7 +331,7 @@ public class SWADMain extends MenuExpandableListActivity {
 			SecureConnection.initSecureConnection();
 
 			//Check if this is the first run after an install or upgrade
-		//	lastVersion = prefs.getLastVersion();
+		// 	lastVersion = prefs.getLastVersion();
 		//	currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
 			lastVersion = 41;
 			currentVersion = 42;
