@@ -1671,8 +1671,6 @@ public class DataBaseHelper {
 	public void upgradeDB(Context context) throws XmlPullParserException, IOException {    	
 		//cleanTables();    	
 		//initializeDB();
-		compactDB();
-
 
 		/* 
 		 * Modify database keeping data:
@@ -1799,5 +1797,7 @@ public class DataBaseHelper {
                 + "userSurname1, userSurname2, userFirstname, location, summary, status, content FROM __"
                 + Global.DB_TABLE_NOTIFICATIONS + ";"
                 + "DROP TABLE __" + Global.DB_TABLE_NOTIFICATIONS + ";");*/
+		
+		compactDB();
 	}
 }
