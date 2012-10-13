@@ -301,7 +301,7 @@
             obligatory="true"
             type="integer" />
         <field
-            name="membership"
+            name="member"
            	new-in-version="13"
            	obligatory="true"
            	type="integer"/>

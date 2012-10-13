@@ -142,7 +142,6 @@ public class DataBaseHelper {
 
 		if(table.equals(Global.DB_TABLE_COURSES)) {
 			o = new Course(ent.getInt("id"),
-					ent.getString("name"),
 					ent.getInt("userRole"),
 					ent.getString("shortName"),
 					ent.getString("fullName"));
@@ -238,7 +237,7 @@ public class DataBaseHelper {
 					ent.getInt("students"),
 					ent.getInt("open"),
 					ent.getInt("fileZones"),
-					ent.getInt("membership"));
+					ent.getInt("member"));
 		}else if (table.equals(Global.DB_TABLE_GROUP_TYPES)){
 			o = new GroupType(ent.getLong("id"),
 					ent.getString("groupTypeName"),
@@ -527,7 +526,7 @@ public class DataBaseHelper {
 			Iterator<Long> iter = groupCodes.iterator();
 			while(iter.hasNext()){
 				Group g = (Group) getRow(Global.DB_TABLE_GROUPS,"id",String.valueOf(iter.next()));
-				if(g.isMembership()) groups.add(g);
+				if(g.isMember()) groups.add(g);
 			}
 		}
 		return groups;
@@ -633,7 +632,6 @@ public class DataBaseHelper {
 	{
 		Entity ent = new Entity(Global.DB_TABLE_COURSES);
 		ent.setValue("id", c.getId());
-		ent.setValue("name", c.getName());
 		ent.setValue("userRole", c.getUserRole());
 		ent.setValue("shortName", c.getShortName());
 		ent.setValue("fullName", c.getFullName());
@@ -789,7 +787,7 @@ public class DataBaseHelper {
 			ent.setValue("students", g.getCurrentStudents());
 			ent.setValue("open", g.isOpen());
 			ent.setValue("fileZones", g.exitsDocumentsArea());
-			ent.setValue("membership", g.isMembership());
+			ent.setValue("member", g.isMember());
 			ent.save();
 		}
 		
@@ -886,10 +884,12 @@ public class DataBaseHelper {
 			}else returnValue = false;
 			
 			long groupTypeCode = g.getGroupTypeCode();
-			GroupType groupType = (GroupType) getRow(Global.DB_TABLE_GROUP_TYPES,"groupTypeCode",String.valueOf(groupTypeCode));
+			
+			//WHILE THE WEB SERVICE TO GET GROUP TYPES STILL UNAVAILABLE, this condition is not evaluated
+			//GroupType groupType = (GroupType) getRow(Global.DB_TABLE_GROUP_TYPES,"id",String.valueOf(groupTypeCode));
 			//group type code is a foreign key. Therefore, to avoid a database error,
 			//it should not insert/modify rows in the relationship table if the group type does not exists
-			if(groupType != null){
+			//if(groupType != null){
 				rows = db.getEntityList(Global.DB_TABLE_GROUPS_GROUPTYPES,"grpCod="+groupCode);
 				if(!rows.isEmpty()){
 					Pair<String,String> params = selectParamsPairTable(Global.DB_TABLE_GROUP_TYPES);
@@ -905,7 +905,7 @@ public class DataBaseHelper {
 					//rows.get(0).setValue("grpTypCod", groupTypeCode[0]);
 					//rows.get(0).save();
 				}
-			}else returnValue = false;
+			/*}else returnValue = false;*/
 			
 			return returnValue;
 		} else
@@ -1021,7 +1021,6 @@ public class DataBaseHelper {
 		List<Entity> rows = db.getEntityList(Global.DB_TABLE_COURSES, "id = " + prev.getId());
 		Entity ent = rows.get(0);
 		ent.setValue("id", actual.getId());
-		ent.setValue("name", actual.getName());
 		ent.setValue("userRole", actual.getUserRole());
 		ent.setValue("shortName", actual.getShortName());
 		ent.setValue("fullName", actual.getFullName());
@@ -1039,7 +1038,6 @@ public class DataBaseHelper {
 		if(!rows.isEmpty()){
 			Entity ent = rows.get(0);
 			ent.setValue("id", actual.getId());
-			ent.setValue("name", actual.getName());
 			ent.setValue("userRole", actual.getUserRole());
 			ent.setValue("shortName", actual.getShortName());
 			ent.setValue("fullName", actual.getFullName());
@@ -1228,7 +1226,7 @@ public class DataBaseHelper {
 			ent.setValue("students", currentGroup.getCurrentStudents());
 			ent.setValue("open", currentGroup.isOpen());
 			ent.setValue("fileZones", currentGroup.exitsDocumentsArea());
-			ent.setValue("membership", currentGroup.isMembership());
+			ent.setValue("member", currentGroup.isMember());
 			ent.save();
 			
 			rows = db.getEntityList(Global.DB_TABLE_GROUPS_COURSES,"grpCod =" + groupCode);
@@ -1674,8 +1672,99 @@ public class DataBaseHelper {
 		//cleanTables();    	
 		//initializeDB();
 		compactDB();
-		
 
+
+		/* 
+		 * Modify database keeping data:
+		 * 1. Create temporary table __DB_TABLE_GROUPS (with the new model)
+		 * 2. insert in the temporary table all the data (in the new model) from the old table
+		 * 3. drop table DB_TABLE_GROUPS
+		 * 4. create DB_TABLE_GROUPS with the new model. 
+		 * 5. insert in DB_TABLE_GROUPS all the data from __DB_TABLE_GROUPS
+		 * 6. insert in DB_TABLE_GROUPS_GROUPTYPES the relationships between the deleted groups and group types
+		 * 7. drop __DB_TABLE_GROUPS
+		 * Just to modify database without to keep data just 7,6.
+		 * 
+		 * */
+		/*TODO Àesto se deber’a ejecutar s—lo cuando se pase una version < 12 a una mayor de 13? en el resto de los casos no 
+		Àcon la version de swadroid?*/
+		
+		/* From version 11 to 12 
+		 * changes on courses table:
+		 * - old field name is erased
+		 * The rest of the changes are only new fields and they are added automatic by Dataframework. */
+		Cursor dbCursor = db.getDB().query(Global.DB_TABLE_COURSES, null, null, null, null, null, null);
+		String[] columnNames = dbCursor.getColumnNames();
+		boolean found = false;
+		int i = 0;
+		while(i < columnNames.length && !found){
+			if(columnNames[i].compareTo("name") == 0) found = true;
+			++i;			
+		}
+		if(found){
+			//without to keep data 
+			db.getDB().execSQL( "DROP TABLE " + Global.DB_TABLE_COURSES + ";");//+
+					db.getDB().execSQL("CREATE TABLE "+ Global.DB_TABLE_COURSES
+					+ " (_id integer primary key autoincrement, id long, userRole integer,shortName text, fullName text);");
+			//Keeping data (It will have columns without data):
+			/*
+			 * db.getDB().execSQL("CREATE TEMPORARY TABLE __"+ Global.DB_TABLE_COURSES
+			+ " (_id integer primary key autoincrement, id long, userRole integer,"
+            + " shortName text, fullName text); ");
+	db.getDB().execSQL(
+            "INSERT INTO __" + Global.DB_TABLE_COURSES + " SELECT _id, id, userRole, name, name  "
+           + " FROM "+ Global.DB_TABLE_COURSES + ";");
+	db.getDB().execSQL( "DROP TABLE " + Global.DB_TABLE_COURSES + ";");
+	db.getDB().execSQL("CREATE TABLE "+ Global.DB_TABLE_COURSES
+			+ " (_id integer primary key autoincrement, id long, userRole integer,"
+            + " shortName text, fullName text); ");
+	db.getDB().execSQL(
+            "INSERT INTO " + Global.DB_TABLE_COURSES + " SELECT _id, id, userRole, shortName, fullName  "
+           + " FROM __"+ Global.DB_TABLE_COURSES + ";");*/
+			
+		}
+
+		dbCursor = db.getDB().query(Global.DB_TABLE_COURSES, null, null, null, null, null, null);
+		columnNames = dbCursor.getColumnNames();
+		
+		/* version 12 - 13
+		 * changes on groups table: 
+		 * - old field groupCode is now id
+		 * - old field groupTypeCode is erased 
+		 * - old field groupTypeName is erased
+		 * The rest of the changes are only new fields and they are added automatic by Dataframework. 
+		 * */
+		dbCursor = db.getDB().query(Global.DB_TABLE_GROUPS, null, null, null, null, null, null);
+		columnNames = dbCursor.getColumnNames();
+		found = false;
+		i = 0;
+		while(i < columnNames.length && !found){
+			if(columnNames[i].compareTo("groupCode") == 0) found = true;
+			++i;			
+		}
+		if(found){
+			//without to keep data 
+			db.getDB().execSQL( "DROP TABLE " + Global.DB_TABLE_GROUPS + ";");
+			db.getDB().execSQL("CREATE TABLE " + Global.DB_TABLE_GROUPS+ " (_id integer primary key autoincrement, id long, groupName text, maxStudents integer,"
+	                + " students integer, open integer, fileZones integer, member integer); ");
+		/*db.getDB().execSQL(
+				"CREATE TEMPORARY TABLE __"+ Global.DB_TABLE_GROUPS
+				+ " (_id integer primary key autoincrement, id long, groupName text, maxStudents integer,"
+                + " students integer, open integer, fileZones integer, member integer); ");
+		db.getDB().execSQL(
+                 "INSERT INTO __" + Global.DB_TABLE_GROUPS + " SELECT _id, groupCode, groupName, maxStudents,  "
+                + "students, open, fileZones, member FROM "+ Global.DB_TABLE_GROUPS + ";");
+		db.getDB().execSQL( "DROP TABLE " + Global.DB_TABLE_GROUPS + ";");
+		db.getDB().execSQL("CREATE TABLE " + Global.DB_TABLE_GROUPS+ " (_id integer primary key autoincrement, id long, groupName text, maxStudents integer,"
+                + " students integer, open integer, fileZones integer, member integer); ");
+        db.getDB().execSQL("INSERT INTO " + Global.DB_TABLE_GROUPS + " SELECT _id, id, groupName, maxStudents,  "
+                + "students, open, fileZones, member FROM __"+ Global.DB_TABLE_GROUPS + ";");
+        db.getDB().execSQL( "DROP TABLE __" + Global.DB_TABLE_GROUPS + ";");*/
+		
+		}
+		dbCursor = db.getDB().query(Global.DB_TABLE_GROUPS, null, null, null, null, null, null);
+		columnNames = dbCursor.getColumnNames();
+		
 		/*db.getDB().execSQL("CREATE TEMPORARY TABLE __"
                 + Global.DB_TABLE_NOTIFICATIONS
                 + " (_id INTEGER PRIMARY KEY AUTOINanCREMENT, id INTEGER, eventType TEXT, eventTime TEXT,"

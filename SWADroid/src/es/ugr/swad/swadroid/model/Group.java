@@ -21,23 +21,23 @@ public class Group extends Model {
 	/**
 	 * Maximum number of students allowed in this group
 	 */
-	private int maxStudents;
+	private int maxStudents =  -1;
 	/**
 	 * Current number of students that belong to this group
 	 * */
-	private int students;
+	private int students = -1;
 	/**
 	 * Indicates whether the enrollment to this group is allowed or not 
 	 * */
-	private int open;
+	private int open = 0;
 	/**
 	 * Indicates whether the group has an area of documents related to or not 
 	 * */
-	private int fileZones;
+	private int fileZones = 0;
 	/**
-	 * Indicates if the logged user is a membership of this group
+	 * Indicates if the logged user is a member of this group
 	 * */
-	private int membership;
+	private int member;
 	
 	private static PropertyInfo PI_id = new PropertyInfo();
 	private static PropertyInfo PI_groupName = new PropertyInfo();
@@ -45,7 +45,7 @@ public class Group extends Model {
 	private static PropertyInfo PI_students = new PropertyInfo();
 	private static PropertyInfo PI_open = new PropertyInfo();
 	private static PropertyInfo PI_fileZones = new PropertyInfo();
-	private static PropertyInfo PI_membership = new PropertyInfo();
+	private static PropertyInfo PI_member = new PropertyInfo();
 	private static PropertyInfo PI_groupTypeCode = new PropertyInfo();
 	
 	@SuppressWarnings("unused")
@@ -57,7 +57,7 @@ public class Group extends Model {
 		PI_students,
 		PI_open,
 		PI_fileZones,
-		PI_membership
+		PI_member
 	};
 
 	/**
@@ -68,9 +68,9 @@ public class Group extends Model {
 	 * @param students Current number of students that belong to this group
 	 * @param open Indicates whether the enrollment to this group is allowed or not 
 	 * @param fileZones Indicates whether the group has an area of documents related to or not
-	 * @param membership Indicates if the logged user is a membership of this group
+	 * @param member Indicates if the logged user is a member of this group
 	 */
-	public Group(long id, String groupName,long groupTypeCode, int maxStudents, int open, int students, int fileZones, int membership) {
+	public Group(long id, String groupName,long groupTypeCode, int maxStudents, int open, int students, int fileZones, int member) {
 		super(id);
 		this.groupName		= groupName;
 		this.maxStudents	= maxStudents;
@@ -92,7 +92,7 @@ public class Group extends Model {
 	        case 4 : object = students;break;
 	        case 5 : object = open;break;
 	        case 6 : object = fileZones;break;
-	        case 7 : object = membership;break;
+	        case 7 : object = member;break;
 	        
 	    }
 	    
@@ -137,7 +137,7 @@ public class Group extends Model {
         	break;
         case 7:
         	propertyInfo.type = PropertyInfo.INTEGER_CLASS;
-        	propertyInfo.name = "membership";
+        	propertyInfo.name = "member";
         	break;
 		}
 	}
@@ -153,7 +153,7 @@ public class Group extends Model {
 			case 5  : students = (Integer)obj; break;
 			case 6  : open = (Integer)obj; break;
 			case 7  : fileZones = (Integer)obj; break;
-			case 8  : membership = (Integer)obj; break;
+			case 8  : member = (Integer)obj; break;
 		}    
 
 	}
@@ -161,7 +161,7 @@ public class Group extends Model {
 	@Override
 	public String toString() {
 		return "Group [name="+groupName+", getId()="+getId()+", getGroupTypeCode()=" + getGroupTypeCode()+", getMaxStudents()=" + getMaxStudents()+", getCurrentStudents()=" 
-	+ getCurrentStudents()+", isOpen()=" + isOpen()+", exitsDocumentsArea()=" + exitsDocumentsArea() +", isMembership()= "+ isMembership();
+	+ getCurrentStudents()+", isOpen()=" + isOpen()+", exitsDocumentsArea()=" + exitsDocumentsArea() +", isMember()= "+ isMember();
 	}
 	
 	/**
@@ -230,12 +230,12 @@ public class Group extends Model {
 		return fileZones == 1? true:false;
 	}
 	/**
-	 * Indicates if the logged user is a membership of this group
-	 * @return true if the logged user is a membership of this group
+	 * Indicates if the logged user is a member of this group
+	 * @return true if the logged user is a member of this group
 	 * 		   false otherwise
 	 * */
-	public boolean isMembership(){
-		return membership == 1? true:false;
+	public boolean isMember(){
+		return member == 1? true:false;
 	}
 	//TODO relate Group to Group Type
 
@@ -258,7 +258,7 @@ public class Group extends Model {
 		result = prime * result + students;
 		result = prime * result + open;
 		result = prime * result + fileZones;
-		result = prime * result + membership;
+		result = prime * result + member;
 		return result;
 	}
 
@@ -288,7 +288,7 @@ public class Group extends Model {
 			return false;
 		if (fileZones != other.fileZones)
 			return false;
-		if (membership != other.membership)
+		if (member != other.member)
 			return false;
 		return true;
 	}

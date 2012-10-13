@@ -116,8 +116,8 @@ public class Groups extends Module {
 				int open = Integer.parseInt(pii.getProperty("open").toString());
 				int numStudents = Integer.parseInt(pii.getProperty("numStudents").toString());
 				int fileZones = Integer.parseInt(pii.getProperty("fileZones").toString());
-				int membership = Integer.parseInt(pii.getProperty("membership").toString());
-				Group g = new Group(id,groupName,groupTypeCode,maxStudents,open,numStudents,fileZones,membership);
+				int member = Integer.parseInt(pii.getProperty("member").toString());
+				Group g = new Group(id,groupName,groupTypeCode,maxStudents,open,numStudents,fileZones,member);
 				
 				groupsSWAD.add(g);
 				
