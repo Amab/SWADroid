@@ -146,6 +146,7 @@ public class Notifications extends Module {
 			{
 				//adapter.toggleContentVisibility(position);
 				TextView code = (TextView) v.findViewById(R.id.eventCode);
+				TextView userPhoto = (TextView) v.findViewById(R.id.eventUserPhoto);
 				TextView sender = (TextView) v.findViewById(R.id.eventSender);
 				TextView course = (TextView) v.findViewById(R.id.eventLocation);
 				TextView summary = (TextView) v.findViewById(R.id.eventSummary);
@@ -153,6 +154,7 @@ public class Notifications extends Module {
 				
 				Intent activity = new Intent(getApplicationContext(), NotificationItem.class);
 				activity.putExtra("notificationCode", code.getText().toString());
+				activity.putExtra("userPhoto", userPhoto.getText().toString());
 				activity.putExtra("sender", sender.getText().toString());
 				activity.putExtra("course", course.getText().toString());
 				activity.putExtra("summary", summary.getText().toString());
@@ -257,7 +259,7 @@ public class Notifications extends Module {
 			ContentResolver.requestSync(account, authority, new Bundle());
 		} else {
 			//Calculates next timestamp to be requested
-			Long timestamp = new Long(dbHelper.getFieldOfLastNotification("eventTime"));
+			Long timestamp = Long.valueOf(dbHelper.getFieldOfLastNotification("eventTime"));
 			timestamp++;
 	
 			//Creates webservice request, adds required params and sends request to webservice
@@ -275,16 +277,16 @@ public class Notifications extends Module {
 				notifCount = soap.getPropertyCount();
 				for (int i = 0; i < notifCount; i++) {
 					SoapObject pii = (SoapObject)soap.getProperty(i);
-					Long notificationCode = new Long(pii.getProperty("notificationCode").toString());
+					Long notificationCode = Long.valueOf(pii.getProperty("notificationCode").toString());
 					String eventType = pii.getProperty("eventType").toString();
-					Long eventTime = new Long(pii.getProperty("eventTime").toString());
+					Long eventTime = Long.valueOf(pii.getProperty("eventTime").toString());
 					String userSurname1 = pii.getProperty("userSurname1").toString();
 					String userSurname2 = pii.getProperty("userSurname2").toString();
 					String userFirstName = pii.getProperty("userFirstname").toString();
 					String userPhoto = pii.getProperty("userPhoto").toString();
 					String location = pii.getProperty("location").toString();
 					String summary = pii.getProperty("summary").toString();
-					Integer status = new Integer(pii.getProperty("status").toString());
+					Integer status = Integer.valueOf(pii.getProperty("status").toString());
 					String content = pii.getProperty("content").toString();
 					SWADNotification n = new SWADNotification(notificationCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, userPhoto, location, summary, status, content);
 					dbHelper.insertNotification(n);
