@@ -45,7 +45,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -282,11 +281,12 @@ public class Notifications extends Module {
 					String userSurname1 = pii.getProperty("userSurname1").toString();
 					String userSurname2 = pii.getProperty("userSurname2").toString();
 					String userFirstName = pii.getProperty("userFirstname").toString();
+					String userPhoto = pii.getProperty("userPhoto").toString();
 					String location = pii.getProperty("location").toString();
 					String summary = pii.getProperty("summary").toString();
 					Integer status = new Integer(pii.getProperty("status").toString());
 					String content = pii.getProperty("content").toString();
-					SWADNotification n = new SWADNotification(notificationCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, location, summary, status, content);
+					SWADNotification n = new SWADNotification(notificationCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, userPhoto, location, summary, status, content);
 					dbHelper.insertNotification(n);
 	
 					/*if(isDebuggable)
