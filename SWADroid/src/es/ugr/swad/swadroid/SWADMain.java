@@ -423,8 +423,7 @@ public class SWADMain extends MenuExpandableListActivity {
 	private void createSpinnerAdapter(){
 		Spinner spinner = (Spinner) this.findViewById(R.id.spinner);
 		listCourses = dbHelper.getAllRows(Global.DB_TABLE_COURSES, null, "shortName");
-		Cursor dbCursorColum = db.getDB().query(Global.DB_TABLE_GROUPS, null, null, null, null, null, null);
-		String [] columnNames = dbCursor.getColumnNames();
+		Cursor dbCursorColum = db.getDB().query(Global.DB_TABLE_GROUPS, null, null, null, null, null, null);;
 		dbCursor =  dbHelper.getDb().getCursor(Global.DB_TABLE_COURSES, null, "shortName");
 		startManagingCursor(dbCursor);
 		if(listCourses.size() != 0){
@@ -545,7 +544,7 @@ public class SWADMain extends MenuExpandableListActivity {
 			Course courseSelected;
 			if(Global.getSelectedCourseCode()!=-1){
 				String where = "id="+String.valueOf(Global.getSelectedCourseCode());
-				courseSelected = (Course) dbHelper.getAllRows(Global.DB_TABLE_COURSES, where, "name").get(0);
+				courseSelected = (Course) dbHelper.getAllRows(Global.DB_TABLE_COURSES, where, "shortName").get(0);
 			}else{
 				courseSelected = (Course) listCourses.get(0);
 				Global.setSelectedCourseCode(courseSelected.getId());
