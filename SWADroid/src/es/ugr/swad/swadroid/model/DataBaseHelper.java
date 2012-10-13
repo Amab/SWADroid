@@ -160,7 +160,8 @@ public class DataBaseHelper {
 					ent.getLong("eventTime"), 
 					ent.getString("userSurname1"), 
 					ent.getString("userSurname2"), 
-					ent.getString("userFirstname"), 
+					ent.getString("userFirstname"),  
+					ent.getString("userPhoto"), 
 					ent.getString("location"), 
 					ent.getString("summary"), 
 					ent.getInt("status"), 
@@ -655,6 +656,7 @@ public class DataBaseHelper {
 		ent.setValue("userSurname1", n.getUserSurname1());
 		ent.setValue("userSurname2", n.getUserSurname2());
 		ent.setValue("userFirstname", n.getUserFirstName());
+		ent.setValue("userPhoto", n.getUserPhoto());
 		ent.setValue("location", n.getLocation());
 		ent.setValue("summary", n.getSummary());
 		ent.setValue("status", status);
@@ -1684,8 +1686,8 @@ public class DataBaseHelper {
 		 * Just to modify database without to keep data just 7,6.
 		 * 
 		 * */
-		/*TODO Àesto se deber’a ejecutar s—lo cuando se pase una version < 12 a una mayor de 13? en el resto de los casos no 
-		Àcon la version de swadroid?*/
+		/*TODO ï¿½esto se deberï¿½a ejecutar sï¿½lo cuando se pase una version < 12 a una mayor de 13? en el resto de los casos no 
+		ï¿½con la version de swadroid?*/
 		
 		/* From version 11 to 12 
 		 * changes on courses table:
