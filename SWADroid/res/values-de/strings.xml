@@ -29,8 +29,11 @@
 	<string name="cleanDatabaseTitle_menu">saubere Datenbank</string>
 	<string name="about_preferences">über</string>
 	<string name="versionTitle_preferences">Anwendungs-Version</string>
-	<string name="author_preferences">koordiniert von Antonio Cañas Vargas
-		\nprogrammiert von Juan Miguel Boyero Corral</string>
+	<string name="author_preferences">koordiniert bei Antonio Cañas Vargas
+		\nprogrammiert bei
+		Juan Miguel Boyero Corral		
+		\nHelena Rodríguez Gijón		
+		\nAntonio Aguilera Malagónl</string>
 	<string name="organization_preferences">Universität Granada</string>
 	<string name="loginTitle_menu">anmelden</string>
 	<string name="loginProgressTitle">anmelden</string>

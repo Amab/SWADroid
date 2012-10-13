@@ -129,11 +129,11 @@ public class Courses extends Module {
 			for (int i = 0; i < csSize; i++) {
 				SoapObject pii = (SoapObject)soap.getProperty(i);
 				long id = Long.parseLong(pii.getProperty("courseCode").toString());
-				String name = pii.getProperty("courseName").toString();
+				//String name = pii.getProperty("courseName").toString(); this field is obsolete, and will be erased in the future
 				int userRole = Integer.parseInt(pii.getProperty("userRole").toString());
 				String shortName = pii.getProperty("courseShortName").toString();
 				String fullName = pii.getProperty("courseFullName").toString();
-				Course c = new Course(id, name, userRole,shortName, fullName);
+				Course c = new Course(id, userRole,shortName, fullName);
 				coursesSWAD.add(c);
 
 				/*if(isDebuggable)

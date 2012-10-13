@@ -69,8 +69,8 @@ public class StudentsHistory extends Module {
 
 		// Get selected course
 		String where = "id =" + String.valueOf(Global.getSelectedCourseCode());
-		Course selectedCourse = (Course) dbHelper.getAllRows(Global.DB_TABLE_COURSES, where, "name").get(0);
-		String courseName = selectedCourse.getName();
+		Course selectedCourse = (Course) dbHelper.getAllRows(Global.DB_TABLE_COURSES, where, "fullName").get(0);
+		String courseName = selectedCourse.getFullName();
 
 		// Get selected groupName
 		Intent intent = getIntent();

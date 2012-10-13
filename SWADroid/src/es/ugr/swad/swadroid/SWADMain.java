@@ -24,6 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.android.dataframework.DataFramework;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -329,9 +331,10 @@ public class SWADMain extends MenuExpandableListActivity {
 			SecureConnection.initSecureConnection();
 
 			//Check if this is the first run after an install or upgrade
-			lastVersion = prefs.getLastVersion();
-			currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
-
+		//	lastVersion = prefs.getLastVersion();
+		//	currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+			lastVersion = 41;
+			currentVersion = 42;
 			// Get rollcall course
 			Global.setSelectedRollcallCourseCode(prefs.getRollcallCourseSelected());
 
@@ -355,7 +358,7 @@ public class SWADMain extends MenuExpandableListActivity {
 				//If this is an upgrade, show upgrade dialog
 			} else if(lastVersion < currentVersion) {
 				//showUpgradeDialog();
-				dbHelper.upgradeDB(this);
+					dbHelper.upgradeDB(this);
 				//prefs.upgradeCredentials();
 
 				//Configure automatic synchronization
@@ -364,7 +367,10 @@ public class SWADMain extends MenuExpandableListActivity {
 
 				prefs.setLastVersion(currentVersion);
 			}
-			listCourses = dbHelper.getAllRows(Global.DB_TABLE_COURSES,"","name");
+			Cursor dbCursor = db.getDB().query(Global.DB_TABLE_COURSES, null, null, null, null, null, null);
+			String [] columnNames = dbCursor.getColumnNames();
+
+			listCourses = dbHelper.getAllRows(Global.DB_TABLE_COURSES,"","shortName");
 			if(listCourses.size() >0){
 				Course c =(Course) listCourses.get(prefs.getLastCourseSelected());
 				Global.setSelectedCourseCode(c.getId());
@@ -416,15 +422,26 @@ public class SWADMain extends MenuExpandableListActivity {
 
 	private void createSpinnerAdapter(){
 		Spinner spinner = (Spinner) this.findViewById(R.id.spinner);
-		listCourses = dbHelper.getAllRows(Global.DB_TABLE_COURSES, null, "name");
-		dbCursor =  dbHelper.getDb().getCursor(Global.DB_TABLE_COURSES, null, "name");
+		listCourses = dbHelper.getAllRows(Global.DB_TABLE_COURSES, null, "shortName");
+		Cursor dbCursorColum = db.getDB().query(Global.DB_TABLE_GROUPS, null, null, null, null, null, null);
+		String [] columnNames = dbCursor.getColumnNames();
+		dbCursor =  dbHelper.getDb().getCursor(Global.DB_TABLE_COURSES, null, "shortName");
 		startManagingCursor(dbCursor);
 		if(listCourses.size() != 0){
 			SimpleCursorAdapter adapter = new SimpleCursorAdapter (this,
 					android.R.layout.simple_spinner_item, 
 					dbCursor, 
-					new String[]{"name"}, 
+					new String[]{"shortName"}, 
 					new int[]{android.R.id.text1});
+/*			listCourses = dbHelper.getAllRows(Global.DB_TABLE_COURSES, null, "name");
+			dbCursor =  dbHelper.getDb().getCursor(Global.DB_TABLE_COURSES, null, "name");
+			startManagingCursor(dbCursor);
+			if(listCourses.size() != 0){
+				SimpleCursorAdapter adapter = new SimpleCursorAdapter (this,
+						android.R.layout.simple_spinner_item, 
+						dbCursor, 
+						new String[]{"name"}, 
+						new int[]{android.R.id.text1});	*/
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			spinner.setAdapter(adapter);
 			spinner.setOnItemSelectedListener(new onItemSelectedListener());

@@ -26,7 +26,9 @@
 	<string name="about_preferences">Qui som?</string>
 	<string name="versionTitle_preferences">Versió de l\'aplicació</string>
 	<string name="author_preferences">Coordinat per l\'Antonio Cañas Vargas
-		\nImplementat per l\'Juan Miguel Boyero Corral</string>
+		\nImplementat per Juan Miguel Boyero Corral		
+		\nHelena Rodríguez Gijón		
+		\nAntonio Aguilera Malagónl</string>
 	<string name="organization_preferences">Universidad de Granada</string>
 	<string name="loginTitle_menu">Connectar</string>
 	<string name="loginProgressTitle">Identificació</string>

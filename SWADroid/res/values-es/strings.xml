@@ -31,7 +31,7 @@
     <string name="versionTitle_preferences">Versión de la aplicación</string>
     <string name="author_preferences">Coordinador: Antonio Cañas Vargas
 		\nProgramadores:
-		\nJuan Miguel Boyero Corral		
+		Juan Miguel Boyero Corral		
 		\nHelena Rodríguez Gijón		
 		\nAntonio Aguilera Malagón</string>
     <string name="organization_preferences">Universidad de Granada</string>
@@ -155,7 +155,6 @@
     <string name="msg_default_type">Tipo</string>
     <string name="msg_default_time">Tiempo</string>
     <string name="msg_default_meta">Metadata</string>
-    <string name="button_google_shopper">Google Shopper</string>
     <string name="msg_default_status">Coloque un código de barras en el interior del rectángulo del visor para escanear.</string>
     <string name="msg_camera_framework_bug">Lo sentimos, la cámara de Android ha encontrado un problema. Es posible que necesite reiniciar el dispositivo.</string>
     <string name="button_ok">OK</string>

@@ -61,7 +61,7 @@ import es.ugr.swad.swadroid.modules.Module;
  * Notifications module for get user's notifications
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com> 
- * @author Helena Rodríguez Gijon <hrgijon@gmail.com>
+ * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */
 public class Notifications extends Module {
 	/**
