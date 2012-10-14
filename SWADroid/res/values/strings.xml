@@ -256,4 +256,5 @@ configuration anytime using the "Clean Database" option\n\nDo you want to contin
     <string name="froyoFunctionMsg">This function needs Android 2.2 or higher</string>
     <string name="groupTypesProgressDescription">Retrieving group types...</string>
     <string name="groupTypesProgressTitle">Group Types</string>
+    <string name="groupTypesModuleLabel">Get Group Types</string>
 </resources>

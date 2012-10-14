@@ -335,9 +335,8 @@
             type="integer" />
         <field
             name="courseCode"
-            foreign-table="courses"
             obligatory="true"
-            type="foreign-key"/>
+            type="long"/>
         <field
             name="groupTypeName"
             obligatory="true"
@@ -345,11 +344,15 @@
         <field
             name="mandatory"
             obligatory="true"
-            type="unsignedByte"/>
+            type="integer"/>
        <field
             name="multiple"
             obligatory="true"
-            type="unsignedByte"/>
+            type="integer"/>
+       <field
+            name="openTime"
+            obligatory="true"
+            type="long" />
     </table>
     <table name="group_grouptypes"
         new-in-version="13"

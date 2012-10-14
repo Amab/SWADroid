@@ -338,13 +338,13 @@ public class Rollcall extends MenuExpandableListActivity {
 	private void createSpinnerAdapter() {
 		Spinner spinner = (Spinner) this.findViewById(R.id.spCourse);
 		String where = "id = " + Global.getSelectedRollcallCourseCode();
-		dbCursor =  dbHelper.getDb().getCursor(Global.DB_TABLE_COURSES, where, "name");
+		dbCursor =  dbHelper.getDb().getCursor(Global.DB_TABLE_COURSES, where, "fullName");
 		startManagingCursor(dbCursor);	
 
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter (this,
 				android.R.layout.simple_spinner_item, 
 				dbCursor, 
-				new String[] { "name" }, 
+				new String[] { "fullName" }, 
 				new int[] { android.R.id.text1 });
 		spinner.setAdapter(adapter);
 		spinner.setEnabled(false);

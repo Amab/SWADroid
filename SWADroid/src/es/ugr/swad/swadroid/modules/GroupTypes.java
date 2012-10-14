@@ -14,6 +14,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
@@ -95,7 +96,8 @@ public class GroupTypes extends Module {
 				String groupTypeName = pii.getProperty("groupTypeName").toString();
 				int mandatory = Integer.parseInt(pii.getProperty("mandatory").toString());
 				int multiple = Integer.parseInt(pii.getProperty("multiple").toString());
-				GroupType g = new GroupType(id,groupTypeName,courseCode,mandatory,multiple);
+				long openTime = Long.parseLong(pii.getProperty("openTime").toString());
+				GroupType g = new GroupType(id,groupTypeName,courseCode,mandatory,multiple,openTime);
 				
 				groupsSWAD.add(g);
 				
@@ -129,8 +131,7 @@ public class GroupTypes extends Module {
 
 	@Override
 	protected void postConnect() {
-		// TODO Auto-generated method stub
-
+		finish();
 	}
 
 	@Override

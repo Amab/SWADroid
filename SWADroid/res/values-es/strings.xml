@@ -250,5 +250,6 @@ debe tener definidos los grupos de prácticas en SWAD.\n\nEn cualquier momento p
 configuración mediante la opción "Limpiar base de datos" del menú\n\n¿Desea continuar?</string>
     <string name="noRollcallAllowedMsg">No se permite pasar lista para la asignatura seleccionada. Intente "Limpiar base de datos"</string>
     <string name="froyoFunctionMsg">Esta función requiere Android 2.2 o superior</string>
+    <string name="groupTypesModuleLabel">Conseguir tipos de grupo</string>
     
 </resources>

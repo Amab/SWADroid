@@ -180,6 +180,11 @@
             android:label="@string/myGroupsModuleLabel"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
+        <activity
+            android:name=".modules.GroupTypes"
+            android:label="@string/groupTypesModuleLabel"
+            android:theme="@android:style/Theme.NoTitleBar" >
+        </activity>
 
         <provider
             android:name=".sync.DummyProvider"
