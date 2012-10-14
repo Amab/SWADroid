@@ -37,6 +37,7 @@ import es.ugr.swad.swadroid.model.DataBaseHelper;
  * Superclass for add the options menu to all children classes of ExpandableListActivity
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
+ * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */
 public class MenuExpandableListActivity extends ExpandableListActivity {
 	/**
@@ -100,7 +101,11 @@ public class MenuExpandableListActivity extends ExpandableListActivity {
 		prefs.setLastCourseSelected(0);
 		prefs.setRollcallCourseSelected(-1);
 		Global.setSelectedRollcallCourseCode(-1);
+		Global.setDbCleaned(true);
 		Toast.makeText(this, R.string.cleanDatabaseMsg, Toast.LENGTH_LONG).show();
+		if(this instanceof SWADMain){
+			setMenuDbClean();
+		}
 		Log.i(Global.APP_TAG, getString(R.string.cleanDatabaseMsg));
 	}
 
@@ -187,5 +192,9 @@ public class MenuExpandableListActivity extends ExpandableListActivity {
 	protected void onDestroy() {
 		dbHelper.close();
 		super.onDestroy();
+	}
+	
+	protected void setMenuDbClean(){
+		
 	}
 }

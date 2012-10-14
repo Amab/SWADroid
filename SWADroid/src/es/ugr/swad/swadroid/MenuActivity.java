@@ -37,6 +37,7 @@ import es.ugr.swad.swadroid.model.DataBaseHelper;
  * Superclass for add the options menu to all children classes of Activity
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
+ * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */
 public class MenuActivity extends Activity {
 	/**
@@ -100,6 +101,7 @@ public class MenuActivity extends Activity {
 		prefs.setLastCourseSelected(0);
 		prefs.setRollcallCourseSelected(-1);
 		Global.setSelectedRollcallCourseCode(-1);
+		Global.setDbCleaned(true);
 		Toast.makeText(this, R.string.cleanDatabaseMsg, Toast.LENGTH_LONG).show();
 		Log.i(Global.APP_TAG, getString(R.string.cleanDatabaseMsg));
 	}
