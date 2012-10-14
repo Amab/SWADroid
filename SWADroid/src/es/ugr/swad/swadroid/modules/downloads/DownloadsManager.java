@@ -56,6 +56,8 @@ import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.model.GroupType;
+import es.ugr.swad.swadroid.model.Model;
+import es.ugr.swad.swadroid.modules.GroupTypes;
 import es.ugr.swad.swadroid.modules.Groups;
 
 /**
@@ -140,8 +142,16 @@ public class DownloadsManager extends MenuActivity {
 			if(navigator == null)
 				requestDirectoryTree();
 		}else{
-			Intent activity = new Intent(getBaseContext(),Groups.class);
-			startActivityForResult(activity,Global.GROUPS_REQUEST_CODE);
+			List<Model> rows = dbHelper.getAllRows(Global.DB_TABLE_GROUP_TYPES, "courseCode = " + Global.getSelectedCourseCode() , null);
+			if(rows.size() != 0){
+				Intent activity = new Intent(getBaseContext(),Groups.class);
+				activity.putExtra("courseCode", Global.getSelectedCourseCode());
+				startActivityForResult(activity,Global.GROUPS_REQUEST_CODE);
+			}else{
+				Intent activity = new Intent(getBaseContext(),GroupTypes.class);
+				activity.putExtra("courseCode",  Global.getSelectedCourseCode());
+				startActivityForResult(activity,Global.GROUPTYPES_REQUEST_CODE);
+			}
 		}
 		
 	}
@@ -292,6 +302,11 @@ public class DownloadsManager extends MenuActivity {
 				this.loadGroupsSpinner();
 				requestDirectoryTree();
 				break;	
+			case Global.GROUPTYPES_REQUEST_CODE:	
+				Intent activity = new Intent(getBaseContext(),Groups.class);
+				activity.putExtra("courseCode", Global.getSelectedCourseCode());
+				startActivityForResult(activity,Global.GROUPS_REQUEST_CODE);
+				break;
 			}
 			
 		}

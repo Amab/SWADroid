@@ -173,8 +173,8 @@ public class Group extends Model {
 	}
 	
 	/**
-	 * Gets group type code to wich the group belongs 
-	 * @return groupTypeCode coe 
+	 * Gets group type code to which the group belongs 
+	 * @return groupTypeCode code 
 	 * */
 	public long getGroupTypeCode(){
 		return groupTypeCode;
@@ -219,7 +219,15 @@ public class Group extends Model {
 	 * 		   false otherwise
 	 * */
 	public boolean isOpen(){
-		return open == 1? true:false;
+		return open != 0? true:false;
+	}
+	/**
+	 * Indicates if the enrollment in this group is already allowed
+	 * @return not 0 if the enrollment is already allowed
+	 * 		   0 otherwise
+	 * */
+	public int getOpen(){
+		return open;
 	}
 	/**
 	 * Indicates if the group has an area of documents and of shared documents related to or not 
@@ -227,7 +235,15 @@ public class Group extends Model {
 	 * 		   false otherwise
 	 * */
 	public boolean exitsDocumentsArea(){
-		return fileZones == 1? true:false;
+		return fileZones != 0? true:false;
+	}
+	/**
+	 * Indicates if the group has an area of documents and of shared documents related to or not 
+	 * @return not 0 if the area of documents exits
+	 * 		   false otherwise
+	 * */
+	public int getDocumentsArea(){
+		return fileZones;
 	}
 	/**
 	 * Indicates if the logged user is a member of this group
@@ -235,7 +251,15 @@ public class Group extends Model {
 	 * 		   false otherwise
 	 * */
 	public boolean isMember(){
-		return member == 1? true:false;
+		return member != 0? true:false;
+	}
+	/**
+	 * Indicates if the logged user is a member of this group
+	 * @return not 0 if the logged user is a member of this group
+	 * 		   0 otherwise
+	 * */
+	public int getMember(){
+		return member;
 	}
 	//TODO relate Group to Group Type
 

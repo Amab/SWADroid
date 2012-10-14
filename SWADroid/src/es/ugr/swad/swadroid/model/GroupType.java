@@ -22,13 +22,18 @@ public class GroupType extends Model {
 	 * Indicates if a multiple enrollment is allowed 
 	 * */
 	private int multiple;
-
+	/**
+	 * Indicates if exists a date when the groups of this type will be automatically opened.
+	 * if it is 0, it means, the date does not exit
+	 * */
+	private long openTime;
 	
 	private static PropertyInfo PI_id = new PropertyInfo();
 	private static PropertyInfo PI_groupTypeName = new PropertyInfo();
 	private static PropertyInfo PI_courseCode  = new PropertyInfo();
 	private static PropertyInfo PI_mandatory = new PropertyInfo();
 	private static PropertyInfo PI_multiple = new PropertyInfo();
+	private static PropertyInfo PI_openTime = new PropertyInfo();
 	
 	@SuppressWarnings("unused")
 	private static PropertyInfo[] PI_PROP_ARRAY = {
@@ -37,7 +42,7 @@ public class GroupType extends Model {
 		PI_courseCode,
 		PI_mandatory,
 		PI_multiple,
-		
+		PI_openTime
 	};
 	
 	/**
@@ -47,12 +52,13 @@ public class GroupType extends Model {
 	 * @param mandatory Indicates if the enrollment in this group is mandatory or not
 	 * @param multiple Indicates if a multiple enrollment is allowed 
 	 */
-	public GroupType(long id, String groupTypeName, long courseCode,int mandatory, int multiple) {
+	public GroupType(long id, String groupTypeName, long courseCode,int mandatory, int multiple, long openTime) {
 		super(id);
 		this.groupTypeName = groupTypeName;
 		this.courseCode = courseCode;
 		this.mandatory	= mandatory;
 		this.multiple = multiple;
+		this.openTime = openTime;
 	}
 	
 	@Override
@@ -65,6 +71,7 @@ public class GroupType extends Model {
 	        case 2 : object = courseCode;break;
 	        case 3 : object = mandatory;break;
 	        case 4 : object = multiple;break;
+	        case 5 : object = openTime;break;
 	    }
 	    
 	    return object;
@@ -98,6 +105,10 @@ public class GroupType extends Model {
         	propertyInfo.type = PropertyInfo.INTEGER_CLASS;
         	propertyInfo.name = "multiple";
         	break;
+        case 5:
+        	propertyInfo.type = PropertyInfo.LONG_CLASS;
+        	propertyInfo.name = "openTime";
+        	break;	
 		}
 	}
 
@@ -110,19 +121,20 @@ public class GroupType extends Model {
 			case 2  : courseCode = (Long)obj; break;
 			case 3  : mandatory = (Integer)obj; break;
 			case 4  : multiple = (Integer)obj; break;
+			case 5  : openTime = (Long)obj; break;
 		}    
 
 	}
 	
 	@Override
 	public String toString() {
-		return "GroupType [name="+groupTypeName+", getId()="+getId()+", getCourseCode()= "+ courseCode +", isMandatory()=" + isMandatory()+
-				", isMultiple()=" + isMultiple();
+		return "GroupType [name="+getGroupTypeName()+", getId()="+getId()+", getCourseCode()= "+ courseCode +", getMandatory()=" + getMandatory()+
+				", getMultiple()=" + getMultiple() +", getOpenTime()= " + getOpenTime() ;
 	}
-	
+
 	/**
 	 * Gets group type name
-	 * @return group type name 
+	 * @return group type name
 	 * */
 	public String getGroupTypeName(){
 		return groupTypeName;
@@ -148,5 +160,30 @@ public class GroupType extends Model {
 	 * */
 	public long getCourseCode(){
 		return courseCode;
+	}
+	/**
+	 * Indicates if the enrollment is mandatory 
+	 * @return 0 - if the inscription is not mandatory  
+	 * 		   not 0 otherwise 
+	 * */
+	public int getMandatory(){
+		return mandatory;
+	}
+	/**
+	 * Indicates if a multiple enrollment is allowed 
+	 * @return 0 - if the inscription is not multiple  
+	 * 		   not 0 otherwise 
+	 * */
+	public int getMultiple(){
+		return multiple;
+	}
+	
+	/**
+	 * Gets the date when the groups of this kind will be automatically opened, in case, it exits
+	 * @return 0 if there is not a date when the groups of this kind will be automatically opened
+	 *			otherwise date in unix format (see http://en.wikipedia.org/wiki/Unix_time) 
+	 * */
+	public long getOpenTime(){
+		return openTime;
 	}
 }

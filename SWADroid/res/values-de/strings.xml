@@ -138,4 +138,5 @@ Es muss mindestens ein Antworttyp ausgewählt werden</string>
 	<string name="maxStudent">Max. Stud</string>
 	<string name="enrollment">Einschreibung</string>
 	<string name="myGroupsModuleLabel">Meine Gruppen</string>
+	<string name="groupTypesModuleLabel">Schaffen Gruppetypen</string>
 </resources>

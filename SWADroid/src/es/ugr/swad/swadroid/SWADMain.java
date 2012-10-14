@@ -367,8 +367,6 @@ public class SWADMain extends MenuExpandableListActivity {
 
 				prefs.setLastVersion(currentVersion);
 			}
-			Cursor dbCursor = db.getDB().query(Global.DB_TABLE_COURSES, null, null, null, null, null, null);
-			String [] columnNames = dbCursor.getColumnNames();
 
 			listCourses = dbHelper.getAllRows(Global.DB_TABLE_COURSES,"","shortName");
 			if(listCourses.size() >0){
@@ -422,16 +420,14 @@ public class SWADMain extends MenuExpandableListActivity {
 
 	private void createSpinnerAdapter(){
 		Spinner spinner = (Spinner) this.findViewById(R.id.spinner);
-		listCourses = dbHelper.getAllRows(Global.DB_TABLE_COURSES, null, "shortName");
-		Cursor dbCursorColum = db.getDB().query(Global.DB_TABLE_GROUPS, null, null, null, null, null, null);
-		String [] columnNames = dbCursor.getColumnNames();
-		dbCursor =  dbHelper.getDb().getCursor(Global.DB_TABLE_COURSES, null, "shortName");
+		listCourses = dbHelper.getAllRows(Global.DB_TABLE_COURSES, null, "fullName");
+		dbCursor =  dbHelper.getDb().getCursor(Global.DB_TABLE_COURSES, null, "fullName");
 		startManagingCursor(dbCursor);
 		if(listCourses.size() != 0){
 			SimpleCursorAdapter adapter = new SimpleCursorAdapter (this,
 					android.R.layout.simple_spinner_item, 
 					dbCursor, 
-					new String[]{"shortName"}, 
+					new String[]{"fullName"}, 
 					new int[]{android.R.id.text1});
 /*			listCourses = dbHelper.getAllRows(Global.DB_TABLE_COURSES, null, "name");
 			dbCursor =  dbHelper.getDb().getCursor(Global.DB_TABLE_COURSES, null, "name");
@@ -545,7 +541,7 @@ public class SWADMain extends MenuExpandableListActivity {
 			Course courseSelected;
 			if(Global.getSelectedCourseCode()!=-1){
 				String where = "id="+String.valueOf(Global.getSelectedCourseCode());
-				courseSelected = (Course) dbHelper.getAllRows(Global.DB_TABLE_COURSES, where, "name").get(0);
+				courseSelected = (Course) dbHelper.getAllRows(Global.DB_TABLE_COURSES, where, "fullName").get(0);
 			}else{
 				courseSelected = (Course) listCourses.get(0);
 				Global.setSelectedCourseCode(courseSelected.getId());

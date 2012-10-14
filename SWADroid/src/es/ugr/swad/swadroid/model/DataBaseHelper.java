@@ -243,7 +243,8 @@ public class DataBaseHelper {
 					ent.getString("groupTypeName"),
 					ent.getLong("courseCode"),
 					ent.getInt("mandatory"),
-					ent.getInt("multiple"));
+					ent.getInt("multiple"),
+					ent.getLong("openTime"));
 		} else if(table.equals(Global.DB_TABLE_PRACTICE_SESSIONS)) {
 			SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
@@ -490,8 +491,8 @@ public class DataBaseHelper {
 	public long getGroupTypeCodeFromGroup(long groupCode){
 		List<Entity> rows = db.getEntityList(Global.DB_TABLE_GROUPS_GROUPTYPES, "grpCod = '" + groupCode +"'");
 		long groupTypeCode = -1;
-		if(rows != null){
-			groupTypeCode = rows.get(0).getId();
+		if(!rows.isEmpty()){
+			groupTypeCode = rows.get(0).getLong("grpTypCod");
 		}
 		return groupTypeCode;
 		
@@ -783,11 +784,11 @@ public class DataBaseHelper {
 			Group g = (Group) currentModel;
 			ent.setValue("id", g.getId());
 			ent.setValue("groupName", g.getGroupName());
-			ent.setValue("maxStudent", g.getMaxStudents());
+			ent.setValue("maxStudents", g.getMaxStudents());
 			ent.setValue("students", g.getCurrentStudents());
-			ent.setValue("open", g.isOpen());
-			ent.setValue("fileZones", g.exitsDocumentsArea());
-			ent.setValue("member", g.isMember());
+			ent.setValue("open", g.getOpen());
+			ent.setValue("fileZones", g.getDocumentsArea());
+			ent.setValue("member", g.getMember());
 			ent.save();
 		}
 		
@@ -795,9 +796,10 @@ public class DataBaseHelper {
 			GroupType gt = (GroupType) currentModel;
 			ent.setValue("id", gt.getId());
 			ent.setValue("groupTypeName", gt.getGroupTypeName());
-			ent.setValue("couseCode", gt.getCourseCode());
-			ent.setValue("mandatory", gt.isMandatory());
-			ent.setValue("multiple", gt.isMultiple());
+			ent.setValue("courseCode", gt.getCourseCode());
+			ent.setValue("mandatory", gt.getMandatory());
+			ent.setValue("multiple", gt.getMultiple());
+			ent.setValue("openTime", gt.getOpenTime());
 			ent.save();
 		}
 			
@@ -875,7 +877,7 @@ public class DataBaseHelper {
 			//it should not insert/modify rows in the relationship table if the course does not exists
 			if(course != null){ 
 				if(rows.isEmpty()){
-					PairTable<Long,Long> pair = new PairTable(Global.DB_TABLE_COURSES,courseCode,g.getId());
+					PairTable<Long,Long> pair = new PairTable(Global.DB_TABLE_GROUPS_COURSES,courseCode,g.getId());
 					insertPairTable(pair);
 				}else{ 
 					rows.get(0).setValue("crsCod", courseCode);
@@ -891,8 +893,8 @@ public class DataBaseHelper {
 			//it should not insert/modify rows in the relationship table if the group type does not exists
 			//if(groupType != null){
 				rows = db.getEntityList(Global.DB_TABLE_GROUPS_GROUPTYPES,"grpCod="+groupCode);
-				if(!rows.isEmpty()){
-					Pair<String,String> params = selectParamsPairTable(Global.DB_TABLE_GROUP_TYPES);
+				if(rows.isEmpty()){
+					Pair<String,String> params = selectParamsPairTable(Global.DB_TABLE_GROUPS_GROUPTYPES);
 					insertPairTable(new PairTable<Long,Long>(Global.DB_TABLE_GROUPS_GROUPTYPES,groupTypeCode,groupCode));
 					/*ent = new Entity(Global.DB_TABLE_GROUPS_GROUPTYPES);
 					ent.setValue("grpCod", groupCode);
@@ -920,14 +922,9 @@ public class DataBaseHelper {
 		boolean returnValue = true;
 		GroupType row = (GroupType)getRow(Global.DB_TABLE_GROUP_TYPES,"id",String.valueOf(gt.getId()));
 		if(row == null){
-			Entity ent = new Entity(Global.DB_TABLE_GROUP_TYPES);
-
-			ent.setValue("id", gt.getId());
-			ent.setValue("groupTypeName", gt.getGroupTypeName());
-			ent.setValue("couseCode", gt.getCourseCode());
-			ent.setValue("mandatory", gt.isMandatory());
-			ent.setValue("multiple", gt.isMultiple());
-			ent.save();
+			insertEntity(Global.DB_TABLE_GROUP_TYPES,gt);
+		}else{
+			returnValue = false;
 		}
 		return returnValue;
 	}
@@ -1220,14 +1217,7 @@ public class DataBaseHelper {
 		if(!rows.isEmpty()){
 			Entity ent = rows.get(0);
 			boolean returnValue = true;
-			//ent.setValue("id", g.getId());
-			ent.setValue("groupName", currentGroup.getGroupName());
-			ent.setValue("maxStudent", currentGroup.getMaxStudents());
-			ent.setValue("students", currentGroup.getCurrentStudents());
-			ent.setValue("open", currentGroup.isOpen());
-			ent.setValue("fileZones", currentGroup.exitsDocumentsArea());
-			ent.setValue("member", currentGroup.isMember());
-			ent.save();
+			insertEntity(Global.DB_TABLE_GROUPS,currentGroup,ent);
 			
 			rows = db.getEntityList(Global.DB_TABLE_GROUPS_COURSES,"grpCod =" + groupCode);
 			Course course = (Course) getRow(Global.DB_TABLE_COURSES,"id",String.valueOf(courseCode));
@@ -1254,16 +1244,12 @@ public class DataBaseHelper {
 					if(!rows.isEmpty()){
 						Pair<String,String> params = selectParamsPairTable(Global.DB_TABLE_GROUP_TYPES);
 						insertPairTable(new PairTable<Long,Long>(Global.DB_TABLE_GROUPS_GROUPTYPES,groupTypeCode[0],groupCode));
-						/*ent = new Entity(Global.DB_TABLE_GROUPS_GROUPTYPES);
-						ent.setValue("grpCod", groupCode);
-						ent.setValue("grpTypCod", groupTypeCode[0]);
-						ent.save();*/
+
 					}else{
 						PairTable<Integer,Integer> prev = new PairTable(Global.DB_TABLE_GROUPS_GROUPTYPES,rows.get(0).getValue("grpTypCod"),rows.get(0).getValue("grpCod"));
 						PairTable<Integer,Integer> current = new PairTable(Global.DB_TABLE_GROUPS_GROUPTYPES,groupTypeCode[0],groupCode);
 						updatePairTable(prev,current);
-						//rows.get(0).setValue("grpTypCod", groupTypeCode[0]);
-						//rows.get(0).save();
+
 					}
 				}else returnValue = false;
 			}
@@ -1629,9 +1615,12 @@ public class DataBaseHelper {
 			//File dir = db.getContext().getExternalFilesDir(null);
 			if(dir != null){
 				String [] children = dir.list();
-				for (int i=0; i < children.length; i++)
-					new File(dir, children[i]).delete();
-				}
+				if(children != null)
+					for (int i=0; i < children.length; i++){
+						File childrenFile = new File(dir,children[i]);
+						if(childrenFile.exists()) childrenFile.delete();
+					}
+			}
 		}
 	}
 
@@ -1684,8 +1673,7 @@ public class DataBaseHelper {
 		 * Just to modify database without to keep data just 7,6.
 		 * 
 		 * */
-		/*TODO Àesto se deber’a ejecutar s—lo cuando se pase una version < 12 a una mayor de 13? en el resto de los casos no 
-		Àcon la version de swadroid?*/
+
 		
 		/* From version 11 to 12 
 		 * changes on courses table:
