@@ -721,7 +721,7 @@ public class SWADMain extends MenuExpandableListActivity {
 	protected void onResume() {
 		super.onResume();
 		
-		if(!Global.isPreferencesChanged() || !Global.isDbCleaned()){
+		if(!Global.isPreferencesChanged() && !Global.isDbCleaned()){
 			createSpinnerAdapter();
 			if(!firstRun){
 				courseCode = Global.getSelectedCourseCode();
