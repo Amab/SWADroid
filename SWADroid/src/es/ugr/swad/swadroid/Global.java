@@ -34,7 +34,7 @@ public class Global {
 	/**
 	 * SWAD application key
 	 */
-	private static final String AppKey = "";
+	private static final String AppKey = "HTC-Desire";
 	/**
 	 * Server URL
 	 */
@@ -70,9 +70,13 @@ public class Global {
 	 */
 	private static long selectedRollcallCourseCode = -1;
 	/**
-	 * Indicates if there are changes on db
+	 * Indicates if there are changes on preferences
 	 * */
 	private static boolean preferencesChanged = false;
+	/**
+	 * Indicates if there are changes on db
+	 * */
+	private static boolean dbCleaned = false;
 	/**
 	 * Null value returned by webservices when a field is empty
 	 */
@@ -368,10 +372,19 @@ public class Global {
 	public static boolean isPreferencesChanged(){
 		return preferencesChanged;
 	}
-
+	/**
+	 * Set the fact that the preferences has changed
+	 * @param newState - true when the preferences has changed 
+	 * 				   - false after the fact is noticed and handled it
+	 * */
 	public static void setPreferencesChanged(){
 		preferencesChanged = true;
 	}
+	/**
+	 * Indicates if the preferences has changed
+	 * @param newState - true when the preferences has changed  and it was not handled it
+	 * 				   - false if the preferences has not changed
+	 * */
 	public static void setPreferencesChanged(boolean newState){
 		preferencesChanged = newState;
 	}
@@ -429,5 +442,20 @@ public class Global {
 	    //If boolean remains false there is no connection available        
 	    return connAvailable;
 	}
-	
+	/**
+	 * Set the fact that the db was cleaned
+	 * @param newState - true when the database was cleaned
+	 * 				   - false after the fact is noticed and handled it
+	 * */
+	public static void setDbCleaned(boolean state){
+		dbCleaned = state;
+	}
+	/**
+	 * Indicates if the db was cleaned
+	 * @param newState - true when the database was cleaned and it was not handled it
+	 * 				   - false if the database does not change
+	 * */
+	public static boolean isDbCleaned(){
+		return dbCleaned;
+	}
 }
