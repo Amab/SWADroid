@@ -212,7 +212,7 @@ public class Messages extends Module {
 				receiversNames += "\n";
 				receiversNames += firstname + " " + surname1 + " " + surname2;
 				
-				if(!nickname.equalsIgnoreCase("anytype{}") && !nickname.equalsIgnoreCase("")) {
+				if(!nickname.equalsIgnoreCase(Global.NULL_VALUE) && !nickname.equalsIgnoreCase("")) {
 					receiversNames += " (" + nickname + ")"; 
 				}
 			}

@@ -158,6 +158,7 @@ public class Login extends Module {
 			if (result != null) {
 				KvmSerializable ks = (KvmSerializable) result;
 				SoapObject soap = (SoapObject)result;
+				
 				/*Log.i(TAG, "count=" + ks.getPropertyCount());
 				Log.i(TAG, "property[0]=" + ks.getProperty(0));
 				Log.i(TAG, "property[1]=" + ks.getProperty(1));
