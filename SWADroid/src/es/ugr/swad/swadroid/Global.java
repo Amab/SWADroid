@@ -74,6 +74,10 @@ public class Global {
 	 * */
 	private static boolean preferencesChanged = false;
 	/**
+	 * Null value returned by webservices when a field is empty
+	 */
+	public static final String NULL_VALUE = "anytype{}";
+	/**
 	 * Time to force relogin
 	 */
 	public static final int RELOGIN_TIME = 86400000; //24h
