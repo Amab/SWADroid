@@ -25,6 +25,7 @@ import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.modules.Messages;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebSettings.RenderPriority;
@@ -93,6 +94,8 @@ public class NotificationItem extends MenuActivity {
 	    if(Global.connectionAvailable(this) && !userPhoto.equalsIgnoreCase("")) {
 	    	//userPhotoView.setImageURI(Uri.parse(userPhoto));
 	    	new DownloadImageTask(userPhotoView).execute(userPhoto);
+	    } else {
+	    	Log.d("NotificationItem", "No connection or no photo " + userPhoto);
 	    }
 				
 		content = fixLinks(content);		
