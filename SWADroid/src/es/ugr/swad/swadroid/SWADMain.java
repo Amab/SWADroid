@@ -50,7 +50,6 @@ import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.Groups;
 import es.ugr.swad.swadroid.modules.Messages;
-import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.modules.Notices;
 import es.ugr.swad.swadroid.modules.downloads.DownloadsManager;
 import es.ugr.swad.swadroid.modules.downloads.DirectoryTreeDownload;
@@ -379,7 +378,7 @@ public class SWADMain extends MenuExpandableListActivity {
 				Global.setSelectedCourseCode(-1);
 				Global.setSelectedCourseShortName("");
 				Global.setSelectedCourseFullName("");
-				if(!firstRun && Module.connectionAvailable(this)) getCurrentCourses(); //at the first run, this will be launched after the preferences menu 
+				if(!firstRun && Global.connectionAvailable(this)) getCurrentCourses(); //at the first run, this will be launched after the preferences menu 
 			}
 			currentRole = -1;
 		} catch (Exception ex) {
@@ -486,7 +485,7 @@ public class SWADMain extends MenuExpandableListActivity {
 			if (event.getAction() == MotionEvent.ACTION_UP) {
 
 				if(dbHelper.getAllRows(Global.DB_TABLE_COURSES).size()==0){
-					if(Module.connectionAvailable(getBaseContext()))
+					if(Global.connectionAvailable(getBaseContext()))
 						getCurrentCourses();
 					//else
 

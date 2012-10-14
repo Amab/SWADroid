@@ -55,6 +55,11 @@
             obligatory="true"
             type="text" />
         <field
+            name="userPhoto"
+            new-in-version="13"
+            obligatory="true"
+            type="text" />
+        <field
             name="location"
             obligatory="true"
             type="text" />

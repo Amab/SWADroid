@@ -210,7 +210,11 @@ public class Messages extends Module {
 				String surname2 = pii.getProperty("userSurname2").toString();
 
 				receiversNames += "\n";
-				receiversNames += firstname + " " + surname1 + " " + surname2 + " (" + nickname + ")"; 
+				receiversNames += firstname + " " + surname1 + " " + surname2;
+				
+				if(!nickname.equalsIgnoreCase(Global.NULL_VALUE) && !nickname.equalsIgnoreCase("")) {
+					receiversNames += " (" + nickname + ")"; 
+				}
 			}
 		}
 

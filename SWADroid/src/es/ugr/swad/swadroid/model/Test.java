@@ -354,9 +354,9 @@ public class Test extends Model {
 
 				userAnswerText = a.getUserAnswer();				
 				if(!userAnswerText.equals("")) {
-					userFloatAnswer = new Float(userAnswerText);				
-					minFloatRange = new Float(a.getAnswer());
-					maxFloatRange = new Float(la.get(1).getAnswer());
+					userFloatAnswer = Float.valueOf(userAnswerText);				
+					minFloatRange = Float.valueOf(a.getAnswer());
+					maxFloatRange = Float.valueOf(la.get(1).getAnswer());
 					a.setCorrectAnswered((userFloatAnswer >= minFloatRange) && (userFloatAnswer <= maxFloatRange));
 				}
 

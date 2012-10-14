@@ -51,7 +51,6 @@ import es.ugr.swad.swadroid.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.PracticeSession;
 import es.ugr.swad.swadroid.model.User;
-import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.modules.rollcall.sessions.NewPracticeSession;
 import es.ugr.swad.swadroid.modules.rollcall.sessions.SessionsHistory;
 import es.ugr.swad.swadroid.modules.rollcall.students.StudentItemModel;
@@ -183,7 +182,7 @@ public class Rollcall extends MenuExpandableListActivity {
 				Context ctx = getApplicationContext();
 
 				storeRollcallData();
-				if (!Module.connectionAvailable(ctx)) {
+				if (!Global.connectionAvailable(ctx)) {
 					Toast.makeText(ctx, R.string.rollcallErrorNoConnection, Toast.LENGTH_LONG).show();
 				} else {
 					Toast.makeText(ctx, R.string.rollcallWebServiceNotAvailable, Toast.LENGTH_LONG).show();
