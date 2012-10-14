@@ -22,12 +22,9 @@ package es.ugr.swad.swadroid.modules;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -248,7 +245,7 @@ public abstract class Module extends MenuActivity {
      */
     protected void runConnection()
     {
-    	isConnected = connectionAvailable(this);
+    	isConnected = Global.connectionAvailable(this);
         if (!isConnected) { 
         	Toast.makeText(this, R.string.errorMsgNoConnection, Toast.LENGTH_SHORT).show();
         } else {
@@ -444,29 +441,6 @@ public abstract class Module extends MenuActivity {
     	}
     }
     
-    /**
-     * Checks if any connection is available 
-     * @param ctx Application context
-     * @return true if there is a connection available, false in other case
-     */
-    public static boolean connectionAvailable(Context ctx){
-        boolean connAvailable = false;
-        ConnectivityManager connec =  (ConnectivityManager)ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        //Survey all networks (wifi, gprs...)
-        NetworkInfo[] networks = connec.getAllNetworkInfo();
-        
-        for(int i=0; i<2; i++){
-            //If any of them has a connection available, put boolean to true
-            if (networks[i].isConnected()){
-                connAvailable = true;
-            }
-        }
-        
-        //If boolean remains false there is no connection available        
-        return connAvailable;
-    }
-
     /**
      * Shows an error message.
      * @param message Error message to show.
