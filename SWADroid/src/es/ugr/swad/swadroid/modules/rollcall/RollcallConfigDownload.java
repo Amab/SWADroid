@@ -145,7 +145,7 @@ public class RollcallConfigDownload extends Module {
 				dbHelper.insertUser(u);
 				dbHelper.insertUserCourse(u, Global.getSelectedCourseCode(), groupCode);
 				// Download user's picture and save it in phone memory
-				downloadFile(u.getPhotoPath());
+				downloadFile(u.getUserPhoto());
 			}	// end for (int i=0; i < usersCount; i++)
 
 			if(isDebuggable) {

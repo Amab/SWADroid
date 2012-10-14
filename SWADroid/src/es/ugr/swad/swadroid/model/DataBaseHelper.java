@@ -160,7 +160,8 @@ public class DataBaseHelper {
 					ent.getLong("eventTime"), 
 					ent.getString("userSurname1"), 
 					ent.getString("userSurname2"), 
-					ent.getString("userFirstname"), 
+					ent.getString("userFirstname"),  
+					ent.getString("userPhoto"), 
 					ent.getString("location"), 
 					ent.getString("summary"), 
 					ent.getInt("status"), 
@@ -226,7 +227,7 @@ public class DataBaseHelper {
 					ent.getString("userSurname1"),
 					ent.getString("userSurname2"),
 					ent.getString("userFirstname"),
-					ent.getString("photoPath"),
+					ent.getString("userPhoto"),
 					ent.getInt("userRole"));			
 		} else if (table.equals(Global.DB_TABLE_GROUPS)){
 			long groupTypeCode = getGroupTypeCodeFromGroup(ent.getLong("id"));
@@ -656,6 +657,7 @@ public class DataBaseHelper {
 		ent.setValue("userSurname1", n.getUserSurname1());
 		ent.setValue("userSurname2", n.getUserSurname2());
 		ent.setValue("userFirstname", n.getUserFirstName());
+		ent.setValue("userPhoto", n.getUserPhoto());
 		ent.setValue("location", n.getLocation());
 		ent.setValue("summary", n.getSummary());
 		ent.setValue("status", status);
@@ -852,7 +854,7 @@ public class DataBaseHelper {
 		ent.setValue("userSurname1", u.getUserSurname1());
 		ent.setValue("userSurname2", u.getUserSurname2());
 		ent.setValue("userFirstname", u.getUserFirstname());
-		ent.setValue("photoPath", u.getPhotoPath());
+		ent.setValue("userPhoto", u.getUserPhoto());
 		ent.setValue("userRole", u.getUserRole());
 		ent.save();
 	}
@@ -1201,7 +1203,7 @@ public class DataBaseHelper {
 		ent.setValue("userSurname1", actual.getUserSurname1());
 		ent.setValue("userSurname2", actual.getUserSurname2());
 		ent.setValue("userFirstname", actual.getUserFirstname());
-		ent.setValue("photoPath", actual.getPhotoPath());
+		ent.setValue("userPhoto", actual.getUserPhoto());
 		ent.setValue("userRole", actual.getUserRole());
 		ent.save();
 	}

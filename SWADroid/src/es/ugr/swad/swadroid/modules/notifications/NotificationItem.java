@@ -18,11 +18,14 @@
  */
 package es.ugr.swad.swadroid.modules.notifications;
 
+import es.ugr.swad.swadroid.DownloadImageTask;
+import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.MenuActivity;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.modules.Messages;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebSettings.RenderPriority;
@@ -38,6 +41,7 @@ import android.widget.TextView;
 public class NotificationItem extends MenuActivity {
 	Long notificationCode;
 	String sender;
+	String userPhoto;
 	String course;
 	String summary;
 	String content;
@@ -51,7 +55,7 @@ public class NotificationItem extends MenuActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		TextView text, senderTextView, courseTextView, summaryTextView;
-		ImageView image, imageSep;
+		ImageView image, imageSep, userPhotoView;
 		ImageButton replyButton;
 		WebView webview;
 		
@@ -61,6 +65,7 @@ public class NotificationItem extends MenuActivity {
 		senderTextView = (TextView)this.findViewById(R.id.senderNameText);
 		courseTextView = (TextView)this.findViewById(R.id.courseNameText);
 		summaryTextView = (TextView)this.findViewById(R.id.summaryText);
+		userPhotoView = (ImageView) this.findViewById(R.id.notifUserPhoto);
 		webview = (WebView)this.findViewById(R.id.contentWebView);
         
 		image = (ImageView)this.findViewById(R.id.moduleIcon);
@@ -76,13 +81,22 @@ public class NotificationItem extends MenuActivity {
 		replyButton.setVisibility(View.VISIBLE);
 		
 		sender = this.getIntent().getStringExtra("sender");
+		userPhoto = this.getIntent().getStringExtra("userPhoto");
 		course = this.getIntent().getStringExtra("course");
 		summary = this.getIntent().getStringExtra("summary");
 		content = this.getIntent().getStringExtra("content");
         
 	    senderTextView.setText(sender);         
 	    courseTextView.setText(course); 
-	    summaryTextView.setText(summary); 
+	    summaryTextView.setText(summary);
+        
+	    //If the user photo exists and is public, download and show it
+	    if(Global.connectionAvailable(this) && !userPhoto.equalsIgnoreCase("")) {
+	    	//userPhotoView.setImageURI(Uri.parse(userPhoto));
+	    	new DownloadImageTask(userPhotoView).execute(userPhoto);
+	    } else {
+	    	Log.d("NotificationItem", "No connection or no photo " + userPhoto);
+	    }
 				
 		content = fixLinks(content);		
 		webview.getSettings().setRenderPriority(RenderPriority.HIGH);

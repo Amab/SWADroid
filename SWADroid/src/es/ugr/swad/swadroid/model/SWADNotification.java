@@ -48,6 +48,10 @@ public class SWADNotification extends Model {
 	 */
 	private String userFirstName;
 	/**
+	 * Full URL path of the sender photo
+	 */
+	private String userPhoto;
+	/**
 	 * Notification location
 	 */
 	private String location;
@@ -69,6 +73,7 @@ public class SWADNotification extends Model {
 	private static PropertyInfo PI_userSurname1 = new PropertyInfo();
 	private static PropertyInfo PI_userSurname2 = new PropertyInfo();
 	private static PropertyInfo PI_userFirstName = new PropertyInfo();
+	private static PropertyInfo PI_userPhoto = new PropertyInfo();
 	private static PropertyInfo PI_location = new PropertyInfo();
 	private static PropertyInfo PI_summary = new PropertyInfo();
 	private static PropertyInfo PI_status = new PropertyInfo();
@@ -82,6 +87,7 @@ public class SWADNotification extends Model {
 		PI_userSurname1,
 		PI_userSurname2,
 		PI_userFirstName,
+		PI_userPhoto,
 		PI_location,
 		PI_summary,
 		PI_status,
@@ -95,13 +101,15 @@ public class SWADNotification extends Model {
 	 * @param userSurname1 Sender first surname
 	 * @param userSurname2 Sender second surname
 	 * @param userFirstName Sender first name
+	 * @param userPhoto Full URL path of the sender photo
 	 * @param location Notification location
 	 * @param summary Notification summary
 	 * @param status Notification summary
 	 */
 	public SWADNotification(long id, String eventType, long eventTime,
 			String userSurname1, String userSurname2, String userFirstName,
-			String location, String summary, int status, String content) {
+			String userPhoto, String location, String summary, int status,
+			String content) {
 
 		super(id);
 		this.eventType = eventType;
@@ -109,6 +117,7 @@ public class SWADNotification extends Model {
 		this.userSurname1 = userSurname1;
 		this.userSurname2 = userSurname2;
 		this.userFirstName = userFirstName;
+		this.userPhoto = userPhoto;
 		this.location = location;
 		this.summary = summary;
 		this.status = status;
@@ -196,6 +205,22 @@ public class SWADNotification extends Model {
 	}
 
 	/**
+	 * Gets full URL path of the sender photo
+	 * @return Full URL path of the sender photo
+	 */
+	public String getUserPhoto() {
+		return userPhoto;
+	}
+
+	/**
+	 * Sets full URL path of the sender photo
+	 * @param userPhoto Full URL path of the sender photo
+	 */
+	public void setUserPhoto(String userPhoto) {
+		this.userPhoto = userPhoto;
+	}
+
+	/**
 	 * Gets notification location
 	 * @return Notification location
 	 */
@@ -260,6 +285,19 @@ public class SWADNotification extends Model {
 	}
 
 	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "SWADNotification [eventType=" + eventType + ", eventTime="
+				+ eventTime + ", userSurname1=" + userSurname1
+				+ ", userSurname2=" + userSurname2 + ", userFirstName="
+				+ userFirstName + ", userPhoto=" + userPhoto + ", location="
+				+ location + ", summary=" + summary + ", status=" + status
+				+ ", content=" + content + "]";
+	}
+
+	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -277,6 +315,8 @@ public class SWADNotification extends Model {
 		result = prime * result
 				+ ((userFirstName == null) ? 0 : userFirstName.hashCode());
 		result = prime * result
+				+ ((userPhoto == null) ? 0 : userPhoto.hashCode());
+		result = prime * result
 				+ ((userSurname1 == null) ? 0 : userSurname1.hashCode());
 		result = prime * result
 				+ ((userSurname2 == null) ? 0 : userSurname2.hashCode());
@@ -284,15 +324,62 @@ public class SWADNotification extends Model {
 	}
 
 	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
+	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
-	public String toString() {
-		return "Notification [eventType=" + eventType + ", eventTime="
-				+ eventTime + ", userSurname1=" + userSurname1
-				+ ", userSurname2=" + userSurname2 + ", userFirstName="
-				+ userFirstName + ", location=" + location + ", summary="
-				+ summary + ", status=" + status + ", content=" + content + "]";
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SWADNotification other = (SWADNotification) obj;
+		if (content == null) {
+			if (other.content != null)
+				return false;
+		} else if (!content.equals(other.content))
+			return false;
+		if (eventTime != other.eventTime)
+			return false;
+		if (eventType == null) {
+			if (other.eventType != null)
+				return false;
+		} else if (!eventType.equals(other.eventType))
+			return false;
+		if (location == null) {
+			if (other.location != null)
+				return false;
+		} else if (!location.equals(other.location))
+			return false;
+		if (status != other.status)
+			return false;
+		if (summary == null) {
+			if (other.summary != null)
+				return false;
+		} else if (!summary.equals(other.summary))
+			return false;
+		if (userFirstName == null) {
+			if (other.userFirstName != null)
+				return false;
+		} else if (!userFirstName.equals(other.userFirstName))
+			return false;
+		if (userPhoto == null) {
+			if (other.userPhoto != null)
+				return false;
+		} else if (!userPhoto.equals(other.userPhoto))
+			return false;
+		if (userSurname1 == null) {
+			if (other.userSurname1 != null)
+				return false;
+		} else if (!userSurname1.equals(other.userSurname1))
+			return false;
+		if (userSurname2 == null) {
+			if (other.userSurname2 != null)
+				return false;
+		} else if (!userSurname2.equals(other.userSurname2))
+			return false;
+		return true;
 	}
 
 	/* (non-Javadoc)
@@ -308,10 +395,11 @@ public class SWADNotification extends Model {
 		case 3 : object = userSurname1;break;
 		case 4 : object = userSurname2;break;
 		case 5 : object = userFirstName;break;
-		case 6 : object = location;break;
-		case 7 : object = summary;break;
-		case 8 : object = status;break;
-		case 9 : object = content;break;
+		case 6 : object = userPhoto;break;
+		case 7 : object = location;break;
+		case 8 : object = summary;break;
+		case 9 : object = status;break;
+		case 10 : object = content;break;
 		}
 
 		return object;
@@ -352,20 +440,24 @@ public class SWADNotification extends Model {
 		case 5:
 			propertyInfo.type = PropertyInfo.STRING_CLASS;
 			propertyInfo.name = "userFirstName";
-			break;    
+			break;     
 		case 6:
 			propertyInfo.type = PropertyInfo.STRING_CLASS;
-			propertyInfo.name = "location";
+			propertyInfo.name = "userPhoto";
 			break;    
 		case 7:
 			propertyInfo.type = PropertyInfo.STRING_CLASS;
+			propertyInfo.name = "location";
+			break;    
+		case 8:
+			propertyInfo.type = PropertyInfo.STRING_CLASS;
 			propertyInfo.name = "summary";
 			break;
-		case 8:
+		case 9:
 			propertyInfo.type = PropertyInfo.INTEGER_CLASS;
 			propertyInfo.name = "status";
 			break;
-		case 9:
+		case 10:
 			propertyInfo.type = PropertyInfo.STRING_CLASS;
 			propertyInfo.name = "content";
 			break;
@@ -384,10 +476,11 @@ public class SWADNotification extends Model {
 		case 3  : userSurname1 = (String)obj; break;
 		case 4  : userSurname2 = (String)obj; break;
 		case 5  : userFirstName = (String)obj; break;
-		case 6  : location = (String)obj; break;
-		case 7  : summary = (String)obj; break;
-		case 8  : status = (Integer)obj; break;
-		case 9  : content = (String)obj; break;
+		case 6  : userPhoto = (String)obj; break;
+		case 7  : location = (String)obj; break;
+		case 8  : summary = (String)obj; break;
+		case 9  : status = (Integer)obj; break;
+		case 10  : content = (String)obj; break;
 		}    
 	}
 }
