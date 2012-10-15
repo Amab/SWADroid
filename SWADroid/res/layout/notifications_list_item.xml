@@ -21,21 +21,6 @@
     android:layout_height="wrap_content">
   </ImageView>  
 		
-  <TextView
-		android:id="@+id/eventDate"
-		android:layout_height="wrap_content"
-		android:layout_width="match_parent"
-    	android:gravity="center_horizontal"
-  		android:textColor="@color/foreground2"
-  		android:layout_marginTop="6dip" />
-		
-   <TextView
-		android:id="@+id/eventTime"
-		android:layout_height="wrap_content"
-		android:layout_width="match_parent"
-    	android:gravity="center_horizontal"
-  		android:textColor="@color/foreground2" />
-		
    <TextView
 		android:id="@+id/eventSender"
 		android:layout_height="wrap_content"
@@ -45,7 +30,7 @@
   		android:textColor="@color/foreground2"
   		android:layout_marginBottom="6dip"
   		android:padding="1dip" />
-  		
+ <!--   		
   	<ImageView
 		android:id="@+id/messageReplyButton"
 		android:layout_width="wrap_content"
@@ -53,7 +38,7 @@
 		android:cropToPadding="false"
 		android:background="@drawable/message_reply"
 		android:clickable="true"
-  		android:visibility="gone" />
+  		android:visibility="gone" />-->
  </LinearLayout>
  
  <LinearLayout
@@ -91,6 +76,31 @@
 		android:layout_width="match_parent"
   		android:textColor="@color/foreground1"
   		android:padding="1dip" />
+    
+    <RelativeLayout
+     	android:id="@+id/dateAndTime"
+     	android:layout_width="wrap_content"
+     	android:layout_height="wrap_content" >
+        
+        <TextView
+			android:id="@+id/eventDate"
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+	    	android:gravity="center_horizontal"
+	  		android:textColor="@color/foreground2"
+	  		android:text="Date"/>
+
+   		<TextView
+   		    android:id="@+id/eventTime"
+   		    android:layout_width="wrap_content"
+   		    android:layout_height="wrap_content"
+   		    android:layout_alignBaseline="@id/eventDate"
+   		    android:layout_toRightOf="@id/eventDate"
+   		    android:layout_marginLeft="10dp"
+   		    android:text="TIme"
+   		    android:textColor="@color/foreground2" />
+        
+    </RelativeLayout>
 		
     <TextView
 		android:id="@+id/eventSummary"
