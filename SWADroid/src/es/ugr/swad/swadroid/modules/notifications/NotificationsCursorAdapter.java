@@ -103,8 +103,8 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         TextView content = (TextView) view.findViewById(R.id.eventText);
         TextView contentMsg = (TextView) view.findViewById(R.id.eventMsg);
         ImageView notificationIcon = (ImageView) view.findViewById(R.id.notificationIcon);
-        ImageView messageReplyButton = (ImageView) view.findViewById(R.id.messageReplyButton);
-        
+        //ImageView messageReplyButton = (ImageView) view.findViewById(R.id.messageReplyButton);
+        /*
         OnClickListener replyMessageListener = new OnClickListener() {
 			public void onClick(View v) {				
 				Intent activity = new Intent(ctx.getApplicationContext(), Messages.class);
@@ -112,13 +112,13 @@ public class NotificationsCursorAdapter extends CursorAdapter {
 				activity.putExtra("summary", summary.getText().toString());
 				ctx.startActivity(activity);
 			}        	
-        };
+        };*/
         
         if(eventType != null) {
         	eventCode.setText(notificationCode.toString());
         	eventUserPhoto.setText(userPhoto);
         	type = cursor.getString(cursor.getColumnIndex("eventType"));
-        	messageReplyButton.setVisibility(View.GONE);
+        	//messageReplyButton.setVisibility(View.GONE);
         	
         	if(type.equals("examAnnouncement"))
         	{
@@ -136,8 +136,8 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         	{
         		type = context.getString(R.string.message);
         		notificationIcon.setImageResource(R.drawable.msg_received);
-        		messageReplyButton.setOnClickListener(replyMessageListener);
-        		messageReplyButton.setVisibility(View.VISIBLE);
+        		//messageReplyButton.setOnClickListener(replyMessageListener);
+        		//messageReplyButton.setVisibility(View.VISIBLE);
         	} else if(type.equals("forumReply"))
         	{
         		type = context.getString(R.string.forumReply);
