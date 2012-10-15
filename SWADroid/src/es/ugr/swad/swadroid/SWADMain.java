@@ -57,6 +57,7 @@ import es.ugr.swad.swadroid.modules.notifications.Notifications;
 import es.ugr.swad.swadroid.modules.rollcall.Rollcall;
 import es.ugr.swad.swadroid.modules.tests.Tests;
 import es.ugr.swad.swadroid.modules.groups.MyGroupsManager;
+import es.ugr.swad.swadroid.modules.groups.SendMyGroups;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
 import es.ugr.swad.swadroid.sync.AccountAuthenticator;
 
@@ -272,8 +273,13 @@ public class SWADMain extends MenuExpandableListActivity {
 			activity.putExtra("treeCode",Global.SHARE_AREA_CODE);
 			startActivityForResult(activity,Global.DIRECTORY_TREE_REQUEST_CODE);*/
 		}else if(keyword.equals(getString(R.string.myGroupsModuleLabel))){
-			activity = new Intent(getBaseContext(), MyGroupsManager.class);
-			startActivityForResult(activity,Global.MYGROUPSMANAGER_REQUEST_CODE);
+			String myGroups = "14313,"+"13050";
+			activity = new  Intent(getBaseContext(), SendMyGroups.class);
+			activity.putExtra("courseCode", Global.getSelectedCourseCode());
+			activity.putExtra("myGroups", myGroups);
+			startActivityForResult(activity,Global.SENDMYGROUPS_REQUEST_CODE);
+		//	activity = new Intent(getBaseContext(), MyGroupsManager.class);
+		//	startActivityForResult(activity,Global.MYGROUPSMANAGER_REQUEST_CODE);
 		}
 
 		return true;
@@ -404,6 +410,9 @@ public class SWADMain extends MenuExpandableListActivity {
 				} else {
 					error(getString(R.string.noGroupsAvailableMsg));
 				}
+				break;
+			case Global.SENDMYGROUPS_REQUEST_CODE:
+				Log.i(TAG, "send my groups ");
 				break;
 			}
 		}
@@ -741,6 +750,10 @@ public class SWADMain extends MenuExpandableListActivity {
 	 * */
 	protected void setMenuDbClean(){
 		Global.setDbCleaned(false);
+		Global.setSelectedCourseCode(-1);
+		Global.setSelectedCourseShortName("");
+		Global.setSelectedCourseFullName("");
+		prefs.setLastCourseSelected(-1);
 		dBCleaned = true;
 		listCourses.clear();
 		cleanSpinner();

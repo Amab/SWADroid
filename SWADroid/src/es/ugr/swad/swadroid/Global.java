@@ -34,7 +34,7 @@ public class Global {
 	/**
 	 * SWAD application key
 	 */
-	private static final String AppKey = "";
+	private static final String AppKey = "HTC-Desire";
 	/**
 	 * Server URL
 	 */
@@ -173,6 +173,10 @@ public class Global {
      * Request code for MyGroups Manager
      * */
     public static final int GROUPTYPES_REQUEST_CODE= 23;
+    /**
+     * Request code for SendMyGroups Manager
+     * */
+    public static final int SENDMYGROUPS_REQUEST_CODE = 24;
 	/**
 	 * Prefix tag name for Logcat
 	 */
