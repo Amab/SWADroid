@@ -20,7 +20,7 @@ import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.model.Group;
 /**
- * Modulo to enroll into groups. 
+ * Module to enroll into groups. 
  * It makes use of the web service sendGroups (see http://swad.ugr.es/ws/#sendMessage)
  *  It needs as extra data:
  * - (long) courseCode course code . It indicates the course to which the groups belong
@@ -62,7 +62,8 @@ public class SendMyGroups extends Module {
 			finish();
 		}
 		
-		setMETHOD_NAME("getGroups");
+		setMETHOD_NAME("sendMyGroups");
+//		setMETHOD_NAME("getGroupt");
 	}
 
 	@Override
@@ -106,7 +107,7 @@ public class SendMyGroups extends Module {
 			if(success != 0){
 				List<Model> groupsSWAD = new ArrayList<Model>();
 				
-				SoapObject soapO = (SoapObject) res.get(1) ;
+				SoapObject soapO = (SoapObject) res.get(2) ;
 				int propertyCount = soapO.getPropertyCount();
 				
 				for(int i = 0; i < propertyCount ; ++i){

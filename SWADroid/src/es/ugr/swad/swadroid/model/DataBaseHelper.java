@@ -462,13 +462,15 @@ public class DataBaseHelper {
 		
 		return groups;
 	}
-	
+	/**
+	 * 
+	 * */
 	public Cursor getCursorGroupsOfType(long groupTypeCode){
-		String select = "SELECT * "+
+		String select = "SELECT g.* "+
 				" FROM " +
 				Global.DB_TABLE_GROUPS + " g, " + Global.DB_TABLE_GROUPS_GROUPTYPES + " ggt" +
 				" WHERE " +
-				"g.id = ggt.grpCod AND ggt.grpTypCod = ?";
+				"g.id = ggt.grpCod AND ggt.grpTypCod = ? ORDER BY groupName";
 
 		SQLiteDatabase db = DataFramework.getInstance().getDB();
 		//TODO sustituir rawquery por getCursor(String table, String[] fields, String selection, 
@@ -477,6 +479,12 @@ public class DataBaseHelper {
 
 	}
 	
+	public Cursor getCursor(String table, String where, String orderby){
+		return db.getCursor(table, where, orderby);
+	}
+	public Cursor getCursorGroupType(long courseCode){
+		return db.getCursor(Global.DB_TABLE_GROUP_TYPES, "courseCode =" + courseCode, "groupTypeName");
+	}
 	
 	public GroupType getGroupTypeFromGroup(long groupCode){
 		long groupTypeCode = getGroupTypeCodeFromGroup(groupCode);
