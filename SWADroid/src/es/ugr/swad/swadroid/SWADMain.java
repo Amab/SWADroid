@@ -273,7 +273,7 @@ public class SWADMain extends MenuExpandableListActivity {
 			activity.putExtra("treeCode",Global.SHARE_AREA_CODE);
 			startActivityForResult(activity,Global.DIRECTORY_TREE_REQUEST_CODE);*/
 		}else if(keyword.equals(getString(R.string.myGroupsModuleLabel))){
-			String myGroups = "14313,"+"13050";
+			String myGroups = "";
 			activity = new  Intent(getBaseContext(), SendMyGroups.class);
 			activity.putExtra("courseCode", Global.getSelectedCourseCode());
 			activity.putExtra("myGroups", myGroups);
