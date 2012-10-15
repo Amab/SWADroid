@@ -185,6 +185,11 @@
             android:label="@string/groupTypesModuleLabel"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
+        <activity
+            android:name=".modules.groups.SendMyGroups"
+            android:label="@string/sendMyGroupsProgressTitle"
+            android:theme="@android:style/Theme.NoTitleBar" >
+        </activity>
 
         <provider
             android:name=".sync.DummyProvider"

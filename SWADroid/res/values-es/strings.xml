@@ -251,5 +251,7 @@ configuración mediante la opción "Limpiar base de datos" del menú\n\n¿Desea 
     <string name="noRollcallAllowedMsg">No se permite pasar lista para la asignatura seleccionada. Intente "Limpiar base de datos"</string>
     <string name="froyoFunctionMsg">Esta función requiere Android 2.2 o superior</string>
     <string name="groupTypesModuleLabel">Conseguir tipos de grupo</string>
+        <string name="sendMyGroupsProgressDescription">Enviando inscripción a grupos</string>
+    <string name="sendMyGroupsProgressTitle">Inscripción en grupos</string>
     
 </resources>

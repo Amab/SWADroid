@@ -24,7 +24,9 @@ import es.ugr.swad.swadroid.R;
 
 /**
  * Groups module gets user's groups inside the current course
- * and stores them in the database
+ * and stores them in the database.
+ * It needs as extra data:
+ * - (long) courseCode course code . It indicates the course to which the groups belong
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  */
@@ -95,14 +97,12 @@ public class Groups extends Module {
 			IllegalAccessException, InstantiationException {
 		createRequest();
 		addParam("wsKey", Global.getLoggedUser().getWsKey());
-		addParam("courseCode", (int)Global.getSelectedCourseCode());
+		addParam("courseCode",(int) courseCode);
 		sendRequest(Group.class,false);
 		
 		if(result != null){
-			
 			//Stores groups data returned by webservice response
 			List<Model> groupsSWAD = new ArrayList<Model>();
-			
 			
 			Vector<?> res = (Vector <?>) result;
 			SoapObject soap = (SoapObject) res.get(1);	
@@ -134,9 +134,7 @@ public class Groups extends Module {
 				//boolean isAdded = dbHelper.insertGroup(g,Global.getSelectedCourseCode());
 				//if(!isAdded){
 				if(!dbHelper.insertGroup(g,Global.getSelectedCourseCode())){
-					Log.i(TAG, "group to update");
 					dbHelper.updateGroup(g.getId(), Global.getSelectedCourseCode(), g);
-					Log.i(TAG, "group updated");
 				}
 			}
 			//Request finalized without errors

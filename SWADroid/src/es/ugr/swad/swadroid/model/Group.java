@@ -78,6 +78,7 @@ public class Group extends Model {
 		this.open = open;
 		this.fileZones = fileZones;
 		this.groupTypeCode = groupTypeCode;
+		this.member = member;
 	}
 	
 	@Override
@@ -161,7 +162,7 @@ public class Group extends Model {
 	@Override
 	public String toString() {
 		return "Group [name="+groupName+", getId()="+getId()+", getGroupTypeCode()=" + getGroupTypeCode()+", getMaxStudents()=" + getMaxStudents()+", getCurrentStudents()=" 
-	+ getCurrentStudents()+", isOpen()=" + isOpen()+", exitsDocumentsArea()=" + exitsDocumentsArea() +", isMember()= "+ isMember();
+	+ getCurrentStudents()+", getOpen()=" + getOpen()+", getDocumentsArea()=" + getDocumentsArea() +", getMember()= "+ getMember();
 	}
 	
 	/**

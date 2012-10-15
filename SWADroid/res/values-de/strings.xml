@@ -139,4 +139,6 @@ Es muss mindestens ein Antworttyp ausgewählt werden</string>
 	<string name="enrollment">Einschreibung</string>
 	<string name="myGroupsModuleLabel">Meine Gruppen</string>
 	<string name="groupTypesModuleLabel">Schaffen Gruppetypen</string>
+	    <string name="sendMyGroupsProgressDescription">Schicken gerade Einschreibung in Gruppen</string>
+    <string name="sendMyGroupsProgressTitle">Einschreibung in Gruppen</string>
 </resources>
