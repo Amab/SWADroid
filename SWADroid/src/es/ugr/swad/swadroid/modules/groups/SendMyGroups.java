@@ -63,7 +63,6 @@ public class SendMyGroups extends Module {
 		}
 		
 		setMETHOD_NAME("sendMyGroups");
-//		setMETHOD_NAME("getGroupt");
 	}
 
 	@Override

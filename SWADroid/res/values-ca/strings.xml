@@ -113,4 +113,5 @@
 	<!-- <string name="maxStudent">Màxim d'estud.</string> -->
 	<string name="enrollment">Inscripció</string>
 	<string name="myGroupsModuleLabel">Els meus grups</string>
+	<string name="openingTime">Obertura de grups: </string>
 </resources>

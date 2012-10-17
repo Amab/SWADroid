@@ -1,34 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-         <TextView
-			android:id="@+id/groupTypeText"
-			android:layout_height="wrap_content"
-			android:layout_width="wrap_content"
-			android:layout_toRightOf="@id/padlockIcon" 
-			android:text="Group Type Name"/>
-
-         <TextView
-             android:id="@+id/vacantsText"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:layout_alignParentRight="true"
-             android:layout_below="@id/groupTypeText"
-             android:text="@string/vacants" />
-         <TextView
-             android:id="@+id/numStudentText"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:layout_toLeftOf="@id/vacantsText"
-             android:layout_below="@id/groupTypeText"
-             android:text="@string/numStudent" />
-         <TextView
-             android:id="@+id/maxStudentText"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:layout_toLeftOf="@id/numStudentText"
-             android:layout_below="@id/groupTypeText"
-             android:text="@string/numStudent" />  
+    android:layout_height="match_parent"
+    android:padding="5dp"
+    android:background="@color/pale_yellow">
+ 	<TextView     
+ 	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:id="@+id/groupTypeText"
+	    android:layout_toRightOf="@id/padlockIcon" 
+		android:textColor="@android:color/black"
+		android:text="Group Type Name"
+		android:paddingRight = "10dp"
+		android:paddingLeft ="35dp"
+	  />
+ 	<TextView
+ 	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:id="@+id/openTimeText"
+	    android:layout_toRightOf="@id/padlockIcon"
+	    android:layout_below="@id/groupTypeText"
+	    android:visibility="gone"
+ 	    />   
 
 </RelativeLayout>
