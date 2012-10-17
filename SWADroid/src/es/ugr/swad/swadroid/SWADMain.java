@@ -273,14 +273,13 @@ public class SWADMain extends MenuExpandableListActivity {
 			activity.putExtra("treeCode",Global.SHARE_AREA_CODE);
 			startActivityForResult(activity,Global.DIRECTORY_TREE_REQUEST_CODE);*/
 		}else if(keyword.equals(getString(R.string.myGroupsModuleLabel))){
-			//String myGroups = "";
-			//activity = new  Intent(getBaseContext(), SendMyGroups.class);
-			//activity.putExtra("courseCode", Global.getSelectedCourseCode());
-			//activity.putExtra("myGroups", myGroups);
-			//startActivityForResult(activity,Global.SENDMYGROUPS_REQUEST_CODE);
-			activity = new Intent(getBaseContext(), MyGroupsManager.class);
+			String myGroups = "";
+			activity = new  Intent(getBaseContext(), SendMyGroups.class);
 			activity.putExtra("courseCode", Global.getSelectedCourseCode());
-			startActivityForResult(activity,Global.MYGROUPSMANAGER_REQUEST_CODE);
+			activity.putExtra("myGroups", myGroups);
+			startActivityForResult(activity,Global.SENDMYGROUPS_REQUEST_CODE);
+		//	activity = new Intent(getBaseContext(), MyGroupsManager.class);
+		//	startActivityForResult(activity,Global.MYGROUPSMANAGER_REQUEST_CODE);
 		}
 
 		return true;
@@ -434,19 +433,7 @@ public class SWADMain extends MenuExpandableListActivity {
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			spinner.setAdapter(adapter);
 			spinner.setOnItemSelectedListener(new onItemSelectedListener());
-			if(Global.getSelectedCourseCode() != -1) {
-				boolean found = false;
-				int i = 0;
-				while (!found && i < listCourses.size()) {
-					if (listCourses.get(i).getId() == Global.getSelectedCourseCode()) {
-						found = true;
-					} else {
-						++i;
-					}
-				}
-				if (i < listCourses.size())
-					spinner.setSelection(i);
-			}
+			spinner.setSelection(prefs.getLastCourseSelected());
 			spinner.setOnTouchListener(Spinner_OnTouch);
 		} else {
 			cleanSpinner();
@@ -544,8 +531,7 @@ public class SWADMain extends MenuExpandableListActivity {
 		if(listCourses.size() != 0){
 			Course courseSelected;
 			if(Global.getSelectedCourseCode()!=-1){
-				String where = "id="+String.valueOf(Global.getSelectedCourseCode());
-				courseSelected = (Course) dbHelper.getAllRows(Global.DB_TABLE_COURSES, where, "fullName").get(0);
+				courseSelected = (Course) dbHelper.getRow(Global.DB_TABLE_COURSES, "id", String.valueOf(Global.getSelectedCourseCode()));
 			}else{
 				int lastSelected = prefs.getLastCourseSelected();
 				if(lastSelected != -1 && lastSelected < listCourses.size() ){
