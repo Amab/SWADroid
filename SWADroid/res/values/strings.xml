@@ -141,7 +141,7 @@
     <string name="mailingListTitle">Mailing list</string>
     <string name="blogTitle">Blog</string>
     <string name="marketTitle">Android Market</string>
-    <string name="notificationsAlertTitle">New notifications</string>
+    <string name="notificationsAlertTitle">SWADroid</string>
     <string name="notificationsAlertMsg">new notifications</string>
     <string name="footMessageMsg">Sended from</string>
     <string name="marksMsg">Click on the notification to view the mark.</string>
