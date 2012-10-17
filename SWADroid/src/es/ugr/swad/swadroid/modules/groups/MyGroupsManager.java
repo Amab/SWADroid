@@ -58,7 +58,7 @@ public class MyGroupsManager extends MenuActivity {
 	protected void onStart() {
 		super.onStart();
 		
-		List<Model> groupTypes = dbHelper.getAllRows(Global.DB_TABLE_GROUP_TYPES, "courseCode = " + Global.getSelectedCourseCode() , "groupTypeName");
+		List<Model> groupTypes = dbHelper.getAllRows(Global.DB_TABLE_GROUP_TYPES, "courseCode = " + courseCode , "groupTypeName");
 		List<Group> groups = dbHelper.getGroups(courseCode);
 		if((!groupTypes.isEmpty()) && (!groups.isEmpty())){
 			setMenu();
@@ -119,7 +119,7 @@ public class MyGroupsManager extends MenuActivity {
 			case Global.GROUPTYPES_REQUEST_CODE:
 				Intent activity = new Intent(getBaseContext(),GroupTypes.class);
 				activity.putExtra("courseCode",  Global.getSelectedCourseCode());
-				startActivityForResult(activity,Global.GROUPTYPES_REQUEST_CODE);
+				startActivityForResult(activity,Global.GROUPS_REQUEST_CODE);
 				break;
 			case Global.GROUPS_REQUEST_CODE:
 				setMenu();
@@ -134,6 +134,11 @@ public class MyGroupsManager extends MenuActivity {
 		listAdapter = new GroupsResourceCursorTreeAdapter(getBaseContext(), gTCursor,
 				R.layout.group_type_list_item, R.layout.group_list_item);
 		expandableList.setAdapter(listAdapter);
+		
+		int collapsedGroups = expandableList.getExpandableListAdapter().getGroupCount();
+		for(int i=0; i < collapsedGroups; ++i){
+			expandableList.expandGroup(i);
+		}
 		
 	}
 

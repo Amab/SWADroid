@@ -36,5 +36,7 @@
     <color name="viewfinder_laser">#ffff0000</color>
     <color name="viewfinder_mask">#60000000</color>
     <color name="possible_result_points">#c0ffff00</color>
+    <color name="pale_yellow">#f2eca1</color>
+  	<color name="dark_grey"> #383838</color>
 
 </resources>
