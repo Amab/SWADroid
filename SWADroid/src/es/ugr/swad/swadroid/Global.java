@@ -436,7 +436,7 @@ public class Global {
 	    //Survey all networks (wifi, gprs...)
 	    NetworkInfo[] networks = connec.getAllNetworkInfo();
 	    
-	    for(int i=0; i<2; i++){
+	    for(int i=0; i<networks.length; i++){
 	        //If any of them has a connection available, put boolean to true
 	        if (networks[i].isConnected()){
 	            connAvailable = true;
