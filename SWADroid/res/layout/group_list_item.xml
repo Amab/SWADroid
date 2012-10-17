@@ -10,18 +10,39 @@
         android:layout_height="wrap_content"
         android:src="@drawable/padlockred"
         android:layout_alignParentLeft="true"
+        android:paddingLeft="5dp"
         />
 	<CheckBox android:id="@+id/checkBoxGroup"
-	    android:layout_width="wrap_content"
+	    android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_toRightOf="@id/padlockIcon"
-		android:text="Prueba"/>
-	<RadioButton android:id="@+id/radioButtonGroup"
-	    android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_toRightOf="@id/padlockIcon"
+		android:textColor="@android:color/black"
 		android:text="Prueba"
-		android:visibility="gone"
+		android:visibility="gone"/>
+	<RadioButton android:id="@+id/radioButtonGroup"
+	    android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_toRightOf="@id/padlockIcon"
+		android:textColor="@android:color/black"
+		android:text="Prueba"
+		
 	    />
-
+	<TextView 
+	    android:id="@+id/vacantsText"
+	    android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:gravity="center"
+		android:layout_below="@id/padlockIcon"
+		android:layout_toRightOf="@id/padlockIcon"
+		android:text="@string/vacants"
+		/>
+	<TextView 
+	    android:id="@+id/nStudentText"
+	    android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/vacantsText"
+		android:layout_toRightOf="@id/padlockIcon"
+		android:gravity="center"
+		android:text="@string/numStudent"
+	    />
 </RelativeLayout>
