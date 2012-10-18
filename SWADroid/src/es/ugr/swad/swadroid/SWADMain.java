@@ -269,17 +269,10 @@ public class SWADMain extends MenuExpandableListActivity {
 			activity = new Intent(getBaseContext(), DownloadsManager.class);
 			activity.putExtra("downloadsAreaCode", Global.SHARE_AREA_CODE);
 			startActivityForResult(activity,Global.DOWNLOADSMANAGER_REQUEST_CODE);
-			/*activity = new Intent(getBaseContext(),DirectoryTreeDownload.class);
-			activity.putExtra("treeCode",Global.SHARE_AREA_CODE);
-			startActivityForResult(activity,Global.DIRECTORY_TREE_REQUEST_CODE);*/
-		}else if(keyword.equals(getString(R.string.myGroupsModuleLabel))){
-			String myGroups = "";
-			activity = new  Intent(getBaseContext(), SendMyGroups.class);
+		}else if(keyword.equals(getString(R.string.myGroupsModuleLabel))){			
+			activity = new Intent(getBaseContext(), MyGroupsManager.class);
 			activity.putExtra("courseCode", Global.getSelectedCourseCode());
-			activity.putExtra("myGroups", myGroups);
-			startActivityForResult(activity,Global.SENDMYGROUPS_REQUEST_CODE);
-		//	activity = new Intent(getBaseContext(), MyGroupsManager.class);
-		//	startActivityForResult(activity,Global.MYGROUPSMANAGER_REQUEST_CODE);
+			startActivityForResult(activity,Global.MYGROUPSMANAGER_REQUEST_CODE);
 		}
 
 		return true;
@@ -411,9 +404,6 @@ public class SWADMain extends MenuExpandableListActivity {
 					error(getString(R.string.noGroupsAvailableMsg));
 				}
 				break;
-			case Global.SENDMYGROUPS_REQUEST_CODE:
-				Log.i(TAG, "send my groups ");
-				break;
 			}
 		}
 	}
@@ -433,7 +423,10 @@ public class SWADMain extends MenuExpandableListActivity {
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			spinner.setAdapter(adapter);
 			spinner.setOnItemSelectedListener(new onItemSelectedListener());
-			spinner.setSelection(prefs.getLastCourseSelected());
+			if(prefs.getLastCourseSelected() < listCourses.size())
+				spinner.setSelection(prefs.getLastCourseSelected());
+			else
+				spinner.setSelection(0);
 			spinner.setOnTouchListener(Spinner_OnTouch);
 		} else {
 			cleanSpinner();
