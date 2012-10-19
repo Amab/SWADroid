@@ -142,4 +142,5 @@ Es muss mindestens ein Antworttyp ausgewählt werden</string>
 	    <string name="sendMyGroupsProgressDescription">Schicken gerade Einschreibung in Gruppen</string>
     <string name="sendMyGroupsProgressTitle">Einschreibung in Gruppen</string>
     <string name="openingTime">Öffnungsdatum den Gruppen: </string>
+    <string name="noGroupsText">Gruppen worden nicht im Kurs erstellt</string>
 </resources>
