@@ -91,8 +91,6 @@ public class MyGroupsManager extends MenuActivity {
 		
 		courseCode = getIntent().getLongExtra("courseCode",-1);
 		
-		
-		
 		setContentView(R.layout.group_choice);
 		this.findViewById(R.id.courseSelectedText).setVisibility(View.VISIBLE);
 		//in this module the group will not be chosen through the spinner, 
@@ -122,7 +120,15 @@ public class MyGroupsManager extends MenuActivity {
 				startActivityForResult(activity,Global.GROUPS_REQUEST_CODE);
 				break;
 			case Global.GROUPS_REQUEST_CODE:
-				setMenu();
+				if(dbHelper.getCursorGroupType(courseCode).getColumnCount() < 0){
+					expandableList.setVisibility(View.VISIBLE);
+					this.findViewById(R.id.noGroupsText).setVisibility(View.GONE);
+					setMenu();
+				}else{
+					expandableList.setVisibility(View.GONE);
+					this.findViewById(R.id.noGroupsText).setVisibility(View.VISIBLE);
+				}
+					
 				break;	
 			}
 			

@@ -126,8 +126,7 @@ public class GroupsResourceCursorTreeAdapter extends ResourceCursorTreeAdapter {
 //        	Date d = new Date(unixTime * 1000);
 //        	java.text.DateFormat dateShortFormat = android.text.format.DateFormat.getDateFormat(context);
 //        	java.text.DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(context);
-//        	openTimeText.setText(dateShortFormat.format(d));
-//        	//openTimeText.setText(timeFormat.format(d));
+//        	openTimeText.setText(dateShortFormat.format(d)+ "  "+(timeFormat.format(d));
 //		}
 	}
 
