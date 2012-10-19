@@ -21,6 +21,8 @@
 	    android:layout_toRightOf="@id/padlockIcon"
 	    android:layout_below="@id/groupTypeText"
 	    android:visibility="gone"
+	    android:paddingLeft ="35dp"
+	    android:textColor="@android:color/black"
  	    />   
 
 </RelativeLayout>

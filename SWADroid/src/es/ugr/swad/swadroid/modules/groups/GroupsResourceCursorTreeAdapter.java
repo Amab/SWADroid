@@ -120,14 +120,17 @@ public class GroupsResourceCursorTreeAdapter extends ResourceCursorTreeAdapter {
 		textViewGroupTypeName = (TextView) view.findViewById(R.id.groupTypeText);
 		textViewGroupTypeName.setText(cursor.getString(cursor.getColumnIndex("groupTypeName")));
 		
-//		long unixTime = cursor.getLong(cursor.getColumnIndex("openTime"));
-//		openTimeText = (TextView)view.findViewById(R.id.openTimeText);
-//		if(unixTime != 0){
-//        	Date d = new Date(unixTime * 1000);
-//        	java.text.DateFormat dateShortFormat = android.text.format.DateFormat.getDateFormat(context);
-//        	java.text.DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(context);
-//        	openTimeText.setText(dateShortFormat.format(d)+ "  "+(timeFormat.format(d));
-//		}
+		long unixTime = cursor.getLong(cursor.getColumnIndex("openTime"));
+		openTimeText = (TextView)view.findViewById(R.id.openTimeText);
+		if(unixTime != 0){
+			openTimeText.setVisibility(View.VISIBLE);
+        	Date d = new Date(unixTime * 1000);
+        	java.text.DateFormat dateShortFormat = android.text.format.DateFormat.getDateFormat(context);
+        	java.text.DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(context);
+        	openTimeText.setText(context.getString(R.string.openingTime)+ " "+  dateShortFormat.format(d)+ "  "+(timeFormat.format(d)));
+		}else{
+			openTimeText.setVisibility(View.GONE);
+		}
 	}
 
 	@Override
