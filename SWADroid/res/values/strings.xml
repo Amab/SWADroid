@@ -259,6 +259,6 @@ configuration anytime using the "Clean Database" option\n\nDo you want to contin
     <string name="groupTypesModuleLabel">Get Group Types</string>
     <string name="sendMyGroupsProgressDescription">Sending enrollment into groups</string>
     <string name="sendMyGroupsProgressTitle">Enrolment into groups</string>
-    <string name="openingTime">Opening of groups: </string>
+    <string name="openingTime">Opening: </string>
     <string name="noGroupsText">No groups have been created in the course</string>
 </resources>

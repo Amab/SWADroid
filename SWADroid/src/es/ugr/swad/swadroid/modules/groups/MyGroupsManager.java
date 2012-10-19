@@ -116,7 +116,7 @@ public class MyGroupsManager extends MenuActivity {
 			switch (requestCode) {
 			case Global.GROUPTYPES_REQUEST_CODE:
 				Intent activity = new Intent(getBaseContext(),GroupTypes.class);
-				activity.putExtra("courseCode",  Global.getSelectedCourseCode());
+				activity.putExtra("courseCode",  courseCode);
 				startActivityForResult(activity,Global.GROUPS_REQUEST_CODE);
 				break;
 			case Global.GROUPS_REQUEST_CODE:

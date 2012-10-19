@@ -253,7 +253,7 @@ configuración mediante la opción "Limpiar base de datos" del menú\n\n¿Desea 
     <string name="groupTypesModuleLabel">Conseguir tipos de grupo</string>
         <string name="sendMyGroupsProgressDescription">Enviando inscripción a grupos</string>
     <string name="sendMyGroupsProgressTitle">Inscripción en grupos</string>
-    <string name="openingTime">Apertura de grupos: </string>
+    <string name="openingTime">Apertura: </string>
     <string name="noGroupsText">No se han creado grupos dentro de la asignatura</string>
     
 </resources>
