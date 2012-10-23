@@ -557,16 +557,6 @@ public class SWADMain extends MenuExpandableListActivity {
 	}
 
 	/**
-	 * Create an empty menu. It is called when the database is cleaned.
-	 * */
-//	private void createEmptyMenu(){
-//		ImageExpandableListAdapter adapter = (ImageExpandableListAdapter) getExpandableListAdapter();
-//		int groups = adapter.getGroupCount();
-//		for (int i=0; i<groups; ++i)
-//			adapter.removeGroup(i);
-//
-//	}
-	/**
 	 * Creates base menu. The menu base is common for students and teachers.
 	 * Sets currentRole to student role
 	 * */
