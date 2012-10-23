@@ -20,7 +20,7 @@
     <include android:id="@+id/courseNameLayout" layout="@layout/course_or_group_name"/>
    
     <ExpandableListView
-        android:id="@+id/expandableListGroups"
+        android:id="@+id/android:list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:cacheColorHint="@color/background"

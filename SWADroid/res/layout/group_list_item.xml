@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" 
+    android:focusable="false"
     >
     <ImageView
         android:id="@+id/padlockIcon"
@@ -11,21 +12,23 @@
         android:src="@drawable/padlockred"
         android:layout_alignParentLeft="true"
         android:paddingLeft="5dp"
+        android:focusable="false"
         />
-	<CheckBox android:id="@+id/checkBoxGroup"
+	<CheckBox android:id="@+id/checkBox"
 	    android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_toRightOf="@id/padlockIcon"
 		android:textColor="@android:color/black"
 		android:text="Prueba"
+		android:focusable="false"
 		android:visibility="gone"/>
-	<RadioButton android:id="@+id/radioButtonGroup"
+	<RadioButton android:id="@+id/radioButton"
 	    android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_toRightOf="@id/padlockIcon"
 		android:textColor="@android:color/black"
 		android:text="Prueba"
-		
+		android:focusable="false"
 	    />
 	<TextView 
 	    android:id="@+id/vacantsText"
@@ -35,6 +38,7 @@
 		android:layout_below="@id/padlockIcon"
 		android:layout_toRightOf="@id/padlockIcon"
 		android:text="@string/vacants"
+		android:focusable="false"
 		/>
 	<TextView 
 	    android:id="@+id/nStudentText"
@@ -44,5 +48,6 @@
 		android:layout_toRightOf="@id/padlockIcon"
 		android:gravity="center"
 		android:text="@string/numStudent"
+		android:focusable="false"
 	    />
 </RelativeLayout>

@@ -1,38 +1,37 @@
 package es.ugr.swad.swadroid.modules.groups;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-import com.android.dataframework.DataFramework;
-
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ExpandableListView;
-import android.widget.ImageView;
-import android.widget.SimpleCursorTreeAdapter;
 import android.widget.TextView;
+
+import com.android.dataframework.DataFramework;
+
 import es.ugr.swad.swadroid.Global;
-import es.ugr.swad.swadroid.MenuActivity;
+import es.ugr.swad.swadroid.MenuExpandableListActivity;
+import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.model.Group;
-import es.ugr.swad.swadroid.model.GroupType;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.modules.GroupTypes;
 import es.ugr.swad.swadroid.modules.Groups;
-import es.ugr.swad.swadroid.R;
 /**
  * Activity to manage the enrollments into groups. It is responsible for maintain the UI and send the appropriate web services
  *   It needs as extra data:
  * - (long) courseCode course code . It indicates the course to which the groups belong
+ * 
+ * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  * */
 
 
-public class MyGroupsManager extends MenuActivity {
+public class MyGroupsManager extends MenuExpandableListActivity {
 	
 	/**
 	 * Course code of current selected course
@@ -42,17 +41,7 @@ public class MyGroupsManager extends MenuActivity {
 	 * Database Framework.
 	 */
 	protected static DataFramework db; 
-	/**
-	 * List of Group Types of the selected Course 
-	 */
-	//private List<Model> groupTypes = null;
-	/**
-	 * List of Group Types of the selected Course 
-	 */
-	//private List<Group> groups = null; 
-	
-	private ExpandableListView expandableList = null;
-	private GroupsResourceCursorTreeAdapter listAdapter = null;
+	private GroupsCursorTreeAdapter CursorTreeAdapter = null;
 	
 	@Override
 	protected void onStart() {
@@ -107,7 +96,6 @@ public class MyGroupsManager extends MenuActivity {
 		TextView moduleText = (TextView) this.findViewById(R.id.moduleName);
 		moduleText.setText(R.string.myGroupsModuleLabel);
 		
-		expandableList = (ExpandableListView) this.findViewById(R.id.expandableListGroups);
 	}
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -120,12 +108,12 @@ public class MyGroupsManager extends MenuActivity {
 				startActivityForResult(activity,Global.GROUPS_REQUEST_CODE);
 				break;
 			case Global.GROUPS_REQUEST_CODE:
-				if(dbHelper.getCursorGroupType(courseCode).getColumnCount() < 0){
-					expandableList.setVisibility(View.VISIBLE);
+				if(dbHelper.getCursorGroupType(courseCode).getColumnCount() > 0){
+					getExpandableListView().setVisibility(View.VISIBLE);
 					this.findViewById(R.id.noGroupsText).setVisibility(View.GONE);
 					setMenu();
 				}else{
-					expandableList.setVisibility(View.GONE);
+					getExpandableListView().setVisibility(View.GONE);
 					this.findViewById(R.id.noGroupsText).setVisibility(View.VISIBLE);
 				}
 					
@@ -137,15 +125,42 @@ public class MyGroupsManager extends MenuActivity {
 	
 	private void setMenu(){
 		Cursor gTCursor = dbHelper.getCursorGroupType(courseCode);
-		listAdapter = new GroupsResourceCursorTreeAdapter(getBaseContext(), gTCursor,
-				R.layout.group_type_list_item, R.layout.group_list_item);
-		expandableList.setAdapter(listAdapter);
 		
-		int collapsedGroups = expandableList.getExpandableListAdapter().getGroupCount();
-		for(int i=0; i < collapsedGroups; ++i){
-			expandableList.expandGroup(i);
+		HashMap<Long,Cursor> childCursors = new HashMap<Long,Cursor>();
+		gTCursor.moveToFirst();
+		for(int i = 0; i < gTCursor.getCount(); ++i){
+			long gTCode = gTCursor.getLong(gTCursor.getColumnIndex("id"));
+			Cursor c =  dbHelper.getCursorGroupsOfType(gTCode);
+			childCursors.put(Long.valueOf(gTCode), c);
+			gTCursor.moveToNext();
 		}
+		
+		CursorTreeAdapter = new GroupsCursorTreeAdapter(getBaseContext(),gTCursor,childCursors, R.layout.group_type_list_item, R.layout.group_list_item); 
+		getExpandableListView().setAdapter(CursorTreeAdapter);
+		int collapsedGroups = getExpandableListView().getExpandableListAdapter().getGroupCount();
+		for(int i=0; i < collapsedGroups; ++i){
+			getExpandableListView().expandGroup(i);
+		}
+		
+		getExpandableListView().setOnChildClickListener(this);
 		
 	}
 
+
+	@Override
+	public boolean onChildClick(ExpandableListView parent, View v,
+			int groupPosition, int childPosition, long id) {
+		boolean result = ((GroupsCursorTreeAdapter) getExpandableListView().getExpandableListAdapter()).checkItem(groupPosition,childPosition);
+		((GroupsCursorTreeAdapter) getExpandableListView().getExpandableListAdapter()).notifyDataSetChanged(false);
+		return  result;
+	}
+
+	@Override
+	protected void onPause() {
+		((GroupsCursorTreeAdapter) getExpandableListView().getExpandableListAdapter()).resetChecked();
+		super.onPause();
+	}
+	
+	
+	
 }
