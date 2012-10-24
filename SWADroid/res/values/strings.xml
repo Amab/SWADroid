@@ -171,7 +171,7 @@
     <string name="scan_data_not_found">No data on this student</string>
     <string name="scan_no_codes">Not detect any valid QR code</string>
     <string name="usersPresent">Present students</string>
-    <string name="NoNotificationsMsg">There is no new notifications</string>
+    <string name="NoNotificationsMsg">There are no new notifications</string>
     <string name="home_icon">Shows home folder</string>
     <string name="parent_icon">Shows upper folder</string>
     <string name="refresh_icon">Updates</string>
