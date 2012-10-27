@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <resources>
+
     <string name="app_name">SWADroid</string>
     <string name="serverName_preferences">Servidor</string>
     <string name="serverSummary_preferences">Servidor (sin http://)</string>
@@ -178,11 +179,10 @@
     <string name="downloadFile">Volver a descargar</string>
     <string name="deleteFile">Borrar</string>
     <string name="vacants">Vacantes</string>
-	<string name="numStudent">Nº de estud.</string>
-	<string name="maxStudent">Máx.estud</string>
+    <string name="numStudent">Nº de estud.</string>
+    <string name="maxStudent">Máx.estud</string>
     <string name="enrollment">Inscripción</string>
     <string name="myGroupsModuleLabel">Mis Grupos</string>
-
     <string name="scan_no_photos">No se han podido guardar las fotos de los estudiantes</string>
     <string name="noStudentsAvailableMsg">Esta asignatura no tiene alumnos</string>
     <string name="studentsUpdated">alumnos actualizados</string>
@@ -194,7 +194,7 @@ Intente "Actualizar alumnos"</string>
     <string name="addSessionTitle_menu">Nueva sesión de prácticas</string>
     <string name="groupsProgressDescription">Obteniendo grupos...</string>
     <string name="groupsProgressTitle">Grupos</string>
-    <string name="noGroupsAvailableMsg">No existen grupos de prácticas para la asignatura seleccionada</string>
+    <string name="noGroupsAvailableMsg">No existen grupos para la asignatura seleccionada</string>
     <string name="groupsUpdated">Grupos actualizados</string>
     <string name="sessionCourseText">Asignatura</string>
     <string name="sessionGroupText">Grupo</string>
@@ -243,16 +243,11 @@ Seleccione: Sesiones de prácticas - Nueva</string>
     <string name="rollcallSaved">Datos de asistencia guardados correctamente</string>
     <string name="rollcallWebServiceNotAvailable">El servicio web para enviar a SWAD los datos de asistencia no está disponible.</string>
     <string name="rollcallEvent">Evento de pasar lista</string>
-    <string name="firstRollcallRunMsg">Debido al funcionamiento incorrecto del método getGroups, no es posible saber a qué asignatura 
-pertenecen los grupos de prácticas descargados. Por tanto, hasta que se solucione el error, 
-sólo se permite utilizar la aplicación con una única asignatura.\n\nLa asignatura seleccionada 
-debe tener definidos los grupos de prácticas en SWAD.\n\nEn cualquier momento puede borrar esta 
-configuración mediante la opción "Limpiar base de datos" del menú\n\n¿Desea continuar?</string>
-    <string name="noRollcallAllowedMsg">No se permite pasar lista para la asignatura seleccionada. Intente "Limpiar base de datos"</string>
     <string name="froyoFunctionMsg">Esta función requiere Android 2.2 o superior</string>
+    <string name="groupSeparator">: </string>
     <string name="groupTypesModuleLabel">Conseguir tipos de grupo</string>
-        <string name="sendMyGroupsProgressDescription">Enviando inscripción a grupos</string>
+    <string name="sendMyGroupsProgressDescription">Enviando inscripción a grupos</string>
     <string name="sendMyGroupsProgressTitle">Inscripción en grupos</string>
     <string name="openingTime">Apertura de grupos: </string>
-    
+
 </resources>

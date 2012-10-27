@@ -5,7 +5,7 @@ import java.util.Hashtable;
 import org.ksoap2.serialization.PropertyInfo;
 
 public class GroupType extends Model {
-	
+
 	/**
 	 * Group type name
 	 * */
@@ -27,15 +27,14 @@ public class GroupType extends Model {
 	 * if it is 0, it means, the date does not exit
 	 * */
 	private long openTime;
-	
+
 	private static PropertyInfo PI_id = new PropertyInfo();
 	private static PropertyInfo PI_groupTypeName = new PropertyInfo();
 	private static PropertyInfo PI_courseCode  = new PropertyInfo();
 	private static PropertyInfo PI_mandatory = new PropertyInfo();
 	private static PropertyInfo PI_multiple = new PropertyInfo();
 	private static PropertyInfo PI_openTime = new PropertyInfo();
-	
-	@SuppressWarnings("unused")
+
 	private static PropertyInfo[] PI_PROP_ARRAY = {
 		PI_id,
 		PI_groupTypeName,
@@ -44,7 +43,7 @@ public class GroupType extends Model {
 		PI_multiple,
 		PI_openTime
 	};
-	
+
 	/**
 	 * Constructor.
 	 * @param id Group code.
@@ -60,21 +59,21 @@ public class GroupType extends Model {
 		this.multiple = multiple;
 		this.openTime = openTime;
 	}
-	
+
 	@Override
 	public Object getProperty(int param) {
 		Object object = null;
-	    switch(param)
-	    {
-	        case 0 : object = this.getId();break;
-	        case 1 : object = groupTypeName;break;
-	        case 2 : object = courseCode;break;
-	        case 3 : object = mandatory;break;
-	        case 4 : object = multiple;break;
-	        case 5 : object = openTime;break;
-	    }
-	    
-	    return object;
+		switch(param)
+		{
+		case 0 : object = this.getId();break;
+		case 1 : object = groupTypeName;break;
+		case 2 : object = courseCode;break;
+		case 3 : object = mandatory;break;
+		case 4 : object = multiple;break;
+		case 5 : object = openTime;break;
+		}
+
+		return object;
 	}
 
 	@Override
@@ -85,30 +84,30 @@ public class GroupType extends Model {
 	@Override
 	public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo propertyInfo) {
 		switch(param){
-        case 0:
-            propertyInfo.type = PropertyInfo.LONG_CLASS;
-            propertyInfo.name = "id";
-            break;   
-        case 1:
-            propertyInfo.type = PropertyInfo.STRING_CLASS;
-            propertyInfo.name = "groupTypeName";
-            break;
-        case 2:
-            propertyInfo.type = PropertyInfo.LONG_CLASS;
-            propertyInfo.name = "courseCode";
-            break; 
-        case 3:
-        	propertyInfo.type = PropertyInfo.INTEGER_CLASS;
-        	propertyInfo.name = "mandatory";
-        	break;
-        case 4:
-        	propertyInfo.type = PropertyInfo.INTEGER_CLASS;
-        	propertyInfo.name = "multiple";
-        	break;
-        case 5:
-        	propertyInfo.type = PropertyInfo.LONG_CLASS;
-        	propertyInfo.name = "openTime";
-        	break;	
+		case 0:
+			propertyInfo.type = PropertyInfo.LONG_CLASS;
+			propertyInfo.name = "id";
+			break;   
+		case 1:
+			propertyInfo.type = PropertyInfo.STRING_CLASS;
+			propertyInfo.name = "groupTypeName";
+			break;
+		case 2:
+			propertyInfo.type = PropertyInfo.LONG_CLASS;
+			propertyInfo.name = "courseCode";
+			break; 
+		case 3:
+			propertyInfo.type = PropertyInfo.INTEGER_CLASS;
+			propertyInfo.name = "mandatory";
+			break;
+		case 4:
+			propertyInfo.type = PropertyInfo.INTEGER_CLASS;
+			propertyInfo.name = "multiple";
+			break;
+		case 5:
+			propertyInfo.type = PropertyInfo.LONG_CLASS;
+			propertyInfo.name = "openTime";
+			break;	
 		}
 	}
 
@@ -116,16 +115,16 @@ public class GroupType extends Model {
 	public void setProperty(int param, Object obj) {
 		switch(param)
 		{
-			case 0  : this.setId((Long)obj); break;
-			case 1  : groupTypeName = (String)obj; break;
-			case 2  : courseCode = (Long)obj; break;
-			case 3  : mandatory = (Integer)obj; break;
-			case 4  : multiple = (Integer)obj; break;
-			case 5  : openTime = (Long)obj; break;
+		case 0  : this.setId((Long)obj); break;
+		case 1  : groupTypeName = (String)obj; break;
+		case 2  : courseCode = (Long)obj; break;
+		case 3  : mandatory = (Integer)obj; break;
+		case 4  : multiple = (Integer)obj; break;
+		case 5  : openTime = (Long)obj; break;
 		}    
 
 	}
-	
+
 	@Override
 	public String toString() {
 		return "GroupType [name="+getGroupTypeName()+", getId()="+getId()+", getCourseCode()= "+ courseCode +", getMandatory()=" + getMandatory()+
@@ -177,7 +176,7 @@ public class GroupType extends Model {
 	public int getMultiple(){
 		return multiple;
 	}
-	
+
 	/**
 	 * Gets the date when the groups of this kind will be automatically opened, in case, it exits
 	 * @return 0 if there is not a date when the groups of this kind will be automatically opened

@@ -273,26 +273,30 @@
             name="id"
             obligatory="true"
             type="integer" />
-      <!--   <field
-            name="groupCode"
-            obligatory="true"
-            type="integer" />  renombrar una columna de nombre?-->
         <field
             name="groupName"
             obligatory="true"
             type="text" />
+        <field
+            name="groupTypeCode"
+            obligatory="true"
+            type="integer" />
+        <field
+            name="groupTypeName"
+            obligatory="true"
+            type="text" />
+        <field
+            name="open"
+            new-in-version="13"
+            obligatory="true"
+            type="integer" />
         <field
             name="maxStudents"
             new-in-version="13"
             obligatory="true"
             type="integer" />
         <field
-            name="students"
-            new-in-version="13"
-            obligatory="true"
-            type="integer" />
-        <field
-            name="open"
+            name="numStudents"
             new-in-version="13"
             obligatory="true"
             type="integer" />
@@ -303,17 +307,9 @@
             type="integer" />
         <field
             name="member"
-           	new-in-version="13"
-           	obligatory="true"
-           	type="integer"/>
-        <!-- <field
-            name="groupTypeCode"
+            new-in-version="13"
             obligatory="true"
             type="integer" />
-        <field
-            name="groupTypeName"
-            obligatory="true"
-            type="text" />  -->
     </table>
     <table
         name="group_course"
@@ -330,10 +326,10 @@
             obligatory="true"
             type="foreign-key" />
     </table>
-    <table 
+    <table
         name="group_types"
         new-in-version="13"
-        to-string="%name%">
+        to-string="%name%" >
         <field
             name="id"
             obligatory="true"
@@ -341,32 +337,33 @@
         <field
             name="courseCode"
             obligatory="true"
-            type="long"/>
+            type="long" />
         <field
             name="groupTypeName"
             obligatory="true"
-            type="text"/>
+            type="text" />
         <field
             name="mandatory"
             obligatory="true"
-            type="integer"/>
-       <field
+            type="integer" />
+        <field
             name="multiple"
             obligatory="true"
-            type="integer"/>
-       <field
+            type="integer" />
+        <field
             name="openTime"
             obligatory="true"
             type="long" />
     </table>
-    <table name="group_grouptypes"
+    <table
+        name="group_grouptypes"
         new-in-version="13"
-        to-string="%name%">
+        to-string="%name%" >
         <field
             name="grpTypCod"
             foreign-table="group_types"
             obligatory="true"
-            type="foreign-key"/>
+            type="foreign-key" />
         <field
             name="grpCod"
             foreign-table="groups"

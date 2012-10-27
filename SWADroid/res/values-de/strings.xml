@@ -1,145 +1,156 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-	<string name="app_name">SWADroid</string>	
-	<string name="serverName_preferences">Server</string>
-	<string name="serverSummary_preferences">Server (ohne http://)</string>
-	<string name="serverTitle_preferences">Server</string>
-	<string name="loginModuleLabel">anmelden</string>
-	<string name="notificationsModuleLabel">Benachrichtigungen</string>
-	<string name="coursesModuleLabel">Kurse</string>
-	<string name="testsModuleLabel">Tests</string>
-	<string name="messagesModuleLabel">Nachricht senden</string>
-	<string name="noticesModuleLabel">veröffentlichen weitere Ankündigung</string>
-	<string name="title_error_dialog">FEHLER</string>
-	<string name="close_dialog">schlieβen</string>
-	<string name="set_preferences">Vorlieben</string>
-	<string name="user_preferences">User-Daten</string>
-	<string name="userIDName_preferences">User</string>
-	<string name="userIDSummary_preferences">DNI oder Benutzername</string>
-	<string name="userIDTitle_preferences">User</string>
-	<string name="userPasswordName_preferences">Passwort</string>
-	<string name="userPasswordSummary_preferences">Passwort</string>
-	<string name="userPasswordTitle_preferences">Passwort</string>
-	<string name="saveMsg_preferences">Einstellungen wurden gespeichert</string>
-	<string name="saveSummary_preferences">aktuellen Einstellungen zu speichern</string>
-	<string name="saveTitle_preferences">Einstellungen speichern</string>
-	<string name="preferencesTitle_menu">Einstellungen</string>
-	<string name="shareTitle_menu">Anteil SWADroid</string>
-	<string name="rateTitle_menu">schützen</string>
-	<string name="cleanDatabaseTitle_menu">saubere Datenbank</string>
-	<string name="about_preferences">über</string>
-	<string name="versionTitle_preferences">Anwendungs-Version</string>
-	<string name="author_preferences">koordiniert bei Antonio Cañas Vargas
+
+    <string name="app_name">SWADroid</string>
+    <string name="serverName_preferences">Server</string>
+    <string name="serverSummary_preferences">Server (ohne http://)</string>
+    <string name="serverTitle_preferences">Server</string>
+    <string name="loginModuleLabel">anmelden</string>
+    <string name="notificationsModuleLabel">Benachrichtigungen</string>
+    <string name="coursesModuleLabel">Kurse</string>
+    <string name="testsModuleLabel">Tests</string>
+    <string name="messagesModuleLabel">Nachricht senden</string>
+    <string name="noticesModuleLabel">veröffentlichen weitere Ankündigung</string>
+    <string name="title_error_dialog">FEHLER</string>
+    <string name="close_dialog">schlieβen</string>
+    <string name="set_preferences">Vorlieben</string>
+    <string name="user_preferences">User-Daten</string>
+    <string name="userIDName_preferences">User</string>
+    <string name="userIDSummary_preferences">DNI oder Benutzername</string>
+    <string name="userIDTitle_preferences">User</string>
+    <string name="userPasswordName_preferences">Passwort</string>
+    <string name="userPasswordSummary_preferences">Passwort</string>
+    <string name="userPasswordTitle_preferences">Passwort</string>
+    <string name="saveMsg_preferences">Einstellungen wurden gespeichert</string>
+    <string name="saveSummary_preferences">aktuellen Einstellungen zu speichern</string>
+    <string name="saveTitle_preferences">Einstellungen speichern</string>
+    <string name="preferencesTitle_menu">Einstellungen</string>
+    <string name="shareTitle_menu">Anteil SWADroid</string>
+    <string name="rateTitle_menu">schützen</string>
+    <string name="cleanDatabaseTitle_menu">saubere Datenbank</string>
+    <string name="about_preferences">über</string>
+    <string name="versionTitle_preferences">Anwendungs-Version</string>
+    <string name="author_preferences">koordiniert bei Antonio Cañas Vargas
 		\nprogrammiert bei
 		Juan Miguel Boyero Corral		
 		\nHelena Rodríguez Gijón		
-		\nAntonio Aguilera Malagónl</string>
-	<string name="organization_preferences">Universität Granada</string>
-	<string name="loginTitle_menu">anmelden</string>
-	<string name="loginProgressTitle">anmelden</string>
-	<string name="loginProgressDescription">Anschluss...</string>
-	<string name="coursesProgressTitle">Kurse</string><string name="coursesProgressDescription">Abrufen von Kursen...</string><string name="notificationsProgressTitle">Benachrichtigungen</string>
-	<string name="notificationsProgressDescription">Abrufen neuer Benachrichtigungen...</string>
-	<string name="notificationsEmptyListMsg">Nicht heruntergeladen haben keine Benachrichtigung.\n\nZum Download j�ngsten Benachrichtigungen klicken Sie auf das Symbol in der oberen rechten Ecke des Bildschirms.</string><string name="notificationsDownloadedMsg">Benachrichtigungen heruntergeladen</string>
-	<string name="testsDownloadProgressTitle">Tests</string>
-	<string name="testsDownloadProgressDescription">Synchronisieren von Testfragen.\n\nAbhängig von der Anzahl der Fragen zu synchronisieren, kann die Datenverarbeitung mehrere Minuten dauern.\n\nBitte warten...</string>
-	
-	
-	<string name="errorMsgLaunchingActivity">Ein Fehler ist aufgetreten während der Ausführung der Operation</string>
-	<string name="errorMsgWorkaroundEmulator">Das Android-Emulator Fehler wieder erschien. Neuer Versuch...</string>
-	<string name="errorMsgNoConnection">Keine Verbindung gefunden</string><string name="errorCopyMsg_DB">Fehler beim Kopieren der Datenbank</string>
-	
-	<string name="upgradeMsg_DB">Upgrade von Datenbank...</string>
-	<string name="loginSuccessfulMsg">Melden Sie sich an erfolgreich</string>
-	<string name="examAnnouncement">Prüfung Ankündigung</string>
-	<string name="marksFile">Bewertungen</string>
-	<string name="notice">Ankündigungen</string>
-	<string name="message">Nachricht</string>
-	<string name="forumReply">Foren Antwort</string>
-	<string name="content">Inhalt</string>
-	<string name="messages">Nachrichten</string>
-	<string name="evaluation">Auswertung</string>
-	<string name="course">Kurs</string>
-	<string name="assignment">Zuordnung</string>
-	<string name="survey">Umfrage</string>
-	<string name="unknownNotification">Unbekannt Benachrichtigung</string>
-	<string name="fromMsg">aus</string>
-	<string name="dateMsg">Datum</string>
-	<string name="noSubjectMsg">Kein Betreff</string>
-	<string name="noContentMsg">Keine Inhalte</string>
-	<string name="yesMsg">ja</string>
-	<string name="noMsg">kein</string>
-	<string name="trueMsg">wahr</string>
-	<string name="falseMsg">falsch</string>
-	<string name="acceptMsg">Ok</string>
-	<string name="cancelMsg">stornieren</string>
-	<string name="allMsg">alle</string>
-	<string name="selectCourseTitle">Wählen Sie Kurs</string>
-	<string name="noCourseSelectedMsg">Sie müssen einen Kurs, um Tests zum Download</string>
-	<string name="noQuestionsAvailableTestsDownloadMsg">Es gibt keine Fragen zu diesem Kurs</string>
-	<string name="noQuestionsPluggableTestsDownloadMsg">Der Lehrer nicht erlaubt die Fragen zum Download</string>
-	<string name="questionsTestsDownloadSuccesfulMsg">Fragen erfolgreich heruntergeladen</string>
-	<string name="testNoQuestionsCourseMsg">Nicht jede heruntergeladene Testfrage für diesen Kurs</string>
-	<string name="testNoQuestionsMsg">Vor der Durchführung einer Prüfung sollten Sie die Testfragen für mindestens einen Kurs zum Download</string>
-	<string name="testNoQuestionsMeetsSpecifiedCriteriaMsg">Es ist keine Frage, die die angegebenen Kriterien erfällt</string>
-	<string name="testNumQuestionsMsg">Geben Sie die Anzahl der Testfragen</string>
-	<string name="testTagsMsg">Wählen Sie die Tags in den Test einbezogen werden</string>
-	<string name="testNoTagsSelectedMsg">Es muss mindestens ein Tag ausgewählt werde</string>
-	<string name="testAnswerTypesMsg">Wählen Sie die Antwort-Typen, die in den Test einbezogen werden</string>
-	<string name="testNoAnswerTypesSelectedMsg">	
-Es muss mindestens ein Antworttyp ausgewählt werden</string>
-	<string name="testEvaluateMsg">bewerten</string>
-	<string name="testResultsTextMsg">Ergebnis</string>
-	<string name="testShowResultsMsg">Zeige Summen</string>
-	<string name="testShowResultsDetailsMsg">Details anzeigen</string>
-	<string name="testNoDetailsMsg">Der Lehrer erlaubt es nicht, die Details zu sehen</string>
-	<string name="testNoResultsMsg">Der Lehrer erlaubt es nicht, die Ergebnisse zu sehen</string>
-	<string name="firstRunMsg">Bevor Sie die Anwendung zum ersten Mal müssen Sie den Benutzernamen und das Kennwort für SWAD geben Sie auf der Setup-Bildschirm.\n\nSie können auf die Setup-Bildschirm aus dem Men� jederzeit Zugriff.\n\nWollen Sie das Konfigurationsfenster jetzt öffnen?
-	</string><string name="initialDialogTitle">WICHTIG</string>
-	
-	<string name="upgradeMsg">Aufgrund von �nderungen in der Datenbank alle Testfragen Daten wurden gel�scht.\n\nBitte.</string>
-	<string name="errorBadLoginMsg">Falscher Benutzer oder das Passwort</string>
-	<string name="errorServerResponseMsg">Fehler in der Server-Antwort</string>
-	<string name="errorConnectionMsg">Fehler bei der Verbindung zum Server</string>
-	<string name="errorTimeoutMsg">Zeitlimit versucht, die Verbindung zum Server</string>
-	<string name="sendingMessageMsg">Nachricht wird gesendet...</string>
-	<string name="messageSendedMsg">Nachricht gesendet erfolgreich</string><string name="messageSendErrorMsg">Fehler beim Senden der Nachricht. überprüfen Sie die Daten in der Nachricht Felder</string>
-	<string name="message_receivers_title">Empfänger (getrennt durch Komma)</string>
-	<string name="message_subject_title">Betreff</string>
-	<string name="message_body_title">Nachricht</string>
-	<string name="notice_body_title">Ankündigungen</string>
-	<string name="publishingNotice">Veröffentlichung Ankündigung...</string>
-	<string name="noticePublished">Veröffentlichung der Ankündigung</string><string name="noticeSendError">Fehler bei der Veröffentlichung der neuen Ankündigung</string>	
-	<string name="sendMsg">senden</string>
-	<string name="cleanDatabaseMsg">Die Datenbank wurde gereinigt</string>
-	<string name="shareBodyMsg">Ich verwende # SWADroid in meinem Android-Handy für den Zugang zum E-Learning Plattform SWAD.\n Holen Sie es hier kostenlos: https://market.android.com/details?id=es.ugr.swad.swadroid</string>
-	<string name="marketURL">market://details?id=es.ugr.swad.swadroid</string>
-	<string name="marketWebURL">http://goo.gl/Wgo1y</string><string name="twitterURL">https://twitter.com/#!/SWADroid</string>
-	<string name="facebookURL">https://www.facebook.com/SWADroid</string>
-	<string name="googlePlusURL">http://goo.gl/kuezQ</string>
-	<string name="mailingListURL">http://goo.gl/3A5iO</string>
-	<string name="blogURL">http://swadroid.wordpress.com</string>
-	<string name="twitterUser">\@SWADroid</string><string name="twitterTitle">Twitter</string>
-	<string name="facebookTitle">Facebook</string>
-	<string name="googlePlusTitle">Google+</string>
-	<string name="mailingListTitle">Mailing-Liste</string>
-	<string name="blogTitle">Blog</string><string name="marketTitle">Android Market</string><string name="notificationsAlertTitle">Neue Benachrichtigungen</string><string name="notificationsAlertMsg">neue Benachrichtigungen</string><string name="footMessageMsg">gesendet von</string>
-	<string name="marksMsg">Klicken Sie auf die Benachrichtigung, um die Marke anzeigen.</string>
-	<string name="clickToGetCourses">Klicken Sie hier, um Ihre Kurse zu bekommen</string>
-	<string name="documentsDownloadModuleLabel">Dokumente</string><string name = "documentsDownloadProgressDescription">Erste-Dateien...</string>
-	<string name="sharedsDownloadModuleLabel">Gemeinsamer Bereich</string>
-	<string name="connectionRequired">Internetverbindung ist für diese Funktionalität erforderlich</string>
-	<string name="home_icon">Zeigt home Ordner</string>
+		\nAntonio Aguilera Malagón</string>
+    <string name="organization_preferences">Universität Granada</string>
+    <string name="loginTitle_menu">anmelden</string>
+    <string name="loginProgressTitle">anmelden</string>
+    <string name="loginProgressDescription">Anschluss...</string>
+    <string name="coursesProgressTitle">Kurse</string>
+    <string name="coursesProgressDescription">Abrufen von Kursen...</string>
+    <string name="notificationsProgressTitle">Benachrichtigungen</string>
+    <string name="notificationsProgressDescription">Abrufen neuer Benachrichtigungen...</string>
+    <string name="notificationsEmptyListMsg">Nicht heruntergeladen haben keine Benachrichtigung.\n\nZum Download j�ngsten Benachrichtigungen klicken Sie auf das Symbol in der oberen rechten Ecke des Bildschirms.</string>
+    <string name="notificationsDownloadedMsg">Benachrichtigungen heruntergeladen</string>
+    <string name="testsDownloadProgressTitle">Tests</string>
+    <string name="testsDownloadProgressDescription">Synchronisieren von Testfragen.\n\nAbhängig von der Anzahl der Fragen zu synchronisieren, kann die Datenverarbeitung mehrere Minuten dauern.\n\nBitte warten...</string>
+    <string name="errorMsgLaunchingActivity">Ein Fehler ist aufgetreten während der Ausführung der Operation</string>
+    <string name="errorMsgWorkaroundEmulator">Das Android-Emulator Fehler wieder erschien. Neuer Versuch...</string>
+    <string name="errorMsgNoConnection">Keine Verbindung gefunden</string>
+    <string name="errorCopyMsg_DB">Fehler beim Kopieren der Datenbank</string>
+    <string name="upgradeMsg_DB">Upgrade von Datenbank...</string>
+    <string name="loginSuccessfulMsg">Melden Sie sich an erfolgreich</string>
+    <string name="examAnnouncement">Prüfung Ankündigung</string>
+    <string name="marksFile">Bewertungen</string>
+    <string name="notice">Ankündigungen</string>
+    <string name="message">Nachricht</string>
+    <string name="forumReply">Foren Antwort</string>
+    <string name="content">Inhalt</string>
+    <string name="messages">Nachrichten</string>
+    <string name="evaluation">Auswertung</string>
+    <string name="course">Kurs</string>
+    <string name="assignment">Zuordnung</string>
+    <string name="survey">Umfrage</string>
+    <string name="unknownNotification">Unbekannt Benachrichtigung</string>
+    <string name="fromMsg">aus</string>
+    <string name="dateMsg">Datum</string>
+    <string name="noSubjectMsg">Kein Betreff</string>
+    <string name="noContentMsg">Keine Inhalte</string>
+    <string name="yesMsg">ja</string>
+    <string name="noMsg">kein</string>
+    <string name="trueMsg">wahr</string>
+    <string name="falseMsg">falsch</string>
+    <string name="acceptMsg">Ok</string>
+    <string name="cancelMsg">stornieren</string>
+    <string name="allMsg">alle</string>
+    <string name="selectCourseTitle">Wählen Sie Kurs</string>
+    <string name="noCourseSelectedMsg">Sie müssen einen Kurs, um Tests zum Download</string>
+    <string name="noQuestionsAvailableTestsDownloadMsg">Es gibt keine Fragen zu diesem Kurs</string>
+    <string name="noQuestionsPluggableTestsDownloadMsg">Der Lehrer nicht erlaubt die Fragen zum Download</string>
+    <string name="questionsTestsDownloadSuccesfulMsg">Fragen erfolgreich heruntergeladen</string>
+    <string name="testNoQuestionsCourseMsg">Nicht jede heruntergeladene Testfrage für diesen Kurs</string>
+    <string name="testNoQuestionsMsg">Vor der Durchführung einer Prüfung sollten Sie die Testfragen für mindestens einen Kurs zum Download</string>
+    <string name="testNoQuestionsMeetsSpecifiedCriteriaMsg">Es ist keine Frage, die die angegebenen Kriterien erfällt</string>
+    <string name="testNumQuestionsMsg">Geben Sie die Anzahl der Testfragen</string>
+    <string name="testTagsMsg">Wählen Sie die Tags in den Test einbezogen werden</string>
+    <string name="testNoTagsSelectedMsg">Es muss mindestens ein Tag ausgewählt werde</string>
+    <string name="testAnswerTypesMsg">Wählen Sie die Antwort-Typen, die in den Test einbezogen werden</string>
+    <string name="testNoAnswerTypesSelectedMsg">Es muss mindestens ein Antworttyp ausgewählt werden</string>
+    <string name="testEvaluateMsg">bewerten</string>
+    <string name="testResultsTextMsg">Ergebnis</string>
+    <string name="testShowResultsMsg">Zeige Summen</string>
+    <string name="testShowResultsDetailsMsg">Details anzeigen</string>
+    <string name="testNoDetailsMsg">Der Lehrer erlaubt es nicht, die Details zu sehen</string>
+    <string name="testNoResultsMsg">Der Lehrer erlaubt es nicht, die Ergebnisse zu sehen</string>
+    <string name="firstRunMsg">Bevor Sie die Anwendung zum ersten Mal müssen Sie den Benutzernamen und das Kennwort für SWAD geben Sie auf der Setup-Bildschirm.\n\nSie können auf die Setup-Bildschirm aus dem Men� jederzeit Zugriff.\n\nWollen Sie das Konfigurationsfenster jetzt öffnen?</string>
+    <string name="initialDialogTitle">WICHTIG</string>
+    <string name="upgradeMsg">Aufgrund von �nderungen in der Datenbank alle Testfragen Daten wurden gel�scht.\n\nBitte.</string>
+    <string name="errorBadLoginMsg">Falscher Benutzer oder das Passwort</string>
+    <string name="errorServerResponseMsg">Fehler in der Server-Antwort</string>
+    <string name="errorConnectionMsg">Fehler bei der Verbindung zum Server</string>
+    <string name="errorTimeoutMsg">Zeitlimit versucht, die Verbindung zum Server</string>
+    <string name="sendingMessageMsg">Nachricht wird gesendet...</string>
+    <string name="messageSendedMsg">Nachricht gesendet erfolgreich</string>
+    <string name="messageSendErrorMsg">Fehler beim Senden der Nachricht. überprüfen Sie die Daten in der Nachricht Felder</string>
+    <string name="message_receivers_title">Empfänger (getrennt durch Komma)</string>
+    <string name="message_subject_title">Betreff</string>
+    <string name="message_body_title">Nachricht</string>
+    <string name="notice_body_title">Ankündigungen</string>
+    <string name="publishingNotice">Veröffentlichung Ankündigung...</string>
+    <string name="noticePublished">Veröffentlichung der Ankündigung</string>
+    <string name="noticeSendError">Fehler bei der Veröffentlichung der neuen Ankündigung</string>
+    <string name="sendMsg">senden</string>
+    <string name="cleanDatabaseMsg">Die Datenbank wurde gereinigt</string>
+    <string name="shareBodyMsg">Ich verwende # SWADroid in meinem Android-Handy für den Zugang zum E-Learning Plattform SWAD.\n Holen Sie es hier kostenlos: https://market.android.com/details?id=es.ugr.swad.swadroid</string>
+    <string name="marketURL">market://details?id=es.ugr.swad.swadroid</string>
+    <string name="marketWebURL">http://goo.gl/Wgo1y</string>
+    <string name="twitterURL">https://twitter.com/#!/SWADroid</string>
+    <string name="facebookURL">https://www.facebook.com/SWADroid</string>
+    <string name="googlePlusURL">http://goo.gl/kuezQ</string>
+    <string name="mailingListURL">http://goo.gl/3A5iO</string>
+    <string name="blogURL">http://swadroid.wordpress.com</string>
+    <string name="twitterUser">\@SWADroid</string>
+    <string name="twitterTitle">Twitter</string>
+    <string name="facebookTitle">Facebook</string>
+    <string name="googlePlusTitle">Google+</string>
+    <string name="mailingListTitle">Mailing-Liste</string>
+    <string name="blogTitle">Blog</string>
+    <string name="marketTitle">Android Market</string>
+    <string name="notificationsAlertTitle">Neue Benachrichtigungen</string>
+    <string name="notificationsAlertMsg">neue Benachrichtigungen</string>
+    <string name="footMessageMsg">gesendet von</string>
+    <string name="marksMsg">Klicken Sie auf die Benachrichtigung, um die Marke anzeigen.</string>
+    <string name="clickToGetCourses">Klicken Sie hier, um Ihre Kurse zu bekommen</string>
+    <string name="documentsDownloadModuleLabel">Dokumente</string>
+    <string name="documentsDownloadProgressDescription">Erste-Dateien...</string>
+    <string name="sharedsDownloadModuleLabel">Gemeinsamer Bereich</string>
+    <string name="connectionRequired">Internetverbindung ist für diese Funktionalität erforderlich</string>
+    <string name="home_icon">Zeigt home Ordner</string>
     <string name="parent_icon">Zeigt oberen Ordner</string>
     <string name="refresh_icon">Updates</string>
     <string name="Group">Gruppe</string>
     <string name="vacants">Frei</string>
-	<string name="numStudent">Anzahl der Stud.</string>
-	<string name="maxStudent">Max. Stud</string>
-	<string name="enrollment">Einschreibung</string>
-	<string name="myGroupsModuleLabel">Meine Gruppen</string>
-	<string name="groupTypesModuleLabel">Schaffen Gruppetypen</string>
-	    <string name="sendMyGroupsProgressDescription">Schicken gerade Einschreibung in Gruppen</string>
+    <string name="numStudent">Anzahl der Stud.</string>
+    <string name="maxStudent">Max. Stud</string>
+    <string name="enrollment">Einschreibung</string>
+    <string name="myGroupsModuleLabel">Meine Gruppen</string>
+    <string name="groupSeparator">: </string>
+    <string name="groupTypesModuleLabel">Schaffen Gruppetypen</string>
+    <string name="sendMyGroupsProgressDescription">Schicken gerade Einschreibung in Gruppen</string>
     <string name="sendMyGroupsProgressTitle">Einschreibung in Gruppen</string>
     <string name="openingTime">Öffnungsdatum den Gruppen: </string>
+
 </resources>
