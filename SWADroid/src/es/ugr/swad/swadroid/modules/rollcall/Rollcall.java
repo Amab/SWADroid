@@ -37,6 +37,7 @@ import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -255,12 +256,15 @@ public class Rollcall extends MenuExpandableListActivity {
 			if (c.getCount() > 0) {
 				fillGroupsSpinner(c);
 			} else {
+				practiceGroup = (Spinner) this.findViewById(R.id.spGroup);
 				practiceGroup.setEnabled(false);
 
-				int groupCount = getExpandableListAdapter().getGroupCount();
-				for (int i=groupCount-1; i >= 0; i--)
-					((ImageExpandableListAdapter) getExpandableListAdapter()).removeGroup(i);
-
+				ExpandableListAdapter adapter = getExpandableListAdapter();
+				if (adapter != null) {
+					int groupCount = adapter.getGroupCount();
+					for (int i=groupCount-1; i >= 0; i--)
+						((ImageExpandableListAdapter) adapter).removeGroup(i);
+				}
 				error(getString(R.string.noGroupsAvailableMsg));
 			}
 			break;
