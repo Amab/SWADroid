@@ -320,7 +320,7 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 				idList.add(u.getUserID());
 
 				// Check if the specified user is enrolled in the selected course
-				if (dbHelper.isUserEnrolledCourse(u.getUserID(), Global.getSelectedCourseCode())) {
+				if (dbHelper.isUserEnrolledCourse(u.getUserID(), Global.getSelectedRollcallCourseCode())) {
 					messageResult = getString(R.string.scan_valid_student);
 					iconResult = R.drawable.ok;
 					soundResult = sounds[0]; // Positive sound

@@ -76,7 +76,7 @@ public class RollcallConfigDownload extends Module {
 		super.onStart();
 		try {
 			if(isDebuggable) {
-				Log.d(TAG, "selectedCourseCode = " + Long.toString(Global.getSelectedCourseCode()));
+				Log.d(TAG, "selectedRollcallCourseCode = " + Long.toString(Global.getSelectedRollcallCourseCode()));
 			}
 			runConnection();
 		} catch (Exception ex) {
@@ -94,14 +94,13 @@ public class RollcallConfigDownload extends Module {
 	protected void requestService() throws NoSuchAlgorithmException, IOException, XmlPullParserException, SoapFault,
 	IllegalAccessException, InstantiationException {
 		int userRole = Global.STUDENT_TYPE_CODE;
-
-		// Get groupCode
+		long courseCode = Global.getSelectedRollcallCourseCode();
 		long groupCode = getIntent().getLongExtra("groupCode", 0);
 
 		// Creates webservice request, adds required params and sends request to webservice
 		createRequest();
 		addParam("wsKey", Global.getLoggedUser().getWsKey());
-		addParam("courseCode", (int) Global.getSelectedCourseCode());
+		addParam("courseCode", (int) courseCode);
 		addParam("groupCode", (int) groupCode);
 		addParam("userRole", userRole);
 		sendRequest(User.class, false);
@@ -141,7 +140,7 @@ public class RollcallConfigDownload extends Module {
 
 				// Inserts user in database or updates it if already exists
 				dbHelper.insertUser(u);
-				dbHelper.insertUserCourse(u, Global.getSelectedCourseCode(), groupCode);
+				dbHelper.insertUserCourse(u, courseCode, groupCode);
 				// Download user's picture and save it in phone memory
 				downloadFile(u.getUserPhoto());
 			}	// end for (int i=0; i < usersCount; i++)

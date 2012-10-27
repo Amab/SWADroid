@@ -33,6 +33,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.AdapterView;
@@ -146,7 +147,7 @@ public class Rollcall extends MenuExpandableListActivity {
 	}
 
 	private void showStudentsList() {
-		List<Long> idList = dbHelper.getUsersCourse(Global.getSelectedCourseCode());
+		List<Long> idList = dbHelper.getUsersCourse(Global.getSelectedRollcallCourseCode());
 		if (!idList.isEmpty()) {
 			studentsList = new ArrayList<StudentItemModel>();
 
@@ -195,7 +196,7 @@ public class Rollcall extends MenuExpandableListActivity {
 	}
 
 	private void storeRollcallData() {
-		long selectedCourse = Global.getSelectedCourseCode();
+		long selectedCourse = Global.getSelectedRollcallCourseCode();
 		Cursor selectedGroup = (Cursor) practiceGroup.getSelectedItem();
 		long groupId = selectedGroup.getLong(1);
 		PracticeSession ps;
@@ -280,7 +281,7 @@ public class Rollcall extends MenuExpandableListActivity {
 						if (u != null) {
 							studentsList.add(new StudentItemModel(u));
 							// Check if the specified user is enrolled in the selected course
-							enrolledStudents.add(dbHelper.isUserEnrolledCourse(id, Global.getSelectedCourseCode()));
+							enrolledStudents.add(dbHelper.isUserEnrolledCourse(id, Global.getSelectedRollcallCourseCode()));
 						}
 					}
 					// Mark as attending the students enrolled in selected course
@@ -366,11 +367,11 @@ public class Rollcall extends MenuExpandableListActivity {
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinner.setAdapter(adapter);
 
-		if(Global.getSelectedCourseCode() != -1) {
+		if(Global.getSelectedRollcallCourseCode() != -1) {
 			boolean found = false;
 			int i = 0;
 			while (!found && i < listCourses.size()) {
-				if (listCourses.get(i).getId() == Global.getSelectedCourseCode()) {
+				if (listCourses.get(i).getId() == Global.getSelectedRollcallCourseCode()) {
 					found = true;
 				} else {
 					++i;
