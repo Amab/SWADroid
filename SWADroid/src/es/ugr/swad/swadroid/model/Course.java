@@ -38,15 +38,15 @@ public class Course extends Model {
 	private static PropertyInfo PI_userRole = new PropertyInfo();
 	private static PropertyInfo PI_shortName = new PropertyInfo();
 	private static PropertyInfo PI_fullName = new PropertyInfo();
-    @SuppressWarnings("unused")
+
 	private static PropertyInfo[] PI_PROP_ARRAY =
-    {
-    	PI_id,
-    	PI_userRole,
-    	PI_shortName,
-    	PI_fullName
-    };
-	
+		{
+		PI_id,
+		PI_userRole,
+		PI_shortName,
+		PI_fullName
+		};
+
 	/**
 	 * Constructor
 	 * @param id Course identifier
@@ -59,7 +59,7 @@ public class Course extends Model {
 		this.fullName = fullName;
 	}
 
-	
+
 	/**
 	 * Gets user role inside the course
 	 * @return user role (2 = student, 3 = teacher)
@@ -74,7 +74,7 @@ public class Course extends Model {
 	public String getShortName() {
 		return shortName;
 	}
-	
+
 	/**
 	 * Sets short course name
 	 * @param shortName short course name
@@ -89,7 +89,7 @@ public class Course extends Model {
 	public String getFullName() {
 		return fullName;
 	}
-	
+
 	/**
 	 * Sets short course name
 	 * @param shortName short course name
@@ -97,9 +97,9 @@ public class Course extends Model {
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
 	}
-	
-	
-	
+
+
+
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
@@ -127,15 +127,15 @@ public class Course extends Model {
 	 */
 	public Object getProperty(int param) {
 		Object object = null;
-        switch(param)
-        {
-            case 0 : object = this.getId();break;
-            case 1 : object = userRole;break;
-            case 2 : object = shortName;break;
-            case 3 : object = fullName;break;
-        }
-        
-        return object;
+		switch(param)
+		{
+		case 0 : object = this.getId();break;
+		case 1 : object = userRole;break;
+		case 2 : object = shortName;break;
+		case 3 : object = fullName;break;
+		}
+
+		return object;
 	}
 
 	/* (non-Javadoc)
@@ -150,23 +150,23 @@ public class Course extends Model {
 	 */
 	public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo propertyInfo) {
 		switch(param){
-	        case 0:
-	            propertyInfo.type = PropertyInfo.LONG_CLASS;
-	            propertyInfo.name = "id";
-	            break;   
-	        case 1:
-	        	propertyInfo.type = PropertyInfo.INTEGER_CLASS;
-	        	propertyInfo.name = "userRole";
-	        	break;
-	        case 2:
-	            propertyInfo.type = PropertyInfo.STRING_CLASS;
-	            propertyInfo.name = "shortName";
-	            break;
-	        case 3:
-	            propertyInfo.type = PropertyInfo.STRING_CLASS;
-	            propertyInfo.name = "fullName";
-	            break;    
-	      
+		case 0:
+			propertyInfo.type = PropertyInfo.LONG_CLASS;
+			propertyInfo.name = "id";
+			break;   
+		case 1:
+			propertyInfo.type = PropertyInfo.INTEGER_CLASS;
+			propertyInfo.name = "userRole";
+			break;
+		case 2:
+			propertyInfo.type = PropertyInfo.STRING_CLASS;
+			propertyInfo.name = "shortName";
+			break;
+		case 3:
+			propertyInfo.type = PropertyInfo.STRING_CLASS;
+			propertyInfo.name = "fullName";
+			break;    
+
 		}
 	}
 
@@ -176,11 +176,11 @@ public class Course extends Model {
 	public void setProperty(int param, Object obj) {
 		switch(param)
 		{
-			case 0  : this.setId((Long)obj); break;
-			case 1  : userRole = (Integer)obj; break;
-			case 2  : shortName = (String)obj; break;
-			case 3  : fullName = (String)obj; break;
-		
+		case 0  : this.setId((Long)obj); break;
+		case 1  : userRole = (Integer)obj; break;
+		case 2  : shortName = (String)obj; break;
+		case 3  : fullName = (String)obj; break;
+
 		}    
 	}
 
@@ -193,5 +193,5 @@ public class Course extends Model {
 		if(fullName.compareTo(other.getFullName()) != 0) return false;
 		return true; 
 	}
-	
+
 }

@@ -56,7 +56,7 @@ public class RollcallConfigDownload extends Module {
 	/**
 	 * Maximum size of a student photo (in bytes)
 	 * */
-	private static int PHOTO_FILE_MAX_SIZE= 20*1024;	// 20 KB
+	private static int PHOTO_FILE_MAX_SIZE= 30*1024;	// 30 KB
 	/**
 	 * Rollcall Config Download tag name for Logcat
 	 */
@@ -91,11 +91,9 @@ public class RollcallConfigDownload extends Module {
 	}
 
 	@Override
-	protected void requestService() throws NoSuchAlgorithmException,
-	IOException, XmlPullParserException, SoapFault,
+	protected void requestService() throws NoSuchAlgorithmException, IOException, XmlPullParserException, SoapFault,
 	IllegalAccessException, InstantiationException {
 		int userRole = Global.STUDENT_TYPE_CODE;
-		String empty = "anyType{}";
 
 		// Get groupCode
 		long groupCode = getIntent().getLongExtra("groupCode", 0);
@@ -116,19 +114,19 @@ public class RollcallConfigDownload extends Module {
 			for (int i = 0; i < numStudents; i++) {
 				SoapObject pii = (SoapObject) soap.getProperty(i);
 
-				Log.i(TAG, "getUsers.size()=" + pii.getPropertyCount());
-
-				long userCode = new Long(pii.getProperty("userCode").toString());
+				long userCode = Long.valueOf(pii.getProperty("userCode").toString());
 				String userID = pii.getProperty("userID").toString();
 				String userNickname = pii.getProperty("userNickname").toString();
 				String userSurname1 = pii.getProperty("userSurname1").toString();
 				String userSurname2 = pii.getProperty("userSurname2").toString();
 				String userFirstName = pii.getProperty("userFirstname").toString();
+				String userPhoto = pii.getProperty("userPhoto").toString();
 
-				if (userNickname.equals(empty)) userNickname = null;
-				if (userSurname1.equals(empty)) userSurname1 = null;
-				if (userSurname2.equals(empty)) userSurname2 = null;
-				if (userFirstName.equals(empty)) userFirstName = null;
+				if (userNickname.equalsIgnoreCase(Global.NULL_VALUE)) userNickname = null;
+				if (userSurname1.equalsIgnoreCase(Global.NULL_VALUE)) userSurname1 = null;
+				if (userSurname2.equalsIgnoreCase(Global.NULL_VALUE)) userSurname2 = null;
+				if (userFirstName.equalsIgnoreCase(Global.NULL_VALUE)) userFirstName = null;
+				if (userPhoto.equalsIgnoreCase(Global.NULL_VALUE)) userPhoto = null;
 
 				User u = new User(
 						userCode,					// id
@@ -138,7 +136,7 @@ public class RollcallConfigDownload extends Module {
 						userSurname1,
 						userSurname2,
 						userFirstName,
-						null,						// photoPath
+						userPhoto,					// photoPath
 						userRole);
 
 				// Inserts user in database or updates it if already exists

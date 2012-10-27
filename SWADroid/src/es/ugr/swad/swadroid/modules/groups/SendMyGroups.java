@@ -13,12 +13,11 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.os.Bundle;
 import android.util.Log;
-
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.modules.Module;
-import es.ugr.swad.swadroid.model.Group;
 /**
  * Module to enroll into groups. 
  * It makes use of the web service sendGroups (see http://swad.ugr.es/ws/#sendMessage)
@@ -51,7 +50,7 @@ public class SendMyGroups extends Module {
 	 * Groups tag name for Logcat
 	 */
 	public static final String TAG = Global.APP_TAG + "Send My Groups";
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -61,7 +60,7 @@ public class SendMyGroups extends Module {
 			Log.i(TAG, "Missing arguments");
 			finish();
 		}
-		
+
 		setMETHOD_NAME("sendMyGroups");
 	}
 
@@ -89,11 +88,11 @@ public class SendMyGroups extends Module {
 			finish();
 		}
 	}
-	
+
 	@Override
 	protected void requestService() throws NoSuchAlgorithmException,
-			IOException, XmlPullParserException, SoapFault,
-			IllegalAccessException, InstantiationException {
+	IOException, XmlPullParserException, SoapFault,
+	IllegalAccessException, InstantiationException {
 		createRequest();
 		addParam("wsKey", Global.getLoggedUser().getWsKey());
 		addParam("courseCode", (int)courseCode);
@@ -105,27 +104,38 @@ public class SendMyGroups extends Module {
 			success = Integer.parseInt(soapP.toString());
 			if(success != 0){
 				List<Model> groupsSWAD = new ArrayList<Model>();
-				
+
 				SoapObject soapO = (SoapObject) res.get(2) ;
 				int propertyCount = soapO.getPropertyCount();
-				
+
 				for(int i = 0; i < propertyCount ; ++i){
 					SoapObject pii = (SoapObject)soapO.getProperty(i);
+
 					long id = Long.parseLong(pii.getProperty("groupCode").toString());
 					String groupName = pii.getProperty("groupName").toString();
 					long groupTypeCode = Integer.parseInt(pii.getProperty("groupTypeCode").toString());
-					int maxStudents = Integer.parseInt(pii.getProperty("maxStudents").toString());
+					String groupTypeName = pii.getProperty("groupTypeName").toString();
 					int open = Integer.parseInt(pii.getProperty("open").toString());
+					int maxStudents = Integer.parseInt(pii.getProperty("maxStudents").toString());
 					int numStudents = Integer.parseInt(pii.getProperty("numStudents").toString());
 					int fileZones = Integer.parseInt(pii.getProperty("fileZones").toString());
 					int member = Integer.parseInt(pii.getProperty("member").toString());
-					
-					Group g = new Group(id,groupName,groupTypeCode,maxStudents,open,numStudents,fileZones,member);
+
+					Group g = new Group(
+							id,
+							groupName,
+							groupTypeCode,
+							groupTypeName,
+							open,
+							maxStudents,
+							numStudents,
+							fileZones,
+							member);
 					groupsSWAD.add(g);
-					
+
 					if(isDebuggable){
 						Log.i(TAG, g.toString());
-	        		}
+					}
 				}
 				for(int i = 0; i < groupsSWAD.size(); ++i){
 					Group g = (Group) groupsSWAD.get(i);
@@ -147,7 +157,7 @@ public class SendMyGroups extends Module {
 		int progressTitle = R.string.sendMyGroupsProgressTitle;
 
 		new Connect(true, progressDescription, progressTitle).execute();
-	
+
 
 	}
 

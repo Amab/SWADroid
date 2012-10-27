@@ -35,6 +35,8 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.view.ContextThemeWrapper;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -49,8 +51,10 @@ import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.ImageExpandableListAdapter;
 import es.ugr.swad.swadroid.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.model.PracticeSession;
 import es.ugr.swad.swadroid.model.User;
+import es.ugr.swad.swadroid.modules.Groups;
 import es.ugr.swad.swadroid.modules.rollcall.sessions.NewPracticeSession;
 import es.ugr.swad.swadroid.modules.rollcall.sessions.SessionsHistory;
 import es.ugr.swad.swadroid.modules.rollcall.students.StudentItemModel;
@@ -71,10 +75,6 @@ public class Rollcall extends MenuExpandableListActivity {
 	 */
 	final String IMAGE = "listIcon";
 	/**
-	 * Code of selected course
-	 * */
-	long courseCode;
-	/**
 	 * Cursor for database access
 	 */
 	private Cursor dbCursor;
@@ -87,6 +87,10 @@ public class Rollcall extends MenuExpandableListActivity {
 	 */
 	private Spinner practiceGroup;
 	/**
+	 * User courses list
+	 */
+	private List<Model> listCourses;
+	/**
 	 * Students list
 	 */
 	List<StudentItemModel> studentsList;
@@ -95,15 +99,15 @@ public class Rollcall extends MenuExpandableListActivity {
 	 * @see android.app.ExpandableListActivity#onChildClick(android.widget.ExpandableListView, android.view.View, int, int, long)
 	 */
 	@Override
-	public boolean onChildClick(ExpandableListView parent, View v,
-			int groupPosition, int childPosition, long id) {
+	public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
 		// Get the item that was clicked
-		Object o = this.getExpandableListAdapter().getChild(groupPosition, childPosition);
+		Object o = getExpandableListAdapter().getChild(groupPosition, childPosition);
 		@SuppressWarnings("unchecked")
-		String keyword = (String) ((Map<String,Object>)o).get(NAME);
+		String keyword = (String) ((Map<String,Object>) o).get(NAME);
 		Intent activity;
 		Context context = getBaseContext();
 		Cursor selectedGroup = (Cursor) practiceGroup.getSelectedItem();
+		String groupName = selectedGroup.getString(2) + getString(R.string.groupSeparator) + selectedGroup.getString(3);
 
 		if (keyword.equals(getString(R.string.studentsUpdate))) {
 			activity = new Intent(context, RollcallConfigDownload.class);
@@ -111,24 +115,27 @@ public class Rollcall extends MenuExpandableListActivity {
 			startActivity(activity);
 		} else if (keyword.equals(getString(R.string.studentsSelect))) {
 			activity = new Intent(context, StudentsHistory.class);
-			activity.putExtra("groupName", selectedGroup.getString(2));
+			activity.putExtra("groupName", groupName);
 			startActivityForResult(activity, Global.STUDENTS_HISTORY_REQUEST_CODE);
 		} else if (keyword.equals(getString(R.string.newTitle))) {
 			activity = new Intent(context, NewPracticeSession.class);
 			activity.putExtra("groupCode", selectedGroup.getLong(1));
-			activity.putExtra("groupName", selectedGroup.getString(2));
+			activity.putExtra("groupName", groupName);
 			startActivity(activity);
 		} else if (keyword.equals(getString(R.string.sessionsSelect))) {
 			activity = new Intent(context, SessionsHistory.class);
 			activity.putExtra("groupCode", selectedGroup.getLong(1));
-			activity.putExtra("groupName", selectedGroup.getString(2));
+			activity.putExtra("groupName", groupName);
 			startActivityForResult(activity, Global.ROLLCALL_HISTORY_REQUEST_CODE);
 		} else if (keyword.equals(getString(R.string.rollcallScanQR))) {
-			if (checkCameraHardware()) {
+			// Check if device has a camera
+			if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
 				activity = new Intent(Intents.Scan.ACTION);
 				activity.putExtra("SCAN_MODE", "QR_CODE_MODE");
 				activity.putExtra("SCAN_FORMATS", "QR_CODE");
 				startActivityForResult(activity, Global.SCAN_QR_REQUEST_CODE);
+			} else {
+				error(getString(R.string.noCameraFound));
 			}
 		} else if (keyword.equals(getString(R.string.rollcallManual))) {
 			showStudentsList();
@@ -137,22 +144,9 @@ public class Rollcall extends MenuExpandableListActivity {
 		return true;
 	}
 
-	/** Check if this device has a camera */
-	private boolean checkCameraHardware() {
-		if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-			return true;
-		} else {
-			String noCamera = getString(R.string.noCameraFound);
-			error(noCamera);
-			return false;
-		}
-	}
-
 	private void showStudentsList() {
 		List<Long> idList = dbHelper.getUsersCourse(Global.getSelectedCourseCode());
-		int numUsers = idList.size();
-
-		if (numUsers > 0) {
+		if (!idList.isEmpty()) {
 			studentsList = new ArrayList<StudentItemModel>();
 
 			for (Long userCode: idList) {
@@ -254,14 +248,26 @@ public class Rollcall extends MenuExpandableListActivity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		switch(requestCode) {
+		case Global.GROUPS_REQUEST_CODE:
+			// Check if course has practice groups
+			Cursor c = dbHelper.getPracticeGroups(Global.getSelectedRollcallCourseCode());
+
+			if (c.getCount() > 0) {
+				fillGroupsSpinner(c);
+			} else {
+				practiceGroup.setEnabled(false);
+
+				int groupCount = getExpandableListAdapter().getGroupCount();
+				for (int i=groupCount-1; i >= 0; i--)
+					((ImageExpandableListAdapter) getExpandableListAdapter()).removeGroup(i);
+
+				error(getString(R.string.noGroupsAvailableMsg));
+			}
+			break;
 		case Global.SCAN_QR_REQUEST_CODE:
 			if (resultCode == Activity.RESULT_OK) {
 				ArrayList<String> idList = intent.getStringArrayListExtra("id_list");
-
-				if (idList.isEmpty()) {
-					String noCodes = getString(R.string.scan_no_codes);
-					Toast.makeText(this, noCodes, Toast.LENGTH_LONG).show();
-				} else {
+				if (!idList.isEmpty()) {
 					studentsList = new ArrayList<StudentItemModel>();
 					ArrayList<Boolean> enrolledStudents = new ArrayList<Boolean>();
 
@@ -287,21 +293,12 @@ public class Rollcall extends MenuExpandableListActivity {
 					// Show a dialog with the list of students
 					AlertDialog.Builder mBuilder = createDialog();
 					mBuilder.setView(lv).show();
-				}
+				} else {
+					Toast.makeText(this, R.string.scan_no_codes, Toast.LENGTH_LONG).show();
+				} 
 			}
 			break;
 		}
-	}
-
-	/* (non-Javadoc)
-	 * @see es.ugr.swad.swadroid.MenuExpandableListActivity#onStart()
-	 */
-	@Override
-	protected void onStart() {
-		super.onStart();
-		createSpinnerAdapter();
-		courseCode = Global.getSelectedCourseCode();
-		createBaseMenu();
 	}
 
 	/* (non-Javadoc)
@@ -318,26 +315,43 @@ public class Rollcall extends MenuExpandableListActivity {
 		TextView text = (TextView) this.findViewById(R.id.moduleName);
 		text.setText(R.string.rollcallModuleLabel);
 
-		// Fill spinner with practice groups list from database
-		practiceGroup = (Spinner) this.findViewById(R.id.spGroup);
-		practiceGroup.setPromptId(R.string.selectGroupTitle);
+		listCourses = dbHelper.getAllRows(Global.DB_TABLE_COURSES, "userRole = 3", "fullName");
 
-		Cursor c = dbHelper.getPracticeGroups(Global.getSelectedCourseCode());
+		// Update rollcall course
+		long courseCode = Global.getSelectedCourseCode();
+
+		Global.setSelectedRollcallCourseCode(courseCode);
+		prefs.setRollcallCourseSelected(courseCode);
+
+		createSpinnerAdapter();
+
+		// Fill spinner with practice groups list from database
+		Cursor c = dbHelper.getPracticeGroups(Global.getSelectedRollcallCourseCode());
+		if (c.getCount() > 0) {
+			fillGroupsSpinner(c);
+		}
+	}
+
+	private void fillGroupsSpinner(Cursor c) {
+		practiceGroup = (Spinner) this.findViewById(R.id.spGroup);
+
 		startManagingCursor(c);
-		SimpleCursorAdapter adapter2 = new SimpleCursorAdapter (this,
-				android.R.layout.simple_spinner_item,
+		SimpleCursorAdapter adapter = new SimpleCursorAdapter (this,
+				R.layout.group_item,
 				c,
-				new String[] { "groupName" },
-				new int[] { android.R.id.text1 }
+				new String[] { "groupTypeName", "groupName" },
+				new int[] { R.id.textView1, R.id.textView2 }
 				);
-		adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		practiceGroup.setAdapter(adapter2);
+		adapter.setDropDownViewResource(R.layout.group_dropdown_item);
+		practiceGroup.setAdapter(adapter);
+		practiceGroup.setEnabled(true);
+
+		createBaseMenu();
 	}
 
 	private void createSpinnerAdapter() {
 		Spinner spinner = (Spinner) this.findViewById(R.id.spCourse);
-		String where = "id = " + Global.getSelectedRollcallCourseCode();
-		dbCursor =  dbHelper.getDb().getCursor(Global.DB_TABLE_COURSES, where, "fullName");
+		dbCursor =  dbHelper.getDb().getCursor(Global.DB_TABLE_COURSES, "userRole = 3", "fullName");
 		startManagingCursor(dbCursor);	
 
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter (this,
@@ -345,89 +359,126 @@ public class Rollcall extends MenuExpandableListActivity {
 				dbCursor, 
 				new String[] { "fullName" }, 
 				new int[] { android.R.id.text1 });
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinner.setAdapter(adapter);
-		spinner.setEnabled(false);
+
+		if(Global.getSelectedCourseCode() != -1) {
+			boolean found = false;
+			int i = 0;
+			while (!found && i < listCourses.size()) {
+				if (listCourses.get(i).getId() == Global.getSelectedCourseCode()) {
+					found = true;
+				} else {
+					++i;
+				}
+			}
+			if (i < listCourses.size())
+				spinner.setSelection(i);
+		}
+		spinner.setOnItemSelectedListener(new onItemSelectedListener());
+	}
+
+	private class onItemSelectedListener implements OnItemSelectedListener{
+		@Override
+		public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+			long courseCode = listCourses.get(position).getId();
+
+			Global.setSelectedRollcallCourseCode(courseCode);
+			prefs.setRollcallCourseSelected(courseCode);
+
+			// Fill spinner with practice groups list from database
+			Cursor c = dbHelper.getPracticeGroups(Global.getSelectedRollcallCourseCode());
+			if (c.getCount() > 0) {
+				fillGroupsSpinner(c);
+			} else {
+				Intent activity = new Intent(getBaseContext(), Groups.class);
+				activity.putExtra("courseCode", Global.getSelectedRollcallCourseCode());
+				startActivityForResult(activity, Global.GROUPS_REQUEST_CODE);
+			}
+		}
+
+		@Override
+		public void onNothingSelected(AdapterView<?> arg0) {
+		}
 	}
 
 	/**
 	 * Creates base menu
 	 * */
 	private void createBaseMenu() {
-		if(getExpandableListAdapter() == null) {
-			final ArrayList<HashMap<String, Object>> headerData = new ArrayList<HashMap<String, Object>>();
-			final ArrayList<ArrayList<HashMap<String, Object>>> childData = new ArrayList<ArrayList<HashMap<String, Object>>>();
+		final ArrayList<HashMap<String, Object>> headerData = new ArrayList<HashMap<String, Object>>();
+		final ArrayList<ArrayList<HashMap<String, Object>>> childData = new ArrayList<ArrayList<HashMap<String, Object>>>();
 
-			// Students category
-			final HashMap<String, Object> students = new HashMap<String, Object>();
-			students.put(NAME, getString(R.string.studentsTitle));
-			students.put(IMAGE, getResources().getDrawable(R.drawable.students));
-			headerData.add(students);
+		// Students category
+		final HashMap<String, Object> students = new HashMap<String, Object>();
+		students.put(NAME, getString(R.string.studentsTitle));
+		students.put(IMAGE, getResources().getDrawable(R.drawable.students));
+		headerData.add(students);
 
-			final ArrayList<HashMap<String, Object>> studentsData = new ArrayList<HashMap<String, Object>>();
-			childData.add(studentsData);
+		final ArrayList<HashMap<String, Object>> studentsData = new ArrayList<HashMap<String, Object>>();
+		childData.add(studentsData);
 
-			HashMap<String, Object> map = new HashMap<String,Object>();
-			map.put(NAME, getString(R.string.studentsUpdate));
-			map.put(IMAGE, getResources().getDrawable(R.drawable.students_update));
-			studentsData.add(map); 
+		HashMap<String, Object> map = new HashMap<String,Object>();
+		map.put(NAME, getString(R.string.studentsUpdate));
+		map.put(IMAGE, getResources().getDrawable(R.drawable.students_update));
+		studentsData.add(map); 
 
-			map = new HashMap<String,Object>();        
-			map.put(NAME, getString(R.string.studentsSelect));
-			map.put(IMAGE, getResources().getDrawable(R.drawable.students_check));
-			studentsData.add(map);
+		map = new HashMap<String,Object>();        
+		map.put(NAME, getString(R.string.studentsSelect));
+		map.put(IMAGE, getResources().getDrawable(R.drawable.students_check));
+		studentsData.add(map);
 
-			// Practice sessions category
-			final HashMap<String, Object> sessions = new HashMap<String, Object>();
-			sessions.put(NAME, getString(R.string.sessionsTitle));
-			sessions.put(IMAGE, getResources().getDrawable(R.drawable.sessions));
-			headerData.add(sessions);
+		// Practice sessions category
+		final HashMap<String, Object> sessions = new HashMap<String, Object>();
+		sessions.put(NAME, getString(R.string.sessionsTitle));
+		sessions.put(IMAGE, getResources().getDrawable(R.drawable.sessions));
+		headerData.add(sessions);
 
-			final ArrayList<HashMap<String, Object>> sessionsData = new ArrayList<HashMap<String, Object>>();
-			childData.add(sessionsData);
+		final ArrayList<HashMap<String, Object>> sessionsData = new ArrayList<HashMap<String, Object>>();
+		childData.add(sessionsData);
 
-			map = new HashMap<String,Object>();
-			map.put(NAME, getString(R.string.newTitle));
-			map.put(IMAGE, getResources().getDrawable(R.drawable.session_new));
-			sessionsData.add(map);
+		map = new HashMap<String,Object>();
+		map.put(NAME, getString(R.string.newTitle));
+		map.put(IMAGE, getResources().getDrawable(R.drawable.session_new));
+		sessionsData.add(map);
 
-			map = new HashMap<String,Object>();
-			map.put(NAME, getString(R.string.sessionsSelect));
-			map.put(IMAGE, getResources().getDrawable(R.drawable.session_check));
-			sessionsData.add(map);
+		map = new HashMap<String,Object>();
+		map.put(NAME, getString(R.string.sessionsSelect));
+		map.put(IMAGE, getResources().getDrawable(R.drawable.session_check));
+		sessionsData.add(map);
 
-			// Rollcall category
-			final HashMap<String, Object> rollcall = new HashMap<String,Object>();
-			rollcall.put(NAME, getString(R.string.rollcallModuleLabel));
-			rollcall.put(IMAGE, getResources().getDrawable(R.drawable.rollcall));
-			headerData.add(rollcall);
+		// Rollcall category
+		final HashMap<String, Object> rollcall = new HashMap<String,Object>();
+		rollcall.put(NAME, getString(R.string.rollcallModuleLabel));
+		rollcall.put(IMAGE, getResources().getDrawable(R.drawable.rollcall));
+		headerData.add(rollcall);
 
-			final ArrayList<HashMap<String,Object>> rollcallData = new ArrayList<HashMap<String, Object>>();
-			childData.add(rollcallData);
+		final ArrayList<HashMap<String,Object>> rollcallData = new ArrayList<HashMap<String, Object>>();
+		childData.add(rollcallData);
 
-			map = new HashMap<String,Object>();
-			map.put(NAME, getString(R.string.rollcallScanQR));
-			map.put(IMAGE, getResources().getDrawable(R.drawable.scan_qr));
-			rollcallData.add(map);
+		map = new HashMap<String,Object>();
+		map.put(NAME, getString(R.string.rollcallScanQR));
+		map.put(IMAGE, getResources().getDrawable(R.drawable.scan_qr));
+		rollcallData.add(map);
 
-			map = new HashMap<String,Object>();
-			map.put(NAME, getString(R.string.rollcallManual));
-			map.put(IMAGE, getResources().getDrawable(R.drawable.rollcall_manual));
-			rollcallData.add(map);
+		map = new HashMap<String,Object>();
+		map.put(NAME, getString(R.string.rollcallManual));
+		map.put(IMAGE, getResources().getDrawable(R.drawable.rollcall_manual));
+		rollcallData.add(map);
 
-			setListAdapter( new ImageExpandableListAdapter(
-					this,
-					headerData,
-					R.layout.image_list_item,
-					new String[] { NAME },			// the name of the field data
-					new int[] { R.id.listText },	// the text field to populate with the field data
-					childData,
-					0,
-					null,
-					new int[] {}
-					));
+		setListAdapter( new ImageExpandableListAdapter(
+				this,
+				headerData,
+				R.layout.image_list_item,
+				new String[] { NAME },			// the name of the field data
+				new int[] { R.id.listText },	// the text field to populate with the field data
+				childData,
+				0,
+				null,
+				new int[] {}
+				));
 
-			getExpandableListView().setOnChildClickListener(this);
-		}
+		getExpandableListView().setOnChildClickListener(this);
 	}
 
 }
