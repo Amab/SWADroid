@@ -434,13 +434,11 @@ public class DataBaseHelper {
 		List<Long> result = new ArrayList<Long>();
 
 		List<Entity> rows = db.getEntityList(Global.DB_TABLE_GROUPS_COURSES, "crsCod = '" + courseCode + "'");
-		//List<Entity> rows = db.getEntityList(Global.DB_TABLE_GROUPS, "groupTypeCode = '4321'");
 		if (rows != null) {
 			Iterator<Entity> iter = rows.iterator();
 			while (iter.hasNext()) {
 				Entity ent = iter.next();
-				//result.add(ent.getLong("grpCod"));
-				result.add(ent.getLong("groupCode"));
+				result.add(ent.getLong("grpCod"));
 			}
 		}
 

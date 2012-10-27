@@ -68,7 +68,7 @@ public class StudentsHistory extends Module {
 		text.setText(R.string.studentsHistoryModuleLabel);
 
 		// Get selected course
-		String where = "id =" + String.valueOf(Global.getSelectedCourseCode());
+		String where = "id =" + String.valueOf(Global.getSelectedRollcallCourseCode());
 		Course selectedCourse = (Course) dbHelper.getAllRows(Global.DB_TABLE_COURSES, where, "fullName").get(0);
 		String courseName = selectedCourse.getFullName();
 
@@ -83,7 +83,7 @@ public class StudentsHistory extends Module {
 	}
 
 	private void showStudentsList() {
-		List<Long> idList = dbHelper.getUsersCourse(Global.getSelectedCourseCode());
+		List<Long> idList = dbHelper.getUsersCourse(Global.getSelectedRollcallCourseCode());
 
 		if (idList.size() > 0) {
 			studentsList = new ArrayList<StudentItemModel>();
