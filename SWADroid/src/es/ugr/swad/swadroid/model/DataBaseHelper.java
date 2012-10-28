@@ -227,7 +227,7 @@ public class DataBaseHelper {
 					ent.getString("userSurname1"),
 					ent.getString("userSurname2"),
 					ent.getString("userFirstname"),
-					ent.getString("userPhoto"),
+					ent.getString("photoPath"),
 					ent.getInt("userRole"));			
 		} else if (table.equals(Global.DB_TABLE_GROUPS)){
 			long groupTypeCode = getGroupTypeCodeFromGroup(ent.getLong("id"));
@@ -433,13 +433,11 @@ public class DataBaseHelper {
 		List<Long> result = new ArrayList<Long>();
 
 		List<Entity> rows = db.getEntityList(Global.DB_TABLE_GROUPS_COURSES, "crsCod = '" + courseCode + "'");
-		//List<Entity> rows = db.getEntityList(Global.DB_TABLE_GROUPS, "groupTypeCode = '4321'");
 		if (rows != null) {
 			Iterator<Entity> iter = rows.iterator();
 			while (iter.hasNext()) {
 				Entity ent = iter.next();
-				//result.add(ent.getLong("grpCod"));
-				result.add(ent.getLong("groupCode"));
+				result.add(ent.getLong("grpCod"));
 			}
 		}
 
@@ -478,7 +476,7 @@ public class DataBaseHelper {
 		return db.rawQuery(select, new String [] { String.valueOf(groupTypeCode) });
 
 	}
-	
+
 	public Cursor getCursor(String table, String where, String orderby){
 		return db.getCursor(table, where, orderby);
 	}
@@ -549,11 +547,11 @@ public class DataBaseHelper {
 	 */
 	public Cursor getPracticeGroups(long courseCode) {
 		String select = "SELECT " +
-				"g._id, g.groupCode, g.groupName" +
+				"g._id, g.id, g.groupName" +
 				" FROM " +
 				Global.DB_TABLE_GROUPS + " g, " + Global.DB_TABLE_GROUPS_COURSES + " gc" +
 				" WHERE " +
-				"g.groupCode = gc.grpCod AND g.groupTypeCode = 4321 AND gc.crsCod = ?";
+				"g.id = gc.grpCod AND gc.crsCod = ?";
 
 		SQLiteDatabase db = DataFramework.getInstance().getDB();
 		return db.rawQuery(select, new String [] { String.valueOf(courseCode) });
@@ -862,7 +860,7 @@ public class DataBaseHelper {
 		ent.setValue("userSurname1", u.getUserSurname1());
 		ent.setValue("userSurname2", u.getUserSurname2());
 		ent.setValue("userFirstname", u.getUserFirstname());
-		ent.setValue("userPhoto", u.getUserPhoto());
+		ent.setValue("photoPath", u.getUserPhoto());
 		ent.setValue("userRole", u.getUserRole());
 		ent.save();
 	}
@@ -955,7 +953,7 @@ public class DataBaseHelper {
 			ent.save();
 		}
 	}
-	
+
 	/**
 	 * Inserts a practice session in database
 	 * @param courseCode Course code to be referenced
@@ -1285,7 +1283,7 @@ public class DataBaseHelper {
 			insertEntity(Global.DB_TABLE_GROUPS,currentGroup,rows.get(0));
 		}
 		if(prev.getId() != currentGroup.getId()){
-			//in this case, the relationships with group types and courses should be updated
+			//TODO in this case, the relationships with group types and courses should be updated
 			
 		}
 	}

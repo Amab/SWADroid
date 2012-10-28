@@ -24,8 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.android.dataframework.DataFramework;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -48,7 +46,6 @@ import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.modules.Courses;
-import es.ugr.swad.swadroid.modules.Groups;
 import es.ugr.swad.swadroid.modules.Messages;
 import es.ugr.swad.swadroid.modules.Notices;
 import es.ugr.swad.swadroid.modules.downloads.DownloadsManager;
@@ -201,32 +198,6 @@ public class SWADMain extends MenuExpandableListActivity {
 		.show();
 	}
 
-	/**
-	 * Shows rollcall dialog on first run.
-	 */
-	public void showRollcallDialog() {
-		new AlertDialog.Builder(this)
-		.setTitle(R.string.initialDialogTitle)
-		.setMessage(R.string.firstRollcallRunMsg)
-		.setCancelable(false)
-		.setPositiveButton(R.string.yesMsg, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
-				long selectedCourse = Global.getSelectedCourseCode();
-				// Set rollcall course
-				Global.setSelectedRollcallCourseCode(selectedCourse);
-				prefs.setRollcallCourseSelected(selectedCourse);
-				// Call getGroups
-				Intent activity = new Intent(getBaseContext(), Groups.class);
-				startActivityForResult(activity, Global.GROUPS_REQUEST_CODE);
-			}
-		})
-		.setNegativeButton(R.string.noMsg, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
-				dialog.cancel();
-			}
-		}).show();
-	}
-
 	/* (non-Javadoc)
 	 * @see android.app.ExpandableListActivity#onChildClick(android.widget.ExpandableListView, android.view.View, int, int, long)
 	 */
@@ -255,7 +226,8 @@ public class SWADMain extends MenuExpandableListActivity {
 		} else if(keyword.equals(getString(R.string.rollcallModuleLabel))) {
 			//This module requires Android 2.2 or higher
 			if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.FROYO) {
-				getActualGroups();
+				activity  = new Intent(getBaseContext(), Rollcall.class);
+				startActivityForResult(activity, Global.ROLLCALL_REQUEST_CODE);
 			} else {
 				//If Android version < 2.2 show error message
 				error(getString(R.string.froyoFunctionMsg) + "\n(actual: " + android.os.Build.VERSION.RELEASE + ")");
@@ -323,10 +295,8 @@ public class SWADMain extends MenuExpandableListActivity {
 			//Check if this is the first run after an install or upgrade
 		 	lastVersion = prefs.getLastVersion();
 			currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
-		//	lastVersion = 41;
-		//	currentVersion = 42;
-			// Get rollcall course
-			Global.setSelectedRollcallCourseCode(prefs.getRollcallCourseSelected());
+			//	lastVersion = 41;
+			//	currentVersion = 42;
 
 			//If this is the first run, show configuration dialog
 			if(lastVersion == 0) {
@@ -391,18 +361,6 @@ public class SWADMain extends MenuExpandableListActivity {
 			case Global.COURSES_REQUEST_CODE:
 				createSpinnerAdapter();
 				createMenu();
-				break;
-			case Global.GROUPS_REQUEST_CODE:
-				// Check if course has practice groups
-				Cursor c = dbHelper.getPracticeGroups(Global.getSelectedCourseCode());
-				startManagingCursor(c);
-
-				if (c.getCount() > 0) {
-					Intent activity  = new Intent(getBaseContext(), Rollcall.class);
-					startActivityForResult(activity, Global.ROLLCALL_REQUEST_CODE);
-				} else {
-					error(getString(R.string.noGroupsAvailableMsg));
-				}
 				break;
 			}
 		}
@@ -487,37 +445,6 @@ public class SWADMain extends MenuExpandableListActivity {
 		activity = new Intent(getBaseContext(), Courses.class );
 		Toast.makeText(getBaseContext(), R.string.coursesProgressDescription, Toast.LENGTH_LONG).show();
 		startActivityForResult(activity,Global.COURSES_REQUEST_CODE);
-	}
-
-	private void getActualGroups() {
-		long courseCode = Global.getSelectedCourseCode();
-		long rollcallCourseCode = Global.getSelectedRollcallCourseCode();
-
-		/* Due to malfunction getGroups method is not possible to know which subject belong downloaded 
-		 * practice groups. Therefore, until the error is resolved, is only allowed to use the application 
-		 * with a single subject. 
-		 * The selected subject must have practice groups defined in SWAD.
-		 * You can delete this configuration anytime using the "Clean Database" option */
-
-		// If this is the first call to Rollcall, show information dialog
-		if (rollcallCourseCode == -1) {
-			showRollcallDialog();
-		}
-		// If the selected course is the rollcall course, go to rollcall activity
-		else if (rollcallCourseCode == courseCode) {
-			Cursor c = dbHelper.getPracticeGroups(Global.getSelectedCourseCode());
-
-			if (c.getCount() > 0) {
-				Intent activity  = new Intent(getBaseContext(), Rollcall.class);
-				startActivityForResult(activity, Global.ROLLCALL_REQUEST_CODE);
-			} else {
-				error(getString(R.string.noGroupsAvailableMsg));
-			}
-		}
-		// Otherwise show error message
-		else {
-			error(getString(R.string.noRollcallAllowedMsg));
-		}
 	}
 
 	private void createMenu(){
@@ -711,8 +638,6 @@ public class SWADMain extends MenuExpandableListActivity {
 			Global.setDbCleaned(false);
 			setMenuDbClean();
 		}
-		Global.setSelectedRollcallCourseCode(prefs.getRollcallCourseSelected());
-		
 	}
 	
 	/**

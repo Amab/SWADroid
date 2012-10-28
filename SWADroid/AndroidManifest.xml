@@ -15,8 +15,10 @@
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
- 
-    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
 
     <uses-sdk
         android:minSdkVersion="7"
@@ -158,8 +160,7 @@
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:label="@string/noticesModuleLabel"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
-        </activity>        
-        
+        </activity>
         <activity
             android:name=".sync.AccountAuthenticator"
             android:configChanges="keyboard|keyboardHidden|orientation"

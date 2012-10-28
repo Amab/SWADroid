@@ -4,6 +4,11 @@ import java.util.Hashtable;
 
 import org.ksoap2.serialization.PropertyInfo;
 
+/**
+ * Class to store a Group Type. A group type is related to a course and to multiple groups
+ * * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
+ * */
+
 public class GroupType extends Model {
 	
 	/**

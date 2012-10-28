@@ -62,8 +62,6 @@ public class Groups extends Module {
 	@Override
 	protected void onStart() {
 		super.onStart(); 
-//		List<Model> rows = dbHelper.getAllRows(Global.DB_TABLE_GROUP_TYPES, "courseCode = " + String.valueOf(courseCode) , null);
-//		if(rows.size() != 0){
 			try {
 				runConnection();
 			} catch (Exception ex) {
@@ -75,41 +73,46 @@ public class Groups extends Module {
 					ex.printStackTrace();
 				}
 			}
-//		}else{ //get the group types and then the groups
-//			Intent activity = new Intent(getBaseContext(),GroupTypes.class);
-//			activity.putExtra("courseCode", courseCode);
-//			startActivityForResult(activity,Global.GROUPTYPES_REQUEST_CODE);
-//		}
 	}
-	
-		@Override
+
+	/* (non-Javadoc)
+	 * @see es.ugr.swad.swadroid.modules.Module#onActivityResult(int, int, android.content.Intent)
+	 */
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == Activity.RESULT_CANCELED) {
+			setResult(RESULT_CANCELED);
+			finish();
+		}
+	}
+	@Override
 	protected void connect() {
 		String progressDescription = getString(R.string.groupsProgressDescription);
 		int progressTitle = R.string.groupsProgressTitle;
 
 		new Connect(true, progressDescription, progressTitle).execute();
 	}
-	
-	
+
+
 	@Override
 	protected void requestService() throws NoSuchAlgorithmException,
 			IOException, XmlPullParserException, SoapFault,
 			IllegalAccessException, InstantiationException {
 		createRequest();
-		addParam("wsKey", Global.getLoggedUser().getWsKey());
-		addParam("courseCode",(int) courseCode);
-		sendRequest(Group.class,false);
-		
-		if(result != null){
+		addParam("wsKey", Global.getLoggedUser().getWsKey());		
+		addParam("courseCode", (int) courseCode);
+		sendRequest(Group.class, false);
+
+		if(result != null) {			
 			//Stores groups data returned by webservice response
 			List<Model> groupsSWAD = new ArrayList<Model>();
 			
 			Vector<?> res = (Vector <?>) result;
 			SoapObject soap = (SoapObject) res.get(1);	
-			int csSize = soap.getPropertyCount();
-			
-			
-			for (int i = 0; i < csSize; i++) {
+			numGroups = soap.getPropertyCount();			
+
+			for (int i = 0; i < numGroups; i++) {
 				SoapObject pii = (SoapObject)soap.getProperty(i);
 				long id = Long.parseLong(pii.getProperty("groupCode").toString());
 				String groupName = pii.getProperty("groupName").toString();
@@ -156,7 +159,4 @@ public class Groups extends Module {
 		// TODO Auto-generated method stub
 
 	}
-
-
-
 }

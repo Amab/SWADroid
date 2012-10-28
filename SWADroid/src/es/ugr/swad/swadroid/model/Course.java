@@ -89,7 +89,7 @@ public class Course extends Model {
 	public String getFullName() {
 		return fullName;
 	}
-	
+
 	/**
 	 * Sets short course name
 	 * @param shortName short course name

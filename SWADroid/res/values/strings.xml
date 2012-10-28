@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <resources>
+
     <string name="app_name">SWADroid</string>
     <string name="serverName_preferences">Server</string>
     <string name="serverSummary_preferences">Server (without http://)</string>
@@ -102,8 +103,7 @@
     <string name="firstRunMsg">Before using the application for the first time you
 		must enter the user name and password for SWAD at the setup
 		screen.\n\nYou can access to the setup screen from the application
-		menu anytime.\n\nDo you want to open the configuration screen now?
-	</string>
+		menu anytime.\n\nDo you want to open the configuration screen now?</string>
     <string name="initialDialogTitle">IMPORTANT</string>
     <string name="upgradeMsg">Due to changes in the database all test questions
 		data have been deleted.\n\nSorry.</string>
@@ -171,7 +171,7 @@
     <string name="scan_data_not_found">No data on this student</string>
     <string name="scan_no_codes">Not detect any valid QR code</string>
     <string name="usersPresent">Present students</string>
-    <string name="NoNotificationsMsg">There is no new notifications</string>
+    <string name="NoNotificationsMsg">There are no new notifications</string>
     <string name="home_icon">Shows home folder</string>
     <string name="parent_icon">Shows upper folder</string>
     <string name="refresh_icon">Updates</string>
@@ -198,7 +198,7 @@ Try "Update students"</string>
     <string name="addSessionTitle_menu">New practice session</string>
     <string name="groupsProgressDescription">Retrieving groups...</string>
     <string name="groupsProgressTitle">Groups</string>
-    <string name="noGroupsAvailableMsg">No practice groups for selected subject</string>
+    <string name="noGroupsAvailableMsg">No groups for selected subject</string>
     <string name="groupsUpdated">Groups updated</string>
     <string name="sessionCourseText">Course</string>
     <string name="sessionGroupText">Group</string>
@@ -256,6 +256,7 @@ configuration anytime using the "Clean Database" option\n\nDo you want to contin
     <string name="froyoFunctionMsg">This function needs Android 2.2 or higher</string>
     <string name="groupTypesProgressDescription">Retrieving group types...</string>
     <string name="groupTypesProgressTitle">Group Types</string>
+    <string name="groupSeparator">: </string>
     <string name="groupTypesModuleLabel">Get Group Types</string>
     <string name="sendMyGroupsProgressDescription">Sending enrollment into groups</string>
     <string name="sendMyGroupsProgressTitle">Enrolment into groups</string>
