@@ -114,4 +114,5 @@
 	<string name="enrollment">Inscripció</string>
 	<string name="myGroupsModuleLabel">Els meus grups</string>
 	<string name="openingTime">Obertura: </string>
+	<string name="changeGroups">Canviar de grups</string>
 </resources>

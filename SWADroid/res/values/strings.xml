@@ -261,4 +261,5 @@ configuration anytime using the "Clean Database" option\n\nDo you want to contin
     <string name="sendMyGroupsProgressTitle">Enrolment into groups</string>
     <string name="openingTime">Opening: </string>
     <string name="noGroupsText">No groups have been created in the course</string>
+    <string name="changeGroups">Change my groups</string>
 </resources>
