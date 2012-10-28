@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
@@ -32,7 +33,10 @@ import es.ugr.swad.swadroid.modules.Groups;
 
 
 public class MyGroupsManager extends MenuExpandableListActivity {
-	
+	/**
+	 * Tests tag name for Logcat
+	 */
+	public static final String TAG = Global.APP_TAG + "Groups Manager";
 	/**
 	 * Course code of current selected course
 	 * */
@@ -110,14 +114,19 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 			case Global.GROUPS_REQUEST_CODE:
 				if(dbHelper.getCursorGroupType(courseCode).getColumnCount() > 0){
 					getExpandableListView().setVisibility(View.VISIBLE);
+					this.findViewById(R.id.sendMyGroupsButton).setVisibility(View.VISIBLE);
 					this.findViewById(R.id.noGroupsText).setVisibility(View.GONE);
 					setMenu();
 				}else{
 					getExpandableListView().setVisibility(View.GONE);
+					this.findViewById(R.id.sendMyGroupsButton).setVisibility(View.GONE);
 					this.findViewById(R.id.noGroupsText).setVisibility(View.VISIBLE);
 				}
 					
-				break;	
+				break;
+			case Global.SENDMYGROUPS_REQUEST_CODE:
+				Log.i(TAG, " send groups");
+				break;
 			}
 			
 		}
@@ -144,6 +153,22 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 		
 		getExpandableListView().setOnChildClickListener(this);
 		
+		Button button = (Button) this.findViewById(R.id.sendMyGroupsButton);
+		
+		View.OnClickListener buttonListener = new View.OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				String myGroups = ((GroupsCursorTreeAdapter)getExpandableListView().getExpandableListAdapter()).getChosenGroupCodes();
+				Intent activity = new  Intent(getBaseContext(), SendMyGroups.class);
+				activity.putExtra("courseCode", courseCode);
+				activity.putExtra("myGroups", myGroups);
+				startActivityForResult(activity,Global.SENDMYGROUPS_REQUEST_CODE);
+			}
+			
+		};
+		button.setOnClickListener(buttonListener);
+		
 	}
 
 
@@ -160,7 +185,6 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 		((GroupsCursorTreeAdapter) getExpandableListView().getExpandableListAdapter()).resetChecked();
 		super.onPause();
 	}
-	
 	
 	
 }

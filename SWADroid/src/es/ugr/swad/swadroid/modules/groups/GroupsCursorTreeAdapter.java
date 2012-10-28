@@ -250,4 +250,20 @@ public class GroupsCursorTreeAdapter extends CursorTreeAdapter {
 	public boolean isChildSelectable(int groupPosition, int childPosition) {
 		return true;
 	}
+	
+	public String getChosenGroupCodes(){
+		String groupCodes="";
+		for(Map.Entry<Long, Integer> entry : this.childChecked.entrySet()){
+			Integer checked = entry.getValue();
+			long code = entry.getKey().longValue();
+			if(checked.intValue() != 0)
+				if(groupCodes.compareTo("") != 0 )
+					groupCodes = groupCodes.concat(","+String.valueOf(code));
+				else
+					groupCodes = groupCodes.concat(String.valueOf(code));
+		}
+		
+		return groupCodes;
+	}
+	
 }
