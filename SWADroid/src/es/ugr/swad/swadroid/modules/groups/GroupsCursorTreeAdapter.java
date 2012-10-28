@@ -60,7 +60,26 @@ public class GroupsCursorTreeAdapter extends CursorTreeAdapter {
 		this.childCursors = childCursors;
 		
 		setCheckedStateToDB();
+		//store what kind of enrollment type is each group
+		getMultipleGroups();	
 
+
+	}
+	
+	private void getMultipleGroups(){
+		groupsCursor.moveToFirst();
+		for(int i = 0; i < groupsCursor.getCount(); ++i){
+			int multiple = groupsCursor.getInt(groupsCursor.getColumnIndex("multiple"));
+			Long groupTypeCode = groupsCursor.getLong(groupsCursor.getColumnIndex("id"));
+			Cursor child = childCursors.get(groupTypeCode);
+			child.moveToFirst();
+			for(int j = 0; j < child.getCount(); ++j){
+				Long groupCode = child.getLong(child.getColumnIndex("id"));
+				childMultiple.put(groupCode, Integer.valueOf(multiple));
+				child.moveToNext();
+			}
+			groupsCursor.moveToNext();
+		}
 	}
 	
 	/**
@@ -170,16 +189,6 @@ public class GroupsCursorTreeAdapter extends CursorTreeAdapter {
 	protected Cursor getChildrenCursor(Cursor groupCursor) {
 		Long groupTypeCode = groupCursor.getLong(groupCursor.getColumnIndex("id"));
 		Cursor childCursor = childCursors.get(groupTypeCode);
-		
-		//store what kind of enrollment type is each group
-		int multiple = groupCursor.getInt(groupCursor.getColumnIndex("multiple"));
-		childCursor.moveToFirst();
-		for(int i = 0; i < childCursor.getCount(); ++i){
-			Long groupCode = childCursor.getLong(childCursor.getColumnIndex("id"));
-			childMultiple.put(groupCode, Integer.valueOf(multiple));
-			childCursor.moveToNext();
-		}
-		
 		return childCursor;
 	}
 

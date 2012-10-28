@@ -181,9 +181,11 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 	}
 
 	@Override
-	protected void onPause() {
-		((GroupsCursorTreeAdapter) getExpandableListView().getExpandableListAdapter()).resetChecked();
-		super.onPause();
+	protected void onStop() {
+		
+		if(getExpandableListView().getExpandableListAdapter() != null)
+			((GroupsCursorTreeAdapter) getExpandableListView().getExpandableListAdapter() ).resetChecked();
+		super.onStop();
 	}
 	
 	

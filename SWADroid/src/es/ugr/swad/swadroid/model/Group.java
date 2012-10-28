@@ -80,7 +80,7 @@ public class Group extends Model {
 		this.groupTypeCode = groupTypeCode;
 		this.member = member;
 	}
-	
+
 	@Override
 	public Object getProperty(int param) {
 		Object object = null;
@@ -164,7 +164,7 @@ public class Group extends Model {
 		return "Group [name="+groupName+", getId()="+getId()+", getGroupTypeCode()=" + getGroupTypeCode()+", getMaxStudents()=" + getMaxStudents()+", getCurrentStudents()=" 
 	+ getCurrentStudents()+", getOpen()=" + getOpen()+", getDocumentsArea()=" + getDocumentsArea() +", getMember()= "+ getMember();
 	}
-	
+
 	/**
 	 * Gets group name
 	 * @return group name 
@@ -172,29 +172,31 @@ public class Group extends Model {
 	public String getGroupName(){
 		return groupName;
 	}
-	
+
 	/**
 	 * Gets group type code to which the group belongs 
 	 * @return groupTypeCode code 
 	 * */
-	public long getGroupTypeCode(){
+	public long getGroupTypeCode() {
 		return groupTypeCode;
 	}
+
 	/**
 	 * Gets maximum number of students allowed in this group
 	 * @return -1 if there is not a limit of students for this group, maximum number allowed otherwise
 	 * 
 	 * */
-	public int getMaxStudents(){
+	public int getMaxStudents() {
 		return maxStudents;
 	}
+
 	/**
 	 * Indicates if there is a limit of students for this group
 	 * @return true if there is not a limit of students for this group, false otherwise
 	 * 
 	 * */
-	public boolean existsMaxStudents(){
-		return maxStudents != -1?true:false;
+	public boolean existsMaxStudents() {
+		return maxStudents != -1 ? true : false;
 	}
 	/**
 	 * Gets current student number enrolled in this group
@@ -222,28 +224,35 @@ public class Group extends Model {
 	public boolean isOpen(){
 		return open != 0? true:false;
 	}
+	
 	/**
 	 * Indicates if the enrollment in this group is already allowed
 	 * @return not 0 if the enrollment is already allowed
 	 * 		   0 otherwise
 	 * */
-	public int getOpen(){
+	public int getOpen() {
 		return open;
 	}
+
+	public void setOpen(int open) {
+		this.open = open;
+	}
+	
 	/**
 	 * Indicates if the group has an area of documents and of shared documents related to or not 
 	 * @return true if the area of documents exits
 	 * 		   false otherwise
 	 * */
-	public boolean exitsDocumentsArea(){
-		return fileZones != 0? true:false;
+	public boolean exitsDocumentsArea() {
+		return fileZones != 0 ? true : false;
 	}
+
 	/**
 	 * Indicates if the group has an area of documents and of shared documents related to or not 
 	 * @return not 0 if the area of documents exits
 	 * 		   false otherwise
 	 * */
-	public int getDocumentsArea(){
+	public int getDocumentsArea() {
 		return fileZones;
 	}
 	/**
@@ -252,24 +261,24 @@ public class Group extends Model {
 	 * 		   false otherwise
 	 * */
 	public boolean isMember(){
-		return member != 0? true:false;
+		return member != 0 ? true : false;
 	}
+
 	/**
 	 * Indicates if the logged user is a member of this group
 	 * @return not 0 if the logged user is a member of this group
 	 * 		   0 otherwise
 	 * */
-	public int getMember(){
+	public int getMember() {
 		return member;
 	}
 	//TODO relate Group to Group Type
 
-/*	public String getGroupCompleteName(){
+	/*	public String getGroupCompleteName(){
 		return groupTypeName + ":" + groupName;
 	}
-	
-*/
-	
+
+	 */
 
 	@Override
 	public int hashCode() {
