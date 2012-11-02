@@ -241,7 +241,7 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 		this.children = children;
 	}
 	
-	public String getChosenGroupCodes(){
+	public String getChosenGroupCodesAsString(){
 		String groupCodes="";
 		for(Map.Entry<Long, ArrayList<Group>> entry : this.children.entrySet()){
 			ArrayList<Group> children = entry.getValue();
@@ -254,6 +254,22 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 						groupCodes = groupCodes.concat(","+String.valueOf(code));
 					else
 						groupCodes = groupCodes.concat(String.valueOf(code));
+				}
+			}
+		}
+		return groupCodes;
+	}
+	
+	public ArrayList<Long> getChosenGroupCodes(){
+		ArrayList<Long> groupCodes = new ArrayList<Long>();
+		for(Map.Entry<Long, ArrayList<Group>> entry : this.children.entrySet()){
+			ArrayList<Group> children = entry.getValue();
+			Group g;
+			for(int i = 0; i < children.size(); ++i){
+				g = children.get(i);
+				if(g.getMember() == 1){
+					long code = g.getId();
+					groupCodes.add(Long.valueOf(g.getId()));
 				}
 			}
 		}
