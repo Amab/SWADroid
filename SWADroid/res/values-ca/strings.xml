@@ -119,8 +119,8 @@
 	<string name="openingTime">Obertura: </string>
 	<string name="changeGroups">Canviar de grups</string>
 	<string name="resultEnrollment">Resultat de la inscripció</string>
-    <string name="successfullEnrollment">Totes les inscripcions shan realitzat amb èxit</string>
+    <string name="successfullEnrollment">Totes les inscripcions shan realitzat amb èxit. Si us plau, comprovi que en realitat s està inscrit en els grups desitjats</string>
     <string name="confirmEnrollments">Confirmar inscripcions sollicitades</string>
     <string name="areYouSure"> Esteu segur que vol inscriure en els grups seleccionats?</string>
-    
+    <string name="failedEnrollment">Ho sentim però la inscripció en els grups seleccionats no es va poder realitzar</string>
 </resources>

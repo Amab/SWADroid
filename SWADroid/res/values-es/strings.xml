@@ -252,9 +252,9 @@ Seleccione: Sesiones de prácticas - Nueva</string>
     <string name="noGroupsText">No se han creado grupos dentro de la asignatura</string>
     <string name="changeGroups">Cambiar de grupos</string>
      <string name="resultEnrollment">Resultado de la inscripción</string>
-    <string name="successfullEnrollment">Todas las inscripciones se han realizado con éxito </string>
+    <string name="successfullEnrollment">Todas las inscripciones se han realizado con éxito. Por favor, compruebe que en realidad se está inscrito en los grupos deseados </string>
     <string name="confirmEnrollments">Confirmar inscripciones solicitadas </string>
     <string name="areYouSure"> ¿Seguro que quiere inscribirse en los grupos seleccionados?</string>
-    
+    <string name="failedEnrollment">Lo sentimos pero la inscripción en los grupos seleccionados no se pudo realizar</string>
 </resources>
 

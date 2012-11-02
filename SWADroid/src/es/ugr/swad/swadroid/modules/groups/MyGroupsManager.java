@@ -142,7 +142,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 					HashMap<Long,ArrayList<Group>> currentGroups = getHashMapGroups(groupTypes);
 					((EnrollmentExpandableListAdapter)getExpandableListView().getExpandableListAdapter()).resetChildren(currentGroups);
 					((EnrollmentExpandableListAdapter)getExpandableListView().getExpandableListAdapter()).notifyDataSetChanged();
-					
+					showFailedEnrollmentDialog();
 				}else{
 					showSuccessfulEnrollmentDialog();
 				}
@@ -167,6 +167,25 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 		})
 		.show();
 	}
+	
+	/**
+	 *  Shows informative dialog on failed enrollment
+	 */
+	public void showFailedEnrollmentDialog() {
+		new AlertDialog.Builder(this)
+		.setTitle(R.string.resultEnrollment)
+		.setMessage(R.string.failedEnrollment)
+		.setCancelable(false)
+		.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+			}
+		})
+		.show();
+	}
+	
+	
+	
 	/**
 	 * Shows dialog to ask for confirmation in group enrollments
 	 */
