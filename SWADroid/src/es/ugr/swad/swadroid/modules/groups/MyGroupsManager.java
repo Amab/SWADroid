@@ -1,5 +1,6 @@
 package es.ugr.swad.swadroid.modules.groups;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -20,6 +21,7 @@ import es.ugr.swad.swadroid.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.model.Group;
+import es.ugr.swad.swadroid.model.GroupType;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.modules.GroupTypes;
 import es.ugr.swad.swadroid.modules.Groups;
@@ -45,7 +47,9 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 	 * Database Framework.
 	 */
 	protected static DataFramework db; 
-	private GroupsCursorTreeAdapter CursorTreeAdapter = null;
+	//private GroupsCursorTreeAdapter CursorTreeAdapter = null;
+	
+	private ArrayList<Model> groupsTypes;
 	
 	@Override
 	protected void onStart() {
@@ -144,12 +148,14 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 			gTCursor.moveToNext();
 		}
 		
-		CursorTreeAdapter = new GroupsCursorTreeAdapter(getBaseContext(),gTCursor,childCursors, R.layout.group_type_list_item, R.layout.group_list_item); 
-		getExpandableListView().setAdapter(CursorTreeAdapter);
+		groupsTypes = (ArrayList<Model>) dbHelper.getAllRows(Global.DB_TABLE_GROUP_TYPES, "courseCode ="+ String.valueOf(courseCode), "groupTypeName");
+		HashMap<Long,ArrayList<Group>> children = getHashMapGroups(groupsTypes);
+		EnrollmentExpandableListAdapter adapter = new EnrollmentExpandableListAdapter(getBaseContext(), groupsTypes, children, R.layout.group_type_list_item, R.layout.group_list_item);
+		getExpandableListView().setAdapter(adapter);
+		
 		int collapsedGroups = getExpandableListView().getExpandableListAdapter().getGroupCount();
-		for(int i=0; i < collapsedGroups; ++i){
+		for(int i=0; i < collapsedGroups; ++i)
 			getExpandableListView().expandGroup(i);
-		}
 		
 		getExpandableListView().setOnChildClickListener(this);
 		
@@ -159,7 +165,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 
 			@Override
 			public void onClick(View v) {
-				String myGroups = ((GroupsCursorTreeAdapter)getExpandableListView().getExpandableListAdapter()).getChosenGroupCodes();
+				String myGroups = ((EnrollmentExpandableListAdapter)getExpandableListView().getExpandableListAdapter()).getChosenGroupCodes();
 				Intent activity = new  Intent(getBaseContext(), SendMyGroups.class);
 				activity.putExtra("courseCode", courseCode);
 				activity.putExtra("myGroups", myGroups);
@@ -175,18 +181,29 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 	@Override
 	public boolean onChildClick(ExpandableListView parent, View v,
 			int groupPosition, int childPosition, long id) {
-		boolean result = ((GroupsCursorTreeAdapter) getExpandableListView().getExpandableListAdapter()).checkItem(groupPosition,childPosition);
-		((GroupsCursorTreeAdapter) getExpandableListView().getExpandableListAdapter()).notifyDataSetChanged(false);
+		boolean result = ((EnrollmentExpandableListAdapter) getExpandableListView().getExpandableListAdapter()).checkItem(groupPosition,childPosition);
+		((EnrollmentExpandableListAdapter) getExpandableListView().getExpandableListAdapter()).notifyDataSetChanged();
 		return  result;
 	}
 
 	@Override
 	protected void onStop() {
 		
-		if(getExpandableListView().getExpandableListAdapter() != null)
-			((GroupsCursorTreeAdapter) getExpandableListView().getExpandableListAdapter() ).resetChecked();
+		if(getExpandableListView().getExpandableListAdapter() != null){
+			HashMap<Long,ArrayList<Group>> updatedChildren = getHashMapGroups(groupsTypes);
+			((EnrollmentExpandableListAdapter) getExpandableListView().getExpandableListAdapter() ).resetChildren(updatedChildren);
+		}
 		super.onStop();
 	}
 	
+	private HashMap<Long,ArrayList<Group>> getHashMapGroups(ArrayList<Model> groupTypes){
+		HashMap<Long,ArrayList<Group>> children = new HashMap<Long,ArrayList<Group>>();
+		for(int i = 0; i < groupTypes.size(); ++i){
+			long groupTypeCode = ((GroupType)groupTypes.get(i)).getId();
+			ArrayList<Group> groups = (ArrayList<Group>)dbHelper.getGroupsOfType(groupTypeCode);
+			children.put(Long.valueOf(groupTypeCode), groups);
+		}
+		return children;
+	}
 	
 }
