@@ -267,5 +267,5 @@ configuration anytime using the "Clean Database" option\n\nDo you want to contin
     <string name="successfullEnrollment">All the enrollments were made successfully </string>
     <string name="confirmEnrollments">Confirm requested enrollments</string>
     <string name="areYouSure">Are you sure, that you want to enroll on the selected groups?</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
 </resources>
