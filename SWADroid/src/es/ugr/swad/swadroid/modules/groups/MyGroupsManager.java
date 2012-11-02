@@ -51,6 +51,8 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 	
 	private ArrayList<Model> groupTypes;
 	
+	private boolean groupTypesRequested = false;
+	
 	@Override
 	protected void onStart() {
 		super.onStart();
@@ -65,9 +67,11 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 				activity.putExtra("courseCode", courseCode);
 				startActivityForResult(activity,Global.GROUPS_REQUEST_CODE);
 			}else{
-				Intent activity = new Intent(getBaseContext(),GroupTypes.class);
-				activity.putExtra("courseCode",  courseCode);
-				startActivityForResult(activity,Global.GROUPTYPES_REQUEST_CODE);
+				if(!groupTypesRequested){
+					Intent activity = new Intent(getBaseContext(),GroupTypes.class);
+					activity.putExtra("courseCode",  courseCode);
+					startActivityForResult(activity,Global.GROUPTYPES_REQUEST_CODE);
+				}
 			}
 		}
 	}
@@ -111,9 +115,14 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 		if (resultCode == Activity.RESULT_OK) {
 			switch (requestCode) {
 			case Global.GROUPTYPES_REQUEST_CODE:
-				Intent activity = new Intent(getBaseContext(),GroupTypes.class);
-				activity.putExtra("courseCode",  courseCode);
-				startActivityForResult(activity,Global.GROUPS_REQUEST_CODE);
+				groupTypesRequested = true;
+				if(dbHelper.getAllRows(Global.DB_TABLE_GROUP_TYPES, "courseCode = " + courseCode , "groupTypeName").size() > 0){
+					//If there are not group types, either groups. Therefore, there is no need to request groups
+					Intent activity = new Intent(getBaseContext(),GroupTypes.class);
+					activity.putExtra("courseCode",  courseCode);
+					startActivityForResult(activity,Global.GROUPS_REQUEST_CODE);
+				}else
+					setEmptyMenu();
 				break;
 			case Global.GROUPS_REQUEST_CODE:
 				if(dbHelper.getGroups(courseCode).size() > 0){
@@ -121,11 +130,8 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 					this.findViewById(R.id.sendMyGroupsButton).setVisibility(View.VISIBLE);
 					this.findViewById(R.id.noGroupsText).setVisibility(View.GONE);
 					setMenu();
-				}else{
-					getExpandableListView().setVisibility(View.GONE);
-					this.findViewById(R.id.sendMyGroupsButton).setVisibility(View.GONE);
-					this.findViewById(R.id.noGroupsText).setVisibility(View.VISIBLE);
-				}
+				}else
+					setEmptyMenu();
 					
 				break;
 			case Global.SENDMYGROUPS_REQUEST_CODE:
@@ -160,6 +166,11 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 		.show();
 	}
 	
+	private void setEmptyMenu(){
+		getExpandableListView().setVisibility(View.GONE);
+		this.findViewById(R.id.sendMyGroupsButton).setVisibility(View.GONE);
+		this.findViewById(R.id.noGroupsText).setVisibility(View.VISIBLE);
+	}
 	
 	private void setMenu(){
 		groupTypes = (ArrayList<Model>) dbHelper.getAllRows(Global.DB_TABLE_GROUP_TYPES, "courseCode ="+ String.valueOf(courseCode), "groupTypeName");
