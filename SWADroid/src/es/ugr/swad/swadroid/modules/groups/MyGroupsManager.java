@@ -5,8 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -47,9 +48,8 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 	 * Database Framework.
 	 */
 	protected static DataFramework db; 
-	//private GroupsCursorTreeAdapter CursorTreeAdapter = null;
 	
-	private ArrayList<Model> groupsTypes;
+	private ArrayList<Model> groupTypes;
 	
 	@Override
 	protected void onStart() {
@@ -116,7 +116,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 				startActivityForResult(activity,Global.GROUPS_REQUEST_CODE);
 				break;
 			case Global.GROUPS_REQUEST_CODE:
-				if(dbHelper.getCursorGroupType(courseCode).getColumnCount() > 0){
+				if(dbHelper.getGroups(courseCode).size() > 0){
 					getExpandableListView().setVisibility(View.VISIBLE);
 					this.findViewById(R.id.sendMyGroupsButton).setVisibility(View.VISIBLE);
 					this.findViewById(R.id.noGroupsText).setVisibility(View.GONE);
@@ -129,28 +129,42 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 					
 				break;
 			case Global.SENDMYGROUPS_REQUEST_CODE:
-				Log.i(TAG, " send groups");
+				int success = data.getIntExtra("success",0);
+				if(success == 0){ //no enrollment was made
+					HashMap<Long,ArrayList<Group>> currentGroups = getHashMapGroups(groupTypes);
+					((EnrollmentExpandableListAdapter)getExpandableListView().getExpandableListAdapter()).resetChildren(currentGroups);
+					((EnrollmentExpandableListAdapter)getExpandableListView().getExpandableListAdapter()).notifyDataSetChanged();
+					
+				}else{
+					showSuccessfulEnrollmentDialog();
+				}
 				break;
 			}
 			
 		}
 	}
 	
+	/**
+	 * Shows configuration dialog on first run.
+	 */
+	public void showSuccessfulEnrollmentDialog() {
+		new AlertDialog.Builder(this)
+		.setTitle(R.string.resultEnrollment)
+		.setMessage(R.string.successfullEnrollment)
+		.setCancelable(false)
+		.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+			}
+		})
+		.show();
+	}
+	
+	
 	private void setMenu(){
-		Cursor gTCursor = dbHelper.getCursorGroupType(courseCode);
-		
-		HashMap<Long,Cursor> childCursors = new HashMap<Long,Cursor>();
-		gTCursor.moveToFirst();
-		for(int i = 0; i < gTCursor.getCount(); ++i){
-			long gTCode = gTCursor.getLong(gTCursor.getColumnIndex("id"));
-			Cursor c =  dbHelper.getCursorGroupsOfType(gTCode);
-			childCursors.put(Long.valueOf(gTCode), c);
-			gTCursor.moveToNext();
-		}
-		
-		groupsTypes = (ArrayList<Model>) dbHelper.getAllRows(Global.DB_TABLE_GROUP_TYPES, "courseCode ="+ String.valueOf(courseCode), "groupTypeName");
-		HashMap<Long,ArrayList<Group>> children = getHashMapGroups(groupsTypes);
-		EnrollmentExpandableListAdapter adapter = new EnrollmentExpandableListAdapter(getBaseContext(), groupsTypes, children, R.layout.group_type_list_item, R.layout.group_list_item);
+		groupTypes = (ArrayList<Model>) dbHelper.getAllRows(Global.DB_TABLE_GROUP_TYPES, "courseCode ="+ String.valueOf(courseCode), "groupTypeName");
+		HashMap<Long,ArrayList<Group>> children = getHashMapGroups(groupTypes);
+		EnrollmentExpandableListAdapter adapter = new EnrollmentExpandableListAdapter(getBaseContext(), groupTypes, children, R.layout.group_type_list_item, R.layout.group_list_item);
 		getExpandableListView().setAdapter(adapter);
 		
 		int collapsedGroups = getExpandableListView().getExpandableListAdapter().getGroupCount();
@@ -190,7 +204,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 	protected void onStop() {
 		
 		if(getExpandableListView().getExpandableListAdapter() != null){
-			HashMap<Long,ArrayList<Group>> updatedChildren = getHashMapGroups(groupsTypes);
+			HashMap<Long,ArrayList<Group>> updatedChildren = getHashMapGroups(groupTypes);
 			((EnrollmentExpandableListAdapter) getExpandableListView().getExpandableListAdapter() ).resetChildren(updatedChildren);
 		}
 		super.onStop();

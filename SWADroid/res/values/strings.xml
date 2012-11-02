@@ -263,4 +263,7 @@ configuration anytime using the "Clean Database" option\n\nDo you want to contin
     <string name="openingTime">Opening: </string>
     <string name="noGroupsText">No groups have been created in the course</string>
     <string name="changeGroups">Change my groups</string>
+    <string name="resultEnrollment">Result on the enrollment</string>
+    <string name="successfullEnrollment">All the enrollments were made successfully </string>
+    <string name="ok">Ok</string>
 </resources>

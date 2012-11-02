@@ -11,6 +11,7 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -102,6 +103,7 @@ public class SendMyGroups extends Module {
 		if(result != null){
 			Vector<?> res = (Vector <?>) result;
 			SoapPrimitive soapP = (SoapPrimitive) res.get(0);
+			
 			success = Integer.parseInt(soapP.toString());
 			if(success != 0){
 				List<Model> groupsSWAD = new ArrayList<Model>();
@@ -136,6 +138,9 @@ public class SendMyGroups extends Module {
 					}
 				}
 			}
+			Intent resultIntent = new Intent();
+			resultIntent.putExtra("success", success);
+			setResult(RESULT_OK,resultIntent);
 		}else{
 			setResult(RESULT_CANCELED);
 		}
