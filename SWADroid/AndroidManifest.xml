@@ -189,7 +189,7 @@
         <activity
             android:name=".modules.groups.SendMyGroups"
             android:label="@string/sendMyGroupsProgressTitle"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
 
         <provider
