@@ -45,6 +45,8 @@ public class NotificationItem extends MenuActivity {
 	String course;
 	String summary;
 	String content;
+	String date;
+	String time;
 	
 	private String fixLinks(String body) {
 	    String regex = "(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
@@ -54,7 +56,7 @@ public class NotificationItem extends MenuActivity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		TextView text, senderTextView, courseTextView, summaryTextView;
+		TextView text, senderTextView, courseTextView, summaryTextView, dateTextView, timeTextView;
 		ImageView image, imageSep, userPhotoView;
 		ImageButton replyButton;
 		WebView webview;
@@ -67,6 +69,8 @@ public class NotificationItem extends MenuActivity {
 		summaryTextView = (TextView)this.findViewById(R.id.summaryText);
 		userPhotoView = (ImageView) this.findViewById(R.id.notifUserPhoto);
 		webview = (WebView)this.findViewById(R.id.contentWebView);
+		dateTextView = (TextView)this.findViewById(R.id.notifDate);
+		timeTextView = (TextView)this.findViewById(R.id.notifTime);
         
 		image = (ImageView)this.findViewById(R.id.moduleIcon);
         image.setBackgroundResource(R.drawable.notif);
@@ -85,10 +89,14 @@ public class NotificationItem extends MenuActivity {
 		course = this.getIntent().getStringExtra("course");
 		summary = this.getIntent().getStringExtra("summary");
 		content = this.getIntent().getStringExtra("content");
+		date = this.getIntent().getStringExtra("date");
+		time = this.getIntent().getStringExtra("time");
         
 	    senderTextView.setText(sender);         
 	    courseTextView.setText(course); 
 	    summaryTextView.setText(summary);
+	    dateTextView.setText(date);
+	    timeTextView.setText(time);
         
 	    //If the user photo exists and is public, download and show it
 	    if(userPhoto != null)
