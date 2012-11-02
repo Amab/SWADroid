@@ -189,6 +189,7 @@ public class Group extends Model {
 	public int getMaxStudents() {
 		return maxStudents;
 	}
+	
 
 	/**
 	 * Indicates if there is a limit of students for this group
@@ -271,6 +272,15 @@ public class Group extends Model {
 	 * */
 	public int getMember() {
 		return member;
+	}
+	
+	/**
+	 * Set that the user belongs to this group or not
+	 * @param membership: 0 - the user does not belong to the group
+	 * 					 1 - the user does belong to the group
+	 * */
+	public void setMember(int member) {
+		this.member = member;
 	}
 	//TODO relate Group to Group Type
 

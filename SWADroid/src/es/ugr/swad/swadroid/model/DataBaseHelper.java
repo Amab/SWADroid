@@ -235,8 +235,8 @@ public class DataBaseHelper {
 					ent.getString("groupName"),
 					groupTypeCode,
 					ent.getInt("maxStudents"),
-					ent.getInt("students"),
 					ent.getInt("open"),
+					ent.getInt("students"),
 					ent.getInt("fileZones"),
 					ent.getInt("member"));
 		}else if (table.equals(Global.DB_TABLE_GROUP_TYPES)){
@@ -516,7 +516,7 @@ public class DataBaseHelper {
 		if(rows != null){
 			Iterator<Entity> iter = rows.iterator();
 			while(iter.hasNext()){
-				groupCodes.add(iter.next().getLong("grpCode"));
+				groupCodes.add(iter.next().getLong("grpCod"));
 			}
 		}
 		return groupCodes;
