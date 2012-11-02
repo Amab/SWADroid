@@ -118,4 +118,9 @@
 	<string name="groupSeparator">: </string>
 	<string name="openingTime">Obertura: </string>
 	<string name="changeGroups">Canviar de grups</string>
+	<string name="resultEnrollment">Resultat de la inscripció</string>
+    <string name="successfullEnrollment">Totes les inscripcions shan realitzat amb èxit</string>
+    <string name="confirmEnrollments">Confirmar inscripcions sollicitades</string>
+    <string name="areYouSure"> Esteu segur que vol inscriure en els grups seleccionats?</string>
+    
 </resources>

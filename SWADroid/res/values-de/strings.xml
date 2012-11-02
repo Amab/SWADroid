@@ -154,4 +154,9 @@
     <string name="openingTime">Öffnungsdatum: </string>
     <string name="noGroupsText">Gruppen worden nicht im Kurs erstellt</string>
     <string name="changeGroups">Gruppen ändern</string>
+     <string name="resultEnrollment">Ergebnis auf dem Anmeldeformular</string>
+    <string name="successfullEnrollment">Alle Anmeldungen wurden erfolgreich durchgeführt </string>
+    <string name="confirmEnrollments">Bestätigen angeforderten Einschreibungen</string>
+    <string name="areYouSure">Sind Sie sicher, dass Sie sich auf den ausgewählten Gruppen einschreiben wollen?</string>
+    
 </resources>
