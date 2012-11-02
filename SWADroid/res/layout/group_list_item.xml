@@ -13,6 +13,7 @@
         android:layout_alignParentLeft="true"
         android:paddingLeft="5dp"
         android:focusable="false"
+        android:clickable="false"
         />
 	<CheckBox android:id="@+id/checkBox"
 	    android:layout_width="match_parent"
@@ -21,6 +22,7 @@
 		android:textColor="@android:color/black"
 		android:text="Prueba"
 		android:focusable="false"
+		android:clickable="false"
 		android:visibility="gone"/>
 	<RadioButton android:id="@+id/radioButton"
 	    android:layout_width="match_parent"
@@ -29,6 +31,7 @@
 		android:textColor="@android:color/black"
 		android:text="Prueba"
 		android:focusable="false"
+		android:clickable="false"
 	    />
 	<TextView 
 	    android:id="@+id/vacantsText"
@@ -39,6 +42,7 @@
 		android:layout_toRightOf="@id/padlockIcon"
 		android:text="@string/vacants"
 		android:focusable="false"
+		android:clickable="false"
 		/>
 	<TextView 
 	    android:id="@+id/nStudentText"
@@ -49,5 +53,6 @@
 		android:gravity="center"
 		android:text="@string/numStudent"
 		android:focusable="false"
+		android:clickable="false"
 	    />
 </RelativeLayout>
