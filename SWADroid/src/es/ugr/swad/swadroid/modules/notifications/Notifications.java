@@ -150,7 +150,9 @@ public class Notifications extends Module {
 				TextView sender = (TextView) v.findViewById(R.id.eventSender);
 				TextView course = (TextView) v.findViewById(R.id.eventLocation);
 				TextView summary = (TextView) v.findViewById(R.id.eventSummary);
-				TextView content = (TextView) v.findViewById(R.id.eventText);	
+				TextView content = (TextView) v.findViewById(R.id.eventText);
+				TextView date = (TextView) v.findViewById(R.id.eventDate);	
+				TextView time = (TextView) v.findViewById(R.id.eventTime);	
 				
 				Intent activity = new Intent(getApplicationContext(), NotificationItem.class);
 				activity.putExtra("notificationCode", code.getText().toString());
@@ -159,6 +161,8 @@ public class Notifications extends Module {
 				activity.putExtra("course", course.getText().toString());
 				activity.putExtra("summary", summary.getText().toString());
 				activity.putExtra("content", content.getText().toString());
+				activity.putExtra("date", date.getText().toString());
+				activity.putExtra("time", time.getText().toString());
 				startActivity(activity);
 			}    	
 		};
