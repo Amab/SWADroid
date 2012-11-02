@@ -51,6 +51,8 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 	
 	private ArrayList<Model> groupTypes;
 	
+	private HashMap<Long,ArrayList<Group>> groups;
+	
 	private boolean groupTypesRequested = false;
 	
 	@Override
@@ -151,7 +153,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 	}
 	
 	/**
-	 * Shows configuration dialog on first run.
+	 * Shows informative dialog on successful enrollment 
 	 */
 	public void showSuccessfulEnrollmentDialog() {
 		new AlertDialog.Builder(this)
@@ -165,6 +167,45 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 		})
 		.show();
 	}
+	/**
+	 * Shows dialog to ask for confirmation in group enrollments
+	 */
+	private void showConfirmEnrollmentDialog(){
+		new AlertDialog.Builder(this)
+		.setTitle(R.string.confirmEnrollments)
+		.setMessage(R.string.areYouSure)
+		.setCancelable(false)
+		.setPositiveButton(R.string.yesMsg, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+				String myGroups = ((EnrollmentExpandableListAdapter)getExpandableListView().getExpandableListAdapter()).getChosenGroupCodesAsString();
+				Intent activity = new  Intent(getBaseContext(), SendMyGroups.class);
+				activity.putExtra("courseCode", courseCode);
+				activity.putExtra("myGroups", myGroups);
+				startActivityForResult(activity,Global.SENDMYGROUPS_REQUEST_CODE);
+			}
+		})
+		.setNegativeButton(R.string.noMsg, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+			}
+		})
+		.show();
+		
+	}
+	
+	private String getRequestedGroups(){
+		ArrayList<Long> requestedGroupCodes = ((EnrollmentExpandableListAdapter)getExpandableListView().getExpandableListAdapter()).getChosenGroupCodes();
+		String text = "";
+		for(int i = 0; i < requestedGroupCodes.size(); ++i){
+			long groupCode = requestedGroupCodes.get(i).longValue();
+			Group g = dbHelper.getGroup(groupCode);
+			GroupType gT = dbHelper.getGroupTypeFromGroup(groupCode);
+			text += gT.getGroupTypeName() + " : " + g.getGroupName() + "\n";
+		}
+		return text;
+	}
+	
 	
 	private void setEmptyMenu(){
 		getExpandableListView().setVisibility(View.GONE);
@@ -190,11 +231,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 
 			@Override
 			public void onClick(View v) {
-				String myGroups = ((EnrollmentExpandableListAdapter)getExpandableListView().getExpandableListAdapter()).getChosenGroupCodes();
-				Intent activity = new  Intent(getBaseContext(), SendMyGroups.class);
-				activity.putExtra("courseCode", courseCode);
-				activity.putExtra("myGroups", myGroups);
-				startActivityForResult(activity,Global.SENDMYGROUPS_REQUEST_CODE);
+				showConfirmEnrollmentDialog();
 			}
 			
 		};
@@ -230,5 +267,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 		}
 		return children;
 	}
+	
+
 	
 }
