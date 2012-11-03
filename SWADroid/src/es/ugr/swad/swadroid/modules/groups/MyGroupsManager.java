@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ExpandableListView;
+import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.dataframework.DataFramework;
@@ -54,6 +56,12 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 	private HashMap<Long,ArrayList<Group>> groups;
 	
 	private boolean groupTypesRequested = false;
+	
+	private boolean refreshRequested = false;
+	
+	
+	private ImageButton updateButton;
+	private ProgressBar progressbar;
 	
 	@Override
 	protected void onStart() {
@@ -110,6 +118,12 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 		TextView moduleText = (TextView) this.findViewById(R.id.moduleName);
 		moduleText.setText(R.string.myGroupsModuleLabel);
 		
+		progressbar = (ProgressBar) this.findViewById(R.id.progress_refresh);
+		progressbar.setVisibility(View.GONE);
+		updateButton = (ImageButton)this.findViewById(R.id.refresh);
+		updateButton.setVisibility(View.VISIBLE);
+		
+		
 	}
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -127,10 +141,16 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 					setEmptyMenu();
 				break;
 			case Global.GROUPS_REQUEST_CODE:
-				if(dbHelper.getGroups(courseCode).size() > 0){
+				if(dbHelper.getGroups(courseCode).size() > 0 || refreshRequested){
 					getExpandableListView().setVisibility(View.VISIBLE);
 					this.findViewById(R.id.sendMyGroupsButton).setVisibility(View.VISIBLE);
 					this.findViewById(R.id.noGroupsText).setVisibility(View.GONE);
+					
+					updateButton.setVisibility(View.VISIBLE);
+					progressbar.setVisibility(View.GONE);
+					
+					refreshRequested = false;
+					
 					setMenu();
 				}else
 					setEmptyMenu();
@@ -287,6 +307,24 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 		return children;
 	}
 	
+	/**
+	 * Launches an action when refresh button is pushed.
+	 *  
+	 * The listener onClick is set in action_bar.xml
+	 * @param v Actual view
+	 */
+	public void onRefreshClick(View v)
+	{        
+		updateButton.setVisibility(View.GONE);
+		progressbar.setVisibility(View.VISIBLE);
+		
+		refreshRequested = true;
+		
+		Intent activity = new Intent(getBaseContext(),GroupTypes.class);
+		activity.putExtra("courseCode",  courseCode);
+		startActivityForResult(activity,Global.GROUPTYPES_REQUEST_CODE);
+
+	}
 
 	
 }
