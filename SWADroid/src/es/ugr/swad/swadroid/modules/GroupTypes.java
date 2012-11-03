@@ -106,7 +106,9 @@ public class GroupTypes extends Module {
 	    		}
 			}
 	
-			//TODO remove obsolete groups
+			dbHelper.insertCollection(Global.DB_TABLE_GROUP_TYPES, groupsSWAD);
+			
+		/*	//TODO remove obsolete groups
 			for(int i = 0; i < groupsSWAD.size(); ++i){
 				GroupType g = (GroupType) groupsSWAD.get(i);
 				//boolean isAdded = dbHelper.insertGroup(g,Global.getSelectedCourseCode());
@@ -114,7 +116,7 @@ public class GroupTypes extends Module {
 				if(!dbHelper.insertGroupType(g)){
 					setResult(RESULT_CANCELED);
 				}
-			}
+			}*/
 			//Request finalized without errors
 			setResult(RESULT_OK);
 		}

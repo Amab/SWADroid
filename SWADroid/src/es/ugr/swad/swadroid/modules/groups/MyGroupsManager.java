@@ -134,7 +134,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 				groupTypesRequested = true;
 				if(dbHelper.getAllRows(Global.DB_TABLE_GROUP_TYPES, "courseCode = " + courseCode , "groupTypeName").size() > 0){
 					//If there are not group types, either groups. Therefore, there is no need to request groups
-					Intent activity = new Intent(getBaseContext(),GroupTypes.class);
+					Intent activity = new Intent(getBaseContext(),Groups.class);
 					activity.putExtra("courseCode",  courseCode);
 					startActivityForResult(activity,Global.GROUPS_REQUEST_CODE);
 				}else
