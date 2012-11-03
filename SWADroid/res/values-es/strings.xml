@@ -256,5 +256,6 @@ Seleccione: Sesiones de prácticas - Nueva</string>
     <string name="confirmEnrollments">Confirmar inscripciones solicitadas </string>
     <string name="areYouSure"> ¿Seguro que quiere inscribirse en los grupos seleccionados?</string>
     <string name="failedEnrollment">Lo sentimos pero la inscripción en los grupos seleccionados no se pudo realizar</string>
+    <string name="groupTypesProgressDescription">Obteniendo tipos de grupo...</string>
 </resources>
 
