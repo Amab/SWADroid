@@ -19,6 +19,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 /**
  * Adapter to populate with data  an expandable list.
@@ -40,6 +41,7 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 		TextView openTimeText;
 	} 
 	private static class ChildHolder{
+		RelativeLayout relativeLayout;
 		ImageView imagePadlock;
 		CheckBox checkBox;
 		RadioButton radioButton;
@@ -80,6 +82,7 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 		if(convertView == null){
 			convertView = mInflater.inflate(layoutChild, parent, false);
 			holder = new ChildHolder();
+			holder.relativeLayout = (RelativeLayout) convertView.findViewById(R.id.groupsLayout);
 			holder.imagePadlock = (ImageView) convertView.findViewById(R.id.padlockIcon);
 			holder.checkBox = (CheckBox) convertView.findViewById(R.id.checkBox);
 			holder.radioButton = (RadioButton) convertView.findViewById(R.id.radioButton);
@@ -104,11 +107,25 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 		int open = group.getOpen();
 		int member = group.getMember();
 		
-		if(open != 0)
+		if(open != 0){
 			holder.imagePadlock.setImageResource(R.drawable.padlockgreen);
-		else
+			convertView.setEnabled(true);
+			/*holder.checkBox.setEnabled(true);
+			holder.imagePadlock.setEnabled(true);
+			holder.nStudentText.setEnabled(true);
+			holder.radioButton.setEnabled(true);
+			holder.relativeLayout.setEnabled(true);
+			holder.vacantsText.setEnabled(true);*/
+		}else{
 			holder.imagePadlock.setImageResource(R.drawable.padlockred);
-		
+			convertView.setEnabled(false);
+		/*	holder.checkBox.setEnabled(false);
+			holder.imagePadlock.setEnabled(false);
+			holder.nStudentText.setEnabled(false);
+			holder.radioButton.setEnabled(false);
+			holder.relativeLayout.setEnabled(false);
+			holder.vacantsText.setEnabled(false);*/
+		}
 		//for multiple inscriptions the groups should be checkboxes to allow multiple choice
 		//otherwise the groups should be radio button to allow just a single choice
 		if(multiple == 0){ //single inscriptions:
@@ -274,6 +291,11 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 			}
 		}
 		return groupCodes;
+	}
+
+	@Override
+	public boolean areAllItemsEnabled() {
+		return false;
 	}
 	
 }
