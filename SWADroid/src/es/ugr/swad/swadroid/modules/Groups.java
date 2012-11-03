@@ -150,8 +150,6 @@ public class Groups extends Module {
 
 	@Override
 	protected void postConnect() {
-		Toast.makeText(this, "got groups", Toast.LENGTH_LONG).show();
-		Log.i(TAG, "got groups");
 		finish();
 	}
 
