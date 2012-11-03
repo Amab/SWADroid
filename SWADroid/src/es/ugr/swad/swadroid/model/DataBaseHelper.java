@@ -788,7 +788,7 @@ public class DataBaseHelper {
 		}else{
 			ent = new Entity(tableName);
 		}
-		if(tableName.equals(Global.DB_TABLE_GROUPS)){
+		if(tableName.compareTo(Global.DB_TABLE_GROUPS) == 0){
 			Group g = (Group) currentModel;
 			ent.setValue("id", g.getId());
 			ent.setValue("groupName", g.getGroupName());
@@ -800,7 +800,7 @@ public class DataBaseHelper {
 			ent.save();
 		}
 		
-		if(tableName.equals(Global.DB_TABLE_GROUP_TYPES)){
+		if(tableName.compareTo(Global.DB_TABLE_GROUP_TYPES) == 0){
 			GroupType gt = (GroupType) currentModel;
 			ent.setValue("id", gt.getId());
 			ent.setValue("groupTypeName", gt.getGroupTypeName());
@@ -875,7 +875,11 @@ public class DataBaseHelper {
 		boolean returnValue = true;
 		if(rows.isEmpty()) {
 			insertEntity(Global.DB_TABLE_GROUPS,g);
+		} else { //already exits a group with the given code. just update
+			insertEntity(Global.DB_TABLE_GROUPS,g,rows.get(0));
 			
+		}
+		//update all the relationship
 			Entity ent;
 			
 			long groupCode = g.getId();
@@ -885,7 +889,7 @@ public class DataBaseHelper {
 			//it should not insert/modify rows in the relationship table if the course does not exists
 			if(course != null){ 
 				if(rows.isEmpty()){
-					PairTable<Long,Long> pair = new PairTable(Global.DB_TABLE_GROUPS_COURSES,courseCode,g.getId());
+					PairTable<Long,Long> pair = new PairTable(Global.DB_TABLE_GROUPS_COURSES,g.getId(),courseCode);
 					insertPairTable(pair);
 				}else{ 
 					rows.get(0).setValue("crsCod", courseCode);
@@ -904,22 +908,14 @@ public class DataBaseHelper {
 				if(rows.isEmpty()){
 					Pair<String,String> params = selectParamsPairTable(Global.DB_TABLE_GROUPS_GROUPTYPES);
 					insertPairTable(new PairTable<Long,Long>(Global.DB_TABLE_GROUPS_GROUPTYPES,groupTypeCode,groupCode));
-					/*ent = new Entity(Global.DB_TABLE_GROUPS_GROUPTYPES);
-					ent.setValue("grpCod", groupCode);
-					ent.setValue("grpTypCod", groupTypeCode[0]);
-					ent.save();*/
 				}else{
 					PairTable<Integer,Integer> prev = new PairTable(Global.DB_TABLE_GROUPS_GROUPTYPES,rows.get(0).getValue("grpTypCod"),rows.get(0).getValue("grpCod"));
 					PairTable<Integer,Integer> current = new PairTable(Global.DB_TABLE_GROUPS_GROUPTYPES,groupTypeCode,groupCode);
 					updatePairTable(prev,current);
-					//rows.get(0).setValue("grpTypCod", groupTypeCode[0]);
-					//rows.get(0).save();
 				}
 			/*}else returnValue = false;*/
 			
 			return returnValue;
-		} else
-			return false;
 	}
 
 	/**
@@ -935,6 +931,62 @@ public class DataBaseHelper {
 			returnValue = false;
 		}
 		return returnValue;
+	}
+	
+	public boolean insertCollection(String table,List<Model> currentModels, long...courseCode){
+		boolean result = true;
+		List<Model> modelsDB = getAllRows(table);
+		List<Model> newModels = new ArrayList<Model>();
+		List<Model> obsoleteModel = new ArrayList<Model>();
+		List<Model> modifiedModel = new ArrayList<Model>();
+		
+		newModels.addAll(currentModels);
+		newModels.removeAll(modelsDB);
+		
+		obsoleteModel.addAll(modelsDB);
+		obsoleteModel.removeAll(currentModels);
+		
+		modifiedModel.addAll(currentModels);
+		modifiedModel.removeAll(newModels);
+		modifiedModel.removeAll(obsoleteModel);
+		
+		if(table.compareTo(Global.DB_TABLE_GROUP_TYPES) == 0){
+			for(int i = 0; i < obsoleteModel.size(); ++i){
+				long code = obsoleteModel.get(i).getId();
+				removeAllRow(table,"id", code);
+				removeAllRow(Global.DB_TABLE_GROUPS_GROUPTYPES,"grpTypCod", code);
+			}
+			for(int i = 0; i < newModels.size(); ++i){
+				Model model = newModels.get(i);
+				insertEntity(table,model);
+			}
+			List<Entity> rows; 
+			for(int i = 0; i < modifiedModel.size(); ++i){
+				Model m = modifiedModel.get(i);
+				rows = db.getEntityList(table, "id="+ m.getId());
+				insertEntity(table,m,rows.get(0));
+			}
+		}
+		
+		if(table.compareTo(Global.DB_TABLE_GROUPS) == 0){
+			for(int i = 0; i < obsoleteModel.size(); ++i){
+				long code = obsoleteModel.get(i).getId();
+				removeAllRow(table,"id", code);
+				removeAllRow(Global.DB_TABLE_GROUPS_GROUPTYPES,"grpCod", code);
+				removeAllRow(Global.DB_TABLE_GROUPS_COURSES,"grpCod",code);
+			}
+			for(int i = 0; i < newModels.size(); ++i){
+				Model model = newModels.get(i);
+				insertGroup((Group) model, courseCode[0]);
+			}
+			List<Entity> rows; 
+			for(int i = 0; i < modifiedModel.size(); ++i){
+				Model model = modifiedModel.get(i);
+				insertGroup((Group) model, courseCode[0]);
+			}
+		}
+		
+		return result;
 	}
 	
 	/**

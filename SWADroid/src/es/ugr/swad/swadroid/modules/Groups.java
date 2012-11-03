@@ -131,15 +131,16 @@ public class Groups extends Module {
         		}
 			}
 
+			dbHelper.insertCollection(Global.DB_TABLE_GROUPS, groupsSWAD, courseCode);
 			//TODO remove obsolete groups
-			for(int i = 0; i < groupsSWAD.size(); ++i){
+			/*for(int i = 0; i < groupsSWAD.size(); ++i){
 				Group g = (Group) groupsSWAD.get(i);
 				//boolean isAdded = dbHelper.insertGroup(g,Global.getSelectedCourseCode());
 				//if(!isAdded){
 				if(!dbHelper.insertGroup(g,Global.getSelectedCourseCode())){
 					dbHelper.updateGroup(g.getId(), Global.getSelectedCourseCode(), g);
 				}
-			}
+			}*/
 			//Request finalized without errors
 			setResult(RESULT_OK);
 		}
