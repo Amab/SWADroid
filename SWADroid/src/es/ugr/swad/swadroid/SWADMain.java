@@ -513,7 +513,7 @@ public class SWADMain extends MenuExpandableListActivity {
 			
 			final HashMap<String, Object> enrolment = new HashMap<String,Object>();
 			enrolment.put(NAME, getString(R.string.enrollment));
-			//enrolment.put(IMAGE, getResources().getDrawable(R.drawable.blackboard));
+			//TODO enrolment.put(IMAGE, getResources().getDrawable(R.drawable.blackboard));
 			headerData.add(enrolment);
 
 			final ArrayList<ArrayList<HashMap<String, Object>>> childData = new ArrayList<ArrayList<HashMap<String, Object>>>();
@@ -563,7 +563,7 @@ public class SWADMain extends MenuExpandableListActivity {
 			
 			map = new HashMap<String,Object>();
 			map.put(NAME, getString(R.string.myGroupsModuleLabel));
-			//map.put(IMAGE,  getResources().getDrawable(R.drawable.folder));
+			map.put(IMAGE,  getResources().getDrawable(R.drawable.mygroups));
 			enrollmentData.add(map);
 			
 			setListAdapter( new ImageExpandableListAdapter(

@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -111,9 +112,8 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 		TextView courseNameText = (TextView) this.findViewById(R.id.courseSelectedText);
 		courseNameText.setText(Global.getSelectedCourseShortName());
 		
-		//TODO Add icon for My Groups Module
-		//ImageView moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
-		//moduleIcon.setBackgroundResource(R.drawable.folder);
+		ImageView moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
+		moduleIcon.setBackgroundResource(R.drawable.mygroups);
 
 		TextView moduleText = (TextView) this.findViewById(R.id.moduleName);
 		moduleText.setText(R.string.myGroupsModuleLabel);
