@@ -885,7 +885,7 @@ public class DataBaseHelper {
 			//it should not insert/modify rows in the relationship table if the course does not exists
 			if(course != null){ 
 				if(rows.isEmpty()){
-					PairTable<Long,Long> pair = new PairTable(Global.DB_TABLE_GROUPS_COURSES,courseCode,g.getId());
+					PairTable<Long,Long> pair = new PairTable(Global.DB_TABLE_GROUPS_COURSES,g.getId(),courseCode);
 					insertPairTable(pair);
 				}else{ 
 					rows.get(0).setValue("crsCod", courseCode);
