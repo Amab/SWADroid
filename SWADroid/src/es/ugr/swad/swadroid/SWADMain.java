@@ -19,6 +19,7 @@
 
 package es.ugr.swad.swadroid;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -206,7 +207,6 @@ public class SWADMain extends MenuExpandableListActivity {
 			int groupPosition, int childPosition, long id) {
 		// Get the item that was clicked
 		Object o = this.getExpandableListAdapter().getChild(groupPosition, childPosition);
-		@SuppressWarnings("unchecked")
 		String keyword = (String) ((Map<String,Object>)o).get(NAME);
 
 		Intent activity;
@@ -237,11 +237,11 @@ public class SWADMain extends MenuExpandableListActivity {
 			activity.putExtra("downloadsAreaCode", Global.DOCUMENTS_AREA_CODE);
 			startActivityForResult(activity,Global.DOWNLOADSMANAGER_REQUEST_CODE);
 			
-		}else if(keyword.equals(getString(R.string.sharedsDownloadModuleLabel))){
+		} else if(keyword.equals(getString(R.string.sharedsDownloadModuleLabel))){
 			activity = new Intent(getBaseContext(), DownloadsManager.class);
 			activity.putExtra("downloadsAreaCode", Global.SHARE_AREA_CODE);
 			startActivityForResult(activity,Global.DOWNLOADSMANAGER_REQUEST_CODE);
-		}else if(keyword.equals(getString(R.string.myGroupsModuleLabel))){			
+		} else if(keyword.equals(getString(R.string.myGroupsModuleLabel))){			
 			activity = new Intent(getBaseContext(), MyGroupsManager.class);
 			activity.putExtra("courseCode", Global.getSelectedCourseCode());
 			startActivityForResult(activity,Global.MYGROUPSMANAGER_REQUEST_CODE);
@@ -268,7 +268,7 @@ public class SWADMain extends MenuExpandableListActivity {
 		int lastVersion, currentVersion;
 		ImageView image;
 		TextView text;
-
+		
 		//Initialize screen
 		super.onCreate(icicle);
 		setContentView(R.layout.main);
@@ -280,12 +280,7 @@ public class SWADMain extends MenuExpandableListActivity {
 		text.setText(R.string.app_name);
 
 		
-		try {            
-			//Initialize database
-			/*db = DataFramework.getInstance();
-            db.open(this, this.getPackageName());
-            dbHelper = new DataBaseHelper(db);*/
-
+		try {
 			//Initialize preferences
 			prefs.getPreferences(getBaseContext()); 
 
@@ -295,8 +290,8 @@ public class SWADMain extends MenuExpandableListActivity {
 			//Check if this is the first run after an install or upgrade
 		 	lastVersion = prefs.getLastVersion();
 			currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
-			//	lastVersion = 41;
-			//	currentVersion = 42;
+			//lastVersion = 41;
+			//currentVersion = 42;
 
 			//If this is the first run, show configuration dialog
 			if(lastVersion == 0) {
@@ -316,14 +311,14 @@ public class SWADMain extends MenuExpandableListActivity {
 				Global.setSelectedCourseFullName("");
 
 				//If this is an upgrade, show upgrade dialog
-			} else if(lastVersion < currentVersion) {
-				//showUpgradeDialog();
-					dbHelper.upgradeDB(this);
+			} else if(lastVersion < currentVersion) {				
+				showUpgradeDialog();
+				dbHelper.upgradeDB(this);
 				//prefs.upgradeCredentials();
 
 				//Configure automatic synchronization
-				Intent activity = new Intent(getBaseContext(), AccountAuthenticator.class);
-				startActivity(activity);
+				//Intent activity = new Intent(getBaseContext(), AccountAuthenticator.class);
+				//startActivity(activity);
 
 				prefs.setLastVersion(currentVersion);
 			}

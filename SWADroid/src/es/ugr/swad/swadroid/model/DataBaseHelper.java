@@ -32,8 +32,8 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteStatement;
+import net.sqlcipher.database.SQLiteDatabase;
+import net.sqlcipher.database.SQLiteStatement;
 import android.os.Environment;
 import android.util.Log;
 
@@ -41,6 +41,7 @@ import com.android.dataframework.DataFramework;
 import com.android.dataframework.Entity;
 
 import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Preferences;
 
 /**
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
@@ -52,13 +53,54 @@ public class DataBaseHelper {
 	 * Field for access to the database backend
 	 */
 	private DataFramework db;
+	/**
+	 * Application context
+	 */
+	private Context mCtx;
+	/**
+	 * Application preferences
+	 */
+	private Preferences prefs = new Preferences();
+	/**
+	 * Database passphrase
+	 */
+	private String DBKey;
+	/**
+	 * Database passphrase length
+	 */
+	private int DB_KEY_LENGTH = 128;
 
 	/**
 	 * Constructor
 	 * @param database Previously instantiated DataFramework object
 	 */
-	public DataBaseHelper(DataFramework database) {
-		db = database;
+	public DataBaseHelper(Context ctx) {		
+		mCtx = ctx;
+		prefs.getPreferences(mCtx);
+		DBKey = prefs.getDBKey();
+		db = DataFramework.getInstance();
+		
+		//Initialize SQLCipher libraries
+		SQLiteDatabase.loadLibs(mCtx);
+		
+		//If the passphrase is empty, generate a random passphrase and recreate database
+		if(DBKey.equals("")) {
+			DBKey = Global.randomString(DB_KEY_LENGTH);
+			prefs.setDBKey(DBKey);
+			mCtx.deleteDatabase("swadroid_db");
+			SQLiteDatabase database = SQLiteDatabase.openOrCreateDatabase(mCtx.getDatabasePath("swadroid_db_crypt"), DBKey, null);
+			database.close();
+		}
+		
+		Log.d("DataBaseHelper", "DBKey=" + DBKey);
+		
+		try {
+			db.open(mCtx, mCtx.getPackageName(), DBKey);
+		} catch (XmlPullParserException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -1739,7 +1781,7 @@ public class DataBaseHelper {
 		 * changes on courses table:
 		 * - old field name is erased
 		 * The rest of the changes are only new fields and they are added automatic by Dataframework. */
-		Cursor dbCursor = db.getDB().query(Global.DB_TABLE_COURSES, null, null, null, null, null, null);
+		/*Cursor dbCursor = db.getDB().query(Global.DB_TABLE_COURSES, null, null, null, null, null, null);
 		String[] columnNames = dbCursor.getColumnNames();
 		boolean found = false;
 		int i = 0;
@@ -1766,7 +1808,7 @@ public class DataBaseHelper {
             + " shortName text, fullName text); ");
 	db.getDB().execSQL(
             "INSERT INTO " + Global.DB_TABLE_COURSES + " SELECT _id, id, userRole, shortName, fullName  "
-           + " FROM __"+ Global.DB_TABLE_COURSES + ";");*/
+           + " FROM __"+ Global.DB_TABLE_COURSES + ";");
 			
 		}
 
@@ -1780,7 +1822,7 @@ public class DataBaseHelper {
 		 * - old field groupTypeName is erased
 		 * The rest of the changes are only new fields and they are added automatic by Dataframework. 
 		 * */
-		dbCursor = db.getDB().query(Global.DB_TABLE_GROUPS, null, null, null, null, null, null);
+		/*dbCursor = db.getDB().query(Global.DB_TABLE_GROUPS, null, null, null, null, null, null);
 		columnNames = dbCursor.getColumnNames();
 		found = false;
 		i = 0;
@@ -1807,7 +1849,7 @@ public class DataBaseHelper {
                 + "students, open, fileZones, member FROM __"+ Global.DB_TABLE_GROUPS + ";");
         db.getDB().execSQL( "DROP TABLE __" + Global.DB_TABLE_GROUPS + ";");*/
 		
-		}
+		/*}
 		dbCursor = db.getDB().query(Global.DB_TABLE_GROUPS, null, null, null, null, null, null);
 		columnNames = dbCursor.getColumnNames();
 		

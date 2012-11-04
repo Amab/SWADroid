@@ -48,7 +48,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.dataframework.DataFramework;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
@@ -99,11 +98,7 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 	/**
 	 * Database Helper.
 	 */
-	protected static DataBaseHelper dbHelper;   
-	/**
-	 * Database Framework.
-	 */
-	protected static DataFramework db;
+	protected static DataBaseHelper dbHelper; 
 
 	ViewfinderView getViewfinderView() {
 		return viewfinderView;
@@ -132,9 +127,7 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 
 		// Initialize database
 		try {
-			db = DataFramework.getInstance();
-			db.open(this, getPackageName());
-			dbHelper = new DataBaseHelper(db);
+			dbHelper = new DataBaseHelper(getBaseContext());
 		} catch (Exception ex) {
 			Log.e(ex.getClass().getSimpleName(), ex.getMessage());
 			ex.printStackTrace();
