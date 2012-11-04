@@ -196,7 +196,7 @@ Try "Update students"</string>
     <string name="noCameraFound">The device has no camera</string>
     <string name="saveMsg">Save</string>
     <string name="addSessionTitle_menu">New practice session</string>
-    <string name="groupsProgressDescription">Retrieving groups...</string>
+    <string name="groupsProgressDescription">Retrieving groups...\n\nPlease wait...</string>
     <string name="groupsProgressTitle">Groups</string>
     <string name="noGroupsAvailableMsg">No groups for selected subject</string>
     <string name="groupsUpdated">Groups updated</string>
@@ -254,11 +254,11 @@ must have practice groups defined in SWAD.\n\nYou can delete this
 configuration anytime using the "Clean Database" option\n\nDo you want to continue?</string>
     <string name="noRollcallAllowedMsg">Rollcall for the selected subject is not allowed. Try "Clean database"</string>
     <string name="froyoFunctionMsg">This function needs Android 2.2 or higher</string>
-    <string name="groupTypesProgressDescription">Retrieving group types...</string>
+    <string name="groupTypesProgressDescription">Retrieving group types&#8230;\nPlease wait&#8230;</string>
     <string name="groupTypesProgressTitle">Group Types</string>
     <string name="groupSeparator">: </string>
-    <string name="groupTypesModuleLabel">Get Group Types</string>
-    <string name="sendMyGroupsProgressDescription">Sending enrollment into groups</string>
+    <string name="groupTypesModuleLabel">Group Types</string>
+    <string name="sendMyGroupsProgressDescription">Sending enrollment into groups&#8230;\nPlease wait&#8230;</string>
     <string name="sendMyGroupsProgressTitle">Enrolment into groups</string>
     <string name="openingTime">Opening: </string>
     <string name="noGroupsText">No groups have been created in the course</string>

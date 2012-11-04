@@ -33,23 +33,23 @@
     <string name="organization_preferences">Universidad de Granada</string>
     <string name="loginTitle_menu">Connectar</string>
     <string name="loginProgressTitle">Identificació</string>
-    <string name="loginProgressDescription">Connectant...</string>
+    <string name="loginProgressDescription">Connectant&#8230;</string>
     <string name="coursesProgressTitle">Assignatures</string>
-    <string name="coursesProgressDescription">Obtenint assignatures...</string>
+    <string name="coursesProgressDescription">Obtenint assignatures&#8230;</string>
     <string name="notificationsProgressTitle">Notificacions</string>
-    <string name="notificationsProgressDescription">Obtenint noves notificacions...</string>
+    <string name="notificationsProgressDescription">Obtenint noves notificacions&#8230;</string>
     <string name="notificationsEmptyListMsg">No s\'ha descarregat cap notificació.\n\nPer a descarregar les
 		notificacions més recents premi l\'icona al cantó superior dreta de la pantalla.</string>
     <string name="notificationsDownloadedMsg">Notificacions descarregades</string>
     <string name="testsDownloadProgressTitle">Tests</string>
     <string name="testsDownloadProgressDescription">Sincronitzant preguntes de test.\n\En funció del nombre de
-		preguntes a sincronitzar, el processament de les dades pot tardar uns minuts.\n\nSi us plau, esperi...</string>
+		preguntes a sincronitzar, el processament de les dades pot tardar uns minuts.\n\nSi us plau, esperi&#8230;</string>
     <string name="errorMsgWorkaroundEmulator">Merda. Aquest bug del emulador d\'Android ha tornat a
-		aparèixer. Provant una altra vegada...</string>
+		aparèixer. Provant una altra vegada&#8230;</string>
     <string name="errorMsgLaunchingActivity">Ha ocorregut un error durant l\'execució de l\'operació</string>
     <string name="errorMsgNoConnection">No n\'hi ha conexió</string>
     <string name="errorCopyMsg_DB">Error copiant la base de dades</string>
-    <string name="upgradeMsg_DB">Actualitzant la base de dades...</string>
+    <string name="upgradeMsg_DB">Actualitzant la base de dades&#8230;</string>
     <string name="loginSuccessfulMsg">Connectat</string>
     <string name="examAnnouncement">Convocatòria d\'examen</string>
     <string name="marksFile">Qualificacions</string>
@@ -99,7 +99,7 @@
     <string name="errorServerResponseMsg">Error en la resposta del servidor</string>
     <string name="errorConnectionMsg">Error durant la connexió amb el servidor</string>
     <string name="errorTimeoutMsg">Temps d\'espera esgotat intentant connectar amb el servidor</string>
-    <string name="sendingMessageMsg">Enviant missatge...</string>
+    <string name="sendingMessageMsg">Enviant missatge&#8230;</string>
     <string name="messageSendedMsg">Missatge enviat</string>
     <string name="messageSendErrorMsg">Error al enviar el missatge. Comprovi les dades introduïts</string>
     <string name="message_receivers_title">Detinataris (separarts per comas)</string>
@@ -123,6 +123,10 @@
     <string name="confirmEnrollments">Confirmar inscripcions sollicitades</string>
     <string name="areYouSure"> Esteu segur que vol inscriure en els grups seleccionats?</string>
     <string name="failedEnrollment">Ho sentim però la inscripció en els grups seleccionats no es va poder realitzar</string>
-    <string name="groupsProgressDescription">Obtenint groupos...</string>
-    <string name="groupTypesProgressDescription">Obtenint Tipus de grup...</string>
+    <string name="groupsProgressDescription">Obtenint groupos&#8230;\nSi us plau&#8230;</string>
+    <string name="groupTypesProgressDescription">Obtenint Tipus de grup&#8230;\nSi us plau&#8230;</string>
+    <string name="groupTypesProgressTitle">Tipus de grup</string>
+    <string name="groupsProgressTitle">Groupos</string>
+    <string name="sendMyGroupsProgressDescription">Enviant Inscripció a grups&#8230;\nSi us plau&#8230;</string>
+    <string name="sendMyGroupsProgressTitle">Inscripció en grups</string>
 </resources>

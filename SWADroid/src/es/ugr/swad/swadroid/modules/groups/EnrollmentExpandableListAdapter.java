@@ -109,22 +109,25 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 		
 		if(open != 0){
 			holder.imagePadlock.setImageResource(R.drawable.padlockgreen);
-			convertView.setEnabled(true);
-			/*holder.checkBox.setEnabled(true);
+			holder.checkBox.setEnabled(true);
+			holder.checkBox.setTextColor(context.getResources().getColor(android.R.color.black));
 			holder.imagePadlock.setEnabled(true);
 			holder.nStudentText.setEnabled(true);
 			holder.radioButton.setEnabled(true);
+			holder.radioButton.setTextColor(context.getResources().getColor(android.R.color.black));
+			
 			holder.relativeLayout.setEnabled(true);
-			holder.vacantsText.setEnabled(true);*/
+			holder.vacantsText.setEnabled(true);
 		}else{
 			holder.imagePadlock.setImageResource(R.drawable.padlockred);
-			convertView.setEnabled(false);
-		/*	holder.checkBox.setEnabled(false);
+			holder.checkBox.setEnabled(false);
+			holder.checkBox.setTextColor( context.getResources().getColor(R.color.sgilight_gray));
 			holder.imagePadlock.setEnabled(false);
 			holder.nStudentText.setEnabled(false);
 			holder.radioButton.setEnabled(false);
+			holder.radioButton.setTextColor(context.getResources().getColor(R.color.sgilight_gray));
 			holder.relativeLayout.setEnabled(false);
-			holder.vacantsText.setEnabled(false);*/
+			holder.vacantsText.setEnabled(false);
 		}
 		//for multiple inscriptions the groups should be checkboxes to allow multiple choice
 		//otherwise the groups should be radio button to allow just a single choice
@@ -219,7 +222,14 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public boolean isChildSelectable(int groupPosition, int childPosition) {
-		return true;
+		Long groupTypeCode = groups.get(groupPosition).getId();
+	
+		ArrayList<Group> children = this.children.get(groupTypeCode);
+		Group group = children.get(childPosition);
+		if(group.getOpen() != 0)
+			return true;
+		else
+			return false;
 	}
 
 	/**
@@ -285,17 +295,11 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 			for(int i = 0; i < children.size(); ++i){
 				g = children.get(i);
 				if(g.getMember() == 1){
-					long code = g.getId();
 					groupCodes.add(Long.valueOf(g.getId()));
 				}
 			}
 		}
 		return groupCodes;
-	}
-
-	@Override
-	public boolean areAllItemsEnabled() {
-		return false;
 	}
 	
 }
