@@ -34,12 +34,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.android.dataframework.DataFramework;
-
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Course;
-import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.model.Model;
 
 /**
@@ -211,10 +208,6 @@ public class Courses extends Module {
 	 */
 	public void clearCourses(Context context) {
 		try {
-			DataFramework db = DataFramework.getInstance();
-			db.open(context, context.getPackageName());
-			dbHelper = new DataBaseHelper(db);
-
 			dbHelper.emptyTable(Global.DB_TABLE_COURSES);
 		} catch (Exception e) {
 			e.printStackTrace();

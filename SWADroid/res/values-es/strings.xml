@@ -107,7 +107,7 @@
 		momento.\n\n¿Desea abrir ahora la pantalla de configuración?</string>
     <string name="initialDialogTitle">IMPORTANTE</string>
     <string name="upgradeMsg">Debido a cambios en la base de datos todos los
-		datos de las preguntas de test han sido borrados.\n\nDisculpe las
+		datos han sido borrados.\n\nDisculpe las
 		molestias.</string>
     <string name="errorBadLoginMsg">Usuario o contraseña incorrectos</string>
     <string name="errorServerResponseMsg">Error en respuesta del servidor</string>
@@ -246,6 +246,8 @@ Seleccione: Sesiones de prácticas - Nueva</string>
     <string name="froyoFunctionMsg">Esta función requiere Android 2.2 o superior</string>
     <string name="groupSeparator">: </string>
     <string name="groupTypesModuleLabel">Conseguir tipos de grupo</string>
+    <string name="groupTypesProgressDescription">Obteniendo tipos de grupos...</string>
+    <string name="groupTypesProgressTitle">Tipos de grupos</string>
     <string name="sendMyGroupsProgressDescription">Enviando inscripción a grupos</string>
     <string name="sendMyGroupsProgressTitle">Inscripción en grupos</string>
     <string name="openingTime">Apertura: </string>

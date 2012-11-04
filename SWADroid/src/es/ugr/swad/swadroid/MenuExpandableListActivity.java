@@ -29,8 +29,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.android.dataframework.DataFramework;
-
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 
 /**
@@ -47,11 +45,7 @@ public class MenuExpandableListActivity extends ExpandableListActivity {
 	/**
 	 * Database Helper.
 	 */
-	protected static DataBaseHelper dbHelper;   
-	/**
-	 * Database Framework.
-	 */
-	protected static DataFramework db;  
+	protected static DataBaseHelper dbHelper; 
 
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onStart()
@@ -174,10 +168,7 @@ public class MenuExpandableListActivity extends ExpandableListActivity {
 
 		//Initialize database
 		try {
-			db = DataFramework.getInstance();
-			db.open(this, this.getPackageName());
-			dbHelper = new DataBaseHelper(db);
-
+			dbHelper = new DataBaseHelper(this);
 		} catch (Exception ex) {
 			Log.e(ex.getClass().getSimpleName(), ex.getMessage());
 			error(ex.getMessage());
