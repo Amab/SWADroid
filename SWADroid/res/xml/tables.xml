@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <database
-    name="swadroid_db"
+    name="swadroid_db_crypt"
     version="13" >
 
     <table

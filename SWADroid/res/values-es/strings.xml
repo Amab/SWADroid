@@ -107,7 +107,7 @@
 		momento.\n\n¿Desea abrir ahora la pantalla de configuración?</string>
     <string name="initialDialogTitle">IMPORTANTE</string>
     <string name="upgradeMsg">Debido a cambios en la base de datos todos los
-		datos de las preguntas de test han sido borrados.\n\nDisculpe las
+		datos han sido borrados.\n\nDisculpe las
 		molestias.</string>
     <string name="errorBadLoginMsg">Usuario o contraseña incorrectos</string>
     <string name="errorServerResponseMsg">Error en respuesta del servidor</string>

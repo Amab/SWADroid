@@ -19,6 +19,8 @@
 
 package es.ugr.swad.swadroid;
 
+import java.util.Random;
+
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -34,7 +36,7 @@ public class Global {
 	/**
 	 * SWAD application key
 	 */
-	private static final String AppKey = "";
+	private static final String AppKey = "HTC-Desire";
 	/**
 	 * Server URL
 	 */
@@ -63,8 +65,6 @@ public class Global {
 	 * Short name of the full course.
 	 * */
 	private static String selectedCourseFullName;
-		
-
 	/**
 	 * Code of the chosen course for rollcall. All next actions are referred to this course.
 	 */
@@ -77,6 +77,14 @@ public class Global {
 	 * Indicates if there are changes on db
 	 * */
 	private static boolean dbCleaned = false;
+	/**
+	 * Base string to generate random alphanumeric strings
+	 */
+	private static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	/**
+	 * Random generator
+	 */
+	private static Random rnd = new Random();
 	/**
 	 * Null value returned by webservices when a field is empty
 	 */
@@ -461,5 +469,18 @@ public class Global {
 	 * */
 	public static boolean isDbCleaned(){
 		return dbCleaned;
+	}
+	
+	/**
+	 * Generates a random string of length len
+	 * @param len Length of random string
+	 * @return A random string of length len
+	 */
+	public static String randomString(int len) 
+	{
+	   StringBuilder sb = new StringBuilder(len);
+	   for(int i = 0; i < len; i++) 
+	      sb.append(AB.charAt(rnd.nextInt(AB.length())));
+	   return sb.toString();
 	}
 }

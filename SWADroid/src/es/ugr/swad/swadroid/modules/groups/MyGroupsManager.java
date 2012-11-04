@@ -93,9 +93,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 		
 		// Initialize database
 		try {
-			db = DataFramework.getInstance();
-			db.open(this, getPackageName());
-			dbHelper = new DataBaseHelper(db);
+			dbHelper = new DataBaseHelper(getBaseContext());
 		} catch (Exception ex) {
 			Log.e(ex.getClass().getSimpleName(), ex.getMessage());
 			ex.printStackTrace();
