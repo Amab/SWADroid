@@ -246,7 +246,6 @@ Seleccione: Sesiones de prácticas - Nueva</string>
     <string name="froyoFunctionMsg">Esta función requiere Android 2.2 o superior</string>
     <string name="groupSeparator">: </string>
     <string name="groupTypesModuleLabel">Conseguir tipos de grupo</string>
-    <string name="groupTypesProgressDescription">Obteniendo tipos de grupos...</string>
     <string name="groupTypesProgressTitle">Tipos de grupos</string>
     <string name="sendMyGroupsProgressDescription">Enviando inscripción a grupos</string>
     <string name="sendMyGroupsProgressTitle">Inscripción en grupos</string>
