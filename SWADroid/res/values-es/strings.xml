@@ -37,24 +37,24 @@
     <string name="organization_preferences">Universidad de Granada</string>
     <string name="loginTitle_menu">Conectar</string>
     <string name="loginProgressTitle">Identificación</string>
-    <string name="loginProgressDescription">Conectando...</string>
+    <string name="loginProgressDescription">Conectando&#8230;</string>
     <string name="coursesProgressTitle">Asignaturas</string>
-    <string name="coursesProgressDescription">Obteniendo asignaturas...</string>
+    <string name="coursesProgressDescription">Obteniendo asignaturas&#8230;</string>
     <string name="notificationsProgressTitle">Notificaciones</string>
-    <string name="notificationsProgressDescription">Obteniendo nuevas notificaciones...</string>
+    <string name="notificationsProgressDescription">Obteniendo nuevas notificaciones&#8230;</string>
     <string name="notificationsEmptyListMsg">No se ha descargado ninguna notificación.\n\nPara descargar las
 		notificaciones más recientes pulse el icono de la esquina superior derecha de la pantalla.</string>
     <string name="notificationsDownloadedMsg">Notificaciones descargadas</string>
     <string name="testsDownloadProgressTitle">Tests</string>
     <string name="testsDownloadProgressDescription">Sincronizando preguntas de test.\n\nDependiendo del número de
-		preguntas a sincronizar, el procesamiento de los datos puede tardar unos minutos.\n\nPor favor, espere...</string>
+		preguntas a sincronizar, el procesamiento de los datos puede tardar unos minutos.\n\nPor favor, espere&#8230;</string>
     <string name="errorMsgLaunchingActivity">Ha ocurrido un error durante la ejecución de la
 		operación</string>
     <string name="errorMsgWorkaroundEmulator">Mierda. Ese bug del emulador de Android ha vuelto a
-		aparecer. Reintentando...</string>
+		aparecer. Reintentando&#8230;</string>
     <string name="errorMsgNoConnection">No hay conexión</string>
     <string name="errorCopyMsg_DB">Error copiando base de datos</string>
-    <string name="upgradeMsg_DB">Actualizando base de datos...</string>
+    <string name="upgradeMsg_DB">Actualizando base de datos&#8230;</string>
     <string name="loginSuccessfulMsg">Conectado</string>
     <string name="examAnnouncement">Convocatoria de examen</string>
     <string name="marksFile">Calificaciones</string>
@@ -115,14 +115,14 @@
     <string name="errorConnectionMsg">Error durante la conexión con el servidor</string>
     <string name="errorTimeoutMsg">Tiempo de espera agotado intentando conectar con el
 		servidor</string>
-    <string name="sendingMessageMsg">Enviando mensaje...</string>
+    <string name="sendingMessageMsg">Enviando mensaje&#8230;</string>
     <string name="messageSendedMsg">Mensaje enviado</string>
     <string name="messageSendErrorMsg">Error al enviar el mensaje. Compruebe los datos introducidos</string>
     <string name="message_receivers_title">Destinatarios (separados por comas)</string>
     <string name="message_subject_title">Asunto</string>
     <string name="message_body_title">Mensaje</string>
     <string name="notice_body_title">Aviso</string>
-    <string name="publishingNotice">Publicando aviso...</string>
+    <string name="publishingNotice">Publicando aviso&#8230;</string>
     <string name="noticePublished">Aviso publicado</string>
     <string name="noticeSendError">Error al publicar el nuevo aviso</string>
     <string name="sendMsg">Enviar</string>
@@ -145,7 +145,7 @@
     <string name="users">Usuarios</string>
     <string name="usersDownloadProgressTitle">Estudiantes</string>
     <string name="usersDownloadProgressDescription">Sincronizando estudiantes.\n\nDependiendo del número de
-		estudiantes a sincronizar, el procesamiento de los datos puede tardar unos minutos.\n\nPor favor, espere...</string>
+		estudiantes a sincronizar, el procesamiento de los datos puede tardar unos minutos.\n\nPor favor, espere&#8230;</string>
     <string name="documentsDownloadModuleLabel">Documentos</string>
     <string name="documentsDownloadProgressDescription">Obteniendo árbol de archivos..</string>
     <string name="sharedsDownloadModuleLabel">Zona común</string>
@@ -192,8 +192,6 @@ Intente "Actualizar alumnos"</string>
     <string name="noCameraFound">El dispositivo no dispone de cámara</string>
     <string name="saveMsg">Guardar</string>
     <string name="addSessionTitle_menu">Nueva sesión de prácticas</string>
-    <string name="groupsProgressDescription">Obteniendo grupos...</string>
-    <string name="groupsProgressTitle">Grupos</string>
     <string name="noGroupsAvailableMsg">No existen grupos para la asignatura seleccionada</string>
     <string name="groupsUpdated">Grupos actualizados</string>
     <string name="sessionCourseText">Asignatura</string>
@@ -224,7 +222,7 @@ Intente "Actualizar alumnos"</string>
     <string name="rollcallModuleLabel">Pasar lista</string>
     <string name="studentsTitle">Estudiantes</string>
     <string name="studentsDownloadProgressDescription">Sincronizando estudiantes.\n\nDependiendo del número de
-		estudiantes a sincronizar, el procesamiento de los datos puede tardar unos minutos.\n\nPor favor, espere...</string>
+		estudiantes a sincronizar, el procesamiento de los datos puede tardar unos minutos.\n\nPor favor, espere&#8230;</string>
     <string name="studentsList">Lista de estudiantes</string>
     <string name="studentsDownloadProgressTitle">Estudiantes</string>
     <string name="studentsPresent">Estudiantes presentes</string>
@@ -246,8 +244,6 @@ Seleccione: Sesiones de prácticas - Nueva</string>
     <string name="froyoFunctionMsg">Esta función requiere Android 2.2 o superior</string>
     <string name="groupSeparator">: </string>
     <string name="groupTypesModuleLabel">Conseguir tipos de grupo</string>
-    <string name="sendMyGroupsProgressDescription">Enviando inscripción a grupos</string>
-    <string name="sendMyGroupsProgressTitle">Inscripción en grupos</string>
     <string name="openingTime">Apertura: </string>
     <string name="noGroupsText">No se han creado grupos dentro de la asignatura</string>
     <string name="changeGroups">Cambiar de grupos</string>
@@ -256,6 +252,11 @@ Seleccione: Sesiones de prácticas - Nueva</string>
     <string name="confirmEnrollments">Confirmar inscripciones solicitadas </string>
     <string name="areYouSure"> ¿Seguro que quiere inscribirse en los grupos seleccionados?</string>
     <string name="failedEnrollment">Lo sentimos pero la inscripción en los grupos seleccionados no se pudo realizar</string>
-    <string name="groupTypesProgressDescription">Obteniendo tipos de grupo...</string>
+    <string name="groupTypesProgressDescription">Obteniendo tipos de grupo&#8230;\nPor favor, espere&#8230;</string>
+    <string name="groupsProgressDescription">Obteniendo grupos&#8230;\nPor favor, espere&#8230;</string>
+    <string name="groupTypesProgressTitle">Tipos de grupos</string>
+    <string name="groupsProgressTitle">Grupos</string>
+    <string name="sendMyGroupsProgressDescription">Enviando inscripción a grupos&#8230;\nPor favor, espere&#8230;</string>
+    <string name="sendMyGroupsProgressTitle">Inscripción a grupos</string>
 </resources>
 

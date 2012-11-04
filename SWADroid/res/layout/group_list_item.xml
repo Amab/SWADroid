@@ -21,7 +21,6 @@
 		android:layout_height="wrap_content"
 		android:layout_toRightOf="@id/padlockIcon"
 		android:textColor="@android:color/black"
-		android:text="Prueba"
 		android:focusable="false"
 		android:clickable="false"
 		android:visibility="gone"/>
@@ -30,7 +29,6 @@
 		android:layout_height="wrap_content"
 		android:layout_toRightOf="@id/padlockIcon"
 		android:textColor="@android:color/black"
-		android:text="Prueba"
 		android:focusable="false"
 		android:clickable="false"
 	    />
