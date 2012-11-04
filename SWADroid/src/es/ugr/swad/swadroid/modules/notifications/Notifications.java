@@ -48,8 +48,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.dataframework.DataFramework;
-
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
@@ -399,10 +397,6 @@ public class Notifications extends Module {
 	 */
 	public void clearNotifications(Context context) {
 		try {
-			DataFramework db = DataFramework.getInstance();
-			db.open(context, context.getPackageName());
-			dbHelper = new DataBaseHelper(db);
-
 			dbHelper.emptyTable(Global.DB_TABLE_NOTIFICATIONS);
 		} catch (Exception e) {
 			e.printStackTrace();

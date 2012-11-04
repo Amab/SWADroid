@@ -33,8 +33,6 @@ import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.KeepAliveHttpsTransportSE;
 import org.xmlpull.v1.XmlPullParserException;
 
-import com.android.dataframework.DataFramework;
-
 import es.ugr.swad.swadroid.Base64;
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.Preferences;
@@ -70,7 +68,6 @@ public class NotificationsSyncAdapterService extends Service {
 	private static int NOTIF_ALERT_ID = 1982;
 	private static final int SIZE_LIMIT = 25;
 	private static Preferences prefs;
-	private static DataFramework db;
 	private static DataBaseHelper dbHelper;
 	private static String METHOD_NAME = "";
 	private static String NAMESPACE = "urn:swad";
@@ -93,9 +90,7 @@ public class NotificationsSyncAdapterService extends Service {
 	   prefs = new Preferences();
 	   
 	   try {
-		  db = DataFramework.getInstance();
-		  db.open(mContext, mContext.getPackageName());		  
-		  dbHelper = new DataBaseHelper(db);
+		   dbHelper = new DataBaseHelper(mContext);
 	   } catch (Exception e) {
 		  e.printStackTrace();
 	   }
