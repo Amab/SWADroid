@@ -123,4 +123,6 @@
     <string name="confirmEnrollments">Confirmar inscripcions sollicitades</string>
     <string name="areYouSure"> Esteu segur que vol inscriure en els grups seleccionats?</string>
     <string name="failedEnrollment">Ho sentim però la inscripció en els grups seleccionats no es va poder realitzar</string>
+    <string name="groupsProgressDescription">Obtenint groupos...</string>
+    <string name="groupTypesProgressDescription">Obtenint Tipus de grup...</string>
 </resources>

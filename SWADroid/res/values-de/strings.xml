@@ -159,4 +159,6 @@
     <string name="confirmEnrollments">Bestätigen angeforderten Einschreibungen</string>
     <string name="areYouSure">Sind Sie sicher, dass Sie sich auf den ausgewählten Gruppen einschreiben wollen?</string>
     <string name="failedEnrollment">Sorry, aber die Eintragung in den ausgewählten Gruppen konnte nicht durchgeführt werden</string>
+    <string name="groupsProgressDescription">Abrufen von Gruppen...</string>
+    <string name="groupTypesProgressDescription">Abrufen Gruppentypen...</string>
 </resources>
