@@ -181,8 +181,33 @@ public class MenuExpandableListActivity extends ExpandableListActivity {
 	 */
 	@Override
 	protected void onDestroy() {
-		dbHelper.close();
 		super.onDestroy();
+	}
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onPause()
+	 */
+	@Override
+	protected void onPause() {
+		dbHelper.close();
+		super.onPause();
+	}
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onResume()
+	 */
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		//Initialize database
+		try {
+			dbHelper = new DataBaseHelper(this);
+		} catch (Exception ex) {
+			Log.e(ex.getClass().getSimpleName(), ex.getMessage());
+			error(ex.getMessage());
+			ex.printStackTrace();
+		}
 	}
 	
 	protected void setMenuDbClean(){
