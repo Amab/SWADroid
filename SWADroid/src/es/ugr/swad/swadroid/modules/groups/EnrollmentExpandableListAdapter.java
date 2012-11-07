@@ -32,6 +32,7 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 	
 	private HashMap<Long,ArrayList<Group>> children = null;
 	private ArrayList<Model> groups = null;
+	private HashMap<Long, boolean[]> realMembership = new HashMap<Long,boolean[]>();
 	
 	private int layoutGroup = 0;
 	private int layoutChild = 0;
@@ -60,6 +61,13 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 		this.layoutGroup = layoutGroup;
 		this.layoutChild = layoutChild;
 		
+		//Initialize real inscription
+		for(Map.Entry<Long, ArrayList<Group>> entry : this.children.entrySet()){
+			Long groupTypeCode = entry.getKey();
+			ArrayList<Group> groupsChildren = entry.getValue();
+			realMembership.put(groupTypeCode, new boolean[groupsChildren.size()]);
+		}
+		setRealInscription();
 		mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
@@ -100,6 +108,13 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 		ArrayList<Group> children = this.children.get(groupTypeCode);
 		Group group = children.get(childPosition);
 		
+		if (realMembership.get(groupTypeCode)[childPosition]){
+			holder.relativeLayout.setBackgroundColor(context.getResources().getColor(R.color.slategray));
+		}else{
+			holder.relativeLayout.setBackgroundColor(context.getResources().getColor(android.R.color.white));
+		}
+		
+		
 		//Data from Group
 		String groupName = group.getGroupName();
 		int maxStudents = group.getMaxStudents();
@@ -137,27 +152,29 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 			holder.radioButton.setVisibility(View.VISIBLE);
 			
 			holder.radioButton.setText(groupName);
-			if(member != 0) 
+			if(member != 0) {
 				holder.radioButton.setChecked(true);
-			else	
+			}else{	
 				holder.radioButton.setChecked(false);
+			}
 		}else{ //multiple inscriptions :
 			
 			holder.checkBox.setVisibility(View.VISIBLE);
 			holder.radioButton.setVisibility(View.GONE);
 			
 			holder.checkBox.setText(groupName);
-			if(member != 0) 
+			if(member != 0){ 
 				holder.checkBox.setChecked(true);
-			else 
+			}else{ 
 				holder.checkBox.setChecked(false);
+			}	
 		}
 
 		holder.nStudentText.setText(context.getString(R.string.numStudent) + String.valueOf(students));
 		if(maxStudents != -1)
 			holder.vacantsText.setText( context.getString(R.string.vacants)+" : "+String.valueOf(maxStudents - students));
 		else 					
-			holder.vacantsText.setText(context.getString(R.string.vacants)+ " : -");
+			holder.vacantsText.setText(context.getString(R.string.vacants)+ " : " + context.getString(R.string.withoutLimit));
 		
 		return convertView;
 	}
@@ -266,6 +283,7 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 	
 	public void resetChildren(HashMap<Long,ArrayList<Group>> children){
 		this.children = children;
+		setRealInscription();
 	}
 	
 	public String getChosenGroupCodesAsString(){
@@ -300,6 +318,23 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 			}
 		}
 		return groupCodes;
+	}
+	
+	private void setRealInscription(){
+		for(Map.Entry<Long, ArrayList<Group>> entry : this.children.entrySet()){
+			Long groupTypeCode = entry.getKey();
+			ArrayList<Group> children = entry.getValue();
+			Group g;
+			for(int i = 0; i < children.size(); ++i){
+				g = children.get(i);
+				if(g.getMember() == 1){
+					realMembership.get(groupTypeCode)[i] = true;
+				}else{
+					realMembership.get(groupTypeCode)[i] = false;
+				}
+				
+			}
+		}
 	}
 	
 }

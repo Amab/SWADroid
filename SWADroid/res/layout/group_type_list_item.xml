@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="5dp"
-    android:background="@color/pale_yellow">
+    >
  	<TextView     
  	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
@@ -13,6 +13,7 @@
 		android:text="Group Type Name"
 		android:paddingRight = "10dp"
 		android:paddingLeft ="35dp"
+		android:textSize="18sp"
 	  />
  	<TextView
  	    android:layout_width="wrap_content"
