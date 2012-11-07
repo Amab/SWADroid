@@ -13,7 +13,7 @@
 		android:text="Group Type Name"
 		android:paddingRight = "10dp"
 		android:paddingLeft ="35dp"
-		android:textSize="18sp"
+		android:textSize="24sp"
 	  />
  	<TextView
  	    android:layout_width="wrap_content"
