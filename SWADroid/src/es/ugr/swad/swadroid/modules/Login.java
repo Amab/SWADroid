@@ -132,13 +132,9 @@ public class Login extends Module {
 				if(isInteger(userID)) {
 					userID = String.valueOf(Integer.parseInt(userID));
 					
-				//If the first position is a char, remove it
-				} else if(isInteger(userID.substring(1))) {
-					userID = String.valueOf(Integer.parseInt(userID.substring(1)));
-					
-				//If the last position is a char, remove it
-				} else {
-					userID = String.valueOf(Integer.parseInt(userID.substring(0, userID.length()-1)));
+				//If the last position of the DNI is a char, remove it
+				} else if(isInteger(userID.substring(0, userID.length()-1))) {
+					userID = String.valueOf(Integer.parseInt(userID.substring(0, userID.length()-1)));					
 				}
 			}
 			
