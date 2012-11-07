@@ -669,7 +669,7 @@ public class DataBaseHelper {
 		while (groupCodes.moveToNext()){
 			Group group = (Group)this.getRow(Global.DB_TABLE_GROUPS, "id", String.valueOf(groupCodes.getInt(0)));
 			groups.add(group);
-		}	
+		}
 		return groups;
 	}
 	

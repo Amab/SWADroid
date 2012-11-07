@@ -12,6 +12,7 @@ import es.ugr.swad.swadroid.model.Model;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -108,8 +109,10 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 		ArrayList<Group> children = this.children.get(groupTypeCode);
 		Group group = children.get(childPosition);
 		
-		if (realMembership.get(groupTypeCode)[childPosition]){
-			holder.relativeLayout.setBackgroundColor(context.getResources().getColor(R.color.slategray));
+		
+		boolean  isCurrentMember = realMembership.get(groupTypeCode)[childPosition];
+		if (isCurrentMember){
+			holder.relativeLayout.setBackgroundColor(context.getResources().getColor(R.color.lightskyblue));
 		}else{
 			holder.relativeLayout.setBackgroundColor(context.getResources().getColor(android.R.color.white));
 		}
@@ -327,11 +330,11 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 			Group g;
 			for(int i = 0; i < children.size(); ++i){
 				g = children.get(i);
-				if(g.getMember() == 1){
+				if(g.getMember() == 1)
 					realMembership.get(groupTypeCode)[i] = true;
-				}else{
+				else
 					realMembership.get(groupTypeCode)[i] = false;
-				}
+				
 				
 			}
 		}

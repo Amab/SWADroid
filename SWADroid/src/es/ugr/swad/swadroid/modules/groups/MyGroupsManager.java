@@ -150,6 +150,9 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 					((EnrollmentExpandableListAdapter)getExpandableListView().getExpandableListAdapter()).notifyDataSetChanged();
 					showFailedEnrollmentDialog();
 				}else{
+					HashMap<Long,ArrayList<Group>> currentGroups = getHashMapGroups(groupTypes);
+					((EnrollmentExpandableListAdapter)getExpandableListView().getExpandableListAdapter()).resetChildren(currentGroups);
+					((EnrollmentExpandableListAdapter)getExpandableListView().getExpandableListAdapter()).notifyDataSetChanged();
 					showSuccessfulEnrollmentDialog();
 				}
 				break;
