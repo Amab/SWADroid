@@ -47,11 +47,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 	 * Course code of current selected course
 	 * */
 	private long courseCode = -1;
-	/**
-	 * Database Framework.
-	 */
-	protected static DataFramework db; 
-	
+
 	private ArrayList<Model> groupTypes;
 	
 	private HashMap<Long,ArrayList<Group>> groups;
@@ -90,14 +86,6 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		// Initialize database
-		try {
-			dbHelper = new DataBaseHelper(getBaseContext());
-		} catch (Exception ex) {
-			Log.e(ex.getClass().getSimpleName(), ex.getMessage());
-			ex.printStackTrace();
-		}
 		
 		courseCode = getIntent().getLongExtra("courseCode",-1);
 		

@@ -178,10 +178,9 @@
     <string name="downloadFile">Volver a descargar</string>
     <string name="deleteFile">Borrar</string>
     <string name="vacants">Vacantes</string>
-	<string name="numStudent">Nº de estud.</string>
-	<string name="maxStudent">Máx.estud</string>
+	<string name="numStudent">Nº de estudiantes: </string>
     <string name="enrollment">Inscripción</string>
-    <string name="myGroupsModuleLabel">Mis Grupos</string>
+    <string name="myGroupsModuleLabel">Mis grupos</string>
 
     <string name="scan_no_photos">No se han podido guardar las fotos de los estudiantes</string>
     <string name="noStudentsAvailableMsg">Esta asignatura no tiene alumnos</string>
@@ -248,7 +247,7 @@ Seleccione: Sesiones de prácticas - Nueva</string>
     <string name="noGroupsText">No se han creado grupos dentro de la asignatura</string>
     <string name="changeGroups">Cambiar de grupos</string>
      <string name="resultEnrollment">Resultado de la inscripción</string>
-    <string name="successfullEnrollment">Todas las inscripciones se han realizado con éxito. Por favor, compruebe que en realidad se está inscrito en los grupos deseados </string>
+    <string name="successfullEnrollment">Todas las inscripciones se han realizado con éxito. Por favor, compruebe que está inscrito en los grupos deseados </string>
     <string name="confirmEnrollments">Confirmar inscripciones solicitadas </string>
     <string name="areYouSure"> ¿Seguro que quiere inscribirse en los grupos seleccionados?</string>
     <string name="failedEnrollment">Lo sentimos pero la inscripción en los grupos seleccionados no se pudo realizar</string>
@@ -258,5 +257,6 @@ Seleccione: Sesiones de prácticas - Nueva</string>
     <string name="groupsProgressTitle">Grupos</string>
     <string name="sendMyGroupsProgressDescription">Enviando inscripción a grupos&#8230;\nPor favor, espere&#8230;</string>
     <string name="sendMyGroupsProgressTitle">Inscripción a grupos</string>
+    <string name="withoutLimit">sin límite</string>
 </resources>
 

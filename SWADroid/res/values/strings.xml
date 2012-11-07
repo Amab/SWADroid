@@ -182,7 +182,7 @@
     <string name="downloadFile">Download again</string>
     <string name="deleteFile">Delete</string>
     <string name="vacants">Vacants</string>
-	<string name="numStudent">No. of stud.</string>
+	<string name="numStudent">No. of students: </string>
 	<string name="maxStudent">Max.stud.</string>
 	<string name="enrollment">Enrollment</string>
 	<string name="myGroupsModuleLabel">My groups</string>
@@ -263,9 +263,10 @@ configuration anytime using the "Clean Database" option\n\nDo you want to contin
     <string name="noGroupsText">No groups have been created in the course</string>
     <string name="changeGroups">Change my groups</string>
     <string name="resultEnrollment">Result on the enrollment</string>
-    <string name="successfullEnrollment">All the enrollments were made successfully. Please check that you are actually enrolled in your wished groups </string>
+    <string name="successfullEnrollment">All the enrollments were made successfully. Please check that you are enrolled in your wished groups </string>
     <string name="confirmEnrollments">Confirm requested enrollments</string>
     <string name="areYouSure">Are you sure, that you want to enroll on the selected groups?</string>
     <string name="ok">OK</string>
     <string name="failedEnrollment">Sorry but the enrollment on the selected groups could not be performed</string>
+	<string name="withoutLimit">unlimited</string>
 </resources>

@@ -111,15 +111,15 @@
 		 https://market.android.com/details?id=es.ugr.swad.swadroid</string>
 	<string name="mailingListTitle">Llista de correu</string>
 	<string name="vacants">Vacants</string>
-	<!-- <string name="numStudent">Nombre d'estud.</string> -->
-	<!-- <string name="maxStudent">Màxim d'estud.</string> -->
+	<string name="numStudent">Nombre dels estudiants: </string>
+	<string name="maxStudent">Màxim dels estudiants: </string>
 	<string name="enrollment">Inscripció</string>
 	<string name="myGroupsModuleLabel">Els meus grups</string>
 	<string name="groupSeparator">: </string>
 	<string name="openingTime">Obertura: </string>
 	<string name="changeGroups">Canviar de grups</string>
 	<string name="resultEnrollment">Resultat de la inscripció</string>
-    <string name="successfullEnrollment">Totes les inscripcions shan realitzat amb èxit. Si us plau, comprovi que en realitat s està inscrit en els grups desitjats</string>
+    <string name="successfullEnrollment">Totes les inscripcions shan realitzat amb èxit. Si us plau, comprovi que s està inscrit en els grups desitjats</string>
     <string name="confirmEnrollments">Confirmar inscripcions sollicitades</string>
     <string name="areYouSure"> Esteu segur que vol inscriure en els grups seleccionats?</string>
     <string name="failedEnrollment">Ho sentim però la inscripció en els grups seleccionats no es va poder realitzar</string>
@@ -129,4 +129,5 @@
     <string name="groupsProgressTitle">Groupos</string>
     <string name="sendMyGroupsProgressDescription">Enviant Inscripció a grups&#8230;\nSi us plau&#8230;</string>
     <string name="sendMyGroupsProgressTitle">Inscripció en grups</string>
+    <string name="withoutLimit">sense límit</string>
 </resources>
