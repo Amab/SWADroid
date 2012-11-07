@@ -232,6 +232,7 @@ public class DataFrameworkCore {
 			
 	        mDbHelper = new DatabaseHelper();
 	        mDb = mDbHelper.getWritableDatabase(password);
+	        //mDb = SQLiteDatabase.openDatabase(mCtx.getDatabasePath(mDataBaseName).getPath(), password, null, SQLiteDatabase.OPEN_READWRITE | SQLiteDatabase.CREATE_IF_NECESSARY | SQLiteDatabase.NO_LOCALIZED_COLLATORS);
 			
 	        if (mSaveInitialValues)	        
 	        	saveInitialValues();

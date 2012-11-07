@@ -88,8 +88,8 @@ public class DataBaseHelper {
 			DBKey = Global.randomString(DB_KEY_LENGTH);
 			prefs.setDBKey(DBKey);
 			mCtx.deleteDatabase("swadroid_db");
-			SQLiteDatabase database = SQLiteDatabase.openOrCreateDatabase(mCtx.getDatabasePath("swadroid_db_crypt"), DBKey, null);
-			database.close();
+			//SQLiteDatabase database = SQLiteDatabase.openOrCreateDatabase(mCtx.getDatabasePath("swadroid_db_crypt"), DBKey, null);
+			//database.close();
 		}
 		
 		Log.d("DataBaseHelper", "DBKey=" + DBKey);
