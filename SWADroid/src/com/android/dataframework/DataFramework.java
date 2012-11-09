@@ -29,7 +29,8 @@ package com.android.dataframework;
 
 import android.content.Context;
 import android.database.Cursor;
-import net.sqlcipher.database.SQLiteDatabase;
+import android.database.sqlite.SQLiteDatabase;
+//import net.sqlcipher.database.SQLiteDatabase;
 
 import com.android.dataframework.core.DataFrameworkCore;
 import com.android.dataframework.core.Table;
@@ -51,10 +52,12 @@ public class DataFramework {
     
     private DataFrameworkCore mCore;
     
-    public void open(Context context, String namePackage, String password) throws XmlPullParserException, IOException 
+    //public void open(Context context, String namePackage, String password) throws XmlPullParserException, IOException 
+    public void open(Context context, String namePackage) throws XmlPullParserException, IOException
     {
     	if (mOpenInstances == 0){
-			mCore.open(context, namePackage, mTables, password);
+			//mCore.open(context, namePackage, mTables, password);
+    		mCore.open(context, namePackage, mTables);
 		}
     	mOpenInstances++;
     }

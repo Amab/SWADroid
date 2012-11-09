@@ -86,7 +86,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 	/**
 	 * Database passphrase
 	 */
-	private String DBKey;
+	//private String DBKey;
 	/**
 	 * Last application version preference name.
 	 */
@@ -138,7 +138,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 	/**
 	 * Database passphrase preference name.
 	 */
-	private static final String DBKEYPREF = "DBKeyPref";
+	//private static final String DBKEYPREF = "DBKeyPref";
 	/**
 	 * User ID preference
 	 */
@@ -277,20 +277,20 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 	 * Gets the database passphrase
 	 * @return The database passphrase
 	 */
-	public String getDBKey() {
+	/*public String getDBKey() {
 		return DBKey;
-	}
+	}*/
 
 	/**
 	 * Sets the database passphrase
 	 * @param key The database passphrase
 	 */
-	public void setDBKey(String key) {
+	/*public void setDBKey(String key) {
 		DBKey = key;
 		editor = prefs.edit();
 		editor.putString(DBKEYPREF, DBKey);
 		editor.commit();
-	}
+	}*/
 
 	/**
 	 * Generates the stars sequence to be showed on password field
@@ -355,7 +355,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 		lastVersion = prefs.getInt(LASTVERSIONPREF, 0);
 		lastCourseSelected = prefs.getInt(LASTCOURSESELECTEDPREF, 0);
 		rollcallCourseSelected = prefs.getLong(ROLLCALLCOURSESELECTEDPREF, -1);
-		DBKey = prefs.getString(DBKEYPREF, "");
+		//DBKey = prefs.getString(DBKEYPREF, "");
 	}
 
 	/* (non-Javadoc)
@@ -589,7 +589,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 		editor.putInt(LASTVERSIONPREF, lastVersion);
 		editor.putInt(LASTCOURSESELECTEDPREF, lastCourseSelected);
 		editor.putLong(ROLLCALLCOURSESELECTEDPREF, rollcallCourseSelected);
-		editor.putString(DBKEYPREF, DBKey);
+		//editor.putString(DBKEYPREF, DBKey);
 		editor.commit();
 	}
 }
