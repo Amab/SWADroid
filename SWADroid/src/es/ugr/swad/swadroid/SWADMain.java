@@ -312,7 +312,7 @@ public class SWADMain extends MenuExpandableListActivity {
 
 				//If this is an upgrade, show upgrade dialog
 			} else if(lastVersion < currentVersion) {				
-				showUpgradeDialog();
+				//showUpgradeDialog();
 				dbHelper.upgradeDB(this);
 				//prefs.upgradeCredentials();
 

@@ -30,8 +30,10 @@ package com.android.dataframework.core;
 import android.content.Context;
 import android.content.res.XmlResourceParser;
 import android.database.Cursor;
-import net.sqlcipher.database.SQLiteDatabase;
-import net.sqlcipher.database.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+//import net.sqlcipher.database.SQLiteDatabase;
+//import net.sqlcipher.database.SQLiteOpenHelper;
 import android.util.Log;
 import com.android.dataframework.DataFramework;
 import com.android.dataframework.Entity;
@@ -149,7 +151,8 @@ public class DataFrameworkCore {
      * @param idInitialValues recurso XML con los registros a generar en la primera carga
      * 
      */	
-	public void open(Context context, String namePackage, ArrayList<Table> tables, String password) throws XmlPullParserException, IOException {
+	//public void open(Context context, String namePackage, ArrayList<Table> tables, String password) throws XmlPullParserException, IOException {
+    public void open(Context context, String namePackage, ArrayList<Table> tables) throws XmlPullParserException, IOException {
 		try {
 			// Solo en el caso de que no est�n cargadas las tablas, leemos el XML
 			if (tables.size() == 0)
@@ -231,7 +234,8 @@ public class DataFrameworkCore {
 			mSaveInitialValues = false;
 			
 	        mDbHelper = new DatabaseHelper();
-	        mDb = mDbHelper.getWritableDatabase(password);
+	        mDb = mDbHelper.getWritableDatabase();
+	        //mDb = mDbHelper.getWritableDatabase(password);
 	        //mDb = SQLiteDatabase.openDatabase(mCtx.getDatabasePath(mDataBaseName).getPath(), password, null, SQLiteDatabase.OPEN_READWRITE | SQLiteDatabase.CREATE_IF_NECESSARY | SQLiteDatabase.NO_LOCALIZED_COLLATORS);
 			
 	        if (mSaveInitialValues)	        
