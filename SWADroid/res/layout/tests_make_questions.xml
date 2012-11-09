@@ -5,13 +5,18 @@
     android:layout_height="match_parent"
     android:background="@color/background">
     <include layout="@layout/action_bar"/>    
- 		
+ 	
+  	<RelativeLayout android:layout_below="@id/actionBarLayout" android:id="@+id/courseNameLayout"
+        android:layout_height="wrap_content" android:layout_width="fill_parent">
+        <include layout="@layout/course_or_group_name" />
+    </RelativeLayout>
+ 	
  	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 		android:id="@+id/testMakeStem"
     	android:orientation="horizontal"
     	android:layout_width="match_parent"
     	android:layout_height="wrap_content"
-		android:layout_below="@+id/actionBarLayout"
+		android:layout_below="@+id/courseNameLayout"
 		android:weightSum="1.0"
 		android:gravity="center"
     	android:background="@android:color/transparent">

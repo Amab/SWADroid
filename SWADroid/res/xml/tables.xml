@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <database
-    name="swadroid_db"
-    version="11" >
+    name="swadroid_db_crypt"
+    version="13" >
 
     <table
         name="courses"
@@ -11,14 +11,20 @@
             obligatory="true"
             type="long" />
         <field
-            name="name"
-            obligatory="true"
-            type="text" />
-        <field
             name="userRole"
             new-in-version="9"
             obligatory="true"
             type="integer" />
+        <field
+            name="shortName"
+            new-in-version="12"
+            obligatory="true"
+            type="text" />
+        <field
+            name="fullName"
+            new-in-version="12"
+            obligatory="true"
+            type="text" />
     </table>
     <table
         name="notifications"
@@ -46,6 +52,11 @@
             type="text" />
         <field
             name="userFirstname"
+            obligatory="true"
+            type="text" />
+        <field
+            name="userPhoto"
+            new-in-version="13"
             obligatory="true"
             type="text" />
         <field
@@ -259,7 +270,7 @@
         new-in-version="11"
         to-string="%name%" >
         <field
-            name="groupCode"
+            name="id"
             obligatory="true"
             type="integer" />
         <field
@@ -267,13 +278,30 @@
             obligatory="true"
             type="text" />
         <field
-            name="groupTypeCode"
+            name="maxStudents"
+            new-in-version="13"
             obligatory="true"
             type="integer" />
         <field
-            name="groupTypeName"
+            name="students"
+            new-in-version="13"
             obligatory="true"
-            type="text" />
+            type="integer" />
+        <field
+            name="open"
+            new-in-version="13"
+            obligatory="true"
+            type="integer" />
+        <field
+            name="fileZones"
+            new-in-version="13"
+            obligatory="true"
+            type="integer" />
+        <field
+            name="member"
+            new-in-version="13"
+            obligatory="true"
+            type="integer" />
     </table>
     <table
         name="group_course"
@@ -287,6 +315,50 @@
         <field
             name="crsCod"
             foreign-table="courses"
+            obligatory="true"
+            type="foreign-key" />
+    </table>
+    <table
+        name="group_types"
+        new-in-version="13"
+        to-string="%name%" >
+        <field
+            name="id"
+            obligatory="true"
+            type="integer" />
+        <field
+            name="courseCode"
+            obligatory="true"
+            type="long" />
+        <field
+            name="groupTypeName"
+            obligatory="true"
+            type="text" />
+        <field
+            name="mandatory"
+            obligatory="true"
+            type="integer" />
+        <field
+            name="multiple"
+            obligatory="true"
+            type="integer" />
+        <field
+            name="openTime"
+            obligatory="true"
+            type="long" />
+    </table>
+    <table
+        name="group_grouptypes"
+        new-in-version="13"
+        to-string="%name%" >
+        <field
+            name="grpTypCod"
+            foreign-table="group_types"
+            obligatory="true"
+            type="foreign-key" />
+        <field
+            name="grpCod"
+            foreign-table="groups"
             obligatory="true"
             type="foreign-key" />
     </table>

@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">SWADroid</string>
     <string name="serverName_preferences">Servidor</string>
-    <string name="serverSummary_preferences">Servidor (sin http://, vacío para servidor por defecto)</string>
+    <string name="serverSummary_preferences">Servidor (sin http://)</string>
     <string name="serverTitle_preferences">Servidor</string>
     <string name="loginModuleLabel">Conectar</string>
     <string name="notificationsModuleLabel">Notificaciones</string>
@@ -30,31 +30,31 @@
     <string name="about_preferences">Acerca de</string>
     <string name="versionTitle_preferences">Versión de la aplicación</string>
     <string name="author_preferences">Coordinador: Antonio Cañas Vargas
-		\nProgramadores: 
+		\nProgramadores:
 		Juan Miguel Boyero Corral		
 		\nHelena Rodríguez Gijón		
 		\nAntonio Aguilera Malagón</string>
     <string name="organization_preferences">Universidad de Granada</string>
     <string name="loginTitle_menu">Conectar</string>
     <string name="loginProgressTitle">Identificación</string>
-    <string name="loginProgressDescription">Conectando...</string>
+    <string name="loginProgressDescription">Conectando&#8230;</string>
     <string name="coursesProgressTitle">Asignaturas</string>
-    <string name="coursesProgressDescription">Obteniendo asignaturas...</string>
+    <string name="coursesProgressDescription">Obteniendo asignaturas&#8230;</string>
     <string name="notificationsProgressTitle">Notificaciones</string>
-    <string name="notificationsProgressDescription">Obteniendo nuevas notificaciones...</string>
+    <string name="notificationsProgressDescription">Obteniendo nuevas notificaciones&#8230;</string>
     <string name="notificationsEmptyListMsg">No se ha descargado ninguna notificación.\n\nPara descargar las
 		notificaciones más recientes pulse el icono de la esquina superior derecha de la pantalla.</string>
     <string name="notificationsDownloadedMsg">Notificaciones descargadas</string>
     <string name="testsDownloadProgressTitle">Tests</string>
     <string name="testsDownloadProgressDescription">Sincronizando preguntas de test.\n\nDependiendo del número de
-		preguntas a sincronizar, el procesamiento de los datos puede tardar unos minutos.\n\nPor favor, espere...</string>
+		preguntas a sincronizar, el procesamiento de los datos puede tardar unos minutos.\n\nPor favor, espere&#8230;</string>
     <string name="errorMsgLaunchingActivity">Ha ocurrido un error durante la ejecución de la
 		operación</string>
     <string name="errorMsgWorkaroundEmulator">Mierda. Ese bug del emulador de Android ha vuelto a
-		aparecer. Reintentando...</string>
+		aparecer. Reintentando&#8230;</string>
     <string name="errorMsgNoConnection">No hay conexión</string>
     <string name="errorCopyMsg_DB">Error copiando base de datos</string>
-    <string name="upgradeMsg_DB">Actualizando base de datos...</string>
+    <string name="upgradeMsg_DB">Actualizando base de datos&#8230;</string>
     <string name="loginSuccessfulMsg">Conectado</string>
     <string name="examAnnouncement">Convocatoria de examen</string>
     <string name="marksFile">Calificaciones</string>
@@ -107,42 +107,47 @@
 		momento.\n\n¿Desea abrir ahora la pantalla de configuración?</string>
     <string name="initialDialogTitle">IMPORTANTE</string>
     <string name="upgradeMsg">Debido a cambios en la base de datos todos los
-		datos de las preguntas de test han sido borrados.\n\nDisculpe las
+		datos han sido borrados.\n\nDisculpe las
 		molestias.</string>
     <string name="errorBadLoginMsg">Usuario o contraseña incorrectos</string>
-    <string name="errorBadAppKeyMsg">Clave de aplicación incorrecta. Por favor, contacte con el desarrollador.</string>
     <string name="errorServerResponseMsg">Error en respuesta del servidor</string>
-    <string name="errorConnectionMsg">Error durante la conexión con el servidor.\nPor favor, compruebe que la URL del servidor en la ventana de configuración es correcta.\nSi tiene dudas, deje el campo vacío para establecer el servidor por defecto.</string>
-    <string name="errorTimeoutMsg">Tiempo de espera agotado intentando conectar con el servidor</string>
-    <string name="sendingMessageMsg">Enviando mensaje...</string>
+    <string name="errorBadAppKeyMsg">Clave de aplicación incorrecta. Por favor, contacte con el desarrollador.</string>
+    <string name="errorConnectionMsg">Error durante la conexión con el servidor</string>
+    <string name="errorTimeoutMsg">Tiempo de espera agotado intentando conectar con el
+		servidor</string>
+    <string name="sendingMessageMsg">Enviando mensaje&#8230;</string>
     <string name="messageSendedMsg">Mensaje enviado</string>
     <string name="messageSendErrorMsg">Error al enviar el mensaje. Compruebe los datos introducidos</string>
     <string name="message_receivers_title">Destinatarios (separados por comas)</string>
     <string name="message_subject_title">Asunto</string>
     <string name="message_body_title">Mensaje</string>
     <string name="notice_body_title">Aviso</string>
-    <string name="publishingNotice">Publicando aviso...</string>
+    <string name="publishingNotice">Publicando aviso&#8230;</string>
     <string name="noticePublished">Aviso publicado</string>
     <string name="noticeSendError">Error al publicar el nuevo aviso</string>
     <string name="sendMsg">Enviar</string>
     <string name="cleanDatabaseMsg">Todos los datos de la base de datos han sido borrados</string>
-    <string name="shareBodyMsg">Estoy usando @SWADroid en mi Android para acceder a la
+    <string name="shareBodyMsg">Estoy usando #SWADroid en mi Android para acceder a la
 		plataforma de teleformación SWAD.\nObtenlo gratis aquí:
-		 https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid</string>
+		 https://market.android.com/details?id=es.ugr.swad.swadroid</string>
     <string name="twitterTitle">Twitter</string>
     <string name="facebookTitle">Facebook</string>
     <string name="googlePlusTitle">Google+</string>
     <string name="mailingListTitle">Lista de correo</string>
     <string name="blogTitle">Blog</string>
     <string name="marketTitle">Android Market</string>
-    <string name="notificationsAlertTitle">Nuevas notificaciones</string>
+    <string name="notificationsAlertTitle">SWADroid</string>
     <string name="notificationsAlertMsg">nuevas notificaciones</string>
     <string name="footMessageMsg">Enviado desde</string>
     <string name="marksMsg">Pulse sobre la notificación para ver la calificación.</string>
     <string name="clickToGetCourses">Pulse aquí para conseguir sus asignaturas</string>
+    <string name="attendanceModuleLabel">Pasar lista</string>
     <string name="users">Usuarios</string>
+    <string name="usersDownloadProgressTitle">Estudiantes</string>
+    <string name="usersDownloadProgressDescription">Sincronizando estudiantes.\n\nDependiendo del número de
+		estudiantes a sincronizar, el procesamiento de los datos puede tardar unos minutos.\n\nPor favor, espere&#8230;</string>
     <string name="documentsDownloadModuleLabel">Documentos</string>
-    <string name="documentsDownloadProgressDescription">Obteniendo archivos..</string>
+    <string name="documentsDownloadProgressDescription">Obteniendo árbol de archivos..</string>
     <string name="sharedsDownloadModuleLabel">Zona común</string>
     <string name="connectionRequired">Para esta funcionalidad se necesita conexión a Internet</string>
     <string name="course">Asignatura</string>
@@ -159,7 +164,24 @@
     <string name="scan_id">DNI</string>
     <string name="scan_not_valid_code">Código QR no válido</string>
     <string name="scan_data_not_found">No existen datos de este alumno</string>
-    <string name="scan_no_codes">Ningún código QR válido detectado</string>
+    <string name="scan_no_codes">No se ha detectado ningún código QR válido</string>
+    <string name="usersPresent">Estudiantes presentes</string>
+    <string name="NoNotificationsMsg">No hay nuevas notificaciones</string>
+    <string name="home_icon">Muestra la carpeta inicial</string>
+    <string name="parent_icon">Muestra la carpeta superior a la actual</string>
+    <string name="refresh_icon">Actualizar</string>
+    <string name="group">Grupo</string>
+    <string name="notificationDownloadTitle">Descargando..</string>
+    <string name="complete">completo</string>
+    <string name="fileOptions">Opciones de fichero</string>
+    <string name="openFile">Abrir</string>
+    <string name="downloadFile">Volver a descargar</string>
+    <string name="deleteFile">Borrar</string>
+    <string name="vacants">Vacantes</string>
+	<string name="numStudent">Nº de estudiantes: </string>
+    <string name="enrollment">Inscripción</string>
+    <string name="myGroupsModuleLabel">Mis grupos</string>
+
     <string name="scan_no_photos">No se han podido guardar las fotos de los estudiantes</string>
     <string name="noStudentsAvailableMsg">Esta asignatura no tiene alumnos</string>
     <string name="studentsUpdated">alumnos actualizados</string>
@@ -169,9 +191,7 @@ Intente "Actualizar alumnos"</string>
     <string name="noCameraFound">El dispositivo no dispone de cámara</string>
     <string name="saveMsg">Guardar</string>
     <string name="addSessionTitle_menu">Nueva sesión de prácticas</string>
-    <string name="groupsProgressDescription">Obteniendo grupos...</string>
-    <string name="groupsProgressTitle">Grupos</string>
-    <string name="noGroupsAvailableMsg">No existen grupos de prácticas para la asignatura seleccionada</string>
+    <string name="noGroupsAvailableMsg">No existen grupos para la asignatura seleccionada</string>
     <string name="groupsUpdated">Grupos actualizados</string>
     <string name="sessionCourseText">Asignatura</string>
     <string name="sessionGroupText">Grupo</string>
@@ -196,13 +216,12 @@ Intente "Actualizar alumnos"</string>
     <string name="sessionNoStudentsMsg">Ningún alumno ha asistido a esta sesión</string>
     <string name="studentsHistoryModuleLabel">Historial de alumnos</string>
     <string name="sessionsTitle">Sesiones de prácticas</string>
-    <string name="group">Grupo</string>
     <string name="noSessionsAvailableMsg">No existen sesiones de prácticas en la base de datos</string>
     <string name="listSampleModuleLabel">Prueba</string>
     <string name="rollcallModuleLabel">Pasar lista</string>
     <string name="studentsTitle">Estudiantes</string>
     <string name="studentsDownloadProgressDescription">Sincronizando estudiantes.\n\nDependiendo del número de
-		estudiantes a sincronizar, el procesamiento de los datos puede tardar unos minutos.\n\nPor favor, espere...</string>
+		estudiantes a sincronizar, el procesamiento de los datos puede tardar unos minutos.\n\nPor favor, espere&#8230;</string>
     <string name="studentsList">Lista de estudiantes</string>
     <string name="studentsDownloadProgressTitle">Estudiantes</string>
     <string name="studentsPresent">Estudiantes presentes</string>
@@ -221,13 +240,23 @@ Seleccione: Sesiones de prácticas - Nueva</string>
     <string name="rollcallSaved">Datos de asistencia guardados correctamente</string>
     <string name="rollcallWebServiceNotAvailable">El servicio web para enviar a SWAD los datos de asistencia no está disponible.</string>
     <string name="rollcallEvent">Evento de pasar lista</string>
-    <string name="NoNotificationsMsg">No hay nuevas notificaciones</string>
-    <string name="firstRollcallRunMsg">Debido al funcionamiento incorrecto del método getGroups, no es posible saber a qué asignatura 
-pertenecen los grupos de prácticas descargados. Por tanto, hasta que se solucione el error, 
-sólo se permite utilizar la aplicación con una única asignatura.\n\nLa asignatura seleccionada 
-debe tener definidos los grupos de prácticas en SWAD.\n\nEn cualquier momento puede borrar esta 
-configuración mediante la opción "Limpiar base de datos" del menú\n\n¿Desea continuar?</string>
-    <string name="noRollcallAllowedMsg">No se permite pasar lista para la asignatura seleccionada. Intente "Limpiar base de datos"</string>
     <string name="froyoFunctionMsg">Esta función requiere Android 2.2 o superior</string>
-    
+    <string name="groupSeparator">: </string>
+    <string name="groupTypesModuleLabel">Conseguir tipos de grupo</string>
+    <string name="openingTime">Apertura: </string>
+    <string name="noGroupsText">No se han creado grupos dentro de la asignatura</string>
+    <string name="changeGroups">Cambiar de grupos</string>
+     <string name="resultEnrollment">Resultado de la inscripción</string>
+    <string name="successfullEnrollment">Todas las inscripciones se han realizado con éxito. Por favor, compruebe que está inscrito en los grupos deseados </string>
+    <string name="confirmEnrollments">Confirmar inscripciones solicitadas </string>
+    <string name="areYouSure"> ¿Seguro que quiere inscribirse en los grupos seleccionados?</string>
+    <string name="failedEnrollment">Lo sentimos pero la inscripción en los grupos seleccionados no se pudo realizar</string>
+    <string name="groupTypesProgressDescription">Obteniendo tipos de grupo&#8230;\nPor favor, espere&#8230;</string>
+    <string name="groupsProgressDescription">Obteniendo grupos&#8230;\nPor favor, espere&#8230;</string>
+    <string name="groupTypesProgressTitle">Tipos de grupos</string>
+    <string name="groupsProgressTitle">Grupos</string>
+    <string name="sendMyGroupsProgressDescription">Enviando inscripción a grupos&#8230;\nPor favor, espere&#8230;</string>
+    <string name="sendMyGroupsProgressTitle">Inscripción a grupos</string>
+    <string name="withoutLimit">sin límite</string>
 </resources>
+

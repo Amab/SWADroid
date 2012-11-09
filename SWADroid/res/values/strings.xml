@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <resources>
+
     <string name="app_name">SWADroid</string>
     <string name="serverName_preferences">Server</string>
-    <string name="serverSummary_preferences">Server (without http://, empty for default server)</string>
+    <string name="serverSummary_preferences">Server (without http://)</string>
     <string name="serverTitle_preferences">Server</string>
     <string name="loginModuleLabel">Login</string>
     <string name="notificationsModuleLabel">Notifications</string>
@@ -21,7 +22,7 @@
     <string name="userPasswordSummary_preferences">Password</string>
     <string name="userPasswordTitle_preferences">Password</string>
     <string name="saveMsg_preferences">Preferences have been saved</string>
-    <string name="saveSummary_preferences">Save actual preferences</string>
+    <string name="saveSummary_preferences">Save current preferences</string>
     <string name="saveTitle_preferences">Save preferences</string>
     <string name="preferencesTitle_menu">Preferences</string>
     <string name="shareTitle_menu">Share SWADroid</string>
@@ -30,7 +31,7 @@
     <string name="about_preferences">About</string>
     <string name="versionTitle_preferences">Application version</string>
     <string name="author_preferences">Coordinator: Antonio Cañas Vargas
-		\nProgrammers: 
+		\nProgrammers:
 		Juan Miguel Boyero Corral		
 		\nHelena Rodríguez Gijón		
 		\nAntonio Aguilera Malagón</string>
@@ -102,15 +103,13 @@
     <string name="firstRunMsg">Before using the application for the first time you
 		must enter the user name and password for SWAD at the setup
 		screen.\n\nYou can access to the setup screen from the application
-		menu anytime.\n\nDo you want to open the configuration screen now?
-	</string>
+		menu anytime.\n\nDo you want to open the configuration screen now?</string>
     <string name="initialDialogTitle">IMPORTANT</string>
-    <string name="upgradeMsg">Due to changes in the database all test questions
-		data have been deleted.\n\nSorry.</string>
+    <string name="upgradeMsg">Due to changes in the database all data have been deleted.\n\nSorry.</string>
     <string name="errorBadLoginMsg">Incorrect user or password</string>
-    <string name="errorBadAppKeyMsg">Unknown apllication key. Please contact the developer.</string>
     <string name="errorServerResponseMsg">Error in server response</string>
-    <string name="errorConnectionMsg">Error while connecting to the server.\nPlease check that the URL of the server in preferences is correct.\nIf you are unsure, leave empty to set the default server.</string>
+    <string name="errorBadAppKeyMsg">Unknown apllication key. Please contact the developer.</string>
+    <string name="errorConnectionMsg">Error while connecting to server</string>
     <string name="errorTimeoutMsg">Timeout trying to connect to the server</string>
     <string name="sendingMessageMsg">Sending message...</string>
     <string name="messageSendedMsg">Message sended successfully</string>
@@ -124,9 +123,9 @@
     <string name="noticeSendError">Error while publishing the new notice</string>
     <string name="sendMsg">Send</string>
     <string name="cleanDatabaseMsg">The database has been cleaned</string>
-    <string name="shareBodyMsg">I\'m using @SWADroid in my Android mobile for access to
+    <string name="shareBodyMsg">I\'m using #SWADroid in my Android mobile for access to
 		the e-learning platform SWAD.\nGet it for free here:
-		 https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid</string>
+		 https://market.android.com/details?id=es.ugr.swad.swadroid</string>
     <string name="marketURL">market://details?id=es.ugr.swad.swadroid</string>
     <string name="marketWebURL">http://goo.gl/Wgo1y</string>
     <string name="twitterURL">https://twitter.com/#!/SWADroid</string>
@@ -141,12 +140,16 @@
     <string name="mailingListTitle">Mailing list</string>
     <string name="blogTitle">Blog</string>
     <string name="marketTitle">Android Market</string>
-    <string name="notificationsAlertTitle">New notifications</string>
+    <string name="notificationsAlertTitle">SWADroid</string>
     <string name="notificationsAlertMsg">new notifications</string>
     <string name="footMessageMsg">Sended from</string>
     <string name="marksMsg">Click on the notification to view the mark.</string>
     <string name="clickToGetCourses">Click here to get your courses</string>
+    <string name="attendanceModuleLabel">Rollcall</string>
     <string name="users">Users</string>
+    <string name="usersDownloadProgressDescription">Synchronizing users.\n\nDepending of the number of
+		users to synchronize, the data processing can take several minutes.\n\nPlease wait...</string>
+    <string name="usersDownloadProgressTitle">Students</string>
     <string name="documentsDownloadModuleLabel">Documents</string>
     <string name="documentsDownloadProgressDescription">Getting files..</string>
     <string name="sharedsDownloadModuleLabel">Shared area</string>
@@ -166,6 +169,23 @@
     <string name="scan_not_valid_code">QR code invalid</string>
     <string name="scan_data_not_found">No data on this student</string>
     <string name="scan_no_codes">Not detect any valid QR code</string>
+    <string name="usersPresent">Present students</string>
+    <string name="NoNotificationsMsg">There are no new notifications</string>
+    <string name="home_icon">Shows home folder</string>
+    <string name="parent_icon">Shows upper folder</string>
+    <string name="refresh_icon">Updates</string>
+    <string name="group">Group</string>
+    <string name="notificationDownloadTitle">Downloading..</string>
+    <string name="complete">complete</string>
+    <string name="fileOptions">File Options</string>
+    <string name="openFile">Open</string>
+    <string name="downloadFile">Download again</string>
+    <string name="deleteFile">Delete</string>
+    <string name="vacants">Vacants</string>
+	<string name="numStudent">No. of students: </string>
+	<string name="maxStudent">Max.stud.</string>
+	<string name="enrollment">Enrollment</string>
+	<string name="myGroupsModuleLabel">My groups</string>
     <string name="scan_no_photos">Failed to save the photos of students</string>
     <string name="noStudentsAvailableMsg">There are no students in this subject</string>
     <string name="studentsUpdated">students updated</string>
@@ -175,9 +195,9 @@ Try "Update students"</string>
     <string name="noCameraFound">The device has no camera</string>
     <string name="saveMsg">Save</string>
     <string name="addSessionTitle_menu">New practice session</string>
-    <string name="groupsProgressDescription">Retrieving groups...</string>
+    <string name="groupsProgressDescription">Retrieving groups...\n\nPlease wait...</string>
     <string name="groupsProgressTitle">Groups</string>
-    <string name="noGroupsAvailableMsg">No practice groups for selected subject</string>
+    <string name="noGroupsAvailableMsg">No groups for selected subject</string>
     <string name="groupsUpdated">Groups updated</string>
     <string name="sessionCourseText">Course</string>
     <string name="sessionGroupText">Group</string>
@@ -202,7 +222,6 @@ Try "Update students"</string>
     <string name="sessionNoStudentsMsg">No student has attended this session</string>
     <string name="studentsHistoryModuleLabel">History of students</string>
     <string name="sessionsTitle">Practice sessions</string>
-    <string name="group">Group</string>
     <string name="noSessionsAvailableMsg">There are no practice sessions in the database</string>
     <string name="listSampleModuleLabel">Sample</string>
     <string name="rollcallModuleLabel">Rollcall</string>
@@ -227,7 +246,6 @@ Select: Practice sessions - New</string>
     <string name="rollcallSaved">Rollcall data stored properly</string>
     <string name="rollcallWebServiceNotAvailable">The web service to send SWAD rollcall data is not available.</string>
     <string name="rollcallEvent">Rollcall event</string>
-    <string name="NoNotificationsMsg">There is no new notifications</string>
     <string name="firstRollcallRunMsg">Due to malfunction getGroups method is not possible to know which subject
 belong downloaded practice groups. Therefore, until the error is resolved,
 is only allowed to use the application with a single subject.\n\nThe selected subject
@@ -235,4 +253,20 @@ must have practice groups defined in SWAD.\n\nYou can delete this
 configuration anytime using the "Clean Database" option\n\nDo you want to continue?</string>
     <string name="noRollcallAllowedMsg">Rollcall for the selected subject is not allowed. Try "Clean database"</string>
     <string name="froyoFunctionMsg">This function needs Android 2.2 or higher</string>
+    <string name="groupTypesProgressDescription">Retrieving group types&#8230;\nPlease wait&#8230;</string>
+    <string name="groupTypesProgressTitle">Group Types</string>
+    <string name="groupSeparator">: </string>
+    <string name="groupTypesModuleLabel">Group Types</string>
+    <string name="sendMyGroupsProgressDescription">Sending enrollment into groups&#8230;\nPlease wait&#8230;</string>
+    <string name="sendMyGroupsProgressTitle">Enrolment into groups</string>
+    <string name="openingTime">Opening: </string>
+    <string name="noGroupsText">No groups have been created in the course</string>
+    <string name="changeGroups">Change my groups</string>
+    <string name="resultEnrollment">Result on the enrollment</string>
+    <string name="successfullEnrollment">All the enrollments were made successfully. Please check that you are enrolled in your wished groups </string>
+    <string name="confirmEnrollments">Confirm requested enrollments</string>
+    <string name="areYouSure">Are you sure, that you want to enroll on the selected groups?</string>
+    <string name="ok">OK</string>
+    <string name="failedEnrollment">Sorry but the enrollment on the selected groups could not be performed</string>
+	<string name="withoutLimit">unlimited</string>
 </resources>

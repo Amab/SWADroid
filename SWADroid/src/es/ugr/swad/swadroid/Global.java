@@ -19,6 +19,11 @@
 
 package es.ugr.swad.swadroid;
 
+import java.util.Random;
+
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import es.ugr.swad.swadroid.model.User;
 
 /**
@@ -31,7 +36,7 @@ public class Global {
 	/**
 	 * SWAD application key
 	 */
-	private static final String AppKey = "";
+	private static final String AppKey = ""; //DELETE BEFORE COMMIT!!!
 	/**
 	 * Server URL
 	 */
@@ -53,13 +58,37 @@ public class Global {
 	 */
 	private static long selectedCourseCode = -1;
 	/**
+	 * Short name of the chosen course.
+	 * */
+	private static String selectedCourseShortName;
+	/**
+	 * Short name of the full course.
+	 * */
+	private static String selectedCourseFullName;
+	/**
 	 * Code of the chosen course for rollcall. All next actions are referred to this course.
 	 */
 	private static long selectedRollcallCourseCode = -1;
 	/**
-	 * Indicates if there are changes on db
+	 * Indicates if there are changes on preferences
 	 * */
 	private static boolean preferencesChanged = false;
+	/**
+	 * Indicates if there are changes on db
+	 * */
+	private static boolean dbCleaned = false;
+	/**
+	 * Base string to generate random alphanumeric strings
+	 */
+	private static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	/**
+	 * Random generator
+	 */
+	private static Random rnd = new Random();
+	/**
+	 * Null value returned by webservices when a field is empty
+	 */
+	public static final String NULL_VALUE = "anytype{}";
 	/**
 	 * Time to force relogin
 	 */
@@ -136,6 +165,26 @@ public class Global {
 	 * Request code for Sessions List module.
 	 */
 	public static final int SESSIONS_LIST_REQUEST_CODE = 19;
+    /**
+     * Request code for Downloads Manager
+     * */
+    public static final int DOWNLOADSMANAGER_REQUEST_CODE = 20;
+    /**
+     * Request code for Notify Download
+     * */
+    public static final int NOTIFYDOWNLOAD_REQUEST_CODE = 21;
+    /**
+     * Request code for MyGroups Manager
+     * */
+    public static final int MYGROUPSMANAGER_REQUEST_CODE= 22;
+    /**
+     * Request code for MyGroups Manager
+     * */
+    public static final int GROUPTYPES_REQUEST_CODE= 23;
+    /**
+     * Request code for SendMyGroups Manager
+     * */
+    public static final int SENDMYGROUPS_REQUEST_CODE = 24;
 	/**
 	 * Prefix tag name for Logcat
 	 */
@@ -193,6 +242,14 @@ public class Global {
 	 * */
 	public static final String DB_TABLE_GROUPS_COURSES = "group_course";
 	/**
+	 * Table name for group types
+	 * */
+	public static final String DB_TABLE_GROUP_TYPES = "group_types";
+	/**
+	 * Table name for relationship between groups and group types
+	 * */
+	public static final String DB_TABLE_GROUPS_GROUPTYPES = "group_grouptypes";
+	/**
 	 * Table name for practice sessions
 	 * */
 	public static final String DB_TABLE_PRACTICE_SESSIONS = "practice_sessions";
@@ -203,19 +260,19 @@ public class Global {
 	/**
 	 * Student userRole for getUsers web service.
 	 */
-	public static final int STUDENT_ROLE = 2;
+	public static final int STUDENT_TYPE_CODE = 2;
 	/**
-	 * Teacher userRole for getUsers web service.
+	 * Teacher userTypeCode for getUsers web service.
 	 */
-	public static final int TEACHER_ROLE = 3;
-	/**
-	 * Code to access to the documents in documents area 
-	 * */
-	public static int DOCUMENTS_AREA_CODE= 1;
-	/**
-	 * Code to access to the documents in share area 
-	 * */
-	public static int SHARE_AREA_CODE= 2;
+	public static final int TEACHER_TYPE_CODE = 3;
+    /**
+     * Code to access to the documents in documents area 
+     * */
+    public static int DOCUMENTS_AREA_CODE= 1;
+    /**
+     * Code to access to the documents in share area 
+     * */
+    public static int SHARE_AREA_CODE= 2;
 
 	/**
 	 * Gets the SWAD application key
@@ -310,32 +367,57 @@ public class Global {
 		return b ? "Y" : "N";
 	}
 	/**
-	 * Gets code of actual course
-	 * return -1 if no course chosen; code of actual course in other case
+	 * Gets code of current course
+	 * return -1 if no course chosen; code of current course in other case
 	 * */
 	public static long getSelectedCourseCode(){
 		return selectedCourseCode;
 	}
 	/**
-	 * Sets code of actual course
+	 * Sets code of current course
 	 * @param courseCode. Code of the chosen course. It should be courseCode>0. Otherwise nothing will change
 	 * */
-	public static void setSelectedCourseCode(long actualCourseCode){
-		if(actualCourseCode >0) selectedCourseCode = actualCourseCode;
+	public static void setSelectedCourseCode(long currentCourseCode){
+		if(currentCourseCode >0) selectedCourseCode = currentCourseCode;
 	}
 
 	public static boolean isPreferencesChanged(){
 		return preferencesChanged;
 	}
-
+	/**
+	 * Set the fact that the preferences has changed
+	 * @param newState - true when the preferences has changed 
+	 * 				   - false after the fact is noticed and handled it
+	 * */
 	public static void setPreferencesChanged(){
 		preferencesChanged = true;
 	}
+	/**
+	 * Indicates if the preferences has changed
+	 * @param newState - true when the preferences has changed  and it was not handled it
+	 * 				   - false if the preferences has not changed
+	 * */
 	public static void setPreferencesChanged(boolean newState){
 		preferencesChanged = newState;
 	}
-
-	/**
+	
+	public static void setSelectedCourseShortName(String currentCourseShortName){
+		selectedCourseShortName = currentCourseShortName;
+		
+	}
+	public static void setSelectedCourseFullName(String currentCourseFullName){
+		selectedCourseFullName = currentCourseFullName;
+		
+	}
+	public static String getSelectedCourseShortName(){
+		return selectedCourseShortName;
+		
+	}
+	public static String getSelectedCourseFullName(){
+		return selectedCourseFullName;
+		
+	}
+		/**
 	 * Gets code of actual rollcall course
 	 * return -1 if no rollcall course chosen; code of actual rollcall course in other case
 	 * */
@@ -349,5 +431,56 @@ public class Global {
 	 * */
 	public static void setSelectedRollcallCourseCode(long actualCourseCode) {
 		selectedRollcallCourseCode = actualCourseCode;
+	}
+	/**
+	 * Checks if any connection is available 
+	 * @param ctx Application context
+	 * @return true if there is a connection available, false in other case
+	 */
+	public static boolean connectionAvailable(Context ctx){
+	    boolean connAvailable = false;
+	    ConnectivityManager connec =  (ConnectivityManager)ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
+	
+	    //Survey all networks (wifi, gprs...)
+	    NetworkInfo[] networks = connec.getAllNetworkInfo();
+	    
+	    for(int i=0; i<networks.length; i++){
+	        //If any of them has a connection available, put boolean to true
+	        if (networks[i].isConnected()){
+	            connAvailable = true;
+	        }
+	    }
+	    
+	    //If boolean remains false there is no connection available        
+	    return connAvailable;
+	}
+	/**
+	 * Set the fact that the db was cleaned
+	 * @param newState - true when the database was cleaned
+	 * 				   - false after the fact is noticed and handled it
+	 * */
+	public static void setDbCleaned(boolean state){
+		dbCleaned = state;
+	}
+	/**
+	 * Indicates if the db was cleaned
+	 * @param newState - true when the database was cleaned and it was not handled it
+	 * 				   - false if the database does not change
+	 * */
+	public static boolean isDbCleaned(){
+		return dbCleaned;
+	}
+	
+	/**
+	 * Generates a random string of length len
+	 * @param len Length of random string
+	 * @return A random string of length len
+	 */
+	public static String randomString(int len) 
+	{
+	   StringBuilder sb = new StringBuilder(len);
+	   for(int i = 0; i < len; i++) 
+	      sb.append(AB.charAt(rnd.nextInt(AB.length())));
+	   return sb.toString();
 	}
 }

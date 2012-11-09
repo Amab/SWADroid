@@ -42,8 +42,8 @@ public class DirectoryTreeDownload extends Module {
 			SoapObject soapObject = (SoapObject) result;
 			String tree = soapObject.getProperty("tree").toString();
 
-			//directoryTree = new DirectoryTree();
-			setResult(RESULT_OK);
+			this.getIntent().putExtra("tree", tree);
+			setResult(RESULT_OK, this.getIntent());
 		}
 	}
 
@@ -82,6 +82,7 @@ public class DirectoryTreeDownload extends Module {
 	protected void onStart() {
 		super.onStart();
 		treeCode = getIntent().getIntExtra("treeCode", Global.DOCUMENTS_AREA_CODE); 
+		//group = getIntent().getIntExtra("groupCode", 0);
 		runConnection();
 		if(!isConnected){
 			setResult(RESULT_CANCELED);

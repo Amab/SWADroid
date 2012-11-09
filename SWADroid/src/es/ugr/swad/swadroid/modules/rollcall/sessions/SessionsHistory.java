@@ -69,9 +69,9 @@ public class SessionsHistory extends Module {
 		text.setText(R.string.rollcallHistoryModuleLabel);
 
 		// Get selected course
-		String where = "id =" + String.valueOf(Global.getSelectedCourseCode());
-		Course selectedCourse = (Course) dbHelper.getAllRows(Global.DB_TABLE_COURSES, where, "name").get(0);
-		String courseName = selectedCourse.getName();
+		String where = "id =" + String.valueOf(Global.getSelectedRollcallCourseCode());
+		Course selectedCourse = (Course) dbHelper.getAllRows(Global.DB_TABLE_COURSES, where, "fullName").get(0);
+		String courseName = selectedCourse.getFullName();
 
 		// Get selected groupCode, groupName
 		Intent intent = getIntent();
@@ -81,7 +81,7 @@ public class SessionsHistory extends Module {
 		TextView title = (TextView) this.findViewById(R.id.listText);
 		title.setText(courseName + " - " + groupName);
 
-		sessions = dbHelper.getPracticeSessions(Global.getSelectedCourseCode(), groupCode);
+		sessions = dbHelper.getPracticeSessions(Global.getSelectedRollcallCourseCode(), groupCode);
 		int numSessions = sessions.size();
 		if (numSessions > 0) {
 			String [] sessionsStarts = new String[numSessions];

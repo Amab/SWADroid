@@ -297,7 +297,7 @@ public class Test extends Model {
 		questionsScore.clear();
 
 		for(int i=0; i<this.questions.size(); i++) {
-			this.questionsScore.add(new Float(0));
+			this.questionsScore.add(Float.valueOf(0));
 		}
 	}
 
@@ -316,11 +316,11 @@ public class Test extends Model {
 		s = buff.toString().trim();
 
 		//Remove accents
-		s = s.replace('á', 'a');
-		s = s.replace('é', 'e');
-		s = s.replace('í', 'i');
-		s = s.replace('ó', 'o');
-		s = s.replace('ú', 'u');
+		s = s.replace('Ã¡', 'a');
+		s = s.replace('Ã©', 'e');
+		s = s.replace('Ã­', 'i');
+		s = s.replace('Ã³', 'o');
+		s = s.replace('Ãº', 'u');
 
 		return s;
 	}
@@ -330,8 +330,8 @@ public class Test extends Model {
 	 */
 	public void evaluate() {
 		int totalAnswers, trueAnswers, falseAnswers, correctUserAnswers, errors;
-		Float score = new Float(0);
-		Float userFloatAnswer, minFloatRange = new Float(0), maxFloatRange = new Float(0);
+		Float score = Float.valueOf(0);
+		Float userFloatAnswer, minFloatRange = Float.valueOf(0), maxFloatRange = Float.valueOf(0);
 		TestQuestion q;
 		TestAnswer a;
 		List<TestAnswer> la;
@@ -354,9 +354,9 @@ public class Test extends Model {
 
 				userAnswerText = a.getUserAnswer();				
 				if(!userAnswerText.equals("")) {
-					userFloatAnswer = new Float(userAnswerText);				
-					minFloatRange = new Float(a.getAnswer());
-					maxFloatRange = new Float(la.get(1).getAnswer());
+					userFloatAnswer = Float.valueOf(userAnswerText);				
+					minFloatRange = Float.valueOf(a.getAnswer());
+					maxFloatRange = Float.valueOf(la.get(1).getAnswer());
 					a.setCorrectAnswered((userFloatAnswer >= minFloatRange) && (userFloatAnswer <= maxFloatRange));
 				}
 
@@ -367,7 +367,7 @@ public class Test extends Model {
 				}
 
 				if(userAnswerText.equals("")) {
-					score = new Float(0);
+					score = Float.valueOf(0);
 				} else {
 					score = correctUserAnswers/(float)totalAnswers;
 				}
@@ -388,7 +388,7 @@ public class Test extends Model {
 				}
 
 				if(userAnswerText.equals("")) {
-					score = new Float(0);
+					score = Float.valueOf(0);
 				} else {
 					score = (float) (correctUserAnswers-errors);
 				}
@@ -403,7 +403,7 @@ public class Test extends Model {
 				}
 
 				if(userAnswerText.equals("")) {
-					score = new Float(0);
+					score = Float.valueOf(0);
 				} else {
 					score = correctUserAnswers/(float)totalAnswers;
 				}
@@ -428,7 +428,7 @@ public class Test extends Model {
 				}
 
 				if(userAnswerText.equals("")) {
-					score = new Float(0);
+					score = Float.valueOf(0);
 				} else {
 					score = correctUserAnswers/(float)totalAnswers;
 				}
@@ -451,7 +451,7 @@ public class Test extends Model {
 				}
 
 				if(a.getUserAnswer().equals("")) {
-					score = new Float(0);
+					score = Float.valueOf(0);
 				} else {
 					score = correctUserAnswers-(errors/((float)totalAnswers-1));
 				}
@@ -477,7 +477,7 @@ public class Test extends Model {
 				}
 
 				if(noneSelected) {
-					score = new Float(0);
+					score = Float.valueOf(0);
 				} else {
 					if(falseAnswers == 0) {
 						score = correctUserAnswers/(float)totalAnswers;

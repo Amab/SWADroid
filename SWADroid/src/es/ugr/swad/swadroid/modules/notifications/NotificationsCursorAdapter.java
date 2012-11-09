@@ -20,6 +20,7 @@ package es.ugr.swad.swadroid.modules.notifications;
 
 import java.util.Date;
 
+import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.modules.Messages;
 import android.content.Context;
@@ -76,6 +77,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
 	public void bindView(View view, Context context, Cursor cursor) {
 		final Context ctx = context;
 		final Long notificationCode = cursor.getLong(cursor.getColumnIndex("id"));
+		final String userPhoto = cursor.getString(cursor.getColumnIndex("userPhoto"));
 		long unixTime;
 		String type = "";
 		String sender, senderFirstname, senderSurname1, senderSurname2, summaryText;
@@ -91,6 +93,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
     	
     	view.setScrollContainer(false);
     	TextView eventCode = (TextView) view.findViewById(R.id.eventCode);
+    	TextView eventUserPhoto = (TextView) view.findViewById(R.id.eventUserPhoto);
         TextView eventType = (TextView) view.findViewById(R.id.eventType);
         TextView eventDate = (TextView) view.findViewById(R.id.eventDate);
         TextView eventTime = (TextView) view.findViewById(R.id.eventTime);
@@ -100,8 +103,8 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         TextView content = (TextView) view.findViewById(R.id.eventText);
         TextView contentMsg = (TextView) view.findViewById(R.id.eventMsg);
         ImageView notificationIcon = (ImageView) view.findViewById(R.id.notificationIcon);
-        ImageView messageReplyButton = (ImageView) view.findViewById(R.id.messageReplyButton);
-        
+        //ImageView messageReplyButton = (ImageView) view.findViewById(R.id.messageReplyButton);
+        /*
         OnClickListener replyMessageListener = new OnClickListener() {
 			public void onClick(View v) {				
 				Intent activity = new Intent(ctx.getApplicationContext(), Messages.class);
@@ -109,12 +112,13 @@ public class NotificationsCursorAdapter extends CursorAdapter {
 				activity.putExtra("summary", summary.getText().toString());
 				ctx.startActivity(activity);
 			}        	
-        };
+        };*/
         
         if(eventType != null) {
         	eventCode.setText(notificationCode.toString());
+        	eventUserPhoto.setText(userPhoto);
         	type = cursor.getString(cursor.getColumnIndex("eventType"));
-        	messageReplyButton.setVisibility(View.GONE);
+        	//messageReplyButton.setVisibility(View.GONE);
         	
         	if(type.equals("examAnnouncement"))
         	{
@@ -132,8 +136,8 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         	{
         		type = context.getString(R.string.message);
         		notificationIcon.setImageResource(R.drawable.msg_received);
-        		messageReplyButton.setOnClickListener(replyMessageListener);
-        		messageReplyButton.setVisibility(View.VISIBLE);
+        		//messageReplyButton.setOnClickListener(replyMessageListener);
+        		//messageReplyButton.setVisibility(View.VISIBLE);
         	} else if(type.equals("forumReply"))
         	{
         		type = context.getString(R.string.forumReply);
@@ -166,11 +170,11 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         	senderSurname2 = cursor.getString(cursor.getColumnIndex("userSurname2"));
         	
         	//Empty fields checking
-        	if(!senderFirstname.equals("anyType{}"))
+        	if(!senderFirstname.equals(Global.NULL_VALUE))
         		sender += senderFirstname + " ";
-        	if(!senderSurname1.equals("anyType{}"))
+        	if(!senderSurname1.equals(Global.NULL_VALUE))
         		sender += senderSurname1 + " ";
-        	if(!senderSurname2.equals("anyType{}"))
+        	if(!senderSurname2.equals(Global.NULL_VALUE))
         		sender += senderSurname2;
         	
         	eventSender.setText(sender);
@@ -182,7 +186,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         	summaryText = cursor.getString(cursor.getColumnIndex("summary"));
         	
         	//Empty field checking
-        	if(summaryText.equals("anyType{}"))
+        	if(summaryText.equals(Global.NULL_VALUE))
         		summaryText = context.getString(R.string.noSubjectMsg);
         	
         	summary.setText(Html.fromHtml(summaryText));
@@ -191,7 +195,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         	contentText = cursor.getString(cursor.getColumnIndex("content"));
         	
         	//Empty field checking
-        	if(contentText.equals("anyType{}"))
+        	if(contentText.equals(Global.NULL_VALUE))
         		contentText = context.getString(R.string.noContentMsg);
         	
     		content.setText(contentText);

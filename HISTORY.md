@@ -1,3 +1,14 @@
+## 0.10 (2012-11-09)
+
+* Added module for enrollment to course groups
+* Added missing javadoc packages info
+* Updated Android DataFramework library. Removed the binary version and added the latest source code version from GitHub
+* GUI improvements
+* Fixed DNI processing when using a NIE instead of a DNI (NIE format X5264085Y)
+* Fixed a misspelling in english language file
+* Fixed some bugs in course selection spinner
+* Fixed bug when checking available connections
+
 ## 0.9.3 (2012-07-20)
 
 * Added folders support in server URL

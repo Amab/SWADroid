@@ -48,8 +48,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.dataframework.DataFramework;
-
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
@@ -59,7 +57,8 @@ import es.ugr.swad.swadroid.modules.Module;
 /**
  * Notifications module for get user's notifications
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
- * @author Antonio Aguilera Malagon <aguilerin@gmail.com> *
+ * @author Antonio Aguilera Malagon <aguilerin@gmail.com> 
+ * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */
 public class Notifications extends Module {
 	/**
@@ -145,24 +144,34 @@ public class Notifications extends Module {
 			{
 				//adapter.toggleContentVisibility(position);
 				TextView code = (TextView) v.findViewById(R.id.eventCode);
+				TextView userPhoto = (TextView) v.findViewById(R.id.eventUserPhoto);
 				TextView sender = (TextView) v.findViewById(R.id.eventSender);
 				TextView course = (TextView) v.findViewById(R.id.eventLocation);
 				TextView summary = (TextView) v.findViewById(R.id.eventSummary);
-				TextView content = (TextView) v.findViewById(R.id.eventText);	
+				TextView content = (TextView) v.findViewById(R.id.eventText);
+				TextView date = (TextView) v.findViewById(R.id.eventDate);	
+				TextView time = (TextView) v.findViewById(R.id.eventTime);	
 				
 				Intent activity = new Intent(getApplicationContext(), NotificationItem.class);
 				activity.putExtra("notificationCode", code.getText().toString());
+				activity.putExtra("userPhoto", userPhoto.getText().toString());
 				activity.putExtra("sender", sender.getText().toString());
 				activity.putExtra("course", course.getText().toString());
 				activity.putExtra("summary", summary.getText().toString());
 				activity.putExtra("content", content.getText().toString());
+				activity.putExtra("date", date.getText().toString());
+				activity.putExtra("time", time.getText().toString());
 				startActivity(activity);
 			}    	
 		};
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.list_items);
-
+		
+		this.findViewById(R.id.courseSelectedText).setVisibility(View.GONE);
+		this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
+		
+		
 		image = (ImageView)this.findViewById(R.id.moduleIcon);
 		image.setBackgroundResource(R.drawable.notif);
 
@@ -252,7 +261,7 @@ public class Notifications extends Module {
 			ContentResolver.requestSync(account, authority, new Bundle());
 		} else {
 			//Calculates next timestamp to be requested
-			Long timestamp = new Long(dbHelper.getFieldOfLastNotification("eventTime"));
+			Long timestamp = Long.valueOf(dbHelper.getFieldOfLastNotification("eventTime"));
 			timestamp++;
 	
 			//Creates webservice request, adds required params and sends request to webservice
@@ -270,21 +279,21 @@ public class Notifications extends Module {
 				notifCount = soap.getPropertyCount();
 				for (int i = 0; i < notifCount; i++) {
 					SoapObject pii = (SoapObject)soap.getProperty(i);
-					Long notificationCode = new Long(pii.getProperty("notificationCode").toString());
+					Long notificationCode = Long.valueOf(pii.getProperty("notificationCode").toString());
 					String eventType = pii.getProperty("eventType").toString();
-					Long eventTime = new Long(pii.getProperty("eventTime").toString());
+					Long eventTime = Long.valueOf(pii.getProperty("eventTime").toString());
 					String userSurname1 = pii.getProperty("userSurname1").toString();
 					String userSurname2 = pii.getProperty("userSurname2").toString();
 					String userFirstName = pii.getProperty("userFirstname").toString();
+					String userPhoto = pii.getProperty("userPhoto").toString();
 					String location = pii.getProperty("location").toString();
 					String summary = pii.getProperty("summary").toString();
-					Integer status = new Integer(pii.getProperty("status").toString());
+					Integer status = Integer.valueOf(pii.getProperty("status").toString());
 					String content = pii.getProperty("content").toString();
-					SWADNotification n = new SWADNotification(notificationCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, location, summary, status, content);
+					SWADNotification n = new SWADNotification(notificationCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, userPhoto, location, summary, status, content);
 					dbHelper.insertNotification(n);
 	
-					/*if(isDebuggable)
-		    			Log.d(TAG, n.toString());*/
+					//Log.d(TAG, n.toString());
 				}
 	
 				//Request finalized without errors
@@ -388,10 +397,6 @@ public class Notifications extends Module {
 	 */
 	public void clearNotifications(Context context) {
 		try {
-			DataFramework db = DataFramework.getInstance();
-			db.open(context, context.getPackageName());
-			dbHelper = new DataBaseHelper(db);
-
 			dbHelper.emptyTable(Global.DB_TABLE_NOTIFICATIONS);
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -5,12 +5,15 @@
     android:layout_height="match_parent"
     android:background="@color/background">
     <include layout="@layout/action_bar"/>    
- 
+  	<RelativeLayout android:layout_below="@id/actionBarLayout" android:id="@+id/courseNameLayout"
+        android:layout_height="wrap_content" android:layout_width="fill_parent">
+        <include layout="@layout/course_or_group_name" />
+    </RelativeLayout>
 	<TextView
 		android:id="@+id/testAnswerTypesText"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_below="@+id/actionBarLayout"
+		android:layout_below="@id/courseNameLayout"
 		android:gravity="center"
 		android:padding="20dip"
 		android:textColor="@color/foreground1"
