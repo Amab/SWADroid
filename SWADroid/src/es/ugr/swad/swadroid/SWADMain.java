@@ -501,17 +501,17 @@ public class SWADMain extends MenuExpandableListActivity {
 			evaluation.put(NAME, getString(R.string.evaluation));
 			evaluation.put(IMAGE, getResources().getDrawable(R.drawable.grades));
 			headerData.add( evaluation);
-			
-			final HashMap<String, Object> courses = new HashMap<String,Object>();
+
+			//DISABLE until it will be functional
+			/*final HashMap<String, Object> courses = new HashMap<String,Object>();
 			courses.put(NAME, getString(R.string.course));
 			courses.put(IMAGE, getResources().getDrawable(R.drawable.blackboard));
-			headerData.add(courses);
+			headerData.add(courses);*/
 			
-			//DISABLE until it will be functional
-			/*final HashMap<String, Object> enrolment = new HashMap<String,Object>();
+			final HashMap<String, Object> enrolment = new HashMap<String,Object>();
 			enrolment.put(NAME, getString(R.string.enrollment));
 			enrolment.put(IMAGE, getResources().getDrawable(R.drawable.enrollment));
-			headerData.add(enrolment);*/
+			headerData.add(enrolment);
 
 			final ArrayList<ArrayList<HashMap<String, Object>>> childData = new ArrayList<ArrayList<HashMap<String, Object>>>();
 
