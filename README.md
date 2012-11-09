@@ -41,8 +41,10 @@ SWADroid uses [ZXing][zxing-library] library developed by [Sean Owen][zxing-auth
 
 ## Contributors
 
+* Antonio Cañas Vargas
 * Helena Rodríguez Gijón
 * Antonio Aguilera Malagón
+* Alejandro Alcalde Barros
 
 ## Contributing
 
