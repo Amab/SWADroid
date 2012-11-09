@@ -33,8 +33,6 @@ import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.KeepAliveHttpsTransportSE;
 import org.xmlpull.v1.XmlPullParserException;
 
-import com.android.dataframework.DataFramework;
-
 import es.ugr.swad.swadroid.Base64;
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.Preferences;
@@ -70,7 +68,6 @@ public class NotificationsSyncAdapterService extends Service {
 	private static int NOTIF_ALERT_ID = 1982;
 	private static final int SIZE_LIMIT = 25;
 	private static Preferences prefs;
-	private static DataFramework db;
 	private static DataBaseHelper dbHelper;
 	private static String METHOD_NAME = "";
 	private static String NAMESPACE = "urn:swad";
@@ -93,9 +90,7 @@ public class NotificationsSyncAdapterService extends Service {
 	   prefs = new Preferences();
 	   
 	   try {
-		  db = DataFramework.getInstance();
-		  db.open(mContext, mContext.getPackageName());		  
-		  dbHelper = new DataBaseHelper(db);
+		   dbHelper = new DataBaseHelper(mContext);
 	   } catch (Exception e) {
 		  e.printStackTrace();
 	   }
@@ -237,18 +232,20 @@ public class NotificationsSyncAdapterService extends Service {
 
 			if (result != null) {
 				KvmSerializable ks = (KvmSerializable) result;
+				SoapObject soap = (SoapObject)result;
 
 				//Stores user data returned by webservice response
 				User loggedUser = new User(
-						Long.parseLong(ks.getProperty(0).toString()),	// id
-						ks.getProperty(2).toString(),					// wsKey
-						ks.getProperty(3).toString(),					// userID
-						null,											// userNickname
-						ks.getProperty(4).toString(),					// userSurname1
-						ks.getProperty(5).toString(),					// userSurname2
-						ks.getProperty(6).toString(),					// userFirstName
-						null,											// photoPath
-						Integer.parseInt(ks.getProperty(8).toString())	// userRole
+						Long.parseLong(ks.getProperty(0).toString()),					// id
+						soap.getProperty("wsKey").toString(),							// wsKey
+						soap.getProperty("userID").toString(),							// userID
+						//soap.getProperty("userNickname").toString(),					// userNickname
+						null,															// userNickname
+						soap.getProperty("userSurname1").toString(),					// userSurname1
+						soap.getProperty("userSurname2").toString(),					// userSurname2
+						soap.getProperty("userFirstname").toString(),					// userFirstname
+						soap.getProperty("userPhoto").toString(),						// userPhoto
+						Integer.parseInt(soap.getProperty("userRole").toString())		// userRole
 						);
 
 				Global.setLoggedUser(loggedUser);
@@ -263,7 +260,7 @@ public class NotificationsSyncAdapterService extends Service {
 			Log.d(TAG, "Logged");
 			
 			//Calculates next timestamp to be requested
-			Long timestamp = new Long(dbHelper.getFieldOfLastNotification("eventTime"));
+			Long timestamp = Long.valueOf(dbHelper.getFieldOfLastNotification("eventTime"));
 			timestamp++;
 	
 			//Creates webservice request, adds required params and sends request to webservice
@@ -282,21 +279,21 @@ public class NotificationsSyncAdapterService extends Service {
 				notifCount = soap.getPropertyCount();
 				for (int i = 0; i < notifCount; i++) {
 					SoapObject pii = (SoapObject)soap.getProperty(i);
-					Long notificationCode = new Long(pii.getProperty("notificationCode").toString());
+					Long notificationCode = Long.valueOf(pii.getProperty("notificationCode").toString());
 					String eventType = pii.getProperty("eventType").toString();
-					Long eventTime = new Long(pii.getProperty("eventTime").toString());
+					Long eventTime = Long.valueOf(pii.getProperty("eventTime").toString());
 					String userSurname1 = pii.getProperty("userSurname1").toString();
 					String userSurname2 = pii.getProperty("userSurname2").toString();
 					String userFirstName = pii.getProperty("userFirstname").toString();
+					String userPhoto = pii.getProperty("userPhoto").toString();
 					String location = pii.getProperty("location").toString();
 					String summary = pii.getProperty("summary").toString();
-					Integer status = new Integer(pii.getProperty("status").toString());
+					Integer status = Integer.valueOf(pii.getProperty("status").toString());
 					String content = pii.getProperty("content").toString();
-					SWADNotification n = new SWADNotification(notificationCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, location, summary, status, content);
+					SWADNotification n = new SWADNotification(notificationCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, userPhoto, location, summary, status, content);
 					dbHelper.insertNotification(n);
 	
-					/*if(isDebuggable)
-		    			Log.d(TAG, n.toString());*/
+					//Log.d(TAG, n.toString());
 				}
 	
 				//Request finalized without errors

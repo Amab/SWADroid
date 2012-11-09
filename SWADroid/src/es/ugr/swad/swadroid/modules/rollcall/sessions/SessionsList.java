@@ -100,13 +100,13 @@ public class SessionsList extends Module {
 
 	private void initialize() {
 		List<SessionItemModel> sessionList = null;
-		long courseCode = Global.getSelectedCourseCode();
+		long courseCode = Global.getSelectedRollcallCourseCode();
 		Intent intent = getIntent();
 		long studentId = intent.getLongExtra("studentId", (long) 0);
 		boolean existSessions = false;
 
 		// Get practice groups of selected course
-		List<Long> groupIdList = dbHelper.getGroupsCourse(courseCode);
+		List<Long> groupIdList = dbHelper.getGroupCodesCourse(courseCode);
 
 		ListView lv = new ListView(this);
 		SeparatedListAdapter adapter = new SeparatedListAdapter(this);

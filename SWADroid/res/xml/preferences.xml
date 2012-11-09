@@ -30,6 +30,16 @@
             android:title="@string/rateTitle_menu" />
         <Preference
             android:defaultValue=""
+            android:key="sharePref"
+            android:summary="@string/shareBodyMsg"
+            android:title="@string/shareTitle_menu" />
+        <Preference
+            android:defaultValue=""
+            android:key="blogPref"
+            android:summary="@string/blogURL"
+            android:title="@string/blogTitle" />
+        <Preference
+            android:defaultValue=""
             android:key="twitterPref"
             android:summary="@string/twitterUser"
             android:title="@string/twitterTitle" />
@@ -48,16 +58,6 @@
             android:key="mailingListPref"
             android:summary="@string/mailingListURL"
             android:title="@string/mailingListTitle" />
-        <Preference
-            android:defaultValue=""
-            android:key="blogPref"
-            android:summary="@string/blogURL"
-            android:title="@string/blogTitle" />
-        <Preference
-            android:defaultValue=""
-            android:key="sharePref"
-            android:summary="@string/shareBodyMsg"
-            android:title="@string/shareTitle_menu" />
         <Preference
             android:defaultValue=""
             android:hint=""

@@ -27,6 +27,7 @@ import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -137,6 +138,14 @@ public class Messages extends Module {
 			subjectText.setText("Re: " + subject);
 			receiversText.setVisibility(View.GONE);
 		}
+		
+		messageDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+
+			public void onCancel(DialogInterface dialog) {
+				setResult(RESULT_CANCELED);
+				finish();
+			}
+		});
 
 		messageDialog.show();
 	}
@@ -201,7 +210,11 @@ public class Messages extends Module {
 				String surname2 = pii.getProperty("userSurname2").toString();
 
 				receiversNames += "\n";
-				receiversNames += firstname + " " + surname1 + " " + surname2 + " (" + nickname + ")"; 
+				receiversNames += firstname + " " + surname1 + " " + surname2;
+				
+				if(!nickname.equalsIgnoreCase(Global.NULL_VALUE) && !nickname.equalsIgnoreCase("")) {
+					receiversNames += " (" + nickname + ")"; 
+				}
 			}
 		}
 

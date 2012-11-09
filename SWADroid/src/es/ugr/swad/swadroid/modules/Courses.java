@@ -34,18 +34,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.android.dataframework.DataFramework;
-
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Course;
-import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.model.Model;
 
 /**
  * Courses module for get user's courses
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
- * @author Antonio Aguilera Malagon <aguilerin@gmail.com> *
+ * @author Antonio Aguilera Malagon <aguilerin@gmail.com> 
+ * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */
 public class Courses extends Module {
 	/**
@@ -128,9 +126,11 @@ public class Courses extends Module {
 			for (int i = 0; i < csSize; i++) {
 				SoapObject pii = (SoapObject)soap.getProperty(i);
 				long id = Long.parseLong(pii.getProperty("courseCode").toString());
-				String name = pii.getProperty("courseName").toString();
+				//String name = pii.getProperty("courseName").toString(); this field is obsolete, and will be erased in the future
 				int userRole = Integer.parseInt(pii.getProperty("userRole").toString());
-				Course c = new Course(id, name, userRole);
+				String shortName = pii.getProperty("courseShortName").toString();
+				String fullName = pii.getProperty("courseFullName").toString();
+				Course c = new Course(id, userRole,shortName, fullName);
 				coursesSWAD.add(c);
 
 				/*if(isDebuggable)
@@ -208,10 +208,6 @@ public class Courses extends Module {
 	 */
 	public void clearCourses(Context context) {
 		try {
-			DataFramework db = DataFramework.getInstance();
-			db.open(context, context.getPackageName());
-			dbHelper = new DataBaseHelper(db);
-
 			dbHelper.emptyTable(Global.DB_TABLE_COURSES);
 		} catch (Exception e) {
 			e.printStackTrace();

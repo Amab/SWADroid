@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/actionBarLayout"
+    android:layout_width="match_parent"
+    android:layout_height="50dip"
+    android:background="@color/title_background"
+    android:orientation="horizontal" >
+
+    <!-- Home -->    
+    <ImageButton
+        android:id="@+id/home_button"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/navigation_button"
+        android:contentDescription="@string/home_icon"
+        android:onClick="onRefreshClick"
+        android:paddingLeft="5dip"
+        android:paddingRight="5dip"
+        android:scaleType="centerCrop"
+        android:src="@drawable/home" />
+
+    <!-- Parent -->
+    <ImageButton
+        android:id="@+id/parent_button"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/home_button"
+        android:contentDescription="@string/parent_icon"
+        android:background="@drawable/navigation_button"
+        android:onClick="onRefreshClick"
+        android:paddingLeft="5dip"
+        android:paddingRight="5dip"
+        android:scaleType="centerCrop"
+        android:src="@drawable/parent" />
+    
+	<!-- Refresh -->
+    <ImageButton
+        android:id="@+id/refresh_button"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/navigation_button"
+        android:contentDescription="@string/refresh_icon"
+        android:onClick="onRefreshClick"
+        android:layout_alignParentRight="true"
+        android:paddingLeft="5dip"
+        android:paddingRight="5dip"
+        android:scaleType="centerCrop"
+        android:src="@drawable/refresh" />
+</RelativeLayout>

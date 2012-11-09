@@ -143,9 +143,9 @@ public class NewPracticeSession extends Module {
 		Button btCancel = (Button) newSessionDialog.findViewById(R.id.btCancel);
 
 		// Get selected course
-		String where = "id =" + String.valueOf(Global.getSelectedCourseCode());
-		Course selectedCourse = (Course) dbHelper.getAllRows(Global.DB_TABLE_COURSES, where, "name").get(0);
-		String courseName = selectedCourse.getName();
+		String where = "id =" + String.valueOf(Global.getSelectedRollcallCourseCode());
+		Course selectedCourse = (Course) dbHelper.getAllRows(Global.DB_TABLE_COURSES, where, "fullName").get(0);
+		String courseName = selectedCourse.getFullName();
 
 		// Get selected groupCode, groupName
 		Intent i = getIntent();
@@ -213,7 +213,7 @@ public class NewPracticeSession extends Module {
 				String site = etSite.getText().length() == 0 ? "" : etSite.getText().toString();
 				String description = etDescription.getText().length() == 0 ? "" : etDescription.getText().toString();
 
-				inserted = dbHelper.insertPracticeSession(Global.getSelectedCourseCode(),
+				inserted = dbHelper.insertPracticeSession(Global.getSelectedRollcallCourseCode(),
 						groupCode,
 						btStartDate.getText().toString() + " " + btStartTime.getText().toString(),
 						btEndDate.getText().toString() + " " + btEndTime.getText().toString(),

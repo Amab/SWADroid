@@ -29,14 +29,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.android.dataframework.DataFramework;
-
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 
 /**
  * Superclass for add the options menu to all children classes of Activity
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
+ * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */
 public class MenuActivity extends Activity {
 	/**
@@ -46,11 +45,7 @@ public class MenuActivity extends Activity {
 	/**
 	 * Database Helper.
 	 */
-	protected static DataBaseHelper dbHelper;   
-	/**
-	 * Database Framework.
-	 */
-	protected static DataFramework db;    
+	protected static DataBaseHelper dbHelper; 
 
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onStart()
@@ -100,6 +95,7 @@ public class MenuActivity extends Activity {
 		prefs.setLastCourseSelected(0);
 		prefs.setRollcallCourseSelected(-1);
 		Global.setSelectedRollcallCourseCode(-1);
+		Global.setDbCleaned(true);
 		Toast.makeText(this, R.string.cleanDatabaseMsg, Toast.LENGTH_LONG).show();
 		Log.i(Global.APP_TAG, getString(R.string.cleanDatabaseMsg));
 	}
@@ -169,10 +165,7 @@ public class MenuActivity extends Activity {
 
 		//Initialize database
 		try {
-			db = DataFramework.getInstance();
-			db.open(this, this.getPackageName());
-			dbHelper = new DataBaseHelper(db);
-
+			dbHelper = new DataBaseHelper(this);
 		} catch (Exception ex) {
 			Log.e(ex.getClass().getSimpleName(), ex.getMessage());
 			error(ex.getMessage());
@@ -185,7 +178,32 @@ public class MenuActivity extends Activity {
 	 */
 	@Override
 	protected void onDestroy() {
-		dbHelper.close();
 		super.onDestroy();
+	}
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onPause()
+	 */
+	@Override
+	protected void onPause() {
+		dbHelper.close();
+		super.onPause();
+	}
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onResume()
+	 */
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		//Initialize database
+		try {
+			dbHelper = new DataBaseHelper(this);
+		} catch (Exception ex) {
+			Log.e(ex.getClass().getSimpleName(), ex.getMessage());
+			error(ex.getMessage());
+			ex.printStackTrace();
+		}
 	}
 }
