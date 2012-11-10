@@ -114,16 +114,15 @@ public class SWADMain extends MenuExpandableListActivity {
 	/**
 	 * Group position inside the main menu for Course group
 	 * */
-	//private int COURSE_GROUP = 2;
+	private int COURSE_GROUP = 2;
 	/**
 	 * Group position inside the main menu for Enrollment group
 	 * */
-	//private int ENROLLMENT_GROUP = 3;
-	private int ENROLLMENT_GROUP = 2;
+	private int ENROLLMENT_GROUP = 3;
 	/**
 	 * Group position inside the main menu for User group
 	 * */
-	//private int USERS_GROUP = 4;
+	private int USERS_GROUP = 4;
 	/**
 	 * Child position inside the messages menu for Notification
 	 * */
@@ -503,10 +502,10 @@ public class SWADMain extends MenuExpandableListActivity {
 			headerData.add( evaluation);
 
 			//DISABLE until it will be functional
-			/*final HashMap<String, Object> courses = new HashMap<String,Object>();
+			final HashMap<String, Object> courses = new HashMap<String,Object>();
 			courses.put(NAME, getString(R.string.course));
 			courses.put(IMAGE, getResources().getDrawable(R.drawable.blackboard));
-			headerData.add(courses);*/
+			headerData.add(courses);
 			
 			final HashMap<String, Object> enrolment = new HashMap<String,Object>();
 			enrolment.put(NAME, getString(R.string.enrollment));
@@ -522,8 +521,8 @@ public class SWADMain extends MenuExpandableListActivity {
 			childData.add(evaluationData);
 
 			//DISABLE until it will be functional
-			//final ArrayList<HashMap<String,Object>> documentsData = new ArrayList<HashMap<String, Object>>();
-			//childData.add(documentsData);
+			final ArrayList<HashMap<String,Object>> documentsData = new ArrayList<HashMap<String, Object>>();
+			childData.add(documentsData);
 			
 			final ArrayList<HashMap<String,Object>> enrollmentData = new ArrayList<HashMap<String, Object>>();
 			childData.add(enrollmentData);
@@ -547,7 +546,7 @@ public class SWADMain extends MenuExpandableListActivity {
 
 			//DISABLE until it will be functional
 			//Documents category
-			/*map = new HashMap<String,Object>();
+			map = new HashMap<String,Object>();
 			map.put(NAME, getString(R.string.documentsDownloadModuleLabel));
 			map.put(IMAGE,  getResources().getDrawable(R.drawable.folder));
 			documentsData.add(map);
@@ -555,7 +554,7 @@ public class SWADMain extends MenuExpandableListActivity {
 			map = new HashMap<String,Object>();
 			map.put(NAME, getString(R.string.sharedsDownloadModuleLabel));
 			map.put(IMAGE,  getResources().getDrawable(R.drawable.folderusers));
-			documentsData.add(map);*/			
+			documentsData.add(map);			
 			
 			map = new HashMap<String,Object>();
 			map.put(NAME, getString(R.string.myGroupsModuleLabel));
@@ -588,7 +587,7 @@ public class SWADMain extends MenuExpandableListActivity {
 			((ImageExpandableListAdapter) getExpandableListAdapter()).removeChild(MESSAGES_GROUP, PUBLISH_NOTE_CHILD);
 			//Removes completely users menu 
 			//DISABLE until it will be functional
-			//((ImageExpandableListAdapter) getExpandableListAdapter()).removeGroup(USERS_GROUP);
+			((ImageExpandableListAdapter) getExpandableListAdapter()).removeGroup(USERS_GROUP);
 		}
 		currentRole = Global.STUDENT_TYPE_CODE;
 	}
@@ -604,7 +603,7 @@ public class SWADMain extends MenuExpandableListActivity {
 			((ImageExpandableListAdapter) getExpandableListAdapter()).addChild(MESSAGES_GROUP,PUBLISH_NOTE_CHILD, map);
 
 			//DISABLE until it will be functional
-			/*final HashMap<String, Object> users = new HashMap<String, Object>();
+			final HashMap<String, Object> users = new HashMap<String, Object>();
 			users.put(NAME, getString(R.string.users));
 			users.put(IMAGE, getResources().getDrawable(R.drawable.users));
 
@@ -614,7 +613,7 @@ public class SWADMain extends MenuExpandableListActivity {
 			map.put(NAME, getString(R.string.rollcallModuleLabel));
 			map.put(IMAGE, getResources().getDrawable(R.drawable.rollcall));
 			child.add(map);
-			((ImageExpandableListAdapter) getExpandableListAdapter()).addGroup(USERS_GROUP, users, child);*/
+			((ImageExpandableListAdapter) getExpandableListAdapter()).addGroup(USERS_GROUP, users, child);
 
 
 		}
