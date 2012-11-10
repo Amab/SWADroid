@@ -183,13 +183,17 @@ public class Global {
      * */
     public static final int MYGROUPSMANAGER_REQUEST_CODE= 22;
     /**
-     * Request code for MyGroups Manager
+     * Request code for Group Types module
      * */
     public static final int GROUPTYPES_REQUEST_CODE= 23;
     /**
-     * Request code for SendMyGroups Manager
+     * Request code for SendMyGroups 
      * */
     public static final int SENDMYGROUPS_REQUEST_CODE = 24;
+    /**
+     * Request code for GetFile Manager
+     * */
+    public static final int GETFILE_REQUEST_CODE = 25;
 	/**
 	 * Prefix tag name for Logcat
 	 */
