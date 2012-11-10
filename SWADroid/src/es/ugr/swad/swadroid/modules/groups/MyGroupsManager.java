@@ -9,7 +9,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ExpandableListView;
@@ -17,13 +16,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import com.android.dataframework.DataFramework;
-
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.model.GroupType;
 import es.ugr.swad.swadroid.model.Model;
@@ -244,7 +239,8 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 	private void setMenu(){
 		groupTypes = (ArrayList<Model>) dbHelper.getAllRows(Global.DB_TABLE_GROUP_TYPES, "courseCode ="+ String.valueOf(courseCode), "groupTypeName");
 		HashMap<Long,ArrayList<Group>> children = getHashMapGroups(groupTypes);
-		EnrollmentExpandableListAdapter adapter = new EnrollmentExpandableListAdapter(getBaseContext(), groupTypes, children, R.layout.group_type_list_item, R.layout.group_list_item);
+		int currentRole = Global.getCurrentUserRole();
+		EnrollmentExpandableListAdapter adapter = new EnrollmentExpandableListAdapter(getBaseContext(), groupTypes, children, R.layout.group_type_list_item, R.layout.group_list_item,currentRole);
 		getExpandableListView().setAdapter(adapter);
 		
 		int collapsedGroups = getExpandableListView().getExpandableListAdapter().getGroupCount();
