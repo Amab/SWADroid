@@ -42,6 +42,7 @@
 		android:text="@string/vacants"
 		android:focusable="false"
 		android:clickable="false"
+		android:textColor="@color/sgilight_gray_32"
 		/>
 	<TextView 
 	    android:id="@+id/nStudentText"
@@ -53,5 +54,6 @@
 		android:text="@string/numStudent"
 		android:focusable="false"
 		android:clickable="false"
+		android:textColor="@color/sgilight_gray_32"
 	    />
 </RelativeLayout>

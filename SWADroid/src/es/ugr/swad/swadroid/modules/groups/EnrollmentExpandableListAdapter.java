@@ -12,7 +12,9 @@ import es.ugr.swad.swadroid.model.GroupType;
 import es.ugr.swad.swadroid.model.Model;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,6 +53,7 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 		RadioButton radioButton;
 		TextView nStudentText;
 		TextView vacantsText;
+		ColorStateList oldColor;
 	}
 	
 	private LayoutInflater mInflater;
@@ -100,7 +103,7 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 			holder.radioButton = (RadioButton) convertView.findViewById(R.id.radioButton);
 			holder.nStudentText = (TextView) convertView.findViewById(R.id.nStudentText);
 			holder.vacantsText = (TextView) convertView.findViewById(R.id.vacantsText);
-			
+			holder.oldColor =  holder.vacantsText.getTextColors();
 			convertView.setTag(holder);
 		}else{
 			holder = (ChildHolder) convertView.getTag();
@@ -147,20 +150,23 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 			holder.checkBox.setTextColor(context.getResources().getColor(android.R.color.black));
 			holder.imagePadlock.setEnabled(true);
 			holder.nStudentText.setEnabled(true);
+			holder.nStudentText.setTextColor(context.getResources().getColor(R.color.sgilight_gray_32));
 			holder.radioButton.setEnabled(true);
 			holder.radioButton.setTextColor(context.getResources().getColor(android.R.color.black));
-			
 			holder.relativeLayout.setEnabled(true);
 			holder.vacantsText.setEnabled(true);
+			holder.vacantsText.setTextColor(context.getResources().getColor(R.color.sgilight_gray_32));
 		}else{
 			holder.checkBox.setEnabled(false);
 			holder.checkBox.setTextColor( context.getResources().getColor(R.color.sgilight_gray));
 			holder.imagePadlock.setEnabled(false);
 			holder.nStudentText.setEnabled(false);
+			holder.nStudentText.setTextColor( context.getResources().getColor(R.color.sgilight_gray));
 			holder.radioButton.setEnabled(false);
 			holder.radioButton.setTextColor(context.getResources().getColor(R.color.sgilight_gray));
 			holder.relativeLayout.setEnabled(false);
 			holder.vacantsText.setEnabled(false);
+			holder.vacantsText.setTextColor( context.getResources().getColor(R.color.sgilight_gray));
 		}
 		//for multiple inscriptions the groups should be checkboxes to allow multiple choice
 		//otherwise the groups should be radio button to allow just a single choice
@@ -188,11 +194,20 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 			}	
 		}
 
-		holder.nStudentText.setText(context.getString(R.string.numStudent) + String.valueOf(students));
-		if(maxStudents != -1)
-			holder.vacantsText.setText( context.getString(R.string.vacants)+" : "+String.valueOf(maxStudents - students));
-		else 					
+		holder.nStudentText.setText(context.getString(R.string.numStudent) +" " +String.valueOf(students));
+		
+		if(maxStudents != -1){
+			int vacants = maxStudents - students;
+			holder.vacantsText.setText( context.getString(R.string.vacants)+" : "+String.valueOf(vacants));
+			if(vacants == 0)
+				holder.vacantsText.setTypeface(null, Typeface.BOLD);
+			else
+				holder.vacantsText.setTypeface(null, Typeface.NORMAL);
+				
+		}else{					
 			holder.vacantsText.setText(context.getString(R.string.vacants)+ " : " + context.getString(R.string.withoutLimit));
+			holder.vacantsText.setTypeface(null, Typeface.NORMAL);
+		}
 		
 		return convertView;
 	}
@@ -269,7 +284,9 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 		}else{ //if maxStudent == -1, there is not limit of students in this groups
 			freeSpot = true;
 		}
-		if((group.getOpen() != 0 && freeSpot)|| role == Global.TEACHER_TYPE_CODE)
+		
+		boolean realMember = realMembership.get(groupTypeCode)[childPosition];
+		if((group.getOpen() != 0 && (freeSpot || realMember))|| role == Global.TEACHER_TYPE_CODE)
 			return true;
 		else
 			return false;

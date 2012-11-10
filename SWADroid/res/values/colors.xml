@@ -38,7 +38,9 @@
     <color name="possible_result_points">#c0ffff00</color>
     <color name="pale_yellow">#f2eca1</color>
   	<color name="dark_grey"> #383838</color>
-  	<color name="sgilight_gray">#AAAAAA</color>
-  	<color name="lightskyblue">#B0E2FF</color>
-
+  	<color name="sgilight_gray">#C1C1C1</color>
+  	<color name="sgilight_gray_32">#515151</color>
+  	<color name="lightskyblue">#DDECF1</color>
+  	<color name="sgi_salmon">#C67171</color>
+	
 </resources>
