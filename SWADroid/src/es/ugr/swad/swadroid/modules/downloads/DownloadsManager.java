@@ -92,15 +92,6 @@ public class DownloadsManager extends MenuActivity {
 	 * Downloads tag name for Logcat
 	 */
 	public static final String TAG = Global.APP_TAG + " Downloads";
-
-	/**
-	 * Database Helper.
-	 */
-	protected static DataBaseHelper dbHelper;    
-	/**
-	 * Database Framework.
-	 */
-	protected static DataFramework db; 
 	
 	/**
 	 * List of group of the selected course to which the user belongs
@@ -159,15 +150,6 @@ public class DownloadsManager extends MenuActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		// Initialize database
-		try {
-			dbHelper = new DataBaseHelper(getBaseContext());
-		} catch (Exception ex) {
-			Log.e(ex.getClass().getSimpleName(), ex.getMessage());
-			ex.printStackTrace();
-		}
-		
 		setContentView(R.layout.navigation);
 		
 		checkMediaAvailability();
@@ -284,7 +266,8 @@ public class DownloadsManager extends MenuActivity {
 			// After get the list of courses, a dialog is launched to choice the
 			// course
 			case Global.DIRECTORY_TREE_REQUEST_CODE:
-				tree = data.getStringExtra("tree");
+				//TODO tree = data.getStringExtra("tree"); this is the right call, disable until getDirectoryTreeDownload is fixed
+				tree = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><tree><dir name=\".\"><dir name=\"2012\"><dir name=\"2012-04-16 4Hackathon\"><file name=\"SWADroid-4hackathon.odp\"><size>5366058</size><time>1335209681</time><license>CC Reconocimiento - No comercial - Compartir bajo la misma licencia</license><publisher>Antonio Ca–as Vargas</publisher><photo></photo></file></dir></dir></dir></tree>";
 				if (!refresh)
 					setMainView();
 				else {
@@ -506,4 +489,13 @@ public class DownloadsManager extends MenuActivity {
 			startActivity(intent);
 		}
 	}
+	private void callGetFile(){
+	    Intent activity;
+	    activity = new Intent(getBaseContext(), GetFile.class);
+	    activity.putExtra("courseCode", Global.getSelectedCourseCode());
+	    activity.putExtra("groupCode", chosenGroupCode);
+	    activity.putExtra("treeCode", downloadsAreaCode);
+	    activity.putExtra("path", navigator.getPath());
+	    startActivityForResult(activity, Global.GETFILE_REQUEST_CODE);
+	  }
 }
