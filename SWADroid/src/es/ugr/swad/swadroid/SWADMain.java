@@ -119,7 +119,6 @@ public class SWADMain extends MenuExpandableListActivity {
 	 * Group position inside the main menu for Enrollment group
 	 * */
 	private int ENROLLMENT_GROUP = 3;
-	//private int ENROLLMENT_GROUP = 2;
 	/**
 	 * Group position inside the main menu for User group
 	 * */
