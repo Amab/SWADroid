@@ -199,9 +199,10 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 		if(maxStudents != -1){
 			int vacants = maxStudents - students;
 			holder.vacantsText.setText( context.getString(R.string.vacants)+" : "+String.valueOf(vacants));
-			if(vacants == 0)
+			if(vacants == 0){
+				holder.vacantsText.setTextColor(context.getResources().getColor(R.color.sgi_salmon));
 				holder.vacantsText.setTypeface(null, Typeface.BOLD);
-			else
+			}else
 				holder.vacantsText.setTypeface(null, Typeface.NORMAL);
 				
 		}else{					
