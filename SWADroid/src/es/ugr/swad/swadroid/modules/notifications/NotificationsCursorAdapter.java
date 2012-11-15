@@ -170,11 +170,11 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         	senderSurname2 = cursor.getString(cursor.getColumnIndex("userSurname2"));
         	
         	//Empty fields checking
-        	if(!senderFirstname.equals(Global.NULL_VALUE))
+        	if(senderFirstname.compareTo(Global.NULL_VALUE)!=0)
         		sender += senderFirstname + " ";
-        	if(!senderSurname1.equals(Global.NULL_VALUE))
+        	if(senderSurname1.compareTo(Global.NULL_VALUE)!= 0)
         		sender += senderSurname1 + " ";
-        	if(!senderSurname2.equals(Global.NULL_VALUE))
+        	if(senderSurname2.compareTo(Global.NULL_VALUE) != 0)
         		sender += senderSurname2;
         	
         	eventSender.setText(sender);
@@ -186,7 +186,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         	summaryText = cursor.getString(cursor.getColumnIndex("summary"));
         	
         	//Empty field checking
-        	if(summaryText.equals(Global.NULL_VALUE))
+        	if(summaryText.compareTo(Global.NULL_VALUE)!=0)
         		summaryText = context.getString(R.string.noSubjectMsg);
         	
         	summary.setText(Html.fromHtml(summaryText));
@@ -195,7 +195,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         	contentText = cursor.getString(cursor.getColumnIndex("content"));
         	
         	//Empty field checking
-        	if(contentText.equals(Global.NULL_VALUE))
+        	if(contentText.compareTo(Global.NULL_VALUE)!=0)
         		contentText = context.getString(R.string.noContentMsg);
         	
     		content.setText(contentText);

@@ -31,17 +31,22 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+import android.util.Log;
+
 /**
  * 	Class used to navigate around the XML file. That XML file contains the 
  	information of all the directory.
  * 	@author Sergio Ropero Oliver. <sro0000@gmail.com>
- * 	@author Helena Rodríguez Gijón <hrgijon@gmail.com> 
+ * 	@author Helena Rodriguez Gijon <hrgijon@gmail.com> 
  * 	@version 1.0
  */
 
 //TODO look for a more efficient navigation
 public class DirectoryNavigator
 {
+	
+	private String TAG = "Swadroid DirectoryNavigator";
+	
     private String XMLinfo;
     
     private ArrayList<String> path;
@@ -260,8 +265,10 @@ public class DirectoryNavigator
 
 	        //We put the current node in the root Element.
 	        currentNode = dom.getDocumentElement();
-	        System.out.println("XML: " + XMLinfo);
-	        System.out.println("path size "+path.size());
+	        
+	        //TODO DirectoryNavigatior remove debug log
+	        Log.i(TAG, XMLinfo);
+	        Log.i(TAG,"path size "+path.size());
 	        //We change the current node.
 	        for(int i=0; i<path.size(); i++)
 	        {
