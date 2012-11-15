@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/padlockred"
         android:layout_alignParentLeft="true"
+        android:paddingTop="5dp"
         android:paddingLeft="5dp"
         android:focusable="false"
         android:clickable="false"
