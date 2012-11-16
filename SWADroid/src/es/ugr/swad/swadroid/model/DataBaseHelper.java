@@ -662,7 +662,7 @@ public class DataBaseHelper {
 	 * @param courseCode Course code to be referenced
 	 * @return Cursor access to the groups
 	 * */
-	public List<Group> getGroups(long courseCode){
+	public List<Group> getGroups(long courseCode, String...filter){
 		String select = "SELECT grpCod FROM " + Global.DB_TABLE_GROUPS_COURSES + " WHERE crsCod = " + courseCode +";";  
 		Cursor groupCodes = db.getDB().rawQuery(select, null);
 		
