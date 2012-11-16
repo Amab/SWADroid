@@ -248,8 +248,8 @@ public class DownloadsManager extends MenuActivity {
 			// After get the list of courses, a dialog is launched to choice the
 			// course
 			case Global.DIRECTORY_TREE_REQUEST_CODE:
-				//TODO tree = data.getStringExtra("tree"); this is the right call, disable until getDirectoryTreeDownload is fixed
-				tree = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><tree><dir name=\"2012\"><dir name=\"2012-04-16 4Hackathon\"><file name=\"SWADroid-4hackathon.odp\"><size>5366058</size><time>1335209681</time><license>CC Reconocimiento - No comercial - Compartir bajo la misma licencia</license><publisher>Antonio Ca–as Vargas</publisher><photo></photo></file></dir></dir></tree>";
+				// tree = data.getStringExtra("tree");// this is the right call, disable until getDirectoryTreeDownload is fixed
+				tree = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><tree><dir name=\"2012-04-16 4Hackathon\"></dir><file name=\"SWADroid-4hackathon.odp\"><size>5366058</size><time>1335209681</time><license>CC Reconocimiento - No comercial - Compartir bajo la misma licencia</license><publisher>Antonio Ca–as Vargas</publisher><photo></photo></file></tree>";
 				if (!refresh)
 					setMainView();
 				else {
@@ -325,6 +325,15 @@ public class DownloadsManager extends MenuActivity {
 	 * */
 	private void loadGroupsSpinner(){
 		groups = dbHelper.getGroups(Global.getSelectedCourseCode());
+		//remove groups that do not have a file zone assigned 
+		int j = 0;
+		while(j < groups.size()){
+			if(groups.get(j).getDocumentsArea() != 0 && groups.get(j).isMember())
+				++j;
+			else
+				groups.remove(j);
+		}
+		
 		if(!groups.isEmpty() ){ //there are groups in the selected course, therefore the groups spinner should be loaded
 			this.findViewById(R.id.courseSelectedText).setVisibility(View.GONE);
 			Spinner groupsSpinner = (Spinner)this.findViewById(R.id.groupSpinner);
