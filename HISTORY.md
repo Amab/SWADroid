@@ -1,3 +1,11 @@
+## 0.10.1 (2012-11-17)
+
+* Added Android 4.2 compatibility
+* Added red highlight for groups without free spot
+* Changed to lighter blue of background of groups with real membership, darker gray on text about vacants
+* Fixed available choose for groups with real membership
+* Fixed problem with uppercase letter in notifications without summary
+
 ## 0.10 (2012-11-09)
 
 * Added module for enrollment to course groups
