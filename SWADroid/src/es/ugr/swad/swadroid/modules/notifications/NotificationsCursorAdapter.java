@@ -186,7 +186,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         	summaryText = cursor.getString(cursor.getColumnIndex("summary"));
         	
         	//Empty field checking
-        	if(summaryText.compareTo(Global.NULL_VALUE)!=0)
+        	if(summaryText.compareTo(Global.NULL_VALUE)==0)
         		summaryText = context.getString(R.string.noSubjectMsg);
         	
         	summary.setText(Html.fromHtml(summaryText));
@@ -195,7 +195,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         	contentText = cursor.getString(cursor.getColumnIndex("content"));
         	
         	//Empty field checking
-        	if(contentText.compareTo(Global.NULL_VALUE)!=0)
+        	if(contentText.compareTo(Global.NULL_VALUE)==0)
         		contentText = context.getString(R.string.noContentMsg);
         	
     		content.setText(contentText);
