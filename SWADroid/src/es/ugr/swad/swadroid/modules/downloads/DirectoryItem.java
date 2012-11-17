@@ -19,7 +19,7 @@ package es.ugr.swad.swadroid.modules.downloads;
  *  	It will be used, in case a download takes place, to notify SWAD this fact  
  *  	
  * 	@author Sergio Ropero Oliver. <sro0000@gmail.com>
- * 	@author Helena Rodríguez Gijón <hrgijon@gmail.com>
+ * 	@author Helena Rodriguez Gijon <hrgijon@gmail.com>
  *	@version 1.0
  */
 public class DirectoryItem

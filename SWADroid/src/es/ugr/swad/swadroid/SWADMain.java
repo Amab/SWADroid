@@ -310,6 +310,8 @@ public class SWADMain extends MenuExpandableListActivity {
 
 				Global.setSelectedCourseShortName("");
 				Global.setSelectedCourseFullName("");
+				
+				Global.setCurrentUserRole(-1);
 
 				//If this is an upgrade, show upgrade dialog
 			} else if(lastVersion < currentVersion) {				
@@ -330,11 +332,12 @@ public class SWADMain extends MenuExpandableListActivity {
 				Global.setSelectedCourseCode(c.getId());
 				Global.setSelectedCourseShortName(c.getShortName());
 				Global.setSelectedCourseFullName(c.getFullName());
-				
+				Global.setCurrentUserRole(c.getUserRole());
 			}else{
 				Global.setSelectedCourseCode(-1);
 				Global.setSelectedCourseShortName("");
 				Global.setSelectedCourseFullName("");
+				Global.setCurrentUserRole(-1);
 				if(!firstRun && Global.connectionAvailable(this)) getCurrentCourses(); //at the first run, this will be launched after the preferences menu 
 			}
 			currentRole = -1;
@@ -408,6 +411,7 @@ public class SWADMain extends MenuExpandableListActivity {
 				Global.setSelectedCourseCode(courseCode);
 				Global.setSelectedCourseShortName(courseSelected.getShortName());
 				Global.setSelectedCourseFullName(courseSelected.getFullName());
+				Global.setCurrentUserRole(courseSelected.getUserRole());
 				createMenu();
 			}
 		}
@@ -455,12 +459,14 @@ public class SWADMain extends MenuExpandableListActivity {
 					Global.setSelectedCourseCode(courseSelected.getId());
 					Global.setSelectedCourseShortName(courseSelected.getShortName());
 					Global.setSelectedCourseFullName(courseSelected.getFullName());
+					Global.setCurrentUserRole(courseSelected.getUserRole());
 					prefs.setLastCourseSelected(lastSelected);
 				}else{
 					courseSelected = (Course) listCourses.get(0);
 					Global.setSelectedCourseCode(courseSelected.getId());
 					Global.setSelectedCourseShortName(courseSelected.getShortName());
 					Global.setSelectedCourseFullName(courseSelected.getFullName());
+					Global.setCurrentUserRole(courseSelected.getUserRole());
 					prefs.setLastCourseSelected(0);
 				}
 			}
@@ -555,7 +561,7 @@ public class SWADMain extends MenuExpandableListActivity {
 			map = new HashMap<String,Object>();
 			map.put(NAME, getString(R.string.sharedsDownloadModuleLabel));
 			map.put(IMAGE,  getResources().getDrawable(R.drawable.folderusers));
-			documentsData.add(map);*/			
+			documentsData.add(map);*/		
 			
 			map = new HashMap<String,Object>();
 			map.put(NAME, getString(R.string.myGroupsModuleLabel));
@@ -646,6 +652,7 @@ public class SWADMain extends MenuExpandableListActivity {
 		Global.setSelectedCourseCode(-1);
 		Global.setSelectedCourseShortName("");
 		Global.setSelectedCourseFullName("");
+		Global.setCurrentUserRole(-1);
 		prefs.setLastCourseSelected(-1);
 		dBCleaned = true;
 		listCourses.clear();

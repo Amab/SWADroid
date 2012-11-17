@@ -82,7 +82,7 @@ public class DownloadsManager extends MenuActivity {
 	 * Specifies chosen group to show its documents
 	 * 0 - 
 	 * */
-	private int chosenGroupCode = 0;
+	private long chosenGroupCode = 0;
 	/**
 	 * String that contains the xml files recevied from the web service
 	 * */
@@ -92,15 +92,6 @@ public class DownloadsManager extends MenuActivity {
 	 * Downloads tag name for Logcat
 	 */
 	public static final String TAG = Global.APP_TAG + " Downloads";
-
-	/**
-	 * Database Helper.
-	 */
-	protected static DataBaseHelper dbHelper;    
-	/**
-	 * Database Framework.
-	 */
-	protected static DataFramework db; 
 	
 	/**
 	 * List of group of the selected course to which the user belongs
@@ -159,15 +150,6 @@ public class DownloadsManager extends MenuActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		// Initialize database
-		try {
-			dbHelper = new DataBaseHelper(getBaseContext());
-		} catch (Exception ex) {
-			Log.e(ex.getClass().getSimpleName(), ex.getMessage());
-			ex.printStackTrace();
-		}
-		
 		setContentView(R.layout.navigation);
 		
 		checkMediaAvailability();
@@ -186,7 +168,7 @@ public class DownloadsManager extends MenuActivity {
 			    		openFileDefaultApp(directoryPath+File.separator+fileName);
 			    		break;
 			    	case 1:
-			    		createNotification(directoryPath,navigator.getURLFile(chosenNodeName));
+			    		callGetFile(chosenNodeName);
 			    		break;
 			    	case 2:
 			    		File f =  new File(directoryPath, fileName);
@@ -207,32 +189,14 @@ public class DownloadsManager extends MenuActivity {
 					int position, long id) {
 				TextView text = (TextView) v.findViewById(R.id.icon_text);
 				chosenNodeName = text.getText().toString();
-				fileName = navigator.getFileName(chosenNodeName);
 
 				Long fileCode = navigator.getFileCode(chosenNodeName);
 				if(fileCode == -1) //it is a directory therefore navigates into it
 					updateView(navigator.goToSubDirectory(chosenNodeName));
-				else{ //it is a files therefore starts the download and notifies it. 
+				else{ //it is a files therefore gets its information throught web service GETFILE
 
-					
-					directoryPath = getDirectoryPath();
-					File f = new File(directoryPath, fileName);
-					if(!f.exists())
-						createNotification(directoryPath,navigator.getURLFile(chosenNodeName));
-					else{
-						fileOptions.show();
-						
-					}					
-					//TODO activate request for notification download file when it is available 
-/*					if(downloadDone){
-						Intent activity;
-						activity = new Intent(getBaseContext(), NotifyDownload.class);
-						activity.putExtra("fileCode", fileCode);
-						startActivityForResult(activity, Global.NOTIFYDOWNLOAD_REQUEST_CODE);
-						//TODO we must only wait , if a confirmation is needed
-						//startActivity(activity);
-					}*/
-					
+					//TODO
+					callGetFile(chosenNodeName);
 				}
 			}
 		}));
@@ -284,7 +248,8 @@ public class DownloadsManager extends MenuActivity {
 			// After get the list of courses, a dialog is launched to choice the
 			// course
 			case Global.DIRECTORY_TREE_REQUEST_CODE:
-				tree = data.getStringExtra("tree");
+				 tree = data.getStringExtra("tree");// this is the right call, disable until getDirectoryTreeDownload is fixed
+				//tree = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><tree><dir name=\"2012-04-16 4Hackathon\"></dir><file name=\"SWADroid-4hackathon.odp\"><size>5366058</size><time>1335209681</time><license>CC Reconocimiento - No comercial - Compartir bajo la misma licencia</license><publisher>Antonio Ca–as Vargas</publisher><photo></photo></file></tree>";
 				if (!refresh)
 					setMainView();
 				else {
@@ -292,8 +257,16 @@ public class DownloadsManager extends MenuActivity {
 					refresh();
 				}
 				break;
-			case Global.NOTIFYDOWNLOAD_REQUEST_CODE:
-				Log.i(TAG, "Correct download notification");
+			case Global.GETFILE_REQUEST_CODE:
+				Log.i(TAG, "Correct get file");
+				String url = data.getExtras().getString("link");
+				String infoFile = data.getExtras().getString("name");
+				if(url != null && infoFile != null){
+					directoryPath =  getDirectoryPath();
+					File f = new File(directoryPath, infoFile);
+					if(!f.exists())
+						downloadFile(directoryPath,url);
+				}
 				break;
 			case Global.GROUPS_REQUEST_CODE:
 				groupsRequested = true;
@@ -352,6 +325,15 @@ public class DownloadsManager extends MenuActivity {
 	 * */
 	private void loadGroupsSpinner(){
 		groups = dbHelper.getGroups(Global.getSelectedCourseCode());
+		//remove groups that do not have a file zone assigned 
+		int j = 0;
+		while(j < groups.size()){
+			if(groups.get(j).getDocumentsArea() != 0 && groups.get(j).isMember())
+				++j;
+			else
+				groups.remove(j);
+		}
+		
 		if(!groups.isEmpty() ){ //there are groups in the selected course, therefore the groups spinner should be loaded
 			this.findViewById(R.id.courseSelectedText).setVisibility(View.GONE);
 			Spinner groupsSpinner = (Spinner)this.findViewById(R.id.groupSpinner);
@@ -389,7 +371,7 @@ public class DownloadsManager extends MenuActivity {
 			//if the position is 0, it is chosen the whole course. Otherwise a group has been chosen
 			long newGroupCode = position==0? 0 : groups.get(position).getId();
 			if(chosenGroupCode != newGroupCode){
-				chosenGroupCode = (int)newGroupCode;
+				chosenGroupCode = newGroupCode;
 				requestDirectoryTree();
 			}	
 
@@ -397,8 +379,6 @@ public class DownloadsManager extends MenuActivity {
 
 		@Override
 		public void onNothingSelected(AdapterView<?> arg0) {
-			// TODO Auto-generated method stub
-
 		}
 
 	}
@@ -407,7 +387,7 @@ public class DownloadsManager extends MenuActivity {
 		Intent activity;
 		activity = new Intent(getBaseContext(), DirectoryTreeDownload.class);
 		activity.putExtra("treeCode", downloadsAreaCode);
-		activity.putExtra("groupCode", chosenGroupCode);
+		activity.putExtra("groupCode", (int)chosenGroupCode);
 		startActivityForResult(activity, Global.DIRECTORY_TREE_REQUEST_CODE);
 	}
 	
@@ -488,7 +468,7 @@ public class DownloadsManager extends MenuActivity {
 		return path;
 	}
 	
-	private void createNotification(String directory, String url){
+	private void downloadFile(String directory, String url){
 		if(downloadsAreaCode == Global.DOCUMENTS_AREA_CODE)
 			new FileDownloaderAsyncTask(getApplicationContext(),false).execute(directory,url);
 		if(downloadsAreaCode == Global.SHARE_AREA_CODE)
@@ -506,4 +486,13 @@ public class DownloadsManager extends MenuActivity {
 			startActivity(intent);
 		}
 	}
+	private void callGetFile(String fileName){
+	    Intent activity;
+	    activity = new Intent(getBaseContext(), GetFile.class);
+	    activity.putExtra("courseCode", Global.getSelectedCourseCode());
+	    activity.putExtra("groupCode", chosenGroupCode);
+	    activity.putExtra("treeCode", downloadsAreaCode);
+	    activity.putExtra("path", navigator.getPath() + fileName);
+	    startActivityForResult(activity, Global.GETFILE_REQUEST_CODE);
+	  }
 }

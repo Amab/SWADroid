@@ -66,6 +66,11 @@ public class Global {
 	 * */
 	private static String selectedCourseFullName;
 	/**
+	 * Role of the logged User in the current selected course
+	 * 
+	 * */
+	private static int currentUserRole = -1;
+	/**
 	 * Code of the chosen course for rollcall. All next actions are referred to this course.
 	 */
 	private static long selectedRollcallCourseCode = -1;
@@ -88,7 +93,7 @@ public class Global {
 	/**
 	 * Null value returned by webservices when a field is empty
 	 */
-	public static final String NULL_VALUE = "anytype{}";
+	public static final String NULL_VALUE = "anyType{}";
 	/**
 	 * Time to force relogin
 	 */
@@ -178,13 +183,17 @@ public class Global {
      * */
     public static final int MYGROUPSMANAGER_REQUEST_CODE= 22;
     /**
-     * Request code for MyGroups Manager
+     * Request code for Group Types module
      * */
     public static final int GROUPTYPES_REQUEST_CODE= 23;
     /**
-     * Request code for SendMyGroups Manager
+     * Request code for SendMyGroups 
      * */
     public static final int SENDMYGROUPS_REQUEST_CODE = 24;
+    /**
+     * Request code for GetFile Manager
+     * */
+    public static final int GETFILE_REQUEST_CODE = 25;
 	/**
 	 * Prefix tag name for Logcat
 	 */
@@ -380,6 +389,16 @@ public class Global {
 	public static void setSelectedCourseCode(long currentCourseCode){
 		if(currentCourseCode >0) selectedCourseCode = currentCourseCode;
 	}
+	/**
+	 * Sets user role in the current selected course
+	 * @param userRole: Role of the user: 0- unknown STUDENT_TYPE_CODE - student TEACHER_TYPE_CODE - teacher
+	 * */
+	public static void setCurrentUserRole(int userRole){
+		if(userRole == 0 || userRole == TEACHER_TYPE_CODE || userRole == STUDENT_TYPE_CODE ) 
+			currentUserRole = userRole;
+		else
+			currentUserRole = -1;
+	}
 
 	public static boolean isPreferencesChanged(){
 		return preferencesChanged;
@@ -417,6 +436,18 @@ public class Global {
 		return selectedCourseFullName;
 		
 	}
+	
+	/**
+	 * Gets the role of the logged user in the current selected course
+	 * @return -1 if the user role has not been fixed, 
+	 * 			0  if the user role is unknown 
+	 * 			2 (STUDENT_TYPE_CODE) if the user is a student
+	 * 			3 (TEACHER_TYPE_CODE) if the user is a teacher
+	 * */
+	public static int getCurrentUserRole(){
+		return currentUserRole;
+	}
+	
 		/**
 	 * Gets code of actual rollcall course
 	 * return -1 if no rollcall course chosen; code of actual rollcall course in other case

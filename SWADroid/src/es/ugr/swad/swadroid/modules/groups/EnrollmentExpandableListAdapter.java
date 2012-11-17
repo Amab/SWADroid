@@ -5,13 +5,16 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.model.GroupType;
 import es.ugr.swad.swadroid.model.Model;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +38,7 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 	private ArrayList<Model> groups = null;
 	private HashMap<Long, boolean[]> realMembership = new HashMap<Long,boolean[]>();
 	
+	private int role = -1;
 	private int layoutGroup = 0;
 	private int layoutChild = 0;
 	
@@ -49,18 +53,20 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 		RadioButton radioButton;
 		TextView nStudentText;
 		TextView vacantsText;
+		ColorStateList oldColor;
 	}
 	
 	private LayoutInflater mInflater;
 	private Context context;
 	
-	public EnrollmentExpandableListAdapter(Context context,ArrayList<Model> groups, HashMap<Long,ArrayList<Group>> children, int layoutGroup, int layoutChild) {
+	public EnrollmentExpandableListAdapter(Context context,ArrayList<Model> groups, HashMap<Long,ArrayList<Group>> children, int layoutGroup, int layoutChild, int currentRole) {
 		super();
 		this.context = context;
 		this.groups = groups;
 		this.children = children;
 		this.layoutGroup = layoutGroup;
 		this.layoutChild = layoutChild;
+		this.role = currentRole;
 		
 		//Initialize real inscription
 		for(Map.Entry<Long, ArrayList<Group>> entry : this.children.entrySet()){
@@ -97,7 +103,7 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 			holder.radioButton = (RadioButton) convertView.findViewById(R.id.radioButton);
 			holder.nStudentText = (TextView) convertView.findViewById(R.id.nStudentText);
 			holder.vacantsText = (TextView) convertView.findViewById(R.id.vacantsText);
-			
+			holder.oldColor =  holder.vacantsText.getTextColors();
 			convertView.setTag(holder);
 		}else{
 			holder = (ChildHolder) convertView.getTag();
@@ -125,32 +131,47 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 		int open = group.getOpen();
 		int member = group.getMember();
 		
+		boolean freeSpot = false;
+		if(maxStudents != -1 ){
+			if(group.getCurrentStudents() < maxStudents)
+				freeSpot = true;
+		}else{ //if maxStudent == -1, there is not limit of students in this groups
+			freeSpot = true;
+		}
+		
 		if(open != 0){
 			holder.imagePadlock.setImageResource(R.drawable.padlockgreen);
+		}else{
+			holder.imagePadlock.setImageResource(R.drawable.padlockred);
+		}
+		
+		if((open != 0 && freeSpot) || role == Global.TEACHER_TYPE_CODE){ //Teachers can enroll even on closed groups
 			holder.checkBox.setEnabled(true);
 			holder.checkBox.setTextColor(context.getResources().getColor(android.R.color.black));
 			holder.imagePadlock.setEnabled(true);
 			holder.nStudentText.setEnabled(true);
+			holder.nStudentText.setTextColor(context.getResources().getColor(R.color.sgilight_gray_32));
 			holder.radioButton.setEnabled(true);
 			holder.radioButton.setTextColor(context.getResources().getColor(android.R.color.black));
-			
 			holder.relativeLayout.setEnabled(true);
 			holder.vacantsText.setEnabled(true);
+			holder.vacantsText.setTextColor(context.getResources().getColor(R.color.sgilight_gray_32));
 		}else{
-			holder.imagePadlock.setImageResource(R.drawable.padlockred);
 			holder.checkBox.setEnabled(false);
 			holder.checkBox.setTextColor( context.getResources().getColor(R.color.sgilight_gray));
 			holder.imagePadlock.setEnabled(false);
 			holder.nStudentText.setEnabled(false);
+			holder.nStudentText.setTextColor( context.getResources().getColor(R.color.sgilight_gray));
 			holder.radioButton.setEnabled(false);
 			holder.radioButton.setTextColor(context.getResources().getColor(R.color.sgilight_gray));
 			holder.relativeLayout.setEnabled(false);
 			holder.vacantsText.setEnabled(false);
+			holder.vacantsText.setTextColor( context.getResources().getColor(R.color.sgilight_gray));
 		}
 		//for multiple inscriptions the groups should be checkboxes to allow multiple choice
 		//otherwise the groups should be radio button to allow just a single choice
-		if(multiple == 0){ //single inscriptions:
-			
+		//Teachers can enroll in multiple groups even if the enrollment type for the group type is single
+		if(multiple == 0 && role != Global.TEACHER_TYPE_CODE){ //single inscriptions:
 			holder.checkBox.setVisibility(View.GONE);
 			holder.radioButton.setVisibility(View.VISIBLE);
 			
@@ -173,11 +194,21 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 			}	
 		}
 
-		holder.nStudentText.setText(context.getString(R.string.numStudent) + String.valueOf(students));
-		if(maxStudents != -1)
-			holder.vacantsText.setText( context.getString(R.string.vacants)+" : "+String.valueOf(maxStudents - students));
-		else 					
+		holder.nStudentText.setText(context.getString(R.string.numStudent) +" " +String.valueOf(students));
+		
+		if(maxStudents != -1){
+			int vacants = maxStudents - students;
+			holder.vacantsText.setText( context.getString(R.string.vacants)+" : "+String.valueOf(vacants));
+			if(vacants == 0){
+				holder.vacantsText.setTextColor(context.getResources().getColor(R.color.sgi_salmon));
+				holder.vacantsText.setTypeface(null, Typeface.BOLD);
+			}else
+				holder.vacantsText.setTypeface(null, Typeface.NORMAL);
+				
+		}else{					
 			holder.vacantsText.setText(context.getString(R.string.vacants)+ " : " + context.getString(R.string.withoutLimit));
+			holder.vacantsText.setTypeface(null, Typeface.NORMAL);
+		}
 		
 		return convertView;
 	}
@@ -246,7 +277,17 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 	
 		ArrayList<Group> children = this.children.get(groupTypeCode);
 		Group group = children.get(childPosition);
-		if(group.getOpen() != 0)
+		int maxStudent = group.getMaxStudents();
+		boolean freeSpot = false;
+		if(maxStudent != -1 ){
+			if(group.getCurrentStudents() < maxStudent)
+				freeSpot = true;
+		}else{ //if maxStudent == -1, there is not limit of students in this groups
+			freeSpot = true;
+		}
+		
+		boolean realMember = realMembership.get(groupTypeCode)[childPosition];
+		if((group.getOpen() != 0 && (freeSpot || realMember))|| role == Global.TEACHER_TYPE_CODE)
 			return true;
 		else
 			return false;
@@ -267,7 +308,7 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 			int previousCheckState = group.getMember();
 			group.setMember((group.getMember()+1) % 2);
 			
-			if(multiple == 0 && previousCheckState == 0){//unique enrollment. Only an option is checked.
+			if(multiple == 0 && previousCheckState == 0 && role != Global.TEACHER_TYPE_CODE){//unique enrollment. Only an option is checked.
 				//If the group does not allow multiple enrollment and previously it was not checked, the rest of the groups should be unchecked. 
 				Long groupTypeCode = groupType.getId();
 				ArrayList<Group> children = this.children.get(groupTypeCode);
