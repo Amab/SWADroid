@@ -248,8 +248,8 @@ public class DownloadsManager extends MenuActivity {
 			// After get the list of courses, a dialog is launched to choice the
 			// course
 			case Global.DIRECTORY_TREE_REQUEST_CODE:
-				// tree = data.getStringExtra("tree");// this is the right call, disable until getDirectoryTreeDownload is fixed
-				tree = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><tree><dir name=\"2012-04-16 4Hackathon\"></dir><file name=\"SWADroid-4hackathon.odp\"><size>5366058</size><time>1335209681</time><license>CC Reconocimiento - No comercial - Compartir bajo la misma licencia</license><publisher>Antonio Ca–as Vargas</publisher><photo></photo></file></tree>";
+				 tree = data.getStringExtra("tree");// this is the right call, disable until getDirectoryTreeDownload is fixed
+				//tree = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><tree><dir name=\"2012-04-16 4Hackathon\"></dir><file name=\"SWADroid-4hackathon.odp\"><size>5366058</size><time>1335209681</time><license>CC Reconocimiento - No comercial - Compartir bajo la misma licencia</license><publisher>Antonio Ca–as Vargas</publisher><photo></photo></file></tree>";
 				if (!refresh)
 					setMainView();
 				else {

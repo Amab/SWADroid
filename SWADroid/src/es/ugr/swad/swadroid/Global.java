@@ -93,7 +93,7 @@ public class Global {
 	/**
 	 * Null value returned by webservices when a field is empty
 	 */
-	public static final String NULL_VALUE = "anytype{}";
+	public static final String NULL_VALUE = "anyType{}";
 	/**
 	 * Time to force relogin
 	 */
