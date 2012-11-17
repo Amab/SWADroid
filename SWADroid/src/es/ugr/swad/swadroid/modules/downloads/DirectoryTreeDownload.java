@@ -7,6 +7,7 @@ import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 import es.ugr.swad.swadroid.Global;
@@ -17,7 +18,7 @@ import es.ugr.swad.swadroid.modules.Module;
 /**
  * DirectoryTreeDownload  gets directory tree of files of general documents of a course/group
  * or documents from shared area of a course/group
- * @author Helena Rodríguez Gijón <hrgijon@gmail.com>
+ * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  * */
 
 public class DirectoryTreeDownload extends Module {
@@ -41,9 +42,12 @@ public class DirectoryTreeDownload extends Module {
 		if(result!=null){
 			SoapObject soapObject = (SoapObject) result;
 			String tree = soapObject.getProperty("tree").toString();
-
-			this.getIntent().putExtra("tree", tree);
-			setResult(RESULT_OK, this.getIntent());
+			
+			Intent resultIntent = new Intent();
+			resultIntent.putExtra("tree", tree);
+			setResult(RESULT_OK, resultIntent);
+		    }else{
+		      setResult(RESULT_CANCELED);
 		}
 	}
 
