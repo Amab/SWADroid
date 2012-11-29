@@ -175,12 +175,14 @@ public class DirectoryNavigator
     			if(childs.item(i).getNodeName().equals("file"))
     			{
     				
-    				String name = "";
-    				String type = "";
-    				String url = "";
-    				int size = -1;
-    				int date = -1;
-    				long fileCode = -1;
+					String name = "";
+					String type = "";
+					long fileCode = -1;
+					long size = -1; //In bytes
+					long time = -1;
+					String license ="";
+					String publisher ="";
+					String photo="";
     				
     				//PARSE THE NAME SEPARING NAME AND EXTENSION
         			NamedNodeMap attributes = currentChild.getAttributes();
@@ -196,41 +198,59 @@ public class DirectoryNavigator
 						System.out.println(j);
     					Node data = fileData.item(j);
     					String tag = data.getNodeName();
-    					if(tag.equals("url"))
-    					{
-    						url = data.getFirstChild().getNodeValue();
-							System.out.println("Url: "+url);
-							//from the url, gets the type
-							int lastDot = url.lastIndexOf(".");
-							if(lastDot != -1)
-								type = url.substring(lastDot+1, url.length());
-							else
-								type = "unknown";
-		    				System.out.println("Type: "+type);
-    					}
-    					else
-    					{
-    						if(tag.equals("size"))
-    						{
-    							size = Integer.parseInt(data.getFirstChild().getNodeValue());
-    							System.out.println("Size: "+size);
-    						}
-    						else
-    						{
-    							if(tag.equals("date"))
-    							{
-    								date = Integer.parseInt(data.getFirstChild().getNodeValue());
-        							System.out.println("Date: "+date);
-    							}else{
-    								if(tag.equals("fileCode"))
-    									fileCode = Long.parseLong(data.getFirstChild().getNodeName());
-    									System.out.println("FileCode "+ fileCode);
-    							}
-    						}
-    					}
+    					Node firstChild = data.getFirstChild();
+    					if(firstChild != null)
+	    					if(tag.equals("code"))
+	    					{
+	    						fileCode = Long.valueOf(firstChild.getNodeValue());
+								/*//from the url, gets the type
+								int lastDot = url.lastIndexOf(".");
+								if(lastDot != -1)
+									type = url.substring(lastDot+1, url.length());
+								else
+									type = "unknown";
+			    				System.out.println("Type: "+type);*/
+	    					}
+	    					else
+	    					{
+	    						if(tag.equals("size"))
+	    						{
+	    							size = Integer.parseInt(firstChild.getNodeValue());
+	    							
+	    						}
+	    						else
+	    						{
+	    							if(tag.equals("time"))
+	    							{
+	    								time = Long.valueOf(firstChild.getNodeValue());
+	        							
+	    							}else{
+	    								if(tag.equals("license")){
+	    									license = firstChild.getNodeValue();
+	    									
+	    								}else{
+	        								if(tag.equals("publisher")){
+	        									publisher = firstChild.getNodeValue();
+	        									
+	        								}else{
+	        									if(tag.equals("photo")){
+	            									photo = firstChild.getNodeValue();
+	            									
+	        									
+	        									}	
+	        								}
+	    								}
+	    							}
+	    						}
+	    					}
     				}
-    				
-    				item = new DirectoryItem(name,type,url,size,date); //TODO it should be replaced with the next constructor when the fields fileCode is added to the web service getDirectoryTree
+    				System.out.println("Code: "+fileCode);
+    				System.out.println("Size: "+size);
+    				System.out.println("Time: "+time);
+    				System.out.println("license: "+ license);
+    				System.out.println("publisher: "+ publisher);
+    				System.out.println("photo: "+ photo);
+    				item = new DirectoryItem(name, type, fileCode, size, time, license, publisher, photo);
     				//item = new DirectoryItem(name,type,url,size,date,fileCode);
     	    		items.add(item);
     			}
@@ -278,14 +298,15 @@ public class DirectoryNavigator
 				for(int j=0;j<childs.getLength();j++)
 				{
 					Node currentChild = childs.item(j);
-	        	
-	        		NamedNodeMap attributes = currentChild.getAttributes();
-	        		System.out.println(path.get(i)+"  "+attributes.getNamedItem("name").getNodeValue());
-	        		if(path.get(i).equals(attributes.getNamedItem("name").getNodeValue()))
-	        		{
-	        			currentNode = currentChild;
-	        			directoryLevel++;
-	        		}
+					if(currentChild.getNodeName().equals("dir") || currentChild.getNodeName().equals("file")){
+		        		NamedNodeMap attributes = currentChild.getAttributes();
+		        		System.out.println(path.get(i)+"  "+attributes.getNamedItem("name").getNodeValue());
+		        		if(path.get(i).equals(attributes.getNamedItem("name").getNodeValue()))
+		        		{
+		        			currentNode = currentChild;
+		        			directoryLevel++;
+		        		}
+					}	        	
 	        	}
 	        }
 		}
@@ -363,20 +384,20 @@ public class DirectoryNavigator
 		long fileCode = -1;
 		
 		DirectoryItem node = getDirectoryItem(name);
-		if(node != null){
+		if(node != null && !node.isFolder()){
 			fileCode = node.getFileCode();
 		}
 		
 		return fileCode;
 		
 	}
-	
-    /**
+	/*
+    *//**
      * Identifies the node with name @a name and gets its file code in case the node is a file. In case the node is a directory returns -1
      * @param name Name of the node located on the current directory.
      * @returns null in case the node is a directory or it does not exists any node with the given name
      * 			URL String that contains the url address to download the chosen file
-     */
+     *//*
 	public String getURLFile(String name){
 		String url = null;
 		
@@ -390,7 +411,7 @@ public class DirectoryNavigator
 		return url;
 		
 	}
-	
+	*/
 	//TODO we use this method only to simulate the download while the web service is not available
 	public String setSimulateURL(){
 		return "http://swad.ugr.es/logo/swad24x24.gif";
@@ -410,8 +431,8 @@ public class DirectoryNavigator
 	 * */
 	// TODO it should not be needed because name of the node and name of the file should be equal. 
 	public String getFileName(String name){
-		String url = getURLFile(name);
-		return getFilenNameFromURL(url);
+		DirectoryItem node = getDirectoryItem(name);
+		return node.getName();
 		
 	}
 }

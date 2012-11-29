@@ -45,6 +45,9 @@ public class DirectoryItem
 		this.fileCode=-1;
 	}
 
+	DirectoryItem(String name, String type, long fileCode, long size, long time, String license, String publisher, String photo){
+		
+	}
 	//TODO This constructor is deprecated.it will be erased when the file code is added to the new web service getDirectoryTree
 	/**
 	 * Constructor of a File item.
