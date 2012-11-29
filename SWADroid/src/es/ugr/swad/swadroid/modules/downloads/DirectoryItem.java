@@ -26,10 +26,12 @@ public class DirectoryItem
 {
 	String name;
 	String type;
-	String url;
-	int size; //In bytes
-	int date;
-	long fileCode;
+	long fileCode = -1;
+	long size = -1; //In bytes
+	long time = -1;
+	String license;
+	String publisher ="";
+	String photo="";
 	
 	/**
 	 * Constructor of a directory type.
@@ -39,48 +41,37 @@ public class DirectoryItem
 	{
 		this.name = name;
 		this.type = "dir";
-		this.url="";
-		this.size=0;
-		this.date = -1;
-		this.fileCode=-1;
-	}
-
-	DirectoryItem(String name, String type, long fileCode, long size, long time, String license, String publisher, String photo){
+		this.fileCode = -1;
+		this.size = 0;
+		this.time = -1;
+		this.license = "";
+		this.publisher = "";
+		this.photo = "";
 		
 	}
+
 	//TODO This constructor is deprecated.it will be erased when the file code is added to the new web service getDirectoryTree
 	/**
 	 * Constructor of a File item.
 	 * @param name
 	 * @param type
-	 * @param url
+	 * @param fileCode
 	 * @param size
-	 * @param date
+	 * @param time
+	 * @param license
+	 * @param publisher
+	 * @param photo
 	 */
-	DirectoryItem(String name, String type, String url, int size, int date)
+	DirectoryItem(String name, String type, long fileCode, long size, long time,String license, String publisher, String photo)
 	{
 		this.name = name;
 		this.type = type;
-		this.url = url;
-		this.size = size;
-		this.date = date;
-	}
-	/**
-	 * Constructor of a File item.
-	 * @param name
-	 * @param type
-	 * @param url
-	 * @param size
-	 * @param date
-	 */
-	DirectoryItem(String name, String type, String url, int size, int date, long fileCode)
-	{
-		this.name = name;
-		this.type = type;
-		this.url = url;
-		this.size = size;
-		this.date = date;
 		this.fileCode = fileCode;
+		this.size = size;
+		this.time = time;
+		this.license = license;
+		this.publisher = publisher;
+		this.photo = photo;
 	}
 	
 	/**
@@ -103,15 +94,12 @@ public class DirectoryItem
 	{
 		this.name = name;
 	}
-
+	public void setFileCode(long fileCode){
+		this.fileCode = fileCode;
+	}
 	public void setType(String type)
 	{
 		this.type = type;
-	}
-	
-	public void setUrl(String url)
-	{
-		this.url = url;
 	}
 	
 	public void setSize(int size)
@@ -119,9 +107,21 @@ public class DirectoryItem
 		this.size = size;
 	}
 	
-	public void setDate(int date)
+	public void setTime(long time)
 	{
-		this.date = date;
+		this.time = time;
+	}
+	public void setLicense(String license)
+	{
+		this.license = license;
+	}
+	public void setPublisher(String publisher)
+	{
+		this.publisher = publisher;
+	}
+	public void setPhoto(String photo)
+	{
+		this.photo = photo;
 	}
 	
 	
@@ -129,28 +129,33 @@ public class DirectoryItem
 	{
 		return name;
 	}
-	
+
 	public String getType()
 	{
 		return type;
 	}
-	
-	public String getUrl()
-	{
-		return url;
+	public long getFileCode(){
+		return fileCode;
 	}
-	
-	public Integer getSize()
+	public long getSize()
 	{
 		return size;
 	}
-	
-	public Integer getDate()
+	public long getTime()
 	{
-		return date;
+		return time;
 	}
-	
-	public Long getFileCode(){
-		return fileCode;
+	public String getLicense()
+	{
+		return license;
 	}
+	public String getPublisher()
+	{
+		return publisher;
+	}
+	public String getPhoto()
+	{
+		return photo;
+	}
+
 }
