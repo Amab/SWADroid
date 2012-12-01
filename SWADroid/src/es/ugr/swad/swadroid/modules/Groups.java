@@ -15,11 +15,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
-import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.model.GroupType;
 import es.ugr.swad.swadroid.model.Model;
+import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
 
 /**
