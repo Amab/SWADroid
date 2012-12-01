@@ -317,6 +317,11 @@ public class Notifications extends Module {
 			//Configure the alert
 			int icon = R.drawable.ic_launcher_swadroid;
 			long hour = System.currentTimeMillis();
+			
+			//If the notifications counter exceeds the limit, set it to the max allowed
+			if(notifCount > SIZE_LIMIT) {
+				notifCount = SIZE_LIMIT;
+			}
 
 			Notification notif =
 					new Notification(icon, getString(R.string.notificationsAlertTitle), hour);

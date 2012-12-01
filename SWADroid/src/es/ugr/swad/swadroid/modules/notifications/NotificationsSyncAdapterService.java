@@ -135,6 +135,11 @@ public class NotificationsSyncAdapterService extends Service {
 				//Configure the alert
 				int icon = R.drawable.ic_launcher_swadroid;
 				long hour = System.currentTimeMillis();
+				
+				//If the notifications counter exceeds the limit, set it to the max allowed
+				if(notifCount > SIZE_LIMIT) {
+					notifCount = SIZE_LIMIT;
+				}
 
 				Notification notif =
 						new Notification(icon, context.getString(R.string.app_name), hour);
