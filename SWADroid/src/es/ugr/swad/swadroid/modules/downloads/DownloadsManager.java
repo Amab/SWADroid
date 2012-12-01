@@ -168,7 +168,7 @@ public class DownloadsManager extends MenuActivity {
 			    		openFileDefaultApp(directoryPath+File.separator+fileName);
 			    		break;
 			    	case 1:
-			    		callGetFile(chosenNodeName);
+			    		requestGetFile(chosenNodeName);
 			    		break;
 			    	case 2:
 			    		File f =  new File(directoryPath, fileName);
@@ -196,7 +196,7 @@ public class DownloadsManager extends MenuActivity {
 				else{ //it is a files therefore gets its information throught web service GETFILE
 
 					//TODO
-					callGetFile(chosenNodeName);
+					requestGetFile(chosenNodeName);
 				}
 			}
 		}));
@@ -369,7 +369,8 @@ public class DownloadsManager extends MenuActivity {
 		public void onItemSelected(AdapterView<?> parent, View view, int position,
 				long id) {
 			//if the position is 0, it is chosen the whole course. Otherwise a group has been chosen
-			long newGroupCode = position==0? 0 : groups.get(position).getId();
+			//position - 0 belongs to the whole course
+			long newGroupCode = position==0? 0 : groups.get(position-1).getId();
 			if(chosenGroupCode != newGroupCode){
 				chosenGroupCode = newGroupCode;
 				requestDirectoryTree();
@@ -486,13 +487,14 @@ public class DownloadsManager extends MenuActivity {
 			startActivity(intent);
 		}
 	}
-	private void callGetFile(String fileName){
+	private void requestGetFile(String fileName){
 	    Intent activity;
 	    activity = new Intent(getBaseContext(), GetFile.class);
 	    activity.putExtra("courseCode", Global.getSelectedCourseCode());
 	    activity.putExtra("groupCode", chosenGroupCode);
 	    activity.putExtra("treeCode", downloadsAreaCode);
-	    activity.putExtra("path", navigator.getPath() + fileName);
+	    activity.putExtra("fileCode", navigator.getFileCode(chosenNodeName));
+	    //activity.putExtra("path", navigator.getPath() + fileName);
 	    startActivityForResult(activity, Global.GETFILE_REQUEST_CODE);
 	  }
 }
