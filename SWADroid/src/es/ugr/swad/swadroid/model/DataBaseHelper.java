@@ -1800,7 +1800,7 @@ public class DataBaseHelper {
 			if(found){
 				//without to keep data 
 				db.getDB().execSQL( "DROP TABLE " + Global.DB_TABLE_COURSES + ";");//+
-						db.getDB().execSQL("CREATE TABLE "+ Global.DB_TABLE_COURSES
+				db.getDB().execSQL("CREATE TABLE "+ Global.DB_TABLE_COURSES
 						+ " (_id integer primary key autoincrement, id long, userRole integer,shortName text, fullName text);");
 				//Keeping data (It will have columns without data):
 				/*
@@ -1822,7 +1822,7 @@ public class DataBaseHelper {
 	
 			dbCursor = db.getDB().query(Global.DB_TABLE_COURSES, null, null, null, null, null, null);
 			columnNames = dbCursor.getColumnNames();
-			}
+		}
 
 		/* version 12 - 13
 		 * changes on groups table: 
