@@ -36,6 +36,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.notifications.Notifications;
+import es.ugr.swad.swadroid.utils.Base64;
 
 /**
  * Preferences window of application.

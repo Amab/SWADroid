@@ -43,6 +43,8 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import es.ugr.swad.swadroid.gui.ImageExpandableListAdapter;
+import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.model.Model;
@@ -316,6 +318,7 @@ public class SWADMain extends MenuExpandableListActivity {
 			} else if(lastVersion < currentVersion) {				
 				//showUpgradeDialog();
 				dbHelper.upgradeDB(this);
+				dbHelper.encryptNotifications();
 				//prefs.upgradeCredentials();
 
 				//Configure automatic synchronization
