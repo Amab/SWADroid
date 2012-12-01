@@ -86,7 +86,7 @@ public class DirectoryTreeDownload extends Module {
 	protected void onStart() {
 		super.onStart();
 		treeCode = getIntent().getIntExtra("treeCode", Global.DOCUMENTS_AREA_CODE); 
-		//group = getIntent().getIntExtra("groupCode", 0);
+		group = getIntent().getIntExtra("groupCode", 0);
 		runConnection();
 		if(!isConnected){
 			setResult(RESULT_CANCELED);

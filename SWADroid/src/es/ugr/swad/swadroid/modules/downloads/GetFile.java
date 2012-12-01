@@ -54,17 +54,19 @@ public class GetFile extends Module {
 	 * Complete path to the file
 	 * */
 	private String path = null;
-	
-	
+	/**
+	 * Unique identificator of file
+	 * */
+	private long fileCode = -1;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		courseCode = getIntent().getLongExtra("courseCode", -1);
 		groupCode = getIntent().getLongExtra("groupCode",-1);
 		treeCode = getIntent().getIntExtra("treeCode", -1);
-		path = getIntent().getStringExtra("path");
+		fileCode = getIntent().getLongExtra("fileCode", -1);
 		
-		if(courseCode == -1 || groupCode == -1 || treeCode == -1 || path == null){
+		if(courseCode == -1 || groupCode == -1 || treeCode == -1 || fileCode == -1){
 			Log.i(TAG, "Missing arguments");
 			finish();
 		}
@@ -105,7 +107,7 @@ public class GetFile extends Module {
 		addParam("courseCode", (int)courseCode);
 		addParam("groupCode", (int)groupCode);
 		addParam("treeCode", (int)treeCode);
-		addParam("path", path);
+		addParam("fileCode", fileCode);
 		sendRequest(Group.class,false); //TODO this is not the correct class to map. nothing will be the correct
 		if(result != null){
 			Vector<?> res = (Vector <?>) result;
