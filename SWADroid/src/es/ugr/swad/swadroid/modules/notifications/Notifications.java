@@ -50,7 +50,6 @@ import android.widget.Toast;
 
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.modules.Module;
 
@@ -169,8 +168,7 @@ public class Notifications extends Module {
 		setContentView(R.layout.list_items);
 		
 		this.findViewById(R.id.courseSelectedText).setVisibility(View.GONE);
-		this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
-		
+		this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);		
 		
 		image = (ImageView)this.findViewById(R.id.moduleIcon);
 		image.setBackgroundResource(R.drawable.notif);
@@ -187,6 +185,7 @@ public class Notifications extends Module {
 		dbCursor = dbHelper.getDb().getCursor(Global.DB_TABLE_NOTIFICATIONS, selection, orderby);
 		startManagingCursor(dbCursor);
 		adapter = new NotificationsCursorAdapter(this, dbCursor);
+		adapter.setDBKey(prefs.getDBKey());
 
 		list = (ListView)this.findViewById(R.id.listItems);
 		list.setAdapter(adapter);
