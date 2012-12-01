@@ -356,7 +356,7 @@ public class DirectoryNavigator
 	 *@returns -1 in case it does not exists any node with the given name
      * 			directoryItem with the given name
 	 * */
-	private DirectoryItem getDirectoryItem(String name){
+	public DirectoryItem getDirectoryItem(String name){
 		DirectoryItem node = null;
 		
 		boolean found = false;
