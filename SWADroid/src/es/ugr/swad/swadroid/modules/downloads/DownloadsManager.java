@@ -86,7 +86,7 @@ public class DownloadsManager extends MenuActivity {
 	/**
 	 * String that contains the xml files recevied from the web service
 	 * */
-	private String tree;
+	private String tree = null;
 
 	/**
 	 * Downloads tag name for Logcat
@@ -125,24 +125,26 @@ public class DownloadsManager extends MenuActivity {
 	String chosenNodeName = null;
 	String fileName = null;
 	
-
+	/**
+	 * Indicates the selected position in the groups spinner
+	 * by default the whole course is selected
+	 * */
+	private int groupPosition = 0;
+	
+	
 	@Override
 	protected void onStart() {
 		super.onStart();
-		if(groupsRequested){
-			if(navigator == null)
+		groups = getFilteredGroups();
+		int nGroups = groups.size();
+		if(nGroups != 0  || groupsRequested){
+			this.loadGroupsSpinner(groups);
+			if(nGroups == 0 && tree == null)
 				requestDirectoryTree();
 		}else{
-			List<Model> rows = dbHelper.getAllRows(Global.DB_TABLE_GROUP_TYPES, "courseCode = " + Global.getSelectedCourseCode() , null);
-			if(rows.size() != 0){
-				Intent activity = new Intent(getBaseContext(),Groups.class);
-				activity.putExtra("courseCode", Global.getSelectedCourseCode());
-				startActivityForResult(activity,Global.GROUPS_REQUEST_CODE);
-			}else{
 				Intent activity = new Intent(getBaseContext(),GroupTypes.class);
 				activity.putExtra("courseCode",  Global.getSelectedCourseCode());
-				startActivityForResult(activity,Global.GROUPTYPES_REQUEST_CODE);
-			}
+				startActivityForResult(activity,Global.GROUPTYPES_REQUEST_CODE);				
 		}
 		
 	}
@@ -233,7 +235,10 @@ public class DownloadsManager extends MenuActivity {
 			public void onClick(View v) {
 
 				refresh = true;
-				requestDirectoryTree();
+				Intent activity = new Intent(getBaseContext(),GroupTypes.class);
+				activity.putExtra("courseCode",  Global.getSelectedCourseCode());
+				startActivityForResult(activity,Global.GROUPTYPES_REQUEST_CODE);
+				
 			}
 
 		}));
@@ -248,8 +253,7 @@ public class DownloadsManager extends MenuActivity {
 			// After get the list of courses, a dialog is launched to choice the
 			// course
 			case Global.DIRECTORY_TREE_REQUEST_CODE:
-				 tree = data.getStringExtra("tree");// this is the right call, disable until getDirectoryTreeDownload is fixed
-				//tree = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><tree><dir name=\"2012-04-16 4Hackathon\"></dir><file name=\"SWADroid-4hackathon.odp\"><size>5366058</size><time>1335209681</time><license>CC Reconocimiento - No comercial - Compartir bajo la misma licencia</license><publisher>Antonio Cañas Vargas</publisher><photo></photo></file></tree>";
+				 tree = data.getStringExtra("tree");
 				if (!refresh)
 					setMainView();
 				else {
@@ -270,7 +274,7 @@ public class DownloadsManager extends MenuActivity {
 				break;
 			case Global.GROUPS_REQUEST_CODE:
 				groupsRequested = true;
-				this.loadGroupsSpinner();
+				this.loadGroupsSpinner(groups);
 				requestDirectoryTree();
 				break;	
 			case Global.GROUPTYPES_REQUEST_CODE:	
@@ -320,29 +324,36 @@ public class DownloadsManager extends MenuActivity {
 		((NodeAdapter) grid.getAdapter()).change(items);
 
 	}
+	
+	/**
+	 * Get the list of the groups of the course with a documents zone to whom the user belongs
+	 * */
+	private List<Group> getFilteredGroups(){
+		List<Group> currentGroups = dbHelper.getGroups(Global.getSelectedCourseCode());
+		//remove groups that do not have a file zone assigned 
+		int j = 0;
+		while(j < currentGroups.size()){
+			if(currentGroups.get(j).getDocumentsArea() != 0 && currentGroups.get(j).isMember())
+				++j;
+			else
+				currentGroups.remove(j);
+		}
+		return currentGroups;
+	}
 	/**
 	 * If there are not groups to which the user belong in the database, it makes the request
 	 * */
-	private void loadGroupsSpinner(){
-		groups = dbHelper.getGroups(Global.getSelectedCourseCode());
-		//remove groups that do not have a file zone assigned 
-		int j = 0;
-		while(j < groups.size()){
-			if(groups.get(j).getDocumentsArea() != 0 && groups.get(j).isMember())
-				++j;
-			else
-				groups.remove(j);
-		}
-		
-		if(!groups.isEmpty() ){ //there are groups in the selected course, therefore the groups spinner should be loaded
+	private void loadGroupsSpinner(List<Group> currentGroups){
+
+		if(!currentGroups.isEmpty() ){ //there are groups in the selected course, therefore the groups spinner should be loaded
 			this.findViewById(R.id.courseSelectedText).setVisibility(View.GONE);
 			Spinner groupsSpinner = (Spinner)this.findViewById(R.id.groupSpinner);
 			groupsSpinner.setVisibility(View.VISIBLE);
 			
-			ArrayList<String> spinnerNames = new ArrayList<String>(groups.size()+1);
+			ArrayList<String> spinnerNames = new ArrayList<String>(currentGroups.size()+1);
 			spinnerNames.add(getString(R.string.course)+"-" + Global.getSelectedCourseShortName());
-			for(int i=0;i<groups.size();++i){
-				Group g = groups.get(i);
+			for(int i=0;i<currentGroups.size();++i){
+				Group g = currentGroups.get(i);
 				GroupType gType = dbHelper.getGroupTypeFromGroup(g.getId());
 				spinnerNames.add(getString(R.string.group)+"-" + gType.getGroupTypeName() + " "+ g.getGroupName() );
 			}
@@ -350,20 +361,19 @@ public class DownloadsManager extends MenuActivity {
 			ArrayAdapter<String> adapter = new ArrayAdapter<String> (this,android.R.layout.simple_spinner_item,spinnerNames);
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			groupsSpinner.setAdapter(adapter);
-			groupsSpinner.setOnItemSelectedListener(new onItemSelectedListener());
-			
+			groupsSpinner.setOnItemSelectedListener(new onGroupSelectedListener());
+			groupsSpinner.setSelection(groupPosition);
 		}else{
-			if(groupsRequested){ //there are not groups in the selected course, therefore only the course name should be loaded
-				this.findViewById(R.id.courseSelectedText).setVisibility(View.VISIBLE);
-				this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
-				
-				TextView courseNameText = (TextView) this.findViewById(R.id.courseSelectedText);
-				courseNameText.setText(Global.getSelectedCourseShortName());
-			}
+			this.findViewById(R.id.courseSelectedText).setVisibility(View.VISIBLE);
+			this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
+			
+			TextView courseNameText = (TextView) this.findViewById(R.id.courseSelectedText);
+			courseNameText.setText(Global.getSelectedCourseShortName());
+			
 		}
 	}
 	
-	private class onItemSelectedListener implements OnItemSelectedListener{
+	private class onGroupSelectedListener implements OnItemSelectedListener{
 
 		@Override
 		public void onItemSelected(AdapterView<?> parent, View view, int position,
@@ -371,8 +381,9 @@ public class DownloadsManager extends MenuActivity {
 			//if the position is 0, it is chosen the whole course. Otherwise a group has been chosen
 			//position - 0 belongs to the whole course
 			long newGroupCode = position==0? 0 : groups.get(position-1).getId();
-			if(chosenGroupCode != newGroupCode){
+			if(chosenGroupCode != newGroupCode || tree == null){
 				chosenGroupCode = newGroupCode;
+				groupPosition = position;
 				requestDirectoryTree();
 			}	
 
