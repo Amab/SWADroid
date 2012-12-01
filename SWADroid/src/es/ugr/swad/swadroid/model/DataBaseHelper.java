@@ -1680,7 +1680,7 @@ public class DataBaseHelper {
 			ent.setValue("eventType", Crypto.encrypt(DBKey, ent.getString("eventType")));
 			ent.setValue("userSurname1", Crypto.encrypt(DBKey, ent.getString("userSurname1")));
 			ent.setValue("userSurname2", Crypto.encrypt(DBKey, ent.getString("userSurname2")));
-			ent.setValue("userFirstname", Crypto.encrypt(DBKey, ent.getString("userSurname2")));
+			ent.setValue("userFirstname", Crypto.encrypt(DBKey, ent.getString("userFirstname")));
 			ent.setValue("userPhoto", Crypto.encrypt(DBKey, ent.getString("userPhoto")));
 			ent.setValue("location", Crypto.encrypt(DBKey, ent.getString("location")));
 			ent.setValue("summary", Crypto.encrypt(DBKey, ent.getString("summary")));
