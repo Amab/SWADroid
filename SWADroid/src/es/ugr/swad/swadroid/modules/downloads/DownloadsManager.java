@@ -23,6 +23,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.android.dataframework.DataFramework;
@@ -118,10 +119,7 @@ public class DownloadsManager extends MenuActivity {
 	private ImageView moduleIcon = null;
 	private TextView moduleText = null;
 	private TextView currentPathText;
-	private TextView moduleCourseName = null;
-	
-	private AlertDialog fileOptions = null;
-	
+
 	String chosenNodeName = null;
 	String fileName = null;
 	
@@ -158,47 +156,20 @@ public class DownloadsManager extends MenuActivity {
 		
 		downloadsAreaCode = getIntent().getIntExtra("downloadsAreaCode",
 				Global.DOCUMENTS_AREA_CODE);
-		
-		final CharSequence[] items = {getString(R.string.openFile) , getString(R.string.downloadFile) , getString(R.string.deleteFile) };
-
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(getString(R.string.fileOptions));
-		builder.setItems(items, new DialogInterface.OnClickListener() {
-		    public void onClick(DialogInterface dialog, int item) {
-		    	switch(item){
-			    	case 0:
-			    		openFileDefaultApp(directoryPath+File.separator+fileName);
-			    		break;
-			    	case 1:
-			    		requestGetFile(chosenNodeName);
-			    		break;
-			    	case 2:
-			    		File f =  new File(directoryPath, fileName);
-			    		if(f.exists())
-			    			f.delete();
-			    		//TODO change icon file to show the file is not downloaded	
-			    		break;
-		    		
-		    	}
-		    }
-		});
-		final AlertDialog fileOptions = builder.create();
-		
-		
+	
 		grid = (GridView) this.findViewById(R.id.gridview);
 		grid.setOnItemClickListener((new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v,
 					int position, long id) {
 				TextView text = (TextView) v.findViewById(R.id.icon_text);
 				chosenNodeName = text.getText().toString();
-
-				Long fileCode = navigator.getFileCode(chosenNodeName);
-				if(fileCode == -1) //it is a directory therefore navigates into it
+				DirectoryItem node = navigator.getDirectoryItem(chosenNodeName);
+				if(node.getFileCode() == -1) //it is a directory therefore navigates into it
 					updateView(navigator.goToSubDirectory(chosenNodeName));
 				else{ //it is a files therefore gets its information throught web service GETFILE
-
-					//TODO
-					requestGetFile(chosenNodeName);
+					AlertDialog fileInfoDialog = createFileInfoDialog(node.getName(),node.getSize(),node.getTime(),node.getPublisher(),node.getFileCode());
+					fileInfoDialog.show();
+					//TODO 
 				}
 			}
 		}));
@@ -498,14 +469,39 @@ public class DownloadsManager extends MenuActivity {
 			startActivity(intent);
 		}
 	}
-	private void requestGetFile(String fileName){
+	private void requestGetFile(long fileCode){
 	    Intent activity;
 	    activity = new Intent(getBaseContext(), GetFile.class);
-	    activity.putExtra("courseCode", Global.getSelectedCourseCode());
-	    activity.putExtra("groupCode", chosenGroupCode);
-	    activity.putExtra("treeCode", downloadsAreaCode);
-	    activity.putExtra("fileCode", navigator.getFileCode(chosenNodeName));
+	    activity.putExtra("fileCode", fileCode);
 	    //activity.putExtra("path", navigator.getPath() + fileName);
 	    startActivityForResult(activity, Global.GETFILE_REQUEST_CODE);
 	  }
+	
+	private AlertDialog createFileInfoDialog(String name,long size, long time,String uploader,long fileCode){
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		AlertDialog dialog;
+		final long code = fileCode;
+		builder.setTitle(name);
+    	Date d = new Date(time * 1000);
+    	java.text.DateFormat dateShortFormat = android.text.format.DateFormat.getDateFormat(this);
+    	java.text.DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(this);
+    	//TODO show size in appropriate measure
+		String message =this.getResources().getString(R.string.uploaderTitle) +" " + uploader+ '\n' + 
+				 this.getResources().getString(R.string.sizeFileTitle)  +" " + String.valueOf(size) + '\n'+
+				this.getResources().getString(R.string.creationTimeTitle) +" "  +   dateShortFormat.format(d)+ "  "+(timeFormat.format(d));
+		builder.setMessage(message);
+		builder.setPositiveButton(R.string.downloadFileTitle, new DialogInterface.OnClickListener() {
+	           public void onClick(DialogInterface dialog, int id) {
+	               requestGetFile(code);
+	           }
+	       });
+		builder.setNegativeButton(R.string.cancelMsg, new DialogInterface.OnClickListener() {
+	           public void onClick(DialogInterface dialog, int id) {
+	               dialog.dismiss();
+	           }
+	       });
+		
+		dialog = builder.create();
+		return dialog;
+	}
 }

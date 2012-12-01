@@ -177,10 +177,11 @@
     <string name="group">Group</string>
     <string name="notificationDownloadTitle">Downloading..</string>
     <string name="complete">complete</string>
-    <string name="fileOptions">File Options</string>
-    <string name="openFile">Open</string>
-    <string name="downloadFile">Download again</string>
-    <string name="deleteFile">Delete</string>
+    <string name="fileInfoTitle">File Information</string>
+    <string name="sizeFileTitle">Size:</string>
+    <string name="creationTimeTitle">Date of creation:</string>
+    <string name="uploaderTitle">Uploaded by:</string>
+    <string name="downloadFileTitle">Download</string>
     <string name="vacants">Vacants</string>
 	<string name="numStudent">No. of students: </string>
 	<string name="maxStudent">Max.stud.</string>
