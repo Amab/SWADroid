@@ -475,9 +475,9 @@ public class SWADMain extends MenuExpandableListActivity {
 					createBaseMenu();
 				}
 				int userRole = courseSelected.getUserRole();
-				if(userRole == Global.TEACHER_TYPE_CODE && currentRole != Global.TEACHER_TYPE_CODE)
+				if((userRole == Global.TEACHER_TYPE_CODE) && (currentRole != Global.TEACHER_TYPE_CODE))
 					changeToTeacherMenu();
-				if(userRole == Global.STUDENT_TYPE_CODE && currentRole != Global.STUDENT_TYPE_CODE) 
+				if((userRole == Global.STUDENT_TYPE_CODE) && (currentRole != Global.STUDENT_TYPE_CODE)) 
 					changeToStudentMenu();
 				dBCleaned = false;
 			}
@@ -593,7 +593,7 @@ public class SWADMain extends MenuExpandableListActivity {
 			((ImageExpandableListAdapter) getExpandableListAdapter()).removeChild(MESSAGES_GROUP, PUBLISH_NOTE_CHILD);
 			//Removes completely users menu 
 			//DISABLE until it will be functional
-			//((ImageExpandableListAdapter) getExpandableListAdapter()).removeGroup(USERS_GROUP);
+			((ImageExpandableListAdapter) getExpandableListAdapter()).removeGroup(USERS_GROUP);
 		}
 		currentRole = Global.STUDENT_TYPE_CODE;
 	}
