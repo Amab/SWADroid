@@ -30,9 +30,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 import es.ugr.swad.swadroid.Global;
-import es.ugr.swad.swadroid.MenuActivity;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.gui.MenuActivity;
+
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeoutException;
@@ -68,7 +69,7 @@ public abstract class Module extends MenuActivity {
     /**
      * Preferences of the activity.
      */
-    Preferences prefs = new Preferences();
+    protected Preferences prefs = new Preferences();
     /**
      * Webservice request.
      */
