@@ -164,4 +164,12 @@
     <string name="groupTypesProgressTitle">Gruppenarten</string>
     <string name="groupsProgressTitle">Guppen</string>
     <string name="withoutLimit">unbegrenzt</string>
+    <string name="complete">complete</string>
+    <string name="fileInfoTitle">File Information</string>
+    <string name="sizeFileTitle">Size:</string>
+    <string name="creationTimeTitle">Date of creation:</string>
+    <string name="uploaderTitle">Uploaded by:</string>
+    <string name="downloadFileTitle">Download</string>
+    <string  name="sdCardBusyTitle">SD-Karte nicht verfügbar</string>
+    <string name="sdCardBusy">SD-Karte ist in Verwendung. Um Downloads zu erlauben, "USB-Speicher ausschalten" in der Benachrichtigung wählen</string>
 </resources>

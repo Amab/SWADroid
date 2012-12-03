@@ -237,13 +237,29 @@ public class DownloadsManager extends MenuActivity {
 				break;
 			case Global.GETFILE_REQUEST_CODE:
 				Log.i(TAG, "Correct get file");
-				String url = data.getExtras().getString("link");
-				if(url != null && fileName != null){
-					directoryPath =  getDirectoryPath();
-					File f = new File(directoryPath, fileName);
-					if(!f.exists())
-						downloadFile(directoryPath,url);
-				}
+				//if the sd card is not busy, the file can be downloaded 
+				if (this.checkMediaAvailability() == 2){
+					String url = data.getExtras().getString("link");
+					if(url != null && fileName != null){
+						directoryPath =  getDirectoryPath();
+						File f = new File(directoryPath, fileName);
+						if(!f.exists())
+							downloadFile(directoryPath,url);
+					}
+				}else{ //if the sd card is busy, it shows a alert dialog
+					AlertDialog.Builder builder = new AlertDialog.Builder(this);
+					AlertDialog dialog;
+					builder.setTitle(R.string.sdCardBusyTitle);
+					builder.setMessage(R.string.sdCardBusy);
+					builder.setIcon(android.R.drawable.ic_dialog_alert);
+					builder.setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+			           public void onClick(DialogInterface dialog, int id) {
+			               dialog.dismiss();
+			           }
+			       });
+					dialog = builder.create();
+					dialog.show();
+				}	
 				break;
 			case Global.GROUPS_REQUEST_CODE:
 				groupsRequested = true;
@@ -384,25 +400,19 @@ public class DownloadsManager extends MenuActivity {
 	 * */
 
 	private int checkMediaAvailability(){
-		boolean mExternalStorageAvailable = false;
-		boolean mExternalStorageWriteable = false;
 		String state = Environment.getExternalStorageState();
 		int returnValue = 0;
 		if (Environment.MEDIA_MOUNTED.equals(state)) {
 		    // We can read and write the media
-		    mExternalStorageAvailable = mExternalStorageWriteable = true;
 		    Toast.makeText(this, "External Storage can be read and wrote", Toast.LENGTH_LONG).show();
 		    returnValue = 2;
 		} else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
 		    // We can only read the media
-		    mExternalStorageAvailable = true;
-		    mExternalStorageWriteable = false;
 		    Toast.makeText(this,"External Storage can only be read", Toast.LENGTH_LONG).show();
 		    returnValue = 1;
 		} else {
 		    // Something else is wrong. It may be one of many other states, but all we need
 		    //  to know is we can neither read nor write
-		    mExternalStorageAvailable = mExternalStorageWriteable = false;
 		    Toast.makeText(this, "External Storage can not be read either wrote", Toast.LENGTH_LONG).show();
 		    returnValue = 0;
 		}
@@ -451,7 +461,7 @@ public class DownloadsManager extends MenuActivity {
 		AlertDialog dialog;
 		final long code = fileCode;
 		fileName = name;
-		builder.setTitle(name);
+		
     	Date d = new Date(time * 1000);
     	java.text.DateFormat dateShortFormat = android.text.format.DateFormat.getDateFormat(this);
     	java.text.DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(this);
@@ -459,6 +469,7 @@ public class DownloadsManager extends MenuActivity {
 		String message =this.getResources().getString(R.string.uploaderTitle) +" " + uploader+ '\n' + 
 				 this.getResources().getString(R.string.sizeFileTitle)  +" " + String.valueOf(size) + '\n'+
 				this.getResources().getString(R.string.creationTimeTitle) +" "  +   dateShortFormat.format(d)+ "  "+(timeFormat.format(d));
+		builder.setTitle(name);
 		builder.setMessage(message);
 		builder.setPositiveButton(R.string.downloadFileTitle, new DialogInterface.OnClickListener() {
 	           public void onClick(DialogInterface dialog, int id) {
