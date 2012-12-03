@@ -39,12 +39,31 @@ public class GetFile extends Module {
 	 */
 	public static final String TAG = Global.APP_TAG + "GetFile";
 	/**
+	 * Course code 
+	 * */
+	private long courseCode = -1;
+	/**
+	 * Group code 
+	 * */
+	private long groupCode = -1;
+	/**
+	 * Tree code 
+	 * */
+	private int treeCode = -1;
+	/**
+	 * Complete path to the file
+	 * */
+	private String path = null;
+	/**
 	 * Unique identificator of file
 	 * */
 	private long fileCode = -1;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		courseCode = getIntent().getLongExtra("courseCode", -1);
+		groupCode = getIntent().getLongExtra("groupCode",-1);
+		treeCode = getIntent().getIntExtra("treeCode", -1);
 		fileCode = getIntent().getLongExtra("fileCode", -1);
 		
 		if(fileCode == -1){
@@ -85,18 +104,39 @@ public class GetFile extends Module {
 			IllegalAccessException, InstantiationException {
 		createRequest();
 		addParam("wsKey", Global.getLoggedUser().getWsKey());
+		addParam("courseCode", (int)courseCode);
+		addParam("groupCode", (int)groupCode);
+		addParam("treeCode", (int)treeCode);
 		addParam("fileCode", fileCode);
-		sendRequest(Group.class,false); //TODO this is not the correct class to map. nothing will be the correct
+		Intent resultIntent = new Intent();
+		resultIntent.putExtra("link", "https://swad.ugr.es/swad/tmp/QwYa2_M606M6IpsNSovtWx4eEEzRAxvAgc9vEb0R16Y/Practica%202a%20Tutorial.pdf");
+		setResult(RESULT_OK,resultIntent);
+/*		sendRequest(Group.class,false); //TODO this is not the correct class to map. nothing will be the correct
 		if(result != null){
 			Vector<?> res = (Vector <?>) result;
 			SoapPrimitive soapP = (SoapPrimitive) res.get(0);
+			String name = soapP.toString();
+			soapP = (SoapPrimitive) res.get(1);
 			String link = soapP.toString();
+			soapP = (SoapPrimitive) res.get(2);
+			int size = Integer.parseInt(soapP.toString());
+			soapP = (SoapPrimitive) res.get(3);
+			long time = Long.parseLong(soapP.toString());
+			soapP = (SoapPrimitive) res.get(4);
+			String license = soapP.toString();
+			soapP = (SoapPrimitive) res.get(5);
+			String publischerName = soapP.toString();
+			soapP = (SoapPrimitive) res.get(6);
+			String publisherPhoto = soapP.toString();
+			
+			
 			Intent resultIntent = new Intent();
-			resultIntent.putExtra("link", link);
+			//resultIntent.putExtra("link", link);
+			resultIntent.putExtra("link", "https://swad.ugr.es/swad/tmp/tUC8BWNM40Q7iQNBqwTln9ZOVB6P2oby5DdeJI1e-bQ/Guion%20Practica%202.pdf");
 			setResult(RESULT_OK,resultIntent);
 		}else{
 			setResult(RESULT_CANCELED);
-		}
+		}*/
 		
 	}
 

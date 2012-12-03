@@ -121,7 +121,10 @@ public class DownloadsManager extends MenuActivity {
 	private TextView currentPathText;
 
 	String chosenNodeName = null;
-	String fileName = null;
+	/**
+	 * fileName stores the last file name chosen to be downloaded
+	 * */
+	private String fileName = null;
 	
 	/**
 	 * Indicates the selected position in the groups spinner
@@ -166,7 +169,7 @@ public class DownloadsManager extends MenuActivity {
 				DirectoryItem node = navigator.getDirectoryItem(chosenNodeName);
 				if(node.getFileCode() == -1) //it is a directory therefore navigates into it
 					updateView(navigator.goToSubDirectory(chosenNodeName));
-				else{ //it is a files therefore gets its information throught web service GETFILE
+				else{ //it is a files therefore gets its information through web service GETFILE
 					AlertDialog fileInfoDialog = createFileInfoDialog(node.getName(),node.getSize(),node.getTime(),node.getPublisher(),node.getFileCode());
 					fileInfoDialog.show();
 					//TODO 
@@ -235,10 +238,9 @@ public class DownloadsManager extends MenuActivity {
 			case Global.GETFILE_REQUEST_CODE:
 				Log.i(TAG, "Correct get file");
 				String url = data.getExtras().getString("link");
-				String infoFile = data.getExtras().getString("name");
-				if(url != null && infoFile != null){
+				if(url != null && fileName != null){
 					directoryPath =  getDirectoryPath();
-					File f = new File(directoryPath, infoFile);
+					File f = new File(directoryPath, fileName);
 					if(!f.exists())
 						downloadFile(directoryPath,url);
 				}
@@ -411,44 +413,8 @@ public class DownloadsManager extends MenuActivity {
 	 * it gets the directory path where the files will be located.This will be /$EXTERNAL_STORAGE/SWADroid/courseCode shortName Course. This directory is created in case it does not exist
 	 * */
 	private String getDirectoryPath(){
-		String path = null;
-		String swadroidDirName = Environment.getExternalStorageDirectory()+File.separator+getString(R.string.app_name);
-		String courseDirName = swadroidDirName +File.separator + Global.getSelectedCourseCode()+ File.separator +String.valueOf(chosenGroupCode)+navigator.getPath();
-		if(checkMediaAvailability() == 2){
-			File courseDir = new File(courseDirName);
-			if(courseDir.exists()){
-				path = courseDirName;
-			}else if(courseDir.mkdirs())
-					path = courseDirName;
-				
-			
-			/*if(courseDir.exists()){
-				path = courseDirName;
-			}else {
-				File mainDir = new File(swadroidDirName);
-				if(!mainDir.exists()){
-					
-				}
-			}
-			
-			
-			File mainDir = new File(swadroidDirName);
-			boolean mainDirB = mainDir.exists();
-			
-			if(!mainDirB){
-				boolean mainDirCreated = mainDir.mkdir();
-			//if(!mainDir.exists()){
-				if(mainDirCreated){
-				//if(mainDir.mkdir()){
-					String courseDirName = swadroidDirName +
-					
-					if(!courseDir.exists())
-						if(courseDir.mkdir())
-							path = new String(courseDirName);
-				}
-			}*/
-		}
-		return path;
+		String downloadsDirName = Environment.getExternalStorageDirectory()+File.separator+"download";
+		return downloadsDirName;
 	}
 	
 	private void downloadFile(String directory, String url){
@@ -476,11 +442,15 @@ public class DownloadsManager extends MenuActivity {
 	    //activity.putExtra("path", navigator.getPath() + fileName);
 	    startActivityForResult(activity, Global.GETFILE_REQUEST_CODE);
 	  }
-	
+	/**
+	 * Method that shows information file and allows its download
+	 * It has a button to confirm the download. If It is confirmed  getFile will be requested to get the link
+	 * */
 	private AlertDialog createFileInfoDialog(String name,long size, long time,String uploader,long fileCode){
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		AlertDialog dialog;
 		final long code = fileCode;
+		fileName = name;
 		builder.setTitle(name);
     	Date d = new Date(time * 1000);
     	java.text.DateFormat dateShortFormat = android.text.format.DateFormat.getDateFormat(this);
