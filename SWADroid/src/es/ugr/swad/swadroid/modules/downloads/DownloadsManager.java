@@ -109,10 +109,6 @@ public class DownloadsManager extends MenuActivity {
 	 * */
 	private boolean refresh = false;
 	
-	/**
-	 * Path to the directory where files will be located
-	 * */
-	private String directoryPath = null; 
 	
 	private GridView grid;
 
@@ -184,7 +180,6 @@ public class DownloadsManager extends MenuActivity {
 			@Override
 			public void onClick(View v) {
 				updateView(navigator.goToRoot());
-				directoryPath = getDirectoryPath();
 			}
 
 		}));
@@ -196,7 +191,6 @@ public class DownloadsManager extends MenuActivity {
 			@Override
 			public void onClick(View v) {
 				updateView(navigator.goToParentDirectory());
-				directoryPath = getDirectoryPath();
 			}
 
 		}));
@@ -240,12 +234,8 @@ public class DownloadsManager extends MenuActivity {
 				//if the sd card is not busy, the file can be downloaded 
 				if (this.checkMediaAvailability() == 2){
 					String url = data.getExtras().getString("link");
-					if(url != null && fileName != null){
-						directoryPath =  getDirectoryPath();
-						File f = new File(directoryPath, fileName);
-						if(!f.exists())
-							downloadFile(directoryPath,url);
-					}
+					downloadFile(getDirectoryPath(),url);
+					
 				}else{ //if the sd card is busy, it shows a alert dialog
 					AlertDialog.Builder builder = new AlertDialog.Builder(this);
 					AlertDialog dialog;
@@ -420,7 +410,7 @@ public class DownloadsManager extends MenuActivity {
 	}
 	
 	/**
-	 * it gets the directory path where the files will be located.This will be /$EXTERNAL_STORAGE/SWADroid/courseCode shortName Course. This directory is created in case it does not exist
+	 * it gets the directory path where the files will be located.This will be /$EXTERNAL_STORAGE/download 
 	 * */
 	private String getDirectoryPath(){
 		String downloadsDirName = Environment.getExternalStorageDirectory()+File.separator+"download";
@@ -428,9 +418,6 @@ public class DownloadsManager extends MenuActivity {
 	}
 	
 	private void downloadFile(String directory, String url){
-		if(downloadsAreaCode == Global.DOCUMENTS_AREA_CODE)
-			new FileDownloaderAsyncTask(getApplicationContext(),false).execute(directory,url);
-		if(downloadsAreaCode == Global.SHARE_AREA_CODE)
 			new FileDownloaderAsyncTask(getApplicationContext(),true).execute(directory,url);
 	}
 	private void openFileDefaultApp(String absolutePath){
