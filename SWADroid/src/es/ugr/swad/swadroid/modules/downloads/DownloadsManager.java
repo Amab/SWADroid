@@ -118,9 +118,9 @@ public class DownloadsManager extends MenuActivity {
 
 	String chosenNodeName = null;
 	/**
-	 * fileName stores the last file name chosen to be downloaded
+	 * fileSize stores the size of the last file name chosen to be downloaded
 	 * */
-	private String fileName = null;
+	private long fileSize = 0;
 	
 	/**
 	 * Indicates the selected position in the groups spinner
@@ -168,7 +168,6 @@ public class DownloadsManager extends MenuActivity {
 				else{ //it is a files therefore gets its information through web service GETFILE
 					AlertDialog fileInfoDialog = createFileInfoDialog(node.getName(),node.getSize(),node.getTime(),node.getPublisher(),node.getFileCode());
 					fileInfoDialog.show();
-					//TODO 
 				}
 			}
 		}));
@@ -234,7 +233,7 @@ public class DownloadsManager extends MenuActivity {
 				//if the sd card is not busy, the file can be downloaded 
 				if (this.checkMediaAvailability() == 2){
 					String url = data.getExtras().getString("link");
-					downloadFile(getDirectoryPath(),url);
+					downloadFile(getDirectoryPath(),url,fileSize);
 					
 				}else{ //if the sd card is busy, it shows a alert dialog
 					AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -417,8 +416,14 @@ public class DownloadsManager extends MenuActivity {
 		return downloadsDirName;
 	}
 	
-	private void downloadFile(String directory, String url){
-			new FileDownloaderAsyncTask(getApplicationContext(),true).execute(directory,url);
+	/**
+	 * it initializes the download the file from the url @a url and stores it in the directory name @directory
+	 * @param directory - directory where the downloaded file will be stored
+	 * @param url - url from which the file is downloaded
+	 * @param fileSize - file size of the file. It is used to show the download progress in the notification
+	 * */
+	private void downloadFile(String directory, String url,long fileSize){
+			new FileDownloaderAsyncTask(getApplicationContext(),true,fileSize).execute(directory,url);
 	}
 	private void openFileDefaultApp(String absolutePath){
 		File file = new File(absolutePath);
@@ -447,7 +452,7 @@ public class DownloadsManager extends MenuActivity {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		AlertDialog dialog;
 		final long code = fileCode;
-		fileName = name;
+		this.fileSize = size;
 		
     	Date d = new Date(time * 1000);
     	java.text.DateFormat dateShortFormat = android.text.format.DateFormat.getDateFormat(this);
