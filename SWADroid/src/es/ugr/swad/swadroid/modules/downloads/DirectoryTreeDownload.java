@@ -80,9 +80,6 @@ public class DirectoryTreeDownload extends Module {
 
 	@Override
 	protected void postConnect() {
-		//Toast.makeText(this, "got directory tree", Toast.LENGTH_LONG).show();
-		//Log.i(TAG, "directory tree");
-
 		finish();
 
 	}

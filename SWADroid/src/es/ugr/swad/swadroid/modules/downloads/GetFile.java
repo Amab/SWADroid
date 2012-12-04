@@ -122,21 +122,21 @@ public class GetFile extends Module {
 			IllegalAccessException, InstantiationException {
 		createRequest();
 		addParam("wsKey", Global.getLoggedUser().getWsKey());
-		addParam("courseCode", (int)courseCode);
-		addParam("groupCode", (int)groupCode);
-		addParam("treeCode", (int)treeCode);
+//		addParam("courseCode", (int)courseCode);
+//		addParam("groupCode", (int)groupCode);
+//		addParam("treeCode", (int)treeCode);
 		addParam("fileCode", fileCode);
-		Intent resultIntent = new Intent();
+/*		Intent resultIntent = new Intent();
 		resultIntent.putExtra("link", "https://swad.ugr.es/swad/tmp/beuIeebR9OA9ym3XB-2SYYxE1-fy_k1xVtx3E7YCGC0/suma_03_SC_c.c");
-		setResult(RESULT_OK,resultIntent);
-/*		sendRequest(Group.class,false); //TODO this is not the correct class to map. nothing will be the correct
+		setResult(RESULT_OK,resultIntent);*/
+		sendRequest(Group.class,false); //TODO this is not the correct class to map. nothing will be the correct
 		if(result != null){
 			Vector<?> res = (Vector <?>) result;
 			SoapPrimitive soapP = (SoapPrimitive) res.get(0);
-			String name = soapP.toString();
-			soapP = (SoapPrimitive) res.get(1);
+/*			String name = soapP.toString();
+			soapP = (SoapPrimitive) res.get(1);*/
 			String link = soapP.toString();
-			soapP = (SoapPrimitive) res.get(2);
+/*			soapP = (SoapPrimitive) res.get(2);
 			int size = Integer.parseInt(soapP.toString());
 			soapP = (SoapPrimitive) res.get(3);
 			long time = Long.parseLong(soapP.toString());
@@ -145,16 +145,16 @@ public class GetFile extends Module {
 			soapP = (SoapPrimitive) res.get(5);
 			String publischerName = soapP.toString();
 			soapP = (SoapPrimitive) res.get(6);
-			String publisherPhoto = soapP.toString();
+			String publisherPhoto = soapP.toString();*/
 			
 			
 			Intent resultIntent = new Intent();
-			//resultIntent.putExtra("link", link);
-			resultIntent.putExtra("link", "https://swad.ugr.es/swad/tmp/tUC8BWNM40Q7iQNBqwTln9ZOVB6P2oby5DdeJI1e-bQ/Guion%20Practica%202.pdf");
+			resultIntent.putExtra("link", link);
+			//resultIntent.putExtra("link", "https://swad.ugr.es/swad/tmp/tUC8BWNM40Q7iQNBqwTln9ZOVB6P2oby5DdeJI1e-bQ/Guion%20Practica%202.pdf");
 			setResult(RESULT_OK,resultIntent);
 		}else{
 			setResult(RESULT_CANCELED);
-		}*/
+		}
 		
 	}
 

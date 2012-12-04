@@ -234,7 +234,7 @@ public class DownloadsManager extends MenuActivity {
 				if (this.checkMediaAvailability() == 2){
 					String url = data.getExtras().getString("link");
 					downloadFile(getDirectoryPath(),url,fileSize);
-					Toast.makeText(this, R.string.notificationDownloadTitle + chosenNodeName , Toast.LENGTH_LONG).show();
+					Toast.makeText(this, chosenNodeName + this.getResources().getString(R.string.notificationDownloadTitle) , Toast.LENGTH_LONG).show();
 				}else{ //if the sd card is busy, it shows a alert dialog
 					AlertDialog.Builder builder = new AlertDialog.Builder(this);
 					AlertDialog dialog;
