@@ -176,7 +176,7 @@
     <string name="parent_icon">Shows upper folder</string>
     <string name="refresh_icon">Updates</string>
     <string name="group">Group</string>
-    <string name="notificationDownloadTitle">Downloading..</string>
+    <string name="notificationDownloadTitle">Downloading&#8230;</string>
     <string name="complete">complete</string>
     <string name="fileInfoTitle">File Information</string>
     <string name="sizeFileTitle">Size:</string>
