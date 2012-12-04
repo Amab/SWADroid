@@ -459,7 +459,7 @@ public class DownloadsManager extends MenuActivity {
     	java.text.DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(this);
     	//TODO show size in appropriate measure
 		String message =this.getResources().getString(R.string.uploaderTitle) +" " + uploader+ '\n' + 
-				 this.getResources().getString(R.string.sizeFileTitle)  +" " + String.valueOf(size) + '\n'+
+				 this.getResources().getString(R.string.sizeFileTitle)  +" " +  humanReadableByteCount(size, true) + '\n'+
 				this.getResources().getString(R.string.creationTimeTitle) +" "  +   dateShortFormat.format(d)+ "  "+(timeFormat.format(d));
 		builder.setTitle(name);
 		builder.setMessage(message);
@@ -476,5 +476,16 @@ public class DownloadsManager extends MenuActivity {
 		
 		dialog = builder.create();
 		return dialog;
+	}
+	
+	/** Method to show file size in bytes in a human readable way 
+	 * http://stackoverflow.com/questions/3758606/how-to-convert-byte-size-into-human-readable-format-in-java
+	 * */
+	public static String humanReadableByteCount(long bytes, boolean si) {
+	    int unit = si ? 1000 : 1024;
+	    if (bytes < unit) return bytes + " B";
+	    int exp = (int) (Math.log(bytes) / Math.log(unit));
+	    String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp-1) + (si ? "" : "i");
+	    return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
 	}
 }
