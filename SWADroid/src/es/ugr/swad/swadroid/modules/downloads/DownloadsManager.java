@@ -234,7 +234,7 @@ public class DownloadsManager extends MenuActivity {
 				if (this.checkMediaAvailability() == 2){
 					String url = data.getExtras().getString("link");
 					downloadFile(getDirectoryPath(),url,fileSize);
-					
+					Toast.makeText(this, R.string.notificationDownloadTitle + chosenNodeName , Toast.LENGTH_LONG).show();
 				}else{ //if the sd card is busy, it shows a alert dialog
 					AlertDialog.Builder builder = new AlertDialog.Builder(this);
 					AlertDialog dialog;
@@ -393,16 +393,13 @@ public class DownloadsManager extends MenuActivity {
 		int returnValue = 0;
 		if (Environment.MEDIA_MOUNTED.equals(state)) {
 		    // We can read and write the media
-		    Toast.makeText(this, "External Storage can be read and wrote", Toast.LENGTH_LONG).show();
 		    returnValue = 2;
 		} else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
 		    // We can only read the media
-		    Toast.makeText(this,"External Storage can only be read", Toast.LENGTH_LONG).show();
 		    returnValue = 1;
 		} else {
 		    // Something else is wrong. It may be one of many other states, but all we need
 		    //  to know is we can neither read nor write
-		    Toast.makeText(this, "External Storage can not be read either wrote", Toast.LENGTH_LONG).show();
 		    returnValue = 0;
 		}
 		return returnValue;
@@ -481,7 +478,7 @@ public class DownloadsManager extends MenuActivity {
 	/** Method to show file size in bytes in a human readable way 
 	 * http://stackoverflow.com/questions/3758606/how-to-convert-byte-size-into-human-readable-format-in-java
 	 * */
-	public static String humanReadableByteCount(long bytes, boolean si) {
+	private static String humanReadableByteCount(long bytes, boolean si) {
 	    int unit = si ? 1000 : 1024;
 	    if (bytes < unit) return bytes + " B";
 	    int exp = (int) (Math.log(bytes) / Math.log(unit));

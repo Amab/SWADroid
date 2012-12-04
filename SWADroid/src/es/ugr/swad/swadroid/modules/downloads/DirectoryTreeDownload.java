@@ -1,3 +1,21 @@
+/*
+ *  This file is part of SWADroid.
+ *
+ *  Copyright (C) 2012 Helena Rodriguez Gijon <hrgijon@gmail.com>
+ *
+ *  SWADroid is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  SWADroid is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with SWADroid.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package es.ugr.swad.swadroid.modules.downloads;
 
 import java.io.IOException;
@@ -55,8 +73,7 @@ public class DirectoryTreeDownload extends Module {
 	protected void connect() {
 		String progessDescription= getString(R.string.documentsDownloadProgressDescription);
 		int progressTitle = R.string.documentsDownloadModuleLabel;
-		Toast.makeText(this, getString(R.string.documentsDownloadProgressDescription), Toast.LENGTH_LONG).show();
-		Connect con = new Connect(false,progessDescription,progressTitle,true);
+		Connect con = new Connect(true,progessDescription,progressTitle,true);
 		con.execute();
 
 	}

@@ -151,7 +151,8 @@
 		users to synchronize, the data processing can take several minutes.\n\nPlease wait&#8230;</string>
     <string name="usersDownloadProgressTitle">Students</string>
     <string name="documentsDownloadModuleLabel">Documents</string>
-    <string name="documentsDownloadProgressDescription">Getting files..</string>
+    <string name="documentsDownloadProgressDescription">Getting directory tree. \n\nDepending of the directory size, this could take several minutes.\n\nPlease wait&#8230;</string>
+    <string name="clickToOpenFile">Click here to open the file</string>
     <string name="sharedsDownloadModuleLabel">Shared area</string>
     <string name="connectionRequired">Internet connection is required for this functionality</string>
     <string name="course">Course</string>

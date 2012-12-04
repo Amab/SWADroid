@@ -1,3 +1,21 @@
+/*
+ *  This file is part of SWADroid.
+ *
+ *  Copyright (C) 2012 Helena Rodriguez Gijon <hrgijon@gmail.com>
+ *
+ *  SWADroid is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  SWADroid is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with SWADroid.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package es.ugr.swad.swadroid.modules.downloads;
 
 import java.io.IOException;
@@ -109,7 +127,7 @@ public class GetFile extends Module {
 		addParam("treeCode", (int)treeCode);
 		addParam("fileCode", fileCode);
 		Intent resultIntent = new Intent();
-		resultIntent.putExtra("link", "https://swad.ugr.es/swad/tmp/SI80DrLoTQOlWhigagLkY2jjZuC3NF0ctGhXBo54G8s/Guion%20Practica%202.pdf");
+		resultIntent.putExtra("link", "https://swad.ugr.es/swad/tmp/beuIeebR9OA9ym3XB-2SYYxE1-fy_k1xVtx3E7YCGC0/suma_03_SC_c.c");
 		setResult(RESULT_OK,resultIntent);
 /*		sendRequest(Group.class,false); //TODO this is not the correct class to map. nothing will be the correct
 		if(result != null){
