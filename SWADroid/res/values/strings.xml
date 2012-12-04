@@ -273,4 +273,6 @@ configuration anytime using the "Clean Database" option\n\nDo you want to contin
     <string name="ok">OK</string>
     <string name="failedEnrollment">Sorry but the enrollment on the selected groups could not be performed</string>
 	<string name="withoutLimit">unlimited</string>
+	<string name="downloadProblemTitle">Download problem</string>
+	<string name="downloadProblemMsg">Sorry. The download of file was interrupted. Try again</string>
 </resources>

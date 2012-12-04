@@ -44,6 +44,8 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 	private URL url;
 	boolean notification = true;
 	private long fileSize;
+	private String fileName = "";
+	private String directoryPath = "";
 	
 	/**
 	 * Downloads tag name for Logcat
@@ -65,7 +67,7 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 	@Override
 	protected void onPostExecute(Boolean result) {
 		Log.i(TAG, "onPostExecute");
-		mNotification.completedDownload();
+		mNotification.completedDownload(this.directoryPath,this.fileName);
 	}
 
 	/* Return the path to the directory where files are saved */
@@ -104,6 +106,7 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 		
 		
 		download_dir = new File(params[0]);
+		this.directoryPath = params[0];
 		if(!download_dir.exists()) 
 			return false;
 		try {
@@ -149,8 +152,8 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 			}while(output.exists());
 			filename = basename+"-"+String.valueOf(i-1)+extension;
 		}	
-		
-		mNotification.createNotification(params[0],filename);
+		this.fileName = fileName;
+		mNotification.createNotification(filename);
 		
 		
 		/* Open a connection to the URL and a buffered input stream */
@@ -159,7 +162,7 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 			ucon = url.openConnection();
 		} catch (IOException e) {
 			// TODO TODO ¿cambiar barra de progreso por mensaje de error?
-			Log.i(TAG, "Error conection");mNotification.eraseNotification();
+			Log.i(TAG, "Error conection");mNotification.eraseNotification(this.fileName);
 			e.printStackTrace();
 			return false;
 		}
@@ -168,7 +171,7 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 			is = ucon.getInputStream();
 		} catch (IOException e) {
 			// TODO TODO ¿cambiar barra de progreso por mensaje de error?
-			Log.i(TAG, "Error conection");mNotification.eraseNotification();
+			Log.i(TAG, "Error conection");mNotification.eraseNotification(this.fileName);
 			e.printStackTrace();
 			return false;
 		}
@@ -181,7 +184,7 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 		try {
 			total = bis.available();
 		} catch (IOException e1) {
-			Log.i(TAG, "Error lectura bytes");mNotification.eraseNotification();
+			Log.i(TAG, "Error lectura bytes");mNotification.eraseNotification(this.fileName);
 			e1.printStackTrace();
 		};
 		
@@ -203,7 +206,7 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 				}
 			} catch (IOException e) {
 				// TODO TODO ¿cambiar barra de progreso por mensaje de error?
-				Log.i(TAG, "Error conection");mNotification.eraseNotification();
+				Log.i(TAG, "Error conection");mNotification.eraseNotification(this.fileName);
 				e.printStackTrace();
 				return false;
 			}
@@ -216,7 +219,7 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 				}
 			} catch (IOException e) {
 				// TODO TODO ¿cambiar barra de progreso por mensaje de error?
-				Log.i(TAG, "Error conection");mNotification.eraseNotification();
+				Log.i(TAG, "Error conection");mNotification.eraseNotification(this.fileName);
 				e.printStackTrace();
 				return false;
 			}
