@@ -12,14 +12,10 @@ import java.net.URLConnection;
 
 import org.apache.http.util.ByteArrayBuffer;
 
-import es.ugr.swad.swadroid.Global;
-
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import es.ugr.swad.swadroid.Global;
 
 public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 
@@ -184,8 +180,8 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 		
 		/* Avoid StringIndexOutOfBoundsException from being thrown if the
 		 * file has no extension (such as "http://www.domain.com/README" */
-		String basename = null;
-		String extension = null;
+		String basename = "";
+		String extension = "";
 		
 		if(lastDotIndex == -1)
 			basename  = filename.substring(lastSlashIndex + 1);
@@ -199,10 +195,15 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 			basename = "tmp";
 	
 		File output = new File(this.getDownloadDir(),filename) ;
-		
+		String name;
 		if(output.exists()){
-			output.delete();
-		}
+			int i = 1;
+			do{
+				output = new File(this.getDownloadDir(),basename+"-"+String.valueOf(i)+extension);
+				++i;
+			}while(output.exists());
+		}	
+		
 /*		try {
 			output = File.cre //File.createTempFile("swad48x48", ".gif",this.getDownloadDir());
 			//output = File.createTempFile(basename, extension, this.getDownloadDir());

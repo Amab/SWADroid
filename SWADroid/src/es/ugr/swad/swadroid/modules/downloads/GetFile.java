@@ -109,7 +109,7 @@ public class GetFile extends Module {
 		addParam("treeCode", (int)treeCode);
 		addParam("fileCode", fileCode);
 		Intent resultIntent = new Intent();
-		resultIntent.putExtra("link", "https://swad.ugr.es/swad/tmp/QwYa2_M606M6IpsNSovtWx4eEEzRAxvAgc9vEb0R16Y/Practica%202a%20Tutorial.pdf");
+		resultIntent.putExtra("link", "https://swad.ugr.es/swad/tmp/SI80DrLoTQOlWhigagLkY2jjZuC3NF0ctGhXBo54G8s/Guion%20Practica%202.pdf");
 		setResult(RESULT_OK,resultIntent);
 /*		sendRequest(Group.class,false); //TODO this is not the correct class to map. nothing will be the correct
 		if(result != null){
