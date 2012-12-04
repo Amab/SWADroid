@@ -147,7 +147,8 @@
     <string name="usersDownloadProgressDescription">Sincronizando estudiantes.\n\nDependiendo del número de
 		estudiantes a sincronizar, el procesamiento de los datos puede tardar unos minutos.\n\nPor favor, espere&#8230;</string>
     <string name="documentsDownloadModuleLabel">Documentos</string>
-    <string name="documentsDownloadProgressDescription">Obteniendo árbol de archivos..</string>
+    <string name="documentsDownloadProgressDescription">Obteniendo árbol de directorios.\n\nDependiendo del tamaño del directorio, podría necesitar varios minutos.\n\nPor favor, espere&#8230;</string>
+    <string name="clickToOpenFile">Pulse aqui para abrir el archivo</string>
     <string name="sharedsDownloadModuleLabel">Zona común</string>
     <string name="connectionRequired">Para esta funcionalidad se necesita conexión a Internet</string>
     <string name="course">Asignatura</string>

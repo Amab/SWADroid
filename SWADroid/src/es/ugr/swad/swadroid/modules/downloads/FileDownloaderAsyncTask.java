@@ -1,3 +1,21 @@
+/*
+ *  This file is part of SWADroid.
+ *
+ *  Copyright (C) 2012 Helena Rodriguez Gijon <hrgijon@gmail.com>
+ *
+ *  SWADroid is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  SWADroid is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with SWADroid.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package es.ugr.swad.swadroid.modules.downloads;
 
 import java.io.BufferedInputStream;
@@ -47,7 +65,7 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 	@Override
 	protected void onPostExecute(Boolean result) {
 		Log.i(TAG, "onPostExecute");
-		mNotification.completed();
+		mNotification.completedDownload();
 	}
 
 	/* Return the path to the directory where files are saved */
@@ -132,7 +150,7 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 			filename = basename+"-"+String.valueOf(i-1)+extension;
 		}	
 		
-		mNotification.createNotification(filename);
+		mNotification.createNotification(params[0],filename);
 		
 		
 		/* Open a connection to the URL and a buffered input stream */
@@ -141,7 +159,7 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 			ucon = url.openConnection();
 		} catch (IOException e) {
 			// TODO TODO ¿cambiar barra de progreso por mensaje de error?
-			Log.i(TAG, "Error conection");mNotification.completed();
+			Log.i(TAG, "Error conection");mNotification.eraseNotification();
 			e.printStackTrace();
 			return false;
 		}
@@ -150,7 +168,7 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 			is = ucon.getInputStream();
 		} catch (IOException e) {
 			// TODO TODO ¿cambiar barra de progreso por mensaje de error?
-			Log.i(TAG, "Error conection");mNotification.completed();
+			Log.i(TAG, "Error conection");mNotification.eraseNotification();
 			e.printStackTrace();
 			return false;
 		}
@@ -163,7 +181,7 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 		try {
 			total = bis.available();
 		} catch (IOException e1) {
-			Log.i(TAG, "Error lectura bytes");mNotification.completed();
+			Log.i(TAG, "Error lectura bytes");mNotification.eraseNotification();
 			e1.printStackTrace();
 		};
 		
@@ -185,7 +203,7 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 				}
 			} catch (IOException e) {
 				// TODO TODO ¿cambiar barra de progreso por mensaje de error?
-				Log.i(TAG, "Error conection");mNotification.completed();
+				Log.i(TAG, "Error conection");mNotification.eraseNotification();
 				e.printStackTrace();
 				return false;
 			}
@@ -198,7 +216,7 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 				}
 			} catch (IOException e) {
 				// TODO TODO ¿cambiar barra de progreso por mensaje de error?
-				Log.i(TAG, "Error conection");mNotification.completed();
+				Log.i(TAG, "Error conection");mNotification.eraseNotification();
 				e.printStackTrace();
 				return false;
 			}

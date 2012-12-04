@@ -135,7 +135,8 @@
     <string name="marksMsg">Klicken Sie auf die Benachrichtigung, um die Marke anzeigen.</string>
     <string name="clickToGetCourses">Klicken Sie hier, um Ihre Kurse zu bekommen</string>
     <string name="documentsDownloadModuleLabel">Dokumente</string>
-    <string name="documentsDownloadProgressDescription">Erste-Dateien&#8230;</string>
+    <string name="documentsDownloadProgressDescription">Getting directory tree. \n\nDepending of the directory size, this could take several minutes.\n\nPlease wait&#8230;</string>
+    <string name="clickToOpenFile">Klicken Sie hier, um die Datei zu öffnen</string>
     <string name="sharedsDownloadModuleLabel">Gemeinsamer Bereich</string>
     <string name="connectionRequired">Internetverbindung ist für diese Funktionalität erforderlich</string>
     <string name="home_icon">Zeigt home Ordner</string>
