@@ -25,6 +25,7 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 	private File download_dir;
 	private URL url;
 	boolean notification = true;
+	private long fileSize;
 	
 	/**
 	 * Downloads tag name for Logcat
@@ -35,9 +36,10 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 		this.fileName = text;
 		this.progressBar = progressBar;
 	}*/
-	public FileDownloaderAsyncTask(Context context, boolean notification){
+	public FileDownloaderAsyncTask(Context context, boolean notification, long fileSize){
 		mNotification = new DownloadNotification(context);
 		this.notification = notification;
+		this.fileSize = fileSize;
 	}
 	
 	
@@ -100,7 +102,35 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 		String filename = FileDownloader.getFilenameFromURL(url.getPath());
 		//if(filename == null)
 		//	throw new FileNotFoundException("URL does not point to a file");
-
+		
+		int lastSlashIndex = filename.lastIndexOf("/");
+		int lastDotIndex = filename.lastIndexOf(".");
+		
+		/* Avoid StringIndexOutOfBoundsException from being thrown if the
+		 * file has no extension (such as "http://www.domain.com/README" */
+		String basename = "";
+		String extension = "";
+		
+		if(lastDotIndex == -1)
+			basename  = filename.substring(lastSlashIndex + 1);
+		else {
+			basename  = filename.substring(lastSlashIndex + 1, lastDotIndex);
+			extension = filename.substring(lastDotIndex);
+		}
+		
+		/* The prefix must be at least three characters long */
+		if(basename.length() < 3)
+			basename = "tmp";
+	
+		File output = new File(this.getDownloadDir(),filename) ;
+		if(output.exists()){
+			int i = 1;
+			do{
+				output = new File(this.getDownloadDir(),basename+"-"+String.valueOf(i)+extension);
+				++i;
+			}while(output.exists());
+			filename = basename+"-"+String.valueOf(i-1)+extension;
+		}	
 		
 		mNotification.createNotification(filename);
 		
@@ -146,7 +176,7 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 				while ((current = bis.read()) != -1) {
 					baf.append((byte) current);
 					++byteRead;
-					int newValue = new Float(((float) byteRead*100/ (float) total)).intValue();
+					int newValue = new Float(((float) byteRead*100/ (float) fileSize)).intValue();
 					if(newValue > progress){
 						progress = newValue;
 						publishProgress(progress);
@@ -174,35 +204,7 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 			}
 			
 		}
-		
-		int lastSlashIndex = filename.lastIndexOf("/");
-		int lastDotIndex = filename.lastIndexOf(".");
-		
-		/* Avoid StringIndexOutOfBoundsException from being thrown if the
-		 * file has no extension (such as "http://www.domain.com/README" */
-		String basename = "";
-		String extension = "";
-		
-		if(lastDotIndex == -1)
-			basename  = filename.substring(lastSlashIndex + 1);
-		else {
-			basename  = filename.substring(lastSlashIndex + 1, lastDotIndex);
-			extension = filename.substring(lastDotIndex);
-		}
-		
-		/* The prefix must be at least three characters long */
-		if(basename.length() < 3)
-			basename = "tmp";
-	
-		File output = new File(this.getDownloadDir(),filename) ;
-		String name;
-		if(output.exists()){
-			int i = 1;
-			do{
-				output = new File(this.getDownloadDir(),basename+"-"+String.valueOf(i)+extension);
-				++i;
-			}while(output.exists());
-		}	
+
 		
 /*		try {
 			output = File.cre //File.createTempFile("swad48x48", ".gif",this.getDownloadDir());

@@ -38,7 +38,7 @@ public class DownloadNotification {
 
         //create the content which is shown in the notification pulldown
        // mContentTitle = "Your download is in progress";
-        mContentTitle = fileName +" " +mContext.getString(R.string.notificationDownloadTitle); //Full title of the notification in the pull down
+        mContentTitle = fileName; //Full title of the notification in the pull down
         CharSequence contentText = "O Bytes";//"0%" +" "+ mContext.getString(R.string.complete);  //Text of the notification in the pull down
 
         //you have to set a PendingIntent on a notification to tell the system what you want it to do when the notification is selected
@@ -62,8 +62,7 @@ public class DownloadNotification {
      */
     public void progressUpdate(int percentageComplete) {
         //build up the new status message
-    	CharSequence contentText = percentageComplete + "Bytes";
-        //CharSequence contentText = percentageComplete + "% "+ mContext.getString(R.string.complete);
+        CharSequence contentText = percentageComplete + "% "+ mContext.getString(R.string.complete);
         //publish it to the status bar
         mNotification.setLatestEventInfo(mContext, mContentTitle, contentText, mContentIntent);
         mNotificationManager.notify(NOTIFICATION_ID, mNotification);
