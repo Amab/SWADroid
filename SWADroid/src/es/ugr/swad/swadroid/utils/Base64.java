@@ -146,7 +146,7 @@
  * @version 2.3.7
  */
 
-package es.ugr.swad.swadroid;
+package es.ugr.swad.swadroid.utils;
 
 public class Base64
 {

@@ -44,6 +44,8 @@ import com.android.dataframework.Entity;
 
 import es.ugr.swad.swadroid.Global;
 //import es.ugr.swad.swadroid.Preferences;
+import es.ugr.swad.swadroid.Preferences;
+import es.ugr.swad.swadroid.utils.Crypto;
 
 /**
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
@@ -62,19 +64,19 @@ public class DataBaseHelper {
 	/**
 	 * Application preferences
 	 */
-	//private Preferences prefs = new Preferences();
+	private Preferences prefs = new Preferences();
 	/**
 	 * Database name
 	 */
-	//private String DBName = "swadroid_db";
+	//private String DBName = "swadroid_db_crypt";
 	/**
 	 * Database passphrase
 	 */
-	//private String DBKey;
+	private String DBKey;
 	/**
 	 * Database passphrase length
 	 */
-	//private int DB_KEY_LENGTH = 128;
+	private int DB_KEY_LENGTH = 128;
 
 	/**
 	 * Constructor
@@ -82,23 +84,12 @@ public class DataBaseHelper {
 	 */
 	public DataBaseHelper(Context ctx) {		
 		mCtx = ctx;
-		//prefs.getPreferences(mCtx);
-		//DBKey = prefs.getDBKey();
+		prefs.getPreferences(mCtx);
+		DBKey = prefs.getDBKey();
 		db = DataFramework.getInstance();
 		
 		//Initialize SQLCipher libraries
 		//SQLiteDatabase.loadLibs(mCtx);
-		
-		//If the passphrase is empty, generate a random passphrase and recreate database
-		/*if(DBKey.equals("")) {
-			DBKey = Global.randomString(DB_KEY_LENGTH);
-			prefs.setDBKey(DBKey);
-			mCtx.deleteDatabase(DBName);
-			SQLiteDatabase database = SQLiteDatabase.openOrCreateDatabase(mCtx.getDatabasePath("swadroid_db_crypt"), DBKey, null);
-			database.close();
-		}
-		
-		Log.d("DataBaseHelper", "DBKey=" + DBKey);*/
 		
 		try {
 			//db.open(mCtx, mCtx.getPackageName(), DBKey);
@@ -108,6 +99,18 @@ public class DataBaseHelper {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		//If the passphrase is empty, generate a random passphrase and recreate database
+		if(DBKey.equals("")) {
+			DBKey = Global.randomString(DB_KEY_LENGTH);
+			prefs.setDBKey(DBKey);
+
+			/*mCtx.deleteDatabase(DBName);
+			SQLiteDatabase database = SQLiteDatabase.openOrCreateDatabase(mCtx.getDatabasePath("swadroid_db_crypt"), DBKey, null);
+			database.close();*/
+		}
+		
+		//Log.d("DataBaseHelper", "DBKey=" + DBKey);
 	}
 
 	/**
@@ -207,16 +210,16 @@ public class DataBaseHelper {
 					ent.getInt(params.getSecond()));
 		} else if(table.equals(Global.DB_TABLE_NOTIFICATIONS)) {			
 			o = new SWADNotification(ent.getInt("id"),
-					ent.getString("eventType"), 
+					Crypto.decrypt(DBKey, ent.getString("eventType")), 
 					ent.getLong("eventTime"), 
-					ent.getString("userSurname1"), 
-					ent.getString("userSurname2"), 
-					ent.getString("userFirstname"),  
-					ent.getString("userPhoto"), 
-					ent.getString("location"), 
-					ent.getString("summary"), 
+					Crypto.decrypt(DBKey, ent.getString("userSurname1")), 
+					Crypto.decrypt(DBKey, ent.getString("userSurname2")), 
+					Crypto.decrypt(DBKey, ent.getString("userFirstname")),  
+					Crypto.decrypt(DBKey, ent.getString("userPhoto")), 
+					Crypto.decrypt(DBKey, ent.getString("location")), 
+					Crypto.decrypt(DBKey, ent.getString("summary")), 
 					ent.getInt("status"), 
-					ent.getString("content"));
+					Crypto.decrypt(DBKey, ent.getString("content")));
 		} else if(table.equals(Global.DB_TABLE_TEST_QUESTIONS)) {
 			id = ent.getInt("id");
 			PairTable q = (PairTable)getRow(Global.DB_TABLE_TEST_QUESTIONS_COURSE, "qstCod", Long.toString(id));
@@ -709,16 +712,16 @@ public class DataBaseHelper {
 		String status = String.valueOf(n.getStatus());
 
 		ent.setValue("id", n.getId());
-		ent.setValue("eventType", n.getEventType());
+		ent.setValue("eventType", Crypto.encrypt(DBKey, n.getEventType()));
 		ent.setValue("eventTime", eventTime);
-		ent.setValue("userSurname1", n.getUserSurname1());
-		ent.setValue("userSurname2", n.getUserSurname2());
-		ent.setValue("userFirstname", n.getUserFirstName());
-		ent.setValue("userPhoto", n.getUserPhoto());
-		ent.setValue("location", n.getLocation());
-		ent.setValue("summary", n.getSummary());
+		ent.setValue("userSurname1", Crypto.encrypt(DBKey, n.getUserSurname1()));
+		ent.setValue("userSurname2", Crypto.encrypt(DBKey, n.getUserSurname2()));
+		ent.setValue("userFirstname", Crypto.encrypt(DBKey, n.getUserFirstName()));
+		ent.setValue("userPhoto", Crypto.encrypt(DBKey, n.getUserPhoto()));
+		ent.setValue("location", Crypto.encrypt(DBKey, n.getLocation()));
+		ent.setValue("summary", Crypto.encrypt(DBKey, n.getSummary()));
 		ent.setValue("status", status);
-		ent.setValue("content", n.getContent());
+		ent.setValue("content", Crypto.encrypt(DBKey, n.getContent()));
 		ent.save();
 	}
 
@@ -1662,6 +1665,27 @@ public class DataBaseHelper {
 		{
 			for(int i=0; i<numDeletions; i++)
 				rows.get(i).delete();
+		}
+	}
+	
+	/**
+	 * Encrypts the notifications data
+	 */
+	public void encryptNotifications() {
+		List<Entity> rows = db.getEntityList(Global.DB_TABLE_NOTIFICATIONS);
+
+		Iterator<Entity> iter = rows.iterator();
+		while (iter.hasNext()) {
+			Entity ent = iter.next();
+			ent.setValue("eventType", Crypto.encrypt(DBKey, ent.getString("eventType")));
+			ent.setValue("userSurname1", Crypto.encrypt(DBKey, ent.getString("userSurname1")));
+			ent.setValue("userSurname2", Crypto.encrypt(DBKey, ent.getString("userSurname2")));
+			ent.setValue("userFirstname", Crypto.encrypt(DBKey, ent.getString("userFirstname")));
+			ent.setValue("userPhoto", Crypto.encrypt(DBKey, ent.getString("userPhoto")));
+			ent.setValue("location", Crypto.encrypt(DBKey, ent.getString("location")));
+			ent.setValue("summary", Crypto.encrypt(DBKey, ent.getString("summary")));
+			ent.setValue("content", Crypto.encrypt(DBKey, ent.getString("content")));
+			ent.save();
 		}
 	}
 

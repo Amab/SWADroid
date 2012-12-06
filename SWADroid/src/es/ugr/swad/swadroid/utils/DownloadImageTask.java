@@ -1,4 +1,4 @@
-package es.ugr.swad.swadroid;
+package es.ugr.swad.swadroid.utils;
 
 import java.io.InputStream;
 
