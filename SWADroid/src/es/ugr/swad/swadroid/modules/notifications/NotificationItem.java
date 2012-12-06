@@ -18,11 +18,11 @@
  */
 package es.ugr.swad.swadroid.modules.notifications;
 
-import es.ugr.swad.swadroid.DownloadImageTask;
 import es.ugr.swad.swadroid.Global;
-import es.ugr.swad.swadroid.MenuActivity;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.modules.Messages;
+import es.ugr.swad.swadroid.utils.DownloadImageTask;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
