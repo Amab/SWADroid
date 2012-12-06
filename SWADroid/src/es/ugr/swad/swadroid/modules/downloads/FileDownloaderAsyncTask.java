@@ -140,8 +140,8 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 		}
 		
 		/* The prefix must be at least three characters long */
-		if(basename.length() < 3)
-			basename = "tmp";
+//		if(basename.length() < 3)
+//			basename = "tmp";
 	
 		File output = new File(this.getDownloadDir(),filename) ;
 		if(output.exists()){
@@ -152,8 +152,8 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 			}while(output.exists());
 			filename = basename+"-"+String.valueOf(i-1)+extension;
 		}	
-		this.fileName = fileName;
-		mNotification.createNotification(filename);
+		this.fileName = filename;
+		mNotification.createNotification(this.fileName);
 		
 		
 		/* Open a connection to the URL and a buffered input stream */

@@ -138,8 +138,10 @@ public class Notices extends Module {
 		addParam("body",body);
 
 		sendRequest(User.class,false);
-
-		setResult(RESULT_OK);
+		if(result != null){
+			//TODO 
+			setResult(RESULT_OK);
+		}
 	}
 
 	@Override

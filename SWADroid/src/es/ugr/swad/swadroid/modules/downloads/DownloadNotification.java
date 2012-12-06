@@ -40,7 +40,7 @@ import android.webkit.MimeTypeMap;
 
 public class DownloadNotification {
     private Context mContext;
-    private int NOTIFICATION_ID = 1982;
+    private int NOTIFICATION_ID = 19982;
     private Notification mNotification;
     private NotificationManager mNotificationManager;
     private PendingIntent mContentIntent;
@@ -49,6 +49,9 @@ public class DownloadNotification {
     public DownloadNotification(Context context)
     {
         mContext = context;
+    	
+        //get the notification manager
+        mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
     
@@ -58,9 +61,8 @@ public class DownloadNotification {
      * @param fileName  name of file that is downloading. It is show on the notification.   
      */
     public void createNotification(String fileName) {
-        //get the notification manager
-        mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
 
+    	mNotificationManager.cancel(NOTIFICATION_ID);
         //create the notification
         int icon = android.R.drawable.stat_sys_download;
         CharSequence tickerText =mContext.getString(R.string.app_name)+" " + mContext.getString(R.string.notificationDownloadTitle); //Initial text that appears in the status bar
@@ -71,6 +73,11 @@ public class DownloadNotification {
        // mContentTitle = "Your download is in progress";
         mContentTitle = fileName; //Full title of the notification in the pull down
         CharSequence contentText = "0%" +" "+ mContext.getString(R.string.complete);  //Text of the notification in the pull down
+
+        //you have to set a PendingIntent on a notification to tell the system what you want it to do when the notification is selected
+        //I don't want to use this here so I'm just creating a blank one
+        Intent notificationIntent = new Intent();
+        mContentIntent = PendingIntent.getActivity(mContext, 0, notificationIntent, 0);
 
         //add the additional content and intent to the notification
         mNotification.setLatestEventInfo(mContext, mContentTitle, contentText, mContentIntent);
@@ -106,12 +113,12 @@ public class DownloadNotification {
     	
        //create the notification
         int icon = android.R.drawable.stat_sys_download_done;
-        CharSequence tickerText =mContext.getString(R.string.app_name)+" " + mContext.getString(R.string.notificationDownloadTitle); //Initial text that appears in the status bar
+        CharSequence tickerText =mContext.getString(R.string.app_name)+" " + mContext.getString(R.string.downloadCompletedTitle); //Initial text that appears in the status bar
         long when = System.currentTimeMillis();
         mNotification = new Notification(icon, tickerText, when);
 	
         //build up the new status message
-        CharSequence contentText = "100% "+ mContext.getString(R.string.complete)+ mContext.getString(R.string.clickToOpenFile);
+        CharSequence contentText = mContext.getString(R.string.clickToOpenFile);
         //publish it to the status bar
         mNotification.setLatestEventInfo(mContext, mContentTitle, contentText, mContentIntent);
         //create the content which is shown in the notification pulldown
