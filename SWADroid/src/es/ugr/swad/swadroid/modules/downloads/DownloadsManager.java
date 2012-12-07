@@ -453,8 +453,14 @@ public class DownloadsManager extends MenuActivity {
     	Date d = new Date(time * 1000);
     	java.text.DateFormat dateShortFormat = android.text.format.DateFormat.getDateFormat(this);
     	java.text.DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(this);
-    	//TODO show size in appropriate measure
-		String message =this.getResources().getString(R.string.uploaderTitle) +" " + uploader+ '\n' + 
+    	
+    	String uploaderName;
+    	if(uploader.compareTo("") != 0)
+    		uploaderName = uploader;
+    	else
+    		uploaderName = this.getResources().getString(R.string.unknown); 
+    	
+		String message =this.getResources().getString(R.string.uploaderTitle) +" " + uploaderName+ '\n' + 
 				 this.getResources().getString(R.string.sizeFileTitle)  +" " +  humanReadableByteCount(size, true) + '\n'+
 				this.getResources().getString(R.string.creationTimeTitle) +" "  +   dateShortFormat.format(d)+ "  "+(timeFormat.format(d));
 		builder.setTitle(name);
