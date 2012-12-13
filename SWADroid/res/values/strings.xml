@@ -278,4 +278,5 @@ configuration anytime using the "Clean Database" option\n\nDo you want to contin
 	<string name="downloadCompletedTitle"> Download completed </string>
 	<string name="unknown">Unknown</string>
 	<string name="selectZoneTitle">Select zone</string>
+	<string name="fileTitle">File:</string>
 </resources>

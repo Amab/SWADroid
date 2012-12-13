@@ -469,7 +469,8 @@ public class DownloadsManager extends MenuActivity {
     	else
     		uploaderName = this.getResources().getString(R.string.unknown); 
     	
-		String message =this.getResources().getString(R.string.uploaderTitle) +" " + uploaderName+ '\n' + 
+		String message = this.getResources().getString(R.string.fileTitle) +" " + name+ '\n' + 
+				this.getResources().getString(R.string.uploaderTitle) +" " + uploaderName+ '\n' + 
 				 this.getResources().getString(R.string.sizeFileTitle)  +" " +  humanReadableByteCount(size, true) + '\n'+
 				this.getResources().getString(R.string.creationTimeTitle) +" "  +   dateShortFormat.format(d)+ "  "+(timeFormat.format(d));
 		builder.setTitle(name);
