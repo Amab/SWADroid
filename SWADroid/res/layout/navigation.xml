@@ -8,20 +8,7 @@
 
     <include layout="@layout/action_bar" />
     <include layout="@layout/course_or_group_name"/>
-	
-    <TextView
-		android:id="@+id/path"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:padding="8dp"
-		android:background="@color/title_background"
-		android:textColor="@android:color/white"
-		android:textSize="18sp"
-		android:textStyle="bold" 
-		android:ellipsize="start"
-		android:singleLine="true">
-	</TextView>
-    
+ 
 	<include layout="@layout/navigation_bar" />
 	
 	<GridView xmlns:android="http://schemas.android.com/apk/res/android" 
