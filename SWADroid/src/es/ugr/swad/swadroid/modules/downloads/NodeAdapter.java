@@ -93,7 +93,7 @@ public class NodeAdapter extends BaseAdapter {
 		holder.text.setText(((DirectoryItem)list.get(position)).getName());
 		
 		if(((DirectoryItem)list.get(position)).isFolder()){
-			holder.image.setImageResource(R.drawable.folder);
+			holder.image.setImageResource(R.drawable.folder_open);
 		}else{
 			holder.image.setImageResource(R.drawable.file);
 		}

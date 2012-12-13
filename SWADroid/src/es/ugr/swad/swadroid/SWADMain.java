@@ -558,12 +558,12 @@ public class SWADMain extends MenuExpandableListActivity {
 			//shared area category
 			map = new HashMap<String,Object>();
 			map.put(NAME, getString(R.string.sharedsDownloadModuleLabel));
-			map.put(IMAGE,  getResources().getDrawable(R.drawable.folderusers));
+			map.put(IMAGE,  getResources().getDrawable(R.drawable.folder_users));
 			documentsData.add(map);	
 			
 			map = new HashMap<String,Object>();
 			map.put(NAME, getString(R.string.myGroupsModuleLabel));
-			map.put(IMAGE,  getResources().getDrawable(R.drawable.mygroups));
+			map.put(IMAGE,  getResources().getDrawable(R.drawable.my_groups));
 			enrollmentData.add(map);
 			
 			setListAdapter( new ImageExpandableListAdapter(
@@ -616,7 +616,7 @@ public class SWADMain extends MenuExpandableListActivity {
 
 			map = new HashMap<String,Object>();
 			map.put(NAME, getString(R.string.rollcallModuleLabel));
-			map.put(IMAGE, getResources().getDrawable(R.drawable.rollcall));
+			map.put(IMAGE, getResources().getDrawable(R.drawable.roll_call));
 			child.add(map);
 			((ImageExpandableListAdapter) getExpandableListAdapter()).addGroup(USERS_GROUP, users, child);
 

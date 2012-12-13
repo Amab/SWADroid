@@ -315,7 +315,7 @@ public class Rollcall extends MenuExpandableListActivity {
 		setContentView(R.layout.main_rollcall);
 
 		ImageView image = (ImageView) this.findViewById(R.id.moduleIcon);
-		image.setBackgroundResource(R.drawable.rollcall);
+		image.setBackgroundResource(R.drawable.roll_call);
 
 		TextView text = (TextView) this.findViewById(R.id.moduleName);
 		text.setText(R.string.rollcallModuleLabel);
@@ -455,7 +455,7 @@ public class Rollcall extends MenuExpandableListActivity {
 		// Rollcall category
 		final HashMap<String, Object> rollcall = new HashMap<String,Object>();
 		rollcall.put(NAME, getString(R.string.rollcallModuleLabel));
-		rollcall.put(IMAGE, getResources().getDrawable(R.drawable.rollcall));
+		rollcall.put(IMAGE, getResources().getDrawable(R.drawable.roll_call));
 		headerData.add(rollcall);
 
 		final ArrayList<HashMap<String,Object>> rollcallData = new ArrayList<HashMap<String, Object>>();

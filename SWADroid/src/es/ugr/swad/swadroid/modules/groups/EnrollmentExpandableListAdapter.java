@@ -158,9 +158,9 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 		}
 		
 		if(open != 0){
-			holder.imagePadlock.setImageResource(R.drawable.padlockgreen);
+			holder.imagePadlock.setImageResource(R.drawable.padlock_green);
 		}else{
-			holder.imagePadlock.setImageResource(R.drawable.padlockred);
+			holder.imagePadlock.setImageResource(R.drawable.padlock_red);
 		}
 		
 		if((open != 0 && freeSpot) || role == Global.TEACHER_TYPE_CODE){ //Teachers can enroll even on closed groups

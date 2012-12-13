@@ -283,7 +283,7 @@ public class DownloadsManager extends MenuActivity {
 				moduleText.setText(R.string.documentsDownloadModuleLabel);
 			} else { // SHARE_AREA_CODE
 				moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
-				moduleIcon.setBackgroundResource(R.drawable.folderusers);
+				moduleIcon.setBackgroundResource(R.drawable.folder_users);
 
 				moduleText = (TextView) this.findViewById(R.id.moduleName);
 				moduleText.setText(R.string.sharedsDownloadModuleLabel);

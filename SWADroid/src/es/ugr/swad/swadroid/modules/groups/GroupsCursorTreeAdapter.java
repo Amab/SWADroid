@@ -144,9 +144,9 @@ public class GroupsCursorTreeAdapter extends CursorTreeAdapter {
 		
 		
 		if(open != 0)
-			imagePadlock.setImageResource(R.drawable.padlockgreen);
+			imagePadlock.setImageResource(R.drawable.padlock_green);
 		else
-			imagePadlock.setImageResource(R.drawable.padlockred);
+			imagePadlock.setImageResource(R.drawable.padlock_red);
 		
 		//Multiple or single inscription? it comes from the group type
 		int multiple = childMultiple.get(Long.valueOf(groupCode)).intValue();
