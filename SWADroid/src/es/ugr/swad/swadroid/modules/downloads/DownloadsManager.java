@@ -159,12 +159,15 @@ public class DownloadsManager extends MenuActivity {
 		grid.setOnItemClickListener((new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v,
 					int position, long id) {
-				TextView text = (TextView) v.findViewById(R.id.icon_text);
-				chosenNodeName = text.getText().toString();
-				DirectoryItem node = navigator.getDirectoryItem(chosenNodeName);
+				//TextView text = (TextView) v.findViewById(R.id.icon_text);
+				//chosenNodeName = text.getText().toString();
+				//DirectoryItem node = navigator.getDirectoryItem(chosenNodeName);
+				DirectoryItem node = navigator.getDirectoryItem(position);
 				if(node.getFileCode() == -1) //it is a directory therefore navigates into it
-					updateView(navigator.goToSubDirectory(chosenNodeName));
+					updateView(navigator.goToSubDirectory(position));
+					//updateView(navigator.goToSubDirectory(chosenNodeName));
 				else{ //it is a files therefore gets its information through web service GETFILE
+					chosenNodeName = node.getName();
 					AlertDialog fileInfoDialog = createFileInfoDialog(node.getName(),node.getSize(),node.getTime(),node.getPublisher(),node.getFileCode());
 					fileInfoDialog.show();
 				}
@@ -419,7 +422,7 @@ public class DownloadsManager extends MenuActivity {
 	 * @param fileSize - file size of the file. It is used to show the download progress in the notification
 	 * */
 	private void downloadFile(String directory, String url,long fileSize){
-			new FileDownloaderAsyncTask(getApplicationContext(),true,fileSize).execute(directory,url);
+			new FileDownloaderAsyncTask(getApplicationContext(),this.chosenNodeName,true,fileSize).execute(directory,url);
 	}
 	private void openFileDefaultApp(String absolutePath){
 		File file = new File(absolutePath);

@@ -82,6 +82,28 @@ public class DirectoryNavigator
         //return itemsToShow;
         return currentItems;
     }
+    
+    /**
+     * Travel inside a subdirectory.
+     * @param directoryPosition The position of the subdirectory where we will travel.
+     * @return Return a list of items that are inside the subdirectory.
+     * @throws InvalidPath When the directory don't exist.
+     */
+    public ArrayList<DirectoryItem> goToSubDirectory(int directoryPosition) throws InvalidPath
+    {
+    	String subDirectory = currentItems.get(directoryPosition).getName();
+    	
+        //We increase the path.
+        path.add(subDirectory);
+        
+        Node node = goToDirectory();
+        
+        //ArrayList<DirectoryItem> itemsToShow;
+        //itemsToShow = new ArrayList<DirectoryItem>(getItems(node));
+        currentItems= new ArrayList<DirectoryItem>(getItems(node));
+        //return itemsToShow;
+        return currentItems;
+    }
         
     /**
      * Travel to the parent directory.
@@ -353,8 +375,7 @@ public class DirectoryNavigator
 	/**
 	 *Searches for a node in the current directory with the given name
 	 *@param name Name of the node located on the current directory.
-	 *@returns -1 in case it does not exists any node with the given name
-     * 			directoryItem with the given name
+	 *@returns null in case it does not exists any node with the given name
 	 * */
 	public DirectoryItem getDirectoryItem(String name){
 		DirectoryItem node = null;
@@ -373,6 +394,20 @@ public class DirectoryNavigator
 		
 		return node;
 	}
+	
+	/**
+	 *Searches for a node in the current directory with the given position
+	 *@param position position where the node is located
+	 *@returns null in case it does not exists any node located at the given position
+	 * */
+	public DirectoryItem getDirectoryItem(int position){
+		DirectoryItem node = null;
+		if(position >=0 && position < currentItems.size()){
+			node = currentItems.get(position);
+		}		
+		return node;
+	}
+	
 	
     /**
      * Identifies the node with name @a name and gets its file code in case the node is a file. In case the node is a directory returns -1

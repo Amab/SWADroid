@@ -56,7 +56,8 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 		this.fileName = text;
 		this.progressBar = progressBar;
 	}*/
-	public FileDownloaderAsyncTask(Context context, boolean notification, long fileSize){
+	public FileDownloaderAsyncTask(Context context,String fileName, boolean notification, long fileSize){
+		this.fileName = fileName;
 		mNotification = new DownloadNotification(context);
 		this.notification = notification;
 		this.fileSize = fileSize;
@@ -120,12 +121,11 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 		
 		/* The downloaded file will be saved to a temporary file, whose prefix
 		 * will be the basename of the file and the suffix its extension */
-		String filename = FileDownloader.getFilenameFromURL(url.getPath());
-		//if(filename == null)
+		//if(FileDownloader.getFilenameFromURL(url.getPath() == null)
 		//	throw new FileNotFoundException("URL does not point to a file");
 		
-		int lastSlashIndex = filename.lastIndexOf("/");
-		int lastDotIndex = filename.lastIndexOf(".");
+		int lastSlashIndex = this.fileName.lastIndexOf("/");
+		int lastDotIndex = this.fileName.lastIndexOf(".");
 		
 		/* Avoid StringIndexOutOfBoundsException from being thrown if the
 		 * file has no extension (such as "http://www.domain.com/README" */
@@ -133,26 +133,25 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 		String extension = "";
 		
 		if(lastDotIndex == -1)
-			basename  = filename.substring(lastSlashIndex + 1);
+			basename  = this.fileName.substring(lastSlashIndex + 1);
 		else {
-			basename  = filename.substring(lastSlashIndex + 1, lastDotIndex);
-			extension = filename.substring(lastDotIndex);
+			basename  = this.fileName.substring(lastSlashIndex + 1, lastDotIndex);
+			extension = this.fileName.substring(lastDotIndex);
 		}
 		
 		/* The prefix must be at least three characters long */
 //		if(basename.length() < 3)
 //			basename = "tmp";
 	
-		File output = new File(this.getDownloadDir(),filename) ;
+		File output = new File(this.getDownloadDir(),this.fileName) ;
 		if(output.exists()){
 			int i = 1;
 			do{
 				output = new File(this.getDownloadDir(),basename+"-"+String.valueOf(i)+extension);
 				++i;
 			}while(output.exists());
-			filename = basename+"-"+String.valueOf(i-1)+extension;
+			this.fileName = basename+"-"+String.valueOf(i-1)+extension;
 		}	
-		this.fileName = filename;
 		mNotification.createNotification(this.fileName);
 		
 		
