@@ -267,5 +267,6 @@ Seleccione: Sesiones de prácticas - Nueva</string>
 	<string name="downloadCompletedTitle"> Descarga completa </string>
 	<string name="unknown">Desconocido</string>
 	<string name="selectZoneTitle">Seleccione zona</string>
+	<string name="fileTitle">Fichero:</string>
 </resources>
 
