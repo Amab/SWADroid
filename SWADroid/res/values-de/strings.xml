@@ -173,4 +173,5 @@
     <string name="downloadFileTitle">Download</string>
     <string  name="sdCardBusyTitle">SD-Karte nicht verfügbar</string>
     <string name="sdCardBusy">SD-Karte ist in Verwendung. Um Downloads zu erlauben, "USB-Speicher ausschalten" in der Benachrichtigung wählen</string>
+	<string name="selectZone">Wählen Sie Bereich</string>
 </resources>

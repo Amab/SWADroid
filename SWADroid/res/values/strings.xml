@@ -277,4 +277,5 @@ configuration anytime using the "Clean Database" option\n\nDo you want to contin
 	<string name="downloadProblemMsg">Sorry. The download of file was interrupted. Try again</string>
 	<string name="downloadCompletedTitle"> Download completed </string>
 	<string name="unknown">Unknown</string>
+	<string name="selectZoneTitle">Select zone</string>
 </resources>

@@ -266,5 +266,6 @@ Seleccione: Sesiones de prácticas - Nueva</string>
 	<string name="downloadProblemMsg">Lo sentimos. La descarga fue interrumpida. Inténtelo de nuevo</string>
 	<string name="downloadCompletedTitle"> Descarga completa </string>
 	<string name="unknown">Desconocido</string>
+	<string name="selectZoneTitle">Seleccione zona</string>
 </resources>
 
