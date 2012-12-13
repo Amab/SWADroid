@@ -10,7 +10,7 @@
         android:id="@+id/padlockIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/padlockred"
+        android:src="@drawable/padlock_red"
         android:layout_alignParentLeft="true"
         android:paddingTop="5dp"
         android:paddingLeft="5dp"

@@ -112,7 +112,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 		courseNameText.setText(Global.getSelectedCourseShortName());
 		
 		ImageView moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
-		moduleIcon.setBackgroundResource(R.drawable.mygroups);
+		moduleIcon.setBackgroundResource(R.drawable.my_groups);
 
 		TextView moduleText = (TextView) this.findViewById(R.id.moduleName);
 		moduleText.setText(R.string.myGroupsModuleLabel);

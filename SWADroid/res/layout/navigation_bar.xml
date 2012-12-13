@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/actionBarLayout"
     android:layout_width="match_parent"
-    android:layout_height="50dip"
+    android:layout_height="40dip"
     android:background="@color/title_background"
     android:orientation="horizontal" >
 
@@ -31,7 +31,7 @@
         android:contentDescription="@string/parent_icon"
         android:background="@drawable/navigation_button"
         android:onClick="onRefreshClick"
-        android:paddingLeft="5dip"
+        android:paddingLeft="20dip"
         android:paddingRight="5dip"
         android:scaleType="centerCrop"
         android:src="@drawable/parent" />
