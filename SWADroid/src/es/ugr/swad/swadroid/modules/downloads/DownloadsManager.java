@@ -45,6 +45,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ArrayAdapter;
@@ -108,6 +109,8 @@ public class DownloadsManager extends MenuActivity {
 	 * */
 	private boolean refresh = false;
 	
+	private ImageButton updateButton;
+	private ProgressBar progressbar;
 	
 	private GridView grid;
 
@@ -201,21 +204,10 @@ public class DownloadsManager extends MenuActivity {
 
 		}));
 
-		ImageButton refreshButton = (ImageButton) this
-				.findViewById(R.id.refresh_button);
-		refreshButton.setOnClickListener((new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-
-				refresh = true;
-				Intent activity = new Intent(getBaseContext(),GroupTypes.class);
-				activity.putExtra("courseCode",  Global.getSelectedCourseCode());
-				startActivityForResult(activity,Global.GROUPTYPES_REQUEST_CODE);
-				
-			}
-
-		}));
+		progressbar = (ProgressBar) this.findViewById(R.id.progress_refresh);
+		progressbar.setVisibility(View.GONE);
+		updateButton = (ImageButton)this.findViewById(R.id.refresh);
+		updateButton.setVisibility(View.VISIBLE);
 
 	}
 
@@ -233,6 +225,9 @@ public class DownloadsManager extends MenuActivity {
 				else {
 					refresh = false;
 					refresh();
+					updateButton.setVisibility(View.VISIBLE);
+					progressbar.setVisibility(View.GONE);
+
 				}
 				break;
 			case Global.GETFILE_REQUEST_CODE:
@@ -499,5 +494,24 @@ public class DownloadsManager extends MenuActivity {
 	    int exp = (int) (Math.log(bytes) / Math.log(unit));
 	    String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp-1) + (si ? "" : "i");
 	    return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
+	}
+	
+	/**
+	 * Launches an action when refresh button is pushed.
+	 *  
+	 * The listener onClick is set in action_bar.xml
+	 * @param v Actual view
+	 */
+	public void onRefreshClick(View v)
+	{        
+		updateButton.setVisibility(View.GONE);
+		progressbar.setVisibility(View.VISIBLE);
+		
+		refresh = true;
+		
+		Intent activity = new Intent(getBaseContext(),GroupTypes.class);
+		activity.putExtra("courseCode",  Global.getSelectedCourseCode());
+		startActivityForResult(activity,Global.GROUPTYPES_REQUEST_CODE);
+
 	}
 }
