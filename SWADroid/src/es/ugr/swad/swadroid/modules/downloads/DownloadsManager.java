@@ -96,7 +96,7 @@ public class DownloadsManager extends MenuActivity {
 	/**
 	 * List of group of the selected course to which the user belongs
 	 * */
-	private List<Group> groups;
+	private List<Group> myGroups;
 	
 	/**
 	 * Indicates if the groups has been requested
@@ -131,11 +131,16 @@ public class DownloadsManager extends MenuActivity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		groups = getFilteredGroups();
-		int nGroups = groups.size();
-		if(nGroups != 0  || groupsRequested){
-			this.loadGroupsSpinner(groups);
-			if(nGroups == 0 && tree == null)
+		List<Group> allGroups = dbHelper.getGroups(Global.getSelectedCourseCode());
+		int nGroups = allGroups.size();
+		
+		if(nGroups != 0 || groupsRequested){ //groupsRequested is used to avoid continue requests of groups on courses that have not any group.
+			myGroups = getFilteredGroups(); //only groups where the user is enrolled. 
+			int nMyGroups = myGroups.size(); 
+			this.loadGroupsSpinner(myGroups);
+			// the tree request must be explicit only when there are not any groups(where the user is enrolled), and therefore any Spinner. 
+			//in case there are groups(where the user is enrolled), it will be a spinner, and the tree request will be automatic made by OnItemSelectedListener
+			if(nMyGroups == 0 && tree == null) 
 				requestDirectoryTree();
 		}else{
 				Intent activity = new Intent(getBaseContext(),GroupTypes.class);
@@ -254,7 +259,8 @@ public class DownloadsManager extends MenuActivity {
 				break;
 			case Global.GROUPS_REQUEST_CODE:
 				groupsRequested = true;
-				this.loadGroupsSpinner(groups);
+				myGroups = getFilteredGroups(); //only groups where the user is enrolled.
+				this.loadGroupsSpinner(myGroups);
 				requestDirectoryTree();
 				break;	
 			case Global.GROUPTYPES_REQUEST_CODE:	
@@ -360,7 +366,7 @@ public class DownloadsManager extends MenuActivity {
 				long id) {
 			//if the position is 0, it is chosen the whole course. Otherwise a group has been chosen
 			//position - 0 belongs to the whole course
-			long newGroupCode = position==0? 0 : groups.get(position-1).getId();
+			long newGroupCode = position==0? 0 : myGroups.get(position-1).getId();
 			if(chosenGroupCode != newGroupCode || tree == null){
 				chosenGroupCode = newGroupCode;
 				groupPosition = position;
