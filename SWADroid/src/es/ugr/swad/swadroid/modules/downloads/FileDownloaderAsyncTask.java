@@ -155,6 +155,18 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 		mNotification.createNotification(this.fileName);
 		
 		
+		/*Create the output file*/
+		Log.i(TAG, "output: " + output.getPath());
+		/* Convert the Bytes read to a String. */
+		FileOutputStream fos;
+		try {
+			fos = new FileOutputStream(output);
+		} catch (FileNotFoundException e) {
+			Log.i(TAG, "no se puede crear fichero de salida");
+			e.printStackTrace();
+			return false;
+		}
+
 		/* Open a connection to the URL and a buffered input stream */
 		URLConnection ucon;
 		try {
@@ -165,6 +177,10 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 			e.printStackTrace();
 			return false;
 		}
+		
+		int lenghtOfFile = ucon.getContentLength();
+		Log.i(TAG, "lenghtOfFile = "+String.valueOf(lenghtOfFile));
+		
 		InputStream is;
 		try {
 			is = ucon.getInputStream();
@@ -195,16 +211,35 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 			try {
 				while ((current = bis.read()) != -1) {
 					baf.append((byte) current);
+					
+					if(baf.isFull()){ //before the buffer is full, it writes it in the file and clears the buffer
+						try {
+							fos.write(baf.toByteArray());
+							baf.clear();
+						} catch (IOException e) {
+							Log.i(TAG, "no se puede escribir fichero de salida");
+							mNotification.eraseNotification(this.fileName);
+							e.printStackTrace();
+							return false;
+						}
+					}
 					++byteRead;
-					int newValue = new Float(((float) byteRead*100/ (float) fileSize)).intValue();
+					int newValue = Float.valueOf(((float) byteRead*100/ (float) fileSize)).intValue();
 					if(newValue > progress){
 						progress = newValue;
+						Log.i(TAG, "total = "+progress);
 						publishProgress(progress);
 					}
 					//if((byteRead % 10) == 0) publishProgress(byteRead);
 				}
 			} catch (IOException e) {
-				// TODO TODO ¿cambiar barra de progreso por mensaje de error?
+				try {
+					fos.close();
+				} catch (IOException e1) {
+					Log.i(TAG, "no se puede cerrar fichero de salida");
+					e1.printStackTrace();
+					return false;
+				}
 				Log.i(TAG, "Error conection");mNotification.eraseNotification(this.fileName);
 				e.printStackTrace();
 				return false;
@@ -214,17 +249,49 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 			try {
 				while ((current = bis.read()) != -1) {
 					baf.append((byte) current);
-
+					if(baf.isFull()){ //before the buffer is full, it writes it in the file and clears the buffer
+						try {
+							fos.write(baf.toByteArray());
+							baf.clear();
+						} catch (IOException e) {
+							Log.i(TAG, "no se puede escribir fichero de salida");
+							mNotification.eraseNotification(this.fileName);
+							e.printStackTrace();
+							try {
+								fos.close();
+							} catch (IOException e1) {
+								Log.i(TAG, "no se puede cerrar fichero de salida");
+								e1.printStackTrace();
+								return false;
+							}
+							return false;
+						}
+					}
 				}
 			} catch (IOException e) {
-				// TODO TODO ¿cambiar barra de progreso por mensaje de error?
-				Log.i(TAG, "Error conection");mNotification.eraseNotification(this.fileName);
+				try {
+					fos.close();
+				} catch (IOException e1) {
+					Log.i(TAG, "no se puede cerrar fichero de salida");
+					e1.printStackTrace();
+					return false;
+				}
+				mNotification.eraseNotification(this.fileName);
+				Log.i(TAG, "Error conection");
 				e.printStackTrace();
 				return false;
 			}
 			
 		}
-
+		
+		/*Close the output file*/
+		try {
+			fos.close();
+		} catch (IOException e) {
+			Log.i(TAG, "no se puede cerrar fichero de salida");
+			e.printStackTrace();
+			return false;
+		}
 		
 /*		try {
 			output = File.cre //File.createTempFile("swad48x48", ".gif",this.getDownloadDir());
@@ -235,31 +302,7 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 			e.printStackTrace();
 			return false;
 		}*/
-		Log.i(TAG, "output: " + output.getPath());
-		/* Convert the Bytes read to a String. */
-		FileOutputStream fos;
-		try {
-			fos = new FileOutputStream(output);
-		} catch (FileNotFoundException e) {
-			Log.i(TAG, "no se puede crear fichero de salida");
-			e.printStackTrace();
-			return false;
-		}
-		try {
-			fos.write(baf.toByteArray());
-		} catch (IOException e) {
-			Log.i(TAG, "no se puede escribir fichero de salida");
-			e.printStackTrace();
-			return false;
-		}
-		try {
-			fos.close();
-		} catch (IOException e) {
-			Log.i(TAG, "no se puede cerrar fichero de salida");
-			e.printStackTrace();
-			return false;
-		}
-		
+
 		
 		Log.i(TAG, "Terminado");
 		
