@@ -35,6 +35,20 @@ import android.os.AsyncTask;
 import android.util.Log;
 import es.ugr.swad.swadroid.Global;
 
+/**
+ *
+ * Download the file located at the given URL, save it to a file.
+ * It also launches the notification on bar status and erases it when the download is completed or failed. 
+ * . Note that we are responsible for the deletion of 
+ *  the file when it is no longer needed. Throws:
+ *    - MalformedUrlException: if a malformed URL is given as parameter.
+ *      - IOException: most probably because the connection to the server fails.
+ *      - FileNotFoundException: if the URL points to a non-existent file or to a directory - such as "www.ugr.es/" 
+ * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
+ * @author Víctor Terrón <`echo vt2rron1iaa32s | tr 132 @.e`>
+ * */
+
+
 public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 
 	//private TextView fileName;
@@ -52,10 +66,7 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 	 */
 	public static final String TAG = Global.APP_TAG + " Downloads";
 
-	/*public FileDownloaderAsyncTask(TextView text, ProgressBar progressBar){
-		this.fileName = text;
-		this.progressBar = progressBar;
-	}*/
+
 	public FileDownloaderAsyncTask(Context context,String fileName, boolean notification, long fileSize){
 		this.fileName = fileName;
 		mNotification = new DownloadNotification(context);
@@ -79,12 +90,7 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
-		
 
-/*		fileName.setVisibility(View.VISIBLE);
-		progressBar.setVisibility(View.VISIBLE);
-		progressBar.setProgress(0);
-		progressBar.setMax(100);*/
 	}
 
 
@@ -292,17 +298,6 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 			e.printStackTrace();
 			return false;
 		}
-		
-/*		try {
-			output = File.cre //File.createTempFile("swad48x48", ".gif",this.getDownloadDir());
-			//output = File.createTempFile(basename, extension, this.getDownloadDir());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			Log.i(TAG, "directory path no existe");
-			e.printStackTrace();
-			return false;
-		}*/
-
 		
 		Log.i(TAG, "Terminado");
 		
