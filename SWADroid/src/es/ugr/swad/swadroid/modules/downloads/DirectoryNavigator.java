@@ -31,7 +31,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-import android.util.Log;
 
 /**
  * 	Class used to navigate around the XML file. That XML file contains the 
