@@ -168,7 +168,7 @@
     <string name="complete">complete</string>
     <string name="fileInfoTitle">File Information</string>
     <string name="sizeFileTitle">Size:</string>
-    <string name="creationTimeTitle">Date of creation:</string>
+    <string name="creationTimeTitle">Date:</string>
     <string name="uploaderTitle">Uploaded by:</string>
     <string name="downloadFileTitle">Download</string>
     <string  name="sdCardBusyTitle">SD-Karte nicht verfügbar</string>
@@ -176,4 +176,6 @@
 	<string name="selectZone">Wählen Sie Bereich</string>
 	<string name="fileTitle">Datei:</string>
 	<string name="noConnectionMsg">Es gibt nicht conection.Sorry, aber diese Funktion muss conection.</string>
+	<string name="noApp">Es kann diese Datei nicht öffnen. Location:</string>
+	
 </resources>
