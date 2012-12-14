@@ -33,7 +33,6 @@
         android:src="@drawable/parent" />
      <TextView
 		android:id="@+id/path"
-		android:text="@string/fileTitle"
 		android:layout_toRightOf="@id/parent_button"
 		android:layout_centerVertical="true"
 		android:layout_width="match_parent"

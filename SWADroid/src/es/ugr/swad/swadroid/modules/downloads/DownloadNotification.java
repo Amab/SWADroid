@@ -149,7 +149,7 @@ public class DownloadNotification {
         long when = System.currentTimeMillis();
         mNotification = new Notification(icon, tickerText, when);
         //build up the new status message
-        CharSequence contentText =fileName + mContext.getString(R.string.downloadProblemMsg);
+        CharSequence contentText =mContext.getString(R.string.downloadProblemMsg);
         //publish it to the status bar
         mNotification.setLatestEventInfo(mContext, mContentTitle, contentText, mContentIntent);
         mNotification.flags = Notification.FLAG_AUTO_CANCEL;
