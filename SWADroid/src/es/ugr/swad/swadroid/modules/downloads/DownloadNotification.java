@@ -124,7 +124,8 @@ public class DownloadNotification {
         //activity that will be launched when the notification is clicked.
         //this activity will open the downloaded file with the default app. 
         Intent notificationIntent = openFileDefaultApp(directoryPath + File.separator+ fileName);
-        mContentIntent = PendingIntent.getActivity(mContext, 0, notificationIntent, 0);
+        if(notificationIntent != null)
+        	mContentIntent = PendingIntent.getActivity(mContext, 0, notificationIntent, 0);
 
         
         //build up the new status message
