@@ -139,7 +139,7 @@ public class FileDownloader{
 			basename = "tmp";
 	
 		File output = File.createTempFile(basename, extension, this.getDownloadDir());
-		System.out.println("output: " + output.getPath());
+		//System.out.println("output: " + output.getPath());
 		/* Convert the Bytes read to a String. */
 		FileOutputStream fos = new FileOutputStream(output);
 		fos.write(baf.toByteArray());
