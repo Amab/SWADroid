@@ -179,7 +179,9 @@
         <activity
             android:name=".modules.downloads.DownloadsManager"
             android:label="@string/documentsDownloadModuleLabel"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:configChanges="orientation|keyboardHidden" 
+            >
         </activity>
         <activity
             android:name=".modules.groups.MyGroupsManager"

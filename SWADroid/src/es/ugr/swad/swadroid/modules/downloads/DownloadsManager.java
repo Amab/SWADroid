@@ -32,10 +32,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.OrientationEventListener;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.MimeTypeMap;
@@ -135,6 +138,7 @@ public class DownloadsManager extends MenuActivity {
 	 * */
 	private boolean noConnectionView = false;
 	
+	
 	@Override
 	protected void onStart() {
 		super.onStart();
@@ -162,10 +166,9 @@ public class DownloadsManager extends MenuActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.navigation);
 		
-		checkMediaAvailability();
-		
 		downloadsAreaCode = getIntent().getIntExtra("downloadsAreaCode",
 				Global.DOCUMENTS_AREA_CODE);
+		
 		//set the module bar
 		if (downloadsAreaCode == Global.DOCUMENTS_AREA_CODE) {
 			moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
@@ -299,6 +302,8 @@ public class DownloadsManager extends MenuActivity {
 			}
 		}
 	}
+	
+	
 	/**
 	 * Having connection is mandatory for the Download Module.
 	 * Therefore when there is not connection, the grid of nodes is disabled and instead it is showed an info messages  
@@ -557,5 +562,21 @@ public class DownloadsManager extends MenuActivity {
 		activity.putExtra("courseCode",  Global.getSelectedCourseCode());
 		startActivityForResult(activity,Global.GROUPTYPES_REQUEST_CODE);
 
+	}
+
+	/**
+	 * This method is launched instead of onCreate when device rotates
+	 * It prevents from repeating calls to web services when they are not necessary
+	 * */
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {        
+	    super.onConfigurationChanged(newConfig);
+	    
+	    // Checks the orientation of the screen
+/*	    if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+	        Log.i(TAG,"onConfigChanged - Landscape");
+	    } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+	    	Log.i(TAG,"onConfigChanged - Portrait");
+	    }*/
 	}
 }

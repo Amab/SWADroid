@@ -68,7 +68,6 @@ public class DirectoryItem
 		
 	}
 
-	//TODO This constructor is deprecated.it will be erased when the file code is added to the new web service getDirectoryTree
 	/**
 	 * Constructor of a File item.
 	 * @param name

@@ -180,7 +180,7 @@ public class DirectoryNavigator
     	NodeList childs = node.getChildNodes();
     	
     	DirectoryItem item;
-    	System.out.println("Num of childs"+childs.getLength());
+    	//System.out.println("Num of childs"+childs.getLength());
     	for(int i=0; i<childs.getLength(); i++)
     	{
     		Node currentChild = childs.item(i);
@@ -188,7 +188,7 @@ public class DirectoryNavigator
     		{
     			NamedNodeMap attributes = currentChild.getAttributes();
         		String name = attributes.getNamedItem("name").getNodeValue();
-				System.out.println("Name:  "+name);
+				//System.out.println("Name:  "+name);
     			item = new DirectoryItem(name);
         		items.add(item);
     		}
@@ -210,14 +210,14 @@ public class DirectoryNavigator
         			NamedNodeMap attributes = currentChild.getAttributes();
             		name = attributes.getNamedItem("name").getNodeValue();
             		
-    				System.out.println("Name:  "+name);
+    				//System.out.println("Name:  "+name);
     				
     				
     				//WE GET THE REST OF THE INFO
     				NodeList fileData = currentChild.getChildNodes();
     				for(int j=0;j<fileData.getLength();j++)
     				{
-						System.out.println(j);
+						//System.out.println(j);
     					Node data = fileData.item(j);
     					String tag = data.getNodeName();
     					Node firstChild = data.getFirstChild();
@@ -231,7 +231,7 @@ public class DirectoryNavigator
 									type = url.substring(lastDot+1, url.length());
 								else
 									type = "unknown";
-			    				System.out.println("Type: "+type);*/
+			    				//System.out.println("Type: "+type);*/
 	    					}
 	    					else
 	    					{
@@ -266,12 +266,12 @@ public class DirectoryNavigator
 	    						}
 	    					}
     				}
-    				System.out.println("Code: "+fileCode);
-    				System.out.println("Size: "+size);
-    				System.out.println("Time: "+time);
-    				System.out.println("license: "+ license);
-    				System.out.println("publisher: "+ publisher);
-    				System.out.println("photo: "+ photo);
+    				//System.out.println("Code: "+fileCode);
+    				//System.out.println("Size: "+size);
+    				//System.out.println("Time: "+time);
+    				//System.out.println("license: "+ license);
+    				//System.out.println("publisher: "+ publisher);
+    				//System.out.println("photo: "+ photo);
     				item = new DirectoryItem(name, type, fileCode, size, time, license, publisher, photo);
     				//item = new DirectoryItem(name,type,url,size,date,fileCode);
     	    		items.add(item);
@@ -308,21 +308,18 @@ public class DirectoryNavigator
 	        //We put the current node in the root Element.
 	        currentNode = dom.getDocumentElement();
 	        
-	        //TODO DirectoryNavigatior remove debug log
-	        Log.i(TAG, XMLinfo);
-	        Log.i(TAG,"path size "+path.size());
 	        //We change the current node.
 	        for(int i=0; i<path.size(); i++)
 	        {
 	        	//WE GET THE REST OF THE INFO
 				NodeList childs = currentNode.getChildNodes();
-				System.out.println(childs.getLength());
+				//System.out.println(childs.getLength());
 				for(int j=0;j<childs.getLength();j++)
 				{
 					Node currentChild = childs.item(j);
 					if(currentChild.getNodeName().equals("dir") || currentChild.getNodeName().equals("file")){
 		        		NamedNodeMap attributes = currentChild.getAttributes();
-		        		System.out.println(path.get(i)+"  "+attributes.getNamedItem("name").getNodeValue());
+		        		//System.out.println(path.get(i)+"  "+attributes.getNamedItem("name").getNodeValue());
 		        		if(path.get(i).equals(attributes.getNamedItem("name").getNodeValue()))
 		        		{
 		        			currentNode = currentChild;
