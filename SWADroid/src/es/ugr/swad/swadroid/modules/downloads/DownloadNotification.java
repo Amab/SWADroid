@@ -129,14 +129,16 @@ public class DownloadNotification {
         
         //build up the new status message
         CharSequence contentText;
-        if(notificationIntent != null)
+        if(notificationIntent != null){
         	contentText = mContext.getString(R.string.clickToOpenFile);
-        else
-        	contentText = mContext.getString(R.string.noApp) + " " + directoryPath + File.separator+ fileName;
+        	mContentTitle = fileName; //Full title of the notification in the pull down
+        }else{
+        	contentText = mContext.getString(R.string.noApp);
+        	mContentTitle = directoryPath + File.separator+ fileName; 
+        }
         //publish it to the status bar
         mNotification.setLatestEventInfo(mContext, mContentTitle, contentText, mContentIntent);
-        //create the content which is shown in the notification pulldown
-        mContentTitle = fileName;; //Full title of the notification in the pull down
+
         
         //add the additional content and intent to the notification
         mNotification.setLatestEventInfo(mContext, mContentTitle, contentText, mContentIntent);

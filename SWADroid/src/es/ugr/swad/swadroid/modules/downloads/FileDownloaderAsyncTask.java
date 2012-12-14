@@ -189,6 +189,14 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 			ucon = url.openConnection();
 		} catch (IOException e) {
 			//Log.i(TAG, "Error connection");
+			try {
+				fos.close();
+			} catch (IOException e1) {
+				//Log.i(TAG, "no se puede cerrar fichero de salida");
+				e1.printStackTrace();
+				notifyFailed();
+				return false;
+			}
 			e.printStackTrace();
 			notifyFailed();
 			return false;
@@ -202,6 +210,14 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 			is = ucon.getInputStream();
 		} catch (IOException e) {
 			//Log.i(TAG, "Error connection");
+			try {
+				fos.close();
+			} catch (IOException e1) {
+				//Log.i(TAG, "no se puede cerrar fichero de salida");
+				e1.printStackTrace();
+				notifyFailed();
+				return false;
+			}
 			notifyFailed();
 			e.printStackTrace();
 			return false;
@@ -211,14 +227,6 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 		/*  Read bytes to the buffer until there is nothing more to read(-1) */
 		ByteArrayBuffer baf = new ByteArrayBuffer(50);
 		int current = 0;
-		int total = 100;
-		try {
-			total = bis.available();
-		} catch (IOException e1) {
-			Log.i(TAG, "Error lectura bytes");mNotification.eraseNotification(this.fileName);
-			e1.printStackTrace();
-		};
-		
 		
 		if(notification){
 		
@@ -234,6 +242,14 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 							baf.clear();
 						} catch (IOException e) {
 //							Log.i(TAG, "no se puede escribir fichero de salida");
+							try {
+								fos.close();
+							} catch (IOException e1) {
+								//Log.i(TAG, "no se puede cerrar fichero de salida");
+								e1.printStackTrace();
+								notifyFailed();
+								return false;
+							}
 							notifyFailed();
 							e.printStackTrace();
 							return false;
