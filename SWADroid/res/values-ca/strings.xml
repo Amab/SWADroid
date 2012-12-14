@@ -134,7 +134,7 @@
     <string name="complete">complet</string>
     <string name="fileInfoTitle">Informació del fitxer</string>
     <string name="sizeFileTitle">Mida:</string>
-    <string name="creationTimeTitle">Data de creació:</string>
+    <string name="creationTimeTitle">Data:</string>
     <string name="uploaderTitle">Carregat per:</string>
     <string name="downloadFileTitle">Descarregar</string>
     <string  name="sdCardBusyTitle">Targeta SD no disponible</string>
@@ -144,4 +144,6 @@
     <string name="selectZone">Seleccioneu zona</string>
     <string name="fileTitle">Fitxer:</string>
     <string name="noConnectionMsg">No hi ha connexió. Ho sentim però aquesta funció necessita connexió.</string>
+	<string name="noApp">There is not any app that can open this file. Location:</string>
+    
 </resources>

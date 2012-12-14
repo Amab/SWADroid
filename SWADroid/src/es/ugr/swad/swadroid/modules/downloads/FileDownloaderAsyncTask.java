@@ -79,7 +79,7 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 	
 	@Override
 	protected void onPostExecute(Boolean result) {
-		Log.i(TAG, "onPostExecute");
+		//Log.i(TAG, "onPostExecute");
 		if(downloadSuccess)
 			mNotification.completedDownload(this.directoryPath,this.fileName);
 		else
@@ -171,7 +171,7 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 		
 		
 		/*Create the output file*/
-		Log.i(TAG, "output: " + output.getPath());
+		//Log.i(TAG, "output: " + output.getPath());
 		/* Convert the Bytes read to a String. */
 		FileOutputStream fos;
 		try {
@@ -195,7 +195,7 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 		}
 		
 		int lenghtOfFile = ucon.getContentLength();
-		Log.i(TAG, "lenghtOfFile = "+String.valueOf(lenghtOfFile));
+		//Log.i(TAG, "lenghtOfFile = "+String.valueOf(lenghtOfFile));
 		
 		InputStream is;
 		try {
@@ -243,7 +243,7 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 					int newValue = Float.valueOf(((float) byteRead*100/ (float) fileSize)).intValue();
 					if(newValue > progress){
 						progress = newValue;
-						Log.i(TAG, "total = "+progress);
+						//Log.i(TAG, "total = "+progress);
 						publishProgress(progress);
 					}
 					//if((byteRead % 10) == 0) publishProgress(byteRead);

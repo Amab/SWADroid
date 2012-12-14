@@ -136,7 +136,7 @@ public class DownloadNotification {
         //publish it to the status bar
         mNotification.setLatestEventInfo(mContext, mContentTitle, contentText, mContentIntent);
         //create the content which is shown in the notification pulldown
-        mContentTitle = fileName; //Full title of the notification in the pull down
+        mContentTitle = fileName;; //Full title of the notification in the pull down
         
         //add the additional content and intent to the notification
         mNotification.setLatestEventInfo(mContext, mContentTitle, contentText, mContentIntent);

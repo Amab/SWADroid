@@ -180,7 +180,7 @@
     <string name="complete">complete</string>
     <string name="fileInfoTitle">File Information</string>
     <string name="sizeFileTitle">Size:</string>
-    <string name="creationTimeTitle">Date of creation:</string>
+    <string name="creationTimeTitle">Date:</string>
     <string name="uploaderTitle">Uploaded by:</string>
     <string name="downloadFileTitle">Download</string>
     <string  name="sdCardBusyTitle">SD card unavailable</string>
@@ -280,5 +280,5 @@ configuration anytime using the "Clean Database" option\n\nDo you want to contin
 	<string name="selectZoneTitle">Select zone</string>
 	<string name="fileTitle">File:</string>
 	<string name="noConnectionMsg">There is not connection. Sorry but this function needs connection. </string>
-	<string name="noApp">There is not any app that can open this file. Location:</string>
+	<string name="noApp">No Es Pot obrir this Arxiu. ubicació:</string>
 </resources>

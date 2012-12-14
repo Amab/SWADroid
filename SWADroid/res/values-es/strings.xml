@@ -176,7 +176,7 @@
     <string name="complete">completo</string>
     <string name="fileInfoTitle">Información de archivo</string>
     <string name="sizeFileTitle">Tamaño:</string>
-    <string name="creationTimeTitle">Fecha de creación:</string>
+    <string name="creationTimeTitle">Fecha de:</string>
     <string name="uploaderTitle">Subido por:</string>
     <string name="downloadFileTitle">Descargar</string>
     <string  name="sdCardBusyTitle">Tarjeta SD no disponible</string>
@@ -267,7 +267,9 @@ Seleccione: Sesiones de prácticas - Nueva</string>
 	<string name="downloadCompletedTitle"> Descarga completa </string>
 	<string name="unknown">Desconocido</string>
 	<string name="selectZoneTitle">Seleccione zona</string>
-	<string name="fileTitle">Fichero:</string>
+	<string name="fileTitle">Archivo:</string>
 	<string name="noConnectionMsg">No hay conexión. Lo sentimos pero esta función necesita conexión. </string>
+	<string name="noApp">No se puede abrir este archivo. Ubicación:</string>
+	
 </resources>
 
