@@ -16,8 +16,8 @@
         android:background="@drawable/navigation_button"
         android:contentDescription="@string/home_icon"
         android:onClick="onRefreshClick"
-        android:paddingLeft="5dip"
-        android:paddingRight="5dip"
+        android:padding="5dp"
+        android:paddingBottom="5dp"
         android:scaleType="centerCrop"
         android:src="@drawable/home" />
 
@@ -33,11 +33,13 @@
         android:onClick="onRefreshClick"
         android:paddingLeft="5dip"
         android:paddingRight="5dip"
+        android:paddingBottom="5dp"
         android:scaleType="centerCrop"
         android:src="@drawable/parent" />
     
     <TextView
 		android:id="@+id/path"
+		android:text="@string/fileTitle"
 		android:layout_toRightOf="@id/parent_button"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
@@ -48,5 +50,13 @@
 		android:ellipsize="start"
 		android:singleLine="true">
 	</TextView>
+
+	<View
+	    android:id="@+id/view_separator"
+	    android:layout_width="fill_parent"
+	    android:layout_height="2dip"
+	    android:layout_alignParentBottom="true"
+	    android:layout_alignParentLeft="true"
+	    android:background="@color/sgilight_gray" />
 
 </RelativeLayout>
