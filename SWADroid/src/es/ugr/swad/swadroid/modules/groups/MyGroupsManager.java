@@ -171,6 +171,13 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 				break;
 			}
 			
+		}else{
+			if(refreshRequested){
+				updateButton.setVisibility(View.VISIBLE);
+				progressbar.setVisibility(View.GONE);
+				
+				refreshRequested = false;
+			}
 		}
 	}
 	
