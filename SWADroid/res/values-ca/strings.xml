@@ -143,4 +143,5 @@
     <string name="clickToOpenFile">Premeu aquí per obrir el fitxer</string>
     <string name="selectZone">Seleccioneu zona</string>
     <string name="fileTitle">Fitxer:</string>
+    <string name="noConnectionMsg">No hi ha connexió. Ho sentim però aquesta funció necessita connexió.</string>
 </resources>

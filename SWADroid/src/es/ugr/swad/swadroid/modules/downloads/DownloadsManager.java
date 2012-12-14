@@ -112,6 +112,7 @@ public class DownloadsManager extends MenuActivity {
 	private ImageButton updateButton;
 	private ProgressBar progressbar;
 	
+	private TextView noConnectionText;
 	private GridView grid;
 
 	private ImageView moduleIcon = null;
@@ -129,7 +130,10 @@ public class DownloadsManager extends MenuActivity {
 	 * by default the whole course is selected
 	 * */
 	private int groupPosition = 0;
-	
+	/**
+	 * Indicates if the menu no connection is visible
+	 * */
+	private boolean noConnectionView = false;
 	
 	@Override
 	protected void onStart() {
@@ -162,7 +166,23 @@ public class DownloadsManager extends MenuActivity {
 		
 		downloadsAreaCode = getIntent().getIntExtra("downloadsAreaCode",
 				Global.DOCUMENTS_AREA_CODE);
-	
+		//set the module bar
+		if (downloadsAreaCode == Global.DOCUMENTS_AREA_CODE) {
+			moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
+			moduleIcon.setBackgroundResource(R.drawable.folder);
+
+			moduleText = (TextView) this.findViewById(R.id.moduleName);
+			moduleText.setText(R.string.documentsDownloadModuleLabel);
+		} else { // SHARE_AREA_CODE
+			moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
+			moduleIcon.setBackgroundResource(R.drawable.folder_users);
+
+			moduleText = (TextView) this.findViewById(R.id.moduleName);
+			moduleText.setText(R.string.sharedsDownloadModuleLabel);
+		}
+		
+		noConnectionText = (TextView) this.findViewById(R.id.noConnectionText);
+		
 		grid = (GridView) this.findViewById(R.id.gridview);
 		grid.setOnItemClickListener((new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v,
@@ -220,13 +240,18 @@ public class DownloadsManager extends MenuActivity {
 			// course
 			case Global.DIRECTORY_TREE_REQUEST_CODE:
 				 tree = data.getStringExtra("tree");
+				 setMainView();
 				if (!refresh)
 					setMainView();
 				else {
 					refresh = false;
-					refresh();
 					updateButton.setVisibility(View.VISIBLE);
 					progressbar.setVisibility(View.GONE);
+					if(!noConnectionView)
+						refresh();
+					else
+						setMainView();
+					
 
 				}
 				break;
@@ -265,26 +290,35 @@ public class DownloadsManager extends MenuActivity {
 				break;
 			}
 			
+		}else{
+			setNoConnectionView();
+			if (refresh){
+				refresh = false;
+				updateButton.setVisibility(View.VISIBLE);
+				progressbar.setVisibility(View.GONE);
+			}
 		}
 	}
 
+	private void setNoConnectionView(){
+		noConnectionView = true;
+		noConnectionText.setVisibility(View.VISIBLE);
+		grid.setVisibility(View.GONE);
+		
+		this.findViewById(R.id.courseSelectedText).setVisibility(View.VISIBLE);
+		this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
+		
+		TextView courseNameText = (TextView) this.findViewById(R.id.courseSelectedText);
+		courseNameText.setText(Global.getSelectedCourseShortName());
+		
+	}
 	private void setMainView() {
-		if (moduleIcon == null) {
-			if (downloadsAreaCode == Global.DOCUMENTS_AREA_CODE) {
-				moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
-				moduleIcon.setBackgroundResource(R.drawable.folder);
-
-				moduleText = (TextView) this.findViewById(R.id.moduleName);
-				moduleText.setText(R.string.documentsDownloadModuleLabel);
-			} else { // SHARE_AREA_CODE
-				moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
-				moduleIcon.setBackgroundResource(R.drawable.folder_users);
-
-				moduleText = (TextView) this.findViewById(R.id.moduleName);
-				moduleText.setText(R.string.sharedsDownloadModuleLabel);
-			}
-		}
-
+		
+		noConnectionText.setVisibility(View.GONE);
+		grid.setVisibility(View.VISIBLE);
+		
+		noConnectionView = false;
+		
 		currentPathText = (TextView) this.findViewById(R.id.path);
 
 		navigator = new DirectoryNavigator(tree);

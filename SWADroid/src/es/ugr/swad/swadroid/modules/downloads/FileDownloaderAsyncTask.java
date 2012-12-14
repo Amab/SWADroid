@@ -60,6 +60,7 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 	private long fileSize;
 	private String fileName = "";
 	private String directoryPath = "";
+	private boolean downloadSuccess  = true; 
 	
 	/**
 	 * Downloads tag name for Logcat
@@ -79,7 +80,10 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 	@Override
 	protected void onPostExecute(Boolean result) {
 		Log.i(TAG, "onPostExecute");
-		mNotification.completedDownload(this.directoryPath,this.fileName);
+		if(downloadSuccess)
+			mNotification.completedDownload(this.directoryPath,this.fileName);
+		else
+			mNotification.eraseNotification(this.fileName);
 	}
 
 	/* Return the path to the directory where files are saved */
@@ -97,12 +101,14 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 
 	@Override
 	protected void onProgressUpdate(Integer... values) {
-		// TODO Auto-generated method stub
 		mNotification.progressUpdate(values[0]);
 
 	}
 
-
+	private void notifyFailed(){
+		downloadSuccess = false;
+		mNotification.eraseNotification(this.fileName);
+	} 
 
 	@Override
 	/**
@@ -114,14 +120,17 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 		
 		download_dir = new File(params[0]);
 		this.directoryPath = params[0];
-		if(!download_dir.exists()) 
+		if(!download_dir.exists()){
+			downloadSuccess = false;
 			return false;
+		}
+		
 		try {
 			url = new URL(params[1]);
 		} catch (MalformedURLException e) {
-			// TODO ¿cambiar barra de progreso por mensaje de error?
 			e.printStackTrace();
-			Log.i(TAG, "Incorrect URL");
+//			Log.i(TAG, "Incorrect URL");
+			downloadSuccess = false;
 			return false;
 		}
 		
@@ -168,8 +177,9 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 		try {
 			fos = new FileOutputStream(output);
 		} catch (FileNotFoundException e) {
-			Log.i(TAG, "no se puede crear fichero de salida");
+			//Log.i(TAG, "no se puede crear fichero de salida");
 			e.printStackTrace();
+			notifyFailed();
 			return false;
 		}
 
@@ -178,9 +188,9 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 		try {
 			ucon = url.openConnection();
 		} catch (IOException e) {
-			// TODO TODO ¿cambiar barra de progreso por mensaje de error?
-			Log.i(TAG, "Error conection");mNotification.eraseNotification(this.fileName);
+			//Log.i(TAG, "Error connection");
 			e.printStackTrace();
+			notifyFailed();
 			return false;
 		}
 		
@@ -191,8 +201,8 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 		try {
 			is = ucon.getInputStream();
 		} catch (IOException e) {
-			// TODO TODO ¿cambiar barra de progreso por mensaje de error?
-			Log.i(TAG, "Error conection");mNotification.eraseNotification(this.fileName);
+			//Log.i(TAG, "Error connection");
+			notifyFailed();
 			e.printStackTrace();
 			return false;
 		}
@@ -223,8 +233,8 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 							fos.write(baf.toByteArray());
 							baf.clear();
 						} catch (IOException e) {
-							Log.i(TAG, "no se puede escribir fichero de salida");
-							mNotification.eraseNotification(this.fileName);
+//							Log.i(TAG, "no se puede escribir fichero de salida");
+							notifyFailed();
 							e.printStackTrace();
 							return false;
 						}
@@ -242,11 +252,13 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 				try {
 					fos.close();
 				} catch (IOException e1) {
-					Log.i(TAG, "no se puede cerrar fichero de salida");
+//					Log.i(TAG, "no se puede cerrar fichero de salida");
+					notifyFailed();
 					e1.printStackTrace();
 					return false;
 				}
-				Log.i(TAG, "Error conection");mNotification.eraseNotification(this.fileName);
+//				Log.i(TAG, "Error connection");
+				notifyFailed();
 				e.printStackTrace();
 				return false;
 			}
@@ -260,16 +272,18 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 							fos.write(baf.toByteArray());
 							baf.clear();
 						} catch (IOException e) {
-							Log.i(TAG, "no se puede escribir fichero de salida");
-							mNotification.eraseNotification(this.fileName);
-							e.printStackTrace();
+							
 							try {
 								fos.close();
 							} catch (IOException e1) {
-								Log.i(TAG, "no se puede cerrar fichero de salida");
+//								Log.i(TAG, "no se puede cerrar fichero de salida");
+								notifyFailed();
 								e1.printStackTrace();
 								return false;
 							}
+							//Log.i(TAG, "no se puede escribir fichero de salida");
+							e.printStackTrace();
+							notifyFailed();
 							return false;
 						}
 					}
@@ -278,12 +292,13 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 				try {
 					fos.close();
 				} catch (IOException e1) {
-					Log.i(TAG, "no se puede cerrar fichero de salida");
+					//Log.i(TAG, "no se puede cerrar fichero de salida");
 					e1.printStackTrace();
+					notifyFailed();
 					return false;
 				}
-				mNotification.eraseNotification(this.fileName);
-				Log.i(TAG, "Error conection");
+//				Log.i(TAG, "Error connection");
+				notifyFailed();
 				e.printStackTrace();
 				return false;
 			}
@@ -294,12 +309,13 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 		try {
 			fos.close();
 		} catch (IOException e) {
-			Log.i(TAG, "no se puede cerrar fichero de salida");
+//			Log.i(TAG, "no se puede cerrar fichero de salida");
 			e.printStackTrace();
+			notifyFailed();
 			return false;
 		}
 		
-		Log.i(TAG, "Terminado");
+//		Log.i(TAG, "Terminado");
 		
 		return true;
 	}

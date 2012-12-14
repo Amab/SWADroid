@@ -10,7 +10,18 @@
     <include layout="@layout/course_or_group_name"/>
  
 	<include layout="@layout/navigation_bar" />
-	
+	<TextView
+		android:id="@+id/noConnectionText"
+		android:text="@string/noConnectionMsg"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:padding="20dp"
+		android:background="@android:color/white"
+		android:textColor="@color/foreground1"
+		android:textSize="24sp"
+		android:textStyle="bold" 
+		android:visibility="gone"
+	/>
 	<GridView xmlns:android="http://schemas.android.com/apk/res/android" 
 	    android:id="@+id/gridview"
 	    android:layout_width="fill_parent" 
