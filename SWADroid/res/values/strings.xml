@@ -280,4 +280,5 @@ configuration anytime using the "Clean Database" option\n\nDo you want to contin
 	<string name="selectZoneTitle">Select zone</string>
 	<string name="fileTitle">File:</string>
 	<string name="noConnectionMsg">There is not connection. Sorry but this function needs connection. </string>
+	<string name="noApp">There is not any app that can open this file. Location:</string>
 </resources>
