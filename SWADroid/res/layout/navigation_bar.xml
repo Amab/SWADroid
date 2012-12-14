@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/actionBarLayout"
     android:layout_width="match_parent"
-    android:layout_height="40dip"
+    android:layout_height="50dip"
     android:background="@android:color/white"
     android:orientation="horizontal" >
 
@@ -12,12 +12,10 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
         android:background="@drawable/navigation_button"
         android:contentDescription="@string/home_icon"
         android:onClick="onRefreshClick"
-        android:padding="5dp"
-        android:paddingBottom="5dp"
+        android:padding="4dp"
         android:scaleType="centerCrop"
         android:src="@drawable/home" />
 
@@ -26,30 +24,28 @@
         android:id="@+id/parent_button"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/home_button"
         android:contentDescription="@string/parent_icon"
         android:background="@drawable/navigation_button"
         android:onClick="onRefreshClick"
-        android:paddingLeft="5dip"
-        android:paddingRight="5dip"
-        android:paddingBottom="5dp"
+        android:padding="4dp"
         android:scaleType="centerCrop"
         android:src="@drawable/parent" />
-    
-    <TextView
+     <TextView
 		android:id="@+id/path"
 		android:text="@string/fileTitle"
 		android:layout_toRightOf="@id/parent_button"
+		android:layout_centerVertical="true"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:padding="8dp"
+		android:padding="4dp"
 		android:textColor="@android:color/black"
 		android:textSize="18sp"
 		android:textStyle="bold" 
 		android:ellipsize="start"
 		android:singleLine="true">
-	</TextView>
+	</TextView>   
+
 
 	<View
 	    android:id="@+id/view_separator"
