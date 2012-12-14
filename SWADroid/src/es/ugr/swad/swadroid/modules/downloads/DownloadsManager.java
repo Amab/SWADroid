@@ -299,7 +299,10 @@ public class DownloadsManager extends MenuActivity {
 			}
 		}
 	}
-
+	/**
+	 * Having connection is mandatory for the Download Module.
+	 * Therefore when there is not connection, the grid of nodes is disabled and instead it is showed an info messages  
+	 * */
 	private void setNoConnectionView(){
 		noConnectionView = true;
 		noConnectionText.setVisibility(View.VISIBLE);
@@ -312,6 +315,9 @@ public class DownloadsManager extends MenuActivity {
 		courseNameText.setText(Global.getSelectedCourseShortName());
 		
 	}
+	/**
+	 * This method set the grid of nodes visible and paints the directory tree in its root node
+	 * */
 	private void setMainView() {
 		
 		noConnectionText.setVisibility(View.GONE);
@@ -329,11 +335,16 @@ public class DownloadsManager extends MenuActivity {
 		grid.setAdapter(new NodeAdapter(this, items));
 	}
 
+	/**
+	 * This method is called after the new file tree is received when the refresh button is pressed
+	 * */
 	private void refresh() {
 		navigator.refresh(tree);
 
 	}
-
+	/**
+	 * When the user moves into a new directory, this method updates the set of new directories and files and paints it
+	 * */
 	private void updateView(ArrayList<DirectoryItem> items) {
 		currentPathText.setText(navigator.getPath());
 		((NodeAdapter) grid.getAdapter()).change(items);
@@ -388,6 +399,9 @@ public class DownloadsManager extends MenuActivity {
 		}
 	}
 	
+	/**
+	 * Listener associated with the spinner. With a new group / course is selected, it is requested the right file tree
+	 * */
 	private class onGroupSelectedListener implements OnItemSelectedListener{
 
 		@Override
@@ -409,6 +423,9 @@ public class DownloadsManager extends MenuActivity {
 		}
 
 	}
+	/**
+	 * Method to request files tree to SWAD thought the web services GETDIRECTORYTREE
+	 * */
 	
 	private void requestDirectoryTree(){
 		Intent activity;
@@ -459,18 +476,11 @@ public class DownloadsManager extends MenuActivity {
 	private void downloadFile(String directory, String url,long fileSize){
 			new FileDownloaderAsyncTask(getApplicationContext(),this.chosenNodeName,true,fileSize).execute(directory,url);
 	}
-	private void openFileDefaultApp(String absolutePath){
-		File file = new File(absolutePath);
-		if(file.exists()){
-			Intent intent = new Intent();
-			intent.setAction(android.content.Intent.ACTION_VIEW);
-			int lastDotIndex = absolutePath.lastIndexOf(".");
-			String extension = absolutePath.substring(lastDotIndex+1);
-			String MIME = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
-			intent.setDataAndType(Uri.fromFile(file), MIME);
-			startActivity(intent);
-		}
-	}
+	
+	/**
+	 * Method to request info file identified with @a fileCode to SWAD thought the web services GETFILE
+	 * @fileCode file code
+	 * */
 	private void requestGetFile(long fileCode){
 	    Intent activity;
 	    activity = new Intent(getBaseContext(), GetFile.class);

@@ -19,6 +19,7 @@
 package es.ugr.swad.swadroid.modules.downloads;
 
 import java.io.File;
+import java.util.List;
 
 import es.ugr.swad.swadroid.R;
 import android.app.Notification;
@@ -26,6 +27,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.webkit.MimeTypeMap;
 
@@ -117,17 +120,24 @@ public class DownloadNotification {
         long when = System.currentTimeMillis();
         mNotification = new Notification(icon, tickerText, when);
 	
-        //build up the new status message
-        CharSequence contentText = mContext.getString(R.string.clickToOpenFile);
-        //publish it to the status bar
-        mNotification.setLatestEventInfo(mContext, mContentTitle, contentText, mContentIntent);
-        //create the content which is shown in the notification pulldown
-        mContentTitle = fileName; //Full title of the notification in the pull down
+
         //activity that will be launched when the notification is clicked.
         //this activity will open the downloaded file with the default app. 
         Intent notificationIntent = openFileDefaultApp(directoryPath + File.separator+ fileName);
         mContentIntent = PendingIntent.getActivity(mContext, 0, notificationIntent, 0);
 
+        
+        //build up the new status message
+        CharSequence contentText;
+        if(notificationIntent != null)
+        	contentText = mContext.getString(R.string.clickToOpenFile);
+        else
+        	contentText = mContext.getString(R.string.noApp) + " " + directoryPath + File.separator+ fileName;
+        //publish it to the status bar
+        mNotification.setLatestEventInfo(mContext, mContentTitle, contentText, mContentIntent);
+        //create the content which is shown in the notification pulldown
+        mContentTitle = fileName; //Full title of the notification in the pull down
+        
         //add the additional content and intent to the notification
         mNotification.setLatestEventInfo(mContext, mContentTitle, contentText, mContentIntent);
         //Flag_auto_cancel allows to the notification to erases itself when is clicked. 
@@ -157,19 +167,26 @@ public class DownloadNotification {
     }
     /**
      * It is defined an Intent to open the file located in @a absolutePath with the default app associated with its extension 
+     * @return null	It does not exist an app associated with the file type located in @a absolutePath
+     * 				otherwise an intent that will launch the right app to open the file located in @a absolutePath 
+     * 			
      * */
 	private Intent openFileDefaultApp(String absolutePath){
 		File file = new File(absolutePath);
-		Intent intent = null;
-
-		intent = new Intent();
+		Intent intent = new Intent();
 		intent.setAction(android.content.Intent.ACTION_VIEW);
 		int lastDotIndex = absolutePath.lastIndexOf(".");
 		String extension = absolutePath.substring(lastDotIndex+1);
 		String MIME = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
 		intent.setDataAndType(Uri.fromFile(file), MIME);
-
-		return intent;
+		
+		PackageManager packageManager = this.mContext.getPackageManager();
+		List<ResolveInfo> activities = packageManager.queryIntentActivities(intent, 0);
+		boolean isIntentSafe = activities.size() > 0;
+		if(isIntentSafe)
+			return intent;
+		else
+			return null;
 	}
 	
 	
