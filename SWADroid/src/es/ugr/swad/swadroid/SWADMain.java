@@ -123,7 +123,7 @@ public class SWADMain extends MenuExpandableListActivity {
 	/**
 	 * Group position inside the main menu for User group
 	 * */
-	private int USERS_GROUP = 4;
+	//private int USERS_GROUP = 4;
 	/**
 	 * Child position inside the messages menu for Notification
 	 * */
@@ -601,7 +601,7 @@ public class SWADMain extends MenuExpandableListActivity {
 			((ImageExpandableListAdapter) getExpandableListAdapter()).removeChild(MESSAGES_GROUP, PUBLISH_NOTE_CHILD);
 			//Removes completely users menu 
 			//DISABLE until it will be functional
-			((ImageExpandableListAdapter) getExpandableListAdapter()).removeGroup(USERS_GROUP);
+			//((ImageExpandableListAdapter) getExpandableListAdapter()).removeGroup(USERS_GROUP);
 		}
 		currentRole = Global.STUDENT_TYPE_CODE;
 	}
@@ -617,7 +617,7 @@ public class SWADMain extends MenuExpandableListActivity {
 			((ImageExpandableListAdapter) getExpandableListAdapter()).addChild(MESSAGES_GROUP,PUBLISH_NOTE_CHILD, map);
 
 			//DISABLE until it will be functional
-			final HashMap<String, Object> users = new HashMap<String, Object>();
+			/*final HashMap<String, Object> users = new HashMap<String, Object>();
 			users.put(NAME, getString(R.string.users));
 			users.put(IMAGE, getResources().getDrawable(R.drawable.users));
 
@@ -628,7 +628,7 @@ public class SWADMain extends MenuExpandableListActivity {
 			map.put(IMAGE, getResources().getDrawable(R.drawable.roll_call));
 			child.add(map);
 			((ImageExpandableListAdapter) getExpandableListAdapter()).addGroup(USERS_GROUP, users, child);
-
+			*/
 
 		}
 		currentRole = Global.TEACHER_TYPE_CODE;
