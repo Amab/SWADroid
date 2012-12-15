@@ -18,7 +18,7 @@
         android:id="@+id/groupSpinner"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:prompt="@string/selectCourseTitle" 
+        android:prompt="@string/selectZoneTitle" 
         android:visibility="gone"
         />
 

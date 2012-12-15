@@ -319,7 +319,7 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 					soundResult = sounds[0]; // Positive sound
 				} else {
 					messageResult = getString(R.string.scan_not_valid_student);
-					iconResult = R.drawable.notok;
+					iconResult = R.drawable.not_ok;
 					soundResult = sounds[1]; // Negative sound
 				}
 				messageResult += "\n\n"
@@ -329,13 +329,13 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 			} else {
 				// There is no user with that ID or nickname
 				messageResult = getString(R.string.scan_data_not_found);
-				iconResult = R.drawable.notok;
+				iconResult = R.drawable.not_ok;
 				soundResult = sounds[1]; // Negative sound
 			}
 		} else {
 			// Not detected any valid ID or nickname 
 			messageResult = getString(R.string.scan_not_valid_code);
-			iconResult = R.drawable.notok;
+			iconResult = R.drawable.not_ok;
 			soundResult = sounds[1]; // Negative sound
 		}
 

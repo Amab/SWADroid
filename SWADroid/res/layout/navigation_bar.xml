@@ -3,7 +3,7 @@
     android:id="@+id/actionBarLayout"
     android:layout_width="match_parent"
     android:layout_height="50dip"
-    android:background="@color/title_background"
+    android:background="@android:color/white"
     android:orientation="horizontal" >
 
     <!-- Home -->    
@@ -12,12 +12,10 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
         android:background="@drawable/navigation_button"
         android:contentDescription="@string/home_icon"
         android:onClick="onRefreshClick"
-        android:paddingLeft="5dip"
-        android:paddingRight="5dip"
+        android:padding="4dp"
         android:scaleType="centerCrop"
         android:src="@drawable/home" />
 
@@ -26,28 +24,34 @@
         android:id="@+id/parent_button"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/home_button"
         android:contentDescription="@string/parent_icon"
         android:background="@drawable/navigation_button"
         android:onClick="onRefreshClick"
-        android:paddingLeft="5dip"
-        android:paddingRight="5dip"
+        android:padding="4dp"
         android:scaleType="centerCrop"
         android:src="@drawable/parent" />
-    
-	<!-- Refresh -->
-    <ImageButton
-        android:id="@+id/refresh_button"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:background="@drawable/navigation_button"
-        android:contentDescription="@string/refresh_icon"
-        android:onClick="onRefreshClick"
-        android:layout_alignParentRight="true"
-        android:paddingLeft="5dip"
-        android:paddingRight="5dip"
-        android:scaleType="centerCrop"
-        android:src="@drawable/refresh" />
+     <TextView
+		android:id="@+id/path"
+		android:layout_toRightOf="@id/parent_button"
+		android:layout_centerVertical="true"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:padding="4dp"
+		android:textColor="@android:color/black"
+		android:textSize="18sp"
+		android:textStyle="bold" 
+		android:ellipsize="start"
+		android:singleLine="true">
+	</TextView>   
+
+
+	<View
+	    android:id="@+id/view_separator"
+	    android:layout_width="fill_parent"
+	    android:layout_height="2dip"
+	    android:layout_alignParentBottom="true"
+	    android:layout_alignParentLeft="true"
+	    android:background="@color/sgilight_gray" />
+
 </RelativeLayout>

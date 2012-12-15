@@ -33,7 +33,6 @@ import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.KeepAliveHttpsTransportSE;
 import org.xmlpull.v1.XmlPullParserException;
 
-import es.ugr.swad.swadroid.Base64;
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
@@ -41,6 +40,7 @@ import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
+import es.ugr.swad.swadroid.utils.Base64;
 
 import android.accounts.Account;
 import android.accounts.OperationCanceledException;
@@ -135,6 +135,11 @@ public class NotificationsSyncAdapterService extends Service {
 				//Configure the alert
 				int icon = R.drawable.ic_launcher_swadroid;
 				long hour = System.currentTimeMillis();
+				
+				//If the notifications counter exceeds the limit, set it to the max allowed
+				if(notifCount > SIZE_LIMIT) {
+					notifCount = SIZE_LIMIT;
+				}
 
 				Notification notif =
 						new Notification(icon, context.getString(R.string.app_name), hour);

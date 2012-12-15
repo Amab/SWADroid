@@ -1,3 +1,11 @@
+## 0.11 (2012-12-15)
+
+* Added downloads module
+* Added encryption to notifications
+* Added database version checks in upgradeDB method to apply only required changes to the database structure
+* Modified the order of modules in main menu to coincide with the order of functions in SWAD
+* Refactored main package classes. Moved GUI and utilities classes to separate packages
+
 ## 0.10.1 (2012-11-17)
 
 * Added Android 4.2 compatibility

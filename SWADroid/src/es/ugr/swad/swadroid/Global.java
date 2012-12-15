@@ -36,7 +36,7 @@ public class Global {
 	/**
 	 * SWAD application key
 	 */
-	private static final String AppKey = ""; //DELETE BEFORE COMMIT!!!
+	private static final String AppKey =""; //DELETE THE KEY BEFORE COMMIT!!!
 	/**
 	 * Server URL
 	 */

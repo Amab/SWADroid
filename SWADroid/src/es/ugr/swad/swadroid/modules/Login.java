@@ -29,11 +29,11 @@ import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.os.Bundle;
-import es.ugr.swad.swadroid.Base64;
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.rollcall.Util;
+import es.ugr.swad.swadroid.utils.Base64;
 
 /**
  * Login module for connect to SWAD.

@@ -50,9 +50,9 @@ import android.widget.Toast;
 import com.google.zxing.client.android.Intents;
 
 import es.ugr.swad.swadroid.Global;
-import es.ugr.swad.swadroid.ImageExpandableListAdapter;
-import es.ugr.swad.swadroid.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.gui.ImageExpandableListAdapter;
+import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.model.PracticeSession;
 import es.ugr.swad.swadroid.model.User;
@@ -315,7 +315,7 @@ public class Rollcall extends MenuExpandableListActivity {
 		setContentView(R.layout.main_rollcall);
 
 		ImageView image = (ImageView) this.findViewById(R.id.moduleIcon);
-		image.setBackgroundResource(R.drawable.rollcall);
+		image.setBackgroundResource(R.drawable.roll_call);
 
 		TextView text = (TextView) this.findViewById(R.id.moduleName);
 		text.setText(R.string.rollcallModuleLabel);
@@ -455,7 +455,7 @@ public class Rollcall extends MenuExpandableListActivity {
 		// Rollcall category
 		final HashMap<String, Object> rollcall = new HashMap<String,Object>();
 		rollcall.put(NAME, getString(R.string.rollcallModuleLabel));
-		rollcall.put(IMAGE, getResources().getDrawable(R.drawable.rollcall));
+		rollcall.put(IMAGE, getResources().getDrawable(R.drawable.roll_call));
 		headerData.add(rollcall);
 
 		final ArrayList<HashMap<String,Object>> rollcallData = new ArrayList<HashMap<String, Object>>();

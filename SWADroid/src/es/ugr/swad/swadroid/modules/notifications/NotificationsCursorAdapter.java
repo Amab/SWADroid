@@ -22,14 +22,12 @@ import java.util.Date;
 
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.modules.Messages;
+import es.ugr.swad.swadroid.utils.Crypto;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
@@ -41,8 +39,9 @@ import android.widget.TextView;
  *
  */
 public class NotificationsCursorAdapter extends CursorAdapter {
+	protected Context ctx;
 	private boolean [] contentVisible;
-	Context ctx;
+	private String DBKey;
 	
 	/**
 	 * Constructor
@@ -75,7 +74,6 @@ public class NotificationsCursorAdapter extends CursorAdapter {
 
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {
-		final Context ctx = context;
 		final Long notificationCode = cursor.getLong(cursor.getColumnIndex("id"));
 		final String userPhoto = cursor.getString(cursor.getColumnIndex("userPhoto"));
 		long unixTime;
@@ -86,7 +84,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
     	java.text.DateFormat dateShortFormat = android.text.format.DateFormat.getDateFormat(context);
     	java.text.DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(context);
     	int numRows = cursor.getCount();
-    	
+
     	if(contentVisible.length == 0) {
     		contentVisible = new boolean[numRows];
     	}
@@ -107,17 +105,17 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         /*
         OnClickListener replyMessageListener = new OnClickListener() {
 			public void onClick(View v) {				
-				Intent activity = new Intent(ctx.getApplicationContext(), Messages.class);
+				Intent activity = new Intent(context.getApplicationContext(), Messages.class);
 				activity.putExtra("notificationCode", notificationCode);
 				activity.putExtra("summary", summary.getText().toString());
-				ctx.startActivity(activity);
+				context.startActivity(activity);
 			}        	
         };*/
         
         if(eventType != null) {
         	eventCode.setText(notificationCode.toString());
-        	eventUserPhoto.setText(userPhoto);
-        	type = cursor.getString(cursor.getColumnIndex("eventType"));
+        	eventUserPhoto.setText(Crypto.decrypt(DBKey, userPhoto));
+        	type = Crypto.decrypt(DBKey, cursor.getString(cursor.getColumnIndex("eventType")));
         	//messageReplyButton.setVisibility(View.GONE);
         	
         	if(type.equals("examAnnouncement"))
@@ -165,9 +163,9 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         }
         if(eventSender != null){
         	sender = "";
-        	senderFirstname = cursor.getString(cursor.getColumnIndex("userFirstname"));
-        	senderSurname1 = cursor.getString(cursor.getColumnIndex("userSurname1"));
-        	senderSurname2 = cursor.getString(cursor.getColumnIndex("userSurname2"));
+        	senderFirstname = Crypto.decrypt(DBKey, cursor.getString(cursor.getColumnIndex("userFirstname")));
+        	senderSurname1 = Crypto.decrypt(DBKey, cursor.getString(cursor.getColumnIndex("userSurname1")));
+        	senderSurname2 = Crypto.decrypt(DBKey, cursor.getString(cursor.getColumnIndex("userSurname2")));
         	
         	//Empty fields checking
         	if(senderFirstname.compareTo(Global.NULL_VALUE)!=0)
@@ -180,10 +178,10 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         	eventSender.setText(sender);
         }
         if(location != null) {
-        	location.setText(Html.fromHtml(cursor.getString(cursor.getColumnIndex("location"))));
+        	location.setText(Html.fromHtml(Crypto.decrypt(DBKey, cursor.getString(cursor.getColumnIndex("location")))));
         }
         if(summary != null){   
-        	summaryText = cursor.getString(cursor.getColumnIndex("summary"));
+        	summaryText = Crypto.decrypt(DBKey, cursor.getString(cursor.getColumnIndex("summary")));
         	
         	//Empty field checking
         	if(summaryText.compareTo(Global.NULL_VALUE)==0)
@@ -192,7 +190,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         	summary.setText(Html.fromHtml(summaryText));
         }
         if((content != null)){
-        	contentText = cursor.getString(cursor.getColumnIndex("content"));
+        	contentText = Crypto.decrypt(DBKey, cursor.getString(cursor.getColumnIndex("content")));
         	
         	//Empty field checking
         	if(contentText.compareTo(Global.NULL_VALUE)==0)
@@ -249,4 +247,12 @@ public class NotificationsCursorAdapter extends CursorAdapter {
 			this.notifyDataSetChanged();
 		}
 	}*/
+	
+	/**
+	 * Sets the database key
+	 * @param key
+	 */
+	public void setDBKey(String key) {
+		DBKey = key;
+	}
 }

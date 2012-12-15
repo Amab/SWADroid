@@ -147,7 +147,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:onClick="onReplyMessageClick"
-		android:background="@drawable/message_reply"
+		android:background="@drawable/msg_reply"
 		android:clickable="true"
   		android:visibility="gone" />
 

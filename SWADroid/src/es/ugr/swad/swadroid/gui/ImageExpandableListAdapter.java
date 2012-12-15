@@ -16,11 +16,15 @@
  *  You should have received a copy of the GNU General Public License
  *  along with SWADroid.  If not, see <http://www.gnu.org/licenses/>.
  */
-package es.ugr.swad.swadroid;
+package es.ugr.swad.swadroid.gui;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.R.id;
+import es.ugr.swad.swadroid.R.layout;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;

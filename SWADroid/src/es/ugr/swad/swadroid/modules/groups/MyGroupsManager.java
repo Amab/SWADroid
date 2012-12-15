@@ -1,3 +1,21 @@
+/*
+ *  This file is part of SWADroid.
+ *
+ *  Copyright (C) 2012 Helena Rodriguez Gijon <hrgijon@gmail.com>
+ *
+ *  SWADroid is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  SWADroid is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with SWADroid.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package es.ugr.swad.swadroid.modules.groups;
 
 import java.util.ArrayList;
@@ -17,8 +35,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import es.ugr.swad.swadroid.Global;
-import es.ugr.swad.swadroid.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.model.GroupType;
 import es.ugr.swad.swadroid.model.Model;
@@ -94,7 +112,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 		courseNameText.setText(Global.getSelectedCourseShortName());
 		
 		ImageView moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
-		moduleIcon.setBackgroundResource(R.drawable.mygroups);
+		moduleIcon.setBackgroundResource(R.drawable.my_groups);
 
 		TextView moduleText = (TextView) this.findViewById(R.id.moduleName);
 		moduleText.setText(R.string.myGroupsModuleLabel);
@@ -153,6 +171,13 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 				break;
 			}
 			
+		}else{
+			if(refreshRequested){
+				updateButton.setVisibility(View.VISIBLE);
+				progressbar.setVisibility(View.GONE);
+				
+				refreshRequested = false;
+			}
 		}
 	}
 	

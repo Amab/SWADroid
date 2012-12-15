@@ -147,7 +147,8 @@
     <string name="usersDownloadProgressDescription">Sincronizando estudiantes.\n\nDependiendo del número de
 		estudiantes a sincronizar, el procesamiento de los datos puede tardar unos minutos.\n\nPor favor, espere&#8230;</string>
     <string name="documentsDownloadModuleLabel">Documentos</string>
-    <string name="documentsDownloadProgressDescription">Obteniendo árbol de archivos..</string>
+    <string name="documentsDownloadProgressDescription">Obteniendo archivos.\n\nDependiendo del tamaño del directorio, podría necesitar varios minutos.\n\nPor favor, espere&#8230;</string>
+    <string name="clickToOpenFile">Pulse aqui para abrir el archivo</string>
     <string name="sharedsDownloadModuleLabel">Zona común</string>
     <string name="connectionRequired">Para esta funcionalidad se necesita conexión a Internet</string>
     <string name="course">Asignatura</string>
@@ -171,12 +172,15 @@
     <string name="parent_icon">Muestra la carpeta superior a la actual</string>
     <string name="refresh_icon">Actualizar</string>
     <string name="group">Grupo</string>
-    <string name="notificationDownloadTitle">Descargando..</string>
+    <string name="notificationDownloadTitle">Descargando&#8230;</string>
     <string name="complete">completo</string>
-    <string name="fileOptions">Opciones de fichero</string>
-    <string name="openFile">Abrir</string>
-    <string name="downloadFile">Volver a descargar</string>
-    <string name="deleteFile">Borrar</string>
+    <string name="fileInfoTitle">Información de archivo</string>
+    <string name="sizeFileTitle">Tamaño:</string>
+    <string name="creationTimeTitle">Fecha de:</string>
+    <string name="uploaderTitle">Subido por:</string>
+    <string name="downloadFileTitle">Descargar</string>
+    <string  name="sdCardBusyTitle">Tarjeta SD no disponible</string>
+    <string name="sdCardBusy">La tarjeta SD está ocupada ahora mismo. Para permitir descargas, selecciona "Desactiva almacenamiento USB" en la notificación</string>
     <string name="vacants">Vacantes</string>
 	<string name="numStudent">Nº de estudiantes: </string>
     <string name="enrollment">Inscripción</string>
@@ -258,5 +262,14 @@ Seleccione: Sesiones de prácticas - Nueva</string>
     <string name="sendMyGroupsProgressDescription">Enviando inscripción a grupos&#8230;\nPor favor, espere&#8230;</string>
     <string name="sendMyGroupsProgressTitle">Inscripción a grupos</string>
     <string name="withoutLimit">sin límite</string>
+   	<string name="downloadProblemTitle">Problema en descarga</string>
+	<string name="downloadProblemMsg">Lo sentimos. La descarga fue interrumpida. Inténtelo de nuevo</string>
+	<string name="downloadCompletedTitle"> Descarga completa </string>
+	<string name="unknown">Desconocido</string>
+	<string name="selectZoneTitle">Seleccione zona</string>
+	<string name="fileTitle">Archivo:</string>
+	<string name="noConnectionMsg">No hay conexión. Lo sentimos pero esta función necesita conexión. </string>
+	<string name="noApp">No se puede abrir este archivo.</string>
+	
 </resources>
 

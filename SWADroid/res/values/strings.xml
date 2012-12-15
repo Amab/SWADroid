@@ -38,24 +38,24 @@
     <string name="organization_preferences">University of Granada</string>
     <string name="loginTitle_menu">Login</string>
     <string name="loginProgressTitle">Login</string>
-    <string name="loginProgressDescription">Connecting...</string>
+    <string name="loginProgressDescription">Connecting&#8230;</string>
     <string name="coursesProgressTitle">Courses</string>
-    <string name="coursesProgressDescription">Retrieving courses...</string>
+    <string name="coursesProgressDescription">Retrieving courses&#8230;</string>
     <string name="notificationsProgressTitle">Notifications</string>
-    <string name="notificationsProgressDescription">Retrieving new notifications...</string>
+    <string name="notificationsProgressDescription">Retrieving new notifications&#8230;</string>
     <string name="notificationsEmptyListMsg">Did not download any notification.\n\nTo download most recent
 		notifications click the icon in the upper right of the screen.</string>
     <string name="notificationsDownloadedMsg">Notifications downloaded</string>
     <string name="testsDownloadProgressTitle">Tests</string>
     <string name="testsDownloadProgressDescription">Synchronizing test questions.\n\nDepending of the number of
-		questions to synchronize, the data processing can take several minutes.\n\nPlease wait...</string>
+		questions to synchronize, the data processing can take several minutes.\n\nPlease wait&#8230;</string>
     <string name="errorMsgLaunchingActivity">An error occurred during the execution of the
 		operation</string>
     <string name="errorMsgWorkaroundEmulator">Damn. That Android emulator bug appeared again.
-		Retrying...</string>
+		Retrying&#8230;</string>
     <string name="errorMsgNoConnection">No connection found</string>
     <string name="errorCopyMsg_DB">Error copying database</string>
-    <string name="upgradeMsg_DB">Upgrading database...</string>
+    <string name="upgradeMsg_DB">Upgrading database&#8230;</string>
     <string name="loginSuccessfulMsg">Login successful</string>
     <string name="examAnnouncement">Exam announcement</string>
     <string name="marksFile">Marks file</string>
@@ -111,14 +111,14 @@
     <string name="errorBadAppKeyMsg">Unknown apllication key. Please contact the developer.</string>
     <string name="errorConnectionMsg">Error while connecting to server</string>
     <string name="errorTimeoutMsg">Timeout trying to connect to the server</string>
-    <string name="sendingMessageMsg">Sending message...</string>
+    <string name="sendingMessageMsg">Sending message&#8230;</string>
     <string name="messageSendedMsg">Message sended successfully</string>
     <string name="messageSendErrorMsg">Error while sending the message. Check the data in the message fields</string>
     <string name="message_receivers_title">Receivers (separated by comma)</string>
     <string name="message_subject_title">Subject</string>
     <string name="message_body_title">Message</string>
     <string name="notice_body_title">Notice</string>
-    <string name="publishingNotice">Publishing notice...</string>
+    <string name="publishingNotice">Publishing notice&#8230;</string>
     <string name="noticePublished">Notice published</string>
     <string name="noticeSendError">Error while publishing the new notice</string>
     <string name="sendMsg">Send</string>
@@ -148,10 +148,11 @@
     <string name="attendanceModuleLabel">Rollcall</string>
     <string name="users">Users</string>
     <string name="usersDownloadProgressDescription">Synchronizing users.\n\nDepending of the number of
-		users to synchronize, the data processing can take several minutes.\n\nPlease wait...</string>
+		users to synchronize, the data processing can take several minutes.\n\nPlease wait&#8230;</string>
     <string name="usersDownloadProgressTitle">Students</string>
     <string name="documentsDownloadModuleLabel">Documents</string>
-    <string name="documentsDownloadProgressDescription">Getting files..</string>
+    <string name="documentsDownloadProgressDescription">Getting files. \n\nDepending of the directory size, this could take several minutes.\n\nPlease wait&#8230;</string>
+    <string name="clickToOpenFile">Click here to open the file</string>
     <string name="sharedsDownloadModuleLabel">Shared area</string>
     <string name="connectionRequired">Internet connection is required for this functionality</string>
     <string name="course">Course</string>
@@ -175,12 +176,15 @@
     <string name="parent_icon">Shows upper folder</string>
     <string name="refresh_icon">Updates</string>
     <string name="group">Group</string>
-    <string name="notificationDownloadTitle">Downloading..</string>
+    <string name="notificationDownloadTitle">Downloading&#8230;</string>
     <string name="complete">complete</string>
-    <string name="fileOptions">File Options</string>
-    <string name="openFile">Open</string>
-    <string name="downloadFile">Download again</string>
-    <string name="deleteFile">Delete</string>
+    <string name="fileInfoTitle">File Information</string>
+    <string name="sizeFileTitle">Size:</string>
+    <string name="creationTimeTitle">Date:</string>
+    <string name="uploaderTitle">Uploaded by:</string>
+    <string name="downloadFileTitle">Download</string>
+    <string  name="sdCardBusyTitle">SD card unavailable</string>
+    <string name="sdCardBusy">The SD casd is busy. To allow downloads, select "Turn off USB storage" in the notification</string>
     <string name="vacants">Vacants</string>
 	<string name="numStudent">No. of students: </string>
 	<string name="maxStudent">Max.stud.</string>
@@ -195,7 +199,7 @@ Try "Update students"</string>
     <string name="noCameraFound">The device has no camera</string>
     <string name="saveMsg">Save</string>
     <string name="addSessionTitle_menu">New practice session</string>
-    <string name="groupsProgressDescription">Retrieving groups...\n\nPlease wait...</string>
+    <string name="groupsProgressDescription">Retrieving groups&#8230;\n\nPlease wait&#8230;</string>
     <string name="groupsProgressTitle">Groups</string>
     <string name="noGroupsAvailableMsg">No groups for selected subject</string>
     <string name="groupsUpdated">Groups updated</string>
@@ -227,7 +231,7 @@ Try "Update students"</string>
     <string name="rollcallModuleLabel">Rollcall</string>
     <string name="studentsTitle">Students</string>
     <string name="studentsDownloadProgressDescription">Synchronizing users.\n\nDepending of the number of
-		users to synchronize, the data processing can take several minutes.\n\nPlease wait...</string>
+		users to synchronize, the data processing can take several minutes.\n\nPlease wait&#8230;</string>
     <string name="studentsList">Students list</string>
     <string name="studentsDownloadProgressTitle">Students</string>
     <string name="studentsPresent">Present students</string>
@@ -269,4 +273,12 @@ configuration anytime using the "Clean Database" option\n\nDo you want to contin
     <string name="ok">OK</string>
     <string name="failedEnrollment">Sorry but the enrollment on the selected groups could not be performed</string>
 	<string name="withoutLimit">unlimited</string>
+	<string name="downloadProblemTitle">Download problem</string>
+	<string name="downloadProblemMsg">Sorry. The download of file was interrupted. Try again</string>
+	<string name="downloadCompletedTitle"> Download completed </string>
+	<string name="unknown">Unknown</string>
+	<string name="selectZoneTitle">Select zone</string>
+	<string name="fileTitle">File:</string>
+	<string name="noConnectionMsg">There is not connection. Sorry but this function needs connection. </string>
+	<string name="noApp">No application can open this file</string>
 </resources>
