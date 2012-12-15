@@ -1,8 +1,27 @@
+/*
+ *  This file is part of SWADroid.
+ *
+ *  Copyright (C) 2012 Helena Rodriguez Gijon <hrgijon@gmail.com>
+ *
+ *  SWADroid is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  SWADroid is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with SWADroid.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package es.ugr.swad.swadroid.modules.downloads;
 
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,11 +80,20 @@ public class NodeAdapter extends BaseAdapter {
 		}else{
 			holder= (ViewHolder) convertView.getTag();
 		}
+		// Trying to use ellipsizing only when it is needed, it does not work 
+		/*
+		 *
+		String nodeName = ((DirectoryItem)list.get(position)).getName();
+		if(!isTooLarge(holder.text,nodeName)) 
+			holder.text.setEllipsize(null); //if the text fits in two lines, the ellipsizing is turn off
+		else
+			holder.text.setEllipsize(TextUtils.TruncateAt.END); //if the text does not fit in two lines, the ellipsizing is set to end
+		*/
 		
 		holder.text.setText(((DirectoryItem)list.get(position)).getName());
 		
 		if(((DirectoryItem)list.get(position)).isFolder()){
-			holder.image.setImageResource(R.drawable.folder);
+			holder.image.setImageResource(R.drawable.folder_open);
 		}else{
 			holder.image.setImageResource(R.drawable.file);
 		}
@@ -77,5 +105,14 @@ public class NodeAdapter extends BaseAdapter {
 		list = newBrowser;
 		notifyDataSetInvalidated();	
 	}
-
+	/**
+	 * Method to messure if the @a newText fits or not in the width of @a text
+	 * IT DOES NOT WORK CORRECTLY 
+	 * */
+	private boolean isTooLarge (TextView text, String newText) {
+	    float textWidth = text.getPaint().measureText(newText);
+	    return (textWidth >= text. getWidth ());
+	}
+	
+	
 }

@@ -23,6 +23,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.android.dataframework.DataFramework;
@@ -31,10 +32,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.OrientationEventListener;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.MimeTypeMap;
@@ -44,14 +48,14 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
-import android.webkit.MimeTypeMap;
 import es.ugr.swad.swadroid.Global;
-import es.ugr.swad.swadroid.MenuActivity;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.model.Group;
@@ -86,7 +90,7 @@ public class DownloadsManager extends MenuActivity {
 	/**
 	 * String that contains the xml files recevied from the web service
 	 * */
-	private String tree;
+	private String tree = null;
 
 	/**
 	 * Downloads tag name for Logcat
@@ -96,7 +100,7 @@ public class DownloadsManager extends MenuActivity {
 	/**
 	 * List of group of the selected course to which the user belongs
 	 * */
-	private List<Group> groups;
+	private List<Group> myGroups;
 	
 	/**
 	 * Indicates if the groups has been requested
@@ -108,41 +112,51 @@ public class DownloadsManager extends MenuActivity {
 	 * */
 	private boolean refresh = false;
 	
-	/**
-	 * Path to the directory where files will be located
-	 * */
-	private String directoryPath = null; 
+	private ImageButton updateButton;
+	private ProgressBar progressbar;
 	
+	private TextView noConnectionText;
 	private GridView grid;
 
 	private ImageView moduleIcon = null;
 	private TextView moduleText = null;
 	private TextView currentPathText;
-	private TextView moduleCourseName = null;
-	
-	private AlertDialog fileOptions = null;
-	
-	String chosenNodeName = null;
-	String fileName = null;
-	
 
+	String chosenNodeName = null;
+	/**
+	 * fileSize stores the size of the last file name chosen to be downloaded
+	 * */
+	private long fileSize = 0;
+	
+	/**
+	 * Indicates the selected position in the groups spinner
+	 * by default the whole course is selected
+	 * */
+	private int groupPosition = 0;
+	/**
+	 * Indicates if the menu no connection is visible
+	 * */
+	private boolean noConnectionView = false;
+	
+	
 	@Override
 	protected void onStart() {
 		super.onStart();
-		if(groupsRequested){
-			if(navigator == null)
+		List<Group> allGroups = dbHelper.getGroups(Global.getSelectedCourseCode());
+		int nGroups = allGroups.size();
+		
+		if(nGroups != 0 || groupsRequested){ //groupsRequested is used to avoid continue requests of groups on courses that have not any group.
+			myGroups = getFilteredGroups(); //only groups where the user is enrolled. 
+			int nMyGroups = myGroups.size(); 
+			this.loadGroupsSpinner(myGroups);
+			// the tree request must be explicit only when there are not any groups(where the user is enrolled), and therefore any Spinner. 
+			//in case there are groups(where the user is enrolled), it will be a spinner, and the tree request will be automatic made by OnItemSelectedListener
+			if(nMyGroups == 0 && tree == null) 
 				requestDirectoryTree();
 		}else{
-			List<Model> rows = dbHelper.getAllRows(Global.DB_TABLE_GROUP_TYPES, "courseCode = " + Global.getSelectedCourseCode() , null);
-			if(rows.size() != 0){
-				Intent activity = new Intent(getBaseContext(),Groups.class);
-				activity.putExtra("courseCode", Global.getSelectedCourseCode());
-				startActivityForResult(activity,Global.GROUPS_REQUEST_CODE);
-			}else{
 				Intent activity = new Intent(getBaseContext(),GroupTypes.class);
 				activity.putExtra("courseCode",  Global.getSelectedCourseCode());
-				startActivityForResult(activity,Global.GROUPTYPES_REQUEST_CODE);
-			}
+				startActivityForResult(activity,Global.GROUPTYPES_REQUEST_CODE);				
 		}
 		
 	}
@@ -152,51 +166,41 @@ public class DownloadsManager extends MenuActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.navigation);
 		
-		checkMediaAvailability();
-		
 		downloadsAreaCode = getIntent().getIntExtra("downloadsAreaCode",
 				Global.DOCUMENTS_AREA_CODE);
 		
-		final CharSequence[] items = {getString(R.string.openFile) , getString(R.string.downloadFile) , getString(R.string.deleteFile) };
+		//set the module bar
+		if (downloadsAreaCode == Global.DOCUMENTS_AREA_CODE) {
+			moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
+			moduleIcon.setBackgroundResource(R.drawable.folder);
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(getString(R.string.fileOptions));
-		builder.setItems(items, new DialogInterface.OnClickListener() {
-		    public void onClick(DialogInterface dialog, int item) {
-		    	switch(item){
-			    	case 0:
-			    		openFileDefaultApp(directoryPath+File.separator+fileName);
-			    		break;
-			    	case 1:
-			    		callGetFile(chosenNodeName);
-			    		break;
-			    	case 2:
-			    		File f =  new File(directoryPath, fileName);
-			    		if(f.exists())
-			    			f.delete();
-			    		//TODO change icon file to show the file is not downloaded	
-			    		break;
-		    		
-		    	}
-		    }
-		});
-		final AlertDialog fileOptions = builder.create();
+			moduleText = (TextView) this.findViewById(R.id.moduleName);
+			moduleText.setText(R.string.documentsDownloadModuleLabel);
+		} else { // SHARE_AREA_CODE
+			moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
+			moduleIcon.setBackgroundResource(R.drawable.folder_users);
+
+			moduleText = (TextView) this.findViewById(R.id.moduleName);
+			moduleText.setText(R.string.sharedsDownloadModuleLabel);
+		}
 		
+		noConnectionText = (TextView) this.findViewById(R.id.noConnectionText);
 		
 		grid = (GridView) this.findViewById(R.id.gridview);
 		grid.setOnItemClickListener((new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v,
 					int position, long id) {
-				TextView text = (TextView) v.findViewById(R.id.icon_text);
-				chosenNodeName = text.getText().toString();
-
-				Long fileCode = navigator.getFileCode(chosenNodeName);
-				if(fileCode == -1) //it is a directory therefore navigates into it
-					updateView(navigator.goToSubDirectory(chosenNodeName));
-				else{ //it is a files therefore gets its information throught web service GETFILE
-
-					//TODO
-					callGetFile(chosenNodeName);
+				//TextView text = (TextView) v.findViewById(R.id.icon_text);
+				//chosenNodeName = text.getText().toString();
+				//DirectoryItem node = navigator.getDirectoryItem(chosenNodeName);
+				DirectoryItem node = navigator.getDirectoryItem(position);
+				if(node.getFileCode() == -1) //it is a directory therefore navigates into it
+					updateView(navigator.goToSubDirectory(position));
+					//updateView(navigator.goToSubDirectory(chosenNodeName));
+				else{ //it is a files therefore gets its information through web service GETFILE
+					chosenNodeName = node.getName();
+					AlertDialog fileInfoDialog = createFileInfoDialog(node.getName(),node.getSize(),node.getTime(),node.getPublisher(),node.getFileCode());
+					fileInfoDialog.show();
 				}
 			}
 		}));
@@ -208,7 +212,6 @@ public class DownloadsManager extends MenuActivity {
 			@Override
 			public void onClick(View v) {
 				updateView(navigator.goToRoot());
-				directoryPath = getDirectoryPath();
 			}
 
 		}));
@@ -220,23 +223,14 @@ public class DownloadsManager extends MenuActivity {
 			@Override
 			public void onClick(View v) {
 				updateView(navigator.goToParentDirectory());
-				directoryPath = getDirectoryPath();
 			}
 
 		}));
 
-		ImageButton refreshButton = (ImageButton) this
-				.findViewById(R.id.refresh_button);
-		refreshButton.setOnClickListener((new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-
-				refresh = true;
-				requestDirectoryTree();
-			}
-
-		}));
+		progressbar = (ProgressBar) this.findViewById(R.id.progress_refresh);
+		progressbar.setVisibility(View.GONE);
+		updateButton = (ImageButton)this.findViewById(R.id.refresh);
+		updateButton.setVisibility(View.VISIBLE);
 
 	}
 
@@ -248,29 +242,48 @@ public class DownloadsManager extends MenuActivity {
 			// After get the list of courses, a dialog is launched to choice the
 			// course
 			case Global.DIRECTORY_TREE_REQUEST_CODE:
-				 tree = data.getStringExtra("tree");// this is the right call, disable until getDirectoryTreeDownload is fixed
-				//tree = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><tree><dir name=\"2012-04-16 4Hackathon\"></dir><file name=\"SWADroid-4hackathon.odp\"><size>5366058</size><time>1335209681</time><license>CC Reconocimiento - No comercial - Compartir bajo la misma licencia</license><publisher>Antonio Ca–as Vargas</publisher><photo></photo></file></tree>";
+				 tree = data.getStringExtra("tree");
+				 setMainView();
 				if (!refresh)
 					setMainView();
 				else {
 					refresh = false;
-					refresh();
+					updateButton.setVisibility(View.VISIBLE);
+					progressbar.setVisibility(View.GONE);
+					if(!noConnectionView)
+						refresh();
+					else
+						setMainView();
+					
+
 				}
 				break;
 			case Global.GETFILE_REQUEST_CODE:
 				Log.i(TAG, "Correct get file");
-				String url = data.getExtras().getString("link");
-				String infoFile = data.getExtras().getString("name");
-				if(url != null && infoFile != null){
-					directoryPath =  getDirectoryPath();
-					File f = new File(directoryPath, infoFile);
-					if(!f.exists())
-						downloadFile(directoryPath,url);
-				}
+				//if the sd card is not busy, the file can be downloaded 
+				if (this.checkMediaAvailability() == 2){
+					String url = data.getExtras().getString("link");
+					downloadFile(getDirectoryPath(),url,fileSize);
+					Toast.makeText(this, chosenNodeName +" "+ this.getResources().getString(R.string.notificationDownloadTitle) , Toast.LENGTH_LONG).show();
+				}else{ //if the sd card is busy, it shows a alert dialog
+					AlertDialog.Builder builder = new AlertDialog.Builder(this);
+					AlertDialog dialog;
+					builder.setTitle(R.string.sdCardBusyTitle);
+					builder.setMessage(R.string.sdCardBusy);
+					builder.setIcon(android.R.drawable.ic_dialog_alert);
+					builder.setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+			           public void onClick(DialogInterface dialog, int id) {
+			               dialog.dismiss();
+			           }
+			       });
+					dialog = builder.create();
+					dialog.show();
+				}	
 				break;
 			case Global.GROUPS_REQUEST_CODE:
 				groupsRequested = true;
-				this.loadGroupsSpinner();
+				myGroups = getFilteredGroups(); //only groups where the user is enrolled.
+				this.loadGroupsSpinner(myGroups);
 				requestDirectoryTree();
 				break;	
 			case Global.GROUPTYPES_REQUEST_CODE:	
@@ -280,26 +293,43 @@ public class DownloadsManager extends MenuActivity {
 				break;
 			}
 			
-		}
-	}
-
-	private void setMainView() {
-		if (moduleIcon == null) {
-			if (downloadsAreaCode == Global.DOCUMENTS_AREA_CODE) {
-				moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
-				moduleIcon.setBackgroundResource(R.drawable.folder);
-
-				moduleText = (TextView) this.findViewById(R.id.moduleName);
-				moduleText.setText(R.string.documentsDownloadModuleLabel);
-			} else { // SHARE_AREA_CODE
-				moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
-				moduleIcon.setBackgroundResource(R.drawable.folderusers);
-
-				moduleText = (TextView) this.findViewById(R.id.moduleName);
-				moduleText.setText(R.string.sharedsDownloadModuleLabel);
+		}else{
+			setNoConnectionView();
+			if (refresh){
+				refresh = false;
+				updateButton.setVisibility(View.VISIBLE);
+				progressbar.setVisibility(View.GONE);
 			}
 		}
-
+	}
+	
+	
+	/**
+	 * Having connection is mandatory for the Download Module.
+	 * Therefore when there is not connection, the grid of nodes is disabled and instead it is showed an info messages  
+	 * */
+	private void setNoConnectionView(){
+		noConnectionView = true;
+		noConnectionText.setVisibility(View.VISIBLE);
+		grid.setVisibility(View.GONE);
+		
+		this.findViewById(R.id.courseSelectedText).setVisibility(View.VISIBLE);
+		this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
+		
+		TextView courseNameText = (TextView) this.findViewById(R.id.courseSelectedText);
+		courseNameText.setText(Global.getSelectedCourseShortName());
+		
+	}
+	/**
+	 * This method set the grid of nodes visible and paints the directory tree in its root node
+	 * */
+	private void setMainView() {
+		
+		noConnectionText.setVisibility(View.GONE);
+		grid.setVisibility(View.VISIBLE);
+		
+		noConnectionView = false;
+		
 		currentPathText = (TextView) this.findViewById(R.id.path);
 
 		navigator = new DirectoryNavigator(tree);
@@ -310,39 +340,51 @@ public class DownloadsManager extends MenuActivity {
 		grid.setAdapter(new NodeAdapter(this, items));
 	}
 
+	/**
+	 * This method is called after the new file tree is received when the refresh button is pressed
+	 * */
 	private void refresh() {
 		navigator.refresh(tree);
 
 	}
-
+	/**
+	 * When the user moves into a new directory, this method updates the set of new directories and files and paints it
+	 * */
 	private void updateView(ArrayList<DirectoryItem> items) {
 		currentPathText.setText(navigator.getPath());
 		((NodeAdapter) grid.getAdapter()).change(items);
 
 	}
+	
+	/**
+	 * Get the list of the groups of the course with a documents zone to whom the user belongs
+	 * */
+	private List<Group> getFilteredGroups(){
+		List<Group> currentGroups = dbHelper.getGroups(Global.getSelectedCourseCode());
+		//remove groups that do not have a file zone assigned 
+		int j = 0;
+		while(j < currentGroups.size()){
+			if(currentGroups.get(j).getDocumentsArea() != 0 && currentGroups.get(j).isMember())
+				++j;
+			else
+				currentGroups.remove(j);
+		}
+		return currentGroups;
+	}
 	/**
 	 * If there are not groups to which the user belong in the database, it makes the request
 	 * */
-	private void loadGroupsSpinner(){
-		groups = dbHelper.getGroups(Global.getSelectedCourseCode());
-		//remove groups that do not have a file zone assigned 
-		int j = 0;
-		while(j < groups.size()){
-			if(groups.get(j).getDocumentsArea() != 0 && groups.get(j).isMember())
-				++j;
-			else
-				groups.remove(j);
-		}
-		
-		if(!groups.isEmpty() ){ //there are groups in the selected course, therefore the groups spinner should be loaded
+	private void loadGroupsSpinner(List<Group> currentGroups){
+
+		if(!currentGroups.isEmpty() ){ //there are groups in the selected course, therefore the groups spinner should be loaded
 			this.findViewById(R.id.courseSelectedText).setVisibility(View.GONE);
 			Spinner groupsSpinner = (Spinner)this.findViewById(R.id.groupSpinner);
 			groupsSpinner.setVisibility(View.VISIBLE);
 			
-			ArrayList<String> spinnerNames = new ArrayList<String>(groups.size()+1);
+			ArrayList<String> spinnerNames = new ArrayList<String>(currentGroups.size()+1);
 			spinnerNames.add(getString(R.string.course)+"-" + Global.getSelectedCourseShortName());
-			for(int i=0;i<groups.size();++i){
-				Group g = groups.get(i);
+			for(int i=0;i<currentGroups.size();++i){
+				Group g = currentGroups.get(i);
 				GroupType gType = dbHelper.getGroupTypeFromGroup(g.getId());
 				spinnerNames.add(getString(R.string.group)+"-" + gType.getGroupTypeName() + " "+ g.getGroupName() );
 			}
@@ -350,28 +392,32 @@ public class DownloadsManager extends MenuActivity {
 			ArrayAdapter<String> adapter = new ArrayAdapter<String> (this,android.R.layout.simple_spinner_item,spinnerNames);
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			groupsSpinner.setAdapter(adapter);
-			groupsSpinner.setOnItemSelectedListener(new onItemSelectedListener());
-			
+			groupsSpinner.setOnItemSelectedListener(new onGroupSelectedListener());
+			groupsSpinner.setSelection(groupPosition);
 		}else{
-			if(groupsRequested){ //there are not groups in the selected course, therefore only the course name should be loaded
-				this.findViewById(R.id.courseSelectedText).setVisibility(View.VISIBLE);
-				this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
-				
-				TextView courseNameText = (TextView) this.findViewById(R.id.courseSelectedText);
-				courseNameText.setText(Global.getSelectedCourseShortName());
-			}
+			this.findViewById(R.id.courseSelectedText).setVisibility(View.VISIBLE);
+			this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
+			
+			TextView courseNameText = (TextView) this.findViewById(R.id.courseSelectedText);
+			courseNameText.setText(Global.getSelectedCourseShortName());
+			
 		}
 	}
 	
-	private class onItemSelectedListener implements OnItemSelectedListener{
+	/**
+	 * Listener associated with the spinner. With a new group / course is selected, it is requested the right file tree
+	 * */
+	private class onGroupSelectedListener implements OnItemSelectedListener{
 
 		@Override
 		public void onItemSelected(AdapterView<?> parent, View view, int position,
 				long id) {
 			//if the position is 0, it is chosen the whole course. Otherwise a group has been chosen
-			long newGroupCode = position==0? 0 : groups.get(position).getId();
-			if(chosenGroupCode != newGroupCode){
+			//position - 0 belongs to the whole course
+			long newGroupCode = position==0? 0 : myGroups.get(position-1).getId();
+			if(chosenGroupCode != newGroupCode || tree == null){
 				chosenGroupCode = newGroupCode;
+				groupPosition = position;
 				requestDirectoryTree();
 			}	
 
@@ -382,6 +428,9 @@ public class DownloadsManager extends MenuActivity {
 		}
 
 	}
+	/**
+	 * Method to request files tree to SWAD thought the web services GETDIRECTORYTREE
+	 * */
 	
 	private void requestDirectoryTree(){
 		Intent activity;
@@ -399,100 +448,135 @@ public class DownloadsManager extends MenuActivity {
 	 * */
 
 	private int checkMediaAvailability(){
-		boolean mExternalStorageAvailable = false;
-		boolean mExternalStorageWriteable = false;
 		String state = Environment.getExternalStorageState();
 		int returnValue = 0;
 		if (Environment.MEDIA_MOUNTED.equals(state)) {
 		    // We can read and write the media
-		    mExternalStorageAvailable = mExternalStorageWriteable = true;
-		    Toast.makeText(this, "External Storage can be read and wrote", Toast.LENGTH_LONG).show();
 		    returnValue = 2;
 		} else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
 		    // We can only read the media
-		    mExternalStorageAvailable = true;
-		    mExternalStorageWriteable = false;
-		    Toast.makeText(this,"External Storage can only be read", Toast.LENGTH_LONG).show();
 		    returnValue = 1;
 		} else {
 		    // Something else is wrong. It may be one of many other states, but all we need
 		    //  to know is we can neither read nor write
-		    mExternalStorageAvailable = mExternalStorageWriteable = false;
-		    Toast.makeText(this, "External Storage can not be read either wrote", Toast.LENGTH_LONG).show();
 		    returnValue = 0;
 		}
 		return returnValue;
 	}
 	
 	/**
-	 * it gets the directory path where the files will be located.This will be /$EXTERNAL_STORAGE/SWADroid/courseCode shortName Course. This directory is created in case it does not exist
+	 * it gets the directory path where the files will be located.This will be /$EXTERNAL_STORAGE/download 
 	 * */
 	private String getDirectoryPath(){
-		String path = null;
-		String swadroidDirName = Environment.getExternalStorageDirectory()+File.separator+getString(R.string.app_name);
-		String courseDirName = swadroidDirName +File.separator + Global.getSelectedCourseCode()+ File.separator +String.valueOf(chosenGroupCode)+navigator.getPath();
-		if(checkMediaAvailability() == 2){
-			File courseDir = new File(courseDirName);
-			if(courseDir.exists()){
-				path = courseDirName;
-			}else if(courseDir.mkdirs())
-					path = courseDirName;
-				
-			
-			/*if(courseDir.exists()){
-				path = courseDirName;
-			}else {
-				File mainDir = new File(swadroidDirName);
-				if(!mainDir.exists()){
-					
-				}
-			}
-			
-			
-			File mainDir = new File(swadroidDirName);
-			boolean mainDirB = mainDir.exists();
-			
-			if(!mainDirB){
-				boolean mainDirCreated = mainDir.mkdir();
-			//if(!mainDir.exists()){
-				if(mainDirCreated){
-				//if(mainDir.mkdir()){
-					String courseDirName = swadroidDirName +
-					
-					if(!courseDir.exists())
-						if(courseDir.mkdir())
-							path = new String(courseDirName);
-				}
-			}*/
-		}
-		return path;
+		String downloadsDirName = Environment.getExternalStorageDirectory()+File.separator+"download";
+		return downloadsDirName;
 	}
 	
-	private void downloadFile(String directory, String url){
-		if(downloadsAreaCode == Global.DOCUMENTS_AREA_CODE)
-			new FileDownloaderAsyncTask(getApplicationContext(),false).execute(directory,url);
-		if(downloadsAreaCode == Global.SHARE_AREA_CODE)
-			new FileDownloaderAsyncTask(getApplicationContext(),true).execute(directory,url);
+	/**
+	 * it initializes the download the file from the url @a url and stores it in the directory name @directory
+	 * @param directory - directory where the downloaded file will be stored
+	 * @param url - url from which the file is downloaded
+	 * @param fileSize - file size of the file. It is used to show the download progress in the notification
+	 * */
+	private void downloadFile(String directory, String url,long fileSize){
+			new FileDownloaderAsyncTask(getApplicationContext(),this.chosenNodeName,true,fileSize).execute(directory,url);
 	}
-	private void openFileDefaultApp(String absolutePath){
-		File file = new File(absolutePath);
-		if(file.exists()){
-			Intent intent = new Intent();
-			intent.setAction(android.content.Intent.ACTION_VIEW);
-			int lastDotIndex = absolutePath.lastIndexOf(".");
-			String extension = absolutePath.substring(lastDotIndex+1);
-			String MIME = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
-			intent.setDataAndType(Uri.fromFile(file), MIME);
-			startActivity(intent);
-		}
-	}
-	private void callGetFile(String fileName){
+	
+	/**
+	 * Method to request info file identified with @a fileCode to SWAD thought the web services GETFILE
+	 * @fileCode file code
+	 * */
+	private void requestGetFile(long fileCode){
 	    Intent activity;
 	    activity = new Intent(getBaseContext(), GetFile.class);
-	    activity.putExtra("courseCode", Global.getSelectedCourseCode());
-	    activity.putExtra("groupCode", chosenGroupCode);
-	    activity.putExtra("treeCode", downloadsAreaCode);
-	    activity.putExtra("path", navigator.getPath() + fileName);
+	    activity.putExtra("fileCode", fileCode);
+	    //activity.putExtra("path", navigator.getPath() + fileName);
 	    startActivityForResult(activity, Global.GETFILE_REQUEST_CODE);
 	  }
+	/**
+	 * Method that shows information file and allows its download
+	 * It has a button to confirm the download. If It is confirmed  getFile will be requested to get the link
+	 * */
+	private AlertDialog createFileInfoDialog(String name,long size, long time,String uploader,long fileCode){
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		AlertDialog dialog;
+		final long code = fileCode;
+		this.fileSize = size;
+		
+    	Date d = new Date(time * 1000);
+    	java.text.DateFormat dateShortFormat = android.text.format.DateFormat.getDateFormat(this);
+    	java.text.DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(this);
+    	
+    	String uploaderName;
+    	if(uploader.compareTo("") != 0)
+    		uploaderName = uploader;
+    	else
+    		uploaderName = this.getResources().getString(R.string.unknown); 
+    	
+		String message = this.getResources().getString(R.string.fileTitle) +" " + name+ '\n' + 
+				 this.getResources().getString(R.string.sizeFileTitle)  +" " +  humanReadableByteCount(size, true) + '\n'+
+				this.getResources().getString(R.string.uploaderTitle) +" " + uploaderName+ '\n' + 
+				this.getResources().getString(R.string.creationTimeTitle) +" "  +   dateShortFormat.format(d)+ "  "+(timeFormat.format(d));
+		builder.setTitle(name);
+		builder.setMessage(message);
+		builder.setPositiveButton(R.string.downloadFileTitle, new DialogInterface.OnClickListener() {
+	           public void onClick(DialogInterface dialog, int id) {
+	               requestGetFile(code);
+	           }
+	       });
+		builder.setNegativeButton(R.string.cancelMsg, new DialogInterface.OnClickListener() {
+	           public void onClick(DialogInterface dialog, int id) {
+	               dialog.dismiss();
+	           }
+	       });
+		
+		dialog = builder.create();
+		return dialog;
+	}
+	
+	/** Method to show file size in bytes in a human readable way 
+	 * http://stackoverflow.com/questions/3758606/how-to-convert-byte-size-into-human-readable-format-in-java
+	 * */
+	private static String humanReadableByteCount(long bytes, boolean si) {
+	    int unit = si ? 1000 : 1024;
+	    if (bytes < unit) return bytes + " B";
+	    int exp = (int) (Math.log(bytes) / Math.log(unit));
+	    String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp-1) + (si ? "" : "i");
+	    return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
+	}
+	
+	/**
+	 * Launches an action when refresh button is pushed.
+	 *  
+	 * The listener onClick is set in action_bar.xml
+	 * @param v Actual view
+	 */
+	public void onRefreshClick(View v)
+	{        
+		updateButton.setVisibility(View.GONE);
+		progressbar.setVisibility(View.VISIBLE);
+		
+		refresh = true;
+		
+		Intent activity = new Intent(getBaseContext(),GroupTypes.class);
+		activity.putExtra("courseCode",  Global.getSelectedCourseCode());
+		startActivityForResult(activity,Global.GROUPTYPES_REQUEST_CODE);
+
+	}
+
+	/**
+	 * This method is launched instead of onCreate when device rotates
+	 * It prevents from repeating calls to web services when they are not necessary
+	 * */
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {        
+	    super.onConfigurationChanged(newConfig);
+	    
+	    // Checks the orientation of the screen
+/*	    if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+	        Log.i(TAG,"onConfigChanged - Landscape");
+	    } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+	    	Log.i(TAG,"onConfigChanged - Portrait");
+	    }*/
+	}
 }

@@ -19,7 +19,6 @@
 
 package es.ugr.swad.swadroid;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,7 +30,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -43,6 +41,8 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import es.ugr.swad.swadroid.gui.ImageExpandableListAdapter;
+import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.model.Model;
@@ -50,12 +50,10 @@ import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.Messages;
 import es.ugr.swad.swadroid.modules.Notices;
 import es.ugr.swad.swadroid.modules.downloads.DownloadsManager;
-import es.ugr.swad.swadroid.modules.downloads.DirectoryTreeDownload;
+import es.ugr.swad.swadroid.modules.groups.MyGroupsManager;
 import es.ugr.swad.swadroid.modules.notifications.Notifications;
 import es.ugr.swad.swadroid.modules.rollcall.Rollcall;
 import es.ugr.swad.swadroid.modules.tests.Tests;
-import es.ugr.swad.swadroid.modules.groups.MyGroupsManager;
-import es.ugr.swad.swadroid.modules.groups.SendMyGroups;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
 import es.ugr.swad.swadroid.sync.AccountAuthenticator;
 
@@ -103,23 +101,25 @@ public class SWADMain extends MenuExpandableListActivity {
 	 * Current role 2 - student 3 - teacher -1 - none role was chosen 
 	 * */
 	private int currentRole = -1;
+	
 	/**
-	 * Group position inside the main menu for Messages group
+	 * Group position inside the main menu for Course group
 	 * */
-	private int MESSAGES_GROUP = 0;
+	private int COURSE_GROUP = 0;
 	/**
 	 * Group position inside the main menu for Evaluation group
 	 * */
 	private int EVALUATION_GROUP = 1;
+
 	/**
-	 * Group position inside the main menu for Course group
+	 * Group position inside the main menu for Messages group
 	 * */
-	//private int COURSE_GROUP = 2;
+	private int MESSAGES_GROUP = 2;
+
 	/**
 	 * Group position inside the main menu for Enrollment group
 	 * */
-	//private int ENROLLMENT_GROUP = 3;
-	private int ENROLLMENT_GROUP = 2;
+	private int ENROLLMENT_GROUP = 3;
 	/**
 	 * Group position inside the main menu for User group
 	 * */
@@ -317,6 +317,7 @@ public class SWADMain extends MenuExpandableListActivity {
 			} else if(lastVersion < currentVersion) {				
 				//showUpgradeDialog();
 				dbHelper.upgradeDB(this);
+				dbHelper.encryptNotifications();
 				//prefs.upgradeCredentials();
 
 				//Configure automatic synchronization
@@ -476,9 +477,9 @@ public class SWADMain extends MenuExpandableListActivity {
 					createBaseMenu();
 				}
 				int userRole = courseSelected.getUserRole();
-				if(userRole == Global.TEACHER_TYPE_CODE && currentRole != Global.TEACHER_TYPE_CODE)
+				if((userRole == Global.TEACHER_TYPE_CODE) && (currentRole != Global.TEACHER_TYPE_CODE))
 					changeToTeacherMenu();
-				if(userRole == Global.STUDENT_TYPE_CODE && currentRole != Global.STUDENT_TYPE_CODE) 
+				if((userRole == Global.STUDENT_TYPE_CODE) && (currentRole != Global.STUDENT_TYPE_CODE)) 
 					changeToStudentMenu();
 				dBCleaned = false;
 			}
@@ -497,45 +498,68 @@ public class SWADMain extends MenuExpandableListActivity {
 			currentRole = Global.STUDENT_TYPE_CODE; 
 			//Construct Expandable List
 			final ArrayList<HashMap<String, Object>> headerData = new ArrayList<HashMap<String, Object>>();
+			
+			//Order:
+			// 1- Course
+			// 2- Evaluation 
+			// 3- Messages
+			// 4- Enrollment
+			// 5- Users
+			final HashMap<String, Object> courses = new HashMap<String,Object>();
+			courses.put(NAME, getString(R.string.course));
+			courses.put(IMAGE, getResources().getDrawable(R.drawable.blackboard));
+			headerData.add(courses);
+			
+			final HashMap<String, Object> evaluation = new HashMap<String, Object>();
+			evaluation.put(NAME, getString(R.string.evaluation));
+			evaluation.put(IMAGE, getResources().getDrawable(R.drawable.grades));
+			headerData.add(evaluation);
 
 			final HashMap<String, Object> messages = new HashMap<String, Object>();
 			messages.put(NAME, getString(R.string.messages));
 			messages.put(IMAGE, getResources().getDrawable(R.drawable.msg));
 			headerData.add( messages );
-
-			final HashMap<String, Object> evaluation = new HashMap<String, Object>();
-			evaluation.put(NAME, getString(R.string.evaluation));
-			evaluation.put(IMAGE, getResources().getDrawable(R.drawable.grades));
-			headerData.add( evaluation);
-
-			//DISABLE until it will be functional
-			/*final HashMap<String, Object> courses = new HashMap<String,Object>();
-			courses.put(NAME, getString(R.string.course));
-			courses.put(IMAGE, getResources().getDrawable(R.drawable.blackboard));
-			headerData.add(courses);*/
 			
 			final HashMap<String, Object> enrolment = new HashMap<String,Object>();
 			enrolment.put(NAME, getString(R.string.enrollment));
 			enrolment.put(IMAGE, getResources().getDrawable(R.drawable.enrollment));
 			headerData.add(enrolment);
 
+
 			final ArrayList<ArrayList<HashMap<String, Object>>> childData = new ArrayList<ArrayList<HashMap<String, Object>>>();
+			
+			final ArrayList<HashMap<String,Object>> courseData = new ArrayList<HashMap<String, Object>>();
+			childData.add(courseData);
+			
+			final ArrayList<HashMap<String, Object>> evaluationData = new ArrayList<HashMap<String, Object>>();
+			childData.add(evaluationData);
 
 			final ArrayList<HashMap<String, Object>> messagesData = new ArrayList<HashMap<String, Object>>();
 			childData.add(messagesData);
 
-			final ArrayList<HashMap<String, Object>> evaluationData = new ArrayList<HashMap<String, Object>>();
-			childData.add(evaluationData);
-
-			//DISABLE until it will be functional
-			//final ArrayList<HashMap<String,Object>> documentsData = new ArrayList<HashMap<String, Object>>();
-			//childData.add(documentsData);
-			
 			final ArrayList<HashMap<String,Object>> enrollmentData = new ArrayList<HashMap<String, Object>>();
 			childData.add(enrollmentData);
+			
+			HashMap<String, Object> map = new HashMap<String,Object>();
+			
+			//Documents category
+			map.put(NAME, getString(R.string.documentsDownloadModuleLabel));
+			map.put(IMAGE,  getResources().getDrawable(R.drawable.folder));
+			courseData.add(map);
+			//shared area category
+			map = new HashMap<String,Object>();
+			map.put(NAME, getString(R.string.sharedsDownloadModuleLabel));
+			map.put(IMAGE,  getResources().getDrawable(R.drawable.folder_users));
+			courseData.add(map);
+			
+			//Evaluation category
+			map = new HashMap<String,Object>();
+			map.put(NAME, getString(R.string.testsModuleLabel) );
+			map.put(IMAGE, getResources().getDrawable(R.drawable.test));
+			evaluationData.add(map);
 
 			//Messages category
-			HashMap<String, Object> map = new HashMap<String,Object>();
+			map = new HashMap<String,Object>();
 			map.put(NAME, getString(R.string.notificationsModuleLabel) );
 			map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
 			messagesData.add(map); 
@@ -544,28 +568,11 @@ public class SWADMain extends MenuExpandableListActivity {
 			map.put(NAME, getString(R.string.messagesModuleLabel) );
 			map.put(IMAGE, getResources().getDrawable(R.drawable.msg_write));
 			messagesData.add(map);
-
-			//Evaluation category
-			map = new HashMap<String,Object>();
-			map.put(NAME, getString(R.string.testsModuleLabel) );
-			map.put(IMAGE, getResources().getDrawable(R.drawable.test));
-			evaluationData.add(map);
-
-			//DISABLE until it will be functional
-			//Documents category
-			/*map = new HashMap<String,Object>();
-			map.put(NAME, getString(R.string.documentsDownloadModuleLabel));
-			map.put(IMAGE,  getResources().getDrawable(R.drawable.folder));
-			documentsData.add(map);
-			//shared area category
-			map = new HashMap<String,Object>();
-			map.put(NAME, getString(R.string.sharedsDownloadModuleLabel));
-			map.put(IMAGE,  getResources().getDrawable(R.drawable.folderusers));
-			documentsData.add(map);*/		
-			
+	
+			//Enrollment category
 			map = new HashMap<String,Object>();
 			map.put(NAME, getString(R.string.myGroupsModuleLabel));
-			map.put(IMAGE,  getResources().getDrawable(R.drawable.mygroups));
+			map.put(IMAGE,  getResources().getDrawable(R.drawable.my_groups));
 			enrollmentData.add(map);
 			
 			setListAdapter( new ImageExpandableListAdapter(
@@ -618,10 +625,10 @@ public class SWADMain extends MenuExpandableListActivity {
 
 			map = new HashMap<String,Object>();
 			map.put(NAME, getString(R.string.rollcallModuleLabel));
-			map.put(IMAGE, getResources().getDrawable(R.drawable.rollcall));
+			map.put(IMAGE, getResources().getDrawable(R.drawable.roll_call));
 			child.add(map);
-			((ImageExpandableListAdapter) getExpandableListAdapter()).addGroup(USERS_GROUP, users, child);*/
-
+			((ImageExpandableListAdapter) getExpandableListAdapter()).addGroup(USERS_GROUP, users, child);
+			*/
 
 		}
 		currentRole = Global.TEACHER_TYPE_CODE;
