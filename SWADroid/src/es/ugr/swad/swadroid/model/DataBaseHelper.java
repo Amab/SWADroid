@@ -1240,7 +1240,7 @@ public class DataBaseHelper {
 		List<Entity> rows = db.getEntityList(Global.DB_TABLE_TEST_TAGS, "id = " + prev.getId());
 		Entity ent = rows.get(0);
 		List<Integer> qstCodList = actual.getQstCodList();
-		SQLiteStatement st = db.getDB().compileStatement("INSERT OR IGNORE INTO " +
+		SQLiteStatement st = db.getDB().compileStatement("INSERT OR REPLACE INTO " +
 				Global.DB_TABLE_TEST_QUESTION_TAGS + " VALUES (NULL, ?, ?, ?);");
 
 		ent.setValue("id", actual.getId());
@@ -1251,7 +1251,7 @@ public class DataBaseHelper {
 			st.bindLong(1, i);
 			st.bindLong(2, actual.getId());
 			st.bindLong(3, actual.getTagInd());
-			st.executeInsert();	
+			st.executeInsert();
 		}		
 	}
 
