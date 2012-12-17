@@ -1533,7 +1533,7 @@ public class DataBaseHelper {
 		String tables = Global.DB_TABLE_TEST_TAGS + " AS T, " + Global.DB_TABLE_TEST_QUESTION_TAGS
 				+ " AS Q, "	+ Global.DB_TABLE_TEST_QUESTIONS_COURSE + " AS C";
 		String where = "T.id=Q.tagCod AND Q.qstCod=C.qstCod AND C.crsCod=" + selectedCourseCode;
-		String orderBy = "Q.tagInd ASC";
+		String orderBy = "T.tagTxt ASC";
 		String groupBy = "T.id";
 		Cursor dbCursor = db.getDB().query(tables, columns, where, null, groupBy, null, orderBy);
 		List<TestTag> result = new ArrayList<TestTag>();
