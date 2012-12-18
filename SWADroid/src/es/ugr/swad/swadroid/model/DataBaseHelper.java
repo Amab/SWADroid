@@ -1240,7 +1240,7 @@ public class DataBaseHelper {
 		List<Entity> rows = db.getEntityList(Global.DB_TABLE_TEST_TAGS, "id = " + prev.getId());
 		Entity ent = rows.get(0);
 		List<Integer> qstCodList = actual.getQstCodList();
-		SQLiteStatement st = db.getDB().compileStatement("INSERT OR IGNORE INTO " +
+		SQLiteStatement st = db.getDB().compileStatement("INSERT OR REPLACE INTO " +
 				Global.DB_TABLE_TEST_QUESTION_TAGS + " VALUES (NULL, ?, ?, ?);");
 
 		ent.setValue("id", actual.getId());
@@ -1251,7 +1251,7 @@ public class DataBaseHelper {
 			st.bindLong(1, i);
 			st.bindLong(2, actual.getId());
 			st.bindLong(3, actual.getTagInd());
-			st.executeInsert();	
+			st.executeInsert();
 		}		
 	}
 
@@ -1533,7 +1533,7 @@ public class DataBaseHelper {
 		String tables = Global.DB_TABLE_TEST_TAGS + " AS T, " + Global.DB_TABLE_TEST_QUESTION_TAGS
 				+ " AS Q, "	+ Global.DB_TABLE_TEST_QUESTIONS_COURSE + " AS C";
 		String where = "T.id=Q.tagCod AND Q.qstCod=C.qstCod AND C.crsCod=" + selectedCourseCode;
-		String orderBy = "Q.tagInd ASC";
+		String orderBy = "T.tagTxt ASC";
 		String groupBy = "T.id";
 		Cursor dbCursor = db.getDB().query(tables, columns, where, null, groupBy, null, orderBy);
 		List<TestTag> result = new ArrayList<TestTag>();
