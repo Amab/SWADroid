@@ -279,6 +279,6 @@ configuration anytime using the "Clean Database" option\n\nDo you want to contin
 	<string name="unknown">Unknown</string>
 	<string name="selectZoneTitle">Select zone</string>
 	<string name="fileTitle">File:</string>
-	<string name="noConnectionMsg">There is not connection. Sorry but this function needs connection. </string>
+	<string name="noConnectionMsg">This function needs connection. </string>
 	<string name="noApp">No application can open this file</string>
 </resources>
