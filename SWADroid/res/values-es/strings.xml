@@ -268,7 +268,7 @@ Seleccione: Sesiones de prácticas - Nueva</string>
 	<string name="unknown">Desconocido</string>
 	<string name="selectZoneTitle">Seleccione zona</string>
 	<string name="fileTitle">Archivo:</string>
-	<string name="noConnectionMsg">No hay conexión. Lo sentimos pero esta función necesita conexión. </string>
+	<string name="noConnectionMsg">Esta función necesita conexión. </string>
 	<string name="noApp">No se puede abrir este archivo.</string>
 	
 </resources>
