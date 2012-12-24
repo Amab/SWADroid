@@ -71,10 +71,6 @@ public class Global {
 	 * */
 	private static int currentUserRole = -1;
 	/**
-	 * Code of the chosen course for rollcall. All next actions are referred to this course.
-	 */
-	private static long selectedRollcallCourseCode = -1;
-	/**
 	 * Indicates if there are changes on preferences
 	 * */
 	private static boolean preferencesChanged = false;
@@ -447,22 +443,7 @@ public class Global {
 	public static int getCurrentUserRole(){
 		return currentUserRole;
 	}
-	
-		/**
-	 * Gets code of actual rollcall course
-	 * return -1 if no rollcall course chosen; code of actual rollcall course in other case
-	 * */
-	public static long getSelectedRollcallCourseCode() {
-		return selectedRollcallCourseCode;
-	}
 
-	/**
-	 * Sets code of actual rollcall course
-	 * @param actualCourseCode. Code of the chosen rollcall course. It should be actualCourseCode>0. Otherwise nothing will change
-	 * */
-	public static void setSelectedRollcallCourseCode(long actualCourseCode) {
-		selectedRollcallCourseCode = actualCourseCode;
-	}
 	/**
 	 * Checks if any connection is available 
 	 * @param ctx Application context

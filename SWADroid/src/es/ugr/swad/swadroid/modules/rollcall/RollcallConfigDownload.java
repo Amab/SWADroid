@@ -76,7 +76,7 @@ public class RollcallConfigDownload extends Module {
 		super.onStart();
 		try {
 			if(isDebuggable) {
-				Log.d(TAG, "selectedRollcallCourseCode = " + Long.toString(Global.getSelectedRollcallCourseCode()));
+				Log.d(TAG, "selectedCourseCode = " + Long.toString(Global.getSelectedCourseCode()));
 			}
 			runConnection();
 		} catch (Exception ex) {
@@ -94,7 +94,7 @@ public class RollcallConfigDownload extends Module {
 	protected void requestService() throws NoSuchAlgorithmException, IOException, XmlPullParserException, SoapFault,
 	IllegalAccessException, InstantiationException {
 		int userRole = Global.STUDENT_TYPE_CODE;
-		long courseCode = Global.getSelectedRollcallCourseCode();
+		long courseCode = Global.getSelectedCourseCode();
 		long groupCode = getIntent().getLongExtra("groupCode", 0);
 
 		// Creates webservice request, adds required params and sends request to webservice
