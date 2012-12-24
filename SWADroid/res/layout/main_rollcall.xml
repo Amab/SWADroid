@@ -7,11 +7,9 @@
 
     <include layout="@layout/action_bar" />
 
-    <Spinner
-        android:id="@+id/spCourse"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:prompt="@string/selectCourseTitle" />
+    <include
+        android:id="@+id/courseNameLayout"
+        layout="@layout/course_or_group_name" />
 
     <Spinner
         android:id="@+id/spGroup"

@@ -100,7 +100,7 @@ public class SessionsList extends Module {
 
 	private void initialize() {
 		List<SessionItemModel> sessionList = null;
-		long courseCode = Global.getSelectedRollcallCourseCode();
+		long courseCode = Global.getSelectedCourseCode();
 		Intent intent = getIntent();
 		long studentId = intent.getLongExtra("studentId", (long) 0);
 		boolean existSessions = false;
