@@ -27,7 +27,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
- * Cryptographic class for encription purposes.
+ * Cryptographic class for encryption purposes.
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class Crypto
@@ -36,8 +36,8 @@ public class Crypto
     {
         try
         {
-            byte[] rawKey = getRawKey(seed.getBytes());
-            byte[] result = encrypt(rawKey, cleartext.getBytes());
+            byte[] rawKey = getRawKey(seed.getBytes("UTF-8"));
+            byte[] result = encrypt(rawKey, cleartext.getBytes("UTF-8"));
             return Base64.encodeBytes(result);
         }
         catch(Exception e)
@@ -51,10 +51,10 @@ public class Crypto
     {
         try
         {
-            byte[] rawKey = getRawKey(seed.getBytes());
+            byte[] rawKey = getRawKey(seed.getBytes("UTF-8"));
             byte[] enc = Base64.decode(encrypted);
             byte[] result = decrypt(rawKey, enc);
-            return new String(result);
+            return new String(result, "UTF-8");
         }
         catch(Exception e)
         {
@@ -97,7 +97,7 @@ public class Crypto
         try
         {
             MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
-            digest.update(s.getBytes());
+            digest.update(s.getBytes("UTF-8"));
             byte messageDigest[] = digest.digest();
 
             StringBuffer hexString = new StringBuffer();

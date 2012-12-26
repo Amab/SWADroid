@@ -316,11 +316,11 @@ public class Test extends Model {
 		s = buff.toString().trim();
 
 		//Remove accents
-		s = s.replace('‡', 'a');
-		s = s.replace('Ž', 'e');
-		s = s.replace('’', 'i');
-		s = s.replace('—', 'o');
-		s = s.replace('œ', 'u');
+		s = s.replace('Ã¡', 'a');
+		s = s.replace('Ã©', 'e');
+		s = s.replace('Ã­', 'i');
+		s = s.replace('Ã³', 'o');
+		s = s.replace('Ãº', 'u');
 
 		return s;
 	}
