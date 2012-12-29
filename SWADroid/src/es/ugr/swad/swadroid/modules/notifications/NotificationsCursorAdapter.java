@@ -42,6 +42,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
 	protected Context ctx;
 	private boolean [] contentVisible;
 	private String DBKey;
+	private Crypto crypto;
 	
 	/**
 	 * Constructor
@@ -51,6 +52,26 @@ public class NotificationsCursorAdapter extends CursorAdapter {
 	public NotificationsCursorAdapter(Context context, Cursor c) {
 		super(context, c, true);
 		
+		ctx = context;
+		int numRows = c.getCount();
+
+		contentVisible = new boolean[numRows];
+		for(int i=0; i<numRows; i++) {
+			contentVisible[i] = false;
+		}
+	}
+	
+	/**
+	 * Constructor
+	 * @param context Application context
+	 * @param c Database cursor
+	 * @param key Database key
+	 */
+	public NotificationsCursorAdapter(Context context, Cursor c, String key) {
+		super(context, c, true);
+		
+		DBKey = key;
+		crypto = new Crypto(DBKey);
 		ctx = context;
 		int numRows = c.getCount();
 
@@ -114,8 +135,8 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         
         if(eventType != null) {
         	eventCode.setText(notificationCode.toString());
-        	eventUserPhoto.setText(Crypto.decrypt(DBKey, userPhoto));
-        	type = Crypto.decrypt(DBKey, cursor.getString(cursor.getColumnIndex("eventType")));
+        	eventUserPhoto.setText(crypto.decrypt(userPhoto));
+        	type = crypto.decrypt(cursor.getString(cursor.getColumnIndex("eventType")));
         	//messageReplyButton.setVisibility(View.GONE);
         	
         	if(type.equals("examAnnouncement"))
@@ -163,9 +184,9 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         }
         if(eventSender != null){
         	sender = "";
-        	senderFirstname = Crypto.decrypt(DBKey, cursor.getString(cursor.getColumnIndex("userFirstname")));
-        	senderSurname1 = Crypto.decrypt(DBKey, cursor.getString(cursor.getColumnIndex("userSurname1")));
-        	senderSurname2 = Crypto.decrypt(DBKey, cursor.getString(cursor.getColumnIndex("userSurname2")));
+        	senderFirstname = crypto.decrypt(cursor.getString(cursor.getColumnIndex("userFirstname")));
+        	senderSurname1 = crypto.decrypt(cursor.getString(cursor.getColumnIndex("userSurname1")));
+        	senderSurname2 = crypto.decrypt(cursor.getString(cursor.getColumnIndex("userSurname2")));
         	
         	//Empty fields checking
         	if(senderFirstname.compareTo(Global.NULL_VALUE)!=0)
@@ -178,10 +199,10 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         	eventSender.setText(sender);
         }
         if(location != null) {
-        	location.setText(Html.fromHtml(Crypto.decrypt(DBKey, cursor.getString(cursor.getColumnIndex("location")))));
+        	location.setText(Html.fromHtml(crypto.decrypt(cursor.getString(cursor.getColumnIndex("location")))));
         }
         if(summary != null){   
-        	summaryText = Crypto.decrypt(DBKey, cursor.getString(cursor.getColumnIndex("summary")));
+        	summaryText = crypto.decrypt(cursor.getString(cursor.getColumnIndex("summary")));
         	
         	//Empty field checking
         	if(summaryText.compareTo(Global.NULL_VALUE)==0)
@@ -190,7 +211,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         	summary.setText(Html.fromHtml(summaryText));
         }
         if((content != null)){
-        	contentText = Crypto.decrypt(DBKey, cursor.getString(cursor.getColumnIndex("content")));
+        	contentText = crypto.decrypt(cursor.getString(cursor.getColumnIndex("content")));
         	
         	//Empty field checking
         	if(contentText.compareTo(Global.NULL_VALUE)==0)
@@ -247,12 +268,4 @@ public class NotificationsCursorAdapter extends CursorAdapter {
 			this.notifyDataSetChanged();
 		}
 	}*/
-	
-	/**
-	 * Sets the database key
-	 * @param key
-	 */
-	public void setDBKey(String key) {
-		DBKey = key;
-	}
 }
