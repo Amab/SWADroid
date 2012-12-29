@@ -176,8 +176,8 @@ public class Notifications extends Module {
 		text = (TextView)this.findViewById(R.id.moduleName);
 		text.setText(R.string.notificationsModuleLabel);        
 
-		image = (ImageView)this.findViewById(R.id.title_sep_1);
-		image.setVisibility(View.VISIBLE);
+		//image = (ImageView)this.findViewById(R.id.title_sep_1);
+		//image.setVisibility(View.VISIBLE);
 
 		updateButton = (ImageButton)this.findViewById(R.id.refresh);
 		updateButton.setVisibility(View.VISIBLE);
