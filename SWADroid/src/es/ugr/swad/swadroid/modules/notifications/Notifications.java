@@ -184,8 +184,7 @@ public class Notifications extends Module {
 
 		dbCursor = dbHelper.getDb().getCursor(Global.DB_TABLE_NOTIFICATIONS, selection, orderby);
 		startManagingCursor(dbCursor);
-		adapter = new NotificationsCursorAdapter(this, dbCursor);
-		adapter.setDBKey(prefs.getDBKey());
+		adapter = new NotificationsCursorAdapter(this, dbCursor, prefs.getDBKey());
 
 		list = (ListView)this.findViewById(R.id.listItems);
 		list.setAdapter(adapter);

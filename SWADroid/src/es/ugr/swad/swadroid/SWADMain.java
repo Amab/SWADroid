@@ -291,8 +291,8 @@ public class SWADMain extends MenuExpandableListActivity {
 			//Check if this is the first run after an install or upgrade
 		 	lastVersion = prefs.getLastVersion();
 			currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
-			//lastVersion = 41;
-			//currentVersion = 42;
+			//lastVersion = 45;
+			//currentVersion = 46;
 
 			//If this is the first run, show configuration dialog
 			if(lastVersion == 0) {
@@ -317,7 +317,16 @@ public class SWADMain extends MenuExpandableListActivity {
 			} else if(lastVersion < currentVersion) {				
 				//showUpgradeDialog();
 				dbHelper.upgradeDB(this);
-				dbHelper.encryptNotifications();
+				
+				//If the app is updating from an unencrypted version, encrypt already downloaded notifications
+				if(lastVersion < 45) {
+					dbHelper.encryptNotifications();
+					
+				//If the app is updating from the bugged encrypted version, 
+				//re-encrypt the notifications using the new method
+				} else if(lastVersion == 45) {
+					dbHelper.reencryptNotifications();
+				}
 				//prefs.upgradeCredentials();
 
 				//Configure automatic synchronization

@@ -43,9 +43,9 @@ import com.android.dataframework.Entity;
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.utils.Crypto;
+import es.ugr.swad.swadroid.utils.OldCrypto;
 //import net.sqlcipher.database.SQLiteDatabase;
 //import net.sqlcipher.database.SQLiteStatement;
-//import es.ugr.swad.swadroid.Preferences;
 
 /**
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
@@ -77,6 +77,10 @@ public class DataBaseHelper {
 	 * Database passphrase length
 	 */
 	private int DB_KEY_LENGTH = 128;
+	/**
+	 * Cryptographic object
+	 */
+	private Crypto crypto;
 
 	/**
 	 * Constructor
@@ -106,10 +110,11 @@ public class DataBaseHelper {
 			prefs.setDBKey(DBKey);
 
 			/*mCtx.deleteDatabase(DBName);
-			SQLiteDatabase database = SQLiteDatabase.openOrCreateDatabase(mCtx.getDatabasePath("swadroid_db_crypt"), DBKey, null);
+			SQLiteDatabase database = SQLiteDatabase.openOrCreateDatabase(mCtx.getDatabasePath("swadroid_db_crypt"), null);
 			database.close();*/
-		}
+		}		
 
+		crypto = new Crypto(DBKey);
 		//Log.d("DataBaseHelper", "DBKey=" + DBKey);
 	}
 
@@ -210,16 +215,16 @@ public class DataBaseHelper {
 					ent.getInt(params.getSecond()));
 		} else if(table.equals(Global.DB_TABLE_NOTIFICATIONS)) {			
 			o = new SWADNotification(ent.getInt("id"),
-					Crypto.decrypt(DBKey, ent.getString("eventType")), 
+					crypto.decrypt(ent.getString("eventType")), 
 					ent.getLong("eventTime"), 
-					Crypto.decrypt(DBKey, ent.getString("userSurname1")), 
-					Crypto.decrypt(DBKey, ent.getString("userSurname2")), 
-					Crypto.decrypt(DBKey, ent.getString("userFirstname")),  
-					Crypto.decrypt(DBKey, ent.getString("userPhoto")), 
-					Crypto.decrypt(DBKey, ent.getString("location")), 
-					Crypto.decrypt(DBKey, ent.getString("summary")), 
+					crypto.decrypt(ent.getString("userSurname1")), 
+					crypto.decrypt(ent.getString("userSurname2")), 
+					crypto.decrypt(ent.getString("userFirstname")),  
+					crypto.decrypt(ent.getString("userPhoto")), 
+					crypto.decrypt(ent.getString("location")), 
+					crypto.decrypt(ent.getString("summary")), 
 					ent.getInt("status"), 
-					Crypto.decrypt(DBKey, ent.getString("content")));
+					crypto.decrypt(ent.getString("content")));
 		} else if(table.equals(Global.DB_TABLE_TEST_QUESTIONS)) {
 			id = ent.getInt("id");
 			PairTable q = (PairTable)getRow(Global.DB_TABLE_TEST_QUESTIONS_COURSE, "qstCod", Long.toString(id));
@@ -713,16 +718,16 @@ public class DataBaseHelper {
 		String status = String.valueOf(n.getStatus());
 
 		ent.setValue("id", n.getId());
-		ent.setValue("eventType", Crypto.encrypt(DBKey, n.getEventType()));
+		ent.setValue("eventType", crypto.encrypt(n.getEventType()));
 		ent.setValue("eventTime", eventTime);
-		ent.setValue("userSurname1", Crypto.encrypt(DBKey, n.getUserSurname1()));
-		ent.setValue("userSurname2", Crypto.encrypt(DBKey, n.getUserSurname2()));
-		ent.setValue("userFirstname", Crypto.encrypt(DBKey, n.getUserFirstName()));
-		ent.setValue("userPhoto", Crypto.encrypt(DBKey, n.getUserPhoto()));
-		ent.setValue("location", Crypto.encrypt(DBKey, n.getLocation()));
-		ent.setValue("summary", Crypto.encrypt(DBKey, n.getSummary()));
+		ent.setValue("userSurname1", crypto.encrypt(n.getUserSurname1()));
+		ent.setValue("userSurname2", crypto.encrypt(n.getUserSurname2()));
+		ent.setValue("userFirstname", crypto.encrypt(n.getUserFirstName()));
+		ent.setValue("userPhoto", crypto.encrypt(n.getUserPhoto()));
+		ent.setValue("location", crypto.encrypt(n.getLocation()));
+		ent.setValue("summary", crypto.encrypt(n.getSummary()));
 		ent.setValue("status", status);
-		ent.setValue("content", Crypto.encrypt(DBKey, n.getContent()));
+		ent.setValue("content", crypto.encrypt(n.getContent()));
 		ent.save();
 	}
 
@@ -1678,14 +1683,46 @@ public class DataBaseHelper {
 		Iterator<Entity> iter = rows.iterator();
 		while (iter.hasNext()) {
 			Entity ent = iter.next();
-			ent.setValue("eventType", Crypto.encrypt(DBKey, ent.getString("eventType")));
-			ent.setValue("userSurname1", Crypto.encrypt(DBKey, ent.getString("userSurname1")));
-			ent.setValue("userSurname2", Crypto.encrypt(DBKey, ent.getString("userSurname2")));
-			ent.setValue("userFirstname", Crypto.encrypt(DBKey, ent.getString("userFirstname")));
-			ent.setValue("userPhoto", Crypto.encrypt(DBKey, ent.getString("userPhoto")));
-			ent.setValue("location", Crypto.encrypt(DBKey, ent.getString("location")));
-			ent.setValue("summary", Crypto.encrypt(DBKey, ent.getString("summary")));
-			ent.setValue("content", Crypto.encrypt(DBKey, ent.getString("content")));
+			ent.setValue("eventType", crypto.encrypt(ent.getString("eventType")));
+			ent.setValue("userSurname1", crypto.encrypt(ent.getString("userSurname1")));
+			ent.setValue("userSurname2", crypto.encrypt(ent.getString("userSurname2")));
+			ent.setValue("userFirstname", crypto.encrypt(ent.getString("userFirstname")));
+			ent.setValue("userPhoto", crypto.encrypt(ent.getString("userPhoto")));
+			ent.setValue("location", crypto.encrypt(ent.getString("location")));
+			ent.setValue("summary", crypto.encrypt(ent.getString("summary")));
+			ent.setValue("content", crypto.encrypt(ent.getString("content")));
+			ent.save();
+		}
+	}
+	
+	/**
+	 * Reencrypts the notifications data
+	 */
+	public void reencryptNotifications() {
+		List<Entity> rows = db.getEntityList(Global.DB_TABLE_NOTIFICATIONS);
+		String type, surname1, surname2, firstname, photo, location, summary, content;
+
+		Iterator<Entity> iter = rows.iterator();
+		while (iter.hasNext()) {
+			Entity ent = iter.next();
+			
+			type = crypto.encrypt(OldCrypto.decrypt(DBKey, ent.getString("eventType")));
+			surname1 = crypto.encrypt(OldCrypto.decrypt(DBKey, ent.getString("userSurname1")));
+			surname2 = crypto.encrypt(OldCrypto.decrypt(DBKey, ent.getString("userSurname2")));
+			firstname = crypto.encrypt(OldCrypto.decrypt(DBKey, ent.getString("userFirstname")));
+			photo = crypto.encrypt(OldCrypto.decrypt(DBKey, ent.getString("userPhoto")));
+			location = crypto.encrypt(OldCrypto.decrypt(DBKey, ent.getString("location")));
+			summary = crypto.encrypt(OldCrypto.decrypt(DBKey, ent.getString("summary")));
+			content = crypto.encrypt(OldCrypto.decrypt(DBKey, ent.getString("content")));
+			
+			ent.setValue("eventType", type);
+			ent.setValue("userSurname1",surname1);
+			ent.setValue("userSurname2", surname2);
+			ent.setValue("userFirstname", firstname);
+			ent.setValue("userPhoto", photo);
+			ent.setValue("location", location);
+			ent.setValue("summary", summary);
+			ent.setValue("content", content);
 			ent.save();
 		}
 	}

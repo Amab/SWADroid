@@ -17,105 +17,110 @@
  *  along with SWADroid.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
 package es.ugr.swad.swadroid.utils;
 
-import java.security.MessageDigest;
-import java.security.SecureRandom;
+import java.security.spec.AlgorithmParameterSpec;
+import java.security.spec.KeySpec;
+
 import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.PBEParameterSpec;
 
 /**
  * Cryptographic class for encryption purposes.
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
-public class Crypto
-{
-    public static String encrypt(String seed, String cleartext)
-    {
-        try
-        {
-            byte[] rawKey = getRawKey(seed.getBytes("UTF-8"));
-            byte[] result = encrypt(rawKey, cleartext.getBytes("UTF-8"));
-            return Base64.encodeBytes(result);
+public class Crypto {
+
+    Cipher ecipher;
+    Cipher dcipher;
+
+    // 8-byte Salt
+    byte[] salt = { 1, 2, 4, 5, 7, 8, 3, 6 };
+
+    // Iteration count
+    int iterationCount = 1979;
+
+    public Crypto(String passPhrase) {
+        try {
+            // Create the key
+            KeySpec keySpec = new PBEKeySpec(passPhrase.toCharArray(), salt,
+                    iterationCount);
+            SecretKey key = SecretKeyFactory.getInstance(
+                    "PBEWITHSHA256AND128BITAES-CBC-BC").generateSecret(keySpec);
+            ecipher = Cipher.getInstance(key.getAlgorithm());
+            dcipher = Cipher.getInstance(key.getAlgorithm());
+
+            // Prepare the parameter to the ciphers
+            AlgorithmParameterSpec paramSpec = new PBEParameterSpec(salt,
+                    iterationCount);
+
+            // Create the ciphers
+            ecipher.init(Cipher.ENCRYPT_MODE, key, paramSpec);
+            dcipher.init(Cipher.DECRYPT_MODE, key, paramSpec);
+        } catch (Exception e) {
         }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-        return "error";
     }
 
-    public static String decrypt(String seed, String encrypted)
-    {
-        try
-        {
-            byte[] rawKey = getRawKey(seed.getBytes("UTF-8"));
-            byte[] enc = Base64.decode(encrypted);
-            byte[] result = decrypt(rawKey, enc);
-            return new String(result, "UTF-8");
+    public String encrypt(String str) {
+        String rVal;
+        try {
+            // Encode the string into bytes using utf-8
+            byte[] utf8 = str.getBytes("UTF8");
+
+            // Encrypt
+            byte[] enc = ecipher.doFinal(utf8);
+
+            // Encode bytes to base64 to get a string
+            rVal = toHex(enc);
+        } catch (Exception e) {
+            rVal = "Error encrypting: " + e.getMessage();
         }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-        return "error";
+        return rVal;
     }
 
-    private static byte[] getRawKey(byte[] seed) throws Exception
-    {
-        KeyGenerator kgen = KeyGenerator.getInstance("AES");
-        SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
-        sr.setSeed(seed);
-        kgen.init(128, sr);
-        SecretKey skey = kgen.generateKey();
-        byte[] raw = skey.getEncoded();
-        return raw;
-    }
+    public String decrypt(String str) {
+        String rVal;
+        try {
+            // Decode base64 to get bytes
+            byte[] dec = toByte(str);
 
-    private static byte[] encrypt(byte[] raw, byte[] clear) throws Exception
-    {
-        SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
-        Cipher cipher = Cipher.getInstance("AES");
-        cipher.init(Cipher.ENCRYPT_MODE, skeySpec);
-        byte[] encrypted = cipher.doFinal(clear);
-        return encrypted;
-    }
+            // Decrypt
+            byte[] utf8 = dcipher.doFinal(dec);
 
-    private static byte[] decrypt(byte[] raw, byte[] encrypted) throws Exception
-    {
-        SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
-        Cipher cipher = Cipher.getInstance("AES");
-        cipher.init(Cipher.DECRYPT_MODE, skeySpec);
-        byte[] decrypted = cipher.doFinal(encrypted);
-        return decrypted;
-    }
-    
-    public static final String md5(final String s) 
-    {
-        try
-        {
-            MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
-            digest.update(s.getBytes("UTF-8"));
-            byte messageDigest[] = digest.digest();
-
-            StringBuffer hexString = new StringBuffer();
-            for(int i=0; i<messageDigest.length; i++)
-            {
-                String h = Integer.toHexString(0xFF & messageDigest[i]);
-                while(h.length()<2)
-                {
-                    h="0"+h;
-                }
-                hexString.append(h);
-            }
-            return hexString.toString();
+            // Decode using utf-8
+            rVal = new String(utf8, "UTF8");
+        } catch (Exception e) {
+            rVal = "Error encrypting: " + e.getMessage();
         }
-        catch(Exception e)
-        {
-            e.printStackTrace();
+        return rVal;
+    }
+
+    private static byte[] toByte(String hexString) {
+        int len = hexString.length() / 2;
+        byte[] result = new byte[len];
+        for (int i = 0; i < len; i++)
+            result[i] = Integer.valueOf(hexString.substring(2 * i, 2 * i + 2),
+                    16).byteValue();
+        return result;
+    }
+
+    private static String toHex(byte[] buf) {
+        if (buf == null)
+            return "";
+        StringBuffer result = new StringBuffer(2 * buf.length);
+        for (int i = 0; i < buf.length; i++) {
+            appendHex(result, buf[i]);
         }
-        return "error";
+        return result.toString();
+    }
+
+    private final static String HEX = "0123456789ABCDEF";
+
+    private static void appendHex(StringBuffer sb, byte b) {
+        sb.append(HEX.charAt((b >> 4) & 0x0f)).append(HEX.charAt(b & 0x0f));
     }
 }
