@@ -439,7 +439,7 @@ public class TestsMake extends Module {
 		prev = (Button) findViewById(R.id.testMakePrevButton);
 		next = (Button) findViewById(R.id.testMakeNextButton);
 		eval = (Button) findViewById(R.id.testEvaluateButton);
-		title_separator = (ImageView) findViewById(R.id.title_sep_2);
+		//title_separator = (ImageView) findViewById(R.id.title_sep_2);
 		bar = (TextProgressBar) findViewById(R.id.test_questions_bar);
 
 		bar.setMax(size);
@@ -449,7 +449,7 @@ public class TestsMake extends Module {
 		bar.setTextSize(20);
 
 		eval.setVisibility(View.VISIBLE);
-		title_separator.setVisibility(View.VISIBLE);
+		//title_separator.setVisibility(View.VISIBLE);
 
 		actualQuestion = 0;
 		prev.setOnClickListener(new View.OnClickListener() {			
@@ -542,10 +542,10 @@ public class TestsMake extends Module {
 			if(!test.isEvaluated()) {
 				test.evaluate();
 				evalBt = (Button) findViewById(R.id.testEvaluateButton);
-				sep2 = (ImageView) findViewById(R.id.title_sep_2);
+				//sep2 = (ImageView) findViewById(R.id.title_sep_2);
 
 				evalBt.setVisibility(View.GONE);
-				sep2.setVisibility(View.GONE);
+				//sep2.setVisibility(View.GONE);
 			}
 
 			score = test.getTotalScore();
@@ -579,19 +579,19 @@ public class TestsMake extends Module {
 	 */
 	public void onShowResultsDetailsClick(View v) {
 		Button evalBt, resBt;
-		ImageView sep2, sep3;
+		//ImageView sep2, sep3;
 
 		showTest();
 
 		evalBt = (Button) findViewById(R.id.testEvaluateButton);
-		sep2 = (ImageView) findViewById(R.id.title_sep_2);		
+		//sep2 = (ImageView) findViewById(R.id.title_sep_2);		
 		resBt = (Button) findViewById(R.id.testShowResultsButton);
-		sep3 = (ImageView) findViewById(R.id.title_sep_3);
+		//sep3 = (ImageView) findViewById(R.id.title_sep_3);
 
 		evalBt.setVisibility(View.GONE);
-		sep2.setVisibility(View.GONE);
+		//sep2.setVisibility(View.GONE);
 		resBt.setVisibility(View.VISIBLE);
-		sep3.setVisibility(View.VISIBLE);
+		//sep3.setVisibility(View.VISIBLE);
 	}
 
 	/* (non-Javadoc)
