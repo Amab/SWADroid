@@ -348,7 +348,7 @@ public class Notifications extends Module {
 			//Send alert
 			notManager.notify(NOTIF_ALERT_ID, notif);
 		} else {
-			Toast.makeText(this, R.string.NoNotificationsMsg, Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, R.string.NoNotificationsMsg, Toast.LENGTH_LONG).show();
 		}
 	}
 
@@ -425,6 +425,10 @@ public class Notifications extends Module {
 	        }
 	        else if (intent.getAction().equals(NotificationsSyncAdapterService.STOP_SYNC)) {
 	            Log.i(TAG, "Stopped sync");
+	            
+	            if(notifCount == 0) {
+	            	Toast.makeText(context, R.string.NoNotificationsMsg, Toast.LENGTH_LONG).show();
+	            }
 	            
 	            ProgressBar pb = (ProgressBar)mActivity.findViewById(R.id.progress_refresh);
 	    		ImageButton updateButton = (ImageButton)mActivity.findViewById(R.id.refresh);
