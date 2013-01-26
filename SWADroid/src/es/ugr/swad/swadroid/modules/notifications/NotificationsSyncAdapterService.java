@@ -125,7 +125,7 @@ public class NotificationsSyncAdapterService extends Service {
 	  return sSyncAdapter;
 	 }
 	 
-	 protected static void alertNotif(Context context) {
+	 protected static void alertNotif(final Context context) {
 			if(notifCount > 0) {
 				//Obtain a reference to the notification service
 				String ns = Context.NOTIFICATION_SERVICE;
@@ -316,6 +316,7 @@ public class NotificationsSyncAdapterService extends Service {
 		//Notify synchronization stop
 		Intent stopIntent = new Intent();
 		stopIntent.setAction(STOP_SYNC);
+		stopIntent.putExtra("notifCount", notifCount);
 	    context.sendBroadcast(stopIntent);
 	 }
 }

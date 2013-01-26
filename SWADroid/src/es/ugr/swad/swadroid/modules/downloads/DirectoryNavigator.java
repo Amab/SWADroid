@@ -82,6 +82,10 @@ public class DirectoryNavigator
         return currentItems;
     }
     
+    
+    public ArrayList<DirectoryItem> goToCurrentDirectory(){
+    	return currentItems;
+    }
     /**
      * Travel inside a subdirectory.
      * @param directoryPosition The position of the subdirectory where we will travel.

@@ -317,7 +317,7 @@ public class Test extends Model {
 
 		//Remove accents
 		s = s.replace('á', 'a');
-		s = s.replace('e', 'e');
+		s = s.replace('é', 'e');
 		s = s.replace('í', 'i');
 		s = s.replace('ó', 'o');
 		s = s.replace('ú', 'u');

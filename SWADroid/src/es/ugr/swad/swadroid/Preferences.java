@@ -41,7 +41,6 @@ import es.ugr.swad.swadroid.utils.Base64;
 /**
  * Preferences window of application.
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
- * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  */
 public class Preferences extends PreferenceActivity implements OnPreferenceChangeListener {
 	/**
@@ -81,10 +80,6 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 	 */
 	private int lastCourseSelected = -1;
 	/**
-	 * Rollcall course selected
-	 */
-	private long rollcallCourseSelected = -1;
-	/**
 	 * Database passphrase
 	 */
 	private String DBKey;
@@ -100,10 +95,6 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 	 * Last course selected preference name.
 	 */
 	private static final String LASTCOURSESELECTEDPREF = "lastCourseSelectedPref";
-	/**
-	 * Rollcall course selected preference name.
-	 */
-	private static final String ROLLCALLCOURSESELECTEDPREF = "rollcallCourseSelectedPref";
 	/**
 	 * Rate preference name.
 	 */
@@ -256,25 +247,6 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 	}
 
 	/**
-	 * Gets rollcall course selected
-	 * @return Rollcall course selected
-	 */
-	public long getRollcallCourseSelected() {
-		return rollcallCourseSelected;
-	}
-
-	/**
-	 * Sets rollcall course selected
-	 * @param rollcallCourseSelected Rollcall course selected
-	 */
-	public void setRollcallCourseSelected(long rcs) {
-		rollcallCourseSelected = rcs;
-		editor = prefs.edit();
-		editor.putLong(ROLLCALLCOURSESELECTEDPREF, rcs);
-		editor.commit();
-	}
-
-	/**
 	 * Gets the database passphrase
 	 * @return The database passphrase
 	 */
@@ -355,7 +327,6 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 		server = prefs.getString(SERVERPREF, Global.getDefaultServer());
 		lastVersion = prefs.getInt(LASTVERSIONPREF, 0);
 		lastCourseSelected = prefs.getInt(LASTCOURSESELECTEDPREF, 0);
-		rollcallCourseSelected = prefs.getLong(ROLLCALLCOURSESELECTEDPREF, -1);
 		DBKey = prefs.getString(DBKEYPREF, "");
 	}
 
@@ -375,7 +346,6 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 		server = prefs.getString(SERVERPREF, Global.getDefaultServer());
 		lastVersion = prefs.getInt(LASTVERSIONPREF, 0);
 		lastCourseSelected = prefs.getInt(LASTCOURSESELECTEDPREF, 0);
-		rollcallCourseSelected = prefs.getLong(ROLLCALLCOURSESELECTEDPREF, -1);
 		editor = prefs.edit();
 
 		userIDPref = findPreference(USERIDPREF);
@@ -589,7 +559,6 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 		super.onPause();
 		editor.putInt(LASTVERSIONPREF, lastVersion);
 		editor.putInt(LASTCOURSESELECTEDPREF, lastCourseSelected);
-		editor.putLong(ROLLCALLCOURSESELECTEDPREF, rollcallCourseSelected);
 		editor.putString(DBKEYPREF, DBKey);
 		editor.commit();
 	}

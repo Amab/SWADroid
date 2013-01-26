@@ -34,8 +34,6 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
-//import net.sqlcipher.database.SQLiteDatabase;
-//import net.sqlcipher.database.SQLiteStatement;
 import android.os.Environment;
 import android.util.Log;
 
@@ -43,9 +41,11 @@ import com.android.dataframework.DataFramework;
 import com.android.dataframework.Entity;
 
 import es.ugr.swad.swadroid.Global;
-//import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.utils.Crypto;
+import es.ugr.swad.swadroid.utils.OldCrypto;
+//import net.sqlcipher.database.SQLiteDatabase;
+//import net.sqlcipher.database.SQLiteStatement;
 
 /**
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
@@ -77,6 +77,10 @@ public class DataBaseHelper {
 	 * Database passphrase length
 	 */
 	private int DB_KEY_LENGTH = 128;
+	/**
+	 * Cryptographic object
+	 */
+	private Crypto crypto;
 
 	/**
 	 * Constructor
@@ -87,10 +91,10 @@ public class DataBaseHelper {
 		prefs.getPreferences(mCtx);
 		DBKey = prefs.getDBKey();
 		db = DataFramework.getInstance();
-		
+
 		//Initialize SQLCipher libraries
 		//SQLiteDatabase.loadLibs(mCtx);
-		
+
 		try {
 			//db.open(mCtx, mCtx.getPackageName(), DBKey);
 			db.open(mCtx, mCtx.getPackageName());
@@ -99,17 +103,18 @@ public class DataBaseHelper {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		//If the passphrase is empty, generate a random passphrase and recreate database
 		if(DBKey.equals("")) {
 			DBKey = Global.randomString(DB_KEY_LENGTH);
 			prefs.setDBKey(DBKey);
 
 			/*mCtx.deleteDatabase(DBName);
-			SQLiteDatabase database = SQLiteDatabase.openOrCreateDatabase(mCtx.getDatabasePath("swadroid_db_crypt"), DBKey, null);
+			SQLiteDatabase database = SQLiteDatabase.openOrCreateDatabase(mCtx.getDatabasePath("swadroid_db_crypt"), null);
 			database.close();*/
-		}
-		
+		}		
+
+		crypto = new Crypto(DBKey);
 		//Log.d("DataBaseHelper", "DBKey=" + DBKey);
 	}
 
@@ -170,15 +175,15 @@ public class DataBaseHelper {
 	 * Gets ParTable class from table
 	 * @param <T>
 	 * */
-/*	private <T> PairTable<T, T> getPairTable(String table, T firstValue, T secondValue){
+	/*	private <T> PairTable<T, T> getPairTable(String table, T firstValue, T secondValue){
 		PairTable<T,T> par;
 		if(table.equals(Global.DB_TABLE_GROUPS_GROUPTYPES)){
 			par = new PairTable<T,T>(table,firstValue,secondValue);
 		}
 		return new Pair<Class,Class>(firstClass,secondClass);
 	}*/
-	
-	
+
+
 
 	/**
 	 * Creates a Model's subclass object looking at the table selected
@@ -210,16 +215,16 @@ public class DataBaseHelper {
 					ent.getInt(params.getSecond()));
 		} else if(table.equals(Global.DB_TABLE_NOTIFICATIONS)) {			
 			o = new SWADNotification(ent.getInt("id"),
-					Crypto.decrypt(DBKey, ent.getString("eventType")), 
+					crypto.decrypt(ent.getString("eventType")), 
 					ent.getLong("eventTime"), 
-					Crypto.decrypt(DBKey, ent.getString("userSurname1")), 
-					Crypto.decrypt(DBKey, ent.getString("userSurname2")), 
-					Crypto.decrypt(DBKey, ent.getString("userFirstname")),  
-					Crypto.decrypt(DBKey, ent.getString("userPhoto")), 
-					Crypto.decrypt(DBKey, ent.getString("location")), 
-					Crypto.decrypt(DBKey, ent.getString("summary")), 
+					crypto.decrypt(ent.getString("userSurname1")), 
+					crypto.decrypt(ent.getString("userSurname2")), 
+					crypto.decrypt(ent.getString("userFirstname")),  
+					crypto.decrypt(ent.getString("userPhoto")), 
+					crypto.decrypt(ent.getString("location")), 
+					crypto.decrypt(ent.getString("summary")), 
 					ent.getInt("status"), 
-					Crypto.decrypt(DBKey, ent.getString("content")));
+					crypto.decrypt(ent.getString("content")));
 		} else if(table.equals(Global.DB_TABLE_TEST_QUESTIONS)) {
 			id = ent.getInt("id");
 			PairTable q = (PairTable)getRow(Global.DB_TABLE_TEST_QUESTIONS_COURSE, "qstCod", Long.toString(id));
@@ -462,7 +467,7 @@ public class DataBaseHelper {
 		}
 		return sessions;
 	}
-	
+
 	/**
 	 * Gets the group which code is given
 	 * @param groupId long that identifies uniquely the searched group
@@ -511,7 +516,7 @@ public class DataBaseHelper {
 				groups.add((Group)getRow(Global.DB_TABLE_GROUPS,"id",String.valueOf(iter.next())));
 			}
 		}
-		
+
 		return groups;
 	}
 	/**
@@ -537,11 +542,11 @@ public class DataBaseHelper {
 	public Cursor getCursorGroupType(long courseCode){
 		return db.getCursor(Global.DB_TABLE_GROUP_TYPES, "courseCode =" + courseCode, "groupTypeName");
 	}
-	
+
 	public GroupType getGroupTypeFromGroup(long groupCode){
 		long groupTypeCode = getGroupTypeCodeFromGroup(groupCode);
 		return (GroupType) getRow(Global.DB_TABLE_GROUP_TYPES,"id",String.valueOf(groupTypeCode));
-		
+
 	}
 	/**
 	 * Gets the code of the group type belonging the group with the given group code
@@ -556,7 +561,7 @@ public class DataBaseHelper {
 			groupTypeCode = rows.get(0).getLong("grpTypCod");
 		}
 		return groupTypeCode;
-		
+
 	}
 
 	/**
@@ -575,7 +580,7 @@ public class DataBaseHelper {
 		}
 		return groupCodes;
 	}
-	
+
 	/**
 	 * Get groups belonging to the referred course to which the logged user is enrolled 
 	 * @param courseCode course code to which the groups belong
@@ -593,7 +598,7 @@ public class DataBaseHelper {
 		}
 		return groups;
 	}
-	
+
 	/**
 	 * Gets the practice groups in the selected course
 	 * @param courseCode Course code to be referenced
@@ -601,11 +606,12 @@ public class DataBaseHelper {
 	 */
 	public Cursor getPracticeGroups(long courseCode) {
 		String select = "SELECT " +
-				"g._id, g.id, g.groupName" +
+				"g._id, g.id, gt.groupTypeName, g.groupName" +
 				" FROM " +
-				Global.DB_TABLE_GROUPS + " g, " + Global.DB_TABLE_GROUPS_COURSES + " gc" +
+				Global.DB_TABLE_GROUPS + " g, " + Global.DB_TABLE_GROUPS_COURSES + " gc, " + 
+				Global.DB_TABLE_GROUP_TYPES + " gt, " + Global.DB_TABLE_GROUPS_GROUPTYPES + " ggt" + 
 				" WHERE " +
-				"g.id = gc.grpCod AND gc.crsCod = ?";
+				"gc.crsCod = ? AND gc.grpCod = g.id AND gc.grpCod = ggt.grpCod AND ggt.grpTypCod = gt.id";
 
 		SQLiteDatabase db = DataFramework.getInstance().getDB();
 		return db.rawQuery(select, new String [] { String.valueOf(courseCode) });
@@ -672,10 +678,10 @@ public class DataBaseHelper {
 	 * @param courseCode Course code to be referenced
 	 * @return Cursor access to the groups
 	 * */
-	public List<Group> getGroups(long courseCode, String...filter){
+	public List<Group> getGroups(long courseCode, String...filter) {
 		String select = "SELECT grpCod FROM " + Global.DB_TABLE_GROUPS_COURSES + " WHERE crsCod = " + courseCode +";";  
 		Cursor groupCodes = db.getDB().rawQuery(select, null);
-		
+
 		List<Group> groups = new ArrayList<Group>(groupCodes.getCount());
 
 		while (groupCodes.moveToNext()){
@@ -684,8 +690,8 @@ public class DataBaseHelper {
 		}
 		return groups;
 	}
-	
-	
+
+
 	/**
 	 * Inserts a course in database
 	 * @param c Course to be inserted
@@ -712,16 +718,16 @@ public class DataBaseHelper {
 		String status = String.valueOf(n.getStatus());
 
 		ent.setValue("id", n.getId());
-		ent.setValue("eventType", Crypto.encrypt(DBKey, n.getEventType()));
+		ent.setValue("eventType", crypto.encrypt(n.getEventType()));
 		ent.setValue("eventTime", eventTime);
-		ent.setValue("userSurname1", Crypto.encrypt(DBKey, n.getUserSurname1()));
-		ent.setValue("userSurname2", Crypto.encrypt(DBKey, n.getUserSurname2()));
-		ent.setValue("userFirstname", Crypto.encrypt(DBKey, n.getUserFirstName()));
-		ent.setValue("userPhoto", Crypto.encrypt(DBKey, n.getUserPhoto()));
-		ent.setValue("location", Crypto.encrypt(DBKey, n.getLocation()));
-		ent.setValue("summary", Crypto.encrypt(DBKey, n.getSummary()));
+		ent.setValue("userSurname1", crypto.encrypt(n.getUserSurname1()));
+		ent.setValue("userSurname2", crypto.encrypt(n.getUserSurname2()));
+		ent.setValue("userFirstname", crypto.encrypt(n.getUserFirstName()));
+		ent.setValue("userPhoto", crypto.encrypt(n.getUserPhoto()));
+		ent.setValue("location", crypto.encrypt(n.getLocation()));
+		ent.setValue("summary", crypto.encrypt(n.getSummary()));
 		ent.setValue("status", status);
-		ent.setValue("content", Crypto.encrypt(DBKey, n.getContent()));
+		ent.setValue("content", crypto.encrypt(n.getContent()));
 		ent.save();
 	}
 
@@ -833,7 +839,7 @@ public class DataBaseHelper {
 	 * @param ents vector of entities. In case this param is given, the entities given will be modified
 	 * 
 	 * */
-	
+
 	public boolean insertEntity(String tableName, Model currentModel,Entity...ents){
 		boolean returnValue = true;
 		Entity ent;
@@ -853,7 +859,7 @@ public class DataBaseHelper {
 			ent.setValue("member", g.getMember());
 			ent.save();
 		}
-		
+
 		if(tableName.compareTo(Global.DB_TABLE_GROUP_TYPES) == 0){
 			GroupType gt = (GroupType) currentModel;
 			ent.setValue("id", gt.getId());
@@ -864,18 +870,18 @@ public class DataBaseHelper {
 			ent.setValue("openTime", gt.getOpenTime());
 			ent.save();
 		}
-			
+
 		return returnValue;
 	}
 	/**
 	 * Inserts a relation in database
 	 * @param p Relation to be inserted
 	 */
-/*	public void insertPairTable(String table)
+	/*	public void insertPairTable(String table)
 	{
 		Pair<Class, Class> pairClass = selectParamsClassPairTable(table);
 		class T1 = pairClass.getFirst();
-		
+
 		Pair<String,String> pairParams = selectParamsPairTable(table);
 		PairTable<pairClass.getFirst(), pairClass.getSecond()> 
 		String table = p.getTable();
@@ -886,7 +892,7 @@ public class DataBaseHelper {
 		ent.setValue(params.getSecond(), p.getSecond());
 		ent.save();
 	}
-*/
+	 */
 	/**
 	 * Inserts a user in database or updates it if already exists
 	 * @param u User to be inserted
@@ -931,43 +937,43 @@ public class DataBaseHelper {
 			insertEntity(Global.DB_TABLE_GROUPS,g);
 		} else { //already exits a group with the given code. just update
 			insertEntity(Global.DB_TABLE_GROUPS,g,rows.get(0));
-			
+
 		}
 		//update all the relationship			
-			long groupCode = g.getId();
-			rows = db.getEntityList(Global.DB_TABLE_GROUPS_COURSES,"grpCod =" + groupCode);
-			Course course = (Course) getRow(Global.DB_TABLE_COURSES,"id",String.valueOf(courseCode));
-			//course code is a foreign key. Therefore, to avoid a database error,
-			//it should not insert/modify rows in the relationship table if the course does not exists
-			if(course != null){ 
-				if(rows.isEmpty()){
-					PairTable<Long,Long> pair = new PairTable(Global.DB_TABLE_GROUPS_COURSES,g.getId(),courseCode);
-					insertPairTable(pair);
-				}else{ 
-					rows.get(0).setValue("crsCod", courseCode);
-					rows.get(0).save();
-				}
-			}else returnValue = false;
-			
-			long groupTypeCode = g.getGroupTypeCode();
-			
-			//WHILE THE WEB SERVICE TO GET GROUP TYPES STILL UNAVAILABLE, this condition is not evaluated
-			//GroupType groupType = (GroupType) getRow(Global.DB_TABLE_GROUP_TYPES,"id",String.valueOf(groupTypeCode));
-			//group type code is a foreign key. Therefore, to avoid a database error,
-			//it should not insert/modify rows in the relationship table if the group type does not exists
-			//if(groupType != null){
-				rows = db.getEntityList(Global.DB_TABLE_GROUPS_GROUPTYPES,"grpCod="+groupCode);
-				if(rows.isEmpty()){
-					Pair<String,String> params = selectParamsPairTable(Global.DB_TABLE_GROUPS_GROUPTYPES);
-					insertPairTable(new PairTable<Long,Long>(Global.DB_TABLE_GROUPS_GROUPTYPES,groupTypeCode,groupCode));
-				}else{
-					PairTable<Integer,Integer> prev = new PairTable(Global.DB_TABLE_GROUPS_GROUPTYPES,rows.get(0).getValue("grpTypCod"),rows.get(0).getValue("grpCod"));
-					PairTable<Integer,Integer> current = new PairTable(Global.DB_TABLE_GROUPS_GROUPTYPES,groupTypeCode,groupCode);
-					updatePairTable(prev,current);
-				}
-			/*}else returnValue = false;*/
-			
-			return returnValue;
+		long groupCode = g.getId();
+		rows = db.getEntityList(Global.DB_TABLE_GROUPS_COURSES,"grpCod =" + groupCode);
+		Course course = (Course) getRow(Global.DB_TABLE_COURSES,"id",String.valueOf(courseCode));
+		//course code is a foreign key. Therefore, to avoid a database error,
+		//it should not insert/modify rows in the relationship table if the course does not exists
+		if(course != null){ 
+			if(rows.isEmpty()){
+				PairTable<Long,Long> pair = new PairTable(Global.DB_TABLE_GROUPS_COURSES,g.getId(),courseCode);
+				insertPairTable(pair);
+			}else{ 
+				rows.get(0).setValue("crsCod", courseCode);
+				rows.get(0).save();
+			}
+		}else returnValue = false;
+
+		long groupTypeCode = g.getGroupTypeCode();
+
+		//WHILE THE WEB SERVICE TO GET GROUP TYPES STILL UNAVAILABLE, this condition is not evaluated
+		//GroupType groupType = (GroupType) getRow(Global.DB_TABLE_GROUP_TYPES,"id",String.valueOf(groupTypeCode));
+		//group type code is a foreign key. Therefore, to avoid a database error,
+		//it should not insert/modify rows in the relationship table if the group type does not exists
+		//if(groupType != null){
+		rows = db.getEntityList(Global.DB_TABLE_GROUPS_GROUPTYPES,"grpCod="+groupCode);
+		if(rows.isEmpty()){
+			Pair<String,String> params = selectParamsPairTable(Global.DB_TABLE_GROUPS_GROUPTYPES);
+			insertPairTable(new PairTable<Long,Long>(Global.DB_TABLE_GROUPS_GROUPTYPES,groupTypeCode,groupCode));
+		}else{
+			PairTable<Integer,Integer> prev = new PairTable(Global.DB_TABLE_GROUPS_GROUPTYPES,rows.get(0).getValue("grpTypCod"),rows.get(0).getValue("grpCod"));
+			PairTable<Integer,Integer> current = new PairTable(Global.DB_TABLE_GROUPS_GROUPTYPES,groupTypeCode,groupCode);
+			updatePairTable(prev,current);
+		}
+		/*}else returnValue = false;*/
+
+		return returnValue;
 	}
 
 	/**
@@ -984,24 +990,24 @@ public class DataBaseHelper {
 		}
 		return returnValue;
 	}
-	
+
 	public boolean insertCollection(String table,List<Model> currentModels, long...courseCode){
 		boolean result = true;
 		List<Model> modelsDB = getAllRows(table);
 		List<Model> newModels = new ArrayList<Model>();
 		List<Model> obsoleteModel = new ArrayList<Model>();
 		List<Model> modifiedModel = new ArrayList<Model>();
-		
+
 		newModels.addAll(currentModels);
 		newModels.removeAll(modelsDB);
-		
+
 		obsoleteModel.addAll(modelsDB);
 		obsoleteModel.removeAll(currentModels);
-		
+
 		modifiedModel.addAll(currentModels);
 		modifiedModel.removeAll(newModels);
 		modifiedModel.removeAll(obsoleteModel);
-		
+
 		if(table.compareTo(Global.DB_TABLE_GROUP_TYPES) == 0){
 			for(int i = 0; i < obsoleteModel.size(); ++i){
 				long code = obsoleteModel.get(i).getId();
@@ -1019,7 +1025,7 @@ public class DataBaseHelper {
 				insertEntity(table,m,rows.get(0));
 			}
 		}
-		
+
 		if(table.compareTo(Global.DB_TABLE_GROUPS) == 0){
 			for(int i = 0; i < obsoleteModel.size(); ++i){
 				long code = obsoleteModel.get(i).getId();
@@ -1036,10 +1042,10 @@ public class DataBaseHelper {
 				insertGroup((Group) model, courseCode[0]);
 			}
 		}
-		
+
 		return result;
 	}
-	
+
 	/**
 	 * Inserts the rollcall data of a student to a practice session in database
 	 * @param l User code of student
@@ -1240,7 +1246,7 @@ public class DataBaseHelper {
 		List<Entity> rows = db.getEntityList(Global.DB_TABLE_TEST_TAGS, "id = " + prev.getId());
 		Entity ent = rows.get(0);
 		List<Integer> qstCodList = actual.getQstCodList();
-		SQLiteStatement st = db.getDB().compileStatement("INSERT OR IGNORE INTO " +
+		SQLiteStatement st = db.getDB().compileStatement("INSERT OR REPLACE INTO " +
 				Global.DB_TABLE_TEST_QUESTION_TAGS + " VALUES (NULL, ?, ?, ?);");
 
 		ent.setValue("id", actual.getId());
@@ -1251,7 +1257,7 @@ public class DataBaseHelper {
 			st.bindLong(1, i);
 			st.bindLong(2, actual.getId());
 			st.bindLong(3, actual.getTagInd());
-			st.executeInsert();	
+			st.executeInsert();
 		}		
 	}
 
@@ -1316,7 +1322,7 @@ public class DataBaseHelper {
 		ent.setValue("userRole", actual.getUserRole());
 		ent.save();
 	}
-	
+
 	/**
 	 * Updates a Group and the relationship between Groups and Courses
 	 * @param groupCode code of the group to be updated
@@ -1329,7 +1335,7 @@ public class DataBaseHelper {
 			Entity ent = rows.get(0);
 			boolean returnValue = true;
 			insertEntity(Global.DB_TABLE_GROUPS,currentGroup,ent);
-			
+
 			rows = db.getEntityList(Global.DB_TABLE_GROUPS_COURSES,"grpCod =" + groupCode);
 			Course course = (Course) getRow(Global.DB_TABLE_COURSES,"id",String.valueOf(courseCode));
 			//course code is a foreign key. Therefore, to avoid a database error,
@@ -1345,7 +1351,7 @@ public class DataBaseHelper {
 					rows.get(0).save();
 				}
 			}else returnValue = false;
-			
+
 			if(groupTypeCode.length > 0){
 				GroupType groupType = (GroupType) getRow(Global.DB_TABLE_GROUP_TYPES,"id",String.valueOf(groupTypeCode[0]));
 				//group type code is a foreign key. Therefore, to avoid a database error,
@@ -1368,10 +1374,10 @@ public class DataBaseHelper {
 		}else
 			return false;
 	}
-	
+
 	private <T> boolean updateRelationship(Pair<String,String> tables, Pair<String,String> idsTables, String relationTable, Pair<String,T> remainField, Pair<String,T> changedField){
-		
-		
+
+
 		return true;
 	}
 
@@ -1387,7 +1393,7 @@ public class DataBaseHelper {
 		}
 		if(prev.getId() != currentGroup.getId()){
 			//TODO in this case, the relationships with group types and courses should be updated
-			
+
 		}
 	}
 
@@ -1425,7 +1431,7 @@ public class DataBaseHelper {
 	 */
 	public void removeGroup(Group g) {
 		removeRow(Global.DB_TABLE_GROUPS, g.getId());
-		
+
 		//Remove also relationships with courses and group types
 		removeAllRow(Global.DB_TABLE_GROUPS_GROUPTYPES,"grpCod",g.getId());
 		removeAllRow(Global.DB_TABLE_GROUPS_COURSES,"grpCod",g.getId());
@@ -1533,7 +1539,7 @@ public class DataBaseHelper {
 		String tables = Global.DB_TABLE_TEST_TAGS + " AS T, " + Global.DB_TABLE_TEST_QUESTION_TAGS
 				+ " AS Q, "	+ Global.DB_TABLE_TEST_QUESTIONS_COURSE + " AS C";
 		String where = "T.id=Q.tagCod AND Q.qstCod=C.qstCod AND C.crsCod=" + selectedCourseCode;
-		String orderBy = "Q.tagInd ASC";
+		String orderBy = "T.tagTxt ASC";
 		String groupBy = "T.id";
 		Cursor dbCursor = db.getDB().query(tables, columns, where, null, groupBy, null, orderBy);
 		List<TestTag> result = new ArrayList<TestTag>();
@@ -1667,7 +1673,7 @@ public class DataBaseHelper {
 				rows.get(i).delete();
 		}
 	}
-	
+
 	/**
 	 * Encrypts the notifications data
 	 */
@@ -1677,14 +1683,46 @@ public class DataBaseHelper {
 		Iterator<Entity> iter = rows.iterator();
 		while (iter.hasNext()) {
 			Entity ent = iter.next();
-			ent.setValue("eventType", Crypto.encrypt(DBKey, ent.getString("eventType")));
-			ent.setValue("userSurname1", Crypto.encrypt(DBKey, ent.getString("userSurname1")));
-			ent.setValue("userSurname2", Crypto.encrypt(DBKey, ent.getString("userSurname2")));
-			ent.setValue("userFirstname", Crypto.encrypt(DBKey, ent.getString("userFirstname")));
-			ent.setValue("userPhoto", Crypto.encrypt(DBKey, ent.getString("userPhoto")));
-			ent.setValue("location", Crypto.encrypt(DBKey, ent.getString("location")));
-			ent.setValue("summary", Crypto.encrypt(DBKey, ent.getString("summary")));
-			ent.setValue("content", Crypto.encrypt(DBKey, ent.getString("content")));
+			ent.setValue("eventType", crypto.encrypt(ent.getString("eventType")));
+			ent.setValue("userSurname1", crypto.encrypt(ent.getString("userSurname1")));
+			ent.setValue("userSurname2", crypto.encrypt(ent.getString("userSurname2")));
+			ent.setValue("userFirstname", crypto.encrypt(ent.getString("userFirstname")));
+			ent.setValue("userPhoto", crypto.encrypt(ent.getString("userPhoto")));
+			ent.setValue("location", crypto.encrypt(ent.getString("location")));
+			ent.setValue("summary", crypto.encrypt(ent.getString("summary")));
+			ent.setValue("content", crypto.encrypt(ent.getString("content")));
+			ent.save();
+		}
+	}
+	
+	/**
+	 * Reencrypts the notifications data
+	 */
+	public void reencryptNotifications() {
+		List<Entity> rows = db.getEntityList(Global.DB_TABLE_NOTIFICATIONS);
+		String type, surname1, surname2, firstname, photo, location, summary, content;
+
+		Iterator<Entity> iter = rows.iterator();
+		while (iter.hasNext()) {
+			Entity ent = iter.next();
+			
+			type = crypto.encrypt(OldCrypto.decrypt(DBKey, ent.getString("eventType")));
+			surname1 = crypto.encrypt(OldCrypto.decrypt(DBKey, ent.getString("userSurname1")));
+			surname2 = crypto.encrypt(OldCrypto.decrypt(DBKey, ent.getString("userSurname2")));
+			firstname = crypto.encrypt(OldCrypto.decrypt(DBKey, ent.getString("userFirstname")));
+			photo = crypto.encrypt(OldCrypto.decrypt(DBKey, ent.getString("userPhoto")));
+			location = crypto.encrypt(OldCrypto.decrypt(DBKey, ent.getString("location")));
+			summary = crypto.encrypt(OldCrypto.decrypt(DBKey, ent.getString("summary")));
+			content = crypto.encrypt(OldCrypto.decrypt(DBKey, ent.getString("content")));
+			
+			ent.setValue("eventType", type);
+			ent.setValue("userSurname1",surname1);
+			ent.setValue("userSurname2", surname2);
+			ent.setValue("userFirstname", firstname);
+			ent.setValue("userPhoto", photo);
+			ent.setValue("location", location);
+			ent.setValue("summary", summary);
+			ent.setValue("content", content);
 			ent.save();
 		}
 	}
@@ -1841,9 +1879,9 @@ public class DataBaseHelper {
 		db.getDB().execSQL(
 	            "INSERT INTO " + Global.DB_TABLE_COURSES + " SELECT _id, id, userRole, shortName, fullName  "
 	           + " FROM __"+ Global.DB_TABLE_COURSES + ";");*/
-	
+
 			}
-	
+
 			dbCursor = db.getDB().query(Global.DB_TABLE_COURSES, null, null, null, null, null, null);
 			columnNames = dbCursor.getColumnNames();
 		}
@@ -1868,8 +1906,8 @@ public class DataBaseHelper {
 				//without to keep data 
 				db.getDB().execSQL( "DROP TABLE " + Global.DB_TABLE_GROUPS + ";");
 				db.getDB().execSQL("CREATE TABLE " + Global.DB_TABLE_GROUPS+ " (_id integer primary key autoincrement, id long, groupName text, maxStudents integer,"
-		                + " students integer, open integer, fileZones integer, member integer); ");
-			/*db.getDB().execSQL(
+						+ " students integer, open integer, fileZones integer, member integer); ");
+				/*db.getDB().execSQL(
 					"CREATE TEMPORARY TABLE __"+ Global.DB_TABLE_GROUPS
 					+ " (_id integer primary key autoincrement, id long, groupName text, maxStudents integer,"
 	                + " students integer, open integer, fileZones integer, member integer); ");
@@ -1882,7 +1920,7 @@ public class DataBaseHelper {
 	        db.getDB().execSQL("INSERT INTO " + Global.DB_TABLE_GROUPS + " SELECT _id, id, groupName, maxStudents,  "
 	                + "students, open, fileZones, member FROM __"+ Global.DB_TABLE_GROUPS + ";");
 	        db.getDB().execSQL( "DROP TABLE __" + Global.DB_TABLE_GROUPS + ";");*/
-	
+
 			}
 			dbCursor = db.getDB().query(Global.DB_TABLE_GROUPS, null, null, null, null, null, null);
 			columnNames = dbCursor.getColumnNames();
@@ -1914,7 +1952,7 @@ public class DataBaseHelper {
 		deleteTable(Global.DB_TABLE_ROLLCALL);
 		deleteTable(Global.DB_TABLE_GROUP_TYPES);
 		deleteTable(Global.DB_TABLE_GROUPS_GROUPTYPES);
-		
+
 
         db.createTables();
 

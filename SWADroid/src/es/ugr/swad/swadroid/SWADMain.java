@@ -28,6 +28,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -123,7 +124,7 @@ public class SWADMain extends MenuExpandableListActivity {
 	/**
 	 * Group position inside the main menu for User group
 	 * */
-	//private int USERS_GROUP = 4;
+	private int USERS_GROUP = 4;
 	/**
 	 * Child position inside the messages menu for Notification
 	 * */
@@ -209,6 +210,15 @@ public class SWADMain extends MenuExpandableListActivity {
 		// Get the item that was clicked
 		Object o = this.getExpandableListAdapter().getChild(groupPosition, childPosition);
 		String keyword = (String) ((Map<String,Object>)o).get(NAME);
+		boolean rollCallAndroidVersionOK = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.FROYO);
+		PackageManager pm = getPackageManager();
+		//boolean frontCam, rearCam;
+		boolean rearCam;
+
+		//It would be safer to use the constant PackageManager.FEATURE_CAMERA_FRONT
+		//but since it is not defined for Android 2.2, I substituted the literal value
+		//frontCam = pm.hasSystemFeature("android.hardware.camera.front");
+		rearCam = pm.hasSystemFeature(PackageManager.FEATURE_CAMERA);
 
 		Intent activity;
 		if(keyword.equals(getString(R.string.notificationsModuleLabel))) {
@@ -225,13 +235,19 @@ public class SWADMain extends MenuExpandableListActivity {
 			activity = new Intent(getBaseContext(), Notices.class);
 			startActivityForResult(activity, Global.NOTICES_REQUEST_CODE);
 		} else if(keyword.equals(getString(R.string.rollcallModuleLabel))) {
+			
 			//This module requires Android 2.2 or higher
-			if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.FROYO) {
+			if(!rollCallAndroidVersionOK) {
+				//If Android version < 2.2 show error message
+				error(getString(R.string.froyoFunctionMsg) + "\n(System: " + android.os.Build.VERSION.RELEASE + ")");
+			
+			//This module requires a rear camera
+			} else if(!rearCam) {
+				//If the device has no rear camera available show error message
+				error(getString(R.string.noRearCamera));
+			} else {
 				activity  = new Intent(getBaseContext(), Rollcall.class);
 				startActivityForResult(activity, Global.ROLLCALL_REQUEST_CODE);
-			} else {
-				//If Android version < 2.2 show error message
-				error(getString(R.string.froyoFunctionMsg) + "\n(actual: " + android.os.Build.VERSION.RELEASE + ")");
 			}
 		} else if(keyword.equals(getString(R.string.documentsDownloadModuleLabel))){
 			activity = new Intent(getBaseContext(), DownloadsManager.class);
@@ -291,8 +307,8 @@ public class SWADMain extends MenuExpandableListActivity {
 			//Check if this is the first run after an install or upgrade
 		 	lastVersion = prefs.getLastVersion();
 			currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
-			//lastVersion = 41;
-			//currentVersion = 42;
+			//lastVersion = 45;
+			//currentVersion = 46;
 
 			//If this is the first run, show configuration dialog
 			if(lastVersion == 0) {
@@ -317,7 +333,16 @@ public class SWADMain extends MenuExpandableListActivity {
 			} else if(lastVersion < currentVersion) {				
 				//showUpgradeDialog();
 				dbHelper.upgradeDB(this);
-				dbHelper.encryptNotifications();
+				
+				//If the app is updating from an unencrypted version, encrypt already downloaded notifications
+				if(lastVersion < 45) {
+					dbHelper.encryptNotifications();
+					
+				//If the app is updating from the bugged encrypted version, 
+				//re-encrypt the notifications using the new method
+				} else if(lastVersion == 45) {
+					dbHelper.reencryptNotifications();
+				}
 				//prefs.upgradeCredentials();
 
 				//Configure automatic synchronization
@@ -600,8 +625,7 @@ public class SWADMain extends MenuExpandableListActivity {
 			//Removes Publish Note from messages menu
 			((ImageExpandableListAdapter) getExpandableListAdapter()).removeChild(MESSAGES_GROUP, PUBLISH_NOTE_CHILD);
 			//Removes completely users menu 
-			//DISABLE until it will be functional
-			//((ImageExpandableListAdapter) getExpandableListAdapter()).removeGroup(USERS_GROUP);
+			((ImageExpandableListAdapter) getExpandableListAdapter()).removeGroup(USERS_GROUP);
 		}
 		currentRole = Global.STUDENT_TYPE_CODE;
 	}
@@ -616,8 +640,7 @@ public class SWADMain extends MenuExpandableListActivity {
 			map.put(IMAGE, getResources().getDrawable(R.drawable.note));
 			((ImageExpandableListAdapter) getExpandableListAdapter()).addChild(MESSAGES_GROUP,PUBLISH_NOTE_CHILD, map);
 
-			//DISABLE until it will be functional
-			/*final HashMap<String, Object> users = new HashMap<String, Object>();
+			final HashMap<String, Object> users = new HashMap<String, Object>();
 			users.put(NAME, getString(R.string.users));
 			users.put(IMAGE, getResources().getDrawable(R.drawable.users));
 
@@ -628,8 +651,6 @@ public class SWADMain extends MenuExpandableListActivity {
 			map.put(IMAGE, getResources().getDrawable(R.drawable.roll_call));
 			child.add(map);
 			((ImageExpandableListAdapter) getExpandableListAdapter()).addGroup(USERS_GROUP, users, child);
-			*/
-
 		}
 		currentRole = Global.TEACHER_TYPE_CODE;
 	}
