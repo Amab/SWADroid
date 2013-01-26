@@ -1,3 +1,16 @@
+## 0.11.1 (2013-01-26)
+
+* Added compatibility with screens with basic touch capabilities
+* Added compatibility with devices that have no rear camera available
+* Removed vertical white line from action bar
+* Test tags are now ordered alphabetically
+* Modified text of date field in dialog of file options
+* Modified some strings
+* Changed the encryption method in order to fix a decryption bug in notifications module
+* Fixed prevention of activity restart when rotating the screen on Android 4.x platforms
+* Fixed group selection in rollcall module
+* Fixed database corruption and error message when updating the tests descriptors
+
 ## 0.11 (2012-12-15)
 
 * Added downloads module
