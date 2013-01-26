@@ -316,6 +316,7 @@ public class NotificationsSyncAdapterService extends Service {
 		//Notify synchronization stop
 		Intent stopIntent = new Intent();
 		stopIntent.setAction(STOP_SYNC);
+		stopIntent.putExtra("notifCount", notifCount);
 	    context.sendBroadcast(stopIntent);
 	 }
 }
