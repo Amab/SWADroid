@@ -30,7 +30,7 @@
 	</TextView>
 
 	<!-- Right buttons -->
-    <ImageView
+    <!-- <ImageView
     	android:id="@+id/title_sep_3"
 		android:layout_toLeftOf="@+id/testShowResultsButton"
         android:layout_width="1dp"
@@ -39,11 +39,11 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
         android:background="@color/title_separator"
-        android:visibility="gone"/>
+        android:visibility="gone"/>  -->
         
     <Button
     	android:id="@+id/testShowResultsButton"
-		android:layout_toLeftOf="@+id/title_sep_2"
+		android:layout_toLeftOf="@+id/testEvaluateButton"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
 		android:padding="8dp"
@@ -59,7 +59,7 @@
         android:background="@drawable/title_button"
         android:visibility="gone"/>
         
-    <ImageView
+    <!-- <ImageView
     	android:id="@+id/title_sep_2"
 		android:layout_toLeftOf="@+id/testEvaluateButton"
         android:layout_width="1dp"
@@ -68,11 +68,11 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
         android:background="@color/title_separator"
-        android:visibility="gone"/>
+        android:visibility="gone"/>  -->
         
     <Button
     	android:id="@+id/testEvaluateButton"
-		android:layout_toLeftOf="@+id/title_sep_1"
+		android:layout_toLeftOf="@+id/progress_refresh"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
 		android:padding="8dp"
@@ -88,7 +88,7 @@
         android:background="@drawable/title_button"
         android:visibility="gone"/>
         
-    <ImageView
+   <!-- <ImageView
     	android:id="@+id/title_sep_1"
 		android:layout_toLeftOf="@+id/refresh"
         android:layout_width="1dp"
@@ -97,7 +97,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
         android:background="@color/title_separator"
-        android:visibility="gone"/>
+        android:visibility="gone"/>  -->
         
     <ImageButton
     	android:id="@+id/refresh"
@@ -127,7 +127,7 @@
         android:layout_alignParentRight="true"
         android:visibility="gone"/>
     
-    <ImageView
+    <!-- <ImageView
     	android:id="@+id/title_sep_4"
 		android:layout_toLeftOf="@+id/messageReplyButton"
         android:layout_width="1dp"
@@ -136,7 +136,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
         android:background="@color/title_separator"
-        android:visibility="gone"/>
+        android:visibility="gone"/>  -->
     
     <ImageButton
 		android:id="@+id/messageReplyButton"

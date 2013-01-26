@@ -69,7 +69,7 @@ public class SessionsHistory extends Module {
 		text.setText(R.string.rollcallHistoryModuleLabel);
 
 		// Get selected course
-		String where = "id =" + String.valueOf(Global.getSelectedRollcallCourseCode());
+		String where = "id =" + String.valueOf(Global.getSelectedCourseCode());
 		Course selectedCourse = (Course) dbHelper.getAllRows(Global.DB_TABLE_COURSES, where, "fullName").get(0);
 		String courseName = selectedCourse.getFullName();
 
@@ -81,7 +81,7 @@ public class SessionsHistory extends Module {
 		TextView title = (TextView) this.findViewById(R.id.listText);
 		title.setText(courseName + " - " + groupName);
 
-		sessions = dbHelper.getPracticeSessions(Global.getSelectedRollcallCourseCode(), groupCode);
+		sessions = dbHelper.getPracticeSessions(Global.getSelectedCourseCode(), groupCode);
 		int numSessions = sessions.size();
 		if (numSessions > 0) {
 			String [] sessionsStarts = new String[numSessions];

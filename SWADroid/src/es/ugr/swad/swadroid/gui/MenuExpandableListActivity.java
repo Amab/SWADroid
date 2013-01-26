@@ -28,15 +28,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
-
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADMain;
-import es.ugr.swad.swadroid.R.drawable;
-import es.ugr.swad.swadroid.R.id;
-import es.ugr.swad.swadroid.R.menu;
-import es.ugr.swad.swadroid.R.string;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 
 /**
@@ -101,8 +96,6 @@ public class MenuExpandableListActivity extends ExpandableListActivity {
 	protected void cleanDatabase() {
 		dbHelper.cleanTables();
 		prefs.setLastCourseSelected(0);
-		prefs.setRollcallCourseSelected(-1);
-		Global.setSelectedRollcallCourseCode(-1);
 		Global.setDbCleaned(true);
 		Toast.makeText(this, R.string.cleanDatabaseMsg, Toast.LENGTH_LONG).show();
 		if(this instanceof SWADMain){

@@ -33,15 +33,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -56,6 +54,7 @@ import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.model.PracticeSession;
 import es.ugr.swad.swadroid.model.User;
+import es.ugr.swad.swadroid.modules.GroupTypes;
 import es.ugr.swad.swadroid.modules.Groups;
 import es.ugr.swad.swadroid.modules.rollcall.sessions.NewPracticeSession;
 import es.ugr.swad.swadroid.modules.rollcall.sessions.SessionsHistory;
@@ -77,25 +76,108 @@ public class Rollcall extends MenuExpandableListActivity {
 	 */
 	final String IMAGE = "listIcon";
 	/**
-	 * Cursor for database access
-	 */
-	private Cursor dbCursor;
-	/**
 	 * Rollcall tag name for Logcat
 	 */
 	public static final String TAG = Global.APP_TAG + " Rollcall";
+	/**
+	 * Course code of current selected course
+	 * */
+	private long courseCode = -1;
 	/**
 	 * Practice group spinner
 	 */
 	private Spinner practiceGroup;
 	/**
-	 * User courses list
-	 */
-	private List<Model> listCourses;
-	/**
 	 * Students list
 	 */
 	List<StudentItemModel> studentsList;
+
+	private boolean groupTypesRequested = false;	
+	private boolean refreshRequested = false;
+
+	private ProgressBar progressbar;	
+	private ImageButton updateButton;
+
+	/* (non-Javadoc)
+	 * @see es.ugr.swad.swadroid.MenuExpandableListActivity#onCreate(android.os.Bundle)
+	 */
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.main_rollcall);
+
+		courseCode = Global.getSelectedCourseCode();
+
+		ImageView image = (ImageView) this.findViewById(R.id.moduleIcon);
+		image.setBackgroundResource(R.drawable.roll_call);
+
+		TextView text = (TextView) this.findViewById(R.id.moduleName);
+		text.setText(R.string.rollcallModuleLabel);
+
+		progressbar = (ProgressBar) this.findViewById(R.id.progress_refresh);
+		progressbar.setVisibility(View.GONE);
+		updateButton = (ImageButton) this.findViewById(R.id.refresh);
+		updateButton.setVisibility(View.VISIBLE);
+
+		TextView courseNameText = (TextView) this.findViewById(R.id.courseSelectedText);
+		courseNameText.setText(Global.getSelectedCourseShortName());
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+
+		List<Model> groupTypes = dbHelper.getAllRows(Global.DB_TABLE_GROUP_TYPES, "courseCode = " + courseCode, "groupTypeName");
+		Cursor c = dbHelper.getPracticeGroups(Global.getSelectedCourseCode());
+		startManagingCursor(c);
+		
+		if(!groupTypes.isEmpty() && c.getCount() > 0) {
+			// Fill spinner with practice groups list from database
+			fillGroupsSpinner(c);
+		} else if(!groupTypes.isEmpty()) {
+			Intent activity = new Intent(getBaseContext(), Groups.class);
+			activity.putExtra("courseCode", courseCode);
+			startActivityForResult(activity, Global.GROUPS_REQUEST_CODE);
+		} else if(!groupTypesRequested) {
+			Intent activity = new Intent(getBaseContext(), GroupTypes.class);
+			activity.putExtra("courseCode", courseCode);
+			startActivityForResult(activity, Global.GROUPTYPES_REQUEST_CODE);
+		}
+	}
+
+	private void fillGroupsSpinner(Cursor c) {
+		practiceGroup = (Spinner) this.findViewById(R.id.spGroup);
+
+		startManagingCursor(c);
+		SimpleCursorAdapter adapter = new SimpleCursorAdapter (this,
+				R.layout.group_item,
+				c,
+				new String[] { "groupTypeName", "groupName" },
+				new int[] { R.id.textView1, R.id.textView2 }
+				);
+		adapter.setDropDownViewResource(R.layout.group_dropdown_item);
+		practiceGroup.setAdapter(adapter);
+		practiceGroup.setEnabled(true);
+
+		createBaseMenu();
+	}
+
+	/**
+	 * Launches an action when refresh button is pushed.
+	 *  
+	 * The listener onClick is set in action_bar.xml
+	 * @param v Actual view
+	 */
+	public void onRefreshClick(View v) {
+		updateButton.setVisibility(View.GONE);
+		progressbar.setVisibility(View.VISIBLE);
+
+		refreshRequested = true;
+
+		Intent activity = new Intent(getBaseContext(), GroupTypes.class);
+		activity.putExtra("courseCode", courseCode);
+		startActivityForResult(activity, Global.GROUPTYPES_REQUEST_CODE);
+	}
 
 	/* (non-Javadoc)
 	 * @see android.app.ExpandableListActivity#onChildClick(android.widget.ExpandableListView, android.view.View, int, int, long)
@@ -147,7 +229,7 @@ public class Rollcall extends MenuExpandableListActivity {
 	}
 
 	private void showStudentsList() {
-		List<Long> idList = dbHelper.getUsersCourse(Global.getSelectedRollcallCourseCode());
+		List<Long> idList = dbHelper.getUsersCourse(Global.getSelectedCourseCode());
 		if (!idList.isEmpty()) {
 			studentsList = new ArrayList<StudentItemModel>();
 
@@ -196,7 +278,7 @@ public class Rollcall extends MenuExpandableListActivity {
 	}
 
 	private void storeRollcallData() {
-		long selectedCourse = Global.getSelectedRollcallCourseCode();
+		long selectedCourse = Global.getSelectedCourseCode();
 		Cursor selectedGroup = (Cursor) practiceGroup.getSelectedItem();
 		long groupId = selectedGroup.getLong(1);
 		PracticeSession ps;
@@ -250,22 +332,35 @@ public class Rollcall extends MenuExpandableListActivity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		switch(requestCode) {
+		case Global.GROUPTYPES_REQUEST_CODE:
+			groupTypesRequested = true;
+			List<Model> groupTypes = dbHelper.getAllRows(Global.DB_TABLE_GROUP_TYPES, "courseCode = " + courseCode, "groupTypeName");
+			if(!groupTypes.isEmpty()) {
+				// If there are not group types, either groups. Therefore, there is no need to request groups
+				Intent activity = new Intent(getBaseContext(), Groups.class);
+				activity.putExtra("courseCode", courseCode);
+				startActivityForResult(activity,Global.GROUPS_REQUEST_CODE);
+			} else {
+				getExpandableListView().setVisibility(View.GONE);
+			}
+			break;
 		case Global.GROUPS_REQUEST_CODE:
 			// Check if course has practice groups
-			Cursor c = dbHelper.getPracticeGroups(Global.getSelectedRollcallCourseCode());
+			Cursor c = dbHelper.getPracticeGroups(Global.getSelectedCourseCode());
+			startManagingCursor(c);
+			
+			if (c.getCount() > 0 || refreshRequested) {
+				getExpandableListView().setVisibility(View.VISIBLE);
+				updateButton.setVisibility(View.VISIBLE);
+				progressbar.setVisibility(View.GONE);
 
-			if (c.getCount() > 0) {
+				refreshRequested = false;
 				fillGroupsSpinner(c);
 			} else {
+				getExpandableListView().setVisibility(View.GONE);
 				practiceGroup = (Spinner) this.findViewById(R.id.spGroup);
 				practiceGroup.setEnabled(false);
 
-				ExpandableListAdapter adapter = getExpandableListAdapter();
-				if (adapter != null) {
-					int groupCount = adapter.getGroupCount();
-					for (int i=groupCount-1; i >= 0; i--)
-						((ImageExpandableListAdapter) adapter).removeGroup(i);
-				}
 				error(getString(R.string.noGroupsAvailableMsg));
 			}
 			break;
@@ -281,7 +376,7 @@ public class Rollcall extends MenuExpandableListActivity {
 						if (u != null) {
 							studentsList.add(new StudentItemModel(u));
 							// Check if the specified user is enrolled in the selected course
-							enrolledStudents.add(dbHelper.isUserEnrolledCourse(id, Global.getSelectedRollcallCourseCode()));
+							enrolledStudents.add(dbHelper.isUserEnrolledCourse(id, Global.getSelectedCourseCode()));
 						}
 					}
 					// Mark as attending the students enrolled in selected course
@@ -303,107 +398,6 @@ public class Rollcall extends MenuExpandableListActivity {
 				} 
 			}
 			break;
-		}
-	}
-
-	/* (non-Javadoc)
-	 * @see es.ugr.swad.swadroid.MenuExpandableListActivity#onCreate(android.os.Bundle)
-	 */
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main_rollcall);
-
-		ImageView image = (ImageView) this.findViewById(R.id.moduleIcon);
-		image.setBackgroundResource(R.drawable.roll_call);
-
-		TextView text = (TextView) this.findViewById(R.id.moduleName);
-		text.setText(R.string.rollcallModuleLabel);
-
-		listCourses = dbHelper.getAllRows(Global.DB_TABLE_COURSES, "userRole = 3", "fullName");
-
-		// Update rollcall course
-		long courseCode = Global.getSelectedCourseCode();
-
-		Global.setSelectedRollcallCourseCode(courseCode);
-		prefs.setRollcallCourseSelected(courseCode);
-
-		createSpinnerAdapter();
-
-		// Fill spinner with practice groups list from database
-		Cursor c = dbHelper.getPracticeGroups(Global.getSelectedRollcallCourseCode());
-		if (c.getCount() > 0) {
-			fillGroupsSpinner(c);
-		}
-	}
-
-	private void fillGroupsSpinner(Cursor c) {
-		practiceGroup = (Spinner) this.findViewById(R.id.spGroup);
-
-		startManagingCursor(c);
-		SimpleCursorAdapter adapter = new SimpleCursorAdapter (this,
-				R.layout.group_item,
-				c,
-				new String[] { "groupTypeName", "groupName" },
-				new int[] { R.id.textView1, R.id.textView2 }
-				);
-		adapter.setDropDownViewResource(R.layout.group_dropdown_item);
-		practiceGroup.setAdapter(adapter);
-		practiceGroup.setEnabled(true);
-
-		createBaseMenu();
-	}
-
-	private void createSpinnerAdapter() {
-		Spinner spinner = (Spinner) this.findViewById(R.id.spCourse);
-		dbCursor =  dbHelper.getDb().getCursor(Global.DB_TABLE_COURSES, "userRole = 3", "fullName");
-		startManagingCursor(dbCursor);	
-
-		SimpleCursorAdapter adapter = new SimpleCursorAdapter (this,
-				android.R.layout.simple_spinner_item, 
-				dbCursor, 
-				new String[] { "fullName" }, 
-				new int[] { android.R.id.text1 });
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spinner.setAdapter(adapter);
-
-		if(Global.getSelectedRollcallCourseCode() != -1) {
-			boolean found = false;
-			int i = 0;
-			while (!found && i < listCourses.size()) {
-				if (listCourses.get(i).getId() == Global.getSelectedRollcallCourseCode()) {
-					found = true;
-				} else {
-					++i;
-				}
-			}
-			if (i < listCourses.size())
-				spinner.setSelection(i);
-		}
-		spinner.setOnItemSelectedListener(new onItemSelectedListener());
-	}
-
-	private class onItemSelectedListener implements OnItemSelectedListener{
-		@Override
-		public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-			long courseCode = listCourses.get(position).getId();
-
-			Global.setSelectedRollcallCourseCode(courseCode);
-			prefs.setRollcallCourseSelected(courseCode);
-
-			// Fill spinner with practice groups list from database
-			Cursor c = dbHelper.getPracticeGroups(Global.getSelectedRollcallCourseCode());
-			if (c.getCount() > 0) {
-				fillGroupsSpinner(c);
-			} else {
-				Intent activity = new Intent(getBaseContext(), Groups.class);
-				activity.putExtra("courseCode", Global.getSelectedRollcallCourseCode());
-				startActivityForResult(activity, Global.GROUPS_REQUEST_CODE);
-			}
-		}
-
-		@Override
-		public void onNothingSelected(AdapterView<?> arg0) {
 		}
 	}
 

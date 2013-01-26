@@ -176,16 +176,15 @@ public class Notifications extends Module {
 		text = (TextView)this.findViewById(R.id.moduleName);
 		text.setText(R.string.notificationsModuleLabel);        
 
-		image = (ImageView)this.findViewById(R.id.title_sep_1);
-		image.setVisibility(View.VISIBLE);
+		//image = (ImageView)this.findViewById(R.id.title_sep_1);
+		//image.setVisibility(View.VISIBLE);
 
 		updateButton = (ImageButton)this.findViewById(R.id.refresh);
 		updateButton.setVisibility(View.VISIBLE);
 
 		dbCursor = dbHelper.getDb().getCursor(Global.DB_TABLE_NOTIFICATIONS, selection, orderby);
 		startManagingCursor(dbCursor);
-		adapter = new NotificationsCursorAdapter(this, dbCursor);
-		adapter.setDBKey(prefs.getDBKey());
+		adapter = new NotificationsCursorAdapter(this, dbCursor, prefs.getDBKey());
 
 		list = (ListView)this.findViewById(R.id.listItems);
 		list.setAdapter(adapter);
@@ -349,7 +348,7 @@ public class Notifications extends Module {
 			//Send alert
 			notManager.notify(NOTIF_ALERT_ID, notif);
 		} else {
-			Toast.makeText(this, R.string.NoNotificationsMsg, Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, R.string.NoNotificationsMsg, Toast.LENGTH_LONG).show();
 		}
 	}
 
@@ -426,6 +425,11 @@ public class Notifications extends Module {
 	        }
 	        else if (intent.getAction().equals(NotificationsSyncAdapterService.STOP_SYNC)) {
 	            Log.i(TAG, "Stopped sync");
+	            
+	            notifCount = intent.getIntExtra("notifCount", 0);
+	            if(notifCount == 0) {
+	            	Toast.makeText(context, R.string.NoNotificationsMsg, Toast.LENGTH_LONG).show();
+	            }
 	            
 	            ProgressBar pb = (ProgressBar)mActivity.findViewById(R.id.progress_refresh);
 	    		ImageButton updateButton = (ImageButton)mActivity.findViewById(R.id.refresh);

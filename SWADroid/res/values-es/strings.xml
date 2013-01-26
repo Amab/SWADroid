@@ -176,7 +176,7 @@
     <string name="complete">completo</string>
     <string name="fileInfoTitle">Información de archivo</string>
     <string name="sizeFileTitle">Tamaño:</string>
-    <string name="creationTimeTitle">Fecha de:</string>
+    <string name="creationTimeTitle">Fecha:</string>
     <string name="uploaderTitle">Subido por:</string>
     <string name="downloadFileTitle">Descargar</string>
     <string  name="sdCardBusyTitle">Tarjeta SD no disponible</string>
@@ -245,12 +245,13 @@ Seleccione: Sesiones de prácticas - Nueva</string>
     <string name="rollcallWebServiceNotAvailable">El servicio web para enviar a SWAD los datos de asistencia no está disponible.</string>
     <string name="rollcallEvent">Evento de pasar lista</string>
     <string name="froyoFunctionMsg">Esta función requiere Android 2.2 o superior</string>
+    <string name="noRearCamera">Esta función requiere una cámara trasera</string>
     <string name="groupSeparator">: </string>
     <string name="groupTypesModuleLabel">Conseguir tipos de grupo</string>
     <string name="openingTime">Apertura: </string>
     <string name="noGroupsText">No se han creado grupos dentro de la asignatura</string>
     <string name="changeGroups">Cambiar de grupos</string>
-     <string name="resultEnrollment">Resultado de la inscripción</string>
+    <string name="resultEnrollment">Resultado de la inscripción</string>
     <string name="successfullEnrollment">Todas las inscripciones se han realizado con éxito. Por favor, compruebe que está inscrito en los grupos deseados </string>
     <string name="confirmEnrollments">Confirmar inscripciones solicitadas </string>
     <string name="areYouSure"> ¿Seguro que quiere inscribirse en los grupos seleccionados?</string>
@@ -268,7 +269,7 @@ Seleccione: Sesiones de prácticas - Nueva</string>
 	<string name="unknown">Desconocido</string>
 	<string name="selectZoneTitle">Seleccione zona</string>
 	<string name="fileTitle">Archivo:</string>
-	<string name="noConnectionMsg">No hay conexión. Lo sentimos pero esta función necesita conexión. </string>
+	<string name="noConnectionMsg">Esta función necesita conexión. </string>
 	<string name="noApp">No se puede abrir este archivo.</string>
 	
 </resources>

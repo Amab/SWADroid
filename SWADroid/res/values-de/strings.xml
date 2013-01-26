@@ -175,7 +175,7 @@
     <string name="sdCardBusy">SD-Karte ist in Verwendung. Um Downloads zu erlauben, "USB-Speicher ausschalten" in der Benachrichtigung wählen</string>
 	<string name="selectZone">Wählen Sie Bereich</string>
 	<string name="fileTitle">Datei:</string>
-	<string name="noConnectionMsg">Es gibt nicht conection.Sorry, aber diese Funktion muss conection.</string>
+	<string name="noConnectionMsg">Diese Funktion muss conection haben.</string>
 	<string name="noApp">Es kann diese Datei nicht öffnen.</string>
 	
 </resources>

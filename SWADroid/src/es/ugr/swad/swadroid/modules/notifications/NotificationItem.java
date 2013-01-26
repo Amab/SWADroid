@@ -78,8 +78,8 @@ public class NotificationItem extends MenuActivity {
         text = (TextView)this.findViewById(R.id.moduleName);
         text.setText(R.string.notificationsModuleLabel);
         
-        imageSep = (ImageView)this.findViewById(R.id.title_sep_4);
-        imageSep.setVisibility(View.VISIBLE);
+        //imageSep = (ImageView)this.findViewById(R.id.title_sep_4);
+        //imageSep.setVisibility(View.VISIBLE);
 
 		replyButton = (ImageButton)this.findViewById(R.id.messageReplyButton);
 		replyButton.setVisibility(View.VISIBLE);

@@ -123,6 +123,8 @@ public class DownloadsManager extends MenuActivity {
 	private TextView currentPathText;
 
 	String chosenNodeName = null;
+	
+
 	/**
 	 * fileSize stores the size of the last file name chosen to be downloaded
 	 * */
@@ -137,7 +139,15 @@ public class DownloadsManager extends MenuActivity {
 	 * Indicates if the menu no connection is visible
 	 * */
 	private boolean noConnectionView = false;
+	/**
+	 * Indicates that the current state should be saved in case the activity is brought to background
+	 * */
+	private boolean saveState = false;
 	
+	/**
+	 * Indicates if the state before the activity was brought to background has o not connection
+	 * */
+	private boolean previousConnection = false;
 	
 	@Override
 	protected void onStart() {
@@ -145,18 +155,28 @@ public class DownloadsManager extends MenuActivity {
 		List<Group> allGroups = dbHelper.getGroups(Global.getSelectedCourseCode());
 		int nGroups = allGroups.size();
 		
-		if(nGroups != 0 || groupsRequested){ //groupsRequested is used to avoid continue requests of groups on courses that have not any group.
-			myGroups = getFilteredGroups(); //only groups where the user is enrolled. 
-			int nMyGroups = myGroups.size(); 
-			this.loadGroupsSpinner(myGroups);
-			// the tree request must be explicit only when there are not any groups(where the user is enrolled), and therefore any Spinner. 
-			//in case there are groups(where the user is enrolled), it will be a spinner, and the tree request will be automatic made by OnItemSelectedListener
-			if(nMyGroups == 0 && tree == null) 
-				requestDirectoryTree();
+		if(!saveState){
+			if(nGroups != 0 || groupsRequested){ //groupsRequested is used to avoid continue requests of groups on courses that have not any group.
+				myGroups = getFilteredGroups(); //only groups where the user is enrolled. 
+				int nMyGroups = myGroups.size();
+				this.loadGroupsSpinner(myGroups);
+				// the tree request must be explicit only when there are not any groups(where the user is enrolled), and therefore any Spinner. 
+				//in case there are groups(where the user is enrolled), it will be a spinner, and the tree request will be automatic made by OnItemSelectedListener
+				if(nMyGroups == 0 && tree == null) 
+					requestDirectoryTree();
+			}else{
+					Intent activity = new Intent(getBaseContext(),GroupTypes.class);
+					activity.putExtra("courseCode",  Global.getSelectedCourseCode());
+					startActivityForResult(activity,Global.GROUPTYPES_REQUEST_CODE);
+			}
 		}else{
-				Intent activity = new Intent(getBaseContext(),GroupTypes.class);
-				activity.putExtra("courseCode",  Global.getSelectedCourseCode());
-				startActivityForResult(activity,Global.GROUPTYPES_REQUEST_CODE);				
+			myGroups = getFilteredGroups();
+			this.loadGroupsSpinner(myGroups);
+			if(previousConnection){
+				setMainView();
+			}else{
+				setNoConnectionView();
+			}
 		}
 		
 	}
@@ -164,6 +184,32 @@ public class DownloadsManager extends MenuActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		if(savedInstanceState != null){
+			this.saveState = savedInstanceState.getBoolean("saveState", false);
+			if(saveState){
+				this.groupsRequested = true;
+				this.previousConnection = savedInstanceState.getBoolean("previousConnection", false);
+				this.chosenGroupCode = savedInstanceState.getLong("chosenGroupCode",0);
+				this.groupPosition = savedInstanceState.getInt("groupPosition",0);
+				if(previousConnection){
+					this.tree = savedInstanceState.getString("tree");
+					String path = savedInstanceState.getString("path");
+					this.navigator = new DirectoryNavigator(this.tree);
+					if(path.compareTo("/") !=0){
+						int firstBar = path.indexOf('/',0);
+						int nextBar = path.indexOf('/', firstBar+1);
+						while(nextBar != -1){
+							String dir = path.substring(firstBar+1, nextBar);
+							this.navigator.goToSubDirectory(dir);
+							firstBar = nextBar;
+							nextBar = path.indexOf('/', firstBar+1);
+						}
+					}
+				}
+			}	
+			
+		}
 		setContentView(R.layout.navigation);
 		
 		downloadsAreaCode = getIntent().getIntExtra("downloadsAreaCode",
@@ -234,6 +280,23 @@ public class DownloadsManager extends MenuActivity {
 
 	}
 
+
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putBoolean("saveState", this.saveState);
+		if(this.saveState){
+			outState.putBoolean("previousConnection", this.previousConnection);
+			outState.putLong("chosenGroupCode", this.chosenGroupCode);
+			outState.putInt("groupPosition", this.groupPosition);
+			if(this.previousConnection){
+				outState.putString("tree", this.tree);
+				outState.putString("path", this.navigator.getPath());
+			}	
+		}	
+	}
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -243,10 +306,9 @@ public class DownloadsManager extends MenuActivity {
 			// course
 			case Global.DIRECTORY_TREE_REQUEST_CODE:
 				 tree = data.getStringExtra("tree");
-				 setMainView();
-				if (!refresh)
+				if (!refresh){
 					setMainView();
-				else {
+				}else {
 					refresh = false;
 					updateButton.setVisibility(View.VISIBLE);
 					progressbar.setVisibility(View.GONE);
@@ -254,8 +316,6 @@ public class DownloadsManager extends MenuActivity {
 						refresh();
 					else
 						setMainView();
-					
-
 				}
 				break;
 			case Global.GETFILE_REQUEST_CODE:
@@ -284,7 +344,8 @@ public class DownloadsManager extends MenuActivity {
 				groupsRequested = true;
 				myGroups = getFilteredGroups(); //only groups where the user is enrolled.
 				this.loadGroupsSpinner(myGroups);
-				requestDirectoryTree();
+				if(myGroups.size() == 0)
+					requestDirectoryTree();
 				break;	
 			case Global.GROUPTYPES_REQUEST_CODE:	
 				Intent activity = new Intent(getBaseContext(),Groups.class);
@@ -319,6 +380,9 @@ public class DownloadsManager extends MenuActivity {
 		TextView courseNameText = (TextView) this.findViewById(R.id.courseSelectedText);
 		courseNameText.setText(Global.getSelectedCourseShortName());
 		
+		this.saveState = true;
+		this.previousConnection = false;
+		
 	}
 	/**
 	 * This method set the grid of nodes visible and paints the directory tree in its root node
@@ -332,12 +396,20 @@ public class DownloadsManager extends MenuActivity {
 		
 		currentPathText = (TextView) this.findViewById(R.id.path);
 
-		navigator = new DirectoryNavigator(tree);
-		// GridView
-		ArrayList<DirectoryItem> items = (ArrayList<DirectoryItem>) navigator
-				.goToRoot();
+		ArrayList<DirectoryItem> items;
+		if(!(this.saveState && this.previousConnection)){
+			navigator = new DirectoryNavigator(tree);
+			items = (ArrayList<DirectoryItem>) navigator
+					.goToRoot();
+		}else{
+			items = (ArrayList<DirectoryItem>) navigator.goToCurrentDirectory();
+		}
+
 		currentPathText.setText(navigator.getPath());
 		grid.setAdapter(new NodeAdapter(this, items));
+		//this is used for the activity restart in case it was taken background
+		this.saveState = true;
+		this.previousConnection = true;
 	}
 
 	/**
@@ -564,19 +636,19 @@ public class DownloadsManager extends MenuActivity {
 
 	}
 
-	/**
-	 * This method is launched instead of onCreate when device rotates
-	 * It prevents from repeating calls to web services when they are not necessary
-	 * */
-	@Override
-	public void onConfigurationChanged(Configuration newConfig) {        
-	    super.onConfigurationChanged(newConfig);
-	    
-	    // Checks the orientation of the screen
-/*	    if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-	        Log.i(TAG,"onConfigChanged - Landscape");
-	    } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
-	    	Log.i(TAG,"onConfigChanged - Portrait");
-	    }*/
-	}
+//	/**
+//	 * This method is launched instead of onCreate when device rotates
+//	 * It prevents from repeating calls to web services when they are not necessary
+//	 * */
+//	@Override
+//	public void onConfigurationChanged(Configuration newConfig) {        
+//	    super.onConfigurationChanged(newConfig);
+//	    Log.i(TAG,"Device rotation");
+//	    // Checks the orientation of the screen
+///*	    if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//	        Log.i(TAG,"onConfigChanged - Landscape");
+//	    } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+//	    	Log.i(TAG,"onConfigChanged - Portrait");
+//	    }*/
+//	}
 }
