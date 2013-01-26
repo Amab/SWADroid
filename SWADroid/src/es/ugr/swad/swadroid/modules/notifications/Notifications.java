@@ -426,6 +426,7 @@ public class Notifications extends Module {
 	        else if (intent.getAction().equals(NotificationsSyncAdapterService.STOP_SYNC)) {
 	            Log.i(TAG, "Stopped sync");
 	            
+	            notifCount = intent.getIntExtra("notifCount", 0);
 	            if(notifCount == 0) {
 	            	Toast.makeText(context, R.string.NoNotificationsMsg, Toast.LENGTH_LONG).show();
 	            }
