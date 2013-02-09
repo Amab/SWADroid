@@ -142,7 +142,7 @@
             android:name=".modules.tests.TestsMake"
             android:configChanges="orientation|screenSize"
             android:label="@string/testsModuleLabel"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:theme="@android:style/Theme.NoTitleBar">
         </activity>
         <activity
             android:name=".modules.Messages"
