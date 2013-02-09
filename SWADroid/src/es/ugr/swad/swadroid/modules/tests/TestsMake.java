@@ -632,6 +632,29 @@ public class TestsMake extends Module {
 		tfAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
 		tfAdapter.add(getString(R.string.trueMsg));
 		tfAdapter.add(getString(R.string.falseMsg));
+		
+		prefs.getPreferences(getBaseContext());
+		String selection ="id=" + Long.toString(Global.getSelectedCourseCode());
+		Cursor dbCursor = dbHelper.getDb().getCursor(Global.DB_TABLE_TEST_CONFIG,selection,null);
+		startManagingCursor(dbCursor);
+		if(dbCursor.getCount() > 0) {			
+			if(isDebuggable) {
+				Log.d(TAG, "selectedCourseCode = " + Long.toString(Global.getSelectedCourseCode()));
+			}
+
+			test = (Test) dbHelper.getRow(Global.DB_TABLE_TEST_CONFIG, "id",
+					Long.toString(Global.getSelectedCourseCode()));
+		
+			if(test != null) {
+				setNumQuestions();
+			} else {
+				Toast.makeText(getBaseContext(), R.string.testNoQuestionsCourseMsg, Toast.LENGTH_LONG).show();
+				finish();
+			}
+		} else {
+			Toast.makeText(getBaseContext(), R.string.testNoQuestionsMsg, Toast.LENGTH_LONG).show();
+			finish();
+		}
 
 		setResult(RESULT_OK);
 	}
@@ -639,7 +662,7 @@ public class TestsMake extends Module {
 	/* (non-Javadoc)
 	 * @see es.ugr.swad.swadroid.modules.Module#onStart()
 	 */
-	@Override
+	/*@Override
 	protected void onStart() {
 		super.onStart();
 		prefs.getPreferences(getBaseContext());
@@ -665,7 +688,7 @@ public class TestsMake extends Module {
 			finish();
 		}
 
-	}
+	}*/
 
 	/* (non-Javadoc)
 	 * @see es.ugr.swad.swadroid.modules.Module#requestService()
