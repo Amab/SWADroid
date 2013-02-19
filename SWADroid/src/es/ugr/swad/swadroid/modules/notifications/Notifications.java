@@ -143,6 +143,7 @@ public class Notifications extends Module {
 			{
 				//adapter.toggleContentVisibility(position);
 				TextView code = (TextView) v.findViewById(R.id.eventCode);
+				TextView type = (TextView) v.findViewById(R.id.eventType);
 				TextView userPhoto = (TextView) v.findViewById(R.id.eventUserPhoto);
 				TextView sender = (TextView) v.findViewById(R.id.eventSender);
 				TextView course = (TextView) v.findViewById(R.id.eventLocation);
@@ -153,6 +154,7 @@ public class Notifications extends Module {
 				
 				Intent activity = new Intent(getApplicationContext(), NotificationItem.class);
 				activity.putExtra("notificationCode", code.getText().toString());
+				activity.putExtra("notificationType", type.getText().toString());
 				activity.putExtra("userPhoto", userPhoto.getText().toString());
 				activity.putExtra("sender", sender.getText().toString());
 				activity.putExtra("course", course.getText().toString());
