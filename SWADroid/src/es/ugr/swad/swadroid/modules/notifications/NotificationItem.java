@@ -112,8 +112,12 @@ public class NotificationItem extends MenuActivity {
 		    	Log.d("NotificationItem", "No connection or no photo " + userPhoto);
 		    }
 				
-		content = fixLinks(content);		
-		webview.getSettings().setRenderPriority(RenderPriority.HIGH);
+		content = fixLinks(content);
+		if(content.startsWith("<![CDATA[")) {
+			content = content.substring(9, content.length()-3);
+		}
+		
+	    webview.getSettings().setRenderPriority(RenderPriority.HIGH);
 		webview.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);		
 		webview.loadDataWithBaseURL("", content, "text/html", "utf-8", "");
 	}
