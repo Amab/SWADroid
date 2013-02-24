@@ -559,7 +559,6 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 		super.onPause();
 		editor.putInt(LASTVERSIONPREF, lastVersion);
 		editor.putInt(LASTCOURSESELECTEDPREF, lastCourseSelected);
-		editor.putString(DBKEYPREF, DBKey);
 		editor.commit();
 	}
 }
