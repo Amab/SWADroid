@@ -1,3 +1,13 @@
+## 0.11.2 (2013-02-24)
+
+* Added refresh button on main screen to update courses without clean the whole database
+* Hided reply button when notification type is not a message
+* Fixed wrong storage of database key when closing preferences screen
+* Fixed hided soft menu button on Android ICS
+* Fixed parsing of marksFile notifications when the student doesn't exists in the marks file
+* Fixed activity restart when TestMake returns from background to foreground
+* Fixed wrong behaviour of checkboxes in Android 4.2 (isChecked() method behaviour is exactly the opposite in Android 4.2)
+
 ## 0.11.1 (2013-01-26)
 
 * Added compatibility with screens with basic touch capabilities
