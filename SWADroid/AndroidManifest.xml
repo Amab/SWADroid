@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="es.ugr.swad.swadroid"
     android:installLocation="auto"
-    android:versionCode="46"
-    android:versionName="0.11.1" >
+    android:versionCode="47"
+    android:versionName="0.11.2" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -21,7 +21,7 @@
 
     <uses-sdk
         android:minSdkVersion="7"
-        android:targetSdkVersion="17" >
+        android:targetSdkVersion="8" >
     </uses-sdk>
 
     <supports-screens
@@ -41,8 +41,7 @@
             android:name=".SWADMain"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:icon="@drawable/ic_launcher_swadroid"
-            android:label="@string/app_name"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:label="@string/app_name" android:theme="@android:style/Theme.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -142,7 +141,7 @@
             android:name=".modules.tests.TestsMake"
             android:configChanges="orientation|screenSize"
             android:label="@string/testsModuleLabel"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:theme="@android:style/Theme.NoTitleBar">
         </activity>
         <activity
             android:name=".modules.Messages"

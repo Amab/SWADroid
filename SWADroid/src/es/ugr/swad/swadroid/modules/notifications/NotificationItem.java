@@ -60,6 +60,7 @@ public class NotificationItem extends MenuActivity {
 		ImageView image, imageSep, userPhotoView;
 		ImageButton replyButton;
 		WebView webview;
+		String type = this.getIntent().getStringExtra("notificationType");
 		
 		super.onCreate(savedInstanceState);		
 		setContentView(R.layout.single_notification_view);
@@ -82,7 +83,11 @@ public class NotificationItem extends MenuActivity {
         //imageSep.setVisibility(View.VISIBLE);
 
 		replyButton = (ImageButton)this.findViewById(R.id.messageReplyButton);
-		replyButton.setVisibility(View.VISIBLE);
+        if(type.equals(getString(R.string.message))) {
+        	replyButton.setVisibility(View.VISIBLE);
+        } else {
+        	replyButton.setVisibility(View.GONE);
+        }
 		
 		sender = this.getIntent().getStringExtra("sender");
 		userPhoto = this.getIntent().getStringExtra("userPhoto");
@@ -107,8 +112,12 @@ public class NotificationItem extends MenuActivity {
 		    	Log.d("NotificationItem", "No connection or no photo " + userPhoto);
 		    }
 				
-		content = fixLinks(content);		
-		webview.getSettings().setRenderPriority(RenderPriority.HIGH);
+		content = fixLinks(content);
+		if(content.startsWith("<![CDATA[")) {
+			content = content.substring(9, content.length()-3);
+		}
+		
+	    webview.getSettings().setRenderPriority(RenderPriority.HIGH);
 		webview.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);		
 		webview.loadDataWithBaseURL("", content, "text/html", "utf-8", "");
 	}

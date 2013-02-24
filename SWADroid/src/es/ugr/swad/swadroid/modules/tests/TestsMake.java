@@ -48,7 +48,6 @@ import android.widget.Toast;
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.Test;
 import es.ugr.swad.swadroid.model.TestAnswer;
 import es.ugr.swad.swadroid.model.TestQuestion;
@@ -182,7 +181,7 @@ public class TestsMake extends Module {
 				if(checkedItems.get(0, false)) {
 					tagsList.add(new TestTag(0, null, "all", 0));
 
-					//If "All tags" item not checked, add the selected items to the list of selected tags
+					//If "All tags" item is not checked, add the selected items to the list of selected tags
 				} else {				
 					for(int i=0; i<childsCount; i++) {
 						if(checkedItems.get(i, false)) {
@@ -432,7 +431,6 @@ public class TestsMake extends Module {
 	private void showTest() {
 		final TextProgressBar bar;
 		Button prev, next, eval;
-		ImageView title_separator;
 		final int size = test.getQuestions().size();
 
 		setLayout(R.layout.tests_make_questions);
@@ -518,7 +516,7 @@ public class TestsMake extends Module {
 			//Shows the test
 			showTest();
 		} else {
-			Toast.makeText(this, R.string.testNoQuestionsMeetsSpecifiedCriteriaMsg, Toast.LENGTH_LONG);
+			Toast.makeText(this, R.string.testNoQuestionsMeetsSpecifiedCriteriaMsg, Toast.LENGTH_LONG).show();
 			finish();
 		}
 	}
@@ -530,7 +528,6 @@ public class TestsMake extends Module {
 	public void onEvaluateClick(View v) {
 		TextView textView;
 		Button bt, evalBt;
-		ImageView sep2;
 		Float score, scoreDec;
 		DecimalFormat df = new DecimalFormat("0.00");
 		String feedback = test.getFeedback();
@@ -614,7 +611,7 @@ public class TestsMake extends Module {
 
 				if(position == 0) {
 					for(int i=1; i<childCount; i++) {
-						lv.setItemChecked(i, !chk.isChecked());
+						lv.setItemChecked(i, checkedItems.get(0, false));
 					}
 				} else {					
 					for(int i=1; i<childCount; i++) {
@@ -625,7 +622,7 @@ public class TestsMake extends Module {
 
 					if (allChecked) {
 						lv.setItemChecked(0, true);
-					} else if(chk.isChecked()) {
+					} else {
 						lv.setItemChecked(0, false);
 					}
 				}
@@ -635,6 +632,29 @@ public class TestsMake extends Module {
 		tfAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
 		tfAdapter.add(getString(R.string.trueMsg));
 		tfAdapter.add(getString(R.string.falseMsg));
+		
+		prefs.getPreferences(getBaseContext());
+		String selection ="id=" + Long.toString(Global.getSelectedCourseCode());
+		Cursor dbCursor = dbHelper.getDb().getCursor(Global.DB_TABLE_TEST_CONFIG,selection,null);
+		startManagingCursor(dbCursor);
+		if(dbCursor.getCount() > 0) {			
+			if(isDebuggable) {
+				Log.d(TAG, "selectedCourseCode = " + Long.toString(Global.getSelectedCourseCode()));
+			}
+
+			test = (Test) dbHelper.getRow(Global.DB_TABLE_TEST_CONFIG, "id",
+					Long.toString(Global.getSelectedCourseCode()));
+		
+			if(test != null) {
+				setNumQuestions();
+			} else {
+				Toast.makeText(getBaseContext(), R.string.testNoQuestionsCourseMsg, Toast.LENGTH_LONG).show();
+				finish();
+			}
+		} else {
+			Toast.makeText(getBaseContext(), R.string.testNoQuestionsMsg, Toast.LENGTH_LONG).show();
+			finish();
+		}
 
 		setResult(RESULT_OK);
 	}
@@ -642,11 +662,8 @@ public class TestsMake extends Module {
 	/* (non-Javadoc)
 	 * @see es.ugr.swad.swadroid.modules.Module#onStart()
 	 */
-	@Override
+	/*@Override
 	protected void onStart() {
-		Course c;
-		int lastCourseSelected;
-
 		super.onStart();
 		prefs.getPreferences(getBaseContext());
 		String selection ="id=" + Long.toString(Global.getSelectedCourseCode());
@@ -667,10 +684,11 @@ public class TestsMake extends Module {
 				finish();
 			}
 		} else {
-			Toast.makeText(getBaseContext(), R.string.testNoQuestionsMsg, Toast.LENGTH_LONG).show();		
+			Toast.makeText(getBaseContext(), R.string.testNoQuestionsMsg, Toast.LENGTH_LONG).show();
+			finish();
 		}
 
-	}
+	}*/
 
 	/* (non-Javadoc)
 	 * @see es.ugr.swad.swadroid.modules.Module#requestService()

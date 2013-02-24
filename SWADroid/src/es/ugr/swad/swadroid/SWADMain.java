@@ -37,7 +37,9 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -296,6 +298,9 @@ public class SWADMain extends MenuExpandableListActivity {
 		text = (TextView)this.findViewById(R.id.moduleName);
 		text.setText(R.string.app_name);
 
+
+		ImageButton updateButton = (ImageButton)this.findViewById(R.id.refresh);
+		updateButton.setVisibility(View.VISIBLE);
 		
 		try {
 			//Initialize preferences
@@ -384,6 +389,13 @@ public class SWADMain extends MenuExpandableListActivity {
 			switch(requestCode){
 			//After get the list of courses, a dialog is launched to choice the course
 			case Global.COURSES_REQUEST_CODE:
+				ImageButton updateButton = (ImageButton)this.findViewById(R.id.refresh);
+				ProgressBar pb = (ProgressBar)this.findViewById(R.id.progress_refresh);
+
+				pb.setVisibility(View.GONE);
+				updateButton.setVisibility(View.VISIBLE);
+
+				setMenuDbClean();
 				createSpinnerAdapter();
 				createMenu();
 				break;
@@ -689,4 +701,18 @@ public class SWADMain extends MenuExpandableListActivity {
 		list.setVisibility(View.INVISIBLE);
 	}
 	
+	/**
+	 * Launches an action when refresh button is pushed
+	 * @param v Actual view
+	 */
+	public void onRefreshClick(View v)
+	{        
+		ImageButton updateButton = (ImageButton)this.findViewById(R.id.refresh);
+		ProgressBar pb = (ProgressBar)this.findViewById(R.id.progress_refresh);
+
+		updateButton.setVisibility(View.GONE);
+		pb.setVisibility(View.VISIBLE);
+		
+		getCurrentCourses();
+	}
 }
