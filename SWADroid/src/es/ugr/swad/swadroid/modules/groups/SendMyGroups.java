@@ -29,6 +29,8 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 import org.xmlpull.v1.XmlPullParserException;
 
+import com.bugsense.trace.BugSenseHandler;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -92,11 +94,12 @@ public class SendMyGroups extends Module {
 		} catch (Exception ex) {
 			String errorMsg = getString(R.string.errorServerResponseMsg);
 			error(errorMsg);
-
-			if(isDebuggable) {
-				Log.e(ex.getClass().getSimpleName(), errorMsg);        		
-				ex.printStackTrace();
-			}
+			
+			Log.e(ex.getClass().getSimpleName(), errorMsg);        		
+			ex.printStackTrace();
+			
+			//Send exception details to Bugsense
+			BugSenseHandler.sendException(ex);
 		}
 	}
 

@@ -29,6 +29,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
+
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
@@ -44,6 +45,8 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.KeepAliveHttpsTransportSE;
 import org.xmlpull.v1.XmlPullParserException;
+
+import com.bugsense.trace.BugSenseHandler;
 
 /**
  * Superclass for encapsulate common behavior of all modules.
@@ -539,6 +542,7 @@ public abstract class Module extends MenuActivity {
         @Override
         protected void onPostExecute(Void unused) {  
         	String errorMsg = "";
+        	boolean sendException = true;
         	
     		/*if(isDebuggable)
     			Log.d(TAG, "onPostExecute()");*/
@@ -555,18 +559,21 @@ public abstract class Module extends MenuActivity {
                 if(e instanceof SoapFault) {
                     SoapFault es = (SoapFault) e;
             		
-            		if(es.faultstring.equals("Bad log in"))
+            		if(es.faultstring.equals("Bad log in")) {
             			errorMsg = getString(R.string.errorBadLoginMsg);
-            		else if(es.faultstring.equals("Unknown application key"))
+            			sendException = false;
+            		} else if(es.faultstring.equals("Unknown application key")) {
             			errorMsg = getString(R.string.errorBadAppKeyMsg);
-            		else
+            		} else {
             			errorMsg = "Server error: " + es.getMessage();
+            		}
                 } else if (e instanceof XmlPullParserException) {
                 	errorMsg = getString(R.string.errorServerResponseMsg);
                 } else if (e instanceof IOException) {
                 	errorMsg = getString(R.string.errorConnectionMsg);
                 } else if (e instanceof TimeoutException) {
                 	errorMsg = getString(R.string.errorTimeoutMsg);
+        			sendException = false;
                 } else {
                 	errorMsg = e.getMessage();
                 }
@@ -575,6 +582,12 @@ public abstract class Module extends MenuActivity {
         		onError(); 
         		error(errorMsg); 
         		e.printStackTrace();
+
+        		//Send exception details to Bugsense
+        		if(sendException) {
+        			BugSenseHandler.sendExceptionMessage(TAG, errorMsg, e);
+        		}
+        		
         		//Log.d(TAG, connection.getHost() + " " + connection.getPath() + " " + connection.getPort());
         		//Log.d(TAG, connection.requestDump.toString());
                 //Log.d(TAG, connection.responseDump.toString());

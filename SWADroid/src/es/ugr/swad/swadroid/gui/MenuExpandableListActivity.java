@@ -18,6 +18,8 @@
  */
 package es.ugr.swad.swadroid.gui;
 
+import com.bugsense.trace.BugSenseHandler;
+
 import android.app.AlertDialog;
 import android.app.ExpandableListActivity;
 import android.content.Intent;
@@ -174,6 +176,9 @@ public class MenuExpandableListActivity extends ExpandableListActivity {
 			Log.e(ex.getClass().getSimpleName(), ex.getMessage());
 			error(ex.getMessage());
 			ex.printStackTrace();
+			
+			//Send exception details to Bugsense
+			BugSenseHandler.sendException(ex);
 		}
 	}
 
@@ -208,6 +213,9 @@ public class MenuExpandableListActivity extends ExpandableListActivity {
 			Log.e(ex.getClass().getSimpleName(), ex.getMessage());
 			error(ex.getMessage());
 			ex.printStackTrace();
+			
+			//Send exception details to Bugsense
+			BugSenseHandler.sendException(ex);
 		}
 	}
 	

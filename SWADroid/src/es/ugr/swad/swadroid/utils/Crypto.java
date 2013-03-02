@@ -29,6 +29,8 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
 
+import com.bugsense.trace.BugSenseHandler;
+
 /**
  * Cryptographic class for encryption purposes.
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
@@ -62,6 +64,10 @@ public class Crypto {
             ecipher.init(Cipher.ENCRYPT_MODE, key, paramSpec);
             dcipher.init(Cipher.DECRYPT_MODE, key, paramSpec);
         } catch (Exception e) {
+        	e.printStackTrace();
+        	
+			//Send exception details to Bugsense
+			BugSenseHandler.sendException(e);
         }
     }
 
@@ -78,6 +84,10 @@ public class Crypto {
             rVal = toHex(enc);
         } catch (Exception e) {
             rVal = "Error encrypting: " + e.getMessage();
+        	e.printStackTrace();
+        	
+			//Send exception details to Bugsense
+			BugSenseHandler.sendException(e);
         }
         return rVal;
     }
@@ -95,6 +105,10 @@ public class Crypto {
             rVal = new String(utf8, "UTF8");
         } catch (Exception e) {
             rVal = "Error encrypting: " + e.getMessage();
+        	e.printStackTrace();
+        	
+			//Send exception details to Bugsense
+			BugSenseHandler.sendException(e);
         }
         return rVal;
     }

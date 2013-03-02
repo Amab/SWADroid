@@ -63,7 +63,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 
 	private ArrayList<Model> groupTypes;
 	
-	private HashMap<Long,ArrayList<Group>> groups;
+	//private HashMap<Long,ArrayList<Group>> groups;
 	
 	private boolean groupTypesRequested = false;
 	
