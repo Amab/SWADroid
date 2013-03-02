@@ -129,13 +129,13 @@
     <string name="cleanDatabaseMsg">Todos los datos de la base de datos han sido borrados</string>
     <string name="shareBodyMsg">Estoy usando #SWADroid en mi Android para acceder a la
 		plataforma de teleformación SWAD.\nObtenlo gratis aquí:
-		 https://market.android.com/details?id=es.ugr.swad.swadroid</string>
+		 https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid</string>
     <string name="twitterTitle">Twitter</string>
     <string name="facebookTitle">Facebook</string>
     <string name="googlePlusTitle">Google+</string>
     <string name="mailingListTitle">Lista de correo</string>
     <string name="blogTitle">Blog</string>
-    <string name="marketTitle">Android Market</string>
+    <string name="marketTitle">Google Play</string>
     <string name="notificationsAlertTitle">SWADroid</string>
     <string name="notificationsAlertMsg">nuevas notificaciones</string>
     <string name="footMessageMsg">Enviado desde</string>

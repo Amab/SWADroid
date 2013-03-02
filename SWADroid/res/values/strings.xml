@@ -125,7 +125,7 @@
     <string name="cleanDatabaseMsg">The database has been cleaned</string>
     <string name="shareBodyMsg">I\'m using #SWADroid in my Android mobile for access to
 		the e-learning platform SWAD.\nGet it for free here:
-		 https://market.android.com/details?id=es.ugr.swad.swadroid</string>
+		 https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid</string>
     <string name="marketURL">market://details?id=es.ugr.swad.swadroid</string>
     <string name="marketWebURL">http://goo.gl/Wgo1y</string>
     <string name="twitterURL">https://twitter.com/#!/SWADroid</string>
@@ -139,7 +139,7 @@
     <string name="googlePlusTitle">Google+</string>
     <string name="mailingListTitle">Mailing list</string>
     <string name="blogTitle">Blog</string>
-    <string name="marketTitle">Android Market</string>
+    <string name="marketTitle">Google Play</string>
     <string name="notificationsAlertTitle">SWADroid</string>
     <string name="notificationsAlertMsg">new notifications</string>
     <string name="footMessageMsg">Sended from</string>

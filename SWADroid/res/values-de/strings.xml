@@ -115,7 +115,7 @@
     <string name="sendMsg">senden</string>
     <string name="cleanDatabaseMsg">Die Datenbank wurde gereinigt</string>
     <string name="shareBodyMsg">Ich verwende # SWADroid in meinem Android-Handy für den Zugang zum E-Learning Plattform SWAD.\n Holen Sie es hier kostenlos: https://market.android.com/details?id=es.ugr.swad.swadroid</string>
-    <string name="marketURL">market://details?id=es.ugr.swad.swadroid</string>
+    <string name="marketURL">https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid</string>
     <string name="marketWebURL">http://goo.gl/Wgo1y</string>
     <string name="twitterURL">https://twitter.com/#!/SWADroid</string>
     <string name="facebookURL">https://www.facebook.com/SWADroid</string>
@@ -128,7 +128,7 @@
     <string name="googlePlusTitle">Google+</string>
     <string name="mailingListTitle">Mailing-Liste</string>
     <string name="blogTitle">Blog</string>
-    <string name="marketTitle">Android Market</string>
+    <string name="marketTitle">Google Play</string>
     <string name="notificationsAlertTitle">Neue Benachrichtigungen</string>
     <string name="notificationsAlertMsg">neue Benachrichtigungen</string>
     <string name="footMessageMsg">gesendet von</string>
