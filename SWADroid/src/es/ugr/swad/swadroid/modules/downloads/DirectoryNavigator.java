@@ -31,6 +31,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+import com.bugsense.trace.BugSenseHandler;
+
 
 /**
  * 	Class used to navigate around the XML file. That XML file contains the 
@@ -335,6 +337,9 @@ public class DirectoryNavigator
 		catch (Exception e)
 		{
 			e.printStackTrace();
+			
+			//Send exception details to Bugsense
+			BugSenseHandler.sendException(e);
 		}
 	
         //If we don't find the entire path, we throw an exception.

@@ -35,6 +35,10 @@ import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
+import com.bugsense.trace.BugSenseHandler;
+
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -82,11 +86,12 @@ public class RollcallConfigDownload extends Module {
 		} catch (Exception ex) {
 			String errorMsg = getString(R.string.errorServerResponseMsg);
 			error(errorMsg);
-
-			if(isDebuggable) {
-				Log.e(ex.getClass().getSimpleName(), errorMsg);        		
-				ex.printStackTrace();
-			}
+			
+			Log.e(ex.getClass().getSimpleName(), errorMsg);        		
+			ex.printStackTrace();
+			
+			//Send exception details to Bugsense
+			BugSenseHandler.sendException(ex);
 		}
 	}
 
@@ -154,6 +159,7 @@ public class RollcallConfigDownload extends Module {
 		setResult(RESULT_OK);
 	}
 
+	@TargetApi(Build.VERSION_CODES.FROYO)
 	private void downloadFile(String url) {
 		if (url != null) {
 			// Check the status of the external memory
@@ -188,8 +194,14 @@ public class RollcallConfigDownload extends Module {
 				} catch (IOException e) {
 					Log.e(TAG, "Error IO: " + e.getMessage());
 					e.printStackTrace();
+					
+					//Send exception details to Bugsense
+					BugSenseHandler.sendException(e);
 				} catch (URISyntaxException e) {
 					e.printStackTrace();
+					
+					//Send exception details to Bugsense
+					BugSenseHandler.sendException(e);
 				}
 			}
 		}

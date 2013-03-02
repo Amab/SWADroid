@@ -33,6 +33,8 @@ import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.KeepAliveHttpsTransportSE;
 import org.xmlpull.v1.XmlPullParserException;
 
+import com.bugsense.trace.BugSenseHandler;
+
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
@@ -93,6 +95,9 @@ public class NotificationsSyncAdapterService extends Service {
 		   dbHelper = new DataBaseHelper(mContext);
 	   } catch (Exception e) {
 		  e.printStackTrace();
+			
+		  //Send exception details to Bugsense
+		  BugSenseHandler.sendException(e);
 	   }
 	  }
 	 
@@ -107,7 +112,10 @@ public class NotificationsSyncAdapterService extends Service {
 			stopIntent.setAction(STOP_SYNC);
 		    mContext.sendBroadcast(stopIntent);
 		    
-			e.printStackTrace();		
+			e.printStackTrace();	
+			
+			//Send exception details to Bugsense
+			BugSenseHandler.sendException(e);	
 	   }
 	  }
 	 }
@@ -232,7 +240,7 @@ public class NotificationsSyncAdapterService extends Service {
 			createRequest();
 			addParam("userID", prefs.getUserID());
 			addParam("userPassword", userPassword);
-			addParam("appKey", Global.getAppKey());
+			addParam("appKey", Global.getSWADAppKey());
 			sendRequest(true);		
 
 			if (result != null) {

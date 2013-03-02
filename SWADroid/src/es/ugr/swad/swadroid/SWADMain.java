@@ -44,6 +44,9 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bugsense.trace.BugSenseHandler;
+
 import es.ugr.swad.swadroid.gui.ImageExpandableListAdapter;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.model.Course;
@@ -270,16 +273,6 @@ public class SWADMain extends MenuExpandableListActivity {
 	}
 
 	/* (non-Javadoc)
-	 * @see android.app.Activity#onStart()
-	 */
-	@Override
-	protected void onStart() {
-		super.onStart();
-		prefs.getPreferences(getBaseContext());
-
-	}
-
-	/* (non-Javadoc)
 	 * @see android.app.Activity#onCreate()
 	 */
 	@Override
@@ -287,6 +280,9 @@ public class SWADMain extends MenuExpandableListActivity {
 		int lastVersion, currentVersion;
 		ImageView image;
 		TextView text;
+		
+		//Initialize Bugsense plugin
+		BugSenseHandler.initAndStartSession(this, Global.getBugsenseAPIKey());
 		
 		//Initialize screen
 		super.onCreate(icicle);
@@ -375,11 +371,50 @@ public class SWADMain extends MenuExpandableListActivity {
 		} catch (Exception ex) {
 			error(ex.getMessage());
 			ex.printStackTrace();
+			
+			//Send exception details to Bugsense
+			BugSenseHandler.sendException(ex);
 		} 
 		/*if(!firstRun && Module.connectionAvailable(this)){
 			getActualCourses();
 		}*/
 
+	}
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onStart()
+	 */
+	@Override
+	protected void onStart() {
+		super.onStart();
+		prefs.getPreferences(getBaseContext());
+
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		if(!Global.isPreferencesChanged() && !Global.isDbCleaned()){
+			createSpinnerAdapter();
+			if(!firstRun){
+				courseCode = Global.getSelectedCourseCode();
+				createMenu();
+			}
+		}else{
+			Global.setPreferencesChanged(false);
+			Global.setDbCleaned(false);
+			setMenuDbClean();
+		}
+	}
+	
+	/* (non-Javadoc)
+	 * @see es.ugr.swad.swadroid.gui.MenuExpandableListActivity#onDestroy()
+	 */
+	@Override
+	protected void onDestroy() {
+		BugSenseHandler.closeSession(this);
+		super.onDestroy();
 	}
 
 	@Override
@@ -667,23 +702,6 @@ public class SWADMain extends MenuExpandableListActivity {
 		currentRole = Global.TEACHER_TYPE_CODE;
 	}
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		
-		if(!Global.isPreferencesChanged() && !Global.isDbCleaned()){
-			createSpinnerAdapter();
-			if(!firstRun){
-				courseCode = Global.getSelectedCourseCode();
-				createMenu();
-			}
-		}else{
-			Global.setPreferencesChanged(false);
-			Global.setDbCleaned(false);
-			setMenuDbClean();
-		}
-	}
-	
 	/**
 	 * Creates an empty Menu and spinner when the data base is empty
 	 * */

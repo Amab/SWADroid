@@ -26,6 +26,8 @@ import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
+import com.bugsense.trace.BugSenseHandler;
+
 import android.accounts.Account;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -405,6 +407,9 @@ public class Notifications extends Module {
 			dbHelper.emptyTable(Global.DB_TABLE_NOTIFICATIONS);
 		} catch (Exception e) {
 			e.printStackTrace();
+			
+			//Send exception details to Bugsense
+			BugSenseHandler.sendException(e);
 		}
 	}
 	
