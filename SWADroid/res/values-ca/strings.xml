@@ -108,7 +108,7 @@
     <string name="sendMsg">Enviar</string>
     <string name="cleanDatabaseMsg">Tots les dades de la base de dades han estat esborrats</string>
     <string name="shareBodyMsg">Estic usant #SWADroid en el meu Android per a accedir a la plataforma de teleformació SWAD.\nAconsegueix-ho gratis aquí:
-		 https://market.android.com/details?id=es.ugr.swad.swadroid</string>
+		 https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid</string>
 	<string name="mailingListTitle">Llista de correu</string>
 	<string name="vacants">Vacants</string>
 	<string name="numStudent">Nombre dels estudiants: </string>
