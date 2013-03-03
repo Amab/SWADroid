@@ -38,8 +38,7 @@ public class Course extends Model {
 	private static PropertyInfo PI_userRole = new PropertyInfo();
 	private static PropertyInfo PI_shortName = new PropertyInfo();
 	private static PropertyInfo PI_fullName = new PropertyInfo();
-    @SuppressWarnings("unused")
-	private static PropertyInfo[] PI_PROP_ARRAY =
+    private static PropertyInfo[] PI_PROP_ARRAY =
     {
     	PI_id,
     	PI_userRole,

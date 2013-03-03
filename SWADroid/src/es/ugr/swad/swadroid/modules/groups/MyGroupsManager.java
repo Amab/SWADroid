@@ -242,7 +242,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 		
 	}
 	
-	private String getRequestedGroups(){
+/*	private String getRequestedGroups(){
 		ArrayList<Long> requestedGroupCodes = ((EnrollmentExpandableListAdapter)getExpandableListView().getExpandableListAdapter()).getChosenGroupCodes();
 		String text = "";
 		for(int i = 0; i < requestedGroupCodes.size(); ++i){
@@ -253,7 +253,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 		}
 		return text;
 	}
-	
+*/
 	
 	private void setEmptyMenu(){
 		getExpandableListView().setVisibility(View.GONE);

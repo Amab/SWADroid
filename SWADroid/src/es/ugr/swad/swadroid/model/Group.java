@@ -48,7 +48,6 @@ public class Group extends Model {
 	private static PropertyInfo PI_member = new PropertyInfo();
 	private static PropertyInfo PI_groupTypeCode = new PropertyInfo();
 	
-	@SuppressWarnings("unused")
 	private static PropertyInfo[] PI_PROP_ARRAY = {
 		PI_id,
 		PI_groupName,

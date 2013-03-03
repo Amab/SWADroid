@@ -39,7 +39,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -603,7 +602,7 @@ public class TestsMake extends Module {
 			public void onItemClick(AdapterView<?> parent, View v, int position,
 					long id) {
 
-				CheckedTextView chk = (CheckedTextView) v;
+				//CheckedTextView chk = (CheckedTextView) v;
 				ListView lv = (ListView) parent;
 				int childCount = lv.getCount();
 				SparseBooleanArray checkedItems = lv.getCheckedItemPositions();

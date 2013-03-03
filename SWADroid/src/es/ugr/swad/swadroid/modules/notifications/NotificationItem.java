@@ -57,7 +57,8 @@ public class NotificationItem extends MenuActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		TextView text, senderTextView, courseTextView, summaryTextView, dateTextView, timeTextView;
-		ImageView image, imageSep, userPhotoView;
+		ImageView image, userPhotoView;
+		//ImageView imageSep;
 		ImageButton replyButton;
 		WebView webview;
 		String type = this.getIntent().getStringExtra("notificationType");
