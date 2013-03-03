@@ -1,3 +1,13 @@
+## 0.11.3 (2013-03-03)
+
+* Added Bugsense error reporting plugin for track unhandled and handled exceptions. Error reports are automatically sended when
+  the exception is catched
+* Shows default server in preference summary when the preference value is empty
+* Updated Google Play references
+* Updated ksoap2-android library
+* Code cleaning
+* Fixed NullPointer exceptions when cleaning notifications and courses on preferences change
+
 ## 0.11.2 (2013-02-24)
 
 * Added refresh button on main screen to update courses without clean the whole database
