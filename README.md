@@ -2,7 +2,7 @@
 
 Android client for e-learning platform SWAD.
 
-[Install from Android Market][apk]
+[Install from Google Play][apk]
 
 * Code: `git clone git://github.com/Amab/SWADroid.git`
 * Issue tracker: <https://github.com/Amab/SWADroid/issues>

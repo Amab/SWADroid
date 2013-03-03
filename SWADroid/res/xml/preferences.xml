@@ -66,6 +66,7 @@
         <Preference
             android:defaultValue=""
             android:summary="@string/author_preferences"
+            android:key="aboutPref"
             android:title="@string/organization_preferences" />
     </PreferenceCategory>
 

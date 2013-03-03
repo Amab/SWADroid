@@ -26,6 +26,8 @@ import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
+import com.bugsense.trace.BugSenseHandler;
+
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -83,10 +85,11 @@ public class Messages extends Module {
 				String errorMsg = getString(R.string.errorServerResponseMsg);
 				error(errorMsg);
 
-				/*if(isDebuggable) {
-        			Log.e(ex.getClass().getSimpleName(), errorMsg);        		
-        			ex.printStackTrace();
-        		}*/
+    			Log.e(ex.getClass().getSimpleName(), errorMsg);        		
+    			ex.printStackTrace();
+    			
+    			//Send exception details to Bugsense
+    			BugSenseHandler.sendExceptionMessage(TAG, errorMsg, ex);
 			}				
 		}
 	};

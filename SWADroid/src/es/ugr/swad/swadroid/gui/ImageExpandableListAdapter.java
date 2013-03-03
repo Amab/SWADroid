@@ -23,9 +23,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.R.id;
-import es.ugr.swad.swadroid.R.layout;
-
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;

@@ -28,6 +28,8 @@ import org.ksoap2.serialization.KvmSerializable;
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
+import com.bugsense.trace.BugSenseHandler;
+
 import android.os.Bundle;
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
@@ -99,7 +101,12 @@ public class Login extends Module {
         try {
             Integer.parseInt(str);
             return true;
-        } catch (NumberFormatException nfe) {}
+        } catch (NumberFormatException nfe) {       		
+			nfe.printStackTrace();
+			
+			//Send exception details to Bugsense
+			BugSenseHandler.sendException(nfe);
+        }
         return false;
     }
 
@@ -148,7 +155,7 @@ public class Login extends Module {
 			createRequest();
 			addParam("userID", userID);
 			addParam("userPassword", userPassword);
-			addParam("appKey", Global.getAppKey());
+			addParam("appKey", Global.getSWADAppKey());
 			sendRequest(User.class, true);
 
 			if (result != null) {
