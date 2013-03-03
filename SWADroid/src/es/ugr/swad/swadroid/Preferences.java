@@ -22,6 +22,8 @@ package es.ugr.swad.swadroid;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import com.bugsense.trace.BugSenseHandler;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -487,16 +489,16 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 			 */
 			public boolean onPreferenceClick(Preference preference) {
 				server = prefs.getString(SERVERPREF, Global.getDefaultServer());
-				editor.putString(SERVERPREF, server);
+				editor.putString(SERVERPREF, server);				
 				return true;
 			}
 		}); 
-		serverPref.setSummary(server);
 
 		try {
 			currentVersionPref.setSummary(getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
 		} catch (NameNotFoundException e) {
 			e.printStackTrace();
+			BugSenseHandler.sendException(e);
 		}
 	}
 
@@ -525,11 +527,11 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 			preference.setSummary((CharSequence) newValue);
 		}
 
-		if (SERVERPREF.equals(key) || SERVERPREF.equals(key)) {
+		if (SERVERPREF.equals(key)) {
 			Global.setLogged(false);
 			n.clearNotifications(this);
 			c.clearCourses(this);
-			Global.setPreferencesChanged();
+			Global.setPreferencesChanged();			
 			editor.commit();
 		}
 
@@ -548,7 +550,11 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 		if(!prefs.getString(USERPASSWORDPREF, "").equals(""))
 			userPasswordPref.setSummary(stars);        
 
-		serverPref.setSummary(server);
+		if(!server.equals("")) {
+			serverPref.setSummary(server);
+		} else {
+			serverPref.setSummary(Global.getDefaultServer());
+		}
 	}
 
 	/* (non-Javadoc)
