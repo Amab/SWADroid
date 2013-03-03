@@ -108,10 +108,10 @@ public class NodeAdapter extends BaseAdapter {
 	 * Method to messure if the @a newText fits or not in the width of @a text
 	 * IT DOES NOT WORK CORRECTLY 
 	 * */
-	private boolean isTooLarge (TextView text, String newText) {
+/*	private boolean isTooLarge (TextView text, String newText) {
 	    float textWidth = text.getPaint().measureText(newText);
 	    return (textWidth >= text. getWidth ());
 	}
-	
+*/	
 	
 }

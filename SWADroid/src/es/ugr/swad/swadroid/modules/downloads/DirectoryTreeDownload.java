@@ -27,7 +27,6 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
