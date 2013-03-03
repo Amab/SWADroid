@@ -92,7 +92,7 @@ public class MenuActivity extends Activity {
 	}
 
 	/**
-	 * Deletes notifications and tests data from database
+	 * Deletes all data from database
 	 */
 	protected void cleanDatabase() {
 		dbHelper.cleanTables();
