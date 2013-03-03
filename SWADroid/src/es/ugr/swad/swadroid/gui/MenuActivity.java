@@ -18,6 +18,8 @@
  */
 package es.ugr.swad.swadroid.gui;
 
+import com.bugsense.trace.BugSenseHandler;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -90,7 +92,7 @@ public class MenuActivity extends Activity {
 	}
 
 	/**
-	 * Deletes notifications and tests data from database
+	 * Deletes all data from database
 	 */
 	protected void cleanDatabase() {
 		dbHelper.cleanTables();
@@ -170,6 +172,9 @@ public class MenuActivity extends Activity {
 			Log.e(ex.getClass().getSimpleName(), ex.getMessage());
 			error(ex.getMessage());
 			ex.printStackTrace();
+			
+			//Send exception details to Bugsense
+			BugSenseHandler.sendException(ex);
 		}
 	}
 
@@ -204,6 +209,9 @@ public class MenuActivity extends Activity {
 			Log.e(ex.getClass().getSimpleName(), ex.getMessage());
 			error(ex.getMessage());
 			ex.printStackTrace();
+			
+			//Send exception details to Bugsense
+			BugSenseHandler.sendException(ex);
 		}
 	}
 }

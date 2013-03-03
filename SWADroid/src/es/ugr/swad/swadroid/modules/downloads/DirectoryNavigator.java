@@ -31,6 +31,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+import com.bugsense.trace.BugSenseHandler;
+
 
 /**
  * 	Class used to navigate around the XML file. That XML file contains the 
@@ -115,7 +117,7 @@ public class DirectoryNavigator
      */
     public ArrayList<DirectoryItem> goToParentDirectory() throws InvalidPath
     {
-    	ArrayList<DirectoryItem> itemsToShow;
+    	//ArrayList<DirectoryItem> itemsToShow;
     	
     	if(path.size() !=0){
 	        //We decrease the path.
@@ -123,8 +125,8 @@ public class DirectoryNavigator
 	        Node node = goToDirectory();
 	        //itemsToShow = new ArrayList<DirectoryItem>(getItems(node));
 	        currentItems = new ArrayList<DirectoryItem>(getItems(node));
-    	}else
-    		itemsToShow = goToRoot();
+    	}//else
+    		//itemsToShow = goToRoot();
     		//currentItems = goToRoot();
     		
         //return itemsToShow;
@@ -335,6 +337,9 @@ public class DirectoryNavigator
 		catch (Exception e)
 		{
 			e.printStackTrace();
+			
+			//Send exception details to Bugsense
+			BugSenseHandler.sendException(e);
 		}
 	
         //If we don't find the entire path, we throw an exception.
@@ -454,14 +459,14 @@ public class DirectoryNavigator
 	
 
 	
-	private String getFilenNameFromURL(String url){
+/*	private String getFilenNameFromURL(String url){
 		int slashIndex = url.lastIndexOf("/");
 		if(slashIndex == url.length() - 1)
 			return null;
 		else
 			return url.substring(slashIndex + 1);			
 	}
-	
+*/
 	/**
 	 * */
 	// TODO it should not be needed because name of the node and name of the file should be equal. 

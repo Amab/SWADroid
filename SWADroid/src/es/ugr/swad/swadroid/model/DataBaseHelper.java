@@ -39,6 +39,7 @@ import android.util.Log;
 
 import com.android.dataframework.DataFramework;
 import com.android.dataframework.Entity;
+import com.bugsense.trace.BugSenseHandler;
 
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.Preferences;
@@ -100,8 +101,14 @@ public class DataBaseHelper {
 			db.open(mCtx, mCtx.getPackageName());
 		} catch (XmlPullParserException e) {
 			e.printStackTrace();
+			
+			//Send exception details to Bugsense
+			BugSenseHandler.sendException(e);
 		} catch (IOException e) {
 			e.printStackTrace();
+			
+			//Send exception details to Bugsense
+			BugSenseHandler.sendException(e);
 		}
 
 		//If the passphrase is empty, generate a random passphrase and recreate database
@@ -318,6 +325,9 @@ public class DataBaseHelper {
 						ent.getString("description"));
 			} catch (ParseException e) {
 				e.printStackTrace();
+				
+				//Send exception details to Bugsense
+				BugSenseHandler.sendException(e);
 			}
 		}
 
@@ -843,11 +853,13 @@ public class DataBaseHelper {
 	public boolean insertEntity(String tableName, Model currentModel,Entity...ents){
 		boolean returnValue = true;
 		Entity ent;
+		
 		if(ents.length>= 1){
 			ent = ents[0];
 		}else{
 			ent = new Entity(tableName);
 		}
+		
 		if(tableName.compareTo(Global.DB_TABLE_GROUPS) == 0){
 			Group g = (Group) currentModel;
 			ent.setValue("id", g.getId());
@@ -933,16 +945,19 @@ public class DataBaseHelper {
 	public boolean insertGroup(Group g, long courseCode) {
 		List<Entity> rows = db.getEntityList(Global.DB_TABLE_GROUPS, "id = " + g.getId());
 		boolean returnValue = true;
+		
 		if(rows.isEmpty()) {
 			insertEntity(Global.DB_TABLE_GROUPS,g);
 		} else { //already exits a group with the given code. just update
 			insertEntity(Global.DB_TABLE_GROUPS,g,rows.get(0));
 
 		}
+		
 		//update all the relationship			
 		long groupCode = g.getId();
 		rows = db.getEntityList(Global.DB_TABLE_GROUPS_COURSES,"grpCod =" + groupCode);
 		Course course = (Course) getRow(Global.DB_TABLE_COURSES,"id",String.valueOf(courseCode));
+		
 		//course code is a foreign key. Therefore, to avoid a database error,
 		//it should not insert/modify rows in the relationship table if the course does not exists
 		if(course != null){ 

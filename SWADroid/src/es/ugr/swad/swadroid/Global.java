@@ -36,7 +36,11 @@ public class Global {
 	/**
 	 * SWAD application key
 	 */
-	private static final String AppKey =""; //DELETE THE KEY BEFORE COMMIT!!!
+	private static final String SWADAppKey =""; //DELETE THE KEY BEFORE COMMIT!!!
+	/**
+	 * Bugsense application key
+	 */
+	private static final String BugsenseAPIKey =""; //DELETE THE KEY BEFORE COMMIT!!!
 	/**
 	 * Server URL
 	 */
@@ -283,8 +287,15 @@ public class Global {
 	 * Gets the SWAD application key
 	 * @return SWAD application key
 	 */
-	public static String getAppKey() {
-		return AppKey;
+	public static String getSWADAppKey() {
+		return SWADAppKey;
+	}  
+	/**
+	 * Gets the Bugsense API key
+	 * @return Bugsense API key
+	 */
+	public static String getBugsenseAPIKey() {
+		return BugsenseAPIKey;
 	}    
 	/**
 	 * Gets the server URL

@@ -30,9 +30,10 @@ import java.net.URLConnection;
 
 import org.apache.http.util.ByteArrayBuffer;
 
+import com.bugsense.trace.BugSenseHandler;
+
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 import es.ugr.swad.swadroid.Global;
 
 /**
@@ -129,7 +130,11 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 			url = new URL(params[1]);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
+			
+			//Send exception details to Bugsense
+			BugSenseHandler.sendException(e);
 //			Log.i(TAG, "Incorrect URL");
+			
 			downloadSuccess = false;
 			return false;
 		}
@@ -179,6 +184,10 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 		} catch (FileNotFoundException e) {
 			//Log.i(TAG, "no se puede crear fichero de salida");
 			e.printStackTrace();
+			
+			//Send exception details to Bugsense
+			BugSenseHandler.sendException(e);
+			
 			notifyFailed();
 			return false;
 		}
@@ -194,15 +203,23 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 			} catch (IOException e1) {
 				//Log.i(TAG, "no se puede cerrar fichero de salida");
 				e1.printStackTrace();
+				
+				//Send exception details to Bugsense
+				BugSenseHandler.sendException(e);
+				
 				notifyFailed();
 				return false;
 			}
 			e.printStackTrace();
+			
+			//Send exception details to Bugsense
+			BugSenseHandler.sendException(e);
+			
 			notifyFailed();
 			return false;
 		}
 		
-		int lenghtOfFile = ucon.getContentLength();
+		//int lenghtOfFile = ucon.getContentLength();
 		//Log.i(TAG, "lenghtOfFile = "+String.valueOf(lenghtOfFile));
 		
 		InputStream is;
@@ -215,11 +232,19 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 			} catch (IOException e1) {
 				//Log.i(TAG, "no se puede cerrar fichero de salida");
 				e1.printStackTrace();
+				
+				//Send exception details to Bugsense
+				BugSenseHandler.sendException(e);
+				
 				notifyFailed();
 				return false;
 			}
 			notifyFailed();
 			e.printStackTrace();
+			
+			//Send exception details to Bugsense
+			BugSenseHandler.sendException(e);
+			
 			return false;
 		}
 		BufferedInputStream bis = new BufferedInputStream(is);
@@ -247,11 +272,19 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 							} catch (IOException e1) {
 								//Log.i(TAG, "no se puede cerrar fichero de salida");
 								e1.printStackTrace();
+								
+								//Send exception details to Bugsense
+								BugSenseHandler.sendException(e);
+								
 								notifyFailed();
 								return false;
 							}
 							notifyFailed();
 							e.printStackTrace();
+							
+							//Send exception details to Bugsense
+							BugSenseHandler.sendException(e);
+							
 							return false;
 						}
 					}
@@ -271,11 +304,19 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 //					Log.i(TAG, "no se puede cerrar fichero de salida");
 					notifyFailed();
 					e1.printStackTrace();
+					
+					//Send exception details to Bugsense
+					BugSenseHandler.sendException(e);
+					
 					return false;
 				}
 //				Log.i(TAG, "Error connection");
 				notifyFailed();
 				e.printStackTrace();
+				
+				//Send exception details to Bugsense
+				BugSenseHandler.sendException(e);
+				
 				return false;
 			}
 		}else{
@@ -295,10 +336,18 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 //								Log.i(TAG, "no se puede cerrar fichero de salida");
 								notifyFailed();
 								e1.printStackTrace();
+								
+								//Send exception details to Bugsense
+								BugSenseHandler.sendException(e);
+								
 								return false;
 							}
 							//Log.i(TAG, "no se puede escribir fichero de salida");
 							e.printStackTrace();
+							
+							//Send exception details to Bugsense
+							BugSenseHandler.sendException(e);
+							
 							notifyFailed();
 							return false;
 						}
@@ -310,12 +359,20 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 				} catch (IOException e1) {
 					//Log.i(TAG, "no se puede cerrar fichero de salida");
 					e1.printStackTrace();
+					
+					//Send exception details to Bugsense
+					BugSenseHandler.sendException(e);
+					
 					notifyFailed();
 					return false;
 				}
 //				Log.i(TAG, "Error connection");
 				notifyFailed();
 				e.printStackTrace();
+				
+				//Send exception details to Bugsense
+				BugSenseHandler.sendException(e);
+				
 				return false;
 			}
 			
@@ -327,6 +384,10 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 		} catch (IOException e) {
 //			Log.i(TAG, "no se puede cerrar fichero de salida");
 			e.printStackTrace();
+			
+			//Send exception details to Bugsense
+			BugSenseHandler.sendException(e);
+			
 			notifyFailed();
 			return false;
 		}

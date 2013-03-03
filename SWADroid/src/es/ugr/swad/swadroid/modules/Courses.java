@@ -28,6 +28,8 @@ import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
+import com.bugsense.trace.BugSenseHandler;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -211,6 +213,9 @@ public class Courses extends Module {
 			dbHelper.emptyTable(Global.DB_TABLE_COURSES);
 		} catch (Exception e) {
 			e.printStackTrace();
+			
+			//Send exception details to Bugsense
+			BugSenseHandler.sendException(e);
 		}
 	}
 }

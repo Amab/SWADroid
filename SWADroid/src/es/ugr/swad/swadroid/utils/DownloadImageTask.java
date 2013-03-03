@@ -2,6 +2,8 @@ package es.ugr.swad.swadroid.utils;
 
 import java.io.InputStream;
 
+import com.bugsense.trace.BugSenseHandler;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -27,6 +29,9 @@ public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         } catch (Exception e) {
             Log.e("DownloadImageTask", e.getMessage());
             e.printStackTrace();
+        	
+			//Send exception details to Bugsense
+			BugSenseHandler.sendException(e);
         }
         return mIcon11;
     }

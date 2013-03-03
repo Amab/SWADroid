@@ -26,6 +26,8 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
+import com.bugsense.trace.BugSenseHandler;
+
 /**
  * Cryptographic class for encryption purposes.
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
@@ -43,6 +45,9 @@ public class OldCrypto
         catch(Exception e)
         {
             e.printStackTrace();
+        	
+			//Send exception details to Bugsense
+			BugSenseHandler.sendException(e);
         }
         return "error";
     }
@@ -59,6 +64,9 @@ public class OldCrypto
         catch(Exception e)
         {
             e.printStackTrace();
+        	
+			//Send exception details to Bugsense
+			BugSenseHandler.sendException(e);
         }
         return "error";
     }
@@ -115,6 +123,9 @@ public class OldCrypto
         catch(Exception e)
         {
             e.printStackTrace();
+        	
+			//Send exception details to Bugsense
+			BugSenseHandler.sendException(e);
         }
         return "error";
     }

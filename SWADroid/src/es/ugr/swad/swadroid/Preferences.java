@@ -22,6 +22,8 @@ package es.ugr.swad.swadroid;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import com.bugsense.trace.BugSenseHandler;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -34,8 +36,8 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-import es.ugr.swad.swadroid.modules.Courses;
-import es.ugr.swad.swadroid.modules.notifications.Notifications;
+import android.util.Log;
+import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.utils.Base64;
 
 /**
@@ -51,6 +53,10 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 	 * User identifier.
 	 */
 	private String userID;
+	/**
+	 * Database Helper.
+	 */
+	private static DataBaseHelper dbHelper; 
 	/**
 	 * User identifier preference name.
 	 */
@@ -314,6 +320,16 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 		userIDPref.setSummary(prefs.getString(USERIDPREF, ""));
 		userPasswordPref.setSummary(stars);
 	}
+	
+	/**
+	 * Deletes notifications and courses data from database
+	 */
+	private void cleanDatabase() {
+		dbHelper.emptyTable(Global.DB_TABLE_NOTIFICATIONS);
+		dbHelper.emptyTable(Global.DB_TABLE_COURSES);
+		setLastCourseSelected(0);
+		Global.setDbCleaned(true);
+	}
 
 	/**
 	 * Initializes preferences of activity.
@@ -340,6 +356,17 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 		//Restore preferences
 		addPreferencesFromResource(R.xml.preferences);
 		prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+		
+		//Initialize database
+		try {
+			dbHelper = new DataBaseHelper(this);
+		} catch (Exception ex) {
+			Log.e(ex.getClass().getSimpleName(), ex.getMessage());
+			ex.printStackTrace();
+			
+			//Send exception details to Bugsense
+			BugSenseHandler.sendException(ex);
+		}
 
 		userID = prefs.getString(USERIDPREF, "");
 		userPassword = prefs.getString(USERPASSWORDPREF, "");
@@ -487,16 +514,16 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 			 */
 			public boolean onPreferenceClick(Preference preference) {
 				server = prefs.getString(SERVERPREF, Global.getDefaultServer());
-				editor.putString(SERVERPREF, server);
+				editor.putString(SERVERPREF, server);				
 				return true;
 			}
 		}); 
-		serverPref.setSummary(server);
 
 		try {
 			currentVersionPref.setSummary(getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
 		} catch (NameNotFoundException e) {
 			e.printStackTrace();
+			BugSenseHandler.sendException(e);
 		}
 	}
 
@@ -505,14 +532,11 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 	 */
 	public boolean onPreferenceChange(Preference preference, Object newValue) {
 		String key = preference.getKey();
-		Notifications n = new Notifications();
-		Courses c = new Courses();
 
 		//If preferences have changed, logout and save new preferences
 		if (USERIDPREF.equals(key) || USERPASSWORDPREF.equals(key)) {
 			Global.setLogged(false);
-			n.clearNotifications(this);
-			c.clearCourses(this);
+			cleanDatabase();
 			Global.setPreferencesChanged();
 			editor.commit();
 		}
@@ -525,10 +549,9 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 			preference.setSummary((CharSequence) newValue);
 		}
 
-		if (SERVERPREF.equals(key) || SERVERPREF.equals(key)) {
+		if (SERVERPREF.equals(key)) {
 			Global.setLogged(false);
-			n.clearNotifications(this);
-			c.clearCourses(this);
+			cleanDatabase();
 			Global.setPreferencesChanged();
 			editor.commit();
 		}
@@ -548,7 +571,11 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 		if(!prefs.getString(USERPASSWORDPREF, "").equals(""))
 			userPasswordPref.setSummary(stars);        
 
-		serverPref.setSummary(server);
+		if(!server.equals("")) {
+			serverPref.setSummary(server);
+		} else {
+			serverPref.setSummary(Global.getDefaultServer());
+		}
 	}
 
 	/* (non-Javadoc)

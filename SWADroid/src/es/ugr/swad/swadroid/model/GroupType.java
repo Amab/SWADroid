@@ -40,7 +40,6 @@ public class GroupType extends Model {
 	private static PropertyInfo PI_multiple = new PropertyInfo();
 	private static PropertyInfo PI_openTime = new PropertyInfo();
 	
-	@SuppressWarnings("unused")
 	private static PropertyInfo[] PI_PROP_ARRAY = {
 		PI_id,
 		PI_groupTypeName,
