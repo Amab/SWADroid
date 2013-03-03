@@ -93,7 +93,7 @@ public class MenuExpandableListActivity extends ExpandableListActivity {
 	}
 
 	/**
-	 * Deletes notifications and tests data from database
+	 * Deletes all data from database
 	 */
 	protected void cleanDatabase() {
 		dbHelper.cleanTables();
