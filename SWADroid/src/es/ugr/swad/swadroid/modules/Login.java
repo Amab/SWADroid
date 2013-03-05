@@ -28,8 +28,6 @@ import org.ksoap2.serialization.KvmSerializable;
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
-import com.bugsense.trace.BugSenseHandler;
-
 import android.os.Bundle;
 import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
@@ -105,7 +103,7 @@ public class Login extends Module {
 			nfe.printStackTrace();
 			
 			//Send exception details to Bugsense
-			BugSenseHandler.sendException(nfe);
+			//BugSenseHandler.sendException(nfe);
         }
         return false;
     }
