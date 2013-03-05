@@ -105,13 +105,16 @@ public class NotificationItem extends MenuActivity {
 	    timeTextView.setText(time);
         
 	    //If the user photo exists and is public, download and show it
-	    if(userPhoto != null)
-		    if(Global.connectionAvailable(this) && !userPhoto.equalsIgnoreCase("")) {
+	    if(userPhoto != null) {
+		    if(Global.connectionAvailable(this)
+		    		&& (userPhoto != null) && !userPhoto.equalsIgnoreCase("")
+		    		&& (userPhoto.compareTo(Global.NULL_VALUE)!=0)) {
 		    	//userPhotoView.setImageURI(Uri.parse(userPhoto));
 		    	new DownloadImageTask(userPhotoView).execute(userPhoto);
 		    } else {
 		    	Log.d("NotificationItem", "No connection or no photo " + userPhoto);
 		    }
+	    }
 				
 		content = fixLinks(content);
 		if(content.startsWith("<![CDATA[")) {
