@@ -50,6 +50,11 @@ public class TestQuestion extends Model {
 	 */
 	private boolean shuffle;
 	/**
+	 * Question's feedback
+	 */
+	private String feedback;
+
+	/**
 	 * Question's answers
 	 */
 	private List<TestAnswer> answers;
@@ -58,6 +63,7 @@ public class TestQuestion extends Model {
 	private static PropertyInfo PI_editTime = new PropertyInfo();
 	private static PropertyInfo PI_ansType = new PropertyInfo();
 	private static PropertyInfo PI_shuffle = new PropertyInfo();
+	private static PropertyInfo PI_feedback = new PropertyInfo();
 	@SuppressWarnings("unused")
 	private static PropertyInfo[] PI_PROP_ARRAY =
 {
@@ -65,7 +71,8 @@ public class TestQuestion extends Model {
 		PI_stem,
 		PI_editTime,
 		PI_ansType,
-		PI_shuffle
+		PI_shuffle,
+		PI_feedback
 };
 
 	/**
@@ -73,13 +80,15 @@ public class TestQuestion extends Model {
 	 * @param stem Question's text
 	 * @param anstype Answer type
 	 * @param shuffle Flag to shuffle answers in test
+	 * @param feedback Text of the question's feedback
 	 */
-	public TestQuestion(long id, String stem, String anstype, boolean shuffle) {
+	public TestQuestion(long id, String stem, String anstype, boolean shuffle, String feedback) {
 		super(id);
 		this.stem = stem;
 		this.answerType = anstype;
 		this.shuffle = shuffle;
 		this.answers = new ArrayList<TestAnswer>();
+		this.feedback = feedback;
 	}
 
 	/**
@@ -88,14 +97,16 @@ public class TestQuestion extends Model {
 	 * @param stem Question's text
 	 * @param anstype Answer type
 	 * @param shuffle Flag to shuffle answers in test
+	 * @param feedback Text of the question's feedback
 	 */
-	public TestQuestion(long id, long selectedCourseCode, String stem, String anstype, boolean shuffle) {
+	public TestQuestion(long id, long selectedCourseCode, String stem, String anstype, boolean shuffle, String feedback) {
 		super(id);
 		this.crsCod = selectedCourseCode;
 		this.stem = stem;
 		this.answerType = anstype;
 		this.shuffle = shuffle;
 		this.answers = new ArrayList<TestAnswer>();
+		this.feedback = feedback;
 	}
 
 	/**
@@ -178,6 +189,21 @@ public class TestQuestion extends Model {
 		this.answers = answers;
 	}
 
+	/** Gets the text of the question's feedback
+	 * @return Text of the question's feedback
+	 */
+	public String getFeedback() {
+		return feedback;
+	}
+
+	/**
+	 * Sets the text of the question's feedback
+	 * @param feedback Text of the question's feedback
+	 */
+	public void setFeedback(String feedback) {
+		this.feedback = feedback;
+	}
+	
 	/**
 	 * Gets correct answer for this test
 	 * @return Correct test's answer
@@ -217,7 +243,10 @@ public class TestQuestion extends Model {
 		int result = super.hashCode();
 		result = prime * result
 				+ ((answerType == null) ? 0 : answerType.hashCode());
+		result = prime * result + ((answers == null) ? 0 : answers.hashCode());
 		result = prime * result + (int) (crsCod ^ (crsCod >>> 32));
+		result = prime * result
+				+ ((feedback == null) ? 0 : feedback.hashCode());
 		result = prime * result + (shuffle ? 1231 : 1237);
 		result = prime * result + ((stem == null) ? 0 : stem.hashCode());
 		return result;
@@ -232,6 +261,8 @@ public class TestQuestion extends Model {
 			return true;
 		if (!super.equals(obj))
 			return false;
+		if (getClass() != obj.getClass())
+			return false;
 		return true;
 	}
 
@@ -240,8 +271,9 @@ public class TestQuestion extends Model {
 	 */
 	@Override
 	public String toString() {
-		return "TestQuestion [stem=" + stem + ", anstype=" + answerType + ", shuffle=" + shuffle
-				+ ", answers=" + answers + ", getId()=" + getId() + "]";
+		return "TestQuestion [crsCod=" + crsCod + ", stem=" + stem
+				+ ", answerType=" + answerType + ", shuffle=" + shuffle
+				+ ", feedback=" + feedback + ", answers=" + answers + "]";
 	}
 
 	/* (non-Javadoc)
@@ -255,6 +287,7 @@ public class TestQuestion extends Model {
 		case 1 : object = stem;break;
 		case 2 : object = answerType;break;
 		case 3 : object = shuffle;break;
+		case 4 : object = feedback;break;
 		}
 
 		return object;
@@ -264,7 +297,7 @@ public class TestQuestion extends Model {
 	 * @see org.ksoap2.serialization.KvmSerializable#getPropertyCount()
 	 */
 	public int getPropertyCount() {
-		return 4;
+		return 5;
 	}
 
 	/* (non-Javadoc)
@@ -285,8 +318,12 @@ public class TestQuestion extends Model {
 			propertyInfo.name = "anstype";
 			break;  
 		case 3:
-			propertyInfo.type = PropertyInfo.STRING_CLASS;
+			propertyInfo.type = PropertyInfo.BOOLEAN_CLASS;
 			propertyInfo.name = "shuffle";
+			break; 
+		case 4:
+			propertyInfo.type = PropertyInfo.STRING_CLASS;
+			propertyInfo.name = "feedback";
 			break;
 		}
 	}
@@ -301,6 +338,7 @@ public class TestQuestion extends Model {
 		case 1  : stem = (String)obj; break;
 		case 2  : answerType = (String)obj; break;
 		case 3  : shuffle = Global.parseStringBool((String)obj); break;
+		case 4  : feedback = (String)obj; break;
 		}    
 	}
 }

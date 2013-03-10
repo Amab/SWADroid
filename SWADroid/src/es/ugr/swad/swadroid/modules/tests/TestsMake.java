@@ -276,11 +276,13 @@ public class TestsMake extends Module {
 		ImageView img = (ImageView) findViewById(R.id.testMakeCorrectAnswerImage);
 		CheckedAnswersArrayAdapter checkedAnswersAdapter;
 		String answerType = question.getAnswerType();
+		String questionFeedback = question.getFeedback();
 		String feedback = test.getFeedback();
 		String correctAnswer = "";
 		int numAnswers = answers.size();
 		Float questionScore;
 		DecimalFormat df = new DecimalFormat("0.00");
+		int feedbackLevel;
 
 		score.setVisibility(View.GONE);
 		textAnswer.setVisibility(View.GONE);
@@ -289,15 +291,17 @@ public class TestsMake extends Module {
 		img.setVisibility(View.GONE);
 
 		stem.setText(Html.fromHtml(question.getStem()));
-		if(answerType.equals("text")
-				|| answerType.equals("int")
-				|| answerType.equals("float")) {
+		feedbackLevel = Test.FEEDBACK_VALUES.indexOf(feedback);
+		
+		if(answerType.equals(TestAnswer.TYPE_TEXT)
+				|| answerType.equals(TestAnswer.TYPE_INT)
+				|| answerType.equals(TestAnswer.TYPE_FLOAT)) {
 
-			if(answerType.equals("int")) {
+			if(answerType.equals(TestAnswer.TYPE_INT)) {
 				textAnswer.setInputType(
 						InputType.TYPE_CLASS_NUMBER
 						|InputType.TYPE_NUMBER_FLAG_SIGNED);
-			} else if(answerType.equals("float")) {
+			} else if(answerType.equals(TestAnswer.TYPE_FLOAT)) {
 				textAnswer.setInputType(
 						InputType.TYPE_CLASS_NUMBER
 						|InputType.TYPE_NUMBER_FLAG_DECIMAL
@@ -310,20 +314,26 @@ public class TestsMake extends Module {
 			textAnswer.setText(a.getUserAnswer());
 			textAnswer.setVisibility(View.VISIBLE);
 
-			if(test.isEvaluated() && feedback.equals("eachGoodBad")) {
-				if(answerType.equals("float")) {
+			if(test.isEvaluated() && (feedbackLevel > 3)) {
+				if(answerType.equals(TestAnswer.TYPE_FLOAT)) {
 					correctAnswer = "[" + a.getAnswer() + ";" + answers.get(1).getAnswer() + "]";
 				} else {
 					for(int i=0; i<numAnswers; i++) {
 						a = answers.get(i);
-						correctAnswer += a.getAnswer() + "<br/>";
+						
+						if(test.isEvaluated() && (feedbackLevel == 5)) {
+							correctAnswer += "<strong>" + a.getAnswer() + "<strong/><br/>";
+							correctAnswer += a.getFeedback() + "<br/><br/>";
+						} else {
+							correctAnswer += a.getAnswer() + "<br/>";							
+						}
 					}
 				}
 
 				textCorrectAnswer.setText(Html.fromHtml(correctAnswer));
 				textCorrectAnswer.setVisibility(View.VISIBLE);
 			}
-		} else if(answerType.equals("multipleChoice")) {
+		} else if(answerType.equals(TestAnswer.TYPE_MULTIPLE_CHOICE)) {
 			checkedAnswersAdapter = new CheckedAnswersArrayAdapter(this, R.layout.list_item_multiple_choice,
 					answers, test.isEvaluated(), test.getFeedback(), answerType);
 
@@ -337,11 +347,11 @@ public class TestsMake extends Module {
 
 			testMakeList.setVisibility(View.VISIBLE);
 		} else {				
-			if(answerType.equals("TF") && (numAnswers < 2)) {
-				if(answers.get(0).getAnswer().equals("T")) {
-					answers.add(1, new TestAnswer(0, 1, 0, false, "F"));
+			if(answerType.equals(TestAnswer.TYPE_TRUE_FALSE) && (numAnswers < 2)) {
+				if(answers.get(0).getAnswer().equals(TestAnswer.VALUE_TRUE)) {
+					answers.add(1, new TestAnswer(0, 1, 0, false, TestAnswer.VALUE_FALSE, answers.get(0).getFeedback()));
 				} else {
-					answers.add(0, new TestAnswer(0, 0, 0, false, "T"));
+					answers.add(0, new TestAnswer(0, 0, 0, false, TestAnswer.VALUE_TRUE, answers.get(0).getFeedback()));
 				}
 
 				numAnswers = 2;
@@ -364,14 +374,14 @@ public class TestsMake extends Module {
 			testMakeList.setVisibility(View.VISIBLE);
 		}
 
-		if(test.isEvaluated() && (feedback.equals("eachResult") || feedback.equals("eachGoodBad"))) {
+		if(test.isEvaluated() && (feedbackLevel > 2)) {
 			textAnswer.setEnabled(false);
 			textAnswer.setOnClickListener(null);
 
-			if(feedback.equals("eachGoodBad")) {
+			if(feedback.equals(Test.FEEDBACK_HIGH)) {
 				img.setImageResource(R.drawable.btn_check_buttonless_on);				
-				if(!answerType.equals("TF") && !answerType.equals("multipleChoice")
-						&& !answerType.equals("uniqueChoice")) {
+				if(!answerType.equals(TestAnswer.TYPE_TRUE_FALSE) && !answerType.equals(TestAnswer.TYPE_MULTIPLE_CHOICE)
+						&& !answerType.equals(TestAnswer.TYPE_UNIQUE_CHOICE)) {
 
 					if(!answers.get(0).isCorrectAnswered()) {
 						img.setImageResource(android.R.drawable.ic_delete);
@@ -408,12 +418,12 @@ public class TestsMake extends Module {
 		SparseBooleanArray checkedItems;
 
 		answerType = q.getAnswerType();
-		if(answerType.equals("text")
-				|| answerType.equals("int")
-				|| answerType.equals("float")) {
+		if(answerType.equals(TestAnswer.TYPE_TEXT)
+				|| answerType.equals(TestAnswer.TYPE_INT)
+				|| answerType.equals(TestAnswer.TYPE_FLOAT)) {
 
 			la.get(0).setUserAnswer(String.valueOf(textAnswer.getText()));
-		} else if(answerType.equals("multipleChoice")) {
+		} else if(answerType.equals(TestAnswer.TYPE_MULTIPLE_CHOICE)) {
 			checkedItems = testMakeList.getCheckedItemPositions();
 			checkedListCount = checkedItems.size();
 			for(int i=0; i<checkedListCount; i++) {
@@ -541,7 +551,7 @@ public class TestsMake extends Module {
 		readUserAnswer(test.getQuestionAndAnswers(actualQuestion));
 
 		setLayout(R.layout.tests_make_results);
-		if(!feedback.equals("nothing")) {
+		if(!feedback.equals(Test.FEEDBACK_NONE)) {
 			if(!test.isEvaluated()) {
 				test.evaluate();
 				evalBt = (Button) findViewById(R.id.testEvaluateButton);
@@ -563,7 +573,7 @@ public class TestsMake extends Module {
 			}
 
 			bt = (Button) findViewById(R.id.testResultsButton);
-			if(feedback.equals("totalResult")) {
+			if(feedback.equals(Test.FEEDBACK_MIN)) {
 				bt.setEnabled(false);
 				bt.setText(R.string.testNoDetailsMsg);
 			}

@@ -105,7 +105,7 @@ public class TestsConfigDownload extends Module {
 	IllegalAccessException, InstantiationException {
 
 		//Calculates next timestamp to be requested		
-		Long timestamp = new Long(dbHelper.getTimeOfLastTestUpdate(Global.getSelectedCourseCode()));
+		Long timestamp = Long.valueOf(dbHelper.getTimeOfLastTestUpdate(Global.getSelectedCourseCode()));
 		timestamp++;
 
 		//Creates webservice request, adds required params and sends request to webservice
@@ -118,9 +118,9 @@ public class TestsConfigDownload extends Module {
 			//Stores tests data returned by webservice response
 			Vector<?> res = (Vector<?>) result;
 
-			Integer pluggable = new Integer(res.get(0).toString());
+			Integer pluggable = Integer.valueOf(res.get(0).toString());
 			isPluggable = Global.parseIntBool(pluggable);
-			numQuestions = new Integer(res.get(1).toString());
+			numQuestions = Integer.valueOf(res.get(1).toString());
 
 			//If there are no available questions, notify to user
 			if(numQuestions == 0) {
@@ -132,9 +132,9 @@ public class TestsConfigDownload extends Module {
 
 				//If there are questions and the teacher allows their download, process the questions data
 			} else {
-				Integer minQuestions = new Integer(res.get(2).toString());
-				Integer defQuestions = new Integer(res.get(3).toString());
-				Integer maxQuestions = new Integer(res.get(4).toString());
+				Integer minQuestions = Integer.valueOf(res.get(2).toString());
+				Integer defQuestions = Integer.valueOf(res.get(3).toString());
+				Integer maxQuestions = Integer.valueOf(res.get(4).toString());
 				String feedback = res.get(5).toString();
 				Test tDB = (Test) dbHelper.getRow(Global.DB_TABLE_TEST_CONFIG, "id",
 						Long.toString(Global.getSelectedCourseCode()));

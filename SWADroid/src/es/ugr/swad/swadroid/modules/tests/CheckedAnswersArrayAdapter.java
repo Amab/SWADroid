@@ -21,6 +21,7 @@ package es.ugr.swad.swadroid.modules.tests;
 import java.util.List;
 
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.model.Test;
 import es.ugr.swad.swadroid.model.TestAnswer;
 import android.content.Context;
 import android.graphics.Color;
@@ -62,6 +63,7 @@ public class CheckedAnswersArrayAdapter extends ArrayAdapter<TestAnswer> {
 		final ListView lv = (ListView) parent;
 		final int rbPosition = position;
 		TestAnswer a = items.get(position);
+		int feedbackLevel;
         
 		if (convertView == null) {
              LayoutInflater vi = LayoutInflater.from(context);
@@ -69,8 +71,8 @@ public class CheckedAnswersArrayAdapter extends ArrayAdapter<TestAnswer> {
         }
 		 
 		tt = (CheckedTextView) convertView.findViewById(android.R.id.text1);
-		if(answerType.equals("TF")) {
-			if(a.getAnswer().equals("T")) {
+		if(answerType.equals(TestAnswer.TYPE_TRUE_FALSE)) {
+			if(a.getAnswer().equals(TestAnswer.VALUE_TRUE)) {
 				tt.setText(R.string.trueMsg);
 			} else {
 				tt.setText(R.string.falseMsg);
@@ -97,8 +99,9 @@ public class CheckedAnswersArrayAdapter extends ArrayAdapter<TestAnswer> {
 		
 		if(evaluated) {
 			tt.setOnClickListener(null);
-			
-			if(feedback.equals("eachGoodBad") && a.getCorrect()) {
+
+			feedbackLevel = Test.FEEDBACK_VALUES.indexOf(feedback);
+			if((feedbackLevel > 2) && a.getCorrect()) {
 				tt.setTextColor(context.getResources().getColor(R.color.green));
 			} else {
 				tt.setTextColor(Color.BLACK);
