@@ -19,11 +19,14 @@
 package es.ugr.swad.swadroid.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.StringTokenizer;
 
 import org.ksoap2.serialization.PropertyInfo;
+
+import es.ugr.swad.swadroid.Global;
 
 /**
  * Class for store a test
@@ -34,6 +37,34 @@ public class Test extends Model {
 	 * Correct answer score
 	 */
 	private final float CORRECT_ANSWER_SCORE = 1;
+	/**
+	 * None feedback
+	 */
+	public static final String FEEDBACK_NONE = "nothing";
+	/**
+	 * Minimum feedback
+	 */
+	public static final String FEEDBACK_MIN = "totalResult";
+	/**
+	 * Medium feedback
+	 */
+	public static final String FEEDBACK_MEDIUM = "eachResult";
+	/**
+	 * High feedback
+	 */
+	public static final String FEEDBACK_HIGH = "eachGoodBad";
+	/**
+	 * Maximum feedback
+	 */
+	public static final String FEEDBACK_MAX = "fullFeedback";
+	/**
+	 * Feedback values
+	 */
+	public static final List<String> FEEDBACK_VALUES = Arrays.asList(FEEDBACK_NONE, FEEDBACK_MIN, FEEDBACK_MEDIUM, FEEDBACK_HIGH, FEEDBACK_MAX);
+	/**
+	 * Tests tag name for Logcat
+	 */
+	private static final String TAG = Global.APP_TAG + " TestsMake";
 	/**
 	 * List of questions and related answers
 	 */

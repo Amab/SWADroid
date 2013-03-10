@@ -241,7 +241,8 @@ public class DataBaseHelper {
 						(Integer) q.getFirst(),
 						ent.getString("stem"), 
 						ent.getString("ansType"), 
-						Global.parseStringBool(ent.getString("shuffle")));
+						Global.parseStringBool(ent.getString("shuffle")),
+						ent.getString("feedback"));
 			} else {
 				o = null;
 			}
@@ -255,7 +256,8 @@ public class DataBaseHelper {
 						ansInd,
 						(Integer) a.getFirst(),
 						Global.parseStringBool(ent.getString("correct")), 
-						ent.getString("answer"));
+						ent.getString("answer"), 
+						ent.getString("answerFeedback"));
 			} else {
 				o = null;
 			}
@@ -1593,7 +1595,7 @@ public class DataBaseHelper {
 	public List<TestQuestion> getRandomCourseQuestionsByTagAndAnswerType(long selectedCourseCode, List<TestTag> tagsList,
 			List<String> answerTypesList, int maxQuestions)
 			{
-		String select = "SELECT DISTINCT Q.id, Q.ansType, Q.shuffle, Q.stem";
+		String select = "SELECT DISTINCT Q.id, Q.ansType, Q.shuffle, Q.stem, Q.feedback";
 		String tables = " FROM " + Global.DB_TABLE_TEST_QUESTIONS + " AS Q, "
 				+ Global.DB_TABLE_TEST_QUESTIONS_COURSE + " AS C, "
 				+ Global.DB_TABLE_TEST_QUESTION_TAGS + " AS T";
@@ -1639,7 +1641,7 @@ public class DataBaseHelper {
 
 		dbCursorQuestions = db.getDB().rawQuery(select + tables + where + orderby + limit, null);
 
-		select = "SELECT DISTINCT A._id, A.ansInd, A.answer, A.correct";
+		select = "SELECT DISTINCT A._id, A.ansInd, A.answer, A.correct, A.answerFeedback";
 		tables = " FROM " + Global.DB_TABLE_TEST_ANSWERS + " AS A, "
 				+ Global.DB_TABLE_TEST_QUESTION_ANSWERS + " AS Q";
 		orderby = " ORDER BY A.ansInd";
@@ -1649,7 +1651,8 @@ public class DataBaseHelper {
 			String ansType = dbCursorQuestions.getString(1);
 			boolean shuffle = Global.parseStringBool(dbCursorQuestions.getString(2));
 			String stem = dbCursorQuestions.getString(3);
-			TestQuestion q = new TestQuestion(qstCod, selectedCourseCode, stem, ansType, shuffle);			
+			String questionFeedback = dbCursorQuestions.getString(4);
+			TestQuestion q = new TestQuestion(qstCod, selectedCourseCode, stem, ansType, shuffle, questionFeedback);			
 
 			where = " WHERE Q.qstCod=" + qstCod + " AND Q.ansCod=A._id";
 			dbCursorAnswers = db.getDB().rawQuery(select + tables + where + orderby, null);
@@ -1659,8 +1662,9 @@ public class DataBaseHelper {
 				int ansInd = dbCursorAnswers.getInt(1);
 				String answer = dbCursorAnswers.getString(2);
 				boolean correct = dbCursorAnswers.getString(3).equals("true") ? true: false;
+				String aswerFeedback = dbCursorAnswers.getString(2);
 
-				answers.add(new TestAnswer(ansCod, ansInd, qstCod, correct, answer));
+				answers.add(new TestAnswer(ansCod, ansInd, qstCod, correct, answer, aswerFeedback));
 			}
 
 			q.setAnswers(answers);

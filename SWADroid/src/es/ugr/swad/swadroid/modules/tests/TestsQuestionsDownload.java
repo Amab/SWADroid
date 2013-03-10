@@ -107,7 +107,7 @@ public class TestsQuestionsDownload extends Module {
 			int listSize = tagsListObject.getPropertyCount();
 			for (int i = 0; i < listSize; i++) {
 				SoapObject pii = (SoapObject)tagsListObject.getProperty(i);
-				Integer tagCod = new Integer(pii.getProperty("tagCode").toString());
+				Integer tagCod = Integer.valueOf(pii.getProperty("tagCode").toString());
 				String tagTxt = pii.getProperty("tagText").toString();
 				TestTag tag = new TestTag(tagCod, null, tagTxt, 0);
 				tagsList.add(tag);
@@ -124,11 +124,12 @@ public class TestsQuestionsDownload extends Module {
 			listSize = questionsListObject.getPropertyCount();
 			for (int i = 0; i < listSize; i++) {
 				SoapObject pii = (SoapObject)questionsListObject.getProperty(i);
-				Integer qstCod = new Integer(pii.getProperty("questionCode").toString());
+				Integer qstCod = Integer.valueOf(pii.getProperty("questionCode").toString());
 				String anstype = pii.getProperty("answerType").toString();
-				Integer shuffle = new Integer(pii.getProperty("shuffle").toString());
+				Integer shuffle = Integer.valueOf(pii.getProperty("shuffle").toString());
 				String stem = pii.getProperty("stem").toString();
-				TestQuestion q = new TestQuestion(qstCod, stem, anstype, Global.parseIntBool(shuffle));
+				String questionFeedback = pii.getProperty("feedback").toString();
+				TestQuestion q = new TestQuestion(qstCod, stem, anstype, Global.parseIntBool(shuffle), questionFeedback);
 
 				//If it's a new question, insert in database
 				try {
@@ -153,11 +154,12 @@ public class TestsQuestionsDownload extends Module {
 			listSize = answersListObject.getPropertyCount();
 			for (int i = 0; i < listSize; i++) {
 				SoapObject pii = (SoapObject)answersListObject.getProperty(i);
-				Integer qstCod = new Integer(pii.getProperty("questionCode").toString());
-				Integer ansIndex = new Integer(pii.getProperty("answerIndex").toString());
-				Integer correct = new Integer(pii.getProperty("correct").toString());
+				Integer qstCod = Integer.valueOf(pii.getProperty("questionCode").toString());
+				Integer ansIndex = Integer.valueOf(pii.getProperty("answerIndex").toString());
+				Integer correct = Integer.valueOf(pii.getProperty("correct").toString());
 				String answer = pii.getProperty("answerText").toString();
-				TestAnswer a = new TestAnswer(0, ansIndex, qstCod, Global.parseIntBool(correct), answer);
+				String answerFeeback = pii.getProperty("answerFeedback").toString();
+				TestAnswer a = new TestAnswer(0, ansIndex, qstCod, Global.parseIntBool(correct), answer, answerFeeback);
 
 				//If it's a new answer, insert in database
 				try {
@@ -182,9 +184,9 @@ public class TestsQuestionsDownload extends Module {
 			listSize = questionTagsListObject.getPropertyCount();
 			for (int i = 0; i < listSize; i++) {
 				SoapObject pii = (SoapObject)questionTagsListObject.getProperty(i);
-				Integer qstCod = new Integer(pii.getProperty("questionCode").toString());
-				Integer tagCod = new Integer(pii.getProperty("tagCode").toString());
-				Integer tagIndex = new Integer(pii.getProperty("tagIndex").toString());
+				Integer qstCod = Integer.valueOf(pii.getProperty("questionCode").toString());
+				Integer tagCod = Integer.valueOf(pii.getProperty("tagCode").toString());
+				Integer tagIndex = Integer.valueOf(pii.getProperty("tagIndex").toString());
 				TestTag tag = tagsList.get(tagsList.indexOf(new TestTag(tagCod, "", 0)));
 				tag.addQstCod(qstCod);
 				tag.setTagInd(tagIndex);
