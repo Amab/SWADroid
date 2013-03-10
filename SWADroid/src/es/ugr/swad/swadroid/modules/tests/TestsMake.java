@@ -293,10 +293,17 @@ public class TestsMake extends Module {
 				|| answerType.equals("int")
 				|| answerType.equals("float")) {
 
-			if(!answerType.equals("text")) {
-				textAnswer.setRawInputType(InputType.TYPE_CLASS_NUMBER);
+			if(answerType.equals("int")) {
+				textAnswer.setInputType(
+						InputType.TYPE_CLASS_NUMBER
+						|InputType.TYPE_NUMBER_FLAG_SIGNED);
+			} else if(answerType.equals("float")) {
+				textAnswer.setInputType(
+						InputType.TYPE_CLASS_NUMBER
+						|InputType.TYPE_NUMBER_FLAG_DECIMAL
+						|InputType.TYPE_NUMBER_FLAG_SIGNED);
 			} else {
-				textAnswer.setRawInputType(InputType.TYPE_CLASS_TEXT);
+				textAnswer.setInputType(InputType.TYPE_CLASS_TEXT);				
 			}
 
 			a = answers.get(0);
