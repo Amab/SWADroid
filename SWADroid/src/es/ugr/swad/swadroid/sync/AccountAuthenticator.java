@@ -1,5 +1,6 @@
 package es.ugr.swad.swadroid.sync;
 
+import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import android.accounts.Account;
@@ -9,22 +10,13 @@ import android.accounts.AccountManager;
 import android.content.ContentResolver;
 import android.os.Bundle;
 
-public class AccountAuthenticator extends AccountAuthenticatorActivity {
-	/**
-	 * Account type
-	 */
-	private static String accountType = "es.ugr.swad.swadroid";
-	/**
-	 * Synchronization authority
-	 */
-	private static String authority = "es.ugr.swad.swadroid.content";
-	
+public class AccountAuthenticator extends AccountAuthenticatorActivity {	
 	@Override
 	protected void onCreate(Bundle icicle) {		
 		super.onCreate(icicle);
 	    Preferences prefs = new Preferences();
 	    prefs.getPreferences(getBaseContext()); 
-		Account account = new Account(getString(R.string.app_name), accountType);
+		Account account = new Account(getString(R.string.app_name), Global.getAccountType());
 		AccountManager am = AccountManager.get(this);
 		boolean accountCreated = am.addAccountExplicitly(account, getString(R.string.app_name), null);
 		
@@ -38,9 +30,9 @@ public class AccountAuthenticator extends AccountAuthenticatorActivity {
 		  response.onResult(result);
 		  
 		  //Configure automatic synchronization
-    	  ContentResolver.setIsSyncable(account, authority, 1);
+    	  ContentResolver.setIsSyncable(account, Global.getAuthority(), 1);
     	  ContentResolver.setMasterSyncAutomatically(true);
-    	  ContentResolver.setSyncAutomatically(account, authority, true);
+    	  ContentResolver.setSyncAutomatically(account, Global.getAuthority(), true);
 		 }
 		}
 		finish();

@@ -22,6 +22,16 @@
             android:key="serverPref"
             android:title="@string/serverTitle_preferences" />
     </PreferenceCategory>
+	<PreferenceCategory 
+		android:title="@string/prefCatSyncTitle">
+		<ListPreference
+			android:title="@string/prefSynctimeTitle"
+			android:summary="@string/prefSynctimeSummary"
+			android:key="@string/prefSynctimeKey"
+			android:entries="@array/prefSynctimeEntries"
+			android:entryValues="@array/prefSynctimeValues"
+			android:defaultValue="60" />
+	</PreferenceCategory>
     <PreferenceCategory android:title="@string/about_preferences" >
         <Preference
             android:defaultValue=""
