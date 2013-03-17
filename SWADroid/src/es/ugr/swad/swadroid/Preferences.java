@@ -38,6 +38,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
+import es.ugr.swad.swadroid.sync.SyncUtils;
 import es.ugr.swad.swadroid.utils.Base64;
 
 /**
@@ -138,6 +139,10 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 	 */
 	private static final String DBKEYPREF = "DBKeyPref";
 	/**
+	 * Database passphrase preference name.
+	 */
+	private static final String SYNCPREF = "prefSynctime";
+	/**
 	 * User ID preference
 	 */
 	private Preference userIDPref;
@@ -181,6 +186,10 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 	 * Server preference
 	 */
 	private Preference serverPref;
+	/**
+	 * Synchronization preference
+	 */
+	private Preference synctimePref;
 	/**
 	 * Preferences editor
 	 */
@@ -386,6 +395,20 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 		blogPref = findPreference(BLOGPREF);
 		sharePref = findPreference(SHAREPREF);
 		serverPref = findPreference(SERVERPREF);
+		synctimePref = findPreference(SYNCPREF);
+        synctimePref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			public boolean onPreferenceChange(Preference preference, Object value) {
+				long time = Long.parseLong((String)value);
+
+				SyncUtils.removePeriodicSync(Global.getAuthority(), Bundle.EMPTY, getApplicationContext());
+
+				if(time != 0) {
+					SyncUtils.addPeriodicSync(Global.getAuthority(), Bundle.EMPTY, time, getApplicationContext());
+				}
+
+				return true;
+			}
+        });
 
 		userIDPref.setOnPreferenceChangeListener(this);
 		userPasswordPref.setOnPreferenceChangeListener(this);

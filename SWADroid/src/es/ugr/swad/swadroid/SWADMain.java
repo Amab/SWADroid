@@ -62,6 +62,7 @@ import es.ugr.swad.swadroid.modules.rollcall.Rollcall;
 import es.ugr.swad.swadroid.modules.tests.Tests;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
 import es.ugr.swad.swadroid.sync.AccountAuthenticator;
+import es.ugr.swad.swadroid.sync.SyncUtils;
 
 /**
  * Main class of the application.
@@ -320,6 +321,7 @@ public class SWADMain extends MenuExpandableListActivity {
 				//Configure automatic synchronization
 				Intent activity = new Intent(getBaseContext(), AccountAuthenticator.class);
 				startActivity(activity);
+				SyncUtils.addPeriodicSync(Global.getAuthority(), Bundle.EMPTY, Global.getDefaultSyncTime(), this);
 
 				prefs.setLastVersion(currentVersion);
 				firstRun = true;
@@ -349,6 +351,7 @@ public class SWADMain extends MenuExpandableListActivity {
 				//Configure automatic synchronization
 				//Intent activity = new Intent(getBaseContext(), AccountAuthenticator.class);
 				//startActivity(activity);
+				SyncUtils.addPeriodicSync(Global.getAuthority(), Bundle.EMPTY, Global.getDefaultSyncTime(), this);
 
 				prefs.setLastVersion(currentVersion);
 			}
