@@ -135,7 +135,10 @@
     <string name="googlePlusTitle">Google+</string>
     <string name="mailingListTitle">Lista de correo</string>
     <string name="blogTitle">Blog</string>
-    <string name="marketTitle">Google Play</string>
+    <string name="marketTitle">Google Play</string>    
+    <string name="prefCatSyncTitle">Sincronización</string>
+    <string name="prefSynctimeTitle">Frecuencia de sincronización</string>
+    <string name="prefSynctimeSummary">Frecuencia de sincronización de notificaciones</string>
     <string name="notificationsAlertTitle">SWADroid</string>
     <string name="notificationsAlertMsg">nuevas notificaciones</string>
     <string name="footMessageMsg">Enviado desde</string>
@@ -185,7 +188,6 @@
 	<string name="numStudent">Nº de estudiantes: </string>
     <string name="enrollment">Inscripción</string>
     <string name="myGroupsModuleLabel">Mis grupos</string>
-
     <string name="scan_no_photos">No se han podido guardar las fotos de los estudiantes</string>
     <string name="noStudentsAvailableMsg">Esta asignatura no tiene alumnos</string>
     <string name="studentsUpdated">alumnos actualizados</string>

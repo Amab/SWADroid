@@ -139,7 +139,11 @@
     <string name="googlePlusTitle">Google+</string>
     <string name="mailingListTitle">Mailing list</string>
     <string name="blogTitle">Blog</string>
-    <string name="marketTitle">Google Play</string>
+    <string name="marketTitle">Google Play</string> 
+    <string name="prefCatSyncTitle">Synchronization</string>
+    <string name="prefSynctimeTitle">Synchronization frecuency</string>
+    <string name="prefSynctimeSummary">Synchronization frecuency of notifications</string>
+    <string name="prefSynctimeKey">prefSynctime</string>
     <string name="notificationsAlertTitle">SWADroid</string>
     <string name="notificationsAlertMsg">new notifications</string>
     <string name="footMessageMsg">Sended from</string>

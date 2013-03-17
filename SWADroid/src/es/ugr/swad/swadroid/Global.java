@@ -46,6 +46,15 @@ public class Global {
 	 */
 	private static final String DEFAULT_SERVER = "swad.ugr.es";
 	/**
+	 * Account type
+	 */
+	private static final String accountType = "es.ugr.swad.swadroid";
+	/**
+	 * Synchronization authority
+	 */
+	private static final String authority = "es.ugr.swad.swadroid.content";
+	private static final long DEFAULT_SYNC_TIME = 60;
+	/**
 	 * User logged flag
 	 */
 	private static boolean logged;
@@ -455,6 +464,29 @@ public class Global {
 		return currentUserRole;
 	}
 
+	/**
+	 * Gets the account type for synchronization
+	 * @return the account type for synchronization
+	 */
+	public static String getAccountType() {
+		return accountType;
+	}
+	
+	/**
+	 * Gets the authority for synchronization
+	 * @return the authority for synchronization
+	 */
+	public static String getAuthority() {
+		return authority;
+	}
+
+	/**
+	 * Gets the default synchronization interval
+	 * @return the default synchronization interval
+	 */
+	public static long getDefaultSyncTime() {
+		return DEFAULT_SYNC_TIME;
+	}
 	/**
 	 * Checks if any connection is available 
 	 * @param ctx Application context
