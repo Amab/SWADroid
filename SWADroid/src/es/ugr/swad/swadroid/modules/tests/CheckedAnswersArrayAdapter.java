@@ -20,6 +20,7 @@ package es.ugr.swad.swadroid.modules.tests;
 
 import java.util.List;
 
+import es.ugr.swad.swadroid.Global;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Test;
 import es.ugr.swad.swadroid.model.TestAnswer;
@@ -33,6 +34,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckedTextView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class CheckedAnswersArrayAdapter extends ArrayAdapter<TestAnswer> {
 	private Context context;
@@ -60,6 +62,7 @@ public class CheckedAnswersArrayAdapter extends ArrayAdapter<TestAnswer> {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		CheckedTextView tt;
+		TextView answerFeedback;
 		final ListView lv = (ListView) parent;
 		final int rbPosition = position;
 		TestAnswer a = items.get(position);
@@ -71,6 +74,7 @@ public class CheckedAnswersArrayAdapter extends ArrayAdapter<TestAnswer> {
         }
 		 
 		tt = (CheckedTextView) convertView.findViewById(android.R.id.text1);
+		
 		if(answerType.equals(TestAnswer.TYPE_TRUE_FALSE)) {
 			if(a.getAnswer().equals(TestAnswer.VALUE_TRUE)) {
 				tt.setText(R.string.trueMsg);
@@ -99,12 +103,20 @@ public class CheckedAnswersArrayAdapter extends ArrayAdapter<TestAnswer> {
 		
 		if(evaluated) {
 			tt.setOnClickListener(null);
+			answerFeedback = (TextView) convertView.findViewById(android.R.id.text2);			
+			answerFeedback.setText(Html.fromHtml(a.getFeedback()));
 
 			feedbackLevel = Test.FEEDBACK_VALUES.indexOf(feedback);
 			if((feedbackLevel > 2) && a.getCorrect()) {
 				tt.setTextColor(context.getResources().getColor(R.color.green));
 			} else {
 				tt.setTextColor(Color.BLACK);
+			}
+			
+			if(feedbackLevel == 4 && !a.getFeedback().equals(Global.NULL_VALUE)) {
+				answerFeedback.setVisibility(View.VISIBLE);
+			} else {
+				answerFeedback.setVisibility(View.GONE);
 			}
 		}
          

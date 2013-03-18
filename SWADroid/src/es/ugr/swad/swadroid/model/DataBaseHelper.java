@@ -756,6 +756,7 @@ public class DataBaseHelper {
 		ent.setValue("ansType", q.getAnswerType());
 		ent.setValue("stem", q.getStem());
 		ent.setValue("shuffle", Global.parseBoolString(q.getShuffle()));
+		ent.setValue("feedback", q.getFeedback());
 		ent.save();
 
 		ent = new Entity(Global.DB_TABLE_TEST_QUESTIONS_COURSE);
@@ -777,6 +778,7 @@ public class DataBaseHelper {
 		ent.setValue("ansInd", a.getAnsInd());
 		ent.setValue("answer", a.getAnswer());
 		ent.setValue("correct", a.getCorrect());
+		ent.setValue("answerFeedback", a.getFeedback());
 		ent.save();
 		id = ent.getId();
 
@@ -1008,7 +1010,7 @@ public class DataBaseHelper {
 		return returnValue;
 	}
 
-	public boolean insertCollection(String table,List<Model> currentModels, long...courseCode){
+	public boolean insertCollection(String table, List<Model> currentModels, long...courseCode){
 		boolean result = true;
 		List<Model> modelsDB = getAllRows(table);
 		List<Model> newModels = new ArrayList<Model>();
@@ -1217,6 +1219,7 @@ public class DataBaseHelper {
 		ent.setValue("ansType", actual.getAnswerType());
 		ent.setValue("stem", actual.getStem());
 		ent.setValue("shuffle", Global.parseBoolString(actual.getShuffle()));
+		ent.setValue("feedback", actual.getFeedback());
 		ent.save();
 
 		rows = db.getEntityList(Global.DB_TABLE_TEST_QUESTIONS_COURSE, "qstCod = " + actual.getId());
@@ -1242,6 +1245,7 @@ public class DataBaseHelper {
 		ent.setValue("ansInd", actual.getAnsInd());
 		ent.setValue("answer", actual.getAnswer());
 		ent.setValue("correct", actual.getCorrect());
+		ent.setValue("answerFeedback", actual.getFeedback());
 		ent.save();
 
 		rows = db.getEntityList(Global.DB_TABLE_TEST_QUESTION_ANSWERS, "ansCod = " + actual.getId());
@@ -1662,7 +1666,7 @@ public class DataBaseHelper {
 				int ansInd = dbCursorAnswers.getInt(1);
 				String answer = dbCursorAnswers.getString(2);
 				boolean correct = dbCursorAnswers.getString(3).equals("true") ? true: false;
-				String aswerFeedback = dbCursorAnswers.getString(2);
+				String aswerFeedback = dbCursorAnswers.getString(4);
 
 				answers.add(new TestAnswer(ansCod, ansInd, qstCod, correct, answer, aswerFeedback));
 			}

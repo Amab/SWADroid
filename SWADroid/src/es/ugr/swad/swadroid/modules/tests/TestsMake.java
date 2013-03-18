@@ -269,14 +269,15 @@ public class TestsMake extends Module {
 		List<TestAnswer> answers = question.getAnswers();
 		TestAnswer a;
 		ListView testMakeList = (ListView) findViewById(R.id.testMakeList);
-		TextView stem = (TextView) findViewById(R.id.testMakeText);
+		TextView stem = (TextView) findViewById(R.id.testMakeQuestionStem);
+		TextView questionFeedback = (TextView) findViewById(R.id.testMakeQuestionFeedback);
+		TextView answerFeedback = (TextView) findViewById(R.id.testMakeAnswerFeedback);
 		TextView score = (TextView) findViewById(R.id.testMakeQuestionScore);
 		TextView textCorrectAnswer = (TextView) findViewById(R.id.testMakeCorrectAnswer);
 		EditText textAnswer = (EditText) findViewById(R.id.testMakeEditText);
 		ImageView img = (ImageView) findViewById(R.id.testMakeCorrectAnswerImage);
 		CheckedAnswersArrayAdapter checkedAnswersAdapter;
 		String answerType = question.getAnswerType();
-		String questionFeedback = question.getFeedback();
 		String feedback = test.getFeedback();
 		String correctAnswer = "";
 		int numAnswers = answers.size();
@@ -284,6 +285,8 @@ public class TestsMake extends Module {
 		DecimalFormat df = new DecimalFormat("0.00");
 		int feedbackLevel;
 
+		questionFeedback.setVisibility(View.GONE);
+		answerFeedback.setVisibility(View.GONE);
 		score.setVisibility(View.GONE);
 		textAnswer.setVisibility(View.GONE);
 		textCorrectAnswer.setVisibility(View.GONE);
@@ -291,7 +294,14 @@ public class TestsMake extends Module {
 		img.setVisibility(View.GONE);
 
 		stem.setText(Html.fromHtml(question.getStem()));
+		questionFeedback.setText(Html.fromHtml(question.getFeedback()));
 		feedbackLevel = Test.FEEDBACK_VALUES.indexOf(feedback);
+		
+		if(test.isEvaluated() && (feedbackLevel == 4) && !question.getFeedback().equals(Global.NULL_VALUE)) {
+			questionFeedback.setVisibility(View.VISIBLE);
+		} else {
+			questionFeedback.setVisibility(View.GONE);
+		}
 		
 		if(answerType.equals(TestAnswer.TYPE_TEXT)
 				|| answerType.equals(TestAnswer.TYPE_INT)
@@ -313,17 +323,25 @@ public class TestsMake extends Module {
 			a = answers.get(0);
 			textAnswer.setText(a.getUserAnswer());
 			textAnswer.setVisibility(View.VISIBLE);
+			
+			answerFeedback.setText(Html.fromHtml(a.getFeedback()));
 
-			if(test.isEvaluated() && (feedbackLevel > 3)) {
+			if(test.isEvaluated() && (feedbackLevel > 2)) {
 				if(answerType.equals(TestAnswer.TYPE_FLOAT)) {
 					correctAnswer = "[" + a.getAnswer() + ";" + answers.get(1).getAnswer() + "]";
+					
+					if(test.isEvaluated() && (feedbackLevel == 4) && !a.getFeedback().equals(Global.NULL_VALUE)) {
+						answerFeedback.setVisibility(View.VISIBLE);
+					} else {
+						answerFeedback.setVisibility(View.GONE);
+					}
 				} else {
 					for(int i=0; i<numAnswers; i++) {
 						a = answers.get(i);
 						
-						if(test.isEvaluated() && (feedbackLevel == 5)) {
-							correctAnswer += "<strong>" + a.getAnswer() + "<strong/><br/>";
-							correctAnswer += a.getFeedback() + "<br/><br/>";
+						if((feedbackLevel == 4) && !a.getFeedback().equals(Global.NULL_VALUE)) {
+							correctAnswer += "<strong>" + a.getAnswer() + "</strong><br/>";
+							correctAnswer += "<i>" + a.getFeedback() + "</i><br/><br/>";
 						} else {
 							correctAnswer += a.getAnswer() + "<br/>";							
 						}
