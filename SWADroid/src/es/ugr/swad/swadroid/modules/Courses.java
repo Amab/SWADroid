@@ -36,7 +36,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.Model;
@@ -51,7 +51,7 @@ public class Courses extends Module {
 	/**
 	 * Courses tag name for Logcat
 	 */
-	public static final String TAG = Global.APP_TAG + " Courses";
+	public static final String TAG = Constants.APP_TAG + " Courses";
 
 	@Override
 	protected void runConnection() {
@@ -112,12 +112,12 @@ public class Courses extends Module {
 
 		//Creates webservice request, adds required params and sends request to webservice
 		createRequest();
-		addParam("wsKey", Global.getLoggedUser().getWsKey());
+		addParam("wsKey", Constants.getLoggedUser().getWsKey());
 		sendRequest(Course.class, false);
 
 		if (result != null) {
 			//Stores courses data returned by webservice response
-			List<Model> coursesDB = dbHelper.getAllRows(Global.DB_TABLE_COURSES);
+			List<Model> coursesDB = dbHelper.getAllRows(Constants.DB_TABLE_COURSES);
 			List<Model> coursesSWAD = new ArrayList<Model>();
 			List<Model> newCourses = new ArrayList<Model>();
 			List<Model> obsoleteCourses = new ArrayList<Model>();
@@ -161,7 +161,7 @@ public class Courses extends Module {
 			csSize = obsoleteCourses.size();
 			for (int i = 0; i < csSize; i++) {
 				Course c = (Course) obsoleteCourses.get(i);
-				dbHelper.removeRow(Global.DB_TABLE_COURSES, c.getId());
+				dbHelper.removeRow(Constants.DB_TABLE_COURSES, c.getId());
 			}
 
 			Log.i(TAG, "Deleted " + csSize + " old courses");
@@ -210,12 +210,14 @@ public class Courses extends Module {
 	 */
 	public void clearCourses(Context context) {
 		try {
-			dbHelper.emptyTable(Global.DB_TABLE_COURSES);
+			dbHelper.emptyTable(Constants.DB_TABLE_COURSES);
 		} catch (Exception e) {
 			e.printStackTrace();
 			
 			//Send exception details to Bugsense
-			BugSenseHandler.sendException(e);
+			if(!isDebuggable) {
+				BugSenseHandler.sendException(e);
+			}
 		}
 	}
 }

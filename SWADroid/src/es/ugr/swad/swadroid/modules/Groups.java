@@ -28,15 +28,13 @@ import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
-import com.bugsense.trace.BugSenseHandler;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.model.Model;
-import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 
 /**
@@ -59,7 +57,7 @@ public class Groups extends Module {
 	/**
 	 * Groups tag name for Logcat
 	 */
-	public static final String TAG = Global.APP_TAG + " Groups";
+	public static final String TAG = Constants.APP_TAG + " Groups";
 	@Override
 	protected void runConnection() {
 		super.runConnection();
@@ -83,13 +81,7 @@ public class Groups extends Module {
 				runConnection();
 			} catch (Exception ex) {
 				String errorMsg = getString(R.string.errorServerResponseMsg);
-				error(errorMsg);
-
-				Log.e(ex.getClass().getSimpleName(), errorMsg);        		
-				ex.printStackTrace();
-				
-				//Send exception details to Bugsense
-				BugSenseHandler.sendExceptionMessage(TAG, errorMsg, ex);
+				error(TAG, errorMsg, ex);
 			}
 	}
 
@@ -118,7 +110,7 @@ public class Groups extends Module {
 			IOException, XmlPullParserException, SoapFault,
 			IllegalAccessException, InstantiationException {
 		createRequest();
-		addParam("wsKey", Global.getLoggedUser().getWsKey());		
+		addParam("wsKey", Constants.getLoggedUser().getWsKey());		
 		addParam("courseCode", (int) courseCode);
 		sendRequest(Group.class, false);
 
@@ -149,7 +141,7 @@ public class Groups extends Module {
         		}
 			}
 
-			dbHelper.insertCollection(Global.DB_TABLE_GROUPS, groupsSWAD, courseCode);
+			dbHelper.insertCollection(Constants.DB_TABLE_GROUPS, groupsSWAD, courseCode);
 			//TODO remove obsolete groups
 			/*for(int i = 0; i < groupsSWAD.size(); ++i){
 				Group g = (Group) groupsSWAD.get(i);

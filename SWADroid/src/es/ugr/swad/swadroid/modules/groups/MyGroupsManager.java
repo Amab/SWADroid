@@ -34,7 +34,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.model.Group;
@@ -55,7 +55,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 	/**
 	 * Tests tag name for Logcat
 	 */
-	public static final String TAG = Global.APP_TAG + "Groups Manager";
+	public static final String TAG = Constants.APP_TAG + "Groups Manager";
 	/**
 	 * Course code of current selected course
 	 * */
@@ -77,7 +77,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 	protected void onStart() {
 		super.onStart();
 		
-		List<Model> groupTypes = dbHelper.getAllRows(Global.DB_TABLE_GROUP_TYPES, "courseCode = " + courseCode , "groupTypeName");
+		List<Model> groupTypes = dbHelper.getAllRows(Constants.DB_TABLE_GROUP_TYPES, "courseCode = " + courseCode , "groupTypeName");
 		List<Group> groups = dbHelper.getGroups(courseCode);
 		if((!groupTypes.isEmpty()) && (!groups.isEmpty())){
 			setMenu();
@@ -85,12 +85,12 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 			if(groupTypes.size() != 0){
 				Intent activity = new Intent(getBaseContext(),Groups.class);
 				activity.putExtra("courseCode", courseCode);
-				startActivityForResult(activity,Global.GROUPS_REQUEST_CODE);
+				startActivityForResult(activity,Constants.GROUPS_REQUEST_CODE);
 			}else{
 				if(!groupTypesRequested){
 					Intent activity = new Intent(getBaseContext(),GroupTypes.class);
 					activity.putExtra("courseCode",  courseCode);
-					startActivityForResult(activity,Global.GROUPTYPES_REQUEST_CODE);
+					startActivityForResult(activity,Constants.GROUPTYPES_REQUEST_CODE);
 				}
 			}
 		}
@@ -109,7 +109,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 		this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
 		
 		TextView courseNameText = (TextView) this.findViewById(R.id.courseSelectedText);
-		courseNameText.setText(Global.getSelectedCourseShortName());
+		courseNameText.setText(Constants.getSelectedCourseShortName());
 		
 		ImageView moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
 		moduleIcon.setBackgroundResource(R.drawable.my_groups);
@@ -129,17 +129,17 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == Activity.RESULT_OK) {
 			switch (requestCode) {
-			case Global.GROUPTYPES_REQUEST_CODE:
+			case Constants.GROUPTYPES_REQUEST_CODE:
 				groupTypesRequested = true;
-				if(dbHelper.getAllRows(Global.DB_TABLE_GROUP_TYPES, "courseCode = " + courseCode , "groupTypeName").size() > 0){
+				if(dbHelper.getAllRows(Constants.DB_TABLE_GROUP_TYPES, "courseCode = " + courseCode , "groupTypeName").size() > 0){
 					//If there are not group types, either groups. Therefore, there is no need to request groups
 					Intent activity = new Intent(getBaseContext(),Groups.class);
 					activity.putExtra("courseCode",  courseCode);
-					startActivityForResult(activity,Global.GROUPS_REQUEST_CODE);
+					startActivityForResult(activity,Constants.GROUPS_REQUEST_CODE);
 				}else
 					setEmptyMenu();
 				break;
-			case Global.GROUPS_REQUEST_CODE:
+			case Constants.GROUPS_REQUEST_CODE:
 				if(dbHelper.getGroups(courseCode).size() > 0 || refreshRequested){
 					getExpandableListView().setVisibility(View.VISIBLE);
 					this.findViewById(R.id.sendMyGroupsButton).setVisibility(View.VISIBLE);
@@ -155,7 +155,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 					setEmptyMenu();
 					
 				break;
-			case Global.SENDMYGROUPS_REQUEST_CODE:
+			case Constants.SENDMYGROUPS_REQUEST_CODE:
 				int success = data.getIntExtra("success",0);
 				if(success == 0){ //no enrollment was made
 					HashMap<Long,ArrayList<Group>> currentGroups = getHashMapGroups(groupTypes);
@@ -230,7 +230,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 				Intent activity = new  Intent(getBaseContext(), SendMyGroups.class);
 				activity.putExtra("courseCode", courseCode);
 				activity.putExtra("myGroups", myGroups);
-				startActivityForResult(activity,Global.SENDMYGROUPS_REQUEST_CODE);
+				startActivityForResult(activity,Constants.SENDMYGROUPS_REQUEST_CODE);
 			}
 		})
 		.setNegativeButton(R.string.noMsg, new DialogInterface.OnClickListener() {
@@ -262,9 +262,9 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 	}
 	
 	private void setMenu(){
-		groupTypes = (ArrayList<Model>) dbHelper.getAllRows(Global.DB_TABLE_GROUP_TYPES, "courseCode ="+ String.valueOf(courseCode), "groupTypeName");
+		groupTypes = (ArrayList<Model>) dbHelper.getAllRows(Constants.DB_TABLE_GROUP_TYPES, "courseCode ="+ String.valueOf(courseCode), "groupTypeName");
 		HashMap<Long,ArrayList<Group>> children = getHashMapGroups(groupTypes);
-		int currentRole = Global.getCurrentUserRole();
+		int currentRole = Constants.getCurrentUserRole();
 		EnrollmentExpandableListAdapter adapter = new EnrollmentExpandableListAdapter(getBaseContext(), groupTypes, children, R.layout.group_type_list_item, R.layout.group_list_item,currentRole);
 		getExpandableListView().setAdapter(adapter);
 		
@@ -332,7 +332,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 		
 		Intent activity = new Intent(getBaseContext(),GroupTypes.class);
 		activity.putExtra("courseCode",  courseCode);
-		startActivityForResult(activity,Global.GROUPTYPES_REQUEST_CODE);
+		startActivityForResult(activity,Constants.GROUPTYPES_REQUEST_CODE);
 
 	}
 

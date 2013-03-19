@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
  * Useful functions.
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  */
-public class Util {
+public class RollCallUtil {
 	public static boolean isValidDni(String dni) {
 		String dniPattern = "^[A-Z]?\\d{1,16}[A-Z]?$";	// (0 or 1 letter) + (1 to 16 digits) + (0 or 1 letter)
 

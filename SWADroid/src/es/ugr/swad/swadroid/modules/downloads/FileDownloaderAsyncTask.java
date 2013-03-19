@@ -34,7 +34,7 @@ import com.bugsense.trace.BugSenseHandler;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Constants;
 
 /**
  *
@@ -66,7 +66,7 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 	/**
 	 * Downloads tag name for Logcat
 	 */
-	public static final String TAG = Global.APP_TAG + " Downloads";
+	public static final String TAG = Constants.APP_TAG + " Downloads";
 
 
 	public FileDownloaderAsyncTask(Context context,String fileName, boolean notification, long fileSize){

@@ -25,17 +25,16 @@ import java.util.Vector;
 import org.ksoap2.SoapFault;
 import org.xmlpull.v1.XmlPullParserException;
 
-import com.bugsense.trace.BugSenseHandler;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
-import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Test;
 import es.ugr.swad.swadroid.modules.Module;
+import es.ugr.swad.swadroid.utils.Utils;
 
 /**
  * Tests module for download and update questions
@@ -54,7 +53,7 @@ public class TestsConfigDownload extends Module {
 	/**
 	 * Tests tag name for Logcat
 	 */
-	public static final String TAG = Global.APP_TAG + " TestsConfigDownload";
+	public static final String TAG = Constants.APP_TAG + " TestsConfigDownload";
 	/**
 	 * Application preferences.
 	 */
@@ -79,19 +78,13 @@ public class TestsConfigDownload extends Module {
 		try {					
 
 			if(isDebuggable) {
-				Log.d(TAG, "selectedCourseCode = " + Long.toString(Global.getSelectedCourseCode()));
+				Log.d(TAG, "selectedCourseCode = " + Long.toString(Constants.getSelectedCourseCode()));
 			}
 
 			runConnection();
 		} catch (Exception ex) {
 			String errorMsg = getString(R.string.errorServerResponseMsg);
-			error(errorMsg);
-
-			Log.e(ex.getClass().getSimpleName(), errorMsg);        		
-			ex.printStackTrace();
-			
-			//Send exception details to Bugsense
-			BugSenseHandler.sendException(ex);
+			error(TAG, errorMsg, ex);
 		}		
 	}
 
@@ -105,13 +98,13 @@ public class TestsConfigDownload extends Module {
 	IllegalAccessException, InstantiationException {
 
 		//Calculates next timestamp to be requested		
-		Long timestamp = Long.valueOf(dbHelper.getTimeOfLastTestUpdate(Global.getSelectedCourseCode()));
+		Long timestamp = Long.valueOf(dbHelper.getTimeOfLastTestUpdate(Constants.getSelectedCourseCode()));
 		timestamp++;
 
 		//Creates webservice request, adds required params and sends request to webservice
 		createRequest();
-		addParam("wsKey", Global.getLoggedUser().getWsKey());
-		addParam("courseCode", (int)Global.getSelectedCourseCode());
+		addParam("wsKey", Constants.getLoggedUser().getWsKey());
+		addParam("courseCode", (int)Constants.getSelectedCourseCode());
 		sendRequest(Test.class, false);
 
 		if (result != null) {
@@ -119,7 +112,7 @@ public class TestsConfigDownload extends Module {
 			Vector<?> res = (Vector<?>) result;
 
 			Integer pluggable = Integer.valueOf(res.get(0).toString());
-			isPluggable = Global.parseIntBool(pluggable);
+			isPluggable = Utils.parseIntBool(pluggable);
 			numQuestions = Integer.valueOf(res.get(1).toString());
 
 			//If there are no available questions, notify to user
@@ -136,12 +129,12 @@ public class TestsConfigDownload extends Module {
 				Integer defQuestions = Integer.valueOf(res.get(3).toString());
 				Integer maxQuestions = Integer.valueOf(res.get(4).toString());
 				String feedback = res.get(5).toString();
-				Test tDB = (Test) dbHelper.getRow(Global.DB_TABLE_TEST_CONFIG, "id",
-						Long.toString(Global.getSelectedCourseCode()));
+				Test tDB = (Test) dbHelper.getRow(Constants.DB_TABLE_TEST_CONFIG, "id",
+						Long.toString(Constants.getSelectedCourseCode()));
 
 				//If not exists a test configuration for this course, insert to database
 				if(tDB == null) {
-					Test t = new Test(Global.getSelectedCourseCode(), minQuestions, defQuestions, maxQuestions, feedback);
+					Test t = new Test(Constants.getSelectedCourseCode(), minQuestions, defQuestions, maxQuestions, feedback);
 					dbHelper.insertTestConfig(t);
 				}
 
@@ -154,7 +147,7 @@ public class TestsConfigDownload extends Module {
 
 				Intent activity = new Intent(getBaseContext(), TestsQuestionsDownload.class);
 				activity.putExtra("timestamp", timestamp);
-				startActivityForResult(activity, Global.TESTS_QUESTIONS_DOWNLOAD_REQUEST_CODE);
+				startActivityForResult(activity, Constants.TESTS_QUESTIONS_DOWNLOAD_REQUEST_CODE);
 			}
 		}
 

@@ -53,11 +53,11 @@ import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.camera.CameraManager;
 
-import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.model.User;
-import es.ugr.swad.swadroid.modules.rollcall.Util;
+import es.ugr.swad.swadroid.modules.rollcall.RollCallUtil;
 
 /**
  * This activity opens the camera and does the actual scanning on a background thread. It draws a
@@ -298,8 +298,8 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		Bitmap bMap;
 		Bitmap bMapScaled;
 		String qrContent = rawResult.toString();
-		Boolean validDni = Util.isValidDni(qrContent);
-		Boolean validNickname = Util.isValidNickname(qrContent);
+		Boolean validDni = RollCallUtil.isValidDni(qrContent);
+		Boolean validNickname = RollCallUtil.isValidNickname(qrContent);
 		int widthScale, heightScale, bMapScaledWidth, bMapScaledHeight;
 
 		inactivityTimer.onActivity();
@@ -307,13 +307,13 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 
 		if (validDni || validNickname) {			
 			String fieldName = (validDni) ? "userID" : "userNickname";			
-			u = (User) dbHelper.getRow(Global.DB_TABLE_USERS, fieldName, qrContent);
+			u = (User) dbHelper.getRow(Constants.DB_TABLE_USERS, fieldName, qrContent);
 
 			if (u != null) {
 				idList.add(u.getUserID());
 
 				// Check if the specified user is enrolled in the selected course
-				if (dbHelper.isUserEnrolledCourse(u.getUserID(), Global.getSelectedCourseCode())) {
+				if (dbHelper.isUserEnrolledCourse(u.getUserID(), Constants.getSelectedCourseCode())) {
 					messageResult = getString(R.string.scan_valid_student);
 					iconResult = R.drawable.ok;
 					soundResult = sounds[0]; // Positive sound

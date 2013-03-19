@@ -20,7 +20,7 @@ package es.ugr.swad.swadroid.modules.tests;
 
 import java.util.List;
 
-import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Test;
 import es.ugr.swad.swadroid.model.TestAnswer;
@@ -113,7 +113,7 @@ public class CheckedAnswersArrayAdapter extends ArrayAdapter<TestAnswer> {
 				tt.setTextColor(Color.BLACK);
 			}
 			
-			if(feedbackLevel == 4 && !a.getFeedback().equals(Global.NULL_VALUE)) {
+			if(feedbackLevel == 4 && !a.getFeedback().equals(Constants.NULL_VALUE)) {
 				answerFeedback.setVisibility(View.VISIBLE);
 			} else {
 				answerFeedback.setVisibility(View.GONE);

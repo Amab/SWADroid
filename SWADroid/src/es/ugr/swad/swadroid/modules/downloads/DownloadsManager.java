@@ -43,7 +43,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
-import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.model.Group;
@@ -82,7 +82,7 @@ public class DownloadsManager extends MenuActivity {
 	/**
 	 * Downloads tag name for Logcat
 	 */
-	public static final String TAG = Global.APP_TAG + " Downloads";
+	public static final String TAG = Constants.APP_TAG + " Downloads";
 	
 	/**
 	 * List of group of the selected course to which the user belongs
@@ -139,7 +139,7 @@ public class DownloadsManager extends MenuActivity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		List<Group> allGroups = dbHelper.getGroups(Global.getSelectedCourseCode());
+		List<Group> allGroups = dbHelper.getGroups(Constants.getSelectedCourseCode());
 		int nGroups = allGroups.size();
 		
 		if(!saveState){
@@ -153,8 +153,8 @@ public class DownloadsManager extends MenuActivity {
 					requestDirectoryTree();
 			}else{
 					Intent activity = new Intent(getBaseContext(),GroupTypes.class);
-					activity.putExtra("courseCode",  Global.getSelectedCourseCode());
-					startActivityForResult(activity,Global.GROUPTYPES_REQUEST_CODE);
+					activity.putExtra("courseCode",  Constants.getSelectedCourseCode());
+					startActivityForResult(activity,Constants.GROUPTYPES_REQUEST_CODE);
 			}
 		}else{
 			myGroups = getFilteredGroups();
@@ -200,10 +200,10 @@ public class DownloadsManager extends MenuActivity {
 		setContentView(R.layout.navigation);
 		
 		downloadsAreaCode = getIntent().getIntExtra("downloadsAreaCode",
-				Global.DOCUMENTS_AREA_CODE);
+				Constants.DOCUMENTS_AREA_CODE);
 		
 		//set the module bar
-		if (downloadsAreaCode == Global.DOCUMENTS_AREA_CODE) {
+		if (downloadsAreaCode == Constants.DOCUMENTS_AREA_CODE) {
 			moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
 			moduleIcon.setBackgroundResource(R.drawable.folder);
 
@@ -291,7 +291,7 @@ public class DownloadsManager extends MenuActivity {
 			switch (requestCode) {
 			// After get the list of courses, a dialog is launched to choice the
 			// course
-			case Global.DIRECTORY_TREE_REQUEST_CODE:
+			case Constants.DIRECTORY_TREE_REQUEST_CODE:
 				 tree = data.getStringExtra("tree");
 				if (!refresh){
 					setMainView();
@@ -305,7 +305,7 @@ public class DownloadsManager extends MenuActivity {
 						setMainView();
 				}
 				break;
-			case Global.GETFILE_REQUEST_CODE:
+			case Constants.GETFILE_REQUEST_CODE:
 				Log.i(TAG, "Correct get file");
 				//if the sd card is not busy, the file can be downloaded 
 				if (this.checkMediaAvailability() == 2){
@@ -327,17 +327,17 @@ public class DownloadsManager extends MenuActivity {
 					dialog.show();
 				}	
 				break;
-			case Global.GROUPS_REQUEST_CODE:
+			case Constants.GROUPS_REQUEST_CODE:
 				groupsRequested = true;
 				myGroups = getFilteredGroups(); //only groups where the user is enrolled.
 				this.loadGroupsSpinner(myGroups);
 				if(myGroups.size() == 0)
 					requestDirectoryTree();
 				break;	
-			case Global.GROUPTYPES_REQUEST_CODE:	
+			case Constants.GROUPTYPES_REQUEST_CODE:	
 				Intent activity = new Intent(getBaseContext(),Groups.class);
-				activity.putExtra("courseCode", Global.getSelectedCourseCode());
-				startActivityForResult(activity,Global.GROUPS_REQUEST_CODE);
+				activity.putExtra("courseCode", Constants.getSelectedCourseCode());
+				startActivityForResult(activity,Constants.GROUPS_REQUEST_CODE);
 				break;
 			}
 			
@@ -365,7 +365,7 @@ public class DownloadsManager extends MenuActivity {
 		this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
 		
 		TextView courseNameText = (TextView) this.findViewById(R.id.courseSelectedText);
-		courseNameText.setText(Global.getSelectedCourseShortName());
+		courseNameText.setText(Constants.getSelectedCourseShortName());
 		
 		this.saveState = true;
 		this.previousConnection = false;
@@ -419,7 +419,7 @@ public class DownloadsManager extends MenuActivity {
 	 * Get the list of the groups of the course with a documents zone to whom the user belongs
 	 * */
 	private List<Group> getFilteredGroups(){
-		List<Group> currentGroups = dbHelper.getGroups(Global.getSelectedCourseCode());
+		List<Group> currentGroups = dbHelper.getGroups(Constants.getSelectedCourseCode());
 		//remove groups that do not have a file zone assigned 
 		int j = 0;
 		while(j < currentGroups.size()){
@@ -441,7 +441,7 @@ public class DownloadsManager extends MenuActivity {
 			groupsSpinner.setVisibility(View.VISIBLE);
 			
 			ArrayList<String> spinnerNames = new ArrayList<String>(currentGroups.size()+1);
-			spinnerNames.add(getString(R.string.course)+"-" + Global.getSelectedCourseShortName());
+			spinnerNames.add(getString(R.string.course)+"-" + Constants.getSelectedCourseShortName());
 			for(int i=0;i<currentGroups.size();++i){
 				Group g = currentGroups.get(i);
 				GroupType gType = dbHelper.getGroupTypeFromGroup(g.getId());
@@ -458,7 +458,7 @@ public class DownloadsManager extends MenuActivity {
 			this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
 			
 			TextView courseNameText = (TextView) this.findViewById(R.id.courseSelectedText);
-			courseNameText.setText(Global.getSelectedCourseShortName());
+			courseNameText.setText(Constants.getSelectedCourseShortName());
 			
 		}
 	}
@@ -496,7 +496,7 @@ public class DownloadsManager extends MenuActivity {
 		activity = new Intent(getBaseContext(), DirectoryTreeDownload.class);
 		activity.putExtra("treeCode", downloadsAreaCode);
 		activity.putExtra("groupCode", (int)chosenGroupCode);
-		startActivityForResult(activity, Global.DIRECTORY_TREE_REQUEST_CODE);
+		startActivityForResult(activity, Constants.DIRECTORY_TREE_REQUEST_CODE);
 	}
 	
 	/**
@@ -550,7 +550,7 @@ public class DownloadsManager extends MenuActivity {
 	    activity = new Intent(getBaseContext(), GetFile.class);
 	    activity.putExtra("fileCode", fileCode);
 	    //activity.putExtra("path", navigator.getPath() + fileName);
-	    startActivityForResult(activity, Global.GETFILE_REQUEST_CODE);
+	    startActivityForResult(activity, Constants.GETFILE_REQUEST_CODE);
 	  }
 	/**
 	 * Method that shows information file and allows its download
@@ -618,8 +618,8 @@ public class DownloadsManager extends MenuActivity {
 		refresh = true;
 		
 		Intent activity = new Intent(getBaseContext(),GroupTypes.class);
-		activity.putExtra("courseCode",  Global.getSelectedCourseCode());
-		startActivityForResult(activity,Global.GROUPTYPES_REQUEST_CODE);
+		activity.putExtra("courseCode",  Constants.getSelectedCourseCode());
+		startActivityForResult(activity,Constants.GROUPTYPES_REQUEST_CODE);
 
 	}
 

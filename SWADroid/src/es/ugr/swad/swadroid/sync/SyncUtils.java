@@ -18,7 +18,7 @@
  */
 package es.ugr.swad.swadroid.sync;
 
-import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Constants;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
@@ -50,7 +50,7 @@ public class SyncUtils {
 			manager.setInexactRepeating(type, triggerAtTime, interval, operation);
 		} else {	
 			AccountManager am = AccountManager.get(context);
-			Account[] accounts = am.getAccountsByType(Global.getAccountType());
+			Account[] accounts = am.getAccountsByType(Constants.ACCOUNT_TYPE);
 
 			for(Account a : accounts) {
 				ContentResolver.addPeriodicSync(a, authority, extras, frequency * 60);
@@ -61,7 +61,7 @@ public class SyncUtils {
     public static void removePeriodicSync(String authority, Bundle extras, Context context) {	
     	if(android.os.Build.VERSION.SDK_INT >= 8) {
 			AccountManager am = AccountManager.get(context);
-			Account[] accounts = am.getAccountsByType(Global.getAccountType());
+			Account[] accounts = am.getAccountsByType(Constants.ACCOUNT_TYPE);
 
 			for(Account a : accounts) {
 				ContentResolver.removePeriodicSync(a, authority, extras);

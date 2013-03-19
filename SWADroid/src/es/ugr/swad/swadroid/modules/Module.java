@@ -30,10 +30,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
+import es.ugr.swad.swadroid.utils.Utils;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -100,7 +101,7 @@ public abstract class Module extends MenuActivity {
     /**
      * Class Module's tag name for Logcat
      */
-    public static final String TAG = Global.APP_TAG + " Module";
+    public static final String TAG = Constants.APP_TAG + " Module";
     
     private static KeepAliveHttpsTransportSE connection;
     
@@ -249,7 +250,7 @@ public abstract class Module extends MenuActivity {
      */
     protected void runConnection()
     {
-    	isConnected = Global.connectionAvailable(this);
+    	isConnected = Utils.connectionAvailable(this);
         if (!isConnected) { 
         	Toast.makeText(this, R.string.errorMsgNoConnection, Toast.LENGTH_SHORT).show();
         } else {
@@ -257,7 +258,7 @@ public abstract class Module extends MenuActivity {
 	        if(!(this instanceof Login)) {
 	        	Intent loginActivity = new Intent(getBaseContext(),
 	        			Login.class);
-	        	startActivityForResult(loginActivity, Global.LOGIN_REQUEST_CODE);
+	        	startActivityForResult(loginActivity, Constants.LOGIN_REQUEST_CODE);
 	        }
         }
     }
@@ -361,8 +362,8 @@ public abstract class Module extends MenuActivity {
 		
         if (resultCode == Activity.RESULT_OK) {
             switch(requestCode) {
-	            case Global.LOGIN_REQUEST_CODE:
-                    Global.setLogged(true);
+	            case Constants.LOGIN_REQUEST_CODE:
+                    Constants.setLogged(true);
                     //Toast.makeText(getBaseContext(), R.string.loginSuccessfulMsg, Toast.LENGTH_SHORT).show();
                     
             		/*if(isDebuggable)
@@ -449,7 +450,7 @@ public abstract class Module extends MenuActivity {
      * Shows an error message.
      * @param message Error message to show.
      */
-    protected void error(String message) {
+    protected void error(String tag, String message, Exception ex) {
         errorDialog = new AlertDialog
                 .Builder(this)
                 .setTitle(R.string.title_error_dialog)
@@ -461,6 +462,13 @@ public abstract class Module extends MenuActivity {
                     }
                 })
                 .setIcon(R.drawable.erroricon).show();
+        
+        if(!isDebuggable && (ex != null)) {
+        	ex.printStackTrace();
+        	
+        	//Send exception details to Bugsense
+			BugSenseHandler.sendExceptionMessage(tag, message, ex);
+        }
     }
 
 	/**
@@ -526,9 +534,7 @@ public abstract class Module extends MenuActivity {
             /**
              * If an exception occurs, capture, points exception pointer
              * to it and shows error message according to exception type.
-             */
-            } catch (SoapFault ex) {
-            	e = ex;
+             */            
             } catch (Exception ex) {
             	e = ex;
             }
@@ -580,8 +586,7 @@ public abstract class Module extends MenuActivity {
 
                 //Request finalized with errors        		
         		onError(); 
-        		error(errorMsg); 
-        		e.printStackTrace();
+        		error(TAG, errorMsg, null); 
 
         		//Send exception details to Bugsense
         		if(sendException) {
