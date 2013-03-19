@@ -18,11 +18,12 @@
  */
 package es.ugr.swad.swadroid.modules.notifications;
 
-import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.modules.Messages;
 import es.ugr.swad.swadroid.utils.DownloadImageTask;
+import es.ugr.swad.swadroid.utils.Utils;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -106,9 +107,9 @@ public class NotificationItem extends MenuActivity {
         
 	    //If the user photo exists and is public, download and show it
 	    if(userPhoto != null) {
-		    if(Global.connectionAvailable(this)
+		    if(Utils.connectionAvailable(this)
 		    		&& (userPhoto != null) && !userPhoto.equalsIgnoreCase("")
-		    		&& (userPhoto.compareTo(Global.NULL_VALUE)!=0)) {
+		    		&& (userPhoto.compareTo(Constants.NULL_VALUE)!=0)) {
 		    	//userPhotoView.setImageURI(Uri.parse(userPhoto));
 		    	new DownloadImageTask(userPhotoView).execute(userPhoto);
 		    } else {

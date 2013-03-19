@@ -18,7 +18,7 @@
  */
 package es.ugr.swad.swadroid.sync;
 
-import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Constants;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
@@ -34,7 +34,7 @@ public final class PeriodicSyncReceiver extends BroadcastReceiver {
 
 	public static Intent createIntent(Context context, String authority, Bundle extras) {
 		Intent intent = new Intent(context, PeriodicSyncReceiver.class);
-		intent.putExtra(Global.getAuthority(), authority);
+		intent.putExtra(Constants.AUTHORITY, authority);
 		return intent;
 	}
 
@@ -47,7 +47,7 @@ public final class PeriodicSyncReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		String authority = intent.getStringExtra(Global.getAuthority());
+		String authority = intent.getStringExtra(Constants.AUTHORITY);
 
 		ContentResolver.requestSync(null, authority, new Bundle());
 	}

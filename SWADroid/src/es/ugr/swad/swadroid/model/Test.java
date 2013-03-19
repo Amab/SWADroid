@@ -26,7 +26,7 @@ import java.util.StringTokenizer;
 
 import org.ksoap2.serialization.PropertyInfo;
 
-import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Constants;
 
 /**
  * Class for store a test
@@ -64,7 +64,7 @@ public class Test extends Model {
 	/**
 	 * Tests tag name for Logcat
 	 */
-	private static final String TAG = Global.APP_TAG + " TestsMake";
+	private static final String TAG = Constants.APP_TAG + " TestsMake";
 	/**
 	 * List of questions and related answers
 	 */

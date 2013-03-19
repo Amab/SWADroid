@@ -36,7 +36,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 
 /**
@@ -49,7 +49,7 @@ public class StudentsArrayAdapter extends ArrayAdapter<StudentItemModel> {
 	private int widthScale, heightScale, bMapScaledWidth, bMapScaledHeight;
 	private int callerId;
 
-	public static final String TAG = Global.APP_TAG + " InteractiveArrayAdapter";
+	public static final String TAG = Constants.APP_TAG + " InteractiveArrayAdapter";
 
 	public StudentsArrayAdapter(Activity context, List<StudentItemModel> list, int callerId) {
 		super(context, R.layout.list_items, list);
@@ -121,7 +121,7 @@ public class StudentsArrayAdapter extends ArrayAdapter<StudentItemModel> {
 		viewHolder.image.setImageBitmap(bMapScaled);
 		viewHolder.text.setText(list.get(position).toString());
 		viewHolder.checkbox.setChecked(list.get(position).isSelected());
-		if (callerId == Global.STUDENTS_LIST_REQUEST_CODE || callerId == Global.STUDENTS_HISTORY_REQUEST_CODE)
+		if (callerId == Constants.STUDENTS_LIST_REQUEST_CODE || callerId == Constants.STUDENTS_HISTORY_REQUEST_CODE)
 			viewHolder.checkbox.setVisibility(View.GONE);
 
 		return view;

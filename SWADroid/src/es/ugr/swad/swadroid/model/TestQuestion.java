@@ -26,7 +26,7 @@ import java.util.List;
 
 import org.ksoap2.serialization.PropertyInfo;
 
-import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.utils.Utils;
 
 /**
  * Clas for store a test question
@@ -337,7 +337,7 @@ public class TestQuestion extends Model {
 		case 0  : this.setId((Long)obj); break;
 		case 1  : stem = (String)obj; break;
 		case 2  : answerType = (String)obj; break;
-		case 3  : shuffle = Global.parseStringBool((String)obj); break;
+		case 3  : shuffle = Utils.parseStringBool((String)obj); break;
 		case 4  : feedback = (String)obj; break;
 		}    
 	}

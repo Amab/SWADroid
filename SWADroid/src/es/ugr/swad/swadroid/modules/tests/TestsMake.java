@@ -44,7 +44,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Test;
@@ -52,6 +52,7 @@ import es.ugr.swad.swadroid.model.TestAnswer;
 import es.ugr.swad.swadroid.model.TestQuestion;
 import es.ugr.swad.swadroid.model.TestTag;
 import es.ugr.swad.swadroid.modules.Module;
+import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.widget.NumberPicker;
 import es.ugr.swad.swadroid.widget.TextProgressBar;
 
@@ -92,7 +93,7 @@ public class TestsMake extends Module {
 	/**
 	 * Tests tag name for Logcat
 	 */
-	public static final String TAG = Global.APP_TAG + " TestsMake";
+	public static final String TAG = Constants.APP_TAG + " TestsMake";
 	/**
 	 * Application preferences.
 	 */
@@ -118,7 +119,7 @@ public class TestsMake extends Module {
 		this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
 		
 		text = (TextView) this.findViewById(R.id.courseSelectedText);
-		text.setText(Global.getSelectedCourseShortName());
+		text.setText(Constants.getSelectedCourseShortName());
 		
 	}
 
@@ -156,7 +157,7 @@ public class TestsMake extends Module {
 		Button acceptButton;
 		final ListView checkBoxesList;
 		final TagsArrayAdapter tagsAdapter;
-		final List<TestTag> allTagsList = dbHelper.getOrderedCourseTags(Global.getSelectedCourseCode());
+		final List<TestTag> allTagsList = dbHelper.getOrderedCourseTags(Constants.getSelectedCourseCode());
 
 		//Add "All tags" item in list's top
 		allTagsList.add(0, new TestTag(0, getResources().getString(R.string.allMsg), 0));
@@ -297,7 +298,7 @@ public class TestsMake extends Module {
 		questionFeedback.setText(Html.fromHtml(question.getFeedback()));
 		feedbackLevel = Test.FEEDBACK_VALUES.indexOf(feedback);
 		
-		if(test.isEvaluated() && (feedbackLevel == 4) && !question.getFeedback().equals(Global.NULL_VALUE)) {
+		if(test.isEvaluated() && (feedbackLevel == 4) && !question.getFeedback().equals(Constants.NULL_VALUE)) {
 			questionFeedback.setVisibility(View.VISIBLE);
 		} else {
 			questionFeedback.setVisibility(View.GONE);
@@ -330,7 +331,7 @@ public class TestsMake extends Module {
 				if(answerType.equals(TestAnswer.TYPE_FLOAT)) {
 					correctAnswer = "[" + a.getAnswer() + ";" + answers.get(1).getAnswer() + "]";
 					
-					if(test.isEvaluated() && (feedbackLevel == 4) && !a.getFeedback().equals(Global.NULL_VALUE)) {
+					if(test.isEvaluated() && (feedbackLevel == 4) && !a.getFeedback().equals(Constants.NULL_VALUE)) {
 						answerFeedback.setVisibility(View.VISIBLE);
 					} else {
 						answerFeedback.setVisibility(View.GONE);
@@ -339,7 +340,7 @@ public class TestsMake extends Module {
 					for(int i=0; i<numAnswers; i++) {
 						a = answers.get(i);
 						
-						if((feedbackLevel == 4) && !a.getFeedback().equals(Global.NULL_VALUE)) {
+						if((feedbackLevel == 4) && !a.getFeedback().equals(Constants.NULL_VALUE)) {
 							correctAnswer += "<strong>" + a.getAnswer() + "</strong><br/>";
 							correctAnswer += "<i>" + a.getFeedback() + "</i><br/><br/>";
 						} else {
@@ -360,7 +361,7 @@ public class TestsMake extends Module {
 
 			for(int i=0; i<numAnswers; i++) {
 				a = answers.get(i);
-				testMakeList.setItemChecked(i, Global.parseStringBool(a.getUserAnswer()));
+				testMakeList.setItemChecked(i, Utils.parseStringBool(a.getUserAnswer()));
 			}
 
 			testMakeList.setVisibility(View.VISIBLE);
@@ -445,7 +446,7 @@ public class TestsMake extends Module {
 			checkedItems = testMakeList.getCheckedItemPositions();
 			checkedListCount = checkedItems.size();
 			for(int i=0; i<checkedListCount; i++) {
-				la.get(i).setUserAnswer(Global.parseBoolString(checkedItems.get(i, false)));
+				la.get(i).setUserAnswer(Utils.parseBoolString(checkedItems.get(i, false)));
 			}
 		} else {
 			selectedPos = testMakeList.getCheckedItemPosition();
@@ -535,7 +536,7 @@ public class TestsMake extends Module {
 		List<TestQuestion> questions;
 
 		//Generates the test
-		questions = dbHelper.getRandomCourseQuestionsByTagAndAnswerType(Global.getSelectedCourseCode(), tagsList, answerTypesList,
+		questions = dbHelper.getRandomCourseQuestionsByTagAndAnswerType(Constants.getSelectedCourseCode(), tagsList, answerTypesList,
 				numQuestions);
 		if(!questions.isEmpty()) {			
 			test.setQuestions(questions);
@@ -668,16 +669,16 @@ public class TestsMake extends Module {
 		tfAdapter.add(getString(R.string.falseMsg));
 		
 		prefs.getPreferences(getBaseContext());
-		String selection ="id=" + Long.toString(Global.getSelectedCourseCode());
-		Cursor dbCursor = dbHelper.getDb().getCursor(Global.DB_TABLE_TEST_CONFIG,selection,null);
+		String selection ="id=" + Long.toString(Constants.getSelectedCourseCode());
+		Cursor dbCursor = dbHelper.getDb().getCursor(Constants.DB_TABLE_TEST_CONFIG,selection,null);
 		startManagingCursor(dbCursor);
 		if(dbCursor.getCount() > 0) {			
 			if(isDebuggable) {
-				Log.d(TAG, "selectedCourseCode = " + Long.toString(Global.getSelectedCourseCode()));
+				Log.d(TAG, "selectedCourseCode = " + Long.toString(Constants.getSelectedCourseCode()));
 			}
 
-			test = (Test) dbHelper.getRow(Global.DB_TABLE_TEST_CONFIG, "id",
-					Long.toString(Global.getSelectedCourseCode()));
+			test = (Test) dbHelper.getRow(Constants.DB_TABLE_TEST_CONFIG, "id",
+					Long.toString(Constants.getSelectedCourseCode()));
 		
 			if(test != null) {
 				setNumQuestions();

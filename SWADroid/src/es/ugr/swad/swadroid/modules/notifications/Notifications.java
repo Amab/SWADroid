@@ -50,7 +50,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.modules.Module;
@@ -93,7 +93,7 @@ public class Notifications extends Module {
 	/**
 	 * Notifications tag name for Logcat
 	 */
-	public static final String TAG = Global.APP_TAG + " Notifications";
+	public static final String TAG = Constants.APP_TAG + " Notifications";
 	/**
 	 * Account type
 	 */
@@ -117,7 +117,7 @@ public class Notifications extends Module {
 	private void refreshScreen() {		
 		//Refresh data on screen 
 		stopManagingCursor(dbCursor);
-		dbCursor = dbHelper.getDb().getCursor(Global.DB_TABLE_NOTIFICATIONS, selection, orderby);
+		dbCursor = dbHelper.getDb().getCursor(Constants.DB_TABLE_NOTIFICATIONS, selection, orderby);
 		startManagingCursor(dbCursor);
 		adapter.changeCursor(dbCursor);
 
@@ -186,7 +186,7 @@ public class Notifications extends Module {
 		updateButton = (ImageButton)this.findViewById(R.id.refresh);
 		updateButton.setVisibility(View.VISIBLE);
 
-		dbCursor = dbHelper.getDb().getCursor(Global.DB_TABLE_NOTIFICATIONS, selection, orderby);
+		dbCursor = dbHelper.getDb().getCursor(Constants.DB_TABLE_NOTIFICATIONS, selection, orderby);
 		startManagingCursor(dbCursor);
 		adapter = new NotificationsCursorAdapter(this, dbCursor, prefs.getDBKey());
 
@@ -268,7 +268,7 @@ public class Notifications extends Module {
 	
 			//Creates webservice request, adds required params and sends request to webservice
 			createRequest();
-			addParam("wsKey", Global.getLoggedUser().getWsKey());
+			addParam("wsKey", Constants.getLoggedUser().getWsKey());
 			addParam("beginTime", timestamp);
 			sendRequest(SWADNotification.class, false);
 	
@@ -404,12 +404,14 @@ public class Notifications extends Module {
 	 */
 	public void clearNotifications(Context context) {
 		try {
-			dbHelper.emptyTable(Global.DB_TABLE_NOTIFICATIONS);
+			dbHelper.emptyTable(Constants.DB_TABLE_NOTIFICATIONS);
 		} catch (Exception e) {
 			e.printStackTrace();
 			
 			//Send exception details to Bugsense
-			BugSenseHandler.sendException(e);
+			if(!isDebuggable) {
+				BugSenseHandler.sendException(e);
+			}
 		}
 	}
 	

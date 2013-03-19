@@ -40,6 +40,7 @@ import android.util.Log;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.sync.SyncUtils;
 import es.ugr.swad.swadroid.utils.Base64;
+import es.ugr.swad.swadroid.utils.Utils;
 
 /**
  * Preferences window of application.
@@ -217,7 +218,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 	 */
 	public String getServer() {    	
 		if(server.equals("")) {
-			server = Global.getDefaultServer();
+			server = Constants.DEFAULT_SERVER;
 		}
 
 		return server;
@@ -334,10 +335,10 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 	 * Deletes notifications and courses data from database
 	 */
 	private void cleanDatabase() {
-		dbHelper.emptyTable(Global.DB_TABLE_NOTIFICATIONS);
-		dbHelper.emptyTable(Global.DB_TABLE_COURSES);
+		dbHelper.emptyTable(Constants.DB_TABLE_NOTIFICATIONS);
+		dbHelper.emptyTable(Constants.DB_TABLE_COURSES);
 		setLastCourseSelected(0);
-		Global.setDbCleaned(true);
+		Utils.setDbCleaned(true);
 	}
 
 	/**
@@ -349,7 +350,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 		prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
 		userID = prefs.getString(USERIDPREF, "");
 		userPassword = prefs.getString(USERPASSWORDPREF, "");
-		server = prefs.getString(SERVERPREF, Global.getDefaultServer());
+		server = prefs.getString(SERVERPREF, Constants.DEFAULT_SERVER);
 		lastVersion = prefs.getInt(LASTVERSIONPREF, 0);
 		lastCourseSelected = prefs.getInt(LASTCOURSESELECTEDPREF, 0);
 		DBKey = prefs.getString(DBKEYPREF, "");
@@ -379,7 +380,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 
 		userID = prefs.getString(USERIDPREF, "");
 		userPassword = prefs.getString(USERPASSWORDPREF, "");
-		server = prefs.getString(SERVERPREF, Global.getDefaultServer());
+		server = prefs.getString(SERVERPREF, Constants.DEFAULT_SERVER);
 		lastVersion = prefs.getInt(LASTVERSIONPREF, 0);
 		lastCourseSelected = prefs.getInt(LASTCOURSESELECTEDPREF, 0);
 		editor = prefs.edit();
@@ -400,10 +401,10 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 			public boolean onPreferenceChange(Preference preference, Object value) {
 				long time = Long.parseLong((String)value);
 
-				SyncUtils.removePeriodicSync(Global.getAuthority(), Bundle.EMPTY, getApplicationContext());
+				SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, getApplicationContext());
 
 				if(time != 0) {
-					SyncUtils.addPeriodicSync(Global.getAuthority(), Bundle.EMPTY, time, getApplicationContext());
+					SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, time, getApplicationContext());
 				}
 
 				return true;
@@ -536,7 +537,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 			 * @param preference Preference selected.
 			 */
 			public boolean onPreferenceClick(Preference preference) {
-				server = prefs.getString(SERVERPREF, Global.getDefaultServer());
+				server = prefs.getString(SERVERPREF, Constants.DEFAULT_SERVER);
 				editor.putString(SERVERPREF, server);				
 				return true;
 			}
@@ -558,9 +559,9 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 
 		//If preferences have changed, logout and save new preferences
 		if (USERIDPREF.equals(key) || USERPASSWORDPREF.equals(key)) {
-			Global.setLogged(false);
+			Constants.setLogged(false);
 			cleanDatabase();
-			Global.setPreferencesChanged();
+			Constants.setPreferencesChanged();
 			editor.commit();
 		}
 
@@ -573,9 +574,9 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 		}
 
 		if (SERVERPREF.equals(key)) {
-			Global.setLogged(false);
+			Constants.setLogged(false);
 			cleanDatabase();
-			Global.setPreferencesChanged();
+			Constants.setPreferencesChanged();
 			editor.commit();
 		}
 
@@ -597,7 +598,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 		if(!server.equals("")) {
 			serverPref.setSummary(server);
 		} else {
-			serverPref.setSummary(Global.getDefaultServer());
+			serverPref.setSummary(Constants.DEFAULT_SERVER);
 		}
 	}
 

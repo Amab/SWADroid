@@ -36,7 +36,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.PracticeSession;
@@ -52,7 +52,7 @@ public class SessionsHistory extends Module {
 	/**
 	 * Sessions History tag name for Logcat
 	 */
-	public static final String TAG = Global.APP_TAG + " SessionsHistory";
+	public static final String TAG = Constants.APP_TAG + " SessionsHistory";
 
 	/* (non-Javadoc)
 	 * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
@@ -69,8 +69,8 @@ public class SessionsHistory extends Module {
 		text.setText(R.string.rollcallHistoryModuleLabel);
 
 		// Get selected course
-		String where = "id =" + String.valueOf(Global.getSelectedCourseCode());
-		Course selectedCourse = (Course) dbHelper.getAllRows(Global.DB_TABLE_COURSES, where, "fullName").get(0);
+		String where = "id =" + String.valueOf(Constants.getSelectedCourseCode());
+		Course selectedCourse = (Course) dbHelper.getAllRows(Constants.DB_TABLE_COURSES, where, "fullName").get(0);
 		String courseName = selectedCourse.getFullName();
 
 		// Get selected groupCode, groupName
@@ -81,7 +81,7 @@ public class SessionsHistory extends Module {
 		TextView title = (TextView) this.findViewById(R.id.listText);
 		title.setText(courseName + " - " + groupName);
 
-		sessions = dbHelper.getPracticeSessions(Global.getSelectedCourseCode(), groupCode);
+		sessions = dbHelper.getPracticeSessions(Constants.getSelectedCourseCode(), groupCode);
 		int numSessions = sessions.size();
 		if (numSessions > 0) {
 			String [] sessionsStarts = new String[numSessions];

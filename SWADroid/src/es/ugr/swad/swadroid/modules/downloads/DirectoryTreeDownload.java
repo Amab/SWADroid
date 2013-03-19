@@ -27,7 +27,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.content.Intent;
 import android.os.Bundle;
-import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.Module;
@@ -51,8 +51,8 @@ public class DirectoryTreeDownload extends Module {
 	IOException, XmlPullParserException, SoapFault,
 	IllegalAccessException, InstantiationException {
 		createRequest();
-		addParam("wsKey", Global.getLoggedUser().getWsKey());
-		addParam("courseCode", (int)Global.getSelectedCourseCode());
+		addParam("wsKey", Constants.getLoggedUser().getWsKey());
+		addParam("courseCode", (int)Constants.getSelectedCourseCode());
 		addParam("groupCode", group);
 		addParam("treeCode", treeCode);
 		sendRequest(User.class,true);
@@ -98,7 +98,7 @@ public class DirectoryTreeDownload extends Module {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		treeCode = getIntent().getIntExtra("treeCode", Global.DOCUMENTS_AREA_CODE); 
+		treeCode = getIntent().getIntExtra("treeCode", Constants.DOCUMENTS_AREA_CODE); 
 		group = getIntent().getIntExtra("groupCode", 0);
 		runConnection();
 		if(!isConnected){

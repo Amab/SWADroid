@@ -1,6 +1,6 @@
 package es.ugr.swad.swadroid.sync;
 
-import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import android.accounts.Account;
@@ -16,7 +16,7 @@ public class AccountAuthenticator extends AccountAuthenticatorActivity {
 		super.onCreate(icicle);
 	    Preferences prefs = new Preferences();
 	    prefs.getPreferences(getBaseContext()); 
-		Account account = new Account(getString(R.string.app_name), Global.getAccountType());
+		Account account = new Account(getString(R.string.app_name), Constants.ACCOUNT_TYPE);
 		AccountManager am = AccountManager.get(this);
 		boolean accountCreated = am.addAccountExplicitly(account, getString(R.string.app_name), null);
 		
@@ -30,9 +30,9 @@ public class AccountAuthenticator extends AccountAuthenticatorActivity {
 		  response.onResult(result);
 		  
 		  //Configure automatic synchronization
-    	  ContentResolver.setIsSyncable(account, Global.getAuthority(), 1);
+    	  ContentResolver.setIsSyncable(account, Constants.AUTHORITY, 1);
     	  ContentResolver.setMasterSyncAutomatically(true);
-    	  ContentResolver.setSyncAutomatically(account, Global.getAuthority(), true);
+    	  ContentResolver.setSyncAutomatically(account, Constants.AUTHORITY, true);
 		 }
 		}
 		finish();

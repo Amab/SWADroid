@@ -29,13 +29,11 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 import org.xmlpull.v1.XmlPullParserException;
 
-import com.bugsense.trace.BugSenseHandler;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.modules.Module;
@@ -71,7 +69,7 @@ public class SendMyGroups extends Module {
 	/**
 	 * Groups tag name for Logcat
 	 */
-	public static final String TAG = Global.APP_TAG + "Send My Groups";
+	public static final String TAG = Constants.APP_TAG + "Send My Groups";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -93,13 +91,7 @@ public class SendMyGroups extends Module {
 			runConnection();
 		} catch (Exception ex) {
 			String errorMsg = getString(R.string.errorServerResponseMsg);
-			error(errorMsg);
-			
-			Log.e(ex.getClass().getSimpleName(), errorMsg);        		
-			ex.printStackTrace();
-			
-			//Send exception details to Bugsense
-			BugSenseHandler.sendException(ex);
+			error(TAG, errorMsg, ex);
 		}
 	}
 
@@ -117,7 +109,7 @@ public class SendMyGroups extends Module {
 			IOException, XmlPullParserException, SoapFault,
 			IllegalAccessException, InstantiationException {
 		createRequest();
-		addParam("wsKey", Global.getLoggedUser().getWsKey());
+		addParam("wsKey", Constants.getLoggedUser().getWsKey());
 		addParam("courseCode", (int)courseCode);
 		addParam("myGroups", myGroups);
 		sendRequest(Group.class,false);

@@ -24,8 +24,6 @@ import java.security.NoSuchAlgorithmException;
 import org.ksoap2.SoapFault;
 import org.xmlpull.v1.XmlPullParserException;
 
-import com.bugsense.trace.BugSenseHandler;
-
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -36,7 +34,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
@@ -50,7 +48,7 @@ public class Notices extends Module {
 	/**
 	 * Messages tag name for Logcat
 	 */
-	public static final String TAG = Global.APP_TAG + " Notice";
+	public static final String TAG = Constants.APP_TAG + " Notice";
 
 	/**
 	 * Notice's body
@@ -83,13 +81,7 @@ public class Notices extends Module {
 				runConnection();
 			} catch (Exception ex) {
 				String errorMsg = getString(R.string.errorServerResponseMsg);
-				error(errorMsg);
-
-					Log.e(ex.getClass().getSimpleName(), errorMsg);        		
-					ex.printStackTrace();
-					
-					//Send exception details to Bugsense
-					BugSenseHandler.sendExceptionMessage(TAG, errorMsg, ex);
+				error(TAG, errorMsg, ex);
 			}
 		}
 	};
@@ -136,7 +128,7 @@ public class Notices extends Module {
 
 		createRequest();
 
-		addParam("wsKey", Global.getLoggedUser().getWsKey());
+		addParam("wsKey", Constants.getLoggedUser().getWsKey());
 		addParam("courseCode",(int)selectedCourseCode);
 		addParam("body",body);
 
@@ -188,7 +180,7 @@ public class Notices extends Module {
 	protected void onStart() {
 		super.onStart();
 		prefs.getPreferences(getBaseContext());
-		selectedCourseCode = Global.getSelectedCourseCode();
+		selectedCourseCode = Constants.getSelectedCourseCode();
 		launchNoticeDialog();
 	}
 

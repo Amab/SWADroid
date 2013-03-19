@@ -44,7 +44,7 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.modules.Module;
@@ -80,7 +80,7 @@ public class NewPracticeSession extends Module {
 	/**
 	 * New Practice Session tag name for Logcat
 	 */
-	public static final String TAG = Global.APP_TAG + " NewPracticeSession";
+	public static final String TAG = Constants.APP_TAG + " NewPracticeSession";
 
 	/* (non-Javadoc)
 	 * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
@@ -143,8 +143,8 @@ public class NewPracticeSession extends Module {
 		Button btCancel = (Button) newSessionDialog.findViewById(R.id.btCancel);
 
 		// Get selected course
-		String where = "id =" + String.valueOf(Global.getSelectedCourseCode());
-		Course selectedCourse = (Course) dbHelper.getAllRows(Global.DB_TABLE_COURSES, where, "fullName").get(0);
+		String where = "id =" + String.valueOf(Constants.getSelectedCourseCode());
+		Course selectedCourse = (Course) dbHelper.getAllRows(Constants.DB_TABLE_COURSES, where, "fullName").get(0);
 		String courseName = selectedCourse.getFullName();
 
 		// Get selected groupCode, groupName
@@ -213,7 +213,7 @@ public class NewPracticeSession extends Module {
 				String site = etSite.getText().length() == 0 ? "" : etSite.getText().toString();
 				String description = etDescription.getText().length() == 0 ? "" : etDescription.getText().toString();
 
-				inserted = dbHelper.insertPracticeSession(Global.getSelectedCourseCode(),
+				inserted = dbHelper.insertPracticeSession(Constants.getSelectedCourseCode(),
 						groupCode,
 						btStartDate.getText().toString() + " " + btStartTime.getText().toString(),
 						btEndDate.getText().toString() + " " + btEndTime.getText().toString(),
