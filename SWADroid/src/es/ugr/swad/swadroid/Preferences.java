@@ -24,6 +24,8 @@ import java.security.NoSuchAlgorithmException;
 
 import com.bugsense.trace.BugSenseHandler;
 
+import android.accounts.Account;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -31,6 +33,7 @@ import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
@@ -92,6 +95,10 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 	 */
 	private String DBKey;
 	/**
+	 * Synchronization enabled flag
+	 */
+	private boolean syncEnabled;
+	/**
 	 * Last application version preference name.
 	 */
 	private static final String LASTVERSIONPREF = "lastVersionPref";
@@ -140,9 +147,13 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 	 */
 	private static final String DBKEYPREF = "DBKeyPref";
 	/**
-	 * Database passphrase preference name.
+	 * Synchronization time preference name.
 	 */
-	private static final String SYNCPREF = "prefSynctime";
+	private static final String SYNCTIMEPREF = "prefSyncTime";
+	/**
+	 * Synchronization enable preference name.
+	 */
+	private static final String SYNCENABLEPREF = "prefSyncEnable";
 	/**
 	 * User ID preference
 	 */
@@ -188,9 +199,13 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 	 */
 	private Preference serverPref;
 	/**
-	 * Synchronization preference
+	 * Synchronization time preference
 	 */
-	private Preference synctimePref;
+	private Preference syncTimePref;
+	/**
+	 * Synchronization enable preference
+	 */
+	private CheckBoxPreference syncEnablePref;
 	/**
 	 * Preferences editor
 	 */
@@ -353,6 +368,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 		server = prefs.getString(SERVERPREF, Constants.DEFAULT_SERVER);
 		lastVersion = prefs.getInt(LASTVERSIONPREF, 0);
 		lastCourseSelected = prefs.getInt(LASTCOURSESELECTEDPREF, 0);
+		syncEnabled = prefs.getBoolean(SYNCENABLEPREF, true);
 		DBKey = prefs.getString(DBKEYPREF, "");
 	}
 
@@ -383,6 +399,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 		server = prefs.getString(SERVERPREF, Constants.DEFAULT_SERVER);
 		lastVersion = prefs.getInt(LASTVERSIONPREF, 0);
 		lastCourseSelected = prefs.getInt(LASTCOURSESELECTEDPREF, 0);
+		syncEnabled = prefs.getBoolean(SYNCENABLEPREF, true);
 		editor = prefs.edit();
 
 		userIDPref = findPreference(USERIDPREF);
@@ -396,8 +413,10 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 		blogPref = findPreference(BLOGPREF);
 		sharePref = findPreference(SHAREPREF);
 		serverPref = findPreference(SERVERPREF);
-		synctimePref = findPreference(SYNCPREF);
-        synctimePref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+		syncTimePref = findPreference(SYNCTIMEPREF);
+		syncEnablePref = (CheckBoxPreference) findPreference(SYNCENABLEPREF);
+		
+        syncTimePref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			public boolean onPreferenceChange(Preference preference, Object value) {
 				long time = Long.parseLong((String)value);
 
@@ -406,6 +425,25 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 				if(time != 0) {
 					SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, time, getApplicationContext());
 				}
+
+				return true;
+			}
+        });
+        syncEnablePref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			public boolean onPreferenceChange(Preference preference, Object value) {
+				//boolean masterSyncEnabled = ContentResolver.getMasterSyncAutomatically();
+				syncEnabled = (Boolean) value;
+				Account account = new Account(getString(R.string.app_name), Constants.ACCOUNT_TYPE);
+				
+				//Configure automatic synchronization
+				/*if(syncEnabled && !masterSyncEnabled) {
+					ContentResolver.setMasterSyncAutomatically(syncEnabled);
+				}*/
+				
+		  	    ContentResolver.setSyncAutomatically(account, Constants.AUTHORITY, syncEnabled);
+		  	   
+		  	    syncEnablePref.setChecked(syncEnabled);
+		  	    editor.commit();
 
 				return true;
 			}

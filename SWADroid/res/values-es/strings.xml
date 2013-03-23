@@ -137,8 +137,10 @@
     <string name="blogTitle">Blog</string>
     <string name="marketTitle">Google Play</string>    
     <string name="prefCatSyncTitle">Sincronización</string>
-    <string name="prefSynctimeTitle">Frecuencia de sincronización</string>
-    <string name="prefSynctimeSummary">Frecuencia de sincronización de notificaciones</string>
+    <string name="prefSyncTimeTitle">Frecuencia de sincronización</string>
+    <string name="prefSyncTimeSummary">Frecuencia de sincronización de las notificaciones</string>
+    <string name="prefSyncEnableTitle">Sincronización automática</string>
+    <string name="prefSyncEnableSummary">Habilitar la sincronización automática</string>
     <string name="notificationsAlertTitle">SWADroid</string>
     <string name="notificationsAlertMsg">nuevas notificaciones</string>
     <string name="footMessageMsg">Enviado desde</string>

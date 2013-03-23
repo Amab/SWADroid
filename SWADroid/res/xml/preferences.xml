@@ -24,13 +24,19 @@
     </PreferenceCategory>
 	<PreferenceCategory 
 		android:title="@string/prefCatSyncTitle">
+        <CheckBoxPreference 
+            android:title="@string/prefSyncEnableTitle"
+            android:key="@string/prefSyncEnableKey"
+			android:defaultValue="true"
+            android:summary="@string/prefSyncEnableSummary" />
 		<ListPreference
-			android:title="@string/prefSynctimeTitle"
-			android:summary="@string/prefSynctimeSummary"
-			android:key="@string/prefSynctimeKey"
-			android:entries="@array/prefSynctimeEntries"
-			android:entryValues="@array/prefSynctimeValues"
-			android:defaultValue="60" />
+			android:title="@string/prefSyncTimeTitle"
+			android:summary="@string/prefSyncTimeSummary"
+			android:key="@string/prefSyncTimeKey"
+			android:entries="@array/prefSyncTimeEntries"
+			android:entryValues="@array/prefSyncTimeValues"
+			android:defaultValue="60"
+			android:dependency="@string/prefSyncEnableKey" />
 	</PreferenceCategory>
     <PreferenceCategory android:title="@string/about_preferences" >
         <Preference
