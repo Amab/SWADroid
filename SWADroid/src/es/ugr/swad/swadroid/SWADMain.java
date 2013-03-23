@@ -110,62 +110,6 @@ public class SWADMain extends MenuExpandableListActivity {
 	 * */
 	private int currentRole = -1;
 	
-	/**
-	 * Group position inside the main menu for Course group
-	 * */
-	private int COURSE_GROUP = 0;
-	/**
-	 * Group position inside the main menu for Evaluation group
-	 * */
-	private int EVALUATION_GROUP = 1;
-
-	/**
-	 * Group position inside the main menu for Messages group
-	 * */
-	private int MESSAGES_GROUP = 2;
-
-	/**
-	 * Group position inside the main menu for Enrollment group
-	 * */
-	private int ENROLLMENT_GROUP = 3;
-	/**
-	 * Group position inside the main menu for User group
-	 * */
-	private int USERS_GROUP = 4;
-	/**
-	 * Child position inside the messages menu for Notification
-	 * */
-	private int NOTIFICATION_CHILD = 0;
-	/**
-	 * Child position inside the messages menu for Send message
-	 * */
-	private int SEND_MESSAGES_CHILD = 1;
-	/**
-	 * Child position inside the messages menu for Publish Note
-	 * */
-	private int PUBLISH_NOTE_CHILD = 2;
-	/**
-	 * Child position inside the evaluation menu for Tests
-	 * */
-	private int TESTS_CHILD = 0;
-	/**
-	 * Child position inside the course menu for Documents
-	 * */
-	private int DOCUMENTS_CHILD = 0;
-	/**
-	 * Child position inside the course menu for Shared area
-	 * */
-	private int SHARED_AREA_CHILD = 1;
-	/**
-	 * Child position inside the users menu for Rollcall
-	 * */
-	private int ROLLCALL_CHILD = 0;
-	/**
-	 * Child position inside the enrollment menu for My Groups
-	 * */
-	private int MYGROUPS_CHILD = 0;
-
-	
 	private boolean dBCleaned = false;
 	/**
 	 * Gets the database helper
@@ -350,8 +294,8 @@ public class SWADMain extends MenuExpandableListActivity {
 				//prefs.upgradeCredentials();
 
 				//Configure automatic synchronization
-				//Intent activity = new Intent(getBaseContext(), AccountAuthenticator.class);
-				//startActivity(activity);
+				Intent activity = new Intent(getBaseContext(), AccountAuthenticator.class);
+				startActivity(activity);
 				SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, Constants.DEFAULT_SYNC_TIME, this);
 
 				prefs.setLastVersion(currentVersion);
@@ -674,9 +618,9 @@ public class SWADMain extends MenuExpandableListActivity {
 	{
 		if(currentRole == Constants.TEACHER_TYPE_CODE){
 			//Removes Publish Note from messages menu
-			((ImageExpandableListAdapter) getExpandableListAdapter()).removeChild(MESSAGES_GROUP, PUBLISH_NOTE_CHILD);
+			((ImageExpandableListAdapter) getExpandableListAdapter()).removeChild(Constants.MESSAGES_GROUP, Constants.PUBLISH_NOTE_CHILD);
 			//Removes completely users menu 
-			((ImageExpandableListAdapter) getExpandableListAdapter()).removeGroup(USERS_GROUP);
+			((ImageExpandableListAdapter) getExpandableListAdapter()).removeGroup(Constants.USERS_GROUP);
 		}
 		currentRole = Constants.STUDENT_TYPE_CODE;
 	}
@@ -689,7 +633,7 @@ public class SWADMain extends MenuExpandableListActivity {
 			HashMap<String, Object> map  = new HashMap<String,Object>();        
 			map.put(NAME, getString(R.string.noticesModuleLabel) );
 			map.put(IMAGE, getResources().getDrawable(R.drawable.note));
-			((ImageExpandableListAdapter) getExpandableListAdapter()).addChild(MESSAGES_GROUP,PUBLISH_NOTE_CHILD, map);
+			((ImageExpandableListAdapter) getExpandableListAdapter()).addChild(Constants.MESSAGES_GROUP,Constants.PUBLISH_NOTE_CHILD, map);
 
 			final HashMap<String, Object> users = new HashMap<String, Object>();
 			users.put(NAME, getString(R.string.users));
@@ -701,7 +645,7 @@ public class SWADMain extends MenuExpandableListActivity {
 			map.put(NAME, getString(R.string.rollcallModuleLabel));
 			map.put(IMAGE, getResources().getDrawable(R.drawable.roll_call));
 			child.add(map);
-			((ImageExpandableListAdapter) getExpandableListAdapter()).addGroup(USERS_GROUP, users, child);
+			((ImageExpandableListAdapter) getExpandableListAdapter()).addGroup(Constants.USERS_GROUP, users, child);
 		}
 		currentRole = Constants.TEACHER_TYPE_CODE;
 	}

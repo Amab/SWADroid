@@ -292,6 +292,58 @@ public class Constants {
      * */
     public static int SHARE_AREA_CODE= 2;
 	/**
+	 * Group position inside the main menu for Course group
+	 * */
+    public static final int COURSE_GROUP = 0;
+	/**
+	 * Group position inside the main menu for Evaluation group
+	 * */
+	public static final int EVALUATION_GROUP = 1;
+	/**
+	 * Group position inside the main menu for Messages group
+	 * */
+	public static final int MESSAGES_GROUP = 2;
+	/**
+	 * Group position inside the main menu for Enrollment group
+	 * */
+	public static final int ENROLLMENT_GROUP = 3;
+	/**
+	 * Group position inside the main menu for User group
+	 * */
+	public static final int USERS_GROUP = 4;
+	/**
+	 * Child position inside the messages menu for Notification
+	 * */
+	public static final int NOTIFICATION_CHILD = 0;
+	/**
+	 * Child position inside the messages menu for Send message
+	 * */
+	public static final int SEND_MESSAGES_CHILD = 1;
+	/**
+	 * Child position inside the messages menu for Publish Note
+	 * */
+	public static final int PUBLISH_NOTE_CHILD = 2;
+	/**
+	 * Child position inside the evaluation menu for Tests
+	 * */
+	public static final int TESTS_CHILD = 0;
+	/**
+	 * Child position inside the course menu for Documents
+	 * */
+	public static final int DOCUMENTS_CHILD = 0;
+	/**
+	 * Child position inside the course menu for Shared area
+	 * */
+	public static final int SHARED_AREA_CHILD = 1;
+	/**
+	 * Child position inside the users menu for Rollcall
+	 * */
+	public static final int ROLLCALL_CHILD = 0;
+	/**
+	 * Child position inside the enrollment menu for My Groups
+	 * */
+	public static final int MYGROUPS_CHILD = 0;
+	/**
 	 * Checks if user is already logged on SWAD
 	 * @return User logged flag
 	 */
