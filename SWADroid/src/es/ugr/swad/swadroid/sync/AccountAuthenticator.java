@@ -28,13 +28,14 @@ public class AccountAuthenticator extends AccountAuthenticatorActivity {
 		  result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
 		  result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
 		  response.onResult(result);
-		  
-		  //Configure automatic synchronization
-    	  ContentResolver.setIsSyncable(account, Constants.AUTHORITY, 1);
-    	  ContentResolver.setMasterSyncAutomatically(true);
-    	  ContentResolver.setSyncAutomatically(account, Constants.AUTHORITY, true);
 		 }
 		}
+		  
+		//Configure automatic synchronization
+  	    ContentResolver.setIsSyncable(account, Constants.AUTHORITY, 1);
+  	    ContentResolver.setMasterSyncAutomatically(true);
+  	    ContentResolver.setSyncAutomatically(account, Constants.AUTHORITY, true);
+  	  
 		finish();
 	}
 	

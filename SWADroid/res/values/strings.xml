@@ -141,9 +141,12 @@
     <string name="blogTitle">Blog</string>
     <string name="marketTitle">Google Play</string> 
     <string name="prefCatSyncTitle">Synchronization</string>
-    <string name="prefSynctimeTitle">Synchronization frecuency</string>
-    <string name="prefSynctimeSummary">Synchronization frecuency of notifications</string>
-    <string name="prefSynctimeKey">prefSynctime</string>
+    <string name="prefSyncTimeTitle">Synchronization frecuency</string>
+    <string name="prefSyncTimeSummary">Synchronization frecuency of notifications</string>
+    <string name="prefSyncTimeKey">prefSyncTime</string>    
+    <string name="prefSyncEnableTitle">Auto Sync</string>
+    <string name="prefSyncEnableSummary">Enable auto sync</string>
+    <string name="prefSyncEnableKey">prefSyncEnable</string>    
     <string name="notificationsAlertTitle">SWADroid</string>
     <string name="notificationsAlertMsg">new notifications</string>
     <string name="footMessageMsg">Sended from</string>
