@@ -10,8 +10,23 @@
   	    android:id="@+id/courseNameLayout" 
   	    android:layout_below="@id/actionBarLayout"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent">
-        <include layout="@layout/course_or_group_name" />
+        android:layout_width="match_parent"
+		android:background="@color/title_background">
+        <include layout="@layout/course_or_group_name" />        
+     
+			<!--android:layout_weight="0.13"--> 
+			<!--android:layout_width="0dip"-->    
+		<TextView
+			android:id="@+id/testMakeQuestionScore"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:gravity="center"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="8dip"
+			android:textColor="@color/foreground1"
+			android:textStyle="bold"			 
+			android:textSize="20sp"   
+			android:visibility="gone"/>	
     </RelativeLayout>
  	
  	<LinearLayout
@@ -23,23 +38,14 @@
 		android:weightSum="1.0"
 		android:gravity="center"
     	android:background="@android:color/transparent">
-        
-		<TextView
-			android:id="@+id/testMakeQuestionScore"
-			android:layout_width="0dip"
-			android:layout_height="wrap_content"
-			android:layout_weight="0.2"
-			android:textColor="@color/foreground1"
-			android:textStyle="bold"
-			android:textSize="20sp"
-			android:visibility="gone"/>	
- 	
+		
+ 		<!-- android:layout_weight="0.85" -->
 	 	<LinearLayout
 			android:id="@+id/testMakeQuestion"
 	    	android:orientation="vertical"
     		android:layout_width="0dip"
 	    	android:layout_height="wrap_content"
-			android:layout_weight="0.75"
+			android:layout_weight="0.95"
 	    	android:background="@android:color/transparent">
 				
 			<TextView

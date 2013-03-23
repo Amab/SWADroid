@@ -33,7 +33,7 @@
     <!-- <ImageView
     	android:id="@+id/title_sep_3"
 		android:layout_toLeftOf="@+id/testShowResultsButton"
-        android:layout_width="1dp"
+        android:layout_width="1dip"
         android:layout_height="match_parent"
         android:layout_alignWithParentIfMissing="true"
         android:layout_alignParentTop="true"
@@ -46,7 +46,7 @@
 		android:layout_toLeftOf="@+id/testEvaluateButton"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-		android:padding="8dp"
+		android:padding="8dip"
         android:layout_alignWithParentIfMissing="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
@@ -62,7 +62,7 @@
     <!-- <ImageView
     	android:id="@+id/title_sep_2"
 		android:layout_toLeftOf="@+id/testEvaluateButton"
-        android:layout_width="1dp"
+        android:layout_width="1dip"
         android:layout_height="match_parent"
         android:layout_alignWithParentIfMissing="true"
         android:layout_alignParentTop="true"
@@ -75,7 +75,7 @@
 		android:layout_toLeftOf="@+id/progress_refresh"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-		android:padding="8dp"
+		android:padding="8dip"
         android:layout_alignWithParentIfMissing="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
@@ -112,8 +112,8 @@
         android:onClick="onRefreshClick"
         android:background="@drawable/title_button"
         android:scaleType="centerCrop"
-        android:paddingLeft="3dp"
-        android:paddingRight="5dp"
+        android:paddingLeft="3dip"
+        android:paddingRight="5dip"
         android:visibility="gone"/>
     
     <ProgressBar
