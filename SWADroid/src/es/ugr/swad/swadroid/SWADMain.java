@@ -28,7 +28,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -161,15 +160,14 @@ public class SWADMain extends MenuExpandableListActivity {
 		// Get the item that was clicked
 		Object o = this.getExpandableListAdapter().getChild(groupPosition, childPosition);
 		String keyword = (String) ((Map<String,Object>)o).get(NAME);
-		boolean rollCallAndroidVersionOK = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.FROYO);
-		PackageManager pm = getPackageManager();
-		//boolean frontCam, rearCam;
-		boolean rearCam;
+		//boolean rollCallAndroidVersionOK = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.FROYO);
+		//PackageManager pm = getPackageManager();
+		//boolean rearCam;
 
 		//It would be safer to use the constant PackageManager.FEATURE_CAMERA_FRONT
 		//but since it is not defined for Android 2.2, I substituted the literal value
 		//frontCam = pm.hasSystemFeature("android.hardware.camera.front");
-		rearCam = pm.hasSystemFeature(PackageManager.FEATURE_CAMERA);
+		//rearCam = pm.hasSystemFeature(PackageManager.FEATURE_CAMERA);
 
 		Intent activity;
 		if(keyword.equals(getString(R.string.notificationsModuleLabel))) {
@@ -186,20 +184,8 @@ public class SWADMain extends MenuExpandableListActivity {
 			activity = new Intent(getBaseContext(), Notices.class);
 			startActivityForResult(activity, Constants.NOTICES_REQUEST_CODE);
 		} else if(keyword.equals(getString(R.string.rollcallModuleLabel))) {
-			
-			//This module requires Android 2.2 or higher
-			if(!rollCallAndroidVersionOK) {
-				//If Android version < 2.2 show error message
-				error(getString(R.string.froyoFunctionMsg) + "\n(System: " + android.os.Build.VERSION.RELEASE + ")");
-			
-			//This module requires a rear camera
-			} else if(!rearCam) {
-				//If the device has no rear camera available show error message
-				error(getString(R.string.noRearCamera));
-			} else {
-				activity  = new Intent(getBaseContext(), Rollcall.class);
-				startActivityForResult(activity, Constants.ROLLCALL_REQUEST_CODE);
-			}
+			activity  = new Intent(getBaseContext(), Rollcall.class);
+			startActivityForResult(activity, Constants.ROLLCALL_REQUEST_CODE);
 		} else if(keyword.equals(getString(R.string.documentsDownloadModuleLabel))){
 			activity = new Intent(getBaseContext(), DownloadsManager.class);
 			activity.putExtra("downloadsAreaCode", Constants.DOCUMENTS_AREA_CODE);
