@@ -187,12 +187,14 @@ public class Rollcall extends MenuExpandableListActivity {
 	public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
 		// Get the item that was clicked
 		Object o = getExpandableListAdapter().getChild(groupPosition, childPosition);
-		@SuppressWarnings("unchecked")
 		String keyword = (String) ((Map<String,Object>) o).get(NAME);
 		Intent activity;
 		Context context = getBaseContext();
 		Cursor selectedGroup = (Cursor) practiceGroup.getSelectedItem();
 		String groupName = selectedGroup.getString(2) + getString(R.string.groupSeparator) + selectedGroup.getString(3);
+		PackageManager pm = getPackageManager();
+		boolean rollCallAndroidVersionOK = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.FROYO);
+		boolean hasRearCam = pm.hasSystemFeature(PackageManager.FEATURE_CAMERA);
 
 		if (keyword.equals(getString(R.string.studentsUpdate))) {
 			activity = new Intent(context, RollcallConfigDownload.class);
@@ -213,14 +215,22 @@ public class Rollcall extends MenuExpandableListActivity {
 			activity.putExtra("groupName", groupName);
 			startActivityForResult(activity, Constants.ROLLCALL_HISTORY_REQUEST_CODE);
 		} else if (keyword.equals(getString(R.string.rollcallScanQR))) {
-			// Check if device has a camera
-			if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-				activity = new Intent(Intents.Scan.ACTION);
-				activity.putExtra("SCAN_MODE", "QR_CODE_MODE");
-				activity.putExtra("SCAN_FORMATS", "QR_CODE");
-				startActivityForResult(activity, Constants.SCAN_QR_REQUEST_CODE);
+			//This module requires Android 2.2 or higher
+			if(rollCallAndroidVersionOK) {
+				// Check if device has a rear camera
+				if (hasRearCam) {
+					activity = new Intent(Intents.Scan.ACTION);
+					activity.putExtra("SCAN_MODE", "QR_CODE_MODE");
+					activity.putExtra("SCAN_FORMATS", "QR_CODE");
+					startActivityForResult(activity, Constants.SCAN_QR_REQUEST_CODE);
+				} else {
+					//If the device has no rear camera available show error message
+					//error(getString(R.string.noRearCamera));
+					error(getString(R.string.noCameraFound));
+				}
 			} else {
-				error(getString(R.string.noCameraFound));
+				//If Android version < 2.2 show error message
+				error(getString(R.string.froyoFunctionMsg) + "\n(System: " + android.os.Build.VERSION.RELEASE + ")");
 			}
 		} else if (keyword.equals(getString(R.string.rollcallManual))) {
 			showStudentsList();
