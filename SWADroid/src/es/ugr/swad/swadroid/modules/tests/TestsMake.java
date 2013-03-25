@@ -34,6 +34,7 @@ import android.text.Html;
 import android.text.InputType;
 import android.util.Log;
 import android.util.SparseBooleanArray;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -42,6 +43,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import es.ugr.swad.swadroid.Constants;
@@ -269,6 +271,7 @@ public class TestsMake extends Module {
 		TestQuestion question = test.getQuestions().get(pos);
 		List<TestAnswer> answers = question.getAnswers();
 		TestAnswer a;
+		ScrollView scrollContent = (ScrollView) findViewById(R.id.testMakeScroll);
 		ListView testMakeList = (ListView) findViewById(R.id.testMakeList);
 		TextView stem = (TextView) findViewById(R.id.testMakeQuestionStem);
 		TextView questionFeedback = (TextView) findViewById(R.id.testMakeQuestionFeedback);
@@ -285,6 +288,21 @@ public class TestsMake extends Module {
 		Float questionScore;
 		DecimalFormat df = new DecimalFormat("0.00");
 		int feedbackLevel;
+		
+		scrollContent.setOnTouchListener(new View.OnTouchListener() {
+             public boolean onTouch(View v, MotionEvent event) {
+                 findViewById(R.id.testMakeList).getParent().requestDisallowInterceptTouchEvent(false);
+                 return false;
+             }
+         });
+		 testMakeList.setOnTouchListener(new View.OnTouchListener() {
+             public boolean onTouch(View v, MotionEvent event) 
+             {
+                 // Disallow the touch request for parent scroll on touch of child view
+            	 v.getParent().requestDisallowInterceptTouchEvent(true);
+                 return false;
+             }
+         });
 
 		questionFeedback.setVisibility(View.GONE);
 		answerFeedback.setVisibility(View.GONE);
@@ -293,7 +311,7 @@ public class TestsMake extends Module {
 		textCorrectAnswer.setVisibility(View.GONE);
 		testMakeList.setVisibility(View.GONE);
 		img.setVisibility(View.GONE);
-
+		
 		stem.setText(Html.fromHtml(question.getStem()));
 		questionFeedback.setText(Html.fromHtml(question.getFeedback()));
 		feedbackLevel = Test.FEEDBACK_VALUES.indexOf(feedback);
