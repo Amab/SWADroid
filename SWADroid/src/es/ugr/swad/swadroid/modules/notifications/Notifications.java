@@ -175,7 +175,7 @@ public class Notifications extends Module {
 		this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);		
 		
 		image = (ImageView)this.findViewById(R.id.moduleIcon);
-		image.setBackgroundResource(R.drawable.notif);
+		image.setBackgroundResource(R.drawable.bell);
 
 		text = (TextView)this.findViewById(R.id.moduleName);
 		text.setText(R.string.notificationsModuleLabel);        

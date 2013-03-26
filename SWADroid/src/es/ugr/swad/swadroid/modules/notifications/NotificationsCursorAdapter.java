@@ -165,7 +165,23 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         	{
         		type = context.getString(R.string.assignment);
         		notificationIcon.setImageResource(R.drawable.desk);
-        	} else if(type.equals("survey"))
+        	} else if(type.equals("documentFile"))
+        	{
+        		type = context.getString(R.string.documentFile);
+        		notificationIcon.setImageResource(R.drawable.folder);
+        	} else if(type.equals("sharedFile"))
+        	{
+        		type = context.getString(R.string.sharedFile);
+        		notificationIcon.setImageResource(R.drawable.folder_users);
+        	} else if(type.equals("enrollment"))
+        	{
+        		type = context.getString(R.string.enrollment);
+        		notificationIcon.setImageResource(R.drawable.user_ok);
+        	} else if(type.equals("enrollmentRequest"))
+        	{
+        		type = context.getString(R.string.enrollmentRequest);
+        		notificationIcon.setImageResource(R.drawable.user_ok);
+        	} else if(type.equals("documentFile"))
         	{
         		type = context.getString(R.string.survey);
         		notificationIcon.setImageResource(R.drawable.survey);
