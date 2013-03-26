@@ -53,7 +53,7 @@ public class RollCallUtil {
 	}
 
 	public static boolean isValidNickname(String nickname) {
-		String patronNickname = "[a-zA-Z_0-9]{1,30}";	// 1 to 30 letters, underscored or digits
+		String patronNickname = "@[a-zA-Z_0-9]{1,17}";	// 1 to 17 letters, underscored or digits
 
 		Pattern pattern = Pattern.compile(patronNickname, Pattern.CASE_INSENSITIVE);
 		Matcher matcher = pattern.matcher(nickname);
