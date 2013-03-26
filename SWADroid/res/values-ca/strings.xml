@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <resources>
+
     <string name="app_name">"SWADroid"</string>
     <string name="serverName_preferences">"Servidor"</string>
     <string name="serverSummary_preferences">"Servidor (sense http://)"</string>
@@ -9,6 +10,7 @@
     <string name="coursesModuleLabel">"Assignatures"</string>
     <string name="testsModuleLabel">"Tests"</string>
     <string name="messagesModuleLabel">"Enviar missatge"</string>
+    <string name="generateQRModuleLabel">Generar codi QR</string>
     <string name="noticesModuleLabel">"Publicar anunci"</string>
     <string name="title_error_dialog">"ERROR"</string>
     <string name="close_dialog">"Tancar"</string>
@@ -119,13 +121,13 @@
     <string name="googlePlusTitle">"Google+"</string>
     <string name="mailingListTitle">"Llista de correu"</string>
     <string name="blogTitle">"Bloc"</string>
-    <string name="marketTitle">"Google Play"</string>    
+    <string name="marketTitle">"Google Play"</string>
     <string name="prefCatSyncTitle">"Sincronització"</string>
     <string name="prefSyncTimeTitle">"Freqüència de sincronització"</string>
     <string name="prefSyncTimeSummary">"Freqüència de sincronització de les notificacions"</string>
     <string name="prefSyncEnableTitle">"Sincronització automàtica"</string>
-    <string name="prefSyncEnableSummary">"Habilita la sincronització automàtica"</string>  
-    <string name="prefCatNotifTitle">"Notificacions"</string> 
+    <string name="prefSyncEnableSummary">"Habilita la sincronització automàtica"</string>
+    <string name="prefCatNotifTitle">"Notificacions"</string>
     <string name="prefNotifLimitTitle">"Límit de notificacions"</string>
     <string name="prefNotifLimitDialogMessage">"Seleccioneu el nombre màxim de notificacions que seran emmagatzemades:"</string>
     <string name="prefNotifLimitSuffix">"notificacions"</string>
@@ -174,7 +176,7 @@
     <string name="sdCardBusyTitle">"Targeta SD no disponible"</string>
     <string name="sdCardBusy">"La targeta SD està ocupada ara mateix. Per permetre descàrregues, seleccioneu \"Desactiva emmagatzematge USB\" a la notificació"</string>
     <string name="vacants">"Vacants"</string>
-	<string name="numStudent">"Nombre d'estudiants: "</string>
+    <string name="numStudent">"Nombre d'estudiants: "</string>
     <string name="myGroupsModuleLabel">"Els meus grups"</string>
     <string name="scan_no_photos">"No s'han pogut desar les fotos dels estudiants"</string>
     <string name="noStudentsAvailableMsg">"Aquesta assignatura no té alumnes"</string>
@@ -249,13 +251,19 @@
     <string name="sendMyGroupsProgressDescription">"Enviant inscripció a grups... \nSi us plau, esperi..."</string>
     <string name="sendMyGroupsProgressTitle">"Inscripció a grups"</string>
     <string name="withoutLimit">"sense límit"</string>
-   	<string name="downloadProblemTitle">"Problema en descàrrega"</string>
-	<string name="downloadProblemMsg">"Ho sentim. La descàrrega va ser interrompuda. Intenteu-ho de nou"</string>
-	<string name="downloadCompletedTitle">" Descàrrega completa "</string>
-	<string name="unknown">"desconegut"</string>
-	<string name="selectZoneTitle">"Seleccioni zona"</string>
-	<string name="fileTitle">"archiu"</string>
-	<string name="noConnectionMsg">"Aquesta funció necessita connexió. "</string>
-	<string name="noApp">"No es pot obrir aquest fitxer."</string>
-	
+    <string name="downloadProblemTitle">"Problema en descàrrega"</string>
+    <string name="downloadProblemMsg">"Ho sentim. La descàrrega va ser interrompuda. Intenteu-ho de nou"</string>
+    <string name="downloadCompletedTitle">" Descàrrega completa "</string>
+    <string name="unknown">"desconegut"</string>
+    <string name="selectZoneTitle">"Seleccioni zona"</string>
+    <string name="fileTitle">"archiu"</string>
+    <string name="noConnectionMsg">"Aquesta funció necessita connexió. "</string>
+    <string name="noApp">"No es pot obrir aquest fitxer."</string>
+    <string name="contents_contact">Informació de contacte</string>
+    <string name="contents_email">Adreça electrònica</string>
+    <string name="contents_location">Coordenades geogràfiques</string>
+    <string name="contents_phone">Número de telèfon</string>
+    <string name="contents_sms">Adreça SMS</string>
+    <string name="contents_text">Text pla</string>
+
 </resources>

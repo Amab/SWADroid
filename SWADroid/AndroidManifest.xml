@@ -197,7 +197,7 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
         </activity>
 
-        <provider
+        <activity android:name=".modules.GenerateQR" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="keyboard|keyboardHidden|orientation|screenSize"></activity><provider
             android:name=".sync.DummyProvider"
             android:authorities="es.ugr.swad.swadroid.content"
             android:label="SWADroid"
@@ -227,6 +227,7 @@
                 android:name="android.content.SyncAdapter"
                 android:resource="@xml/sync_notifications" />
         </service>
+        
     </application>
 
 </manifest>

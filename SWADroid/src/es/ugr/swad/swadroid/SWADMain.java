@@ -52,6 +52,7 @@ import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.modules.Courses;
+import es.ugr.swad.swadroid.modules.GenerateQR;
 import es.ugr.swad.swadroid.modules.Messages;
 import es.ugr.swad.swadroid.modules.Notices;
 import es.ugr.swad.swadroid.modules.downloads.DownloadsManager;
@@ -186,11 +187,13 @@ public class SWADMain extends MenuExpandableListActivity {
 		} else if(keyword.equals(getString(R.string.rollcallModuleLabel))) {
 			activity  = new Intent(getBaseContext(), Rollcall.class);
 			startActivityForResult(activity, Constants.ROLLCALL_REQUEST_CODE);
+		} else if(keyword.equals(getString(R.string.generateQRModuleLabel))) {
+			activity = new Intent(getBaseContext(), GenerateQR.class);
+			startActivityForResult(activity,Constants.GENERATE_QR_REQUEST_CODE);
 		} else if(keyword.equals(getString(R.string.documentsDownloadModuleLabel))){
 			activity = new Intent(getBaseContext(), DownloadsManager.class);
 			activity.putExtra("downloadsAreaCode", Constants.DOCUMENTS_AREA_CODE);
-			startActivityForResult(activity,Constants.DOWNLOADSMANAGER_REQUEST_CODE);
-			
+			startActivityForResult(activity,Constants.DOWNLOADSMANAGER_REQUEST_CODE);			
 		} else if(keyword.equals(getString(R.string.sharedsDownloadModuleLabel))){
 			activity = new Intent(getBaseContext(), DownloadsManager.class);
 			activity.putExtra("downloadsAreaCode", Constants.SHARE_AREA_CODE);
@@ -531,6 +534,11 @@ public class SWADMain extends MenuExpandableListActivity {
 			enrolment.put(IMAGE, getResources().getDrawable(R.drawable.enrollment));
 			headerData.add(enrolment);
 
+			final HashMap<String, Object> users = new HashMap<String, Object>();
+			users.put(NAME, getString(R.string.users));
+			users.put(IMAGE, getResources().getDrawable(R.drawable.users)); 
+			headerData.add(users);
+
 
 			final ArrayList<ArrayList<HashMap<String, Object>>> childData = new ArrayList<ArrayList<HashMap<String, Object>>>();
 			
@@ -545,6 +553,9 @@ public class SWADMain extends MenuExpandableListActivity {
 
 			final ArrayList<HashMap<String,Object>> enrollmentData = new ArrayList<HashMap<String, Object>>();
 			childData.add(enrollmentData);
+
+			ArrayList<HashMap<String,Object>> usersData = new ArrayList<HashMap<String, Object>>();
+			childData.add(usersData);
 			
 			HashMap<String, Object> map = new HashMap<String,Object>();
 			
@@ -581,6 +592,11 @@ public class SWADMain extends MenuExpandableListActivity {
 			map.put(IMAGE,  getResources().getDrawable(R.drawable.my_groups));
 			enrollmentData.add(map);
 			
+			map = new HashMap<String,Object>();
+			map.put(NAME, getString(R.string.generateQRModuleLabel));
+			map.put(IMAGE, getResources().getDrawable(R.drawable.scan_qr));
+			usersData.add(map);
+			
 			setListAdapter( new ImageExpandableListAdapter(
 					this,
 					headerData,
@@ -605,8 +621,8 @@ public class SWADMain extends MenuExpandableListActivity {
 		if(currentRole == Constants.TEACHER_TYPE_CODE){
 			//Removes Publish Note from messages menu
 			((ImageExpandableListAdapter) getExpandableListAdapter()).removeChild(Constants.MESSAGES_GROUP, Constants.PUBLISH_NOTE_CHILD);
-			//Removes completely users menu 
-			((ImageExpandableListAdapter) getExpandableListAdapter()).removeGroup(Constants.USERS_GROUP);
+			//Removes Rollcall from users menu 
+			((ImageExpandableListAdapter) getExpandableListAdapter()).removeChild(Constants.USERS_GROUP, Constants.ROLLCALL_CHILD);
 		}
 		currentRole = Constants.STUDENT_TYPE_CODE;
 	}
@@ -619,19 +635,12 @@ public class SWADMain extends MenuExpandableListActivity {
 			HashMap<String, Object> map  = new HashMap<String,Object>();        
 			map.put(NAME, getString(R.string.noticesModuleLabel) );
 			map.put(IMAGE, getResources().getDrawable(R.drawable.note));
-			((ImageExpandableListAdapter) getExpandableListAdapter()).addChild(Constants.MESSAGES_GROUP,Constants.PUBLISH_NOTE_CHILD, map);
-
-			final HashMap<String, Object> users = new HashMap<String, Object>();
-			users.put(NAME, getString(R.string.users));
-			users.put(IMAGE, getResources().getDrawable(R.drawable.users));
-
-			ArrayList<HashMap<String,Object>> child = new ArrayList<HashMap<String, Object>>();  
+			((ImageExpandableListAdapter) getExpandableListAdapter()).addChild(Constants.MESSAGES_GROUP,Constants.PUBLISH_NOTE_CHILD, map); 
 
 			map = new HashMap<String,Object>();
 			map.put(NAME, getString(R.string.rollcallModuleLabel));
 			map.put(IMAGE, getResources().getDrawable(R.drawable.roll_call));
-			child.add(map);
-			((ImageExpandableListAdapter) getExpandableListAdapter()).addGroup(Constants.USERS_GROUP, users, child);
+			((ImageExpandableListAdapter) getExpandableListAdapter()).addChild(Constants.USERS_GROUP,Constants.ROLLCALL_CHILD, map);
 		}
 		currentRole = Constants.TEACHER_TYPE_CODE;
 	}

@@ -203,6 +203,10 @@ public class Constants {
      * Request code for GetFile Manager
      * */
     public static final int GETFILE_REQUEST_CODE = 25;
+    /**
+     * Request code for Generate QR
+     * */
+    public static final int GENERATE_QR_REQUEST_CODE = 26;
 	/**
 	 * Prefix tag name for Logcat
 	 */
@@ -336,9 +340,13 @@ public class Constants {
 	 * */
 	public static final int SHARED_AREA_CHILD = 1;
 	/**
+	 * Child position inside the users menu for Generate QR
+	 * */
+	public static final int GENERATE_QR_CHILD = 0;
+	/**
 	 * Child position inside the users menu for Rollcall
 	 * */
-	public static final int ROLLCALL_CHILD = 0;
+	public static final int ROLLCALL_CHILD = 1;
 	/**
 	 * Child position inside the enrollment menu for My Groups
 	 * */
