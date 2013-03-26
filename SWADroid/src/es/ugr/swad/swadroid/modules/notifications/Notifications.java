@@ -65,7 +65,7 @@ public class Notifications extends Module {
 	/**
 	 * Max size to store notifications 
 	 */
-	private static final int SIZE_LIMIT = 25;
+	private int SIZE_LIMIT;
 	/**
 	 * Notifications adapter for showing the data
 	 */
@@ -209,6 +209,7 @@ public class Notifications extends Module {
 		setMETHOD_NAME("getNotifications");
 		receiver = new SyncReceiver(this);
 		account = new Account(getString(R.string.app_name), accountType);
+		SIZE_LIMIT = prefs.getNotifLimit();
 	}
 
 	/**
@@ -256,6 +257,7 @@ public class Notifications extends Module {
 	protected void requestService() throws NoSuchAlgorithmException,
 	IOException, XmlPullParserException, SoapFault,
 	IllegalAccessException, InstantiationException {
+		SIZE_LIMIT = prefs.getNotifLimit();
 		
 		account = new Account(getString(R.string.app_name), accountType);
 		if(ContentResolver.getSyncAutomatically(account, authority)) {
