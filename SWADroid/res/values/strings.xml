@@ -147,6 +147,11 @@
     <string name="prefSyncEnableTitle">Auto Sync</string>
     <string name="prefSyncEnableSummary">Enable auto sync</string>
     <string name="prefSyncEnableKey">prefSyncEnable</string>    
+    <string name="prefCatNotifTitle">Notifications</string>  
+    <string name="prefNotifLimitTitle">Notifications limit</string>
+    <string name="prefNotifLimitDialogMessage">Select the max number of notifications to be stored:</string>
+    <string name="prefNotifLimitSuffix">notifications</string>
+    <string name="prefNotifLimitKey">prefNotifLimit</string>
     <string name="notificationsAlertTitle">SWADroid</string>
     <string name="notificationsAlertMsg">new notifications</string>
     <string name="footMessageMsg">Sended from</string>

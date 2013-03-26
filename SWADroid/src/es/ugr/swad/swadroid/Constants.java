@@ -24,7 +24,7 @@ import java.util.Random;
 import es.ugr.swad.swadroid.model.User;
 
 /**
- * Constans of application.
+ * Constants of application.
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>

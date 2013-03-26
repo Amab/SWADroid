@@ -140,7 +140,11 @@
     <string name="prefSyncTimeTitle">Frecuencia de sincronización</string>
     <string name="prefSyncTimeSummary">Frecuencia de sincronización de las notificaciones</string>
     <string name="prefSyncEnableTitle">Sincronización automática</string>
-    <string name="prefSyncEnableSummary">Habilitar la sincronización automática</string>
+    <string name="prefSyncEnableSummary">Habilitar la sincronización automática</string>  
+    <string name="prefCatNotifTitle">Notificaciones</string> 
+    <string name="prefNotifLimitTitle">Límite de notificaciones</string>
+    <string name="prefNotifLimitDialogMessage">Seleccione el número máximo de notificaciones que serán almacenadas:</string>
+    <string name="prefNotifLimitSuffix">notificaciones</string>
     <string name="notificationsAlertTitle">SWADroid</string>
     <string name="notificationsAlertMsg">nuevas notificaciones</string>
     <string name="footMessageMsg">Enviado desde</string>

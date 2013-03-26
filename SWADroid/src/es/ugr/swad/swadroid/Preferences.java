@@ -44,6 +44,7 @@ import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.sync.SyncUtils;
 import es.ugr.swad.swadroid.utils.Base64;
 import es.ugr.swad.swadroid.utils.Utils;
+import es.ugr.swad.swadroid.widget.SeekBarDialogPreference;
 
 /**
  * Preferences window of application.
@@ -98,6 +99,10 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 	 * Synchronization enabled flag
 	 */
 	private boolean syncEnabled;
+	/**
+	 * Notifications limit
+	 */
+	private int notifLimit;
 	/**
 	 * Last application version preference name.
 	 */
@@ -155,6 +160,10 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 	 */
 	private static final String SYNCENABLEPREF = "prefSyncEnable";
 	/**
+	 * Notifications limit preference name.
+	 */
+	private static final String NOTIFLIMITPREF = "prefNotifLimit";
+	/**
 	 * User ID preference
 	 */
 	private Preference userIDPref;
@@ -206,6 +215,10 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 	 * Synchronization enable preference
 	 */
 	private CheckBoxPreference syncEnablePref;
+	/**
+	 * Notifications limit preference
+	 */
+	private SeekBarDialogPreference notifLimitPref;
 	/**
 	 * Preferences editor
 	 */
@@ -283,6 +296,14 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 	 */
 	public String getDBKey() {
 		return DBKey;
+	}
+
+	/**
+	 * Gets the max number of notifications to be stored
+	 * @return the max number of notifications to be stored
+	 */
+	public int getNotifLimit() {
+		return notifLimit;
 	}
 
 	/**
@@ -369,6 +390,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 		lastVersion = prefs.getInt(LASTVERSIONPREF, 0);
 		lastCourseSelected = prefs.getInt(LASTCOURSESELECTEDPREF, 0);
 		syncEnabled = prefs.getBoolean(SYNCENABLEPREF, true);
+		notifLimit = prefs.getInt(NOTIFLIMITPREF, 25);
 		DBKey = prefs.getString(DBKEYPREF, "");
 	}
 
@@ -400,6 +422,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 		lastVersion = prefs.getInt(LASTVERSIONPREF, 0);
 		lastCourseSelected = prefs.getInt(LASTCOURSESELECTEDPREF, 0);
 		syncEnabled = prefs.getBoolean(SYNCENABLEPREF, true);
+		notifLimit = prefs.getInt(NOTIFLIMITPREF, 25);
 		editor = prefs.edit();
 
 		userIDPref = findPreference(USERIDPREF);
@@ -415,6 +438,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 		serverPref = findPreference(SERVERPREF);
 		syncTimePref = findPreference(SYNCTIMEPREF);
 		syncEnablePref = (CheckBoxPreference) findPreference(SYNCENABLEPREF);
+		notifLimitPref = (SeekBarDialogPreference) findPreference(NOTIFLIMITPREF);
 		
         syncTimePref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			public boolean onPreferenceChange(Preference preference, Object value) {
@@ -459,6 +483,9 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 		blogPref.setOnPreferenceChangeListener(this);
 		sharePref.setOnPreferenceChangeListener(this);
 		serverPref.setOnPreferenceChangeListener(this);
+		notifLimitPref.setOnPreferenceChangeListener(this);
+		
+		notifLimitPref.setProgress(notifLimit);
 
 		userIDPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			/**
@@ -580,6 +607,16 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 				return true;
 			}
 		}); 
+		notifLimitPref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			@Override
+			public boolean onPreferenceChange(Preference preference,
+					Object newValue) {
+				notifLimit = (Integer) newValue;
+				editor.putInt(NOTIFLIMITPREF, notifLimit);
+				dbHelper.clearOldNotifications(notifLimit);
+				return true;
+			}
+		});
 
 		try {
 			currentVersionPref.setSummary(getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
