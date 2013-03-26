@@ -67,6 +67,10 @@
     <string name="evaluation">Evaluation</string>
     <string name="assignment">Assignment</string>
     <string name="survey">Survey</string>
+    <string name="documentFile">Document</string>
+    <string name="sharedFile">Shared document</string>
+    <string name="enrollment">Enrollment</string>
+    <string name="enrollmentRequest">Enrollment request</string>
     <string name="unknownNotification">Unknown notification</string>
     <string name="fromMsg">From</string>
     <string name="dateMsg">Date</string>
@@ -200,7 +204,6 @@
     <string name="vacants">Vacants</string>
 	<string name="numStudent">No. of students: </string>
 	<string name="maxStudent">Max.stud.</string>
-	<string name="enrollment">Enrollment</string>
 	<string name="myGroupsModuleLabel">My groups</string>
     <string name="scan_no_photos">Failed to save the photos of students</string>
     <string name="noStudentsAvailableMsg">There are no students in this subject</string>

@@ -66,6 +66,10 @@
     <string name="evaluation">Evaluación</string>
     <string name="assignment">Actividad</string>
     <string name="survey">Encuesta</string>
+    <string name="documentFile">Documento</string>
+    <string name="sharedFile">Documento compartido</string>
+    <string name="enrollment">Inscripción</string>
+    <string name="enrollmentRequest">Petición de inscripción</string>
     <string name="unknownNotification">Notificación desconocida</string>
     <string name="fromMsg">De</string>
     <string name="dateMsg">Fecha</string>
@@ -192,7 +196,6 @@
     <string name="sdCardBusy">La tarjeta SD está ocupada ahora mismo. Para permitir descargas, selecciona "Desactiva almacenamiento USB" en la notificación</string>
     <string name="vacants">Vacantes</string>
 	<string name="numStudent">Nº de estudiantes: </string>
-    <string name="enrollment">Inscripción</string>
     <string name="myGroupsModuleLabel">Mis grupos</string>
     <string name="scan_no_photos">No se han podido guardar las fotos de los estudiantes</string>
     <string name="noStudentsAvailableMsg">Esta asignatura no tiene alumnos</string>
