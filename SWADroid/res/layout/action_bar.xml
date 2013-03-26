@@ -117,15 +117,21 @@
         android:visibility="gone"/>
     
     <ProgressBar
-    	android:id="@+id/progress_refresh"
-		android:indeterminateDrawable="@drawable/rotate_refresh"
+        android:id="@+id/progress_refresh"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_alignWithParentIfMissing="true"
-        android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:visibility="gone"/>
+        android:layout_alignParentTop="true"
+        android:layout_alignWithParentIfMissing="true"
+        android:indeterminateBehavior="repeat"
+        android:indeterminateDrawable="@drawable/rotate_refresh"
+        android:maxHeight="40dp"
+        android:maxWidth="40dp"
+        android:minHeight="40dp"
+        android:minWidth="40dp"
+        android:padding="5dp"
+        android:visibility="gone" />
     
     <!-- <ImageView
     	android:id="@+id/title_sep_4"
