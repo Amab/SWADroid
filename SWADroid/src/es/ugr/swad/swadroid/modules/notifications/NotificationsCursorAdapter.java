@@ -180,7 +180,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         	} else if(type.equals("enrollmentRequest"))
         	{
         		type = context.getString(R.string.enrollmentRequest);
-        		notificationIcon.setImageResource(R.drawable.user_ok);
+        		notificationIcon.setImageResource(R.drawable.enrollment_request);
         	} else if(type.equals("documentFile"))
         	{
         		type = context.getString(R.string.survey);
