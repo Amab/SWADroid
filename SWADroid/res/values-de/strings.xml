@@ -155,7 +155,7 @@
     <string name="openingTime">Öffnungsdatum: </string>
     <string name="noGroupsText">Gruppen worden nicht im Kurs erstellt</string>
     <string name="changeGroups">Gruppen ändern</string>
-     <string name="resultEnrollment">Ergebnis auf dem Anmeldeformular</string>
+    <string name="resultEnrollment">Ergebnis auf dem Anmeldeformular</string>
     <string name="successfullEnrollment">Alle Anmeldungen wurden erfolgreich durchgeführt. Bitte überprüfen Sie, dass Sie in Ihrem gewünschten Gruppen eingeschrieben sind </string>
     <string name="confirmEnrollments">Bestätigen angeforderten Einschreibungen</string>
     <string name="areYouSure">Sind Sie sicher, dass Sie sich auf den ausgewählten Gruppen einschreiben wollen?</string>
@@ -171,11 +171,17 @@
     <string name="creationTimeTitle">Date:</string>
     <string name="uploaderTitle">Uploaded by:</string>
     <string name="downloadFileTitle">Download</string>
-    <string  name="sdCardBusyTitle">SD-Karte nicht verfügbar</string>
+    <string name="sdCardBusyTitle">SD-Karte nicht verfügbar</string>
     <string name="sdCardBusy">SD-Karte ist in Verwendung. Um Downloads zu erlauben, "USB-Speicher ausschalten" in der Benachrichtigung wählen</string>
-	<string name="selectZone">Wählen Sie Bereich</string>
-	<string name="fileTitle">Datei:</string>
-	<string name="noConnectionMsg">Diese Funktion muss conection haben.</string>
-	<string name="noApp">Es kann diese Datei nicht öffnen.</string>
-	
+    <string name="selectZone">Wählen Sie Bereich</string>
+    <string name="fileTitle">Datei:</string>
+    <string name="noConnectionMsg">Diese Funktion muss conection haben.</string>
+    <string name="noApp">Es kann diese Datei nicht öffnen.</string>
+    <string name="contents_contact">Kontaktinfo</string>
+    <string name="contents_email">E-Mail Adresse</string>
+    <string name="contents_location">Koordinaten</string>
+    <string name="contents_phone">Telefonnummer</string>
+    <string name="contents_sms">SMS Adresse</string>
+    <string name="contents_text">Text</string>
+
 </resources>
