@@ -79,9 +79,9 @@ public class Groups extends Module {
 		super.onStart(); 
 			try {
 				runConnection();
-			} catch (Exception ex) {
+			} catch (Exception e) {
 				String errorMsg = getString(R.string.errorServerResponseMsg);
-				error(TAG, errorMsg, ex);
+				error(TAG, errorMsg, e, true);
 			}
 	}
 
@@ -101,7 +101,7 @@ public class Groups extends Module {
 		String progressDescription = getString(R.string.groupsProgressDescription);
 		int progressTitle = R.string.groupsProgressTitle;
 
-		new Connect(true, progressDescription, progressTitle).execute();
+		startConnection(true, progressDescription, progressTitle);
 	}
 
 
@@ -165,7 +165,6 @@ public class Groups extends Module {
 
 	@Override
 	protected void onError() {
-		// TODO Auto-generated method stub
 
 	}
 }

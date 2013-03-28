@@ -39,23 +39,19 @@
         android:label="@string/app_name" >
         <activity
             android:name=".SWADMain"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:icon="@drawable/ic_launcher_swadroid"
             android:label="@string/app_name" android:theme="@android:style/Theme.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".Preferences"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:name=".Preferences"            
             android:label="@string/set_preferences" >
         </activity>
         <activity
-            android:name=".modules.Login"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:name=".modules.Login"            
             android:label="@string/loginModuleLabel"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
@@ -63,141 +59,140 @@
             android:name=".modules.rollcall.Rollcall"
             android:label="@string/rollcallModuleLabel"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name=".modules.rollcall.RollcallConfigDownload"
             android:label="@string/rollcallModuleLabel"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name=".modules.rollcall.sessions.NewPracticeSession"
             android:label="@string/sessionModuleLabel"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name=".modules.rollcall.sessions.SessionsHistory"
             android:label="@string/rollcallHistoryModuleLabel"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name=".modules.rollcall.sessions.SessionsList"
             android:label="@string/sessionModuleLabel"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name=".modules.rollcall.students.StudentsHistory"
             android:label="@string/studentsHistoryModuleLabel"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name=".modules.rollcall.students.StudentsList"
             android:label="@string/sessionModuleLabel"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name=".modules.Groups"
             android:label="@string/rollcallModuleLabel"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.google.zxing.client.android.CaptureActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:windowSoftInputMode="stateAlwaysHidden" >
             <intent-filter>
                 <action android:name="es.ugr.swad.swadroid.android.SCAN" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
             android:name=".modules.Courses"
             android:label="@string/coursesModuleLabel"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name=".modules.notifications.Notifications"
             android:label="@string/notificationsModuleLabel"
-            android:theme="@android:style/Theme.NoTitleBar" android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
+            android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
             android:name=".modules.tests.Tests"
             android:label="@string/testsModuleLabel"
-            android:theme="@android:style/Theme.NoTitleBar" android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
+            android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
             android:name=".modules.tests.TestsQuestionsDownload"
             android:label="@string/testsModuleLabel"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name=".modules.tests.TestsConfigDownload"
             android:label="@string/testsModuleLabel"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
-            android:name=".modules.tests.TestsMake"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:name=".modules.tests.TestsMake"            
             android:label="@string/testsModuleLabel"
             android:theme="@android:style/Theme.NoTitleBar">
         </activity>
         <activity
-            android:name=".modules.Messages"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:name=".modules.Messages"            
             android:label="@string/messagesModuleLabel"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name=".modules.notifications.NotificationItem"
             android:label="@string/notificationsModuleLabel"
-            android:theme="@android:style/Theme.NoTitleBar" android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
+            android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
-            android:name=".modules.Notices"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:name=".modules.Notices"            
             android:label="@string/noticesModuleLabel"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
-            android:name=".sync.AccountAuthenticator"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:name=".sync.AccountAuthenticator"            
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name=".modules.downloads.DirectoryTreeDownload"
             android:label="@string/documentsDownloadModuleLabel"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name=".modules.downloads.GetFile"
             android:label="@string/documentsDownloadModuleLabel"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name=".modules.downloads.DownloadsManager"
             android:label="@string/documentsDownloadModuleLabel"
             android:theme="@android:style/Theme.NoTitleBar"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
+            >
         </activity>
         <activity
             android:name=".modules.groups.MyGroupsManager"
             android:label="@string/myGroupsModuleLabel"
-            android:theme="@android:style/Theme.NoTitleBar" android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
+            android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
             android:name=".modules.GroupTypes"
             android:label="@string/groupTypesModuleLabel"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name=".modules.groups.SendMyGroups"
             android:label="@string/sendMyGroupsProgressTitle"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
 
-        <activity android:name=".modules.GenerateQR" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="keyboard|keyboardHidden|orientation|screenSize"></activity><provider
+        <activity android:name=".modules.GenerateQR"
+            android:theme="@android:style/Theme.NoTitleBar" >            
+        </activity>
+        
+        <provider
             android:name=".sync.DummyProvider"
             android:authorities="es.ugr.swad.swadroid.content"
             android:label="SWADroid"

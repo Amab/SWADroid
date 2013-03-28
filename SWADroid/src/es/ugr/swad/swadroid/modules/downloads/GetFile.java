@@ -74,9 +74,9 @@ public class GetFile extends Module {
 		super.onStart();
 		try {
 			runConnection();
-		} catch (Exception ex) {
+		} catch (Exception e) {
 			String errorMsg = getString(R.string.errorServerResponseMsg);
-			error(TAG, errorMsg, ex);
+			error(TAG, errorMsg, e, true);
 		}
 	}
 	@Override
@@ -112,7 +112,7 @@ public class GetFile extends Module {
 
 	@Override
 	protected void connect() {
-		new Connect(false, "", 0).execute();
+		startConnection(false, "", 0);
 	}
 
 	@Override
@@ -125,7 +125,6 @@ public class GetFile extends Module {
 
 	@Override
 	protected void onError() {
-		// TODO Auto-generated method stub
 
 	}
 

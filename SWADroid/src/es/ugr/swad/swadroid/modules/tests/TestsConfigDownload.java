@@ -82,9 +82,9 @@ public class TestsConfigDownload extends Module {
 			}
 
 			runConnection();
-		} catch (Exception ex) {
+		} catch (Exception e) {
 			String errorMsg = getString(R.string.errorServerResponseMsg);
-			error(TAG, errorMsg, ex);
+			error(TAG, errorMsg, e, true);
 		}		
 	}
 
@@ -163,7 +163,7 @@ public class TestsConfigDownload extends Module {
 		String progressDescription = getString(R.string.testsDownloadProgressDescription);
 		int progressTitle = R.string.testsDownloadProgressTitle;
 
-		new Connect(false, progressDescription, progressTitle).execute();
+		startConnection(false, progressDescription, progressTitle);
 	}
 
 	/* (non-Javadoc)

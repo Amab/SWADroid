@@ -70,11 +70,10 @@ public class DirectoryTreeDownload extends Module {
 
 	@Override
 	protected void connect() {
-		String progessDescription= getString(R.string.documentsDownloadProgressDescription);
+		String progressDescription= getString(R.string.documentsDownloadProgressDescription);
 		int progressTitle = R.string.documentsDownloadModuleLabel;
-		Connect con = new Connect(true,progessDescription,progressTitle,true);
-		con.execute();
 
+		startConnection(true, progressDescription, progressTitle);
 	}
 
 	@Override
@@ -85,7 +84,6 @@ public class DirectoryTreeDownload extends Module {
 
 	@Override
 	protected void onError() {
-		// TODO Auto-generated method stub
 
 	}
 

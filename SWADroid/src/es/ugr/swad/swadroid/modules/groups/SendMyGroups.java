@@ -89,9 +89,9 @@ public class SendMyGroups extends Module {
 		super.onStart(); 
 		try {
 			runConnection();
-		} catch (Exception ex) {
+		} catch (Exception e) {
 			String errorMsg = getString(R.string.errorServerResponseMsg);
-			error(TAG, errorMsg, ex);
+			error(TAG, errorMsg, e, true);
 		}
 	}
 
@@ -164,9 +164,7 @@ public class SendMyGroups extends Module {
 		String progressDescription = getString(R.string.sendMyGroupsProgressDescription);
 		int progressTitle = R.string.sendMyGroupsProgressTitle;
 
-		new Connect(true, progressDescription, progressTitle).execute();
-	
-
+		startConnection(true, progressDescription, progressTitle);
 	}
 
 	@Override
@@ -177,7 +175,6 @@ public class SendMyGroups extends Module {
 
 	@Override
 	protected void onError() {
-		// TODO Auto-generated method stub
 
 	}
 
