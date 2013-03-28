@@ -79,9 +79,9 @@ public class Messages extends Module {
 				}*/
 
 				runConnection();
-			} catch (Exception ex) {
+			} catch (Exception e) {
 				String errorMsg = getString(R.string.errorServerResponseMsg);
-				error(TAG, errorMsg, ex);
+				error(TAG, errorMsg, e, true);
 			}				
 		}
 	};
@@ -116,7 +116,7 @@ public class Messages extends Module {
 		messageDialog.setContentView(R.layout.messages_dialog);
 		messageDialog.setCancelable(true);
 
-		messageDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		messageDialog.getWindow().setLayout(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 
 		acceptButton = (Button) messageDialog.findViewById(R.id.message_button_accept);
 		acceptButton.setOnClickListener(positiveClickListener);
@@ -224,7 +224,7 @@ public class Messages extends Module {
 		String progressDescription = getString(R.string.sendingMessageMsg);
 		int progressTitle = R.string.messagesModuleLabel;
 
-		new Connect(false, progressDescription, progressTitle).execute();
+		startConnection(false, progressDescription, progressTitle);
 
 		Toast.makeText(this, R.string.sendingMessageMsg, Toast.LENGTH_SHORT).show();
 		Log.i(TAG, getString(R.string.sendingMessageMsg));

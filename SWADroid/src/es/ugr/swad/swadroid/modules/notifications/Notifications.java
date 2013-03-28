@@ -366,7 +366,7 @@ public class Notifications extends Module {
 		String progressDescription = getString(R.string.notificationsProgressDescription);
 		int progressTitle = R.string.notificationsProgressTitle; 
 
-		new Connect(false, progressDescription, progressTitle).execute();
+		startConnection(false, progressDescription, progressTitle);
 	}
 
 	/* (non-Javadoc)

@@ -51,9 +51,9 @@ public class GroupTypes extends Module {
 		super.onStart();      
 		try {
 			runConnection();
-		} catch (Exception ex) {
+		} catch (Exception e) {
 			String errorMsg = getString(R.string.errorServerResponseMsg);
-			error(TAG, errorMsg, ex);
+			error(TAG, errorMsg, e, true);
 		}
 	}
 	@Override
@@ -109,7 +109,7 @@ public class GroupTypes extends Module {
 		String progressDescription = getString(R.string.groupTypesProgressDescription);
 		int progressTitle = R.string.groupTypesProgressTitle;
 
-		new Connect(true, progressDescription, progressTitle).execute();
+		startConnection(true, progressDescription, progressTitle);
 	}
 
 	@Override
@@ -119,7 +119,6 @@ public class GroupTypes extends Module {
 
 	@Override
 	protected void onError() {
-		// TODO Auto-generated method stub
 
 	}
 

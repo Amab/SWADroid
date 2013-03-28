@@ -83,9 +83,9 @@ public class RollcallConfigDownload extends Module {
 				Log.d(TAG, "selectedCourseCode = " + Long.toString(Constants.getSelectedCourseCode()));
 			}
 			runConnection();
-		} catch (Exception ex) {
+		} catch (Exception e) {
 			String errorMsg = getString(R.string.errorServerResponseMsg);
-			error(TAG, errorMsg, ex);
+			error(TAG, errorMsg, e, true);
 		}
 	}
 
@@ -210,7 +210,7 @@ public class RollcallConfigDownload extends Module {
 		String progressDescription = getString(R.string.studentsDownloadProgressDescription);
 		int progressTitle = R.string.studentsDownloadProgressTitle;
 
-		new Connect(true, progressDescription, progressTitle).execute();
+		startConnection(true, progressDescription, progressTitle);
 	}
 
 	@Override

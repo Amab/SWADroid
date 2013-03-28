@@ -87,12 +87,8 @@ public class Login extends Module {
 	protected void connect() {
 		String progressDescription = getString(R.string.loginProgressDescription);
 		int progressTitle = R.string.loginProgressTitle;
-		Connect con = new Connect(false, progressDescription, progressTitle, true);
-
-		/*if(!Global.isLogged())
-    		Toast.makeText(this, progressDescription, Toast.LENGTH_LONG).show();*/
-
-		con.execute();
+		
+		startConnection(false, progressDescription, progressTitle);
 	} 
 	
 	public static boolean isInteger(String str) {

@@ -42,7 +42,7 @@ public class GenerateQR extends Module {
 			ImageView qr_image = (ImageView) findViewById(R.id.qr_code_image);
 			qr_image.setImageBitmap(qrCode);
 		} catch (WriterException e) {
-			error(TAG, e.getMessage(), e);
+			error(TAG, e.getMessage(), e, true);
 		}
 	}
 

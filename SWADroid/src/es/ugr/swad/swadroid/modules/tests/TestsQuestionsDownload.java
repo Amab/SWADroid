@@ -234,7 +234,7 @@ public class TestsQuestionsDownload extends Module {
 		String progressDescription = getString(R.string.testsDownloadProgressDescription);
 		int progressTitle = R.string.testsDownloadProgressTitle;
 
-		new Connect(true, progressDescription, progressTitle).execute();
+		startConnection(true, progressDescription, progressTitle);
 	}
 
 	/* (non-Javadoc)

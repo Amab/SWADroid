@@ -100,7 +100,7 @@ public class Courses extends Module {
 		String progressDescription = getString(R.string.coursesProgressDescription);
 		int progressTitle = R.string.coursesProgressTitle;
 
-		new Connect(false, progressDescription, progressTitle).execute();
+		startConnection(false, progressDescription, progressTitle);
 	}
 
 	/* (non-Javadoc)
