@@ -105,6 +105,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
     	java.text.DateFormat dateShortFormat = android.text.format.DateFormat.getDateFormat(context);
     	java.text.DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(context);
     	int numRows = cursor.getCount();
+    	int cursorPosition = cursor.getPosition();
 
     	if(contentVisible.length == 0) {
     		contentVisible = new boolean[numRows];
@@ -238,14 +239,20 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         	if(type.equals(context.getString(R.string.marksFile))) {
         		contentMsgText = context.getString(R.string.marksMsg);
         		contentMsg.setText(contentMsgText);
-        		contentVisible[cursor.getPosition()] = true;
+        		
+        		if(cursorPosition < contentVisible.length) {
+	        		contentVisible[cursorPosition] = true;
+	        	}
         	} else {
         		contentMsgText = "";
     			contentMsg.setText(contentMsgText);
-        		contentVisible[cursor.getPosition()] = false;
+    			
+    			if(cursorPosition < contentVisible.length) {
+    				contentVisible[cursorPosition] = false;
+	        	}
         	}
         	
-        	if(contentVisible[cursor.getPosition()]) {
+        	if((cursorPosition < contentVisible.length) && contentVisible[cursorPosition]) {
         		contentMsg.setVisibility(View.VISIBLE);
         	} else {
         		contentMsg.setVisibility(View.GONE);
