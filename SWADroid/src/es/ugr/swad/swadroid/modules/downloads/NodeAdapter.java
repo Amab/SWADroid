@@ -48,7 +48,13 @@ public class NodeAdapter extends BaseAdapter {
 	
 	@Override
 	public int getCount() {
-		return list.size();
+		int size = 0;
+		
+		if (list != null) {
+			size = list.size();
+		}
+		
+		return size;
 	}
 
 	@Override
