@@ -18,7 +18,6 @@
  */
 package es.ugr.swad.swadroid.modules.downloads;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -42,7 +41,6 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ArrayAdapter;
-import android.widget.Toast;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
@@ -56,6 +54,7 @@ import es.ugr.swad.swadroid.modules.Groups;
  * the downloads of documents
  * 
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * */
 public class DownloadsManager extends MenuActivity {
 	/**
@@ -306,13 +305,15 @@ public class DownloadsManager extends MenuActivity {
 				}
 				break;
 			case Constants.GETFILE_REQUEST_CODE:
-				Log.i(TAG, "Correct get file");
-				//if the sd card is not busy, the file can be downloaded 
-				if (this.checkMediaAvailability() == 2){
+				Log.d(TAG, "Correct get file");
+				//if the sd card is not busy, the file can be downloaded
+				if (this.checkMediaAvailability() == 2){ 
+					Log.i(TAG, "External storage is available");
 					String url = data.getExtras().getString("link");
 					downloadFile(getDirectoryPath(),url,fileSize);
-					Toast.makeText(this, chosenNodeName +" "+ this.getResources().getString(R.string.notificationDownloadTitle) , Toast.LENGTH_LONG).show();
-				}else{ //if the sd card is busy, it shows a alert dialog
+					//Toast.makeText(this, chosenNodeName +" "+ this.getResources().getString(R.string.notificationDownloadTitle) , Toast.LENGTH_LONG).show();
+				}else{ //if the sd card is busy, it shows a alert dialog 
+					Log.i(TAG, "External storage is NOT available");
 					AlertDialog.Builder builder = new AlertDialog.Builder(this);
 					AlertDialog dialog;
 					builder.setTitle(R.string.sdCardBusyTitle);
@@ -524,10 +525,11 @@ public class DownloadsManager extends MenuActivity {
 	}
 	
 	/**
-	 * it gets the directory path where the files will be located.This will be /$EXTERNAL_STORAGE/download 
+	 * it gets the directory path where the files will be located.This will be /$EXTERNAL_STORAGE/$DOWNLOADS 
 	 * */
 	private String getDirectoryPath(){
-		String downloadsDirName = Environment.getExternalStorageDirectory()+File.separator+"download";
+		//String downloadsDirName = Environment.getExternalStorageDirectory()+File.separator+"download";
+		String downloadsDirName = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
 		return downloadsDirName;
 	}
 	
@@ -537,7 +539,7 @@ public class DownloadsManager extends MenuActivity {
 	 * @param url - url from which the file is downloaded
 	 * @param fileSize - file size of the file. It is used to show the download progress in the notification
 	 * */
-	private void downloadFile(String directory, String url,long fileSize){
+	private void downloadFile(String directory, String url,long fileSize){ 
 			new FileDownloaderAsyncTask(getApplicationContext(),this.chosenNodeName,true,fileSize).execute(directory,url);
 	}
 	

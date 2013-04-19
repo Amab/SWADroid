@@ -87,6 +87,8 @@ public class DownloadNotification {
 
         //make this notification appear in the 'Ongoing events' section
         mNotification.flags = Notification.FLAG_ONGOING_EVENT;
+        
+        mNotification.contentIntent = mContentIntent;
 
         //show the notification
         mNotificationManager.notify(NOTIFICATION_ID, mNotification);
@@ -145,6 +147,12 @@ public class DownloadNotification {
         mNotification.setLatestEventInfo(mContext, mContentTitle, contentText, mContentIntent);
         //Flag_auto_cancel allows to the notification to erases itself when is clicked. 
         mNotification.flags = Notification.FLAG_AUTO_CANCEL;
+
+		//Add sound, vibration and lights
+        mNotification.defaults |= Notification.DEFAULT_SOUND;
+		//notif.defaults |= Notification.DEFAULT_VIBRATE;
+        mNotification.defaults |= Notification.DEFAULT_LIGHTS;
+        
         mNotification.contentIntent = mContentIntent;
         mNotificationManager.notify(NOTIFICATION_ID, mNotification);
 
@@ -162,11 +170,22 @@ public class DownloadNotification {
         CharSequence tickerText =mContext.getString(R.string.app_name)+" " + mContext.getString(R.string.downloadProblemTitle); //Initial text that appears in the status bar
         long when = System.currentTimeMillis();
         mNotification = new Notification(icon, tickerText, when);
+        mContentTitle = fileName;
         //build up the new status message
         CharSequence contentText =mContext.getString(R.string.downloadProblemMsg);
         //publish it to the status bar
         mNotification.setLatestEventInfo(mContext, mContentTitle, contentText, mContentIntent);
         mNotification.flags = Notification.FLAG_AUTO_CANCEL;
+
+		//Add sound, vibration and lights
+        mNotification.defaults |= Notification.DEFAULT_SOUND;
+		//notif.defaults |= Notification.DEFAULT_VIBRATE;
+        mNotification.defaults |= Notification.DEFAULT_LIGHTS;
+        
+        Intent notificationIntent = new Intent();
+        if(notificationIntent != null)
+        	mContentIntent = PendingIntent.getActivity(mContext, 0, notificationIntent, 0);
+        
         mNotification.contentIntent = mContentIntent;
         mNotificationManager.notify(NOTIFICATION_ID, mNotification);
     }
