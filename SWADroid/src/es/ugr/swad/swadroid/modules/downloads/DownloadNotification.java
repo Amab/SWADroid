@@ -145,6 +145,7 @@ public class DownloadNotification {
         mNotification.setLatestEventInfo(mContext, mContentTitle, contentText, mContentIntent);
         //Flag_auto_cancel allows to the notification to erases itself when is clicked. 
         mNotification.flags = Notification.FLAG_AUTO_CANCEL;
+        mNotification.contentIntent = mContentIntent;
         mNotificationManager.notify(NOTIFICATION_ID, mNotification);
 
     }
@@ -166,6 +167,7 @@ public class DownloadNotification {
         //publish it to the status bar
         mNotification.setLatestEventInfo(mContext, mContentTitle, contentText, mContentIntent);
         mNotification.flags = Notification.FLAG_AUTO_CANCEL;
+        mNotification.contentIntent = mContentIntent;
         mNotificationManager.notify(NOTIFICATION_ID, mNotification);
     }
     /**
