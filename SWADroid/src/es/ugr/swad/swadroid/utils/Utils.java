@@ -19,12 +19,24 @@
 
 package es.ugr.swad.swadroid.utils;
 
+import java.util.List;
+
+import android.annotation.TargetApi;
+import android.app.DownloadManager;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
+import android.util.Log;
 import es.ugr.swad.swadroid.Constants;
 
 public class Utils {
+	public static final String TAG = Constants.APP_TAG + " Utils";
 
 	/**
 	 * Generates a random string of length len
@@ -114,6 +126,79 @@ public class Utils {
 	 */
 	public static String parseBoolString(boolean b) {
 		return b ? "Y" : "N";
+	}
+	
+	/**
+	 * @param context used to check the device version and DownloadManager information
+	 * @return true if the download manager is available
+	 */
+	public static boolean isDownloadManagerAvailable(Context context) {
+	    try {
+	        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD) {
+	            return false;
+	        }
+	        Intent intent = new Intent(Intent.ACTION_MAIN);
+	        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+	        intent.setClassName("com.android.providers.downloads.ui", "com.android.providers.downloads.ui.DownloadList");
+	        List<ResolveInfo> list = context.getPackageManager().queryIntentActivities(intent,
+	                PackageManager.MATCH_DEFAULT_ONLY);
+	        return list.size() > 0;
+	    } catch (Exception e) {
+	        return false;
+	    }
+	}
+	
+	public static boolean isHTTPUrl(String url) {
+		return url.startsWith("http://");
+	}
+	
+	/**
+	 * Download method for Android >= Gingerbread
+	 * 
+	 * @param url URL of the file to be downloaded
+	 * @param fileName filename of the file to be downloaded
+	 * @param title title of the download notification
+	 * @param description description of the download notification
+	 */
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	public static boolean downloadFileGingerbread(Context context, String url, String fileName, String title, String description) {
+		DownloadManager.Request request;
+		DownloadManager manager;
+		
+		Log.d(TAG, "URL received: " + url);
+		
+		// in order for this if to run, you must use the android 3.2 to compile your app
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			Log.d(TAG, "Downloading file " + fileName + " with DownloadManager >= HONEYCOMB");
+			
+			request = new DownloadManager.Request(Uri.parse(url));
+			request.setDescription(title);
+			request.setTitle(description);
+			
+		    request.allowScanningByMediaScanner();
+		    request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+			request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
+
+			// get download service and enqueue file
+			manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+			manager.enqueue(request);		
+		} else if(isHTTPUrl(url)){
+			Log.d(TAG, "Downloading file " + fileName + " with DownloadManager GINGERBREAD");
+			
+			request = new DownloadManager.Request(Uri.parse(url));
+			request.setDescription(title);
+			request.setTitle(description);
+			request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
+
+			// get download service and enqueue file
+			manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+			manager.enqueue(request);
+		} else {
+			Log.e(TAG, "Can only download HTTP URIs with DownloadManager GINGERBREAD");
+			return false;
+		}
+		
+		return true;
 	}
 
 }

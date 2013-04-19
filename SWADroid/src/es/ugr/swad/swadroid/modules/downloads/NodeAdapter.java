@@ -31,6 +31,7 @@ import es.ugr.swad.swadroid.R;
 /**
  * Adapter to populate browser of files with the information received from SWAD
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * */
 
 public class NodeAdapter extends BaseAdapter {

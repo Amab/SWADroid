@@ -193,7 +193,7 @@ public class Rollcall extends MenuExpandableListActivity {
 		Cursor selectedGroup = (Cursor) practiceGroup.getSelectedItem();
 		String groupName = selectedGroup.getString(2) + getString(R.string.groupSeparator) + selectedGroup.getString(3);
 		PackageManager pm = getPackageManager();
-		boolean rollCallAndroidVersionOK = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.FROYO);
+		//boolean rollCallAndroidVersionFROYO = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.FROYO);
 		boolean hasRearCam = pm.hasSystemFeature(PackageManager.FEATURE_CAMERA);
 
 		if (keyword.equals(getString(R.string.studentsUpdate))) {
@@ -216,7 +216,7 @@ public class Rollcall extends MenuExpandableListActivity {
 			startActivityForResult(activity, Constants.ROLLCALL_HISTORY_REQUEST_CODE);
 		} else if (keyword.equals(getString(R.string.rollcallScanQR))) {
 			//This module requires Android 2.2 or higher
-			if(rollCallAndroidVersionOK) {
+			//if(rollCallAndroidVersionFROYO) {
 				// Check if device has a rear camera
 				if (hasRearCam) {
 					activity = new Intent(Intents.Scan.ACTION);
@@ -228,10 +228,10 @@ public class Rollcall extends MenuExpandableListActivity {
 					//error(getString(R.string.noRearCamera));
 					error(getString(R.string.noCameraFound));
 				}
-			} else {
+			/*} else {
 				//If Android version < 2.2 show error message
 				error(getString(R.string.froyoFunctionMsg) + "\n(System: " + android.os.Build.VERSION.RELEASE + ")");
-			}
+			}*/
 		} else if (keyword.equals(getString(R.string.rollcallManual))) {
 			showStudentsList();
 		}
