@@ -169,7 +169,7 @@ public class Utils {
 		
 		// in order for this if to run, you must use the android 3.2 to compile your app
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			Log.d(TAG, "Downloading file " + fileName + " with DownloadManager >= HONEYCOMB");
+			Log.i(TAG, "Downloading file " + fileName + " with DownloadManager >= HONEYCOMB");
 			
 			request = new DownloadManager.Request(Uri.parse(url));
 			request.setDescription(title);
@@ -183,7 +183,7 @@ public class Utils {
 			manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
 			manager.enqueue(request);		
 		} else if(isHTTPUrl(url)){
-			Log.d(TAG, "Downloading file " + fileName + " with DownloadManager GINGERBREAD");
+			Log.i(TAG, "Downloading file " + fileName + " with DownloadManager GINGERBREAD");
 			
 			request = new DownloadManager.Request(Uri.parse(url));
 			request.setDescription(title);
