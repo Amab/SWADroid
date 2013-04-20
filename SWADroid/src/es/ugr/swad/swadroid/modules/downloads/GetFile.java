@@ -118,7 +118,7 @@ public class GetFile extends Module {
 	@Override
 	protected void postConnect() {
 		if(isDebuggable)
-			Log.i(TAG, "Enrollment requested");
+			Log.i(TAG, "File requested");
 		finish();
 
 	}

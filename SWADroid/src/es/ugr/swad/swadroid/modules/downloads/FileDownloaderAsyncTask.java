@@ -52,6 +52,7 @@ import es.ugr.swad.swadroid.utils.Utils;
 
 
 public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
+	private static final int BLOCK_SIZE = 1024*16; // 16kb
 
 	//private TextView fileName;
 	//private ProgressBar progressBar;
@@ -71,6 +72,7 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 	 * Downloads tag name for Logcat
 	 */
 	public static final String TAG = Constants.APP_TAG + " Downloads";
+	
 
 
 	public FileDownloaderAsyncTask(Context context,String fileName, boolean notification, long fileSize){
@@ -171,7 +173,7 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 			
 			/*  Read bytes to the buffer until there is nothing more to read(-1) */
 			//ByteArrayBuffer baf = new ByteArrayBuffer(50);
-			byte data[] = new byte[1024];
+			byte data[] = new byte[BLOCK_SIZE];
 			int byteRead = 0;
 			int current = 0;
 			
@@ -296,7 +298,7 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 		}
 		
 		if(!isDownloadManagerAvailable || !downloadSuccess) {
-			Log.d(TAG, "Downloading file " + fileName + " with DownloadManager SWADroid");
+			Log.i(TAG, "Downloading file " + fileName + " with DownloadManager SWADroid");
 			isDownloadManagerSWADroid = true;
 			downloadSuccess = downloadFileCustom(basename, extension);
 		}
