@@ -34,7 +34,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
-import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.modules.Module;
 
@@ -51,7 +51,7 @@ public class Tests extends Module {
     /**
      * Tests tag name for Logcat
      */
-    public static final String TAG = Global.APP_TAG + " Tests";
+    public static final String TAG = Constants.APP_TAG + " Tests";
 	
 	/* (non-Javadoc)
 	 * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
@@ -67,11 +67,11 @@ public class Tests extends Module {
 				Intent activity;
 				switch(position) {
 					case 0: activity = new Intent(getBaseContext(), TestsConfigDownload.class);
-							startActivityForResult(activity, Global.TESTS_CONFIG_DOWNLOAD_REQUEST_CODE);
+							startActivityForResult(activity, Constants.TESTS_CONFIG_DOWNLOAD_REQUEST_CODE);
 							break;
 							
 					case 1: activity = new Intent(getBaseContext(), TestsMake.class);
-							startActivityForResult(activity, Global.TESTS_MAKE_REQUEST_CODE);
+							startActivityForResult(activity, Constants.TESTS_MAKE_REQUEST_CODE);
 							break;
 				}
 				
@@ -96,7 +96,7 @@ public class Tests extends Module {
 		this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
         
         text = (TextView) this.findViewById(R.id.courseSelectedText);
-		text.setText(Global.getSelectedCourseShortName());
+		text.setText(Constants.getSelectedCourseShortName());
 	}
 
 	/* (non-Javadoc)

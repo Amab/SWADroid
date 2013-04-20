@@ -34,6 +34,7 @@ import android.text.Html;
 import android.text.InputType;
 import android.util.Log;
 import android.util.SparseBooleanArray;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -42,9 +43,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Test;
@@ -52,6 +54,7 @@ import es.ugr.swad.swadroid.model.TestAnswer;
 import es.ugr.swad.swadroid.model.TestQuestion;
 import es.ugr.swad.swadroid.model.TestTag;
 import es.ugr.swad.swadroid.modules.Module;
+import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.widget.NumberPicker;
 import es.ugr.swad.swadroid.widget.TextProgressBar;
 
@@ -92,7 +95,7 @@ public class TestsMake extends Module {
 	/**
 	 * Tests tag name for Logcat
 	 */
-	public static final String TAG = Global.APP_TAG + " TestsMake";
+	public static final String TAG = Constants.APP_TAG + " TestsMake";
 	/**
 	 * Application preferences.
 	 */
@@ -118,7 +121,7 @@ public class TestsMake extends Module {
 		this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
 		
 		text = (TextView) this.findViewById(R.id.courseSelectedText);
-		text.setText(Global.getSelectedCourseShortName());
+		text.setText(Constants.getSelectedCourseShortName());
 		
 	}
 
@@ -156,7 +159,7 @@ public class TestsMake extends Module {
 		Button acceptButton;
 		final ListView checkBoxesList;
 		final TagsArrayAdapter tagsAdapter;
-		final List<TestTag> allTagsList = dbHelper.getOrderedCourseTags(Global.getSelectedCourseCode());
+		final List<TestTag> allTagsList = dbHelper.getOrderedCourseTags(Constants.getSelectedCourseCode());
 
 		//Add "All tags" item in list's top
 		allTagsList.add(0, new TestTag(0, getResources().getString(R.string.allMsg), 0));
@@ -268,8 +271,11 @@ public class TestsMake extends Module {
 		TestQuestion question = test.getQuestions().get(pos);
 		List<TestAnswer> answers = question.getAnswers();
 		TestAnswer a;
+		ScrollView scrollContent = (ScrollView) findViewById(R.id.testMakeScroll);
 		ListView testMakeList = (ListView) findViewById(R.id.testMakeList);
-		TextView stem = (TextView) findViewById(R.id.testMakeText);
+		TextView stem = (TextView) findViewById(R.id.testMakeQuestionStem);
+		TextView questionFeedback = (TextView) findViewById(R.id.testMakeQuestionFeedback);
+		TextView answerFeedback = (TextView) findViewById(R.id.testMakeAnswerFeedback);
 		TextView score = (TextView) findViewById(R.id.testMakeQuestionScore);
 		TextView textCorrectAnswer = (TextView) findViewById(R.id.testMakeCorrectAnswer);
 		EditText textAnswer = (EditText) findViewById(R.id.testMakeEditText);
@@ -281,42 +287,90 @@ public class TestsMake extends Module {
 		int numAnswers = answers.size();
 		Float questionScore;
 		DecimalFormat df = new DecimalFormat("0.00");
+		int feedbackLevel;
+		
+		scrollContent.setOnTouchListener(new View.OnTouchListener() {
+             public boolean onTouch(View v, MotionEvent event) {
+                 findViewById(R.id.testMakeList).getParent().requestDisallowInterceptTouchEvent(false);
+                 return false;
+             }
+         });
+		 testMakeList.setOnTouchListener(new View.OnTouchListener() {
+             public boolean onTouch(View v, MotionEvent event) 
+             {
+                 // Disallow the touch request for parent scroll on touch of child view
+            	 v.getParent().requestDisallowInterceptTouchEvent(true);
+                 return false;
+             }
+         });
 
+		questionFeedback.setVisibility(View.GONE);
+		answerFeedback.setVisibility(View.GONE);
 		score.setVisibility(View.GONE);
 		textAnswer.setVisibility(View.GONE);
 		textCorrectAnswer.setVisibility(View.GONE);
 		testMakeList.setVisibility(View.GONE);
 		img.setVisibility(View.GONE);
-
+		
 		stem.setText(Html.fromHtml(question.getStem()));
-		if(answerType.equals("text")
-				|| answerType.equals("int")
-				|| answerType.equals("float")) {
+		questionFeedback.setText(Html.fromHtml(question.getFeedback()));
+		feedbackLevel = Test.FEEDBACK_VALUES.indexOf(feedback);
+		
+		if(test.isEvaluated() && (feedbackLevel == 4) && !question.getFeedback().equals(Constants.NULL_VALUE)) {
+			questionFeedback.setVisibility(View.VISIBLE);
+		} else {
+			questionFeedback.setVisibility(View.GONE);
+		}
+		
+		if(answerType.equals(TestAnswer.TYPE_TEXT)
+				|| answerType.equals(TestAnswer.TYPE_INT)
+				|| answerType.equals(TestAnswer.TYPE_FLOAT)) {
 
-			if(!answerType.equals("text")) {
-				textAnswer.setRawInputType(InputType.TYPE_CLASS_NUMBER);
+			if(answerType.equals(TestAnswer.TYPE_INT)) {
+				textAnswer.setInputType(
+						InputType.TYPE_CLASS_NUMBER
+						|InputType.TYPE_NUMBER_FLAG_SIGNED);
+			} else if(answerType.equals(TestAnswer.TYPE_FLOAT)) {
+				textAnswer.setInputType(
+						InputType.TYPE_CLASS_NUMBER
+						|InputType.TYPE_NUMBER_FLAG_DECIMAL
+						|InputType.TYPE_NUMBER_FLAG_SIGNED);
 			} else {
-				textAnswer.setRawInputType(InputType.TYPE_CLASS_TEXT);
+				textAnswer.setInputType(InputType.TYPE_CLASS_TEXT);				
 			}
 
 			a = answers.get(0);
 			textAnswer.setText(a.getUserAnswer());
 			textAnswer.setVisibility(View.VISIBLE);
+			
+			answerFeedback.setText(Html.fromHtml(a.getFeedback()));
 
-			if(test.isEvaluated() && feedback.equals("eachGoodBad")) {
-				if(answerType.equals("float")) {
+			if(test.isEvaluated() && (feedbackLevel > 2)) {
+				if(answerType.equals(TestAnswer.TYPE_FLOAT)) {
 					correctAnswer = "[" + a.getAnswer() + ";" + answers.get(1).getAnswer() + "]";
+					
+					if(test.isEvaluated() && (feedbackLevel == 4) && !a.getFeedback().equals(Constants.NULL_VALUE)) {
+						answerFeedback.setVisibility(View.VISIBLE);
+					} else {
+						answerFeedback.setVisibility(View.GONE);
+					}
 				} else {
 					for(int i=0; i<numAnswers; i++) {
 						a = answers.get(i);
-						correctAnswer += a.getAnswer() + "<br/>";
+						
+						if((feedbackLevel == 4) && !a.getFeedback().equals(Constants.NULL_VALUE)) {
+							correctAnswer += "<strong>" + a.getAnswer() + "</strong><br/>";
+							correctAnswer += "<i>" + a.getFeedback() + "</i><br/><br/>";
+						} else {
+							correctAnswer += a.getAnswer() + "<br/>";							
+						}
 					}
 				}
 
 				textCorrectAnswer.setText(Html.fromHtml(correctAnswer));
 				textCorrectAnswer.setVisibility(View.VISIBLE);
 			}
-		} else if(answerType.equals("multipleChoice")) {
+		} else if(answerType.equals(TestAnswer.TYPE_MULTIPLE_CHOICE)) {
 			checkedAnswersAdapter = new CheckedAnswersArrayAdapter(this, R.layout.list_item_multiple_choice,
 					answers, test.isEvaluated(), test.getFeedback(), answerType);
 
@@ -325,16 +379,16 @@ public class TestsMake extends Module {
 
 			for(int i=0; i<numAnswers; i++) {
 				a = answers.get(i);
-				testMakeList.setItemChecked(i, Global.parseStringBool(a.getUserAnswer()));
+				testMakeList.setItemChecked(i, Utils.parseStringBool(a.getUserAnswer()));
 			}
 
 			testMakeList.setVisibility(View.VISIBLE);
 		} else {				
-			if(answerType.equals("TF") && (numAnswers < 2)) {
-				if(answers.get(0).getAnswer().equals("T")) {
-					answers.add(1, new TestAnswer(0, 1, 0, false, "F"));
+			if(answerType.equals(TestAnswer.TYPE_TRUE_FALSE) && (numAnswers < 2)) {
+				if(answers.get(0).getAnswer().equals(TestAnswer.VALUE_TRUE)) {
+					answers.add(1, new TestAnswer(0, 1, 0, false, TestAnswer.VALUE_FALSE, answers.get(0).getFeedback()));
 				} else {
-					answers.add(0, new TestAnswer(0, 0, 0, false, "T"));
+					answers.add(0, new TestAnswer(0, 0, 0, false, TestAnswer.VALUE_TRUE, answers.get(0).getFeedback()));
 				}
 
 				numAnswers = 2;
@@ -357,14 +411,14 @@ public class TestsMake extends Module {
 			testMakeList.setVisibility(View.VISIBLE);
 		}
 
-		if(test.isEvaluated() && (feedback.equals("eachResult") || feedback.equals("eachGoodBad"))) {
+		if(test.isEvaluated() && (feedbackLevel > 2)) {
 			textAnswer.setEnabled(false);
 			textAnswer.setOnClickListener(null);
 
-			if(feedback.equals("eachGoodBad")) {
+			if(feedback.equals(Test.FEEDBACK_HIGH)) {
 				img.setImageResource(R.drawable.btn_check_buttonless_on);				
-				if(!answerType.equals("TF") && !answerType.equals("multipleChoice")
-						&& !answerType.equals("uniqueChoice")) {
+				if(!answerType.equals(TestAnswer.TYPE_TRUE_FALSE) && !answerType.equals(TestAnswer.TYPE_MULTIPLE_CHOICE)
+						&& !answerType.equals(TestAnswer.TYPE_UNIQUE_CHOICE)) {
 
 					if(!answers.get(0).isCorrectAnswered()) {
 						img.setImageResource(android.R.drawable.ic_delete);
@@ -401,16 +455,16 @@ public class TestsMake extends Module {
 		SparseBooleanArray checkedItems;
 
 		answerType = q.getAnswerType();
-		if(answerType.equals("text")
-				|| answerType.equals("int")
-				|| answerType.equals("float")) {
+		if(answerType.equals(TestAnswer.TYPE_TEXT)
+				|| answerType.equals(TestAnswer.TYPE_INT)
+				|| answerType.equals(TestAnswer.TYPE_FLOAT)) {
 
 			la.get(0).setUserAnswer(String.valueOf(textAnswer.getText()));
-		} else if(answerType.equals("multipleChoice")) {
+		} else if(answerType.equals(TestAnswer.TYPE_MULTIPLE_CHOICE)) {
 			checkedItems = testMakeList.getCheckedItemPositions();
 			checkedListCount = checkedItems.size();
 			for(int i=0; i<checkedListCount; i++) {
-				la.get(i).setUserAnswer(Global.parseBoolString(checkedItems.get(i, false)));
+				la.get(i).setUserAnswer(Utils.parseBoolString(checkedItems.get(i, false)));
 			}
 		} else {
 			selectedPos = testMakeList.getCheckedItemPosition();
@@ -500,7 +554,7 @@ public class TestsMake extends Module {
 		List<TestQuestion> questions;
 
 		//Generates the test
-		questions = dbHelper.getRandomCourseQuestionsByTagAndAnswerType(Global.getSelectedCourseCode(), tagsList, answerTypesList,
+		questions = dbHelper.getRandomCourseQuestionsByTagAndAnswerType(Constants.getSelectedCourseCode(), tagsList, answerTypesList,
 				numQuestions);
 		if(!questions.isEmpty()) {			
 			test.setQuestions(questions);
@@ -534,7 +588,7 @@ public class TestsMake extends Module {
 		readUserAnswer(test.getQuestionAndAnswers(actualQuestion));
 
 		setLayout(R.layout.tests_make_results);
-		if(!feedback.equals("nothing")) {
+		if(!feedback.equals(Test.FEEDBACK_NONE)) {
 			if(!test.isEvaluated()) {
 				test.evaluate();
 				evalBt = (Button) findViewById(R.id.testEvaluateButton);
@@ -556,7 +610,7 @@ public class TestsMake extends Module {
 			}
 
 			bt = (Button) findViewById(R.id.testResultsButton);
-			if(feedback.equals("totalResult")) {
+			if(feedback.equals(Test.FEEDBACK_MIN)) {
 				bt.setEnabled(false);
 				bt.setText(R.string.testNoDetailsMsg);
 			}
@@ -633,16 +687,16 @@ public class TestsMake extends Module {
 		tfAdapter.add(getString(R.string.falseMsg));
 		
 		prefs.getPreferences(getBaseContext());
-		String selection ="id=" + Long.toString(Global.getSelectedCourseCode());
-		Cursor dbCursor = dbHelper.getDb().getCursor(Global.DB_TABLE_TEST_CONFIG,selection,null);
+		String selection ="id=" + Long.toString(Constants.getSelectedCourseCode());
+		Cursor dbCursor = dbHelper.getDb().getCursor(Constants.DB_TABLE_TEST_CONFIG,selection,null);
 		startManagingCursor(dbCursor);
 		if(dbCursor.getCount() > 0) {			
 			if(isDebuggable) {
-				Log.d(TAG, "selectedCourseCode = " + Long.toString(Global.getSelectedCourseCode()));
+				Log.d(TAG, "selectedCourseCode = " + Long.toString(Constants.getSelectedCourseCode()));
 			}
 
-			test = (Test) dbHelper.getRow(Global.DB_TABLE_TEST_CONFIG, "id",
-					Long.toString(Global.getSelectedCourseCode()));
+			test = (Test) dbHelper.getRow(Constants.DB_TABLE_TEST_CONFIG, "id",
+					Long.toString(Constants.getSelectedCourseCode()));
 		
 			if(test != null) {
 				setNumQuestions();

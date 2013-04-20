@@ -36,7 +36,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
-import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.Module;
@@ -50,7 +50,7 @@ public class StudentsList extends Module {
 	/**
 	 * Students List tag name for Logcat
 	 */
-	public static final String TAG = Global.APP_TAG + " StudentsList";
+	public static final String TAG = Constants.APP_TAG + " StudentsList";
 
 	/* (non-Javadoc)
 	 * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
@@ -89,14 +89,14 @@ public class StudentsList extends Module {
 
 		List<StudentItemModel> studentsList = new ArrayList<StudentItemModel>();
 		for (long userCode: userIds) {
-			User u = (User) dbHelper.getRow(Global.DB_TABLE_USERS, "userCode", String.valueOf(userCode));
+			User u = (User) dbHelper.getRow(Constants.DB_TABLE_USERS, "userCode", String.valueOf(userCode));
 			studentsList.add(new StudentItemModel(u));
 		}
 		// Arrange the list alphabetically
 		Collections.sort(studentsList);
 
 		ListView lv = new ListView(this);
-		lv.setAdapter(new StudentsArrayAdapter(this, studentsList, Global.STUDENTS_LIST_REQUEST_CODE));
+		lv.setAdapter(new StudentsArrayAdapter(this, studentsList, Constants.STUDENTS_LIST_REQUEST_CODE));
 
 		studentsDialog.setContentView(lv);		
 		studentsDialog.show();

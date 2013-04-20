@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <PreferenceCategory android:title="@string/user_preferences" >
+<PreferenceScreen 
+    xmlns:android="http://schemas.android.com/apk/res/android" 
+    xmlns:custom="http://schemas.android.com/apk/res-auto" >
+
+    <PreferenceCategory 
+        android:title="@string/user_preferences" >
         <EditTextPreference
             android:name="@string/userIDName_preferences"
             android:defaultValue=""
@@ -21,8 +25,37 @@
             android:hint="@string/serverSummary_preferences"
             android:key="serverPref"
             android:title="@string/serverTitle_preferences" />
-    </PreferenceCategory>
-    <PreferenceCategory android:title="@string/about_preferences" >
+    </PreferenceCategory>    
+	<PreferenceCategory 
+		android:title="@string/prefCatNotifTitle"> 
+		
+		 <es.ugr.swad.swadroid.widget.SeekBarDialogPreference
+	        android:key="@string/prefNotifLimitKey"
+	        android:dialogMessage="@string/prefNotifLimitDialogMessage"
+	        android:title="@string/prefNotifLimitTitle"
+	        android:defaultValue="25"
+	        android:max="100"
+	        custom:progressTextSuffix="@string/prefNotifLimitSuffix"
+	        custom:min="1" />
+	</PreferenceCategory>
+	<PreferenceCategory 
+		android:title="@string/prefCatSyncTitle">
+        <CheckBoxPreference 
+            android:title="@string/prefSyncEnableTitle"
+            android:key="@string/prefSyncEnableKey"
+			android:defaultValue="true"
+            android:summary="@string/prefSyncEnableSummary" />
+		<ListPreference
+			android:title="@string/prefSyncTimeTitle"
+			android:summary="@string/prefSyncTimeSummary"
+			android:key="@string/prefSyncTimeKey"
+			android:entries="@array/prefSyncTimeEntries"
+			android:entryValues="@array/prefSyncTimeValues"
+			android:defaultValue="60"
+			android:dependency="@string/prefSyncEnableKey" />
+	</PreferenceCategory>
+    <PreferenceCategory 
+        android:title="@string/about_preferences" >
         <Preference
             android:defaultValue=""
             android:key="ratePref"

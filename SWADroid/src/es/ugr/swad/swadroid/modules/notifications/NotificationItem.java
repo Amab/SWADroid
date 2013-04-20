@@ -18,11 +18,12 @@
  */
 package es.ugr.swad.swadroid.modules.notifications;
 
-import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.modules.Messages;
 import es.ugr.swad.swadroid.utils.DownloadImageTask;
+import es.ugr.swad.swadroid.utils.Utils;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -105,13 +106,16 @@ public class NotificationItem extends MenuActivity {
 	    timeTextView.setText(time);
         
 	    //If the user photo exists and is public, download and show it
-	    if(userPhoto != null)
-		    if(Global.connectionAvailable(this) && !userPhoto.equalsIgnoreCase("")) {
+	    if(userPhoto != null) {
+		    if(Utils.connectionAvailable(this)
+		    		&& (userPhoto != null) && !userPhoto.equalsIgnoreCase("")
+		    		&& (userPhoto.compareTo(Constants.NULL_VALUE)!=0)) {
 		    	//userPhotoView.setImageURI(Uri.parse(userPhoto));
 		    	new DownloadImageTask(userPhotoView).execute(userPhoto);
 		    } else {
 		    	Log.d("NotificationItem", "No connection or no photo " + userPhoto);
 		    }
+	    }
 				
 		content = fixLinks(content);
 		if(content.startsWith("<![CDATA[")) {

@@ -35,7 +35,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import com.bugsense.trace.BugSenseHandler;
 
-import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
@@ -224,11 +224,11 @@ public class NotificationsSyncAdapterService extends Service {
 		SecureConnection.initSecureConnection();
 		
 		//If last login time > Global.RELOGIN_TIME, force login
-		if(System.currentTimeMillis()-Global.getLastLoginTime() > Global.RELOGIN_TIME) {
-			Global.setLogged(false);
+		if(System.currentTimeMillis()-Constants.getLastLoginTime() > Constants.RELOGIN_TIME) {
+			Constants.setLogged(false);
 		} 
 			
-		if(!Global.isLogged()) {
+		if(!Constants.isLogged()) {
 			Log.d(TAG, "Not logged");
 			
 			METHOD_NAME = "loginByUserPasswordKey";
@@ -240,7 +240,7 @@ public class NotificationsSyncAdapterService extends Service {
 			createRequest();
 			addParam("userID", prefs.getUserID());
 			addParam("userPassword", userPassword);
-			addParam("appKey", Global.getSWADAppKey());
+			addParam("appKey", Constants.SWAD_APP_KEY);
 			sendRequest(true);		
 
 			if (result != null) {
@@ -261,15 +261,15 @@ public class NotificationsSyncAdapterService extends Service {
 						Integer.parseInt(soap.getProperty("userRole").toString())		// userRole
 						);
 
-				Global.setLoggedUser(loggedUser);
-				Global.setLogged(true);
+				Constants.setLoggedUser(loggedUser);
+				Constants.setLogged(true);
 
 				//Update application last login time
-				Global.setLastLoginTime(System.currentTimeMillis());
+				Constants.setLastLoginTime(System.currentTimeMillis());
 			}
 		}
 		
-		if(Global.isLogged()) {
+		if(Constants.isLogged()) {
 			Log.d(TAG, "Logged");
 			
 			//Calculates next timestamp to be requested
@@ -279,7 +279,7 @@ public class NotificationsSyncAdapterService extends Service {
 			//Creates webservice request, adds required params and sends request to webservice
 			METHOD_NAME = "getNotifications";
 			createRequest();
-			addParam("wsKey", Global.getLoggedUser().getWsKey());
+			addParam("wsKey", Constants.getLoggedUser().getWsKey());
 			addParam("beginTime", timestamp);
 			sendRequest(false);
 	

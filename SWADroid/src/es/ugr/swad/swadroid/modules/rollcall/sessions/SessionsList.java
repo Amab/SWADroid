@@ -36,7 +36,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
-import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.model.PracticeSession;
@@ -51,7 +51,7 @@ public class SessionsList extends Module {
 	/**
 	 * Sessions List tag name for Logcat
 	 */
-	public static final String TAG = Global.APP_TAG + " SessionsList";
+	public static final String TAG = Constants.APP_TAG + " SessionsList";
 
 	/* (non-Javadoc)
 	 * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
@@ -100,7 +100,7 @@ public class SessionsList extends Module {
 
 	private void initialize() {
 		List<SessionItemModel> sessionList = null;
-		long courseCode = Global.getSelectedCourseCode();
+		long courseCode = Constants.getSelectedCourseCode();
 		Intent intent = getIntent();
 		long studentId = intent.getLongExtra("studentId", (long) 0);
 		boolean existSessions = false;

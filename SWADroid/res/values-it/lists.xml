@@ -1,0 +1,31 @@
+<resources>
+
+    <string-array name="functions">
+        <item>"Notifiche"</item>
+        <item>"Test"</item>
+    </string-array>
+    <string-array name="testMenuItems">
+        <item>"Sync domande"</item>
+        <item>"Eseguire il test"</item>
+    </string-array>
+    <string-array name="testAnswerTypesNames">
+        <item>"Tutti"</item>
+        <item>"Vero/Falso"</item>
+        <item>"Elezione solo"</item>
+        <item>"Scelta multipla"</item>
+        <item>"Testo"</item>
+        <item>"No. Tutta la"</item>
+        <item>"Numero reale"</item>
+    </string-array>
+    <string-array name="prefSyncTimeEntries">
+        <item>"5 minuti"</item>
+        <item>"15 minuti"</item>
+        <item>"30 minuti"</item>
+        <item>"1 ora"</item>
+        <item>"3 ore"</item>
+        <item>"6 ore"</item>
+        <item>"12 ore"</item>
+        <item>"24 ore"</item>
+    </string-array>
+
+</resources>

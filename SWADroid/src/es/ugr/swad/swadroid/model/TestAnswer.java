@@ -19,7 +19,6 @@
 package es.ugr.swad.swadroid.model;
 
 import java.util.Hashtable;
-
 import org.ksoap2.serialization.PropertyInfo;
 
 /**
@@ -48,6 +47,42 @@ public class TestAnswer extends Model {
 	 */
 	private String answer;
 	/**
+	 * Answer's feedback
+	 */
+	private String feedback;
+	/**
+	 * Type integer
+	 */
+	public static final String TYPE_INT = "int";
+	/**
+	 * Type float
+	 */
+	public static final String TYPE_FLOAT = "float";
+	/**
+	 * Type true/false
+	 */
+	public static final String TYPE_TRUE_FALSE = "TF";
+	/**
+	 * Type unique choice
+	 */
+	public static final String TYPE_UNIQUE_CHOICE = "uniqueChoice";
+	/**
+	 * Type multiple choice
+	 */
+	public static final String TYPE_MULTIPLE_CHOICE = "multipleChoice";
+	/**
+	 * Type text
+	 */
+	public static final String TYPE_TEXT = "text";
+	/**
+	 * True value
+	 */
+	public static final String VALUE_TRUE = "T";
+	/**
+	 * False value
+	 */
+	public static final String VALUE_FALSE = "F";
+	/**
 	 * User answer
 	 */
 	private String userAnswer;
@@ -56,6 +91,7 @@ public class TestAnswer extends Model {
 	private static PropertyInfo PI_correctAnswered = new PropertyInfo();
 	private static PropertyInfo PI_answer = new PropertyInfo();
 	private static PropertyInfo PI_ansInd = new PropertyInfo();
+	private static PropertyInfo PI_feedback = new PropertyInfo();
 	@SuppressWarnings("unused")
 	private static PropertyInfo[] PI_PROP_ARRAY =
 {
@@ -63,7 +99,8 @@ public class TestAnswer extends Model {
 		PI_correct,
 		PI_correctAnswered,
 		PI_answer,
-		PI_ansInd
+		PI_ansInd,
+		PI_feedback
 };
 
 	/**
@@ -73,8 +110,9 @@ public class TestAnswer extends Model {
 	 * @param qstCod Question code
 	 * @param correct Flag to know if this is the correct answer of the question
 	 * @param answer Answer's text
+	 * @param feedback Text of the answer's feedback
 	 */
-	public TestAnswer(long id, int ansInd, int qstCod, boolean correct, String answer) {
+	public TestAnswer(long id, int ansInd, int qstCod, boolean correct, String answer, String feedback) {
 		super(id);
 		this.ansInd = ansInd;
 		this.qstCod = qstCod;
@@ -82,6 +120,7 @@ public class TestAnswer extends Model {
 		this.correctAnswered = false;
 		this.answer = answer;
 		this.userAnswer = "";
+		this.feedback = feedback;
 	}
 
 	/**
@@ -182,6 +221,22 @@ public class TestAnswer extends Model {
 		this.ansInd = ansInd;
 	}
 
+	/**
+	 * Gets the text of the answer's feedback
+	 * @return Text of the answer's feedback
+	 */
+	public String getFeedback() {
+		return feedback;
+	}
+
+	/**
+	 * Sets the text of the answer's feedback
+	 * @param feedback Text of the answer's feedback
+	 */
+	public void setFeedback(String feedback) {
+		this.feedback = feedback;
+	}
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
@@ -192,7 +247,12 @@ public class TestAnswer extends Model {
 		result = prime * result + ansInd;
 		result = prime * result + ((answer == null) ? 0 : answer.hashCode());
 		result = prime * result + (correct ? 1231 : 1237);
+		result = prime * result + (correctAnswered ? 1231 : 1237);
+		result = prime * result
+				+ ((feedback == null) ? 0 : feedback.hashCode());
 		result = prime * result + qstCod;
+		result = prime * result
+				+ ((userAnswer == null) ? 0 : userAnswer.hashCode());
 		return result;
 	}
 
@@ -203,19 +263,9 @@ public class TestAnswer extends Model {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
+		if (!super.equals(obj))
+			return false;
 		if (getClass() != obj.getClass())
-			return false;
-		TestAnswer other = (TestAnswer) obj;
-		if (ansInd != other.ansInd)
-			return false;
-		if (answer == null) {
-			if (other.answer != null)
-				return false;
-		} else if (!answer.equals(other.answer))
-			return false;
-		if (correct != other.correct)
-			return false;
-		if (qstCod != other.qstCod)
 			return false;
 		return true;
 	}
@@ -227,8 +277,8 @@ public class TestAnswer extends Model {
 	public String toString() {
 		return "TestAnswer [qstCod=" + qstCod + ", ansInd=" + ansInd
 				+ ", correct=" + correct + ", correctAnswered="
-				+ correctAnswered + ", answer=" + answer + ", userAnswer="
-				+ userAnswer + ", getId()=" + getId() + "]";
+				+ correctAnswered + ", answer=" + answer + ", feedback="
+				+ feedback + ", userAnswer=" + userAnswer + "]";
 	}
 
 	/* (non-Javadoc)
@@ -243,6 +293,7 @@ public class TestAnswer extends Model {
 		case 2 : object = correctAnswered;break;
 		case 3 : object = answer;break;
 		case 4 : object = ansInd;break;
+		case 5 : object = feedback;break;
 		}
 
 		return object;
@@ -252,7 +303,7 @@ public class TestAnswer extends Model {
 	 * @see org.ksoap2.serialization.KvmSerializable#getPropertyCount()
 	 */
 	public int getPropertyCount() {
-		return 5;
+		return 6;
 	}
 
 	/* (non-Javadoc)
@@ -279,6 +330,10 @@ public class TestAnswer extends Model {
 		case 4:
 			propertyInfo.type = PropertyInfo.INTEGER_CLASS;
 			propertyInfo.name = "ansInd";
+			break;      
+		case 5:
+			propertyInfo.type = PropertyInfo.STRING_CLASS;
+			propertyInfo.name = "feedback";
 			break;        
 		}
 	}
@@ -294,6 +349,7 @@ public class TestAnswer extends Model {
 		case 2  : correctAnswered = (Boolean) obj; break;
 		case 3  : answer = (String) obj; break;
 		case 4  : ansInd = (Integer) obj; break;
+		case 5  : feedback = (String) obj; break;
 		}    
 	}
 }

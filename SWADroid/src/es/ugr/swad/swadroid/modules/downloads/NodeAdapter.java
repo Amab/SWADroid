@@ -31,6 +31,7 @@ import es.ugr.swad.swadroid.R;
 /**
  * Adapter to populate browser of files with the information received from SWAD
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * */
 
 public class NodeAdapter extends BaseAdapter {
@@ -48,7 +49,13 @@ public class NodeAdapter extends BaseAdapter {
 	
 	@Override
 	public int getCount() {
-		return list.size();
+		int size = 0;
+		
+		if (list != null) {
+			size = list.size();
+		}
+		
+		return size;
 	}
 
 	@Override

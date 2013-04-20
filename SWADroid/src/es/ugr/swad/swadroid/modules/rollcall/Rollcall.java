@@ -47,7 +47,7 @@ import android.widget.Toast;
 
 import com.google.zxing.client.android.Intents;
 
-import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.ImageExpandableListAdapter;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
@@ -61,6 +61,7 @@ import es.ugr.swad.swadroid.modules.rollcall.sessions.SessionsHistory;
 import es.ugr.swad.swadroid.modules.rollcall.students.StudentItemModel;
 import es.ugr.swad.swadroid.modules.rollcall.students.StudentsArrayAdapter;
 import es.ugr.swad.swadroid.modules.rollcall.students.StudentsHistory;
+import es.ugr.swad.swadroid.utils.Utils;
 
 /**
  * Rollcall module.
@@ -78,7 +79,7 @@ public class Rollcall extends MenuExpandableListActivity {
 	/**
 	 * Rollcall tag name for Logcat
 	 */
-	public static final String TAG = Global.APP_TAG + " Rollcall";
+	public static final String TAG = Constants.APP_TAG + " Rollcall";
 	/**
 	 * Course code of current selected course
 	 * */
@@ -106,7 +107,7 @@ public class Rollcall extends MenuExpandableListActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_rollcall);
 
-		courseCode = Global.getSelectedCourseCode();
+		courseCode = Constants.getSelectedCourseCode();
 
 		ImageView image = (ImageView) this.findViewById(R.id.moduleIcon);
 		image.setBackgroundResource(R.drawable.roll_call);
@@ -120,15 +121,15 @@ public class Rollcall extends MenuExpandableListActivity {
 		updateButton.setVisibility(View.VISIBLE);
 
 		TextView courseNameText = (TextView) this.findViewById(R.id.courseSelectedText);
-		courseNameText.setText(Global.getSelectedCourseShortName());
+		courseNameText.setText(Constants.getSelectedCourseShortName());
 	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
 
-		List<Model> groupTypes = dbHelper.getAllRows(Global.DB_TABLE_GROUP_TYPES, "courseCode = " + courseCode, "groupTypeName");
-		Cursor c = dbHelper.getPracticeGroups(Global.getSelectedCourseCode());
+		List<Model> groupTypes = dbHelper.getAllRows(Constants.DB_TABLE_GROUP_TYPES, "courseCode = " + courseCode, "groupTypeName");
+		Cursor c = dbHelper.getPracticeGroups(Constants.getSelectedCourseCode());
 		startManagingCursor(c);
 		
 		if(!groupTypes.isEmpty() && c.getCount() > 0) {
@@ -137,11 +138,11 @@ public class Rollcall extends MenuExpandableListActivity {
 		} else if(!groupTypes.isEmpty()) {
 			Intent activity = new Intent(getBaseContext(), Groups.class);
 			activity.putExtra("courseCode", courseCode);
-			startActivityForResult(activity, Global.GROUPS_REQUEST_CODE);
+			startActivityForResult(activity, Constants.GROUPS_REQUEST_CODE);
 		} else if(!groupTypesRequested) {
 			Intent activity = new Intent(getBaseContext(), GroupTypes.class);
 			activity.putExtra("courseCode", courseCode);
-			startActivityForResult(activity, Global.GROUPTYPES_REQUEST_CODE);
+			startActivityForResult(activity, Constants.GROUPTYPES_REQUEST_CODE);
 		}
 	}
 
@@ -176,7 +177,7 @@ public class Rollcall extends MenuExpandableListActivity {
 
 		Intent activity = new Intent(getBaseContext(), GroupTypes.class);
 		activity.putExtra("courseCode", courseCode);
-		startActivityForResult(activity, Global.GROUPTYPES_REQUEST_CODE);
+		startActivityForResult(activity, Constants.GROUPTYPES_REQUEST_CODE);
 	}
 
 	/* (non-Javadoc)
@@ -186,12 +187,14 @@ public class Rollcall extends MenuExpandableListActivity {
 	public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
 		// Get the item that was clicked
 		Object o = getExpandableListAdapter().getChild(groupPosition, childPosition);
-		@SuppressWarnings("unchecked")
 		String keyword = (String) ((Map<String,Object>) o).get(NAME);
 		Intent activity;
 		Context context = getBaseContext();
 		Cursor selectedGroup = (Cursor) practiceGroup.getSelectedItem();
 		String groupName = selectedGroup.getString(2) + getString(R.string.groupSeparator) + selectedGroup.getString(3);
+		PackageManager pm = getPackageManager();
+		//boolean rollCallAndroidVersionFROYO = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.FROYO);
+		boolean hasRearCam = pm.hasSystemFeature(PackageManager.FEATURE_CAMERA);
 
 		if (keyword.equals(getString(R.string.studentsUpdate))) {
 			activity = new Intent(context, RollcallConfigDownload.class);
@@ -200,7 +203,7 @@ public class Rollcall extends MenuExpandableListActivity {
 		} else if (keyword.equals(getString(R.string.studentsSelect))) {
 			activity = new Intent(context, StudentsHistory.class);
 			activity.putExtra("groupName", groupName);
-			startActivityForResult(activity, Global.STUDENTS_HISTORY_REQUEST_CODE);
+			startActivityForResult(activity, Constants.STUDENTS_HISTORY_REQUEST_CODE);
 		} else if (keyword.equals(getString(R.string.newTitle))) {
 			activity = new Intent(context, NewPracticeSession.class);
 			activity.putExtra("groupCode", selectedGroup.getLong(1));
@@ -210,17 +213,25 @@ public class Rollcall extends MenuExpandableListActivity {
 			activity = new Intent(context, SessionsHistory.class);
 			activity.putExtra("groupCode", selectedGroup.getLong(1));
 			activity.putExtra("groupName", groupName);
-			startActivityForResult(activity, Global.ROLLCALL_HISTORY_REQUEST_CODE);
+			startActivityForResult(activity, Constants.ROLLCALL_HISTORY_REQUEST_CODE);
 		} else if (keyword.equals(getString(R.string.rollcallScanQR))) {
-			// Check if device has a camera
-			if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-				activity = new Intent(Intents.Scan.ACTION);
-				activity.putExtra("SCAN_MODE", "QR_CODE_MODE");
-				activity.putExtra("SCAN_FORMATS", "QR_CODE");
-				startActivityForResult(activity, Global.SCAN_QR_REQUEST_CODE);
-			} else {
-				error(getString(R.string.noCameraFound));
-			}
+			//This module requires Android 2.2 or higher
+			//if(rollCallAndroidVersionFROYO) {
+				// Check if device has a rear camera
+				if (hasRearCam) {
+					activity = new Intent(Intents.Scan.ACTION);
+					activity.putExtra("SCAN_MODE", "QR_CODE_MODE");
+					activity.putExtra("SCAN_FORMATS", "QR_CODE");
+					startActivityForResult(activity, Constants.SCAN_QR_REQUEST_CODE);
+				} else {
+					//If the device has no rear camera available show error message
+					//error(getString(R.string.noRearCamera));
+					error(getString(R.string.noCameraFound));
+				}
+			/*} else {
+				//If Android version < 2.2 show error message
+				error(getString(R.string.froyoFunctionMsg) + "\n(System: " + android.os.Build.VERSION.RELEASE + ")");
+			}*/
 		} else if (keyword.equals(getString(R.string.rollcallManual))) {
 			showStudentsList();
 		}
@@ -229,12 +240,12 @@ public class Rollcall extends MenuExpandableListActivity {
 	}
 
 	private void showStudentsList() {
-		List<Long> idList = dbHelper.getUsersCourse(Global.getSelectedCourseCode());
+		List<Long> idList = dbHelper.getUsersCourse(Constants.getSelectedCourseCode());
 		if (!idList.isEmpty()) {
 			studentsList = new ArrayList<StudentItemModel>();
 
 			for (Long userCode: idList) {
-				User u = (User) dbHelper.getRow(Global.DB_TABLE_USERS, "userCode", String.valueOf(userCode));
+				User u = (User) dbHelper.getRow(Constants.DB_TABLE_USERS, "userCode", String.valueOf(userCode));
 				studentsList.add(new StudentItemModel(u));
 			}
 			// Arrange the list alphabetically
@@ -242,7 +253,7 @@ public class Rollcall extends MenuExpandableListActivity {
 
 			// Show a dialog with the list of students
 			ListView lv = new ListView(this);
-			lv.setAdapter(new StudentsArrayAdapter(this, studentsList, Global.ROLLCALL_REQUEST_CODE));
+			lv.setAdapter(new StudentsArrayAdapter(this, studentsList, Constants.ROLLCALL_REQUEST_CODE));
 
 			AlertDialog.Builder mBuilder = createDialog();
 			mBuilder.setView(lv).show();
@@ -260,7 +271,7 @@ public class Rollcall extends MenuExpandableListActivity {
 				Context ctx = getApplicationContext();
 
 				storeRollcallData();
-				if (!Global.connectionAvailable(ctx)) {
+				if (!Utils.connectionAvailable(ctx)) {
 					Toast.makeText(ctx, R.string.rollcallErrorNoConnection, Toast.LENGTH_LONG).show();
 				} else {
 					Toast.makeText(ctx, R.string.rollcallWebServiceNotAvailable, Toast.LENGTH_LONG).show();
@@ -278,7 +289,7 @@ public class Rollcall extends MenuExpandableListActivity {
 	}
 
 	private void storeRollcallData() {
-		long selectedCourse = Global.getSelectedCourseCode();
+		long selectedCourse = Constants.getSelectedCourseCode();
 		Cursor selectedGroup = (Cursor) practiceGroup.getSelectedItem();
 		long groupId = selectedGroup.getLong(1);
 		PracticeSession ps;
@@ -332,21 +343,21 @@ public class Rollcall extends MenuExpandableListActivity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		switch(requestCode) {
-		case Global.GROUPTYPES_REQUEST_CODE:
+		case Constants.GROUPTYPES_REQUEST_CODE:
 			groupTypesRequested = true;
-			List<Model> groupTypes = dbHelper.getAllRows(Global.DB_TABLE_GROUP_TYPES, "courseCode = " + courseCode, "groupTypeName");
+			List<Model> groupTypes = dbHelper.getAllRows(Constants.DB_TABLE_GROUP_TYPES, "courseCode = " + courseCode, "groupTypeName");
 			if(!groupTypes.isEmpty()) {
 				// If there are not group types, either groups. Therefore, there is no need to request groups
 				Intent activity = new Intent(getBaseContext(), Groups.class);
 				activity.putExtra("courseCode", courseCode);
-				startActivityForResult(activity,Global.GROUPS_REQUEST_CODE);
+				startActivityForResult(activity,Constants.GROUPS_REQUEST_CODE);
 			} else {
 				getExpandableListView().setVisibility(View.GONE);
 			}
 			break;
-		case Global.GROUPS_REQUEST_CODE:
+		case Constants.GROUPS_REQUEST_CODE:
 			// Check if course has practice groups
-			Cursor c = dbHelper.getPracticeGroups(Global.getSelectedCourseCode());
+			Cursor c = dbHelper.getPracticeGroups(Constants.getSelectedCourseCode());
 			startManagingCursor(c);
 			
 			if (c.getCount() > 0 || refreshRequested) {
@@ -364,7 +375,7 @@ public class Rollcall extends MenuExpandableListActivity {
 				error(getString(R.string.noGroupsAvailableMsg));
 			}
 			break;
-		case Global.SCAN_QR_REQUEST_CODE:
+		case Constants.SCAN_QR_REQUEST_CODE:
 			if (resultCode == Activity.RESULT_OK) {
 				ArrayList<String> idList = intent.getStringArrayListExtra("id_list");
 				if (!idList.isEmpty()) {
@@ -372,11 +383,11 @@ public class Rollcall extends MenuExpandableListActivity {
 					ArrayList<Boolean> enrolledStudents = new ArrayList<Boolean>();
 
 					for (String id: idList) {
-						User u = (User) dbHelper.getRow(Global.DB_TABLE_USERS, "userID", id);
+						User u = (User) dbHelper.getRow(Constants.DB_TABLE_USERS, "userID", id);
 						if (u != null) {
 							studentsList.add(new StudentItemModel(u));
 							// Check if the specified user is enrolled in the selected course
-							enrolledStudents.add(dbHelper.isUserEnrolledCourse(id, Global.getSelectedCourseCode()));
+							enrolledStudents.add(dbHelper.isUserEnrolledCourse(id, Constants.getSelectedCourseCode()));
 						}
 					}
 					// Mark as attending the students enrolled in selected course
@@ -388,7 +399,7 @@ public class Rollcall extends MenuExpandableListActivity {
 					// Arrange the list alphabetically
 					Collections.sort(studentsList);
 					ListView lv = new ListView(this);
-					lv.setAdapter(new StudentsArrayAdapter(this, studentsList, Global.ROLLCALL_REQUEST_CODE));
+					lv.setAdapter(new StudentsArrayAdapter(this, studentsList, Constants.ROLLCALL_REQUEST_CODE));
 
 					// Show a dialog with the list of students
 					AlertDialog.Builder mBuilder = createDialog();

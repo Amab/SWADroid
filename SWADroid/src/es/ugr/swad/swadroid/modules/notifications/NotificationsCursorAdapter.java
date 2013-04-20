@@ -20,7 +20,7 @@ package es.ugr.swad.swadroid.modules.notifications;
 
 import java.util.Date;
 
-import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.utils.Crypto;
 import android.content.Context;
@@ -105,6 +105,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
     	java.text.DateFormat dateShortFormat = android.text.format.DateFormat.getDateFormat(context);
     	java.text.DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(context);
     	int numRows = cursor.getCount();
+    	int cursorPosition = cursor.getPosition();
 
     	if(contentVisible.length == 0) {
     		contentVisible = new boolean[numRows];
@@ -165,7 +166,23 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         	{
         		type = context.getString(R.string.assignment);
         		notificationIcon.setImageResource(R.drawable.desk);
-        	} else if(type.equals("survey"))
+        	} else if(type.equals("documentFile"))
+        	{
+        		type = context.getString(R.string.documentFile);
+        		notificationIcon.setImageResource(R.drawable.folder);
+        	} else if(type.equals("sharedFile"))
+        	{
+        		type = context.getString(R.string.sharedFile);
+        		notificationIcon.setImageResource(R.drawable.folder_users);
+        	} else if(type.equals("enrollment"))
+        	{
+        		type = context.getString(R.string.enrollment);
+        		notificationIcon.setImageResource(R.drawable.user_ok);
+        	} else if(type.equals("enrollmentRequest"))
+        	{
+        		type = context.getString(R.string.enrollmentRequest);
+        		notificationIcon.setImageResource(R.drawable.enrollment_request);
+        	} else if(type.equals("documentFile"))
         	{
         		type = context.getString(R.string.survey);
         		notificationIcon.setImageResource(R.drawable.survey);
@@ -189,11 +206,11 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         	senderSurname2 = crypto.decrypt(cursor.getString(cursor.getColumnIndex("userSurname2")));
         	
         	//Empty fields checking
-        	if(senderFirstname.compareTo(Global.NULL_VALUE)!=0)
+        	if(senderFirstname.compareTo(Constants.NULL_VALUE)!=0)
         		sender += senderFirstname + " ";
-        	if(senderSurname1.compareTo(Global.NULL_VALUE)!= 0)
+        	if(senderSurname1.compareTo(Constants.NULL_VALUE)!= 0)
         		sender += senderSurname1 + " ";
-        	if(senderSurname2.compareTo(Global.NULL_VALUE) != 0)
+        	if(senderSurname2.compareTo(Constants.NULL_VALUE) != 0)
         		sender += senderSurname2;
         	
         	eventSender.setText(sender);
@@ -205,7 +222,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         	summaryText = crypto.decrypt(cursor.getString(cursor.getColumnIndex("summary")));
         	
         	//Empty field checking
-        	if(summaryText.compareTo(Global.NULL_VALUE)==0)
+        	if(summaryText.compareTo(Constants.NULL_VALUE)==0)
         		summaryText = context.getString(R.string.noSubjectMsg);
         	
         	summary.setText(Html.fromHtml(summaryText));
@@ -214,7 +231,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         	contentText = crypto.decrypt(cursor.getString(cursor.getColumnIndex("content")));
         	
         	//Empty field checking
-        	if(contentText.compareTo(Global.NULL_VALUE)==0)
+        	if(contentText.compareTo(Constants.NULL_VALUE)==0)
         		contentText = context.getString(R.string.noContentMsg);
         	
     		content.setText(contentText);
@@ -222,14 +239,20 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         	if(type.equals(context.getString(R.string.marksFile))) {
         		contentMsgText = context.getString(R.string.marksMsg);
         		contentMsg.setText(contentMsgText);
-        		contentVisible[cursor.getPosition()] = true;
+        		
+        		if(cursorPosition < contentVisible.length) {
+	        		contentVisible[cursorPosition] = true;
+	        	}
         	} else {
         		contentMsgText = "";
     			contentMsg.setText(contentMsgText);
-        		contentVisible[cursor.getPosition()] = false;
+    			
+    			if(cursorPosition < contentVisible.length) {
+    				contentVisible[cursorPosition] = false;
+	        	}
         	}
         	
-        	if(contentVisible[cursor.getPosition()]) {
+        	if((cursorPosition < contentVisible.length) && contentVisible[cursorPosition]) {
         		contentMsg.setVisibility(View.VISIBLE);
         	} else {
         		contentMsg.setVisibility(View.GONE);
