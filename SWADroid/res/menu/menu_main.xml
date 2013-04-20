@@ -11,11 +11,11 @@
           android:icon="@drawable/ic_menu_star"
           android:showAsAction="ifRoom|withText">
     </item>
-	<item android:id="@+id/clean_database_menu"
+	<!--<item android:id="@+id/clean_database_menu"
           android:title="@string/cleanDatabaseTitle_menu"
           android:icon="@android:drawable/ic_menu_delete"
           android:showAsAction="ifRoom|withText">
-    </item>
+    </item>-->
 	<item android:id="@+id/preferences_menu"
           android:title="@string/preferencesTitle_menu"
           android:icon="@android:drawable/ic_menu_manage"
