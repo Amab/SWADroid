@@ -26,8 +26,6 @@ import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
-import com.bugsense.trace.BugSenseHandler;
-
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -38,7 +36,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.Toast;
-import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
 
@@ -51,7 +49,7 @@ public class Messages extends Module {
 	/**
 	 * Messages tag name for Logcat
 	 */
-	public static final String TAG = Global.APP_TAG + " Messages";
+	public static final String TAG = Constants.APP_TAG + " Messages";
 	/**
 	 * Message code
 	 */
@@ -81,15 +79,9 @@ public class Messages extends Module {
 				}*/
 
 				runConnection();
-			} catch (Exception ex) {
+			} catch (Exception e) {
 				String errorMsg = getString(R.string.errorServerResponseMsg);
-				error(errorMsg);
-
-    			Log.e(ex.getClass().getSimpleName(), errorMsg);        		
-    			ex.printStackTrace();
-    			
-    			//Send exception details to Bugsense
-    			BugSenseHandler.sendExceptionMessage(TAG, errorMsg, ex);
+				error(TAG, errorMsg, e, true);
 			}				
 		}
 	};
@@ -124,7 +116,7 @@ public class Messages extends Module {
 		messageDialog.setContentView(R.layout.messages_dialog);
 		messageDialog.setCancelable(true);
 
-		messageDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		messageDialog.getWindow().setLayout(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 
 		acceptButton = (Button) messageDialog.findViewById(R.id.message_button_accept);
 		acceptButton.setOnClickListener(positiveClickListener);
@@ -193,7 +185,7 @@ public class Messages extends Module {
 		readData();
 
 		createRequest();
-		addParam("wsKey", Global.getLoggedUser().getWsKey());
+		addParam("wsKey", Constants.getLoggedUser().getWsKey());
 		addParam("messageCode", notificationCode.intValue());
 		addParam("to", receivers);
 		addParam("subject", subject);
@@ -215,7 +207,7 @@ public class Messages extends Module {
 				receiversNames += "\n";
 				receiversNames += firstname + " " + surname1 + " " + surname2;
 				
-				if(!nickname.equalsIgnoreCase(Global.NULL_VALUE) && !nickname.equalsIgnoreCase("")) {
+				if(!nickname.equalsIgnoreCase(Constants.NULL_VALUE) && !nickname.equalsIgnoreCase("")) {
 					receiversNames += " (" + nickname + ")"; 
 				}
 			}
@@ -232,7 +224,7 @@ public class Messages extends Module {
 		String progressDescription = getString(R.string.sendingMessageMsg);
 		int progressTitle = R.string.messagesModuleLabel;
 
-		new Connect(false, progressDescription, progressTitle).execute();
+		startConnection(false, progressDescription, progressTitle);
 
 		Toast.makeText(this, R.string.sendingMessageMsg, Toast.LENGTH_SHORT).show();
 		Log.i(TAG, getString(R.string.sendingMessageMsg));

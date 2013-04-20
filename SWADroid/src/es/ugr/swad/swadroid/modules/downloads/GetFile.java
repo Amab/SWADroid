@@ -26,13 +26,11 @@ import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapPrimitive;
 import org.xmlpull.v1.XmlPullParserException;
 
-import com.bugsense.trace.BugSenseHandler;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.modules.Module;
@@ -52,7 +50,7 @@ public class GetFile extends Module {
 	/**
 	 * GetFile tag name for Logcat
 	 */
-	public static final String TAG = Global.APP_TAG + "GetFile";
+	public static final String TAG = Constants.APP_TAG + "GetFile";
 
 	/**
 	 * Unique identificator of file
@@ -76,15 +74,9 @@ public class GetFile extends Module {
 		super.onStart();
 		try {
 			runConnection();
-		} catch (Exception ex) {
+		} catch (Exception e) {
 			String errorMsg = getString(R.string.errorServerResponseMsg);
-			error(errorMsg);
-
-			Log.e(ex.getClass().getSimpleName(), errorMsg);        		
-			ex.printStackTrace();
-			
-			//Send exception details to Bugsense
-			BugSenseHandler.sendException(ex);
+			error(TAG, errorMsg, e, true);
 		}
 	}
 	@Override
@@ -101,7 +93,7 @@ public class GetFile extends Module {
 			IOException, XmlPullParserException, SoapFault,
 			IllegalAccessException, InstantiationException {
 		createRequest();
-		addParam("wsKey", Global.getLoggedUser().getWsKey());
+		addParam("wsKey", Constants.getLoggedUser().getWsKey());
 		addParam("fileCode", (int)fileCode);
 		sendRequest(Group.class,false); 
 		if(result != null){
@@ -120,20 +112,19 @@ public class GetFile extends Module {
 
 	@Override
 	protected void connect() {
-		new Connect(false, "", 0).execute();
+		startConnection(false, "", 0);
 	}
 
 	@Override
 	protected void postConnect() {
 		if(isDebuggable)
-			Log.i(TAG, "Enrollment requested");
+			Log.i(TAG, "File requested");
 		finish();
 
 	}
 
 	@Override
 	protected void onError() {
-		// TODO Auto-generated method stub
 
 	}
 

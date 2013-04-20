@@ -20,7 +20,6 @@ package es.ugr.swad.swadroid.modules.downloads;
 
 import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,13 +27,14 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
-import org.apache.http.util.ByteArrayBuffer;
-
 import com.bugsense.trace.BugSenseHandler;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import es.ugr.swad.swadroid.Global;
+import android.util.Log;
+import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.utils.Utils;
 
 /**
  *
@@ -46,14 +46,17 @@ import es.ugr.swad.swadroid.Global;
  *      - IOException: most probably because the connection to the server fails.
  *      - FileNotFoundException: if the URL points to a non-existent file or to a directory - such as "www.ugr.es/" 
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Víctor Terrón <`echo vt2rron1iaa32s | tr 132 @.e`>
  * */
 
 
 public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
+	private static final int BLOCK_SIZE = 1024*16; // 16kb
 
 	//private TextView fileName;
 	//private ProgressBar progressBar;
+	private Context mContext;
 	private DownloadNotification mNotification;
 	private File download_dir;
 	private URL url;
@@ -62,29 +65,37 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 	private String fileName = "";
 	private String directoryPath = "";
 	private boolean downloadSuccess  = true; 
+	private boolean isDownloadManagerAvailable;
+	private boolean isDownloadManagerSWADroid;
 	
 	/**
 	 * Downloads tag name for Logcat
 	 */
-	public static final String TAG = Global.APP_TAG + " Downloads";
+	public static final String TAG = Constants.APP_TAG + " Downloads";
+	
 
 
 	public FileDownloaderAsyncTask(Context context,String fileName, boolean notification, long fileSize){
 		this.fileName = fileName;
-		mNotification = new DownloadNotification(context);
+		this.mNotification = new DownloadNotification(context);
 		this.notification = notification;
 		this.fileSize = fileSize;
+		this.mContext = context;
+		this.isDownloadManagerAvailable = Utils.isDownloadManagerAvailable(mContext);
+		this.isDownloadManagerSWADroid = false;
 	}
 	
 	
 	
 	@Override
 	protected void onPostExecute(Boolean result) {
-		//Log.i(TAG, "onPostExecute");
-		if(downloadSuccess)
-			mNotification.completedDownload(this.directoryPath,this.fileName);
-		else
-			mNotification.eraseNotification(this.fileName);
+		//Log.d(TAG, "onPostExecute");
+		if(isDownloadManagerSWADroid) {
+			if(downloadSuccess)
+				mNotification.completedDownload(this.directoryPath,this.fileName);
+			else
+				mNotification.eraseNotification(this.fileName);
+		}
 	}
 
 	/* Return the path to the directory where files are saved */
@@ -95,21 +106,141 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
-
+		//Log.d(TAG, "onPreExecute");
 	}
 
 
 
 	@Override
 	protected void onProgressUpdate(Integer... values) {
-		mNotification.progressUpdate(values[0]);
+		//Log.d(TAG, "onProgressUpdate");
+		if(isDownloadManagerSWADroid) {
+			mNotification.progressUpdate(values[0]);
+		}
 
 	}
 
 	private void notifyFailed(){
 		downloadSuccess = false;
-		mNotification.eraseNotification(this.fileName);
+		
+		if(isDownloadManagerSWADroid) {
+			mNotification.eraseNotification(this.fileName);
+		}
 	} 
+	
+	/**
+	 * Download method for Android < Gingerbread
+	 * 
+	 * @param basename filename (without extension) of the file to be downloaded
+	 * @param extension extension of the file to be downloaded
+	 * @return true if the file has been downloaded correctly
+	 * 		   false otherwise
+	 */
+	private boolean downloadFileCustom(String basename, String extension) {
+		FileOutputStream fos = null;
+		/* The prefix must be at least three characters long */
+		//		if(basename.length() < 3)
+		//			basename = "tmp";
+		
+		try {
+			File output = new File(this.getDownloadDir(),this.fileName);
+			if(output.exists()){
+				int i = 1;
+				do{
+					output = new File(this.getDownloadDir(),basename+"-"+String.valueOf(i)+extension);
+					++i;
+				}while(output.exists());
+				this.fileName = basename+"-"+String.valueOf(i-1)+extension;
+			}	
+			mNotification.createNotification(this.fileName);
+			
+			
+			/*Create the output file*/
+			Log.d(TAG, "output: " + output.getPath());
+			/* Convert the Bytes read to a String. */
+			fos = new FileOutputStream(output);
+	
+			/* Open a connection to the URL and a buffered input stream */
+			URLConnection ucon;
+			ucon = url.openConnection();
+			
+			int lenghtOfFile = ucon.getContentLength();
+			Log.d(TAG, "lenghtOfFile = "+String.valueOf(lenghtOfFile));
+			
+			InputStream is;
+			is = ucon.getInputStream();
+			BufferedInputStream bis = new BufferedInputStream(is);
+			
+			/*  Read bytes to the buffer until there is nothing more to read(-1) */
+			//ByteArrayBuffer baf = new ByteArrayBuffer(50);
+			byte data[] = new byte[BLOCK_SIZE];
+			int byteRead = 0;
+			int current = 0;
+			
+			if(notification){
+				Log.d(TAG, "notification = "+notification);
+			
+				int progress = 0;
+				int newValue = 0;
+				//while ((current = bis.read(data)) != -1) {
+				while ((byteRead < fileSize) && (current != -1)) {
+					Log.d(TAG, "current = "+current);
+					
+					current = bis.read(data);
+					fos.write(data, 0, current);
+					
+					byteRead = byteRead + current;
+					newValue = Float.valueOf(((float) byteRead*100/ (float) fileSize)).intValue();
+					
+					Log.d(TAG, "byteRead = "+byteRead);
+					Log.d(TAG, "newValue = "+newValue);
+					if(newValue > progress){
+						progress = newValue;
+						Log.d(TAG, "total = "+progress);
+						
+						publishProgress(progress);
+					}
+					//if((byteRead % 10) == 0) publishProgress(byteRead);
+				}			
+			}else{
+				//while ((current = bis.read(data)) != -1) {
+				while ((byteRead < fileSize) && (current != -1)) {
+					Log.d(TAG, "current = "+current);
+					
+					current = bis.read(data);
+					fos.write(data, 0, current);
+					
+					byteRead = byteRead + current;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+			//Send exception details to Bugsense
+			BugSenseHandler.sendException(e);
+			
+			notifyFailed();
+			return false;
+		} finally {
+			/*Close the output file*/
+			try {
+				if(fos != null) {
+					fos.close();
+				}
+			} catch (IOException e) {
+				Log.e(TAG, "no se puede cerrar el fichero de salida");
+				e.printStackTrace();
+				
+				//Send exception details to Bugsense
+				BugSenseHandler.sendException(e);
+				
+				notifyFailed();
+				return false;
+			}
+		}
+		
+		return true;
+	}
 
 	@Override
 	/**
@@ -117,11 +248,11 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 	 * params[1] - url of file to download
 	 * */
 	protected Boolean doInBackground(String... params) {
-		
-		
+		//Log.d(TAG, "doInBackground");		
 		download_dir = new File(params[0]);
 		this.directoryPath = params[0];
 		if(!download_dir.exists()){
+			Log.e(TAG, "Download folder" + this.directoryPath + " not found");
 			downloadSuccess = false;
 			return false;
 		}
@@ -159,242 +290,22 @@ public class FileDownloaderAsyncTask extends AsyncTask<String,Integer,Boolean> {
 			extension = this.fileName.substring(lastDotIndex);
 		}
 		
-		/* The prefix must be at least three characters long */
-//		if(basename.length() < 3)
-//			basename = "tmp";
-	
-		File output = new File(this.getDownloadDir(),this.fileName) ;
-		if(output.exists()){
-			int i = 1;
-			do{
-				output = new File(this.getDownloadDir(),basename+"-"+String.valueOf(i)+extension);
-				++i;
-			}while(output.exists());
-			this.fileName = basename+"-"+String.valueOf(i-1)+extension;
-		}	
-		mNotification.createNotification(this.fileName);
-		
-		
-		/*Create the output file*/
-		//Log.i(TAG, "output: " + output.getPath());
-		/* Convert the Bytes read to a String. */
-		FileOutputStream fos;
-		try {
-			fos = new FileOutputStream(output);
-		} catch (FileNotFoundException e) {
-			//Log.i(TAG, "no se puede crear fichero de salida");
-			e.printStackTrace();
-			
-			//Send exception details to Bugsense
-			BugSenseHandler.sendException(e);
-			
-			notifyFailed();
-			return false;
-		}
-
-		/* Open a connection to the URL and a buffered input stream */
-		URLConnection ucon;
-		try {
-			ucon = url.openConnection();
-		} catch (IOException e) {
-			//Log.i(TAG, "Error connection");
-			try {
-				fos.close();
-			} catch (IOException e1) {
-				//Log.i(TAG, "no se puede cerrar fichero de salida");
-				e1.printStackTrace();
-				
-				//Send exception details to Bugsense
-				BugSenseHandler.sendException(e);
-				
-				notifyFailed();
-				return false;
-			}
-			e.printStackTrace();
-			
-			//Send exception details to Bugsense
-			BugSenseHandler.sendException(e);
-			
-			notifyFailed();
-			return false;
+		Log.d(TAG, "isDownloadManagerAvailable=" + isDownloadManagerAvailable);
+		if(isDownloadManagerAvailable) {				
+			String titleNotification =mContext.getString(R.string.app_name)+" " + mContext.getString(R.string.notificationDownloadTitle); //Initial text that appears in the status bar
+			String descriptionNotification =fileName;
+			downloadSuccess = Utils.downloadFileGingerbread(mContext, url.toString(), fileName, titleNotification, descriptionNotification);
 		}
 		
-		//int lenghtOfFile = ucon.getContentLength();
-		//Log.i(TAG, "lenghtOfFile = "+String.valueOf(lenghtOfFile));
-		
-		InputStream is;
-		try {
-			is = ucon.getInputStream();
-		} catch (IOException e) {
-			//Log.i(TAG, "Error connection");
-			try {
-				fos.close();
-			} catch (IOException e1) {
-				//Log.i(TAG, "no se puede cerrar fichero de salida");
-				e1.printStackTrace();
-				
-				//Send exception details to Bugsense
-				BugSenseHandler.sendException(e);
-				
-				notifyFailed();
-				return false;
-			}
-			notifyFailed();
-			e.printStackTrace();
-			
-			//Send exception details to Bugsense
-			BugSenseHandler.sendException(e);
-			
-			return false;
-		}
-		BufferedInputStream bis = new BufferedInputStream(is);
-		
-		/*  Read bytes to the buffer until there is nothing more to read(-1) */
-		ByteArrayBuffer baf = new ByteArrayBuffer(50);
-		int current = 0;
-		
-		if(notification){
-		
-			int byteRead = 0;
-			int progress = 0;
-			try {
-				while ((current = bis.read()) != -1) {
-					baf.append((byte) current);
-					
-					if(baf.isFull()){ //before the buffer is full, it writes it in the file and clears the buffer
-						try {
-							fos.write(baf.toByteArray());
-							baf.clear();
-						} catch (IOException e) {
-//							Log.i(TAG, "no se puede escribir fichero de salida");
-							try {
-								fos.close();
-							} catch (IOException e1) {
-								//Log.i(TAG, "no se puede cerrar fichero de salida");
-								e1.printStackTrace();
-								
-								//Send exception details to Bugsense
-								BugSenseHandler.sendException(e);
-								
-								notifyFailed();
-								return false;
-							}
-							notifyFailed();
-							e.printStackTrace();
-							
-							//Send exception details to Bugsense
-							BugSenseHandler.sendException(e);
-							
-							return false;
-						}
-					}
-					++byteRead;
-					int newValue = Float.valueOf(((float) byteRead*100/ (float) fileSize)).intValue();
-					if(newValue > progress){
-						progress = newValue;
-						//Log.i(TAG, "total = "+progress);
-						publishProgress(progress);
-					}
-					//if((byteRead % 10) == 0) publishProgress(byteRead);
-				}
-			} catch (IOException e) {
-				try {
-					fos.close();
-				} catch (IOException e1) {
-//					Log.i(TAG, "no se puede cerrar fichero de salida");
-					notifyFailed();
-					e1.printStackTrace();
-					
-					//Send exception details to Bugsense
-					BugSenseHandler.sendException(e);
-					
-					return false;
-				}
-//				Log.i(TAG, "Error connection");
-				notifyFailed();
-				e.printStackTrace();
-				
-				//Send exception details to Bugsense
-				BugSenseHandler.sendException(e);
-				
-				return false;
-			}
-		}else{
-
-			try {
-				while ((current = bis.read()) != -1) {
-					baf.append((byte) current);
-					if(baf.isFull()){ //before the buffer is full, it writes it in the file and clears the buffer
-						try {
-							fos.write(baf.toByteArray());
-							baf.clear();
-						} catch (IOException e) {
-							
-							try {
-								fos.close();
-							} catch (IOException e1) {
-//								Log.i(TAG, "no se puede cerrar fichero de salida");
-								notifyFailed();
-								e1.printStackTrace();
-								
-								//Send exception details to Bugsense
-								BugSenseHandler.sendException(e);
-								
-								return false;
-							}
-							//Log.i(TAG, "no se puede escribir fichero de salida");
-							e.printStackTrace();
-							
-							//Send exception details to Bugsense
-							BugSenseHandler.sendException(e);
-							
-							notifyFailed();
-							return false;
-						}
-					}
-				}
-			} catch (IOException e) {
-				try {
-					fos.close();
-				} catch (IOException e1) {
-					//Log.i(TAG, "no se puede cerrar fichero de salida");
-					e1.printStackTrace();
-					
-					//Send exception details to Bugsense
-					BugSenseHandler.sendException(e);
-					
-					notifyFailed();
-					return false;
-				}
-//				Log.i(TAG, "Error connection");
-				notifyFailed();
-				e.printStackTrace();
-				
-				//Send exception details to Bugsense
-				BugSenseHandler.sendException(e);
-				
-				return false;
-			}
-			
+		if(!isDownloadManagerAvailable || !downloadSuccess) {
+			Log.i(TAG, "Downloading file " + fileName + " with DownloadManager SWADroid");
+			isDownloadManagerSWADroid = true;
+			downloadSuccess = downloadFileCustom(basename, extension);
 		}
 		
-		/*Close the output file*/
-		try {
-			fos.close();
-		} catch (IOException e) {
-//			Log.i(TAG, "no se puede cerrar fichero de salida");
-			e.printStackTrace();
-			
-			//Send exception details to Bugsense
-			BugSenseHandler.sendException(e);
-			
-			notifyFailed();
-			return false;
-		}
+//		Log.d(TAG, "Terminado");
 		
-//		Log.i(TAG, "Terminado");
-		
-		return true;
+		return downloadSuccess;
 	}
 
 }

@@ -21,34 +21,43 @@ package es.ugr.swad.swadroid;
 
 import java.util.Random;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import es.ugr.swad.swadroid.model.User;
 
 /**
- * Global data of application.
+ * Constants of application.
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */
-public class Global {
+public class Constants {
 	/**
 	 * SWAD application key
 	 */
-	private static final String SWADAppKey =""; //DELETE THE KEY BEFORE COMMIT!!!
+	public static final String SWAD_APP_KEY =""; //DELETE THE KEY BEFORE COMMIT!!!
 	/**
-	 * Bugsense application key
+	 * BugSense application key
 	 */
-	private static final String BugsenseAPIKey =""; //DELETE THE KEY BEFORE COMMIT!!!
+	public static final String BUGSENSE_API_KEY =""; //DELETE THE KEY BEFORE COMMIT!!!
 	/**
 	 * Server URL
 	 */
-	private static final String DEFAULT_SERVER = "swad.ugr.es";
+	public static final String DEFAULT_SERVER = "swad.ugr.es";
+	/**
+	 * Account type
+	 */
+	public static final String ACCOUNT_TYPE = "es.ugr.swad.swadroid";
+	/**
+	 * Synchronization authority
+	 */
+	public static final String AUTHORITY = "es.ugr.swad.swadroid.content";
+	/**
+	 * Default synchronization time for notifications
+	 */
+	public static final long DEFAULT_SYNC_TIME = 60;
 	/**
 	 * User logged flag
 	 */
-	private static boolean logged;
+	public static boolean logged;
 	/**
 	 * Logged user
 	 */
@@ -81,15 +90,15 @@ public class Global {
 	/**
 	 * Indicates if there are changes on db
 	 * */
-	private static boolean dbCleaned = false;
+	public static boolean dbCleaned = false;
 	/**
 	 * Base string to generate random alphanumeric strings
 	 */
-	private static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	public static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	/**
 	 * Random generator
 	 */
-	private static Random rnd = new Random();
+	public static Random rnd = new Random();
 	/**
 	 * Null value returned by webservices when a field is empty
 	 */
@@ -194,6 +203,10 @@ public class Global {
      * Request code for GetFile Manager
      * */
     public static final int GETFILE_REQUEST_CODE = 25;
+    /**
+     * Request code for Generate QR
+     * */
+    public static final int GENERATE_QR_REQUEST_CODE = 26;
 	/**
 	 * Prefix tag name for Logcat
 	 */
@@ -282,28 +295,62 @@ public class Global {
      * Code to access to the documents in share area 
      * */
     public static int SHARE_AREA_CODE= 2;
-
 	/**
-	 * Gets the SWAD application key
-	 * @return SWAD application key
-	 */
-	public static String getSWADAppKey() {
-		return SWADAppKey;
-	}  
+	 * Group position inside the main menu for Course group
+	 * */
+    public static final int COURSE_GROUP = 0;
 	/**
-	 * Gets the Bugsense API key
-	 * @return Bugsense API key
-	 */
-	public static String getBugsenseAPIKey() {
-		return BugsenseAPIKey;
-	}    
+	 * Group position inside the main menu for Evaluation group
+	 * */
+	public static final int EVALUATION_GROUP = 1;
 	/**
-	 * Gets the server URL
-	 * @return Server URL
-	 */
-	public static String getDefaultServer() {
-		return DEFAULT_SERVER;
-	}
+	 * Group position inside the main menu for Messages group
+	 * */
+	public static final int MESSAGES_GROUP = 2;
+	/**
+	 * Group position inside the main menu for Enrollment group
+	 * */
+	public static final int ENROLLMENT_GROUP = 3;
+	/**
+	 * Group position inside the main menu for User group
+	 * */
+	public static final int USERS_GROUP = 4;
+	/**
+	 * Child position inside the messages menu for Notification
+	 * */
+	public static final int NOTIFICATION_CHILD = 0;
+	/**
+	 * Child position inside the messages menu for Send message
+	 * */
+	public static final int SEND_MESSAGES_CHILD = 1;
+	/**
+	 * Child position inside the messages menu for Publish Note
+	 * */
+	public static final int PUBLISH_NOTE_CHILD = 2;
+	/**
+	 * Child position inside the evaluation menu for Tests
+	 * */
+	public static final int TESTS_CHILD = 0;
+	/**
+	 * Child position inside the course menu for Documents
+	 * */
+	public static final int DOCUMENTS_CHILD = 0;
+	/**
+	 * Child position inside the course menu for Shared area
+	 * */
+	public static final int SHARED_AREA_CHILD = 1;
+	/**
+	 * Child position inside the users menu for Generate QR
+	 * */
+	public static final int GENERATE_QR_CHILD = 0;
+	/**
+	 * Child position inside the users menu for Rollcall
+	 * */
+	public static final int ROLLCALL_CHILD = 1;
+	/**
+	 * Child position inside the enrollment menu for My Groups
+	 * */
+	public static final int MYGROUPS_CHILD = 0;
 	/**
 	 * Checks if user is already logged on SWAD
 	 * @return User logged flag
@@ -316,7 +363,7 @@ public class Global {
 	 * @param logged User logged flag
 	 */
 	public static void setLogged(boolean logged) {
-		Global.logged = logged;
+		Constants.logged = logged;
 	}
 	/**
 	 * Gets the user logged on SWAD
@@ -330,7 +377,7 @@ public class Global {
 	 * @param logged User logged flag
 	 */
 	public static void setLoggedUser(User loggedUser) {
-		Global.loggedUser = loggedUser;
+		Constants.loggedUser = loggedUser;
 	}
 
 	/**
@@ -345,42 +392,7 @@ public class Global {
 	 * @param l Start time of application
 	 */
 	public static void setLastLoginTime(long l) {
-		Global.lastLoginTime = l;
-	}
-	/**
-	 * Function to parse from Integer to Boolean
-	 * @param n Integer to be parsed
-	 * @return true if n!=0, false in other case
-	 */
-	public static boolean parseIntBool(int n) {
-		return n!=0;
-	}
-
-	/**
-	 * Function to parse from String to Boolean
-	 * @param s String to be parsed
-	 * @return true if s equals "Y", false in other case
-	 */
-	public static boolean parseStringBool(String s) {
-		return s.equals("Y") ? true : false;
-	}
-
-	/**
-	 * Function to parse from Boolean to Integer
-	 * @param b Boolean to be parsed
-	 * @return 1 if b==true, 0 in other case
-	 */
-	public static int parseBoolInt(boolean b) {
-		return b ? 1 : 0;
-	}
-
-	/**
-	 * Function to parse from Boolean to String
-	 * @param b Boolean to be parsed
-	 * @return "Y" if b==true, "N" in other case
-	 */
-	public static String parseBoolString(boolean b) {
-		return b ? "Y" : "N";
+		Constants.lastLoginTime = l;
 	}
 	/**
 	 * Gets code of current course
@@ -453,57 +465,5 @@ public class Global {
 	 * */
 	public static int getCurrentUserRole(){
 		return currentUserRole;
-	}
-
-	/**
-	 * Checks if any connection is available 
-	 * @param ctx Application context
-	 * @return true if there is a connection available, false in other case
-	 */
-	public static boolean connectionAvailable(Context ctx){
-	    boolean connAvailable = false;
-	    ConnectivityManager connec =  (ConnectivityManager)ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
-	
-	    //Survey all networks (wifi, gprs...)
-	    NetworkInfo[] networks = connec.getAllNetworkInfo();
-	    
-	    for(int i=0; i<networks.length; i++){
-	        //If any of them has a connection available, put boolean to true
-	        if (networks[i].isConnected()){
-	            connAvailable = true;
-	        }
-	    }
-	    
-	    //If boolean remains false there is no connection available        
-	    return connAvailable;
-	}
-	/**
-	 * Set the fact that the db was cleaned
-	 * @param newState - true when the database was cleaned
-	 * 				   - false after the fact is noticed and handled it
-	 * */
-	public static void setDbCleaned(boolean state){
-		dbCleaned = state;
-	}
-	/**
-	 * Indicates if the db was cleaned
-	 * @param newState - true when the database was cleaned and it was not handled it
-	 * 				   - false if the database does not change
-	 * */
-	public static boolean isDbCleaned(){
-		return dbCleaned;
-	}
-	
-	/**
-	 * Generates a random string of length len
-	 * @param len Length of random string
-	 * @return A random string of length len
-	 */
-	public static String randomString(int len) 
-	{
-	   StringBuilder sb = new StringBuilder(len);
-	   for(int i = 0; i < len; i++) 
-	      sb.append(AB.charAt(rnd.nextInt(AB.length())));
-	   return sb.toString();
 	}
 }

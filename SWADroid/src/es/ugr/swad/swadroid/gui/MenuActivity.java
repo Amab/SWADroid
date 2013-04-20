@@ -30,10 +30,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
-import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
+import es.ugr.swad.swadroid.utils.Utils;
 
 /**
  * Superclass for add the options menu to all children classes of Activity
@@ -78,7 +79,7 @@ public class MenuActivity extends Activity {
 		sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "SWADroid");
 		sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, getString(R.string.shareBodyMsg));
 		startActivity(Intent.createChooser(sharingIntent, getString(R.string.shareTitle_menu)));		
-		Log.d(Global.APP_TAG, "shareApplication()");
+		Log.d(Constants.APP_TAG, "shareApplication()");
 	}
 
 	/**
@@ -88,7 +89,7 @@ public class MenuActivity extends Activity {
 		Intent rateIntent = new Intent(Intent.ACTION_VIEW);
 		rateIntent.setData(Uri.parse(getString(R.string.marketURL)));
 		startActivity(rateIntent);
-		Log.d(Global.APP_TAG, "rateApplication()");
+		Log.d(Constants.APP_TAG, "rateApplication()");
 	}
 
 	/**
@@ -97,9 +98,9 @@ public class MenuActivity extends Activity {
 	protected void cleanDatabase() {
 		dbHelper.cleanTables();
 		prefs.setLastCourseSelected(0);
-		Global.setDbCleaned(true);
+		Utils.setDbCleaned(true);
 		Toast.makeText(this, R.string.cleanDatabaseMsg, Toast.LENGTH_LONG).show();
-		Log.i(Global.APP_TAG, getString(R.string.cleanDatabaseMsg));
+		Log.i(Constants.APP_TAG, getString(R.string.cleanDatabaseMsg));
 	}
 
 	/**

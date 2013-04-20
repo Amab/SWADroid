@@ -1,3 +1,27 @@
+## 0.12 (2013-04-20)
+
+* Added new notification types "documentFile", "sharedFile", "enrollment"
+  and "enrollmentRequest". Changed notifications icon
+* Added questions feedback and answers feedback in tests module
+* Added all languages that are present in SWAD
+* Added configuration of max limit of stored notifications on preferences screen
+* Added checkbox preference for enable/disable auto sync from preferences screen
+* Added periodic synchronization. Added synchronization interval selection on preferences screen
+* Updated minimum required API to 8 (FROYO 2.2)
+* Updated Downloads Module. Added DownloadsManager for API >= GINGERBREAD
+* Updated the regular expression for nickname validation. Added "@" character at the beginning
+  and adjusted the max length of the nickname
+* Updated icons for notifications
+* Updated BugSense and ksoap2-android libraries
+* Disabled "Clean database" option
+* Now devices with no rear camera can launch the Rollcall module in manual mode
+* Changed position of question score in tests
+* Refactored code
+* Fixed IllegalArgumentException exception on some activities when changing orientation
+* Fixed wrong score calculation in multiple choice questions. The correct
+  answers not checked by the user are NOT an error and score 0 points
+* Fixed non decimal keyboard type for decimal numbers on some devices
+
 ## 0.11.3 (2013-03-03)
 
 * Added Bugsense error reporting plugin for track unhandled and handled exceptions. Error reports are automatically sended when

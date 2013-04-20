@@ -43,7 +43,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
-import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.Module;
@@ -64,7 +64,7 @@ public class RollcallConfigDownload extends Module {
 	/**
 	 * Rollcall Config Download tag name for Logcat
 	 */
-	public static final String TAG = Global.APP_TAG + " RollcallConfigDownload";
+	public static final String TAG = Constants.APP_TAG + " RollcallConfigDownload";
 
 	/* (non-Javadoc)
 	 * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
@@ -80,31 +80,25 @@ public class RollcallConfigDownload extends Module {
 		super.onStart();
 		try {
 			if(isDebuggable) {
-				Log.d(TAG, "selectedCourseCode = " + Long.toString(Global.getSelectedCourseCode()));
+				Log.d(TAG, "selectedCourseCode = " + Long.toString(Constants.getSelectedCourseCode()));
 			}
 			runConnection();
-		} catch (Exception ex) {
+		} catch (Exception e) {
 			String errorMsg = getString(R.string.errorServerResponseMsg);
-			error(errorMsg);
-			
-			Log.e(ex.getClass().getSimpleName(), errorMsg);        		
-			ex.printStackTrace();
-			
-			//Send exception details to Bugsense
-			BugSenseHandler.sendException(ex);
+			error(TAG, errorMsg, e, true);
 		}
 	}
 
 	@Override
 	protected void requestService() throws NoSuchAlgorithmException, IOException, XmlPullParserException, SoapFault,
 	IllegalAccessException, InstantiationException {
-		int userRole = Global.STUDENT_TYPE_CODE;
-		long courseCode = Global.getSelectedCourseCode();
+		int userRole = Constants.STUDENT_TYPE_CODE;
+		long courseCode = Constants.getSelectedCourseCode();
 		long groupCode = getIntent().getLongExtra("groupCode", 0);
 
 		// Creates webservice request, adds required params and sends request to webservice
 		createRequest();
-		addParam("wsKey", Global.getLoggedUser().getWsKey());
+		addParam("wsKey", Constants.getLoggedUser().getWsKey());
 		addParam("courseCode", (int) courseCode);
 		addParam("groupCode", (int) groupCode);
 		addParam("userRole", userRole);
@@ -126,11 +120,11 @@ public class RollcallConfigDownload extends Module {
 				String userFirstName = pii.getProperty("userFirstname").toString();
 				String userPhoto = pii.getProperty("userPhoto").toString();
 
-				if (userNickname.equalsIgnoreCase(Global.NULL_VALUE)) userNickname = null;
-				if (userSurname1.equalsIgnoreCase(Global.NULL_VALUE)) userSurname1 = null;
-				if (userSurname2.equalsIgnoreCase(Global.NULL_VALUE)) userSurname2 = null;
-				if (userFirstName.equalsIgnoreCase(Global.NULL_VALUE)) userFirstName = null;
-				if (userPhoto.equalsIgnoreCase(Global.NULL_VALUE)) userPhoto = null;
+				if (userNickname.equalsIgnoreCase(Constants.NULL_VALUE)) userNickname = null;
+				if (userSurname1.equalsIgnoreCase(Constants.NULL_VALUE)) userSurname1 = null;
+				if (userSurname2.equalsIgnoreCase(Constants.NULL_VALUE)) userSurname2 = null;
+				if (userFirstName.equalsIgnoreCase(Constants.NULL_VALUE)) userFirstName = null;
+				if (userPhoto.equalsIgnoreCase(Constants.NULL_VALUE)) userPhoto = null;
 
 				User u = new User(
 						userCode,					// id
@@ -196,12 +190,16 @@ public class RollcallConfigDownload extends Module {
 					e.printStackTrace();
 					
 					//Send exception details to Bugsense
-					BugSenseHandler.sendException(e);
+					if(!isDebuggable){
+						BugSenseHandler.sendException(e);
+					}
 				} catch (URISyntaxException e) {
 					e.printStackTrace();
 					
 					//Send exception details to Bugsense
-					BugSenseHandler.sendException(e);
+					if(!isDebuggable){
+						BugSenseHandler.sendException(e);
+					}
 				}
 			}
 		}
@@ -212,7 +210,7 @@ public class RollcallConfigDownload extends Module {
 		String progressDescription = getString(R.string.studentsDownloadProgressDescription);
 		int progressTitle = R.string.studentsDownloadProgressTitle;
 
-		new Connect(true, progressDescription, progressTitle).execute();
+		startConnection(true, progressDescription, progressTitle);
 	}
 
 	@Override

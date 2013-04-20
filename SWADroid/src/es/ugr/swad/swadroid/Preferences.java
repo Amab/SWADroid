@@ -24,6 +24,8 @@ import java.security.NoSuchAlgorithmException;
 
 import com.bugsense.trace.BugSenseHandler;
 
+import android.accounts.Account;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -31,6 +33,7 @@ import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
@@ -38,7 +41,10 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
+import es.ugr.swad.swadroid.sync.SyncUtils;
 import es.ugr.swad.swadroid.utils.Base64;
+import es.ugr.swad.swadroid.utils.Utils;
+import es.ugr.swad.swadroid.widget.SeekBarDialogPreference;
 
 /**
  * Preferences window of application.
@@ -90,6 +96,14 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 	 */
 	private String DBKey;
 	/**
+	 * Synchronization enabled flag
+	 */
+	private boolean syncEnabled;
+	/**
+	 * Notifications limit
+	 */
+	private int notifLimit;
+	/**
 	 * Last application version preference name.
 	 */
 	private static final String LASTVERSIONPREF = "lastVersionPref";
@@ -138,6 +152,18 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 	 */
 	private static final String DBKEYPREF = "DBKeyPref";
 	/**
+	 * Synchronization time preference name.
+	 */
+	private static final String SYNCTIMEPREF = "prefSyncTime";
+	/**
+	 * Synchronization enable preference name.
+	 */
+	private static final String SYNCENABLEPREF = "prefSyncEnable";
+	/**
+	 * Notifications limit preference name.
+	 */
+	private static final String NOTIFLIMITPREF = "prefNotifLimit";
+	/**
 	 * User ID preference
 	 */
 	private Preference userIDPref;
@@ -182,6 +208,18 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 	 */
 	private Preference serverPref;
 	/**
+	 * Synchronization time preference
+	 */
+	private Preference syncTimePref;
+	/**
+	 * Synchronization enable preference
+	 */
+	private CheckBoxPreference syncEnablePref;
+	/**
+	 * Notifications limit preference
+	 */
+	private SeekBarDialogPreference notifLimitPref;
+	/**
 	 * Preferences editor
 	 */
 	Editor editor;
@@ -208,7 +246,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 	 */
 	public String getServer() {    	
 		if(server.equals("")) {
-			server = Global.getDefaultServer();
+			server = Constants.DEFAULT_SERVER;
 		}
 
 		return server;
@@ -258,6 +296,14 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 	 */
 	public String getDBKey() {
 		return DBKey;
+	}
+
+	/**
+	 * Gets the max number of notifications to be stored
+	 * @return the max number of notifications to be stored
+	 */
+	public int getNotifLimit() {
+		return notifLimit;
 	}
 
 	/**
@@ -325,10 +371,10 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 	 * Deletes notifications and courses data from database
 	 */
 	private void cleanDatabase() {
-		dbHelper.emptyTable(Global.DB_TABLE_NOTIFICATIONS);
-		dbHelper.emptyTable(Global.DB_TABLE_COURSES);
+		dbHelper.emptyTable(Constants.DB_TABLE_NOTIFICATIONS);
+		dbHelper.emptyTable(Constants.DB_TABLE_COURSES);
 		setLastCourseSelected(0);
-		Global.setDbCleaned(true);
+		Utils.setDbCleaned(true);
 	}
 
 	/**
@@ -340,9 +386,11 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 		prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
 		userID = prefs.getString(USERIDPREF, "");
 		userPassword = prefs.getString(USERPASSWORDPREF, "");
-		server = prefs.getString(SERVERPREF, Global.getDefaultServer());
+		server = prefs.getString(SERVERPREF, Constants.DEFAULT_SERVER);
 		lastVersion = prefs.getInt(LASTVERSIONPREF, 0);
 		lastCourseSelected = prefs.getInt(LASTCOURSESELECTEDPREF, 0);
+		syncEnabled = prefs.getBoolean(SYNCENABLEPREF, true);
+		notifLimit = prefs.getInt(NOTIFLIMITPREF, 25);
 		DBKey = prefs.getString(DBKEYPREF, "");
 	}
 
@@ -370,9 +418,11 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 
 		userID = prefs.getString(USERIDPREF, "");
 		userPassword = prefs.getString(USERPASSWORDPREF, "");
-		server = prefs.getString(SERVERPREF, Global.getDefaultServer());
+		server = prefs.getString(SERVERPREF, Constants.DEFAULT_SERVER);
 		lastVersion = prefs.getInt(LASTVERSIONPREF, 0);
 		lastCourseSelected = prefs.getInt(LASTCOURSESELECTEDPREF, 0);
+		syncEnabled = prefs.getBoolean(SYNCENABLEPREF, true);
+		notifLimit = prefs.getInt(NOTIFLIMITPREF, 25);
 		editor = prefs.edit();
 
 		userIDPref = findPreference(USERIDPREF);
@@ -386,6 +436,42 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 		blogPref = findPreference(BLOGPREF);
 		sharePref = findPreference(SHAREPREF);
 		serverPref = findPreference(SERVERPREF);
+		syncTimePref = findPreference(SYNCTIMEPREF);
+		syncEnablePref = (CheckBoxPreference) findPreference(SYNCENABLEPREF);
+		notifLimitPref = (SeekBarDialogPreference) findPreference(NOTIFLIMITPREF);
+		
+        syncTimePref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			public boolean onPreferenceChange(Preference preference, Object value) {
+				long time = Long.parseLong((String)value);
+
+				SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, getApplicationContext());
+
+				if(time != 0) {
+					SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, time, getApplicationContext());
+				}
+
+				return true;
+			}
+        });
+        syncEnablePref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			public boolean onPreferenceChange(Preference preference, Object value) {
+				//boolean masterSyncEnabled = ContentResolver.getMasterSyncAutomatically();
+				syncEnabled = (Boolean) value;
+				Account account = new Account(getString(R.string.app_name), Constants.ACCOUNT_TYPE);
+				
+				//Configure automatic synchronization
+				/*if(syncEnabled && !masterSyncEnabled) {
+					ContentResolver.setMasterSyncAutomatically(syncEnabled);
+				}*/
+				
+		  	    ContentResolver.setSyncAutomatically(account, Constants.AUTHORITY, syncEnabled);
+		  	   
+		  	    syncEnablePref.setChecked(syncEnabled);
+		  	    editor.commit();
+
+				return true;
+			}
+        });
 
 		userIDPref.setOnPreferenceChangeListener(this);
 		userPasswordPref.setOnPreferenceChangeListener(this);
@@ -397,6 +483,9 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 		blogPref.setOnPreferenceChangeListener(this);
 		sharePref.setOnPreferenceChangeListener(this);
 		serverPref.setOnPreferenceChangeListener(this);
+		notifLimitPref.setOnPreferenceChangeListener(this);
+		
+		notifLimitPref.setProgress(notifLimit);
 
 		userIDPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			/**
@@ -513,11 +602,21 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 			 * @param preference Preference selected.
 			 */
 			public boolean onPreferenceClick(Preference preference) {
-				server = prefs.getString(SERVERPREF, Global.getDefaultServer());
+				server = prefs.getString(SERVERPREF, Constants.DEFAULT_SERVER);
 				editor.putString(SERVERPREF, server);				
 				return true;
 			}
 		}); 
+		notifLimitPref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			@Override
+			public boolean onPreferenceChange(Preference preference,
+					Object newValue) {
+				notifLimit = (Integer) newValue;
+				editor.putInt(NOTIFLIMITPREF, notifLimit);
+				dbHelper.clearOldNotifications(notifLimit);
+				return true;
+			}
+		});
 
 		try {
 			currentVersionPref.setSummary(getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
@@ -535,9 +634,9 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 
 		//If preferences have changed, logout and save new preferences
 		if (USERIDPREF.equals(key) || USERPASSWORDPREF.equals(key)) {
-			Global.setLogged(false);
+			Constants.setLogged(false);
 			cleanDatabase();
-			Global.setPreferencesChanged();
+			Constants.setPreferencesChanged();
 			editor.commit();
 		}
 
@@ -550,9 +649,9 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 		}
 
 		if (SERVERPREF.equals(key)) {
-			Global.setLogged(false);
+			Constants.setLogged(false);
 			cleanDatabase();
-			Global.setPreferencesChanged();
+			Constants.setPreferencesChanged();
 			editor.commit();
 		}
 
@@ -574,7 +673,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 		if(!server.equals("")) {
 			serverPref.setSummary(server);
 		} else {
-			serverPref.setSummary(Global.getDefaultServer());
+			serverPref.setSummary(Constants.DEFAULT_SERVER);
 		}
 	}
 

@@ -23,7 +23,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.model.GroupType;
@@ -161,7 +161,7 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 			holder.imagePadlock.setImageResource(R.drawable.padlock_red);
 		}
 		
-		if((open != 0 && freeSpot) || role == Global.TEACHER_TYPE_CODE){ //Teachers can enroll even on closed groups
+		if((open != 0 && freeSpot) || role == Constants.TEACHER_TYPE_CODE){ //Teachers can enroll even on closed groups
 			holder.checkBox.setEnabled(true);
 			holder.checkBox.setTextColor(context.getResources().getColor(android.R.color.black));
 			holder.imagePadlock.setEnabled(true);
@@ -187,7 +187,7 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 		//for multiple inscriptions the groups should be checkboxes to allow multiple choice
 		//otherwise the groups should be radio button to allow just a single choice
 		//Teachers can enroll in multiple groups even if the enrollment type for the group type is single
-		if(multiple == 0 && role != Global.TEACHER_TYPE_CODE){ //single inscriptions:
+		if(multiple == 0 && role != Constants.TEACHER_TYPE_CODE){ //single inscriptions:
 			holder.checkBox.setVisibility(View.GONE);
 			holder.radioButton.setVisibility(View.VISIBLE);
 			
@@ -303,7 +303,7 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 		}
 		
 		boolean realMember = realMembership.get(groupTypeCode)[childPosition];
-		if((group.getOpen() != 0 && (freeSpot || realMember))|| role == Global.TEACHER_TYPE_CODE)
+		if((group.getOpen() != 0 && (freeSpot || realMember))|| role == Constants.TEACHER_TYPE_CODE)
 			return true;
 		else
 			return false;
@@ -324,7 +324,7 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 			int previousCheckState = group.getMember();
 			group.setMember((group.getMember()+1) % 2);
 			
-			if(multiple == 0 && previousCheckState == 0 && role != Global.TEACHER_TYPE_CODE){//unique enrollment. Only an option is checked.
+			if(multiple == 0 && previousCheckState == 0 && role != Constants.TEACHER_TYPE_CODE){//unique enrollment. Only an option is checked.
 				//If the group does not allow multiple enrollment and previously it was not checked, the rest of the groups should be unchecked. 
 				Long groupTypeCode = groupType.getId();
 				ArrayList<Group> children = this.children.get(groupTypeCode);

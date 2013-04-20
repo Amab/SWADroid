@@ -38,7 +38,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.User;
@@ -54,7 +54,7 @@ public class StudentsHistory extends Module {
 	/**
 	 * Students History tag name for Logcat
 	 */
-	public static final String TAG = Global.APP_TAG + " StudentsHistory";
+	public static final String TAG = Constants.APP_TAG + " StudentsHistory";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +68,8 @@ public class StudentsHistory extends Module {
 		text.setText(R.string.studentsHistoryModuleLabel);
 
 		// Get selected course
-		String where = "id =" + String.valueOf(Global.getSelectedCourseCode());
-		Course selectedCourse = (Course) dbHelper.getAllRows(Global.DB_TABLE_COURSES, where, "fullName").get(0);
+		String where = "id =" + String.valueOf(Constants.getSelectedCourseCode());
+		Course selectedCourse = (Course) dbHelper.getAllRows(Constants.DB_TABLE_COURSES, where, "fullName").get(0);
 		String courseName = selectedCourse.getFullName();
 
 		// Get selected groupName
@@ -83,13 +83,13 @@ public class StudentsHistory extends Module {
 	}
 
 	private void showStudentsList() {
-		List<Long> idList = dbHelper.getUsersCourse(Global.getSelectedCourseCode());
+		List<Long> idList = dbHelper.getUsersCourse(Constants.getSelectedCourseCode());
 
 		if (idList.size() > 0) {
 			studentsList = new ArrayList<StudentItemModel>();
 
 			for (Long userCode: idList) {
-				User u = (User) dbHelper.getRow(Global.DB_TABLE_USERS, "userCode", String.valueOf(userCode));
+				User u = (User) dbHelper.getRow(Constants.DB_TABLE_USERS, "userCode", String.valueOf(userCode));
 				studentsList.add(new StudentItemModel(u));
 			}
 			// Arrange the list alphabetically
@@ -97,13 +97,13 @@ public class StudentsHistory extends Module {
 
 			// Show a dialog with the list of practice sessions
 			ListView lv = (ListView) this.findViewById(R.id.listItems);
-			lv.setAdapter(new StudentsArrayAdapter(this, studentsList, Global.STUDENTS_HISTORY_REQUEST_CODE));
+			lv.setAdapter(new StudentsArrayAdapter(this, studentsList, Constants.STUDENTS_HISTORY_REQUEST_CODE));
 			lv.setOnItemClickListener(new OnItemClickListener() {
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 					Intent activity = new Intent(getApplicationContext(), SessionsList.class);
 					activity.putExtra("studentId", studentsList.get(position).getId());
-					startActivityForResult(activity, Global.SESSIONS_LIST_REQUEST_CODE);
+					startActivityForResult(activity, Constants.SESSIONS_LIST_REQUEST_CODE);
 				}
 			});
 		} else {
@@ -117,7 +117,7 @@ public class StudentsHistory extends Module {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch(requestCode) {
-		case Global.SESSIONS_LIST_REQUEST_CODE:
+		case Constants.SESSIONS_LIST_REQUEST_CODE:
 			if (resultCode == Activity.RESULT_CANCELED) {
 				Toast.makeText(StudentsHistory.this, R.string.noSessionsAvailableMsg, Toast.LENGTH_LONG).show();
 			}

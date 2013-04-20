@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <resources>
+
     <string name="app_name">SWADroid</string>
     <string name="serverName_preferences">Servidor</string>
     <string name="serverSummary_preferences">Servidor (sin http://)</string>
@@ -10,6 +11,7 @@
     <string name="testsModuleLabel">Tests</string>
     <string name="messagesModuleLabel">Enviar mensaje</string>
     <string name="noticesModuleLabel">Publicar aviso</string>
+    <string name="generateQRModuleLabel">Generar código QR</string>
     <string name="title_error_dialog">ERROR</string>
     <string name="close_dialog">Cerrar</string>
     <string name="set_preferences">Configuración</string>
@@ -66,6 +68,10 @@
     <string name="evaluation">Evaluación</string>
     <string name="assignment">Actividad</string>
     <string name="survey">Encuesta</string>
+    <string name="documentFile">Documento</string>
+    <string name="sharedFile">Documento compartido</string>
+    <string name="enrollment">Inscripción</string>
+    <string name="enrollmentRequest">Petición de inscripción</string>
     <string name="unknownNotification">Notificación desconocida</string>
     <string name="fromMsg">De</string>
     <string name="dateMsg">Fecha</string>
@@ -136,6 +142,15 @@
     <string name="mailingListTitle">Lista de correo</string>
     <string name="blogTitle">Blog</string>
     <string name="marketTitle">Google Play</string>
+    <string name="prefCatSyncTitle">Sincronización</string>
+    <string name="prefSyncTimeTitle">Frecuencia de sincronización</string>
+    <string name="prefSyncTimeSummary">Frecuencia de sincronización de las notificaciones</string>
+    <string name="prefSyncEnableTitle">Sincronización automática</string>
+    <string name="prefSyncEnableSummary">Habilitar la sincronización automática</string>
+    <string name="prefCatNotifTitle">Notificaciones</string>
+    <string name="prefNotifLimitTitle">Límite de notificaciones</string>
+    <string name="prefNotifLimitDialogMessage">Seleccione el número máximo de notificaciones que serán almacenadas:</string>
+    <string name="prefNotifLimitSuffix">notificaciones</string>
     <string name="notificationsAlertTitle">SWADroid</string>
     <string name="notificationsAlertMsg">nuevas notificaciones</string>
     <string name="footMessageMsg">Enviado desde</string>
@@ -148,7 +163,7 @@
 		estudiantes a sincronizar, el procesamiento de los datos puede tardar unos minutos.\n\nPor favor, espere&#8230;</string>
     <string name="documentsDownloadModuleLabel">Documentos</string>
     <string name="documentsDownloadProgressDescription">Obteniendo archivos.\n\nDependiendo del tamaño del directorio, podría necesitar varios minutos.\n\nPor favor, espere&#8230;</string>
-    <string name="clickToOpenFile">Pulse aqui para abrir el archivo</string>
+    <string name="clickToOpenFile">Pulse aquí para abrir el archivo</string>
     <string name="sharedsDownloadModuleLabel">Zona común</string>
     <string name="connectionRequired">Para esta funcionalidad se necesita conexión a Internet</string>
     <string name="course">Asignatura</string>
@@ -179,13 +194,11 @@
     <string name="creationTimeTitle">Fecha:</string>
     <string name="uploaderTitle">Subido por:</string>
     <string name="downloadFileTitle">Descargar</string>
-    <string  name="sdCardBusyTitle">Tarjeta SD no disponible</string>
+    <string name="sdCardBusyTitle">Tarjeta SD no disponible</string>
     <string name="sdCardBusy">La tarjeta SD está ocupada ahora mismo. Para permitir descargas, selecciona "Desactiva almacenamiento USB" en la notificación</string>
     <string name="vacants">Vacantes</string>
-	<string name="numStudent">Nº de estudiantes: </string>
-    <string name="enrollment">Inscripción</string>
+    <string name="numStudent">Nº de estudiantes: </string>
     <string name="myGroupsModuleLabel">Mis grupos</string>
-
     <string name="scan_no_photos">No se han podido guardar las fotos de los estudiantes</string>
     <string name="noStudentsAvailableMsg">Esta asignatura no tiene alumnos</string>
     <string name="studentsUpdated">alumnos actualizados</string>
@@ -263,14 +276,19 @@ Seleccione: Sesiones de prácticas - Nueva</string>
     <string name="sendMyGroupsProgressDescription">Enviando inscripción a grupos&#8230;\nPor favor, espere&#8230;</string>
     <string name="sendMyGroupsProgressTitle">Inscripción a grupos</string>
     <string name="withoutLimit">sin límite</string>
-   	<string name="downloadProblemTitle">Problema en descarga</string>
-	<string name="downloadProblemMsg">Lo sentimos. La descarga fue interrumpida. Inténtelo de nuevo</string>
-	<string name="downloadCompletedTitle"> Descarga completa </string>
-	<string name="unknown">Desconocido</string>
-	<string name="selectZoneTitle">Seleccione zona</string>
-	<string name="fileTitle">Archivo:</string>
-	<string name="noConnectionMsg">Esta función necesita conexión. </string>
-	<string name="noApp">No se puede abrir este archivo.</string>
-	
-</resources>
+    <string name="downloadProblemTitle">Problema en descarga</string>
+    <string name="downloadProblemMsg">Lo sentimos. La descarga fue interrumpida. Inténtelo de nuevo</string>
+    <string name="downloadCompletedTitle"> Descarga completa </string>
+    <string name="unknown">Desconocido</string>
+    <string name="selectZoneTitle">Seleccione zona</string>
+    <string name="fileTitle">Archivo:</string>
+    <string name="noConnectionMsg">Esta función necesita conexión. </string>
+    <string name="noApp">No se puede abrir este archivo.</string>
+    <string name="contents_contact">Información de contacto</string>
+    <string name="contents_email">Dirección de correo electrónico</string>
+    <string name="contents_location">Coordenadas geográficas</string>
+    <string name="contents_phone">Número de teléfono</string>
+    <string name="contents_sms">Dirección SMS</string>
+    <string name="contents_text">Texto</string>
 
+</resources>

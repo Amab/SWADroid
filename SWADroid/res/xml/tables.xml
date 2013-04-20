@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <database
     name="swadroid_db_crypt"
-    version="13" >
+    version="14" >
 
     <table
         name="courses"
@@ -128,6 +128,11 @@
             name="stem"
             obligatory="true"
             type="text" />
+        <field
+            name="feedback"
+            new-in-version="14"
+            obligatory="false"
+            type="text" />
     </table>
     <table
         name="tst_answers"
@@ -145,6 +150,11 @@
         <field
             name="correct"
             obligatory="true"
+            type="text" />
+        <field
+            name="answerFeedback"
+            new-in-version="14"
+            obligatory="false"
             type="text" />
     </table>
     <table

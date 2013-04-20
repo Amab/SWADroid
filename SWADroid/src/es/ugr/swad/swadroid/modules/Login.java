@@ -28,13 +28,11 @@ import org.ksoap2.serialization.KvmSerializable;
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
-import com.bugsense.trace.BugSenseHandler;
-
 import android.os.Bundle;
-import es.ugr.swad.swadroid.Global;
+import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
-import es.ugr.swad.swadroid.modules.rollcall.Util;
+import es.ugr.swad.swadroid.modules.rollcall.RollCallUtil;
 import es.ugr.swad.swadroid.utils.Base64;
 
 /**
@@ -62,7 +60,7 @@ public class Login extends Module {
 	/**
 	 * Login tag name for Logcat
 	 */
-	public static final String TAG = Global.APP_TAG + " Login";
+	public static final String TAG = Constants.APP_TAG + " Login";
 
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onCreate()
@@ -89,12 +87,8 @@ public class Login extends Module {
 	protected void connect() {
 		String progressDescription = getString(R.string.loginProgressDescription);
 		int progressTitle = R.string.loginProgressTitle;
-		Connect con = new Connect(false, progressDescription, progressTitle, true);
-
-		/*if(!Global.isLogged())
-    		Toast.makeText(this, progressDescription, Toast.LENGTH_LONG).show();*/
-
-		con.execute();
+		
+		startConnection(false, progressDescription, progressTitle);
 	} 
 	
 	public static boolean isInteger(String str) {
@@ -103,9 +97,6 @@ public class Login extends Module {
             return true;
         } catch (NumberFormatException nfe) {       		
 			nfe.printStackTrace();
-			
-			//Send exception details to Bugsense
-			BugSenseHandler.sendException(nfe);
         }
         return false;
     }
@@ -123,18 +114,18 @@ public class Login extends Module {
 			throws NoSuchAlgorithmException, IOException, XmlPullParserException, SoapFault, IllegalAccessException, InstantiationException {
 
 		//If last login time > Global.RELOGIN_TIME, force login
-		if(System.currentTimeMillis()-Global.getLastLoginTime() > Global.RELOGIN_TIME) {
-			Global.setLogged(false);
+		if(System.currentTimeMillis()-Constants.getLastLoginTime() > Constants.RELOGIN_TIME) {
+			Constants.setLogged(false);
 		}
 
 		//If the application isn't logged, force login
-		if(!Global.isLogged())
+		if(!Constants.isLogged())
 		{
 			//Remove left and right spaces
 			userID = prefs.getUserID().trim();
 			
 			//If the user ID is a DNI
-			if(Util.isValidDni(userID)) {
+			if(RollCallUtil.isValidDni(userID)) {
 				//If the DNI has no letter, remove left zeros
 				if(isInteger(userID)) {
 					userID = String.valueOf(Integer.parseInt(userID));
@@ -155,7 +146,7 @@ public class Login extends Module {
 			createRequest();
 			addParam("userID", userID);
 			addParam("userPassword", userPassword);
-			addParam("appKey", Global.getSWADAppKey());
+			addParam("appKey", Constants.SWAD_APP_KEY);
 			sendRequest(User.class, true);
 
 			if (result != null) {
@@ -188,10 +179,10 @@ public class Login extends Module {
 						Integer.parseInt(soap.getProperty("userRole").toString())		// userRole
 						);
 
-				Global.setLoggedUser(loggedUser);
+				Constants.setLoggedUser(loggedUser);
 
 				//Update application last login time
-				Global.setLastLoginTime(System.currentTimeMillis());
+				Constants.setLastLoginTime(System.currentTimeMillis());
 			}
 		}
 

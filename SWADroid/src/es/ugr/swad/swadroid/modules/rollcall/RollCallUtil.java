@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
  * Useful functions.
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  */
-public class Util {
+public class RollCallUtil {
 	public static boolean isValidDni(String dni) {
 		String dniPattern = "^[A-Z]?\\d{1,16}[A-Z]?$";	// (0 or 1 letter) + (1 to 16 digits) + (0 or 1 letter)
 
@@ -53,7 +53,7 @@ public class Util {
 	}
 
 	public static boolean isValidNickname(String nickname) {
-		String patronNickname = "[a-zA-Z_0-9]{1,30}";	// 1 to 30 letters, underscored or digits
+		String patronNickname = "@[a-zA-Z_0-9]{1,17}";	// 1 to 17 letters, underscored or digits
 
 		Pattern pattern = Pattern.compile(patronNickname, Pattern.CASE_INSENSITIVE);
 		Matcher matcher = pattern.matcher(nickname);
