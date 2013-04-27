@@ -37,6 +37,7 @@ import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.utils.Utils;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeoutException;
 
@@ -304,7 +305,6 @@ public abstract class Module extends MenuActivity {
 	 * 
 	 * @see android.app.Activity#onCreate()
 	 */
-	@SuppressWarnings("static-access")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// Check if debug mode is enabled
@@ -321,7 +321,7 @@ public abstract class Module extends MenuActivity {
 		// Recover the launched async task if the activity is re-created
 		connect = (Connect) getLastNonConfigurationInstance();
 		if (connect != null) {
-			connect.activity = this;
+			connect.activity = new WeakReference<Module>(this);
 		}
 	}
 
@@ -544,8 +544,8 @@ public abstract class Module extends MenuActivity {
 
 	protected void startConnection(boolean showDialog,
 			String progressDescription, int progressTitle) {
-		connect = new Connect(this, showDialog, progressDescription,
-				progressTitle);
+		
+		connect = new Connect(this, showDialog, progressDescription, progressTitle);
 		connect.execute();
 	}
 
@@ -556,7 +556,7 @@ public abstract class Module extends MenuActivity {
 		/**
 		 * Activity that launched the task
 		 */
-		Module activity;
+		WeakReference<Module> activity;
 		/**
 		 * Exception pointer
 		 */
@@ -585,7 +585,7 @@ public abstract class Module extends MenuActivity {
 			this.progressDescription = progressDescription;
 			this.progressTitle = progressTitle;
 			showDialog = show;
-			this.activity = activity;	
+			this.activity = new WeakReference<Module>(activity);	
 			this.e = null;
 			progressDialog = new ProgressDialog(Module.this);
 
