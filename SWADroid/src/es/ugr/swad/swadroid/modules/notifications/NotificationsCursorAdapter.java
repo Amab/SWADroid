@@ -206,11 +206,11 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         	senderSurname2 = crypto.decrypt(cursor.getString(cursor.getColumnIndex("userSurname2")));
         	
         	//Empty fields checking
-        	if(senderFirstname.compareTo(Constants.NULL_VALUE)!=0)
+        	if(!senderFirstname.equals(Constants.NULL_VALUE))
         		sender += senderFirstname + " ";
-        	if(senderSurname1.compareTo(Constants.NULL_VALUE)!= 0)
+        	if(!senderSurname1.equals(Constants.NULL_VALUE))
         		sender += senderSurname1 + " ";
-        	if(senderSurname2.compareTo(Constants.NULL_VALUE) != 0)
+        	if(!senderSurname2.equals(Constants.NULL_VALUE))
         		sender += senderSurname2;
         	
         	eventSender.setText(sender);
@@ -222,7 +222,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         	summaryText = crypto.decrypt(cursor.getString(cursor.getColumnIndex("summary")));
         	
         	//Empty field checking
-        	if(summaryText.compareTo(Constants.NULL_VALUE)==0)
+        	if(summaryText.equals(Constants.NULL_VALUE))
         		summaryText = context.getString(R.string.noSubjectMsg);
         	
         	summary.setText(Html.fromHtml(summaryText));
@@ -231,7 +231,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         	contentText = crypto.decrypt(cursor.getString(cursor.getColumnIndex("content")));
         	
         	//Empty field checking
-        	if(contentText.compareTo(Constants.NULL_VALUE)==0)
+        	if(contentText.equals(Constants.NULL_VALUE))
         		contentText = context.getString(R.string.noContentMsg);
         	
     		content.setText(contentText);
