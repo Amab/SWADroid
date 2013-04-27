@@ -283,6 +283,7 @@ public class TestsMake extends Module {
 		CheckedAnswersArrayAdapter checkedAnswersAdapter;
 		String answerType = question.getAnswerType();
 		String feedback = test.getFeedback();
+		String questionFeedbackText = question.getFeedback();
 		String correctAnswer = "";
 		int numAnswers = answers.size();
 		Float questionScore;
@@ -313,7 +314,11 @@ public class TestsMake extends Module {
 		img.setVisibility(View.GONE);
 		
 		stem.setText(Html.fromHtml(question.getStem()));
-		questionFeedback.setText(Html.fromHtml(question.getFeedback()));
+		
+		if((questionFeedbackText != null) && (!questionFeedbackText.equals(Constants.NULL_VALUE))) {
+			questionFeedback.setText(Html.fromHtml(questionFeedbackText));
+		}
+		
 		feedbackLevel = Test.FEEDBACK_VALUES.indexOf(feedback);
 		
 		if(test.isEvaluated() && (feedbackLevel == 4) && !question.getFeedback().equals(Constants.NULL_VALUE)) {
