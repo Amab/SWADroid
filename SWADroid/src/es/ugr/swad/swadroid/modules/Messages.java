@@ -95,7 +95,7 @@ public class Messages extends Module {
 	 * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
 	 */
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {		
 		super.onCreate(savedInstanceState);
 		setMETHOD_NAME("sendMessage");
 	}
@@ -105,17 +105,17 @@ public class Messages extends Module {
 	 */
 	@Override
 	protected void onStart() {
-		messageDialog = new Dialog(this);
 		Button acceptButton, cancelButton;
 		EditText receiversText, subjectText;
-
+		
 		super.onStart();
+		
 		notificationCode = getIntent().getLongExtra("notificationCode", 0);
-
+		
+		messageDialog = new Dialog(this);
 		messageDialog.setTitle(R.string.messagesModuleLabel);
 		messageDialog.setContentView(R.layout.messages_dialog);
 		messageDialog.setCancelable(true);
-
 		messageDialog.getWindow().setLayout(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 
 		acceptButton = (Button) messageDialog.findViewById(R.id.message_button_accept);
@@ -155,7 +155,7 @@ public class Messages extends Module {
 	}
 
 	/**
-	 * Reads user input
+	 * Reads user input from Dialog
 	 */
 	private void readData() {
 		EditText rcv = (EditText) messageDialog.findViewById(R.id.message_receivers_text);
@@ -165,15 +165,34 @@ public class Messages extends Module {
 		subject = subj.getText().toString();
 
 		EditText bd = (EditText) messageDialog.findViewById(R.id.message_body_text);
-		body = bd.getText().toString();
+		body = bd.getText().toString();		
+	}
+
+	/**
+	 * Writes user input to Dialog
+	 */
+	private void writeData() {
+		EditText rcv = (EditText) messageDialog.findViewById(R.id.message_receivers_text);
+		rcv.setText(receivers);
+
+		EditText subj = (EditText) messageDialog.findViewById(R.id.message_subject_text);
+		subj.setText(subject);
+
+		EditText bd = (EditText) messageDialog.findViewById(R.id.message_body_text);
+		bd.setText(body);		
+	}
+
+	/**
+	 * Adds the foot to the message body
+	 */
+	private void addFootBody() {
 		body = body.replaceAll("\n", "<br />");
 		body = body + "<br /><br />"+ getString(R.string.footMessageMsg) + " " + getString(R.string.app_name) +
 				"<br />" + getString(R.string.marketWebURL);
 		//body = body + "<br /><br />"+ getString(R.string.footMessageMsg) + " <a href=\"" +
 		//		getString(R.string.marketWebURL) + "\">" + getString(R.string.app_name) + "</a>";
 	}
-
-
+	
 	/* (non-Javadoc)
 	 * @see es.ugr.swad.swadroid.modules.Module#requestService()
 	 */
@@ -183,6 +202,7 @@ public class Messages extends Module {
 	IllegalAccessException, InstantiationException {
 
 		readData();
+		addFootBody();
 
 		createRequest();
 		addParam("wsKey", Constants.getLoggedUser().getWsKey());
@@ -249,5 +269,37 @@ public class Messages extends Module {
 	@Override
 	protected void onError() {
 
+	}
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onRestoreInstanceState(android.os.Bundle)
+	 */
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		notificationCode = savedInstanceState.getLong("notificationCode");
+		receivers = savedInstanceState.getString("receivers");
+		receiversNames = savedInstanceState.getString("receiversNames");
+		subject = savedInstanceState.getString("subject");
+		body = savedInstanceState.getString("body");
+		
+		writeData();
+		
+		super.onRestoreInstanceState(savedInstanceState);
+	}
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onSaveInstanceState(android.os.Bundle)
+	 */
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		readData();
+		
+		outState.putLong("notificationCode", notificationCode);
+		outState.putString("receivers", receivers);
+		outState.putString("receiversNames", receiversNames);
+		outState.putString("subject", subject);
+		outState.putString("body", body);
+		
+		super.onSaveInstanceState(outState);
 	}
 }

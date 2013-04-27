@@ -43,6 +43,7 @@ import es.ugr.swad.swadroid.model.User;
  * Module for send messages.
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class Notices extends Module {
 	/**
@@ -134,7 +135,6 @@ public class Notices extends Module {
 
 		sendRequest(User.class,false);
 		if(result != null){
-			//TODO 
 			setResult(RESULT_OK);
 		}
 	}
@@ -164,6 +164,11 @@ public class Notices extends Module {
 		body = bd.getText().toString();
 	}
 
+	private void writeData() {
+		EditText bd = (EditText) noticeDialog.findViewById(R.id.notice_body_text);
+		bd.setText(body);		
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -184,10 +189,33 @@ public class Notices extends Module {
 		launchNoticeDialog();
 	}
 
-
 	@Override
 	protected void onError() {
 
+	}
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onRestoreInstanceState(android.os.Bundle)
+	 */
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		body = savedInstanceState.getString("body");
+		
+		writeData();
+		
+		super.onRestoreInstanceState(savedInstanceState);
+	}
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onSaveInstanceState(android.os.Bundle)
+	 */
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		readData();
+		
+		outState.putString("body", body);
+		
+		super.onSaveInstanceState(outState);
 	}
 
 }
