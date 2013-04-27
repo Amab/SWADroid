@@ -243,7 +243,9 @@ public class DownloadsManager extends MenuActivity {
 
 			@Override
 			public void onClick(View v) {
-				updateView(navigator.goToRoot());
+				if(navigator != null) {
+					updateView(navigator.goToRoot());
+				}
 			}
 
 		}));
@@ -254,7 +256,9 @@ public class DownloadsManager extends MenuActivity {
 
 			@Override
 			public void onClick(View v) {
-				updateView(navigator.goToParentDirectory());
+				if(navigator != null) {
+					updateView(navigator.goToParentDirectory());
+				}
 			}
 
 		}));
