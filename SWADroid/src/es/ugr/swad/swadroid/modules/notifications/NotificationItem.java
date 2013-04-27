@@ -109,7 +109,7 @@ public class NotificationItem extends MenuActivity {
 	    if(userPhoto != null) {
 		    if(Utils.connectionAvailable(this)
 		    		&& (userPhoto != null) && !userPhoto.equalsIgnoreCase("")
-		    		&& (userPhoto.compareTo(Constants.NULL_VALUE)!=0)) {
+		    		&& !userPhoto.equals(Constants.NULL_VALUE)) {
 		    	//userPhotoView.setImageURI(Uri.parse(userPhoto));
 		    	new DownloadImageTask(userPhotoView).execute(userPhoto);
 		    } else {
