@@ -470,8 +470,8 @@ public abstract class Module extends MenuActivity {
 	 * @throws IllegalAccessException
 	 * @throws XmlPullParserException
 	 */
-	protected void sendRequest(Class<?> cl, boolean simple) throws IOException,
-			SoapFault, IllegalAccessException, InstantiationException,
+	protected void sendRequest(Class<?> cl, boolean simple) throws SoapFault,
+			IOException, IllegalAccessException, InstantiationException,
 			XmlPullParserException {
 
 		// Variables for URL splitting
@@ -522,7 +522,7 @@ public abstract class Module extends MenuActivity {
 	 * @param sendException 
 	 */
 	protected void error(String tag, String message, Exception ex, boolean sendException) {
-		errorDialog = new AlertDialog.Builder(this)
+		errorDialog = new AlertDialog.Builder(Module.this)
 				.setTitle(R.string.title_error_dialog)
 				.setMessage(message)
 				.setNeutralButton(R.string.close_dialog,
@@ -532,11 +532,11 @@ public abstract class Module extends MenuActivity {
 							}
 						}).setIcon(R.drawable.erroricon).show();
 
-		if (!isDebuggable && (ex != null)) {
+		if (ex != null) {
 			ex.printStackTrace();
 
 			// Send exception details to Bugsense
-			if(sendException) {
+			if(!isDebuggable && sendException) {
 				BugSenseHandler.sendExceptionMessage(tag, message, ex);
 			}
 		}
