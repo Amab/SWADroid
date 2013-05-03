@@ -186,7 +186,7 @@ public class NotificationsSyncAdapterService extends Service {
 	 }
 	 
 	 protected static void sendRequest(boolean simple)
-		    	throws IOException, SoapFault, IllegalAccessException, InstantiationException, XmlPullParserException {
+		    	throws SoapFault, IOException, IllegalAccessException, InstantiationException, XmlPullParserException {
 
 		    	/**
 		    	 * Use of KeepAliveHttpsTransport deals with the problems with the Android ssl libraries having trouble
