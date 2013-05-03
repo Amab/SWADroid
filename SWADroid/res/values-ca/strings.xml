@@ -54,6 +54,7 @@
     <string name="marksFile">"Qualificacions"</string>
     <string name="notice">"Avís"</string>
     <string name="message">"Missatge"</string>
+    <string name="forumPostCourse">Missatge en un fòrum</string>
     <string name="forumReply">"Resposta a fòrum"</string>
     <string name="content">"Contingut"</string>
     <string name="messages">"Missatges"</string>

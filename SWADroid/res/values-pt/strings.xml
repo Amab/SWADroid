@@ -53,6 +53,7 @@
     <string name="marksFile">"Pontuações"</string>
     <string name="notice">"==&gt; Aviso"</string>
     <string name="message">"Mensagem"</string>
+    <string name="forumPostCourse">Postar em um fórum</string>
     <string name="forumReply">"Fórum resposta"</string>
     <string name="content">"Conteúdo"</string>
     <string name="messages">"Posts"</string>

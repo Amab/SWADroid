@@ -158,6 +158,10 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         		notificationIcon.setImageResource(R.drawable.msg_received);
         		//messageReplyButton.setOnClickListener(replyMessageListener);
         		//messageReplyButton.setVisibility(View.VISIBLE);
+        	} else if(type.equals("forumPostCourse"))
+        	{
+        		type = context.getString(R.string.forumPostCourse);
+        		notificationIcon.setImageResource(R.drawable.forum);
         	} else if(type.equals("forumReply"))
         	{
         		type = context.getString(R.string.forumReply);
