@@ -62,6 +62,7 @@
     <string name="marksFile">Calificaciones</string>
     <string name="notice">Aviso</string>
     <string name="message">Mensaje</string>
+    <string name="forumPostCourse">Mensaje en un foro</string>
     <string name="forumReply">Respuesta en foro</string>
     <string name="content">Contenido</string>
     <string name="messages">Mensajes</string>

@@ -62,6 +62,7 @@
     <string name="marksFile">Marks file</string>
     <string name="notice">Notice</string>
     <string name="message">Message</string>
+    <string name="forumPostCourse">Forum message</string>
     <string name="forumReply">Forum reply</string>
     <string name="content">Content</string>
     <string name="messages">Messages</string>

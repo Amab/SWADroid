@@ -53,6 +53,7 @@
     <string name="marksFile">"Notes"</string>
     <string name="notice">"Remarquer"</string>
     <string name="message">"Message"</string>
+    <string name="forumPostCourse">Poster dans un forum</string>
     <string name="forumReply">"Forum Réponse"</string>
     <string name="content">"Contenu"</string>
     <string name="messages">"Messages"</string>
