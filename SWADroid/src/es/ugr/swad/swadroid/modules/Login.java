@@ -19,140 +19,140 @@
 
 package es.ugr.swad.swadroid.modules;
 
-import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
-import org.ksoap2.SoapFault;
-import org.ksoap2.serialization.KvmSerializable;
-import org.ksoap2.serialization.SoapObject;
-import org.xmlpull.v1.XmlPullParserException;
-
 import android.os.Bundle;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.rollcall.RollCallUtil;
 import es.ugr.swad.swadroid.utils.Base64;
+import org.ksoap2.SoapFault;
+import org.ksoap2.serialization.KvmSerializable;
+import org.ksoap2.serialization.SoapObject;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Login module for connect to SWAD.
+ *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  */
 public class Login extends Module {
-	/**
-	 * Logged user
-	 */
-	private User loggedUser;
-	/**
-	 * Digest for user password.
-	 */
-	private MessageDigest md;
-	/**
-	 * User ID.
-	 */
-	private String userID;
-	/**
-	 * User password.
-	 */
-	private String userPassword;
-	/**
-	 * Login tag name for Logcat
-	 */
-	public static final String TAG = Constants.APP_TAG + " Login";
+    /**
+     * Logged user
+     */
+    private User loggedUser;
+    /**
+     * Digest for user password.
+     */
+    private MessageDigest md;
+    /**
+     * User ID.
+     */
+    private String userID;
+    /**
+     * User password.
+     */
+    private String userPassword;
+    /**
+     * Login tag name for Logcat
+     */
+    public static final String TAG = Constants.APP_TAG + " Login";
 
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onCreate()
-	 */
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setMETHOD_NAME("loginByUserPasswordKey");
-	}
+    /* (non-Javadoc)
+     * @see android.app.Activity#onCreate()
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setMETHOD_NAME("loginByUserPasswordKey");
+    }
 
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onStart()
-	 */
-	@Override
-	protected void onStart() {
-		super.onStart();      
-		connect();
-	}
+    /* (non-Javadoc)
+     * @see android.app.Activity#onStart()
+     */
+    @Override
+    protected void onStart() {
+        super.onStart();
+        connect();
+    }
 
-	/**
-	 * Launches action in a separate thread while shows a progress dialog
-	 * in UI thread.
-	 */
-	protected void connect() {
-		String progressDescription = getString(R.string.loginProgressDescription);
-		int progressTitle = R.string.loginProgressTitle;
-		
-		startConnection(false, progressDescription, progressTitle);
-	} 
-	
-	public static boolean isInteger(String str) {
+    /**
+     * Launches action in a separate thread while shows a progress dialog
+     * in UI thread.
+     */
+    protected void connect() {
+        String progressDescription = getString(R.string.loginProgressDescription);
+        int progressTitle = R.string.loginProgressTitle;
+
+        startConnection(false, progressDescription, progressTitle);
+    }
+
+    private static boolean isInteger(String str) {
         try {
             Integer.parseInt(str);
             return true;
-        } catch (NumberFormatException nfe) {       		
-			nfe.printStackTrace();
+        } catch (NumberFormatException nfe) {
+            nfe.printStackTrace();
         }
         return false;
     }
 
-	/**
-	 * Connects to SWAD and gets user data.
-	 * @throws NoSuchAlgorithmException
-	 * @throws IOException
-	 * @throws XmlPullParserException
-	 * @throws SoapFault
-	 * @throws InstantiationException 
-	 * @throws IllegalAccessException 
-	 */
-	protected void requestService()
-			throws NoSuchAlgorithmException, IOException, XmlPullParserException, SoapFault, IllegalAccessException, InstantiationException {
+    /**
+     * Connects to SWAD and gets user data.
+     *
+     * @throws NoSuchAlgorithmException
+     * @throws IOException
+     * @throws XmlPullParserException
+     * @throws SoapFault
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     */
+    protected void requestService()
+            throws NoSuchAlgorithmException, IOException, XmlPullParserException {
 
-		//If last login time > Global.RELOGIN_TIME, force login
-		if(System.currentTimeMillis()-Constants.getLastLoginTime() > Constants.RELOGIN_TIME) {
-			Constants.setLogged(false);
-		}
+        //If last login time > Global.RELOGIN_TIME, force login
+        if (System.currentTimeMillis() - Constants.getLastLoginTime() > Constants.RELOGIN_TIME) {
+            Constants.setLogged(false);
+        }
 
-		//If the application isn't logged, force login
-		if(!Constants.isLogged())
-		{
-			//Remove left and right spaces
-			userID = prefs.getUserID().trim();
-			
-			//If the user ID is a DNI
-			if(RollCallUtil.isValidDni(userID)) {
-				//If the DNI has no letter, remove left zeros
-				if(isInteger(userID)) {
-					userID = String.valueOf(Integer.parseInt(userID));
-					
-				//If the last position of the DNI is a char, remove it
-				} else if(isInteger(userID.substring(0, userID.length()-1))) {
-					userID = String.valueOf(Integer.parseInt(userID.substring(0, userID.length()-1)));					
-				}
-			}
-			
-			//Encrypts user password with SHA-512 and encodes it to Base64UrlSafe   	
-			md = MessageDigest.getInstance("SHA-512");
-			md.update(prefs.getUserPassword().getBytes());
-			userPassword = new String(Base64.encodeBytes(md.digest()));
-			userPassword = userPassword.replace('+','-').replace('/','_').replace('=', ' ').replaceAll("\\s+", "").trim();
+        //If the application isn't logged, force login
+        if (!Constants.isLogged()) {
+            //Remove left and right spaces
+            userID = prefs.getUserID().trim();
 
-			//Creates webservice request, adds required params and sends request to webservice
-			createRequest();
-			addParam("userID", userID);
-			addParam("userPassword", userPassword);
-			addParam("appKey", Constants.SWAD_APP_KEY);
-			sendRequest(User.class, true);
+            //If the user ID is a DNI
+            if (RollCallUtil.isValidDni(userID)) {
+                //If the DNI has no letter, remove left zeros
+                if (isInteger(userID)) {
+                    userID = String.valueOf(Integer.parseInt(userID));
 
-			if (result != null) {
-				KvmSerializable ks = (KvmSerializable) result;
-				SoapObject soap = (SoapObject)result;
-				
+                    //If the last position of the DNI is a char, remove it
+                } else if (isInteger(userID.substring(0, userID.length() - 1))) {
+                    userID = String.valueOf(Integer.parseInt(userID.substring(0, userID.length() - 1)));
+                }
+            }
+
+            //Encrypts user password with SHA-512 and encodes it to Base64UrlSafe
+            md = MessageDigest.getInstance("SHA-512");
+            md.update(prefs.getUserPassword().getBytes());
+            userPassword = Base64.encodeBytes(md.digest());
+            userPassword = userPassword.replace('+', '-').replace('/', '_').replace('=', ' ').replaceAll("\\s+", "").trim();
+
+            //Creates webservice request, adds required params and sends request to webservice
+            createRequest();
+            addParam("userID", userID);
+            addParam("userPassword", userPassword);
+            addParam("appKey", Constants.SWAD_APP_KEY);
+            sendRequest(User.class, true);
+
+            if (result != null) {
+                KvmSerializable ks = (KvmSerializable) result;
+                SoapObject soap = (SoapObject) result;
+
 				/*Log.i(TAG, "count=" + ks.getPropertyCount());
 				Log.i(TAG, "property[0]=" + ks.getProperty(0));
 				Log.i(TAG, "property[1]=" + ks.getProperty(1));
@@ -165,26 +165,26 @@ public class Login extends Module {
 				Log.i(TAG, "property[8]=" + ks.getProperty(8));
 				 */
 
-				//Stores user data returned by webservice response
-				loggedUser = new User(
-						Long.parseLong(ks.getProperty(0).toString()),					// id
-						soap.getProperty("wsKey").toString(),							// wsKey
-						soap.getProperty("userID").toString(),							// userID
-						//soap.getProperty("userNickname").toString(),					// userNickname
-						null,															// userNickname
-						soap.getProperty("userSurname1").toString(),					// userSurname1
-						soap.getProperty("userSurname2").toString(),					// userSurname2
-						soap.getProperty("userFirstname").toString(),					// userFirstname
-						soap.getProperty("userPhoto").toString(),						// photoPath
-						Integer.parseInt(soap.getProperty("userRole").toString())		// userRole
-						);
+                //Stores user data returned by webservice response
+                loggedUser = new User(
+                        Long.parseLong(ks.getProperty(0).toString()),                    // id
+                        soap.getProperty("wsKey").toString(),                            // wsKey
+                        soap.getProperty("userID").toString(),                            // userID
+                        //soap.getProperty("userNickname").toString(),					// userNickname
+                        null,                                                            // userNickname
+                        soap.getProperty("userSurname1").toString(),                    // userSurname1
+                        soap.getProperty("userSurname2").toString(),                    // userSurname2
+                        soap.getProperty("userFirstname").toString(),                    // userFirstname
+                        soap.getProperty("userPhoto").toString(),                        // photoPath
+                        Integer.parseInt(soap.getProperty("userRole").toString())        // userRole
+                );
 
-				Constants.setLoggedUser(loggedUser);
+                Constants.setLoggedUser(loggedUser);
 
-				//Update application last login time
-				Constants.setLastLoginTime(System.currentTimeMillis());
-			}
-		}
+                //Update application last login time
+                Constants.setLastLoginTime(System.currentTimeMillis());
+            }
+        }
 
 		/*if(isDebuggable) {
 			Log.d(TAG, "id=" + loggedUser.getId());
@@ -198,22 +198,22 @@ public class Login extends Module {
 			Log.d(TAG, "lastLoginTime=" + Global.getLastLoginTime());
 		}*/
 
-		//Request finalized without errors
-		setResult(RESULT_OK);
-	}
+        //Request finalized without errors
+        setResult(RESULT_OK);
+    }
 
-	/* (non-Javadoc)
-	 * @see es.ugr.swad.swadroid.modules.Module#postConnect()
-	 */
-	@Override
-	protected void postConnect() {
-		finish();
-	}
+    /* (non-Javadoc)
+     * @see es.ugr.swad.swadroid.modules.Module#postConnect()
+     */
+    @Override
+    protected void postConnect() {
+        finish();
+    }
 
-	/* (non-Javadoc)
-	 * @see es.ugr.swad.swadroid.modules.Module#onError()
-	 */
-	@Override
-	protected void onError() {
-	}
+    /* (non-Javadoc)
+     * @see es.ugr.swad.swadroid.modules.Module#onError()
+     */
+    @Override
+    protected void onError() {
+    }
 }

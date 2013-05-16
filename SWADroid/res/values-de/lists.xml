@@ -1,29 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string-array name="functions">
-		<item>Ankündigungen</item>
-		<item>Prüfungen</item>
-	</string-array>
-	<string-array name="testMenuItems">
-		<item>synchronisieren Sie Fragen</item>
-		<item>machen Prüfung</item>
-	</string-array>
-	<string-array name="testAnswerTypes">
-		<item>alle</item><item>TF</item>
-		<item>einzigartigeAuswahl</item>
-		<item>Mehrfachauswahl</item>
-		<item>text</item>
-		<item>int</item>
-		<item>float</item>
-		
-	</string-array>
-	<string-array name="testAnswerTypesNames">
-		<item>alle</item><item>True/False</item>
-		<item>einzigartige Auswahl</item>
-		<item>Mehrfachauswahl</item>
-		<item>Text</item>
-		<item>Integer</item>
-		<item>Float</item>
-		
-	</string-array>
+    <string-array name="functions">
+        <item>Ankündigungen</item>
+        <item>Prüfungen</item>
+    </string-array>
+    <string-array name="testMenuItems">
+        <item>synchronisieren Sie Fragen</item>
+        <item>machen Prüfung</item>
+    </string-array>
+    <string-array name="testAnswerTypes">
+        <item>alle</item>
+        <item>TF</item>
+        <item>einzigartigeAuswahl</item>
+        <item>Mehrfachauswahl</item>
+        <item>text</item>
+        <item>int</item>
+        <item>float</item>
+
+    </string-array>
+    <string-array name="testAnswerTypesNames">
+        <item>alle</item>
+        <item>True/False</item>
+        <item>einzigartige Auswahl</item>
+        <item>Mehrfachauswahl</item>
+        <item>Text</item>
+        <item>Integer</item>
+        <item>Float</item>
+
+    </string-array>
 </resources>

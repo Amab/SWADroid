@@ -21,31 +21,32 @@ package es.ugr.swad.swadroid.modules.rollcall.sessions;
 
 /**
  * Session item model.
+ *
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  */
 public class SessionItemModel implements Comparable<SessionItemModel> {
-	private String sessionStart;
-	private boolean attended;
+    private final String sessionStart;
+    private boolean attended;
 
-	public SessionItemModel(String start, boolean attended) {
-		this.sessionStart = start;
-		this.attended = attended;
-	}
+    public SessionItemModel(String start, boolean attended) {
+        this.sessionStart = start;
+        this.attended = attended;
+    }
 
-	public boolean isSelected() {
-		return attended;
-	}
+    public boolean isSelected() {
+        return attended;
+    }
 
-	public void setSelected(boolean selected) {
-		this.attended = selected;
-	}
-	
-	public String toString() {
-		return sessionStart;
-	}
+    public void setSelected(boolean selected) {
+        this.attended = selected;
+    }
 
-	@Override
-	public int compareTo(SessionItemModel another) {
-		return this.sessionStart.compareToIgnoreCase(another.sessionStart);
-	}
+    public String toString() {
+        return sessionStart;
+    }
+
+    @Override
+    public int compareTo(SessionItemModel another) {
+        return this.sessionStart.compareToIgnoreCase(another.sessionStart);
+    }
 }

@@ -19,116 +19,110 @@
 
 package es.ugr.swad.swadroid.modules.rollcall.sessions;
 
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.List;
-
-import org.ksoap2.SoapFault;
-import org.xmlpull.v1.XmlPullParserException;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
+import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.PracticeSession;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.modules.rollcall.students.StudentsList;
+import org.ksoap2.SoapFault;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 /**
  * Sessions history module.
+ *
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  */
 public class SessionsHistory extends Module {
-	List<PracticeSession> sessions;
-	/**
-	 * Sessions History tag name for Logcat
-	 */
-	public static final String TAG = Constants.APP_TAG + " SessionsHistory";
+    private List<PracticeSession> sessions;
+    /**
+     * Sessions History tag name for Logcat
+     */
+    public static final String TAG = Constants.APP_TAG + " SessionsHistory";
 
-	/* (non-Javadoc)
-	 * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
-	 */
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.session_history);
+    /* (non-Javadoc)
+     * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.session_history);
 
-		ImageView image = (ImageView) this.findViewById(R.id.moduleIcon);
-		image.setBackgroundResource(R.drawable.session_check);
+        ImageView image = (ImageView) this.findViewById(R.id.moduleIcon);
+        image.setBackgroundResource(R.drawable.session_check);
 
-		TextView text = (TextView) this.findViewById(R.id.moduleName);
-		text.setText(R.string.rollcallHistoryModuleLabel);
+        TextView text = (TextView) this.findViewById(R.id.moduleName);
+        text.setText(R.string.rollcallHistoryModuleLabel);
 
-		// Get selected course
-		String where = "id =" + String.valueOf(Constants.getSelectedCourseCode());
-		Course selectedCourse = (Course) dbHelper.getAllRows(Constants.DB_TABLE_COURSES, where, "fullName").get(0);
-		String courseName = selectedCourse.getFullName();
+        // Get selected course
+        String where = "id =" + String.valueOf(Constants.getSelectedCourseCode());
+        Course selectedCourse = (Course) dbHelper.getAllRows(Constants.DB_TABLE_COURSES, where, "fullName").get(0);
+        String courseName = selectedCourse.getFullName();
 
-		// Get selected groupCode, groupName
-		Intent intent = getIntent();
-		long groupCode = intent.getLongExtra("groupCode", (long) 0);
-		String groupName = intent.getStringExtra("groupName");
+        // Get selected groupCode, groupName
+        Intent intent = getIntent();
+        long groupCode = intent.getLongExtra("groupCode", (long) 0);
+        String groupName = intent.getStringExtra("groupName");
 
-		TextView title = (TextView) this.findViewById(R.id.listText);
-		title.setText(courseName + " - " + groupName);
+        TextView title = (TextView) this.findViewById(R.id.listText);
+        title.setText(courseName + " - " + groupName);
 
-		sessions = dbHelper.getPracticeSessions(Constants.getSelectedCourseCode(), groupCode);
-		int numSessions = sessions.size();
-		if (numSessions > 0) {
-			String [] sessionsStarts = new String[numSessions];
-			for(int i=0; i < numSessions; i++)
-				sessionsStarts[i] = sessions.get(i).getSessionStart();
+        sessions = dbHelper.getPracticeSessions(Constants.getSelectedCourseCode(), groupCode);
+        int numSessions = sessions.size();
+        if (numSessions > 0) {
+            String[] sessionsStarts = new String[numSessions];
+            for (int i = 0; i < numSessions; i++)
+                sessionsStarts[i] = sessions.get(i).getSessionStart();
 
-			ListView lv = (ListView) this.findViewById(R.id.listItems);
-			lv.setAdapter(new ArrayAdapter<String>(this, R.layout.session_list_item, R.id.toptext, sessionsStarts));
-			// On practice session selected
-			lv.setOnItemClickListener(new OnItemClickListener() {
-				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-					List<Long> idList = dbHelper.getStudentsAtSession(sessions.get(position).getId());
-					int numUsers = idList.size();
+            ListView lv = (ListView) this.findViewById(R.id.listItems);
+            lv.setAdapter(new ArrayAdapter<String>(this, R.layout.session_list_item, R.id.toptext, sessionsStarts));
+            // On practice session selected
+            lv.setOnItemClickListener(new OnItemClickListener() {
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    List<Long> idList = dbHelper.getStudentsAtSession(sessions.get(position).getId());
+                    int numUsers = idList.size();
 
-					if (numUsers > 0) {
-						long [] userIds = new long[numUsers];
-						for(int i=0; i < numUsers; i++)
-							userIds[i] = idList.get(i).longValue();
-						// Show students list
-						Intent activity = new Intent(getApplicationContext(), StudentsList.class);
-						activity.putExtra("userIds", userIds);
-						startActivity(activity);
-					} else {
-						Toast.makeText(SessionsHistory.this, R.string.sessionNoStudentsMsg, Toast.LENGTH_LONG).show();
-					}
-				}
-			});
-		} else {
-			Toast.makeText(SessionsHistory.this, R.string.noPracticeSessionsAvailableMsg, Toast.LENGTH_LONG).show();
-		}
-	}
+                    if (numUsers > 0) {
+                        long[] userIds = new long[numUsers];
+                        for (int i = 0; i < numUsers; i++)
+                            userIds[i] = idList.get(i);
+                        // Show students list
+                        Intent activity = new Intent(getApplicationContext(), StudentsList.class);
+                        activity.putExtra("userIds", userIds);
+                        startActivity(activity);
+                    } else {
+                        Toast.makeText(SessionsHistory.this, R.string.sessionNoStudentsMsg, Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+        } else {
+            Toast.makeText(SessionsHistory.this, R.string.noPracticeSessionsAvailableMsg, Toast.LENGTH_LONG).show();
+        }
+    }
 
-	@Override
-	protected void requestService() throws NoSuchAlgorithmException,
-	IOException, XmlPullParserException, SoapFault,
-	IllegalAccessException, InstantiationException {
-	}
+    @Override
+    protected void requestService() throws NoSuchAlgorithmException,
+            IOException, XmlPullParserException {
+    }
 
-	@Override
-	protected void connect() {
-	}
+    @Override
+    protected void connect() {
+    }
 
-	@Override
-	protected void postConnect() {
-	}
+    @Override
+    protected void postConnect() {
+    }
 
-	@Override
-	protected void onError() {
-	}
+    @Override
+    protected void onError() {
+    }
 }

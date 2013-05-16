@@ -1,426 +1,426 @@
 <?xml version="1.0" encoding="utf-8"?>
 <database
-    name="swadroid_db_crypt"
-    version="14" >
+        name="swadroid_db_crypt"
+        version="14">
 
     <table
-        name="courses"
-        to-string="%name%" >
+            name="courses"
+            to-string="%name%">
         <field
-            name="id"
-            obligatory="true"
-            type="long" />
+                name="id"
+                obligatory="true"
+                type="long"/>
         <field
-            name="userRole"
-            new-in-version="9"
-            obligatory="true"
-            type="integer" />
+                name="userRole"
+                new-in-version="9"
+                obligatory="true"
+                type="integer"/>
         <field
-            name="shortName"
-            new-in-version="12"
-            obligatory="true"
-            type="text" />
+                name="shortName"
+                new-in-version="12"
+                obligatory="true"
+                type="text"/>
         <field
-            name="fullName"
-            new-in-version="12"
-            obligatory="true"
-            type="text" />
+                name="fullName"
+                new-in-version="12"
+                obligatory="true"
+                type="text"/>
     </table>
     <table
-        name="notifications"
-        new-in-version="3"
-        to-string="%name%" >
+            name="notifications"
+            new-in-version="3"
+            to-string="%name%">
         <field
-            name="id"
-            obligatory="true"
-            type="long" />
+                name="id"
+                obligatory="true"
+                type="long"/>
         <field
-            name="eventType"
-            obligatory="true"
-            type="text" />
+                name="eventType"
+                obligatory="true"
+                type="text"/>
         <field
-            name="eventTime"
-            obligatory="true"
-            type="text" />
+                name="eventTime"
+                obligatory="true"
+                type="text"/>
         <field
-            name="userSurname1"
-            obligatory="true"
-            type="text" />
+                name="userSurname1"
+                obligatory="true"
+                type="text"/>
         <field
-            name="userSurname2"
-            obligatory="true"
-            type="text" />
+                name="userSurname2"
+                obligatory="true"
+                type="text"/>
         <field
-            name="userFirstname"
-            obligatory="true"
-            type="text" />
+                name="userFirstname"
+                obligatory="true"
+                type="text"/>
         <field
-            name="userPhoto"
-            new-in-version="13"
-            obligatory="true"
-            type="text" />
+                name="userPhoto"
+                new-in-version="13"
+                obligatory="true"
+                type="text"/>
         <field
-            name="location"
-            obligatory="true"
-            type="text" />
+                name="location"
+                obligatory="true"
+                type="text"/>
         <field
-            name="summary"
-            obligatory="true"
-            type="text" />
+                name="summary"
+                obligatory="true"
+                type="text"/>
         <field
-            name="status"
-            new-in-version="4"
-            obligatory="true"
-            type="text" />
+                name="status"
+                new-in-version="4"
+                obligatory="true"
+                type="text"/>
         <field
-            name="content"
-            new-in-version="5"
-            obligatory="true"
-            type="text" />
+                name="content"
+                new-in-version="5"
+                obligatory="true"
+                type="text"/>
     </table>
     <table
-        name="tst_config"
-        new-in-version="6"
-        to-string="%name%" >
+            name="tst_config"
+            new-in-version="6"
+            to-string="%name%">
         <field
-            name="id"
-            obligatory="true"
-            type="long" />
+                name="id"
+                obligatory="true"
+                type="long"/>
         <field
-            name="min"
-            obligatory="true"
-            type="integer" />
+                name="min"
+                obligatory="true"
+                type="integer"/>
         <field
-            name="def"
-            obligatory="true"
-            type="integer" />
+                name="def"
+                obligatory="true"
+                type="integer"/>
         <field
-            name="max"
-            obligatory="true"
-            type="integer" />
+                name="max"
+                obligatory="true"
+                type="integer"/>
         <field
-            name="feedback"
-            obligatory="true"
-            type="text" />
+                name="feedback"
+                obligatory="true"
+                type="text"/>
         <field
-            name="editTime"
-            new-in-version="7"
-            obligatory="true"
-            type="text" />
+                name="editTime"
+                new-in-version="7"
+                obligatory="true"
+                type="text"/>
     </table>
     <table
-        name="tst_questions"
-        new-in-version="6"
-        to-string="%name%" >
+            name="tst_questions"
+            new-in-version="6"
+            to-string="%name%">
         <field
-            name="id"
-            obligatory="true"
-            type="long" />
+                name="id"
+                obligatory="true"
+                type="long"/>
         <field
-            name="ansType"
-            obligatory="true"
-            type="text" />
+                name="ansType"
+                obligatory="true"
+                type="text"/>
         <field
-            name="shuffle"
-            obligatory="true"
-            type="text" />
+                name="shuffle"
+                obligatory="true"
+                type="text"/>
         <field
-            name="stem"
-            obligatory="true"
-            type="text" />
+                name="stem"
+                obligatory="true"
+                type="text"/>
         <field
-            name="feedback"
-            new-in-version="14"
-            obligatory="false"
-            type="text" />
+                name="feedback"
+                new-in-version="14"
+                obligatory="false"
+                type="text"/>
     </table>
     <table
-        name="tst_answers"
-        new-in-version="6"
-        to-string="%name%" >
+            name="tst_answers"
+            new-in-version="6"
+            to-string="%name%">
         <field
-            name="ansInd"
-            new-in-version="8"
-            obligatory="true"
-            type="integer" />
+                name="ansInd"
+                new-in-version="8"
+                obligatory="true"
+                type="integer"/>
         <field
-            name="answer"
-            obligatory="true"
-            type="text" />
+                name="answer"
+                obligatory="true"
+                type="text"/>
         <field
-            name="correct"
-            obligatory="true"
-            type="text" />
+                name="correct"
+                obligatory="true"
+                type="text"/>
         <field
-            name="answerFeedback"
-            new-in-version="14"
-            obligatory="false"
-            type="text" />
+                name="answerFeedback"
+                new-in-version="14"
+                obligatory="false"
+                type="text"/>
     </table>
     <table
-        name="tst_tags"
-        new-in-version="6"
-        to-string="%name%" >
+            name="tst_tags"
+            new-in-version="6"
+            to-string="%name%">
         <field
-            name="id"
-            obligatory="true"
-            type="long" />
+                name="id"
+                obligatory="true"
+                type="long"/>
         <field
-            name="tagTxt"
-            obligatory="true"
-            type="text" />
+                name="tagTxt"
+                obligatory="true"
+                type="text"/>
     </table>
     <table
-        name="tst_question_tags"
-        new-in-version="6"
-        to-string="%name%" >
+            name="tst_question_tags"
+            new-in-version="6"
+            to-string="%name%">
         <field
-            name="qstCod"
-            foreign-table="tst_questions"
-            obligatory="true"
-            type="foreign-key" />
+                name="qstCod"
+                foreign-table="tst_questions"
+                obligatory="true"
+                type="foreign-key"/>
         <field
-            name="tagCod"
-            foreign-table="tst_tags"
-            obligatory="true"
-            type="foreign-key" />
+                name="tagCod"
+                foreign-table="tst_tags"
+                obligatory="true"
+                type="foreign-key"/>
         <field
-            name="tagInd"
-            type="integer" />
+                name="tagInd"
+                type="integer"/>
     </table>
     <table
-        name="tst_questions_course"
-        new-in-version="6"
-        to-string="%name%" >
+            name="tst_questions_course"
+            new-in-version="6"
+            to-string="%name%">
         <field
-            name="qstCod"
-            foreign-table="tst_questions"
-            obligatory="true"
-            type="foreign-key" />
+                name="qstCod"
+                foreign-table="tst_questions"
+                obligatory="true"
+                type="foreign-key"/>
         <field
-            name="crsCod"
-            foreign-table="courses"
-            obligatory="true"
-            type="foreign-key" />
+                name="crsCod"
+                foreign-table="courses"
+                obligatory="true"
+                type="foreign-key"/>
     </table>
     <table
-        name="tst_question_answers"
-        new-in-version="6"
-        to-string="%name%" >
+            name="tst_question_answers"
+            new-in-version="6"
+            to-string="%name%">
         <field
-            name="qstCod"
-            foreign-table="tst_questions"
-            obligatory="true"
-            type="foreign-key" />
+                name="qstCod"
+                foreign-table="tst_questions"
+                obligatory="true"
+                type="foreign-key"/>
         <field
-            name="ansCod"
-            foreign-table="tst_answers"
-            obligatory="true"
-            type="foreign-key" />
+                name="ansCod"
+                foreign-table="tst_answers"
+                obligatory="true"
+                type="foreign-key"/>
     </table>
     <table
-        name="users"
-        new-in-version="10"
-        to-string="%name%" >
+            name="users"
+            new-in-version="10"
+            to-string="%name%">
         <field
-            name="userCode"
-            obligatory="true"
-            type="integer" />
+                name="userCode"
+                obligatory="true"
+                type="integer"/>
         <field
-            name="userID"
-            obligatory="true"
-            type="text" />
+                name="userID"
+                obligatory="true"
+                type="text"/>
         <field
-            name="userNickname"
-            obligatory="true"
-            type="text" />
+                name="userNickname"
+                obligatory="true"
+                type="text"/>
         <field
-            name="userSurname1"
-            obligatory="true"
-            type="text" />
+                name="userSurname1"
+                obligatory="true"
+                type="text"/>
         <field
-            name="userSurname2"
-            obligatory="true"
-            type="text" />
+                name="userSurname2"
+                obligatory="true"
+                type="text"/>
         <field
-            name="userFirstname"
-            obligatory="true"
-            type="text" />
+                name="userFirstname"
+                obligatory="true"
+                type="text"/>
         <field
-            name="photoPath"
-            obligatory="true"
-            type="text" />
+                name="photoPath"
+                obligatory="true"
+                type="text"/>
         <field
-            name="userRole"
-            obligatory="true"
-            type="integer" />
+                name="userRole"
+                obligatory="true"
+                type="integer"/>
     </table>
     <table
-        name="users_courses"
-        new-in-version="10"
-        to-string="%name%" >
+            name="users_courses"
+            new-in-version="10"
+            to-string="%name%">
         <field
-            name="userCode"
-            foreign-table="users"
-            obligatory="true"
-            type="foreign-key" />
+                name="userCode"
+                foreign-table="users"
+                obligatory="true"
+                type="foreign-key"/>
         <field
-            name="crsCod"
-            foreign-table="courses"
-            obligatory="true"
-            type="foreign-key" />
+                name="crsCod"
+                foreign-table="courses"
+                obligatory="true"
+                type="foreign-key"/>
         <field
-            name="grpCod"
+                name="grpCod"
+                new-in-version="11"
+                obligatory="true"
+                type="foreign-key"/>
+    </table>
+    <table
+            name="groups"
             new-in-version="11"
-            obligatory="true"
-            type="foreign-key" />
+            to-string="%name%">
+        <field
+                name="id"
+                obligatory="true"
+                type="integer"/>
+        <field
+                name="groupName"
+                obligatory="true"
+                type="text"/>
+        <field
+                name="maxStudents"
+                new-in-version="13"
+                obligatory="true"
+                type="integer"/>
+        <field
+                name="students"
+                new-in-version="13"
+                obligatory="true"
+                type="integer"/>
+        <field
+                name="open"
+                new-in-version="13"
+                obligatory="true"
+                type="integer"/>
+        <field
+                name="fileZones"
+                new-in-version="13"
+                obligatory="true"
+                type="integer"/>
+        <field
+                name="member"
+                new-in-version="13"
+                obligatory="true"
+                type="integer"/>
     </table>
     <table
-        name="groups"
-        new-in-version="11"
-        to-string="%name%" >
+            name="group_course"
+            new-in-version="11"
+            to-string="%name%">
         <field
-            name="id"
-            obligatory="true"
-            type="integer" />
+                name="grpCod"
+                foreign-table="groups"
+                obligatory="true"
+                type="foreign-key"/>
         <field
-            name="groupName"
-            obligatory="true"
-            type="text" />
-        <field
-            name="maxStudents"
+                name="crsCod"
+                foreign-table="courses"
+                obligatory="true"
+                type="foreign-key"/>
+    </table>
+    <table
+            name="group_types"
             new-in-version="13"
-            obligatory="true"
-            type="integer" />
+            to-string="%name%">
         <field
-            name="students"
+                name="id"
+                obligatory="true"
+                type="integer"/>
+        <field
+                name="courseCode"
+                obligatory="true"
+                type="long"/>
+        <field
+                name="groupTypeName"
+                obligatory="true"
+                type="text"/>
+        <field
+                name="mandatory"
+                obligatory="true"
+                type="integer"/>
+        <field
+                name="multiple"
+                obligatory="true"
+                type="integer"/>
+        <field
+                name="openTime"
+                obligatory="true"
+                type="long"/>
+    </table>
+    <table
+            name="group_grouptypes"
             new-in-version="13"
-            obligatory="true"
-            type="integer" />
+            to-string="%name%">
         <field
-            name="open"
-            new-in-version="13"
-            obligatory="true"
-            type="integer" />
+                name="grpTypCod"
+                foreign-table="group_types"
+                obligatory="true"
+                type="foreign-key"/>
         <field
-            name="fileZones"
-            new-in-version="13"
-            obligatory="true"
-            type="integer" />
-        <field
-            name="member"
-            new-in-version="13"
-            obligatory="true"
-            type="integer" />
+                name="grpCod"
+                foreign-table="groups"
+                obligatory="true"
+                type="foreign-key"/>
     </table>
     <table
-        name="group_course"
-        new-in-version="11"
-        to-string="%name%" >
+            name="practice_sessions"
+            new-in-version="11"
+            to-string="%name%">
         <field
-            name="grpCod"
-            foreign-table="groups"
-            obligatory="true"
-            type="foreign-key" />
+                name="crsCod"
+                foreign-table="courses"
+                obligatory="true"
+                type="foreign-key"/>
         <field
-            name="crsCod"
-            foreign-table="courses"
-            obligatory="true"
-            type="foreign-key" />
+                name="grpCod"
+                foreign-table="groups"
+                obligatory="true"
+                type="foreign-key"/>
+        <field
+                name="startDate"
+                obligatory="true"
+                type="text"/>
+        <field
+                name="endDate"
+                obligatory="true"
+                type="text"/>
+        <field
+                name="site"
+                obligatory="false"
+                type="text"/>
+        <field
+                name="description"
+                obligatory="false"
+                type="text"/>
     </table>
     <table
-        name="group_types"
-        new-in-version="13"
-        to-string="%name%" >
+            name="rollcall"
+            new-in-version="11"
+            to-string="%name%">
         <field
-            name="id"
-            obligatory="true"
-            type="integer" />
+                name="sessCod"
+                foreign-table="practice_sessions"
+                obligatory="true"
+                type="foreign-key"/>
         <field
-            name="courseCode"
-            obligatory="true"
-            type="long" />
+                name="usrCod"
+                foreign-table="users"
+                obligatory="true"
+                type="foreign-key"/>
         <field
-            name="groupTypeName"
-            obligatory="true"
-            type="text" />
-        <field
-            name="mandatory"
-            obligatory="true"
-            type="integer" />
-        <field
-            name="multiple"
-            obligatory="true"
-            type="integer" />
-        <field
-            name="openTime"
-            obligatory="true"
-            type="long" />
-    </table>
-    <table
-        name="group_grouptypes"
-        new-in-version="13"
-        to-string="%name%" >
-        <field
-            name="grpTypCod"
-            foreign-table="group_types"
-            obligatory="true"
-            type="foreign-key" />
-        <field
-            name="grpCod"
-            foreign-table="groups"
-            obligatory="true"
-            type="foreign-key" />
-    </table>
-    <table
-        name="practice_sessions"
-        new-in-version="11"
-        to-string="%name%" >
-        <field
-            name="crsCod"
-            foreign-table="courses"
-            obligatory="true"
-            type="foreign-key" />
-        <field
-            name="grpCod"
-            foreign-table="groups"
-            obligatory="true"
-            type="foreign-key" />
-        <field
-            name="startDate"
-            obligatory="true"
-            type="text" />
-        <field
-            name="endDate"
-            obligatory="true"
-            type="text" />
-        <field
-            name="site"
-            obligatory="false"
-            type="text" />
-        <field
-            name="description"
-            obligatory="false"
-            type="text" />
-    </table>
-    <table
-        name="rollcall"
-        new-in-version="11"
-        to-string="%name%" >
-        <field
-            name="sessCod"
-            foreign-table="practice_sessions"
-            obligatory="true"
-            type="foreign-key" />
-        <field
-            name="usrCod"
-            foreign-table="users"
-            obligatory="true"
-            type="foreign-key" />
-        <field
-            name="comments"
-            obligatory="false"
-            type="text" />
+                name="comments"
+                obligatory="false"
+                type="text"/>
     </table>
 
 </database>

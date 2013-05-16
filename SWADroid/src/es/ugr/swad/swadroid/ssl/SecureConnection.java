@@ -19,40 +19,42 @@
 
 package es.ugr.swad.swadroid.ssl;
 
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 
 /**
  * Establishes a secure connection.
+ *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class SecureConnection {
     /**
      * HostnameVerifier that accepts untrusted certificates.
      */
-    private static UntrustedHostnameVerifier untrustedHN =
+    private static final UntrustedHostnameVerifier untrustedHN =
             new UntrustedHostnameVerifier();
     /**
      * TrustManager that accepts untrusted certificates.
      */
-    private static TrustManager[] untrustedTM =
+    private static final TrustManager[] untrustedTM =
             new TrustManager[]{new UntrustedTrustManager()};
 
     /**
      * Bypasses certificate verification in application.
+     *
      * @throws NoSuchAlgorithmException
      * @throws KeyManagementException
      */
     public static void initSecureConnection()
             throws NoSuchAlgorithmException, KeyManagementException {
-        
-            SSLContext sc = SSLContext.getInstance("TLS");
-            sc.init(null, untrustedTM, new SecureRandom());
-            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-            HttpsURLConnection.setDefaultHostnameVerifier(untrustedHN);
+
+        SSLContext sc = SSLContext.getInstance("TLS");
+        sc.init(null, untrustedTM, new SecureRandom());
+        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+        HttpsURLConnection.setDefaultHostnameVerifier(untrustedHN);
     }
 }

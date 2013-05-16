@@ -31,7 +31,9 @@
     <string name="cleanDatabaseTitle_menu">"Netejar base de dades"</string>
     <string name="about_preferences">"sobre"</string>
     <string name="versionTitle_preferences">"Versió de l'aplicació"</string>
-    <string name="author_preferences">"Coordinador: Antonio Cañas Vargas \nProgramadores: Juan Miguel Bover Corral \nHelena Rodríguez Gijón \nAntonio Aguilera Malagón"</string>
+    <string name="author_preferences">"Coordinador: Antonio Cañas Vargas \nProgramadores: Juan Miguel Bover Corral
+        \nHelena Rodríguez Gijón \nAntonio Aguilera Malagón"
+    </string>
     <string name="organization_preferences">"Universitat de Granada"</string>
     <string name="loginTitle_menu">"Connectar"</string>
     <string name="loginProgressTitle">"Identificació"</string>
@@ -40,12 +42,18 @@
     <string name="coursesProgressDescription">"Obtenint assignatures&#8230;"</string>
     <string name="notificationsProgressTitle">"Notificacions"</string>
     <string name="notificationsProgressDescription">"Obtenint noves notificacions&#8230;"</string>
-    <string name="notificationsEmptyListMsg">"No s'ha descarregat cap notificació.\n\nPer descarregar les notificacions més recents premi la icona de la cantonada superior dreta de la pantalla."</string>
+    <string name="notificationsEmptyListMsg">"No s'ha descarregat cap notificació.\n\nPer descarregar les notificacions
+        més recents premi la icona de la cantonada superior dreta de la pantalla."
+    </string>
     <string name="notificationsDownloadedMsg">"Notificacions descarregades"</string>
     <string name="testsDownloadProgressTitle">"Tests"</string>
-    <string name="testsDownloadProgressDescription">"Sincronitzant preguntes de test.\n\nDependiendo del nombre de preguntes a sincronitzar, el processament de les dades pot trigar uns minuts.\n\nSi us plau, esperi&#8230;"</string>
+    <string name="testsDownloadProgressDescription">"Sincronitzant preguntes de test.\n\nDependiendo del nombre de
+        preguntes a sincronitzar, el processament de les dades pot trigar uns minuts.\n\nSi us plau, esperi&#8230;"
+    </string>
     <string name="errorMsgLaunchingActivity">"S'ha produït un error durant l'execució de l'operació"</string>
-    <string name="errorMsgWorkaroundEmulator">"Merda. Aquest error de l'emulador d'Android ha tornat a aparèixer. Reintentant&#8230;"</string>
+    <string name="errorMsgWorkaroundEmulator">"Merda. Aquest error de l'emulador d'Android ha tornat a aparèixer.
+        Reintentant&#8230;"
+    </string>
     <string name="errorMsgNoConnection">"No hi ha connexió"</string>
     <string name="errorCopyMsg_DB">"Error copiant base de dades"</string>
     <string name="upgradeMsg_DB">"Actualitzant base de dades&#8230;"</string>
@@ -78,13 +86,22 @@
     <string name="cancelMsg">"Cancel·lar"</string>
     <string name="allMsg">"Tots"</string>
     <string name="selectCourseTitle">"Seleccioneu assignatura"</string>
-    <string name="noCourseSelectedMsg">"Heu de seleccionar una assignatura per descarregar les preguntes de test"</string>
-    <string name="noQuestionsAvailableTestsDownloadMsg">"No hi ha preguntes de test disponibles per a aquesta assignatura"</string>
-    <string name="noQuestionsPluggableTestsDownloadMsg">"El professor d'aquesta assignatura no permet la descàrrega de les preguntes de test"</string>
+    <string name="noCourseSelectedMsg">"Heu de seleccionar una assignatura per descarregar les preguntes de test"
+    </string>
+    <string name="noQuestionsAvailableTestsDownloadMsg">"No hi ha preguntes de test disponibles per a aquesta
+        assignatura"
+    </string>
+    <string name="noQuestionsPluggableTestsDownloadMsg">"El professor d'aquesta assignatura no permet la descàrrega de
+        les preguntes de test"
+    </string>
     <string name="questionsTestsDownloadSuccesfulMsg">"Preguntes de test sincronitzades"</string>
     <string name="testNoQuestionsCourseMsg">"No s'ha descarregat cap pregunta de test per aquesta assignatura"</string>
-    <string name="testNoQuestionsMsg">"Abans de fer una anàlisi de descarregar les preguntes de test d'almenys una assignatura"</string>
-    <string name="testNoQuestionsMeetsSpecifiedCriteriaMsg">"No hi ha cap pregunta que s'ajusti als criteris especificats"</string>
+    <string name="testNoQuestionsMsg">"Abans de fer una anàlisi de descarregar les preguntes de test d'almenys una
+        assignatura"
+    </string>
+    <string name="testNoQuestionsMeetsSpecifiedCriteriaMsg">"No hi ha cap pregunta que s'ajusti als criteris
+        especificats"
+    </string>
     <string name="testNumQuestionsMsg">"Indiqueu el nombre de preguntes del test"</string>
     <string name="testTagsMsg">"Seleccioneu els descriptors que voleu incloure en el test"</string>
     <string name="testNoTagsSelectedMsg">"Heu de seleccionar almenys un descriptor"</string>
@@ -96,9 +113,14 @@
     <string name="testShowResultsDetailsMsg">"Veure detalls"</string>
     <string name="testNoDetailsMsg">"El professor no permet veure els detalls"</string>
     <string name="testNoResultsMsg">"El professor no permet veure els resultats del test"</string>
-    <string name="firstRunMsg">"Abans d'utilitzar l'aplicació per primera vegada ha d'introduir el nom d'usuari i la contrasenya d'accés a SWAD a la pantalla de configuració.\n\nPodeu accedir a la pantalla de configuració des del menú de l'aplicació en qualsevol moment.\n\nVoleu obrir ara la pantalla de configuració?"</string>
+    <string name="firstRunMsg">"Abans d'utilitzar l'aplicació per primera vegada ha d'introduir el nom d'usuari i la
+        contrasenya d'accés a SWAD a la pantalla de configuració.\n\nPodeu accedir a la pantalla de configuració des del
+        menú de l'aplicació en qualsevol moment.\n\nVoleu obrir ara la pantalla de configuració?"
+    </string>
     <string name="initialDialogTitle">"IMPORTANT"</string>
-    <string name="upgradeMsg">"A causa de canvis en la base de dades totes les dades han estat esborrats.\n\nDisculpe les molèsties."</string>
+    <string name="upgradeMsg">"A causa de canvis en la base de dades totes les dades han estat esborrats.\n\nDisculpe
+        les molèsties."
+    </string>
     <string name="errorBadLoginMsg">"usuari o contrasenya incorrectes"</string>
     <string name="errorServerResponseMsg">"Error en resposta del servidor"</string>
     <string name="errorBadAppKeyMsg">"Clau d'aplicació incorrecta. Si us plau, contacti amb el desenvolupador."</string>
@@ -116,7 +138,9 @@
     <string name="noticeSendError">"Error en publicar el nou avís"</string>
     <string name="sendMsg">"Enviar"</string>
     <string name="cleanDatabaseMsg">"Totes les dades de la base de dades han estat esborrats"</string>
-    <string name="shareBodyMsg">"Estic usant # SWADroid al meu Android per accedir a la plataforma de teleformació SWAD. \nObtenlo gratis aquí: https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid"</string>
+    <string name="shareBodyMsg">"Estic usant # SWADroid al meu Android per accedir a la plataforma de teleformació SWAD.
+        \nObtenlo gratis aquí: https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid"
+    </string>
     <string name="twitterTitle">"Twitter"</string>
     <string name="facebookTitle">"Facebook"</string>
     <string name="googlePlusTitle">"Google+"</string>
@@ -130,7 +154,9 @@
     <string name="prefSyncEnableSummary">"Habilita la sincronització automàtica"</string>
     <string name="prefCatNotifTitle">"Notificacions"</string>
     <string name="prefNotifLimitTitle">"Límit de notificacions"</string>
-    <string name="prefNotifLimitDialogMessage">"Seleccioneu el nombre màxim de notificacions que seran emmagatzemades:"</string>
+    <string name="prefNotifLimitDialogMessage">"Seleccioneu el nombre màxim de notificacions que seran
+        emmagatzemades:"
+    </string>
     <string name="prefNotifLimitSuffix">"notificacions"</string>
     <string name="notificationsAlertTitle">"SWADroid"</string>
     <string name="notificationsAlertMsg">"noves notificacions"</string>
@@ -140,9 +166,13 @@
     <string name="attendanceModuleLabel">"Passar llista"</string>
     <string name="users">"Usuaris"</string>
     <string name="usersDownloadProgressTitle">"Estudiants"</string>
-    <string name="usersDownloadProgressDescription">"Sincronitzant estudiants.\n\nDependiendo del nombre d'estudiants a sincronitzar, el processament de les dades pot trigar uns minuts.\n\nSi us plau, esperi&#8230;"</string>
+    <string name="usersDownloadProgressDescription">"Sincronitzant estudiants.\n\nDependiendo del nombre d'estudiants a
+        sincronitzar, el processament de les dades pot trigar uns minuts.\n\nSi us plau, esperi&#8230;"
+    </string>
     <string name="documentsDownloadModuleLabel">"Documents"</string>
-    <string name="documentsDownloadProgressDescription">"Obtenint fitxers.\n\nDependiendo de la mida del directori, podria necessitar diversos minuts.\n\nSi us plau, esperi&#8230;"</string>
+    <string name="documentsDownloadProgressDescription">"Obtenint fitxers.\n\nDependiendo de la mida del directori,
+        podria necessitar diversos minuts.\n\nSi us plau, esperi&#8230;"
+    </string>
     <string name="clickToOpenFile">"Pulsi aquí per obrir el fitxer"</string>
     <string name="sharedsDownloadModuleLabel">"Zona comú"</string>
     <string name="connectionRequired">"Per aquesta funcionalitat es necessita connexió a Internet"</string>
@@ -151,8 +181,11 @@
     <string name="msg_default_type">"Tipus"</string>
     <string name="msg_default_time">"Temps"</string>
     <string name="msg_default_meta">"Metadata"</string>
-    <string name="msg_default_status">"Poseu un codi de barres a l'interior del rectangle del visor per escanejar."</string>
-    <string name="msg_camera_framework_bug">"Ho sentim, la càmera d'Android ha trobat un problema. Potser haureu reiniciar el dispositiu."</string>
+    <string name="msg_default_status">"Poseu un codi de barres a l'interior del rectangle del visor per escanejar."
+    </string>
+    <string name="msg_camera_framework_bug">"Ho sentim, la càmera d'Android ha trobat un problema. Potser haureu
+        reiniciar el dispositiu."
+    </string>
     <string name="button_ok">"OK"</string>
     <string name="scan_valid_student">"Alumne d'aquesta assignatura"</string>
     <string name="scan_not_valid_student">"Alumne d'una altra assignatura"</string>
@@ -175,7 +208,9 @@
     <string name="uploaderTitle">"Carregat per:"</string>
     <string name="downloadFileTitle">"Descarregar"</string>
     <string name="sdCardBusyTitle">"Targeta SD no disponible"</string>
-    <string name="sdCardBusy">"La targeta SD està ocupada ara mateix. Per permetre descàrregues, seleccioneu \"Desactiva emmagatzematge USB\" a la notificació"</string>
+    <string name="sdCardBusy">"La targeta SD està ocupada ara mateix. Per permetre descàrregues, seleccioneu \"Desactiva
+        emmagatzematge USB\" a la notificació"
+    </string>
     <string name="vacants">"Vacants"</string>
     <string name="numStudent">"Nombre d'estudiants: "</string>
     <string name="myGroupsModuleLabel">"Els meus grups"</string>
@@ -208,7 +243,9 @@
     <string name="sendingStatePending">"Pendent"</string>
     <string name="sendingStateSent">"enviat"</string>
     <string name="session">"Sessió: "</string>
-    <string name="noPracticeSessionsAvailableMsg">"No hi ha sessions de pràctiques del grup seleccionat a la base de dades"</string>
+    <string name="noPracticeSessionsAvailableMsg">"No hi ha sessions de pràctiques del grup seleccionat a la base de
+        dades"
+    </string>
     <string name="sessionNoStudentsMsg">"Cap alumne ha assistit a aquesta sessió"</string>
     <string name="studentsHistoryModuleLabel">"Historial d'alumnes"</string>
     <string name="sessionsTitle">"Sessions de pràctiques"</string>
@@ -216,7 +253,9 @@
     <string name="listSampleModuleLabel">"Prova"</string>
     <string name="rollcallModuleLabel">"Passar llista"</string>
     <string name="studentsTitle">"Estudiants"</string>
-    <string name="studentsDownloadProgressDescription">"Sincronitzant estudiants.\n\nDependiendo del nombre d'estudiants a sincronitzar, el processament de les dades pot trigar uns minuts.\n\nSi us plau, esperi&#8230;"</string>
+    <string name="studentsDownloadProgressDescription">"Sincronitzant estudiants.\n\nDependiendo del nombre d'estudiants
+        a sincronitzar, el processament de les dades pot trigar uns minuts.\n\nSi us plau, esperi&#8230;"
+    </string>
     <string name="studentsList">"Llista d'estudiants"</string>
     <string name="studentsDownloadProgressTitle">"Estudiants"</string>
     <string name="studentsPresent">"Estudiants presents"</string>
@@ -226,12 +265,18 @@
     <string name="rollcallManual">"Mode manual"</string>
     <string name="sessionsSelect">"Consultar sessions"</string>
     <string name="studentsSelect">"Consultar estudiants"</string>
-    <string name="rollcallErrorNoConnection">"No hi ha connexió amb el servidor. S'han guardat les dades d'assistència a la base de dades."</string>
+    <string name="rollcallErrorNoConnection">"No hi ha connexió amb el servidor. S'han guardat les dades d'assistència a
+        la base de dades."
+    </string>
     <string name="rollcallHistoryModuleLabel">"Historial de sessions"</string>
     <string name="rollcallNoStudentsSelected">"No s'ha seleccionat cap estudiant"</string>
-    <string name="rollcallNoPracticeSessions">"No hi ha sessions de pràctiques definides per l'assignatura i grup seleccionats. Seleccioni: Sessions de pràctiques - Nova"</string>
+    <string name="rollcallNoPracticeSessions">"No hi ha sessions de pràctiques definides per l'assignatura i grup
+        seleccionats. Seleccioni: Sessions de pràctiques - Nova"
+    </string>
     <string name="rollcallSaved">"Dades d'assistència guardats correctament"</string>
-    <string name="rollcallWebServiceNotAvailable">"El servei web per enviar SWAD les dades d'assistència no està disponible."</string>
+    <string name="rollcallWebServiceNotAvailable">"El servei web per enviar SWAD les dades d'assistència no està
+        disponible."
+    </string>
     <string name="rollcallEvent">"Esdeveniment de passar llista"</string>
     <string name="froyoFunctionMsg">"Aquesta funció requereix Android 2.2 o superior"</string>
     <string name="noRearCamera">"Aquesta funció requereix una càmera posterior"</string>
@@ -241,15 +286,19 @@
     <string name="noGroupsText">"No s'han creat grups dins de l'assignatura"</string>
     <string name="changeGroups">"Canviar de grups"</string>
     <string name="resultEnrollment">"Resultat de la inscripció"</string>
-    <string name="successfullEnrollment">"Totes les inscripcions s'han realitzat amb èxit. Si us plau, comprovi que està inscrit en els grups desitjats "</string>
+    <string name="successfullEnrollment">"Totes les inscripcions s'han realitzat amb èxit. Si us plau, comprovi que està
+        inscrit en els grups desitjats "
+    </string>
     <string name="confirmEnrollments">"Confirmar inscripcions sol · licitades "</string>
     <string name="areYouSure">" Esteu segur que vol inscriure en els grups seleccionats?"</string>
-    <string name="failedEnrollment">"Ho sentim però la inscripció en els grups seleccionats no es va poder realitzar"</string>
+    <string name="failedEnrollment">"Ho sentim però la inscripció en els grups seleccionats no es va poder realitzar"
+    </string>
     <string name="groupTypesProgressDescription">"Obtenint tipus de grup&#8230; \nSi us plau, esperi&#8230;"</string>
     <string name="groupsProgressDescription">"Obtenint grups&#8230; \nSi us plau, esperi&#8230;"</string>
     <string name="groupTypesProgressTitle">"Tipus de grups"</string>
     <string name="groupsProgressTitle">"Grups"</string>
-    <string name="sendMyGroupsProgressDescription">"Enviant inscripció a grups&#8230; \nSi us plau, esperi&#8230;"</string>
+    <string name="sendMyGroupsProgressDescription">"Enviant inscripció a grups&#8230; \nSi us plau, esperi&#8230;"
+    </string>
     <string name="sendMyGroupsProgressTitle">"Inscripció a grups"</string>
     <string name="withoutLimit">"sense límit"</string>
     <string name="downloadProblemTitle">"Problema en descàrrega"</string>

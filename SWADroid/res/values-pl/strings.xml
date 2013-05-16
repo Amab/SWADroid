@@ -30,7 +30,9 @@
     <string name="cleanDatabaseTitle_menu">"Czyste Database"</string>
     <string name="about_preferences">"O"</string>
     <string name="versionTitle_preferences">"Wersja aplikacji"</string>
-    <string name="author_preferences">"Koordynator: Antonio Vargas Canas\nProgramiści: Juan Miguel Corral Boyero\nHelena Rodriguez Gijón\nAntonio Aguilera Malagón"</string>
+    <string name="author_preferences">"Koordynator: Antonio Vargas Canas\nProgramiści: Juan Miguel Corral Boyero\nHelena
+        Rodriguez Gijón\nAntonio Aguilera Malagón"
+    </string>
     <string name="organization_preferences">"Uniwersytet w Granadzie"</string>
     <string name="loginTitle_menu">"Połączyć"</string>
     <string name="loginProgressTitle">"Identyfikacja"</string>
@@ -39,12 +41,17 @@
     <string name="coursesProgressDescription">"Pierwsze tematy&#8230;"</string>
     <string name="notificationsProgressTitle">"Powiadomienia"</string>
     <string name="notificationsProgressDescription">"Pierwsze nowe powiadomienia&#8230;"</string>
-    <string name="notificationsEmptyListMsg">"Nie pobrano żadnego powiadomienia.\n\nW pobrać najnowszą powiadomień kliknij ikonę w prawym górnym rogu ekranu."</string>
+    <string name="notificationsEmptyListMsg">"Nie pobrano żadnego powiadomienia.\n\nW pobrać najnowszą powiadomień
+        kliknij ikonę w prawym górnym rogu ekranu."
+    </string>
     <string name="notificationsDownloadedMsg">"Powiadomienia pobrany"</string>
     <string name="testsDownloadProgressTitle">"Testy"</string>
-    <string name="testsDownloadProgressDescription">"Synchronizacja na pytania testowe.\n\nW zależności liczba pytań do synchronizacji, przetwarzanie danych może zająć kilka minut.\n\nProszę czekać&#8230;"</string>
+    <string name="testsDownloadProgressDescription">"Synchronizacja na pytania testowe.\n\nW zależności liczba pytań do
+        synchronizacji, przetwarzanie danych może zająć kilka minut.\n\nProszę czekać&#8230;"
+    </string>
     <string name="errorMsgLaunchingActivity">"Wystąpił błąd podczas wykonywania operacji"</string>
-    <string name="errorMsgWorkaroundEmulator">"Cholera. To bug Emulator Android wystąpiła. Ponowna próba&#8230;"</string>
+    <string name="errorMsgWorkaroundEmulator">"Cholera. To bug Emulator Android wystąpiła. Ponowna próba&#8230;"
+    </string>
     <string name="errorMsgNoConnection">"Brak połączenia"</string>
     <string name="errorCopyMsg_DB">"Błąd podczas kopiowania danych"</string>
     <string name="upgradeMsg_DB">"Aktualizacja bazy danych&#8230;"</string>
@@ -79,10 +86,13 @@
     <string name="selectCourseTitle">"Wybierz temat"</string>
     <string name="noCourseSelectedMsg">"Musisz wybrać temat, aby pobrać pytania testowe"</string>
     <string name="noQuestionsAvailableTestsDownloadMsg">"Żadnych pytań, testów do tego tematu"</string>
-    <string name="noQuestionsPluggableTestsDownloadMsg">"Nauczyciel tego przedmiotu nie pozwala na pobieranie pytań testowych"</string>
+    <string name="noQuestionsPluggableTestsDownloadMsg">"Nauczyciel tego przedmiotu nie pozwala na pobieranie pytań
+        testowych"
+    </string>
     <string name="questionsTestsDownloadSuccesfulMsg">"Zsynchronizowane pytań testowych"</string>
     <string name="testNoQuestionsCourseMsg">"Nie pobrano każde pytanie testu dla tego tematu"</string>
-    <string name="testNoQuestionsMsg">"Przed wykonaniem testu należy pobrać pytania testowe co najmniej jeden temat"</string>
+    <string name="testNoQuestionsMsg">"Przed wykonaniem testu należy pobrać pytania testowe co najmniej jeden temat"
+    </string>
     <string name="testNoQuestionsMeetsSpecifiedCriteriaMsg">"Nie ma wątpliwości, że spełnia kryteria określone"</string>
     <string name="testNumQuestionsMsg">"Wskazać liczbę pytań testowych"</string>
     <string name="testTagsMsg">"Wybierz deskryptory dołączyć testu"</string>
@@ -95,9 +105,14 @@
     <string name="testShowResultsDetailsMsg">"Zobacz szczegóły"</string>
     <string name="testNoDetailsMsg">"Nauczyciel nie może zobaczyć szczegóły"</string>
     <string name="testNoResultsMsg">"Nauczyciel nie może zobaczyć wyniki testu"</string>
-    <string name="firstRunMsg">"Przed użyciem aplikacji po raz pierwszy, musi wprowadzić nazwę użytkownika i hasło dostępu do swad w ekranie konfiguracji.\n\nNie można uzyskać dostępu do ekranu konfiguracji z menu programu w dowolnym momencie.\n\n Czy chcesz, aby otworzyć ekran konfiguracji teraz?"</string>
+    <string name="firstRunMsg">"Przed użyciem aplikacji po raz pierwszy, musi wprowadzić nazwę użytkownika i hasło
+        dostępu do swad w ekranie konfiguracji.\n\nNie można uzyskać dostępu do ekranu konfiguracji z menu programu w
+        dowolnym momencie.\n\n Czy chcesz, aby otworzyć ekran konfiguracji teraz?"
+    </string>
     <string name="initialDialogTitle">"WAŻNE"</string>
-    <string name="upgradeMsg">"Ze względu na zmiany w bazie danych, wszystkie dane zostały usunięte.\n\nDisculpe niedogodności."</string>
+    <string name="upgradeMsg">"Ze względu na zmiany w bazie danych, wszystkie dane zostały usunięte.\n\nDisculpe
+        niedogodności."
+    </string>
     <string name="errorBadLoginMsg">"Nazwa użytkownika lub hasło"</string>
     <string name="errorServerResponseMsg">"Błąd w odpowiedzi serwera"</string>
     <string name="errorBadAppKeyMsg">"Key błędne. Proszę skontaktować się z deweloperem."</string>
@@ -115,7 +130,9 @@
     <string name="noticeSendError">"Nie można zakładać nowy anons"</string>
     <string name="sendMsg">"Wysłać"</string>
     <string name="cleanDatabaseMsg">"Wszystkie dane w bazie danych zostały usunięte"</string>
-    <string name="shareBodyMsg">"Używam # SWADroid moim Android dostęp do platformy edukacyjnej swad\nObtenlo darmo tutaj:. Https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid"</string>
+    <string name="shareBodyMsg">"Używam # SWADroid moim Android dostęp do platformy edukacyjnej swad\nObtenlo darmo
+        tutaj:. Https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid"
+    </string>
     <string name="twitterTitle">"twitter:"</string>
     <string name="facebookTitle">"Facebook"</string>
     <string name="googlePlusTitle">"Google+"</string>
@@ -139,9 +156,13 @@
     <string name="attendanceModuleLabel">"Imienne"</string>
     <string name="users">"Użytkownicy"</string>
     <string name="usersDownloadProgressTitle">"Studenci"</string>
-    <string name="usersDownloadProgressDescription">"Synchronizacja studentów.\n\nW zależności studentów, by zsynchronizować przetwarzanie danych może zająć kilka minut.\n\nProszę czekać&#8230;"</string>
+    <string name="usersDownloadProgressDescription">"Synchronizacja studentów.\n\nW zależności studentów, by
+        zsynchronizować przetwarzanie danych może zająć kilka minut.\n\nProszę czekać&#8230;"
+    </string>
     <string name="documentsDownloadModuleLabel">"Dokumenty"</string>
-    <string name="documentsDownloadProgressDescription">"Pobieranie plików.\n \ rozmiar katalogu nW zależności, może upłynąć kilka minut.\n\nProszę czekać&#8230;"</string>
+    <string name="documentsDownloadProgressDescription">"Pobieranie plików.\n \ rozmiar katalogu nW zależności, może
+        upłynąć kilka minut.\n\nProszę czekać&#8230;"
+    </string>
     <string name="clickToOpenFile">"Kliknij tutaj, aby otworzyć plik"</string>
     <string name="sharedsDownloadModuleLabel">"Common Area"</string>
     <string name="connectionRequired">"Dla tej funkcji wymaga połączenia z Internetem"</string>
@@ -151,7 +172,9 @@
     <string name="msg_default_time">"Czas"</string>
     <string name="msg_default_meta">"Metadane"</string>
     <string name="msg_default_status">"Umieść kod kreskowy wewnątrz prostokąta wizjera zeskanowany."</string>
-    <string name="msg_camera_framework_bug">"Niestety, aparat Android napotkał problem. Może być konieczne ponowne uruchomienie urządzenia."</string>
+    <string name="msg_camera_framework_bug">"Niestety, aparat Android napotkał problem. Może być konieczne ponowne
+        uruchomienie urządzenia."
+    </string>
     <string name="button_ok">"Dobrze"</string>
     <string name="scan_valid_student">"Student tego tematu"</string>
     <string name="scan_not_valid_student">"Student z innego tematu"</string>
@@ -174,7 +197,9 @@
     <string name="uploaderTitle">"Przesłane przez:"</string>
     <string name="downloadFileTitle">"Pobierz"</string>
     <string name="sdCardBusyTitle">"Karta SD nie jest dostępny"</string>
-    <string name="sdCardBusy">"Karta SD jest teraz zajęty. Aby umożliwić pobieranie, wybierz \"Wyłącz nośnik USB\" w powiadomieniu"</string>
+    <string name="sdCardBusy">"Karta SD jest teraz zajęty. Aby umożliwić pobieranie, wybierz \"Wyłącz nośnik USB\" w
+        powiadomieniu"
+    </string>
     <string name="vacants">"Wakaty"</string>
     <string name="numStudent">"Liczba uczniów: "</string>
     <string name="myGroupsModuleLabel">"Moje grupy"</string>
@@ -215,7 +240,9 @@
     <string name="listSampleModuleLabel">"Test"</string>
     <string name="rollcallModuleLabel">"Imienne"</string>
     <string name="studentsTitle">"Studenci"</string>
-    <string name="studentsDownloadProgressDescription">"Synchronizacja studentów.\n\nW zależności studentów, by zsynchronizować przetwarzanie danych może zająć kilka minut.\n\nProszę czekać&#8230;"</string>
+    <string name="studentsDownloadProgressDescription">"Synchronizacja studentów.\n\nW zależności studentów, by
+        zsynchronizować przetwarzanie danych może zająć kilka minut.\n\nProszę czekać&#8230;"
+    </string>
     <string name="studentsList">"Lista Student"</string>
     <string name="studentsDownloadProgressTitle">"Studenci"</string>
     <string name="studentsPresent">"Studenci przedstawiają"</string>
@@ -225,12 +252,17 @@
     <string name="rollcallManual">"Tryb ręczny"</string>
     <string name="sessionsSelect">"Sprawdź sesje"</string>
     <string name="studentsSelect">"Sprawdź studentów"</string>
-    <string name="rollcallErrorNoConnection">"Brak połączenia z serwerem. Oni zachowali frekwencję w bazie danych."</string>
+    <string name="rollcallErrorNoConnection">"Brak połączenia z serwerem. Oni zachowali frekwencję w bazie danych."
+    </string>
     <string name="rollcallHistoryModuleLabel">"Sesje historyczne"</string>
     <string name="rollcallNoStudentsSelected">"Uczeń nie ma specjalnego"</string>
-    <string name="rollcallNoPracticeSessions">"Brak zdefiniowanych treningi dla przedmiotu i grupy kontaktów. Wybierz: treningi - New"</string>
+    <string name="rollcallNoPracticeSessions">"Brak zdefiniowanych treningi dla przedmiotu i grupy kontaktów. Wybierz:
+        treningi - New"
+    </string>
     <string name="rollcallSaved">"Widzów dane zapisane poprawnie"</string>
-    <string name="rollcallWebServiceNotAvailable">"Serwis internetowy do wysyłania pomocy danych swad nie jest dostępny."</string>
+    <string name="rollcallWebServiceNotAvailable">"Serwis internetowy do wysyłania pomocy danych swad nie jest
+        dostępny."
+    </string>
     <string name="rollcallEvent">"Rolka Event"</string>
     <string name="froyoFunctionMsg">"Ta funkcja wymaga Androida 2.2 lub nowszego"</string>
     <string name="noRearCamera">"Ta funkcja wymaga aparatu z tyłu"</string>
@@ -240,7 +272,9 @@
     <string name="noGroupsText">"Brak grupy zostały utworzone w ramach przedmiotu"</string>
     <string name="changeGroups">"Zmiana grupy"</string>
     <string name="resultEnrollment">"Zakończenie rejestracji"</string>
-    <string name="successfullEnrollment">"Wszystkie pozycje są wykonane prawidłowo. Proszę sprawdzić, czy są zapisane w pożądanych grup "</string>
+    <string name="successfullEnrollment">"Wszystkie pozycje są wykonane prawidłowo. Proszę sprawdzić, czy są zapisane w
+        pożądanych grup "
+    </string>
     <string name="confirmEnrollments">"Potwierdź wpisy wymagane "</string>
     <string name="areYouSure">" Jesteś pewien, że chcesz dołączyć do wybranych grup?"</string>
     <string name="failedEnrollment">"Przepraszamy rejestracji w wybranych grupach nie może być wykonana"</string>
@@ -248,7 +282,8 @@
     <string name="groupsProgressDescription">"Pierwsze grupy&#8230;\nProszę czekać&#8230;"</string>
     <string name="groupTypesProgressTitle">"Rodzaje grup"</string>
     <string name="groupsProgressTitle">"Grupy"</string>
-    <string name="sendMyGroupsProgressDescription">"Wysyłanie grup rejestracyjnych&#8230;\nProszę czekać&#8230;"</string>
+    <string name="sendMyGroupsProgressDescription">"Wysyłanie grup rejestracyjnych&#8230;\nProszę czekać&#8230;"
+    </string>
     <string name="sendMyGroupsProgressTitle">"Rejestracja do grup"</string>
     <string name="withoutLimit">"Nieograniczony"</string>
     <string name="downloadProblemTitle">"Problem w pobieraniu"</string>

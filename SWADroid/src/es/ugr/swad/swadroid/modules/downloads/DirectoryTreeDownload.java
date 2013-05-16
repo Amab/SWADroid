@@ -18,91 +18,91 @@
  */
 package es.ugr.swad.swadroid.modules.downloads;
 
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-
-import org.ksoap2.SoapFault;
-import org.ksoap2.serialization.SoapObject;
-import org.xmlpull.v1.XmlPullParserException;
-
 import android.content.Intent;
 import android.os.Bundle;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.Module;
+import org.ksoap2.SoapFault;
+import org.ksoap2.serialization.SoapObject;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * DirectoryTreeDownload  gets directory tree of files of general documents of a course/group
  * or documents from shared area of a course/group
+ *
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
- * */
+ */
 
 public class DirectoryTreeDownload extends Module {
-	private int treeCode; //documents of course or common zone of course
-	private int group = 0; // documents of the course
-	//TODO esta clase tiene q cambiar
-	public class DirectoryTree{
-		String tree;
-	}
+    private int treeCode; //documents of course or common zone of course
+    private int group = 0; // documents of the course
 
-	@Override
-	protected void requestService() throws NoSuchAlgorithmException,
-	IOException, XmlPullParserException, SoapFault,
-	IllegalAccessException, InstantiationException {
-		createRequest();
-		addParam("wsKey", Constants.getLoggedUser().getWsKey());
-		addParam("courseCode", (int)Constants.getSelectedCourseCode());
-		addParam("groupCode", group);
-		addParam("treeCode", treeCode);
-		sendRequest(User.class,true);
-		if(result!=null){
-			SoapObject soapObject = (SoapObject) result;
-			String tree = soapObject.getProperty("tree").toString();
-			
-			Intent resultIntent = new Intent();
-			resultIntent.putExtra("tree", tree);
-			setResult(RESULT_OK, resultIntent);
-		    }else{
-		      setResult(RESULT_CANCELED);
-		}
-	}
+    //TODO esta clase tiene q cambiar
+    private class DirectoryTree {
+        String tree;
+    }
 
-	@Override
-	protected void connect() {
-		String progressDescription= getString(R.string.documentsDownloadProgressDescription);
-		int progressTitle = R.string.documentsDownloadModuleLabel;
+    @Override
+    protected void requestService() throws NoSuchAlgorithmException,
+            IOException, XmlPullParserException {
+        createRequest();
+        addParam("wsKey", Constants.getLoggedUser().getWsKey());
+        addParam("courseCode", (int) Constants.getSelectedCourseCode());
+        addParam("groupCode", group);
+        addParam("treeCode", treeCode);
+        sendRequest(User.class, true);
+        if (result != null) {
+            SoapObject soapObject = (SoapObject) result;
+            String tree = soapObject.getProperty("tree").toString();
 
-		startConnection(true, progressDescription, progressTitle);
-	}
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra("tree", tree);
+            setResult(RESULT_OK, resultIntent);
+        } else {
+            setResult(RESULT_CANCELED);
+        }
+    }
 
-	@Override
-	protected void postConnect() {
-		finish();
+    @Override
+    protected void connect() {
+        String progressDescription = getString(R.string.documentsDownloadProgressDescription);
+        int progressTitle = R.string.documentsDownloadModuleLabel;
 
-	}
+        startConnection(true, progressDescription, progressTitle);
+    }
 
-	@Override
-	protected void onError() {
+    @Override
+    protected void postConnect() {
+        finish();
 
-	}
+    }
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setMETHOD_NAME("getDirectoryTree");
-	}
+    @Override
+    protected void onError() {
 
-	@Override
-	protected void onStart() {
-		super.onStart();
-		treeCode = getIntent().getIntExtra("treeCode", Constants.DOCUMENTS_AREA_CODE); 
-		group = getIntent().getIntExtra("groupCode", 0);
-		runConnection();
-		if(!isConnected){
-			setResult(RESULT_CANCELED);
-			finish();
-		}
-	}
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setMETHOD_NAME("getDirectoryTree");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        treeCode = getIntent().getIntExtra("treeCode", Constants.DOCUMENTS_AREA_CODE);
+        group = getIntent().getIntExtra("groupCode", 0);
+        runConnection();
+        if (!isConnected) {
+            setResult(RESULT_CANCELED);
+            finish();
+        }
+    }
 
 }
