@@ -24,16 +24,18 @@ import javax.net.ssl.SSLSession;
 
 /**
  * HostnameVerifier that accepts untrusted certificates.
+ *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
-public class UntrustedHostnameVerifier implements HostnameVerifier{
+public class UntrustedHostnameVerifier implements HostnameVerifier {
     /**
      * Accepts untrusted certificates.
+     *
      * @param hostname Certificate hostname.
-     * @param session SSL session.
+     * @param session  SSL session.
      * @return Verification result.
      */
     public boolean verify(String hostname, SSLSession session) {
-           return true;
+        return true;
     }
 }

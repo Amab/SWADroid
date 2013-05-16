@@ -18,118 +18,114 @@
  */
 package es.ugr.swad.swadroid.modules.tests;
 
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-
-import org.ksoap2.SoapFault;
-import org.xmlpull.v1.XmlPullParserException;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.modules.Module;
+import org.ksoap2.SoapFault;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Tests module for download questions and evaluate user skills in a course
+ *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Helena Rodríguez Gijon <hrgijon@gmail.com>
  */
 public class Tests extends Module {
-	/**
-	 * Array adapter for showing menu options
-	 */
-	private ArrayAdapter<String> adapter;
+    /**
+     * Array adapter for showing menu options
+     */
+    private ArrayAdapter<String> adapter;
     /**
      * Tests tag name for Logcat
      */
     public static final String TAG = Constants.APP_TAG + " Tests";
-	
-	/* (non-Javadoc)
-	 * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
-	 */
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		ImageView image;
-		TextView text;
-		ListView list;
-		String[] items = getResources().getStringArray(R.array.testMenuItems);
-		OnItemClickListener clickListener = new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Intent activity;
-				switch(position) {
-					case 0: activity = new Intent(getBaseContext(), TestsConfigDownload.class);
-							startActivityForResult(activity, Constants.TESTS_CONFIG_DOWNLOAD_REQUEST_CODE);
-							break;
-							
-					case 1: activity = new Intent(getBaseContext(), TestsMake.class);
-							startActivityForResult(activity, Constants.TESTS_MAKE_REQUEST_CODE);
-							break;
-				}
-				
-			}    	
+
+    /* (non-Javadoc)
+     * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        ImageView image;
+        TextView text;
+        ListView list;
+        String[] items = getResources().getStringArray(R.array.testMenuItems);
+        OnItemClickListener clickListener = new OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent activity;
+                switch (position) {
+                    case 0:
+                        activity = new Intent(getBaseContext(), TestsConfigDownload.class);
+                        startActivityForResult(activity, Constants.TESTS_CONFIG_DOWNLOAD_REQUEST_CODE);
+                        break;
+
+                    case 1:
+                        activity = new Intent(getBaseContext(), TestsMake.class);
+                        startActivityForResult(activity, Constants.TESTS_MAKE_REQUEST_CODE);
+                        break;
+                }
+
+            }
         };
-		
-		super.onCreate(savedInstanceState);
+
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.list_items);
-        
-        image = (ImageView)this.findViewById(R.id.moduleIcon);
+
+        image = (ImageView) this.findViewById(R.id.moduleIcon);
         image.setBackgroundResource(R.drawable.test);
-        
-        text = (TextView)this.findViewById(R.id.moduleName);
+
+        text = (TextView) this.findViewById(R.id.moduleName);
         text.setText(R.string.testsModuleLabel);
 
         adapter = new ArrayAdapter<String>(this, R.layout.simple_list_item, R.id.listText, items);
-        list = (ListView)this.findViewById(R.id.listItems);
+        list = (ListView) this.findViewById(R.id.listItems);
         list.setAdapter(adapter);
         list.setOnItemClickListener(clickListener);
-        
-		this.findViewById(R.id.courseSelectedText).setVisibility(View.VISIBLE);
-		this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
-        
+
+        this.findViewById(R.id.courseSelectedText).setVisibility(View.VISIBLE);
+        this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
+
         text = (TextView) this.findViewById(R.id.courseSelectedText);
-		text.setText(Constants.getSelectedCourseShortName());
-	}
+        text.setText(Constants.getSelectedCourseShortName());
+    }
 
-	/* (non-Javadoc)
-	 * @see es.ugr.swad.swadroid.modules.Module#requestService()
-	 */
-	@Override
-	protected void requestService() throws NoSuchAlgorithmException,
-			IOException, XmlPullParserException, SoapFault,
-			IllegalAccessException, InstantiationException {
+    /* (non-Javadoc)
+     * @see es.ugr.swad.swadroid.modules.Module#requestService()
+     */
+    @Override
+    protected void requestService() throws NoSuchAlgorithmException,
+            IOException, XmlPullParserException {
 
-	}
+    }
 
-	/* (non-Javadoc)
-	 * @see es.ugr.swad.swadroid.modules.Module#connect()
-	 */
-	@Override
-	protected void connect() {
+    /* (non-Javadoc)
+     * @see es.ugr.swad.swadroid.modules.Module#connect()
+     */
+    @Override
+    protected void connect() {
 
-	}
+    }
 
-	/* (non-Javadoc)
-	 * @see es.ugr.swad.swadroid.modules.Module#postConnect()
-	 */
-	@Override
-	protected void postConnect() {
+    /* (non-Javadoc)
+     * @see es.ugr.swad.swadroid.modules.Module#postConnect()
+     */
+    @Override
+    protected void postConnect() {
 
-	}
-	
-	/* (non-Javadoc)
-	 * @see es.ugr.swad.swadroid.modules.Module#onError()
-	 */
-	@Override
-	protected void onError() {
+    }
 
-	}
+    /* (non-Javadoc)
+     * @see es.ugr.swad.swadroid.modules.Module#onError()
+     */
+    @Override
+    protected void onError() {
+
+    }
 }

@@ -1,64 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/background"
-    android:orientation="horizontal"
-    android:padding="6dip" >
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:background="@color/background"
+              android:orientation="horizontal"
+              android:padding="6dip">
 
     <ImageView
-        android:id="@+id/icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="6dip"
-        android:contentDescription="@string/rollcallEvent"
-        android:src="@drawable/sessions" />
+            android:id="@+id/icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="6dip"
+            android:contentDescription="@string/rollcallEvent"
+            android:src="@drawable/sessions"/>
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="3dip"
-                android:text="@string/session"
-                android:textColor="@color/foreground1"
-                android:textSize="20dip" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="3dip"
+                    android:text="@string/session"
+                    android:textColor="@color/foreground1"
+                    android:textSize="20dip"/>
 
             <TextView
-                android:id="@+id/toptext"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/foreground1"
-                android:textSize="20dip"
-                android:textStyle="bold" />
+                    android:id="@+id/toptext"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/foreground1"
+                    android:textSize="20dip"
+                    android:textStyle="bold"/>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="3dip"
-                android:text="@string/sendingState"
-                android:textColor="@color/foreground1" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="3dip"
+                    android:text="@string/sendingState"
+                    android:textColor="@color/foreground1"/>
 
             <TextView
-                android:id="@+id/bottomtext"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/sendingStatePending"
-                android:textColor="@color/red" />
+                    android:id="@+id/bottomtext"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sendingStatePending"
+                    android:textColor="@color/red"/>
         </LinearLayout>
     </LinearLayout>
 

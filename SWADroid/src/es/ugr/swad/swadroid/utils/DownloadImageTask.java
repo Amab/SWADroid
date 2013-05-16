@@ -1,18 +1,18 @@
 package es.ugr.swad.swadroid.utils;
 
-import java.io.InputStream;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ImageView;
 
+import java.io.InputStream;
+
 /**
  * Class for download a single image from URL and show it in an ImageView.
  */
 public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-    ImageView bmImage;
+    private final ImageView bmImage;
 
     public DownloadImageTask(ImageView bmImage) {
         this.bmImage = bmImage;

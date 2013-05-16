@@ -19,11 +19,12 @@
 
 package es.ugr.swad.swadroid.ssl;
 
-import java.security.cert.X509Certificate;
 import javax.net.ssl.X509TrustManager;
+import java.security.cert.X509Certificate;
 
 /**
  * TrustManager that accepts untrusted certificates.
+ *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class UntrustedTrustManager implements X509TrustManager {
@@ -32,7 +33,8 @@ public class UntrustedTrustManager implements X509TrustManager {
      * build a certificate path to a trusted root and return if it can be
      * validated and is trusted for client SSL authentication based on the
      * authentication type.
-     * @param chain Certificate.
+     *
+     * @param chain    Certificate.
      * @param authType Authentication type.
      */
     public void checkClientTrusted(X509Certificate[] chain, String authType) {
@@ -42,8 +44,9 @@ public class UntrustedTrustManager implements X509TrustManager {
      * Given the partial or complete certificate chain provided by the peer,
      * build a certificate path to a trusted root and return if it can be
      * validated and is trusted for server SSL authentication based on the
-     * authentication type.     
-     * @param chain Certificate.
+     * authentication type.
+     *
+     * @param chain    Certificate.
      * @param authType Authentication type.
      */
     public void checkServerTrusted(X509Certificate[] chain, String authType) {
@@ -52,9 +55,10 @@ public class UntrustedTrustManager implements X509TrustManager {
     /**
      * Return an array of certificate authority certificates which are trusted
      * for authenticating peers.
+     *
      * @return Array of certificate authority certificates.
      */
     public X509Certificate[] getAcceptedIssuers() {
-           return null;
+        return null;
     }
 }

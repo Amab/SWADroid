@@ -18,12 +18,6 @@
  */
 package es.ugr.swad.swadroid.modules.notifications;
 
-import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.gui.MenuActivity;
-import es.ugr.swad.swadroid.modules.Messages;
-import es.ugr.swad.swadroid.utils.DownloadImageTask;
-import es.ugr.swad.swadroid.utils.Utils;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,109 +28,116 @@ import android.webkit.WebView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.gui.MenuActivity;
+import es.ugr.swad.swadroid.modules.Messages;
+import es.ugr.swad.swadroid.utils.DownloadImageTask;
+import es.ugr.swad.swadroid.utils.Utils;
 
 /**
  * Webview activity for showing marks
+ *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class NotificationItem extends MenuActivity {
-	Long notificationCode;
-	String sender;
-	String userPhoto;
-	String course;
-	String summary;
-	String content;
-	String date;
-	String time;
-	
-	private String fixLinks(String body) {
-	    String regex = "(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
-	    body = body.replaceAll(regex, "<a href=\"$0\">$0</a>");
-	    return body;
-	}
-	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		TextView text, senderTextView, courseTextView, summaryTextView, dateTextView, timeTextView;
-		ImageView image, userPhotoView;
-		//ImageView imageSep;
-		ImageButton replyButton;
-		WebView webview;
-		String type = this.getIntent().getStringExtra("notificationType");
-		
-		super.onCreate(savedInstanceState);		
-		setContentView(R.layout.single_notification_view);
-		
-		senderTextView = (TextView)this.findViewById(R.id.senderNameText);
-		courseTextView = (TextView)this.findViewById(R.id.courseNameText);
-		summaryTextView = (TextView)this.findViewById(R.id.summaryText);
-		userPhotoView = (ImageView) this.findViewById(R.id.notifUserPhoto);
-		webview = (WebView)this.findViewById(R.id.contentWebView);
-		dateTextView = (TextView)this.findViewById(R.id.notifDate);
-		timeTextView = (TextView)this.findViewById(R.id.notifTime);
-        
-		image = (ImageView)this.findViewById(R.id.moduleIcon);
+    private Long notificationCode;
+    private String sender;
+    private String userPhoto;
+    private String course;
+    private String summary;
+    private String content;
+    private String date;
+    private String time;
+
+    private String fixLinks(String body) {
+        String regex = "(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
+        body = body.replaceAll(regex, "<a href=\"$0\">$0</a>");
+        return body;
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        TextView text, senderTextView, courseTextView, summaryTextView, dateTextView, timeTextView;
+        ImageView image, userPhotoView;
+        //ImageView imageSep;
+        ImageButton replyButton;
+        WebView webview;
+        String type = this.getIntent().getStringExtra("notificationType");
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.single_notification_view);
+
+        senderTextView = (TextView) this.findViewById(R.id.senderNameText);
+        courseTextView = (TextView) this.findViewById(R.id.courseNameText);
+        summaryTextView = (TextView) this.findViewById(R.id.summaryText);
+        userPhotoView = (ImageView) this.findViewById(R.id.notifUserPhoto);
+        webview = (WebView) this.findViewById(R.id.contentWebView);
+        dateTextView = (TextView) this.findViewById(R.id.notifDate);
+        timeTextView = (TextView) this.findViewById(R.id.notifTime);
+
+        image = (ImageView) this.findViewById(R.id.moduleIcon);
         image.setBackgroundResource(R.drawable.notif);
-        
-        text = (TextView)this.findViewById(R.id.moduleName);
+
+        text = (TextView) this.findViewById(R.id.moduleName);
         text.setText(R.string.notificationsModuleLabel);
-        
+
         //imageSep = (ImageView)this.findViewById(R.id.title_sep_4);
         //imageSep.setVisibility(View.VISIBLE);
 
-		replyButton = (ImageButton)this.findViewById(R.id.messageReplyButton);
-        if(type.equals(getString(R.string.message))) {
-        	replyButton.setVisibility(View.VISIBLE);
+        replyButton = (ImageButton) this.findViewById(R.id.messageReplyButton);
+        if (type.equals(getString(R.string.message))) {
+            replyButton.setVisibility(View.VISIBLE);
         } else {
-        	replyButton.setVisibility(View.GONE);
+            replyButton.setVisibility(View.GONE);
         }
-		
-		sender = this.getIntent().getStringExtra("sender");
-		userPhoto = this.getIntent().getStringExtra("userPhoto");
-		course = this.getIntent().getStringExtra("course");
-		summary = this.getIntent().getStringExtra("summary");
-		content = this.getIntent().getStringExtra("content");
-		date = this.getIntent().getStringExtra("date");
-		time = this.getIntent().getStringExtra("time");
-        
-	    senderTextView.setText(sender);         
-	    courseTextView.setText(course); 
-	    summaryTextView.setText(summary);
-	    dateTextView.setText(date);
-	    timeTextView.setText(time);
-        
-	    //If the user photo exists and is public, download and show it
-	    if(userPhoto != null) {
-		    if(Utils.connectionAvailable(this)
-		    		&& (userPhoto != null) && !userPhoto.equalsIgnoreCase("")
-		    		&& !userPhoto.equals(Constants.NULL_VALUE)) {
-		    	//userPhotoView.setImageURI(Uri.parse(userPhoto));
-		    	new DownloadImageTask(userPhotoView).execute(userPhoto);
-		    } else {
-		    	Log.d("NotificationItem", "No connection or no photo " + userPhoto);
-		    }
-	    }
-				
-		content = fixLinks(content);
-		if(content.startsWith("<![CDATA[")) {
-			content = content.substring(9, content.length()-3);
-		}
-		
-	    webview.getSettings().setRenderPriority(RenderPriority.HIGH);
-		webview.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);		
-		webview.loadDataWithBaseURL("", content, "text/html", "utf-8", "");
-	}
-	
-	/**
-	 * Launches an action when reply message button is pushed
-	 * @param v Actual view
-	 */
-	public void onReplyMessageClick(View v)
-	{
-		notificationCode = Long.valueOf(this.getIntent().getStringExtra("notificationCode"));
-		Intent activity = new Intent(this, Messages.class);
-		activity.putExtra("notificationCode", notificationCode);
-		activity.putExtra("summary", summary);
-		startActivity(activity);
-	}
+
+        sender = this.getIntent().getStringExtra("sender");
+        userPhoto = this.getIntent().getStringExtra("userPhoto");
+        course = this.getIntent().getStringExtra("course");
+        summary = this.getIntent().getStringExtra("summary");
+        content = this.getIntent().getStringExtra("content");
+        date = this.getIntent().getStringExtra("date");
+        time = this.getIntent().getStringExtra("time");
+
+        senderTextView.setText(sender);
+        courseTextView.setText(course);
+        summaryTextView.setText(summary);
+        dateTextView.setText(date);
+        timeTextView.setText(time);
+
+        //If the user photo exists and is public, download and show it
+        if (userPhoto != null) {
+            if (Utils.connectionAvailable(this)
+                    && (userPhoto != null) && !userPhoto.equalsIgnoreCase("")
+                    && !userPhoto.equals(Constants.NULL_VALUE)) {
+                //userPhotoView.setImageURI(Uri.parse(userPhoto));
+                new DownloadImageTask(userPhotoView).execute(userPhoto);
+            } else {
+                Log.d("NotificationItem", "No connection or no photo " + userPhoto);
+            }
+        }
+
+        content = fixLinks(content);
+        if (content.startsWith("<![CDATA[")) {
+            content = content.substring(9, content.length() - 3);
+        }
+
+        webview.getSettings().setRenderPriority(RenderPriority.HIGH);
+        webview.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+        webview.loadDataWithBaseURL("", content, "text/html", "utf-8", "");
+    }
+
+    /**
+     * Launches an action when reply message button is pushed
+     *
+     * @param v Actual view
+     */
+    public void onReplyMessageClick(View v) {
+        notificationCode = Long.valueOf(this.getIntent().getStringExtra("notificationCode"));
+        Intent activity = new Intent(this, Messages.class);
+        activity.putExtra("notificationCode", notificationCode);
+        activity.putExtra("summary", summary);
+        startActivity(activity);
+    }
 }

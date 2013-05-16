@@ -26,13 +26,14 @@ import android.net.Uri;
 
 /**
  * Dummy provider for sync adapter.
+ *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class DummyProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-         return 0;
+        return 0;
     }
 
     @Override
@@ -52,13 +53,13 @@ public class DummyProvider extends ContentProvider {
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection,
-                    String[] selectionArgs, String sortOrder) {
+                        String[] selectionArgs, String sortOrder) {
         return null;
     }
 
     @Override
     public int update(Uri uri, ContentValues values, String selection,
-                    String[] selectionArgs) {
+                      String[] selectionArgs) {
         return 0;
     }
 }

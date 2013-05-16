@@ -18,12 +18,6 @@
  */
 package es.ugr.swad.swadroid.modules.tests;
 
-import java.util.List;
-
-import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.model.Test;
-import es.ugr.swad.swadroid.model.TestAnswer;
 import android.content.Context;
 import android.graphics.Color;
 import android.text.Html;
@@ -35,91 +29,97 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckedTextView;
 import android.widget.ListView;
 import android.widget.TextView;
+import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.model.Test;
+import es.ugr.swad.swadroid.model.TestAnswer;
+
+import java.util.List;
 
 public class CheckedAnswersArrayAdapter extends ArrayAdapter<TestAnswer> {
-	private Context context;
-	private int textViewResourceId;
-	private List<TestAnswer> items;
-	private boolean evaluated;
-	private String feedback;
-	private String answerType;
-	
-	public CheckedAnswersArrayAdapter(Context context, int textViewResourceId,
-			List<TestAnswer> objects, boolean eval, String feedb, String anstype) {
-		
-		super(context, textViewResourceId, objects);
-		this.context = context;
-		this.textViewResourceId = textViewResourceId;
-		this.items = objects;
-		this.evaluated = eval;
-		this.feedback = feedb;
-		this.answerType = anstype;
-	}
+    private final Context context;
+    private final int textViewResourceId;
+    private final List<TestAnswer> items;
+    private final boolean evaluated;
+    private final String feedback;
+    private final String answerType;
 
-	/* (non-Javadoc)
-	 * @see android.widget.ArrayAdapter#getView(int, android.view.View, android.view.ViewGroup)
-	 */
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		CheckedTextView tt;
-		TextView answerFeedback;
-		final ListView lv = (ListView) parent;
-		final int rbPosition = position;
-		TestAnswer a = items.get(position);
-		int feedbackLevel;
-        
-		if (convertView == null) {
-             LayoutInflater vi = LayoutInflater.from(context);
-             convertView = vi.inflate(textViewResourceId, null);
+    public CheckedAnswersArrayAdapter(Context context, int textViewResourceId,
+                                      List<TestAnswer> objects, boolean eval, String feedb, String anstype) {
+
+        super(context, textViewResourceId, objects);
+        this.context = context;
+        this.textViewResourceId = textViewResourceId;
+        this.items = objects;
+        this.evaluated = eval;
+        this.feedback = feedb;
+        this.answerType = anstype;
+    }
+
+    /* (non-Javadoc)
+     * @see android.widget.ArrayAdapter#getView(int, android.view.View, android.view.ViewGroup)
+     */
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        CheckedTextView tt;
+        TextView answerFeedback;
+        final ListView lv = (ListView) parent;
+        final int rbPosition = position;
+        TestAnswer a = items.get(position);
+        int feedbackLevel;
+
+        if (convertView == null) {
+            LayoutInflater vi = LayoutInflater.from(context);
+            convertView = vi.inflate(textViewResourceId, null);
         }
-		 
-		tt = (CheckedTextView) convertView.findViewById(android.R.id.text1);
-		
-		if(answerType.equals(TestAnswer.TYPE_TRUE_FALSE)) {
-			if(a.getAnswer().equals(TestAnswer.VALUE_TRUE)) {
-				tt.setText(R.string.trueMsg);
-			} else {
-				tt.setText(R.string.falseMsg);
-			}
-		} else {
-			tt.setText(Html.fromHtml(a.getAnswer()));
-		}
-		
-		if(lv.getChoiceMode() == ListView.CHOICE_MODE_SINGLE) {
-			tt.setOnClickListener(new OnClickListener() {				
-				public void onClick(View v) {
-					CheckedTextView rb = (CheckedTextView) v;					
-					int childCount = lv.getCount();
-					boolean checked = rb.isChecked();
-					
-					for(int i=0; i<childCount; i++) {
-						lv.setItemChecked(i, false);
-					}
-					
-					lv.setItemChecked(rbPosition, !checked);
-				}
-			});			
-		}
-		
-		if(evaluated) {
-			tt.setOnClickListener(null);
-			answerFeedback = (TextView) convertView.findViewById(android.R.id.text2);			
-			answerFeedback.setText(Html.fromHtml(a.getFeedback()));
 
-			feedbackLevel = Test.FEEDBACK_VALUES.indexOf(feedback);
-			if((feedbackLevel > 2) && a.getCorrect()) {
-				tt.setTextColor(context.getResources().getColor(R.color.green));
-			} else {
-				tt.setTextColor(Color.BLACK);
-			}
-			
-			if(feedbackLevel == 4 && !a.getFeedback().equals(Constants.NULL_VALUE)) {
-				answerFeedback.setVisibility(View.VISIBLE);
-			} else {
-				answerFeedback.setVisibility(View.GONE);
-			}
-		}
-         
+        tt = (CheckedTextView) convertView.findViewById(android.R.id.text1);
+
+        if (answerType.equals(TestAnswer.TYPE_TRUE_FALSE)) {
+            if (a.getAnswer().equals(TestAnswer.VALUE_TRUE)) {
+                tt.setText(R.string.trueMsg);
+            } else {
+                tt.setText(R.string.falseMsg);
+            }
+        } else {
+            tt.setText(Html.fromHtml(a.getAnswer()));
+        }
+
+        if (lv.getChoiceMode() == ListView.CHOICE_MODE_SINGLE) {
+            tt.setOnClickListener(new OnClickListener() {
+                public void onClick(View v) {
+                    CheckedTextView rb = (CheckedTextView) v;
+                    int childCount = lv.getCount();
+                    boolean checked = rb.isChecked();
+
+                    for (int i = 0; i < childCount; i++) {
+                        lv.setItemChecked(i, false);
+                    }
+
+                    lv.setItemChecked(rbPosition, !checked);
+                }
+            });
+        }
+
+        if (evaluated) {
+            tt.setOnClickListener(null);
+            answerFeedback = (TextView) convertView.findViewById(android.R.id.text2);
+            answerFeedback.setText(Html.fromHtml(a.getFeedback()));
+
+            feedbackLevel = Test.FEEDBACK_VALUES.indexOf(feedback);
+            if ((feedbackLevel > 2) && a.getCorrect()) {
+                tt.setTextColor(context.getResources().getColor(R.color.green));
+            } else {
+                tt.setTextColor(Color.BLACK);
+            }
+
+            if (feedbackLevel == 4 && !a.getFeedback().equals(Constants.NULL_VALUE)) {
+                answerFeedback.setVisibility(View.VISIBLE);
+            } else {
+                answerFeedback.setVisibility(View.GONE);
+            }
+        }
+
         return convertView;
-	}
+    }
 }

@@ -30,7 +30,9 @@
     <string name="cleanDatabaseTitle_menu">"Pulisci database"</string>
     <string name="about_preferences">"Informazioni su&#8230;"</string>
     <string name="versionTitle_preferences">"Applicazione versione"</string>
-    <string name="author_preferences">"Coordinatore: Antonio Canas Vargas\nProgrammatori: Juan Miguel Corral Boyero\nHelena Rodriguez Gijón\nAntonio Aguilera Malagón"</string>
+    <string name="author_preferences">"Coordinatore: Antonio Canas Vargas\nProgrammatori: Juan Miguel Corral
+        Boyero\nHelena Rodriguez Gijón\nAntonio Aguilera Malagón"
+    </string>
     <string name="organization_preferences">"Università di Granada"</string>
     <string name="loginTitle_menu">"Collegare"</string>
     <string name="loginProgressTitle">"Identificazione"</string>
@@ -39,12 +41,18 @@
     <string name="coursesProgressDescription">"Come soggetti&#8230;"</string>
     <string name="notificationsProgressTitle">"Notifiche"</string>
     <string name="notificationsProgressDescription">"Ottenere nuove notifiche&#8230;"</string>
-    <string name="notificationsEmptyListMsg">"Non scaricato alcuna notifica.\n\nPer scaricare le ultime notifiche fare clic sull'icona in alto a destra dello schermo."</string>
+    <string name="notificationsEmptyListMsg">"Non scaricato alcuna notifica.\n\nPer scaricare le ultime notifiche fare
+        clic sull'icona in alto a destra dello schermo."
+    </string>
     <string name="notificationsDownloadedMsg">"Notifiche scaricato"</string>
     <string name="testsDownloadProgressTitle">"Test"</string>
-    <string name="testsDownloadProgressDescription">"Sincronizzazione domande della prova.\n\nDipendente il numero di domande da sincronizzare, l'elaborazione dei dati può richiedere alcuni minuti.\n\nPer favore attendere&#8230;"</string>
+    <string name="testsDownloadProgressDescription">"Sincronizzazione domande della prova.\n\nDipendente il numero di
+        domande da sincronizzare, l'elaborazione dei dati può richiedere alcuni minuti.\n\nPer favore attendere&#8230;"
+    </string>
     <string name="errorMsgLaunchingActivity">"Verificato un errore durante l'esecuzione dell'operazione"</string>
-    <string name="errorMsgWorkaroundEmulator">"Merda. Questo bug emulatore Android è ricomparso. Nuovo tentativo in corso&#8230;"</string>
+    <string name="errorMsgWorkaroundEmulator">"Merda. Questo bug emulatore Android è ricomparso. Nuovo tentativo in
+        corso&#8230;"
+    </string>
     <string name="errorMsgNoConnection">"Nessun collegamento"</string>
     <string name="errorCopyMsg_DB">"Errore durante la copia del database"</string>
     <string name="upgradeMsg_DB">"Aggiornamento database&#8230;"</string>
@@ -77,12 +85,18 @@
     <string name="cancelMsg">"Annullare"</string>
     <string name="allMsg">"Tutti"</string>
     <string name="selectCourseTitle">"Selezionare oggetto"</string>
-    <string name="noCourseSelectedMsg">"È necessario selezionare un argomento per scaricare le domande del test"</string>
-    <string name="noQuestionsAvailableTestsDownloadMsg">"Non ci sono domande del test disponibili per questo soggetto"</string>
-    <string name="noQuestionsPluggableTestsDownloadMsg">"L'insegnante di questo corso non consente il download di domande del test"</string>
+    <string name="noCourseSelectedMsg">"È necessario selezionare un argomento per scaricare le domande del test"
+    </string>
+    <string name="noQuestionsAvailableTestsDownloadMsg">"Non ci sono domande del test disponibili per questo soggetto"
+    </string>
+    <string name="noQuestionsPluggableTestsDownloadMsg">"L'insegnante di questo corso non consente il download di
+        domande del test"
+    </string>
     <string name="questionsTestsDownloadSuccesfulMsg">"Domande del test sincronizzati"</string>
     <string name="testNoQuestionsCourseMsg">"Non scaricate qualsiasi domanda di prova per questo argomento"</string>
-    <string name="testNoQuestionsMsg">"Prima di eseguire un test dovrebbe scaricare le domande del test almeno una materia"</string>
+    <string name="testNoQuestionsMsg">"Prima di eseguire un test dovrebbe scaricare le domande del test almeno una
+        materia"
+    </string>
     <string name="testNoQuestionsMeetsSpecifiedCriteriaMsg">"Non c'è dubbio che soddisfa i criteri specificati"</string>
     <string name="testNumQuestionsMsg">"Indicare il numero di domande del test"</string>
     <string name="testTagsMsg">"Selezionare descrittori di includere nel test"</string>
@@ -95,9 +109,15 @@
     <string name="testShowResultsDetailsMsg">"Vedi dettagli"</string>
     <string name="testNoDetailsMsg">"L'insegnante non può vedere i dettagli"</string>
     <string name="testNoResultsMsg">"L'insegnante non può vedere i risultati del test"</string>
-    <string name="firstRunMsg">"Prima di utilizzare l'applicazione per la prima volta deve inserire il nome utente e la password per l'accesso al SWAD nella schermata di configurazione.\n\nÈ possibile accedere alla schermata di configurazione dal menu dell'applicazione in qualsiasi momento.\n\n Vuoi aprire la schermata di configurazione ora?"</string>
+    <string name="firstRunMsg">"Prima di utilizzare l'applicazione per la prima volta deve inserire il nome utente e la
+        password per l'accesso al SWAD nella schermata di configurazione.\n\nÈ possibile accedere alla schermata di
+        configurazione dal menu dell'applicazione in qualsiasi momento.\n\n Vuoi aprire la schermata di configurazione
+        ora?"
+    </string>
     <string name="initialDialogTitle">"IMPORTANTE"</string>
-    <string name="upgradeMsg">"A causa dei cambiamenti nel database tutti i dati sono stati cancellati.\n\nDisculpe l'inconveniente."</string>
+    <string name="upgradeMsg">"A causa dei cambiamenti nel database tutti i dati sono stati cancellati.\n\nDisculpe
+        l'inconveniente."
+    </string>
     <string name="errorBadLoginMsg">"Nome utente o password errata"</string>
     <string name="errorServerResponseMsg">"Errore nella risposta del server"</string>
     <string name="errorBadAppKeyMsg">"Erronea applicazione chiave. Si prega di contattare lo sviluppatore."</string>
@@ -115,7 +135,9 @@
     <string name="noticeSendError">"Impossibile inviare la nuova comunicazione"</string>
     <string name="sendMsg">"inviare"</string>
     <string name="cleanDatabaseMsg">"Tutti i dati nel database sono stati eliminati"</string>
-    <string name="shareBodyMsg">"Sto utilizzando # SWADroid nel mio Android per accedere alla piattaforma didattica SWAD\nObtenlo gratuitamente qui:. Https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid"</string>
+    <string name="shareBodyMsg">"Sto utilizzando # SWADroid nel mio Android per accedere alla piattaforma didattica
+        SWAD\nObtenlo gratuitamente qui:. Https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid"
+    </string>
     <string name="twitterTitle">"Cinguettio"</string>
     <string name="facebookTitle">"Facebook"</string>
     <string name="googlePlusTitle">"Google+"</string>
@@ -139,9 +161,13 @@
     <string name="attendanceModuleLabel">"Roll Call"</string>
     <string name="users">"Utenti"</string>
     <string name="usersDownloadProgressTitle">"Studenti"</string>
-    <string name="usersDownloadProgressDescription">"Sincronizzazione degli studenti.\n\numero di studenti nDependiendo per sincronizzare il trattamento dei dati può richiedere diversi minuti.\n\nPer favore attendere&#8230;"</string>
+    <string name="usersDownloadProgressDescription">"Sincronizzazione degli studenti.\n\numero di studenti nDependiendo
+        per sincronizzare il trattamento dei dati può richiedere diversi minuti.\n\nPer favore attendere&#8230;"
+    </string>
     <string name="documentsDownloadModuleLabel">"Documentazione"</string>
-    <string name="documentsDownloadProgressDescription">"Ottenere i file.\n \n directory nDependiendo dimensioni, potrebbe richiedere diversi minuti.\n\nSi prega di attendere&#8230;"</string>
+    <string name="documentsDownloadProgressDescription">"Ottenere i file.\n \n directory nDependiendo dimensioni,
+        potrebbe richiedere diversi minuti.\n\nSi prega di attendere&#8230;"
+    </string>
     <string name="clickToOpenFile">"Fai clic qui per aprire il file"</string>
     <string name="sharedsDownloadModuleLabel">"Area comune"</string>
     <string name="connectionRequired">"Per questa funzionalità è necessaria una connessione a Internet"</string>
@@ -150,8 +176,12 @@
     <string name="msg_default_type">"Tipo"</string>
     <string name="msg_default_time">"Tempo"</string>
     <string name="msg_default_meta">"Metadati"</string>
-    <string name="msg_default_status">"Inserire un codice a barre all'interno del rettangolo del mirino per la scansione."</string>
-    <string name="msg_camera_framework_bug">"Spiacenti, la fotocamera Android riscontrato un problema. Potrebbe essere necessario riavviare il dispositivo."</string>
+    <string name="msg_default_status">"Inserire un codice a barre all'interno del rettangolo del mirino per la
+        scansione."
+    </string>
+    <string name="msg_camera_framework_bug">"Spiacenti, la fotocamera Android riscontrato un problema. Potrebbe essere
+        necessario riavviare il dispositivo."
+    </string>
     <string name="button_ok">"Bene"</string>
     <string name="scan_valid_student">"Studente di questo argomento"</string>
     <string name="scan_not_valid_student">"Studente di un altro soggetto"</string>
@@ -174,7 +204,9 @@
     <string name="uploaderTitle">"Caricato da:"</string>
     <string name="downloadFileTitle">"Scaricare"</string>
     <string name="sdCardBusyTitle">"Scheda SD non disponibile"</string>
-    <string name="sdCardBusy">"La scheda SD è occupato. Per consentire i download, selezionare \"Disattiva archivio USB\" nella notifica"</string>
+    <string name="sdCardBusy">"La scheda SD è occupato. Per consentire i download, selezionare \"Disattiva archivio
+        USB\" nella notifica"
+    </string>
     <string name="vacants">"Offerte di lavoro"</string>
     <string name="numStudent">"Numero di studenti: "</string>
     <string name="myGroupsModuleLabel">"I miei gruppi"</string>
@@ -207,7 +239,8 @@
     <string name="sendingStatePending">"In sospeso"</string>
     <string name="sendingStateSent">"Inviato"</string>
     <string name="session">"Sessione: "</string>
-    <string name="noPracticeSessionsAvailableMsg">"Non ci sono sessioni di gruppo di pratica di database selezionato"</string>
+    <string name="noPracticeSessionsAvailableMsg">"Non ci sono sessioni di gruppo di pratica di database selezionato"
+    </string>
     <string name="sessionNoStudentsMsg">"Nessuno studente ha partecipato a questa sessione"</string>
     <string name="studentsHistoryModuleLabel">"Storia studenti"</string>
     <string name="sessionsTitle">"Sessioni di prove"</string>
@@ -215,7 +248,9 @@
     <string name="listSampleModuleLabel">"Test"</string>
     <string name="rollcallModuleLabel">"Roll Call"</string>
     <string name="studentsTitle">"Studenti"</string>
-    <string name="studentsDownloadProgressDescription">"Sincronizzazione degli studenti.\n\nnumero di studenti nDependiendo per sincronizzare il trattamento dei dati può richiedere diversi minuti.\n\nPer favore attendere&#8230;"</string>
+    <string name="studentsDownloadProgressDescription">"Sincronizzazione degli studenti.\n\nnumero di studenti
+        nDependiendo per sincronizzare il trattamento dei dati può richiedere diversi minuti.\n\nPer favore attendere&#8230;"
+    </string>
     <string name="studentsList">"Studente lista"</string>
     <string name="studentsDownloadProgressTitle">"Studenti"</string>
     <string name="studentsPresent">"Gli studenti presentano"</string>
@@ -225,12 +260,18 @@
     <string name="rollcallManual">"Modalità manuale"</string>
     <string name="sessionsSelect">"Controllare le sessioni"</string>
     <string name="studentsSelect">"Controllare gli studenti"</string>
-    <string name="rollcallErrorNoConnection">"Nessun collegamento con il server. Essi hanno mantenuto i dati di affluenza nel database."</string>
+    <string name="rollcallErrorNoConnection">"Nessun collegamento con il server. Essi hanno mantenuto i dati di
+        affluenza nel database."
+    </string>
     <string name="rollcallHistoryModuleLabel">"Storia sessioni"</string>
     <string name="rollcallNoStudentsSelected">"Nessuno studente senza particolari"</string>
-    <string name="rollcallNoPracticeSessions">"Non ci sono sessioni di prove definite per l'oggetto e il gruppo selezionato. Seleziona: sessioni di prove - New"</string>
+    <string name="rollcallNoPracticeSessions">"Non ci sono sessioni di prove definite per l'oggetto e il gruppo
+        selezionato. Seleziona: sessioni di prove - New"
+    </string>
     <string name="rollcallSaved">"Dati memorizzati correttamente presenze"</string>
-    <string name="rollcallWebServiceNotAvailable">"Il servizio web per inviare dati di assistenza SWAD non è disponibile."</string>
+    <string name="rollcallWebServiceNotAvailable">"Il servizio web per inviare dati di assistenza SWAD non è
+        disponibile."
+    </string>
     <string name="rollcallEvent">"Evento rotolo"</string>
     <string name="froyoFunctionMsg">"Questa funzionalità richiede Android 2.2 o superiore"</string>
     <string name="noRearCamera">"Questa funzione richiede una telecamera posteriore"</string>
@@ -240,7 +281,9 @@
     <string name="noGroupsText">"Nessun gruppo sono stati creati all'interno del soggetto"</string>
     <string name="changeGroups">"Modifica gruppi"</string>
     <string name="resultEnrollment">"Risultato della registrazione"</string>
-    <string name="successfullEnrollment">"Tutte le voci sono state effettuate con successo. Si prega di verificare che si sono iscritti i gruppi desiderati "</string>
+    <string name="successfullEnrollment">"Tutte le voci sono state effettuate con successo. Si prega di verificare che
+        si sono iscritti i gruppi desiderati "
+    </string>
     <string name="confirmEnrollments">"Confermare le voci richieste "</string>
     <string name="areYouSure">" Sei sicuro di voler unire i gruppi selezionati?"</string>
     <string name="failedEnrollment">"Spiacenti iscrizione a gruppi selezionati non è stato possibile eseguire"</string>
