@@ -33,15 +33,12 @@ import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.utils.Crypto;
 import es.ugr.swad.swadroid.utils.OldCrypto;
 import es.ugr.swad.swadroid.utils.Utils;
-import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Iterator;
 import java.util.List;
 
 //import net.sqlcipher.database.SQLiteDatabase;
@@ -423,7 +420,7 @@ public class DataBaseHelper {
         Calendar endDate = Calendar.getInstance();
 
         List<Entity> rows = db.getEntityList(table, "crsCod = " + courseCode + " AND grpCod = " + groupId);
-        PracticeSession ps = null;
+        PracticeSession ps;
 
         if (rows != null) {
             for (Entity ent : rows) {
@@ -452,7 +449,7 @@ public class DataBaseHelper {
         String where = "crsCod = " + courseCode + " AND grpCod = " + groupId;
 
         List<Entity> rows = db.getEntityList(table, where, "startDate asc");
-        PracticeSession ps = null;
+        PracticeSession ps;
 
         if (rows != null) {
             for (Entity ent : rows) {
@@ -854,7 +851,7 @@ public class DataBaseHelper {
             ent = new Entity(tableName);
         }
 
-        if (tableName.compareTo(Constants.DB_TABLE_GROUPS) == 0) {
+        if (tableName.equals(Constants.DB_TABLE_GROUPS)) {
             Group g = (Group) currentModel;
             ent.setValue("id", g.getId());
             ent.setValue("groupName", g.getGroupName());
@@ -866,7 +863,7 @@ public class DataBaseHelper {
             ent.save();
         }
 
-        if (tableName.compareTo(Constants.DB_TABLE_GROUP_TYPES) == 0) {
+        if (tableName.equals(Constants.DB_TABLE_GROUP_TYPES)) {
             GroupType gt = (GroupType) currentModel;
             ent.setValue("id", gt.getId());
             ent.setValue("groupTypeName", gt.getGroupTypeName());
@@ -976,7 +973,6 @@ public class DataBaseHelper {
         //if(groupType != null){
         rows = db.getEntityList(Constants.DB_TABLE_GROUPS_GROUPTYPES, "grpCod=" + groupCode);
         if (rows.isEmpty()) {
-            Pair<String, String> params = selectParamsPairTable(Constants.DB_TABLE_GROUPS_GROUPTYPES);
             insertPairTable(new PairTable<Long, Long>(Constants.DB_TABLE_GROUPS_GROUPTYPES, groupTypeCode, groupCode));
         } else {
             PairTable<Integer, Integer> prev = new PairTable(Constants.DB_TABLE_GROUPS_GROUPTYPES, rows.get(0).getValue("grpTypCod"), rows.get(0).getValue("grpCod"));
@@ -1276,11 +1272,11 @@ public class DataBaseHelper {
     /**
      * Updates a test config in database
      *
-     * @param prev   Test to be updated
+     * @param id   ID of the test prior to update
      * @param actual Updated test
      */
-    public void updateTestConfig(Test prev, Test actual) {
-        List<Entity> rows = db.getEntityList(Constants.DB_TABLE_TEST_CONFIG, "id = " + prev.getId());
+    public void updateTestConfig(long id, Test actual) {
+        List<Entity> rows = db.getEntityList(Constants.DB_TABLE_TEST_CONFIG, "id = " + id);
         Entity ent = rows.get(0);
 
         ent.setValue("id", actual.getId());
@@ -1373,7 +1369,6 @@ public class DataBaseHelper {
                 if (groupType != null) {
                     rows = db.getEntityList(Constants.DB_TABLE_GROUPS_GROUPTYPES, "grpCod=" + groupCode);
                     if (!rows.isEmpty()) {
-                        Pair<String, String> params = selectParamsPairTable(Constants.DB_TABLE_GROUP_TYPES);
                         insertPairTable(new PairTable<Long, Long>(Constants.DB_TABLE_GROUPS_GROUPTYPES, groupTypeCode[0], groupCode));
 
                     } else {
@@ -1601,7 +1596,7 @@ public class DataBaseHelper {
         String limit = " LIMIT " + maxQuestions;
         Cursor dbCursorQuestions, dbCursorAnswers;
         List<TestQuestion> result = new ArrayList<TestQuestion>();
-        List<TestAnswer> answers = new ArrayList<TestAnswer>();
+        List<TestAnswer> answers;
         int tagsListSize = tagsList.size();
         int answerTypesListSize = answerTypesList.size();
 
@@ -1791,13 +1786,12 @@ public class DataBaseHelper {
             String packageName = db.getContext().getPackageName();
             File dir = new File(externalPath.getAbsolutePath() + "/Android/data/" + packageName + "/");
             //File dir = db.getContext().getExternalFilesDir(null);
-            if (dir != null) {
-                String[] children = dir.list();
-                if (children != null)
-                    for (String aChildren : children) {
-                        File childrenFile = new File(dir, aChildren);
-                        if (childrenFile.exists()) childrenFile.delete();
-                    }
+            String[] children = dir.list();
+            if (children != null) {
+                for (String aChildren : children) {
+                    File childrenFile = new File(dir, aChildren);
+                    if (childrenFile.exists()) childrenFile.delete();
+                }
             }
         }
     }
@@ -1890,10 +1884,6 @@ public class DataBaseHelper {
 
             }
 
-            dbCursor = db.getDB().query(Constants.DB_TABLE_COURSES, null, null, null, null, null, null);
-            columnNames = dbCursor.getColumnNames();
-        }
-
 		/* version 12 - 13
 		 * changes on groups table: 
 		 * - old field groupCode is now id
@@ -1901,13 +1891,11 @@ public class DataBaseHelper {
 		 * - old field groupTypeName is erased
 		 * The rest of the changes are only new fields and they are added automatic by Dataframework. 
 		 * */
-        if (dbVersion < 13) {
-            Cursor dbCursor = db.getDB().query(Constants.DB_TABLE_COURSES, null, null, null, null, null, null);
+        } else if (dbVersion < 13) {
+            Cursor dbCursor = db.getDB().query(Constants.DB_TABLE_GROUPS, null, null, null, null, null, null);
             String[] columnNames = dbCursor.getColumnNames();
-            dbCursor = db.getDB().query(Constants.DB_TABLE_GROUPS, null, null, null, null, null, null);
-            columnNames = dbCursor.getColumnNames();
             while (i < columnNames.length && !found) {
-                if (columnNames[i].compareTo("groupCode") == 0) found = true;
+                if (columnNames[i].equals("groupCode")) found = true;
                 ++i;
             }
             if (found) {
@@ -1930,8 +1918,6 @@ public class DataBaseHelper {
 	        db.getDB().execSQL( "DROP TABLE __" + Global.DB_TABLE_GROUPS + ";");*/
 
             }
-            dbCursor = db.getDB().query(Constants.DB_TABLE_GROUPS, null, null, null, null, null, null);
-            columnNames = dbCursor.getColumnNames();
         }
 
 		/*db.getDB().execSQL("CREATE TEMPORARY TABLE __"

@@ -206,8 +206,7 @@ public class Course extends Model {
     public boolean equals(Object obj) {
         if (!super.equals(obj)) return false;
         Course other = (Course) obj;
-        if (userRole != other.getUserRole()) return false;
-        return shortName.compareTo(other.getShortName()) == 0 && fullName.compareTo(other.getFullName()) == 0;
+        return userRole == other.getUserRole() && shortName.compareTo(other.getShortName()) == 0 && fullName.compareTo(other.getFullName()) == 0;
     }
 
 }

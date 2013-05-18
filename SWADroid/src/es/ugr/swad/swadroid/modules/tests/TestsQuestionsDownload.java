@@ -27,7 +27,6 @@ import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.*;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.utils.Utils;
-import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -210,10 +209,9 @@ public class TestsQuestionsDownload extends Module {
             Log.i(TAG, "Retrieved " + listSize + " relationships between questions and tags");
 
             //Update last time test was updated
-            Test oldTestConfigDB = (Test) dbHelper.getRow(Constants.DB_TABLE_TEST_CONFIG, "id", Long.toString(Constants.getSelectedCourseCode()));
-            Test testConfig = oldTestConfigDB;
+            Test testConfig = (Test) dbHelper.getRow(Constants.DB_TABLE_TEST_CONFIG, "id", Long.toString(Constants.getSelectedCourseCode()));
             testConfig.setEditTime(System.currentTimeMillis() / 1000L);
-            dbHelper.updateTestConfig(oldTestConfigDB, testConfig);
+            dbHelper.updateTestConfig(testConfig.getId(), testConfig);
             dbHelper.endTransaction();
         }
 

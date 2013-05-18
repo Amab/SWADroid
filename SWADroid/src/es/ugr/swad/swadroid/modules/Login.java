@@ -108,8 +108,6 @@ public class Login extends Module {
      * @throws IOException
      * @throws XmlPullParserException
      * @throws SoapFault
-     * @throws InstantiationException
-     * @throws IllegalAccessException
      */
     protected void requestService()
             throws NoSuchAlgorithmException, IOException, XmlPullParserException {

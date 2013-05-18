@@ -44,7 +44,6 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map.Entry;
 
 public class Entity {
@@ -156,8 +155,7 @@ public class Entity {
      * @return valor (Tipo int)
      */
     public int getDrawableIdentifier(String name) {
-        int id = DataFramework.getInstance().getContext().getResources().getIdentifier(DataFramework.getInstance().getPackage() + ":drawable/" + getValue(name).toString(), null, null);
-        return id;
+        return DataFramework.getInstance().getContext().getResources().getIdentifier(DataFramework.getInstance().getPackage() + ":drawable/" + getValue(name).toString(), null, null);
     }
 
     /**
@@ -182,8 +180,7 @@ public class Entity {
     public BitmapDrawable getBitmapDrawable(String name) {
         int id = DataFramework.getInstance().getContext().getResources().getIdentifier(DataFramework.getInstance().getPackage() + ":drawable/" + getValue(name).toString(), null, null);
         java.io.InputStream is = DataFramework.getInstance().getContext().getResources().openRawResource(id);
-        BitmapDrawable bmd = new BitmapDrawable(BitmapFactory.decodeStream(is));
-        return bmd;
+        return new BitmapDrawable(BitmapFactory.decodeStream(is));
     }
 
     /**
@@ -364,7 +361,6 @@ public class Entity {
         if (c != null) {
             HashMap<String, Object> attribs = mAttributes; // Para reducir el acceso al heap.
             Object[] attributeNames = attribs.keySet().toArray();
-            int attributeCount = attributeNames.length;
 
             for (Object attributeName1 : attributeNames) {
                 String attributeName = attributeName1.toString();
@@ -603,7 +599,6 @@ public class Entity {
     private String getXml() {
         HashMap<String, Object> attribs = mAttributes; // Para reducir el acceso al heap.
         Object[] attributeNames = attribs.keySet().toArray();
-        int attributeCount = attributeNames.length;
 
         String result = "<entity>\n";
         result += "<attribute name=\"_id\" value=\"" + mId + "\"/>\n";

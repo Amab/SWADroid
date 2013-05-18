@@ -175,7 +175,7 @@ public class DownloadsManager extends MenuActivity {
                     this.tree = savedInstanceState.getString("tree");
                     String path = savedInstanceState.getString("path");
                     this.navigator = new DirectoryNavigator(this.tree);
-                    if (path.compareTo("/") != 0) {
+                    if (path.equals("/")) {
                         int firstBar = path.indexOf('/', 0);
                         int nextBar = path.indexOf('/', firstBar + 1);
                         while (nextBar != -1) {
@@ -509,7 +509,7 @@ public class DownloadsManager extends MenuActivity {
 
     private int checkMediaAvailability() {
         String state = Environment.getExternalStorageState();
-        int returnValue = 0;
+        int returnValue;
         if (Environment.MEDIA_MOUNTED.equals(state)) {
             // We can read and write the media
             returnValue = 2;
@@ -529,8 +529,7 @@ public class DownloadsManager extends MenuActivity {
      */
     private String getDirectoryPath() {
         //String downloadsDirName = Environment.getExternalStorageDirectory()+File.separator+"download";
-        String downloadsDirName = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
-        return downloadsDirName;
+        return getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
     }
 
     /**

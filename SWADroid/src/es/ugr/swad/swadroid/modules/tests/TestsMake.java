@@ -40,7 +40,6 @@ import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.widget.NumberPicker;
 import es.ugr.swad.swadroid.widget.TextProgressBar;
-import org.ksoap2.SoapFault;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
@@ -347,7 +346,7 @@ public class TestsMake extends Module {
                 if (answerType.equals(TestAnswer.TYPE_FLOAT)) {
                     correctAnswer = "[" + a.getAnswer() + ";" + answers.get(1).getAnswer() + "]";
 
-                    if (test.isEvaluated() && (feedbackLevel == 4) && !a.getFeedback().equals(Constants.NULL_VALUE)) {
+                    if ((feedbackLevel == 4) && !a.getFeedback().equals(Constants.NULL_VALUE)) {
                         answerFeedback.setVisibility(View.VISIBLE);
                     } else {
                         answerFeedback.setVisibility(View.GONE);

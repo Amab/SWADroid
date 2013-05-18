@@ -20,7 +20,6 @@
 package es.ugr.swad.swadroid.modules.notifications;
 
 import android.accounts.Account;
-import android.accounts.OperationCanceledException;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -116,9 +115,7 @@ public class NotificationsSyncAdapterService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        IBinder ret = null;
-        ret = getSyncAdapter().getSyncAdapterBinder();
-        return ret;
+        return getSyncAdapter().getSyncAdapterBinder();
     }
 
     private SyncAdapterImpl getSyncAdapter() {

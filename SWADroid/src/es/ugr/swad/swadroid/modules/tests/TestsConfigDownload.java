@@ -28,7 +28,6 @@ import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Test;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.utils.Utils;
-import org.ksoap2.SoapFault;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;

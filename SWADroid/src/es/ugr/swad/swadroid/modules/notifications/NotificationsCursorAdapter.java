@@ -258,9 +258,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         LayoutInflater vi = LayoutInflater.from(context);
-        View v = vi.inflate(R.layout.notifications_list_item, parent, false);
-
-        return v;
+        return vi.inflate(R.layout.notifications_list_item, parent, false);
     }
 
     /**

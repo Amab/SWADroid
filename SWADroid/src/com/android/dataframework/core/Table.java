@@ -63,7 +63,6 @@ public class Table {
         String out = "create table " + mName + " (_id integer primary key";
 
         ArrayList<Field> fields = mFields;
-        int fieldCount = fields.size();
 
         for (Field f : fields) {
             if (f.getType().equals("multilanguage")) {
@@ -124,8 +123,7 @@ public class Table {
 
 
     public String getSQLDeleteTable() {
-        String out = "DROP TABLE IF EXISTS " + mName;
-        return out;
+        return "DROP TABLE IF EXISTS " + mName;
     }
 
     /**
@@ -147,7 +145,6 @@ public class Table {
 
     public String[] getFieldsToArray() {
         ArrayList<Field> fields = mFields;
-        int fieldCount = fields.size();
 
         ArrayList<String> aux = new ArrayList<String>();
 
@@ -155,8 +152,8 @@ public class Table {
         for (Field field : fields) {
             if (field.getType().equals("multilanguage")) {
                 ArrayList<String> langs = DataFramework.getInstance().getLanguages();
-                for (int j = 0; j < langs.size(); j++) {
-                    aux.add(field.getName() + "_" + langs.get(j));
+                for (String lang : langs) {
+                    aux.add(field.getName() + "_" + lang);
                 }
             } else {
                 aux.add(field.getName());
@@ -182,7 +179,6 @@ public class Table {
     public Field getField(String name) {
         Field res = null;
         ArrayList<Field> fields = mFields;
-        int fieldCount = fields.size();
 
         for (Field f : fields) {
             if (f.getName().equals(name)) {

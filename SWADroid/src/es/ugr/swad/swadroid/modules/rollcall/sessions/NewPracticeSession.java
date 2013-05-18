@@ -36,7 +36,6 @@ import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.modules.Module;
-import org.ksoap2.SoapFault;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
@@ -204,7 +203,7 @@ public class NewPracticeSession extends Module {
         btCreate.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean inserted = false;
+                boolean inserted;
                 String site = etSite.getText().length() == 0 ? "" : etSite.getText().toString();
                 String description = etDescription.getText().length() == 0 ? "" : etDescription.getText().toString();
 

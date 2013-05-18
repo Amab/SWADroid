@@ -7,7 +7,6 @@ import com.google.zxing.WriterException;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.utils.QR;
-import org.ksoap2.SoapFault;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;

@@ -338,27 +338,13 @@ public abstract class Module extends MenuActivity {
     /*
      * (non-Javadoc)
      *
-     * @see android.app.ListActivity#onDestroy()
-     */
-    @Override
-    protected void onDestroy() {
-        if (connect != null) {
-            connect.activity = null;
-        }
-
-        super.onDestroy();
-    }
-
-    /*
-     * (non-Javadoc)
-     *
      * @see android.app.Activity#onResume()
      */
     @Override
     protected void onResume() {
         super.onResume();
 
-        if (false) {
+        if (showDialog && (progressDialog != null)) {
             progressDialog.show();
         }
     }
@@ -478,7 +464,8 @@ public abstract class Module extends MenuActivity {
     /**
      * Shows an error message.
      *
-     * @param message       Error message to show.
+     * @param tag Error tag to show.
+     * @param message Error message to show.
      * @param sendException
      */
     protected void error(String tag, String message, Exception ex, boolean sendException) {
@@ -489,7 +476,7 @@ public abstract class Module extends MenuActivity {
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 finish();
-                            }
+                        }
                         }).setIcon(R.drawable.erroricon).show();
 
         if (ex != null) {
@@ -595,7 +582,7 @@ public abstract class Module extends MenuActivity {
          */
         @Override
         protected void onPostExecute(Void unused) {
-            String errorMsg = "";
+            String errorMsg;
             boolean sendException = true;
 
             if ((progressDialog != null) && progressDialog.isShowing()) {

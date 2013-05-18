@@ -186,8 +186,7 @@ public class DownloadNotification {
         mNotification.defaults |= Notification.DEFAULT_LIGHTS;
 
         Intent notificationIntent = new Intent();
-        if (notificationIntent != null)
-            mContentIntent = PendingIntent.getActivity(mContext, 0, notificationIntent, 0);
+        mContentIntent = PendingIntent.getActivity(mContext, 0, notificationIntent, 0);
 
         mNotification.contentIntent = mContentIntent;
         mNotificationManager.notify(NOTIFICATION_ID, mNotification);

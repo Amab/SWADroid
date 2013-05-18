@@ -30,7 +30,6 @@ import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.PracticeSession;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.modules.rollcall.students.StudentsList;
-import org.ksoap2.SoapFault;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;

@@ -59,7 +59,7 @@ public class StudentsArrayAdapter extends ArrayAdapter<StudentItemModel> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View view = null;
+        View view;
         Bitmap bMap;
 
         if (convertView == null) {
