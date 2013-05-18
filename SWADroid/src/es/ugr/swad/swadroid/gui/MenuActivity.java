@@ -181,14 +181,6 @@ public class MenuActivity extends Activity {
     }
 
     /* (non-Javadoc)
-     * @see android.app.Activity#onDestroy()
-     */
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    /* (non-Javadoc)
      * @see android.app.Activity#onPause()
      */
     @Override

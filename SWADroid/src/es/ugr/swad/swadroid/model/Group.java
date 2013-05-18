@@ -369,11 +369,7 @@ public class Group extends Model {
             return false;
         if (maxStudents != other.maxStudents)
             return false;
-        if (students != other.students)
-            return false;
-        if (open != other.open)
-            return false;
-        return fileZones == other.fileZones && member == other.member;
+        return students == other.students && open == other.open && fileZones == other.fileZones && member == other.member;
     }
 
 }

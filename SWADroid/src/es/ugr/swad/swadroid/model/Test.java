@@ -381,8 +381,7 @@ public class Test extends Model {
      */
     public void evaluate() {
         int totalAnswers, trueAnswers, falseAnswers, correctUserAnswers, errors;
-        Float score = (float) 0;
-        Float userFloatAnswer, minFloatRange = (float) 0, maxFloatRange = (float) 0;
+        Float score, userFloatAnswer, minFloatRange, maxFloatRange;
         TestQuestion q;
         TestAnswer a;
         List<TestAnswer> la;

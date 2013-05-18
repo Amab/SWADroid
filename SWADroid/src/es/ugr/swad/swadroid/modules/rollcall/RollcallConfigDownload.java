@@ -30,7 +30,6 @@ import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.Module;
-import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -155,7 +154,7 @@ public class RollcallConfigDownload extends Module {
                 // Create a path where we will place our private file on external storage.
                 String fileName = url.substring(url.lastIndexOf('/') + 1);
                 File file = new File(getExternalFilesDir(null), fileName);
-                URI imageUrl = null;
+                URI imageUrl;
 
                 try {
                     imageUrl = new URI(url);
@@ -167,7 +166,7 @@ public class RollcallConfigDownload extends Module {
 
                     byte[] buff = new byte[PHOTO_FILE_MAX_SIZE];
 
-                    int bytesRead = 0;
+                    int bytesRead;
                     ByteArrayOutputStream bao = new ByteArrayOutputStream();
 
                     while ((bytesRead = is.read(buff)) != -1) {

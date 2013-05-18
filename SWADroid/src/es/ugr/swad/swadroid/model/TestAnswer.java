@@ -277,9 +277,7 @@ public class TestAnswer extends Model {
      */
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        return super.equals(obj) && getClass() == obj.getClass();
+        return this == obj || super.equals(obj) && getClass() == obj.getClass();
     }
 
     /* (non-Javadoc)

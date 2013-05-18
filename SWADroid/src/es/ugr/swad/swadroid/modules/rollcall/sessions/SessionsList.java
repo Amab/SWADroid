@@ -32,7 +32,6 @@ import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.model.PracticeSession;
 import es.ugr.swad.swadroid.modules.Module;
-import org.ksoap2.SoapFault;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
@@ -99,7 +98,7 @@ public class SessionsList extends Module {
     }
 
     private void initialize() {
-        List<SessionItemModel> sessionList = null;
+        List<SessionItemModel> sessionList;
         long courseCode = Constants.getSelectedCourseCode();
         Intent intent = getIntent();
         long studentId = intent.getLongExtra("studentId", (long) 0);

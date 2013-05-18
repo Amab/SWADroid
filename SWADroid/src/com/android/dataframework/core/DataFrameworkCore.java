@@ -89,7 +89,6 @@ public class DataFrameworkCore {
                 mDataBaseOldVersion = 0;
 
                 ArrayList<Table> tables = mTables;
-                int tableCount = tables.size();
                 for (Table table : tables) db.execSQL(table.getSQLCreateTable());
 
                 mSaveInitialValues = true;
@@ -104,14 +103,12 @@ public class DataFrameworkCore {
             mDataBaseOldVersion = oldVersion;
 
             ArrayList<Table> tables = mTables;
-            int tableCount = tables.size();
             for (Table t : tables) {
                 if (add(t.getNewInVersion(), oldVersion, newVersion)) {
                     System.out.println("(onUpgrade) CREATE TABLE: " + t.getName());
                     db.execSQL(t.getSQLCreateTable());
                 } else {
                     ArrayList<Field> fields = t.getFields();
-                    int fieldCount = fields.size();
                     for (Field f : fields) {
                         if (add(f.getNewInVersion(), oldVersion, newVersion)) {
                             String sql = t.getSQLAddField(f);
@@ -153,7 +150,7 @@ public class DataFrameworkCore {
                     XmlResourceParser x = mCtx.getResources().getXml(idTables);
                     int eventType = x.getEventType();
                     Table currentTable = new Table("");
-                    Field currentField = new Field("");
+                    Field currentField;
                     while (eventType != XmlPullParser.END_DOCUMENT) {
 
                         if (eventType == XmlPullParser.START_TAG) {
@@ -293,7 +290,6 @@ public class DataFrameworkCore {
                 + "<values>\n");
 
         List<Table> tables = mTables;
-        int tableCount = tables.size();
         System.out.println("tablas: " + tables.size());
 
         for (Table t : tables) {
@@ -309,7 +305,6 @@ public class DataFrameworkCore {
                 c.moveToFirst();
 
                 ArrayList<Field> fields = t.getFields();
-                int fieldCount = fields.size();
 
                 while (!c.isAfterLast()) {
                     osw.append("<row table=\"").append(tableName).append("\" id=\"").append(c.getString(c.getColumnIndex(DataFramework.KEY_ID))).append("\">\n");

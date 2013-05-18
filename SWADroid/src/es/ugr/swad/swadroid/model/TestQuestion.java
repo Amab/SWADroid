@@ -21,7 +21,10 @@ package es.ugr.swad.swadroid.model;
 import es.ugr.swad.swadroid.utils.Utils;
 import org.ksoap2.serialization.PropertyInfo;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Hashtable;
+import java.util.List;
 
 /**
  * Clas for store a test question
@@ -220,7 +223,7 @@ public class TestQuestion extends Model {
      */
     public List<TestAnswer> getCorrectAnswers() {
         List<TestAnswer> corrects = new ArrayList<TestAnswer>();
-        TestAnswer current = null;
+        TestAnswer current;
 
         for (TestAnswer answer : this.answers) {
             current = answer;
@@ -266,9 +269,7 @@ public class TestQuestion extends Model {
      */
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        return super.equals(obj) && getClass() == obj.getClass();
+        return this == obj || super.equals(obj) && getClass() == obj.getClass();
     }
 
     /* (non-Javadoc)

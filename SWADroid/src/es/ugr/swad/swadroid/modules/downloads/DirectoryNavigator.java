@@ -196,7 +196,7 @@ public class DirectoryNavigator {
             } else {
                 if (childs.item(i).getNodeName().equals("file")) {
 
-                    String name = "";
+                    String name;
                     String type = "";
                     long fileCode = -1;
                     long size = -1; //In bytes

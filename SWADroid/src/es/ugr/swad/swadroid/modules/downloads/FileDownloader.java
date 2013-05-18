@@ -22,7 +22,6 @@ package es.ugr.swad.swadroid.modules.downloads;
 import org.apache.http.util.ByteArrayBuffer;
 
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -105,7 +104,7 @@ public class FileDownloader {
  
 		/*  Read bytes to the buffer until there is nothing more to read(-1) */
         ByteArrayBuffer baf = new ByteArrayBuffer(50);
-        int current = 0;
+        int current;
         while ((current = bis.read()) != -1) {
             baf.append((byte) current);
         }
@@ -121,7 +120,7 @@ public class FileDownloader {
 		
 		/* Avoid StringIndexOutOfBoundsException from being thrown if the
 		 * file has no extension (such as "http://www.domain.com/README" */
-        String basename = null;
+        String basename;
         String extension = null;
 
         if (lastDotIndex == -1)

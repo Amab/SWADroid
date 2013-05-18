@@ -124,6 +124,7 @@ public class FileDownloaderAsyncTask extends AsyncTask<String, Integer, Boolean>
      */
     private boolean downloadFileCustom(String basename, String extension) {
         FileOutputStream fos = null;
+        boolean result = true;
         /* The prefix must be at least three characters long */
         //		if(basename.length() < 3)
         //			basename = "tmp";
@@ -147,8 +148,7 @@ public class FileDownloaderAsyncTask extends AsyncTask<String, Integer, Boolean>
             fos = new FileOutputStream(output);
 	
 			/* Open a connection to the URL and a buffered input stream */
-            URLConnection ucon;
-            ucon = url.openConnection();
+            URLConnection ucon = url.openConnection();
 
             int lenghtOfFile = ucon.getContentLength();
             Log.d(TAG, "lenghtOfFile = " + String.valueOf(lenghtOfFile));
@@ -167,7 +167,7 @@ public class FileDownloaderAsyncTask extends AsyncTask<String, Integer, Boolean>
                 Log.d(TAG, "notification = " + notification);
 
                 int progress = 0;
-                int newValue = 0;
+                int newValue;
                 //while ((current = bis.read(data)) != -1) {
                 while ((byteRead < fileSize) && (current != -1)) {
                     Log.d(TAG, "current = " + current);
@@ -206,7 +206,7 @@ public class FileDownloaderAsyncTask extends AsyncTask<String, Integer, Boolean>
             BugSenseHandler.sendException(e);
 
             notifyFailed();
-            return false;
+            result = false;
         } finally {
 			/*Close the output file*/
             try {
@@ -221,11 +221,11 @@ public class FileDownloaderAsyncTask extends AsyncTask<String, Integer, Boolean>
                 BugSenseHandler.sendException(e);
 
                 notifyFailed();
-                return false;
+                result = false;
             }
         }
 
-        return true;
+        return result;
     }
 
     @Override
@@ -266,7 +266,7 @@ public class FileDownloaderAsyncTask extends AsyncTask<String, Integer, Boolean>
 		
 		/* Avoid StringIndexOutOfBoundsException from being thrown if the
 		 * file has no extension (such as "http://www.domain.com/README" */
-        String basename = "";
+        String basename;
         String extension = "";
 
         if (lastDotIndex == -1)

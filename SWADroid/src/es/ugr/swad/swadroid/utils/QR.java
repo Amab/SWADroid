@@ -39,9 +39,8 @@ public class QR {
         intent.putExtra(Intents.Encode.DATA, content);
         QRCodeEncoder qrcode = new QRCodeEncoder(activity, intent,
                 smallerDimension, false);
-        Bitmap bitmap = qrcode.encodeAsBitmap();
 
-        return bitmap;
+        return qrcode.encodeAsBitmap();
     }
 
 }

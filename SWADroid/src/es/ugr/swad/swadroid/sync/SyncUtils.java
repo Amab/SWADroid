@@ -45,10 +45,9 @@ public class SyncUtils {
 
             int type = AlarmManager.ELAPSED_REALTIME_WAKEUP;
             long triggerAtTime = SystemClock.elapsedRealtime() + pollFrequencyMsec;
-            long interval = pollFrequencyMsec;
             PendingIntent operation = PeriodicSyncReceiver.createPendingIntent(context, authority, extras);
 
-            manager.setInexactRepeating(type, triggerAtTime, interval, operation);
+            manager.setInexactRepeating(type, triggerAtTime, pollFrequencyMsec, operation);
         } else {
             AccountManager am = AccountManager.get(context);
             Account[] accounts = am.getAccountsByType(Constants.ACCOUNT_TYPE);

@@ -99,7 +99,6 @@ public class DataFramework {
     public Table getTable(String table) throws NullPointerException {
         Table res = null;
         ArrayList<Table> tables = mTables;
-        int tableCount = tables.size();
 
         for (Table t : tables) {
             if (t.getName().equals(table)) {
@@ -242,7 +241,6 @@ public class DataFramework {
         Cursor c = getCursor(table, fields, where, null, null, null, null, null);
         int count = c.getCount();
         c.close();
-        c = null;
         return count;
     }
 
@@ -331,7 +329,6 @@ public class DataFramework {
      */
     public void createTables() {
         ArrayList<Table> tables = mTables;
-        int tableCount = tables.size();
         for (Table table : tables) {
             mCore.getDB().execSQL(table.getSQLCreateTable());
         }
@@ -343,7 +340,6 @@ public class DataFramework {
 
     public void deleteTables() {
         ArrayList<Table> tables = mTables;
-        int tableCount = tables.size();
         for (Table table : tables) {
             mCore.getDB().execSQL(table.getSQLDeleteTable());
         }
@@ -366,7 +362,6 @@ public class DataFramework {
      */
     public void emptyTables() {
         ArrayList<Table> tables = mTables;
-        int tableCount = tables.size();
         for (Table table : tables) {
             mCore.getDB().delete(table.getName(), null, null);
         }
@@ -378,7 +373,6 @@ public class DataFramework {
 
     public void emptyTablesBackup() {
         ArrayList<Table> tables = mTables;
-        int tableCount = tables.size();
         for (Table t : tables) {
             if (t.isBackup()) {
                 mCore.getDB().delete(t.getName(), null, null);
@@ -470,8 +464,6 @@ public class DataFramework {
 
     /**
      * Inicia una transaccion
-     *
-     * @return void.
      */
     public void startTransaction() {
         mCore.getDB().beginTransaction();
@@ -479,8 +471,6 @@ public class DataFramework {
 
     /**
      * Finaliza una transaccion
-     *
-     * @return void.
      */
     public void endTransaction() {
         mCore.getDB().endTransaction();
@@ -497,8 +487,6 @@ public class DataFramework {
 
     /**
      * Confirma la ejecucion correcta de una transaccion
-     *
-     * @return void.
      */
     public void successfulTransaction() {
         mCore.getDB().setTransactionSuccessful();
