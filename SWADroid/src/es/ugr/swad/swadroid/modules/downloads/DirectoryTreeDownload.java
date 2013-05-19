@@ -83,7 +83,7 @@ public class DirectoryTreeDownload extends Module {
 
     @Override
     protected void onError() {
-
+        finish();
     }
 
     @Override

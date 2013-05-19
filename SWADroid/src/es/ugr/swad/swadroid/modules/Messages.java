@@ -116,7 +116,7 @@ public class Messages extends Module {
         messageDialog.setTitle(R.string.messagesModuleLabel);
         messageDialog.setContentView(R.layout.messages_dialog);
         messageDialog.setCancelable(true);
-        messageDialog.getWindow().setLayout(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+        messageDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
         acceptButton = (Button) messageDialog.findViewById(R.id.message_button_accept);
         acceptButton.setOnClickListener(positiveClickListener);

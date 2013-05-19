@@ -165,6 +165,6 @@ public class Groups extends Module {
 
     @Override
     protected void onError() {
-
+        finish();
     }
 }
