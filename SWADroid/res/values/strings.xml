@@ -119,7 +119,7 @@
     <string name="upgradeMsg">Due to changes in the database all data have been deleted.\n\nSorry.</string>
     <string name="errorBadLoginMsg">Incorrect user or password</string>
     <string name="errorServerResponseMsg">Error in server response</string>
-    <string name="errorBadAppKeyMsg">Unknown apllication key. Please contact the developer.</string>
+    <string name="errorBadAppKeyMsg">Unknown application key. Please contact the developer</string>
     <string name="errorConnectionMsg">Error while connecting to server</string>
     <string name="errorTimeoutMsg">Timeout trying to connect to the server</string>
     <string name="sendingMessageMsg">Sending message&#8230;</string>
