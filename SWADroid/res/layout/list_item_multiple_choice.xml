@@ -24,4 +24,9 @@
             android:textColor="@color/foreground2"
             android:padding="5dip"
             android:visibility="gone"/>
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:background="@android:color/darker_gray"/>
 </es.ugr.swad.swadroid.widget.CheckableLinearLayout>

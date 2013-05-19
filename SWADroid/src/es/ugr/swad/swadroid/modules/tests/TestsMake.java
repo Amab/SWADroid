@@ -164,6 +164,7 @@ public class TestsMake extends Module {
         checkBoxesList.setAdapter(tagsAdapter);
         checkBoxesList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         checkBoxesList.setOnItemClickListener(tagsAnswersTypeItemClickListener);
+        checkBoxesList.setDividerHeight(0);
 
         acceptButton = (Button) findViewById(R.id.testTagsAcceptButton);
         acceptButton.setOnClickListener(new View.OnClickListener() {
@@ -217,6 +218,7 @@ public class TestsMake extends Module {
         checkBoxesList.setAdapter(answerTypesAdapter);
         checkBoxesList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         checkBoxesList.setOnItemClickListener(tagsAnswersTypeItemClickListener);
+        checkBoxesList.setDividerHeight(0);
 
         acceptButton = (Button) findViewById(R.id.testAnswerTypesAcceptButton);
         acceptButton.setOnClickListener(new View.OnClickListener() {
