@@ -81,7 +81,7 @@ public class GroupTypes extends Module {
             //Stores groups data returned by webservice response
             List<Model> groupsSWAD = new ArrayList<Model>();
 
-            ArrayList<?> res = new ArrayList<Object>((Vector)result);
+            ArrayList<?> res = new ArrayList<Object>((Vector) result);
             SoapObject soap = (SoapObject) res.get(1);
             int csSize = soap.getPropertyCount();
 

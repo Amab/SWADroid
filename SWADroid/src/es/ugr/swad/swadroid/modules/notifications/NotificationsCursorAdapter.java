@@ -267,7 +267,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
      * @param position Notification position in the ListView
      */
     /*public void toggleContentVisibility(int position) {
-		String viewType, marksType;
+        String viewType, marksType;
 		View view = this.getView(position, null, null);
 		TextView eventType = (TextView) view.findViewById(R.id.eventType);
 		TextView content = (TextView) view.findViewById(R.id.eventText);

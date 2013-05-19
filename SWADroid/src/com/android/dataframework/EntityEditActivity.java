@@ -128,7 +128,6 @@ public abstract class EntityEditActivity extends Activity {
     /**
      * Carga los datos de la base de datos a la interfaz de usuario.
      * Prepara la vista para editar los datos.
-     *
      */
     void loadDataFromEntityToView(Entity entity) {
         Table table = new Table(getTableName());
@@ -163,7 +162,6 @@ public abstract class EntityEditActivity extends Activity {
     /**
      * Guarda los datos de la interface en el estado para
      * ser restaurados despues.
-     *
      */
     abstract protected void saveDataToState(Bundle state);
 

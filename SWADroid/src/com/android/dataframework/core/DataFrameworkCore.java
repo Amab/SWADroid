@@ -133,7 +133,7 @@ public class DataFrameworkCore {
      * Abre una conexion a ADF generando todos los objetos a partir de los archivos XML
      * pasados como parametros
      *
-     * @param context         Actividad principal
+     * @param context Actividad principal
      */
     //public void open(Context context, String namePackage, ArrayList<Table> tables, String password) throws XmlPullParserException, IOException {
     public void open(Context context, String namePackage, ArrayList<Table> tables) {

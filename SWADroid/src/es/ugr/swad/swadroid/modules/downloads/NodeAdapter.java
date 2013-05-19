@@ -91,7 +91,7 @@ public class NodeAdapter extends BaseAdapter {
         }
         // Trying to use ellipsizing only when it is needed, it does not work
         /*
-		 *
+         *
 		String nodeName = ((DirectoryItem)list.get(position)).getName();
 		if(!isTooLarge(holder.text,nodeName)) 
 			holder.text.setEllipsize(null); //if the text fits in two lines, the ellipsizing is turn off

@@ -275,7 +275,7 @@ public class SWADMain extends MenuExpandableListActivity {
                 //prefs.upgradeCredentials();
 
                 //Configure automatic synchronization
-                if(lastVersion < 49) {
+                if (lastVersion < 49) {
                     Intent activity = new Intent(getBaseContext(), AccountAuthenticator.class);
                     startActivity(activity);
                     SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, Constants.DEFAULT_SYNC_TIME, this);
@@ -308,7 +308,7 @@ public class SWADMain extends MenuExpandableListActivity {
             BugSenseHandler.sendException(ex);
         }
         /*if(!firstRun && Module.connectionAvailable(this)){
-			getActualCourses();
+            getActualCourses();
 		}*/
 
     }

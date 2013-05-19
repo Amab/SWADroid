@@ -75,7 +75,7 @@ public class Notices extends Module {
 
             try {
                 /*if(isDebuggable) {
-					Log.i(TAG, "selectedCourseCode = " + Long.toString(courseCode));
+                    Log.i(TAG, "selectedCourseCode = " + Long.toString(courseCode));
 				}*/
 
                 runConnection();

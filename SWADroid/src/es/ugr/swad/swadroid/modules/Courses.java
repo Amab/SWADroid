@@ -119,7 +119,7 @@ public class Courses extends Module {
             List<Model> newCourses = new ArrayList<Model>();
             List<Model> obsoleteCourses = new ArrayList<Model>();
             //List<Model> modifiedCourses = new ArrayList<Model>();
-            ArrayList<?> res = new ArrayList<Object>((Vector)result);
+            ArrayList<?> res = new ArrayList<Object>((Vector) result);
             SoapObject soap = (SoapObject) res.get(1);
             int csSize = soap.getPropertyCount();
             for (int i = 0; i < csSize; i++) {
@@ -173,7 +173,7 @@ public class Courses extends Module {
             Log.i(TAG, "Added " + csSize + " new courses");
 
             //update modified courses
-			/*   csSize = modifiedCourses.size();
+            /*   csSize = modifiedCourses.size();
             for(int i=0; i < csSize; ++i){
             	Course c = (Course) newCourses.get(i);
             	dbHelper.updateCourse(c.getId(), c);

@@ -264,7 +264,7 @@ public class Notifications extends Module {
                 dbHelper.beginTransaction();
 
                 //Stores notifications data returned by webservice response
-                ArrayList<?> res = new ArrayList<Object>((Vector)result);
+                ArrayList<?> res = new ArrayList<Object>((Vector) result);
                 SoapObject soap = (SoapObject) res.get(1);
                 notifCount = soap.getPropertyCount();
                 for (int i = 0; i < notifCount; i++) {

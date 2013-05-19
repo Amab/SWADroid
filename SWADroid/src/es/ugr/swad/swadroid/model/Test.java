@@ -44,7 +44,7 @@ public class Test extends Model {
     /**
      * Medium feedback
      */
-    private static final String FEEDBACK_MEDIUM = "eachResult";
+    public static final String FEEDBACK_MEDIUM = "eachResult";
     /**
      * High feedback
      */
@@ -52,7 +52,7 @@ public class Test extends Model {
     /**
      * Maximum feedback
      */
-    private static final String FEEDBACK_MAX = "fullFeedback";
+    public static final String FEEDBACK_MAX = "fullFeedback";
     /**
      * Feedback values
      */

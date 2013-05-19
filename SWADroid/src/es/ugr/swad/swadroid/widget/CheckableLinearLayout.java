@@ -60,6 +60,24 @@ public class CheckableLinearLayout extends LinearLayout implements Checkable {
         }
     }
 
+    public void setText(int resid) {
+        if (_checkbox != null) {
+            _checkbox.setText(resid);
+        }
+    }
+
+    public void setText(CharSequence text) {
+        if (_checkbox != null) {
+            _checkbox.setText(text);
+        }
+    }
+
+    public void setTextColor(int color) {
+        if (_checkbox != null) {
+            _checkbox.setTextColor(color);
+        }
+    }
+
     @Override
     public void toggle() {
         if (_checkbox != null) {

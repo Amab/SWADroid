@@ -147,7 +147,6 @@ public class Field {
 
     /**
      * Establece el campo obligatorio
-     *
      */
 
     public void setObligatory(boolean obligatory) {
@@ -166,7 +165,6 @@ public class Field {
 
     /**
      * Establece el tamano
-     *
      */
 
     public void setSize(int size) {
@@ -185,7 +183,6 @@ public class Field {
 
     /**
      * Establece la tabla a la que pertenece la clave foranea
-     *
      */
 
     public void setForeignTable(String foreignTable) {
@@ -222,7 +219,6 @@ public class Field {
 
     /**
      * Establece el texto por defecto
-     *
      */
 
     public void setTextDefault(String textDefault) {

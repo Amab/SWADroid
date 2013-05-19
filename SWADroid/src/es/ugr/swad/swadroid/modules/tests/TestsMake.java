@@ -38,6 +38,7 @@ import es.ugr.swad.swadroid.model.TestQuestion;
 import es.ugr.swad.swadroid.model.TestTag;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.utils.Utils;
+import es.ugr.swad.swadroid.widget.CheckableLinearLayout;
 import es.ugr.swad.swadroid.widget.NumberPicker;
 import es.ugr.swad.swadroid.widget.TextProgressBar;
 import org.xmlpull.v1.XmlPullParserException;
@@ -265,7 +266,7 @@ public class TestsMake extends Module {
         List<TestAnswer> answers = question.getAnswers();
         TestAnswer a;
         ScrollView scrollContent = (ScrollView) findViewById(R.id.testMakeScroll);
-        ListView testMakeList = (ListView) findViewById(R.id.testMakeList);
+        LinearLayout testMakeList = (LinearLayout) findViewById(R.id.testMakeList);
         TextView stem = (TextView) findViewById(R.id.testMakeQuestionStem);
         TextView questionFeedback = (TextView) findViewById(R.id.testMakeQuestionFeedback);
         TextView answerFeedback = (TextView) findViewById(R.id.testMakeAnswerFeedback);
@@ -282,6 +283,8 @@ public class TestsMake extends Module {
         Float questionScore;
         DecimalFormat df = new DecimalFormat("0.00");
         int feedbackLevel;
+        int mediumFeedbackLevel = Test.FEEDBACK_VALUES.indexOf(Test.FEEDBACK_MEDIUM);
+        int maxFeedbackLevel = Test.FEEDBACK_VALUES.indexOf(Test.FEEDBACK_MAX);
 
         scrollContent.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
@@ -305,6 +308,7 @@ public class TestsMake extends Module {
         testMakeList.setVisibility(View.GONE);
         img.setVisibility(View.GONE);
 
+        testMakeList.removeAllViews();
         stem.setText(Html.fromHtml(question.getStem()));
 
         if ((questionFeedbackText != null) && (!questionFeedbackText.equals(Constants.NULL_VALUE))) {
@@ -313,7 +317,7 @@ public class TestsMake extends Module {
 
         feedbackLevel = Test.FEEDBACK_VALUES.indexOf(feedback);
 
-        if (test.isEvaluated() && (feedbackLevel == 4) && !question.getFeedback().equals(Constants.NULL_VALUE)) {
+        if (test.isEvaluated() && (feedbackLevel == maxFeedbackLevel) && !question.getFeedback().equals(Constants.NULL_VALUE)) {
             questionFeedback.setVisibility(View.VISIBLE);
         } else {
             questionFeedback.setVisibility(View.GONE);
@@ -342,11 +346,11 @@ public class TestsMake extends Module {
 
             answerFeedback.setText(Html.fromHtml(a.getFeedback()));
 
-            if (test.isEvaluated() && (feedbackLevel > 2)) {
+            if (test.isEvaluated() && (feedbackLevel > mediumFeedbackLevel)) {
                 if (answerType.equals(TestAnswer.TYPE_FLOAT)) {
                     correctAnswer = "[" + a.getAnswer() + ";" + answers.get(1).getAnswer() + "]";
 
-                    if ((feedbackLevel == 4) && !a.getFeedback().equals(Constants.NULL_VALUE)) {
+                    if ((feedbackLevel == maxFeedbackLevel) && !a.getFeedback().equals(Constants.NULL_VALUE)) {
                         answerFeedback.setVisibility(View.VISIBLE);
                     } else {
                         answerFeedback.setVisibility(View.GONE);
@@ -355,7 +359,7 @@ public class TestsMake extends Module {
                     for (int i = 0; i < numAnswers; i++) {
                         a = answers.get(i);
 
-                        if ((feedbackLevel == 4) && !a.getFeedback().equals(Constants.NULL_VALUE)) {
+                        if ((feedbackLevel == maxFeedbackLevel) && !a.getFeedback().equals(Constants.NULL_VALUE)) {
                             correctAnswer += "<strong>" + a.getAnswer() + "</strong><br/>";
                             correctAnswer += "<i>" + a.getFeedback() + "</i><br/><br/>";
                         } else {
@@ -371,12 +375,11 @@ public class TestsMake extends Module {
             checkedAnswersAdapter = new CheckedAnswersArrayAdapter(this, R.layout.list_item_multiple_choice,
                     answers, test.isEvaluated(), test.getFeedback(), answerType);
 
-            testMakeList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-            testMakeList.setAdapter(checkedAnswersAdapter);
-
             for (int i = 0; i < numAnswers; i++) {
                 a = answers.get(i);
-                testMakeList.setItemChecked(i, Utils.parseStringBool(a.getUserAnswer()));
+                CheckableLinearLayout item = (CheckableLinearLayout) checkedAnswersAdapter.getView(i, null, null);
+                item.setChecked(Utils.parseStringBool(a.getUserAnswer()));
+                testMakeList.addView(item);
             }
 
             testMakeList.setVisibility(View.VISIBLE);
@@ -394,21 +397,17 @@ public class TestsMake extends Module {
             checkedAnswersAdapter = new CheckedAnswersArrayAdapter(this, R.layout.list_item_single_choice,
                     answers, test.isEvaluated(), test.getFeedback(), answerType);
 
-            testMakeList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-            testMakeList.setAdapter(checkedAnswersAdapter);
-
             for (int i = 0; i < numAnswers; i++) {
                 a = answers.get(i);
-                if (a.getAnswer().equals(answers.get(0).getUserAnswer())) {
-                    testMakeList.setItemChecked(i, true);
-                    break;
-                }
+                CheckableLinearLayout item = (CheckableLinearLayout) checkedAnswersAdapter.getView(i, null, null);
+                item.setChecked(a.getAnswer().equals(answers.get(0).getUserAnswer()));
+                testMakeList.addView(item);
             }
 
             testMakeList.setVisibility(View.VISIBLE);
         }
 
-        if (test.isEvaluated() && (feedbackLevel > 2)) {
+        if (test.isEvaluated() && (feedbackLevel > mediumFeedbackLevel)) {
             textAnswer.setEnabled(false);
             textAnswer.setOnClickListener(null);
 
@@ -439,13 +438,44 @@ public class TestsMake extends Module {
         }
     }
 
+    private int getCheckedItemPosition(LinearLayout parent) {
+        int selectedPos = -1;
+        int childCount = parent.getChildCount();
+        boolean found = false;
+        CheckableLinearLayout tv;
+
+        for (int i = 0; !found && (i < childCount); i++) {
+            tv = (CheckableLinearLayout) parent.getChildAt(i);
+            found = tv.isChecked();
+
+            if (found) {
+                selectedPos = i;
+            }
+        }
+
+        return selectedPos;
+    }
+
+    private SparseBooleanArray getCheckedItemPositions(LinearLayout parent) {
+        SparseBooleanArray checkedItems = new SparseBooleanArray();
+        int childCount = parent.getChildCount();
+        CheckableLinearLayout tv;
+
+        for (int i = 0; i < childCount; i++) {
+            tv = (CheckableLinearLayout) parent.getChildAt(i);
+            checkedItems.append(i, tv.isChecked());
+        }
+
+        return checkedItems;
+    }
+
     /**
      * Reads the user answer of a question
      *
      * @param q Question to read the answer
      */
     private void readUserAnswer(TestQuestion q) {
-        ListView testMakeList = (ListView) findViewById(R.id.testMakeList);
+        LinearLayout testMakeList = (LinearLayout) findViewById(R.id.testMakeList);
         EditText textAnswer = (EditText) findViewById(R.id.testMakeEditText);
         List<TestAnswer> la = q.getAnswers();
         int checkedListCount, selectedPos;
@@ -459,13 +489,13 @@ public class TestsMake extends Module {
 
             la.get(0).setUserAnswer(String.valueOf(textAnswer.getText()));
         } else if (answerType.equals(TestAnswer.TYPE_MULTIPLE_CHOICE)) {
-            checkedItems = testMakeList.getCheckedItemPositions();
+            checkedItems = getCheckedItemPositions(testMakeList);
             checkedListCount = checkedItems.size();
             for (int i = 0; i < checkedListCount; i++) {
                 la.get(i).setUserAnswer(Utils.parseBoolString(checkedItems.get(i, false)));
             }
         } else {
-            selectedPos = testMakeList.getCheckedItemPosition();
+            selectedPos = getCheckedItemPosition(testMakeList);
             if (selectedPos == -1) {
                 userAnswer = "";
             } else {
@@ -713,7 +743,7 @@ public class TestsMake extends Module {
     }
 
 	/* (non-Javadoc)
-	 * @see es.ugr.swad.swadroid.modules.Module#onStart()
+     * @see es.ugr.swad.swadroid.modules.Module#onStart()
 	 */
 	/*@Override
 	protected void onStart() {

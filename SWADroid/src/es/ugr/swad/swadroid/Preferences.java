@@ -285,7 +285,6 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 
     /**
      * Sets last course selected
-     *
      */
     public void setLastCourseSelected(int lcs) {
         lastCourseSelected = lcs;
@@ -470,7 +469,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 
                 //Configure automatic synchronization
                 /*if(syncEnabled && !masterSyncEnabled) {
-					ContentResolver.setMasterSyncAutomatically(syncEnabled);
+                    ContentResolver.setMasterSyncAutomatically(syncEnabled);
 				}*/
 
                 ContentResolver.setSyncAutomatically(account, Constants.AUTHORITY, syncEnabled);

@@ -223,7 +223,7 @@ public class DirectoryNavigator {
                             if (tag.equals("code")) {
                                 fileCode = Long.valueOf(firstChild.getNodeValue());
                                 /*//from the url, gets the type
-								int lastDot = url.lastIndexOf(".");
+                                int lastDot = url.lastIndexOf(".");
 								if(lastDot != -1)
 									type = url.substring(lastDot+1, url.length());
 								else

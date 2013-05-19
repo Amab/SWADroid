@@ -21,7 +21,7 @@ public class QR {
 
         // Find screen size
         /*WindowManager manager = (WindowManager) activity
-				.getSystemService(activity.WINDOW_SERVICE);
+                .getSystemService(activity.WINDOW_SERVICE);
 		Display display = manager.getDefaultDisplay();
 		Point point = new Point();
 		display.getSize(point);
