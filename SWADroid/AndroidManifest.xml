@@ -40,7 +40,8 @@
         <activity
                 android:name=".SWADMain"
                 android:icon="@drawable/ic_launcher_swadroid"
-                android:label="@string/app_name" android:theme="@android:style/Theme.NoTitleBar">
+                android:label="@string/app_name"
+                android:theme="@android:style/Theme.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -135,7 +136,8 @@
         <activity
                 android:name=".modules.tests.TestsMake"
                 android:label="@string/testsModuleLabel"
-                android:theme="@android:style/Theme.NoTitleBar">
+                android:theme="@android:style/Theme.NoTitleBar"
+                android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
         </activity>
         <activity
                 android:name=".modules.Messages"
