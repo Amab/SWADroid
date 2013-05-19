@@ -30,10 +30,12 @@
     <string name="cleanDatabaseTitle_menu">"Czyste Database"</string>
     <string name="about_preferences">"O"</string>
     <string name="versionTitle_preferences">"Wersja aplikacji"</string>
-    <string name="author_preferences">"Koordynator: Antonio Vargas Canas\nProgramiści: Juan Miguel Corral Boyero\nHelena
-        Rodriguez Gijón\nAntonio Aguilera Malagón"
+    <string name="author_preferences">"Koordynator: Antonio Vargas Canas
+        \nJuan Miguel Boyero Corral
+        \nHelena Rodríguez Gijón
+        \nAntonio Aguilera Malagón
     </string>
-    <string name="organization_preferences">"Uniwersytet w Granadzie"</string>
+    <string name="author_title_preferences">Autorzy</string>
     <string name="loginTitle_menu">"Połączyć"</string>
     <string name="loginProgressTitle">"Identyfikacja"</string>
     <string name="loginProgressDescription">"Łączenie&#8230;"</string>

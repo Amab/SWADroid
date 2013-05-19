@@ -32,12 +32,11 @@
     <string name="about_preferences">About</string>
     <string name="versionTitle_preferences">Application version</string>
     <string name="author_preferences">Coordinator: Antonio Cañas Vargas
-        \nProgrammers:
-        Juan Miguel Boyero Corral
+        \nJuan Miguel Boyero Corral
         \nHelena Rodríguez Gijón
         \nAntonio Aguilera Malagón
     </string>
-    <string name="organization_preferences">University of Granada</string>
+    <string name="author_title_preferences">Authors</string>
     <string name="loginTitle_menu">Login</string>
     <string name="loginProgressTitle">Login</string>
     <string name="loginProgressDescription">Connecting&#8230;</string>

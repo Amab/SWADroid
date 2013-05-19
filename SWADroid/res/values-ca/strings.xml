@@ -31,10 +31,12 @@
     <string name="cleanDatabaseTitle_menu">"Netejar base de dades"</string>
     <string name="about_preferences">"sobre"</string>
     <string name="versionTitle_preferences">"Versió de l'aplicació"</string>
-    <string name="author_preferences">"Coordinador: Antonio Cañas Vargas \nProgramadores: Juan Miguel Bover Corral
-        \nHelena Rodríguez Gijón \nAntonio Aguilera Malagón"
+    <string name="author_preferences">"Coordinador: Antonio Cañas Vargas
+        \nJuan Miguel Boyero Corral
+        \nHelena Rodríguez Gijón
+        \nAntonio Aguilera Malagón
     </string>
-    <string name="organization_preferences">"Universitat de Granada"</string>
+    <string name="author_title_preferences">Autors</string>
     <string name="loginTitle_menu">"Connectar"</string>
     <string name="loginProgressTitle">"Identificació"</string>
     <string name="loginProgressDescription">"Connectant&#8230;"</string>
