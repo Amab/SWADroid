@@ -49,6 +49,7 @@ import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Vector;
 
 /**
@@ -278,7 +279,7 @@ public class NotificationsSyncAdapterService extends Service {
                 dbHelper.beginTransaction();
 
                 //Stores notifications data returned by webservice response
-                Vector<?> res = (Vector<?>) result;
+                ArrayList<?> res = new ArrayList<Object>((Vector)result);
                 SoapObject soap = (SoapObject) res.get(1);
                 notifCount = soap.getPropertyCount();
                 for (int i = 0; i < notifCount; i++) {

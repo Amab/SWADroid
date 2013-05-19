@@ -32,6 +32,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Vector;
 
 /**
@@ -107,21 +108,21 @@ public class TestsConfigDownload extends Module {
 
         if (result != null) {
             //Stores tests data returned by webservice response
-            Vector<?> res = (Vector<?>) result;
+            ArrayList<?> res = new ArrayList<Object>((Vector)result);
 
             Integer pluggable = Integer.valueOf(res.get(0).toString());
             isPluggable = Utils.parseIntBool(pluggable);
             numQuestions = Integer.valueOf(res.get(1).toString());
 
-            //If there are no available questions, notify to user
-            if (numQuestions == 0) {
-                Log.i(TAG, getString(R.string.noQuestionsAvailableTestsDownloadMsg));
-
-                //If the teacher doesn't allows questions download, notify to user
-            } else if (!isPluggable) {
+            //If the teacher doesn't allows questions download, notify to user
+            if (!isPluggable) {
                 Log.i(TAG, getString(R.string.noQuestionsPluggableTestsDownloadMsg));
 
-                //If there are questions and the teacher allows their download, process the questions data
+            //If there are no available questions, notify to user
+            } else if (numQuestions == 0) {
+                    Log.i(TAG, getString(R.string.noQuestionsAvailableTestsDownloadMsg));
+
+            //If there are questions and the teacher allows their download, process the questions data
             } else {
                 Integer minQuestions = Integer.valueOf(res.get(2).toString());
                 Integer defQuestions = Integer.valueOf(res.get(3).toString());
@@ -132,7 +133,7 @@ public class TestsConfigDownload extends Module {
 
                 //If not exists a test configuration for this course, insert to database
                 if (tDB == null) {
-                    Test t = new Test(Constants.getSelectedCourseCode(), minQuestions, defQuestions, maxQuestions, feedback);
+                    Test t = new Test(Constants.getSelectedCourseCode(), minQuestions, defQuestions, maxQuestions, feedback, System.currentTimeMillis() / 1000L);
                     dbHelper.insertTestConfig(t);
                 }
 
