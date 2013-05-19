@@ -224,6 +224,7 @@ public class RollcallConfigDownload extends Module {
 
     @Override
     protected void onError() {
+
     }
 
 }

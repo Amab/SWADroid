@@ -617,7 +617,6 @@ public abstract class Module extends MenuActivity {
                 }
 
                 // Request finalized with errors
-                onError();
                 error(TAG, errorMsg, e, sendException);
 
                 // Log.d(TAG, connection.getHost() + " " + connection.getPath()
@@ -625,6 +624,8 @@ public abstract class Module extends MenuActivity {
                 // Log.d(TAG, connection.requestDump.toString());
                 // Log.d(TAG, connection.responseDump.toString());
                 setResult(RESULT_CANCELED);
+
+                onError();
             } else {
                 postConnect();
             }
