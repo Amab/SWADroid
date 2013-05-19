@@ -30,10 +30,12 @@
     <string name="cleanDatabaseTitle_menu">"Pulisci database"</string>
     <string name="about_preferences">"Informazioni su&#8230;"</string>
     <string name="versionTitle_preferences">"Applicazione versione"</string>
-    <string name="author_preferences">"Coordinatore: Antonio Canas Vargas\nProgrammatori: Juan Miguel Corral
-        Boyero\nHelena Rodriguez Gijón\nAntonio Aguilera Malagón"
+    <string name="author_preferences">"Coordinatore: Antonio Canas Vargas
+        \nJuan Miguel Boyero Corral
+        \nHelena Rodríguez Gijón
+        \nAntonio Aguilera Malagón
     </string>
-    <string name="organization_preferences">"Università di Granada"</string>
+    <string name="author_title_preferences">Autori</string>
     <string name="loginTitle_menu">"Collegare"</string>
     <string name="loginProgressTitle">"Identificazione"</string>
     <string name="loginProgressDescription">"Connessione in corso&#8230;"</string>

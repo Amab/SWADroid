@@ -30,10 +30,12 @@
     <string name="cleanDatabaseTitle_menu">"Base de données propre"</string>
     <string name="about_preferences">"À propos de&#8230;"</string>
     <string name="versionTitle_preferences">"Version de l'application"</string>
-    <string name="author_preferences">"Coordinateur: Antonio Canas Vargas\nProgrammeurs: Juan Miguel Corral
-        Boyero\nHelena Rodriguez Gijón\nAntonio Aguilera Malagón"
+    <string name="author_preferences">"Coordinateur: Antonio Canas Vargas
+        \nJuan Miguel Boyero Corral
+        \nHelena Rodríguez Gijón
+        \nAntonio Aguilera Malagón
     </string>
-    <string name="organization_preferences">"Université de Grenade"</string>
+    <string name="author_title_preferences">Auteurs</string>
     <string name="loginTitle_menu">"Relier"</string>
     <string name="loginProgressTitle">"Identification"</string>
     <string name="loginProgressDescription">"Connexion en cours&#8230;"</string>

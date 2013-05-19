@@ -100,7 +100,7 @@
                 android:defaultValue=""
                 android:summary="@string/author_preferences"
                 android:key="aboutPref"
-                android:title="@string/organization_preferences"/>
+                android:title="@string/author_title_preferences"/>
     </PreferenceCategory>
 
 </PreferenceScreen>
