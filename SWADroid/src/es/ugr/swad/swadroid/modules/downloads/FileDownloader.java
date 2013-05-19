@@ -110,7 +110,7 @@ public class FileDownloader {
         }
 
 		/* The downloaded file will be saved to a temporary file, whose prefix
-		 * will be the basename of the file and the suffix its extension */
+         * will be the basename of the file and the suffix its extension */
         String filename = FileDownloader.getFilenameFromURL(url.getPath());
         if (filename == null)
             throw new FileNotFoundException("URL does not point to a file");

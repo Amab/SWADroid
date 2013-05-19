@@ -464,8 +464,8 @@ public abstract class Module extends MenuActivity {
     /**
      * Shows an error message.
      *
-     * @param tag Error tag to show.
-     * @param message Error message to show.
+     * @param tag           Error tag to show.
+     * @param message       Error message to show.
      * @param sendException
      */
     protected void error(String tag, String message, Exception ex, boolean sendException) {
@@ -476,7 +476,7 @@ public abstract class Module extends MenuActivity {
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 finish();
-                        }
+                            }
                         }).setIcon(R.drawable.erroricon).show();
 
         if (ex != null) {

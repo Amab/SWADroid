@@ -137,7 +137,6 @@ public class TestAnswer extends Model {
 
     /**
      * Sets answer correct flag
-     *
      */
     public void setCorrect(boolean correct) {
         this.correct = correct;

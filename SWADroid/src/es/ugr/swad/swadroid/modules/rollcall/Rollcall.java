@@ -217,7 +217,7 @@ public class Rollcall extends MenuExpandableListActivity {
                 error(getString(R.string.noCameraFound));
             }
             /*} else {
-				//If Android version < 2.2 show error message
+                //If Android version < 2.2 show error message
 				error(getString(R.string.froyoFunctionMsg) + "\n(System: " + android.os.Build.VERSION.RELEASE + ")");
 			}*/
         } else if (keyword.equals(getString(R.string.rollcallManual))) {

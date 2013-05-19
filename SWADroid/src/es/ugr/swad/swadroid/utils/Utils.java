@@ -53,7 +53,6 @@ public class Utils {
 
     /**
      * Indicates if the db was cleaned
-     *
      */
     public static boolean isDbCleaned() {
         return Constants.dbCleaned;
@@ -61,7 +60,6 @@ public class Utils {
 
     /**
      * Set the fact that the db was cleaned
-     *
      */
     public static void setDbCleaned(boolean state) {
         Constants.dbCleaned = state;

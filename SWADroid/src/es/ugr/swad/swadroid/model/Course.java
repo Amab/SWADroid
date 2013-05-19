@@ -50,7 +50,7 @@ public class Course extends Model {
     /**
      * Constructor
      *
-     * @param id   Course identifier
+     * @param id Course identifier
      */
     public Course(long id, int userRole, String shortName, String fullName) {
         super(id);
@@ -98,7 +98,6 @@ public class Course extends Model {
 
     /**
      * Sets short course name
-     *
      */
     public void setFullName(String fullName) {
         this.fullName = fullName;

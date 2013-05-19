@@ -83,7 +83,7 @@
         <LinearLayout
                 android:id="@+id/testMakeContent"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@android:color/transparent"
                 android:orientation="vertical"
                 android:weightSum="1.0">
@@ -158,14 +158,17 @@
                         android:textColor="@color/foreground2"
                         android:visibility="gone"/>
 
-                <es.ugr.swad.swadroid.widget.ExpandedListView
+                <!--<es.ugr.swad.swadroid.widget.ExpandedListView-->
+                <LinearLayout
                         android:id="@+id/testMakeList"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:orientation="vertical"
                         android:background="@android:color/transparent"
                         android:cacheColorHint="@color/background"
                         android:visibility="gone">
-                </es.ugr.swad.swadroid.widget.ExpandedListView>
+                </LinearLayout>
+                <!--</es.ugr.swad.swadroid.widget.ExpandedListView>-->
             </RelativeLayout>
         </LinearLayout>
     </ScrollView>

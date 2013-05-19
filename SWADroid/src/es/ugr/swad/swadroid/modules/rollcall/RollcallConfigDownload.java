@@ -99,7 +99,7 @@ public class RollcallConfigDownload extends Module {
 
         if (result != null) {
             // Stores users data returned by webservice response
-            ArrayList<?> res = new ArrayList<Object>((Vector)result);
+            ArrayList<?> res = new ArrayList<Object>((Vector) result);
             SoapObject soap = (SoapObject) res.get(1);
             numStudents = soap.getPropertyCount();
             for (int i = 0; i < numStudents; i++) {

@@ -140,7 +140,7 @@ public class FileDownloaderAsyncTask extends AsyncTask<String, Integer, Boolean>
                 this.fileName = basename + "-" + String.valueOf(i - 1) + extension;
             }
             mNotification.createNotification(this.fileName);
-			
+
 			
 			/*Create the output file*/
             Log.d(TAG, "output: " + output.getPath());

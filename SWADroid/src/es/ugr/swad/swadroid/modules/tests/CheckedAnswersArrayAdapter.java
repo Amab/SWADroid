@@ -27,12 +27,13 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckedTextView;
-import android.widget.ListView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Test;
 import es.ugr.swad.swadroid.model.TestAnswer;
+import es.ugr.swad.swadroid.widget.CheckableLinearLayout;
 
 import java.util.List;
 
@@ -63,8 +64,8 @@ public class CheckedAnswersArrayAdapter extends ArrayAdapter<TestAnswer> {
     public View getView(int position, View convertView, ViewGroup parent) {
         CheckedTextView tt;
         TextView answerFeedback;
-        final ListView lv = (ListView) parent;
         final int rbPosition = position;
+        final CheckableLinearLayout cl;
         TestAnswer a = items.get(position);
         int feedbackLevel;
 
@@ -73,6 +74,7 @@ public class CheckedAnswersArrayAdapter extends ArrayAdapter<TestAnswer> {
             convertView = vi.inflate(textViewResourceId, null);
         }
 
+        cl = (CheckableLinearLayout) convertView;
         tt = (CheckedTextView) convertView.findViewById(android.R.id.text1);
 
         if (answerType.equals(TestAnswer.TYPE_TRUE_FALSE)) {
@@ -85,18 +87,28 @@ public class CheckedAnswersArrayAdapter extends ArrayAdapter<TestAnswer> {
             tt.setText(Html.fromHtml(a.getAnswer()));
         }
 
-        if (lv.getChoiceMode() == ListView.CHOICE_MODE_SINGLE) {
+        if (answerType.equals(TestAnswer.TYPE_UNIQUE_CHOICE) || answerType.equals(TestAnswer.TYPE_TRUE_FALSE)) {
             tt.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
                     CheckedTextView rb = (CheckedTextView) v;
-                    int childCount = lv.getCount();
                     boolean checked = rb.isChecked();
+                    CheckableLinearLayout lb;
+                    LinearLayout ll = (LinearLayout) cl.getParent();
+                    int childCount = ll.getChildCount();
 
                     for (int i = 0; i < childCount; i++) {
-                        lv.setItemChecked(i, false);
+                        lb = (CheckableLinearLayout) ll.getChildAt(i);
+                        lb.setChecked(false);
                     }
 
-                    lv.setItemChecked(rbPosition, !checked);
+                    rb.setChecked(!checked);
+                }
+            });
+        } else if (answerType.equals(TestAnswer.TYPE_MULTIPLE_CHOICE)) {
+            tt.setOnClickListener(new OnClickListener() {
+                public void onClick(View v) {
+                    CheckedTextView rb = (CheckedTextView) v;
+                    rb.setChecked(!rb.isChecked());
                 }
             });
         }
@@ -107,13 +119,13 @@ public class CheckedAnswersArrayAdapter extends ArrayAdapter<TestAnswer> {
             answerFeedback.setText(Html.fromHtml(a.getFeedback()));
 
             feedbackLevel = Test.FEEDBACK_VALUES.indexOf(feedback);
-            if ((feedbackLevel > 2) && a.getCorrect()) {
+            if ((feedbackLevel > Test.FEEDBACK_VALUES.indexOf(Test.FEEDBACK_MEDIUM)) && a.getCorrect()) {
                 tt.setTextColor(context.getResources().getColor(R.color.green));
             } else {
                 tt.setTextColor(Color.BLACK);
             }
 
-            if (feedbackLevel == 4 && !a.getFeedback().equals(Constants.NULL_VALUE)) {
+            if (feedback.equals(Test.FEEDBACK_MAX) && !a.getFeedback().equals(Constants.NULL_VALUE)) {
                 answerFeedback.setVisibility(View.VISIBLE);
             } else {
                 answerFeedback.setVisibility(View.GONE);

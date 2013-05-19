@@ -320,7 +320,6 @@ public class Group extends Model {
 
     /**
      * Set that the user belongs to this group or not
-     *
      */
     public void setMember(int member) {
         this.member = member;

@@ -75,7 +75,7 @@ public class Messages extends Module {
         public void onClick(View v) {
             try {
                 /*if(isDebuggable) {
-					Log.d(TAG, "notificationCode = " + Long.toString(notificationCode));
+                    Log.d(TAG, "notificationCode = " + Long.toString(notificationCode));
 				}*/
 
                 runConnection();
@@ -213,7 +213,7 @@ public class Messages extends Module {
 
         receiversNames = "";
         if (result != null) {
-            ArrayList<?> res = new ArrayList<Object>((Vector)result);
+            ArrayList<?> res = new ArrayList<Object>((Vector) result);
             SoapObject soap = (SoapObject) res.get(1);
             int csSize = soap.getPropertyCount();
             for (int i = 0; i < csSize; i++) {

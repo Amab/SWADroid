@@ -118,7 +118,7 @@ public class Groups extends Module {
             //Stores groups data returned by webservice response
             List<Model> groupsSWAD = new ArrayList<Model>();
 
-            ArrayList<?> res = new ArrayList<Object>((Vector)result);
+            ArrayList<?> res = new ArrayList<Object>((Vector) result);
             SoapObject soap = (SoapObject) res.get(1);
             numGroups = soap.getPropertyCount();
 
@@ -144,7 +144,7 @@ public class Groups extends Module {
             dbHelper.insertCollection(Constants.DB_TABLE_GROUPS, groupsSWAD, courseCode);
             //TODO remove obsolete groups
             /*for(int i = 0; i < groupsSWAD.size(); ++i){
-				Group g = (Group) groupsSWAD.get(i);
+                Group g = (Group) groupsSWAD.get(i);
 				//boolean isAdded = dbHelper.insertGroup(g,Global.getSelectedCourseCode());
 				//if(!isAdded){
 				if(!dbHelper.insertGroup(g,Global.getSelectedCourseCode())){

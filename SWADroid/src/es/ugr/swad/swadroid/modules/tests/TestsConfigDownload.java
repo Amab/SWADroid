@@ -108,7 +108,7 @@ public class TestsConfigDownload extends Module {
 
         if (result != null) {
             //Stores tests data returned by webservice response
-            ArrayList<?> res = new ArrayList<Object>((Vector)result);
+            ArrayList<?> res = new ArrayList<Object>((Vector) result);
 
             Integer pluggable = Integer.valueOf(res.get(0).toString());
             isPluggable = Utils.parseIntBool(pluggable);
@@ -118,11 +118,11 @@ public class TestsConfigDownload extends Module {
             if (!isPluggable) {
                 Log.i(TAG, getString(R.string.noQuestionsPluggableTestsDownloadMsg));
 
-            //If there are no available questions, notify to user
+                //If there are no available questions, notify to user
             } else if (numQuestions == 0) {
-                    Log.i(TAG, getString(R.string.noQuestionsAvailableTestsDownloadMsg));
+                Log.i(TAG, getString(R.string.noQuestionsAvailableTestsDownloadMsg));
 
-            //If there are questions and the teacher allows their download, process the questions data
+                //If there are questions and the teacher allows their download, process the questions data
             } else {
                 Integer minQuestions = Integer.valueOf(res.get(2).toString());
                 Integer defQuestions = Integer.valueOf(res.get(3).toString());

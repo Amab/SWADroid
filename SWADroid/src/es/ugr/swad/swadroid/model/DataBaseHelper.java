@@ -81,7 +81,6 @@ public class DataBaseHelper {
 
     /**
      * Constructor
-     *
      */
     public DataBaseHelper(Context ctx) {
         mCtx = ctx;
@@ -169,7 +168,7 @@ public class DataBaseHelper {
      * Gets ParTable class from table
      * @param <T>
      * */
-	/*	private <T> PairTable<T, T> getPairTable(String table, T firstValue, T secondValue){
+    /*	private <T> PairTable<T, T> getPairTable(String table, T firstValue, T secondValue){
 		PairTable<T,T> par;
 		if(table.equals(Global.DB_TABLE_GROUPS_GROUPTYPES)){
 			par = new PairTable<T,T>(table,firstValue,secondValue);
@@ -1269,7 +1268,7 @@ public class DataBaseHelper {
     /**
      * Updates a test config in database
      *
-     * @param id   ID of the test prior to update
+     * @param id     ID of the test prior to update
      * @param actual Updated test
      */
     public void updateTestConfig(long id, Test actual) {
@@ -1390,7 +1389,7 @@ public class DataBaseHelper {
     /**
      * Updates a group in database
      *
-     * @param prev   Group to be updated
+     * @param prev Group to be updated
      */
     public void updateGroup(Group prev, Group currentGroup) {
         List<Entity> rows = db.getEntityList(Constants.DB_TABLE_GROUPS, "id = " + prev.getId());
@@ -1824,7 +1823,6 @@ public class DataBaseHelper {
 
     /**
      * Upgrades the database structure
-     *
      */
     public void upgradeDB(Context context) {
         int dbVersion = db.getDB().getVersion();
