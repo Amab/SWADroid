@@ -275,9 +275,11 @@ public class SWADMain extends MenuExpandableListActivity {
                 //prefs.upgradeCredentials();
 
                 //Configure automatic synchronization
-                Intent activity = new Intent(getBaseContext(), AccountAuthenticator.class);
-                startActivity(activity);
-                SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, Constants.DEFAULT_SYNC_TIME, this);
+                if(lastVersion < 49) {
+                    Intent activity = new Intent(getBaseContext(), AccountAuthenticator.class);
+                    startActivity(activity);
+                    SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, Constants.DEFAULT_SYNC_TIME, this);
+                }
 
                 prefs.setLastVersion(currentVersion);
             }
@@ -413,7 +415,7 @@ public class SWADMain extends MenuExpandableListActivity {
 
         @Override
         public void onNothingSelected(AdapterView<?> arg0) {
-            // TODO Auto-generated method stub
+
         }
     }
 
