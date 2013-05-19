@@ -87,7 +87,7 @@ public class TestsQuestionsDownload extends Module {
 
         if (result != null) {
             //Stores tests data returned by webservice response
-            Vector<?> res = (Vector<?>) result;
+            ArrayList<?> res = new ArrayList<Object>((Vector)result);
 
             SoapObject tagsListObject = (SoapObject) res.get(0);
             SoapObject questionsListObject = (SoapObject) res.get(1);
@@ -209,9 +209,9 @@ public class TestsQuestionsDownload extends Module {
             Log.i(TAG, "Retrieved " + listSize + " relationships between questions and tags");
 
             //Update last time test was updated
-            Test testConfig = (Test) dbHelper.getRow(Constants.DB_TABLE_TEST_CONFIG, "id", Long.toString(Constants.getSelectedCourseCode()));
-            testConfig.setEditTime(System.currentTimeMillis() / 1000L);
-            dbHelper.updateTestConfig(testConfig.getId(), testConfig);
+            //Test testConfig = (Test) dbHelper.getRow(Constants.DB_TABLE_TEST_CONFIG, "id", Long.toString(Constants.getSelectedCourseCode()));
+            //testConfig.setEditTime(System.currentTimeMillis() / 1000L);
+            //dbHelper.updateTestConfig(testConfig.getId(), testConfig);
             dbHelper.endTransaction();
         }
 

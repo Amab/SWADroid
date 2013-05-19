@@ -139,7 +139,7 @@ public class Test extends Model {
      * @param feedback Feedback to be showed to the student
      * @param editTime Last time test was updated
      */
-    public Test(int crsCode, int min, int def, int max, String feedback, Long editTime) {
+    public Test(long crsCode, int min, int def, int max, String feedback, Long editTime) {
         this(crsCode, min, def, max, feedback);
         this.editTime = editTime;
     }

@@ -38,6 +38,7 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Vector;
 
 /**
@@ -98,7 +99,7 @@ public class RollcallConfigDownload extends Module {
 
         if (result != null) {
             // Stores users data returned by webservice response
-            Vector<?> res = (Vector<?>) result;
+            ArrayList<?> res = new ArrayList<Object>((Vector)result);
             SoapObject soap = (SoapObject) res.get(1);
             numStudents = soap.getPropertyCount();
             for (int i = 0; i < numStudents; i++) {
@@ -112,11 +113,11 @@ public class RollcallConfigDownload extends Module {
                 String userFirstName = pii.getProperty("userFirstname").toString();
                 String userPhoto = pii.getProperty("userPhoto").toString();
 
-                if (userNickname.equalsIgnoreCase(Constants.NULL_VALUE)) userNickname = null;
-                if (userSurname1.equalsIgnoreCase(Constants.NULL_VALUE)) userSurname1 = null;
-                if (userSurname2.equalsIgnoreCase(Constants.NULL_VALUE)) userSurname2 = null;
-                if (userFirstName.equalsIgnoreCase(Constants.NULL_VALUE)) userFirstName = null;
-                if (userPhoto.equalsIgnoreCase(Constants.NULL_VALUE)) userPhoto = null;
+                if (userNickname.equalsIgnoreCase(Constants.NULL_VALUE)) userNickname = "";
+                if (userSurname1.equalsIgnoreCase(Constants.NULL_VALUE)) userSurname1 = "";
+                if (userSurname2.equalsIgnoreCase(Constants.NULL_VALUE)) userSurname2 = "";
+                if (userFirstName.equalsIgnoreCase(Constants.NULL_VALUE)) userFirstName = "";
+                if (userPhoto.equalsIgnoreCase(Constants.NULL_VALUE)) userPhoto = "";
 
                 User u = new User(
                         userCode,                    // id

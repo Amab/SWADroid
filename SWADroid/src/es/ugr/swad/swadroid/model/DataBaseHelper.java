@@ -1126,10 +1126,7 @@ public class DataBaseHelper {
         }
         ent.setValue("userCode", u.getId());
         ent.setValue("crsCod", courseCode);
-        if (groupCode == 0)
-            ent.setValue("grpCod", null);
-        else
-            ent.setValue("grpCod", groupCode);
+        ent.setValue("grpCod", groupCode);
         ent.save();
     }
 
