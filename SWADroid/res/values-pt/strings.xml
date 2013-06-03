@@ -1,312 +1,293 @@
 <resources>
 
-    <string name="app_name">"SWADroid"</string>
-    <string name="serverName_preferences">"Servidor"</string>
-    <string name="serverSummary_preferences">"Servidor (sem http://)"</string>
-    <string name="serverTitle_preferences">"Servidor"</string>
-    <string name="loginModuleLabel">"Conectar"</string>
-    <string name="notificationsModuleLabel">"Notificações"</string>
-    <string name="coursesModuleLabel">"Assuntos"</string>
-    <string name="testsModuleLabel">"Testes"</string>
-    <string name="messagesModuleLabel">"Enviar Mensagem"</string>
-    <string name="noticesModuleLabel">"Publicar um anúncio"</string>
-    <string name="generateQRModuleLabel">"Gerar código QR"</string>
-    <string name="title_error_dialog">"Errore"</string>
-    <string name="close_dialog">"Fechar"</string>
-    <string name="set_preferences">"configuração"</string>
-    <string name="user_preferences">"Dados do usuário"</string>
-    <string name="userIDName_preferences">"Usuário"</string>
-    <string name="userIDSummary_preferences">"ID ou Apelido"</string>
-    <string name="userIDTitle_preferences">"Usuário"</string>
-    <string name="userPasswordName_preferences">"Senha"</string>
-    <string name="userPasswordSummary_preferences">"Senha"</string>
-    <string name="userPasswordTitle_preferences">"Senha"</string>
-    <string name="saveMsg_preferences">"Configurações salvas"</string>
-    <string name="saveSummary_preferences">"Salva a configuração atual"</string>
-    <string name="saveTitle_preferences">"Salvar configurações"</string>
-    <string name="preferencesTitle_menu">"configuração"</string>
-    <string name="shareTitle_menu">"SWADroid Compartilhar"</string>
-    <string name="rateTitle_menu">"Qualificar"</string>
-    <string name="cleanDatabaseTitle_menu">"Banco de dados limpo"</string>
-    <string name="about_preferences">"Sobre&#8230;"</string>
-    <string name="versionTitle_preferences">"A versão do aplicativo"</string>
-    <string name="author_preferences">"Coordenador: Antonio Canas Vargas\
+    <string name="app_name">SWADroid</string>
+    <string name="serverName_preferences">Servidor</string>
+    <string name="serverSummary_preferences">Servidor (sem http://)</string>
+    <string name="serverTitle_preferences">Servidor</string>
+    <string name="loginModuleLabel">Conectar</string>
+    <string name="notificationsModuleLabel">Notificações</string>
+    <string name="coursesModuleLabel">Assuntos</string>
+    <string name="testsModuleLabel">Testes</string>
+    <string name="messagesModuleLabel">Enviar Mensagem</string>
+    <string name="noticesModuleLabel">Publicar um anúncio</string>
+    <string name="generateQRModuleLabel">Gerar código QR</string>
+    <string name="title_error_dialog">Errore</string>
+    <string name="close_dialog">Fechar</string>
+    <string name="set_preferences">configuração</string>
+    <string name="user_preferences">Dados do usuário</string>
+    <string name="userIDName_preferences">Usuário</string>
+    <string name="userIDSummary_preferences">ID ou Apelido</string>
+    <string name="userIDTitle_preferences">Usuário</string>
+    <string name="userPasswordName_preferences">Senha</string>
+    <string name="userPasswordSummary_preferences">Senha</string>
+    <string name="userPasswordTitle_preferences">Senha</string>
+    <string name="saveMsg_preferences">Configurações salvas</string>
+    <string name="saveSummary_preferences">Salva a configuração atual</string>
+    <string name="saveTitle_preferences">Salvar configurações</string>
+    <string name="preferencesTitle_menu">configuração</string>
+    <string name="shareTitle_menu">SWADroid Compartilhar</string>
+    <string name="rateTitle_menu">Qualificar</string>
+    <string name="cleanDatabaseTitle_menu">Banco de dados limpo</string>
+    <string name="about_preferences">Sobre&#8230;</string>
+    <string name="versionTitle_preferences">A versão do aplicativo</string>
+    <string name="author_preferences">Coordenador: Antonio Canas Vargas\
         \nJuan Miguel Boyero Corral
         \nHelena Rodríguez Gijón
         \nAntonio Aguilera Malagón
     </string>
     <string name="author_title_preferences">Autores</string>
-    <string name="loginTitle_menu">"Conectar"</string>
-    <string name="loginProgressTitle">"identificaçao"</string>
-    <string name="loginProgressDescription">"Conectando&#8230;"</string>
-    <string name="coursesProgressTitle">"Assuntos"</string>
-    <string name="coursesProgressDescription">"Obtendo assuntos&#8230;"</string>
-    <string name="notificationsProgressTitle">"Notificações"</string>
-    <string name="notificationsProgressDescription">"Recebendo notificações de novos&#8230;"</string>
-    <string name="notificationsEmptyListMsg">"Não baixado de qualquer notificação.\n\nPara baixar as últimas
-        notificações clique no ícone no canto superior direito da tela."
-    </string>
-    <string name="notificationsDownloadedMsg">"Notificações baixado"</string>
-    <string name="testsDownloadProgressTitle">"Testes"</string>
-    <string name="testsDownloadProgressDescription">"Sincronizar perguntas do teste.\n\nDependendo o número de questões
-        a serem sincronizados, processamento de dados pode levar vários minutos.\n\nPor favor, aguarde&#8230;"
-    </string>
-    <string name="errorMsgLaunchingActivity">"Ocorreu um erro durante a execução da operação"</string>
-    <string name="errorMsgWorkaroundEmulator">"Merda. Esse bug emulador Android reapareceu. Tentando novamente&#8230;"
-    </string>
-    <string name="errorMsgNoConnection">"Sem conexão"</string>
-    <string name="errorCopyMsg_DB">"Banco de dados de cópia de erro"</string>
-    <string name="upgradeMsg_DB">"Atualizando banco de dados&#8230;"</string>
-    <string name="loginSuccessfulMsg">"Conectado"</string>
-    <string name="examAnnouncement">"Chamar para revisão"</string>
-    <string name="marksFile">"Pontuações"</string>
-    <string name="notice">"==&gt; Aviso"</string>
-    <string name="message">"Mensagem"</string>
+    <string name="loginTitle_menu">Conectar</string>
+    <string name="loginProgressTitle">identificaçao</string>
+    <string name="loginProgressDescription">Conectando&#8230;</string>
+    <string name="coursesProgressTitle">Assuntos</string>
+    <string name="coursesProgressDescription">Obtendo assuntos&#8230;</string>
+    <string name="notificationsProgressTitle">Notificações</string>
+    <string name="notificationsProgressDescription">Recebendo notificações de novos&#8230;</string>
+    <string name="notificationsEmptyListMsg">Não baixado de qualquer notificação.\n\nPara baixar as últimas
+        notificações clique no ícone no canto superior direito da tela.</string>
+    <string name="notificationsDownloadedMsg">Notificações baixado</string>
+    <string name="testsDownloadProgressTitle">Testes</string>
+    <string name="testsDownloadProgressDescription">Sincronizar perguntas do teste.\n\nDependendo o número de questões
+        a serem sincronizados, processamento de dados pode levar vários minutos.\n\nPor favor, aguarde&#8230;</string>
+    <string name="errorMsgLaunchingActivity">Ocorreu um erro durante a execução da operação</string>
+    <string name="errorMsgWorkaroundEmulator">Merda. Esse bug emulador Android reapareceu. Tentando novamente&#8230;</string>
+    <string name="errorMsgNoConnection">Sem conexão</string>
+    <string name="errorCopyMsg_DB">Banco de dados de cópia de erro</string>
+    <string name="upgradeMsg_DB">Atualizando banco de dados&#8230;</string>
+    <string name="loginSuccessfulMsg">Conectado</string>
+    <string name="examAnnouncement">Chamar para revisão</string>
+    <string name="marksFile">Pontuações</string>
+    <string name="notice">==&gt; Aviso</string>
+    <string name="message">Mensagem</string>
     <string name="forumPostCourse">Postar em um fórum</string>
-    <string name="forumReply">"Fórum resposta"</string>
-    <string name="content">"Conteúdo"</string>
-    <string name="messages">"Posts"</string>
-    <string name="evaluation">"Avaliação"</string>
-    <string name="assignment">"Atividade"</string>
-    <string name="survey">"Votação"</string>
-    <string name="documentFile">"Documento #"</string>
-    <string name="sharedFile">"Documento compartilhada"</string>
-    <string name="enrollment">"Inscrição"</string>
-    <string name="enrollmentRequest">"Pedido de gravação"</string>
-    <string name="unknownNotification">"Desconhecido notificação"</string>
-    <string name="fromMsg">"De"</string>
-    <string name="dateMsg">"Data"</string>
-    <string name="noSubjectMsg">"Sem assunto"</string>
-    <string name="noContentMsg">"Sem conteúdo"</string>
-    <string name="yesMsg">"Sim."</string>
-    <string name="noMsg">"Não"</string>
-    <string name="trueMsg">"Verdadeiro"</string>
-    <string name="falseMsg">"Falso"</string>
-    <string name="acceptMsg">"Aceitar"</string>
-    <string name="cancelMsg">"Cancelar"</string>
-    <string name="allMsg">"Todos&#8230;"</string>
-    <string name="selectCourseTitle">"Seleccione o assunto"</string>
-    <string name="noCourseSelectedMsg">"Você deve selecionar um assunto para baixar as perguntas do teste"</string>
-    <string name="noQuestionsAvailableTestsDownloadMsg">"Sem perguntas experimentais para este assunto"</string>
-    <string name="noQuestionsPluggableTestsDownloadMsg">"O professor deste curso não permitir o download de perguntas do
-        teste"
-    </string>
-    <string name="questionsTestsDownloadSuccesfulMsg">"Sincronizadas perguntas do teste"</string>
-    <string name="testNoQuestionsCourseMsg">"Não baixado a qualquer pergunta de teste para este assunto"</string>
-    <string name="testNoQuestionsMsg">"Antes de realizar um teste deve baixar as perguntas do teste pelo menos um
-        assunto"
-    </string>
-    <string name="testNoQuestionsMeetsSpecifiedCriteriaMsg">"Não há dúvida de que atende os critérios especificados"
-    </string>
-    <string name="testNumQuestionsMsg">"Indicar o número de perguntas de teste"</string>
-    <string name="testTagsMsg">"Seleccionar descritores de incluir no teste"</string>
-    <string name="testNoTagsSelectedMsg">"Você deve selecionar pelo menos um descritor"</string>
-    <string name="testAnswerTypesMsg">"Selecione os tipos de respostas que você deseja incluir no teste"</string>
-    <string name="testNoAnswerTypesSelectedMsg">"Você deve selecionar pelo menos um tipo de resposta"</string>
-    <string name="testEvaluateMsg">"Corrija"</string>
-    <string name="testResultsTextMsg">"Pontuação"</string>
-    <string name="testShowResultsMsg">"Ver total"</string>
-    <string name="testShowResultsDetailsMsg">"Veja mais detalhes"</string>
-    <string name="testNoDetailsMsg">"O professor não pode ver os detalhes"</string>
-    <string name="testNoResultsMsg">"O professor não pode ver os resultados do teste"</string>
-    <string name="firstRunMsg">"Antes de usar o aplicativo pela primeira vez, deve digitar o nome de usuário e senha
+    <string name="forumReply">Fórum resposta</string>
+    <string name="content">Conteúdo</string>
+    <string name="messages">Posts</string>
+    <string name="evaluation">Avaliação</string>
+    <string name="assignment">Atividade</string>
+    <string name="survey">Votação</string>
+    <string name="documentFile">Documento #</string>
+    <string name="sharedFile">Documento compartilhada</string>
+    <string name="enrollment">Inscrição</string>
+    <string name="enrollmentRequest">Pedido de gravação</string>
+    <string name="unknownNotification">Desconhecido notificação</string>
+    <string name="fromMsg">De</string>
+    <string name="dateMsg">Data</string>
+    <string name="noSubjectMsg">Sem assunto</string>
+    <string name="noContentMsg">Sem conteúdo</string>
+    <string name="yesMsg">Sim.</string>
+    <string name="noMsg">Não</string>
+    <string name="trueMsg">Verdadeiro</string>
+    <string name="falseMsg">Falso</string>
+    <string name="acceptMsg">Aceitar</string>
+    <string name="cancelMsg">Cancelar</string>
+    <string name="allMsg">Todos&#8230;</string>
+    <string name="selectCourseTitle">Seleccione o assunto</string>
+    <string name="noCourseSelectedMsg">Você deve selecionar um assunto para baixar as perguntas do teste</string>
+    <string name="noQuestionsAvailableTestsDownloadMsg">Sem perguntas experimentais para este assunto</string>
+    <string name="noQuestionsPluggableTestsDownloadMsg">O professor deste curso não permitir o download de perguntas do
+        teste</string>
+    <string name="questionsTestsDownloadSuccesfulMsg">Sincronizadas perguntas do teste</string>
+    <string name="testNoQuestionsCourseMsg">Não baixado a qualquer pergunta de teste para este assunto</string>
+    <string name="testNoQuestionsMsg">Antes de realizar um teste deve baixar as perguntas do teste pelo menos um
+        assunto</string>
+    <string name="testNoQuestionsMeetsSpecifiedCriteriaMsg">Não há dúvida de que atende os critérios especificados</string>
+    <string name="testNumQuestionsMsg">Indicar o número de perguntas de teste</string>
+    <string name="testTagsMsg">Seleccionar descritores de incluir no teste</string>
+    <string name="testNoTagsSelectedMsg">Você deve selecionar pelo menos um descritor</string>
+    <string name="testAnswerTypesMsg">Selecione os tipos de respostas que você deseja incluir no teste</string>
+    <string name="testNoAnswerTypesSelectedMsg">Você deve selecionar pelo menos um tipo de resposta</string>
+    <string name="testEvaluateMsg">Corrija</string>
+    <string name="testResultsTextMsg">Pontuação</string>
+    <string name="testShowResultsMsg">Ver total</string>
+    <string name="testShowResultsDetailsMsg">Veja mais detalhes</string>
+    <string name="testNoDetailsMsg">O professor não pode ver os detalhes</string>
+    <string name="testNoResultsMsg">O professor não pode ver os resultados do teste</string>
+    <string name="firstRunMsg">Antes de usar o aplicativo pela primeira vez, deve digitar o nome de usuário e senha
         para acesso a Swad na tela de configuração.\n\nVocê pode acessar a tela de configuração no menu do aplicativo a
-        qualquer momento.\n\n Você quer abrir a tela de configuração agora?"
+        qualquer momento.\n\n Você quer abrir a tela de configuração agora?</string>
+    <string name="initialDialogTitle">Importante</string>
+    <string name="upgradeMsg">Devido a mudanças no banco de dados todos os dados foram apagados.\n\nDisculpe
+        inconveniente.</string>
+    <string name="errorBadLoginMsg">Nome de usuário ou senha incorreta.\n\n
+         * Certifique-se de que você inseriu o nome de usuário e senha para acesso direto a SWAD, não aqueles de PRADO.\n\n
+         * Se o usuário for um apelido, verificar se o usuário é precedido pelo @.\n\n
+         * Se o usuário é o ID, certifique-se de ter removido a letra final.</string>
+    <string name="errorServerResponseMsg">Erro na resposta do servidor</string>
+    <string name="errorBadAppKeyMsg">Má aplicação da chave. Por favor, entre em contato com o desenvolvedor.</string>
+    <string name="errorConnectionMsg">Erro ao se conectar ao servidor</string>
+    <string name="errorTimeoutMsg">Expirou tentando se conectar ao servidor</string>
+    <string name="sendingMessageMsg">Enviando mensagem&#8230;</string>
+    <string name="messageSendedMsg">Mensagem enviada</string>
+    <string name="messageSendErrorMsg">Falha ao enviar a mensagem. Verifique os dados de entrada</string>
+    <string name="message_receivers_title">Destinatários (separados por vírgulas)</string>
+    <string name="message_subject_title">Assunto</string>
+    <string name="message_body_title">Mensagem</string>
+    <string name="notice_body_title">==&gt; Aviso</string>
+    <string name="publishingNotice">Postagens notar&#8230;</string>
+    <string name="noticePublished">Anúncio</string>
+    <string name="noticeSendError">Falha ao publicar o novo edital</string>
+    <string name="sendMsg">Enviar</string>
+    <string name="cleanDatabaseMsg">Todos os dados no banco de dados foram apagados</string>
+    <string name="shareBodyMsg">Eu estou usando # SWADroid em meu Android para acessar a plataforma de aprendizagem
+        Swad\nObtenlo livre aqui:. Https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid</string>
+    <string name="twitterTitle">Chilro</string>
+    <string name="facebookTitle">Facebook</string>
+    <string name="googlePlusTitle">Google+</string>
+    <string name="mailingListTitle">Mailing List</string>
+    <string name="blogTitle">Blog</string>
+    <string name="marketTitle">Google Play</string>
+    <string name="prefCatSyncTitle">Sincronização</string>
+    <string name="prefSyncTimeTitle">Sincronização da freqüência</string>
+    <string name="prefSyncTimeSummary">Sincronização notificações de freqüência</string>
+    <string name="prefSyncEnableTitle">A sincronização automática</string>
+    <string name="prefSyncEnableSummary">Ativar a sincronização automática</string>
+    <string name="prefCatNotifTitle">Notificações</string>
+    <string name="prefNotifLimitTitle">Notificações de limite de</string>
+    <string name="prefNotifLimitDialogMessage">Selecione o número máximo de notificações a ser armazenado:</string>
+    <string name="prefNotifLimitSuffix">notificações</string>
+    <string name="notificationsAlertTitle">SWADroid</string>
+    <string name="notificationsAlertMsg">novas notificações</string>
+    <string name="footMessageMsg">Enviado de</string>
+    <string name="marksMsg">Clique sobre a notificação para ver a classificação.</string>
+    <string name="clickToGetCourses">Clique aqui para obter seus assuntos</string>
+    <string name="attendanceModuleLabel">Alardo</string>
+    <string name="users">Usuários</string>
+    <string name="usersDownloadProgressTitle">estudantes.</string>
+    <string name="usersDownloadProgressDescription">Estudantes de sincronização.\n\número de estudantes nDependiendo
+        para sincronizar o processamento de dados pode levar vários minutos.\n\nPor favor, aguarde&#8230;</string>
+    <string name="documentsDownloadModuleLabel">Documentos</string>
+    <string name="documentsDownloadProgressDescription">Obtendo arquivos.\n \ tamanho do diretório nDependiendo, pode
+        levar vários minutos.\n\nPor favor, aguarde&#8230;</string>
+    <string name="clickToOpenFile">Clique aqui para abrir o arquivo</string>
+    <string name="sharedsDownloadModuleLabel">Área Comum</string>
+    <string name="connectionRequired">Para esta funcionalidade requer uma ligação à Internet</string>
+    <string name="course">Disciplina:</string>
+    <string name="msg_default_format">Formato</string>
+    <string name="msg_default_type">Tipo</string>
+    <string name="msg_default_time">Tempo</string>
+    <string name="msg_default_meta">Metadados</string>
+    <string name="msg_default_status">Coloque um código de barras dentro do retângulo do visor para digitalizar."
     </string>
-    <string name="initialDialogTitle">"Importante"</string>
-    <string name="upgradeMsg">"Devido a mudanças no banco de dados todos os dados foram apagados.\n\nDisculpe
-        inconveniente."
-    </string>
-    <string name="errorBadLoginMsg">"Nome de usuário ou senha incorreta"</string>
-    <string name="errorServerResponseMsg">"Erro na resposta do servidor"</string>
-    <string name="errorBadAppKeyMsg">"Má aplicação da chave. Por favor, entre em contato com o desenvolvedor."</string>
-    <string name="errorConnectionMsg">"Erro ao se conectar ao servidor"</string>
-    <string name="errorTimeoutMsg">"Expirou tentando se conectar ao servidor"</string>
-    <string name="sendingMessageMsg">"Enviando mensagem&#8230;"</string>
-    <string name="messageSendedMsg">"Mensagem enviada"</string>
-    <string name="messageSendErrorMsg">"Falha ao enviar a mensagem. Verifique os dados de entrada"</string>
-    <string name="message_receivers_title">"Destinatários (separados por vírgulas)"</string>
-    <string name="message_subject_title">"Assunto"</string>
-    <string name="message_body_title">"Mensagem"</string>
-    <string name="notice_body_title">"==&gt; Aviso"</string>
-    <string name="publishingNotice">"Postagens notar&#8230;"</string>
-    <string name="noticePublished">"Anúncio"</string>
-    <string name="noticeSendError">"Falha ao publicar o novo edital"</string>
-    <string name="sendMsg">"Enviar"</string>
-    <string name="cleanDatabaseMsg">"Todos os dados no banco de dados foram apagados"</string>
-    <string name="shareBodyMsg">"Eu estou usando # SWADroid em meu Android para acessar a plataforma de aprendizagem
-        Swad\nObtenlo livre aqui:. Https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid"
-    </string>
-    <string name="twitterTitle">"Chilro"</string>
-    <string name="facebookTitle">"Facebook"</string>
-    <string name="googlePlusTitle">"Google+"</string>
-    <string name="mailingListTitle">"Mailing List"</string>
-    <string name="blogTitle">"Blog"</string>
-    <string name="marketTitle">"Google Play"</string>
-    <string name="prefCatSyncTitle">"Sincronização"</string>
-    <string name="prefSyncTimeTitle">"Sincronização da freqüência"</string>
-    <string name="prefSyncTimeSummary">"Sincronização notificações de freqüência"</string>
-    <string name="prefSyncEnableTitle">"A sincronização automática"</string>
-    <string name="prefSyncEnableSummary">"Ativar a sincronização automática"</string>
-    <string name="prefCatNotifTitle">"Notificações"</string>
-    <string name="prefNotifLimitTitle">"Notificações de limite de"</string>
-    <string name="prefNotifLimitDialogMessage">"Selecione o número máximo de notificações a ser armazenado:"</string>
-    <string name="prefNotifLimitSuffix">"notificações"</string>
-    <string name="notificationsAlertTitle">"SWADroid"</string>
-    <string name="notificationsAlertMsg">"novas notificações"</string>
-    <string name="footMessageMsg">"Enviado de"</string>
-    <string name="marksMsg">"Clique sobre a notificação para ver a classificação."</string>
-    <string name="clickToGetCourses">"Clique aqui para obter seus assuntos"</string>
-    <string name="attendanceModuleLabel">"Alardo"</string>
-    <string name="users">"Usuários"</string>
-    <string name="usersDownloadProgressTitle">"estudantes."</string>
-    <string name="usersDownloadProgressDescription">"Estudantes de sincronização.\n\número de estudantes nDependiendo
-        para sincronizar o processamento de dados pode levar vários minutos.\n\nPor favor, aguarde&#8230;"
-    </string>
-    <string name="documentsDownloadModuleLabel">"Documentos"</string>
-    <string name="documentsDownloadProgressDescription">"Obtendo arquivos.\n \ tamanho do diretório nDependiendo, pode
-        levar vários minutos.\n\nPor favor, aguarde&#8230;"
-    </string>
-    <string name="clickToOpenFile">"Clique aqui para abrir o arquivo"</string>
-    <string name="sharedsDownloadModuleLabel">"Área Comum"</string>
-    <string name="connectionRequired">"Para esta funcionalidade requer uma ligação à Internet"</string>
-    <string name="course">"Disciplina:"</string>
-    <string name="msg_default_format">"Formato"</string>
-    <string name="msg_default_type">"Tipo"</string>
-    <string name="msg_default_time">"Tempo"</string>
-    <string name="msg_default_meta">"Metadados"</string>
-    <string name="msg_default_status">"Coloque um código de barras dentro do retângulo do visor para digitalizar."
-    </string>
-    <string name="msg_camera_framework_bug">"Desculpe, a câmera Android encontrou um problema. Você pode precisar
-        reiniciar o dispositivo."
-    </string>
-    <string name="button_ok">"OK"</string>
-    <string name="scan_valid_student">"Estudante de este assunto"</string>
-    <string name="scan_not_valid_student">"Aluno de outro assunto"</string>
-    <string name="scan_name">"Nome"</string>
-    <string name="scan_id">"Bilhete de Identid"</string>
-    <string name="scan_not_valid_code">"QR Code inválido"</string>
-    <string name="scan_data_not_found">"Não há dados para este aluno"</string>
-    <string name="scan_no_codes">"Não houve nenhum código válido QR"</string>
-    <string name="usersPresent">"Os estudantes apresentam"</string>
-    <string name="NoNotificationsMsg">"Não há novas notificações"</string>
-    <string name="home_icon">"Mostra a pasta inicial"</string>
-    <string name="parent_icon">"Exibe a pasta acima da atual"</string>
-    <string name="refresh_icon">"Atualizar"</string>
-    <string name="group">"Grupo"</string>
-    <string name="notificationDownloadTitle">"Baixando&#8230;"</string>
-    <string name="complete">"completo"</string>
-    <string name="fileInfoTitle">"Info"</string>
-    <string name="sizeFileTitle">"Tamanho:"</string>
-    <string name="creationTimeTitle">"Data"</string>
-    <string name="uploaderTitle">"Enviado por:"</string>
-    <string name="downloadFileTitle">"descarregar"</string>
-    <string name="sdCardBusyTitle">"Cartão SD não disponível"</string>
-    <string name="sdCardBusy">"O cartão SD está ocupado agora. Para permitir downloads, selecione \"Desativar o
-        armazenamento USB\" na notificação"
-    </string>
-    <string name="vacants">"Vagas"</string>
-    <string name="numStudent">"Número de alunos: "</string>
-    <string name="myGroupsModuleLabel">"Meus Grupos"</string>
-    <string name="scan_no_photos">"Falha ao salvar as fotos dos alunos"</string>
-    <string name="noStudentsAvailableMsg">"Este curso não tem alunos"</string>
-    <string name="studentsUpdated">"alunos atuais"</string>
-    <string name="scan_no_students">"Nenhum estudante encontrado\n \"Tente alunos Update\""</string>
-    <string name="photoContentDescription">"Foto de estudante"</string>
-    <string name="noCameraFound">"O dispositivo não tem câmara"</string>
-    <string name="saveMsg">"Guardar"</string>
-    <string name="addSessionTitle_menu">"Sessão nova prática"</string>
-    <string name="noGroupsAvailableMsg">"Não há grupos seleccionados para o sujeito"</string>
-    <string name="groupsUpdated">"Grupos atualizados"</string>
-    <string name="sessionCourseText">"Disciplina:"</string>
-    <string name="sessionGroupText">"Grupo"</string>
-    <string name="sessionEndText">"Fim
-        "
-    </string>
-    <string name="sessionButtonCreate">"Criar"</string>
-    <string name="sessionSiteText">"Localização (opcional)"</string>
-    <string name="sessionButtonCancel">"Cancelar"</string>
-    <string name="sessionStartText">"início"</string>
-    <string name="sessionDescriptionText">"Descrição (opcional)"</string>
-    <string name="sessionModuleLabel">"Sessão nova prática"</string>
-    <string name="confirmExitMsg">"Tem certeza de que deseja sair sem salvar as alterações?"</string>
-    <string name="selectGroupTitle">"Selecione o grupo"</string>
-    <string name="clickToGetGroups">"Clique aqui para obter seus grupos"</string>
-    <string name="sessionCreated">"Sessão de treinos criado corretamente"</string>
-    <string name="sessionNotCreated">"Já existe a sessão de treinos especificado"</string>
-    <string name="sessionChoose">"Escolha a sessão de treinos"</string>
-    <string name="sendingState">"Envio para Swad: "</string>
-    <string name="sendingStatePending">"Declive"</string>
-    <string name="sendingStateSent">"Enviado"</string>
-    <string name="session">"Sessão: "</string>
-    <string name="noPracticeSessionsAvailableMsg">"Não sessões de treinos grupo selecionado de banco de dados"</string>
-    <string name="sessionNoStudentsMsg">"Nenhum estudante participou nesta sessão"</string>
-    <string name="studentsHistoryModuleLabel">"Estudantes de história"</string>
-    <string name="sessionsTitle">"Sessões de treinos"</string>
-    <string name="noSessionsAvailableMsg">"Não há sessões de treinos no banco de dados"</string>
-    <string name="listSampleModuleLabel">"Teste"</string>
-    <string name="rollcallModuleLabel">"Alardo"</string>
-    <string name="studentsTitle">"estudantes."</string>
-    <string name="studentsDownloadProgressDescription">"Estudantes de sincronização.\n\número de estudantes nDependiendo
-        para sincronizar o processamento de dados pode levar vários minutos.\n\nPor favor, aguarde&#8230;"
-    </string>
-    <string name="studentsList">"Lista de alunos"</string>
-    <string name="studentsDownloadProgressTitle">"estudantes."</string>
-    <string name="studentsPresent">"Os estudantes apresentam"</string>
-    <string name="studentsUpdate">"Atualizar"</string>
-    <string name="newTitle">"nova"</string>
-    <string name="rollcallScanQR">"Digitalizar QR"</string>
-    <string name="rollcallManual">"Modo manual"</string>
-    <string name="sessionsSelect">"Verifique sessões"</string>
-    <string name="studentsSelect">"Verifique estudantes"</string>
-    <string name="rollcallErrorNoConnection">"Sem ligação com o servidor. Eles mantiveram os números de atendimento no
-        banco de dados."
-    </string>
-    <string name="rollcallHistoryModuleLabel">"Sessões de História"</string>
-    <string name="rollcallNoStudentsSelected">"Nenhum aluno especial não"</string>
-    <string name="rollcallNoPracticeSessions">"Não há sessões práticas definidas para o assunto e grupo selecionado.
-        Selecione: sessões de treinos - Nova"
-    </string>
-    <string name="rollcallSaved">"Dados do comparecimento armazenados corretamente"</string>
-    <string name="rollcallWebServiceNotAvailable">"O serviço web para enviar dados de assistência Swad não está
-        disponível."
-    </string>
-    <string name="rollcallEvent">"Roll Evento"</string>
-    <string name="froyoFunctionMsg">"Este recurso requer Android 2.2 ou superior"</string>
-    <string name="noRearCamera">"Este recurso requer uma câmera traseira"</string>
-    <string name="groupSeparator">": "</string>
-    <string name="groupTypesModuleLabel">"Obter taxas de grupo"</string>
-    <string name="openingTime">"Abra: "</string>
-    <string name="noGroupsText">"Nenhum grupo foi criado dentro do assunto"</string>
-    <string name="changeGroups">"Grupos de mudança"</string>
-    <string name="resultEnrollment">"Resultado de registro"</string>
-    <string name="successfullEnrollment">"Todas as inscrições foram feitas com sucesso. Por favor, verifique se você
-        está inscrito nos grupos desejados "
-    </string>
-    <string name="confirmEnrollments">"Confirmar as entradas solicitadas "</string>
-    <string name="areYouSure">" Tem certeza de que quer se juntar os grupos selecionados?"</string>
-    <string name="failedEnrollment">"Desculpe inscrição em grupos selecionados não pode ser realizada"</string>
-    <string name="groupTypesProgressDescription">"Obtendo os tipos de grupo&#8230;\nPor favor, aguarde&#8230;"</string>
-    <string name="groupsProgressDescription">"Obtendo grupos&#8230;\nPor favor, aguarde&#8230;"</string>
-    <string name="groupTypesProgressTitle">"Grupos de tipos"</string>
-    <string name="groupsProgressTitle">"Grupos"</string>
-    <string name="sendMyGroupsProgressDescription">"Envio de grupos de registro&#8230;\nPor favor, aguarde&#8230;"
-    </string>
-    <string name="sendMyGroupsProgressTitle">"As inscrições para grupos"</string>
-    <string name="withoutLimit">"Ilimitado"</string>
-    <string name="downloadProblemTitle">"Problema em baixar"</string>
-    <string name="downloadProblemMsg">"Desculpe. O download foi interrompido. Tentar novamente"</string>
-    <string name="downloadCompletedTitle">" Full Download "</string>
-    <string name="unknown">"Desconhecido"</string>
-    <string name="selectZoneTitle">"Selecione a área"</string>
-    <string name="fileTitle">"[&amp;Archivo]"</string>
-    <string name="noConnectionMsg">"Esta característica requer conexão. "</string>
-    <string name="noApp">"Não é possível abrir este arquivo."</string>
-    <string name="contents_contact">"Informações para contato"</string>
-    <string name="contents_email">"Endereço de e-mail"</string>
-    <string name="contents_location">"Coordenadas geográficas"</string>
-    <string name="contents_phone">"Número de telefone"</string>
-    <string name="contents_sms">"SMS endereço"</string>
-    <string name="contents_text">"Texto"</string>
+    <string name="msg_camera_framework_bug">Desculpe, a câmera Android encontrou um problema. Você pode precisar
+        reiniciar o dispositivo.</string>
+    <string name="button_ok">OK</string>
+    <string name="scan_valid_student">Estudante de este assunto</string>
+    <string name="scan_not_valid_student">Aluno de outro assunto</string>
+    <string name="scan_name">Nome</string>
+    <string name="scan_id">Bilhete de Identid</string>
+    <string name="scan_not_valid_code">QR Code inválido</string>
+    <string name="scan_data_not_found">Não há dados para este aluno</string>
+    <string name="scan_no_codes">Não houve nenhum código válido QR</string>
+    <string name="usersPresent">Os estudantes apresentam</string>
+    <string name="NoNotificationsMsg">Não há novas notificações</string>
+    <string name="home_icon">Mostra a pasta inicial</string>
+    <string name="parent_icon">Exibe a pasta acima da atual</string>
+    <string name="refresh_icon">Atualizar</string>
+    <string name="group">Grupo</string>
+    <string name="notificationDownloadTitle">Baixando&#8230;</string>
+    <string name="complete">completo</string>
+    <string name="fileInfoTitle">Info</string>
+    <string name="sizeFileTitle">Tamanho:</string>
+    <string name="creationTimeTitle">Data</string>
+    <string name="uploaderTitle">Enviado por:</string>
+    <string name="downloadFileTitle">descarregar</string>
+    <string name="sdCardBusyTitle">Cartão SD não disponível</string>
+    <string name="sdCardBusy">O cartão SD está ocupado agora. Para permitir downloads, selecione \"Desativar o
+        armazenamento USB\" na notificação</string>
+    <string name="vacants">Vagas</string>
+    <string name="numStudent">Número de alunos: </string>
+    <string name="myGroupsModuleLabel">Meus Grupos</string>
+    <string name="scan_no_photos">Falha ao salvar as fotos dos alunos</string>
+    <string name="noStudentsAvailableMsg">Este curso não tem alunos</string>
+    <string name="studentsUpdated">alunos atuais</string>
+    <string name="scan_no_students">Nenhum estudante encontrado\n \"Tente alunos Update\"</string>
+    <string name="photoContentDescription">Foto de estudante</string>
+    <string name="noCameraFound">O dispositivo não tem câmara</string>
+    <string name="saveMsg">Guardar</string>
+    <string name="addSessionTitle_menu">Sessão nova prática</string>
+    <string name="noGroupsAvailableMsg">Não há grupos seleccionados para o sujeito</string>
+    <string name="groupsUpdated">Grupos atualizados</string>
+    <string name="sessionCourseText">Disciplina:</string>
+    <string name="sessionGroupText">Grupo</string>
+    <string name="sessionEndText">Fim</string>
+    <string name="sessionButtonCreate">Criar</string>
+    <string name="sessionSiteText">Localização (opcional)</string>
+    <string name="sessionButtonCancel">Cancelar</string>
+    <string name="sessionStartText">início</string>
+    <string name="sessionDescriptionText">Descrição (opcional)</string>
+    <string name="sessionModuleLabel">Sessão nova prática</string>
+    <string name="confirmExitMsg">Tem certeza de que deseja sair sem salvar as alterações?</string>
+    <string name="selectGroupTitle">Selecione o grupo</string>
+    <string name="clickToGetGroups">Clique aqui para obter seus grupos</string>
+    <string name="sessionCreated">Sessão de treinos criado corretamente</string>
+    <string name="sessionNotCreated">Já existe a sessão de treinos especificado</string>
+    <string name="sessionChoose">Escolha a sessão de treinos</string>
+    <string name="sendingState">Envio para Swad: </string>
+    <string name="sendingStatePending">Declive</string>
+    <string name="sendingStateSent">Enviado</string>
+    <string name="session">Sessão: </string>
+    <string name="noPracticeSessionsAvailableMsg">Não sessões de treinos grupo selecionado de banco de dados</string>
+    <string name="sessionNoStudentsMsg">Nenhum estudante participou nesta sessão</string>
+    <string name="studentsHistoryModuleLabel">Estudantes de história</string>
+    <string name="sessionsTitle">Sessões de treinos</string>
+    <string name="noSessionsAvailableMsg">Não há sessões de treinos no banco de dados</string>
+    <string name="listSampleModuleLabel">Teste</string>
+    <string name="rollcallModuleLabel">Alardo</string>
+    <string name="studentsTitle">estudantes.</string>
+    <string name="studentsDownloadProgressDescription">Estudantes de sincronização.\n\número de estudantes nDependiendo
+        para sincronizar o processamento de dados pode levar vários minutos.\n\nPor favor, aguarde&#8230;</string>
+    <string name="studentsList">Lista de alunos</string>
+    <string name="studentsDownloadProgressTitle">estudantes.</string>
+    <string name="studentsPresent">Os estudantes apresentam</string>
+    <string name="studentsUpdate">Atualizar</string>
+    <string name="newTitle">nova</string>
+    <string name="rollcallScanQR">Digitalizar QR</string>
+    <string name="rollcallManual">Modo manual</string>
+    <string name="sessionsSelect">Verifique sessões</string>
+    <string name="studentsSelect">Verifique estudantes</string>
+    <string name="rollcallErrorNoConnection">Sem ligação com o servidor. Eles mantiveram os números de atendimento no
+        banco de dados.</string>
+    <string name="rollcallHistoryModuleLabel">Sessões de História</string>
+    <string name="rollcallNoStudentsSelected">Nenhum aluno especial não</string>
+    <string name="rollcallNoPracticeSessions">Não há sessões práticas definidas para o assunto e grupo selecionado.
+        Selecione: sessões de treinos - Nova</string>
+    <string name="rollcallSaved">Dados do comparecimento armazenados corretamente</string>
+    <string name="rollcallWebServiceNotAvailable">O serviço web para enviar dados de assistência Swad não está
+        disponível.</string>
+    <string name="rollcallEvent">Roll Evento</string>
+    <string name="froyoFunctionMsg">Este recurso requer Android 2.2 ou superior</string>
+    <string name="noRearCamera">Este recurso requer uma câmera traseira</string>
+    <string name="groupSeparator">: </string>
+    <string name="groupTypesModuleLabel">Obter taxas de grupo</string>
+    <string name="openingTime">Abra: </string>
+    <string name="noGroupsText">Nenhum grupo foi criado dentro do assunto</string>
+    <string name="changeGroups">Grupos de mudança</string>
+    <string name="resultEnrollment">Resultado de registro</string>
+    <string name="successfullEnrollment">Todas as inscrições foram feitas com sucesso. Por favor, verifique se você
+        está inscrito nos grupos desejadosstring name="confirmEnrollments">Confirmar as entradas solicitadas </string>
+    <string name="areYouSure"> Tem certeza de que quer se juntar os grupos selecionados?</string>
+    <string name="failedEnrollment">Desculpe inscrição em grupos selecionados não pode ser realizada</string>
+    <string name="groupTypesProgressDescription">Obtendo os tipos de grupo&#8230;\nPor favor, aguarde&#8230;</string>
+    <string name="groupsProgressDescription">Obtendo grupos&#8230;\nPor favor, aguarde&#8230;</string>
+    <string name="groupTypesProgressTitle">Grupos de tipos</string>
+    <string name="groupsProgressTitle">Grupos</string>
+    <string name="sendMyGroupsProgressDescription">Envio de grupos de registro&#8230;\nPor favor, aguarde&#8230;</string>
+    <string name="sendMyGroupsProgressTitle">As inscrições para grupos</string>
+    <string name="withoutLimit">Ilimitado</string>
+    <string name="downloadProblemTitle">Problema em baixar</string>
+    <string name="downloadProblemMsg">Desculpe. O download foi interrompido. Tentar novamente</string>
+    <string name="downloadCompletedTitle"> Full Download </string>
+    <string name="unknown">Desconhecido</string>
+    <string name="selectZoneTitle">Selecione a área</string>
+    <string name="fileTitle">[&amp;Archivo]</string>
+    <string name="noConnectionMsg">Esta característica requer conexão. </string>
+    <string name="noApp">Não é possível abrir este arquivo.</string>
+    <string name="contents_contact">Informações para contato</string>
+    <string name="contents_email">Endereço de e-mail</string>
+    <string name="contents_location">Coordenadas geográficas</string>
+    <string name="contents_phone">Número de telefone</string>
+    <string name="contents_sms">SMS endereço</string>
+    <string name="contents_text">Texto</string>
 
 </resources>

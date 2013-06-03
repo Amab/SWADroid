@@ -20,6 +20,7 @@ package es.ugr.swad.swadroid.gui;
 
 import android.app.AlertDialog;
 import android.app.ExpandableListActivity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,7 +29,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
+
 import com.bugsense.trace.BugSenseHandler;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
@@ -52,6 +55,14 @@ public class MenuExpandableListActivity extends ExpandableListActivity {
      * Database Helper.
      */
     protected static DataBaseHelper dbHelper;
+    /**
+     * Application debuggable flag
+     */
+    protected static boolean isDebuggable;
+    /**
+     * Class Module's tag name for Logcat
+     */
+    private static final String TAG = Constants.APP_TAG + " MenuExpandableListActivity";
 
     /* (non-Javadoc)
      * @see android.app.Activity#onStart()
@@ -112,11 +123,25 @@ public class MenuExpandableListActivity extends ExpandableListActivity {
      *
      * @param message Error message to show.
      */
-    protected void error(String message) {
-        new AlertDialog.Builder(this).setTitle(R.string.title_error_dialog)
+    protected void error(String tag, String message, Exception ex, boolean sendException) {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.title_error_dialog)
                 .setMessage(message)
-                .setNeutralButton(R.string.close_dialog, null)
-                .setIcon(R.drawable.erroricon).show();
+                .setNeutralButton(R.string.close_dialog,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                finish();
+                            }
+                        }).setIcon(R.drawable.erroricon).show();
+
+        if (ex != null) {
+            ex.printStackTrace();
+
+            // Send exception details to Bugsense
+            if (!isDebuggable && sendException) {
+                BugSenseHandler.sendExceptionMessage(tag, message, ex);
+            }
+        }
     }
 
     /**
@@ -174,13 +199,10 @@ public class MenuExpandableListActivity extends ExpandableListActivity {
         //Initialize database
         try {
             dbHelper = new DataBaseHelper(this);
+            isDebuggable = (getPackageManager().getApplicationInfo(
+                    getPackageName(), 0).FLAG_DEBUGGABLE != 0);
         } catch (Exception ex) {
-            Log.e(ex.getClass().getSimpleName(), ex.getMessage());
-            error(ex.getMessage());
-            ex.printStackTrace();
-
-            //Send exception details to Bugsense
-            BugSenseHandler.sendException(ex);
+            error(TAG, ex.getMessage(), ex, true);
         }
     }
 
@@ -204,12 +226,7 @@ public class MenuExpandableListActivity extends ExpandableListActivity {
         try {
             dbHelper = new DataBaseHelper(this);
         } catch (Exception ex) {
-            Log.e(ex.getClass().getSimpleName(), ex.getMessage());
-            error(ex.getMessage());
-            ex.printStackTrace();
-
-            //Send exception details to Bugsense
-            BugSenseHandler.sendException(ex);
+            error(TAG, ex.getMessage(), ex, true);
         }
     }
 

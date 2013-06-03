@@ -19,17 +19,19 @@
 package es.ugr.swad.swadroid.modules.downloads;
 
 import com.bugsense.trace.BugSenseHandler;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 
 /**
@@ -38,13 +40,14 @@ import java.util.List;
  *
  * @author Sergio Ropero Oliver. <sro0000@gmail.com>
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @version 1.0
  */
 
 //TODO look for a more efficient navigation
 public class DirectoryNavigator {
 
-    private String TAG = "Swadroid DirectoryNavigator";
+    private String TAG = "SWADroid DirectoryNavigator";
 
     private String XMLinfo;
 
@@ -75,10 +78,8 @@ public class DirectoryNavigator {
 
         Node node = goToDirectory();
 
-        //ArrayList<DirectoryItem> itemsToShow;
-        //itemsToShow = new ArrayList<DirectoryItem>(getItems(node));
         currentItems = new ArrayList<DirectoryItem>(getItems(node));
-        //return itemsToShow;
+
         return currentItems;
     }
 
@@ -102,10 +103,8 @@ public class DirectoryNavigator {
 
         Node node = goToDirectory();
 
-        //ArrayList<DirectoryItem> itemsToShow;
-        //itemsToShow = new ArrayList<DirectoryItem>(getItems(node));
         currentItems = new ArrayList<DirectoryItem>(getItems(node));
-        //return itemsToShow;
+
         return currentItems;
     }
 
@@ -116,19 +115,15 @@ public class DirectoryNavigator {
      * @throws InvalidPath When the directory does not exist.
      */
     public ArrayList<DirectoryItem> goToParentDirectory() throws InvalidPath {
-        //ArrayList<DirectoryItem> itemsToShow;
 
         if (path.size() != 0) {
             //We decrease the path.
             path.remove(path.size() - 1);
             Node node = goToDirectory();
-            //itemsToShow = new ArrayList<DirectoryItem>(getItems(node));
-            currentItems = new ArrayList<DirectoryItem>(getItems(node));
-        }//else
-        //itemsToShow = goToRoot();
-        //currentItems = goToRoot();
 
-        //return itemsToShow;
+            currentItems = new ArrayList<DirectoryItem>(getItems(node));
+        }
+
         return currentItems;
     }
 
@@ -142,11 +137,6 @@ public class DirectoryNavigator {
         this.XMLinfo = fileXML;
 
         Node node = goToDirectory();
-
-        //ArrayList<DirectoryItem> itemsToShow;
-        //itemsToShow = new ArrayList<DirectoryItem>(getItems(node));
-
-        // return itemsToShow;
 
         currentItems = new ArrayList<DirectoryItem>(getItems(node));
         return currentItems;
@@ -162,11 +152,6 @@ public class DirectoryNavigator {
         path.clear();
 
         Node node = goToDirectory();
-
-        //ArrayList<DirectoryItem> itemsToShow;
-        //itemsToShow = new ArrayList<DirectoryItem>(getItems(node));
-
-        //return itemsToShow;
 
         currentItems = new ArrayList<DirectoryItem>(getItems(node));
         return currentItems;
@@ -184,13 +169,11 @@ public class DirectoryNavigator {
         NodeList childs = node.getChildNodes();
 
         DirectoryItem item;
-        //System.out.println("Num of childs"+childs.getLength());
         for (int i = 0; i < childs.getLength(); i++) {
             Node currentChild = childs.item(i);
             if (currentChild.getNodeName().equals("dir")) {
                 NamedNodeMap attributes = currentChild.getAttributes();
                 String name = attributes.getNamedItem("name").getNodeValue();
-                //System.out.println("Name:  "+name);
                 item = new DirectoryItem(name);
                 items.add(item);
             } else {
@@ -209,9 +192,6 @@ public class DirectoryNavigator {
                     NamedNodeMap attributes = currentChild.getAttributes();
                     name = attributes.getNamedItem("name").getNodeValue();
 
-                    //System.out.println("Name:  "+name);
-
-
                     //WE GET THE REST OF THE INFO
                     NodeList fileData = currentChild.getChildNodes();
                     for (int j = 0; j < fileData.getLength(); j++) {
@@ -222,49 +202,20 @@ public class DirectoryNavigator {
                         if (firstChild != null)
                             if (tag.equals("code")) {
                                 fileCode = Long.valueOf(firstChild.getNodeValue());
-                                /*//from the url, gets the type
-                                int lastDot = url.lastIndexOf(".");
-								if(lastDot != -1)
-									type = url.substring(lastDot+1, url.length());
-								else
-									type = "unknown";
-			    				//System.out.println("Type: "+type);*/
-                            } else {
-                                if (tag.equals("size")) {
-                                    size = Integer.parseInt(firstChild.getNodeValue());
-
-                                } else {
-                                    if (tag.equals("time")) {
-                                        time = Long.valueOf(firstChild.getNodeValue());
-
-                                    } else {
-                                        if (tag.equals("license")) {
-                                            license = firstChild.getNodeValue();
-
-                                        } else {
-                                            if (tag.equals("publisher")) {
-                                                publisher = firstChild.getNodeValue();
-
-                                            } else {
-                                                if (tag.equals("photo")) {
-                                                    photo = firstChild.getNodeValue();
-
-
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
+                            } else if (tag.equals("size")) {
+                                size = Integer.parseInt(firstChild.getNodeValue());
+                            } else if (tag.equals("time")) {
+                                time = Long.valueOf(firstChild.getNodeValue());
+                            } else if (tag.equals("license")) {
+                                license = firstChild.getNodeValue();
+                            } else if (tag.equals("publisher")) {
+                                publisher = firstChild.getNodeValue();
+                            } else if (tag.equals("photo")) {
+                                photo = firstChild.getNodeValue();
                             }
                     }
-                    //System.out.println("Code: "+fileCode);
-                    //System.out.println("Size: "+size);
-                    //System.out.println("Time: "+time);
-                    //System.out.println("license: "+ license);
-                    //System.out.println("publisher: "+ publisher);
-                    //System.out.println("photo: "+ photo);
+
                     item = new DirectoryItem(name, type, fileCode, size, time, license, publisher, photo);
-                    //item = new DirectoryItem(name,type,url,size,date,fileCode);
                     items.add(item);
                 }
             }
@@ -302,12 +253,10 @@ public class DirectoryNavigator {
             for (String aPath : path) {
                 //WE GET THE REST OF THE INFO
                 NodeList childs = currentNode.getChildNodes();
-                //System.out.println(childs.getLength());
                 for (int j = 0; j < childs.getLength(); j++) {
                     Node currentChild = childs.item(j);
                     if (currentChild.getNodeName().equals("dir") || currentChild.getNodeName().equals("file")) {
                         NamedNodeMap attributes = currentChild.getAttributes();
-                        //System.out.println(path.get(i)+"  "+attributes.getNamedItem("name").getNodeValue());
                         if (aPath.equals(attributes.getNamedItem("name").getNodeValue())) {
                             currentNode = currentChild;
                             directoryLevel++;
@@ -409,47 +358,7 @@ public class DirectoryNavigator {
         return fileCode;
 
     }
-	/*
-    */
 
-    /**
-     * Identifies the node with name @a name and gets its file code in case the node is a file. In case the node is a directory returns -1
-     *
-     * @returns null in case the node is a directory or it does not exists any node with the given name
-     * URL String that contains the url address to download the chosen file
-     *//*
-	public String getURLFile(String name){
-		String url = null;
-		
-		DirectoryItem node = getDirectoryItem(name);
-		if(node != null){
-			//TODO  disable the simulated url
-			url = node.getUrl();
-			//url = setSimulateURL();
-		}
-		
-		return url;
-		
-	}
-	*/
-    //TODO we use this method only to simulate the download while the web service is not available
-    public String setSimulateURL() {
-        return "http://swad.ugr.es/logo/swad24x24.gif";
-    }
-	
-
-	
-/*	private String getFilenNameFromURL(String url){
-		int slashIndex = url.lastIndexOf("/");
-		if(slashIndex == url.length() - 1)
-			return null;
-		else
-			return url.substring(slashIndex + 1);			
-	}
-*/
-
-    /**
-     * */
     // TODO it should not be needed because name of the node and name of the file should be equal.
     public String getFileName(String name) {
         DirectoryItem node = getDirectoryItem(name);

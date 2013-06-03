@@ -20,6 +20,7 @@ package es.ugr.swad.swadroid.gui;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -51,6 +52,14 @@ public class MenuActivity extends Activity {
      * Database Helper.
      */
     protected static DataBaseHelper dbHelper;
+    /**
+     * Application debuggable flag
+     */
+    protected static boolean isDebuggable;
+    /**
+     * Class Module's tag name for Logcat
+     */
+    private static final String TAG = Constants.APP_TAG + " MenuActivity";
 
     /* (non-Javadoc)
      * @see android.app.Activity#onStart()
@@ -108,11 +117,25 @@ public class MenuActivity extends Activity {
      *
      * @param message Error message to show.
      */
-    void error(String message) {
-        new AlertDialog.Builder(this).setTitle(R.string.title_error_dialog)
+    protected void error(String tag, String message, Exception ex, boolean sendException) {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.title_error_dialog)
                 .setMessage(message)
-                .setNeutralButton(R.string.close_dialog, null)
-                .setIcon(R.drawable.erroricon).show();
+                .setNeutralButton(R.string.close_dialog,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                finish();
+                            }
+                        }).setIcon(R.drawable.erroricon).show();
+
+        if (ex != null) {
+            ex.printStackTrace();
+
+            // Send exception details to Bugsense
+            if (!isDebuggable && sendException) {
+                BugSenseHandler.sendExceptionMessage(tag, message, ex);
+            }
+        }
     }
 
     /**
@@ -170,13 +193,10 @@ public class MenuActivity extends Activity {
         //Initialize database
         try {
             dbHelper = new DataBaseHelper(this);
+            isDebuggable = (getPackageManager().getApplicationInfo(
+                    getPackageName(), 0).FLAG_DEBUGGABLE != 0);
         } catch (Exception ex) {
-            Log.e(ex.getClass().getSimpleName(), ex.getMessage());
-            error(ex.getMessage());
-            ex.printStackTrace();
-
-            //Send exception details to Bugsense
-            BugSenseHandler.sendException(ex);
+            error(TAG, ex.getMessage(), ex, true);
         }
     }
 
@@ -200,12 +220,7 @@ public class MenuActivity extends Activity {
         try {
             dbHelper = new DataBaseHelper(this);
         } catch (Exception ex) {
-            Log.e(ex.getClass().getSimpleName(), ex.getMessage());
-            error(ex.getMessage());
-            ex.printStackTrace();
-
-            //Send exception details to Bugsense
-            BugSenseHandler.sendException(ex);
+            error(TAG, ex.getMessage(), ex, true);
         }
     }
 }

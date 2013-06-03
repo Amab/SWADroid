@@ -19,9 +19,9 @@
 
 package es.ugr.swad.swadroid;
 
-import es.ugr.swad.swadroid.model.User;
-
 import java.util.Random;
+
+import es.ugr.swad.swadroid.model.User;
 
 /**
  * Constants of application.
@@ -52,7 +52,7 @@ public class Constants {
      */
     public static final String AUTHORITY = "es.ugr.swad.swadroid.content";
     /**
-     * Default synchronization time for notifications
+     * Default synchronization time for notifications (in minutes)
      */
     public static final long DEFAULT_SYNC_TIME = 60;
     /**
@@ -372,7 +372,6 @@ public class Constants {
 
     /**
      * Gets the user logged on SWAD
-     *
      */
     public static User getLoggedUser() {
         return loggedUser;
@@ -380,7 +379,6 @@ public class Constants {
 
     /**
      * Sets the user logged on SWAD
-     *
      */
     public static void setLoggedUser(User loggedUser) {
         Constants.loggedUser = loggedUser;
@@ -414,10 +412,10 @@ public class Constants {
 
     /**
      * Sets code of current course
-     *
      */
     public static void setSelectedCourseCode(long currentCourseCode) {
-        if (currentCourseCode > 0) selectedCourseCode = currentCourseCode;
+        //if (currentCourseCode > 0) selectedCourseCode = currentCourseCode;
+        selectedCourseCode = currentCourseCode;
     }
 
     /**
@@ -438,7 +436,6 @@ public class Constants {
 
     /**
      * Set the fact that the preferences has changed
-     *
      */
     public static void setPreferencesChanged() {
         preferencesChanged = true;

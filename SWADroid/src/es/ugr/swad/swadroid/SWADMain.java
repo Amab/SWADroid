@@ -27,9 +27,25 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.*;
+import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
+import android.widget.ExpandableListView;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.SimpleCursorAdapter;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.bugsense.trace.BugSenseHandler;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import es.ugr.swad.swadroid.gui.ImageExpandableListAdapter;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.model.Course;
@@ -48,11 +64,6 @@ import es.ugr.swad.swadroid.ssl.SecureConnection;
 import es.ugr.swad.swadroid.sync.AccountAuthenticator;
 import es.ugr.swad.swadroid.sync.SyncUtils;
 import es.ugr.swad.swadroid.utils.Utils;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Main class of the application.
@@ -235,14 +246,13 @@ public class SWADMain extends MenuExpandableListActivity {
             //Check if this is the first run after an install or upgrade
             lastVersion = prefs.getLastVersion();
             currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+            dbHelper.initializeDB();
             //lastVersion = 45;
             //currentVersion = 46;
 
             //If this is the first run, show configuration dialog
             if (lastVersion == 0) {
                 showConfigurationDialog();
-                dbHelper.initializeDB();
-                //prefs.upgradeCredentials();
 
                 //Configure automatic synchronization
                 Intent activity = new Intent(getBaseContext(), AccountAuthenticator.class);
@@ -272,7 +282,6 @@ public class SWADMain extends MenuExpandableListActivity {
                 } else if (lastVersion == 45) {
                     dbHelper.reencryptNotifications();
                 }
-                //prefs.upgradeCredentials();
 
                 //Configure automatic synchronization
                 if (lastVersion < 49) {
@@ -301,11 +310,7 @@ public class SWADMain extends MenuExpandableListActivity {
             }
             currentRole = -1;
         } catch (Exception ex) {
-            error(ex.getMessage());
-            ex.printStackTrace();
-
-            //Send exception details to Bugsense
-            BugSenseHandler.sendException(ex);
+            error(TAG, ex.getMessage(), ex, true);
         }
         /*if(!firstRun && Module.connectionAvailable(this)){
             getActualCourses();
