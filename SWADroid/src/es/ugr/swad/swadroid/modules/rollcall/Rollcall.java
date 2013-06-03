@@ -29,8 +29,24 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.view.ContextThemeWrapper;
 import android.view.View;
-import android.widget.*;
+import android.widget.ExpandableListView;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.SimpleCursorAdapter;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.zxing.client.android.Intents;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.ImageExpandableListAdapter;
@@ -46,8 +62,6 @@ import es.ugr.swad.swadroid.modules.rollcall.students.StudentItemModel;
 import es.ugr.swad.swadroid.modules.rollcall.students.StudentsArrayAdapter;
 import es.ugr.swad.swadroid.modules.rollcall.students.StudentsHistory;
 import es.ugr.swad.swadroid.utils.Utils;
-
-import java.util.*;
 
 /**
  * Rollcall module.
@@ -214,7 +228,7 @@ public class Rollcall extends MenuExpandableListActivity {
             } else {
                 //If the device has no rear camera available show error message
                 //error(getString(R.string.noRearCamera));
-                error(getString(R.string.noCameraFound));
+                error(TAG, getString(R.string.noCameraFound), null, false);
             }
             /*} else {
                 //If Android version < 2.2 show error message
@@ -320,7 +334,7 @@ public class Rollcall extends MenuExpandableListActivity {
                             });
                     builder.show();
                 } else {
-                    error(getString(R.string.rollcallNoPracticeSessions));
+                    error(TAG, getString(R.string.rollcallNoPracticeSessions), null, false);
                 }
             }
         } else {
@@ -360,7 +374,7 @@ public class Rollcall extends MenuExpandableListActivity {
                     practiceGroup = (Spinner) this.findViewById(R.id.spGroup);
                     practiceGroup.setEnabled(false);
 
-                    error(getString(R.string.noGroupsAvailableMsg));
+                    error(TAG, getString(R.string.noGroupsAvailableMsg), null, false);
                 }
                 break;
             case Constants.SCAN_QR_REQUEST_CODE:

@@ -64,7 +64,6 @@ public class CheckedAnswersArrayAdapter extends ArrayAdapter<TestAnswer> {
     public View getView(int position, View convertView, ViewGroup parent) {
         CheckedTextView tt;
         TextView answerFeedback;
-        final int rbPosition = position;
         final CheckableLinearLayout cl;
         TestAnswer a = items.get(position);
         int feedbackLevel;
