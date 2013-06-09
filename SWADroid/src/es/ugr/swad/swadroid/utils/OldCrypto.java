@@ -19,113 +19,93 @@
 
 package es.ugr.swad.swadroid.utils;
 
-import java.security.MessageDigest;
-import java.security.SecureRandom;
+import com.bugsense.trace.BugSenseHandler;
+
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-
-import com.bugsense.trace.BugSenseHandler;
+import java.security.MessageDigest;
+import java.security.SecureRandom;
 
 /**
  * Cryptographic class for encryption purposes.
+ *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
-public class OldCrypto
-{
-    public static String encrypt(String seed, String cleartext)
-    {
-        try
-        {
+public class OldCrypto {
+    public static String encrypt(String seed, String cleartext) {
+        try {
             byte[] rawKey = getRawKey(seed.getBytes("UTF-8"));
             byte[] result = encrypt(rawKey, cleartext.getBytes("UTF-8"));
             return Base64.encodeBytes(result);
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-        	
-			//Send exception details to Bugsense
-			BugSenseHandler.sendException(e);
+
+            //Send exception details to Bugsense
+            BugSenseHandler.sendException(e);
         }
         return "error";
     }
 
-    public static String decrypt(String seed, String encrypted)
-    {
-        try
-        {
+    public static String decrypt(String seed, String encrypted) {
+        try {
             byte[] rawKey = getRawKey(seed.getBytes("UTF-8"));
             byte[] enc = Base64.decode(encrypted);
             byte[] result = decrypt(rawKey, enc);
             return new String(result, "UTF-8");
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-        	
-			//Send exception details to Bugsense
-			BugSenseHandler.sendException(e);
+
+            //Send exception details to Bugsense
+            BugSenseHandler.sendException(e);
         }
         return "error";
     }
 
-    private static byte[] getRawKey(byte[] seed) throws Exception
-    {
+    private static byte[] getRawKey(byte[] seed) throws Exception {
         KeyGenerator kgen = KeyGenerator.getInstance("AES");
         SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
         sr.setSeed(seed);
         kgen.init(128, sr);
         SecretKey skey = kgen.generateKey();
-        byte[] raw = skey.getEncoded();
-        return raw;
+        return skey.getEncoded();
     }
 
-    private static byte[] encrypt(byte[] raw, byte[] clear) throws Exception
-    {
+    private static byte[] encrypt(byte[] raw, byte[] clear) throws Exception {
         SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
         Cipher cipher = Cipher.getInstance("AES");
         cipher.init(Cipher.ENCRYPT_MODE, skeySpec);
-        byte[] encrypted = cipher.doFinal(clear);
-        return encrypted;
+        return cipher.doFinal(clear);
     }
 
-    private static byte[] decrypt(byte[] raw, byte[] encrypted) throws Exception
-    {
+    private static byte[] decrypt(byte[] raw, byte[] encrypted) throws Exception {
         SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
         Cipher cipher = Cipher.getInstance("AES");
         cipher.init(Cipher.DECRYPT_MODE, skeySpec);
-        byte[] decrypted = cipher.doFinal(encrypted);
-        return decrypted;
+        return cipher.doFinal(encrypted);
     }
-    
-    public static final String md5(final String s) 
-    {
-        try
-        {
+
+    public static String md5(final String s) {
+        try {
             MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
             digest.update(s.getBytes("UTF-8"));
             byte messageDigest[] = digest.digest();
 
-            StringBuffer hexString = new StringBuffer();
-            for(int i=0; i<messageDigest.length; i++)
-            {
-                String h = Integer.toHexString(0xFF & messageDigest[i]);
-                while(h.length()<2)
-                {
-                    h="0"+h;
+            StringBuilder hexString = new StringBuilder();
+            for (byte aMessageDigest : messageDigest) {
+                String h = Integer.toHexString(0xFF & aMessageDigest);
+                while (h.length() < 2) {
+                    h = "0" + h;
                 }
                 hexString.append(h);
             }
             return hexString.toString();
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-        	
-			//Send exception details to Bugsense
-			BugSenseHandler.sendException(e);
+
+            //Send exception details to Bugsense
+            BugSenseHandler.sendException(e);
         }
         return "error";
     }

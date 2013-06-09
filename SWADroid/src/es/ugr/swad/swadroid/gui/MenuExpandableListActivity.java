@@ -18,10 +18,9 @@
  */
 package es.ugr.swad.swadroid.gui;
 
-import com.bugsense.trace.BugSenseHandler;
-
 import android.app.AlertDialog;
 import android.app.ExpandableListActivity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -30,6 +29,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import com.bugsense.trace.BugSenseHandler;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
@@ -39,188 +41,196 @@ import es.ugr.swad.swadroid.utils.Utils;
 
 /**
  * Superclass for add the options menu to all children classes of ExpandableListActivity
+ *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */
 public class MenuExpandableListActivity extends ExpandableListActivity {
-	/**
-	 * Application preferences.
-	 */
-	protected static Preferences prefs = new Preferences();
-	/**
-	 * Database Helper.
-	 */
-	protected static DataBaseHelper dbHelper; 
+    /**
+     * Application preferences.
+     */
+    protected static final Preferences prefs = new Preferences();
+    /**
+     * Database Helper.
+     */
+    protected static DataBaseHelper dbHelper;
+    /**
+     * Application debuggable flag
+     */
+    protected static boolean isDebuggable;
+    /**
+     * Class Module's tag name for Logcat
+     */
+    private static final String TAG = Constants.APP_TAG + " MenuExpandableListActivity";
 
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onStart()
-	 */
-	@Override
-	protected void onStart() {
-		super.onStart();
-		prefs.getPreferences(getBaseContext());
-	}
+    /* (non-Javadoc)
+     * @see android.app.Activity#onStart()
+     */
+    @Override
+    protected void onStart() {
+        super.onStart();
+        prefs.getPreferences(getBaseContext());
+    }
 
-	/**
-	 * Shows Preferences screen
-	 */
-	protected void viewPreferences() {
-		Intent settingsActivity = new Intent(getBaseContext(),
-				Preferences.class);
-		startActivity(settingsActivity);
-	}
+    /**
+     * Shows Preferences screen
+     */
+    protected void viewPreferences() {
+        Intent settingsActivity = new Intent(getBaseContext(),
+                Preferences.class);
+        startActivity(settingsActivity);
+    }
 
-	/**
-	 * Shares the application through the Android sharing options
-	 */
-	protected void shareApplication() {
-		Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-		sharingIntent.setType("text/plain");
-		sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "SWADroid");
-		sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, getString(R.string.shareBodyMsg));
-		startActivity(Intent.createChooser(sharingIntent, getString(R.string.shareTitle_menu)));		
-		Log.d(Constants.APP_TAG, "shareApplication()");
-	}
+    /**
+     * Shares the application through the Android sharing options
+     */
+    void shareApplication() {
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "SWADroid");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, getString(R.string.shareBodyMsg));
+        startActivity(Intent.createChooser(sharingIntent, getString(R.string.shareTitle_menu)));
+        Log.d(Constants.APP_TAG, "shareApplication()");
+    }
 
-	/**
-	 * Rates the application in Android Market
-	 */
-	protected void rateApplication() {
-		Intent rateIntent = new Intent(Intent.ACTION_VIEW);
-		rateIntent.setData(Uri.parse(getString(R.string.marketURL)));
-		startActivity(rateIntent);
-		Log.d(Constants.APP_TAG, "rateApplication()");
-	}
+    /**
+     * Rates the application in Android Market
+     */
+    void rateApplication() {
+        Intent rateIntent = new Intent(Intent.ACTION_VIEW);
+        rateIntent.setData(Uri.parse(getString(R.string.marketURL)));
+        startActivity(rateIntent);
+        Log.d(Constants.APP_TAG, "rateApplication()");
+    }
 
-	/**
-	 * Deletes all data from database
-	 */
-	protected void cleanDatabase() {
-		dbHelper.cleanTables();
-		prefs.setLastCourseSelected(0);
-		Utils.setDbCleaned(true);
-		Toast.makeText(this, R.string.cleanDatabaseMsg, Toast.LENGTH_LONG).show();
-		if(this instanceof SWADMain){
-			setMenuDbClean();
-		}
-		Log.i(Constants.APP_TAG, getString(R.string.cleanDatabaseMsg));
-	}
+    /**
+     * Deletes all data from database
+     */
+    void cleanDatabase() {
+        dbHelper.cleanTables();
+        prefs.setLastCourseSelected(0);
+        Utils.setDbCleaned(true);
+        Toast.makeText(this, R.string.cleanDatabaseMsg, Toast.LENGTH_LONG).show();
+        if (this instanceof SWADMain) {
+            setMenuDbClean();
+        }
+        Log.i(Constants.APP_TAG, getString(R.string.cleanDatabaseMsg));
+    }
 
-	/**
-	 * Shows an error message.
-	 * @param message Error message to show.
-	 */
-	protected void error(String message) {
-		new AlertDialog.Builder(this).setTitle(R.string.title_error_dialog)
-		.setMessage(message)
-		.setNeutralButton(R.string.close_dialog, null)
-		.setIcon(R.drawable.erroricon).show();
-	}
+    /**
+     * Shows an error message.
+     *
+     * @param message Error message to show.
+     */
+    protected void error(String tag, String message, Exception ex, boolean sendException) {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.title_error_dialog)
+                .setMessage(message)
+                .setNeutralButton(R.string.close_dialog,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                finish();
+                            }
+                        }).setIcon(R.drawable.erroricon).show();
 
-	/**
-	 * Shows a dialog.
-	 */
-	public void showDialog(int title, int message) {
-		new AlertDialog.Builder(this)
-		.setTitle(title)
-		.setMessage(message)
-		.setCancelable(false)
-		.setNeutralButton(R.string.close_dialog, null)
-		.show();
-	}
+        if (ex != null) {
+            ex.printStackTrace();
 
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onCreateOptionsMenu()
-	 */
-	@Override 
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.menu_main, menu);
-		return true;
-	}
+            // Send exception details to Bugsense
+            if (!isDebuggable && sendException) {
+                BugSenseHandler.sendExceptionMessage(tag, message, ex);
+            }
+        }
+    }
 
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onOptionsItemSelected()
-	 */
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.share_menu:
-			shareApplication();
-			break;
-		case R.id.rate_menu:
-			rateApplication();
-			break;
-		case R.id.clean_database_menu:
-			cleanDatabase();
-			break;
-		case R.id.preferences_menu:
-			viewPreferences();
-			break;
-		}
+    /**
+     * Shows a dialog.
+     */
+    public void showDialog(int title, int message) {
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setCancelable(false)
+                .setNeutralButton(R.string.close_dialog, null)
+                .show();
+    }
 
-		return super.onOptionsItemSelected(item);
-	}
+    /* (non-Javadoc)
+     * @see android.app.Activity#onCreateOptionsMenu()
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
 
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onCreate()
-	 */
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    /* (non-Javadoc)
+     * @see android.app.Activity#onOptionsItemSelected()
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.share_menu:
+                shareApplication();
+                break;
+            case R.id.rate_menu:
+                rateApplication();
+                break;
+            case R.id.clean_database_menu:
+                cleanDatabase();
+                break;
+            case R.id.preferences_menu:
+                viewPreferences();
+                break;
+        }
 
-		//Initialize database
-		try {
-			dbHelper = new DataBaseHelper(this);
-		} catch (Exception ex) {
-			Log.e(ex.getClass().getSimpleName(), ex.getMessage());
-			error(ex.getMessage());
-			ex.printStackTrace();
-			
-			//Send exception details to Bugsense
-			BugSenseHandler.sendException(ex);
-		}
-	}
+        return super.onOptionsItemSelected(item);
+    }
 
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onDestroy()
-	 */
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-	}
-	
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onPause()
-	 */
-	@Override
-	protected void onPause() {
-		dbHelper.close();
-		super.onPause();
-	}
-	
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onResume()
-	 */
-	@Override
-	protected void onResume() {
-		super.onResume();
-		
-		//Initialize database
-		try {
-			dbHelper = new DataBaseHelper(this);
-		} catch (Exception ex) {
-			Log.e(ex.getClass().getSimpleName(), ex.getMessage());
-			error(ex.getMessage());
-			ex.printStackTrace();
-			
-			//Send exception details to Bugsense
-			BugSenseHandler.sendException(ex);
-		}
-	}
-	
-	protected void setMenuDbClean(){
-		
-	}
+    /* (non-Javadoc)
+     * @see android.app.Activity#onCreate()
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        //Initialize database
+        try {
+            dbHelper = new DataBaseHelper(this);
+            isDebuggable = (getPackageManager().getApplicationInfo(
+                    getPackageName(), 0).FLAG_DEBUGGABLE != 0);
+        } catch (Exception ex) {
+            error(TAG, ex.getMessage(), ex, true);
+        }
+    }
+
+    /* (non-Javadoc)
+     * @see android.app.Activity#onPause()
+     */
+    @Override
+    protected void onPause() {
+        dbHelper.close();
+        super.onPause();
+    }
+
+    /* (non-Javadoc)
+     * @see android.app.Activity#onResume()
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //Initialize database
+        try {
+            dbHelper = new DataBaseHelper(this);
+        } catch (Exception ex) {
+            error(TAG, ex.getMessage(), ex, true);
+        }
+    }
+
+    protected void setMenuDbClean() {
+
+    }
 }

@@ -20,81 +20,81 @@ package es.ugr.swad.swadroid.model;
 
 /**
  * Class for manage a pair of values
+ *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
-public class Pair<FIRST, SECOND>
-{
-	/**
-	 * First value
-	 */
-	private FIRST first;
-	/**
-	 * Second value
-	 */
-	private SECOND second;
+public class Pair<FIRST, SECOND> {
+    /**
+     * First value
+     */
+    private FIRST first;
+    /**
+     * Second value
+     */
+    private SECOND second;
 
-	/**
-	 * Constructor
-	 * @param f First value
-	 * @param s Second value
-	 */
-	public Pair(FIRST f, SECOND s)
-	{ 
-		first = f;
-		second = s;   
-	}
+    /**
+     * Constructor
+     *
+     * @param f First value
+     * @param s Second value
+     */
+    public Pair(FIRST f, SECOND s) {
+        first = f;
+        second = s;
+    }
 
-	/**
-	 * Gets first value
-	 * @return First value
-	 */
-	public FIRST getFirst()
-	{
-		return first;
-	}
+    /**
+     * Gets first value
+     *
+     * @return First value
+     */
+    public FIRST getFirst() {
+        return first;
+    }
 
-	/**
-	 * Gets second value
-	 * @return Second value
-	 */
-	public SECOND getSecond() 
-	{
-		return second;
-	}
+    /**
+     * Gets second value
+     *
+     * @return Second value
+     */
+    public SECOND getSecond() {
+        return second;
+    }
 
-	/**
-	 * Sets first value
-	 * param first First value
-	 */
-	public void setFirst(FIRST first) {
-		this.first = first;
-	}
+    /**
+     * Sets first value
+     * param first First value
+     */
+    public void setFirst(FIRST first) {
+        this.first = first;
+    }
 
-	/**
-	 * Sets second value
-	 * param second Second value
-	 */
-	public void setSecond(SECOND second) {
-		this.second = second;
-	}
+    /**
+     * Sets second value
+     * param second Second value
+     */
+    public void setSecond(SECOND second) {
+        this.second = second;
+    }
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((first == null) ? 0 : first.hashCode());
-		result = prime * result + ((second == null) ? 0 : second.hashCode());
-		return result;
-	}
+    /* (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((first == null) ? 0 : first.hashCode());
+        result = prime * result + ((second == null) ? 0 : second.hashCode());
+        return result;
+    }
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "Pair [first=" + first + ", second=" + second + "]";
-	}
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return "Pair [first=" + first + ", second=" + second + "]";
+    }
 }

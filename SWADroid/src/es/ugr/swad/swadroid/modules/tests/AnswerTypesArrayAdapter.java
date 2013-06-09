@@ -26,34 +26,34 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckedTextView;
 
 public class AnswerTypesArrayAdapter extends ArrayAdapter<CharSequence> {
-	private Context context;
-	private int textViewResourceId;
-	private String[] itemsNames;
+    private final Context context;
+    private final int textViewResourceId;
+    private final String[] itemsNames;
 
-	public AnswerTypesArrayAdapter(Context context, int resource, int resourceNames,
-			int textViewResourceId) {
-		
-		super(context, textViewResourceId, context.getResources().getStringArray(resource));
-		this.context = context;
-		this.textViewResourceId = textViewResourceId;
-		this.itemsNames = context.getResources().getStringArray(resourceNames);
-	}
-	
-	/* (non-Javadoc)
-	 * @see android.widget.ArrayAdapter#getView(int, android.view.View, android.view.ViewGroup)
-	 */
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {        
-		 if (convertView == null) {
-             LayoutInflater vi = LayoutInflater.from(context);
-             convertView = vi.inflate(textViewResourceId, null);
-         }
-		 
-         CheckedTextView tt = (CheckedTextView) convertView.findViewById(android.R.id.text1);
-         if (tt != null) {
-               tt.setText(itemsNames[position]); 
-         }
-        
-         return convertView;
-	}
+    public AnswerTypesArrayAdapter(Context context, int resource, int resourceNames,
+                                   int textViewResourceId) {
+
+        super(context, textViewResourceId, context.getResources().getStringArray(resource));
+        this.context = context;
+        this.textViewResourceId = textViewResourceId;
+        this.itemsNames = context.getResources().getStringArray(resourceNames);
+    }
+
+    /* (non-Javadoc)
+     * @see android.widget.ArrayAdapter#getView(int, android.view.View, android.view.ViewGroup)
+     */
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        if (convertView == null) {
+            LayoutInflater vi = LayoutInflater.from(context);
+            convertView = vi.inflate(textViewResourceId, null);
+        }
+
+        CheckedTextView tt = (CheckedTextView) convertView.findViewById(android.R.id.text1);
+        if (tt != null) {
+            tt.setText(itemsNames[position]);
+        }
+
+        return convertView;
+    }
 }

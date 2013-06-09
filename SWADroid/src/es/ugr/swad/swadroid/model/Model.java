@@ -22,68 +22,69 @@ import org.ksoap2.serialization.KvmSerializable;
 
 /**
  * Superclass for encapsulate common behavior of all Models.
+ *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public abstract class Model implements KvmSerializable {
-	/**
-	 * Model identifier
-	 */
-	private long id;
+    /**
+     * Model identifier
+     */
+    private long id;
 
-	public Model(long id) {
-		super();
-		this.id = id;
-	}
+    Model(long id) {
+        super();
+        this.id = id;
+    }
 
-	/**
-	 * Gets model identifier
-	 * @return Model identifier
-	 */
-	public long getId() {
-		return id;
-	}
+    /**
+     * Gets model identifier
+     *
+     * @return Model identifier
+     */
+    public long getId() {
+        return id;
+    }
 
-	/**
-	 * Sets model identifier
-	 * @param id Model identifier
-	 */
-	public void setId(long id) {
-		this.id = id;
-	}
+    /**
+     * Sets model identifier
+     *
+     * @param id Model identifier
+     */
+    void setId(long id) {
+        this.id = id;
+    }
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (int) (id ^ (id >>> 32));
-		return result;
-	}
+    /* (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (int) (id ^ (id >>> 32));
+        return result;
+    }
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Model other = (Model) obj;
-		if (id != other.id)
-			return false;
-		return true;
-	}
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Model other = (Model) obj;
+        return id == other.id;
+    }
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "Model [id=" + id + "]";
-	}
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return "Model [id=" + id + "]";
+    }
 }

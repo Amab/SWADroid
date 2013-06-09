@@ -19,8 +19,6 @@
 
 package es.ugr.swad.swadroid.modules.rollcall.sessions;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,50 +28,53 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 import es.ugr.swad.swadroid.R;
 
+import java.util.List;
+
 /**
  * Sessions array adapter.
+ *
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  */
 public class SessionsArrayAdapter extends ArrayAdapter<SessionItemModel> {
-	private List<SessionItemModel> list;	
-	private Activity context;
+    private final List<SessionItemModel> list;
+    private final Activity context;
 
-	public SessionsArrayAdapter(Activity context, List<SessionItemModel> list) {
-		super(context, R.layout.group_sessions, list);
-		this.context = context;
-		this.list = list;
-	}
+    public SessionsArrayAdapter(Activity context, List<SessionItemModel> list) {
+        super(context, R.layout.group_sessions, list);
+        this.context = context;
+        this.list = list;
+    }
 
-	static class ViewHolder {
-		protected TextView text;
-		protected CheckBox checkbox;
-	}
+    static class ViewHolder {
+        TextView text;
+        CheckBox checkbox;
+    }
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		View view = null;
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        View view;
 
-		if (convertView == null) {
-			LayoutInflater inflator = context.getLayoutInflater();
-			view = inflator.inflate(R.layout.session_list_item_checked, null);
+        if (convertView == null) {
+            LayoutInflater inflator = context.getLayoutInflater();
+            view = inflator.inflate(R.layout.session_list_item_checked, null);
 
-			final ViewHolder viewHolder = new ViewHolder();
-			viewHolder.text = (TextView) view.findViewById(R.id.sessionStart);
-			viewHolder.checkbox = (CheckBox) view.findViewById(R.id.checkBox1);
-			viewHolder.checkbox.setClickable(false);
+            final ViewHolder viewHolder = new ViewHolder();
+            viewHolder.text = (TextView) view.findViewById(R.id.sessionStart);
+            viewHolder.checkbox = (CheckBox) view.findViewById(R.id.checkBox1);
+            viewHolder.checkbox.setClickable(false);
 
-			view.setTag(viewHolder);
-			viewHolder.checkbox.setTag(list.get(position));
-		} else {
-			view = convertView;
-			((ViewHolder) view.getTag()).checkbox.setTag(list.get(position));
-		}
+            view.setTag(viewHolder);
+            viewHolder.checkbox.setTag(list.get(position));
+        } else {
+            view = convertView;
+            ((ViewHolder) view.getTag()).checkbox.setTag(list.get(position));
+        }
 
-		ViewHolder viewHolder = (ViewHolder) view.getTag();
+        ViewHolder viewHolder = (ViewHolder) view.getTag();
 
-		viewHolder.text.setText(list.get(position).toString());
-		viewHolder.checkbox.setChecked(list.get(position).isSelected());
+        viewHolder.text.setText(list.get(position).toString());
+        viewHolder.checkbox.setChecked(list.get(position).isSelected());
 
-		return view;
-	}
+        return view;
+    }
 }

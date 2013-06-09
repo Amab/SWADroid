@@ -18,37 +18,38 @@
  */
 package es.ugr.swad.swadroid.sync;
 
-import es.ugr.swad.swadroid.Constants;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import es.ugr.swad.swadroid.Constants;
 
 /**
  * Class for launch a periodic sync request
+ *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public final class PeriodicSyncReceiver extends BroadcastReceiver {
 
-	public static Intent createIntent(Context context, String authority, Bundle extras) {
-		Intent intent = new Intent(context, PeriodicSyncReceiver.class);
-		intent.putExtra(Constants.AUTHORITY, authority);
-		return intent;
-	}
+    private static Intent createIntent(Context context, String authority, Bundle extras) {
+        Intent intent = new Intent(context, PeriodicSyncReceiver.class);
+        intent.putExtra(Constants.AUTHORITY, authority);
+        return intent;
+    }
 
-	public static PendingIntent createPendingIntent(Context context, String authority, Bundle extras) {
-		int requestCode = 0;
-		Intent intent = createIntent(context, authority, extras);
-		int flags = 0;
-		return PendingIntent.getBroadcast(context, requestCode, intent, flags);
-	}
+    public static PendingIntent createPendingIntent(Context context, String authority, Bundle extras) {
+        int requestCode = 0;
+        Intent intent = createIntent(context, authority, extras);
+        int flags = 0;
+        return PendingIntent.getBroadcast(context, requestCode, intent, flags);
+    }
 
-	@Override
-	public void onReceive(Context context, Intent intent) {
-		String authority = intent.getStringExtra(Constants.AUTHORITY);
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        String authority = intent.getStringExtra(Constants.AUTHORITY);
 
-		ContentResolver.requestSync(null, authority, new Bundle());
-	}
+        ContentResolver.requestSync(null, authority, new Bundle());
+    }
 }

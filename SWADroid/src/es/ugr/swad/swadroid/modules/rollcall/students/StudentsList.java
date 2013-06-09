@@ -19,15 +19,6 @@
 
 package es.ugr.swad.swadroid.modules.rollcall.students;
 
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import org.ksoap2.SoapFault;
-import org.xmlpull.v1.XmlPullParserException;
-
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnKeyListener;
@@ -40,92 +31,99 @@ import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.Module;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Students list module.
+ *
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  */
 public class StudentsList extends Module {
-	private Dialog studentsDialog;
-	/**
-	 * Students List tag name for Logcat
-	 */
-	public static final String TAG = Constants.APP_TAG + " StudentsList";
+    private Dialog studentsDialog;
+    /**
+     * Students List tag name for Logcat
+     */
+    public static final String TAG = Constants.APP_TAG + " StudentsList";
 
-	/* (non-Javadoc)
-	 * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
-	 */
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-	}
+    /* (non-Javadoc)
+     * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
-	/* (non-Javadoc)
-	 * @see es.ugr.swad.swadroid.modules.Module#onStart()
-	 */
-	@Override
-	protected void onStart() {
-		studentsDialog = new Dialog(this);
-		super.onStart();
+    /* (non-Javadoc)
+     * @see es.ugr.swad.swadroid.modules.Module#onStart()
+     */
+    @Override
+    protected void onStart() {
+        studentsDialog = new Dialog(this);
+        super.onStart();
 
-		studentsDialog.setTitle(R.string.studentsPresent);
-		studentsDialog.setCancelable(true);
-		studentsDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        studentsDialog.setTitle(R.string.studentsPresent);
+        studentsDialog.setCancelable(true);
+        studentsDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
-		studentsDialog.setOnKeyListener(new OnKeyListener() {
-			@Override
-			public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-				if (keyCode == KeyEvent.KEYCODE_BACK) {
-					studentsDialog.dismiss();
-					setResult(RESULT_OK);
-					StudentsList.this.finish();
-				}
-				return false;
-			}
-		});
+        studentsDialog.setOnKeyListener(new OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    studentsDialog.dismiss();
+                    setResult(RESULT_OK);
+                    StudentsList.this.finish();
+                }
+                return false;
+            }
+        });
 
-		Intent i = getIntent();
-		long [] userIds = i.getLongArrayExtra("userIds");
+        Intent i = getIntent();
+        long[] userIds = i.getLongArrayExtra("userIds");
 
-		List<StudentItemModel> studentsList = new ArrayList<StudentItemModel>();
-		for (long userCode: userIds) {
-			User u = (User) dbHelper.getRow(Constants.DB_TABLE_USERS, "userCode", String.valueOf(userCode));
-			studentsList.add(new StudentItemModel(u));
-		}
-		// Arrange the list alphabetically
-		Collections.sort(studentsList);
+        List<StudentItemModel> studentsList = new ArrayList<StudentItemModel>();
+        for (long userCode : userIds) {
+            User u = (User) dbHelper.getRow(Constants.DB_TABLE_USERS, "userCode", String.valueOf(userCode));
+            studentsList.add(new StudentItemModel(u));
+        }
+        // Arrange the list alphabetically
+        Collections.sort(studentsList);
 
-		ListView lv = new ListView(this);
-		lv.setAdapter(new StudentsArrayAdapter(this, studentsList, Constants.STUDENTS_LIST_REQUEST_CODE));
+        ListView lv = new ListView(this);
+        lv.setAdapter(new StudentsArrayAdapter(this, studentsList, Constants.STUDENTS_LIST_REQUEST_CODE));
 
-		studentsDialog.setContentView(lv);		
-		studentsDialog.show();
-	}
+        studentsDialog.setContentView(lv);
+        studentsDialog.show();
+    }
 
-	/* (non-Javadoc)
-	 * @see es.ugr.swad.swadroid.modules.Module#onPause()
-	 */
-	@Override
-	protected void onPause() {
-		super.onPause();
-		studentsDialog.dismiss();
-	}
+    /* (non-Javadoc)
+     * @see es.ugr.swad.swadroid.modules.Module#onPause()
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        studentsDialog.dismiss();
+    }
 
-	@Override
-	protected void requestService() throws NoSuchAlgorithmException,
-	IOException, XmlPullParserException, SoapFault,
-	IllegalAccessException, InstantiationException {
-	}
+    @Override
+    protected void requestService() throws NoSuchAlgorithmException,
+            IOException, XmlPullParserException {
+    }
 
-	@Override
-	protected void connect() {
-	}
+    @Override
+    protected void connect() {
+    }
 
-	@Override
-	protected void postConnect() {
-	}
+    @Override
+    protected void postConnect() {
+    }
 
-	@Override
-	protected void onError() {
-	}
+    @Override
+    protected void onError() {
+    }
 }

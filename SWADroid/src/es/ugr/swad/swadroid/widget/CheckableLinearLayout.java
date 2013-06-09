@@ -29,41 +29,59 @@ import android.widget.LinearLayout;
  * This class is useful for using inside of ListView that needs to have checkable items.
  */
 public class CheckableLinearLayout extends LinearLayout implements Checkable {
-	private CheckedTextView _checkbox;
-    	
+    private CheckedTextView _checkbox;
+
     public CheckableLinearLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
-	}
-    
+    }
+
     @Override
     protected void onFinishInflate() {
-    	super.onFinishInflate();
-    	// find checked text view
-		int childCount = getChildCount();
-		for (int i = 0; i < childCount; ++i) {
-			View v = getChildAt(i);
-			if (v instanceof CheckedTextView) {
-				_checkbox = (CheckedTextView)v;
-			}
-		}    	
+        super.onFinishInflate();
+        // find checked text view
+        int childCount = getChildCount();
+        for (int i = 0; i < childCount; ++i) {
+            View v = getChildAt(i);
+            if (v instanceof CheckedTextView) {
+                _checkbox = (CheckedTextView) v;
+            }
+        }
     }
-    
-    @Override 
-    public boolean isChecked() { 
-        return _checkbox != null ? _checkbox.isChecked() : false; 
+
+    @Override
+    public boolean isChecked() {
+        return _checkbox != null && _checkbox.isChecked();
     }
-    
-    @Override 
+
+    @Override
     public void setChecked(boolean checked) {
-    	if (_checkbox != null) {
-    		_checkbox.setChecked(checked);
-    	}
+        if (_checkbox != null) {
+            _checkbox.setChecked(checked);
+        }
     }
-    
-    @Override 
-    public void toggle() { 
-    	if (_checkbox != null) {
-    		_checkbox.toggle();
-    	}
-    } 
+
+    public void setText(int resid) {
+        if (_checkbox != null) {
+            _checkbox.setText(resid);
+        }
+    }
+
+    public void setText(CharSequence text) {
+        if (_checkbox != null) {
+            _checkbox.setText(text);
+        }
+    }
+
+    public void setTextColor(int color) {
+        if (_checkbox != null) {
+            _checkbox.setTextColor(color);
+        }
+    }
+
+    @Override
+    public void toggle() {
+        if (_checkbox != null) {
+            _checkbox.toggle();
+        }
+    }
 } 

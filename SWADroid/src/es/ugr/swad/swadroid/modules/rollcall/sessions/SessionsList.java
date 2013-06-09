@@ -19,15 +19,6 @@
 
 package es.ugr.swad.swadroid.modules.rollcall.sessions;
 
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import org.ksoap2.SoapFault;
-import org.xmlpull.v1.XmlPullParserException;
-
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnKeyListener;
@@ -41,126 +32,133 @@ import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.model.PracticeSession;
 import es.ugr.swad.swadroid.modules.Module;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Sessions list module.
+ *
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  */
 public class SessionsList extends Module {
-	private Dialog sessionsDialog;
-	/**
-	 * Sessions List tag name for Logcat
-	 */
-	public static final String TAG = Constants.APP_TAG + " SessionsList";
+    private Dialog sessionsDialog;
+    /**
+     * Sessions List tag name for Logcat
+     */
+    public static final String TAG = Constants.APP_TAG + " SessionsList";
 
-	/* (non-Javadoc)
-	 * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
-	 */
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-	}
+    /* (non-Javadoc)
+     * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
-	/* (non-Javadoc)
-	 * @see es.ugr.swad.swadroid.modules.Module#onStart()
-	 */
-	@Override
-	protected void onStart() {
-		sessionsDialog = new Dialog(this);
-		super.onStart();
+    /* (non-Javadoc)
+     * @see es.ugr.swad.swadroid.modules.Module#onStart()
+     */
+    @Override
+    protected void onStart() {
+        sessionsDialog = new Dialog(this);
+        super.onStart();
 
-		sessionsDialog.setTitle(R.string.sessionsTitle);
-		sessionsDialog.setCancelable(true);
+        sessionsDialog.setTitle(R.string.sessionsTitle);
+        sessionsDialog.setCancelable(true);
 
-		sessionsDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        sessionsDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
-		sessionsDialog.setOnKeyListener(new OnKeyListener() {
-			@Override
-			public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-				if (keyCode == KeyEvent.KEYCODE_BACK) {
-					sessionsDialog.dismiss();
-					setResult(RESULT_OK);
-					SessionsList.this.finish();
-				}
-				return false;
-			}
-		});
+        sessionsDialog.setOnKeyListener(new OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    sessionsDialog.dismiss();
+                    setResult(RESULT_OK);
+                    SessionsList.this.finish();
+                }
+                return false;
+            }
+        });
 
-		initialize();
-	}
+        initialize();
+    }
 
-	/* (non-Javadoc)
-	 * @see es.ugr.swad.swadroid.modules.Module#onPause()
-	 */
-	@Override
-	protected void onPause() {
-		super.onPause();
-		sessionsDialog.dismiss();
-	}
+    /* (non-Javadoc)
+     * @see es.ugr.swad.swadroid.modules.Module#onPause()
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sessionsDialog.dismiss();
+    }
 
-	private void initialize() {
-		List<SessionItemModel> sessionList = null;
-		long courseCode = Constants.getSelectedCourseCode();
-		Intent intent = getIntent();
-		long studentId = intent.getLongExtra("studentId", (long) 0);
-		boolean existSessions = false;
+    private void initialize() {
+        List<SessionItemModel> sessionList;
+        long courseCode = Constants.getSelectedCourseCode();
+        Intent intent = getIntent();
+        long studentId = intent.getLongExtra("studentId", (long) 0);
+        boolean existSessions = false;
 
-		// Get practice groups of selected course
-		List<Long> groupIdList = dbHelper.getGroupCodesCourse(courseCode);
+        // Get practice groups of selected course
+        List<Long> groupIdList = dbHelper.getGroupCodesCourse(courseCode);
 
-		ListView lv = new ListView(this);
-		SeparatedListAdapter adapter = new SeparatedListAdapter(this);
+        ListView lv = new ListView(this);
+        SeparatedListAdapter adapter = new SeparatedListAdapter(this);
 
-		// For each practice group, show practice sessions		
-		for (Long groupCode: groupIdList) {
-			Group g = dbHelper.getGroup(groupCode);
+        // For each practice group, show practice sessions
+        for (Long groupCode : groupIdList) {
+            Group g = dbHelper.getGroup(groupCode);
 
-			// Get practice sessions
-			List<PracticeSession> ps = dbHelper.getPracticeSessions(courseCode, groupCode);
-			int numSessions = ps.size();
-			if (numSessions > 0) {
-				existSessions = true;
+            // Get practice sessions
+            List<PracticeSession> ps = dbHelper.getPracticeSessions(courseCode, groupCode);
+            int numSessions = ps.size();
+            if (numSessions > 0) {
+                existSessions = true;
 
-				sessionList = new ArrayList<SessionItemModel>();
-				for (int i=0; i < numSessions; i++) {
-					boolean attended = dbHelper.hasAttendedSession(studentId, ps.get(i).getId());
+                sessionList = new ArrayList<SessionItemModel>();
+                for (PracticeSession p : ps) {
+                    boolean attended = dbHelper.hasAttendedSession(studentId, p.getId());
 
-					SessionItemModel sim = new SessionItemModel(ps.get(i).getSessionStart(), attended);
-					sessionList.add(sim);
-				}
-				// Arrange the list alphabetically
-				Collections.sort(sessionList);
+                    SessionItemModel sim = new SessionItemModel(p.getSessionStart(), attended);
+                    sessionList.add(sim);
+                }
+                // Arrange the list alphabetically
+                Collections.sort(sessionList);
 
-				adapter.addSection(getString(R.string.group) + " " + g.getGroupName(),
-						new SessionsArrayAdapter(this, sessionList));
-			}
-		}
+                adapter.addSection(getString(R.string.group) + " " + g.getGroupName(),
+                        new SessionsArrayAdapter(this, sessionList));
+            }
+        }
 
-		lv.setAdapter(adapter);
-		sessionsDialog.setContentView(lv);
+        lv.setAdapter(adapter);
+        sessionsDialog.setContentView(lv);
 
-		if (!existSessions) {
-			setResult(RESULT_CANCELED);
-			finish();
-		} else
-			sessionsDialog.show();
-	}
+        if (!existSessions) {
+            setResult(RESULT_CANCELED);
+            finish();
+        } else
+            sessionsDialog.show();
+    }
 
-	@Override
-	protected void requestService() throws NoSuchAlgorithmException,
-	IOException, XmlPullParserException, SoapFault,
-	IllegalAccessException, InstantiationException {
-	}
+    @Override
+    protected void requestService() throws NoSuchAlgorithmException,
+            IOException, XmlPullParserException {
+    }
 
-	@Override
-	protected void connect() {
-	}
+    @Override
+    protected void connect() {
+    }
 
-	@Override
-	protected void postConnect() {
-	}
+    @Override
+    protected void postConnect() {
+    }
 
-	@Override
-	protected void onError() {
-	}
+    @Override
+    protected void onError() {
+    }
 }

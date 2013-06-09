@@ -1,40 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/background">
-    <include layout="@layout/action_bar"/>    
-  	<RelativeLayout android:layout_below="@id/actionBarLayout" android:id="@+id/courseNameLayout"
-        android:layout_height="wrap_content" android:layout_width="fill_parent">
-        <include layout="@layout/course_or_group_name" />
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/background">
+    <include layout="@layout/action_bar"/>
+    <RelativeLayout android:layout_below="@id/actionBarLayout" android:id="@+id/courseNameLayout"
+                    android:layout_height="wrap_content" android:layout_width="fill_parent">
+        <include layout="@layout/course_or_group_name"/>
     </RelativeLayout>
-	<TextView
-		android:id="@+id/testAnswerTypesText"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_below="@id/courseNameLayout"
-		android:gravity="center"
-		android:padding="20dip"
-		android:textColor="@color/foreground1"
-		android:textSize="20sp"
-		android:text="@string/testAnswerTypesMsg"/>
-		
+    <TextView
+            android:id="@+id/testAnswerTypesText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/courseNameLayout"
+            android:gravity="center"
+            android:padding="20dip"
+            android:textColor="@color/foreground1"
+            android:textSize="20sp"
+            android:text="@string/testAnswerTypesMsg"/>
+
     <ListView
-	    android:id="@+id/testAnswerTypesList"
-    	android:layout_width="match_parent"
-    	android:layout_height="wrap_content"
-		android:layout_below="@+id/testAnswerTypesText"
-		android:layout_above="@+id/testAnswerTypesAcceptButton"
-		android:layout_centerInParent="true"
-    	android:background="@android:color/transparent"
-    	android:cacheColorHint="@color/background">
+            android:id="@+id/testAnswerTypesList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/testAnswerTypesText"
+            android:layout_above="@+id/testAnswerTypesAcceptButton"
+            android:layout_centerInParent="true"
+            android:background="@android:color/transparent"
+            android:cacheColorHint="@color/background">
     </ListView>
-   
-	<Button 
-	  android:id="@+id/testAnswerTypesAcceptButton"
-	  android:layout_width="match_parent"
-	  android:layout_height="wrap_content"
-	  android:text="@string/acceptMsg"
-	  android:layout_alignParentBottom="true"/>
+
+    <Button
+            android:id="@+id/testAnswerTypesAcceptButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/acceptMsg"
+            android:layout_alignParentBottom="true"/>
 </RelativeLayout>

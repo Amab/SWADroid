@@ -18,14 +18,6 @@
  */
 package es.ugr.swad.swadroid.modules;
 
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.Vector;
-
-import org.ksoap2.SoapFault;
-import org.ksoap2.serialization.SoapObject;
-import org.xmlpull.v1.XmlPullParserException;
-
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -39,215 +31,274 @@ import android.widget.Toast;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
+import org.ksoap2.serialization.SoapObject;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Vector;
 
 /**
  * Module for send messages.
+ *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  */
 public class Messages extends Module {
-	/**
-	 * Messages tag name for Logcat
-	 */
-	public static final String TAG = Constants.APP_TAG + " Messages";
-	/**
-	 * Message code
-	 */
-	private Long notificationCode;
-	/**
-	 * Message's receivers
-	 */
-	private String receivers;
-	/**
-	 * Names of receivers
-	 */
-	private String receiversNames;
-	/**
-	 * Message's subject
-	 */
-	private String subject;
-	/**
-	 * Message's body
-	 */
-	private String body;
-	private Dialog messageDialog;
-	private OnClickListener positiveClickListener = new OnClickListener() {
-		public void onClick(View v) {
-			try {										
-				/*if(isDebuggable) {
-					Log.d(TAG, "notificationCode = " + Long.toString(notificationCode));
+    /**
+     * Messages tag name for Logcat
+     */
+    private static final String TAG = Constants.APP_TAG + " Messages";
+    /**
+     * Message code
+     */
+    private Long notificationCode;
+    /**
+     * Message's receivers
+     */
+    private String receivers;
+    /**
+     * Names of receivers
+     */
+    private String receiversNames;
+    /**
+     * Message's subject
+     */
+    private String subject;
+    /**
+     * Message's body
+     */
+    private String body;
+    private Dialog messageDialog;
+    private final OnClickListener positiveClickListener = new OnClickListener() {
+        public void onClick(View v) {
+            try {
+                /*if(isDebuggable) {
+                    Log.d(TAG, "notificationCode = " + Long.toString(notificationCode));
 				}*/
 
-				runConnection();
-			} catch (Exception e) {
-				String errorMsg = getString(R.string.errorServerResponseMsg);
-				error(TAG, errorMsg, e, true);
-			}				
-		}
-	};
-	private OnClickListener negativeClickListener = new OnClickListener() {
-		public void onClick(View v) {
-			finish();
-		}
-	};
+                runConnection();
+            } catch (Exception e) {
+                String errorMsg = getString(R.string.errorServerResponseMsg);
+                error(TAG, errorMsg, e, true);
+            }
+        }
+    };
+    private final OnClickListener negativeClickListener = new OnClickListener() {
+        public void onClick(View v) {
+            finish();
+        }
+    };
 
-	/* (non-Javadoc)
-	 * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
-	 */
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setMETHOD_NAME("sendMessage");
-	}
+    /* (non-Javadoc)
+     * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setMETHOD_NAME("sendMessage");
+    }
 
-	/* (non-Javadoc)
-	 * @see es.ugr.swad.swadroid.modules.Module#onStart()
-	 */
-	@Override
-	protected void onStart() {
-		messageDialog = new Dialog(this);
-		Button acceptButton, cancelButton;
-		EditText receiversText, subjectText;
+    /* (non-Javadoc)
+     * @see es.ugr.swad.swadroid.modules.Module#onStart()
+     */
+    @Override
+    protected void onStart() {
+        Button acceptButton, cancelButton;
+        EditText receiversText, subjectText;
 
-		super.onStart();
-		notificationCode = getIntent().getLongExtra("notificationCode", 0);
+        super.onStart();
 
-		messageDialog.setTitle(R.string.messagesModuleLabel);
-		messageDialog.setContentView(R.layout.messages_dialog);
-		messageDialog.setCancelable(true);
+        notificationCode = getIntent().getLongExtra("notificationCode", 0);
 
-		messageDialog.getWindow().setLayout(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+        messageDialog = new Dialog(this);
+        messageDialog.setTitle(R.string.messagesModuleLabel);
+        messageDialog.setContentView(R.layout.messages_dialog);
+        messageDialog.setCancelable(true);
+        messageDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
-		acceptButton = (Button) messageDialog.findViewById(R.id.message_button_accept);
-		acceptButton.setOnClickListener(positiveClickListener);
+        acceptButton = (Button) messageDialog.findViewById(R.id.message_button_accept);
+        acceptButton.setOnClickListener(positiveClickListener);
 
-		cancelButton = (Button) messageDialog.findViewById(R.id.message_button_cancel);
-		cancelButton.setOnClickListener(negativeClickListener);
+        cancelButton = (Button) messageDialog.findViewById(R.id.message_button_cancel);
+        cancelButton.setOnClickListener(negativeClickListener);
 
-		if(notificationCode != 0) {
-			subject = getIntent().getStringExtra("summary");
+        if (notificationCode != 0) {
+            subject = getIntent().getStringExtra("summary");
 
-			receiversText = (EditText) messageDialog.findViewById(R.id.message_receivers_text);
-			subjectText = (EditText) messageDialog.findViewById(R.id.message_subject_text);
+            receiversText = (EditText) messageDialog.findViewById(R.id.message_receivers_text);
+            subjectText = (EditText) messageDialog.findViewById(R.id.message_subject_text);
 
-			subjectText.setText("Re: " + subject);
-			receiversText.setVisibility(View.GONE);
-		}
-		
-		messageDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            subjectText.setText("Re: " + subject);
+            receiversText.setVisibility(View.GONE);
+        }
 
-			public void onCancel(DialogInterface dialog) {
-				setResult(RESULT_CANCELED);
-				finish();
-			}
-		});
+        messageDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
 
-		messageDialog.show();
-	}
+            public void onCancel(DialogInterface dialog) {
+                setResult(RESULT_CANCELED);
+                finish();
+            }
+        });
 
-	/* (non-Javadoc)
-	 * @see es.ugr.swad.swadroid.modules.Module#onPause()
-	 */
-	@Override
-	protected void onPause() {
-		super.onPause();
-		messageDialog.dismiss();
-	}
+        messageDialog.show();
+    }
 
-	/**
-	 * Reads user input
-	 */
-	private void readData() {
-		EditText rcv = (EditText) messageDialog.findViewById(R.id.message_receivers_text);
-		receivers = rcv.getText().toString();
+    /* (non-Javadoc)
+     * @see es.ugr.swad.swadroid.modules.Module#onPause()
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        messageDialog.dismiss();
+    }
 
-		EditText subj = (EditText) messageDialog.findViewById(R.id.message_subject_text);
-		subject = subj.getText().toString();
+    /**
+     * Reads user input from Dialog
+     */
+    private void readData() {
+        EditText rcv = (EditText) messageDialog.findViewById(R.id.message_receivers_text);
+        receivers = rcv.getText().toString();
 
-		EditText bd = (EditText) messageDialog.findViewById(R.id.message_body_text);
-		body = bd.getText().toString();
-		body = body.replaceAll("\n", "<br />");
-		body = body + "<br /><br />"+ getString(R.string.footMessageMsg) + " " + getString(R.string.app_name) +
-				"<br />" + getString(R.string.marketWebURL);
-		//body = body + "<br /><br />"+ getString(R.string.footMessageMsg) + " <a href=\"" +
-		//		getString(R.string.marketWebURL) + "\">" + getString(R.string.app_name) + "</a>";
-	}
+        EditText subj = (EditText) messageDialog.findViewById(R.id.message_subject_text);
+        subject = subj.getText().toString();
 
+        EditText bd = (EditText) messageDialog.findViewById(R.id.message_body_text);
+        body = bd.getText().toString();
+    }
 
-	/* (non-Javadoc)
-	 * @see es.ugr.swad.swadroid.modules.Module#requestService()
-	 */
-	@Override
-	protected void requestService() throws NoSuchAlgorithmException,
-	IOException, XmlPullParserException, SoapFault,
-	IllegalAccessException, InstantiationException {
+    /**
+     * Writes user input to Dialog
+     */
+    private void writeData() {
+        EditText rcv = (EditText) messageDialog.findViewById(R.id.message_receivers_text);
+        rcv.setText(receivers);
 
-		readData();
+        EditText subj = (EditText) messageDialog.findViewById(R.id.message_subject_text);
+        subj.setText(subject);
 
-		createRequest();
-		addParam("wsKey", Constants.getLoggedUser().getWsKey());
-		addParam("messageCode", notificationCode.intValue());
-		addParam("to", receivers);
-		addParam("subject", subject);
-		addParam("body", body);
-		sendRequest(User.class, false);
+        EditText bd = (EditText) messageDialog.findViewById(R.id.message_body_text);
+        bd.setText(body);
+    }
 
-		receiversNames = "";
-		if(result != null) {
-			Vector<?> res = (Vector<?>) result;
-			SoapObject soap = (SoapObject) res.get(1);	
-			int csSize = soap.getPropertyCount();
-			for (int i = 0; i < csSize; i++) {
-				SoapObject pii = (SoapObject)soap.getProperty(i);
-				String nickname = pii.getProperty("userNickname").toString();
-				String firstname = pii.getProperty("userFirstname").toString();
-				String surname1 = pii.getProperty("userSurname1").toString();
-				String surname2 = pii.getProperty("userSurname2").toString();
+    /**
+     * Adds the foot to the message body
+     */
+    private void addFootBody() {
+        body = body.replaceAll("\n", "<br />");
+        body = body + "<br /><br />" + getString(R.string.footMessageMsg) + " " + getString(R.string.app_name) +
+                "<br />" + getString(R.string.marketWebURL);
+        //body = body + "<br /><br />"+ getString(R.string.footMessageMsg) + " <a href=\"" +
+        //		getString(R.string.marketWebURL) + "\">" + getString(R.string.app_name) + "</a>";
+    }
 
-				receiversNames += "\n";
-				receiversNames += firstname + " " + surname1 + " " + surname2;
-				
-				if(!nickname.equalsIgnoreCase(Constants.NULL_VALUE) && !nickname.equalsIgnoreCase("")) {
-					receiversNames += " (" + nickname + ")"; 
-				}
-			}
-		}
+    /* (non-Javadoc)
+     * @see es.ugr.swad.swadroid.modules.Module#requestService()
+     */
+    @Override
+    protected void requestService() throws NoSuchAlgorithmException,
+            IOException, XmlPullParserException {
 
-		setResult(RESULT_OK);
-	}
+        readData();
+        addFootBody();
 
-	/* (non-Javadoc)
-	 * @see es.ugr.swad.swadroid.modules.Module#connect()
-	 */
-	@Override
-	protected void connect() {
-		String progressDescription = getString(R.string.sendingMessageMsg);
-		int progressTitle = R.string.messagesModuleLabel;
+        createRequest();
+        addParam("wsKey", Constants.getLoggedUser().getWsKey());
+        addParam("messageCode", notificationCode.intValue());
+        addParam("to", receivers);
+        addParam("subject", subject);
+        addParam("body", body);
+        sendRequest(User.class, false);
 
-		startConnection(false, progressDescription, progressTitle);
+        receiversNames = "";
+        if (result != null) {
+            ArrayList<?> res = new ArrayList<Object>((Vector) result);
+            SoapObject soap = (SoapObject) res.get(1);
+            int csSize = soap.getPropertyCount();
+            for (int i = 0; i < csSize; i++) {
+                SoapObject pii = (SoapObject) soap.getProperty(i);
+                String nickname = pii.getProperty("userNickname").toString();
+                String firstname = pii.getProperty("userFirstname").toString();
+                String surname1 = pii.getProperty("userSurname1").toString();
+                String surname2 = pii.getProperty("userSurname2").toString();
 
-		Toast.makeText(this, R.string.sendingMessageMsg, Toast.LENGTH_SHORT).show();
-		Log.i(TAG, getString(R.string.sendingMessageMsg));
-	}
+                receiversNames += "\n";
+                receiversNames += firstname + " " + surname1 + " " + surname2;
 
-	/* (non-Javadoc)
-	 * @see es.ugr.swad.swadroid.modules.Module#postConnect()
-	 */
-	@Override
-	protected void postConnect() {
-		String messageSended =  getString(R.string.messageSendedMsg) + ":" + receiversNames;
+                if (!nickname.equalsIgnoreCase(Constants.NULL_VALUE) && !nickname.equalsIgnoreCase("")) {
+                    receiversNames += " (" + nickname + ")";
+                }
+            }
+        }
 
-		Toast.makeText(this, messageSended, Toast.LENGTH_LONG).show();
-		Log.i(TAG, messageSended);
+        setResult(RESULT_OK);
+    }
 
-		finish();
-	}
+    /* (non-Javadoc)
+     * @see es.ugr.swad.swadroid.modules.Module#connect()
+     */
+    @Override
+    protected void connect() {
+        String progressDescription = getString(R.string.sendingMessageMsg);
+        int progressTitle = R.string.messagesModuleLabel;
 
-	/* (non-Javadoc)
-	 * @see es.ugr.swad.swadroid.modules.Module#onError()
-	 */
-	@Override
-	protected void onError() {
+        startConnection(false, progressDescription, progressTitle);
 
-	}
+        Toast.makeText(this, R.string.sendingMessageMsg, Toast.LENGTH_SHORT).show();
+        Log.i(TAG, getString(R.string.sendingMessageMsg));
+    }
+
+    /* (non-Javadoc)
+     * @see es.ugr.swad.swadroid.modules.Module#postConnect()
+     */
+    @Override
+    protected void postConnect() {
+        String messageSended = getString(R.string.messageSendedMsg) + ":" + receiversNames;
+
+        Toast.makeText(this, messageSended, Toast.LENGTH_LONG).show();
+        Log.i(TAG, messageSended);
+
+        finish();
+    }
+
+    /* (non-Javadoc)
+     * @see es.ugr.swad.swadroid.modules.Module#onError()
+     */
+    @Override
+    protected void onError() {
+
+    }
+
+    /* (non-Javadoc)
+     * @see android.app.Activity#onRestoreInstanceState(android.os.Bundle)
+     */
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        notificationCode = savedInstanceState.getLong("notificationCode");
+        receivers = savedInstanceState.getString("receivers");
+        receiversNames = savedInstanceState.getString("receiversNames");
+        subject = savedInstanceState.getString("subject");
+        body = savedInstanceState.getString("body");
+
+        writeData();
+
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    /* (non-Javadoc)
+     * @see android.app.Activity#onSaveInstanceState(android.os.Bundle)
+     */
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        readData();
+
+        outState.putLong("notificationCode", notificationCode);
+        outState.putString("receivers", receivers);
+        outState.putString("receiversNames", receiversNames);
+        outState.putString("subject", subject);
+        outState.putString("body", body);
+
+        super.onSaveInstanceState(outState);
+    }
 }
