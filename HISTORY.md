@@ -1,3 +1,27 @@
+##0.12.1 (2013-06-09)
+
+* Added forumPostCourse notification type
+* Added groups package description to Javadocs
+* Added icons in more resolutions
+* Added wsdl folder
+* Removed all references to University of Granada (UGR) in authors section
+* Now the user input is maintained on rotation of the device
+* Inspected and improved the source code with Android Studio
+* Optimized processing of downloaded tests configurations
+* Replaced Vector class with ArrayList class for optimization purposes
+* Replaced the answers ListView with a LinearLayout in order to avoid issues with the parent
+  ScrollView in TestMake
+* Updated BugSense library
+* Avoid overriding of synchronization user preferences on application upgrades
+* Fixed activity restart on TestMake
+* Fixed NullPointerException exceptions when inserting null values into not null database fields
+* Reverted to old ksoap2-android version in order to recover SoapFault processing
+* Now handled exceptions are always shown in logcat
+* Fixed IllegalStateException: Can not perform this action after onSaveInstanceState
+  Added WeakReference to activity in order to fix this issue
+* Modified NULL value detection
+* Bugfixes
+
 ## 0.12 (2013-04-20)
 
 * Added new notification types "documentFile", "sharedFile", "enrollment"
