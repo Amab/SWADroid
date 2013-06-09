@@ -23,51 +23,52 @@ import es.ugr.swad.swadroid.model.User;
 
 /**
  * Student item model.
+ *
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  */
 public class StudentItemModel implements Comparable<StudentItemModel> {
-	private User student;
-	private boolean selected;
+    private final User student;
+    private boolean selected;
 
-	public StudentItemModel(User u) {
-		this.student = u;
-		this.selected = false;
-	}
+    public StudentItemModel(User u) {
+        this.student = u;
+        this.selected = false;
+    }
 
-	public long getId() {
-		return this.student.getId();
-	}
+    public long getId() {
+        return this.student.getId();
+    }
 
-	public String getUserID() {
-		return this.student.getUserID();
-	}
+    public String getUserID() {
+        return this.student.getUserID();
+    }
 
-	public String toString() {
-		return this.student.getUserSurname1() + " " + student.getUserSurname2() + ", " + this.student.getUserFirstname();
-	} 
+    public String toString() {
+        return this.student.getUserSurname1() + " " + student.getUserSurname2() + ", " + this.student.getUserFirstname();
+    }
 
-	public boolean isSelected() {
-		return selected;
-	}
+    public boolean isSelected() {
+        return selected;
+    }
 
-	public void setSelected(boolean selected) {
-		this.selected = selected;
-	}
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
 
-	public String getPhotoFileName() {
-		return student.getPhotoFileName();
-	}
+    public String getPhotoFileName() {
+        return student.getPhotoFileName();
+    }
 
-	@Override
-	public int compareTo(StudentItemModel item) {
-		if(this.student.getUserSurname1().compareToIgnoreCase(item.student.getUserSurname1()) == 0) {
-			if(this.student.getUserSurname2().compareToIgnoreCase(item.student.getUserSurname2()) == 0) {
-				return this.student.getUserFirstname().compareTo(item.student.getUserFirstname());
-			} else {
-				return this.student.getUserSurname2().compareToIgnoreCase(item.student.getUserSurname2());
-			}
-		} else {
-			return this.student.getUserSurname1().compareToIgnoreCase(item.student.getUserSurname1());
-		}
-	}
+    @Override
+    public int compareTo(StudentItemModel item) {
+        if (this.student.getUserSurname1().compareToIgnoreCase(item.student.getUserSurname1()) == 0) {
+            if (this.student.getUserSurname2().compareToIgnoreCase(item.student.getUserSurname2()) == 0) {
+                return this.student.getUserFirstname().compareTo(item.student.getUserFirstname());
+            } else {
+                return this.student.getUserSurname2().compareToIgnoreCase(item.student.getUserSurname2());
+            }
+        } else {
+            return this.student.getUserSurname1().compareToIgnoreCase(item.student.getUserSurname1());
+        }
+    }
 }

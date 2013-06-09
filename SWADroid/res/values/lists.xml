@@ -6,7 +6,7 @@
         <item>Tests</item>
     </string-array>
     <string-array name="testMenuItems">
-        <item>Syncronize questions</item>
+        <item>Synchronize questions</item>
         <item>Make test</item>
     </string-array>
     <string-array name="testAnswerTypes">

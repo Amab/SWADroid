@@ -18,50 +18,49 @@
  */
 package es.ugr.swad.swadroid.modules.tests;
 
-import java.util.List;
-
-import es.ugr.swad.swadroid.model.TestTag;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckedTextView;
+import es.ugr.swad.swadroid.model.TestTag;
+
+import java.util.List;
 
 public class TagsArrayAdapter extends ArrayAdapter<TestTag> {
-	private Context context;
-	private int textViewResourceId;
-	private List<TestTag> items;
-	
-	public TagsArrayAdapter(Context context, int textViewResourceId,
-			List<TestTag> objects) {
-		
-		super(context, textViewResourceId, objects);
-		this.context = context;
-		this.textViewResourceId = textViewResourceId;
-		this.items = objects;
-	}
+    private final Context context;
+    private final int textViewResourceId;
+    private final List<TestTag> items;
 
-	/* (non-Javadoc)
-	 * @see android.widget.ArrayAdapter#getView(int, android.view.View, android.view.ViewGroup)
-	 */
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		 TestTag t = items.get(position);
-        
-		 if (convertView == null) {
-             LayoutInflater vi = LayoutInflater.from(context);
-             convertView = vi.inflate(textViewResourceId, null);
-         }
-		 
-         if (t != null) {
-                 CheckedTextView tt = (CheckedTextView) convertView.findViewById(android.R.id.text1);
-                 if (tt != null) {
-                       tt.setText(t.getTagTxt()); 
-                 }
-         }
-         
-         return convertView;
-	}
+    public TagsArrayAdapter(Context context, int textViewResourceId,
+                            List<TestTag> objects) {
+
+        super(context, textViewResourceId, objects);
+        this.context = context;
+        this.textViewResourceId = textViewResourceId;
+        this.items = objects;
+    }
+
+    /* (non-Javadoc)
+     * @see android.widget.ArrayAdapter#getView(int, android.view.View, android.view.ViewGroup)
+     */
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        TestTag t = items.get(position);
+
+        if (convertView == null) {
+            LayoutInflater vi = LayoutInflater.from(context);
+            convertView = vi.inflate(textViewResourceId, null);
+        }
+
+        if (t != null) {
+            CheckedTextView tt = (CheckedTextView) convertView.findViewById(android.R.id.text1);
+            if (tt != null) {
+                tt.setText(t.getTagTxt());
+            }
+        }
+
+        return convertView;
+    }
 }

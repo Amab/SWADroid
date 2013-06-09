@@ -20,31 +20,31 @@
 
 package es.ugr.swad.swadroid.utils;
 
-import java.security.spec.AlgorithmParameterSpec;
-import java.security.spec.KeySpec;
+import com.bugsense.trace.BugSenseHandler;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
-
-import com.bugsense.trace.BugSenseHandler;
+import java.security.spec.AlgorithmParameterSpec;
+import java.security.spec.KeySpec;
 
 /**
  * Cryptographic class for encryption purposes.
+ *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class Crypto {
 
-    Cipher ecipher;
-    Cipher dcipher;
+    private Cipher ecipher;
+    private Cipher dcipher;
 
     // 8-byte Salt
-    byte[] salt = { 1, 2, 4, 5, 7, 8, 3, 6 };
+    private final byte[] salt = {1, 2, 4, 5, 7, 8, 3, 6};
 
     // Iteration count
-    int iterationCount = 1979;
+    private final int iterationCount = 1979;
 
     public Crypto(String passPhrase) {
         try {
@@ -64,10 +64,10 @@ public class Crypto {
             ecipher.init(Cipher.ENCRYPT_MODE, key, paramSpec);
             dcipher.init(Cipher.DECRYPT_MODE, key, paramSpec);
         } catch (Exception e) {
-        	e.printStackTrace();
-        	
-			//Send exception details to Bugsense
-			BugSenseHandler.sendException(e);
+            e.printStackTrace();
+
+            //Send exception details to Bugsense
+            BugSenseHandler.sendException(e);
         }
     }
 
@@ -84,10 +84,10 @@ public class Crypto {
             rVal = toHex(enc);
         } catch (Exception e) {
             rVal = "Error encrypting: " + e.getMessage();
-        	e.printStackTrace();
-        	
-			//Send exception details to Bugsense
-			BugSenseHandler.sendException(e);
+            e.printStackTrace();
+
+            //Send exception details to Bugsense
+            BugSenseHandler.sendException(e);
         }
         return rVal;
     }
@@ -105,10 +105,10 @@ public class Crypto {
             rVal = new String(utf8, "UTF8");
         } catch (Exception e) {
             rVal = "Error encrypting: " + e.getMessage();
-        	e.printStackTrace();
-        	
-			//Send exception details to Bugsense
-			BugSenseHandler.sendException(e);
+            e.printStackTrace();
+
+            //Send exception details to Bugsense
+            BugSenseHandler.sendException(e);
         }
         return rVal;
     }
@@ -126,8 +126,8 @@ public class Crypto {
         if (buf == null)
             return "";
         StringBuffer result = new StringBuffer(2 * buf.length);
-        for (int i = 0; i < buf.length; i++) {
-            appendHex(result, buf[i]);
+        for (byte aBuf : buf) {
+            appendHex(result, aBuf);
         }
         return result.toString();
     }

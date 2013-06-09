@@ -1,184 +1,184 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/background"
-    android:orientation="vertical" >
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/background"
+              android:orientation="vertical">
 
     <!-- Dummy item to prevent AutoCompleteTextView from receiving focus -->
 
     <LinearLayout
-        android:layout_width="0px"
-        android:layout_height="0px"
-        android:focusable="true"
-        android:focusableInTouchMode="true" />
+            android:layout_width="0px"
+            android:layout_height="0px"
+            android:focusable="true"
+            android:focusableInTouchMode="true"/>
 
     <ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/ScrollView1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/ScrollView1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
         <TableLayout
-            android:id="@+id/TableLayout1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="3dip"
-            android:stretchColumns="1" >
+                android:id="@+id/TableLayout1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="3dip"
+                android:stretchColumns="1">
 
             <TableRow
-                android:id="@+id/tableRow1"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" >
-
-                <TextView
-                    android:id="@+id/tvCourse"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/sessionCourseText" />
-
-                <TextView
-                    android:id="@+id/course"
+                    android:id="@+id/tableRow1"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:textColor="@color/title_background"
-                    android:textSize="18sp"
-                    android:textStyle="bold|italic" />
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+
+                <TextView
+                        android:id="@+id/tvCourse"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sessionCourseText"/>
+
+                <TextView
+                        android:id="@+id/course"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:textColor="@color/title_background"
+                        android:textSize="18sp"
+                        android:textStyle="bold|italic"/>
             </TableRow>
 
             <TableRow
-                android:id="@+id/tableRow2"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" >
-
-                <TextView
-                    android:id="@+id/tvGroup"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/sessionGroupText" />
-
-                <TextView
-                    android:id="@+id/group"
+                    android:id="@+id/tableRow2"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:textColor="@color/title_background"
-                    android:textSize="18sp"
-                    android:textStyle="bold|italic" >
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
 
-                    <requestFocus />
+                <TextView
+                        android:id="@+id/tvGroup"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sessionGroupText"/>
+
+                <TextView
+                        android:id="@+id/group"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:textColor="@color/title_background"
+                        android:textSize="18sp"
+                        android:textStyle="bold|italic">
+
+                    <requestFocus/>
                 </TextView>
             </TableRow>
 
             <TableRow
-                android:id="@+id/tableRow3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical" >
-
-                <TextView
-                    android:id="@+id/tvStart"
+                    android:id="@+id/tableRow3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/sessionStartText" />
+                    android:gravity="center_vertical">
+
+                <TextView
+                        android:id="@+id/tvStart"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sessionStartText"/>
 
                 <TableLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" >
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
 
                     <TableRow
-                        android:id="@+id/tableRow4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" >
+                            android:id="@+id/tableRow4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
 
                         <Button
-                            android:id="@+id/btStartDate"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                                android:id="@+id/btStartDate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
 
                         <Button
-                            android:id="@+id/btStartTime"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                                android:id="@+id/btStartTime"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
                     </TableRow>
                 </TableLayout>
             </TableRow>
 
             <TableRow
-                android:id="@+id/tableRow5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical" >
-
-                <TextView
-                    android:id="@+id/TextView02"
+                    android:id="@+id/tableRow5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/sessionEndText" />
+                    android:gravity="center_vertical">
+
+                <TextView
+                        android:id="@+id/TextView02"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sessionEndText"/>
 
                 <TableLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" >
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
 
                     <TableRow
-                        android:id="@+id/tableRow6"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" >
+                            android:id="@+id/tableRow6"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
 
                         <Button
-                            android:id="@+id/btEndDate"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                                android:id="@+id/btEndDate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
 
                         <Button
-                            android:id="@+id/btEndTime"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                                android:id="@+id/btEndTime"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
                     </TableRow>
                 </TableLayout>
             </TableRow>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="vertical" >
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
                 <EditText
-                    android:id="@+id/etSite"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="@string/sessionSiteText"
-                    android:inputType="text" />
+                        android:id="@+id/etSite"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="@string/sessionSiteText"
+                        android:inputType="text"/>
 
                 <EditText
-                    android:id="@+id/etDescription"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/sessionDescriptionText"
-                    android:inputType="textMultiLine" />
+                        android:id="@+id/etDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/sessionDescriptionText"
+                        android:inputType="textMultiLine"/>
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal" >
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal">
 
                 <Button
-                    android:id="@+id/btCreate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/sessionButtonCreate" />
+                        android:id="@+id/btCreate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sessionButtonCreate"/>
 
                 <Button
-                    android:id="@+id/btCancel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/sessionButtonCancel" />
+                        android:id="@+id/btCancel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sessionButtonCancel"/>
             </LinearLayout>
         </TableLayout>
     </ScrollView>

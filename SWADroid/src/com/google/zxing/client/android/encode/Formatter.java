@@ -22,7 +22,7 @@ package com.google.zxing.client.android.encode;
  * @author Sean Owen
  */
 interface Formatter {
-  
-  String format(String source);
-  
+
+    String format(String source);
+
 }

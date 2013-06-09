@@ -31,11 +31,11 @@
     <string name="about_preferences">über</string>
     <string name="versionTitle_preferences">Anwendungs-Version</string>
     <string name="author_preferences">koordiniert bei Antonio Cañas Vargas
-		\nprogrammiert bei
-		Juan Miguel Boyero Corral		
-		\nHelena Rodríguez Gijón		
-		\nAntonio Aguilera Malagón</string>
-    <string name="organization_preferences">Universität Granada</string>
+        \nJuan Miguel Boyero Corral
+        \nHelena Rodríguez Gijón
+        \nAntonio Aguilera Malagón
+    </string>
+    <string name="author_title_preferences">Autoren</string>
     <string name="loginTitle_menu">anmelden</string>
     <string name="loginProgressTitle">anmelden</string>
     <string name="loginProgressDescription">Anschluss&#8230;</string>
@@ -43,10 +43,13 @@
     <string name="coursesProgressDescription">Abrufen von Kursen&#8230;</string>
     <string name="notificationsProgressTitle">Benachrichtigungen</string>
     <string name="notificationsProgressDescription">Abrufen neuer Benachrichtigungen&#8230;</string>
-    <string name="notificationsEmptyListMsg">Nicht heruntergeladen haben keine Benachrichtigung.\n\nZum Download j�ngsten Benachrichtigungen klicken Sie auf das Symbol in der oberen rechten Ecke des Bildschirms.</string>
+    <string name="notificationsEmptyListMsg">Nicht heruntergeladen haben keine Benachrichtigung.\n\nZum Download
+        j�ngsten Benachrichtigungen klicken Sie auf das Symbol in der oberen rechten Ecke des Bildschirms.
+    </string>
     <string name="notificationsDownloadedMsg">Benachrichtigungen heruntergeladen</string>
     <string name="testsDownloadProgressTitle">Tests</string>
-    <string name="testsDownloadProgressDescription">Synchronisieren von Testfragen.\n\nAbhängig von der Anzahl der Fragen zu synchronisieren, kann die Datenverarbeitung mehrere Minuten dauern.\n\nBitte warten&#8230;</string>
+    <string name="testsDownloadProgressDescription">Synchronisieren von Testfragen.\n\nAbhängig von der Anzahl der
+        Fragen zu synchronisieren, kann die Datenverarbeitung mehrere Minuten dauern.\n\nBitte warten&#8230;</string>
     <string name="errorMsgLaunchingActivity">Ein Fehler ist aufgetreten während der Ausführung der Operation</string>
     <string name="errorMsgWorkaroundEmulator">Das Android-Emulator Fehler wieder erschien. Neuer Versuch&#8230;</string>
     <string name="errorMsgNoConnection">Keine Verbindung gefunden</string>
@@ -57,6 +60,7 @@
     <string name="marksFile">Bewertungen</string>
     <string name="notice">Ankündigungen</string>
     <string name="message">Nachricht</string>
+    <string name="forumPostCourse">Beitrag in einem Forum</string>
     <string name="forumReply">Foren Antwort</string>
     <string name="content">Inhalt</string>
     <string name="messages">Nachrichten</string>
@@ -82,8 +86,11 @@
     <string name="noQuestionsPluggableTestsDownloadMsg">Der Lehrer nicht erlaubt die Fragen zum Download</string>
     <string name="questionsTestsDownloadSuccesfulMsg">Fragen erfolgreich heruntergeladen</string>
     <string name="testNoQuestionsCourseMsg">Nicht jede heruntergeladene Testfrage für diesen Kurs</string>
-    <string name="testNoQuestionsMsg">Vor der Durchführung einer Prüfung sollten Sie die Testfragen für mindestens einen Kurs zum Download</string>
-    <string name="testNoQuestionsMeetsSpecifiedCriteriaMsg">Es ist keine Frage, die die angegebenen Kriterien erfällt</string>
+    <string name="testNoQuestionsMsg">Vor der Durchführung einer Prüfung sollten Sie die Testfragen für mindestens einen
+        Kurs zum Download
+    </string>
+    <string name="testNoQuestionsMeetsSpecifiedCriteriaMsg">Es ist keine Frage, die die angegebenen Kriterien erfällt
+    </string>
     <string name="testNumQuestionsMsg">Geben Sie die Anzahl der Testfragen</string>
     <string name="testTagsMsg">Wählen Sie die Tags in den Test einbezogen werden</string>
     <string name="testNoTagsSelectedMsg">Es muss mindestens ein Tag ausgewählt werde</string>
@@ -95,16 +102,26 @@
     <string name="testShowResultsDetailsMsg">Details anzeigen</string>
     <string name="testNoDetailsMsg">Der Lehrer erlaubt es nicht, die Details zu sehen</string>
     <string name="testNoResultsMsg">Der Lehrer erlaubt es nicht, die Ergebnisse zu sehen</string>
-    <string name="firstRunMsg">Bevor Sie die Anwendung zum ersten Mal müssen Sie den Benutzernamen und das Kennwort für SWAD geben Sie auf der Setup-Bildschirm.\n\nSie können auf die Setup-Bildschirm aus dem Men� jederzeit Zugriff.\n\nWollen Sie das Konfigurationsfenster jetzt öffnen?</string>
+    <string name="firstRunMsg">Bevor Sie die Anwendung zum ersten Mal müssen Sie den Benutzernamen und das Kennwort für
+        SWAD geben Sie auf der Setup-Bildschirm.\n\nSie können auf die Setup-Bildschirm aus dem Men� jederzeit
+        Zugriff.\n\nWollen Sie das Konfigurationsfenster jetzt öffnen?
+    </string>
     <string name="initialDialogTitle">WICHTIG</string>
-    <string name="upgradeMsg">Aufgrund von �nderungen in der Datenbank alle Testfragen Daten wurden gel�scht.\n\nBitte.</string>
-    <string name="errorBadLoginMsg">Falscher Benutzer oder das Passwort</string>
+    <string name="upgradeMsg">Aufgrund von �nderungen in der Datenbank alle Testfragen Daten wurden
+        gel�scht.\n\nBitte.
+    </string>
+    <string name="errorBadLoginMsg">Benutzername oder Passwort sind nicht korrekt.\n\n
+         * Achten Sie darauf, von Ihnen eingegebene Benutzername und Passwort für den direkten Zugang zu SWAD, nicht die von PRADO.\n\n
+         * Wenn der Benutzer ist ein Spitzname, ob der Benutzer nach dem @.\n\n
+         * Wenn der Benutzer ist die ID, sicherzustellen, dass Sie den letzten Buchstaben entfernt.</string>
     <string name="errorServerResponseMsg">Fehler in der Server-Antwort</string>
     <string name="errorConnectionMsg">Fehler bei der Verbindung zum Server</string>
     <string name="errorTimeoutMsg">Zeitlimit versucht, die Verbindung zum Server</string>
     <string name="sendingMessageMsg">Nachricht wird gesendet&#8230;</string>
     <string name="messageSendedMsg">Nachricht gesendet erfolgreich</string>
-    <string name="messageSendErrorMsg">Fehler beim Senden der Nachricht. überprüfen Sie die Daten in der Nachricht Felder</string>
+    <string name="messageSendErrorMsg">Fehler beim Senden der Nachricht. überprüfen Sie die Daten in der Nachricht
+        Felder
+    </string>
     <string name="message_receivers_title">Empfänger (getrennt durch Komma)</string>
     <string name="message_subject_title">Betreff</string>
     <string name="message_body_title">Nachricht</string>
@@ -114,7 +131,9 @@
     <string name="noticeSendError">Fehler bei der Veröffentlichung der neuen Ankündigung</string>
     <string name="sendMsg">senden</string>
     <string name="cleanDatabaseMsg">Die Datenbank wurde gereinigt</string>
-    <string name="shareBodyMsg">Ich verwende # SWADroid in meinem Android-Handy für den Zugang zum E-Learning Plattform SWAD.\n Holen Sie es hier kostenlos: https://market.android.com/details?id=es.ugr.swad.swadroid</string>
+    <string name="shareBodyMsg">Ich verwende # SWADroid in meinem Android-Handy für den Zugang zum E-Learning Plattform
+        SWAD.\n Holen Sie es hier kostenlos: https://market.android.com/details?id=es.ugr.swad.swadroid
+    </string>
     <string name="marketURL">https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid</string>
     <string name="marketWebURL">http://goo.gl/Wgo1y</string>
     <string name="twitterURL">https://twitter.com/#!/SWADroid</string>
@@ -135,7 +154,8 @@
     <string name="marksMsg">Klicken Sie auf die Benachrichtigung, um die Marke anzeigen.</string>
     <string name="clickToGetCourses">Klicken Sie hier, um Ihre Kurse zu bekommen</string>
     <string name="documentsDownloadModuleLabel">Dokumente</string>
-    <string name="documentsDownloadProgressDescription">Getting directory tree. \n\nDepending of the directory size, this could take several minutes.\n\nPlease wait&#8230;</string>
+    <string name="documentsDownloadProgressDescription">Getting directory tree. \n\nDepending of the directory size,
+        this could take several minutes.\n\nPlease wait&#8230;</string>
     <string name="clickToOpenFile">Klicken Sie hier, um die Datei zu öffnen</string>
     <string name="sharedsDownloadModuleLabel">Gemeinsamer Bereich</string>
     <string name="connectionRequired">Internetverbindung ist für diese Funktionalität erforderlich</string>
@@ -144,22 +164,27 @@
     <string name="refresh_icon">Updates</string>
     <string name="Group">Gruppe</string>
     <string name="vacants">Frei</string>
-    <string name="numStudent">Anzahl der Studenten: </string>
+    <string name="numStudent">Anzahl der Studenten:</string>
     <string name="maxStudent">Max. Stud</string>
     <string name="enrollment">Einschreibung</string>
     <string name="myGroupsModuleLabel">Meine Gruppen</string>
-    <string name="groupSeparator">: </string>
+    <string name="groupSeparator">:</string>
     <string name="groupTypesModuleLabel">Schaffen Gruppetypen</string>
-    <string name="sendMyGroupsProgressDescription">Schicken gerade Einschreibung in Gruppen&#8230;\nBitte warten&#8230;</string>
+    <string name="sendMyGroupsProgressDescription">Schicken gerade Einschreibung in Gruppen&#8230;\nBitte
+        warten&#8230;</string>
     <string name="sendMyGroupsProgressTitle">Einschreibung in Gruppen</string>
-    <string name="openingTime">Öffnungsdatum: </string>
+    <string name="openingTime">Öffnungsdatum:</string>
     <string name="noGroupsText">Gruppen worden nicht im Kurs erstellt</string>
     <string name="changeGroups">Gruppen ändern</string>
     <string name="resultEnrollment">Ergebnis auf dem Anmeldeformular</string>
-    <string name="successfullEnrollment">Alle Anmeldungen wurden erfolgreich durchgeführt. Bitte überprüfen Sie, dass Sie in Ihrem gewünschten Gruppen eingeschrieben sind </string>
+    <string name="successfullEnrollment">Alle Anmeldungen wurden erfolgreich durchgeführt. Bitte überprüfen Sie, dass
+        Sie in Ihrem gewünschten Gruppen eingeschrieben sind
+    </string>
     <string name="confirmEnrollments">Bestätigen angeforderten Einschreibungen</string>
     <string name="areYouSure">Sind Sie sicher, dass Sie sich auf den ausgewählten Gruppen einschreiben wollen?</string>
-    <string name="failedEnrollment">Sorry, aber die Eintragung in den ausgewählten Gruppen konnte nicht durchgeführt werden</string>
+    <string name="failedEnrollment">Sorry, aber die Eintragung in den ausgewählten Gruppen konnte nicht durchgeführt
+        werden
+    </string>
     <string name="groupsProgressDescription">Abrufen Gruppen&#8230;\nBitte warten&#8230;</string>
     <string name="groupTypesProgressDescription">Abrufen Gruppentypen&#8230;\nBitte warten&#8230;</string>
     <string name="groupTypesProgressTitle">Gruppenarten</string>
@@ -172,7 +197,9 @@
     <string name="uploaderTitle">Uploaded by:</string>
     <string name="downloadFileTitle">Download</string>
     <string name="sdCardBusyTitle">SD-Karte nicht verfügbar</string>
-    <string name="sdCardBusy">SD-Karte ist in Verwendung. Um Downloads zu erlauben, "USB-Speicher ausschalten" in der Benachrichtigung wählen</string>
+    <string name="sdCardBusy">SD-Karte ist in Verwendung. Um Downloads zu erlauben, "USB-Speicher ausschalten" in der
+        Benachrichtigung wählen
+    </string>
     <string name="selectZone">Wählen Sie Bereich</string>
     <string name="fileTitle">Datei:</string>
     <string name="noConnectionMsg">Diese Funktion muss conection haben.</string>
