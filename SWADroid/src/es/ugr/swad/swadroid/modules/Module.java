@@ -29,12 +29,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
+
 import com.bugsense.trace.BugSenseHandler;
-import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.Preferences;
-import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.gui.MenuActivity;
-import es.ugr.swad.swadroid.utils.Utils;
+
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
@@ -46,6 +43,12 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeoutException;
+
+import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.Preferences;
+import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.gui.MenuActivity;
+import es.ugr.swad.swadroid.utils.Utils;
 
 /**
  * Superclass for encapsulate common behavior of all modules.
@@ -445,6 +448,7 @@ public abstract class Module extends MenuActivity {
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
                 SoapEnvelope.VER11);
         System.setProperty("http.keepAlive", "false");
+        envelope.dotNet=false;
         envelope.setOutputSoapObject(request);
         envelope.addMapping(NAMESPACE, cl.getSimpleName(), cl);
         // connection.debug = true;
