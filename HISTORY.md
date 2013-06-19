@@ -1,3 +1,7 @@
+##0.12.2 (2013-06-19)
+
+* Updated ksoap2-android library with 3.0.1-SNAPSHOT version from git repository.
+
 ##0.12.1 (2013-06-09)
 
 * Added forumPostCourse notification type
