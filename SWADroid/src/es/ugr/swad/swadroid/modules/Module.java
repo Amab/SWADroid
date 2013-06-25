@@ -611,11 +611,11 @@ public abstract class Module extends MenuActivity {
                     }
                 } else if (e instanceof XmlPullParserException) {
                     errorMsg = getString(R.string.errorServerResponseMsg);
-                } else if (e instanceof IOException) {
-                    errorMsg = getString(R.string.errorConnectionMsg);
                 } else if (e instanceof TimeoutException) {
                     errorMsg = getString(R.string.errorTimeoutMsg);
                     sendException = false;
+                //} else if (e instanceof IOException) {
+                //    errorMsg = getString(R.string.errorConnectionMsg);
                 } else {
                     errorMsg = e.getMessage();
                 }
