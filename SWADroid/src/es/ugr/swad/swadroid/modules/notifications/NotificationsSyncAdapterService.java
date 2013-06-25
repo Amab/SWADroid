@@ -184,13 +184,28 @@ public class NotificationsSyncAdapterService extends Service {
          * Use of KeepAliveHttpsTransport deals with the problems with the Android ssl libraries having trouble
          * with certificates and certificate authorities somehow messing up connecting/needing reconnects.
          */
-        String URL = prefs.getServer();
-        int TIMEOUT = 10000;
+
+        // Variables for URL splitting
+        String delimiter = "/";
+        String PATH, URL;
+        String[] URLArray;
+
+        // Split URL
+        URLArray = prefs.getServer().split(delimiter, 2);
+        URL = URLArray[0];
+        if (URLArray.length == 2) {
+            PATH = delimiter + URLArray[1];
+        } else {
+            PATH = "";
+        }
+        
+        int TIMEOUT = 60000;
         KeepAliveHttpsTransportSE connection;
 
         connection = new KeepAliveHttpsTransportSE(URL, 443, "", TIMEOUT);
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         System.setProperty("http.keepAlive", "false");
+        envelope.dotNet=false;
         envelope.setOutputSoapObject(request);
         //connection.debug = true;
         connection.call(SOAP_ACTION, envelope);
