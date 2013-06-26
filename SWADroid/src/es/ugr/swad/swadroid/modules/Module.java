@@ -105,10 +105,6 @@ public abstract class Module extends MenuActivity {
      */
     protected static boolean isConnected;
     /**
-     * Connection timeout in milliseconds
-     */
-    private static final int TIMEOUT = 60000;
-    /**
      * Application debuggable flag
      */
     protected static boolean isDebuggable;
@@ -444,7 +440,7 @@ public abstract class Module extends MenuActivity {
          * certificate authorities somehow messing up connecting/needing
          * reconnects.
          */
-        connection = new KeepAliveHttpsTransportSE(URL, 443, PATH, TIMEOUT);
+        connection = new KeepAliveHttpsTransportSE(URL, 443, PATH, Constants.CONNECTION_TIMEOUT);
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
                 SoapEnvelope.VER11);
         System.setProperty("http.keepAlive", "false");

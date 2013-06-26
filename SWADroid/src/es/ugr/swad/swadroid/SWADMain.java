@@ -345,7 +345,16 @@ public class SWADMain extends MenuExpandableListActivity {
         }
     }
 
-    @Override
+    /* (non-Javadoc)
+	 * @see android.app.Activity#onDestroy()
+	 */
+	@Override
+	protected void onDestroy() {
+		BugSenseHandler.closeSession(this);
+		super.onDestroy();
+	}
+
+	@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
