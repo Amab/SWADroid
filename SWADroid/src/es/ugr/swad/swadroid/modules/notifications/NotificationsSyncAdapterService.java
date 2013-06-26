@@ -114,18 +114,47 @@ public class NotificationsSyncAdapterService extends Service {
         }
     }
 
-    @Override
-    public IBinder onBind(Intent intent) {
+    /* (non-Javadoc)
+	 * @see android.app.Service#onCreate()
+	 */
+	@Override
+	public void onCreate() {        
+        //Initialize Bugsense plugin
+        BugSenseHandler.initAndStartSession(this, Constants.BUGSENSE_API_KEY);
+        
+		super.onCreate();
+	}
+
+	/* (non-Javadoc)
+	 * @see android.app.Service#onDestroy()
+	 */
+	@Override
+	public void onDestroy() {
+		BugSenseHandler.closeSession(this);
+		
+		super.onDestroy();
+	}
+
+	@Override
+    public IBinder onBind(Intent intent) {        
         return getSyncAdapter().getSyncAdapterBinder();
     }
 
-    private SyncAdapterImpl getSyncAdapter() {
+	/* (non-Javadoc)
+	 * @see android.app.Service#onUnbind(android.content.Intent)
+	 */
+	@Override
+	public boolean onUnbind(Intent intent) {
+		return super.onUnbind(intent);
+	}
+
+	private SyncAdapterImpl getSyncAdapter() {
         if (sSyncAdapter == null)
             sSyncAdapter = new SyncAdapterImpl(this);
         return sSyncAdapter;
     }
 
-    private static void alertNotif(final Context context) {
+	private static void alertNotif(final Context context) {
         if (notifCount > 0) {
             //Obtain a reference to the notification service
             String ns = Context.NOTIFICATION_SERVICE;
@@ -180,11 +209,6 @@ public class NotificationsSyncAdapterService extends Service {
     private static void sendRequest(boolean simple)
             throws IOException, XmlPullParserException {
 
-        /**
-         * Use of KeepAliveHttpsTransport deals with the problems with the Android ssl libraries having trouble
-         * with certificates and certificate authorities somehow messing up connecting/needing reconnects.
-         */
-
         // Variables for URL splitting
         String delimiter = "/";
         String PATH, URL;
@@ -198,11 +222,14 @@ public class NotificationsSyncAdapterService extends Service {
         } else {
             PATH = "";
         }
-        
-        int TIMEOUT = 60000;
+
+        /**
+         * Use of KeepAliveHttpsTransport deals with the problems with the Android ssl libraries having trouble
+         * with certificates and certificate authorities somehow messing up connecting/needing reconnects.
+         */
         KeepAliveHttpsTransportSE connection;
 
-        connection = new KeepAliveHttpsTransportSE(URL, 443, "", TIMEOUT);
+        connection = new KeepAliveHttpsTransportSE(URL, 443, PATH, Constants.CONNECTION_TIMEOUT);
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         System.setProperty("http.keepAlive", "false");
         envelope.dotNet=false;
