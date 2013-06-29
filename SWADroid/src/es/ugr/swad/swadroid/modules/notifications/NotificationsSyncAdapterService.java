@@ -51,6 +51,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Vector;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Service for notifications sync adapter.
@@ -70,6 +71,7 @@ public class NotificationsSyncAdapterService extends Service {
     private static final String SOAP_ACTION = "";
     private static SoapObject request;
     private static Object result;
+    private static String errorMessage = "";
     public static final String START_SYNC = "es.ugr.swad.swadroid.sync.start";
     public static final String STOP_SYNC = "es.ugr.swad.swadroid.sync.stop";
 
@@ -89,6 +91,7 @@ public class NotificationsSyncAdapterService extends Service {
                 dbHelper = new DataBaseHelper(mContext);
             } catch (Exception e) {
                 e.printStackTrace();
+                errorMessage = e.getMessage();
 
                 //Send exception details to Bugsense
                 BugSenseHandler.sendException(e);
@@ -101,16 +104,43 @@ public class NotificationsSyncAdapterService extends Service {
                 prefs.getPreferences(mContext);
                 SIZE_LIMIT = prefs.getNotifLimit();
                 NotificationsSyncAdapterService.performSync(mContext, account, extras, authority, provider, syncResult);
-            } catch (Exception e) {
+            } catch (Exception e) {                
+                if (e instanceof SoapFault) {
+                    SoapFault es = (SoapFault) e;
+
+                    if (es.faultstring.equals("Bad log in")) {
+                    	errorMessage = mContext.getString(R.string.errorBadLoginMsg);
+                    } else if (es.faultstring.equals("Unknown application key")) {
+                    	errorMessage = mContext.getString(R.string.errorBadAppKeyMsg);
+                    } else {
+                    	errorMessage = "Server error: " + es.getMessage();
+                    }
+                } else if (e instanceof XmlPullParserException) {
+                	errorMessage = mContext.getString(R.string.errorServerResponseMsg);
+
+                    e.printStackTrace();
+
+                    //Send exception details to Bugsense
+                    BugSenseHandler.sendException(e);
+                } else if (e instanceof TimeoutException) {
+                	errorMessage = mContext.getString(R.string.errorTimeoutMsg);
+                //} else if (e instanceof IOException) {
+                //    errorMsg = getString(R.string.errorConnectionMsg);
+                } else {
+                	errorMessage = e.getMessage();
+
+                    e.printStackTrace();
+
+                    //Send exception details to Bugsense
+                    BugSenseHandler.sendException(e);
+                }
+                
                 //Notify synchronization stop
                 Intent stopIntent = new Intent();
                 stopIntent.setAction(STOP_SYNC);
+                stopIntent.putExtra("notifCount", notifCount);  
+                stopIntent.putExtra("errorMessage", errorMessage);        
                 mContext.sendBroadcast(stopIntent);
-
-                e.printStackTrace();
-
-                //Send exception details to Bugsense
-                BugSenseHandler.sendException(e);
             }
         }
     }
@@ -124,6 +154,18 @@ public class NotificationsSyncAdapterService extends Service {
         BugSenseHandler.initAndStartSession(this, Constants.BUGSENSE_API_KEY);
         
 		super.onCreate();
+	}
+
+	/* (non-Javadoc)
+	 * @see android.app.Service#onStartCommand(android.content.Intent, int, int)
+	 */
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId) {
+		super.onStartCommand(intent, flags, startId);
+		 // return START_NOT_STICKY - we want this Service to be left running 
+        //  unless explicitly stopped, and it's process is killed, we want it to
+        //  be restarted
+        return START_STICKY;
 	}
 
 	/* (non-Javadoc)
@@ -372,7 +414,8 @@ public class NotificationsSyncAdapterService extends Service {
         //Notify synchronization stop
         Intent stopIntent = new Intent();
         stopIntent.setAction(STOP_SYNC);
-        stopIntent.putExtra("notifCount", notifCount);
+        stopIntent.putExtra("notifCount", notifCount);  
+        stopIntent.putExtra("errorMessage", errorMessage);        
         context.sendBroadcast(stopIntent);
     }
 }

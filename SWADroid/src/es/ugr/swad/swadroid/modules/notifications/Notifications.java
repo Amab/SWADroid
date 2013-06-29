@@ -75,6 +75,10 @@ public class Notifications extends Module {
      */
     private int notifCount;
     /**
+     * Error message returned by the synchronization service
+     */
+    private String errorMessage;
+    /**
      * Unique identifier for notification alerts
      */
     private final int NOTIF_ALERT_ID = 1982;
@@ -424,7 +428,10 @@ public class Notifications extends Module {
                 Log.i(TAG, "Stopped sync");
 
                 notifCount = intent.getIntExtra("notifCount", 0);
-                if (notifCount == 0) {
+                errorMessage = intent.getStringExtra("errorMessage");
+                if((errorMessage != null) && !errorMessage.equals("")) {
+                	error(TAG, errorMessage, null, true);
+                } else if (notifCount == 0) {
                     Toast.makeText(context, R.string.NoNotificationsMsg, Toast.LENGTH_LONG).show();
                 }
 
