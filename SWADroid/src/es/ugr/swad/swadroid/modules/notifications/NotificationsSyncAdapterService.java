@@ -62,7 +62,7 @@ public class NotificationsSyncAdapterService extends Service {
     private static SyncAdapterImpl sSyncAdapter = null;
     private static int notifCount;
     private static final int NOTIF_ALERT_ID = 1982;
-    private static final int SIZE_LIMIT = 25;
+    private static int SIZE_LIMIT;
     private static Preferences prefs;
     private static DataBaseHelper dbHelper;
     private static String METHOD_NAME = "";
@@ -99,6 +99,7 @@ public class NotificationsSyncAdapterService extends Service {
         public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
             try {
                 prefs.getPreferences(mContext);
+                SIZE_LIMIT = prefs.getNotifLimit();
                 NotificationsSyncAdapterService.performSync(mContext, account, extras, authority, provider, syncResult);
             } catch (Exception e) {
                 //Notify synchronization stop
@@ -232,12 +233,25 @@ public class NotificationsSyncAdapterService extends Service {
         connection = new KeepAliveHttpsTransportSE(URL, 443, PATH, Constants.CONNECTION_TIMEOUT);
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         System.setProperty("http.keepAlive", "false");
-        envelope.dotNet=false;
+        envelope.encodingStyle = SoapEnvelope.ENC;
+        envelope.setAddAdornments(false);
+        envelope.implicitTypes = true;
+        envelope.dotNet = false;
         envelope.setOutputSoapObject(request);
-        //connection.debug = true;
-        connection.call(SOAP_ACTION, envelope);
-        //Log.d(TAG, connection.requestDump.toString());
-        //Log.d(TAG, connection.responseDump.toString());
+    	connection.call(SOAP_ACTION, envelope);
+        /*connection.debug = true;
+        try {
+        	connection.call(SOAP_ACTION, envelope);
+	        Log.d(TAG, connection.getHost() + " " + connection.getPath() + " " +
+	        connection.getPort());
+	        Log.d(TAG, connection.requestDump.toString());
+	        Log.d(TAG, connection.responseDump.toString());
+        } catch (Exception e) {
+	        Log.d(TAG, connection.getHost() + " " + connection.getPath() + " " +
+	        connection.getPort());
+	        Log.d(TAG, connection.requestDump.toString());
+	        Log.d(TAG, connection.responseDump.toString());
+        }*/
 
         if (simple && !(envelope.getResponse() instanceof SoapFault)) {
             result = envelope.bodyIn;

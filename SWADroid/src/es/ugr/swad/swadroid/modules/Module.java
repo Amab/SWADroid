@@ -444,15 +444,26 @@ public abstract class Module extends MenuActivity {
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
                 SoapEnvelope.VER11);
         System.setProperty("http.keepAlive", "false");
-        envelope.dotNet=false;
+        envelope.encodingStyle = SoapEnvelope.ENC;
+        envelope.setAddAdornments(false);
+        envelope.implicitTypes = true;
+        envelope.dotNet = false;
         envelope.setOutputSoapObject(request);
         envelope.addMapping(NAMESPACE, cl.getSimpleName(), cl);
-        // connection.debug = true;
-        connection.call(SOAP_ACTION, envelope);
-        // Log.d(TAG, connection.getHost() + " " + connection.getPath() + " " +
-        // connection.getPort());
-        // Log.d(TAG, connection.requestDump.toString());
-        // Log.d(TAG, connection.responseDump.toString());
+    	connection.call(SOAP_ACTION, envelope);
+        /*connection.debug = true;
+        try {
+        	connection.call(SOAP_ACTION, envelope);
+	        Log.d(TAG, connection.getHost() + " " + connection.getPath() + " " +
+	        connection.getPort());
+	        Log.d(TAG, connection.requestDump.toString());
+	        Log.d(TAG, connection.responseDump.toString());
+        } catch (Exception e) {
+	        Log.d(TAG, connection.getHost() + " " + connection.getPath() + " " +
+	        connection.getPort());
+	        Log.d(TAG, connection.requestDump.toString());
+	        Log.d(TAG, connection.responseDump.toString());
+        }*/
 
         if (simple && !(envelope.getResponse() instanceof SoapFault)) {
             result = envelope.bodyIn;
@@ -618,11 +629,6 @@ public abstract class Module extends MenuActivity {
 
                 // Request finalized with errors
                 error(TAG, errorMsg, e, sendException);
-
-                // Log.d(TAG, connection.getHost() + " " + connection.getPath()
-                // + " " + connection.getPort());
-                // Log.d(TAG, connection.requestDump.toString());
-                // Log.d(TAG, connection.responseDump.toString());
                 setResult(RESULT_CANCELED);
 
                 onError();
