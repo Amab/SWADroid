@@ -31,11 +31,14 @@ import com.android.dataframework.Entity;
 import com.bugsense.trace.BugSenseHandler;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import org.xmlpull.v1.XmlPullParserException;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
@@ -83,8 +86,10 @@ public class DataBaseHelper {
 
     /**
      * Constructor
+     * @throws IOException 
+     * @throws XmlPullParserException 
      */
-    public DataBaseHelper(Context ctx) {
+    public DataBaseHelper(Context ctx) throws XmlPullParserException, IOException {
         mCtx = ctx;
         prefs.getPreferences(mCtx);
         DBKey = prefs.getDBKey();
