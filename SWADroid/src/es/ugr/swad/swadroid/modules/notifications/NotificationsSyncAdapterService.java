@@ -36,7 +36,6 @@ import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
-import es.ugr.swad.swadroid.utils.Base64;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.KvmSerializable;
@@ -47,7 +46,6 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.security.KeyManagementException;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Vector;
@@ -322,14 +320,14 @@ public class NotificationsSyncAdapterService extends Service {
             Log.d(TAG, "Not logged");
 
             METHOD_NAME = "loginByUserPasswordKey";
-            MessageDigest md = MessageDigest.getInstance("SHA-512");
+           /* MessageDigest md = MessageDigest.getInstance("SHA-512");
             md.update(prefs.getUserPassword().getBytes());
             String userPassword = Base64.encodeBytes(md.digest());
-            userPassword = userPassword.replace('+', '-').replace('/', '_').replace('=', ' ').replaceAll("\\s+", "").trim();
+            userPassword = userPassword.replace('+', '-').replace('/', '_').replace('=', ' ').replaceAll("\\s+", "").trim();*/
 
             createRequest();
             addParam("userID", prefs.getUserID());
-            addParam("userPassword", userPassword);
+            addParam("userPassword", prefs.getUserPassword());
             addParam("appKey", Constants.SWAD_APP_KEY);
             sendRequest(true);
 

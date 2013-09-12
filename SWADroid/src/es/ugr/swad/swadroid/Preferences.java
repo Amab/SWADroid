@@ -20,8 +20,10 @@
 package es.ugr.swad.swadroid;
 
 import android.accounts.Account;
+import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -35,14 +37,15 @@ import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.util.Log;
+
 import com.bugsense.trace.BugSenseHandler;
+
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.sync.SyncUtils;
-import es.ugr.swad.swadroid.utils.Base64;
+import es.ugr.swad.swadroid.utils.Crypto;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.widget.SeekBarDialogPreference;
 
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /**
@@ -51,6 +54,10 @@ import java.security.NoSuchAlgorithmException;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class Preferences extends PreferenceActivity implements OnPreferenceChangeListener {
+    /**
+     * Login tag name for Logcat
+     */
+    public static final String TAG = Constants.APP_TAG + " Preferences";
     /**
      * Application preferences
      */
@@ -340,20 +347,29 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
     }
 
     /**
-     * Encrypts user password with SHA-512 and encodes it to Base64UrlSafe
+     * Shows an error message.
      *
-     * @param password Password to be encrypted
-     * @return Encrypted password
-     * @throws NoSuchAlgorithmException
+     * @param message Error message to show.
      */
-    private String encryptPassword(String password) throws NoSuchAlgorithmException {
-        String p;
-        MessageDigest md = MessageDigest.getInstance("SHA-512");
-        md.update(password.getBytes());
-        p = Base64.encodeBytes(md.digest());
-        p = p.replace('+', '-').replace('/', '_').replace('=', ' ').replaceAll("\\s+", "").trim();
+    protected void error(String tag, String message, Exception ex, boolean sendException) {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.title_error_dialog)
+                .setMessage(message)
+                .setNeutralButton(R.string.close_dialog,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                finish();
+                            }
+                        }).setIcon(R.drawable.erroricon).show();
 
-        return p;
+        if (ex != null) {
+            ex.printStackTrace();
+
+            // Send exception details to Bugsense
+            if (sendException) {
+                BugSenseHandler.sendExceptionMessage(tag, message, ex);
+            }
+        }
     }
 
     /**
@@ -362,16 +378,11 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
      * @throws NoSuchAlgorithmException
      */
     public void upgradeCredentials() throws NoSuchAlgorithmException {
-        String stars = getStarsSequence(STARS_LENGTH);
-
         editor = prefs.edit();
         userPassword = prefs.getString(USERPASSWORDPREF, "");
-        userPassword = encryptPassword(userPassword);
+        userPassword = Crypto.encryptPassword(userPassword);
         editor.putString(USERPASSWORDPREF, userPassword);
         editor.commit();
-
-        userIDPref.setSummary(prefs.getString(USERIDPREF, ""));
-        userPasswordPref.setSummary(stars);
     }
 
     /**
@@ -513,7 +524,11 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
              */
             public boolean onPreferenceClick(Preference preference) {
                 userPassword = prefs.getString(USERPASSWORDPREF, "");
-                //userPassword = encryptPassword(userPassword);
+                try {
+					userPassword = Crypto.encryptPassword(userPassword);
+				} catch (NoSuchAlgorithmException ex) {
+					error(TAG, ex.getMessage(), ex, true);
+				}
                 editor.putString(USERPASSWORDPREF, userPassword);
                 return true;
             }
