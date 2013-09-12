@@ -247,8 +247,8 @@ public class SWADMain extends MenuExpandableListActivity {
             lastVersion = prefs.getLastVersion();
             currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
             dbHelper.initializeDB();
-            //lastVersion = 45;
-            //currentVersion = 46;
+            //lastVersion = 51;
+            //currentVersion = 52;
 
             //If this is the first run, show configuration dialog
             if (lastVersion == 0) {
@@ -268,17 +268,24 @@ public class SWADMain extends MenuExpandableListActivity {
 
                 Constants.setCurrentUserRole(-1);
 
-                //If this is an upgrade, show upgrade dialog
+            //If this is an upgrade, show upgrade dialog
             } else if (lastVersion < currentVersion) {
                 //showUpgradeDialog();
                 dbHelper.upgradeDB(this);
 
+                //If the app is updating from an unencrypted user password version, encrypt user password
+                if(lastVersion < 52) {
+                	prefs.upgradeCredentials();
+                }
+                
                 //If the app is updating from an unencrypted version, encrypt already downloaded notifications
-                if (lastVersion < 45) {
+            	if (lastVersion < 45) {
                     dbHelper.encryptNotifications();
 
-                    //If the app is updating from the bugged encrypted version,
-                    //re-encrypt the notifications using the new method
+                /*
+                 * If the app is updating from the bugged encrypted version,
+                 * re-encrypt the notifications using the new method
+                 */
                 } else if (lastVersion == 45) {
                     dbHelper.reencryptNotifications();
                 }

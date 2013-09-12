@@ -27,6 +27,9 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.KeySpec;
 
@@ -136,5 +139,22 @@ public class Crypto {
 
     private static void appendHex(StringBuffer sb, byte b) {
         sb.append(HEX.charAt((b >> 4) & 0x0f)).append(HEX.charAt(b & 0x0f));
+    }
+
+    /**
+     * Encrypts user password with SHA-512 and encodes it to Base64UrlSafe
+     *
+     * @param password Password to be encrypted
+     * @return Encrypted password
+     * @throws NoSuchAlgorithmException
+     */
+    public static String encryptPassword(String password) throws NoSuchAlgorithmException {
+        String p;
+        MessageDigest md = MessageDigest.getInstance("SHA-512");
+        md.update(password.getBytes());
+        p = Base64.encodeBytes(md.digest());
+        p = p.replace('+', '-').replace('/', '_').replace('=', ' ').replaceAll("\\s+", "").trim();
+
+        return p;
     }
 }

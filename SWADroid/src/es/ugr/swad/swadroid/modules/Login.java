@@ -20,18 +20,18 @@
 package es.ugr.swad.swadroid.modules;
 
 import android.os.Bundle;
+import android.util.Log;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
-import es.ugr.swad.swadroid.modules.rollcall.RollCallUtil;
-import es.ugr.swad.swadroid.utils.Base64;
+import es.ugr.swad.swadroid.utils.Utils;
+
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.KvmSerializable;
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /**
@@ -48,7 +48,7 @@ public class Login extends Module {
     /**
      * Digest for user password.
      */
-    private MessageDigest md;
+    //private MessageDigest md;
     /**
      * User ID.
      */
@@ -56,7 +56,7 @@ public class Login extends Module {
     /**
      * User password.
      */
-    private String userPassword;
+    //private String userPassword;
     /**
      * Login tag name for Logcat
      */
@@ -91,16 +91,6 @@ public class Login extends Module {
         startConnection(false, progressDescription, progressTitle);
     }
 
-    private static boolean isInteger(String str) {
-        try {
-            Integer.parseInt(str);
-            return true;
-        } catch (NumberFormatException nfe) {
-            nfe.printStackTrace();
-        }
-        return false;
-    }
-
     /**
      * Connects to SWAD and gets user data.
      *
@@ -123,27 +113,28 @@ public class Login extends Module {
             userID = prefs.getUserID().trim();
 
             //If the user ID is a DNI
-            if (RollCallUtil.isValidDni(userID)) {
+            if (Utils.isValidDni(userID)) {
                 //If the DNI has no letter, remove left zeros
-                if (isInteger(userID)) {
+                if (Utils.isInteger(userID)) {
                     userID = String.valueOf(Integer.parseInt(userID));
 
                     //If the last position of the DNI is a char, remove it
-                } else if (isInteger(userID.substring(0, userID.length() - 1))) {
+                } else if (Utils.isInteger(userID.substring(0, userID.length() - 1))) {
                     userID = String.valueOf(Integer.parseInt(userID.substring(0, userID.length() - 1)));
                 }
             }
 
             //Encrypts user password with SHA-512 and encodes it to Base64UrlSafe
-            md = MessageDigest.getInstance("SHA-512");
+            /*md = MessageDigest.getInstance("SHA-512");
             md.update(prefs.getUserPassword().getBytes());
             userPassword = Base64.encodeBytes(md.digest());
-            userPassword = userPassword.replace('+', '-').replace('/', '_').replace('=', ' ').replaceAll("\\s+", "").trim();
+            userPassword = userPassword.replace('+', '-').replace('/', '_').replace('=', ' ').replaceAll("\\s+", "").trim();*/
 
             //Creates webservice request, adds required params and sends request to webservice
             createRequest();
             addParam("userID", userID);
-            addParam("userPassword", userPassword);
+            //addParam("userPassword", userPassword);
+            addParam("userPassword", prefs.getUserPassword());
             addParam("appKey", Constants.SWAD_APP_KEY);
             sendRequest(User.class, true);
 
