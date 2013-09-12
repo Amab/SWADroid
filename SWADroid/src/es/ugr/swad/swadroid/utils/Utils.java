@@ -34,6 +34,8 @@ import android.util.Log;
 import es.ugr.swad.swadroid.Constants;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Utils {
     private static final String TAG = Constants.APP_TAG + " Utils";
@@ -201,5 +203,46 @@ public class Utils {
 
         return true;
     }
+
+	public static boolean isInteger(String str) {
+	    try {
+	        Integer.parseInt(str);
+	        return true;
+	    } catch (NumberFormatException nfe) {
+	        nfe.printStackTrace();
+	    }
+	    return false;
+	}
+
+	public static boolean isValidDni(String dni) {
+	    String dniPattern = "^[A-Z]?\\d{1,16}[A-Z]?$";    // (0 or 1 letter) + (1 to 16 digits) + (0 or 1 letter)
+	
+	    Pattern pattern = Pattern.compile(dniPattern, Pattern.CASE_INSENSITIVE);
+	    Matcher matcher = pattern.matcher(dni);
+	
+	    return matcher.matches();
+	    /*if (matcher.matches())
+	        return checkDniLetter(dni);
+		return false;*/
+	}
+
+	public static boolean checkDniLetter(String n) {
+	    String number = n.substring(0, n.length() - 1);
+	    String letter = n.substring(n.length() - 1, n.length());
+	
+	    int code = (Integer.valueOf(number)) % 23;
+	    String[] abc = {"T", "R", "W", "A", "G", "M", "Y", "F", "P", "D", "X", "B", "N", "J", "Z", "S", "Q", "V", "H", "L", "C", "K", "E", "T"};
+	
+	    return abc[code].compareToIgnoreCase(letter) == 0;
+	}
+
+	public static boolean isValidNickname(String nickname) {
+	    String patronNickname = "@[a-zA-Z_0-9]{1,17}";    // 1 to 17 letters, underscored or digits
+	
+	    Pattern pattern = Pattern.compile(patronNickname, Pattern.CASE_INSENSITIVE);
+	    Matcher matcher = pattern.matcher(nickname);
+	
+	    return matcher.matches();
+	}
 
 }
