@@ -24,6 +24,7 @@ import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.Module;
+
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -42,7 +43,8 @@ public class DirectoryTreeDownload extends Module {
     private int group = 0; // documents of the course
 
     //TODO esta clase tiene q cambiar
-    private class DirectoryTree {
+    @SuppressWarnings("unused")
+	private class DirectoryTree {
         String tree;
     }
 

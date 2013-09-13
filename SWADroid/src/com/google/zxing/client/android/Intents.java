@@ -157,7 +157,8 @@ public final class Intents {
         }
     }
 
-    private static final class History {
+    @SuppressWarnings("unused")
+	private static final class History {
 
         public static final String ITEM_NUMBER = "ITEM_NUMBER";
 
@@ -203,7 +204,8 @@ public final class Intents {
         }
     }
 
-    private static final class SearchBookContents {
+    @SuppressWarnings("unused")
+	private static final class SearchBookContents {
         /**
          * Use Google Book Search to search the contents of the book provided.
          */
@@ -223,7 +225,8 @@ public final class Intents {
         }
     }
 
-    private static final class WifiConnect {
+    @SuppressWarnings("unused")
+	private static final class WifiConnect {
         /**
          * Internal intent used to trigger connection to a wi-fi network.
          */
@@ -248,7 +251,8 @@ public final class Intents {
         }
     }
 
-    private static final class Share {
+    @SuppressWarnings("unused")
+	private static final class Share {
         /**
          * Give the user a choice of items to encode as a barcode, then render it as a QR Code and
          * display onscreen for a friend to scan with their phone.

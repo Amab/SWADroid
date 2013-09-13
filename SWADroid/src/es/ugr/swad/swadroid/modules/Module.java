@@ -24,6 +24,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -295,8 +296,9 @@ public abstract class Module extends MenuActivity {
     protected void onCreate(Bundle savedInstanceState) {
         // Check if debug mode is enabled
         try {
-            isDebuggable = (getPackageManager().getApplicationInfo(
-                    getPackageName(), 0).FLAG_DEBUGGABLE != 0);
+            getPackageManager().getApplicationInfo(
+                    getPackageName(), 0);
+			isDebuggable = (ApplicationInfo.FLAG_DEBUGGABLE != 0);
         } catch (NameNotFoundException e1) {
             e1.printStackTrace();
         }
@@ -343,9 +345,11 @@ public abstract class Module extends MenuActivity {
     protected void onResume() {
         super.onResume();
 
-        if (showDialog && (progressDialog != null)) {
-            progressDialog.show();
-        }
+        if (showDialog) {
+			if (progressDialog != null) {
+			    progressDialog.show();
+			}
+		}
     }
 
     /*

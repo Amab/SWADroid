@@ -22,6 +22,7 @@ import android.app.AlertDialog;
 import android.app.ExpandableListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -199,8 +200,9 @@ public class MenuExpandableListActivity extends ExpandableListActivity {
         //Initialize database
         try {
             dbHelper = new DataBaseHelper(this);
-            isDebuggable = (getPackageManager().getApplicationInfo(
-                    getPackageName(), 0).FLAG_DEBUGGABLE != 0);
+            getPackageManager().getApplicationInfo(
+                    getPackageName(), 0);
+			isDebuggable = (ApplicationInfo.FLAG_DEBUGGABLE != 0);
         } catch (Exception ex) {
             error(TAG, ex.getMessage(), ex, true);
         }

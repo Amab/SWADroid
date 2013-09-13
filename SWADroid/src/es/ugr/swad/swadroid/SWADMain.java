@@ -163,7 +163,8 @@ public class SWADMain extends MenuExpandableListActivity {
                                 int groupPosition, int childPosition, long id) {
         // Get the item that was clicked
         Object o = this.getExpandableListAdapter().getChild(groupPosition, childPosition);
-        String keyword = (String) ((Map<String, Object>) o).get(NAME);
+        @SuppressWarnings("unchecked")
+		String keyword = (String) ((Map<String, Object>) o).get(NAME);
         //boolean rollCallAndroidVersionOK = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.FROYO);
         //PackageManager pm = getPackageManager();
         //boolean rearCam;

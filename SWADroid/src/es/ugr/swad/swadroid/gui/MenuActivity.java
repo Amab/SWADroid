@@ -22,6 +22,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,7 +30,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
+
 import com.bugsense.trace.BugSenseHandler;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
@@ -193,8 +196,9 @@ public class MenuActivity extends Activity {
         //Initialize database
         try {
             dbHelper = new DataBaseHelper(this);
-            isDebuggable = (getPackageManager().getApplicationInfo(
-                    getPackageName(), 0).FLAG_DEBUGGABLE != 0);
+            getPackageManager().getApplicationInfo(
+                    getPackageName(), 0);
+			isDebuggable = (ApplicationInfo.FLAG_DEBUGGABLE != 0);
         } catch (Exception ex) {
             error(TAG, ex.getMessage(), ex, true);
         }
