@@ -189,7 +189,8 @@ public class Rollcall extends MenuExpandableListActivity {
     public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
         // Get the item that was clicked
         Object o = getExpandableListAdapter().getChild(groupPosition, childPosition);
-        String keyword = (String) ((Map<String, Object>) o).get(NAME);
+        @SuppressWarnings("unchecked")
+		String keyword = (String) ((Map<String, Object>) o).get(NAME);
         Intent activity;
         Context context = getBaseContext();
         Cursor selectedGroup = (Cursor) practiceGroup.getSelectedItem();

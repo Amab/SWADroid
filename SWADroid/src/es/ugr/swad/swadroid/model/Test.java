@@ -346,7 +346,7 @@ public class Test extends Model {
         totalScore = 0;
         questionsScore.clear();
 
-        for (TestQuestion question : this.questions) {
+        for (int i=0; i<this.questions.size(); i++) {
             this.questionsScore.add((float) 0);
         }
     }
