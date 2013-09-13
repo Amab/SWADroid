@@ -308,7 +308,8 @@ public class DataBaseHelper {
                     ent.getInt("multiple"),
                     ent.getLong("openTime"));
         } else if (table.equals(Constants.DB_TABLE_PRACTICE_SESSIONS)) {
-            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            //SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            java.text.DateFormat format = SimpleDateFormat.getDateTimeInstance();
 
             try {
                 o = new PracticeSession(ent.getId(),
@@ -962,7 +963,7 @@ public class DataBaseHelper {
         //it should not insert/modify rows in the relationship table if the course does not exists
         if (course != null) {
             if (rows.isEmpty()) {
-                PairTable<Long, Long> pair = new PairTable(Constants.DB_TABLE_GROUPS_COURSES, g.getId(), courseCode);
+                PairTable<Long, Long> pair = new PairTable<Long, Long>(Constants.DB_TABLE_GROUPS_COURSES, g.getId(), courseCode);
                 insertPairTable(pair);
             } else {
                 rows.get(0).setValue("crsCod", courseCode);
@@ -981,8 +982,10 @@ public class DataBaseHelper {
         if (rows.isEmpty()) {
             insertPairTable(new PairTable<Long, Long>(Constants.DB_TABLE_GROUPS_GROUPTYPES, groupTypeCode, groupCode));
         } else {
-            PairTable<Integer, Integer> prev = new PairTable(Constants.DB_TABLE_GROUPS_GROUPTYPES, rows.get(0).getValue("grpTypCod"), rows.get(0).getValue("grpCod"));
-            PairTable<Integer, Integer> current = new PairTable(Constants.DB_TABLE_GROUPS_GROUPTYPES, groupTypeCode, groupCode);
+			@SuppressWarnings({ "unchecked", "rawtypes" })
+			PairTable<Integer, Integer> prev = new PairTable(Constants.DB_TABLE_GROUPS_GROUPTYPES, rows.get(0).getValue("grpTypCod"), rows.get(0).getValue("grpCod"));
+			@SuppressWarnings({ "unchecked", "rawtypes" })
+			PairTable<Integer, Integer> current = new PairTable(Constants.DB_TABLE_GROUPS_GROUPTYPES, groupTypeCode, groupCode);
             updatePairTable(prev, current);
         }
 		/*}else returnValue = false;*/
@@ -1375,8 +1378,10 @@ public class DataBaseHelper {
                         insertPairTable(new PairTable<Long, Long>(Constants.DB_TABLE_GROUPS_GROUPTYPES, groupTypeCode[0], groupCode));
 
                     } else {
-                        PairTable<Integer, Integer> prev = new PairTable(Constants.DB_TABLE_GROUPS_GROUPTYPES, rows.get(0).getValue("grpTypCod"), rows.get(0).getValue("grpCod"));
-                        PairTable<Integer, Integer> current = new PairTable(Constants.DB_TABLE_GROUPS_GROUPTYPES, groupTypeCode[0], groupCode);
+                        @SuppressWarnings({ "rawtypes", "unchecked" })
+						PairTable<Integer, Integer> prev = new PairTable(Constants.DB_TABLE_GROUPS_GROUPTYPES, rows.get(0).getValue("grpTypCod"), rows.get(0).getValue("grpCod"));
+                        @SuppressWarnings({ "rawtypes", "unchecked" })
+						PairTable<Integer, Integer> current = new PairTable(Constants.DB_TABLE_GROUPS_GROUPTYPES, groupTypeCode[0], groupCode);
                         updatePairTable(prev, current);
 
                     }
@@ -1387,7 +1392,8 @@ public class DataBaseHelper {
             return false;
     }
 
-    private <T> boolean updateRelationship(Pair<String, String> tables, Pair<String, String> idsTables, String relationTable, Pair<String, T> remainField, Pair<String, T> changedField) {
+    @SuppressWarnings("unused")
+	private <T> boolean updateRelationship(Pair<String, String> tables, Pair<String, String> idsTables, String relationTable, Pair<String, T> remainField, Pair<String, T> changedField) {
 
 
         return true;
@@ -1413,7 +1419,8 @@ public class DataBaseHelper {
     /**
      * Updates an existing group type
      */
-    private boolean updateGroupType(GroupType prv, GroupType current) {
+    @SuppressWarnings("unused")
+	private boolean updateGroupType(GroupType prv, GroupType current) {
         List<Entity> rows = db.getEntityList(Constants.DB_TABLE_GROUP_TYPES, "id=" + prv.getId());
         boolean returnValue = true;
         if (!rows.isEmpty()) {
@@ -1803,14 +1810,16 @@ public class DataBaseHelper {
      * Begin a database transaction
      */
     public void beginTransaction() {
-        db.getDB().execSQL("BEGIN;");
+        //db.getDB().execSQL("BEGIN;");
+        db.startTransaction();
     }
 
     /**
      * End a database transaction
      */
     public void endTransaction() {
-        db.getDB().execSQL("END;");
+        //db.getDB().execSQL("END;");
+        db.endTransaction();
     }
 
     /**
