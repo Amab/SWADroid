@@ -49,7 +49,7 @@
     </string>
     <string name="notificationsDownloadedMsg">Notifications downloaded</string>
     <string name="testsDownloadProgressTitle">Tests</string>
-    <string name="testsDownloadProgressDescription">Synchronizing test questions.\n\nDepending of the number of
+    <string name="testsDownloadProgressDescription">Synchronizing test questions.\n\nDepending on the number of
         questions to synchronize, the data processing can take several minutes.\n\nPlease wait&#8230;</string>
     <string name="errorMsgLaunchingActivity">An error occurred during the execution of the
         operation
@@ -174,11 +174,11 @@
     <string name="clickToGetCourses">Click here to get your courses</string>
     <string name="attendanceModuleLabel">Rollcall</string>
     <string name="users">Users</string>
-    <string name="usersDownloadProgressDescription">Synchronizing users.\n\nDepending of the number of
+    <string name="usersDownloadProgressDescription">Synchronizing users.\n\nDepending on the number of
         users to synchronize, the data processing can take several minutes.\n\nPlease wait&#8230;</string>
     <string name="usersDownloadProgressTitle">Students</string>
     <string name="documentsDownloadModuleLabel">Documents</string>
-    <string name="documentsDownloadProgressDescription">Getting files. \n\nDepending of the directory size, this could
+    <string name="documentsDownloadProgressDescription">Getting files. \n\nDepending on the directory size, this could
         take several minutes.\n\nPlease wait&#8230;</string>
     <string name="clickToOpenFile">Click here to open the file</string>
     <string name="sharedsDownloadModuleLabel">Shared area</string>
@@ -263,7 +263,7 @@
     <string name="listSampleModuleLabel">Sample</string>
     <string name="rollcallModuleLabel">Rollcall</string>
     <string name="studentsTitle">Students</string>
-    <string name="studentsDownloadProgressDescription">Synchronizing users.\n\nDepending of the number of
+    <string name="studentsDownloadProgressDescription">Synchronizing users.\n\nDepending on the number of
         users to synchronize, the data processing can take several minutes.\n\nPlease wait&#8230;</string>
     <string name="studentsList">Students list</string>
     <string name="studentsDownloadProgressTitle">Students</string>
