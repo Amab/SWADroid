@@ -117,7 +117,7 @@ public class Login extends Module {
                 if (Utils.isInteger(userID)) {
                     userID = String.valueOf(Integer.parseInt(userID));
 
-                    //If the last position of the DNI is a char, remove it
+                //If the last position of the DNI is a char, remove it
                 } else if (Utils.isInteger(userID.substring(0, userID.length() - 1))) {
                     userID = String.valueOf(Integer.parseInt(userID.substring(0, userID.length() - 1)));
                 }
