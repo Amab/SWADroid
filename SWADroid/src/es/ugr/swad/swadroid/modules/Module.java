@@ -60,15 +60,15 @@ public abstract class Module extends MenuActivity {
     /**
      * SOAP_ACTION param for webservice request.
      */
-    private String SOAP_ACTION = "";
+    private static String SOAP_ACTION = "";
     /**
      * METHOD_NAME param for webservice request.
      */
-    private String METHOD_NAME = "";
+    private static String METHOD_NAME = "";
     /**
      * NAMESPACE param for webservice request.
      */
-    private String NAMESPACE = "urn:swad";
+    private static String NAMESPACE = "urn:swad";
     /**
      * URL param for webservice request.
      */
@@ -76,7 +76,7 @@ public abstract class Module extends MenuActivity {
     /**
      * Preferences of the activity.
      */
-    protected Preferences prefs = new Preferences();
+    protected static Preferences prefs = new Preferences();
     /**
      * Async Task for background jobs
      */
@@ -158,7 +158,7 @@ public abstract class Module extends MenuActivity {
      * @param METHOD_NAME METHOD_NAME parameter.
      */
     protected void setMETHOD_NAME(String METHOD_NAME) {
-        this.METHOD_NAME = METHOD_NAME;
+        Module.METHOD_NAME = METHOD_NAME;
     }
 
     /**
@@ -176,7 +176,7 @@ public abstract class Module extends MenuActivity {
      * @param NAMESPACE NAMESPACE parameter.
      */
     public void setNAMESPACE(String NAMESPACE) {
-        this.NAMESPACE = NAMESPACE;
+        Module.NAMESPACE = NAMESPACE;
     }
 
     /**
@@ -194,7 +194,7 @@ public abstract class Module extends MenuActivity {
      * @param SOAP_ACTION SOAP_ACTION parameter.
      */
     public void setSOAP_ACTION(String SOAP_ACTION) {
-        this.SOAP_ACTION = SOAP_ACTION;
+        Module.SOAP_ACTION = SOAP_ACTION;
     }
 
     /**
@@ -230,7 +230,7 @@ public abstract class Module extends MenuActivity {
      * @param prefs Preferences of activity.
      */
     public void setPrefs(Preferences prefs) {
-        this.prefs = prefs;
+        Module.prefs = prefs;
     }
 
     /**

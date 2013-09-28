@@ -36,8 +36,6 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-import android.util.Log;
-
 import com.bugsense.trace.BugSenseHandler;
 
 import es.ugr.swad.swadroid.model.DataBaseHelper;
@@ -59,13 +57,17 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
      */
     public static final String TAG = Constants.APP_TAG + " Preferences";
     /**
+     * Application context
+     */
+    public Context ctx;
+    /**
      * Application preferences
      */
-    private SharedPreferences prefs;
+    private static SharedPreferences prefs = null;
     /**
      * User identifier.
      */
-    private String userID;
+    private static String userID;
     /**
      * Database Helper.
      */
@@ -77,11 +79,11 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
     /**
      * User password.
      */
-    private String userPassword;
+    private static String userPassword;
     /**
      * Server.
      */
-    private String server;
+    private static String server;
     /**
      * Stars length
      */
@@ -93,23 +95,23 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
     /**
      * Last application version
      */
-    private int lastVersion;
+    private static int lastVersion;
     /**
      * Last course selected
      */
-    private int lastCourseSelected = -1;
+    private static int lastCourseSelected = -1;
     /**
      * Database passphrase
      */
-    private String DBKey;
+    private static String DBKey;
     /**
      * Synchronization enabled flag
      */
-    private boolean syncEnabled;
+    private static boolean syncEnabled;
     /**
      * Notifications limit
      */
-    private int notifLimit;
+    private static int notifLimit;
     /**
      * Last application version preference name.
      */
@@ -173,63 +175,63 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
     /**
      * User ID preference
      */
-    private Preference userIDPref;
+    private static Preference userIDPref;
     /**
      * User password preference
      */
-    private Preference userPasswordPref;
+    private static Preference userPasswordPref;
     /**
      * Current application version preference
      */
-    private Preference currentVersionPref;
+    private static Preference currentVersionPref;
     /**
      * Rate preference
      */
-    private Preference ratePref;
+    private static Preference ratePref;
     /**
      * Twitter preference
      */
-    private Preference twitterPref;
+    private static Preference twitterPref;
     /**
      * Facebook preference
      */
-    private Preference facebookPref;
+    private static Preference facebookPref;
     /**
      * Google Plus preference
      */
-    private Preference googlePlusPref;
+    private static Preference googlePlusPref;
     /**
      * Mailing list preference
      */
-    private Preference mailingListPref;
+    private static Preference mailingListPref;
     /**
      * Blog preference
      */
-    private Preference blogPref;
+    private static Preference blogPref;
     /**
      * Share preference
      */
-    private Preference sharePref;
+    private static Preference sharePref;
     /**
      * Server preference
      */
-    private Preference serverPref;
+    private static Preference serverPref;
     /**
      * Synchronization time preference
      */
-    private Preference syncTimePref;
+    private static Preference syncTimePref;
     /**
      * Synchronization enable preference
      */
-    private CheckBoxPreference syncEnablePref;
+    private static CheckBoxPreference syncEnablePref;
     /**
      * Notifications limit preference
      */
-    private SeekBarDialogPreference notifLimitPref;
+    private static SeekBarDialogPreference notifLimitPref;
     /**
      * Preferences editor
      */
-    private Editor editor;
+    private static Editor editor;
 
     /**
      * Gets user identifier.
@@ -257,6 +259,8 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
     public String getServer() {
         if (server.equals("")) {
             server = Constants.DEFAULT_SERVER;
+        } else {
+        	server = prefs.getString(SERVERPREF, Constants.DEFAULT_SERVER);
         }
 
         return server;
@@ -276,8 +280,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
      */
     public void setLastVersion(int lv) {
         lastVersion = lv;
-        editor = prefs.edit();
-        editor.putInt(LASTVERSIONPREF, lv);
+        editor = editor.putInt(LASTVERSIONPREF, lv);
         editor.commit();
     }
 
@@ -295,8 +298,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
      */
     public void setLastCourseSelected(int lcs) {
         lastCourseSelected = lcs;
-        editor = prefs.edit();
-        editor.putInt(LASTCOURSESELECTEDPREF, lcs);
+        editor = editor.putInt(LASTCOURSESELECTEDPREF, lcs);
         editor.commit();
     }
 
@@ -325,8 +327,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
      */
     public void setDBKey(String key) {
         DBKey = key;
-        editor = prefs.edit();
-        editor.putString(DBKEYPREF, DBKey);
+        editor = editor.putString(DBKEYPREF, DBKey);
         editor.commit();
     }
 
@@ -378,10 +379,8 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
      * @throws NoSuchAlgorithmException
      */
     public void upgradeCredentials() throws NoSuchAlgorithmException {
-        editor = prefs.edit();
-        userPassword = prefs.getString(USERPASSWORDPREF, "");
         userPassword = Crypto.encryptPassword(userPassword);
-        editor.putString(USERPASSWORDPREF, userPassword);
+        editor = editor.putString(USERPASSWORDPREF, userPassword);
         editor.commit();
     }
 
@@ -402,7 +401,13 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
      */
     public void getPreferences(Context ctx) {
         // Get the preferences
-        prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+    	this.ctx = ctx;
+    	
+    	if(prefs == null) {
+    		prefs = PreferenceManager.getDefaultSharedPreferences(ctx);    	
+    		editor = prefs.edit();
+    	}
+    	
         userID = prefs.getString(USERIDPREF, "");
         userPassword = prefs.getString(USERPASSWORDPREF, "");
         server = prefs.getString(SERVERPREF, Constants.DEFAULT_SERVER);
@@ -411,6 +416,29 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         syncEnabled = prefs.getBoolean(SYNCENABLEPREF, true);
         notifLimit = prefs.getInt(NOTIFLIMITPREF, 25);
         DBKey = prefs.getString(DBKEYPREF, "");
+    }
+
+    /**
+     * Saves preferences of activity.
+     *
+     * @param ctx Context of activity.
+     */
+    public void writePreferences() {    	
+    	if(prefs == null) {
+    		prefs = PreferenceManager.getDefaultSharedPreferences(ctx);    	
+    		editor = prefs.edit();
+    	}
+    	
+        editor = editor.putString(USERIDPREF, userID);
+        editor = editor.putString(USERPASSWORDPREF, userPassword);
+        editor = editor.putString(SERVERPREF, server);
+        editor = editor.putInt(LASTVERSIONPREF, lastVersion);
+        editor = editor.putInt(LASTCOURSESELECTEDPREF, lastCourseSelected);
+        editor = editor.putBoolean(SYNCENABLEPREF, syncEnabled);
+        editor = editor.putInt(NOTIFLIMITPREF, notifLimit);
+        editor = editor.putString(DBKEYPREF, DBKey);
+        
+        editor.commit();
     }
 
     /* (non-Javadoc)
@@ -422,17 +450,18 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 
         //Restore preferences
         addPreferencesFromResource(R.xml.preferences);
-        prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        this.ctx = getBaseContext();
+        
+        if(prefs == null) {
+    		prefs = PreferenceManager.getDefaultSharedPreferences(this.ctx);    	
+    		editor = prefs.edit();
+    	}
 
         //Initialize database
         try {
             dbHelper = new DataBaseHelper(this);
         } catch (Exception ex) {
-            Log.e(ex.getClass().getSimpleName(), ex.getMessage());
-            ex.printStackTrace();
-
-            //Send exception details to Bugsense
-            BugSenseHandler.sendException(ex);
+        	error(TAG, ex.getMessage(), ex, true);
         }
 
         userID = prefs.getString(USERIDPREF, "");
@@ -442,7 +471,6 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         lastCourseSelected = prefs.getInt(LASTCOURSESELECTEDPREF, 0);
         syncEnabled = prefs.getBoolean(SYNCENABLEPREF, true);
         notifLimit = prefs.getInt(NOTIFLIMITPREF, 25);
-        editor = prefs.edit();
 
         userIDPref = findPreference(USERIDPREF);
         userPasswordPref = findPreference(USERPASSWORDPREF);
@@ -459,39 +487,6 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         syncEnablePref = (CheckBoxPreference) findPreference(SYNCENABLEPREF);
         notifLimitPref = (SeekBarDialogPreference) findPreference(NOTIFLIMITPREF);
 
-        syncTimePref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-            public boolean onPreferenceChange(Preference preference, Object value) {
-                long time = Long.parseLong((String) value);
-
-                SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, getApplicationContext());
-
-                if (time != 0) {
-                    SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, time, getApplicationContext());
-                }
-
-                return true;
-            }
-        });
-        syncEnablePref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-            public boolean onPreferenceChange(Preference preference, Object value) {
-                //boolean masterSyncEnabled = ContentResolver.getMasterSyncAutomatically();
-                syncEnabled = (Boolean) value;
-                Account account = new Account(getString(R.string.app_name), Constants.ACCOUNT_TYPE);
-
-                //Configure automatic synchronization
-                /*if(syncEnabled && !masterSyncEnabled) {
-                    ContentResolver.setMasterSyncAutomatically(syncEnabled);
-				}*/
-
-                ContentResolver.setSyncAutomatically(account, Constants.AUTHORITY, syncEnabled);
-
-                syncEnablePref.setChecked(syncEnabled);
-                editor.commit();
-
-                return true;
-            }
-        });
-
         userIDPref.setOnPreferenceChangeListener(this);
         userPasswordPref.setOnPreferenceChangeListener(this);
         ratePref.setOnPreferenceChangeListener(this);
@@ -503,6 +498,8 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         sharePref.setOnPreferenceChangeListener(this);
         serverPref.setOnPreferenceChangeListener(this);
         notifLimitPref.setOnPreferenceChangeListener(this);
+        syncEnablePref.setOnPreferenceChangeListener(this);
+        syncTimePref.setOnPreferenceChangeListener(this);
 
         notifLimitPref.setProgress(notifLimit);
 
@@ -513,7 +510,6 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
              */
             public boolean onPreferenceClick(Preference preference) {
                 userID = prefs.getString(USERIDPREF, "");
-                editor.putString(USERIDPREF, userID);
                 return true;
             }
         });
@@ -523,13 +519,11 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
              * @param preference Preference selected.
              */
             public boolean onPreferenceClick(Preference preference) {
-                userPassword = prefs.getString(USERPASSWORDPREF, "");
                 try {
-					userPassword = Crypto.encryptPassword(userPassword);
-				} catch (NoSuchAlgorithmException ex) {
-					error(TAG, ex.getMessage(), ex, true);
+					userPassword = Crypto.encryptPassword(prefs.getString(USERPASSWORDPREF, ""));
+				} catch (NoSuchAlgorithmException e) {
+					error(TAG, e.getMessage(), e, true);
 				}
-                editor.putString(USERPASSWORDPREF, userPassword);
                 return true;
             }
         });
@@ -626,17 +620,6 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
              */
             public boolean onPreferenceClick(Preference preference) {
                 server = prefs.getString(SERVERPREF, Constants.DEFAULT_SERVER);
-                editor.putString(SERVERPREF, server);
-                return true;
-            }
-        });
-        notifLimitPref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference,
-                                              Object newValue) {
-                notifLimit = (Integer) newValue;
-                editor.putInt(NOTIFLIMITPREF, notifLimit);
-                dbHelper.clearOldNotifications(notifLimit);
                 return true;
             }
         });
@@ -654,29 +637,60 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
      */
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         String key = preference.getKey();
-
-        //If preferences have changed, logout and save new preferences
-        if (USERIDPREF.equals(key) || USERPASSWORDPREF.equals(key)) {
-            Constants.setLogged(false);
-            cleanDatabase();
-            Constants.setPreferencesChanged();
-            editor.commit();
-        }
-
-        if (USERPASSWORDPREF.equals(key)) {
+        
+        if (USERIDPREF.equals(key)) {
+        	//userID = (String) newValue;
+        	//editor = editor.putString(USERIDPREF, userID);
+        	preference.setSummary((CharSequence) newValue);
+        } else if (USERPASSWORDPREF.equals(key)) {
             String stars = getStarsSequence(STARS_LENGTH);
             preference.setSummary(stars);
-        } else {
-            preference.setSummary((CharSequence) newValue);
+            
+            /*try {
+				userPassword = Crypto.encryptPassword((String) newValue);
+				editor = editor.putString(USERPASSWORDPREF, userPassword);
+			} catch (NoSuchAlgorithmException ex) {
+				error(TAG, ex.getMessage(), ex, true);
+			}*/
+        } else if (SERVERPREF.equals(key)) {
+            //server = (String) newValue;
+            //editor = editor.putString(SERVERPREF, server);
+        } else if(SYNCENABLEPREF.equals(key)) {
+        	//boolean masterSyncEnabled = ContentResolver.getMasterSyncAutomatically();
+            syncEnabled = (Boolean) newValue;
+            Account account = new Account(getString(R.string.app_name), Constants.ACCOUNT_TYPE);
+
+            //Configure automatic synchronization
+            /*if(syncEnabled && !masterSyncEnabled) {
+                ContentResolver.setMasterSyncAutomatically(syncEnabled);
+			}*/
+
+            ContentResolver.setSyncAutomatically(account, Constants.AUTHORITY, syncEnabled);
+
+            syncEnablePref.setChecked(syncEnabled);
+        } else if(SYNCTIMEPREF.equals(key)) {
+        	long time = Long.parseLong((String) newValue);
+
+            SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, getApplicationContext());
+
+            if (time != 0) {
+                SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, time, getApplicationContext());
+            }
+        } else if(NOTIFLIMITPREF.equals(key)) {
+        	 //notifLimit = (Integer) newValue;
+        	// editor = editor.putInt(NOTIFLIMITPREF, notifLimit);
+             dbHelper.clearOldNotifications(notifLimit);
         }
 
-        if (SERVERPREF.equals(key)) {
+        //If preferences have changed, logout
+        if (USERIDPREF.equals(key) || USERPASSWORDPREF.equals(key) || SERVERPREF.equals(key)) {
             Constants.setLogged(false);
             cleanDatabase();
             Constants.setPreferencesChanged();
-            editor.commit();
         }
-
+        
+        //editor.commit(); 
+        
         return true;
     }
 
@@ -687,9 +701,9 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
     protected void onResume() {
         super.onResume();
         String stars = getStarsSequence(STARS_LENGTH);
-        userIDPref.setSummary(prefs.getString(USERIDPREF, ""));
-
-        if (!prefs.getString(USERPASSWORDPREF, "").equals(""))
+        userIDPref.setSummary(userID);
+        
+        if (!userPassword.equals(""))
             userPasswordPref.setSummary(stars);
 
         if (!server.equals("")) {
@@ -705,8 +719,6 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
     @Override
     protected void onPause() {
         super.onPause();
-        editor.putInt(LASTVERSIONPREF, lastVersion);
-        editor.putInt(LASTCOURSESELECTEDPREF, lastCourseSelected);
-        editor.commit();
+        writePreferences();
     }
 }
