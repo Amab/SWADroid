@@ -509,7 +509,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
              * @param preference Preference selected.
              */
             public boolean onPreferenceClick(Preference preference) {
-                userID = prefs.getString(USERIDPREF, "");
+                //userID = prefs.getString(USERIDPREF, "");
                 return true;
             }
         });
@@ -519,11 +519,11 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
              * @param preference Preference selected.
              */
             public boolean onPreferenceClick(Preference preference) {
-                try {
+                /*try {
 					userPassword = Crypto.encryptPassword(prefs.getString(USERPASSWORDPREF, ""));
 				} catch (NoSuchAlgorithmException e) {
 					error(TAG, e.getMessage(), e, true);
-				}
+				}*/
                 return true;
             }
         });
@@ -619,7 +619,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
              * @param preference Preference selected.
              */
             public boolean onPreferenceClick(Preference preference) {
-                server = prefs.getString(SERVERPREF, Constants.DEFAULT_SERVER);
+                //server = prefs.getString(SERVERPREF, Constants.DEFAULT_SERVER);
                 return true;
             }
         });
@@ -639,22 +639,17 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         String key = preference.getKey();
         
         if (USERIDPREF.equals(key)) {
-        	//userID = (String) newValue;
-        	//editor = editor.putString(USERIDPREF, userID);
+        	userID = (String) newValue;
         	preference.setSummary((CharSequence) newValue);
-        } else if (USERPASSWORDPREF.equals(key)) {
-            String stars = getStarsSequence(STARS_LENGTH);
-            preference.setSummary(stars);
-            
-            /*try {
+        } else if (USERPASSWORDPREF.equals(key)) {            
+            try {
 				userPassword = Crypto.encryptPassword((String) newValue);
-				editor = editor.putString(USERPASSWORDPREF, userPassword);
+	            preference.setSummary(getStarsSequence(STARS_LENGTH));
 			} catch (NoSuchAlgorithmException ex) {
 				error(TAG, ex.getMessage(), ex, true);
-			}*/
+			}
         } else if (SERVERPREF.equals(key)) {
-            //server = (String) newValue;
-            //editor = editor.putString(SERVERPREF, server);
+            server = (String) newValue;
         } else if(SYNCENABLEPREF.equals(key)) {
         	//boolean masterSyncEnabled = ContentResolver.getMasterSyncAutomatically();
             syncEnabled = (Boolean) newValue;
@@ -677,8 +672,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
                 SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, time, getApplicationContext());
             }
         } else if(NOTIFLIMITPREF.equals(key)) {
-        	 //notifLimit = (Integer) newValue;
-        	// editor = editor.putInt(NOTIFLIMITPREF, notifLimit);
+        	 notifLimit = (Integer) newValue;
              dbHelper.clearOldNotifications(notifLimit);
         }
 
@@ -687,9 +681,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
             Constants.setLogged(false);
             cleanDatabase();
             Constants.setPreferencesChanged();
-        }
-        
-        //editor.commit(); 
+        } 
         
         return true;
     }

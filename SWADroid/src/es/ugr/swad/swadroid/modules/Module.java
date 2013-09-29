@@ -22,7 +22,6 @@ package es.ugr.swad.swadroid.modules;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -30,8 +29,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
-
-import com.bugsense.trace.BugSenseHandler;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
@@ -60,19 +57,19 @@ public abstract class Module extends MenuActivity {
     /**
      * SOAP_ACTION param for webservice request.
      */
-    private static String SOAP_ACTION = "";
+    private String SOAP_ACTION = "";
     /**
      * METHOD_NAME param for webservice request.
      */
-    private static String METHOD_NAME = "";
+    private String METHOD_NAME = "";
     /**
      * NAMESPACE param for webservice request.
      */
     private static String NAMESPACE = "urn:swad";
     /**
-     * URL param for webservice request.
+     * SERVER param for webservice request.
      */
-    private String URL; // = "swad.ugr.es";
+    private String SERVER; // = "swad.ugr.es";
     /**
      * Preferences of the activity.
      */
@@ -114,7 +111,7 @@ public abstract class Module extends MenuActivity {
      */
     private static final String TAG = Constants.APP_TAG + " Module";
 
-    private static KeepAliveHttpsTransportSE connection;
+    private KeepAliveHttpsTransportSE connection;
 
     /**
      * Connects to SWAD and gets user data.
@@ -158,7 +155,7 @@ public abstract class Module extends MenuActivity {
      * @param METHOD_NAME METHOD_NAME parameter.
      */
     protected void setMETHOD_NAME(String METHOD_NAME) {
-        Module.METHOD_NAME = METHOD_NAME;
+        this.METHOD_NAME = METHOD_NAME;
     }
 
     /**
@@ -194,25 +191,7 @@ public abstract class Module extends MenuActivity {
      * @param SOAP_ACTION SOAP_ACTION parameter.
      */
     public void setSOAP_ACTION(String SOAP_ACTION) {
-        Module.SOAP_ACTION = SOAP_ACTION;
-    }
-
-    /**
-     * Gets URL parameter.
-     *
-     * @return URL parameter.
-     */
-    public String getURL() {
-        return URL;
-    }
-
-    /**
-     * Sets URL parameter.
-     *
-     * @param URL URL parameter.
-     */
-    public void setURL(String URL) {
-        this.URL = URL;
+        this.SOAP_ACTION = SOAP_ACTION;
     }
 
     /**
@@ -360,6 +339,7 @@ public abstract class Module extends MenuActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        SERVER = prefs.getServer();
     }
 
     /*
@@ -372,7 +352,6 @@ public abstract class Module extends MenuActivity {
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case Constants.LOGIN_REQUEST_CODE:
-                    Constants.setLogged(true);
                     // Toast.makeText(getBaseContext(), R.string.loginSuccessfulMsg,
                     // Toast.LENGTH_SHORT).show();
 
@@ -428,9 +407,10 @@ public abstract class Module extends MenuActivity {
         String delimiter = "/";
         String PATH;
         String[] URLArray;
+        String URL;
 
         // Split URL
-        URLArray = prefs.getServer().split(delimiter, 2);
+        URLArray = SERVER.split(delimiter, 2);
         URL = URLArray[0];
         if (URLArray.length == 2) {
             PATH = delimiter + URLArray[1];
@@ -454,53 +434,29 @@ public abstract class Module extends MenuActivity {
         envelope.dotNet = false;
         envelope.setOutputSoapObject(request);
         envelope.addMapping(NAMESPACE, cl.getSimpleName(), cl);
-    	connection.call(SOAP_ACTION, envelope);
-        /*connection.debug = true;
-        try {
-        	connection.call(SOAP_ACTION, envelope);
-	        Log.d(TAG, connection.getHost() + " " + connection.getPath() + " " +
-	        connection.getPort());
-	        Log.d(TAG, connection.requestDump.toString());
-	        Log.d(TAG, connection.responseDump.toString());
-        } catch (Exception e) {
-	        Log.d(TAG, connection.getHost() + " " + connection.getPath() + " " +
-	        connection.getPort());
-	        Log.d(TAG, connection.requestDump.toString());
-	        Log.d(TAG, connection.responseDump.toString());
-        }*/
+        
+        if (isDebuggable) {
+	        connection.debug = true;
+	        try {
+	        	connection.call(SOAP_ACTION, envelope);
+		        Log.d(TAG, connection.getHost() + " " + connection.getPath() + " " +
+		        connection.getPort());
+		        Log.d(TAG, connection.requestDump.toString());
+		        Log.d(TAG, connection.responseDump.toString());
+	        } catch (Exception e) {
+		        Log.e(TAG, connection.getHost() + " " + connection.getPath() + " " +
+		        connection.getPort());
+		        Log.e(TAG, connection.requestDump.toString());
+		        Log.e(TAG, connection.responseDump.toString());
+	        }        	
+        } else {
+        	connection.call(SOAP_ACTION, envelope);        	
+        }
 
         if (simple && !(envelope.getResponse() instanceof SoapFault)) {
             result = envelope.bodyIn;
         } else {
             result = envelope.getResponse();
-        }
-    }
-
-    /**
-     * Shows an error message.
-     *
-     * @param tag           Error tag to show.
-     * @param message       Error message to show.
-     * @param sendException
-     */
-    protected void error(String tag, String message, Exception ex, boolean sendException) {
-        errorDialog = new AlertDialog.Builder(Module.this)
-                .setTitle(R.string.title_error_dialog)
-                .setMessage(message)
-                .setNeutralButton(R.string.close_dialog,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                finish();
-                            }
-                        }).setIcon(R.drawable.erroricon).show();
-
-        if (ex != null) {
-            ex.printStackTrace();
-
-            // Send exception details to Bugsense
-            if (!isDebuggable && sendException) {
-                BugSenseHandler.sendExceptionMessage(tag, message, ex);
-            }
         }
     }
 
@@ -526,7 +482,6 @@ public abstract class Module extends MenuActivity {
         final String progressDescription;
         final int progressTitle;
         final boolean showDialog;
-        boolean isLoginModule;
 
         /**
          * Shows progress dialog and connects to SWAD in background
@@ -536,8 +491,7 @@ public abstract class Module extends MenuActivity {
          * @param isLogin             Flag for detect if this is the login module
          */
         public Connect(Module activity, boolean show,
-                       String progressDescription, int progressTitle,
-                       Boolean... isLogin) {
+                       String progressDescription, int progressTitle) {
 
             super();
             this.progressDescription = progressDescription;
@@ -546,9 +500,6 @@ public abstract class Module extends MenuActivity {
             this.activity = new WeakReference<Module>(activity);
             this.e = null;
             progressDialog = new ProgressDialog(Module.this);
-
-            assert isLogin.length <= 1;
-            this.isLoginModule = isLogin.length > 0 && isLogin[0];
         }
 
         /*
