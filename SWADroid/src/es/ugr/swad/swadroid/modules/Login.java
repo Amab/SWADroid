@@ -20,6 +20,7 @@
 package es.ugr.swad.swadroid.modules;
 
 import android.os.Bundle;
+import android.util.Log;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
@@ -141,18 +142,6 @@ public class Login extends Module {
                 KvmSerializable ks = (KvmSerializable) result;
                 SoapObject soap = (SoapObject) result;
 
-				/*Log.i(TAG, "count=" + ks.getPropertyCount());
-                Log.i(TAG, "property[0]=" + ks.getProperty(0));
-				Log.i(TAG, "property[1]=" + ks.getProperty(1));
-				Log.i(TAG, "property[2]=" + ks.getProperty(2));
-				Log.i(TAG, "property[3]=" + ks.getProperty(3));
-				Log.i(TAG, "property[4]=" + ks.getProperty(4));
-				Log.i(TAG, "property[5]=" + ks.getProperty(5));
-				Log.i(TAG, "property[6]=" + ks.getProperty(6));
-				Log.i(TAG, "property[7]=" + ks.getProperty(7));
-				Log.i(TAG, "property[8]=" + ks.getProperty(8));
-				 */
-
                 //Stores user data returned by webservice response
                 loggedUser = new User(
                         Long.parseLong(ks.getProperty(0).toString()),                    // id
@@ -167,24 +156,27 @@ public class Login extends Module {
                         Integer.parseInt(soap.getProperty("userRole").toString())        // userRole
                 );
 
+                Constants.setLogged(true);
                 Constants.setLoggedUser(loggedUser);
 
                 //Update application last login time
                 Constants.setLastLoginTime(System.currentTimeMillis());
+
+        		if(isDebuggable) {
+        			Log.d(TAG, "id=" + loggedUser.getId());
+        			Log.d(TAG, "wsKey=" + loggedUser.getWsKey());
+        			Log.d(TAG, "userID=" + loggedUser.getUserID());
+        			Log.d(TAG, "userNickname=" + loggedUser.getUserNickname());
+        			Log.d(TAG, "userSurname1=" + loggedUser.getUserSurname1());
+        			Log.d(TAG, "userSurname2=" + loggedUser.getUserSurname2());
+        			Log.d(TAG, "userFirstName=" + loggedUser.getUserFirstname());
+        			Log.d(TAG, "userPhoto=" + loggedUser.getUserPhoto());
+        			Log.d(TAG, "userRole=" + loggedUser.getUserRole());
+        			Log.d(TAG, "isLogged=" + Constants.isLogged());
+        			Log.d(TAG, "lastLoginTime=" + Constants.getLastLoginTime());
+        		}
             }
         }
-
-		/*if(isDebuggable) {
-			Log.d(TAG, "id=" + loggedUser.getId());
-			Log.d(TAG, "wsKey=" + loggedUser.getWsKey());
-			Log.d(TAG, "userID=" + loggedUser.getUserID());
-			Log.d(TAG, "userNickname=" + loggedUser.getUserNickname());
-			Log.d(TAG, "userSurname1=" + loggedUser.getUserSurname1());
-			Log.d(TAG, "userSurname2=" + loggedUser.getUserSurname2());
-			Log.d(TAG, "userFirstName=" + loggedUser.getUserFirstname());
-			Log.d(TAG, "userRole=" + loggedUser.getUserRole());
-			Log.d(TAG, "lastLoginTime=" + Global.getLastLoginTime());
-		}*/
 
         //Request finalized without errors
         setResult(RESULT_OK);

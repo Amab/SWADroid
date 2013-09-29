@@ -287,7 +287,8 @@ public class Notifications extends Module {
                     SWADNotification n = new SWADNotification(notificationCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, userPhoto, location, summary, status, content);
                     dbHelper.insertNotification(n);
 
-                    //Log.d(TAG, n.toString());
+                    if(isDebuggable)
+                    	Log.d(TAG, n.toString());
                 }
 
                 //Request finalized without errors

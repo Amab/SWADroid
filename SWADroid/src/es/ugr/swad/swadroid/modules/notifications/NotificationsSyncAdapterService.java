@@ -28,7 +28,9 @@ import android.content.*;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+
 import com.bugsense.trace.BugSenseHandler;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
@@ -36,6 +38,7 @@ import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
+
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.KvmSerializable;
@@ -66,12 +69,14 @@ public class NotificationsSyncAdapterService extends Service {
     private static DataBaseHelper dbHelper;
     private static String METHOD_NAME = "";
     private static final String NAMESPACE = "urn:swad";
-    private static final String SOAP_ACTION = "";
+    private final static String SOAP_ACTION = "";
+    private static String SERVER; // = "swad.ugr.es";
     private static SoapObject request;
     private static Object result;
     private static String errorMessage = "";
     public static final String START_SYNC = "es.ugr.swad.swadroid.sync.start";
     public static final String STOP_SYNC = "es.ugr.swad.swadroid.sync.stop";
+    private static KeepAliveHttpsTransportSE connection;
 
     public NotificationsSyncAdapterService() {
         super();
@@ -101,6 +106,7 @@ public class NotificationsSyncAdapterService extends Service {
             try {
                 prefs.getPreferences(mContext);
                 SIZE_LIMIT = prefs.getNotifLimit();
+                SERVER = prefs.getServer();
                 NotificationsSyncAdapterService.performSync(mContext, account, extras, authority, provider, syncResult);
             } catch (Exception e) {                
                 if (e instanceof SoapFault) {
@@ -247,16 +253,17 @@ public class NotificationsSyncAdapterService extends Service {
         request.addProperty(param, value);
     }
 
-    private static void sendRequest(boolean simple)
+    private static void sendRequest(Class<?> cl, boolean simple)
             throws IOException, XmlPullParserException {
 
-        // Variables for URL splitting
+    	// Variables for URL splitting
         String delimiter = "/";
-        String PATH, URL;
+        String PATH;
         String[] URLArray;
+        String URL;
 
         // Split URL
-        URLArray = prefs.getServer().split(delimiter, 2);
+        URLArray = SERVER.split(delimiter, 2);
         URL = URLArray[0];
         if (URLArray.length == 2) {
             PATH = delimiter + URLArray[1];
@@ -265,20 +272,23 @@ public class NotificationsSyncAdapterService extends Service {
         }
 
         /**
-         * Use of KeepAliveHttpsTransport deals with the problems with the Android ssl libraries having trouble
-         * with certificates and certificate authorities somehow messing up connecting/needing reconnects.
+         * Use of KeepAliveHttpsTransport deals with the problems with the
+         * Android ssl libraries having trouble with certificates and
+         * certificate authorities somehow messing up connecting/needing
+         * reconnects.
          */
-        KeepAliveHttpsTransportSE connection;
-
         connection = new KeepAliveHttpsTransportSE(URL, 443, PATH, Constants.CONNECTION_TIMEOUT);
-        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
+                SoapEnvelope.VER11);
         System.setProperty("http.keepAlive", "false");
         envelope.encodingStyle = SoapEnvelope.ENC;
         envelope.setAddAdornments(false);
         envelope.implicitTypes = true;
         envelope.dotNet = false;
         envelope.setOutputSoapObject(request);
-    	connection.call(SOAP_ACTION, envelope);
+        envelope.addMapping(NAMESPACE, cl.getSimpleName(), cl);
+    	connection.call(SOAP_ACTION, envelope);  
+        
         /*connection.debug = true;
         try {
         	connection.call(SOAP_ACTION, envelope);
@@ -287,16 +297,107 @@ public class NotificationsSyncAdapterService extends Service {
 	        Log.d(TAG, connection.requestDump.toString());
 	        Log.d(TAG, connection.responseDump.toString());
         } catch (Exception e) {
-	        Log.d(TAG, connection.getHost() + " " + connection.getPath() + " " +
+	        Log.e(TAG, connection.getHost() + " " + connection.getPath() + " " +
 	        connection.getPort());
-	        Log.d(TAG, connection.requestDump.toString());
-	        Log.d(TAG, connection.responseDump.toString());
+	        Log.e(TAG, connection.requestDump.toString());
+	        Log.e(TAG, connection.responseDump.toString());
         }*/
 
         if (simple && !(envelope.getResponse() instanceof SoapFault)) {
             result = envelope.bodyIn;
         } else {
             result = envelope.getResponse();
+        }
+    }
+    
+    private static void logUser() throws IOException, XmlPullParserException {
+    	Log.d(TAG, "Not logged");
+
+        METHOD_NAME = "loginByUserPasswordKey";
+       /* MessageDigest md = MessageDigest.getInstance("SHA-512");
+        md.update(prefs.getUserPassword().getBytes());
+        String userPassword = Base64.encodeBytes(md.digest());
+        userPassword = userPassword.replace('+', '-').replace('/', '_').replace('=', ' ').replaceAll("\\s+", "").trim();*/
+
+        createRequest();
+        addParam("userID", prefs.getUserID());
+        addParam("userPassword", prefs.getUserPassword());
+        addParam("appKey", Constants.SWAD_APP_KEY);
+        sendRequest(User.class, true);
+
+        if (result != null) {
+            KvmSerializable ks = (KvmSerializable) result;
+            SoapObject soap = (SoapObject) result;
+
+            //Stores user data returned by webservice response
+            User loggedUser = new User(
+                    Long.parseLong(ks.getProperty(0).toString()),                    // id
+                    soap.getProperty("wsKey").toString(),                            // wsKey
+                    soap.getProperty("userID").toString(),                            // userID
+                    //soap.getProperty("userNickname").toString(),					// userNickname
+                    null,                                                            // userNickname
+                    soap.getProperty("userSurname1").toString(),                    // userSurname1
+                    soap.getProperty("userSurname2").toString(),                    // userSurname2
+                    soap.getProperty("userFirstname").toString(),                    // userFirstname
+                    soap.getProperty("userPhoto").toString(),                        // userPhoto
+                    Integer.parseInt(soap.getProperty("userRole").toString())        // userRole
+            );
+
+            Constants.setLoggedUser(loggedUser);
+            Constants.setLogged(true);
+
+            //Update application last login time
+            Constants.setLastLoginTime(System.currentTimeMillis());
+        }
+    }
+    
+    private static void getNotifications() throws IOException, XmlPullParserException {
+    	Log.d(TAG, "Logged");
+
+        //Calculates next timestamp to be requested
+        Long timestamp = Long.valueOf(dbHelper.getFieldOfLastNotification("eventTime"));
+        timestamp++;
+
+        //Creates webservice request, adds required params and sends request to webservice
+        METHOD_NAME = "getNotifications";
+        createRequest();
+        addParam("wsKey", Constants.getLoggedUser().getWsKey());
+        addParam("beginTime", timestamp);
+        sendRequest(SWADNotification.class, false);
+
+        if (result != null) {
+            dbHelper.beginTransaction();
+
+            //Stores notifications data returned by webservice response
+            ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
+            SoapObject soap = (SoapObject) res.get(1);
+            notifCount = soap.getPropertyCount();
+            for (int i = 0; i < notifCount; i++) {
+                SoapObject pii = (SoapObject) soap.getProperty(i);
+                Long notificationCode = Long.valueOf(pii.getProperty("notificationCode").toString());
+                String eventType = pii.getProperty("eventType").toString();
+                Long eventTime = Long.valueOf(pii.getProperty("eventTime").toString());
+                String userSurname1 = pii.getProperty("userSurname1").toString();
+                String userSurname2 = pii.getProperty("userSurname2").toString();
+                String userFirstName = pii.getProperty("userFirstname").toString();
+                String userPhoto = pii.getProperty("userPhoto").toString();
+                String location = pii.getProperty("location").toString();
+                String summary = pii.getProperty("summary").toString();
+                Integer status = Integer.valueOf(pii.getProperty("status").toString());
+                String content = pii.getProperty("content").toString();
+                SWADNotification n = new SWADNotification(notificationCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, userPhoto, location, summary, status, content);
+                dbHelper.insertNotification(n);
+
+                //Log.d(TAG, n.toString());
+            }
+
+            //Request finalized without errors
+            Log.i(TAG, "Retrieved " + notifCount + " notifications");
+
+            //Clear old notifications to control database size
+            dbHelper.clearOldNotifications(SIZE_LIMIT);
+
+            dbHelper.endTransaction();
         }
     }
 
@@ -317,95 +418,11 @@ public class NotificationsSyncAdapterService extends Service {
         }
 
         if (!Constants.isLogged()) {
-            Log.d(TAG, "Not logged");
-
-            METHOD_NAME = "loginByUserPasswordKey";
-           /* MessageDigest md = MessageDigest.getInstance("SHA-512");
-            md.update(prefs.getUserPassword().getBytes());
-            String userPassword = Base64.encodeBytes(md.digest());
-            userPassword = userPassword.replace('+', '-').replace('/', '_').replace('=', ' ').replaceAll("\\s+", "").trim();*/
-
-            createRequest();
-            addParam("userID", prefs.getUserID());
-            addParam("userPassword", prefs.getUserPassword());
-            addParam("appKey", Constants.SWAD_APP_KEY);
-            sendRequest(true);
-
-            if (result != null) {
-                KvmSerializable ks = (KvmSerializable) result;
-                SoapObject soap = (SoapObject) result;
-
-                //Stores user data returned by webservice response
-                User loggedUser = new User(
-                        Long.parseLong(ks.getProperty(0).toString()),                    // id
-                        soap.getProperty("wsKey").toString(),                            // wsKey
-                        soap.getProperty("userID").toString(),                            // userID
-                        //soap.getProperty("userNickname").toString(),					// userNickname
-                        null,                                                            // userNickname
-                        soap.getProperty("userSurname1").toString(),                    // userSurname1
-                        soap.getProperty("userSurname2").toString(),                    // userSurname2
-                        soap.getProperty("userFirstname").toString(),                    // userFirstname
-                        soap.getProperty("userPhoto").toString(),                        // userPhoto
-                        Integer.parseInt(soap.getProperty("userRole").toString())        // userRole
-                );
-
-                Constants.setLoggedUser(loggedUser);
-                Constants.setLogged(true);
-
-                //Update application last login time
-                Constants.setLastLoginTime(System.currentTimeMillis());
-            }
+        	logUser();
         }
 
         if (Constants.isLogged()) {
-            Log.d(TAG, "Logged");
-
-            //Calculates next timestamp to be requested
-            Long timestamp = Long.valueOf(dbHelper.getFieldOfLastNotification("eventTime"));
-            timestamp++;
-
-            //Creates webservice request, adds required params and sends request to webservice
-            METHOD_NAME = "getNotifications";
-            createRequest();
-            addParam("wsKey", Constants.getLoggedUser().getWsKey());
-            addParam("beginTime", timestamp);
-            sendRequest(false);
-
-            if (result != null) {
-                dbHelper.beginTransaction();
-
-                //Stores notifications data returned by webservice response
-                ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
-                SoapObject soap = (SoapObject) res.get(1);
-                notifCount = soap.getPropertyCount();
-                for (int i = 0; i < notifCount; i++) {
-                    SoapObject pii = (SoapObject) soap.getProperty(i);
-                    Long notificationCode = Long.valueOf(pii.getProperty("notificationCode").toString());
-                    String eventType = pii.getProperty("eventType").toString();
-                    Long eventTime = Long.valueOf(pii.getProperty("eventTime").toString());
-                    String userSurname1 = pii.getProperty("userSurname1").toString();
-                    String userSurname2 = pii.getProperty("userSurname2").toString();
-                    String userFirstName = pii.getProperty("userFirstname").toString();
-                    String userPhoto = pii.getProperty("userPhoto").toString();
-                    String location = pii.getProperty("location").toString();
-                    String summary = pii.getProperty("summary").toString();
-                    Integer status = Integer.valueOf(pii.getProperty("status").toString());
-                    String content = pii.getProperty("content").toString();
-                    SWADNotification n = new SWADNotification(notificationCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, userPhoto, location, summary, status, content);
-                    dbHelper.insertNotification(n);
-
-                    //Log.d(TAG, n.toString());
-                }
-
-                //Request finalized without errors
-                Log.i(TAG, "Retrieved " + notifCount + " notifications");
-
-                //Clear old notifications to control database size
-                dbHelper.clearOldNotifications(SIZE_LIMIT);
-
-                dbHelper.endTransaction();
-            }
-
+        	getNotifications();
             alertNotif(context);
         }
 
