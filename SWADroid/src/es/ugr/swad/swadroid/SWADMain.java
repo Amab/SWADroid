@@ -25,6 +25,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -221,7 +222,11 @@ public class SWADMain extends MenuExpandableListActivity {
         TextView text;
 
         //Initialize Bugsense plugin
-        BugSenseHandler.initAndStartSession(this, Constants.BUGSENSE_API_KEY);
+        try {
+        	BugSenseHandler.initAndStartSession(this, Constants.BUGSENSE_API_KEY);
+        } catch (Exception e) {
+        	Log.e(TAG, "Error initializing BugSense", e);
+        }
 
         //Initialize screen
         super.onCreate(icicle);
@@ -358,7 +363,12 @@ public class SWADMain extends MenuExpandableListActivity {
 	 */
 	@Override
 	protected void onDestroy() {
-		BugSenseHandler.closeSession(this);
+		try {
+			BugSenseHandler.closeSession(this);
+		} catch (Exception e) {
+			Log.e(TAG, "Error initializing BugSense", e);
+        }
+		
 		super.onDestroy();
 	}
 
