@@ -1819,6 +1819,7 @@ public class DataBaseHelper {
      */
     public void endTransaction() {
         //db.getDB().execSQL("END;");
+        db.successfulTransaction();
         db.endTransaction();
     }
 
