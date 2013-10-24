@@ -296,5 +296,7 @@
     <string name="contents_phone">numero di telefono</string>
     <string name="contents_sms">Indirizzo SMS</string>
     <string name="contents_text">Testo</string>
+	<string name="lastSyncTimeLabel">Ultima sincronizzazione</string>
+	<string name="neverLabel">Mai</string>
 
 </resources>

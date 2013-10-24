@@ -108,6 +108,9 @@ public class NotificationsSyncAdapterService extends Service {
                 SIZE_LIMIT = prefs.getNotifLimit();
                 SERVER = prefs.getServer();
                 NotificationsSyncAdapterService.performSync(mContext, account, extras, authority, provider, syncResult);
+                
+                //If synchronization was successful, update last synchronization time in preferences
+                prefs.setLastSyncTime(System.currentTimeMillis());
             } catch (Exception e) {                
                 if (e instanceof SoapFault) {
                     SoapFault es = (SoapFault) e;

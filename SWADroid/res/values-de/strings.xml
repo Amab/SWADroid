@@ -210,5 +210,7 @@
     <string name="contents_phone">Telefonnummer</string>
     <string name="contents_sms">SMS Adresse</string>
     <string name="contents_text">Text</string>
+	<string name="lastSyncTimeLabel">Letzte Synchronisation</string>
+	<string name="neverLabel">Nie</string>
 
 </resources>

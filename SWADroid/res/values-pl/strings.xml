@@ -289,5 +289,7 @@
     <string name="contents_phone">Telefon</string>
     <string name="contents_sms">SMS adresowe</string>
     <string name="contents_text">Tekst</string>
+	<string name="lastSyncTimeLabel">Ostatnia synchronizacja</string>
+	<string name="neverLabel">Nigdy</string>
 
 </resources>

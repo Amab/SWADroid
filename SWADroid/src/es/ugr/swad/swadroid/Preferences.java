@@ -36,6 +36,8 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.widget.BaseAdapter;
+
 import com.bugsense.trace.BugSenseHandler;
 
 import es.ugr.swad.swadroid.model.DataBaseHelper;
@@ -45,6 +47,9 @@ import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.widget.SeekBarDialogPreference;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Preferences window of application.
@@ -105,9 +110,17 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
      */
     private static String DBKey;
     /**
+     * Synchronization time
+     */
+    private static String syncTime;
+    /**
      * Synchronization enabled flag
      */
     private static boolean syncEnabled;
+    /**
+     * Last synchronization time
+     */
+    private static long lastSyncTime;
     /**
      * Notifications limit
      */
@@ -172,6 +185,10 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
      * Notifications limit preference name.
      */
     private static final String NOTIFLIMITPREF = "prefNotifLimit";
+    /**
+     * Last synchronization time preference name.
+     */
+    private static final String LASTSYNCTIMEPREF = "lastSyncTimeLimit";
     /**
      * User ID preference
      */
@@ -314,10 +331,50 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
     /**
      * Gets the max number of notifications to be stored
      *
-     * @return the max number of notifications to be stored
+     * @return The max number of notifications to be stored
      */
     public int getNotifLimit() {
         return notifLimit;
+    }
+
+    /**
+     * Gets the synchronization time
+     *
+     * @return The synchronization time
+     */
+    public String getSyncTime() {
+        return syncTime;
+    }
+
+    /**
+     * Sets the synchronization time
+     *
+     * @param defaultSyncTime The synchronization time
+     */
+    public void setSyncTime(String defaultSyncTime) {
+    	syncTime = defaultSyncTime;
+        editor = editor.putString(SYNCTIMEPREF, syncTime);
+        editor.commit();
+    }
+
+    /**
+     * Gets the last synchronization time
+     *
+     * @return The last synchronization time
+     */
+    public long getLastSyncTime() {
+        return lastSyncTime;
+    }
+
+    /**
+     * Sets the last synchronization time
+     *
+     * @param time The last synchronization time
+     */
+    public void setLastSyncTime(long time) {
+    	lastSyncTime = time;
+        editor = editor.putLong(LASTSYNCTIMEPREF, lastSyncTime);
+        editor.commit();
     }
 
     /**
@@ -414,6 +471,8 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         lastVersion = prefs.getInt(LASTVERSIONPREF, 0);
         lastCourseSelected = prefs.getInt(LASTCOURSESELECTEDPREF, 0);
         syncEnabled = prefs.getBoolean(SYNCENABLEPREF, true);
+        syncTime = prefs.getString(SYNCTIMEPREF, "0");
+        lastSyncTime = prefs.getLong(LASTSYNCTIMEPREF, 0);
         notifLimit = prefs.getInt(NOTIFLIMITPREF, 25);
         DBKey = prefs.getString(DBKEYPREF, "");
     }
@@ -435,6 +494,8 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         editor = editor.putInt(LASTVERSIONPREF, lastVersion);
         editor = editor.putInt(LASTCOURSESELECTEDPREF, lastCourseSelected);
         editor = editor.putBoolean(SYNCENABLEPREF, syncEnabled);
+        editor = editor.putString(SYNCTIMEPREF, syncTime);
+        editor = editor.putLong(LASTSYNCTIMEPREF, lastSyncTime);
         editor = editor.putInt(NOTIFLIMITPREF, notifLimit);
         editor = editor.putString(DBKEYPREF, DBKey);
         
@@ -470,6 +531,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         lastVersion = prefs.getInt(LASTVERSIONPREF, 0);
         lastCourseSelected = prefs.getInt(LASTCOURSESELECTEDPREF, 0);
         syncEnabled = prefs.getBoolean(SYNCENABLEPREF, true);
+        lastSyncTime = prefs.getLong(LASTSYNCTIMEPREF, 0);
         notifLimit = prefs.getInt(NOTIFLIMITPREF, 25);
 
         userIDPref = findPreference(USERIDPREF);
@@ -663,14 +725,34 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
             ContentResolver.setSyncAutomatically(account, Constants.AUTHORITY, syncEnabled);
 
             syncEnablePref.setChecked(syncEnabled);
-        } else if(SYNCTIMEPREF.equals(key)) {
-        	long time = Long.parseLong((String) newValue);
+        } else if(SYNCTIMEPREF.equals(key)) {            
+        	setSyncTime((String) newValue);
+        	
+            List<String> prefSyncTimeValues = Arrays.asList(getResources().getStringArray(R.array.prefSyncTimeValues));
+            List<String> prefSyncTimeEntries = Arrays.asList(getResources().getStringArray(R.array.prefSyncTimeEntries));
+            int prefSyncTimeIndex = prefSyncTimeValues.indexOf(syncTime);
+            String prefSyncTimeEntry = prefSyncTimeEntries.get(prefSyncTimeIndex);
 
             SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, getApplicationContext());
 
-            if (time != 0) {
-                SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, time, getApplicationContext());
+            if (!syncTime.equals("0")) {
+                SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, Long.parseLong(syncTime), getApplicationContext());
             }
+            
+            if(lastSyncTime == 0) {
+            	syncEnablePref.setSummary(getString(R.string.lastSyncTimeLabel) + ": " 
+            			+ getString(R.string.neverLabel));
+            } else {
+                java.text.DateFormat dateShortFormat = android.text.format.DateFormat.getDateFormat(this);
+                java.text.DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(this);
+            	Date lastSyncDate = new Date(lastSyncTime);
+            	
+            	syncEnablePref.setSummary(getString(R.string.lastSyncTimeLabel) + ": "
+            			+ dateShortFormat.format(lastSyncDate) + " " 
+            			+ timeFormat.format(lastSyncDate));
+            }
+            
+            syncTimePref.setSummary(prefSyncTimeEntry);
         } else if(NOTIFLIMITPREF.equals(key)) {
         	 notifLimit = (Integer) newValue;
              dbHelper.clearOldNotifications(notifLimit);
@@ -683,6 +765,10 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
             Constants.setPreferencesChanged();
         } 
         
+        //Refresh preferences screen
+        //((BaseAdapter)getPreferenceScreen().getRootAdapter()).notifyDataSetChanged();
+        //getListView().invalidate();
+        
         return true;
     }
 
@@ -692,7 +778,15 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
     @Override
     protected void onResume() {
         super.onResume();
+        java.text.DateFormat dateShortFormat = android.text.format.DateFormat.getDateFormat(this);
+        java.text.DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(this);
+    	Date lastSyncDate = new Date(lastSyncTime);
+        List<String> prefSyncTimeValues = Arrays.asList(getResources().getStringArray(R.array.prefSyncTimeValues));
+        List<String> prefSyncTimeEntries = Arrays.asList(getResources().getStringArray(R.array.prefSyncTimeEntries));
+        int prefSyncTimeIndex = prefSyncTimeValues.indexOf(syncTime);
+        String prefSyncTimeEntry = prefSyncTimeEntries.get(prefSyncTimeIndex);
         String stars = getStarsSequence(STARS_LENGTH);
+        
         userIDPref.setSummary(userID);
         
         if (!userPassword.equals(""))
@@ -703,6 +797,17 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         } else {
             serverPref.setSummary(Constants.DEFAULT_SERVER);
         }
+        
+        if(lastSyncTime == 0) {
+        	syncEnablePref.setSummary(getString(R.string.lastSyncTimeLabel) + ": " 
+        			+ getString(R.string.neverLabel));
+        } else {        	
+        	syncEnablePref.setSummary(getString(R.string.lastSyncTimeLabel) + ": "
+        			+ dateShortFormat.format(lastSyncDate) + " " 
+        			+ timeFormat.format(lastSyncDate));
+        }
+        
+        syncTimePref.setSummary(prefSyncTimeEntry);
     }
 
     /* (non-Javadoc)

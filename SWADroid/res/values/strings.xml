@@ -325,6 +325,8 @@
     <string name="contents_location">Geographic coordinates</string>
     <string name="contents_phone">Phone number</string>
     <string name="contents_sms">SMS address</string>
-    <string name="contents_text">Plain text</string>
+    <string name="contents_text">Plain text</string>  
+    <string name="lastSyncTimeLabel">Last synchronization</string>
+    <string name="neverLabel">Never</string>
 
 </resources>

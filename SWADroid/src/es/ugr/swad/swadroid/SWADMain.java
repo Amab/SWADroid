@@ -264,6 +264,7 @@ public class SWADMain extends MenuExpandableListActivity {
                 Intent activity = new Intent(getBaseContext(), AccountAuthenticator.class);
                 startActivity(activity);
                 SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, Constants.DEFAULT_SYNC_TIME, this);
+                prefs.setSyncTime(String.valueOf(Constants.DEFAULT_SYNC_TIME));
 
                 prefs.setLastVersion(currentVersion);
                 firstRun = true;
@@ -282,6 +283,7 @@ public class SWADMain extends MenuExpandableListActivity {
                 //If the app is updating from an unencrypted user password version, encrypt user password
                 if(lastVersion < 52) {
                 	prefs.upgradeCredentials();
+                	prefs.setSyncTime(String.valueOf(Constants.DEFAULT_SYNC_TIME));
                 }
                 
                 //If the app is updating from an unencrypted version, encrypt already downloaded notifications
@@ -412,7 +414,7 @@ public class SWADMain extends MenuExpandableListActivity {
                 spinner.setSelection(prefs.getLastCourseSelected());
             else
                 spinner.setSelection(0);
-            spinner.setOnTouchListener(Spinner_OnTouch);
+            	spinner.setOnTouchListener(Spinner_OnTouch);
         } else {
             cleanSpinner();
         }
