@@ -42,9 +42,9 @@
             android:title="@string/prefCatSyncTitle">
         <CheckBoxPreference
                 android:title="@string/prefSyncEnableTitle"
+                android:summary="@string/prefSyncEnableSummary"
                 android:key="@string/prefSyncEnableKey"
-                android:defaultValue="true"
-                android:summary="@string/prefSyncEnableSummary"/>
+                android:defaultValue="true"/>
         <ListPreference
                 android:title="@string/prefSyncTimeTitle"
                 android:summary="@string/prefSyncTimeSummary"

@@ -298,5 +298,7 @@
     <string name="contents_phone">Número de telèfon</string>
     <string name="contents_sms">Adreça SMS</string>
     <string name="contents_text">Text pla</string>
+    <string name="lastSyncTimeLabel">Darrera sincronització</string>
+	<string name="neverLabel">Mai</string>
 
 </resources>

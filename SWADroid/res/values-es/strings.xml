@@ -166,7 +166,7 @@
     <string name="prefNotifLimitTitle">Límite de notificaciones</string>
     <string name="prefNotifLimitDialogMessage">Seleccione el número máximo de notificaciones que serán almacenadas:
     </string>
-    <string name="prefNotifLimitSuffix">notificaciones</string>
+    <string name="prefNotifLimitSuffix">notificaciones</string>  
     <string name="notificationsAlertTitle">SWADroid</string>
     <string name="notificationsAlertMsg">nuevas notificaciones</string>
     <string name="footMessageMsg">Enviado desde</string>
@@ -326,6 +326,8 @@
     <string name="contents_location">Coordenadas geográficas</string>
     <string name="contents_phone">Número de teléfono</string>
     <string name="contents_sms">Dirección SMS</string>
-    <string name="contents_text">Texto</string>
+    <string name="contents_text">Texto</string>    
+    <string name="lastSyncTimeLabel">Última sincronización</string>  
+    <string name="neverLabel">Nunca</string>
 
 </resources>
