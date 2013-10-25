@@ -300,5 +300,11 @@
     <string name="contents_text">Text pla</string>
     <string name="lastSyncTimeLabel">Darrera sincronització</string>
 	<string name="neverLabel">Mai</string>
+	<string name="prefNotifSoundTitle">So</string>
+	<string name="prefNotifSoundSummary">Activar/desactivar el so de les alertes de noves notificacions</string>
+	<string name="prefNotifVibrateTitle">Vibració</string>
+	<string name="prefNotifVibrateSummary">Activar/desactivar la vibració de les alertes de noves notificacions</string>
+	<string name="prefNotifLightsTitle">Indicadors lluminosos</string>
+	<string name="prefNotifLightsSummary">Activar/desactivar els indicadors lluminosos de les alertes de noves notificacions</string>
 
 </resources>

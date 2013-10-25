@@ -291,5 +291,11 @@
     <string name="contents_text">Texto</string>
 	<string name="lastSyncTimeLabel">Última sincronização</string>
 	<string name="neverLabel">Nunca</string>
+	<string name="prefNotifSoundTitle">Som</string>
+	<string name="prefNotifSoundSummary">Ativar/desativar alertas sonoros para novas notificações</string>
+	<string name="prefNotifVibrateTitle">Vibração</string>
+	<string name="prefNotifVibrateSummary">Ativar/desativar alertas de vibração para novas notificações</string>
+	<string name="prefNotifLightsTitle">Luzes</string>
+	<string name="prefNotifLightsSummary">Ativar/desativar alertas de luz para novas notificações</string>
 
 </resources>

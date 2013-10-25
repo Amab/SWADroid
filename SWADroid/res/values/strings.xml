@@ -328,5 +328,14 @@
     <string name="contents_text">Plain text</string>  
     <string name="lastSyncTimeLabel">Last synchronization</string>
     <string name="neverLabel">Never</string>
+    <string name="prefNotifSoundKey">prefNotifSoundEnable</string>
+    <string name="prefNotifVibrateKey">prefNotifVibrateEnable</string>
+    <string name="prefNotifLightsKey">prefNotifLightsEnable</string>
+    <string name="prefNotifSoundTitle">Sound</string>
+    <string name="prefNotifSoundSummary">Enable/disable sound alerts for new notifications</string>
+    <string name="prefNotifVibrateTitle">Vibration</string>
+    <string name="prefNotifVibrateSummary">Enable/disable vibration alerts for new notifications</string>
+    <string name="prefNotifLightsTitle">Led</string>
+    <string name="prefNotifLightsSummary">Enable/disable led alerts for new notifications</string>
 
 </resources>

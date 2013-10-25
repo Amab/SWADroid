@@ -37,6 +37,21 @@
                 android:max="100"
                 custom:progressTextSuffix="@string/prefNotifLimitSuffix"
                 custom:min="1"/>
+        <CheckBoxPreference
+                android:title="@string/prefNotifSoundTitle"
+                android:summary="@string/prefNotifSoundSummary"
+                android:key="@string/prefNotifSoundKey"
+                android:defaultValue="true"/>
+        <CheckBoxPreference
+                android:title="@string/prefNotifVibrateTitle"
+                android:summary="@string/prefNotifVibrateSummary"
+                android:key="@string/prefNotifVibrateKey"
+                android:defaultValue="true"/>
+        <CheckBoxPreference
+                android:title="@string/prefNotifLightsTitle"
+                android:summary="@string/prefNotifLightsSummary"
+                android:key="@string/prefNotifLightsKey"
+                android:defaultValue="true"/>
     </PreferenceCategory>
     <PreferenceCategory
             android:title="@string/prefCatSyncTitle">

@@ -298,5 +298,11 @@
     <string name="contents_text">Testo</string>
 	<string name="lastSyncTimeLabel">Ultima sincronizzazione</string>
 	<string name="neverLabel">Mai</string>
+	<string name="prefNotifSoundTitle">Audio</string>
+	<string name="prefNotifSoundSummary">Abilitare/disabilitare gli avvisi sonori per le nuove notifiche</string>
+	<string name="prefNotifVibrateTitle">Vibrazioni</string>
+	<string name="prefNotifVibrateSummary">Abilitare/disabilitare gli avvisi di vibrazione per le nuove notifiche</string>
+	<string name="prefNotifLightsTitle">Luci</string>
+	<string name="prefNotifLightsSummary">Abilitare/disabilitare gli avvisi di luce per le nuove notifiche</string>
 
 </resources>
