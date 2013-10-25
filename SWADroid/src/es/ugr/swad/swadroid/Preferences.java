@@ -36,8 +36,6 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-import android.widget.BaseAdapter;
-
 import com.bugsense.trace.BugSenseHandler;
 
 import es.ugr.swad.swadroid.model.DataBaseHelper;
@@ -126,6 +124,18 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
      */
     private static int notifLimit;
     /**
+     * Notifications sound enabled flag
+     */
+    private static boolean notifSoundEnabled;
+    /**
+     * Notifications vibration enabled flag
+     */
+    private static boolean notifVibrateEnabled;
+    /**
+     * Notifications lights enabled flag
+     */
+    private static boolean notifLightsEnabled;
+    /**
      * Last application version preference name.
      */
     private static final String LASTVERSIONPREF = "lastVersionPref";
@@ -190,6 +200,18 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
      */
     private static final String LASTSYNCTIMEPREF = "lastSyncTimeLimit";
     /**
+     * Notifications sound enable preference name.
+     */
+    private static final String NOTIFSOUNDENABLEPREF = "prefNotifSoundEnable";
+    /**
+     * Notifications vibrate enable preference name.
+     */
+    private static final String NOTIFVIBRATEENABLEPREF = "prefNotifVibrateEnable";
+    /**
+     * Notifications lights enable preference name.
+     */
+    private static final String NOTIFLIGHTSENABLEPREF = "prefNotifLightsEnable";
+    /**
      * User ID preference
      */
     private static Preference userIDPref;
@@ -245,6 +267,18 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
      * Notifications limit preference
      */
     private static SeekBarDialogPreference notifLimitPref;
+    /**
+     * Notifications sound enable preference
+     */
+    private static CheckBoxPreference notifSoundEnablePref;
+    /**
+     * Notifications vibrate enable preference
+     */
+    private static CheckBoxPreference notifVibrateEnablePref;
+    /**
+     * Notifications lights enable preference
+     */
+    private static CheckBoxPreference notifLightsEnablePref;
     /**
      * Preferences editor
      */
@@ -389,6 +423,71 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
     }
 
     /**
+     * Checks if the sound is enabled for notification alerts
+     * 
+	 * @return true if the sound is enabled for notification alerts
+	 * 		   false otherwise
+	 */
+	public static boolean isNotifSoundEnabled() {
+		return notifSoundEnabled;
+	}
+
+	/**
+	 * Enables or disables the sound for notification alerts
+	 * 
+	 * @param notifSoundEnabled true if the sound is enabled for notification alerts
+	 * 		   				    false otherwise
+	 */
+	public static void setNotifSoundEnabled(boolean notifSoundEnabled) {
+		Preferences.notifSoundEnabled = notifSoundEnabled;
+		editor = editor.putBoolean(NOTIFSOUNDENABLEPREF, notifSoundEnabled);
+	    editor.commit();
+	}
+
+	/**
+	 * Checks if the vibration is enabled for notification alerts
+	 * 
+	 * @return true if the vibration is enabled for notification alerts
+	 * 		   false otherwise
+	 */
+	public static boolean isNotifVibrateEnabled() {
+		return notifVibrateEnabled;
+	}
+
+	/**
+	 * Enables or disables the vibration for notification alerts
+	 * 
+	 * @param notifVibrateEnabled the notifVibrateEnabled to set
+	 */
+	public static void setNotifVibrateEnabled(boolean notifVibrateEnabled) {
+		Preferences.notifVibrateEnabled = notifVibrateEnabled;
+		editor = editor.putBoolean(NOTIFVIBRATEENABLEPREF, notifVibrateEnabled);
+	    editor.commit();
+	}
+
+	/**
+	 * Checks if the lights are enabled for notification alerts
+	 * 
+	 * @return true if the lights are enabled for notification alerts
+	 * 		   false otherwise
+	 */
+	public static boolean isNotifLightsEnabled() {
+		return notifLightsEnabled;
+	}
+
+	/**
+	 * Enables or disables the lights for notification alerts
+	 * 
+	 * @param notifLightsEnabled true if the lights are enabled for notification alerts
+	 * 		   				     false otherwise
+	 */
+	public static void setNotifLightsEnabled(boolean notifLightsEnabled) {
+		Preferences.notifLightsEnabled = notifLightsEnabled;
+		editor = editor.putBoolean(NOTIFLIGHTSENABLEPREF, notifLightsEnabled);
+	    editor.commit();
+	}
+
+	/**
      * Generates the stars sequence to be showed on password field
      *
      * @param size Length of the stars sequence
@@ -475,6 +574,9 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         lastSyncTime = prefs.getLong(LASTSYNCTIMEPREF, 0);
         notifLimit = prefs.getInt(NOTIFLIMITPREF, 25);
         DBKey = prefs.getString(DBKEYPREF, "");
+        notifSoundEnabled = prefs.getBoolean(NOTIFSOUNDENABLEPREF, true);
+        notifVibrateEnabled = prefs.getBoolean(NOTIFVIBRATEENABLEPREF, true);
+        notifLightsEnabled = prefs.getBoolean(NOTIFLIGHTSENABLEPREF, true);
     }
 
     /**
@@ -498,6 +600,9 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         editor = editor.putLong(LASTSYNCTIMEPREF, lastSyncTime);
         editor = editor.putInt(NOTIFLIMITPREF, notifLimit);
         editor = editor.putString(DBKEYPREF, DBKey);
+        editor = editor.putBoolean(NOTIFSOUNDENABLEPREF, notifSoundEnabled);
+        editor = editor.putBoolean(NOTIFVIBRATEENABLEPREF, notifVibrateEnabled);
+        editor = editor.putBoolean(NOTIFLIGHTSENABLEPREF, notifLightsEnabled);
         
         editor.commit();
     }
@@ -533,6 +638,9 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         syncEnabled = prefs.getBoolean(SYNCENABLEPREF, true);
         lastSyncTime = prefs.getLong(LASTSYNCTIMEPREF, 0);
         notifLimit = prefs.getInt(NOTIFLIMITPREF, 25);
+        notifSoundEnabled = prefs.getBoolean(NOTIFSOUNDENABLEPREF, true);
+        notifVibrateEnabled = prefs.getBoolean(NOTIFVIBRATEENABLEPREF, true);
+        notifLightsEnabled = prefs.getBoolean(NOTIFLIGHTSENABLEPREF, true);
 
         userIDPref = findPreference(USERIDPREF);
         userPasswordPref = findPreference(USERPASSWORDPREF);
@@ -548,6 +656,9 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         syncTimePref = findPreference(SYNCTIMEPREF);
         syncEnablePref = (CheckBoxPreference) findPreference(SYNCENABLEPREF);
         notifLimitPref = (SeekBarDialogPreference) findPreference(NOTIFLIMITPREF);
+        notifSoundEnablePref = (CheckBoxPreference) findPreference(NOTIFSOUNDENABLEPREF);
+        notifVibrateEnablePref = (CheckBoxPreference) findPreference(NOTIFVIBRATEENABLEPREF);
+        notifLightsEnablePref = (CheckBoxPreference) findPreference(NOTIFLIGHTSENABLEPREF);
 
         userIDPref.setOnPreferenceChangeListener(this);
         userPasswordPref.setOnPreferenceChangeListener(this);
@@ -562,6 +673,9 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         notifLimitPref.setOnPreferenceChangeListener(this);
         syncEnablePref.setOnPreferenceChangeListener(this);
         syncTimePref.setOnPreferenceChangeListener(this);
+        notifSoundEnablePref.setOnPreferenceChangeListener(this);
+        notifVibrateEnablePref.setOnPreferenceChangeListener(this);
+        notifLightsEnablePref.setOnPreferenceChangeListener(this);
 
         notifLimitPref.setProgress(notifLimit);
 
@@ -756,6 +870,15 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         } else if(NOTIFLIMITPREF.equals(key)) {
         	 notifLimit = (Integer) newValue;
              dbHelper.clearOldNotifications(notifLimit);
+        } else if(NOTIFSOUNDENABLEPREF.equals(key)) {
+            notifSoundEnabled = (Boolean) newValue;
+            notifSoundEnablePref.setChecked(notifSoundEnabled);
+        } else if(NOTIFVIBRATEENABLEPREF.equals(key)) {
+            notifVibrateEnabled = (Boolean) newValue;
+            notifVibrateEnablePref.setChecked(notifVibrateEnabled);
+        } else if(NOTIFLIGHTSENABLEPREF.equals(key)) {
+            notifLightsEnabled = (Boolean) newValue;
+            notifLightsEnablePref.setChecked(notifLightsEnabled);
         }
 
         //If preferences have changed, logout

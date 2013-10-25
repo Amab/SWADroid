@@ -19,9 +19,6 @@
 package es.ugr.swad.swadroid.modules.notifications;
 
 import android.accounts.Account;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.*;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -29,11 +26,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
+
 import com.bugsense.trace.BugSenseHandler;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.modules.Module;
+import es.ugr.swad.swadroid.utils.AlertNotification;
+
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -301,54 +302,7 @@ public class Notifications extends Module {
             }
         }
     }
-
-    void alertNotif() {
-        if (notifCount > 0) {
-            //Obtain a reference to the notification service
-            String ns = Context.NOTIFICATION_SERVICE;
-            NotificationManager notManager =
-                    (NotificationManager) getSystemService(ns);
-
-            //Configure the alert
-            int icon = R.drawable.ic_launcher_swadroid;
-            long hour = System.currentTimeMillis();
-
-            //If the notifications counter exceeds the limit, set it to the max allowed
-            if (notifCount > SIZE_LIMIT) {
-                notifCount = SIZE_LIMIT;
-            }
-
-            Notification notif =
-                    new Notification(icon, getString(R.string.notificationsAlertTitle), hour);
-
-            //Configure the Intent
-            Context context = getApplicationContext();
-
-            Intent notIntent = new Intent(context,
-                    Notifications.class);
-
-            PendingIntent contIntent = PendingIntent.getActivity(
-                    context, 0, notIntent, 0);
-
-            notif.setLatestEventInfo(
-                    context, getString(R.string.notificationsAlertTitle), notifCount + " " +
-                    getString(R.string.notificationsAlertMsg), contIntent);
-
-            //AutoCancel: alert disappears when pushed
-            notif.flags |= Notification.FLAG_AUTO_CANCEL;
-
-            //Add sound, vibration and lights
-            notif.defaults |= Notification.DEFAULT_SOUND;
-            //notif.defaults |= Notification.DEFAULT_VIBRATE;
-            notif.defaults |= Notification.DEFAULT_LIGHTS;
-
-            //Send alert
-            notManager.notify(NOTIF_ALERT_ID, notif);
-        } else {
-            Toast.makeText(this, R.string.NoNotificationsMsg, Toast.LENGTH_LONG).show();
-        }
-    }
-
+    
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#connect()
      */
@@ -369,7 +323,18 @@ public class Notifications extends Module {
         //Toast.makeText(this, R.string.notificationsDownloadedMsg, Toast.LENGTH_SHORT).show();
 
         if (!ContentResolver.getSyncAutomatically(account, authority)) {
-            alertNotif();
+        	if (notifCount > 0) {
+	            //If the notifications counter exceeds the limit, set it to the max allowed
+	            if (notifCount > SIZE_LIMIT) {
+	                notifCount = SIZE_LIMIT;
+	            }
+	            
+	            AlertNotification.alertNotif(getApplicationContext(),
+	            		NOTIF_ALERT_ID,
+	            		getString(R.string.app_name),
+	            		notifCount + " " + getString(R.string.notificationsAlertMsg),
+	            		getString(R.string.app_name));
+        	}
 
             ProgressBar pb = (ProgressBar) this.findViewById(R.id.progress_refresh);
             ImageButton updateButton = (ImageButton) this.findViewById(R.id.refresh);

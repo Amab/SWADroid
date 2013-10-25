@@ -33,8 +33,7 @@
     <string name="author_preferences">Koordynator: Antonio Vargas Canas
         \nJuan Miguel Boyero Corral
         \nHelena Rodríguez Gijón
-        \nAntonio Aguilera Malagón
-    </string>
+        \nAntonio Aguilera Malagón</string>
     <string name="author_title_preferences">Autorzy</string>
     <string name="loginTitle_menu">Połączyć</string>
     <string name="loginProgressTitle">Identyfikacja</string>
@@ -107,8 +106,7 @@
         dowolnym momencie.\n\n Czy chcesz, aby otworzyć ekran konfiguracji teraz?</string>
     <string name="initialDialogTitle">WAŻNE</string>
     <string name="upgradeMsg">Ze względu na zmiany w bazie danych, wszystkie dane zostały usunięte.\n\nDisculpe
-        niedogodności."
-    </string>
+        niedogodności."</string>
     <string name="errorBadLoginMsg">Nazwa użytkownika lub hasło nieprawidłowe.\n\n
          * Upewnij się, że wpisana nazwa użytkownika i hasło do bezpośredniego dostępu do SWAD, nie te z PRADO.\n\n
          * Jeśli użytkownik jest nick, sprawdź, czy użytkownik jest poprzedzony @.\n\n
@@ -195,7 +193,7 @@
     <string name="sdCardBusy">Karta SD jest teraz zajęty. Aby umożliwić pobieranie, wybierz \"Wyłącz nośnik USB\" w
         powiadomieniu</string>
     <string name="vacants">Wakaty</string>
-    <string name="numStudent">Liczba uczniów: </string>
+    <string name="numStudent">Liczba uczniów:</string>
     <string name="myGroupsModuleLabel">Moje grupy</string>
     <string name="scan_no_photos">Nie udało się zapisać zdjęcia studentów</string>
     <string name="noStudentsAvailableMsg">Ten kurs nie ma studentów</string>
@@ -222,10 +220,10 @@
     <string name="sessionCreated">Sesja treningowa prawidłowo utworzony</string>
     <string name="sessionNotCreated">Istnieje już sesja określone praktyki</string>
     <string name="sessionChoose">Wybierz sesję treningową</string>
-    <string name="sendingState">Wysyłka do swad: </string>
+    <string name="sendingState">Wysyłka do swad:</string>
     <string name="sendingStatePending">Nachylenie</string>
     <string name="sendingStateSent">Wysłannik</string>
-    <string name="session">Sesja: </string>
+    <string name="session">Sesja:</string>
     <string name="noPracticeSessionsAvailableMsg">Brak treningi grupowe wybranej bazy danych</string>
     <string name="sessionNoStudentsMsg">Żaden uczeń nie uczestniczył w tej sesji</string>
     <string name="studentsHistoryModuleLabel">Studenci historii</string>
@@ -245,8 +243,7 @@
     <string name="rollcallManual">Tryb ręczny</string>
     <string name="sessionsSelect">Sprawdź sesje</string>
     <string name="studentsSelect">Sprawdź studentów</string>
-    <string name="rollcallErrorNoConnection">Brak połączenia z serwerem. Oni zachowali frekwencję w bazie danych."
-    </string>
+    <string name="rollcallErrorNoConnection">Brak połączenia z serwerem. Oni zachowali frekwencję w bazie danych."</string>
     <string name="rollcallHistoryModuleLabel">Sesje historyczne</string>
     <string name="rollcallNoStudentsSelected">Uczeń nie ma specjalnego</string>
     <string name="rollcallNoPracticeSessions">Brak zdefiniowanych treningi dla przedmiotu i grupy kontaktów. Wybierz:
@@ -257,16 +254,16 @@
     <string name="rollcallEvent">Rolka Event</string>
     <string name="froyoFunctionMsg">Ta funkcja wymaga Androida 2.2 lub nowszego</string>
     <string name="noRearCamera">Ta funkcja wymaga aparatu z tyłu</string>
-    <string name="groupSeparator">: </string>
+    <string name="groupSeparator">:</string>
     <string name="groupTypesModuleLabel">Pobierz stawek grupowych</string>
-    <string name="openingTime">Otwórz: </string>
+    <string name="openingTime">Otwórz:</string>
     <string name="noGroupsText">Brak grupy zostały utworzone w ramach przedmiotu</string>
     <string name="changeGroups">Zmiana grupy</string>
     <string name="resultEnrollment">Zakończenie rejestracji</string>
     <string name="successfullEnrollment">Wszystkie pozycje są wykonane prawidłowo. Proszę sprawdzić, czy są zapisane w
         pożądanych grup</string>
-    <string name="confirmEnrollments">Potwierdź wpisy wymagane </string>
-    <string name="areYouSure"> Jesteś pewien, że chcesz dołączyć do wybranych grup?</string>
+    <string name="confirmEnrollments">Potwierdź wpisy wymagane</string>
+    <string name="areYouSure">Jesteś pewien, że chcesz dołączyć do wybranych grup?</string>
     <string name="failedEnrollment">Przepraszamy rejestracji w wybranych grupach nie może być wykonana</string>
     <string name="groupTypesProgressDescription">Pierwsze typy grupy&#8230;\nProszę czekać&#8230;</string>
     <string name="groupsProgressDescription">Pierwsze grupy&#8230;\nProszę czekać&#8230;</string>
@@ -277,11 +274,11 @@
     <string name="withoutLimit">Nieograniczony</string>
     <string name="downloadProblemTitle">Problem w pobieraniu</string>
     <string name="downloadProblemMsg">Przepraszam. Pobieranie zostało przerwane. Spróbować ponownie</string>
-    <string name="downloadCompletedTitle"> Full Download </string>
+    <string name="downloadCompletedTitle">Full Download</string>
     <string name="unknown">Nieznany</string>
     <string name="selectZoneTitle">Wybierz obszar</string>
     <string name="fileTitle">Plik:</string>
-    <string name="noConnectionMsg">Ta funkcja wymaga połączenia. </string>
+    <string name="noConnectionMsg">Ta funkcja wymaga połączenia.</string>
     <string name="noApp">Nie może otworzyć tego pliku.</string>
     <string name="contents_contact">Informacje kontaktowe</string>
     <string name="contents_email">Adres e-mail</string>
@@ -289,7 +286,13 @@
     <string name="contents_phone">Telefon</string>
     <string name="contents_sms">SMS adresowe</string>
     <string name="contents_text">Tekst</string>
-	<string name="lastSyncTimeLabel">Ostatnia synchronizacja</string>
-	<string name="neverLabel">Nigdy</string>
+    <string name="lastSyncTimeLabel">Ostatnia synchronizacja</string>
+    <string name="neverLabel">Nigdy</string>
+    <string name="prefNotifSoundTitle">Dźwięku</string>
+    <string name="prefNotifSoundSummary">włączyć/wyłączyć dźwięk powiadomienia o nowych powiadomień</string>
+    <string name="prefNotifVibrateTitle">Vibration</string>
+    <string name="prefNotifVibrateSummary">włączyć/wyłączyć alarmy wibracyjne dla nowych powiadomień</string>
+    <string name="prefNotifLightsTitle">Lights</string>
+    <string name="prefNotifLightsSummary">Włączanie/wyłączanie światła alerty dla nowych powiadomień</string>
 
 </resources>

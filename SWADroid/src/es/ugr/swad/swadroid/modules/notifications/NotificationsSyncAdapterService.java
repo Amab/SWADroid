@@ -20,9 +20,6 @@
 package es.ugr.swad.swadroid.modules.notifications;
 
 import android.accounts.Account;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.*;
 import android.os.Bundle;
@@ -38,6 +35,7 @@ import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
+import es.ugr.swad.swadroid.utils.AlertNotification;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
@@ -202,49 +200,6 @@ public class NotificationsSyncAdapterService extends Service {
         if (sSyncAdapter == null)
             sSyncAdapter = new SyncAdapterImpl(this);
         return sSyncAdapter;
-    }
-
-	private static void alertNotif(final Context context) {
-        if (notifCount > 0) {
-            //Obtain a reference to the notification service
-            String ns = Context.NOTIFICATION_SERVICE;
-            NotificationManager notManager =
-                    (NotificationManager) context.getSystemService(ns);
-
-            //Configure the alert
-            int icon = R.drawable.ic_launcher_swadroid;
-            long hour = System.currentTimeMillis();
-
-            //If the notifications counter exceeds the limit, set it to the max allowed
-            if (notifCount > SIZE_LIMIT) {
-                notifCount = SIZE_LIMIT;
-            }
-
-            Notification notif =
-                    new Notification(icon, context.getString(R.string.app_name), hour);
-
-            //Configure the Intent
-            Intent notIntent = new Intent(context,
-                    Notifications.class);
-
-            PendingIntent contIntent = PendingIntent.getActivity(
-                    context, 0, notIntent, 0);
-
-            notif.setLatestEventInfo(
-                    context, context.getString(R.string.app_name), notifCount + " " +
-                    context.getString(R.string.notificationsAlertMsg), contIntent);
-
-            //AutoCancel: alert disappears when pushed
-            notif.flags |= Notification.FLAG_AUTO_CANCEL;
-
-            //Add sound, vibration and lights
-            notif.defaults |= Notification.DEFAULT_SOUND;
-            //notif.defaults |= Notification.DEFAULT_VIBRATE;
-            notif.defaults |= Notification.DEFAULT_LIGHTS;
-
-            //Send alert
-            notManager.notify(NOTIF_ALERT_ID, notif);
-        }
     }
 
     private static void createRequest() {
@@ -426,7 +381,19 @@ public class NotificationsSyncAdapterService extends Service {
 
         if (Constants.isLogged()) {
         	getNotifications();
-            alertNotif(context);
+        	
+        	if (notifCount > 0) {
+	            //If the notifications counter exceeds the limit, set it to the max allowed
+	            if (notifCount > SIZE_LIMIT) {
+	                notifCount = SIZE_LIMIT;
+	            }
+	            
+	        	AlertNotification.alertNotif(context,
+	            		NOTIF_ALERT_ID,
+	            		context.getString(R.string.app_name),
+	            		notifCount + " " + context.getString(R.string.notificationsAlertMsg),
+	            		context.getString(R.string.app_name));
+        	}
         }
 
         //Notify synchronization stop

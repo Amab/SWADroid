@@ -327,7 +327,13 @@
     <string name="contents_phone">Número de teléfono</string>
     <string name="contents_sms">Dirección SMS</string>
     <string name="contents_text">Texto</string>    
-    <string name="lastSyncTimeLabel">Última sincronización</string>  
+    <string name="lastSyncTimeLabel">Última sincronización</string>
     <string name="neverLabel">Nunca</string>
+    <string name="prefNotifSoundTitle">Sonido</string>
+    <string name="prefNotifSoundSummary">Activar/desactivar el sonido de las alertas de nuevas notificaciones</string>
+    <string name="prefNotifVibrateTitle">Vibración</string>
+    <string name="prefNotifVibrateSummary">Activar/desactivar la vibración de las alertas de nuevas notificaciones</string>
+    <string name="prefNotifLightsTitle">Led</string>
+    <string name="prefNotifLightsSummary">Activar/desactivar los indicadores luminosos de las alertas de nuevas notificaciones</string>
 
 </resources>
