@@ -17,7 +17,7 @@
  *  along with SWADroid.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package es.ugr.swad.swadroid.utils;
+package es.ugr.swad.swadroid.gui;
 
 import android.app.Notification;
 import android.app.NotificationManager;

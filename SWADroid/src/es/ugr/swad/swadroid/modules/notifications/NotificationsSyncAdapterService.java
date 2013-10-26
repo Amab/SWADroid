@@ -31,11 +31,11 @@ import com.bugsense.trace.BugSenseHandler;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.gui.AlertNotification;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
-import es.ugr.swad.swadroid.utils.AlertNotification;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;

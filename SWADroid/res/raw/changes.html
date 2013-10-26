@@ -1,0 +1,465 @@
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Changelog</title>
+<style type="text/css">
+      .new {
+        color: blue;
+      }
+      .update {
+        color: orange;
+      }
+      .fix {
+        color: red;
+      }
+    </style>
+</head>
+
+<body bgcolor="white">
+<h4>0.12.2 (2013-06-19)</h4>
+<ul>
+<lh class="update">[UPDATES]</lh>
+<li type="disc">Updated communications with server</li>
+</ul>
+
+<h4>0.12.1 (2013-06-09)</h4>
+<ul>
+<lh class="new">[NEW]</lh>
+<li type="disc">Added forumPostCourse notification type</li>
+<li type="disc">Added icons in more resolutions</li>
+</ul>
+<ul>
+<lh class="update">[UPDATES]</lh>
+<li type="disc">Removed all references to University of Granada (UGR) in authors section</li>
+<li type="disc">Now the user input is maintained on rotation of the device</li>
+<li type="disc">Optimized processing of downloaded tests configurations</li>
+<li type="disc">Avoid overriding of synchronization user preferences on application upgrades</li>
+</ul>
+<ul>
+<lh class="fix">[FIXES]</lh>
+<li type="disc">Fixed activity restart on TestMake</li>
+<li type="disc">Fixed NullPointerException exceptions when inserting null values into not null database fields</li>
+<li type="disc">Fixed error messages display</li>
+<li type="disc">Modified NULL value detection in server response</li>
+</ul>
+<h4>0.12 (2013-04-20)</h4>
+<ul>
+<lh class="new">[NEW]</lh>
+<li type="disc">Added new notification types "documentFile", "sharedFile", "enrollment" and "enrollmentRequest". Changed notifications icon</li>
+<li type="disc">Added questions feedback and answers feedback in tests module</li>
+<li type="disc">Added all languages that are present in SWAD</li>
+<li type="disc">Added configuration of max limit of stored notifications on preferences screen</li>
+<li type="disc">Added checkbox preference for enable/disable auto sync from preferences screen</li>
+<li type="disc">Added periodic synchronization. Added synchronization interval selection on preferences screen</li>
+</ul>
+<ul>
+<lh class="update">[UPDATES]</lh>
+<li type="disc">Updated minimum required API to 8 (FROYO 2.2)</li>
+<li type="disc">Updated Downloads Module. Added DownloadsManager for API >= GINGERBREAD</li>
+<li type="disc">Updated the regular expression for nickname validation. Added "@" character at the beginning and adjusted the max length of the nickname</li>
+<li type="disc">Updated icons for notifications</li>
+<li type="disc">Disabled "Clean database" option</li>
+<li type="disc">Now devices with no rear camera can launch the Rollcall module in manual mode</li>
+<li type="disc">Changed position of question score in tests</li>
+</ul>
+<ul>
+<lh class="fix">[FIXES]</lh>
+<li type="disc">Fixed IllegalArgumentException exception on some activities when changing orientation</li>
+<li type="disc">Fixed wrong score calculation in multiple choice questions. The correct answers not checked by the user are NOT an error and score 0 points</li>
+<li type="disc">Fixed non decimal keyboard type for decimal numbers on some devices</li>
+</ul>
+<h4>0.11.3 (2013-03-03)</h4>
+<ul>
+<lh class="update">[UPDATES]</lh>
+<li type="disc">Shows default server in preference summary when the preference value is empty</li>
+<li type="disc">Updated Google Play references</li>
+</ul>
+<ul>
+<lh class="fix">[FIXES]</lh>
+<li type="disc">Fixed NullPointer exceptions when cleaning notifications and courses on preferences change</li>
+</ul>
+<h4>0.11.2 (2013-02-24)</h4>
+<ul>
+<lh class="new">[NEW]</lh>
+<li type="disc">Added refresh button on main screen to update courses without clean the whole database</li>
+</ul>
+<ul>
+<lh class="update">[UPDATES]</lh>
+<li type="disc">Hided reply button when notification type is not a message</li>
+</ul>
+<ul>
+<lh class="fix">[FIXES]</lh>
+<li type="disc">Fixed hided soft menu button on Android ICS</li>
+<li type="disc">Fixed parsing of marksFile notifications when the student doesn't exists in the marks file</li>
+<li type="disc">Fixed activity restart when TestMake returns from background to foreground</li>
+<li type="disc">Fixed wrong behaviour of checkboxes in Android 4.2 (isChecked() method behaviour is exactly the opposite in Android 4.2)</li>
+</ul>
+<h4>0.11.1 (2013-01-26)</h4>
+<ul>
+<lh class="new">[NEW]</lh>
+<li type="disc">Added compatibility with screens with basic touch capabilities</li>
+<li type="disc">Added compatibility with devices that have no rear camera available</li>
+</ul>
+<ul>
+<lh class="update">[UPDATES]</lh>
+<li type="disc">Removed vertical white line from action bar</li>
+<li type="disc">Test tags are now ordered alphabetically</li>
+<li type="disc">Modified text of date field in dialog of file options</li>
+<li type="disc">Modified some translations</li>
+<li type="disc">Changed the encryption method in order to fix a decryption bug in notifications module</li>
+</ul>
+<ul>
+<lh class="fix">[FIXES]</lh>
+<li type="disc">Fixed prevention of activity restart when rotating the screen on Android 4.x platforms</li>
+<li type="disc">Fixed group selection in rollcall module</li>
+<li type="disc">Fixed database corruption and error message when updating the tests descriptors</li>
+</ul>
+<h4>0.11 (2012-12-15)</h4>
+<ul>
+<lh class="new">[NEW]</lh>
+<li type="disc">Added downloads module</li>
+<li type="disc">Added encryption to notifications</li>
+</ul>
+<ul>
+<lh class="update">[UPDATES]</lh>
+<li type="disc">Modified the order of modules in main menu to coincide with the order of functions in SWAD</li>
+</ul>
+<h4>0.10.1 (2012-11-17)</h4>
+<ul>
+<lh class="new">[NEW]</lh>
+<li type="disc">Added Android 4.2 compatibility</li>
+<li type="disc">Added red highlight for groups without free spot in Enrollment module</li>
+</ul>
+<ul>
+<lh class="update">[UPDATES]</lh>
+<li type="disc">Changed to lighter blue of background of groups with real membership, darker gray on text about vacants</li>
+</ul>
+<ul>
+<lh class="fix">[FIXES]</lh>
+<li type="disc">Fixed available choose for groups with real membership</li>
+<li type="disc">Fixed problem with uppercase letter in notifications without summary</li>
+</ul>
+<h4>0.10 (2012-11-09)</h4>
+<ul>
+<lh class="new">[NEW]</lh>
+<li type="disc">Added module for enrollment to course groups</li>
+</ul>
+<ul>
+<lh class="update">[UPDATES]</lh>
+<li type="disc">GUI improvements</li>
+</ul>
+<ul>
+<lh class="fix">[FIXES]</lh>
+<li type="disc">Fixed DNI processing when using a NIE instead of a DNI (NIE format X5264085Y)</li>
+<li type="disc">Fixed a misspelling in english language file</li>
+<li type="disc">Fixed some bugs in course selection spinner</li>
+<li type="disc">Fixed bug when checking available connections</li>
+</ul>
+<h4>0.9.3 (2012-07-20)</h4>
+<ul>
+<lh class="new">[NEW]</lh>
+<li type="disc">Added folders support in server URL</li>
+</ul>
+<ul>
+<lh class="update">[UPDATES]</lh>
+<li type="disc">Improved error messages</li>
+</ul>
+<h4>0.9.2 (2012-07-10)</h4>
+<ul>
+<lh class="fix">[FIXES]</lh>
+<li type="disc">camera.autofocus feature marked as optional in order to fix device incompatibilities</li>
+</ul>
+<h4>0.9.1 (2012-07-09)</h4>
+<ul>
+<lh class="new">[NEW]</lh>
+<li type="disc">Added DNI with letter (first and last) support and DNI with zeros support</li>
+<li type="disc">Added Android 4.1 compatibility</li>
+</ul>
+<ul>
+<lh class="fix">[FIXES]</lh>
+<li type="disc">Fixed xlarge screens support</li>
+</ul>
+<h4>0.9 (2012-07-01)</h4>
+<ul>
+<lh class="new">[NEW]</lh>
+<li type="disc">Added RollCall module</li>
+</ul>
+<h4>0.8.1 (2012-05-20)</h4>
+<ul>
+<lh class="new">[NEW]</lh>
+<li type="disc">Added message replys from open notifications</li>
+</ul>
+<h4>0.8 (2012-05-01)</h4>
+<ul>
+<lh class="new">[NEW]</lh>
+<li type="disc">Added automatic synchronization of notifications</li>
+<li type="disc">Added server URL configuration in preferences</li>
+<li type="disc">Added function to publish new notices (yellow notes) (only teachers)</li>
+<li type="disc">Integrated new SWAD roles system</li>
+<li type="disc">Adapted all Modules to work with a global actual course</li>
+<li type="disc">Added rotating refresh image when updating notifications</li>
+</ul>
+<ul>
+<lh class="update">[UPDATES]</lh>
+<li type="disc">Improved visualization of notifications</li>
+<li type="disc">Updated Market link</li>
+</ul>
+<ul>
+<lh class="fix">[FIXES]</lh>
+<li type="disc">Fixed date and time format</li>
+<li type="disc">Fixed HTML bug in location field of notifications</li>
+<li type="disc">Fixed br tag bug in notifications</li>
+</ul>
+<h4>0.7.2 (2012-02-22)</h4>
+<ul>
+<lh class="new">[NEW]</lh>
+<li type="disc">Added notification alerts on status bar</li>
+<li type="disc">Added navigation ability for HTML links in notifications</li>
+</ul>
+<ul>
+<lh class="update">[UPDATES]</lh>
+<li type="disc">Improved query statements</li>
+</ul>
+<h4>0.7.1 (2012-01-11)</h4>
+<ul>
+<lh class="update">[UPDATES]</lh>
+<li type="disc">Improved rendering speed in marks function</li>
+</ul>
+<ul>
+<lh class="fix">[FIXES]</lh>
+<li type="disc">Fixed rendering errors in marks function</li>
+</ul>
+<h4>0.7 (2012-01-10)</h4>
+<ul>
+<lh class="new">[NEW]</lh>
+<li type="disc">Added marks function in notifications module</li>
+</ul>
+<h4>0.6.2 (2011-12-09)</h4>
+<ul>
+<lh class="new">[NEW]</lh>
+<li type="disc">Added Blog URL to preferences screen</li>
+<li type="disc">Added Catalan language by Francisco Manuel Herrero Pérez</li>
+</ul>
+<ul>
+<lh class="update">[UPDATES]</lh>
+<li type="disc">Reinitialized last course selected on database cleaning</li>
+<li type="disc">Minor changes on error messages</li>
+</ul>
+<h4>0.6.1 (2011-11-16)</h4>
+<ul>
+<lh class="new">[NEW]</lh>
+<li type="disc">Added Google+ account to preferences screen</li>
+</ul>
+<ul>
+<lh class="update">[UPDATES]</lh>
+<li type="disc">Optimized database access</li>
+</ul>
+<ul>
+<lh class="fix">[FIXES]</lh>
+<li type="disc">Fixed menu operation in all activities</li>
+</ul>
+<h4>0.6 (2011-11-06)</h4>
+<ul>
+<lh class="new">[NEW]</lh>
+<li type="disc">Added Android 4.0 compatibility</li>
+<li type="disc">Added sharing options to application menu and preferences</li>
+<li type="disc">Added clean database option to application menu</li>
+<li type="disc">Added name of SWAD's creator to author preferences</li>
+</ul>
+<h4>0.5.2 (2011-09-29)</h4>
+<ul>
+<lh class="new">[NEW]</lh>
+<li type="disc">Added real names of receivers in "Message Sended" toast</li>
+</ul>
+<ul>
+<lh class="update">[UPDATES]</lh>
+<li type="disc">Optimized questions syncronization</li>
+</ul>
+<ul>
+<lh class="fix">[FIXES]</lh>
+<li type="disc">Fixed bug on test questions syncronization</li>
+</ul>
+<h4>0.5.1 (2011-09-26)</h4>
+<ul>
+<lh class="fix">[FIXES]</lh>
+<li type="disc">Fixed bug in reply messages function</li>
+</ul>
+<h4>0.5 (2011-09-26)</h4>
+<ul>
+<lh class="new">[NEW]</lh>
+<li type="disc">Added messages module</li>
+</ul>
+<ul>
+<lh class="fix">[FIXES]</lh>
+<li type="disc">Minor fixes</li>
+</ul>
+<h4>0.4.5 (2011-07-08)</h4>
+<ul>
+<lh class="update">[UPDATES]</lh>
+<li type="disc">Optimized questions syncronization</li>
+</ul>
+<h4>0.4.4 (2011-07-05)</h4>
+<ul>
+<lh class="fix">[FIXES]</lh>
+<li type="disc">Minor fixes</li>
+</ul>
+<h4>0.4.3 (2011-06-15)</h4>
+<ul>
+<lh class="update">[UPDATES]</lh>
+<li type="disc">Improved tests GUI</li>
+</ul>
+<ul>
+<lh class="fix">[FIXES]</lh>
+<li type="disc">Minor fixes</li>
+</ul>
+<h4>0.4.2 (2011-06-15)</h4>
+<ul>
+<lh class="update">[UPDATES]</lh>
+<li type="disc">Now not answered questions score as 0</li>
+<li type="disc">Now is allowed to uncheck a checked answer on T/F and unique choice questions</li>
+<li type="disc">Improved tests GUI</li>
+</ul>
+<h4>0.4.1 (2011-06-14)</h4>
+<ul>
+<lh class="update">[UPDATES]</lh>
+<li type="disc">Allowed negative scores on tests</li>
+</ul>
+<ul>
+<lh class="fix">[FIXES]</lh>
+<li type="disc">Fixed bug on questions syncronization</li>
+</ul>
+<h4>0.4 (2011-06-13)</h4>
+<ul>
+<lh class="new">[NEW]</lh>
+<li type="disc">Added tests module</li>
+</ul>
+<ul>
+<lh class="fix">[FIXES]</lh>
+<li type="disc">Minor fixes</li>
+</ul>
+<h4>0.3.10 (2011-05-19)</h4>
+<ul>
+<lh class="new">[NEW]</lh>
+<li type="disc">Added assignment, survey and unknown notifications</li>
+<li type="disc">Added empty notifications message</li>
+<li type="disc">Added forced relogin if connection time exceeds a certain period</li>
+<li type="disc">Added incorrect user or password error message</li>
+</ul>
+<h4>0.3.9 (2011-05-03)</h4>
+<ul>
+<lh class="fix">[FIXES]</lh>
+<li type="disc">Fixed empty fields bug on notifications module</li>
+</ul>
+<h4>0.3.8 (2011-04-27)</h4>
+<ul>
+<lh class="fix">[FIXES]</lh>
+<li type="disc">Fixed bug on cleaning old notifications</li>
+</ul>
+<h4>0.3.7 (2011-04-14)</h4>
+<ul>
+<lh class="fix">[FIXES]</lh>
+<li type="disc">Fixed notifications bug in surname</li>
+</ul>
+<h4>0.3.6 (2011-04-13)</h4>
+<ul>
+<lh class="new">[NEW]</lh>
+<li type="disc">Added notification details</li>
+<li type="disc">Added upgrade dialog</li>
+</ul>
+<h4>0.3.5 (2011-04-05)</h4>
+<ul>
+<lh class="new">[NEW]</lh>
+<li type="disc">Added action bar</li>
+<li type="disc">Added category organization on main menu</li>
+</ul>
+<ul>
+<lh class="update">[UPDATES]</lh>
+<li type="disc">Improved GUI</li>
+<li type="disc">Improved performance</li>
+</ul>
+<h4>0.3.4 (2011-03-27)</h4>
+<ul>
+<lh class="update">[UPDATES]</lh>
+<li type="disc">Improved GUI</li>
+</ul>
+<ul>
+<lh class="fix">[FIXES]</lh>
+<li type="disc">Fixed minor errors on error messages</li>
+</ul>
+<h4>0.3.3 (2011-03-27)</h4>
+<ul>
+<lh class="update">[UPDATES]</lh>
+<li type="disc">Redesigned GUI</li>
+</ul>
+<h4>0.3.2 (2011-03-24)</h4>
+<ul>
+<lh class="new">[NEW]</lh>
+<li type="disc">Added first run dialog</li>
+</ul>
+<ul>
+<lh class="update">[UPDATES]</lh>
+<li type="disc">Improved preferences screen</li>
+</ul>
+<h4>0.3.1 (2011-03-21)</h4>
+<ul>
+<lh class="new">[NEW]</lh>
+<li type="disc">Added automatic saving of preferences</li>
+<li type="disc">Added automatic notifications cleaning when username or password changes</li>
+</ul>
+<ul>
+<lh class="update">[UPDATES]</lh>
+<li type="disc">Changed background colors of notifications</li>
+</ul>
+<ul>
+<lh class="fix">[FIXES]</lh>
+<li type="disc">Fixed compatibility issues with some devices</li>
+</ul>
+<h4>0.3 (2011-03-08)</h4>
+<ul>
+<lh class="new">[NEW]</lh>
+<li type="disc">Added notifications module</li>
+<li type="disc">Added Android 3.0 Honeycomb compatibility</li>
+</ul>
+<h4>0.2.2 (2011-01-18)</h4>
+<ul>
+<lh class="new">[NEW]</lh>
+<li type="disc">Added connection check</li>
+<li type="disc">Added functions list to main activity</li>
+<li type="disc">Added first run configuration</li>
+<li type="disc">Added login successful message</li>
+</ul>
+<ul>
+<lh class="update">[UPDATES]</lh>
+<li type="disc">Disabled application restart on orientation change</li>
+</ul>
+<ul>
+<lh class="fix">[FIXES]</lh>
+<li type="disc">Fixed launcher icons</li>
+<li type="disc">Fixed Android 1.6 compatibility issues</li>
+</ul>
+<h4>0.2.1 (2010-12-15)</h4>
+<ul>
+<lh class="new">[NEW]</lh>
+<li type="disc">Added Android 2.3 Gingerbread compatibility</li>
+<li type="disc">Completed login module</li>
+</ul>
+<h4>0.2 (2010-12-08)</h4>
+<ul>
+<lh class="new">[NEW]</lh>
+<li type="disc">Added auto logout when user id or password changes</li>
+<li type="disc">Added initial database</li>
+</ul>
+<h4>0.1.1 (2010-11-06)</h4>
+<ul>
+<lh class="new">[NEW]</lh>
+<li type="disc">Added background image to main activity</li>
+</ul>
+<ul>
+<lh class="fix">[Fixes]</lh>
+<li type="disc">Minor fixes on main screen</li>
+</ul>
+<h4>0.1 (2010-11-03)</h4>
+<ul>
+<lh class="new">[NEW]</lh>
+<li type="disc">First release</li>
+</ul>
+</body>

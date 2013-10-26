@@ -21,6 +21,7 @@ package es.ugr.swad.swadroid;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -47,6 +48,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.gui.ImageExpandableListAdapter;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.model.Course;
@@ -147,13 +149,12 @@ public class SWADMain extends MenuExpandableListActivity {
     /**
      * Shows initial dialog after application upgrade.
      */
-    public void showUpgradeDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.initialDialogTitle)
-                .setMessage(R.string.upgradeMsg)
-                .setCancelable(false)
-                .setNeutralButton(R.string.close_dialog, null)
-                .show();
+    public void showUpgradeDialog(Context context) {        
+        AlertDialog alertDialog = DialogFactory.createWebViewDialog(context,
+        		R.string.changelogDialogTitle,
+        		R.raw.changes);
+
+        alertDialog.show();
     }
 
     /* (non-Javadoc)
@@ -277,7 +278,7 @@ public class SWADMain extends MenuExpandableListActivity {
 
             //If this is an upgrade, show upgrade dialog
             } else if (lastVersion < currentVersion) {
-                //showUpgradeDialog();
+                showUpgradeDialog(this);
                 dbHelper.upgradeDB(this);
 
                 //If the app is updating from an unencrypted user password version, encrypt user password
