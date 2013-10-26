@@ -114,7 +114,7 @@ public class Messages extends Module {
 
         messageDialog = new Dialog(this);
         messageDialog.setTitle(R.string.messagesModuleLabel);
-        messageDialog.setContentView(R.layout.messages_dialog);
+        messageDialog.setContentView(R.layout.dialog_messages);
         messageDialog.setCancelable(true);
         messageDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 

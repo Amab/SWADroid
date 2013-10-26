@@ -335,5 +335,6 @@
     <string name="prefNotifVibrateSummary">Activar/desactivar la vibración de las alertas de nuevas notificaciones</string>
     <string name="prefNotifLightsTitle">Led</string>
     <string name="prefNotifLightsSummary">Activar/desactivar los indicadores luminosos de las alertas de nuevas notificaciones</string>
+    <string name="changelogDialogTitle">Historial de cambios</string>
 
 </resources>

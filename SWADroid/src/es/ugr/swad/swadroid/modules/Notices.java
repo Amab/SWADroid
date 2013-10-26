@@ -98,7 +98,7 @@ public class Notices extends Module {
         Button acceptButton, cancelButton;
 
         noticeDialog.setTitle(R.string.noticesModuleLabel);
-        noticeDialog.setContentView(R.layout.notice_dialog);
+        noticeDialog.setContentView(R.layout.dialog_notice);
         noticeDialog.setCancelable(true);
 
         noticeDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
