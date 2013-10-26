@@ -36,13 +36,14 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+
 import com.bugsense.trace.BugSenseHandler;
 
+import es.ugr.swad.swadroid.gui.widget.SeekBarDialogPreference;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.sync.SyncUtils;
 import es.ugr.swad.swadroid.utils.Crypto;
 import es.ugr.swad.swadroid.utils.Utils;
-import es.ugr.swad.swadroid.widget.SeekBarDialogPreference;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;

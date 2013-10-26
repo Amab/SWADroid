@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package es.ugr.swad.swadroid.widget;
+package es.ugr.swad.swadroid.gui.widget;
 
 import android.content.Context;
 import android.os.Handler;
