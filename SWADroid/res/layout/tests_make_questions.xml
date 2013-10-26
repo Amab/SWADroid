@@ -53,7 +53,7 @@
                     android:layout_weight="0.1"
                     android:background="@drawable/back"/>
 
-            <es.ugr.swad.swadroid.widget.TextProgressBar
+            <es.ugr.swad.swadroid.gui.widget.TextProgressBar
                     android:id="@+id/test_questions_bar"
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="0dip"

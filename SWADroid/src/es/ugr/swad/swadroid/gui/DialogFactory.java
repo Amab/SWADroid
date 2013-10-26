@@ -7,7 +7,6 @@ import org.apache.commons.io.IOUtils;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.res.Resources;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.WebView;

@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with SWADroid.  If not, see <http://www.gnu.org/licenses/>.
  */
-package es.ugr.swad.swadroid.widget;
+package es.ugr.swad.swadroid.gui.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;

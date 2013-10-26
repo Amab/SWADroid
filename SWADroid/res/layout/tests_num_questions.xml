@@ -22,7 +22,7 @@
             android:textSize="20sp"
             android:text="@string/testNumQuestionsMsg"/>
 
-    <es.ugr.swad.swadroid.widget.NumberPicker
+    <es.ugr.swad.swadroid.gui.widget.NumberPicker
             android:id="@+id/testNumQuestionsNumberPicker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
