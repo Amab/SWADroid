@@ -45,7 +45,7 @@
     <PreferenceCategory
             android:title="@string/prefCatNotifTitle">
 
-        <es.ugr.swad.swadroid.widget.SeekBarDialogPreference
+        <es.ugr.swad.swadroid.gui.widget.SeekBarDialogPreference
                 android:key="@string/prefNotifLimitKey"
                 android:dialogMessage="@string/prefNotifLimitDialogMessage"
                 android:title="@string/prefNotifLimitTitle"
