@@ -41,9 +41,7 @@ import es.ugr.swad.swadroid.model.TestQuestion;
 import es.ugr.swad.swadroid.model.TestTag;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.utils.Utils;
-
 import org.xmlpull.v1.XmlPullParserException;
-
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
@@ -121,9 +119,9 @@ public class TestsMake extends Module {
 
     /**
      * Screen to select the number of questions in the test
-     * REQUIRES API 11 OR HIGHER
      */
-    /*private void setNumQuestions() {
+    /*@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	private void setNumQuestions() {
         final android.widget.NumberPicker numberPicker;
         Button acceptButton;
 
@@ -151,7 +149,6 @@ public class TestsMake extends Module {
     
     /**
      * Screen to select the number of questions in the test
-     * 
      */
     private void setNumQuestions() {
         final NumberPicker numberPicker;
