@@ -124,6 +124,7 @@ public class TestsMake extends Module {
 	private void setNumQuestions() {
         final android.widget.NumberPicker numberPicker;
         Button acceptButton;
+        TextView minNumQuestions, maxNumQuestions;
 
         setLayout(R.layout.tests_num_questions);
 
@@ -131,7 +132,13 @@ public class TestsMake extends Module {
         numberPicker.setMaxValue(test.getMax());
         numberPicker.setMinValue(test.getMin());
         numberPicker.setValue(test.getDef());
-        numberPicker.setWrapSelectorWheel(false);
+        numberPicker.setWrapSelectorWheel(false);               
+        
+        minNumQuestions = (TextView) findViewById(R.id.minTestNumQuestionsId);
+        minNumQuestions.setText(test.getMin() + "≤");
+        
+        maxNumQuestions = (TextView) findViewById(R.id.maxTestNumQuestionsId);
+        maxNumQuestions.setText("≤" + test.getMax());
 
         acceptButton = (Button) findViewById(R.id.testNumQuestionsAcceptButton);
         acceptButton.setOnClickListener(new View.OnClickListener() {
@@ -153,12 +160,20 @@ public class TestsMake extends Module {
     private void setNumQuestions() {
         final NumberPicker numberPicker;
         Button acceptButton;
+        TextView minNumQuestions, maxNumQuestions;
 
         setLayout(R.layout.tests_num_questions);
 
         numberPicker = (NumberPicker) findViewById(R.id.testNumQuestionsNumberPicker);
         numberPicker.setRange(test.getMin(), test.getMax());
-        numberPicker.setCurrent(test.getDef());
+        numberPicker.setCurrent(test.getDef());        
+        
+        minNumQuestions = (TextView) findViewById(R.id.minTestNumQuestionsId);
+        minNumQuestions.setText(test.getMin() + "≤");
+        
+        maxNumQuestions = (TextView) findViewById(R.id.maxTestNumQuestionsId);
+        maxNumQuestions.setText("≤" + test.getMax());
+        
 
         acceptButton = (Button) findViewById(R.id.testNumQuestionsAcceptButton);
         acceptButton.setOnClickListener(new View.OnClickListener() {
