@@ -129,21 +129,23 @@ public class SWADMain extends MenuExpandableListActivity {
      * Shows configuration dialog on first run.
      */
     void showConfigurationDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.initialDialogTitle)
-                .setMessage(R.string.firstRunMsg)
-                .setCancelable(false)
-                .setPositiveButton(R.string.yesMsg, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        viewPreferences();
-                    }
-                })
-                .setNegativeButton(R.string.noMsg, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                        createSpinnerAdapter();
-                    }
-                }).show();
+    	DialogInterface.OnClickListener positiveListener = new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                viewPreferences();
+            }
+        };
+        
+    	DialogInterface.OnClickListener negativeListener = new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+                createSpinnerAdapter();
+            }
+        };
+        
+    	AlertDialog alertDialog = DialogFactory.positiveNegativeDialog(this, R.string.initialDialogTitle,
+    			R.string.firstRunMsg, positiveListener, negativeListener);
+    	
+    	alertDialog.show();
     }
 
     /**

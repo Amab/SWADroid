@@ -4,8 +4,11 @@ import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
 
+import com.bugsense.trace.BugSenseHandler;
+
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,6 +65,50 @@ public class DialogFactory {
 	        webview.loadData(content, "text/html", "utf-8");
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        
+        return alertDialogBuilder.create();
+    }
+    
+    public static AlertDialog neutralDialog(Context context, int title, int message) {
+    	AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context)
+                .setTitle(title)
+                .setMessage(message)
+                .setCancelable(false)
+                .setNeutralButton(R.string.close_dialog, null);
+    	
+    	return alertDialogBuilder.create();
+    }
+    
+    public static AlertDialog positiveNegativeDialog(Context context, int title, int message,
+    		DialogInterface.OnClickListener positiveListener, DialogInterface.OnClickListener negativeListener) {
+    	
+    	AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context)
+        .setTitle(R.string.initialDialogTitle)
+        .setMessage(R.string.firstRunMsg)
+        .setCancelable(false)
+        .setPositiveButton(R.string.yesMsg, positiveListener)
+        .setNegativeButton(R.string.noMsg, negativeListener);
+    	
+    	return alertDialogBuilder.create();
+    }
+    
+    public static AlertDialog errorDialog(Context context, String tag, String message, Exception ex,
+    		boolean sendException, boolean isDebuggable, DialogInterface.OnClickListener onClickListener) {
+    	
+    	AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context)
+                .setTitle(R.string.title_error_dialog)
+                .setMessage(message)
+                .setNeutralButton(R.string.close_dialog, onClickListener)
+                .setIcon(R.drawable.erroricon);
+
+        if (ex != null) {
+            ex.printStackTrace();
+
+            // Send exception details to Bugsense
+            if (!isDebuggable && sendException) {
+                BugSenseHandler.sendExceptionMessage(tag, message, ex);
+            }
         }
         
         return alertDialogBuilder.create();
