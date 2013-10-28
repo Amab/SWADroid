@@ -396,6 +396,37 @@ public class DataBaseHelper {
     }
 
     /**
+     * Gets an user
+     *
+     * @param fieldName  Field's name
+     * @param fieldValue Field's value
+     * @return The user found 
+     *         or null if the user does not exist
+     */
+    public User getUser(String fieldName, String fieldValue) {
+        List<Entity> rows = db.getEntityList(Constants.DB_TABLE_USERS, fieldName + " = '" + fieldValue + "'");
+        Entity ent;
+        User user = null;
+
+        if (rows.size() > 0) {
+            ent = rows.get(0);
+            
+            user = new User(
+            		ent.getLong("userCode"),
+            		null,
+		            crypto.decrypt(ent.getString("userID")),
+		            crypto.decrypt(ent.getString("userNickname")),
+		            crypto.decrypt(ent.getString("userSurname1")),
+		            crypto.decrypt(ent.getString("userSurname2")),
+		            crypto.decrypt(ent.getString("userFirstname")),
+		            crypto.decrypt(ent.getString("photoPath")),
+		            ent.getInt("userRole"));
+        }
+
+        return user;
+    }
+
+    /**
      * Gets the id of users enrolled in the selected course
      *
      * @param courseCode Course code to be referenced
@@ -926,13 +957,14 @@ public class DataBaseHelper {
             }
             ent = rows.get(0);
         }
+        
         ent.setValue("userCode", u.getId());
-        ent.setValue("userID", u.getUserID());
-        ent.setValue("userNickname", u.getUserNickname());
-        ent.setValue("userSurname1", u.getUserSurname1());
-        ent.setValue("userSurname2", u.getUserSurname2());
-        ent.setValue("userFirstname", u.getUserFirstname());
-        ent.setValue("photoPath", u.getUserPhoto());
+        ent.setValue("userID", crypto.encrypt(u.getUserID()));
+        ent.setValue("userNickname", crypto.encrypt(u.getUserNickname()));
+        ent.setValue("userSurname1", crypto.encrypt(u.getUserSurname1()));
+        ent.setValue("userSurname2", crypto.encrypt(u.getUserSurname2()));
+        ent.setValue("userFirstname", crypto.encrypt(u.getUserFirstname()));
+        ent.setValue("photoPath", crypto.encrypt(u.getUserPhoto()));
         ent.setValue("userRole", u.getUserRole());
         ent.save();
     }
@@ -1123,9 +1155,9 @@ public class DataBaseHelper {
      * @param courseCode Course code to be referenced
      * @param groupCode  Group code to be referenced
      */
-    public void insertUserCourse(User u, long courseCode, long groupCode) {
+    public void insertUserCourse(long userID, long courseCode, long groupCode) {
         Entity ent;
-        String where = "userCode = " + u.getId() + " AND crsCod = " + courseCode;
+        String where = "userCode = " + userID + " AND crsCod = " + courseCode;
         List<Entity> rows = db.getEntityList(Constants.DB_TABLE_USERS_COURSES, where);
 
         if (rows.isEmpty()) {
@@ -1133,7 +1165,7 @@ public class DataBaseHelper {
         } else {
             ent = rows.get(0);
         }
-        ent.setValue("userCode", u.getId());
+        ent.setValue("userCode", userID);
         ent.setValue("crsCod", courseCode);
         ent.setValue("grpCod", groupCode);
         ent.save();
@@ -1709,6 +1741,23 @@ public class DataBaseHelper {
             ent.setValue("location", crypto.encrypt(ent.getString("location")));
             ent.setValue("summary", crypto.encrypt(ent.getString("summary")));
             ent.setValue("content", crypto.encrypt(ent.getString("content")));
+            ent.save();
+        }
+    }
+
+    /**
+     * Encrypts the users data
+     */
+    public void encryptUsers() {
+        List<Entity> rows = db.getEntityList(Constants.DB_TABLE_USERS);
+
+        for (Entity ent : rows) {
+            ent.setValue("userID", crypto.encrypt(ent.getString("userID")));
+            ent.setValue("userNickname", crypto.encrypt(ent.getString("userNickname")));
+            ent.setValue("userSurname1", crypto.encrypt(ent.getString("userSurname1")));
+            ent.setValue("userSurname2", crypto.encrypt(ent.getString("userSurname2")));
+            ent.setValue("userFirstname", crypto.encrypt(ent.getString("userFirstname")));
+            ent.setValue("userPhoto", crypto.encrypt(ent.getString("photoPath")));
             ent.save();
         }
     }
