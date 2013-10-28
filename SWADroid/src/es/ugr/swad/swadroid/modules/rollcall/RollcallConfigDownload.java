@@ -130,7 +130,7 @@ public class RollcallConfigDownload extends Module {
 
                 // Inserts user in database or updates it if already exists
                 dbHelper.insertUser(u);
-                dbHelper.insertUserCourse(u, courseCode, groupCode);
+                dbHelper.insertUserCourse(userCode, courseCode, groupCode);
                 
                 // If user's picture URL is not empty, download and save it in phone memory
                 if(!userPhoto.equals("")) {

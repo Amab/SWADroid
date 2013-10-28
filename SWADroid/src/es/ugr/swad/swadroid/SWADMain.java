@@ -282,10 +282,14 @@ public class SWADMain extends MenuExpandableListActivity {
             } else if (lastVersion < currentVersion) {
                 showUpgradeDialog(this);
                 dbHelper.upgradeDB(this);
-
-                //If the app is updating from an unencrypted user password version, encrypt user password
+                
                 if(lastVersion < 52) {
+                	//Encrypts users table
+                	dbHelper.encryptUsers();
+                	
+                	//If the app is updating from an unencrypted user password version, encrypt user password
                 	prefs.upgradeCredentials();
+                	
                 	prefs.setSyncTime(String.valueOf(Constants.DEFAULT_SYNC_TIME));
                 }
                 
