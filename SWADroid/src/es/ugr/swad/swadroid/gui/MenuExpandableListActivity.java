@@ -30,9 +30,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
-
-import com.bugsense.trace.BugSenseHandler;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
@@ -125,36 +122,24 @@ public class MenuExpandableListActivity extends ExpandableListActivity {
      * @param message Error message to show.
      */
     protected void error(String tag, String message, Exception ex, boolean sendException) {
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.title_error_dialog)
-                .setMessage(message)
-                .setNeutralButton(R.string.close_dialog,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                finish();
-                            }
-                        }).setIcon(R.drawable.erroricon).show();
-
-        if (ex != null) {
-            ex.printStackTrace();
-
-            // Send exception details to Bugsense
-            if (!isDebuggable && sendException) {
-                BugSenseHandler.sendExceptionMessage(tag, message, ex);
+    	DialogInterface.OnClickListener onClickListener = new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                finish();
             }
-        }
+        };
+        
+    	AlertDialog errorDialog = DialogFactory.errorDialog(this, TAG, message, ex, sendException,
+    			isDebuggable, onClickListener);    	
+    	
+    	errorDialog.show();
     }
 
     /**
      * Shows a dialog.
      */
     public void showDialog(int title, int message) {
-        new AlertDialog.Builder(this)
-                .setTitle(title)
-                .setMessage(message)
-                .setCancelable(false)
-                .setNeutralButton(R.string.close_dialog, null)
-                .show();
+       AlertDialog dialog = DialogFactory.neutralDialog(this, title, message);
+       dialog.show();
     }
 
     /* (non-Javadoc)
