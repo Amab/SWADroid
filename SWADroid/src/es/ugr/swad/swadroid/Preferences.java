@@ -36,6 +36,7 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.bugsense.trace.BugSenseHandler;
 
@@ -295,12 +296,30 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
     }
 
     /**
+     * Sets user id
+     */
+    public void setUserID(String userID) {
+    	Preferences.userID = userID;
+        editor = editor.putString(USERIDPREF, userID);
+        editor.commit();
+    }
+
+    /**
      * Gets User password.
      *
      * @return User password.
      */
     public String getUserPassword() {
         return userPassword;
+    }
+
+    /**
+     * Sets user password
+     */
+    public void setUserPassword(String userPassword) {
+    	Preferences.userPassword = userPassword;
+        editor = editor.putString(USERPASSWORDPREF, userPassword);
+        editor.commit();
     }
 
     /**
@@ -547,8 +566,11 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
     private void cleanDatabase() {
         dbHelper.emptyTable(Constants.DB_TABLE_NOTIFICATIONS);
         dbHelper.emptyTable(Constants.DB_TABLE_COURSES);
+        
         setLastCourseSelected(0);
         Utils.setDbCleaned(true);
+        
+        Log.i(TAG, "Database has been cleaned");
     }
 
     /**
@@ -818,6 +840,11 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         if (USERIDPREF.equals(key)) {
         	userID = (String) newValue;
         	preference.setSummary((CharSequence) newValue);
+        	
+        	//Reset user password on userid change
+        	setUserPassword("");
+        	userPasswordPref.setSummary("");
+        	Log.i(TAG, "Resetted user password due to userid change");
         } else if (USERPASSWORDPREF.equals(key)) {            
             try {
 				userPassword = Crypto.encryptPassword((String) newValue);
@@ -883,10 +910,15 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         }
 
         //If preferences have changed, logout
-        if (USERIDPREF.equals(key) || USERPASSWORDPREF.equals(key) || SERVERPREF.equals(key)) {
+        if (USERIDPREF.equals(key) || SERVERPREF.equals(key)) {
             Constants.setLogged(false);
+            Log.i(TAG, "Forced logout due to userid or server change in preferences");
+            
             cleanDatabase();
             Constants.setPreferencesChanged();
+        } else if (USERPASSWORDPREF.equals(key)) {
+            Constants.setLogged(false);
+            Log.i(TAG, "Forced logout due to user password change in preferences");
         } 
         
         //Refresh preferences screen
