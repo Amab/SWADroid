@@ -34,6 +34,8 @@ import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.AlertNotification;
 import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.modules.Module;
+import eu.erikw.PullToRefreshListView;
+import eu.erikw.PullToRefreshListView.OnRefreshListener;
 
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
@@ -103,6 +105,35 @@ public class Notifications extends Module {
      * Synchronization account
      */
     private static Account account;
+    /**
+     * ListView click listener
+     */
+    private OnItemClickListener clickListener = new OnItemClickListener() {
+        public void onItemClick(AdapterView<?> av, View v, int position, long rowId) {
+            //adapter.toggleContentVisibility(position);
+            TextView code = (TextView) v.findViewById(R.id.eventCode);
+            TextView type = (TextView) v.findViewById(R.id.eventType);
+            TextView userPhoto = (TextView) v.findViewById(R.id.eventUserPhoto);
+            TextView sender = (TextView) v.findViewById(R.id.eventSender);
+            TextView course = (TextView) v.findViewById(R.id.eventLocation);
+            TextView summary = (TextView) v.findViewById(R.id.eventSummary);
+            TextView content = (TextView) v.findViewById(R.id.eventText);
+            TextView date = (TextView) v.findViewById(R.id.eventDate);
+            TextView time = (TextView) v.findViewById(R.id.eventTime);
+
+            Intent activity = new Intent(getApplicationContext(), NotificationItem.class);
+            activity.putExtra("notificationCode", code.getText().toString());
+            activity.putExtra("notificationType", type.getText().toString());
+            activity.putExtra("userPhoto", userPhoto.getText().toString());
+            activity.putExtra("sender", sender.getText().toString());
+            activity.putExtra("course", course.getText().toString());
+            activity.putExtra("summary", summary.getText().toString());
+            activity.putExtra("content", content.getText().toString());
+            activity.putExtra("date", date.getText().toString());
+            activity.putExtra("time", time.getText().toString());
+            startActivity(activity);
+        }
+    };
 
     /**
      * Refreshes data on screen
@@ -114,13 +145,17 @@ public class Notifications extends Module {
         startManagingCursor(dbCursor);
         adapter.changeCursor(dbCursor);
 
-        TextView text = (TextView) this.findViewById(R.id.listText);
-        ListView list = (ListView) this.findViewById(R.id.listItems);
+        //TextView text = (TextView) this.findViewById(R.id.listText);
+        //ListView list = (ListView) this.findViewById(R.id.listItems);
+        PullToRefreshListView list = (PullToRefreshListView) this.findViewById(R.id.listItems);
 
         //If there are notifications to show, hide the empty notifications message and show the notifications list
         if (dbCursor.getCount() > 0) {
-            text.setVisibility(View.GONE);
-            list.setVisibility(View.VISIBLE);
+            //text.setVisibility(View.GONE);
+            //list.setVisibility(View.VISIBLE);
+            list.setAdapter(adapter);
+            list.setOnItemClickListener(clickListener);
+        	list.setDividerHeight(1);
         }
     }
 
@@ -129,36 +164,11 @@ public class Notifications extends Module {
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ImageButton updateButton;
+        //ImageButton updateButton;
         ImageView image;
         TextView text;
-        ListView list;
-        OnItemClickListener clickListener = new OnItemClickListener() {
-            public void onItemClick(AdapterView<?> av, View v, int position, long rowId) {
-                //adapter.toggleContentVisibility(position);
-                TextView code = (TextView) v.findViewById(R.id.eventCode);
-                TextView type = (TextView) v.findViewById(R.id.eventType);
-                TextView userPhoto = (TextView) v.findViewById(R.id.eventUserPhoto);
-                TextView sender = (TextView) v.findViewById(R.id.eventSender);
-                TextView course = (TextView) v.findViewById(R.id.eventLocation);
-                TextView summary = (TextView) v.findViewById(R.id.eventSummary);
-                TextView content = (TextView) v.findViewById(R.id.eventText);
-                TextView date = (TextView) v.findViewById(R.id.eventDate);
-                TextView time = (TextView) v.findViewById(R.id.eventTime);
-
-                Intent activity = new Intent(getApplicationContext(), NotificationItem.class);
-                activity.putExtra("notificationCode", code.getText().toString());
-                activity.putExtra("notificationType", type.getText().toString());
-                activity.putExtra("userPhoto", userPhoto.getText().toString());
-                activity.putExtra("sender", sender.getText().toString());
-                activity.putExtra("course", course.getText().toString());
-                activity.putExtra("summary", summary.getText().toString());
-                activity.putExtra("content", content.getText().toString());
-                activity.putExtra("date", date.getText().toString());
-                activity.putExtra("time", time.getText().toString());
-                startActivity(activity);
-            }
-        };
+        //ListView list;
+        final PullToRefreshListView list;
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_items);
@@ -175,16 +185,25 @@ public class Notifications extends Module {
         //image = (ImageView)this.findViewById(R.id.title_sep_1);
         //image.setVisibility(View.VISIBLE);
 
-        updateButton = (ImageButton) this.findViewById(R.id.refresh);
-        updateButton.setVisibility(View.VISIBLE);
+        //updateButton = (ImageButton) this.findViewById(R.id.refresh);
+        //updateButton.setVisibility(View.VISIBLE);
 
         dbCursor = dbHelper.getDb().getCursor(Constants.DB_TABLE_NOTIFICATIONS, selection, orderby);
         startManagingCursor(dbCursor);
         adapter = new NotificationsCursorAdapter(this, dbCursor, prefs.getDBKey());
 
-        list = (ListView) this.findViewById(R.id.listItems);
+        //list = (ListView) this.findViewById(R.id.listItems);
+        list = (PullToRefreshListView) this.findViewById(R.id.listItems);
         list.setAdapter(adapter);
         list.setOnItemClickListener(clickListener);
+        list.setOnRefreshListener(new OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+                runConnection();
+            	list.onRefreshComplete();
+            }
+        });
 
         text = (TextView) this.findViewById(R.id.listText);
 
@@ -193,9 +212,13 @@ public class Notifications extends Module {
 		 * message
 		 */
         if (dbCursor.getCount() == 0) {
-            list.setVisibility(View.GONE);
-            text.setVisibility(View.VISIBLE);
-            text.setText(R.string.notificationsEmptyListMsg);
+            //list.setVisibility(View.GONE);
+            //text.setVisibility(View.VISIBLE);
+        	String emptyMsgArray[]={getString(R.string.notificationsEmptyListMsg)};
+        	ArrayAdapter<String> adapter =new ArrayAdapter<String>(getApplicationContext(), R.layout.list_item, emptyMsgArray);
+        	list.setAdapter(adapter);
+        	list.setOnItemClickListener(null);
+        	list.setDividerHeight(0);
         }
 
         setMETHOD_NAME("getNotifications");
@@ -401,11 +424,11 @@ public class Notifications extends Module {
                     Toast.makeText(context, R.string.NoNotificationsMsg, Toast.LENGTH_LONG).show();
                 }
 
-                ProgressBar pb = (ProgressBar) mActivity.findViewById(R.id.progress_refresh);
-                ImageButton updateButton = (ImageButton) mActivity.findViewById(R.id.refresh);
+                //ProgressBar pb = (ProgressBar) mActivity.findViewById(R.id.progress_refresh);
+                //ImageButton updateButton = (ImageButton) mActivity.findViewById(R.id.refresh);
 
-                pb.setVisibility(View.GONE);
-                updateButton.setVisibility(View.VISIBLE);
+                //pb.setVisibility(View.GONE);
+                //updateButton.setVisibility(View.VISIBLE);
 
                 refreshScreen();
             }

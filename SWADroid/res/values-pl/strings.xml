@@ -42,8 +42,8 @@
     <string name="coursesProgressDescription">Pierwsze tematy&#8230;</string>
     <string name="notificationsProgressTitle">Powiadomienia</string>
     <string name="notificationsProgressDescription">Pierwsze nowe powiadomienia&#8230;</string>
-    <string name="notificationsEmptyListMsg">Nie pobrano żadnego powiadomienia.\n\nW pobrać najnowszą powiadomień
-        kliknij ikonę w prawym górnym rogu ekranu.</string>
+    <string name="notificationsEmptyListMsg">Nie pobierać żadnego powiadomienia.\n\nW pobrania najnowsza
+         Powiadomienia zjechać tę wiadomość.</string>
     <string name="notificationsDownloadedMsg">Powiadomienia pobrany</string>
     <string name="testsDownloadProgressTitle">Testy</string>
     <string name="testsDownloadProgressDescription">Synchronizacja na pytania testowe.\n\nW zależności liczba pytań do

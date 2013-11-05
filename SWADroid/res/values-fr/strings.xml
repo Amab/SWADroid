@@ -43,8 +43,8 @@
     <string name="coursesProgressDescription">Obtenir sujets&#8230;</string>
     <string name="notificationsProgressTitle">Notifications</string>
     <string name="notificationsProgressDescription">Obtenir de nouvelles notifications&#8230;</string>
-    <string name="notificationsEmptyListMsg">Non téléchargé aucune notification.\n\nPour télécharger les dernières
-        notifications cliquez sur l\'icône en haut à droite de l\'écran.</string>
+    <string name="notificationsEmptyListMsg">N\'a pas télécharger toute notification.\n\nPour télécharger la plus récente
+         notifications glisser vers le bas de ce message.</string>
     <string name="notificationsDownloadedMsg">Notifications téléchargés</string>
     <string name="testsDownloadProgressTitle">Tests</string>
     <string name="testsDownloadProgressDescription">Synchronisation questions du test.\n\nEn fonction le nombre de

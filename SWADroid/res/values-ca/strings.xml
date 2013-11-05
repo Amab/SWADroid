@@ -44,8 +44,8 @@
     <string name="coursesProgressDescription">Obtenint assignatures&#8230;</string>
     <string name="notificationsProgressTitle">Notificacions</string>
     <string name="notificationsProgressDescription">Obtenint noves notificacions&#8230;</string>
-    <string name="notificationsEmptyListMsg">No s\'ha descarregat cap notificació.\n\nPer descarregar les notificacions
-        més recents premi la icona de la cantonada superior dreta de la pantalla.</string>
+    <string name="notificationsEmptyListMsg">No s\'ha descarregat cap notificació.\n\nPer descarregar les
+         notificacions més recents llisqui aquest missatge cap avall.</string>
     <string name="notificationsDownloadedMsg">Notificacions descarregades</string>
     <string name="testsDownloadProgressTitle">Tests</string>
     <string name="testsDownloadProgressDescription">Sincronitzant preguntes de test.\n\nDependiendo del nombre de

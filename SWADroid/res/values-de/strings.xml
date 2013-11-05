@@ -43,8 +43,8 @@
     <string name="coursesProgressDescription">Abrufen von Kursen&#8230;</string>
     <string name="notificationsProgressTitle">Benachrichtigungen</string>
     <string name="notificationsProgressDescription">Abrufen neuer Benachrichtigungen&#8230;</string>
-    <string name="notificationsEmptyListMsg">Nicht heruntergeladen haben keine Benachrichtigung.\n\nZum Download
-        j�ngsten Benachrichtigungen klicken Sie auf das Symbol in der oberen rechten Ecke des Bildschirms.
+    <string name="notificationsEmptyListMsg">Haben Sie nicht das Herunterladen von Benachrichtigung.\n\nFür Download jüngsten
+         Meldungen rutschen diese Meldung.
     </string>
     <string name="notificationsDownloadedMsg">Benachrichtigungen heruntergeladen</string>
     <string name="testsDownloadProgressTitle">Tests</string>

@@ -43,8 +43,8 @@
     <string name="coursesProgressDescription">Come soggetti&#8230;</string>
     <string name="notificationsProgressTitle">Notifiche</string>
     <string name="notificationsProgressDescription">Ottenere nuove notifiche&#8230;</string>
-    <string name="notificationsEmptyListMsg">Non scaricato alcuna notifica.\n\nPer scaricare le ultime notifiche fare
-        clic sull\'icona in alto a destra dello schermo.</string>
+    <string name="notificationsEmptyListMsg">Non scaricare alcuna notifica.\n\nPer scaricare più recente
+         notifiche di scivolare giù questo messaggio.</string>
     <string name="notificationsDownloadedMsg">Notifiche scaricato</string>
     <string name="testsDownloadProgressTitle">Test</string>
     <string name="testsDownloadProgressDescription">Sincronizzazione domande della prova.\n\nDipendente il numero di

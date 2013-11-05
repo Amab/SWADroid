@@ -478,6 +478,12 @@ public class EntityCursor implements Cursor, Iterable<Entity> {
 		return 0;
 	}
 
+	@Override
+	public Uri getNotificationUri() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
 
 

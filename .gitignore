@@ -13,4 +13,9 @@ SWADroid/gen/es/ugr/swad/swadroid/BuildConfig.java
 SWADroid/gen/es/ugr/swad/swadroid/R.java
 SWADroid/gen/com/google/zxing/client/android/R.java
 gen/com/google/zxing/client/android/R.java
+PullToRefreshListView/bin/
+PullToRefreshListView/default.properties
+PullToRefreshListView/.classpath
+PullToRefreshListView/.project
+PullToRefreshListView/.settings/
 
