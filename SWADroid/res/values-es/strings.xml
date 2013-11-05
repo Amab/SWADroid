@@ -45,7 +45,7 @@
     <string name="notificationsProgressTitle">Notificaciones</string>
     <string name="notificationsProgressDescription">Obteniendo nuevas notificaciones&#8230;</string>
     <string name="notificationsEmptyListMsg">No se ha descargado ninguna notificación.\n\nPara descargar las
-        notificaciones más recientes pulse el icono de la esquina superior derecha de la pantalla.
+        notificaciones más recientes deslice este mensaje hacia abajo.
     </string>
     <string name="notificationsDownloadedMsg">Notificaciones descargadas</string>
     <string name="testsDownloadProgressTitle">Tests</string>
