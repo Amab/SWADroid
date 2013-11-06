@@ -337,6 +337,6 @@
     <string name="prefNotifVibrateSummary">Enable/disable vibration alerts for new notifications</string>
     <string name="prefNotifLightsTitle">Led</string>
     <string name="prefNotifLightsSummary">Enable/disable led alerts for new notifications</string>
-    <string name="changelogDialogTitle">Changelog</string>
+    <string name="changelogTitle">Changelog</string>
 
 </resources>
