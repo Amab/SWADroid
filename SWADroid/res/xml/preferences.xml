@@ -73,6 +73,19 @@
             android:title="@string/about_preferences">
         <Preference
                 android:defaultValue=""
+                android:hint=""
+                android:key="currentVersionPref"
+                android:title="@string/versionTitle_preferences"/>
+        <Preference
+                android:defaultValue=""
+                android:key="changelogPref"
+                android:title="@string/changelogTitle"/>
+        <Preference
+                android:defaultValue=""
+                android:key="authorsPref"
+                android:title="@string/author_title_preferences"/>
+        <Preference
+                android:defaultValue=""
                 android:key="ratePref"
                 android:summary="@string/marketTitle"
                 android:title="@string/rateTitle_menu"/>
@@ -106,16 +119,6 @@
                 android:key="mailingListPref"
                 android:summary="@string/mailingListURL"
                 android:title="@string/mailingListTitle"/>
-        <Preference
-                android:defaultValue=""
-                android:hint=""
-                android:key="currentVersionPref"
-                android:title="@string/versionTitle_preferences"/>
-        <Preference
-                android:defaultValue=""
-                android:summary="@string/author_preferences"
-                android:key="aboutPref"
-                android:title="@string/author_title_preferences"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

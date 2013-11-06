@@ -27,6 +27,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
@@ -36,10 +37,12 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 import android.util.Log;
 
 import com.bugsense.trace.BugSenseHandler;
 
+import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.gui.widget.SeekBarDialogPreference;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.sync.SyncUtils;
@@ -214,6 +217,14 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
      */
     private static final String NOTIFLIGHTSENABLEPREF = "prefNotifLightsEnable";
     /**
+     * Changelog preference name.
+     */
+    private static final String CHANGELOGPREF = "changelogPref";
+    /**
+     * Authors preference name.
+     */
+    private static final String AUTHORSPREF = "authorsPref";
+    /**
      * User ID preference
      */
     private static Preference userIDPref;
@@ -285,6 +296,10 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
      * Preferences editor
      */
     private static Editor editor;
+    /**
+     * Application debuggable flag
+     */
+    protected static boolean isDebuggable;
 
     /**
      * Gets user identifier.
@@ -529,24 +544,16 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
      * @param message Error message to show.
      */
     protected void error(String tag, String message, Exception ex, boolean sendException) {
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.title_error_dialog)
-                .setMessage(message)
-                .setNeutralButton(R.string.close_dialog,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                finish();
-                            }
-                        }).setIcon(R.drawable.erroricon).show();
-
-        if (ex != null) {
-            ex.printStackTrace();
-
-            // Send exception details to Bugsense
-            if (sendException) {
-                BugSenseHandler.sendExceptionMessage(tag, message, ex);
+    	DialogInterface.OnClickListener onClickListener = new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                finish();
             }
-        }
+        };
+        
+    	AlertDialog errorDialog = DialogFactory.errorDialog(this, TAG, message, ex, sendException,
+    			isDebuggable, onClickListener); 
+    	
+    	errorDialog.show();
     }
 
     /**
@@ -647,8 +654,11 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
     	}
 
         //Initialize database
-        try {
-            dbHelper = new DataBaseHelper(this);
+        try {    		
+            dbHelper = new DataBaseHelper(this); 
+            getPackageManager().getApplicationInfo(
+                    getPackageName(), 0);
+    		isDebuggable = (ApplicationInfo.FLAG_DEBUGGABLE != 0);
         } catch (Exception ex) {
         	error(TAG, ex.getMessage(), ex, true);
         }
@@ -818,7 +828,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
              * @param preference Preference selected.
              */
             public boolean onPreferenceClick(Preference preference) {
-                //server = prefs.getString(SERVERPREF, Constants.DEFAULT_SERVER);
+                server = prefs.getString(SERVERPREF, Constants.DEFAULT_SERVER);
                 return true;
             }
         });
@@ -927,6 +937,28 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         
         return true;
     }
+    
+    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen,
+            final Preference preference) {
+
+    	String key = preference.getKey();
+    	
+		if(key.equals(CHANGELOGPREF)) {
+			 AlertDialog alertDialog = DialogFactory.createWebViewDialog(this,
+		     		R.string.changelogTitle,
+		     		R.raw.changes);
+		
+		     alertDialog.show();
+		} else if(key.equals(AUTHORSPREF)) {
+			 AlertDialog alertDialog = DialogFactory.createWebViewDialog(this,
+			     		R.string.author_title_preferences,
+			     		R.raw.authors);
+			
+			     alertDialog.show();
+			}
+		
+		return true;
+  }
 
     /* (non-Javadoc)
      * @see android.app.Activity#onResume()

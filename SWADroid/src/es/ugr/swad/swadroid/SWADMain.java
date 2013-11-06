@@ -153,7 +153,7 @@ public class SWADMain extends MenuExpandableListActivity {
      */
     public void showUpgradeDialog(Context context) {        
         AlertDialog alertDialog = DialogFactory.createWebViewDialog(context,
-        		R.string.changelogDialogTitle,
+        		R.string.changelogTitle,
         		R.raw.changes);
 
         alertDialog.show();
