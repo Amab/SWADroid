@@ -147,7 +147,7 @@ public class Notifications extends Module {
 
         //TextView text = (TextView) this.findViewById(R.id.listText);
         //ListView list = (ListView) this.findViewById(R.id.listItems);
-        PullToRefreshListView list = (PullToRefreshListView) this.findViewById(R.id.listItems);
+        PullToRefreshListView list = (PullToRefreshListView) this.findViewById(R.id.listItemsPullToRefresh);
 
         //If there are notifications to show, hide the empty notifications message and show the notifications list
         if (dbCursor.getCount() > 0) {
@@ -156,7 +156,9 @@ public class Notifications extends Module {
             list.setAdapter(adapter);
             list.setOnItemClickListener(clickListener);
         	list.setDividerHeight(1);
-        }
+        }        
+
+    	list.onRefreshComplete();
     }
 
     /* (non-Javadoc)
@@ -171,7 +173,7 @@ public class Notifications extends Module {
         final PullToRefreshListView list;
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.list_items);
+        setContentView(R.layout.list_items_pulltorefresh);
 
         this.findViewById(R.id.courseSelectedText).setVisibility(View.GONE);
         this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
@@ -193,7 +195,7 @@ public class Notifications extends Module {
         adapter = new NotificationsCursorAdapter(this, dbCursor, prefs.getDBKey());
 
         //list = (ListView) this.findViewById(R.id.listItems);
-        list = (PullToRefreshListView) this.findViewById(R.id.listItems);
+        list = (PullToRefreshListView) this.findViewById(R.id.listItemsPullToRefresh);
         list.setAdapter(adapter);
         list.setOnItemClickListener(clickListener);
         list.setOnRefreshListener(new OnRefreshListener() {
@@ -201,7 +203,6 @@ public class Notifications extends Module {
             @Override
             public void onRefresh() {
                 runConnection();
-            	list.onRefreshComplete();
             }
         });
 
