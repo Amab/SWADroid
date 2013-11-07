@@ -40,6 +40,9 @@
     <color name="dark_grey">#383838</color>
     <color name="sgilight_gray">#C1C1C1</color>
     <color name="sgilight_gray_32">#515151</color>
+    <color name="gray_cloud">#B6B6B4</color>
+    <color name="gray_goose">#D1D0CE</color>
+    <color name="platinum">#E5E4E2</color>
     <color name="lightskyblue">#DDECF1</color>
     <color name="sgi_salmon">#C67171</color>
 

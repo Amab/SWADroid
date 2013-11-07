@@ -40,7 +40,7 @@ SWADroid uses [ksoap2-android][ksoap2-library] library developed by [Manfred Mos
 SWADroid uses [ZXing][zxing-library] library developed by [Sean Owen][zxing-author] and licensed under [Apache License 2.0][apache2]
 
 [![Copyright and License](http://www.apache.org/images/feather-small.gif)][apache2]
-SWADroid uses [PullToRefresh-ListView][pulltorefresh-listView-library] library developed by [erikwt][pulltorefresh-listView-author] and licensed under [Apache License 2.0][apache2]
+SWADroid uses [Android-PullToRefresh][android-pulltorefresh-library] library developed by [chrisbanes][android-pulltorefresh-author] and licensed under [Apache License 2.0][apache2]
 
 ## Author
 
@@ -70,7 +70,7 @@ The Github team has also been kind enough to write up some great [documentation]
 [androiddataframework-author]: http://www.javielinux.com/quiensoy.php
 [zxing-library]: http://code.google.com/p/zxing/
 [zxing-author]: https://github.com/srowen
-[pulltorefresh-listView-library]: https://github.com/erikwt/PullToRefresh-ListView
-[pulltorefresh-listView-author]: https://github.com/erikwt
+[android-pulltorefresh-library]: https://github.com/chrisbanes/Android-PullToRefresh
+[android-pulltorefresh-author]: https://github.com/chrisbanes
 [apache2]: http://www.apache.org/licenses/LICENSE-2.0
 [apk]: https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid
