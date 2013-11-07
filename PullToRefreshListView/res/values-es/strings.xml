@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="ptr_pull_to_refresh">Deslizar hacia abajo para actualizar</string>
-    <string name="ptr_release_to_refresh">Soltar para actualizar</string>
-    <string name="ptr_refreshing">Actualizando…</string>
-    <string name="ptr_last_updated">Última actualización: %1$s</string>
-</resources>
