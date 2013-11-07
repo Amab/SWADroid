@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    		  xmlns:pulltorefresh="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="@color/background"
@@ -11,9 +10,6 @@
     
 	<com.handmark.pulltorefresh.library.PullToRefreshListView
             android:id="@+id/listItemsPullToRefresh"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            pulltorefresh:ptrHeaderTextColor="@color/foreground1"
-            pulltorefresh:ptrHeaderBackground="@color/gray_goose"/>
+            style="@style/PullToRefresh"/>
 
 </LinearLayout>

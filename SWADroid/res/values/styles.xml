@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:pulltorefresh="http://schemas.android.com/apk/res-auto">
+    <style name="PullToRefresh">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="ptrHeaderTextColor">@color/foreground1</item>
+        <item name="ptrHeaderBackground">@color/gray_goose</item>
+    </style>
+</resources>
