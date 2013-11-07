@@ -6,7 +6,6 @@
         android:orientation="horizontal">
 
     <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/eventMetaData"
             android:layout_height="wrap_content"
             android:layout_width="100dip"
@@ -42,7 +41,6 @@
     </LinearLayout>
 
     <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/eventContent"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"

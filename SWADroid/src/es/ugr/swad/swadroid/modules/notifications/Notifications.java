@@ -28,14 +28,15 @@ import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.bugsense.trace.BugSenseHandler;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.AlertNotification;
 import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.modules.Module;
-import eu.erikw.PullToRefreshListView;
-import eu.erikw.PullToRefreshListView.OnRefreshListener;
 
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
@@ -155,7 +156,7 @@ public class Notifications extends Module {
             //list.setVisibility(View.VISIBLE);
             list.setAdapter(adapter);
             list.setOnItemClickListener(clickListener);
-        	list.setDividerHeight(1);
+        	//list.setDividerHeight(1);
         }        
 
     	list.onRefreshComplete();
@@ -198,10 +199,10 @@ public class Notifications extends Module {
         list = (PullToRefreshListView) this.findViewById(R.id.listItemsPullToRefresh);
         list.setAdapter(adapter);
         list.setOnItemClickListener(clickListener);
-        list.setOnRefreshListener(new OnRefreshListener() {
+        list.setOnRefreshListener(new OnRefreshListener<ListView>() {
 
             @Override
-            public void onRefresh() {
+            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
                 runConnection();
             }
         });
@@ -219,7 +220,7 @@ public class Notifications extends Module {
         	ArrayAdapter<String> adapter =new ArrayAdapter<String>(getApplicationContext(), R.layout.list_item, emptyMsgArray);
         	list.setAdapter(adapter);
         	list.setOnItemClickListener(null);
-        	list.setDividerHeight(0);
+        	//list.setDividerHeight(0);
         }
 
         setMETHOD_NAME("getNotifications");
@@ -404,10 +405,10 @@ public class Notifications extends Module {
      * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
      */
     private class SyncReceiver extends BroadcastReceiver {
-        private final Notifications mActivity;
+        //private final Notifications mActivity;
 
         public SyncReceiver(Notifications activity) {
-            mActivity = activity;
+            //mActivity = activity;
         }
 
         @Override

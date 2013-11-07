@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    		  xmlns:pulltorefresh="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="@color/background"
@@ -8,10 +9,11 @@
 
     <include android:id="@+id/courseNameLayout" layout="@layout/course_or_group_name"/>
     
-	<eu.erikw.PullToRefreshListView
+	<com.handmark.pulltorefresh.library.PullToRefreshListView
             android:id="@+id/listItemsPullToRefresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:cacheColorHint="@color/background"/>
+            pulltorefresh:ptrHeaderTextColor="@color/foreground1"
+            pulltorefresh:ptrHeaderBackground="@color/gray_goose"/>
 
 </LinearLayout>
