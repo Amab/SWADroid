@@ -155,7 +155,7 @@ public class Messages extends Module {
 
         notificationCode = getIntent().getLongExtra("notificationCode", 0);
 
-        messageDialog = DialogFactory.positiveNegativeDialog(this,
+        messageDialog = DialogFactory.createPositiveNegativeDialog(this,
         		R.layout.dialog_messages,
         		R.string.messagesModuleLabel,
         		-1,

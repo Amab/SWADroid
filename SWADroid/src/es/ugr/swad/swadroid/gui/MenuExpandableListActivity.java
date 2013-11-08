@@ -128,7 +128,7 @@ public class MenuExpandableListActivity extends ExpandableListActivity {
             }
         };
         
-    	AlertDialog errorDialog = DialogFactory.errorDialog(this, TAG, message, ex, sendException,
+    	AlertDialog errorDialog = DialogFactory.createErrorDialog(this, TAG, message, ex, sendException,
     			isDebuggable, onClickListener);    	
     	
     	errorDialog.show();
@@ -138,7 +138,7 @@ public class MenuExpandableListActivity extends ExpandableListActivity {
      * Shows a dialog.
      */
     public void showDialog(int title, int message) {
-       AlertDialog dialog = DialogFactory.neutralDialog(this, title, message);
+       AlertDialog dialog = DialogFactory.createNeutralDialog(this, title, message, R.string.close_dialog, null);
        dialog.show();
     }
 

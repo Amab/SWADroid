@@ -132,7 +132,7 @@ public class Notices extends Module {
     };
 
     private void launchNoticeDialog() {       
-        noticeDialog = DialogFactory.positiveNegativeDialog(this,
+        noticeDialog = DialogFactory.createPositiveNegativeDialog(this,
         		R.layout.dialog_notice,
         		R.string.noticesModuleLabel,
         		-1,
