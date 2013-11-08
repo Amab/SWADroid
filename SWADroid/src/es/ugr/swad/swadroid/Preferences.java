@@ -550,7 +550,7 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
             }
         };
         
-    	AlertDialog errorDialog = DialogFactory.errorDialog(this, TAG, message, ex, sendException,
+    	AlertDialog errorDialog = DialogFactory.createErrorDialog(this, TAG, message, ex, sendException,
     			isDebuggable, onClickListener); 
     	
     	errorDialog.show();

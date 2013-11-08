@@ -142,7 +142,7 @@ public class SWADMain extends MenuExpandableListActivity {
             }
         };
         
-    	AlertDialog alertDialog = DialogFactory.positiveNegativeDialog(this,
+    	AlertDialog alertDialog = DialogFactory.createPositiveNegativeDialog(this,
     			-1,
     			R.string.initialDialogTitle,
     			R.string.firstRunMsg,

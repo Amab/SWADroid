@@ -9,6 +9,8 @@ import com.bugsense.trace.BugSenseHandler;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
+import android.content.DialogInterface.OnClickListener;
 import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,12 +42,12 @@ public class DialogFactory {
     /**
      * Creates a Webview dialog with HTML content.
      */
-    public static AlertDialog createWebViewDialog(Context context, int title, int contentResourceId) {
+    public static AlertDialog createWebViewDialog(Context context, int titleId, int contentResourceId) {
     	LayoutInflater li = LayoutInflater.from(context);
         View promptsView = li.inflate(R.layout.dialog_webview, null);
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-        alertDialogBuilder.setTitle(context.getString(title));
+        alertDialogBuilder.setTitle(context.getString(titleId));
         alertDialogBuilder.setCancelable(false);
         alertDialogBuilder.setNeutralButton(R.string.close_dialog, null);
 
@@ -71,20 +73,21 @@ public class DialogFactory {
         return alertDialogBuilder.create();
     }
     
-    public static AlertDialog neutralDialog(Context context, int title, int message) {
+    public static AlertDialog createNeutralDialog(Context context, int titleId, int messageId, int buttonLabelId,
+    		OnClickListener clickListener) {
+    	
     	AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context)
-                .setTitle(title)
-                .setMessage(message)
+                .setTitle(titleId)
+                .setMessage(messageId)
                 .setCancelable(false)
-                .setNeutralButton(R.string.close_dialog, null);
+                .setNeutralButton(buttonLabelId, clickListener);
     	
     	return alertDialogBuilder.create();
     }
     
-    public static AlertDialog positiveNegativeDialog(Context context, int layoutId, int titleId, int messageId,
-    		int acceptLabel, int cancelLabel,
-    		DialogInterface.OnClickListener positiveListener, DialogInterface.OnClickListener negativeListener,
-    		DialogInterface.OnCancelListener cancelListener) {
+    public static AlertDialog createPositiveNegativeDialog(Context context, int layoutId, int titleId,
+    		int messageId, int acceptLabel, int cancelLabel, OnClickListener positiveListener,
+    		OnClickListener negativeListener, OnCancelListener cancelListener) {
     	
     	AlertDialog alertDialog;
     	AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context)
@@ -116,7 +119,7 @@ public class DialogFactory {
     	return alertDialog;
     }
     
-    public static AlertDialog errorDialog(Context context, String tag, String message, Exception ex,
+    public static AlertDialog createErrorDialog(Context context, String tag, String message, Exception ex,
     		boolean sendException, boolean isDebuggable, DialogInterface.OnClickListener onClickListener) {
     	
     	AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context)
