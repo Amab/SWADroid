@@ -13,6 +13,7 @@ import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.WebView;
+import android.widget.FrameLayout;
 import es.ugr.swad.swadroid.R;
 
 public class DialogFactory {
@@ -80,17 +81,39 @@ public class DialogFactory {
     	return alertDialogBuilder.create();
     }
     
-    public static AlertDialog positiveNegativeDialog(Context context, int title, int message,
-    		DialogInterface.OnClickListener positiveListener, DialogInterface.OnClickListener negativeListener) {
+    public static AlertDialog positiveNegativeDialog(Context context, int layoutId, int titleId, int messageId,
+    		int acceptLabel, int cancelLabel,
+    		DialogInterface.OnClickListener positiveListener, DialogInterface.OnClickListener negativeListener,
+    		DialogInterface.OnCancelListener cancelListener) {
     	
+    	AlertDialog alertDialog;
     	AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context)
-        .setTitle(R.string.initialDialogTitle)
-        .setMessage(R.string.firstRunMsg)
+        .setTitle(titleId)
         .setCancelable(false)
-        .setPositiveButton(R.string.yesMsg, positiveListener)
-        .setNegativeButton(R.string.noMsg, negativeListener);
+        .setPositiveButton(acceptLabel, positiveListener)
+        .setNegativeButton(cancelLabel, negativeListener);
     	
-    	return alertDialogBuilder.create();
+    	if(messageId != -1) {
+    		alertDialogBuilder.setMessage(messageId);
+    	}
+    	
+    	if(cancelListener != null) {
+    		alertDialogBuilder.setCancelable(true);
+    		alertDialogBuilder.setOnCancelListener(cancelListener);
+    	}
+    	
+    	if(layoutId != -1) {    		
+    		FrameLayout frameView = new FrameLayout(context);
+    		alertDialogBuilder.setView(frameView);
+
+    		alertDialog = alertDialogBuilder.create();
+    		LayoutInflater inflater = alertDialog.getLayoutInflater();
+    		inflater.inflate(layoutId, frameView);
+    	} else {
+    		alertDialog = alertDialogBuilder.create();
+    	}
+    	
+    	return alertDialog;
     }
     
     public static AlertDialog errorDialog(Context context, String tag, String message, Exception ex,
