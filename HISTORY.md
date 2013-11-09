@@ -1,3 +1,32 @@
+##0.12.3 (2013-11-09)
+
+* Added authors and changelog WebView dialogs and reordered the preferences items
+* Added PullToRefresh-ListView library project
+* Added pull-to-refresh update system to the notifications ListView
+* Added encryption of users table
+* Added changelog dialog on application update
+* Added sound, vibration and led configuration for alert notifications on preferences screen
+* Added confirmation of successful transactions in the database
+* User password is now stored encrypted
+* Updated ksoap2-android library to version 3.1.0
+* Updated Android Framework library
+* Updated BugSense library
+* Updated sendRequest method on Module class
+* Now user password change doesn't clean the database
+* Now the entire database is cleaned when the username changes in preferences screen
+* Notice and Message dialogs now stay open when sending fails
+* Refactored dialogs code into DialogFactory class
+* Improved display of number questions screen in tests module
+* Refactored alerts notification code to AlertNotification class
+* Refactored fixLinks method to Utils class
+* Improved error management
+* Removed IOException error control in SOAP calls
+* Refactored swadroid.widget into swadroid.gui.widget package
+* Fixed bug on BugSense initialization
+* Fixed misspellings on translation strings
+* Fixed a bug when trying to download an user picture from an empty URL
+* Fixed display bug on number of questions input of the tests
+
 ##0.12.2 (2013-06-19)
 
 * Updated ksoap2-android library with 3.0.1-SNAPSHOT version from git repository
