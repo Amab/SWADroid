@@ -308,8 +308,8 @@ public class DataBaseHelper {
                     ent.getInt("multiple"),
                     ent.getLong("openTime"));
         } else if (table.equals(Constants.DB_TABLE_PRACTICE_SESSIONS)) {
-            //SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-            java.text.DateFormat format = SimpleDateFormat.getDateTimeInstance();
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            //java.text.DateFormat format = SimpleDateFormat.getDateTimeInstance();
 
             try {
                 o = new PracticeSession(ent.getId(),
