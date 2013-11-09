@@ -568,11 +568,12 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
     }
 
     /**
-     * Deletes notifications and courses data from database
+     * Clean data of all tables from database. Removes users photos from external storage
      */
     private void cleanDatabase() {
-        dbHelper.emptyTable(Constants.DB_TABLE_NOTIFICATIONS);
-        dbHelper.emptyTable(Constants.DB_TABLE_COURSES);
+        //dbHelper.emptyTable(Constants.DB_TABLE_NOTIFICATIONS);
+        //dbHelper.emptyTable(Constants.DB_TABLE_COURSES);
+    	dbHelper.cleanTables();
         
         setLastCourseSelected(0);
         Utils.setDbCleaned(true);
