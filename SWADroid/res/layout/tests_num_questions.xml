@@ -6,33 +6,71 @@
                 android:background="@color/background">
     <include layout="@layout/action_bar"/>
 
-    <RelativeLayout android:layout_below="@id/actionBarLayout" android:id="@+id/courseNameLayout"
-                    android:layout_height="wrap_content" android:layout_width="fill_parent">
+    <RelativeLayout android:layout_below="@id/actionBarLayout"
+        			android:id="@+id/courseNameLayout"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent">
         <include layout="@layout/course_or_group_name"/>
     </RelativeLayout>
+    
+	<RelativeLayout
+        android:id="@+id/testNumQuestionsContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+   		android:layout_centerInParent="true"
+        android:orientation="vertical">
 
-    <TextView
-            android:id="@+id/testNumQuestionsText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/courseNameLayout"
-            android:layout_above="@id/testNumQuestionsNumberPicker"
-            android:gravity="center"
-            android:textColor="@color/foreground1"
-            android:textSize="20sp"
-            android:text="@string/testNumQuestionsMsg"/>
-
-    <es.ugr.swad.swadroid.widget.NumberPicker
-            android:id="@+id/testNumQuestionsNumberPicker"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:textSize="24sp"/>
-
+	    <TextView
+	            android:id="@+id/testNumQuestionsText"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:gravity="center"
+		        android:layout_marginBottom="20dip"
+	            android:textColor="@color/foreground1"
+	            android:textSize="20sp"
+	            android:text="@string/testNumQuestionsMsg"/>
+	    
+		<LinearLayout
+	        android:id="@+id/testNumQuestionsInput"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+   			android:layout_centerInParent="true"
+	        android:layout_below="@id/testNumQuestionsText"
+	        android:orientation="horizontal">
+	
+		    <TextView
+		            android:id="@+id/minTestNumQuestionsId"
+		            android:layout_width="wrap_content"
+		            android:layout_height="match_parent"
+		            android:gravity="center"
+		            android:padding="20dip"
+		            android:textColor="@color/foreground1"
+		            android:textSize="30sp">
+		    </TextView>
+		    
+		    <es.ugr.swad.swadroid.gui.widget.NumberPicker
+		            android:id="@+id/testNumQuestionsNumberPicker"
+		            android:layout_width="wrap_content"
+		            android:layout_height="match_parent"
+	            	android:gravity="center"
+		            android:textSize="30sp"/>	    
+	
+		    <TextView
+		            android:id="@+id/maxTestNumQuestionsId"
+		            android:layout_width="wrap_content"
+		            android:layout_height="match_parent"
+		            android:gravity="center"
+		            android:padding="20dip"
+		            android:textColor="@color/foreground1"
+		            android:textSize="30sp">
+		    </TextView>
+	    </LinearLayout>
+    </RelativeLayout>
+	
     <Button
             android:id="@+id/testNumQuestionsAcceptButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_height="wrap_content"       		
+       		android:layout_alignParentBottom="true"
             android:text="@string/acceptMsg"/>
 </RelativeLayout>

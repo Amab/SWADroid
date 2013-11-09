@@ -31,11 +31,14 @@ import com.android.dataframework.Entity;
 import com.bugsense.trace.BugSenseHandler;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import org.xmlpull.v1.XmlPullParserException;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
@@ -83,8 +86,10 @@ public class DataBaseHelper {
 
     /**
      * Constructor
+     * @throws IOException 
+     * @throws XmlPullParserException 
      */
-    public DataBaseHelper(Context ctx) {
+    public DataBaseHelper(Context ctx) throws XmlPullParserException, IOException {
         mCtx = ctx;
         prefs.getPreferences(mCtx);
         DBKey = prefs.getDBKey();
@@ -303,7 +308,8 @@ public class DataBaseHelper {
                     ent.getInt("multiple"),
                     ent.getLong("openTime"));
         } else if (table.equals(Constants.DB_TABLE_PRACTICE_SESSIONS)) {
-            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            //SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            java.text.DateFormat format = SimpleDateFormat.getDateTimeInstance();
 
             try {
                 o = new PracticeSession(ent.getId(),
@@ -387,6 +393,37 @@ public class DataBaseHelper {
         }
 
         return row;
+    }
+
+    /**
+     * Gets an user
+     *
+     * @param fieldName  Field's name
+     * @param fieldValue Field's value
+     * @return The user found 
+     *         or null if the user does not exist
+     */
+    public User getUser(String fieldName, String fieldValue) {
+        List<Entity> rows = db.getEntityList(Constants.DB_TABLE_USERS, fieldName + " = '" + fieldValue + "'");
+        Entity ent;
+        User user = null;
+
+        if (rows.size() > 0) {
+            ent = rows.get(0);
+            
+            user = new User(
+            		ent.getLong("userCode"),
+            		null,
+		            crypto.decrypt(ent.getString("userID")),
+		            crypto.decrypt(ent.getString("userNickname")),
+		            crypto.decrypt(ent.getString("userSurname1")),
+		            crypto.decrypt(ent.getString("userSurname2")),
+		            crypto.decrypt(ent.getString("userFirstname")),
+		            crypto.decrypt(ent.getString("photoPath")),
+		            ent.getInt("userRole"));
+        }
+
+        return user;
     }
 
     /**
@@ -920,13 +957,14 @@ public class DataBaseHelper {
             }
             ent = rows.get(0);
         }
+        
         ent.setValue("userCode", u.getId());
-        ent.setValue("userID", u.getUserID());
-        ent.setValue("userNickname", u.getUserNickname());
-        ent.setValue("userSurname1", u.getUserSurname1());
-        ent.setValue("userSurname2", u.getUserSurname2());
-        ent.setValue("userFirstname", u.getUserFirstname());
-        ent.setValue("photoPath", u.getUserPhoto());
+        ent.setValue("userID", crypto.encrypt(u.getUserID()));
+        ent.setValue("userNickname", crypto.encrypt(u.getUserNickname()));
+        ent.setValue("userSurname1", crypto.encrypt(u.getUserSurname1()));
+        ent.setValue("userSurname2", crypto.encrypt(u.getUserSurname2()));
+        ent.setValue("userFirstname", crypto.encrypt(u.getUserFirstname()));
+        ent.setValue("photoPath", crypto.encrypt(u.getUserPhoto()));
         ent.setValue("userRole", u.getUserRole());
         ent.save();
     }
@@ -957,7 +995,7 @@ public class DataBaseHelper {
         //it should not insert/modify rows in the relationship table if the course does not exists
         if (course != null) {
             if (rows.isEmpty()) {
-                PairTable<Long, Long> pair = new PairTable(Constants.DB_TABLE_GROUPS_COURSES, g.getId(), courseCode);
+                PairTable<Long, Long> pair = new PairTable<Long, Long>(Constants.DB_TABLE_GROUPS_COURSES, g.getId(), courseCode);
                 insertPairTable(pair);
             } else {
                 rows.get(0).setValue("crsCod", courseCode);
@@ -976,8 +1014,10 @@ public class DataBaseHelper {
         if (rows.isEmpty()) {
             insertPairTable(new PairTable<Long, Long>(Constants.DB_TABLE_GROUPS_GROUPTYPES, groupTypeCode, groupCode));
         } else {
-            PairTable<Integer, Integer> prev = new PairTable(Constants.DB_TABLE_GROUPS_GROUPTYPES, rows.get(0).getValue("grpTypCod"), rows.get(0).getValue("grpCod"));
-            PairTable<Integer, Integer> current = new PairTable(Constants.DB_TABLE_GROUPS_GROUPTYPES, groupTypeCode, groupCode);
+			@SuppressWarnings({ "unchecked", "rawtypes" })
+			PairTable<Integer, Integer> prev = new PairTable(Constants.DB_TABLE_GROUPS_GROUPTYPES, rows.get(0).getValue("grpTypCod"), rows.get(0).getValue("grpCod"));
+			@SuppressWarnings({ "unchecked", "rawtypes" })
+			PairTable<Integer, Integer> current = new PairTable(Constants.DB_TABLE_GROUPS_GROUPTYPES, groupTypeCode, groupCode);
             updatePairTable(prev, current);
         }
 		/*}else returnValue = false;*/
@@ -1115,9 +1155,9 @@ public class DataBaseHelper {
      * @param courseCode Course code to be referenced
      * @param groupCode  Group code to be referenced
      */
-    public void insertUserCourse(User u, long courseCode, long groupCode) {
+    public void insertUserCourse(long userID, long courseCode, long groupCode) {
         Entity ent;
-        String where = "userCode = " + u.getId() + " AND crsCod = " + courseCode;
+        String where = "userCode = " + userID + " AND crsCod = " + courseCode;
         List<Entity> rows = db.getEntityList(Constants.DB_TABLE_USERS_COURSES, where);
 
         if (rows.isEmpty()) {
@@ -1125,7 +1165,7 @@ public class DataBaseHelper {
         } else {
             ent = rows.get(0);
         }
-        ent.setValue("userCode", u.getId());
+        ent.setValue("userCode", userID);
         ent.setValue("crsCod", courseCode);
         ent.setValue("grpCod", groupCode);
         ent.save();
@@ -1370,8 +1410,10 @@ public class DataBaseHelper {
                         insertPairTable(new PairTable<Long, Long>(Constants.DB_TABLE_GROUPS_GROUPTYPES, groupTypeCode[0], groupCode));
 
                     } else {
-                        PairTable<Integer, Integer> prev = new PairTable(Constants.DB_TABLE_GROUPS_GROUPTYPES, rows.get(0).getValue("grpTypCod"), rows.get(0).getValue("grpCod"));
-                        PairTable<Integer, Integer> current = new PairTable(Constants.DB_TABLE_GROUPS_GROUPTYPES, groupTypeCode[0], groupCode);
+                        @SuppressWarnings({ "rawtypes", "unchecked" })
+						PairTable<Integer, Integer> prev = new PairTable(Constants.DB_TABLE_GROUPS_GROUPTYPES, rows.get(0).getValue("grpTypCod"), rows.get(0).getValue("grpCod"));
+                        @SuppressWarnings({ "rawtypes", "unchecked" })
+						PairTable<Integer, Integer> current = new PairTable(Constants.DB_TABLE_GROUPS_GROUPTYPES, groupTypeCode[0], groupCode);
                         updatePairTable(prev, current);
 
                     }
@@ -1382,7 +1424,8 @@ public class DataBaseHelper {
             return false;
     }
 
-    private <T> boolean updateRelationship(Pair<String, String> tables, Pair<String, String> idsTables, String relationTable, Pair<String, T> remainField, Pair<String, T> changedField) {
+    @SuppressWarnings("unused")
+	private <T> boolean updateRelationship(Pair<String, String> tables, Pair<String, String> idsTables, String relationTable, Pair<String, T> remainField, Pair<String, T> changedField) {
 
 
         return true;
@@ -1408,7 +1451,8 @@ public class DataBaseHelper {
     /**
      * Updates an existing group type
      */
-    private boolean updateGroupType(GroupType prv, GroupType current) {
+    @SuppressWarnings("unused")
+	private boolean updateGroupType(GroupType prv, GroupType current) {
         List<Entity> rows = db.getEntityList(Constants.DB_TABLE_GROUP_TYPES, "id=" + prv.getId());
         boolean returnValue = true;
         if (!rows.isEmpty()) {
@@ -1702,6 +1746,23 @@ public class DataBaseHelper {
     }
 
     /**
+     * Encrypts the users data
+     */
+    public void encryptUsers() {
+        List<Entity> rows = db.getEntityList(Constants.DB_TABLE_USERS);
+
+        for (Entity ent : rows) {
+            ent.setValue("userID", crypto.encrypt(ent.getString("userID")));
+            ent.setValue("userNickname", crypto.encrypt(ent.getString("userNickname")));
+            ent.setValue("userSurname1", crypto.encrypt(ent.getString("userSurname1")));
+            ent.setValue("userSurname2", crypto.encrypt(ent.getString("userSurname2")));
+            ent.setValue("userFirstname", crypto.encrypt(ent.getString("userFirstname")));
+            ent.setValue("userPhoto", crypto.encrypt(ent.getString("photoPath")));
+            ent.save();
+        }
+    }
+
+    /**
      * Reencrypts the notifications data
      */
     public void reencryptNotifications() {
@@ -1798,14 +1859,17 @@ public class DataBaseHelper {
      * Begin a database transaction
      */
     public void beginTransaction() {
-        db.getDB().execSQL("BEGIN;");
+        //db.getDB().execSQL("BEGIN;");
+        db.startTransaction();
     }
 
     /**
      * End a database transaction
      */
     public void endTransaction() {
-        db.getDB().execSQL("END;");
+        //db.getDB().execSQL("END;");
+        db.successfulTransaction();
+        db.endTransaction();
     }
 
     /**

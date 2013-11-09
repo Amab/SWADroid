@@ -50,12 +50,6 @@ public class NotificationItem extends MenuActivity {
     private String date;
     private String time;
 
-    private String fixLinks(String body) {
-        String regex = "(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
-        body = body.replaceAll(regex, "<a href=\"$0\">$0</a>");
-        return body;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         TextView text, senderTextView, courseTextView, summaryTextView, dateTextView, timeTextView;
@@ -116,7 +110,7 @@ public class NotificationItem extends MenuActivity {
             Log.d("NotificationItem", "No connection or no photo " + userPhoto);
         }
 
-        content = fixLinks(content);
+        content = Utils.fixLinks(content);
         if (content.startsWith("<![CDATA[")) {
             content = content.substring(9, content.length() - 3);
         }

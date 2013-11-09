@@ -16,6 +16,7 @@
             android:visibility="gone">
     </TextView>
 
+
     <include android:id="@+id/courseNameLayout" layout="@layout/course_or_group_name"/>
 
     <ListView

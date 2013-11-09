@@ -108,7 +108,7 @@ public class TestsConfigDownload extends Module {
 
         if (result != null) {
             //Stores tests data returned by webservice response
-            ArrayList<?> res = new ArrayList<Object>((Vector) result);
+            ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
 
             Integer pluggable = Integer.valueOf(res.get(0).toString());
             isPluggable = Utils.parseIntBool(pluggable);

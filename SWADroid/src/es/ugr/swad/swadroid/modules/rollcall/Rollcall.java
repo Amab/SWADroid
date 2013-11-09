@@ -189,7 +189,8 @@ public class Rollcall extends MenuExpandableListActivity {
     public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
         // Get the item that was clicked
         Object o = getExpandableListAdapter().getChild(groupPosition, childPosition);
-        String keyword = (String) ((Map<String, Object>) o).get(NAME);
+        @SuppressWarnings("unchecked")
+		String keyword = (String) ((Map<String, Object>) o).get(NAME);
         Intent activity;
         Context context = getBaseContext();
         Cursor selectedGroup = (Cursor) practiceGroup.getSelectedItem();
@@ -247,7 +248,7 @@ public class Rollcall extends MenuExpandableListActivity {
             studentsList = new ArrayList<StudentItemModel>();
 
             for (Long userCode : idList) {
-                User u = (User) dbHelper.getRow(Constants.DB_TABLE_USERS, "userCode", String.valueOf(userCode));
+                User u = dbHelper.getUser("userCode", String.valueOf(userCode));
                 studentsList.add(new StudentItemModel(u));
             }
             // Arrange the list alphabetically
@@ -385,7 +386,7 @@ public class Rollcall extends MenuExpandableListActivity {
                         ArrayList<Boolean> enrolledStudents = new ArrayList<Boolean>();
 
                         for (String id : idList) {
-                            User u = (User) dbHelper.getRow(Constants.DB_TABLE_USERS, "userID", id);
+                            User u = dbHelper.getUser("userID", id);
                             if (u != null) {
                                 studentsList.add(new StudentItemModel(u));
                                 // Check if the specified user is enrolled in the selected course

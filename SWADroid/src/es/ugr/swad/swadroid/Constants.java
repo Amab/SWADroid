@@ -56,6 +56,10 @@ public class Constants {
      */
     public static final long DEFAULT_SYNC_TIME = 60;
     /**
+     * Connection timeout (in milliseconds)
+     */
+    public static final int CONNECTION_TIMEOUT = 60000;
+    /**
      * User logged flag
      */
     private static boolean logged;

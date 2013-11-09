@@ -18,19 +18,23 @@
  */
 package es.ugr.swad.swadroid.modules;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
+import android.content.DialogInterface.OnClickListener;
+import android.content.DialogInterface.OnShowListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.Toast;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.model.User;
+
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -70,12 +74,35 @@ public class Messages extends Module {
      * Message's body
      */
     private String body;
+    
     private Dialog messageDialog;
-    private final OnClickListener positiveClickListener = new OnClickListener() {
-        public void onClick(View v) {
+    
+    /*private final OnClickListener positiveClickListener = new OnClickListener() {
+		@Override
+        public void onClick(DialogInterface dialog, int which) {
             try {
                 /*if(isDebuggable) {
                     Log.d(TAG, "notificationCode = " + Long.toString(notificationCode));
+				}*/
+
+            /*    runConnection();
+            } catch (Exception e) {
+                String errorMsg = getString(R.string.errorServerResponseMsg);
+                error(TAG, errorMsg, e, true);
+            }
+        }
+    };*/
+    
+    private final View.OnClickListener positiveClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+        	/*if(isDebuggable) {
+	            Log.d(TAG, "notificationCode = " + Long.toString(notificationCode));
+			}*/
+
+            try {
+                /*if(isDebuggable) {
+                    Log.i(TAG, "selectedCourseCode = " + Long.toString(courseCode));
 				}*/
 
                 runConnection();
@@ -85,9 +112,26 @@ public class Messages extends Module {
             }
         }
     };
+    
     private final OnClickListener negativeClickListener = new OnClickListener() {
-        public void onClick(View v) {
+    	@Override
+        public void onClick(DialogInterface dialog, int which) {
             finish();
+        }
+    };
+    
+    private final OnCancelListener cancelClickListener = new DialogInterface.OnCancelListener() {
+        public void onCancel(DialogInterface dialog) {
+            setResult(RESULT_CANCELED);
+            finish();
+        }
+    };
+    
+    private final OnShowListener showListener = new DialogInterface.OnShowListener() {
+        @Override
+        public void onShow(DialogInterface dialog) {
+            Button b = ((AlertDialog) messageDialog).getButton(AlertDialog.BUTTON_POSITIVE);
+            b.setOnClickListener(positiveClickListener);
         }
     };
 
@@ -105,25 +149,23 @@ public class Messages extends Module {
      */
     @Override
     protected void onStart() {
-        Button acceptButton, cancelButton;
         EditText receiversText, subjectText;
 
         super.onStart();
 
         notificationCode = getIntent().getLongExtra("notificationCode", 0);
 
-        messageDialog = new Dialog(this);
-        messageDialog.setTitle(R.string.messagesModuleLabel);
-        messageDialog.setContentView(R.layout.messages_dialog);
-        messageDialog.setCancelable(true);
-        messageDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-
-        acceptButton = (Button) messageDialog.findViewById(R.id.message_button_accept);
-        acceptButton.setOnClickListener(positiveClickListener);
-
-        cancelButton = (Button) messageDialog.findViewById(R.id.message_button_cancel);
-        cancelButton.setOnClickListener(negativeClickListener);
-
+        messageDialog = DialogFactory.createPositiveNegativeDialog(this,
+        		R.layout.dialog_messages,
+        		R.string.messagesModuleLabel,
+        		-1,
+        		R.string.sendMsg,
+        		R.string.cancelMsg,
+        		//positiveClickListener,
+        		null,
+        		negativeClickListener,
+        		cancelClickListener);
+        
         if (notificationCode != 0) {
             subject = getIntent().getStringExtra("summary");
 
@@ -134,14 +176,7 @@ public class Messages extends Module {
             receiversText.setVisibility(View.GONE);
         }
 
-        messageDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-
-            public void onCancel(DialogInterface dialog) {
-                setResult(RESULT_CANCELED);
-                finish();
-            }
-        });
-
+        messageDialog.setOnShowListener(showListener);
         messageDialog.show();
     }
 
@@ -213,7 +248,7 @@ public class Messages extends Module {
 
         receiversNames = "";
         if (result != null) {
-            ArrayList<?> res = new ArrayList<Object>((Vector) result);
+            ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
             SoapObject soap = (SoapObject) res.get(1);
             int csSize = soap.getPropertyCount();
             for (int i = 0; i < csSize; i++) {
@@ -258,6 +293,8 @@ public class Messages extends Module {
 
         Toast.makeText(this, messageSended, Toast.LENGTH_LONG).show();
         Log.i(TAG, messageSended);
+        
+        messageDialog.dismiss();
 
         finish();
     }

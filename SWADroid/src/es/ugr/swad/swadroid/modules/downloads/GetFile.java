@@ -98,7 +98,7 @@ public class GetFile extends Module {
         addParam("fileCode", (int) fileCode);
         sendRequest(Group.class, false);
         if (result != null) {
-            ArrayList<?> res = new ArrayList<Object>((Vector) result);
+            ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
             SoapPrimitive soapP = (SoapPrimitive) res.get(1);
             String link = soapP.toString();
 

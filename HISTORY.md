@@ -1,6 +1,35 @@
+##0.12.3 (2013-11-09)
+
+* Added authors and changelog WebView dialogs and reordered the preferences items
+* Added PullToRefresh-ListView library project
+* Added pull-to-refresh update system to the notifications ListView
+* Added encryption of users table
+* Added changelog dialog on application update
+* Added sound, vibration and led configuration for alert notifications on preferences screen
+* Added confirmation of successful transactions in the database
+* User password is now stored encrypted
+* Updated ksoap2-android library to version 3.1.0
+* Updated Android Framework library
+* Updated BugSense library
+* Updated sendRequest method on Module class
+* Now user password change doesn't clean the database
+* Now the entire database is cleaned when the username changes in preferences screen
+* Notice and Message dialogs now stay open when sending fails
+* Refactored dialogs code into DialogFactory class
+* Improved display of number questions screen in tests module
+* Refactored alerts notification code to AlertNotification class
+* Refactored fixLinks method to Utils class
+* Improved error management
+* Removed IOException error control in SOAP calls
+* Refactored swadroid.widget into swadroid.gui.widget package
+* Fixed bug on BugSense initialization
+* Fixed misspellings on translation strings
+* Fixed a bug when trying to download an user picture from an empty URL
+* Fixed display bug on number of questions input of the tests
+
 ##0.12.2 (2013-06-19)
 
-* Updated ksoap2-android library with 3.0.1-SNAPSHOT version from git repository.
+* Updated ksoap2-android library with 3.0.1-SNAPSHOT version from git repository
 
 ##0.12.1 (2013-06-09)
 
@@ -26,7 +55,7 @@
 * Modified NULL value detection
 * Bugfixes
 
-## 0.12 (2013-04-20)
+##0.12 (2013-04-20)
 
 * Added new notification types "documentFile", "sharedFile", "enrollment"
   and "enrollmentRequest". Changed notifications icon
@@ -50,7 +79,7 @@
   answers not checked by the user are NOT an error and score 0 points
 * Fixed non decimal keyboard type for decimal numbers on some devices
 
-## 0.11.3 (2013-03-03)
+##0.11.3 (2013-03-03)
 
 * Added Bugsense error reporting plugin for track unhandled and handled exceptions. Error reports are automatically sended when
   the exception is catched
@@ -60,7 +89,7 @@
 * Code cleaning
 * Fixed NullPointer exceptions when cleaning notifications and courses on preferences change
 
-## 0.11.2 (2013-02-24)
+##0.11.2 (2013-02-24)
 
 * Added refresh button on main screen to update courses without clean the whole database
 * Hided reply button when notification type is not a message
@@ -70,7 +99,7 @@
 * Fixed activity restart when TestMake returns from background to foreground
 * Fixed wrong behaviour of checkboxes in Android 4.2 (isChecked() method behaviour is exactly the opposite in Android 4.2)
 
-## 0.11.1 (2013-01-26)
+##0.11.1 (2013-01-26)
 
 * Added compatibility with screens with basic touch capabilities
 * Added compatibility with devices that have no rear camera available
@@ -83,7 +112,7 @@
 * Fixed group selection in rollcall module
 * Fixed database corruption and error message when updating the tests descriptors
 
-## 0.11 (2012-12-15)
+##0.11 (2012-12-15)
 
 * Added downloads module
 * Added encryption to notifications
@@ -91,7 +120,7 @@
 * Modified the order of modules in main menu to coincide with the order of functions in SWAD
 * Refactored main package classes. Moved GUI and utilities classes to separate packages
 
-## 0.10.1 (2012-11-17)
+##0.10.1 (2012-11-17)
 
 * Added Android 4.2 compatibility
 * Added red highlight for groups without free spot
@@ -99,7 +128,7 @@
 * Fixed available choose for groups with real membership
 * Fixed problem with uppercase letter in notifications without summary
 
-## 0.10 (2012-11-09)
+##0.10 (2012-11-09)
 
 * Added module for enrollment to course groups
 * Added missing javadoc packages info
@@ -110,32 +139,32 @@
 * Fixed some bugs in course selection spinner
 * Fixed bug when checking available connections
 
-## 0.9.3 (2012-07-20)
+##0.9.3 (2012-07-20)
 
 * Added folders support in server URL
 * Updated ksoap2-android library
 * Improved error messages
 
-## 0.9.2 (2012-07-10)
+##0.9.2 (2012-07-10)
 
 * camera.autofocus feature marked as optional in order to fix device incompatibilities
 
-## 0.9.1 (2012-07-09)
+##0.9.1 (2012-07-09)
 
 * Added DNI with letter (first and last) support and DNI with zeros support
 * Added Android 4.1 compatibility
 * Fixed xlarge screens support (accidentally removed during last merge)
 
-## 0.9 (2012-07-01)
+##0.9 (2012-07-01)
 
 * Added RollCall module
 
-## 0.8.1 (2012-05-20)
+##0.8.1 (2012-05-20)
 
 * Fixed closed cursor access exception on Android 4.x platforms
 * Added message replys from open notifications
 
-## 0.8 (2012-05-01)
+##0.8 (2012-05-01)
 
 * Added automatic synchronization of notifications
 * Added server URL configuration in preferences
@@ -154,23 +183,23 @@
 * Fixed HTML bug in location field of notifications
 * Fixed br tag bug in notifications
 
-## 0.7.2 (2012-02-22)
+##0.7.2 (2012-02-22)
 
 * Added notification alerts on status bar
 * Added navigation ability for HTML links in notifications
 * Added WebView activity for all notifications
 * Improved query statements
 
-## 0.7.1 (2012-01-11)
+##0.7.1 (2012-01-11)
 
 * Fixed rendering errors in marks function
 * Improved rendering speed in marks function
 
-## 0.7 (2012-01-10)
+##0.7 (2012-01-10)
 
 * Added marks function in notifications module
 
-## 0.6.2 (2011-12-09)
+##0.6.2 (2011-12-09)
 
 * Added Blog URL to preferences screen
 * Added Catalan language by Francisco Manuel Herrero Pérez
@@ -178,127 +207,127 @@
 * Reinitialized last course selected on database cleaning
 * Minor changes on error messages
 
-## 0.6.1 (2011-11-16)
+##0.6.1 (2011-11-16)
 
 * Added Google+ account to preferences screen
 * Optimized database access
 * Fixed menu operation in all activities
 * Minor improvements
 
-## 0.6 (2011-11-06)
+##0.6 (2011-11-06)
 
 * Added Android 4.0 compatibility
 * Added sharing options to application menu and preferences
 * Added clean database option to application menu
 * Added name of SWAD's creator to author preferences
 
-## 0.5.2 (2011-09-29)
+##0.5.2 (2011-09-29)
 
 * Optimized questions syncronization
 * Added real names of receivers in sendedMessageMsg
 * Fixed bug on test questions syncronization
 
-## 0.5.1 (2011-09-26)
+##0.5.1 (2011-09-26)
 
 * Fixed bug in reply messages function
 * Updated ksoap2-android library
 
-## 0.5 (2011-09-26)
+##0.5 (2011-09-26)
 
 * Added messages module
 * Minor fixes
 
-## 0.4.5 (2011-07-08)
+##0.4.5 (2011-07-08)
 
 * Optimized questions syncronization
 
-## 0.4.4 (2011-07-05)
+##0.4.4 (2011-07-05)
 
 * Added Write message function on main menu
 * Updated ksoap2-android library
 * Minor fixes
 
-## 0.4.3 (2011-06-15)
+##0.4.3 (2011-06-15)
 
 * Minor fixes
 * Improved tests GUI
 
-## 0.4.2 (2011-06-15)
+##0.4.2 (2011-06-15)
 
 * Now not answered questions score as 0
 * Now is allowed to uncheck a checked answer on T/F and unique choice questions
 * Improved tests GUI
 
-## 0.4.1 (2011-06-14)
+##0.4.1 (2011-06-14)
 
 * Allowed negative scores on tests
 * Fixed bug on questions syncronization
 
-## 0.4 (2011-06-13)
+##0.4 (2011-06-13)
 
 * Added tests module
 * Updated ksoap2-android library
 * Minor fixes
 
-## 0.3.10 (2011-05-19)
+##0.3.10 (2011-05-19)
 
 * Added assignment, survey and unknown notifications
 * Added empty notifications message
 * Added forced relogin if connection time exceeds a certain period
 * Added incorrect user or password error message
 
-## 0.3.9 (2011-05-03)
+##0.3.9 (2011-05-03)
 
 * Fixed empty fields bug on notifications module
 
-## 0.3.8 (2011-04-27)
+##0.3.8 (2011-04-27)
 
 * Fixed bug on cleaning old notifications
 
-## 0.3.7 (2011-04-14)
+##0.3.7 (2011-04-14)
 
 * Fixed notifications bug in surname
 
-## 0.3.6 (2011-04-13)
+##0.3.6 (2011-04-13)
 
 * Added notification details
 * Added upgrade dialog
 
-## 0.3.5 (2011-04-05)
+##0.3.5 (2011-04-05)
 
 * Improved GUI
 * Improved performance
 * Added action bar
 * Added category organization on main menu
 
-## 0.3.4 (2011-03-27)
+##0.3.4 (2011-03-27)
 
 * Improved GUI
 * Fixed minor errors on error messages
 
-## 0.3.3 (2011-03-27)
+##0.3.3 (2011-03-27)
 
 * Redesigned GUI
 
-## 0.3.2 (2011-03-24)
+##0.3.2 (2011-03-24)
 
 * Added first run dialog
 * Improved preferences screen
 
-## 0.3.1 (2011-03-21)
+##0.3.1 (2011-03-21)
 
 * Added automatic saving of preferences
 * Added automatic notifications cleaning when username or password changes
 * Changed background colors of notifications
 * Fixed compatibility issues with some devices
 
-## 0.3 (2011-03-08)
+##0.3 (2011-03-08)
 
 * Added notifications module
 * Added Android 3.0 Honeycomb compatibility
 * Updated ksoap2-android library
 
-## 0.2.2 (2011-01-18)
+##0.2.2 (2011-01-18)
 
 * Added connection check
 * Added functions list to main activity
@@ -310,12 +339,12 @@
 * Updated ksoap2-android library
 * Disabled application restart on orientation change
 
-## 0.2.1 (2010-12-15)
+##0.2.1 (2010-12-15)
 
 * Added Android 2.3 Gingerbread compatibility
 * Completed login module
 
-## 0.2 (2010-12-08)
+##0.2 (2010-12-08)
 
 * Added auto logout when user id or password changes
 * Added initial database
@@ -323,7 +352,7 @@
 * Added Android DataFrameWork license in README.md
 * Removed install location for Android 1.6 compatibility
 
-## 0.1.1 (2010-11-06)
+##0.1.1 (2010-11-06)
 
 * Added workaround for Android emulator bug
 * Added background image to main activity
@@ -332,6 +361,6 @@
 * Minor fixes in main layout
 * Established install location to auto
 
-## 0.1 (2010-11-03)
+##0.1 (2010-11-03)
 
 * First release

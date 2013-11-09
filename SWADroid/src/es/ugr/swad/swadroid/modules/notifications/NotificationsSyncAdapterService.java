@@ -20,23 +20,23 @@
 package es.ugr.swad.swadroid.modules.notifications;
 
 import android.accounts.Account;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.*;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+
 import com.bugsense.trace.BugSenseHandler;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.gui.AlertNotification;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
-import es.ugr.swad.swadroid.utils.Base64;
+
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.KvmSerializable;
@@ -47,10 +47,10 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.security.KeyManagementException;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Vector;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Service for notifications sync adapter.
@@ -62,16 +62,19 @@ public class NotificationsSyncAdapterService extends Service {
     private static SyncAdapterImpl sSyncAdapter = null;
     private static int notifCount;
     private static final int NOTIF_ALERT_ID = 1982;
-    private static final int SIZE_LIMIT = 25;
+    private static int SIZE_LIMIT;
     private static Preferences prefs;
     private static DataBaseHelper dbHelper;
     private static String METHOD_NAME = "";
     private static final String NAMESPACE = "urn:swad";
-    private static final String SOAP_ACTION = "";
+    private final static String SOAP_ACTION = "";
+    private static String SERVER; // = "swad.ugr.es";
     private static SoapObject request;
     private static Object result;
+    private static String errorMessage = "";
     public static final String START_SYNC = "es.ugr.swad.swadroid.sync.start";
     public static final String STOP_SYNC = "es.ugr.swad.swadroid.sync.stop";
+    private static KeepAliveHttpsTransportSE connection;
 
     public NotificationsSyncAdapterService() {
         super();
@@ -89,6 +92,7 @@ public class NotificationsSyncAdapterService extends Service {
                 dbHelper = new DataBaseHelper(mContext);
             } catch (Exception e) {
                 e.printStackTrace();
+                errorMessage = e.getMessage();
 
                 //Send exception details to Bugsense
                 BugSenseHandler.sendException(e);
@@ -99,73 +103,103 @@ public class NotificationsSyncAdapterService extends Service {
         public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
             try {
                 prefs.getPreferences(mContext);
+                SIZE_LIMIT = prefs.getNotifLimit();
+                SERVER = prefs.getServer();
                 NotificationsSyncAdapterService.performSync(mContext, account, extras, authority, provider, syncResult);
-            } catch (Exception e) {
+                
+                //If synchronization was successful, update last synchronization time in preferences
+                prefs.setLastSyncTime(System.currentTimeMillis());
+            } catch (Exception e) {                
+                if (e instanceof SoapFault) {
+                    SoapFault es = (SoapFault) e;
+
+                    if (es.faultstring.equals("Bad log in")) {
+                    	errorMessage = mContext.getString(R.string.errorBadLoginMsg);
+                    } else if (es.faultstring.equals("Unknown application key")) {
+                    	errorMessage = mContext.getString(R.string.errorBadAppKeyMsg);
+                    } else {
+                    	errorMessage = "Server error: " + es.getMessage();
+                    }
+                } else if (e instanceof XmlPullParserException) {
+                	errorMessage = mContext.getString(R.string.errorServerResponseMsg);
+
+                    e.printStackTrace();
+
+                    //Send exception details to Bugsense
+                    BugSenseHandler.sendException(e);
+                } else if (e instanceof TimeoutException) {
+                	errorMessage = mContext.getString(R.string.errorTimeoutMsg);
+                //} else if (e instanceof IOException) {
+                //    errorMsg = getString(R.string.errorConnectionMsg);
+                } else {
+                	errorMessage = e.getMessage();
+
+                    e.printStackTrace();
+
+                    //Send exception details to Bugsense
+                    BugSenseHandler.sendException(e);
+                }
+                
                 //Notify synchronization stop
                 Intent stopIntent = new Intent();
                 stopIntent.setAction(STOP_SYNC);
+                stopIntent.putExtra("notifCount", notifCount);  
+                stopIntent.putExtra("errorMessage", errorMessage);        
                 mContext.sendBroadcast(stopIntent);
-
-                e.printStackTrace();
-
-                //Send exception details to Bugsense
-                BugSenseHandler.sendException(e);
             }
         }
     }
 
-    @Override
-    public IBinder onBind(Intent intent) {
+    /* (non-Javadoc)
+	 * @see android.app.Service#onCreate()
+	 */
+	@Override
+	public void onCreate() {        
+        //Initialize Bugsense plugin
+        BugSenseHandler.initAndStartSession(this, Constants.BUGSENSE_API_KEY);
+        
+		super.onCreate();
+	}
+
+	/* (non-Javadoc)
+	 * @see android.app.Service#onStartCommand(android.content.Intent, int, int)
+	 */
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId) {
+		super.onStartCommand(intent, flags, startId);
+		 // return START_NOT_STICKY - we want this Service to be left running 
+        //  unless explicitly stopped, and it's process is killed, we want it to
+        //  be restarted
+        return START_STICKY;
+	}
+
+	/* (non-Javadoc)
+	 * @see android.app.Service#onDestroy()
+	 */
+	@Override
+	public void onDestroy() {
+		BugSenseHandler.closeSession(this);
+		
+		super.onDestroy();
+	}
+
+	@Override
+    public IBinder onBind(Intent intent) {        
         return getSyncAdapter().getSyncAdapterBinder();
     }
 
-    private SyncAdapterImpl getSyncAdapter() {
+	/* (non-Javadoc)
+	 * @see android.app.Service#onUnbind(android.content.Intent)
+	 */
+	@Override
+	public boolean onUnbind(Intent intent) {
+		return super.onUnbind(intent);
+	}
+
+	private SyncAdapterImpl getSyncAdapter() {
         if (sSyncAdapter == null)
             sSyncAdapter = new SyncAdapterImpl(this);
         return sSyncAdapter;
-    }
-
-    private static void alertNotif(final Context context) {
-        if (notifCount > 0) {
-            //Obtain a reference to the notification service
-            String ns = Context.NOTIFICATION_SERVICE;
-            NotificationManager notManager =
-                    (NotificationManager) context.getSystemService(ns);
-
-            //Configure the alert
-            int icon = R.drawable.ic_launcher_swadroid;
-            long hour = System.currentTimeMillis();
-
-            //If the notifications counter exceeds the limit, set it to the max allowed
-            if (notifCount > SIZE_LIMIT) {
-                notifCount = SIZE_LIMIT;
-            }
-
-            Notification notif =
-                    new Notification(icon, context.getString(R.string.app_name), hour);
-
-            //Configure the Intent
-            Intent notIntent = new Intent(context,
-                    Notifications.class);
-
-            PendingIntent contIntent = PendingIntent.getActivity(
-                    context, 0, notIntent, 0);
-
-            notif.setLatestEventInfo(
-                    context, context.getString(R.string.app_name), notifCount + " " +
-                    context.getString(R.string.notificationsAlertMsg), contIntent);
-
-            //AutoCancel: alert disappears when pushed
-            notif.flags |= Notification.FLAG_AUTO_CANCEL;
-
-            //Add sound, vibration and lights
-            notif.defaults |= Notification.DEFAULT_SOUND;
-            //notif.defaults |= Notification.DEFAULT_VIBRATE;
-            notif.defaults |= Notification.DEFAULT_LIGHTS;
-
-            //Send alert
-            notManager.notify(NOTIF_ALERT_ID, notif);
-        }
     }
 
     private static void createRequest() {
@@ -177,30 +211,151 @@ public class NotificationsSyncAdapterService extends Service {
         request.addProperty(param, value);
     }
 
-    private static void sendRequest(boolean simple)
+    private static void sendRequest(Class<?> cl, boolean simple)
             throws IOException, XmlPullParserException {
 
-        /**
-         * Use of KeepAliveHttpsTransport deals with the problems with the Android ssl libraries having trouble
-         * with certificates and certificate authorities somehow messing up connecting/needing reconnects.
-         */
-        String URL = prefs.getServer();
-        int TIMEOUT = 10000;
-        KeepAliveHttpsTransportSE connection;
+    	// Variables for URL splitting
+        String delimiter = "/";
+        String PATH;
+        String[] URLArray;
+        String URL;
 
-        connection = new KeepAliveHttpsTransportSE(URL, 443, "", TIMEOUT);
-        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        // Split URL
+        URLArray = SERVER.split(delimiter, 2);
+        URL = URLArray[0];
+        if (URLArray.length == 2) {
+            PATH = delimiter + URLArray[1];
+        } else {
+            PATH = "";
+        }
+
+        /**
+         * Use of KeepAliveHttpsTransport deals with the problems with the
+         * Android ssl libraries having trouble with certificates and
+         * certificate authorities somehow messing up connecting/needing
+         * reconnects.
+         */
+        connection = new KeepAliveHttpsTransportSE(URL, 443, PATH, Constants.CONNECTION_TIMEOUT);
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
+                SoapEnvelope.VER11);
         System.setProperty("http.keepAlive", "false");
+        envelope.encodingStyle = SoapEnvelope.ENC;
+        envelope.setAddAdornments(false);
+        envelope.implicitTypes = true;
+        envelope.dotNet = false;
         envelope.setOutputSoapObject(request);
-        //connection.debug = true;
-        connection.call(SOAP_ACTION, envelope);
-        //Log.d(TAG, connection.requestDump.toString());
-        //Log.d(TAG, connection.responseDump.toString());
+        envelope.addMapping(NAMESPACE, cl.getSimpleName(), cl);
+    	connection.call(SOAP_ACTION, envelope);  
+        
+        /*connection.debug = true;
+        try {
+        	connection.call(SOAP_ACTION, envelope);
+	        Log.d(TAG, connection.getHost() + " " + connection.getPath() + " " +
+	        connection.getPort());
+	        Log.d(TAG, connection.requestDump.toString());
+	        Log.d(TAG, connection.responseDump.toString());
+        } catch (Exception e) {
+	        Log.e(TAG, connection.getHost() + " " + connection.getPath() + " " +
+	        connection.getPort());
+	        Log.e(TAG, connection.requestDump.toString());
+	        Log.e(TAG, connection.responseDump.toString());
+        }*/
 
         if (simple && !(envelope.getResponse() instanceof SoapFault)) {
             result = envelope.bodyIn;
         } else {
             result = envelope.getResponse();
+        }
+    }
+    
+    private static void logUser() throws IOException, XmlPullParserException {
+    	Log.d(TAG, "Not logged");
+
+        METHOD_NAME = "loginByUserPasswordKey";
+       /* MessageDigest md = MessageDigest.getInstance("SHA-512");
+        md.update(prefs.getUserPassword().getBytes());
+        String userPassword = Base64.encodeBytes(md.digest());
+        userPassword = userPassword.replace('+', '-').replace('/', '_').replace('=', ' ').replaceAll("\\s+", "").trim();*/
+
+        createRequest();
+        addParam("userID", prefs.getUserID());
+        addParam("userPassword", prefs.getUserPassword());
+        addParam("appKey", Constants.SWAD_APP_KEY);
+        sendRequest(User.class, true);
+
+        if (result != null) {
+            KvmSerializable ks = (KvmSerializable) result;
+            SoapObject soap = (SoapObject) result;
+
+            //Stores user data returned by webservice response
+            User loggedUser = new User(
+                    Long.parseLong(ks.getProperty(0).toString()),                    // id
+                    soap.getProperty("wsKey").toString(),                            // wsKey
+                    soap.getProperty("userID").toString(),                            // userID
+                    //soap.getProperty("userNickname").toString(),					// userNickname
+                    null,                                                            // userNickname
+                    soap.getProperty("userSurname1").toString(),                    // userSurname1
+                    soap.getProperty("userSurname2").toString(),                    // userSurname2
+                    soap.getProperty("userFirstname").toString(),                    // userFirstname
+                    soap.getProperty("userPhoto").toString(),                        // userPhoto
+                    Integer.parseInt(soap.getProperty("userRole").toString())        // userRole
+            );
+
+            Constants.setLoggedUser(loggedUser);
+            Constants.setLogged(true);
+
+            //Update application last login time
+            Constants.setLastLoginTime(System.currentTimeMillis());
+        }
+    }
+    
+    private static void getNotifications() throws IOException, XmlPullParserException {
+    	Log.d(TAG, "Logged");
+
+        //Calculates next timestamp to be requested
+        Long timestamp = Long.valueOf(dbHelper.getFieldOfLastNotification("eventTime"));
+        timestamp++;
+
+        //Creates webservice request, adds required params and sends request to webservice
+        METHOD_NAME = "getNotifications";
+        createRequest();
+        addParam("wsKey", Constants.getLoggedUser().getWsKey());
+        addParam("beginTime", timestamp);
+        sendRequest(SWADNotification.class, false);
+
+        if (result != null) {
+            dbHelper.beginTransaction();
+
+            //Stores notifications data returned by webservice response
+            ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
+            SoapObject soap = (SoapObject) res.get(1);
+            notifCount = soap.getPropertyCount();
+            for (int i = 0; i < notifCount; i++) {
+                SoapObject pii = (SoapObject) soap.getProperty(i);
+                Long notificationCode = Long.valueOf(pii.getProperty("notificationCode").toString());
+                String eventType = pii.getProperty("eventType").toString();
+                Long eventTime = Long.valueOf(pii.getProperty("eventTime").toString());
+                String userSurname1 = pii.getProperty("userSurname1").toString();
+                String userSurname2 = pii.getProperty("userSurname2").toString();
+                String userFirstName = pii.getProperty("userFirstname").toString();
+                String userPhoto = pii.getProperty("userPhoto").toString();
+                String location = pii.getProperty("location").toString();
+                String summary = pii.getProperty("summary").toString();
+                Integer status = Integer.valueOf(pii.getProperty("status").toString());
+                String content = pii.getProperty("content").toString();
+                SWADNotification n = new SWADNotification(notificationCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, userPhoto, location, summary, status, content);
+                dbHelper.insertNotification(n);
+
+                //Log.d(TAG, n.toString());
+            }
+
+            //Request finalized without errors
+            Log.i(TAG, "Retrieved " + notifCount + " notifications");
+
+            //Clear old notifications to control database size
+            dbHelper.clearOldNotifications(SIZE_LIMIT);
+
+            dbHelper.endTransaction();
         }
     }
 
@@ -221,102 +376,31 @@ public class NotificationsSyncAdapterService extends Service {
         }
 
         if (!Constants.isLogged()) {
-            Log.d(TAG, "Not logged");
-
-            METHOD_NAME = "loginByUserPasswordKey";
-            MessageDigest md = MessageDigest.getInstance("SHA-512");
-            md.update(prefs.getUserPassword().getBytes());
-            String userPassword = Base64.encodeBytes(md.digest());
-            userPassword = userPassword.replace('+', '-').replace('/', '_').replace('=', ' ').replaceAll("\\s+", "").trim();
-
-            createRequest();
-            addParam("userID", prefs.getUserID());
-            addParam("userPassword", userPassword);
-            addParam("appKey", Constants.SWAD_APP_KEY);
-            sendRequest(true);
-
-            if (result != null) {
-                KvmSerializable ks = (KvmSerializable) result;
-                SoapObject soap = (SoapObject) result;
-
-                //Stores user data returned by webservice response
-                User loggedUser = new User(
-                        Long.parseLong(ks.getProperty(0).toString()),                    // id
-                        soap.getProperty("wsKey").toString(),                            // wsKey
-                        soap.getProperty("userID").toString(),                            // userID
-                        //soap.getProperty("userNickname").toString(),					// userNickname
-                        null,                                                            // userNickname
-                        soap.getProperty("userSurname1").toString(),                    // userSurname1
-                        soap.getProperty("userSurname2").toString(),                    // userSurname2
-                        soap.getProperty("userFirstname").toString(),                    // userFirstname
-                        soap.getProperty("userPhoto").toString(),                        // userPhoto
-                        Integer.parseInt(soap.getProperty("userRole").toString())        // userRole
-                );
-
-                Constants.setLoggedUser(loggedUser);
-                Constants.setLogged(true);
-
-                //Update application last login time
-                Constants.setLastLoginTime(System.currentTimeMillis());
-            }
+        	logUser();
         }
 
         if (Constants.isLogged()) {
-            Log.d(TAG, "Logged");
-
-            //Calculates next timestamp to be requested
-            Long timestamp = Long.valueOf(dbHelper.getFieldOfLastNotification("eventTime"));
-            timestamp++;
-
-            //Creates webservice request, adds required params and sends request to webservice
-            METHOD_NAME = "getNotifications";
-            createRequest();
-            addParam("wsKey", Constants.getLoggedUser().getWsKey());
-            addParam("beginTime", timestamp);
-            sendRequest(false);
-
-            if (result != null) {
-                dbHelper.beginTransaction();
-
-                //Stores notifications data returned by webservice response
-                ArrayList<?> res = new ArrayList<Object>((Vector) result);
-                SoapObject soap = (SoapObject) res.get(1);
-                notifCount = soap.getPropertyCount();
-                for (int i = 0; i < notifCount; i++) {
-                    SoapObject pii = (SoapObject) soap.getProperty(i);
-                    Long notificationCode = Long.valueOf(pii.getProperty("notificationCode").toString());
-                    String eventType = pii.getProperty("eventType").toString();
-                    Long eventTime = Long.valueOf(pii.getProperty("eventTime").toString());
-                    String userSurname1 = pii.getProperty("userSurname1").toString();
-                    String userSurname2 = pii.getProperty("userSurname2").toString();
-                    String userFirstName = pii.getProperty("userFirstname").toString();
-                    String userPhoto = pii.getProperty("userPhoto").toString();
-                    String location = pii.getProperty("location").toString();
-                    String summary = pii.getProperty("summary").toString();
-                    Integer status = Integer.valueOf(pii.getProperty("status").toString());
-                    String content = pii.getProperty("content").toString();
-                    SWADNotification n = new SWADNotification(notificationCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, userPhoto, location, summary, status, content);
-                    dbHelper.insertNotification(n);
-
-                    //Log.d(TAG, n.toString());
-                }
-
-                //Request finalized without errors
-                Log.i(TAG, "Retrieved " + notifCount + " notifications");
-
-                //Clear old notifications to control database size
-                dbHelper.clearOldNotifications(SIZE_LIMIT);
-
-                dbHelper.endTransaction();
-            }
-
-            alertNotif(context);
+        	getNotifications();
+        	
+        	if (notifCount > 0) {
+	            //If the notifications counter exceeds the limit, set it to the max allowed
+	            if (notifCount > SIZE_LIMIT) {
+	                notifCount = SIZE_LIMIT;
+	            }
+	            
+	        	AlertNotification.alertNotif(context,
+	            		NOTIF_ALERT_ID,
+	            		context.getString(R.string.app_name),
+	            		notifCount + " " + context.getString(R.string.notificationsAlertMsg),
+	            		context.getString(R.string.app_name));
+        	}
         }
 
         //Notify synchronization stop
         Intent stopIntent = new Intent();
         stopIntent.setAction(STOP_SYNC);
-        stopIntent.putExtra("notifCount", notifCount);
+        stopIntent.putExtra("notifCount", notifCount);  
+        stopIntent.putExtra("errorMessage", errorMessage);        
         context.sendBroadcast(stopIntent);
     }
 }
