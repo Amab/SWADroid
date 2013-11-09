@@ -19,9 +19,13 @@ import android.widget.FrameLayout;
 import es.ugr.swad.swadroid.R;
 
 public class DialogFactory {
-    /**
-     * Creates a Webview dialog with HTML content.
-     */
+	/**
+	 * Creates a Webview dialog with HTML content.
+	 * @param context Application context
+	 * @param title Dialog title as string
+	 * @param url URL to be loaded
+	 * @return AlertDialog with the HTML content loaded
+	 */
     public static AlertDialog createWebViewDialog(Context context, String title, String url) {
     	LayoutInflater li = LayoutInflater.from(context);
         View promptsView = li.inflate(R.layout.dialog_webview, null);
@@ -41,6 +45,10 @@ public class DialogFactory {
     
     /**
      * Creates a Webview dialog with HTML content.
+     * @param context Application context
+     * @param titleId Resource id of dialog title string
+     * @param contentResourceId Resource id of HTML to be loaded
+     * @return AlertDialog with the HTML content loaded
      */
     public static AlertDialog createWebViewDialog(Context context, int titleId, int contentResourceId) {
     	LayoutInflater li = LayoutInflater.from(context);
@@ -73,6 +81,15 @@ public class DialogFactory {
         return alertDialogBuilder.create();
     }
     
+    /**
+     * Creates an AlertDialog with a neutral button
+     * @param context Application context
+     * @param titleId Resource id of dialog title string
+     * @param messageId Resource id of dialog message string
+     * @param buttonLabelId Resource id of button label string
+     * @param clickListener ClickListener associated to the neutral button
+     * @return AlertDialog with a neutral button
+     */
     public static AlertDialog createNeutralDialog(Context context, int titleId, int messageId, int buttonLabelId,
     		OnClickListener clickListener) {
     	
@@ -85,6 +102,19 @@ public class DialogFactory {
     	return alertDialogBuilder.create();
     }
     
+    /**
+     * Creates an AlertDialog with a positive button and a negative button
+     * @param context Application context
+     * @param layoutId Resource id of dialog layout
+     * @param titleId Resource id of dialog title string
+     * @param messageId Resource id of dialog message string
+     * @param acceptLabel Resource id of positive button label string
+     * @param cancelLabel Resource id of negative button label string
+     * @param positiveListener ClickListener associated to the positive button
+     * @param negativeListener ClickListener associated to the negative button
+     * @param cancelListener ClickListener associated to the cancel dialog action
+     * @return AlertDialog with a positive button and a negative button
+     */
     public static AlertDialog createPositiveNegativeDialog(Context context, int layoutId, int titleId,
     		int messageId, int acceptLabel, int cancelLabel, OnClickListener positiveListener,
     		OnClickListener negativeListener, OnCancelListener cancelListener) {
@@ -119,6 +149,19 @@ public class DialogFactory {
     	return alertDialog;
     }
     
+    /**
+     * Creates an error dialog and sends an error report
+     * @param context Application context
+     * @param tag Module tag
+     * @param message Error message string
+     * @param ex Exception thrown
+     * @param sendException true if the error report has to be sended
+     * 						false otherwise
+     * @param isDebuggable	true if the application is debuggable (develop mode). Activates Logcat messages
+     * 						false otherwise
+     * @param onClickListener ClickListener associated to the neutral button
+     * @return Error dialog and sends an error report
+     */
     public static AlertDialog createErrorDialog(Context context, String tag, String message, Exception ex,
     		boolean sendException, boolean isDebuggable, DialogInterface.OnClickListener onClickListener) {
     	
