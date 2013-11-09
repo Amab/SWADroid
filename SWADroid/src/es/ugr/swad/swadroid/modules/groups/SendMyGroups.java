@@ -112,7 +112,7 @@ public class SendMyGroups extends Module {
         addParam("myGroups", myGroups);
         sendRequest(Group.class, false);
         if (result != null) {
-            ArrayList<?> res = new ArrayList<Object>((Vector) result);
+            ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
             SoapPrimitive soapP = (SoapPrimitive) res.get(0);
 
             success = Integer.parseInt(soapP.toString());

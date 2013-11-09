@@ -45,7 +45,7 @@
     <string name="notificationsProgressTitle">Notificaciones</string>
     <string name="notificationsProgressDescription">Obteniendo nuevas notificaciones&#8230;</string>
     <string name="notificationsEmptyListMsg">No se ha descargado ninguna notificación.\n\nPara descargar las
-        notificaciones más recientes pulse el icono de la esquina superior derecha de la pantalla.
+        notificaciones más recientes deslice este mensaje hacia abajo.
     </string>
     <string name="notificationsDownloadedMsg">Notificaciones descargadas</string>
     <string name="testsDownloadProgressTitle">Tests</string>
@@ -166,7 +166,7 @@
     <string name="prefNotifLimitTitle">Límite de notificaciones</string>
     <string name="prefNotifLimitDialogMessage">Seleccione el número máximo de notificaciones que serán almacenadas:
     </string>
-    <string name="prefNotifLimitSuffix">notificaciones</string>
+    <string name="prefNotifLimitSuffix">notificaciones</string>  
     <string name="notificationsAlertTitle">SWADroid</string>
     <string name="notificationsAlertMsg">nuevas notificaciones</string>
     <string name="footMessageMsg">Enviado desde</string>
@@ -326,6 +326,15 @@
     <string name="contents_location">Coordenadas geográficas</string>
     <string name="contents_phone">Número de teléfono</string>
     <string name="contents_sms">Dirección SMS</string>
-    <string name="contents_text">Texto</string>
+    <string name="contents_text">Texto</string>    
+    <string name="lastSyncTimeLabel">Última sincronización</string>
+    <string name="neverLabel">Nunca</string>
+    <string name="prefNotifSoundTitle">Sonido</string>
+    <string name="prefNotifSoundSummary">Activar/desactivar el sonido de las alertas de nuevas notificaciones</string>
+    <string name="prefNotifVibrateTitle">Vibración</string>
+    <string name="prefNotifVibrateSummary">Activar/desactivar la vibración de las alertas de nuevas notificaciones</string>
+    <string name="prefNotifLightsTitle">Led</string>
+    <string name="prefNotifLightsSummary">Activar/desactivar los indicadores luminosos de las alertas de nuevas notificaciones</string>
+    <string name="changelogTitle">Historial de cambios</string>
 
 </resources>

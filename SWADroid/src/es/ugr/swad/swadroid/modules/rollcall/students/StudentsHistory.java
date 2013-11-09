@@ -84,7 +84,7 @@ public class StudentsHistory extends Module {
             studentsList = new ArrayList<StudentItemModel>();
 
             for (Long userCode : idList) {
-                User u = (User) dbHelper.getRow(Constants.DB_TABLE_USERS, "userCode", String.valueOf(userCode));
+                User u = dbHelper.getUser("userCode", String.valueOf(userCode));
                 studentsList.add(new StudentItemModel(u));
             }
             // Arrange the list alphabetically

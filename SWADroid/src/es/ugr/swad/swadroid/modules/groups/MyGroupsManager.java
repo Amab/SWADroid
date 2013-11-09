@@ -21,12 +21,14 @@ package es.ugr.swad.swadroid.modules.groups;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.model.Model;
@@ -67,6 +69,11 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 
     private ImageButton updateButton;
     private ProgressBar progressbar;
+    private OnClickListener cancelClickListener = new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int id) {
+            dialog.cancel();
+        }
+    };
 
     @Override
     protected void onStart() {
@@ -180,33 +187,27 @@ public class MyGroupsManager extends MenuExpandableListActivity {
     /**
      * Shows informative dialog on successful enrollment
      */
-    void showSuccessfulEnrollmentDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.resultEnrollment)
-                .setMessage(R.string.successfullEnrollment)
-                .setCancelable(false)
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                })
-                .show();
+    void showSuccessfulEnrollmentDialog() {        
+    	AlertDialog dialog = DialogFactory.createNeutralDialog(this,
+    			R.string.resultEnrollment,
+    			R.string.successfullEnrollment,
+    			R.string.ok,
+    			cancelClickListener);
+
+        dialog.show();
     }
 
     /**
      * Shows informative dialog on failed enrollment
      */
     void showFailedEnrollmentDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.resultEnrollment)
-                .setMessage(R.string.failedEnrollment)
-                .setCancelable(false)
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                })
-                .show();
+    	AlertDialog dialog = DialogFactory.createNeutralDialog(this,
+    			R.string.resultEnrollment,
+    			R.string.failedEnrollment,
+    			R.string.ok,
+    			cancelClickListener);
+
+        dialog.show();
     }
 
 
@@ -214,27 +215,28 @@ public class MyGroupsManager extends MenuExpandableListActivity {
      * Shows dialog to ask for confirmation in group enrollments
      */
     private void showConfirmEnrollmentDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.confirmEnrollments)
-                .setMessage(R.string.areYouSure)
-                .setCancelable(false)
-                .setPositiveButton(R.string.yesMsg, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                        String myGroups = ((EnrollmentExpandableListAdapter) getExpandableListView().getExpandableListAdapter()).getChosenGroupCodesAsString();
-                        Intent activity = new Intent(getBaseContext(), SendMyGroups.class);
-                        activity.putExtra("courseCode", courseCode);
-                        activity.putExtra("myGroups", myGroups);
-                        startActivityForResult(activity, Constants.SENDMYGROUPS_REQUEST_CODE);
-                    }
-                })
-                .setNegativeButton(R.string.noMsg, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                })
-                .show();
+    	OnClickListener positiveClickListener = new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+                String myGroups = ((EnrollmentExpandableListAdapter) getExpandableListView().getExpandableListAdapter()).getChosenGroupCodesAsString();
+                Intent activity = new Intent(getBaseContext(), SendMyGroups.class);
+                activity.putExtra("courseCode", courseCode);
+                activity.putExtra("myGroups", myGroups);
+                startActivityForResult(activity, Constants.SENDMYGROUPS_REQUEST_CODE);
+            }
+        };
+        
+    	AlertDialog dialog = DialogFactory.createPositiveNegativeDialog(this,
+    			-1,
+    			R.string.confirmEnrollments,
+    			R.string.areYouSure,
+    			R.string.yesMsg,
+    			R.string.noMsg,
+    			positiveClickListener,
+    			cancelClickListener,
+    			null);
 
+        dialog.show();
     }
 
 /*	private String getRequestedGroups(){

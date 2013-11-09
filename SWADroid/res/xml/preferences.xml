@@ -27,24 +27,12 @@
                 android:title="@string/serverTitle_preferences"/>
     </PreferenceCategory>
     <PreferenceCategory
-            android:title="@string/prefCatNotifTitle">
-
-        <es.ugr.swad.swadroid.widget.SeekBarDialogPreference
-                android:key="@string/prefNotifLimitKey"
-                android:dialogMessage="@string/prefNotifLimitDialogMessage"
-                android:title="@string/prefNotifLimitTitle"
-                android:defaultValue="25"
-                android:max="100"
-                custom:progressTextSuffix="@string/prefNotifLimitSuffix"
-                custom:min="1"/>
-    </PreferenceCategory>
-    <PreferenceCategory
             android:title="@string/prefCatSyncTitle">
         <CheckBoxPreference
                 android:title="@string/prefSyncEnableTitle"
+                android:summary="@string/prefSyncEnableSummary"
                 android:key="@string/prefSyncEnableKey"
-                android:defaultValue="true"
-                android:summary="@string/prefSyncEnableSummary"/>
+                android:defaultValue="true"/>
         <ListPreference
                 android:title="@string/prefSyncTimeTitle"
                 android:summary="@string/prefSyncTimeSummary"
@@ -55,7 +43,47 @@
                 android:dependency="@string/prefSyncEnableKey"/>
     </PreferenceCategory>
     <PreferenceCategory
+            android:title="@string/prefCatNotifTitle">
+
+        <es.ugr.swad.swadroid.gui.widget.SeekBarDialogPreference
+                android:key="@string/prefNotifLimitKey"
+                android:dialogMessage="@string/prefNotifLimitDialogMessage"
+                android:title="@string/prefNotifLimitTitle"
+                android:defaultValue="25"
+                android:max="100"
+                custom:progressTextSuffix="@string/prefNotifLimitSuffix"
+                custom:min="1"/>
+        <CheckBoxPreference
+                android:title="@string/prefNotifSoundTitle"
+                android:summary="@string/prefNotifSoundSummary"
+                android:key="@string/prefNotifSoundKey"
+                android:defaultValue="true"/>
+        <CheckBoxPreference
+                android:title="@string/prefNotifVibrateTitle"
+                android:summary="@string/prefNotifVibrateSummary"
+                android:key="@string/prefNotifVibrateKey"
+                android:defaultValue="true"/>
+        <CheckBoxPreference
+                android:title="@string/prefNotifLightsTitle"
+                android:summary="@string/prefNotifLightsSummary"
+                android:key="@string/prefNotifLightsKey"
+                android:defaultValue="true"/>
+    </PreferenceCategory>
+    <PreferenceCategory
             android:title="@string/about_preferences">
+        <Preference
+                android:defaultValue=""
+                android:hint=""
+                android:key="currentVersionPref"
+                android:title="@string/versionTitle_preferences"/>
+        <Preference
+                android:defaultValue=""
+                android:key="changelogPref"
+                android:title="@string/changelogTitle"/>
+        <Preference
+                android:defaultValue=""
+                android:key="authorsPref"
+                android:title="@string/author_title_preferences"/>
         <Preference
                 android:defaultValue=""
                 android:key="ratePref"
@@ -91,16 +119,6 @@
                 android:key="mailingListPref"
                 android:summary="@string/mailingListURL"
                 android:title="@string/mailingListTitle"/>
-        <Preference
-                android:defaultValue=""
-                android:hint=""
-                android:key="currentVersionPref"
-                android:title="@string/versionTitle_preferences"/>
-        <Preference
-                android:defaultValue=""
-                android:summary="@string/author_preferences"
-                android:key="aboutPref"
-                android:title="@string/author_title_preferences"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

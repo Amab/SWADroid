@@ -28,15 +28,17 @@ import android.view.*;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.camera.CameraManager;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.model.User;
-import es.ugr.swad.swadroid.modules.rollcall.RollCallUtil;
+import es.ugr.swad.swadroid.utils.Utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -283,8 +285,8 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
         Bitmap bMap;
         Bitmap bMapScaled;
         String qrContent = rawResult.toString();
-        Boolean validDni = RollCallUtil.isValidDni(qrContent);
-        Boolean validNickname = RollCallUtil.isValidNickname(qrContent);
+        Boolean validDni = Utils.isValidDni(qrContent);
+        Boolean validNickname = Utils.isValidNickname(qrContent);
         int widthScale, heightScale, bMapScaledWidth, bMapScaledHeight;
 
         inactivityTimer.onActivity();

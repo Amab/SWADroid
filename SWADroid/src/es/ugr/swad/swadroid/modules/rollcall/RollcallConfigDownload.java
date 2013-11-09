@@ -19,8 +19,6 @@
 
 package es.ugr.swad.swadroid.modules.rollcall;
 
-import android.annotation.TargetApi;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -99,7 +97,7 @@ public class RollcallConfigDownload extends Module {
 
         if (result != null) {
             // Stores users data returned by webservice response
-            ArrayList<?> res = new ArrayList<Object>((Vector) result);
+            ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
             SoapObject soap = (SoapObject) res.get(1);
             numStudents = soap.getPropertyCount();
             for (int i = 0; i < numStudents; i++) {
@@ -132,9 +130,12 @@ public class RollcallConfigDownload extends Module {
 
                 // Inserts user in database or updates it if already exists
                 dbHelper.insertUser(u);
-                dbHelper.insertUserCourse(u, courseCode, groupCode);
-                // Download user's picture and save it in phone memory
-                downloadFile(u.getUserPhoto());
+                dbHelper.insertUserCourse(userCode, courseCode, groupCode);
+                
+                // If user's picture URL is not empty, download and save it in phone memory
+                if(!userPhoto.equals("")) {
+                	downloadFile(userPhoto);
+                }
             }    // end for (int i=0; i < usersCount; i++)
 
             if (isDebuggable) {
@@ -146,7 +147,6 @@ public class RollcallConfigDownload extends Module {
         setResult(RESULT_OK);
     }
 
-    @TargetApi(Build.VERSION_CODES.FROYO)
     private void downloadFile(String url) {
         if (url != null) {
             // Check the status of the external memory

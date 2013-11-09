@@ -43,8 +43,8 @@
     <string name="coursesProgressDescription">Obtendo assuntos&#8230;</string>
     <string name="notificationsProgressTitle">Notificações</string>
     <string name="notificationsProgressDescription">Recebendo notificações de novos&#8230;</string>
-    <string name="notificationsEmptyListMsg">Não baixado de qualquer notificação.\n\nPara baixar as últimas
-        notificações clique no ícone no canto superior direito da tela.</string>
+    <string name="notificationsEmptyListMsg">Não baixar qualquer notificação.\n\nPara download mais recente
+         notificações deslizar esta mensagem.</string>
     <string name="notificationsDownloadedMsg">Notificações baixado</string>
     <string name="testsDownloadProgressTitle">Testes</string>
     <string name="testsDownloadProgressDescription">Sincronizar perguntas do teste.\n\nDependendo o número de questões
@@ -289,5 +289,13 @@
     <string name="contents_phone">Número de telefone</string>
     <string name="contents_sms">SMS endereço</string>
     <string name="contents_text">Texto</string>
+	<string name="lastSyncTimeLabel">Última sincronização</string>
+	<string name="neverLabel">Nunca</string>
+	<string name="prefNotifSoundTitle">Som</string>
+	<string name="prefNotifSoundSummary">Ativar/desativar alertas sonoros para novas notificações</string>
+	<string name="prefNotifVibrateTitle">Vibração</string>
+	<string name="prefNotifVibrateSummary">Ativar/desativar alertas de vibração para novas notificações</string>
+	<string name="prefNotifLightsTitle">Luzes</string>
+	<string name="prefNotifLightsSummary">Ativar/desativar alertas de luz para novas notificações</string>
 
 </resources>

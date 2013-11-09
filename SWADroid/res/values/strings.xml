@@ -45,11 +45,11 @@
     <string name="notificationsProgressTitle">Notifications</string>
     <string name="notificationsProgressDescription">Retrieving new notifications&#8230;</string>
     <string name="notificationsEmptyListMsg">Did not download any notification.\n\nTo download most recent
-        notifications click the icon in the upper right of the screen.
+        notifications slide down this message.
     </string>
     <string name="notificationsDownloadedMsg">Notifications downloaded</string>
     <string name="testsDownloadProgressTitle">Tests</string>
-    <string name="testsDownloadProgressDescription">Synchronizing test questions.\n\nDepending of the number of
+    <string name="testsDownloadProgressDescription">Synchronizing test questions.\n\nDepending on the number of
         questions to synchronize, the data processing can take several minutes.\n\nPlease wait&#8230;</string>
     <string name="errorMsgLaunchingActivity">An error occurred during the execution of the
         operation
@@ -174,11 +174,11 @@
     <string name="clickToGetCourses">Click here to get your courses</string>
     <string name="attendanceModuleLabel">Rollcall</string>
     <string name="users">Users</string>
-    <string name="usersDownloadProgressDescription">Synchronizing users.\n\nDepending of the number of
+    <string name="usersDownloadProgressDescription">Synchronizing users.\n\nDepending on the number of
         users to synchronize, the data processing can take several minutes.\n\nPlease wait&#8230;</string>
     <string name="usersDownloadProgressTitle">Students</string>
     <string name="documentsDownloadModuleLabel">Documents</string>
-    <string name="documentsDownloadProgressDescription">Getting files. \n\nDepending of the directory size, this could
+    <string name="documentsDownloadProgressDescription">Getting files. \n\nDepending on the directory size, this could
         take several minutes.\n\nPlease wait&#8230;</string>
     <string name="clickToOpenFile">Click here to open the file</string>
     <string name="sharedsDownloadModuleLabel">Shared area</string>
@@ -263,7 +263,7 @@
     <string name="listSampleModuleLabel">Sample</string>
     <string name="rollcallModuleLabel">Rollcall</string>
     <string name="studentsTitle">Students</string>
-    <string name="studentsDownloadProgressDescription">Synchronizing users.\n\nDepending of the number of
+    <string name="studentsDownloadProgressDescription">Synchronizing users.\n\nDepending on the number of
         users to synchronize, the data processing can take several minutes.\n\nPlease wait&#8230;</string>
     <string name="studentsList">Students list</string>
     <string name="studentsDownloadProgressTitle">Students</string>
@@ -325,6 +325,18 @@
     <string name="contents_location">Geographic coordinates</string>
     <string name="contents_phone">Phone number</string>
     <string name="contents_sms">SMS address</string>
-    <string name="contents_text">Plain text</string>
+    <string name="contents_text">Plain text</string>  
+    <string name="lastSyncTimeLabel">Last synchronization</string>
+    <string name="neverLabel">Never</string>
+    <string name="prefNotifSoundKey">prefNotifSoundEnable</string>
+    <string name="prefNotifVibrateKey">prefNotifVibrateEnable</string>
+    <string name="prefNotifLightsKey">prefNotifLightsEnable</string>
+    <string name="prefNotifSoundTitle">Sound</string>
+    <string name="prefNotifSoundSummary">Enable/disable sound alerts for new notifications</string>
+    <string name="prefNotifVibrateTitle">Vibration</string>
+    <string name="prefNotifVibrateSummary">Enable/disable vibration alerts for new notifications</string>
+    <string name="prefNotifLightsTitle">Led</string>
+    <string name="prefNotifLightsSummary">Enable/disable led alerts for new notifications</string>
+    <string name="changelogTitle">Changelog</string>
 
 </resources>

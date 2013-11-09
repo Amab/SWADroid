@@ -32,17 +32,16 @@ import android.widget.AdapterView.OnItemClickListener;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.gui.widget.CheckableLinearLayout;
+import es.ugr.swad.swadroid.gui.widget.NumberPicker;
+import es.ugr.swad.swadroid.gui.widget.TextProgressBar;
 import es.ugr.swad.swadroid.model.Test;
 import es.ugr.swad.swadroid.model.TestAnswer;
 import es.ugr.swad.swadroid.model.TestQuestion;
 import es.ugr.swad.swadroid.model.TestTag;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.utils.Utils;
-import es.ugr.swad.swadroid.widget.CheckableLinearLayout;
-import es.ugr.swad.swadroid.widget.NumberPicker;
-import es.ugr.swad.swadroid.widget.TextProgressBar;
 import org.xmlpull.v1.XmlPullParserException;
-
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
@@ -121,15 +120,60 @@ public class TestsMake extends Module {
     /**
      * Screen to select the number of questions in the test
      */
+    /*@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	private void setNumQuestions() {
+        final android.widget.NumberPicker numberPicker;
+        Button acceptButton;
+        TextView minNumQuestions, maxNumQuestions;
+
+        setLayout(R.layout.tests_num_questions);
+
+        numberPicker = (android.widget.NumberPicker) findViewById(R.id.testNumQuestionsNumberPicker);
+        numberPicker.setMaxValue(test.getMax());
+        numberPicker.setMinValue(test.getMin());
+        numberPicker.setValue(test.getDef());
+        numberPicker.setWrapSelectorWheel(false);               
+        
+        minNumQuestions = (TextView) findViewById(R.id.minTestNumQuestionsId);
+        minNumQuestions.setText(test.getMin() + "≤");
+        
+        maxNumQuestions = (TextView) findViewById(R.id.maxTestNumQuestionsId);
+        maxNumQuestions.setText("≤" + test.getMax());
+
+        acceptButton = (Button) findViewById(R.id.testNumQuestionsAcceptButton);
+        acceptButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                numQuestions = numberPicker.getValue();
+
+                if (isDebuggable) {
+                    Log.d(TAG, "numQuestions=" + numQuestions);
+                }
+
+                setTags();
+            }
+        });
+    }*/
+    
+    /**
+     * Screen to select the number of questions in the test
+     */
     private void setNumQuestions() {
         final NumberPicker numberPicker;
         Button acceptButton;
+        TextView minNumQuestions, maxNumQuestions;
 
         setLayout(R.layout.tests_num_questions);
 
         numberPicker = (NumberPicker) findViewById(R.id.testNumQuestionsNumberPicker);
         numberPicker.setRange(test.getMin(), test.getMax());
-        numberPicker.setCurrent(test.getDef());
+        numberPicker.setCurrent(test.getDef());        
+        
+        minNumQuestions = (TextView) findViewById(R.id.minTestNumQuestionsId);
+        minNumQuestions.setText(test.getMin() + "≤");
+        
+        maxNumQuestions = (TextView) findViewById(R.id.maxTestNumQuestionsId);
+        maxNumQuestions.setText("≤" + test.getMax());
+        
 
         acceptButton = (Button) findViewById(R.id.testNumQuestionsAcceptButton);
         acceptButton.setOnClickListener(new View.OnClickListener() {

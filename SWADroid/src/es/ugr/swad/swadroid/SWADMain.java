@@ -21,10 +21,12 @@ package es.ugr.swad.swadroid;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -46,6 +48,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.gui.ImageExpandableListAdapter;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.model.Course;
@@ -126,33 +129,41 @@ public class SWADMain extends MenuExpandableListActivity {
      * Shows configuration dialog on first run.
      */
     void showConfigurationDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.initialDialogTitle)
-                .setMessage(R.string.firstRunMsg)
-                .setCancelable(false)
-                .setPositiveButton(R.string.yesMsg, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        viewPreferences();
-                    }
-                })
-                .setNegativeButton(R.string.noMsg, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                        createSpinnerAdapter();
-                    }
-                }).show();
+    	DialogInterface.OnClickListener positiveListener = new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                viewPreferences();
+            }
+        };
+        
+    	DialogInterface.OnClickListener negativeListener = new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+                createSpinnerAdapter();
+            }
+        };
+        
+    	AlertDialog alertDialog = DialogFactory.createPositiveNegativeDialog(this,
+    			-1,
+    			R.string.initialDialogTitle,
+    			R.string.firstRunMsg,
+    			R.string.yesMsg,
+    			R.string.noMsg,
+    			positiveListener,
+    			negativeListener,
+    			null);
+    	
+    	alertDialog.show();
     }
 
     /**
      * Shows initial dialog after application upgrade.
      */
-    public void showUpgradeDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.initialDialogTitle)
-                .setMessage(R.string.upgradeMsg)
-                .setCancelable(false)
-                .setNeutralButton(R.string.close_dialog, null)
-                .show();
+    public void showUpgradeDialog(Context context) {        
+        AlertDialog alertDialog = DialogFactory.createWebViewDialog(context,
+        		R.string.changelogTitle,
+        		R.raw.changes);
+
+        alertDialog.show();
     }
 
     /* (non-Javadoc)
@@ -163,7 +174,8 @@ public class SWADMain extends MenuExpandableListActivity {
                                 int groupPosition, int childPosition, long id) {
         // Get the item that was clicked
         Object o = this.getExpandableListAdapter().getChild(groupPosition, childPosition);
-        String keyword = (String) ((Map<String, Object>) o).get(NAME);
+        @SuppressWarnings("unchecked")
+		String keyword = (String) ((Map<String, Object>) o).get(NAME);
         //boolean rollCallAndroidVersionOK = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.FROYO);
         //PackageManager pm = getPackageManager();
         //boolean rearCam;
@@ -220,7 +232,11 @@ public class SWADMain extends MenuExpandableListActivity {
         TextView text;
 
         //Initialize Bugsense plugin
-        BugSenseHandler.initAndStartSession(this, Constants.BUGSENSE_API_KEY);
+        try {
+        	BugSenseHandler.initAndStartSession(this, Constants.BUGSENSE_API_KEY);
+        } catch (Exception e) {
+        	Log.e(TAG, "Error initializing BugSense", e);
+        }
 
         //Initialize screen
         super.onCreate(icicle);
@@ -247,8 +263,8 @@ public class SWADMain extends MenuExpandableListActivity {
             lastVersion = prefs.getLastVersion();
             currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
             dbHelper.initializeDB();
-            //lastVersion = 45;
-            //currentVersion = 46;
+            //lastVersion = 51;
+            //currentVersion = 52;
 
             //If this is the first run, show configuration dialog
             if (lastVersion == 0) {
@@ -258,6 +274,7 @@ public class SWADMain extends MenuExpandableListActivity {
                 Intent activity = new Intent(getBaseContext(), AccountAuthenticator.class);
                 startActivity(activity);
                 SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, Constants.DEFAULT_SYNC_TIME, this);
+                prefs.setSyncTime(String.valueOf(Constants.DEFAULT_SYNC_TIME));
 
                 prefs.setLastVersion(currentVersion);
                 firstRun = true;
@@ -268,17 +285,29 @@ public class SWADMain extends MenuExpandableListActivity {
 
                 Constants.setCurrentUserRole(-1);
 
-                //If this is an upgrade, show upgrade dialog
+            //If this is an upgrade, show upgrade dialog
             } else if (lastVersion < currentVersion) {
-                //showUpgradeDialog();
+                showUpgradeDialog(this);
                 dbHelper.upgradeDB(this);
-
+                
+                if(lastVersion < 52) {
+                	//Encrypts users table
+                	dbHelper.encryptUsers();
+                	
+                	//If the app is updating from an unencrypted user password version, encrypt user password
+                	prefs.upgradeCredentials();
+                	
+                	prefs.setSyncTime(String.valueOf(Constants.DEFAULT_SYNC_TIME));
+                }
+                
                 //If the app is updating from an unencrypted version, encrypt already downloaded notifications
-                if (lastVersion < 45) {
+            	if (lastVersion < 45) {
                     dbHelper.encryptNotifications();
 
-                    //If the app is updating from the bugged encrypted version,
-                    //re-encrypt the notifications using the new method
+                /*
+                 * If the app is updating from the bugged encrypted version,
+                 * re-encrypt the notifications using the new method
+                 */
                 } else if (lastVersion == 45) {
                     dbHelper.reencryptNotifications();
                 }
@@ -345,7 +374,21 @@ public class SWADMain extends MenuExpandableListActivity {
         }
     }
 
-    @Override
+    /* (non-Javadoc)
+	 * @see android.app.Activity#onDestroy()
+	 */
+	@Override
+	protected void onDestroy() {
+		try {
+			BugSenseHandler.closeSession(this);
+		} catch (Exception e) {
+			Log.e(TAG, "Error initializing BugSense", e);
+        }
+		
+		super.onDestroy();
+	}
+
+	@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
@@ -385,7 +428,7 @@ public class SWADMain extends MenuExpandableListActivity {
                 spinner.setSelection(prefs.getLastCourseSelected());
             else
                 spinner.setSelection(0);
-            spinner.setOnTouchListener(Spinner_OnTouch);
+            	spinner.setOnTouchListener(Spinner_OnTouch);
         } else {
             cleanSpinner();
         }

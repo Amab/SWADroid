@@ -23,11 +23,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+
 import com.bugsense.trace.BugSenseHandler;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.Model;
+
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -119,7 +122,7 @@ public class Courses extends Module {
             List<Model> newCourses = new ArrayList<Model>();
             List<Model> obsoleteCourses = new ArrayList<Model>();
             //List<Model> modifiedCourses = new ArrayList<Model>();
-            ArrayList<?> res = new ArrayList<Object>((Vector) result);
+			ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
             SoapObject soap = (SoapObject) res.get(1);
             int csSize = soap.getPropertyCount();
             for (int i = 0; i < csSize; i++) {
