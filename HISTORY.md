@@ -1,4 +1,8 @@
-##0.12.3 (2013-11-09)
+##0.12.4 (2013-11-09)
+
+* Fixed ParseException in sessions date
+
+#0.12.3 (2013-11-09)
 
 * Added authors and changelog WebView dialogs and reordered the preferences items
 * Added PullToRefresh-ListView library project
