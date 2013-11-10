@@ -130,8 +130,18 @@ public class Messages extends Module {
     private final OnShowListener showListener = new DialogInterface.OnShowListener() {
         @Override
         public void onShow(DialogInterface dialog) {
+            EditText receiversText = (EditText) messageDialog.findViewById(R.id.message_receivers_text);;
+            EditText subjectText = (EditText) messageDialog.findViewById(R.id.message_subject_text);;
             Button b = ((AlertDialog) messageDialog).getButton(AlertDialog.BUTTON_POSITIVE);
+            
             b.setOnClickListener(positiveClickListener);
+            
+            if (notificationCode != 0) {
+                subject = getIntent().getStringExtra("summary");
+
+                subjectText.setText("Re: " + subject);
+                receiversText.setVisibility(View.GONE);
+            }
         }
     };
 
@@ -149,8 +159,6 @@ public class Messages extends Module {
      */
     @Override
     protected void onStart() {
-        EditText receiversText, subjectText;
-
         super.onStart();
 
         notificationCode = getIntent().getLongExtra("notificationCode", 0);
@@ -165,16 +173,6 @@ public class Messages extends Module {
         		null,
         		negativeClickListener,
         		cancelClickListener);
-        
-        if (notificationCode != 0) {
-            subject = getIntent().getStringExtra("summary");
-
-            receiversText = (EditText) messageDialog.findViewById(R.id.message_receivers_text);
-            subjectText = (EditText) messageDialog.findViewById(R.id.message_subject_text);
-
-            subjectText.setText("Re: " + subject);
-            receiversText.setVisibility(View.GONE);
-        }
 
         messageDialog.setOnShowListener(showListener);
         messageDialog.show();
