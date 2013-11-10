@@ -1,3 +1,7 @@
+##0.12.5 (2013-11-10)
+
+* Fixed incorrect layout and NullPointerException in message replys
+
 ##0.12.4 (2013-11-09)
 
 * Fixed ParseException in sessions date
