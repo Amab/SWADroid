@@ -31,9 +31,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.gui.widget.CheckableLinearLayout;
 import es.ugr.swad.swadroid.model.Test;
 import es.ugr.swad.swadroid.model.TestAnswer;
-import es.ugr.swad.swadroid.widget.CheckableLinearLayout;
 
 import java.util.List;
 

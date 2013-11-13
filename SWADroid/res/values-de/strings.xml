@@ -43,8 +43,8 @@
     <string name="coursesProgressDescription">Abrufen von Kursen&#8230;</string>
     <string name="notificationsProgressTitle">Benachrichtigungen</string>
     <string name="notificationsProgressDescription">Abrufen neuer Benachrichtigungen&#8230;</string>
-    <string name="notificationsEmptyListMsg">Nicht heruntergeladen haben keine Benachrichtigung.\n\nZum Download
-        j�ngsten Benachrichtigungen klicken Sie auf das Symbol in der oberen rechten Ecke des Bildschirms.
+    <string name="notificationsEmptyListMsg">Haben Sie nicht das Herunterladen von Benachrichtigung.\n\nFür Download jüngsten
+         Meldungen rutschen diese Meldung.
     </string>
     <string name="notificationsDownloadedMsg">Benachrichtigungen heruntergeladen</string>
     <string name="testsDownloadProgressTitle">Tests</string>
@@ -210,5 +210,13 @@
     <string name="contents_phone">Telefonnummer</string>
     <string name="contents_sms">SMS Adresse</string>
     <string name="contents_text">Text</string>
+	<string name="lastSyncTimeLabel">Letzte Synchronisation</string>
+	<string name="neverLabel">Nie</string>
+	<string name="prefNotifSoundTitle">Ton</string>
+	<string name="prefNotifSoundSummary">Aktivieren/Deaktivieren akustische Signale für neue Meldungen</string>
+	<string name="prefNotifVibrateTitle">Vibration</string>
+	<string name="prefNotifVibrateSummary">Aktivieren/Deaktivieren der Vibrationsalarm für neue Benachrichtigungen</string>
+	<string name="prefNotifLightsTitle">Leuchten</string>
+	<string name="prefNotifLightsSummary">Aktivieren/Deaktivieren der Licht-Benachrichtigungen zu neuen Benachrichtigungen</string>
 
 </resources>

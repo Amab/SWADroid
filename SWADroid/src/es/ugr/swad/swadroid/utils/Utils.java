@@ -37,6 +37,13 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Utilities class.
+ *
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
+ * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
+ */
 public class Utils {
     private static final String TAG = Constants.APP_TAG + " Utils";
 
@@ -244,5 +251,11 @@ public class Utils {
 	
 	    return matcher.matches();
 	}
+
+    public static String fixLinks(String body) {
+        String regex = "(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
+        body = body.replaceAll(regex, "<a href=\"$0\">$0</a>");
+        return body;
+    }
 
 }

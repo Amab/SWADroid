@@ -226,7 +226,7 @@ public class User extends Model {
      *
      * @param userPhoto the userPhoto to set
      */
-    public void setuserPhoto(String userPhoto) {
+    public void setUserPhoto(String userPhoto) {
         this.userPhoto = userPhoto;
     }
 

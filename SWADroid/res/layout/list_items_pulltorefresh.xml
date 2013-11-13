@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/background"
+              android:orientation="vertical">
+    <include layout="@layout/action_bar"/>
+
+    <include android:id="@+id/courseNameLayout" layout="@layout/course_or_group_name"/>
+    
+	<com.handmark.pulltorefresh.library.PullToRefreshListView
+            android:id="@+id/listItemsPullToRefresh"
+            style="@style/PullToRefresh"/>
+
+</LinearLayout>
