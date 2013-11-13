@@ -21,6 +21,7 @@ package es.ugr.swad.swadroid;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -47,6 +48,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.gui.ImageExpandableListAdapter;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.model.Course;
@@ -129,33 +131,41 @@ public class SWADMain extends MenuExpandableListActivity {
      * Shows configuration dialog on first run.
      */
     void showConfigurationDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.initialDialogTitle)
-                .setMessage(R.string.firstRunMsg)
-                .setCancelable(false)
-                .setPositiveButton(R.string.yesMsg, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        viewPreferences();
-                    }
-                })
-                .setNegativeButton(R.string.noMsg, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                        createSpinnerAdapter();
-                    }
-                }).show();
+    	DialogInterface.OnClickListener positiveListener = new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                viewPreferences();
+            }
+        };
+        
+    	DialogInterface.OnClickListener negativeListener = new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+                createSpinnerAdapter();
+            }
+        };
+        
+    	AlertDialog alertDialog = DialogFactory.createPositiveNegativeDialog(this,
+    			-1,
+    			R.string.initialDialogTitle,
+    			R.string.firstRunMsg,
+    			R.string.yesMsg,
+    			R.string.noMsg,
+    			positiveListener,
+    			negativeListener,
+    			null);
+    	
+    	alertDialog.show();
     }
 
     /**
      * Shows initial dialog after application upgrade.
      */
-    public void showUpgradeDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.initialDialogTitle)
-                .setMessage(R.string.upgradeMsg)
-                .setCancelable(false)
-                .setNeutralButton(R.string.close_dialog, null)
-                .show();
+    public void showUpgradeDialog(Context context) {        
+        AlertDialog alertDialog = DialogFactory.createWebViewDialog(context,
+        		R.string.changelogTitle,
+        		R.raw.changes);
+
+        alertDialog.show();
     }
 
     /* (non-Javadoc)
@@ -278,6 +288,7 @@ public class SWADMain extends MenuExpandableListActivity {
                 Intent activity = new Intent(getBaseContext(), AccountAuthenticator.class);
                 startActivity(activity);
                 SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, Constants.DEFAULT_SYNC_TIME, this);
+                prefs.setSyncTime(String.valueOf(Constants.DEFAULT_SYNC_TIME));
 
                 prefs.setLastVersion(currentVersion);
                 firstRun = true;
@@ -290,12 +301,17 @@ public class SWADMain extends MenuExpandableListActivity {
 
             //If this is an upgrade, show upgrade dialog
             } else if (lastVersion < currentVersion) {
-                //showUpgradeDialog();
+                showUpgradeDialog(this);
                 dbHelper.upgradeDB(this);
-
-                //If the app is updating from an unencrypted user password version, encrypt user password
+                
                 if(lastVersion < 52) {
+                	//Encrypts users table
+                	dbHelper.encryptUsers();
+                	
+                	//If the app is updating from an unencrypted user password version, encrypt user password
                 	prefs.upgradeCredentials();
+                	
+                	prefs.setSyncTime(String.valueOf(Constants.DEFAULT_SYNC_TIME));
                 }
                 
                 //If the app is updating from an unencrypted version, encrypt already downloaded notifications
@@ -426,7 +442,7 @@ public class SWADMain extends MenuExpandableListActivity {
                 spinner.setSelection(prefs.getLastCourseSelected());
             else
                 spinner.setSelection(0);
-            spinner.setOnTouchListener(Spinner_OnTouch);
+            	spinner.setOnTouchListener(Spinner_OnTouch);
         } else {
             cleanSpinner();
         }

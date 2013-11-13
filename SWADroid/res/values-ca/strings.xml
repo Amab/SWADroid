@@ -44,8 +44,8 @@
     <string name="coursesProgressDescription">Obtenint assignatures&#8230;</string>
     <string name="notificationsProgressTitle">Notificacions</string>
     <string name="notificationsProgressDescription">Obtenint noves notificacions&#8230;</string>
-    <string name="notificationsEmptyListMsg">No s\'ha descarregat cap notificació.\n\nPer descarregar les notificacions
-        més recents premi la icona de la cantonada superior dreta de la pantalla.</string>
+    <string name="notificationsEmptyListMsg">No s\'ha descarregat cap notificació.\n\nPer descarregar les
+         notificacions més recents llisqui aquest missatge cap avall.</string>
     <string name="notificationsDownloadedMsg">Notificacions descarregades</string>
     <string name="testsDownloadProgressTitle">Tests</string>
     <string name="testsDownloadProgressDescription">Sincronitzant preguntes de test.\n\nDependiendo del nombre de
@@ -298,5 +298,13 @@
     <string name="contents_phone">Número de telèfon</string>
     <string name="contents_sms">Adreça SMS</string>
     <string name="contents_text">Text pla</string>
+    <string name="lastSyncTimeLabel">Darrera sincronització</string>
+	<string name="neverLabel">Mai</string>
+	<string name="prefNotifSoundTitle">So</string>
+	<string name="prefNotifSoundSummary">Activar/desactivar el so de les alertes de noves notificacions</string>
+	<string name="prefNotifVibrateTitle">Vibració</string>
+	<string name="prefNotifVibrateSummary">Activar/desactivar la vibració de les alertes de noves notificacions</string>
+	<string name="prefNotifLightsTitle">Indicadors lluminosos</string>
+	<string name="prefNotifLightsSummary">Activar/desactivar els indicadors lluminosos de les alertes de noves notificacions</string>
 
 </resources>

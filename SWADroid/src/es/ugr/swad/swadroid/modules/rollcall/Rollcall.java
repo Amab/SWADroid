@@ -248,7 +248,7 @@ public class Rollcall extends MenuExpandableListActivity {
             studentsList = new ArrayList<StudentItemModel>();
 
             for (Long userCode : idList) {
-                User u = (User) dbHelper.getRow(Constants.DB_TABLE_USERS, "userCode", String.valueOf(userCode));
+                User u = dbHelper.getUser("userCode", String.valueOf(userCode));
                 studentsList.add(new StudentItemModel(u));
             }
             // Arrange the list alphabetically
@@ -386,7 +386,7 @@ public class Rollcall extends MenuExpandableListActivity {
                         ArrayList<Boolean> enrolledStudents = new ArrayList<Boolean>();
 
                         for (String id : idList) {
-                            User u = (User) dbHelper.getRow(Constants.DB_TABLE_USERS, "userID", id);
+                            User u = dbHelper.getUser("userID", id);
                             if (u != null) {
                                 studentsList.add(new StudentItemModel(u));
                                 // Check if the specified user is enrolled in the selected course

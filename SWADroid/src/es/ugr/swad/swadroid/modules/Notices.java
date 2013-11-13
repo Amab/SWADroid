@@ -18,20 +18,24 @@
  */
 package es.ugr.swad.swadroid.modules;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
+import android.content.DialogInterface.OnClickListener;
+import android.content.DialogInterface.OnShowListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.model.User;
+
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
@@ -66,10 +70,30 @@ public class Notices extends Module {
      */
     private long selectedCourseCode = 0;
 
-    private final OnClickListener positiveClickListener = new OnClickListener() {
-
-        public void onClick(View v) {
+    /*private final OnClickListener positiveClickListener = new OnClickListener() {
+		@Override
+        public void onClick(DialogInterface dialog, int which) {
             if (isDebuggable) {
+                Log.i(TAG, "on click positive before send request to server");
+            }
+
+            try {
+                /*if(isDebuggable) {
+                    Log.i(TAG, "selectedCourseCode = " + Long.toString(courseCode));
+				}*/
+
+            /*    runConnection();
+            } catch (Exception e) {
+                String errorMsg = getString(R.string.errorServerResponseMsg);
+                error(TAG, errorMsg, e, true);
+            }
+        }
+    };*/
+    
+    private final View.OnClickListener positiveClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+        	if (isDebuggable) {
                 Log.i(TAG, "on click positive before send request to server");
             }
 
@@ -87,37 +111,40 @@ public class Notices extends Module {
     };
 
     private final OnClickListener negativeClickListener = new OnClickListener() {
-        public void onClick(View v) {
+        public void onClick(DialogInterface dialog, int which) {
             finish();
         }
     };
+    
+    private final OnCancelListener cancelClickListener = new DialogInterface.OnCancelListener() {
+        public void onCancel(DialogInterface dialog) {
+            setResult(RESULT_CANCELED);
+            finish();
+        }
+    };
+    
+    private final OnShowListener showListener = new DialogInterface.OnShowListener() {
+        @Override
+        public void onShow(DialogInterface dialog) {
+            Button b = ((AlertDialog) noticeDialog).getButton(AlertDialog.BUTTON_POSITIVE);
+            b.setOnClickListener(positiveClickListener);
+        }
+    };
 
-    private void launchNoticeDialog() {
-
-        noticeDialog = new Dialog(this);
-        Button acceptButton, cancelButton;
-
-        noticeDialog.setTitle(R.string.noticesModuleLabel);
-        noticeDialog.setContentView(R.layout.notice_dialog);
-        noticeDialog.setCancelable(true);
-
-        noticeDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-
-        acceptButton = (Button) noticeDialog.findViewById(R.id.notice_button_accept);
-        acceptButton.setOnClickListener(positiveClickListener);
-
-        cancelButton = (Button) noticeDialog.findViewById(R.id.notice_button_cancel);
-        cancelButton.setOnClickListener(negativeClickListener);
-
-        noticeDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-
-            public void onCancel(DialogInterface dialog) {
-                setResult(RESULT_CANCELED);
-                finish();
-            }
-        });
+    private void launchNoticeDialog() {       
+        noticeDialog = DialogFactory.createPositiveNegativeDialog(this,
+        		R.layout.dialog_notice,
+        		R.string.noticesModuleLabel,
+        		-1,
+        		R.string.sendMsg,
+        		R.string.cancelMsg,
+        		//positiveClickListener,
+        		null,
+        		negativeClickListener,
+        		cancelClickListener);
+        
+        noticeDialog.setOnShowListener(showListener);
         noticeDialog.show();
-
     }
 
     @Override
@@ -155,6 +182,7 @@ public class Notices extends Module {
         String noticeSended = getString(R.string.noticePublished);
         Toast.makeText(this, noticeSended, Toast.LENGTH_LONG).show();
         Log.i(TAG, noticeSended);
+        noticeDialog.dismiss();
         finish();
     }
 

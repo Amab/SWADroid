@@ -19,9 +19,6 @@
 package es.ugr.swad.swadroid.modules.notifications;
 
 import android.accounts.Account;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.*;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -29,11 +26,18 @@ import android.util.Log;
 import android.view.View;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
+
 import com.bugsense.trace.BugSenseHandler;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.gui.AlertNotification;
 import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.modules.Module;
+
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -102,6 +106,35 @@ public class Notifications extends Module {
      * Synchronization account
      */
     private static Account account;
+    /**
+     * ListView click listener
+     */
+    private OnItemClickListener clickListener = new OnItemClickListener() {
+        public void onItemClick(AdapterView<?> av, View v, int position, long rowId) {
+            //adapter.toggleContentVisibility(position);
+            TextView code = (TextView) v.findViewById(R.id.eventCode);
+            TextView type = (TextView) v.findViewById(R.id.eventType);
+            TextView userPhoto = (TextView) v.findViewById(R.id.eventUserPhoto);
+            TextView sender = (TextView) v.findViewById(R.id.eventSender);
+            TextView course = (TextView) v.findViewById(R.id.eventLocation);
+            TextView summary = (TextView) v.findViewById(R.id.eventSummary);
+            TextView content = (TextView) v.findViewById(R.id.eventText);
+            TextView date = (TextView) v.findViewById(R.id.eventDate);
+            TextView time = (TextView) v.findViewById(R.id.eventTime);
+
+            Intent activity = new Intent(getApplicationContext(), NotificationItem.class);
+            activity.putExtra("notificationCode", code.getText().toString());
+            activity.putExtra("notificationType", type.getText().toString());
+            activity.putExtra("userPhoto", userPhoto.getText().toString());
+            activity.putExtra("sender", sender.getText().toString());
+            activity.putExtra("course", course.getText().toString());
+            activity.putExtra("summary", summary.getText().toString());
+            activity.putExtra("content", content.getText().toString());
+            activity.putExtra("date", date.getText().toString());
+            activity.putExtra("time", time.getText().toString());
+            startActivity(activity);
+        }
+    };
 
     /**
      * Refreshes data on screen
@@ -113,14 +146,20 @@ public class Notifications extends Module {
         startManagingCursor(dbCursor);
         adapter.changeCursor(dbCursor);
 
-        TextView text = (TextView) this.findViewById(R.id.listText);
-        ListView list = (ListView) this.findViewById(R.id.listItems);
+        //TextView text = (TextView) this.findViewById(R.id.listText);
+        //ListView list = (ListView) this.findViewById(R.id.listItems);
+        PullToRefreshListView list = (PullToRefreshListView) this.findViewById(R.id.listItemsPullToRefresh);
 
         //If there are notifications to show, hide the empty notifications message and show the notifications list
         if (dbCursor.getCount() > 0) {
-            text.setVisibility(View.GONE);
-            list.setVisibility(View.VISIBLE);
-        }
+            //text.setVisibility(View.GONE);
+            //list.setVisibility(View.VISIBLE);
+            list.setAdapter(adapter);
+            list.setOnItemClickListener(clickListener);
+        	//list.setDividerHeight(1);
+        }        
+
+    	list.onRefreshComplete();
     }
 
     /* (non-Javadoc)
@@ -128,39 +167,14 @@ public class Notifications extends Module {
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ImageButton updateButton;
+        //ImageButton updateButton;
         ImageView image;
         TextView text;
-        ListView list;
-        OnItemClickListener clickListener = new OnItemClickListener() {
-            public void onItemClick(AdapterView<?> av, View v, int position, long rowId) {
-                //adapter.toggleContentVisibility(position);
-                TextView code = (TextView) v.findViewById(R.id.eventCode);
-                TextView type = (TextView) v.findViewById(R.id.eventType);
-                TextView userPhoto = (TextView) v.findViewById(R.id.eventUserPhoto);
-                TextView sender = (TextView) v.findViewById(R.id.eventSender);
-                TextView course = (TextView) v.findViewById(R.id.eventLocation);
-                TextView summary = (TextView) v.findViewById(R.id.eventSummary);
-                TextView content = (TextView) v.findViewById(R.id.eventText);
-                TextView date = (TextView) v.findViewById(R.id.eventDate);
-                TextView time = (TextView) v.findViewById(R.id.eventTime);
-
-                Intent activity = new Intent(getApplicationContext(), NotificationItem.class);
-                activity.putExtra("notificationCode", code.getText().toString());
-                activity.putExtra("notificationType", type.getText().toString());
-                activity.putExtra("userPhoto", userPhoto.getText().toString());
-                activity.putExtra("sender", sender.getText().toString());
-                activity.putExtra("course", course.getText().toString());
-                activity.putExtra("summary", summary.getText().toString());
-                activity.putExtra("content", content.getText().toString());
-                activity.putExtra("date", date.getText().toString());
-                activity.putExtra("time", time.getText().toString());
-                startActivity(activity);
-            }
-        };
+        //ListView list;
+        final PullToRefreshListView list;
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.list_items);
+        setContentView(R.layout.list_items_pulltorefresh);
 
         this.findViewById(R.id.courseSelectedText).setVisibility(View.GONE);
         this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
@@ -174,16 +188,24 @@ public class Notifications extends Module {
         //image = (ImageView)this.findViewById(R.id.title_sep_1);
         //image.setVisibility(View.VISIBLE);
 
-        updateButton = (ImageButton) this.findViewById(R.id.refresh);
-        updateButton.setVisibility(View.VISIBLE);
+        //updateButton = (ImageButton) this.findViewById(R.id.refresh);
+        //updateButton.setVisibility(View.VISIBLE);
 
         dbCursor = dbHelper.getDb().getCursor(Constants.DB_TABLE_NOTIFICATIONS, selection, orderby);
         startManagingCursor(dbCursor);
         adapter = new NotificationsCursorAdapter(this, dbCursor, prefs.getDBKey());
 
-        list = (ListView) this.findViewById(R.id.listItems);
+        //list = (ListView) this.findViewById(R.id.listItems);
+        list = (PullToRefreshListView) this.findViewById(R.id.listItemsPullToRefresh);
         list.setAdapter(adapter);
         list.setOnItemClickListener(clickListener);
+        list.setOnRefreshListener(new OnRefreshListener<ListView>() {
+
+            @Override
+            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+                runConnection();
+            }
+        });
 
         text = (TextView) this.findViewById(R.id.listText);
 
@@ -192,9 +214,13 @@ public class Notifications extends Module {
 		 * message
 		 */
         if (dbCursor.getCount() == 0) {
-            list.setVisibility(View.GONE);
-            text.setVisibility(View.VISIBLE);
-            text.setText(R.string.notificationsEmptyListMsg);
+            //list.setVisibility(View.GONE);
+            //text.setVisibility(View.VISIBLE);
+        	String emptyMsgArray[]={getString(R.string.notificationsEmptyListMsg)};
+        	ArrayAdapter<String> adapter =new ArrayAdapter<String>(getApplicationContext(), R.layout.list_item, emptyMsgArray);
+        	list.setAdapter(adapter);
+        	list.setOnItemClickListener(null);
+        	//list.setDividerHeight(0);
         }
 
         setMETHOD_NAME("getNotifications");
@@ -301,54 +327,7 @@ public class Notifications extends Module {
             }
         }
     }
-
-    void alertNotif() {
-        if (notifCount > 0) {
-            //Obtain a reference to the notification service
-            String ns = Context.NOTIFICATION_SERVICE;
-            NotificationManager notManager =
-                    (NotificationManager) getSystemService(ns);
-
-            //Configure the alert
-            int icon = R.drawable.ic_launcher_swadroid;
-            long hour = System.currentTimeMillis();
-
-            //If the notifications counter exceeds the limit, set it to the max allowed
-            if (notifCount > SIZE_LIMIT) {
-                notifCount = SIZE_LIMIT;
-            }
-
-            Notification notif =
-                    new Notification(icon, getString(R.string.notificationsAlertTitle), hour);
-
-            //Configure the Intent
-            Context context = getApplicationContext();
-
-            Intent notIntent = new Intent(context,
-                    Notifications.class);
-
-            PendingIntent contIntent = PendingIntent.getActivity(
-                    context, 0, notIntent, 0);
-
-            notif.setLatestEventInfo(
-                    context, getString(R.string.notificationsAlertTitle), notifCount + " " +
-                    getString(R.string.notificationsAlertMsg), contIntent);
-
-            //AutoCancel: alert disappears when pushed
-            notif.flags |= Notification.FLAG_AUTO_CANCEL;
-
-            //Add sound, vibration and lights
-            notif.defaults |= Notification.DEFAULT_SOUND;
-            //notif.defaults |= Notification.DEFAULT_VIBRATE;
-            notif.defaults |= Notification.DEFAULT_LIGHTS;
-
-            //Send alert
-            notManager.notify(NOTIF_ALERT_ID, notif);
-        } else {
-            Toast.makeText(this, R.string.NoNotificationsMsg, Toast.LENGTH_LONG).show();
-        }
-    }
-
+    
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#connect()
      */
@@ -369,7 +348,18 @@ public class Notifications extends Module {
         //Toast.makeText(this, R.string.notificationsDownloadedMsg, Toast.LENGTH_SHORT).show();
 
         if (!ContentResolver.getSyncAutomatically(account, authority)) {
-            alertNotif();
+        	if (notifCount > 0) {
+	            //If the notifications counter exceeds the limit, set it to the max allowed
+	            if (notifCount > SIZE_LIMIT) {
+	                notifCount = SIZE_LIMIT;
+	            }
+	            
+	            AlertNotification.alertNotif(getApplicationContext(),
+	            		NOTIF_ALERT_ID,
+	            		getString(R.string.app_name),
+	            		notifCount + " " + getString(R.string.notificationsAlertMsg),
+	            		getString(R.string.app_name));
+        	}
 
             ProgressBar pb = (ProgressBar) this.findViewById(R.id.progress_refresh);
             ImageButton updateButton = (ImageButton) this.findViewById(R.id.refresh);
@@ -415,10 +405,10 @@ public class Notifications extends Module {
      * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
      */
     private class SyncReceiver extends BroadcastReceiver {
-        private final Notifications mActivity;
+        //private final Notifications mActivity;
 
         public SyncReceiver(Notifications activity) {
-            mActivity = activity;
+            //mActivity = activity;
         }
 
         @Override
@@ -436,11 +426,11 @@ public class Notifications extends Module {
                     Toast.makeText(context, R.string.NoNotificationsMsg, Toast.LENGTH_LONG).show();
                 }
 
-                ProgressBar pb = (ProgressBar) mActivity.findViewById(R.id.progress_refresh);
-                ImageButton updateButton = (ImageButton) mActivity.findViewById(R.id.refresh);
+                //ProgressBar pb = (ProgressBar) mActivity.findViewById(R.id.progress_refresh);
+                //ImageButton updateButton = (ImageButton) mActivity.findViewById(R.id.refresh);
 
-                pb.setVisibility(View.GONE);
-                updateButton.setVisibility(View.VISIBLE);
+                //pb.setVisibility(View.GONE);
+                //updateButton.setVisibility(View.VISIBLE);
 
                 refreshScreen();
             }
