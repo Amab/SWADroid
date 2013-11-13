@@ -476,7 +476,7 @@ public class TestsMake extends Module {
             } else if (questionScore < 0) {
                 score.setTextColor(getResources().getColor(R.color.red));
             } else {
-                score.setTextColor(Color.BLACK);
+                score.setTextColor(Color.WHITE);
             }
 
             score.setText(df.format(questionScore));

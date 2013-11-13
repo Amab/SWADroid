@@ -19,7 +19,7 @@
 
     <color name="red">#ff0000</color>
     <color name="green">#339900</color>
-    <color name="title_background">#81bef7</color>
+    <color name="title_background">#000000</color>
     <color name="title_text">#ffffffff</color>
     <color name="foreground1">#000000</color>
     <color name="foreground2">#848484</color>
@@ -45,5 +45,6 @@
     <color name="platinum">#E5E4E2</color>
     <color name="lightskyblue">#DDECF1</color>
     <color name="sgi_salmon">#C67171</color>
+    <color name="white">#ffffff</color>
 
 </resources>
