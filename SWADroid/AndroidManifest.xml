@@ -193,7 +193,53 @@
         <activity android:name=".modules.GenerateQR"
                   android:theme="@android:style/Theme.NoTitleBar">
         </activity>
-
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <activity
+                android:name=".modules.introduction.Introduction"
+                android:label="@string/introductionModuleLabel"
+                android:theme="@@android:style/Theme.NoTitleBar">
+        </activity>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         <provider
                 android:name=".sync.DummyProvider"
                 android:authorities="es.ugr.swad.swadroid.content"
