@@ -447,6 +447,16 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
     }
 
     /**
+	 *Checks if automatic synchronization is enabled
+     * 
+	 * @return true if automatic synchronization is enabled
+	 * 		   false otherwise
+	 */
+	public static boolean isSyncEnabled() {
+		return syncEnabled;
+	}
+
+	/**
      * Sets the database passphrase
      *
      * @param key The database passphrase
