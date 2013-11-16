@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <database
         name="swadroid_db_crypt"
-        version="14">
+        version="15">
 
     <table
             name="courses"
@@ -75,6 +75,16 @@
         <field
                 name="content"
                 new-in-version="5"
+                obligatory="true"
+                type="text"/>
+        <field
+                name="seenLocal"
+                new-in-version="15"
+                obligatory="true"
+                type="text"/>
+        <field
+                name="seenRemote"
+                new-in-version="15"
                 obligatory="true"
                 type="text"/>
     </table>

@@ -19,11 +19,13 @@
 
     <color name="red">#ff0000</color>
     <color name="green">#339900</color>
-    <color name="title_background">#000000</color>
+    
     <color name="title_text">#ffffffff</color>
     <color name="foreground1">#000000</color>
     <color name="foreground2">#848484</color>
     <color name="background">#ffffffff</color>
+    <color name="title_background">#000000</color>
+    <color name="notifications_background_yellow">#f4fa58</color>
     <color name="result_view">#b0000000</color>
     <color name="title_separator">#ffffff</color>
     <color name="transparent">#00000000</color>
@@ -46,5 +48,6 @@
     <color name="lightskyblue">#DDECF1</color>
     <color name="sgi_salmon">#C67171</color>
     <color name="white">#ffffff</color>
+    
 
 </resources>

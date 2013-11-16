@@ -18,6 +18,7 @@
  */
 package es.ugr.swad.swadroid.model;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -224,7 +225,9 @@ public class DataBaseHelper {
                     crypto.decrypt(ent.getString("location")),
                     crypto.decrypt(ent.getString("summary")),
                     ent.getInt("status"),
-                    crypto.decrypt(ent.getString("content")));
+                    crypto.decrypt(ent.getString("content")),
+                    Utils.parseStringBool(ent.getString("seenLocal")),
+                    Utils.parseStringBool(ent.getString("seenRemote")));
         } else if (table.equals(Constants.DB_TABLE_TEST_QUESTIONS)) {
             id = ent.getInt("id");
             PairTable q = (PairTable) getRow(Constants.DB_TABLE_TEST_QUESTIONS_COURSE, "qstCod", Long.toString(id));
@@ -727,7 +730,6 @@ public class DataBaseHelper {
         return groups;
     }
 
-
     /**
      * Inserts a course in database
      *
@@ -764,6 +766,8 @@ public class DataBaseHelper {
         ent.setValue("summary", crypto.encrypt(n.getSummary()));
         ent.setValue("status", status);
         ent.setValue("content", crypto.encrypt(n.getContent()));
+        ent.setValue("seenLocal", Utils.parseBoolString(n.isSeenLocal()));
+        ent.setValue("seenRemote", Utils.parseBoolString(n.isSeenRemote()));
         ent.save();
     }
 
@@ -1208,6 +1212,35 @@ public class DataBaseHelper {
     /**
      * Updates a notification in database
      *
+     * @param id     Notification code of notification to be updated
+     * @param actual Updated notification
+     */
+    public void updateNotification(long id, SWADNotification actual) {
+        List<Entity> rows = db.getEntityList(Constants.DB_TABLE_NOTIFICATIONS, "id = " + id);
+        Entity ent = rows.get(0);
+
+        String eventTime = String.valueOf(actual.getEventTime());
+        String status = String.valueOf(actual.getStatus());
+
+        ent.setValue("id", actual.getId());
+        ent.setValue("eventType", crypto.encrypt(actual.getEventType()));
+        ent.setValue("eventTime", eventTime);
+        ent.setValue("userSurname1", crypto.encrypt(actual.getUserSurname1()));
+        ent.setValue("userSurname2", crypto.encrypt(actual.getUserSurname2()));
+        ent.setValue("userFirstname", crypto.encrypt(actual.getUserFirstName()));
+        ent.setValue("userPhoto", crypto.encrypt(actual.getUserPhoto()));
+        ent.setValue("location", crypto.encrypt(actual.getLocation()));
+        ent.setValue("summary", crypto.encrypt(actual.getSummary()));
+        ent.setValue("status", status);
+        ent.setValue("content", crypto.encrypt(actual.getContent()));
+        ent.setValue("seenLocal", Utils.parseBoolString(actual.isSeenLocal()));
+        ent.setValue("seenRemote", Utils.parseBoolString(actual.isSeenRemote()));
+        ent.save();
+    }
+
+    /**
+     * Updates a notification in database
+     *
      * @param prev   Notification to be updated
      * @param actual Updated notification
      */
@@ -1219,15 +1252,18 @@ public class DataBaseHelper {
         String status = String.valueOf(actual.getStatus());
 
         ent.setValue("id", actual.getId());
-        ent.setValue("eventType", actual.getEventType());
+        ent.setValue("eventType", crypto.encrypt(actual.getEventType()));
         ent.setValue("eventTime", eventTime);
-        ent.setValue("userSurname1", actual.getUserSurname1());
-        ent.setValue("userSurname2", actual.getUserSurname2());
-        ent.setValue("userFirstName", actual.getUserFirstName());
-        ent.setValue("location", actual.getLocation());
-        ent.setValue("summary", actual.getSummary());
+        ent.setValue("userSurname1", crypto.encrypt(actual.getUserSurname1()));
+        ent.setValue("userSurname2", crypto.encrypt(actual.getUserSurname2()));
+        ent.setValue("userFirstname", crypto.encrypt(actual.getUserFirstName()));
+        ent.setValue("userPhoto", crypto.encrypt(actual.getUserPhoto()));
+        ent.setValue("location", crypto.encrypt(actual.getLocation()));
+        ent.setValue("summary", crypto.encrypt(actual.getSummary()));
         ent.setValue("status", status);
-        ent.setValue("content", actual.getContent());
+        ent.setValue("content", crypto.encrypt(actual.getContent()));
+        ent.setValue("seenLocal", Utils.parseBoolString(actual.isSeenLocal()));
+        ent.setValue("seenRemote", Utils.parseBoolString(actual.isSeenRemote()));
         ent.save();
     }
 
@@ -1790,6 +1826,10 @@ public class DataBaseHelper {
             ent.save();
         }
     }
+    
+    void markNotificationAsSeenLocally(String notificationCode) {
+    	
+    }
 
     /**
      * Empty table from database
@@ -1894,8 +1934,8 @@ public class DataBaseHelper {
         int dbVersion = db.getDB().getVersion();
         boolean found = false;
         int i = 0;
-        //cleanTables();
-        //initializeDB();
+        int rowsAffected;
+        ContentValues fields;
 
 		/* 
 		 * Modify database keeping data:
@@ -1927,22 +1967,6 @@ public class DataBaseHelper {
                 db.getDB().execSQL("DROP TABLE " + Constants.DB_TABLE_COURSES + ";");//+
                 db.getDB().execSQL("CREATE TABLE " + Constants.DB_TABLE_COURSES
                         + " (_id integer primary key autoincrement, id long, userRole integer,shortName text, fullName text);");
-                //Keeping data (It will have columns without data):
-				/*
-				 * db.getDB().execSQL("CREATE TEMPORARY TABLE __"+ Global.DB_TABLE_COURSES
-				+ " (_id integer primary key autoincrement, id long, userRole integer,"
-	            + " shortName text, fullName text); ");
-		db.getDB().execSQL(
-	            "INSERT INTO __" + Global.DB_TABLE_COURSES + " SELECT _id, id, userRole, name, name  "
-	           + " FROM "+ Global.DB_TABLE_COURSES + ";");
-		db.getDB().execSQL( "DROP TABLE " + Global.DB_TABLE_COURSES + ";");
-		db.getDB().execSQL("CREATE TABLE "+ Global.DB_TABLE_COURSES
-				+ " (_id integer primary key autoincrement, id long, userRole integer,"
-	            + " shortName text, fullName text); ");
-		db.getDB().execSQL(
-	            "INSERT INTO " + Global.DB_TABLE_COURSES + " SELECT _id, id, userRole, shortName, fullName  "
-	           + " FROM __"+ Global.DB_TABLE_COURSES + ";");*/
-
             }
 
 		/* version 12 - 13
@@ -1964,57 +1988,19 @@ public class DataBaseHelper {
                 db.getDB().execSQL("DROP TABLE " + Constants.DB_TABLE_GROUPS + ";");
                 db.getDB().execSQL("CREATE TABLE " + Constants.DB_TABLE_GROUPS + " (_id integer primary key autoincrement, id long, groupName text, maxStudents integer,"
                         + " students integer, open integer, fileZones integer, member integer); ");
-				/*db.getDB().execSQL(
-					"CREATE TEMPORARY TABLE __"+ Global.DB_TABLE_GROUPS
-					+ " (_id integer primary key autoincrement, id long, groupName text, maxStudents integer,"
-	                + " students integer, open integer, fileZones integer, member integer); ");
-			db.getDB().execSQL(
-	                 "INSERT INTO __" + Global.DB_TABLE_GROUPS + " SELECT _id, groupCode, groupName, maxStudents,  "
-	                + "students, open, fileZones, member FROM "+ Global.DB_TABLE_GROUPS + ";");
-			db.getDB().execSQL( "DROP TABLE " + Global.DB_TABLE_GROUPS + ";");
-			db.getDB().execSQL("CREATE TABLE " + Global.DB_TABLE_GROUPS+ " (_id integer primary key autoincrement, id long, groupName text, maxStudents integer,"
-	                + " students integer, open integer, fileZones integer, member integer); ");
-	        db.getDB().execSQL("INSERT INTO " + Global.DB_TABLE_GROUPS + " SELECT _id, id, groupName, maxStudents,  "
-	                + "students, open, fileZones, member FROM __"+ Global.DB_TABLE_GROUPS + ";");
-	        db.getDB().execSQL( "DROP TABLE __" + Global.DB_TABLE_GROUPS + ";");*/
-
             }
+            
+        /* version 14-15
+		 * changes on notifications table: 
+		 * - new field seenLocal initialized to true
+		 * - new field seenRemote initialized to true
+		 * */
+        } else if (dbVersion < 15) {
+        	fields = new ContentValues();
+        	fields.put("seenLocal", Utils.parseBoolString(true));
+        	fields.put("seenRemote", Utils.parseBoolString(true));
+        	rowsAffected = db.getDB().update(Constants.DB_TABLE_NOTIFICATIONS, fields, null, null);
         }
-
-		/*db.getDB().execSQL("CREATE TEMPORARY TABLE __"
-                + Global.DB_TABLE_NOTIFICATIONS
-                + " (_id INTEGER PRIMARY KEY AUTOINanCREMENT, id INTEGER, eventType TEXT, eventTime TEXT,"
-                + " userSurname1 TEXT, userSurname2 TEXT, userFirstname TEXT, location TEXT, summary TEXT," 
-                + "status TEXT, content TEXT); "
-                + "INSERT INTO __" + Global.DB_TABLE_NOTIFICATIONS + " SELECT _id, id, eventType, eventTime, "
-                + "userSurname1, userSurname2, userFirstname, location, summary, status, content FROM "
-                + Global.DB_TABLE_NOTIFICATIONS + ";");
-
-    	deleteTable(Global.DB_TABLE_TEST_QUESTION_ANSWERS);
-    	deleteTable(Global.DB_TABLE_TEST_QUESTION_TAGS);
-    	deleteTable(Global.DB_TABLE_TEST_QUESTIONS_COURSE);
-    	deleteTable(Global.DB_TABLE_COURSES);
-    	deleteTable(Global.DB_TABLE_TEST_ANSWERS);
-    	deleteTable(Global.DB_TABLE_TEST_CONFIG);
-    	deleteTable(Global.DB_TABLE_TEST_QUESTIONS);
-    	deleteTable(Global.DB_TABLE_TEST_TAGS);
-    	deleteTable(Global.DB_TABLE_NOTIFICATIONS);
-		deleteTable(Global.DB_TABLE_USERS_COURSES);
-		deleteTable(Global.DB_TABLE_USERS);
-		deleteTable(Global.DB_TABLE_GROUPS_COURSES);
-		deleteTable(Global.DB_TABLE_GROUPS);
-		deleteTable(Global.DB_TABLE_PRACTICE_SESSIONS);
-		deleteTable(Global.DB_TABLE_ROLLCALL);
-		deleteTable(Global.DB_TABLE_GROUP_TYPES);
-		deleteTable(Global.DB_TABLE_GROUPS_GROUPTYPES);
-
-
-        db.createTables();
-
-    	db.getDB().execSQL("INSERT INTO " + Global.DB_TABLE_NOTIFICATIONS + " SELECT _id, id, eventType, eventTime, "
-                + "userSurname1, userSurname2, userFirstname, location, summary, status, content FROM __"
-                + Global.DB_TABLE_NOTIFICATIONS + ";"
-                + "DROP TABLE __" + Global.DB_TABLE_NOTIFICATIONS + ";");*/
 
         compactDB();
     }

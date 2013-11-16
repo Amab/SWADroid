@@ -310,7 +310,9 @@ public class Notifications extends Module {
                     String summary = pii.getProperty("summary").toString();
                     Integer status = Integer.valueOf(pii.getProperty("status").toString());
                     String content = pii.getProperty("content").toString();
-                    SWADNotification n = new SWADNotification(notificationCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, userPhoto, location, summary, status, content);
+                    
+                    //TODO Add "notification seen" info from SWAD
+                    SWADNotification n = new SWADNotification(notificationCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, userPhoto, location, summary, status, content, false, false);
                     dbHelper.insertNotification(n);
 
                     if(isDebuggable)
