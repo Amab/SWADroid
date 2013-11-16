@@ -23,7 +23,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
-import android.webkit.WebSettings.RenderPriority;
 import android.webkit.WebView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -31,6 +30,7 @@ import android.widget.TextView;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
+import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.modules.Messages;
 import es.ugr.swad.swadroid.utils.DownloadImageTask;
 import es.ugr.swad.swadroid.utils.Utils;
@@ -58,6 +58,7 @@ public class NotificationItem extends MenuActivity {
         ImageButton replyButton;
         WebView webview;
         String type = this.getIntent().getStringExtra("notificationType");
+        SWADNotification notif;
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.single_notification_view);
@@ -86,6 +87,7 @@ public class NotificationItem extends MenuActivity {
             replyButton.setVisibility(View.GONE);
         }
 
+        //notificationCode = 
         sender = this.getIntent().getStringExtra("sender");
         userPhoto = this.getIntent().getStringExtra("userPhoto");
         course = this.getIntent().getStringExtra("course");
@@ -115,9 +117,14 @@ public class NotificationItem extends MenuActivity {
             content = content.substring(9, content.length() - 3);
         }
 
-        webview.getSettings().setRenderPriority(RenderPriority.HIGH);
         webview.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         webview.loadDataWithBaseURL("", content, "text/html", "utf-8", "");
+        
+        //Set notification as seen locally
+        notificationCode = Long.valueOf(this.getIntent().getStringExtra("notificationCode"));
+        notif = (SWADNotification) dbHelper.getRow(Constants.DB_TABLE_NOTIFICATIONS, "id", String.valueOf(notificationCode));
+        notif.setSeenLocal(true);
+        dbHelper.updateNotification(notificationCode, notif);
     }
 
     /**
