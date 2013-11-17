@@ -114,6 +114,8 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         
         if(!seenLocal) {
         	view.setBackgroundColor(context.getResources().getColor(R.color.notifications_background_yellow));
+        } else {
+        	view.setBackgroundColor(context.getResources().getColor(R.color.background));
         }
 
         if (contentVisible.length == 0) {
