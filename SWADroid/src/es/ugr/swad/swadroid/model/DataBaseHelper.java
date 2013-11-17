@@ -1213,29 +1213,55 @@ public class DataBaseHelper {
      * Updates a notification in database
      *
      * @param id     Notification code of notification to be updated
+     * @param field  Field to be updated
+     * @param value  New field value
+     */
+    public void updateNotification(long id, String field, String value) {
+        List<Entity> rows = db.getEntityList(Constants.DB_TABLE_NOTIFICATIONS, "id = " + id);
+        for(Entity ent : rows) {
+        	ent.setValue(field, value);
+        	ent.save();
+        }
+    }
+
+    /**
+     * Updates a notification in database
+     *
+     * @param id     Notification code of notification to be updated
      * @param actual Updated notification
      */
     public void updateNotification(long id, SWADNotification actual) {
         List<Entity> rows = db.getEntityList(Constants.DB_TABLE_NOTIFICATIONS, "id = " + id);
-        Entity ent = rows.get(0);
-
+        long newID = actual.getId();
+        String eventType = crypto.encrypt(actual.getEventType());
         String eventTime = String.valueOf(actual.getEventTime());
+        String userSurname1 = crypto.encrypt(actual.getUserSurname1());
+        String userSurname2 = crypto.encrypt(actual.getUserSurname2());
+        String userFirstname = crypto.encrypt(actual.getUserFirstName());
+        String userPhoto = crypto.encrypt(actual.getUserPhoto());
+        String location = crypto.encrypt(actual.getLocation());
+        String summary = crypto.encrypt(actual.getSummary());
         String status = String.valueOf(actual.getStatus());
-
-        ent.setValue("id", actual.getId());
-        ent.setValue("eventType", crypto.encrypt(actual.getEventType()));
-        ent.setValue("eventTime", eventTime);
-        ent.setValue("userSurname1", crypto.encrypt(actual.getUserSurname1()));
-        ent.setValue("userSurname2", crypto.encrypt(actual.getUserSurname2()));
-        ent.setValue("userFirstname", crypto.encrypt(actual.getUserFirstName()));
-        ent.setValue("userPhoto", crypto.encrypt(actual.getUserPhoto()));
-        ent.setValue("location", crypto.encrypt(actual.getLocation()));
-        ent.setValue("summary", crypto.encrypt(actual.getSummary()));
-        ent.setValue("status", status);
-        ent.setValue("content", crypto.encrypt(actual.getContent()));
-        ent.setValue("seenLocal", Utils.parseBoolString(actual.isSeenLocal()));
-        ent.setValue("seenRemote", Utils.parseBoolString(actual.isSeenRemote()));
-        ent.save();
+        String content = crypto.encrypt(actual.getContent());
+        String seenLocal = Utils.parseBoolString(actual.isSeenLocal());
+        String seenRemote = Utils.parseBoolString(actual.isSeenRemote());
+        
+        for(Entity ent : rows) {
+	        ent.setValue("id", newID);
+	        ent.setValue("eventType", eventType);
+	        ent.setValue("eventTime", eventTime);
+	        ent.setValue("userSurname1", userSurname1);
+	        ent.setValue("userSurname2", userSurname2);
+	        ent.setValue("userFirstname", userFirstname);
+	        ent.setValue("userPhoto", userPhoto);
+	        ent.setValue("location", location);
+	        ent.setValue("summary", summary);
+	        ent.setValue("status", status);
+	        ent.setValue("content", content);
+	        ent.setValue("seenLocal", seenLocal);
+	        ent.setValue("seenRemote", seenRemote);
+	        ent.save();
+        }
     }
 
     /**
@@ -1246,25 +1272,36 @@ public class DataBaseHelper {
      */
     public void updateNotification(SWADNotification prev, SWADNotification actual) {
         List<Entity> rows = db.getEntityList(Constants.DB_TABLE_NOTIFICATIONS, "id = " + prev.getId());
-        Entity ent = rows.get(0);
-
+        long newID = actual.getId();
+        String eventType = crypto.encrypt(actual.getEventType());
         String eventTime = String.valueOf(actual.getEventTime());
+        String userSurname1 = crypto.encrypt(actual.getUserSurname1());
+        String userSurname2 = crypto.encrypt(actual.getUserSurname2());
+        String userFirstname = crypto.encrypt(actual.getUserFirstName());
+        String userPhoto = crypto.encrypt(actual.getUserPhoto());
+        String location = crypto.encrypt(actual.getLocation());
+        String summary = crypto.encrypt(actual.getSummary());
         String status = String.valueOf(actual.getStatus());
-
-        ent.setValue("id", actual.getId());
-        ent.setValue("eventType", crypto.encrypt(actual.getEventType()));
-        ent.setValue("eventTime", eventTime);
-        ent.setValue("userSurname1", crypto.encrypt(actual.getUserSurname1()));
-        ent.setValue("userSurname2", crypto.encrypt(actual.getUserSurname2()));
-        ent.setValue("userFirstname", crypto.encrypt(actual.getUserFirstName()));
-        ent.setValue("userPhoto", crypto.encrypt(actual.getUserPhoto()));
-        ent.setValue("location", crypto.encrypt(actual.getLocation()));
-        ent.setValue("summary", crypto.encrypt(actual.getSummary()));
-        ent.setValue("status", status);
-        ent.setValue("content", crypto.encrypt(actual.getContent()));
-        ent.setValue("seenLocal", Utils.parseBoolString(actual.isSeenLocal()));
-        ent.setValue("seenRemote", Utils.parseBoolString(actual.isSeenRemote()));
-        ent.save();
+        String content = crypto.encrypt(actual.getContent());
+        String seenLocal = Utils.parseBoolString(actual.isSeenLocal());
+        String seenRemote = Utils.parseBoolString(actual.isSeenRemote());
+        
+        for(Entity ent : rows) {
+	        ent.setValue("id", newID);
+	        ent.setValue("eventType", eventType);
+	        ent.setValue("eventTime", eventTime);
+	        ent.setValue("userSurname1", userSurname1);
+	        ent.setValue("userSurname2", userSurname2);
+	        ent.setValue("userFirstname", userFirstname);
+	        ent.setValue("userPhoto", userPhoto);
+	        ent.setValue("location", location);
+	        ent.setValue("summary", summary);
+	        ent.setValue("status", status);
+	        ent.setValue("content", content);
+	        ent.setValue("seenLocal", seenLocal);
+	        ent.setValue("seenRemote", seenRemote);
+	        ent.save();
+        }
     }
 
     /**

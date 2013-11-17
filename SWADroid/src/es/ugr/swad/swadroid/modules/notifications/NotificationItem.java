@@ -30,7 +30,6 @@ import android.widget.TextView;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
-import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.modules.Messages;
 import es.ugr.swad.swadroid.utils.DownloadImageTask;
 import es.ugr.swad.swadroid.utils.Utils;
@@ -58,7 +57,6 @@ public class NotificationItem extends MenuActivity {
         ImageButton replyButton;
         WebView webview;
         String type = this.getIntent().getStringExtra("notificationType");
-        SWADNotification notif;
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.single_notification_view);
@@ -122,9 +120,7 @@ public class NotificationItem extends MenuActivity {
         
         //Set notification as seen locally
         notificationCode = Long.valueOf(this.getIntent().getStringExtra("notificationCode"));
-        notif = (SWADNotification) dbHelper.getRow(Constants.DB_TABLE_NOTIFICATIONS, "id", String.valueOf(notificationCode));
-        notif.setSeenLocal(true);
-        dbHelper.updateNotification(notificationCode, notif);
+        dbHelper.updateNotification(notificationCode, "seenLocal", Utils.parseBoolString(true));
     }
 
     /**
