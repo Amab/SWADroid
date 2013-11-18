@@ -30,6 +30,7 @@ import android.widget.TextView;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.utils.Crypto;
+import es.ugr.swad.swadroid.utils.Utils;
 
 import java.util.Date;
 
@@ -109,6 +110,13 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         java.text.DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(context);
         int numRows = cursor.getCount();
         int cursorPosition = cursor.getPosition();
+        boolean seenLocal = Utils.parseStringBool(cursor.getString(cursor.getColumnIndex("seenLocal")));
+        
+        if(!seenLocal) {
+        	view.setBackgroundColor(context.getResources().getColor(R.color.notifications_background_yellow));
+        } else {
+        	view.setBackgroundColor(context.getResources().getColor(R.color.background));
+        }
 
         if (contentVisible.length == 0) {
             contentVisible = new boolean[numRows];

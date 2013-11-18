@@ -23,7 +23,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
-import android.webkit.WebSettings.RenderPriority;
 import android.webkit.WebView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -86,6 +85,7 @@ public class NotificationItem extends MenuActivity {
             replyButton.setVisibility(View.GONE);
         }
 
+        //notificationCode = 
         sender = this.getIntent().getStringExtra("sender");
         userPhoto = this.getIntent().getStringExtra("userPhoto");
         course = this.getIntent().getStringExtra("course");
@@ -115,9 +115,12 @@ public class NotificationItem extends MenuActivity {
             content = content.substring(9, content.length() - 3);
         }
 
-        webview.getSettings().setRenderPriority(RenderPriority.HIGH);
         webview.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         webview.loadDataWithBaseURL("", content, "text/html", "utf-8", "");
+        
+        //Set notification as seen locally
+        notificationCode = Long.valueOf(this.getIntent().getStringExtra("notificationCode"));
+        dbHelper.updateNotification(notificationCode, "seenLocal", Utils.parseBoolString(true));
     }
 
     /**
