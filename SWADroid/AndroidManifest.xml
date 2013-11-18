@@ -214,7 +214,7 @@
         
         
         <activity
-                android:name=".modules.introduction.Introduction"
+                android:name=".modules.information.Introduction"
                 android:label="@string/introductionModuleLabel"
                 android:theme="@@android:style/Theme.NoTitleBar">
         </activity>
