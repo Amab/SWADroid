@@ -244,6 +244,7 @@ public class SWADMain extends MenuExpandableListActivity {
         int lastVersion, currentVersion;
         ImageView image;
         TextView text;
+        Intent activity;
 
         //Initialize Bugsense plugin
         try {
@@ -277,15 +278,15 @@ public class SWADMain extends MenuExpandableListActivity {
             lastVersion = prefs.getLastVersion();
             currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
             dbHelper.initializeDB();
-            //lastVersion = 51;
-            //currentVersion = 52;
+            //lastVersion = 55;
+            //currentVersion = 56;
 
             //If this is the first run, show configuration dialog
             if (lastVersion == 0) {
                 showConfigurationDialog();
 
                 //Configure automatic synchronization
-                Intent activity = new Intent(getBaseContext(), AccountAuthenticator.class);
+                activity = new Intent(getBaseContext(), AccountAuthenticator.class);
                 startActivity(activity);
                 SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, Constants.DEFAULT_SYNC_TIME, this);
                 prefs.setSyncTime(String.valueOf(Constants.DEFAULT_SYNC_TIME));
@@ -328,9 +329,16 @@ public class SWADMain extends MenuExpandableListActivity {
 
                 //Configure automatic synchronization
                 if (lastVersion < 49) {
-                    Intent activity = new Intent(getBaseContext(), AccountAuthenticator.class);
+                    activity = new Intent(getBaseContext(), AccountAuthenticator.class);
                     startActivity(activity);
                     SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, Constants.DEFAULT_SYNC_TIME, this);
+                }
+
+                //Configure automatic synchronization
+                if(Preferences.isSyncEnabled()) {
+                	activity = new Intent(getBaseContext(), AccountAuthenticator.class);
+                	startActivity(activity);
+                	SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, Long.valueOf(prefs.getSyncTime()), this);
                 }
 
                 prefs.setLastVersion(currentVersion);

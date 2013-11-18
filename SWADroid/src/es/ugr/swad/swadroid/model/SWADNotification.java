@@ -20,6 +20,8 @@ package es.ugr.swad.swadroid.model;
 
 import org.ksoap2.serialization.PropertyInfo;
 
+import es.ugr.swad.swadroid.utils.Utils;
+
 import java.util.Hashtable;
 
 /**
@@ -68,6 +70,14 @@ public class SWADNotification extends Model {
      * Notification content
      */
     private String content;
+    /**
+     * Notification has been seen locally
+     */
+    private boolean seenLocal;
+    /**
+     * Notification has been marked as seen in SWAD
+     */
+    private boolean seenRemote;
     private static final PropertyInfo PI_id = new PropertyInfo();
     private static final PropertyInfo PI_eventType = new PropertyInfo();
     private static final PropertyInfo PI_eventTime = new PropertyInfo();
@@ -105,12 +115,14 @@ public class SWADNotification extends Model {
      * @param userPhoto     Full URL path of the sender photo
      * @param location      Notification location
      * @param summary       Notification summary
-     * @param status        Notification summary
+     * @param status        Notification status
+     * @param seenLocal     Notification has been seen locally
+     * @param seenRemote    Notification has been seen in SWAD
      */
     public SWADNotification(long id, String eventType, long eventTime,
                             String userSurname1, String userSurname2, String userFirstName,
                             String userPhoto, String location, String summary, int status,
-                            String content) {
+                            String content, boolean seenLocal, boolean seenRemote) {
 
         super(id);
         this.eventType = eventType;
@@ -123,6 +135,8 @@ public class SWADNotification extends Model {
         this.summary = summary;
         this.status = status;
         this.content = content;
+        this.seenLocal = seenLocal;
+        this.seenRemote = seenRemote;
     }
 
     /**
@@ -305,20 +319,61 @@ public class SWADNotification extends Model {
         this.content = content;
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString() {
-        return "SWADNotification [eventType=" + eventType + ", eventTime="
-                + eventTime + ", userSurname1=" + userSurname1
-                + ", userSurname2=" + userSurname2 + ", userFirstName="
-                + userFirstName + ", userPhoto=" + userPhoto + ", location="
-                + location + ", summary=" + summary + ", status=" + status
-                + ", content=" + content + "]";
-    }
+    /**
+     * Gets notification seenLocal attribute
+     * 
+	 * @return true if notification has been seen locally
+	 * 		   false otherwise
+	 */
+	public boolean isSeenLocal() {
+		return seenLocal;
+	}
+
+	/**
+	 * Sets notification seenLocal attribute
+	 * 
+	 * @param seenLocal true if notification has been seen locally
+	 * 		   			false otherwise
+	 */
+	public void setSeenLocal(boolean seenLocal) {
+		this.seenLocal = seenLocal;
+	}
+
+	/**
+	 * Gets notification seenRemote attribute
+     * 
+	 * @return true if notification has been seen in SWAD
+	 * 		   false otherwise
+	 */
+	public boolean isSeenRemote() {
+		return seenRemote;
+	}
+
+	/**
+	 * Sets notification seenRemote attribute
+	 * 
+	 * @param seenRemote true if notification has been seen in SWAD
+	 * 		   			 false otherwise
+	 */
+	public void setSeenRemote(boolean seenRemote) {
+		this.seenRemote = seenRemote;
+	}
 
     /* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "SWADNotification [eventType=" + eventType + ", eventTime="
+				+ eventTime + ", userSurname1=" + userSurname1
+				+ ", userSurname2=" + userSurname2 + ", userFirstName="
+				+ userFirstName + ", userPhoto=" + userPhoto + ", location="
+				+ location + ", summary=" + summary + ", status=" + status
+				+ ", content=" + content + ", seenLocal=" + seenLocal
+				+ ", seenRemote=" + seenRemote + "]";
+	}
+
+	/* (non-Javadoc)
      * @see java.lang.Object#hashCode()
      */
     @Override
