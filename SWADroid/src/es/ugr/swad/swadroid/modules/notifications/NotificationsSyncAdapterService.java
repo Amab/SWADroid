@@ -155,8 +155,12 @@ public class NotificationsSyncAdapterService extends Service {
 	 */
 	@Override
 	public void onCreate() {        
-        //Initialize Bugsense plugin
-        BugSenseHandler.initAndStartSession(this, Constants.BUGSENSE_API_KEY);
+		//Initialize Bugsense plugin
+        try {
+        	BugSenseHandler.initAndStartSession(this, Constants.BUGSENSE_API_KEY);
+        } catch (Exception e) {
+        	Log.e(TAG, "Error initializing BugSense", e);
+        }
         
 		super.onCreate();
 	}
@@ -178,7 +182,11 @@ public class NotificationsSyncAdapterService extends Service {
 	 */
 	@Override
 	public void onDestroy() {
-		BugSenseHandler.closeSession(this);
+		try {
+			BugSenseHandler.closeSession(this);
+		} catch (Exception e) {
+			Log.e(TAG, "Error initializing BugSense", e);
+        }
 		
 		super.onDestroy();
 	}
