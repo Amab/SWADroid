@@ -37,6 +37,7 @@ import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.AlertNotification;
 import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.modules.Module;
+import es.ugr.swad.swadroid.utils.Utils;
 
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
@@ -112,6 +113,7 @@ public class Notifications extends Module {
     private OnItemClickListener clickListener = new OnItemClickListener() {
         public void onItemClick(AdapterView<?> av, View v, int position, long rowId) {
             //adapter.toggleContentVisibility(position);
+            TextView id = (TextView) v.findViewById(R.id.notifCode);
             TextView code = (TextView) v.findViewById(R.id.eventCode);
             TextView type = (TextView) v.findViewById(R.id.eventType);
             TextView userPhoto = (TextView) v.findViewById(R.id.eventUserPhoto);
@@ -123,7 +125,8 @@ public class Notifications extends Module {
             TextView time = (TextView) v.findViewById(R.id.eventTime);
 
             Intent activity = new Intent(getApplicationContext(), NotificationItem.class);
-            activity.putExtra("notificationCode", code.getText().toString());
+            activity.putExtra("notifCode", id.getText().toString());
+            activity.putExtra("eventCode", code.getText().toString());
             activity.putExtra("notificationType", type.getText().toString());
             activity.putExtra("userPhoto", userPhoto.getText().toString());
             activity.putExtra("sender", sender.getText().toString());
@@ -178,6 +181,7 @@ public class Notifications extends Module {
 
         this.findViewById(R.id.courseSelectedText).setVisibility(View.GONE);
         this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
+        this.findViewById(R.id.markAllRead).setVisibility(View.VISIBLE);
 
         image = (ImageView) this.findViewById(R.id.moduleIcon);
         image.setBackgroundResource(R.drawable.bell);
@@ -246,6 +250,16 @@ public class Notifications extends Module {
             onError();
     }
 
+    /**
+     * Launches an action when markAllRead button is pushed
+     *
+     * @param v Actual view
+     */
+    public void onMarkAllReadClick(View v) {
+        dbHelper.updateAllNotifications("seenLocal", Utils.parseBoolString(true));
+        refreshScreen();
+    }
+
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#onResume()
      */
@@ -299,7 +313,8 @@ public class Notifications extends Module {
                 notifCount = soap.getPropertyCount();
                 for (int i = 0; i < notifCount; i++) {
                     SoapObject pii = (SoapObject) soap.getProperty(i);
-                    Long notificationCode = Long.valueOf(pii.getProperty("notificationCode").toString());
+                    Long notifCode = Long.valueOf(pii.getProperty("notifCode").toString());
+                    Long eventCode = Long.valueOf(pii.getProperty("notificationCode").toString());
                     String eventType = pii.getProperty("eventType").toString();
                     Long eventTime = Long.valueOf(pii.getProperty("eventTime").toString());
                     String userSurname1 = pii.getProperty("userSurname1").toString();
@@ -312,7 +327,7 @@ public class Notifications extends Module {
                     String content = pii.getProperty("content").toString();
                     
                     //TODO Add "notification seen" info from SWAD
-                    SWADNotification n = new SWADNotification(notificationCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, userPhoto, location, summary, status, content, false, false);
+                    SWADNotification n = new SWADNotification(notifCode, eventCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, userPhoto, location, summary, status, content, false, false);
                     dbHelper.insertNotification(n);
 
                     if(isDebuggable)

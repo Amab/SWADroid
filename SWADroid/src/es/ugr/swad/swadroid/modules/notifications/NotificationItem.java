@@ -40,7 +40,8 @@ import es.ugr.swad.swadroid.utils.Utils;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class NotificationItem extends MenuActivity {
-    private Long notificationCode;
+    private Long notifCode;
+    private Long eventCode;
     private String sender;
     private String userPhoto;
     private String course;
@@ -85,7 +86,8 @@ public class NotificationItem extends MenuActivity {
             replyButton.setVisibility(View.GONE);
         }
 
-        //notificationCode = 
+        notifCode = Long.valueOf(this.getIntent().getStringExtra("notifCode")); 
+        eventCode = Long.valueOf(this.getIntent().getStringExtra("eventCode"));
         sender = this.getIntent().getStringExtra("sender");
         userPhoto = this.getIntent().getStringExtra("userPhoto");
         course = this.getIntent().getStringExtra("course");
@@ -119,8 +121,7 @@ public class NotificationItem extends MenuActivity {
         webview.loadDataWithBaseURL("", content, "text/html", "utf-8", "");
         
         //Set notification as seen locally
-        notificationCode = Long.valueOf(this.getIntent().getStringExtra("notificationCode"));
-        dbHelper.updateNotification(notificationCode, "seenLocal", Utils.parseBoolString(true));
+        dbHelper.updateNotification(notifCode, "seenLocal", Utils.parseBoolString(true));
     }
 
     /**
@@ -129,9 +130,8 @@ public class NotificationItem extends MenuActivity {
      * @param v Actual view
      */
     public void onReplyMessageClick(View v) {
-        notificationCode = Long.valueOf(this.getIntent().getStringExtra("notificationCode"));
         Intent activity = new Intent(this, Messages.class);
-        activity.putExtra("notificationCode", notificationCode);
+        activity.putExtra("eventCode", eventCode);
         activity.putExtra("summary", summary);
         startActivity(activity);
     }

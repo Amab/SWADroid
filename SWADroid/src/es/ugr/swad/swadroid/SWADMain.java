@@ -196,7 +196,7 @@ public class SWADMain extends MenuExpandableListActivity {
             startActivityForResult(activity, Constants.TESTS_REQUEST_CODE);
         } else if (keyword.equals(getString(R.string.messagesModuleLabel))) {
             activity = new Intent(getBaseContext(), Messages.class);
-            activity.putExtra("notificationCode", Long.valueOf(0));
+            activity.putExtra("eventCode", Long.valueOf(0));
             startActivityForResult(activity, Constants.MESSAGES_REQUEST_CODE);
         } else if (keyword.equals(getString(R.string.noticesModuleLabel))) {
             activity = new Intent(getBaseContext(), Notices.class);
@@ -313,25 +313,6 @@ public class SWADMain extends MenuExpandableListActivity {
                 	prefs.upgradeCredentials();
                 	
                 	prefs.setSyncTime(String.valueOf(Constants.DEFAULT_SYNC_TIME));
-                }
-                
-                //If the app is updating from an unencrypted version, encrypt already downloaded notifications
-            	if (lastVersion < 45) {
-                    dbHelper.encryptNotifications();
-
-                /*
-                 * If the app is updating from the bugged encrypted version,
-                 * re-encrypt the notifications using the new method
-                 */
-                } else if (lastVersion == 45) {
-                    dbHelper.reencryptNotifications();
-                }
-
-                //Configure automatic synchronization
-                if (lastVersion < 49) {
-                    activity = new Intent(getBaseContext(), AccountAuthenticator.class);
-                    startActivity(activity);
-                    SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, Constants.DEFAULT_SYNC_TIME, this);
                 }
 
                 //Configure automatic synchronization
