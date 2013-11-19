@@ -50,6 +50,12 @@
             android:layout_marginRight="6dip">
 
         <TextView
+                android:id="@+id/notifCode"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:visibility="gone"/>
+
+        <TextView
                 android:id="@+id/eventCode"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"

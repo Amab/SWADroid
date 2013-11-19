@@ -339,8 +339,9 @@ public class NotificationsSyncAdapterService extends Service {
             SoapObject soap = (SoapObject) res.get(1);
             notifCount = soap.getPropertyCount();
             for (int i = 0; i < notifCount; i++) {
-                SoapObject pii = (SoapObject) soap.getProperty(i);
-                Long notificationCode = Long.valueOf(pii.getProperty("notificationCode").toString());
+            	SoapObject pii = (SoapObject) soap.getProperty(i);
+                Long notifCode = Long.valueOf(pii.getProperty("notifCode").toString());
+                Long eventCode = Long.valueOf(pii.getProperty("notificationCode").toString());
                 String eventType = pii.getProperty("eventType").toString();
                 Long eventTime = Long.valueOf(pii.getProperty("eventTime").toString());
                 String userSurname1 = pii.getProperty("userSurname1").toString();
@@ -353,7 +354,7 @@ public class NotificationsSyncAdapterService extends Service {
                 String content = pii.getProperty("content").toString();
                 
                 //TODO Add "notification seen" info from SWAD
-                SWADNotification n = new SWADNotification(notificationCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, userPhoto, location, summary, status, content, false, false);
+                SWADNotification n = new SWADNotification(notifCode, eventCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, userPhoto, location, summary, status, content, false, false);
                 dbHelper.insertNotification(n);
 
                 //Log.d(TAG, n.toString());

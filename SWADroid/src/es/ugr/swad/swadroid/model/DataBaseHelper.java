@@ -18,7 +18,6 @@
  */
 package es.ugr.swad.swadroid.model;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -215,7 +214,8 @@ public class DataBaseHelper {
                     ent.getInt(params.getFirst()),
                     ent.getInt(params.getSecond()));
         } else if (table.equals(Constants.DB_TABLE_NOTIFICATIONS)) {
-            o = new SWADNotification(ent.getInt("id"),
+            o = new SWADNotification(ent.getInt("notifCode"),
+            		ent.getInt("eventCode"),
                     crypto.decrypt(ent.getString("eventType")),
                     ent.getLong("eventTime"),
                     crypto.decrypt(ent.getString("userSurname1")),
@@ -755,7 +755,8 @@ public class DataBaseHelper {
         String eventTime = String.valueOf(n.getEventTime());
         String status = String.valueOf(n.getStatus());
 
-        ent.setValue("id", n.getId());
+        ent.setValue("notifCode", n.getId());
+        ent.setValue("eventCode", n.getEventCode());
         ent.setValue("eventType", crypto.encrypt(n.getEventType()));
         ent.setValue("eventTime", eventTime);
         ent.setValue("userSurname1", crypto.encrypt(n.getUserSurname1()));
@@ -1065,8 +1066,8 @@ public class DataBaseHelper {
         if (table.compareTo(Constants.DB_TABLE_GROUP_TYPES) == 0) {
             for (Model anObsoleteModel : obsoleteModel) {
                 long code = anObsoleteModel.getId();
-                removeAllRow(table, "id", code);
-                removeAllRow(Constants.DB_TABLE_GROUPS_GROUPTYPES, "grpTypCod", code);
+                removeAllRows(table, "id", code);
+                removeAllRows(Constants.DB_TABLE_GROUPS_GROUPTYPES, "grpTypCod", code);
             }
             for (Model model : newModels) {
                 insertEntity(table, model);
@@ -1081,9 +1082,9 @@ public class DataBaseHelper {
         if (table.compareTo(Constants.DB_TABLE_GROUPS) == 0) {
             for (Model anObsoleteModel : obsoleteModel) {
                 long code = anObsoleteModel.getId();
-                removeAllRow(table, "id", code);
-                removeAllRow(Constants.DB_TABLE_GROUPS_GROUPTYPES, "grpCod", code);
-                removeAllRow(Constants.DB_TABLE_GROUPS_COURSES, "grpCod", code);
+                removeAllRows(table, "id", code);
+                removeAllRows(Constants.DB_TABLE_GROUPS_GROUPTYPES, "grpCod", code);
+                removeAllRows(Constants.DB_TABLE_GROUPS_COURSES, "grpCod", code);
             }
             for (Model model : newModels) {
                 insertGroup((Group) model, courseCode[0]);
@@ -1210,6 +1211,20 @@ public class DataBaseHelper {
     }
 
     /**
+     * Updates all notifications in database
+     *
+     * @param field  Field to be updated
+     * @param value  New field value
+     */
+    public void updateAllNotifications(String field, String value) {
+        List<Entity> rows = db.getEntityList(Constants.DB_TABLE_NOTIFICATIONS);
+        for(Entity ent : rows) {
+        	ent.setValue(field, value);
+        	ent.save();
+        }
+    }
+
+    /**
      * Updates a notification in database
      *
      * @param id     Notification code of notification to be updated
@@ -1217,7 +1232,7 @@ public class DataBaseHelper {
      * @param value  New field value
      */
     public void updateNotification(long id, String field, String value) {
-        List<Entity> rows = db.getEntityList(Constants.DB_TABLE_NOTIFICATIONS, "id = " + id);
+        List<Entity> rows = db.getEntityList(Constants.DB_TABLE_NOTIFICATIONS, "notifCode = " + id);
         for(Entity ent : rows) {
         	ent.setValue(field, value);
         	ent.save();
@@ -1231,8 +1246,9 @@ public class DataBaseHelper {
      * @param actual Updated notification
      */
     public void updateNotification(long id, SWADNotification actual) {
-        List<Entity> rows = db.getEntityList(Constants.DB_TABLE_NOTIFICATIONS, "id = " + id);
-        long newID = actual.getId();
+        List<Entity> rows = db.getEntityList(Constants.DB_TABLE_NOTIFICATIONS, "notifCode = " + id);
+        long notifCode = actual.getId();
+        long eventCode = actual.getEventCode();
         String eventType = crypto.encrypt(actual.getEventType());
         String eventTime = String.valueOf(actual.getEventTime());
         String userSurname1 = crypto.encrypt(actual.getUserSurname1());
@@ -1247,7 +1263,8 @@ public class DataBaseHelper {
         String seenRemote = Utils.parseBoolString(actual.isSeenRemote());
         
         for(Entity ent : rows) {
-	        ent.setValue("id", newID);
+	        ent.setValue("notifCode", notifCode);
+	        ent.setValue("eventCode", eventCode);
 	        ent.setValue("eventType", eventType);
 	        ent.setValue("eventTime", eventTime);
 	        ent.setValue("userSurname1", userSurname1);
@@ -1271,8 +1288,9 @@ public class DataBaseHelper {
      * @param actual Updated notification
      */
     public void updateNotification(SWADNotification prev, SWADNotification actual) {
-        List<Entity> rows = db.getEntityList(Constants.DB_TABLE_NOTIFICATIONS, "id = " + prev.getId());
-        long newID = actual.getId();
+        List<Entity> rows = db.getEntityList(Constants.DB_TABLE_NOTIFICATIONS, "notifCode = " + prev.getId());
+        long notifCode = actual.getId();
+        long eventCode = actual.getEventCode();
         String eventType = crypto.encrypt(actual.getEventType());
         String eventTime = String.valueOf(actual.getEventTime());
         String userSurname1 = crypto.encrypt(actual.getUserSurname1());
@@ -1287,7 +1305,8 @@ public class DataBaseHelper {
         String seenRemote = Utils.parseBoolString(actual.isSeenRemote());
         
         for(Entity ent : rows) {
-	        ent.setValue("id", newID);
+	        ent.setValue("notifCode", notifCode);
+	        ent.setValue("eventCode", eventCode);
 	        ent.setValue("eventType", eventType);
 	        ent.setValue("eventTime", eventTime);
 	        ent.setValue("userSurname1", userSurname1);
@@ -1497,7 +1516,6 @@ public class DataBaseHelper {
             return false;
     }
 
-    @SuppressWarnings("unused")
 	private <T> boolean updateRelationship(Pair<String, String> tables, Pair<String, String> idsTables, String relationTable, Pair<String, T> remainField, Pair<String, T> changedField) {
 
 
@@ -1524,7 +1542,6 @@ public class DataBaseHelper {
     /**
      * Updates an existing group type
      */
-    @SuppressWarnings("unused")
 	private boolean updateGroupType(GroupType prv, GroupType current) {
         List<Entity> rows = db.getEntityList(Constants.DB_TABLE_GROUP_TYPES, "id=" + prv.getId());
         boolean returnValue = true;
@@ -1559,8 +1576,8 @@ public class DataBaseHelper {
         removeRow(Constants.DB_TABLE_GROUPS, g.getId());
 
         //Remove also relationships with courses and group types
-        removeAllRow(Constants.DB_TABLE_GROUPS_GROUPTYPES, "grpCod", g.getId());
-        removeAllRow(Constants.DB_TABLE_GROUPS_COURSES, "grpCod", g.getId());
+        removeAllRows(Constants.DB_TABLE_GROUPS_GROUPTYPES, "grpCod", g.getId());
+        removeAllRows(Constants.DB_TABLE_GROUPS_COURSES, "grpCod", g.getId());
     }
 
     /**
@@ -1580,7 +1597,7 @@ public class DataBaseHelper {
      * @param fieldName Name field to search
      * @param value     Value field of row to be removed
      */
-    void removeAllRow(String table, String fieldName, long value) {
+    void removeAllRows(String table, String fieldName, long value) {
         List<Entity> rows = db.getEntityList(table, fieldName + "= " + value);
         for (Entity ent : rows) {
             ent.delete();
@@ -1592,7 +1609,7 @@ public class DataBaseHelper {
      *
      * @param p PairTable to be removed
      */
-    public void removePairTable(@SuppressWarnings("rawtypes") PairTable p) {
+    public void removePairTable(PairTable<?, ?> p) {
         String table = p.getTable();
         Integer first = (Integer) p.getFirst();
         Integer second = (Integer) p.getSecond();
@@ -1635,7 +1652,7 @@ public class DataBaseHelper {
      * @return Last time the test was updated
      */
     public String getTimeOfLastTestUpdate(long selectedCourseCode) {
-        String where = "id=" + selectedCourseCode;
+        String where = "notifCode=" + selectedCourseCode;
         String orderby = null;
         List<Entity> rows = db.getEntityList(Constants.DB_TABLE_TEST_CONFIG, where, orderby);
         String f = "0";
@@ -1863,10 +1880,6 @@ public class DataBaseHelper {
             ent.save();
         }
     }
-    
-    void markNotificationAsSeenLocally(String notificationCode) {
-    	
-    }
 
     /**
      * Empty table from database
@@ -1897,23 +1910,7 @@ public class DataBaseHelper {
      * Clean data of all tables from database. Removes users photos from external storage
      */
     public void cleanTables() {
-        emptyTable(Constants.DB_TABLE_NOTIFICATIONS);
-        emptyTable(Constants.DB_TABLE_COURSES);
-        emptyTable(Constants.DB_TABLE_TEST_QUESTION_ANSWERS);
-        emptyTable(Constants.DB_TABLE_TEST_QUESTION_TAGS);
-        emptyTable(Constants.DB_TABLE_TEST_QUESTIONS_COURSE);
-        emptyTable(Constants.DB_TABLE_TEST_ANSWERS);
-        emptyTable(Constants.DB_TABLE_TEST_CONFIG);
-        emptyTable(Constants.DB_TABLE_TEST_QUESTIONS);
-        emptyTable(Constants.DB_TABLE_TEST_TAGS);
-        emptyTable(Constants.DB_TABLE_USERS_COURSES);
-        emptyTable(Constants.DB_TABLE_USERS);
-        emptyTable(Constants.DB_TABLE_GROUPS_COURSES);
-        emptyTable(Constants.DB_TABLE_GROUPS);
-        emptyTable(Constants.DB_TABLE_PRACTICE_SESSIONS);
-        emptyTable(Constants.DB_TABLE_ROLLCALL);
-        emptyTable(Constants.DB_TABLE_GROUP_TYPES);
-        emptyTable(Constants.DB_TABLE_GROUPS_GROUPTYPES);
+        db.emptyTables();
         compactDB();
 
         // Removes users photos from external storage (Android 2.2 or higher only)
@@ -1969,11 +1966,6 @@ public class DataBaseHelper {
      */
     public void upgradeDB(Context context) {
         int dbVersion = db.getDB().getVersion();
-        boolean found = false;
-        int i = 0;
-        int rowsAffected;
-        ContentValues fields;
-
 		/* 
 		 * Modify database keeping data:
 		 * 1. Create temporary table __DB_TABLE_GROUPS (with the new model)
@@ -1986,57 +1978,17 @@ public class DataBaseHelper {
 		 * Just to modify database without to keep data just 7,6.
 		 * 
 		 * */
-
-
-		/* From version 11 to 12 
-		 * changes on courses table:
-		 * - old field name is erased
-		 * The rest of the changes are only new fields and they are added automatic by Dataframework. */
-        if (dbVersion < 12) {
-            Cursor dbCursor = db.getDB().query(Constants.DB_TABLE_COURSES, null, null, null, null, null, null);
-            String[] columnNames = dbCursor.getColumnNames();
-            while (i < columnNames.length && !found) {
-                if (columnNames[i].compareTo("name") == 0) found = true;
-                ++i;
-            }
-            if (found) {
-                //without to keep data
-                db.getDB().execSQL("DROP TABLE " + Constants.DB_TABLE_COURSES + ";");//+
-                db.getDB().execSQL("CREATE TABLE " + Constants.DB_TABLE_COURSES
-                        + " (_id integer primary key autoincrement, id long, userRole integer,shortName text, fullName text);");
-            }
-
-		/* version 12 - 13
-		 * changes on groups table: 
-		 * - old field groupCode is now id
-		 * - old field groupTypeCode is erased 
-		 * - old field groupTypeName is erased
-		 * The rest of the changes are only new fields and they are added automatic by Dataframework. 
-		 * */
-        } else if (dbVersion < 13) {
-            Cursor dbCursor = db.getDB().query(Constants.DB_TABLE_GROUPS, null, null, null, null, null, null);
-            String[] columnNames = dbCursor.getColumnNames();
-            while (i < columnNames.length && !found) {
-                if (columnNames[i].equals("groupCode")) found = true;
-                ++i;
-            }
-            if (found) {
-                //without to keep data
-                db.getDB().execSQL("DROP TABLE " + Constants.DB_TABLE_GROUPS + ";");
-                db.getDB().execSQL("CREATE TABLE " + Constants.DB_TABLE_GROUPS + " (_id integer primary key autoincrement, id long, groupName text, maxStudents integer,"
-                        + " students integer, open integer, fileZones integer, member integer); ");
-            }
-            
-        /* version 14-15
+        
+        /* version 15-16
 		 * changes on notifications table: 
-		 * - new field seenLocal initialized to true
-		 * - new field seenRemote initialized to true
+		 * - new field notifCode
+		 * - changed field id to eventCode
 		 * */
-        } else if (dbVersion < 15) {
-        	fields = new ContentValues();
-        	fields.put("seenLocal", Utils.parseBoolString(true));
-        	fields.put("seenRemote", Utils.parseBoolString(true));
-        	rowsAffected = db.getDB().update(Constants.DB_TABLE_NOTIFICATIONS, fields, null, null);
+        if (dbVersion == 16) {
+        	//without keeping data
+        	db.getDB().execSQL("DROP TABLE " + Constants.DB_TABLE_NOTIFICATIONS + ";");
+            db.getDB().execSQL("CREATE TABLE " + Constants.DB_TABLE_NOTIFICATIONS + " (_id integer primary key autoincrement, notifCode long, eventCode long, eventType text, eventTime text,"
+                    + " userSurname1 text, userSurname2 text, userFirstname text, userPhoto text, location text, summary text, status text, content text, seenLocal text, seenRemote text); ");
         }
 
         compactDB();

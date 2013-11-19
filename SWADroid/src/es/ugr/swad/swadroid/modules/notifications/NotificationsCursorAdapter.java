@@ -99,7 +99,8 @@ public class NotificationsCursorAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        final Long notificationCode = cursor.getLong(cursor.getColumnIndex("id"));
+        final Long notifCode = cursor.getLong(cursor.getColumnIndex("notifCode"));
+        final Long eventCode = cursor.getLong(cursor.getColumnIndex("eventCode"));
         final String userPhoto = cursor.getString(cursor.getColumnIndex("userPhoto"));
         long unixTime;
         String type = "";
@@ -123,7 +124,8 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         }
 
         view.setScrollContainer(false);
-        TextView eventCode = (TextView) view.findViewById(R.id.eventCode);
+        TextView notifCodeHided = (TextView) view.findViewById(R.id.notifCode);
+        TextView eventCodeHided = (TextView) view.findViewById(R.id.eventCode);
         TextView eventUserPhoto = (TextView) view.findViewById(R.id.eventUserPhoto);
         TextView eventType = (TextView) view.findViewById(R.id.eventType);
         TextView eventDate = (TextView) view.findViewById(R.id.eventDate);
@@ -146,7 +148,8 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         };*/
 
         if (eventType != null) {
-            eventCode.setText(notificationCode.toString());
+            notifCodeHided.setText(notifCode.toString());
+            eventCodeHided.setText(eventCode.toString());
             eventUserPhoto.setText(crypto.decrypt(userPhoto));
             type = crypto.decrypt(cursor.getString(cursor.getColumnIndex("eventType")));
             //messageReplyButton.setVisibility(View.GONE);
