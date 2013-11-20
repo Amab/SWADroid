@@ -32,7 +32,9 @@ import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
 import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.model.Model;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -256,6 +258,25 @@ public class Utils {
         String regex = "(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
         body = body.replaceAll(regex, "<a href=\"$0\">$0</a>");
         return body;
+    }
+    
+    /**
+     * Creates a string of notification codes separated by commas from a list of notifications
+     */
+    public static String getSeenNotificationCodes(List<Model> markedNotificationsList) {
+    	String seenNotifCodes = "";
+    	Model m;
+    	
+    	for(Iterator<Model> it = markedNotificationsList.iterator(); it.hasNext();) {
+    		m = it.next();
+    		seenNotifCodes += m.getId();
+    		
+    		if(it.hasNext()) {
+    			seenNotifCodes += ",";
+    		}
+    	}
+    	
+    	return seenNotifCodes;
     }
 
 }

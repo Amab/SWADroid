@@ -40,6 +40,10 @@ import es.ugr.swad.swadroid.utils.Utils;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class NotificationItem extends MenuActivity {
+    /**
+     * NotificationsItem tag name for Logcat
+     */
+    private static final String TAG = Constants.APP_TAG + " Notificationsitem";
     private Long notifCode;
     private Long eventCode;
     private String sender;
@@ -49,6 +53,7 @@ public class NotificationItem extends MenuActivity {
     private String content;
     private String date;
     private String time;
+    private boolean seenLocal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +62,7 @@ public class NotificationItem extends MenuActivity {
         //ImageView imageSep;
         ImageButton replyButton;
         WebView webview;
+        Intent activity;
         String type = this.getIntent().getStringExtra("notificationType");
 
         super.onCreate(savedInstanceState);
@@ -95,6 +101,7 @@ public class NotificationItem extends MenuActivity {
         content = this.getIntent().getStringExtra("content");
         date = this.getIntent().getStringExtra("date");
         time = this.getIntent().getStringExtra("time");
+        seenLocal = Utils.parseStringBool(this.getIntent().getStringExtra("seenLocal"));
 
         senderTextView.setText(sender);
         courseTextView.setText(course);
@@ -122,6 +129,20 @@ public class NotificationItem extends MenuActivity {
         
         //Set notification as seen locally
         dbHelper.updateNotification(notifCode, "seenLocal", Utils.parseBoolString(true));
+        
+        //Sends "seen notifications" info to the server if there is a connection available
+        if(!seenLocal) {
+        	if(Utils.connectionAvailable(this)) {
+		        activity = new Intent(getBaseContext(), NotificationsMarkAllAsRead.class);
+		        activity.putExtra("seenNotifCodes", notifCode);
+		        activity.putExtra("numMarkedNotificationsList", 1);
+		        startActivityForResult(activity, Constants.NOTIFMARKALLASREAD_REQUEST_CODE);
+		        
+		        Log.i(TAG, "Notification " + notifCode + " marked as read in SWAD");
+        	} else {
+        		Log.w(TAG, "Not connected: Marking the notification " + notifCode + " as read in SWAD was deferred");
+        	}
+        }
     }
 
     /**
