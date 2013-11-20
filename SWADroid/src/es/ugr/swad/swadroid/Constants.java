@@ -229,8 +229,10 @@ public class Constants {
     
     
     
-    
-    
+    /**
+     * Request code for NotificationMarkAsRead module
+     */
+    public static final int NOTIFMARKALLASREAD_REQUEST_CODE = 28;    
     /**
      * Prefix tag name for Logcat
      */

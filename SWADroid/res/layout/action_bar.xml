@@ -165,7 +165,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:src="@drawable/title_refresh"
+            android:src="@drawable/ok"
             android:onClick="onMarkAllReadClick"
             android:background="@drawable/title_button"
             android:scaleType="centerCrop"

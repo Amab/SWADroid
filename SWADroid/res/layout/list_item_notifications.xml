@@ -56,6 +56,12 @@
                 android:visibility="gone"/>
 
         <TextView
+                android:id="@+id/seenLocal"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:visibility="gone"/>
+
+        <TextView
                 android:id="@+id/eventCode"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"

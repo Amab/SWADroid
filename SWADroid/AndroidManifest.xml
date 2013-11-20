@@ -240,6 +240,11 @@
         
         
         
+        <activity
+                android:name=".modules.notifications.NotificationsMarkAllAsRead"
+                android:label="@string/notificationsMarkAllAsReadModuleLabel"
+                android:theme="@android:style/Theme.Translucent.NoTitleBar">
+        </activity>
         
         <provider
                 android:name=".sync.DummyProvider"

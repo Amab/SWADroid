@@ -111,7 +111,8 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         java.text.DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(context);
         int numRows = cursor.getCount();
         int cursorPosition = cursor.getPosition();
-        boolean seenLocal = Utils.parseStringBool(cursor.getString(cursor.getColumnIndex("seenLocal")));
+        String seenLocalString = cursor.getString(cursor.getColumnIndex("seenLocal"));
+        boolean seenLocal = Utils.parseStringBool(seenLocalString);
         
         if(!seenLocal) {
         	view.setBackgroundColor(context.getResources().getColor(R.color.notifications_background_yellow));
@@ -126,6 +127,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         view.setScrollContainer(false);
         TextView notifCodeHided = (TextView) view.findViewById(R.id.notifCode);
         TextView eventCodeHided = (TextView) view.findViewById(R.id.eventCode);
+        TextView seenLocalHided = (TextView) view.findViewById(R.id.seenLocal);
         TextView eventUserPhoto = (TextView) view.findViewById(R.id.eventUserPhoto);
         TextView eventType = (TextView) view.findViewById(R.id.eventType);
         TextView eventDate = (TextView) view.findViewById(R.id.eventDate);
@@ -150,6 +152,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         if (eventType != null) {
             notifCodeHided.setText(notifCode.toString());
             eventCodeHided.setText(eventCode.toString());
+            seenLocalHided.setText(seenLocalString);
             eventUserPhoto.setText(crypto.decrypt(userPhoto));
             type = crypto.decrypt(cursor.getString(cursor.getColumnIndex("eventType")));
             //messageReplyButton.setVisibility(View.GONE);
