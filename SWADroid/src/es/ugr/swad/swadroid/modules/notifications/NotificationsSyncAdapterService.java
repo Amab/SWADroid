@@ -22,6 +22,8 @@ package es.ugr.swad.swadroid.modules.notifications;
 import android.accounts.Account;
 import android.app.Service;
 import android.content.*;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -75,6 +77,7 @@ public class NotificationsSyncAdapterService extends Service {
     public static final String START_SYNC = "es.ugr.swad.swadroid.sync.start";
     public static final String STOP_SYNC = "es.ugr.swad.swadroid.sync.stop";
     private static KeepAliveHttpsTransportSE connection;
+    public static boolean isDebuggable;
 
     public NotificationsSyncAdapterService() {
         super();
@@ -155,6 +158,15 @@ public class NotificationsSyncAdapterService extends Service {
 	 */
 	@Override
 	public void onCreate() {        
+		// Check if debug mode is enabled
+        try {
+            getPackageManager().getApplicationInfo(
+                    getPackageName(), 0);
+			isDebuggable = (ApplicationInfo.FLAG_DEBUGGABLE != 0);
+        } catch (NameNotFoundException e1) {
+            e1.printStackTrace();
+        }
+        
 		//Initialize Bugsense plugin
         try {
         	BugSenseHandler.initAndStartSession(this, Constants.BUGSENSE_API_KEY);
@@ -253,21 +265,28 @@ public class NotificationsSyncAdapterService extends Service {
         envelope.dotNet = false;
         envelope.setOutputSoapObject(request);
         envelope.addMapping(NAMESPACE, cl.getSimpleName(), cl);
-    	connection.call(SOAP_ACTION, envelope);  
         
-        /*connection.debug = true;
-        try {
-        	connection.call(SOAP_ACTION, envelope);
-	        Log.d(TAG, connection.getHost() + " " + connection.getPath() + " " +
-	        connection.getPort());
-	        Log.d(TAG, connection.requestDump.toString());
-	        Log.d(TAG, connection.responseDump.toString());
-        } catch (Exception e) {
-	        Log.e(TAG, connection.getHost() + " " + connection.getPath() + " " +
-	        connection.getPort());
-	        Log.e(TAG, connection.requestDump.toString());
-	        Log.e(TAG, connection.responseDump.toString());
-        }*/
+        if(cl != null) {
+        	envelope.addMapping(NAMESPACE, cl.getSimpleName(), cl);
+        }
+        
+        if (isDebuggable) {
+	        connection.debug = true;
+	        try {
+	        	connection.call(SOAP_ACTION, envelope);
+		        Log.d(TAG, connection.getHost() + " " + connection.getPath() + " " +
+		        connection.getPort());
+		        Log.d(TAG, connection.requestDump.toString());
+		        Log.d(TAG, connection.responseDump.toString());
+	        } catch (Exception e) {
+		        Log.e(TAG, connection.getHost() + " " + connection.getPath() + " " +
+		        connection.getPort());
+		        Log.e(TAG, connection.requestDump.toString());
+		        Log.e(TAG, connection.responseDump.toString());
+	        }        	
+        } else {
+        	connection.call(SOAP_ACTION, envelope);        	
+        }
 
         if (simple && !(envelope.getResponse() instanceof SoapFault)) {
             result = envelope.bodyIn;

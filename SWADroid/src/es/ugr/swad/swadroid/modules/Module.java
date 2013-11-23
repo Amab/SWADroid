@@ -433,7 +433,10 @@ public abstract class Module extends MenuActivity {
         envelope.implicitTypes = true;
         envelope.dotNet = false;
         envelope.setOutputSoapObject(request);
-        envelope.addMapping(NAMESPACE, cl.getSimpleName(), cl);
+        
+        if(cl != null) {
+        	envelope.addMapping(NAMESPACE, cl.getSimpleName(), cl);
+        }
         
         if (isDebuggable) {
 	        connection.debug = true;

@@ -49,7 +49,6 @@ public class NotificationsMarkAllAsRead extends Module {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        //Sends "seen notifications" info to the server
         setMETHOD_NAME("markNotificationsAsRead");
     }
 
@@ -82,13 +81,15 @@ public class NotificationsMarkAllAsRead extends Module {
             //Stores user data returned by webservice response
             numMarkedNotifications = Integer.parseInt(soap.getProperty("numNotifications").toString());
         }
-
         
         Log.i(TAG, "Marked " + numMarkedNotifications + " as read");
     	dbHelper.updateAllNotifications("seenRemote", Utils.parseBoolString(true));
         
         if(numMarkedNotifications != numMarkedNotificationsList) {	            
         	Log.e(TAG, "numMarkedNotifications (" + numMarkedNotifications + ") != numMarkedNotificationsList (" + numMarkedNotificationsList + ")");
+        	setResult(RESULT_CANCELED);   
+        } else {
+        	setResult(RESULT_OK);   
         }
     }
     
@@ -116,6 +117,6 @@ public class NotificationsMarkAllAsRead extends Module {
      */
     @Override
     protected void onError() {
-
+    	
     }
 }

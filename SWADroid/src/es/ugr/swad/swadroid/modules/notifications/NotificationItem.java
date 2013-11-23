@@ -18,6 +18,7 @@
  */
 package es.ugr.swad.swadroid.modules.notifications;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -137,8 +138,6 @@ public class NotificationItem extends MenuActivity {
 		        activity.putExtra("seenNotifCodes", notifCode);
 		        activity.putExtra("numMarkedNotificationsList", 1);
 		        startActivityForResult(activity, Constants.NOTIFMARKALLASREAD_REQUEST_CODE);
-		        
-		        Log.i(TAG, "Notification " + notifCode + " marked as read in SWAD");
         	} else {
         		Log.w(TAG, "Not connected: Marking the notification " + notifCode + " as read in SWAD was deferred");
         	}
@@ -156,4 +155,20 @@ public class NotificationItem extends MenuActivity {
         activity.putExtra("summary", summary);
         startActivity(activity);
     }
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onActivityResult(int, int, android.content.Intent)
+	 */
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		
+		if(requestCode == Constants.NOTIFMARKALLASREAD_REQUEST_CODE) {
+			if (resultCode == Activity.RESULT_OK) {
+				Log.i(TAG, "Notification " + notifCode + " marked as read in SWAD");
+			} else {
+				Log.e(TAG, "Error marking notification " + notifCode + " as read in SWAD");
+			}
+		}
+	}
 }

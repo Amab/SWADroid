@@ -19,6 +19,7 @@
 package es.ugr.swad.swadroid.modules.notifications;
 
 import android.accounts.Account;
+import android.app.Activity;
 import android.content.*;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -205,6 +206,22 @@ public class Notifications extends Module {
         }
     }
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onActivityResult(int, int, android.content.Intent)
+	 */
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		
+		if(requestCode == Constants.NOTIFMARKALLASREAD_REQUEST_CODE) {
+			if (resultCode == Activity.RESULT_OK) {
+				Log.i(TAG, "Notifications marked as read in SWAD");
+			} else {
+				Log.e(TAG, "Error marking notifications as read in SWAD");
+			}
+		}
+	}
+
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
      */
@@ -380,6 +397,7 @@ public class Notifications extends Module {
                 }
 
                 //Request finalized without errors
+                setResult(RESULT_OK);  
                 Log.i(TAG, "Retrieved " + notifCount + " notifications");
 
                 //Clear old notifications to control database size
