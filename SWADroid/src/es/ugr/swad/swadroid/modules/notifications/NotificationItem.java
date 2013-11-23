@@ -134,8 +134,8 @@ public class NotificationItem extends MenuActivity {
         //Sends "seen notifications" info to the server if there is a connection available
         if(!seenLocal) {
         	if(Utils.connectionAvailable(this)) {
-		        activity = new Intent(getBaseContext(), NotificationsMarkAllAsRead.class);
-		        activity.putExtra("seenNotifCodes", notifCode);
+		        activity = new Intent(this, NotificationsMarkAllAsRead.class);
+		        activity.putExtra("seenNotifCodes", String.valueOf(notifCode));
 		        activity.putExtra("numMarkedNotificationsList", 1);
 		        startActivityForResult(activity, Constants.NOTIFMARKALLASREAD_REQUEST_CODE);
         	} else {

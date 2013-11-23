@@ -25,14 +25,14 @@ import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.utils.Utils;
 
-import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapPrimitive;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * Notifications module for get user's notifications
+ * Notifications module for mark as read user's notifications
  *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
@@ -48,8 +48,9 @@ public class NotificationsMarkAllAsRead extends Module {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         setMETHOD_NAME("markNotificationsAsRead");
+        runConnection();
     }
 
     /* (non-Javadoc)
@@ -61,7 +62,7 @@ public class NotificationsMarkAllAsRead extends Module {
 
         int numMarkedNotifications = 0;
         String seenNotifCodes = this.getIntent().getStringExtra("seenNotifCodes");
-        int numMarkedNotificationsList = Integer.parseInt(this.getIntent().getStringExtra("numMarkedNotificationsList"));
+        int numMarkedNotificationsList = this.getIntent().getIntExtra("numMarkedNotificationsList", 0);
 
         //Request finalized without errors        
         if(isDebuggable) {
@@ -76,13 +77,13 @@ public class NotificationsMarkAllAsRead extends Module {
         sendRequest(Integer.class, false);
         
         if (result != null) {
-            SoapObject soap = (SoapObject) result;
+            SoapPrimitive soap = (SoapPrimitive) result;
 
             //Stores user data returned by webservice response
-            numMarkedNotifications = Integer.parseInt(soap.getProperty("numNotifications").toString());
+            numMarkedNotifications = Integer.parseInt(soap.toString());
         }
         
-        Log.i(TAG, "Marked " + numMarkedNotifications + " as read");
+        Log.i(TAG, "Marked " + numMarkedNotifications + " notifications as read");
     	dbHelper.updateAllNotifications("seenRemote", Utils.parseBoolString(true));
         
         if(numMarkedNotifications != numMarkedNotificationsList) {	            

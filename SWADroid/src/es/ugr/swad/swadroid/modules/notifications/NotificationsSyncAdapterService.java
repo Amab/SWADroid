@@ -35,9 +35,11 @@ import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.AlertNotification;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
+import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
+import es.ugr.swad.swadroid.utils.Utils;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
@@ -51,6 +53,7 @@ import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.TimeoutException;
 
@@ -77,6 +80,7 @@ public class NotificationsSyncAdapterService extends Service {
     public static final String START_SYNC = "es.ugr.swad.swadroid.sync.start";
     public static final String STOP_SYNC = "es.ugr.swad.swadroid.sync.stop";
     private static KeepAliveHttpsTransportSE connection;
+    public static boolean isConnected;
     public static boolean isDebuggable;
 
     public NotificationsSyncAdapterService() {
@@ -158,6 +162,7 @@ public class NotificationsSyncAdapterService extends Service {
 	 */
 	@Override
 	public void onCreate() {        
+        isConnected = Utils.connectionAvailable(this);
 		// Check if debug mode is enabled
         try {
             getPackageManager().getApplicationInfo(
@@ -388,6 +393,43 @@ public class NotificationsSyncAdapterService extends Service {
             dbHelper.endTransaction();
         }
     }
+    
+    /**
+     * Sends to SWAD the "seen notifications" info
+     */
+    private static void sendReadNotifications(Context context) {
+        List<Model> markedNotificationsList;
+        String seenNotifCodes;
+        Intent activity;
+        int numMarkedNotificationsList;
+        
+        if(isConnected) {
+	    	//Construct a list of seen notifications in state "pending to mark as read in SWAD" 
+	        markedNotificationsList = dbHelper.getAllRows(Constants.DB_TABLE_NOTIFICATIONS,
+	        		"seenLocal='" + Utils.parseBoolString(true)
+	        		+ "' AND seenRemote='" + Utils.parseBoolString(false) + "'", null);
+	        
+	        numMarkedNotificationsList = markedNotificationsList.size();
+	        if(isDebuggable)
+	        	Log.d(TAG, "numMarkedNotificationsList=" + numMarkedNotificationsList);
+	        
+	        if(numMarkedNotificationsList > 0) {            
+	            //Creates a string of notification codes separated by commas from the previous list
+	            seenNotifCodes = Utils.getSeenNotificationCodes(markedNotificationsList);
+		        if(isDebuggable)
+		        	Log.d(TAG, "seenNotifCodes=" + seenNotifCodes);
+	
+	            //Sends "seen notifications" info to the server
+		        activity = new Intent(context, NotificationsMarkAllAsRead.class);
+		        activity.putExtra("seenNotifCodes", seenNotifCodes);
+		        activity.putExtra("numMarkedNotificationsList", numMarkedNotificationsList);
+		        activity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		        context.startActivity(activity);
+	        }
+        } else {
+        	Log.w(TAG, "Not connected: Sending of notifications read info to SWAD was deferred");
+        }
+    }
 
     private static void performSync(Context context, Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
             throws IOException, XmlPullParserException, NoSuchAlgorithmException, KeyManagementException {
@@ -424,6 +466,8 @@ public class NotificationsSyncAdapterService extends Service {
 	            		notifCount + " " + context.getString(R.string.notificationsAlertMsg),
 	            		context.getString(R.string.app_name));
         	}
+        	
+        	sendReadNotifications(context);
         }
 
         //Notify synchronization stop

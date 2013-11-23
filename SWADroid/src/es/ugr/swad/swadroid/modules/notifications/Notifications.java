@@ -196,7 +196,7 @@ public class Notifications extends Module {
 		        	Log.d(TAG, "seenNotifCodes=" + seenNotifCodes);
 	
 	            //Sends "seen notifications" info to the server
-		        activity = new Intent(getBaseContext(), NotificationsMarkAllAsRead.class);
+		        activity = new Intent(this, NotificationsMarkAllAsRead.class);
 		        activity.putExtra("seenNotifCodes", seenNotifCodes);
 		        activity.putExtra("numMarkedNotificationsList", numMarkedNotificationsList);
 		        startActivityForResult(activity, Constants.NOTIFMARKALLASREAD_REQUEST_CODE);
@@ -318,11 +318,11 @@ public class Notifications extends Module {
     }
 
     /* (non-Javadoc)
-     * @see es.ugr.swad.swadroid.modules.Module#onStart()
+     * @see es.ugr.swad.swadroid.modules.Module#onResume()
      */
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onResume() {
+        super.onResume();
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(NotificationsSyncAdapterService.START_SYNC);
@@ -334,11 +334,11 @@ public class Notifications extends Module {
     }
     
     /* (non-Javadoc)
-     * @see es.ugr.swad.swadroid.modules.Module#onStop()
+     * @see es.ugr.swad.swadroid.modules.Module#onPause()
      */
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onPause() {
+        super.onPause();
         unregisterReceiver(receiver);
     }
 
@@ -423,10 +423,7 @@ public class Notifications extends Module {
      * @see es.ugr.swad.swadroid.modules.Module#postConnect()
      */
     @Override
-    protected void postConnect() {        
-        refreshScreen();
-        //Toast.makeText(this, R.string.notificationsDownloadedMsg, Toast.LENGTH_SHORT).show();
-
+    protected void postConnect() {   
         if (!ContentResolver.getSyncAutomatically(account, authority)) {
         	if (notifCount > 0) {
 	            //If the notifications counter exceeds the limit, set it to the max allowed
@@ -448,10 +445,13 @@ public class Notifications extends Module {
 
             pb.setVisibility(View.GONE);
             updateButton.setVisibility(View.VISIBLE);*/
+            
+            //Sends to SWAD the "seen notifications" info
+            sendReadNotifications();  
+            
+            refreshScreen();
+            //Toast.makeText(this, R.string.notificationsDownloadedMsg, Toast.LENGTH_SHORT).show();
         }
-        
-        //Sends to SWAD the "seen notifications" info
-        sendReadNotifications();
     }
 
     /* (non-Javadoc)
@@ -516,6 +516,11 @@ public class Notifications extends Module {
 
                 //pb.setVisibility(View.GONE);
                 //updateButton.setVisibility(View.VISIBLE);
+                
+                //Sends to SWAD the "seen notifications" info
+                //sendReadNotifications();     
+                
+                refreshScreen();
             }
         }
     }
