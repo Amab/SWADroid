@@ -609,10 +609,10 @@ public class SWADMain extends MenuExpandableListActivity {
             map.put(IMAGE, getResources().getDrawable(R.drawable.folder_users));
             courseData.add(map);
             //Introduction category
-            map = new HashMap<String, Object>();
+            /*map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.introductionModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
-            courseData.add(map);
+            courseData.add(map);*/
             
             //Evaluation category
             map = new HashMap<String, Object>();
