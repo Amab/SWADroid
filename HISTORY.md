@@ -1,3 +1,16 @@
+##0.12.6 (2013-11-24)
+
+* Added sending of "seen notifications" info to SWAD
+* Added management of seen notifications
+* Updated Notifications table and added "mark all notifications as read" feature
+* Synchronized code from Notifications class to NotificationsSyncAdapterService class
+* Remove ignored files
+* Changed action bar background color to black
+* Improved error management
+* Fixed a bug on BugSense initialization
+* Fixed automatic synchronization on application upgrade
+* Fixed black background color when the notifications list is being pulled
+
 ##0.12.5 (2013-11-10)
 
 * Fixed incorrect layout and NullPointerException in message replys
