@@ -1652,7 +1652,7 @@ public class DataBaseHelper {
      * @return Last time the test was updated
      */
     public String getTimeOfLastTestUpdate(long selectedCourseCode) {
-        String where = "notifCode=" + selectedCourseCode;
+        String where = "id=" + selectedCourseCode;
         String orderby = null;
         List<Entity> rows = db.getEntityList(Constants.DB_TABLE_TEST_CONFIG, where, orderby);
         String f = "0";
