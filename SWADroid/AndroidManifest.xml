@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="es.ugr.swad.swadroid"
           android:installLocation="auto"
-          android:versionCode="55"
-          android:versionName="0.12.5">
+          android:versionCode="56"
+          android:versionName="0.12.6">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -194,7 +194,58 @@
         <activity android:name=".modules.GenerateQR"
                   android:theme="@android:style/Theme.NoTitleBar">
         </activity>
-
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <activity
+                android:name=".modules.information.Introduction"
+                android:label="@string/introductionModuleLabel"
+                android:theme="@@android:style/Theme.NoTitleBar">
+        </activity>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <activity
+                android:name=".modules.notifications.NotificationsMarkAllAsRead"
+                android:label="@string/notificationsMarkAllAsReadModuleLabel"
+                android:theme="@android:style/Theme.Translucent.NoTitleBar">
+        </activity>
+        
         <provider
                 android:name=".sync.DummyProvider"
                 android:authorities="es.ugr.swad.swadroid.content"

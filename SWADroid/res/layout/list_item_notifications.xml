@@ -3,6 +3,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:background="@color/background"
         android:orientation="horizontal">
 
     <LinearLayout
@@ -47,6 +48,18 @@
             android:orientation="vertical"
             android:layout_marginTop="3dip"
             android:layout_marginRight="6dip">
+
+        <TextView
+                android:id="@+id/notifCode"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:visibility="gone"/>
+
+        <TextView
+                android:id="@+id/seenLocal"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:visibility="gone"/>
 
         <TextView
                 android:id="@+id/eventCode"

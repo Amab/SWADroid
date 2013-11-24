@@ -60,6 +60,7 @@ import es.ugr.swad.swadroid.modules.Messages;
 import es.ugr.swad.swadroid.modules.Notices;
 import es.ugr.swad.swadroid.modules.downloads.DownloadsManager;
 import es.ugr.swad.swadroid.modules.groups.MyGroupsManager;
+import es.ugr.swad.swadroid.modules.information.Introduction;
 import es.ugr.swad.swadroid.modules.notifications.Notifications;
 import es.ugr.swad.swadroid.modules.rollcall.Rollcall;
 import es.ugr.swad.swadroid.modules.tests.Tests;
@@ -74,6 +75,7 @@ import es.ugr.swad.swadroid.utils.Utils;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
+ * @author Jose Antonio Guerrero Aviles <cany20@gmail.com>
  */
 public class SWADMain extends MenuExpandableListActivity {
     /**
@@ -194,7 +196,7 @@ public class SWADMain extends MenuExpandableListActivity {
             startActivityForResult(activity, Constants.TESTS_REQUEST_CODE);
         } else if (keyword.equals(getString(R.string.messagesModuleLabel))) {
             activity = new Intent(getBaseContext(), Messages.class);
-            activity.putExtra("notificationCode", Long.valueOf(0));
+            activity.putExtra("eventCode", Long.valueOf(0));
             startActivityForResult(activity, Constants.MESSAGES_REQUEST_CODE);
         } else if (keyword.equals(getString(R.string.noticesModuleLabel))) {
             activity = new Intent(getBaseContext(), Notices.class);
@@ -217,7 +219,19 @@ public class SWADMain extends MenuExpandableListActivity {
             activity = new Intent(getBaseContext(), MyGroupsManager.class);
             activity.putExtra("courseCode", Constants.getSelectedCourseCode());
             startActivityForResult(activity, Constants.MYGROUPSMANAGER_REQUEST_CODE);
-        }
+        
+        
+        
+        
+        
+        
+    	} else if (keyword.equals(getString(R.string.introductionModuleLabel))) {
+    		activity = new Intent(getBaseContext(), Introduction.class);
+    		startActivityForResult(activity, Constants.INTRODUCTION_REQUEST_CODE);
+    	}
+    
+    
+    
 
         return true;
     }
@@ -230,6 +244,7 @@ public class SWADMain extends MenuExpandableListActivity {
         int lastVersion, currentVersion;
         ImageView image;
         TextView text;
+        Intent activity;
 
         //Initialize Bugsense plugin
         try {
@@ -263,15 +278,15 @@ public class SWADMain extends MenuExpandableListActivity {
             lastVersion = prefs.getLastVersion();
             currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
             dbHelper.initializeDB();
-            //lastVersion = 51;
-            //currentVersion = 52;
+            //lastVersion = 55;
+            //currentVersion = 56;
 
             //If this is the first run, show configuration dialog
             if (lastVersion == 0) {
                 showConfigurationDialog();
 
                 //Configure automatic synchronization
-                Intent activity = new Intent(getBaseContext(), AccountAuthenticator.class);
+                activity = new Intent(getBaseContext(), AccountAuthenticator.class);
                 startActivity(activity);
                 SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, Constants.DEFAULT_SYNC_TIME, this);
                 prefs.setSyncTime(String.valueOf(Constants.DEFAULT_SYNC_TIME));
@@ -299,24 +314,12 @@ public class SWADMain extends MenuExpandableListActivity {
                 	
                 	prefs.setSyncTime(String.valueOf(Constants.DEFAULT_SYNC_TIME));
                 }
-                
-                //If the app is updating from an unencrypted version, encrypt already downloaded notifications
-            	if (lastVersion < 45) {
-                    dbHelper.encryptNotifications();
-
-                /*
-                 * If the app is updating from the bugged encrypted version,
-                 * re-encrypt the notifications using the new method
-                 */
-                } else if (lastVersion == 45) {
-                    dbHelper.reencryptNotifications();
-                }
 
                 //Configure automatic synchronization
-                if (lastVersion < 49) {
-                    Intent activity = new Intent(getBaseContext(), AccountAuthenticator.class);
-                    startActivity(activity);
-                    SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, Constants.DEFAULT_SYNC_TIME, this);
+                if(Preferences.isSyncEnabled()) {
+                	activity = new Intent(getBaseContext(), AccountAuthenticator.class);
+                	startActivity(activity);
+                	SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, Long.valueOf(prefs.getSyncTime()), this);
                 }
 
                 prefs.setLastVersion(currentVersion);
@@ -593,7 +596,9 @@ public class SWADMain extends MenuExpandableListActivity {
             childData.add(usersData);
 
             HashMap<String, Object> map = new HashMap<String, Object>();
-
+           
+            
+  
             //Documents category
             map.put(NAME, getString(R.string.documentsDownloadModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.folder));
@@ -603,7 +608,12 @@ public class SWADMain extends MenuExpandableListActivity {
             map.put(NAME, getString(R.string.sharedsDownloadModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.folder_users));
             courseData.add(map);
-
+            //Introduction category
+            /*map = new HashMap<String, Object>();
+            map.put(NAME, getString(R.string.introductionModuleLabel));
+            map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
+            courseData.add(map);*/
+            
             //Evaluation category
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.testsModuleLabel));

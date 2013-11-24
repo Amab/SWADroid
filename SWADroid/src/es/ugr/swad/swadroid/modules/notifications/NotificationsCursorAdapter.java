@@ -30,6 +30,7 @@ import android.widget.TextView;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.utils.Crypto;
+import es.ugr.swad.swadroid.utils.Utils;
 
 import java.util.Date;
 
@@ -98,7 +99,8 @@ public class NotificationsCursorAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        final Long notificationCode = cursor.getLong(cursor.getColumnIndex("id"));
+        final Long notifCode = cursor.getLong(cursor.getColumnIndex("notifCode"));
+        final Long eventCode = cursor.getLong(cursor.getColumnIndex("eventCode"));
         final String userPhoto = cursor.getString(cursor.getColumnIndex("userPhoto"));
         long unixTime;
         String type = "";
@@ -109,13 +111,23 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         java.text.DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(context);
         int numRows = cursor.getCount();
         int cursorPosition = cursor.getPosition();
+        String seenLocalString = cursor.getString(cursor.getColumnIndex("seenLocal"));
+        boolean seenLocal = Utils.parseStringBool(seenLocalString);
+        
+        if(!seenLocal) {
+        	view.setBackgroundColor(context.getResources().getColor(R.color.notifications_background_yellow));
+        } else {
+        	view.setBackgroundColor(context.getResources().getColor(R.color.background));
+        }
 
         if (contentVisible.length == 0) {
             contentVisible = new boolean[numRows];
         }
 
         view.setScrollContainer(false);
-        TextView eventCode = (TextView) view.findViewById(R.id.eventCode);
+        TextView notifCodeHided = (TextView) view.findViewById(R.id.notifCode);
+        TextView eventCodeHided = (TextView) view.findViewById(R.id.eventCode);
+        TextView seenLocalHided = (TextView) view.findViewById(R.id.seenLocal);
         TextView eventUserPhoto = (TextView) view.findViewById(R.id.eventUserPhoto);
         TextView eventType = (TextView) view.findViewById(R.id.eventType);
         TextView eventDate = (TextView) view.findViewById(R.id.eventDate);
@@ -138,7 +150,9 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         };*/
 
         if (eventType != null) {
-            eventCode.setText(notificationCode.toString());
+            notifCodeHided.setText(notifCode.toString());
+            eventCodeHided.setText(eventCode.toString());
+            seenLocalHided.setText(seenLocalString);
             eventUserPhoto.setText(crypto.decrypt(userPhoto));
             type = crypto.decrypt(cursor.getString(cursor.getColumnIndex("eventType")));
             //messageReplyButton.setVisibility(View.GONE);

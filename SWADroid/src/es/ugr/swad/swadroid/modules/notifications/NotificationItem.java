@@ -18,12 +18,12 @@
  */
 package es.ugr.swad.swadroid.modules.notifications;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
-import android.webkit.WebSettings.RenderPriority;
 import android.webkit.WebView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -41,7 +41,12 @@ import es.ugr.swad.swadroid.utils.Utils;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class NotificationItem extends MenuActivity {
-    private Long notificationCode;
+    /**
+     * NotificationsItem tag name for Logcat
+     */
+    private static final String TAG = Constants.APP_TAG + " Notificationsitem";
+    private Long notifCode;
+    private Long eventCode;
     private String sender;
     private String userPhoto;
     private String course;
@@ -49,6 +54,7 @@ public class NotificationItem extends MenuActivity {
     private String content;
     private String date;
     private String time;
+    private boolean seenLocal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +63,7 @@ public class NotificationItem extends MenuActivity {
         //ImageView imageSep;
         ImageButton replyButton;
         WebView webview;
+        Intent activity;
         String type = this.getIntent().getStringExtra("notificationType");
 
         super.onCreate(savedInstanceState);
@@ -86,6 +93,8 @@ public class NotificationItem extends MenuActivity {
             replyButton.setVisibility(View.GONE);
         }
 
+        notifCode = Long.valueOf(this.getIntent().getStringExtra("notifCode")); 
+        eventCode = Long.valueOf(this.getIntent().getStringExtra("eventCode"));
         sender = this.getIntent().getStringExtra("sender");
         userPhoto = this.getIntent().getStringExtra("userPhoto");
         course = this.getIntent().getStringExtra("course");
@@ -93,6 +102,7 @@ public class NotificationItem extends MenuActivity {
         content = this.getIntent().getStringExtra("content");
         date = this.getIntent().getStringExtra("date");
         time = this.getIntent().getStringExtra("time");
+        seenLocal = Utils.parseStringBool(this.getIntent().getStringExtra("seenLocal"));
 
         senderTextView.setText(sender);
         courseTextView.setText(course);
@@ -115,9 +125,23 @@ public class NotificationItem extends MenuActivity {
             content = content.substring(9, content.length() - 3);
         }
 
-        webview.getSettings().setRenderPriority(RenderPriority.HIGH);
         webview.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         webview.loadDataWithBaseURL("", content, "text/html", "utf-8", "");
+        
+        //Set notification as seen locally
+        dbHelper.updateNotification(notifCode, "seenLocal", Utils.parseBoolString(true));
+        
+        //Sends "seen notifications" info to the server if there is a connection available
+        if(!seenLocal) {
+        	if(Utils.connectionAvailable(this)) {
+		        activity = new Intent(this, NotificationsMarkAllAsRead.class);
+		        activity.putExtra("seenNotifCodes", String.valueOf(notifCode));
+		        activity.putExtra("numMarkedNotificationsList", 1);
+		        startActivityForResult(activity, Constants.NOTIFMARKALLASREAD_REQUEST_CODE);
+        	} else {
+        		Log.w(TAG, "Not connected: Marking the notification " + notifCode + " as read in SWAD was deferred");
+        	}
+        }
     }
 
     /**
@@ -126,10 +150,25 @@ public class NotificationItem extends MenuActivity {
      * @param v Actual view
      */
     public void onReplyMessageClick(View v) {
-        notificationCode = Long.valueOf(this.getIntent().getStringExtra("notificationCode"));
         Intent activity = new Intent(this, Messages.class);
-        activity.putExtra("notificationCode", notificationCode);
+        activity.putExtra("eventCode", eventCode);
         activity.putExtra("summary", summary);
         startActivity(activity);
     }
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onActivityResult(int, int, android.content.Intent)
+	 */
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		
+		if(requestCode == Constants.NOTIFMARKALLASREAD_REQUEST_CODE) {
+			if (resultCode == Activity.RESULT_OK) {
+				Log.i(TAG, "Notification " + notifCode + " marked as read in SWAD");
+			} else {
+				Log.e(TAG, "Error marking notification " + notifCode + " as read in SWAD");
+			}
+		}
+	}
 }

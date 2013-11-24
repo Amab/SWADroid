@@ -19,6 +19,7 @@
 package es.ugr.swad.swadroid.modules.notifications;
 
 import android.accounts.Account;
+import android.app.Activity;
 import android.content.*;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -35,8 +36,10 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.AlertNotification;
+import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.modules.Module;
+import es.ugr.swad.swadroid.utils.Utils;
 
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
@@ -44,6 +47,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -112,6 +116,7 @@ public class Notifications extends Module {
     private OnItemClickListener clickListener = new OnItemClickListener() {
         public void onItemClick(AdapterView<?> av, View v, int position, long rowId) {
             //adapter.toggleContentVisibility(position);
+            TextView id = (TextView) v.findViewById(R.id.notifCode);
             TextView code = (TextView) v.findViewById(R.id.eventCode);
             TextView type = (TextView) v.findViewById(R.id.eventType);
             TextView userPhoto = (TextView) v.findViewById(R.id.eventUserPhoto);
@@ -121,9 +126,11 @@ public class Notifications extends Module {
             TextView content = (TextView) v.findViewById(R.id.eventText);
             TextView date = (TextView) v.findViewById(R.id.eventDate);
             TextView time = (TextView) v.findViewById(R.id.eventTime);
+            TextView seenLocalText = (TextView) v.findViewById(R.id.seenLocal);
 
             Intent activity = new Intent(getApplicationContext(), NotificationItem.class);
-            activity.putExtra("notificationCode", code.getText().toString());
+            activity.putExtra("notifCode", id.getText().toString());
+            activity.putExtra("eventCode", code.getText().toString());
             activity.putExtra("notificationType", type.getText().toString());
             activity.putExtra("userPhoto", userPhoto.getText().toString());
             activity.putExtra("sender", sender.getText().toString());
@@ -132,6 +139,7 @@ public class Notifications extends Module {
             activity.putExtra("content", content.getText().toString());
             activity.putExtra("date", date.getText().toString());
             activity.putExtra("time", time.getText().toString());
+            activity.putExtra("seenLocal", seenLocalText.getText().toString());
             startActivity(activity);
         }
     };
@@ -161,6 +169,58 @@ public class Notifications extends Module {
 
     	list.onRefreshComplete();
     }
+    
+    /**
+     * Sends to SWAD the "seen notifications" info
+     */
+    private void sendReadNotifications() {
+        List<Model> markedNotificationsList;
+        String seenNotifCodes;
+        Intent activity;
+        int numMarkedNotificationsList;
+        
+        if(isConnected) {
+	    	//Construct a list of seen notifications in state "pending to mark as read in SWAD" 
+	        markedNotificationsList = dbHelper.getAllRows(Constants.DB_TABLE_NOTIFICATIONS,
+	        		"seenLocal='" + Utils.parseBoolString(true)
+	        		+ "' AND seenRemote='" + Utils.parseBoolString(false) + "'", null);
+	        
+	        numMarkedNotificationsList = markedNotificationsList.size();
+	        if(isDebuggable)
+	        	Log.d(TAG, "numMarkedNotificationsList=" + numMarkedNotificationsList);
+	        
+	        if(numMarkedNotificationsList > 0) {            
+	            //Creates a string of notification codes separated by commas from the previous list
+	            seenNotifCodes = Utils.getSeenNotificationCodes(markedNotificationsList);
+		        if(isDebuggable)
+		        	Log.d(TAG, "seenNotifCodes=" + seenNotifCodes);
+	
+	            //Sends "seen notifications" info to the server
+		        activity = new Intent(this, NotificationsMarkAllAsRead.class);
+		        activity.putExtra("seenNotifCodes", seenNotifCodes);
+		        activity.putExtra("numMarkedNotificationsList", numMarkedNotificationsList);
+		        startActivityForResult(activity, Constants.NOTIFMARKALLASREAD_REQUEST_CODE);
+	        }
+        } else {
+        	Log.w(TAG, "Not connected: Sending of notifications read info to SWAD was deferred");
+        }
+    }
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onActivityResult(int, int, android.content.Intent)
+	 */
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		
+		if(requestCode == Constants.NOTIFMARKALLASREAD_REQUEST_CODE) {
+			if (resultCode == Activity.RESULT_OK) {
+				Log.i(TAG, "Notifications marked as read in SWAD");
+			} else {
+				Log.e(TAG, "Error marking notifications as read in SWAD");
+			}
+		}
+	}
 
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
@@ -178,6 +238,7 @@ public class Notifications extends Module {
 
         this.findViewById(R.id.courseSelectedText).setVisibility(View.GONE);
         this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
+        this.findViewById(R.id.markAllRead).setVisibility(View.VISIBLE);
 
         image = (ImageView) this.findViewById(R.id.moduleIcon);
         image.setBackgroundResource(R.drawable.bell);
@@ -246,6 +307,20 @@ public class Notifications extends Module {
             onError();
     }
 
+    /**
+     * Launches an action when markAllRead button is pushed
+     *
+     * @param v Actual view
+     */
+    public void onMarkAllReadClick(View v) {
+        dbHelper.updateAllNotifications("seenLocal", Utils.parseBoolString(true));
+        
+        //Sends to SWAD the "seen notifications" info
+        sendReadNotifications();  
+        
+        refreshScreen();
+    }
+
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#onResume()
      */
@@ -256,11 +331,15 @@ public class Notifications extends Module {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(NotificationsSyncAdapterService.START_SYNC);
         intentFilter.addAction(NotificationsSyncAdapterService.STOP_SYNC);
+        intentFilter.addAction(Intent.CATEGORY_DEFAULT);
         registerReceiver(receiver, intentFilter);
 
         refreshScreen();
     }
-
+    
+    /* (non-Javadoc)
+     * @see es.ugr.swad.swadroid.modules.Module#onPause()
+     */
     @Override
     protected void onPause() {
         super.onPause();
@@ -273,6 +352,8 @@ public class Notifications extends Module {
     @Override
     protected void requestService() throws NoSuchAlgorithmException,
             IOException, XmlPullParserException {
+    	
+    	//Download new notifications from the server
         SIZE_LIMIT = prefs.getNotifLimit();
 
         account = new Account(getString(R.string.app_name), accountType);
@@ -299,7 +380,8 @@ public class Notifications extends Module {
                 notifCount = soap.getPropertyCount();
                 for (int i = 0; i < notifCount; i++) {
                     SoapObject pii = (SoapObject) soap.getProperty(i);
-                    Long notificationCode = Long.valueOf(pii.getProperty("notificationCode").toString());
+                    Long notifCode = Long.valueOf(pii.getProperty("notifCode").toString());
+                    Long eventCode = Long.valueOf(pii.getProperty("notificationCode").toString());
                     String eventType = pii.getProperty("eventType").toString();
                     Long eventTime = Long.valueOf(pii.getProperty("eventTime").toString());
                     String userSurname1 = pii.getProperty("userSurname1").toString();
@@ -310,7 +392,8 @@ public class Notifications extends Module {
                     String summary = pii.getProperty("summary").toString();
                     Integer status = Integer.valueOf(pii.getProperty("status").toString());
                     String content = pii.getProperty("content").toString();
-                    SWADNotification n = new SWADNotification(notificationCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, userPhoto, location, summary, status, content);
+                    
+                    SWADNotification n = new SWADNotification(notifCode, eventCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, userPhoto, location, summary, status, content, false, false);
                     dbHelper.insertNotification(n);
 
                     if(isDebuggable)
@@ -318,6 +401,7 @@ public class Notifications extends Module {
                 }
 
                 //Request finalized without errors
+                setResult(RESULT_OK);  
                 Log.i(TAG, "Retrieved " + notifCount + " notifications");
 
                 //Clear old notifications to control database size
@@ -343,10 +427,7 @@ public class Notifications extends Module {
      * @see es.ugr.swad.swadroid.modules.Module#postConnect()
      */
     @Override
-    protected void postConnect() {
-        refreshScreen();
-        //Toast.makeText(this, R.string.notificationsDownloadedMsg, Toast.LENGTH_SHORT).show();
-
+    protected void postConnect() {   
         if (!ContentResolver.getSyncAutomatically(account, authority)) {
         	if (notifCount > 0) {
 	            //If the notifications counter exceeds the limit, set it to the max allowed
@@ -359,13 +440,21 @@ public class Notifications extends Module {
 	            		getString(R.string.app_name),
 	            		notifCount + " " + getString(R.string.notificationsAlertMsg),
 	            		getString(R.string.app_name));
+        	} else {
+        		Toast.makeText(this, R.string.NoNotificationsMsg, Toast.LENGTH_LONG).show();
         	}
 
-            ProgressBar pb = (ProgressBar) this.findViewById(R.id.progress_refresh);
+            /*ProgressBar pb = (ProgressBar) this.findViewById(R.id.progress_refresh);
             ImageButton updateButton = (ImageButton) this.findViewById(R.id.refresh);
 
             pb.setVisibility(View.GONE);
-            updateButton.setVisibility(View.VISIBLE);
+            updateButton.setVisibility(View.VISIBLE);*/
+            
+            //Sends to SWAD the "seen notifications" info
+            sendReadNotifications();  
+            
+            refreshScreen();
+            //Toast.makeText(this, R.string.notificationsDownloadedMsg, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -374,11 +463,11 @@ public class Notifications extends Module {
      */
     @Override
     protected void onError() {
-        ProgressBar pb = (ProgressBar) this.findViewById(R.id.progress_refresh);
+        /*ProgressBar pb = (ProgressBar) this.findViewById(R.id.progress_refresh);
         ImageButton updateButton = (ImageButton) this.findViewById(R.id.refresh);
 
         pb.setVisibility(View.GONE);
-        updateButton.setVisibility(View.VISIBLE);
+        updateButton.setVisibility(View.VISIBLE);*/
     }
 
     /**
@@ -431,7 +520,10 @@ public class Notifications extends Module {
 
                 //pb.setVisibility(View.GONE);
                 //updateButton.setVisibility(View.VISIBLE);
-
+                
+                //Sends to SWAD the "seen notifications" info
+                //sendReadNotifications();     
+                
                 refreshScreen();
             }
         }

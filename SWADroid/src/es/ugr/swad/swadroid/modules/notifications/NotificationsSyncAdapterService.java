@@ -22,6 +22,8 @@ package es.ugr.swad.swadroid.modules.notifications;
 import android.accounts.Account;
 import android.app.Service;
 import android.content.*;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -33,9 +35,11 @@ import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.AlertNotification;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
+import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
+import es.ugr.swad.swadroid.utils.Utils;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
@@ -49,6 +53,7 @@ import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.TimeoutException;
 
@@ -75,6 +80,8 @@ public class NotificationsSyncAdapterService extends Service {
     public static final String START_SYNC = "es.ugr.swad.swadroid.sync.start";
     public static final String STOP_SYNC = "es.ugr.swad.swadroid.sync.stop";
     private static KeepAliveHttpsTransportSE connection;
+    public static boolean isConnected;
+    public static boolean isDebuggable;
 
     public NotificationsSyncAdapterService() {
         super();
@@ -101,7 +108,9 @@ public class NotificationsSyncAdapterService extends Service {
 
         @Override
         public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
-            try {
+            boolean sendException = true;
+        	
+        	try {
                 prefs.getPreferences(mContext);
                 SIZE_LIMIT = prefs.getNotifLimit();
                 SERVER = prefs.getServer();
@@ -115,6 +124,7 @@ public class NotificationsSyncAdapterService extends Service {
 
                     if (es.faultstring.equals("Bad log in")) {
                     	errorMessage = mContext.getString(R.string.errorBadLoginMsg);
+                    	sendException = false;
                     } else if (es.faultstring.equals("Unknown application key")) {
                     	errorMessage = mContext.getString(R.string.errorBadAppKeyMsg);
                     } else {
@@ -122,22 +132,23 @@ public class NotificationsSyncAdapterService extends Service {
                     }
                 } else if (e instanceof XmlPullParserException) {
                 	errorMessage = mContext.getString(R.string.errorServerResponseMsg);
-
-                    e.printStackTrace();
-
-                    //Send exception details to Bugsense
-                    BugSenseHandler.sendException(e);
                 } else if (e instanceof TimeoutException) {
                 	errorMessage = mContext.getString(R.string.errorTimeoutMsg);
-                //} else if (e instanceof IOException) {
-                //    errorMsg = getString(R.string.errorConnectionMsg);
+                	sendException = false;
+                } else if (e instanceof IOException) {
+                	errorMessage = mContext.getString(R.string.errorConnectionMsg);
                 } else {
                 	errorMessage = e.getMessage();
+                	if((errorMessage == null) || errorMessage.equals("")) {
+                		errorMessage = mContext.getString(R.string.errorConnectionMsg);
+                	}  
+                }             	
 
-                    e.printStackTrace();
+                e.printStackTrace();
 
-                    //Send exception details to Bugsense
-                    BugSenseHandler.sendException(e);
+                //Send exception details to Bugsense
+                if(sendException) {
+                	BugSenseHandler.sendException(e);
                 }
                 
                 //Notify synchronization stop
@@ -155,8 +166,22 @@ public class NotificationsSyncAdapterService extends Service {
 	 */
 	@Override
 	public void onCreate() {        
-        //Initialize Bugsense plugin
-        BugSenseHandler.initAndStartSession(this, Constants.BUGSENSE_API_KEY);
+        isConnected = Utils.connectionAvailable(this);
+		// Check if debug mode is enabled
+        try {
+            getPackageManager().getApplicationInfo(
+                    getPackageName(), 0);
+			isDebuggable = (ApplicationInfo.FLAG_DEBUGGABLE != 0);
+        } catch (NameNotFoundException e1) {
+            e1.printStackTrace();
+        }
+        
+		//Initialize Bugsense plugin
+        try {
+        	BugSenseHandler.initAndStartSession(this, Constants.BUGSENSE_API_KEY);
+        } catch (Exception e) {
+        	Log.e(TAG, "Error initializing BugSense", e);
+        }
         
 		super.onCreate();
 	}
@@ -178,7 +203,11 @@ public class NotificationsSyncAdapterService extends Service {
 	 */
 	@Override
 	public void onDestroy() {
-		BugSenseHandler.closeSession(this);
+		try {
+			BugSenseHandler.closeSession(this);
+		} catch (Exception e) {
+			Log.e(TAG, "Error initializing BugSense", e);
+        }
 		
 		super.onDestroy();
 	}
@@ -245,21 +274,28 @@ public class NotificationsSyncAdapterService extends Service {
         envelope.dotNet = false;
         envelope.setOutputSoapObject(request);
         envelope.addMapping(NAMESPACE, cl.getSimpleName(), cl);
-    	connection.call(SOAP_ACTION, envelope);  
         
-        /*connection.debug = true;
-        try {
-        	connection.call(SOAP_ACTION, envelope);
-	        Log.d(TAG, connection.getHost() + " " + connection.getPath() + " " +
-	        connection.getPort());
-	        Log.d(TAG, connection.requestDump.toString());
-	        Log.d(TAG, connection.responseDump.toString());
-        } catch (Exception e) {
-	        Log.e(TAG, connection.getHost() + " " + connection.getPath() + " " +
-	        connection.getPort());
-	        Log.e(TAG, connection.requestDump.toString());
-	        Log.e(TAG, connection.responseDump.toString());
-        }*/
+        if(cl != null) {
+        	envelope.addMapping(NAMESPACE, cl.getSimpleName(), cl);
+        }
+        
+        if (isDebuggable) {
+	        connection.debug = true;
+	        try {
+	        	connection.call(SOAP_ACTION, envelope);
+		        Log.d(TAG, connection.getHost() + " " + connection.getPath() + " " +
+		        connection.getPort());
+		        Log.d(TAG, connection.requestDump.toString());
+		        Log.d(TAG, connection.responseDump.toString());
+	        } catch (Exception e) {
+		        Log.e(TAG, connection.getHost() + " " + connection.getPath() + " " +
+		        connection.getPort());
+		        Log.e(TAG, connection.requestDump.toString());
+		        Log.e(TAG, connection.responseDump.toString());
+	        }        	
+        } else {
+        	connection.call(SOAP_ACTION, envelope);        	
+        }
 
         if (simple && !(envelope.getResponse() instanceof SoapFault)) {
             result = envelope.bodyIn;
@@ -331,8 +367,9 @@ public class NotificationsSyncAdapterService extends Service {
             SoapObject soap = (SoapObject) res.get(1);
             notifCount = soap.getPropertyCount();
             for (int i = 0; i < notifCount; i++) {
-                SoapObject pii = (SoapObject) soap.getProperty(i);
-                Long notificationCode = Long.valueOf(pii.getProperty("notificationCode").toString());
+            	SoapObject pii = (SoapObject) soap.getProperty(i);
+                Long notifCode = Long.valueOf(pii.getProperty("notifCode").toString());
+                Long eventCode = Long.valueOf(pii.getProperty("notificationCode").toString());
                 String eventType = pii.getProperty("eventType").toString();
                 Long eventTime = Long.valueOf(pii.getProperty("eventTime").toString());
                 String userSurname1 = pii.getProperty("userSurname1").toString();
@@ -343,7 +380,9 @@ public class NotificationsSyncAdapterService extends Service {
                 String summary = pii.getProperty("summary").toString();
                 Integer status = Integer.valueOf(pii.getProperty("status").toString());
                 String content = pii.getProperty("content").toString();
-                SWADNotification n = new SWADNotification(notificationCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, userPhoto, location, summary, status, content);
+                
+                //TODO Add "notification seen" info from SWAD
+                SWADNotification n = new SWADNotification(notifCode, eventCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, userPhoto, location, summary, status, content, false, false);
                 dbHelper.insertNotification(n);
 
                 //Log.d(TAG, n.toString());
@@ -356,6 +395,43 @@ public class NotificationsSyncAdapterService extends Service {
             dbHelper.clearOldNotifications(SIZE_LIMIT);
 
             dbHelper.endTransaction();
+        }
+    }
+    
+    /**
+     * Sends to SWAD the "seen notifications" info
+     */
+    private static void sendReadNotifications(Context context) {
+        List<Model> markedNotificationsList;
+        String seenNotifCodes;
+        Intent activity;
+        int numMarkedNotificationsList;
+        
+        if(isConnected) {
+	    	//Construct a list of seen notifications in state "pending to mark as read in SWAD" 
+	        markedNotificationsList = dbHelper.getAllRows(Constants.DB_TABLE_NOTIFICATIONS,
+	        		"seenLocal='" + Utils.parseBoolString(true)
+	        		+ "' AND seenRemote='" + Utils.parseBoolString(false) + "'", null);
+	        
+	        numMarkedNotificationsList = markedNotificationsList.size();
+	        if(isDebuggable)
+	        	Log.d(TAG, "numMarkedNotificationsList=" + numMarkedNotificationsList);
+	        
+	        if(numMarkedNotificationsList > 0) {            
+	            //Creates a string of notification codes separated by commas from the previous list
+	            seenNotifCodes = Utils.getSeenNotificationCodes(markedNotificationsList);
+		        if(isDebuggable)
+		        	Log.d(TAG, "seenNotifCodes=" + seenNotifCodes);
+	
+	            //Sends "seen notifications" info to the server
+		        activity = new Intent(context, NotificationsMarkAllAsRead.class);
+		        activity.putExtra("seenNotifCodes", seenNotifCodes);
+		        activity.putExtra("numMarkedNotificationsList", numMarkedNotificationsList);
+		        activity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		        context.startActivity(activity);
+	        }
+        } else {
+        	Log.w(TAG, "Not connected: Sending of notifications read info to SWAD was deferred");
         }
     }
 
@@ -394,6 +470,8 @@ public class NotificationsSyncAdapterService extends Service {
 	            		notifCount + " " + context.getString(R.string.notificationsAlertMsg),
 	            		context.getString(R.string.app_name));
         	}
+        	
+        	sendReadNotifications(context);
         }
 
         //Notify synchronization stop
