@@ -108,7 +108,9 @@ public class NotificationsSyncAdapterService extends Service {
 
         @Override
         public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
-            try {
+            boolean sendException = true;
+        	
+        	try {
                 prefs.getPreferences(mContext);
                 SIZE_LIMIT = prefs.getNotifLimit();
                 SERVER = prefs.getServer();
@@ -122,6 +124,7 @@ public class NotificationsSyncAdapterService extends Service {
 
                     if (es.faultstring.equals("Bad log in")) {
                     	errorMessage = mContext.getString(R.string.errorBadLoginMsg);
+                    	sendException = false;
                     } else if (es.faultstring.equals("Unknown application key")) {
                     	errorMessage = mContext.getString(R.string.errorBadAppKeyMsg);
                     } else {
@@ -129,22 +132,23 @@ public class NotificationsSyncAdapterService extends Service {
                     }
                 } else if (e instanceof XmlPullParserException) {
                 	errorMessage = mContext.getString(R.string.errorServerResponseMsg);
-
-                    e.printStackTrace();
-
-                    //Send exception details to Bugsense
-                    BugSenseHandler.sendException(e);
                 } else if (e instanceof TimeoutException) {
                 	errorMessage = mContext.getString(R.string.errorTimeoutMsg);
-                //} else if (e instanceof IOException) {
-                //    errorMsg = getString(R.string.errorConnectionMsg);
+                	sendException = false;
+                } else if (e instanceof IOException) {
+                	errorMessage = mContext.getString(R.string.errorConnectionMsg);
                 } else {
                 	errorMessage = e.getMessage();
+                	if((errorMessage == null) || errorMessage.equals("")) {
+                		errorMessage = mContext.getString(R.string.errorConnectionMsg);
+                	}  
+                }             	
 
-                    e.printStackTrace();
+                e.printStackTrace();
 
-                    //Send exception details to Bugsense
-                    BugSenseHandler.sendException(e);
+                //Send exception details to Bugsense
+                if(sendException) {
+                	BugSenseHandler.sendException(e);
                 }
                 
                 //Notify synchronization stop

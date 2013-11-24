@@ -579,10 +579,13 @@ public abstract class Module extends MenuActivity {
                 } else if (e instanceof TimeoutException) {
                     errorMsg = getString(R.string.errorTimeoutMsg);
                     sendException = false;
-                //} else if (e instanceof IOException) {
-                //    errorMsg = getString(R.string.errorConnectionMsg);
+                } else if (e instanceof IOException) {
+                    errorMsg = getString(R.string.errorConnectionMsg);
                 } else {
                     errorMsg = e.getMessage();
+                	if((errorMsg == null) || errorMsg.equals("")) {
+                		errorMsg = getString(R.string.errorConnectionMsg);
+                	}
                 }
 
                 // Request finalized with errors
