@@ -314,6 +314,10 @@ public class Notifications extends Module {
      */
     public void onMarkAllReadClick(View v) {
         dbHelper.updateAllNotifications("seenLocal", Utils.parseBoolString(true));
+        
+        //Sends to SWAD the "seen notifications" info
+        sendReadNotifications();  
+        
         refreshScreen();
     }
 
