@@ -29,6 +29,7 @@ import es.ugr.swad.swadroid.model.User;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
+ * @author Jose Antonio Guerrero Aviles <cany20@gmail.com>
  */
 public class Constants {
     /**
@@ -211,6 +212,27 @@ public class Constants {
      * Request code for Generate QR
      */
     public static final int GENERATE_QR_REQUEST_CODE = 26;
+    
+    
+    
+    
+    
+    
+    
+    /**
+     * Request code for Introduction
+     */
+    public static final int INTRODUCTION_REQUEST_CODE = 27;
+    
+    
+    
+    
+    
+    
+    /**
+     * Request code for NotificationMarkAsRead module
+     */
+    public static final int NOTIFMARKALLASREAD_REQUEST_CODE = 28;    
     /**
      * Prefix tag name for Logcat
      */

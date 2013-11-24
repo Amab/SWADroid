@@ -57,7 +57,7 @@ public class Messages extends Module {
     /**
      * Message code
      */
-    private Long notificationCode;
+    private Long eventCode;
     /**
      * Message's receivers
      */
@@ -136,7 +136,7 @@ public class Messages extends Module {
             
             b.setOnClickListener(positiveClickListener);
             
-            if (notificationCode != 0) {
+            if (eventCode != 0) {
                 subject = getIntent().getStringExtra("summary");
 
                 subjectText.setText("Re: " + subject);
@@ -161,7 +161,7 @@ public class Messages extends Module {
     protected void onStart() {
         super.onStart();
 
-        notificationCode = getIntent().getLongExtra("notificationCode", 0);
+        eventCode = getIntent().getLongExtra("eventCode", 0);
 
         messageDialog = DialogFactory.createPositiveNegativeDialog(this,
         		R.layout.dialog_messages,
@@ -238,7 +238,7 @@ public class Messages extends Module {
 
         createRequest();
         addParam("wsKey", Constants.getLoggedUser().getWsKey());
-        addParam("messageCode", notificationCode.intValue());
+        addParam("messageCode", eventCode.intValue());
         addParam("to", receivers);
         addParam("subject", subject);
         addParam("body", body);
@@ -310,7 +310,7 @@ public class Messages extends Module {
      */
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        notificationCode = savedInstanceState.getLong("notificationCode");
+    	eventCode = savedInstanceState.getLong("eventCode");
         receivers = savedInstanceState.getString("receivers");
         receiversNames = savedInstanceState.getString("receiversNames");
         subject = savedInstanceState.getString("subject");
@@ -328,7 +328,7 @@ public class Messages extends Module {
     protected void onSaveInstanceState(Bundle outState) {
         readData();
 
-        outState.putLong("notificationCode", notificationCode);
+        outState.putLong("eventCode", eventCode);
         outState.putString("receivers", receivers);
         outState.putString("receiversNames", receiversNames);
         outState.putString("subject", subject);

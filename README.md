@@ -52,6 +52,7 @@ SWADroid uses [Android-PullToRefresh][android-pulltorefresh-library] library dev
 * Antonio Cañas Vargas
 * Helena Rodríguez Gijón
 * Antonio Aguilera Malagón
+* José Antonio Guerrero Avilés
 
 ## Contributing
 
