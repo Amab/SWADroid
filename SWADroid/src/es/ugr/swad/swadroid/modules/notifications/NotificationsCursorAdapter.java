@@ -115,7 +115,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         boolean seenLocal = Utils.parseStringBool(seenLocalString);
         
         if(!seenLocal) {
-        	view.setBackgroundColor(context.getResources().getColor(R.color.notifications_background_yellow));
+        	view.setBackgroundColor(context.getResources().getColor(R.color.notifications_background_highlighted));
         } else {
         	view.setBackgroundColor(context.getResources().getColor(R.color.background));
         }
