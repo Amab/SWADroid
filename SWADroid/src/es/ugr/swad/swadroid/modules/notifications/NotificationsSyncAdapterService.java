@@ -380,9 +380,9 @@ public class NotificationsSyncAdapterService extends Service {
                 String summary = pii.getProperty("summary").toString();
                 Integer status = Integer.valueOf(pii.getProperty("status").toString());
                 String content = pii.getProperty("content").toString();
+                boolean notifReadSWAD = (status >= 4);
                 
-                //TODO Add "notification seen" info from SWAD
-                SWADNotification n = new SWADNotification(notifCode, eventCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, userPhoto, location, summary, status, content, false, false);
+                SWADNotification n = new SWADNotification(notifCode, eventCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, userPhoto, location, summary, status, content, notifReadSWAD, notifReadSWAD);
                 dbHelper.insertNotification(n);
 
                 //Log.d(TAG, n.toString());
