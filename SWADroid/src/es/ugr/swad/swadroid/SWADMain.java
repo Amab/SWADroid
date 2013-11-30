@@ -278,8 +278,8 @@ public class SWADMain extends MenuExpandableListActivity {
             lastVersion = prefs.getLastVersion();
             currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
             dbHelper.initializeDB();
-            //lastVersion = 55;
-            //currentVersion = 56;
+            //lastVersion = 56;
+            //currentVersion = 57;
 
             //If this is the first run, show configuration dialog
             if (lastVersion == 0) {
@@ -319,6 +319,7 @@ public class SWADMain extends MenuExpandableListActivity {
                 if(Preferences.isSyncEnabled()) {
                 	activity = new Intent(getBaseContext(), AccountAuthenticator.class);
                 	startActivity(activity);
+                	SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, this);
                 	SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, Long.valueOf(prefs.getSyncTime()), this);
                 }
 

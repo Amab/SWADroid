@@ -59,17 +59,17 @@ public class SyncUtils {
     }
 
     public static void removePeriodicSync(String authority, Bundle extras, Context context) {
-        if (android.os.Build.VERSION.SDK_INT >= 8) {
-            AccountManager am = AccountManager.get(context);
-            Account[] accounts = am.getAccountsByType(Constants.ACCOUNT_TYPE);
+        if (android.os.Build.VERSION.SDK_INT < 8) {
+	        AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+	        PendingIntent operation = PeriodicSyncReceiver.createPendingIntent(context, authority, extras);
+	        manager.cancel(operation);
+        } else {
+        	 AccountManager am = AccountManager.get(context);
+             Account[] accounts = am.getAccountsByType(Constants.ACCOUNT_TYPE);
 
-            for (Account a : accounts) {
-                ContentResolver.removePeriodicSync(a, authority, extras);
-            }
+             for (Account a : accounts) {
+                 ContentResolver.removePeriodicSync(a, authority, extras);
+             }
         }
-
-        AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        PendingIntent operation = PeriodicSyncReceiver.createPendingIntent(context, authority, extras);
-        manager.cancel(operation);
     }
 }
