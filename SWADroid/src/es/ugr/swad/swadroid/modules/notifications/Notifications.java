@@ -322,28 +322,30 @@ public class Notifications extends Module {
     }
 
     /* (non-Javadoc)
-     * @see es.ugr.swad.swadroid.modules.Module#onResume()
+     * @see es.ugr.swad.swadroid.modules.Module#onStart()
      */
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onStart() {
+        super.onStart();
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(NotificationsSyncAdapterService.START_SYNC);
         intentFilter.addAction(NotificationsSyncAdapterService.STOP_SYNC);
         intentFilter.addAction(Intent.CATEGORY_DEFAULT);
         registerReceiver(receiver, intentFilter);
+        Log.i(TAG, "Registered receiver for automatic synchronization");
 
         refreshScreen();
     }
     
     /* (non-Javadoc)
-     * @see es.ugr.swad.swadroid.modules.Module#onPause()
+     * @see es.ugr.swad.swadroid.modules.Module#onStop()
      */
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onStop() {
+        super.onStop();
         unregisterReceiver(receiver);
+        Log.i(TAG, "Unregistered receiver for automatic synchronization");
     }
 
     /* (non-Javadoc)
@@ -356,11 +358,14 @@ public class Notifications extends Module {
     	//Download new notifications from the server
         SIZE_LIMIT = prefs.getNotifLimit();
 
-        account = new Account(getString(R.string.app_name), accountType);
         if (ContentResolver.getSyncAutomatically(account, authority)) {
+        	Log.i(TAG, "Automatic synchronization is enabled. Requesting asynchronous sync operation");
+        	
             //Call synchronization service
             ContentResolver.requestSync(account, authority, new Bundle());
         } else {
+        	Log.i(TAG, "Automatic synchronization is disabled. Requesting manual sync operation");
+        	
             //Calculates next timestamp to be requested
             Long timestamp = Long.valueOf(dbHelper.getFieldOfLastNotification("eventTime"));
             timestamp++;

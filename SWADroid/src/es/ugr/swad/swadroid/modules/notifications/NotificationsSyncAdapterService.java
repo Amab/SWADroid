@@ -316,6 +316,10 @@ public class NotificationsSyncAdapterService extends Service {
         createRequest();
         addParam("userID", prefs.getUserID());
         addParam("userPassword", prefs.getUserPassword());
+        Log.d(TAG, "[logUser] SERVER="+SERVER);
+        Log.d(TAG, "[logUser] SIZE_LIMIT="+SIZE_LIMIT);
+        Log.d(TAG, "[logUser] userID="+prefs.getUserID());
+        Log.d(TAG, "[logUser] userPassword="+prefs.getUserPassword());
         addParam("appKey", Constants.SWAD_APP_KEY);
         sendRequest(User.class, true);
 

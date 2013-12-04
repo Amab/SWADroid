@@ -19,9 +19,7 @@
 
 package es.ugr.swad.swadroid;
 
-import android.accounts.Account;
 import android.app.AlertDialog;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -590,6 +588,14 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         
         Log.i(TAG, "Database has been cleaned");
     }
+    
+    private void logoutClean(String key) {
+    	Constants.setLogged(false);
+        Log.i(TAG, "Forced logout due to " + key + " change in preferences");
+        
+        cleanDatabase();
+        Constants.setPreferencesChanged();
+    }
 
     /**
      * Initializes preferences of activity.
@@ -657,12 +663,8 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
 
         //Restore preferences
         addPreferencesFromResource(R.xml.preferences);
-        this.ctx = getBaseContext();
-        
-        if(prefs == null) {
-    		prefs = PreferenceManager.getDefaultSharedPreferences(this.ctx);    	
-    		editor = prefs.edit();
-    	}
+        ctx = getBaseContext();        
+        getPreferences(ctx);
 
         //Initialize database
         try {    		
@@ -673,18 +675,6 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         } catch (Exception ex) {
         	error(TAG, ex.getMessage(), ex, true);
         }
-
-        userID = prefs.getString(USERIDPREF, "");
-        userPassword = prefs.getString(USERPASSWORDPREF, "");
-        server = prefs.getString(SERVERPREF, Constants.DEFAULT_SERVER);
-        lastVersion = prefs.getInt(LASTVERSIONPREF, 0);
-        lastCourseSelected = prefs.getInt(LASTCOURSESELECTEDPREF, 0);
-        syncEnabled = prefs.getBoolean(SYNCENABLEPREF, true);
-        lastSyncTime = prefs.getLong(LASTSYNCTIMEPREF, 0);
-        notifLimit = prefs.getInt(NOTIFLIMITPREF, 25);
-        notifSoundEnabled = prefs.getBoolean(NOTIFSOUNDENABLEPREF, true);
-        notifVibrateEnabled = prefs.getBoolean(NOTIFVIBRATEENABLEPREF, true);
-        notifLightsEnabled = prefs.getBoolean(NOTIFLIGHTSENABLEPREF, true);
 
         userIDPref = findPreference(USERIDPREF);
         userPasswordPref = findPreference(USERPASSWORDPREF);
@@ -865,27 +855,42 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
         	//Reset user password on userid change
         	setUserPassword("");
         	userPasswordPref.setSummary("");
-        	Log.i(TAG, "Resetted user password due to userid change");
+        	Log.i(TAG, "Resetted user password due to userid change"); 
+        	
+        	//If preferences have changed, logout
+        	logoutClean(key);
         } else if (USERPASSWORDPREF.equals(key)) {            
             try {
 				userPassword = Crypto.encryptPassword((String) newValue);
 	            preference.setSummary(getStarsSequence(STARS_LENGTH));
+	            
+	            //If preferences have changed, logout
+	            Constants.setLogged(false);
+	            Log.i(TAG, "Forced logout due to " + key + " change in preferences");
 			} catch (NoSuchAlgorithmException ex) {
 				error(TAG, ex.getMessage(), ex, true);
 			}
         } else if (SERVERPREF.equals(key)) {
-            server = (String) newValue;
+            server = (String) newValue; 
+            
+            //If preferences have changed, logout
+        	logoutClean(key);
         } else if(SYNCENABLEPREF.equals(key)) {
         	//boolean masterSyncEnabled = ContentResolver.getMasterSyncAutomatically();
             syncEnabled = (Boolean) newValue;
-            Account account = new Account(getString(R.string.app_name), Constants.ACCOUNT_TYPE);
+            //Account account = new Account(getString(R.string.app_name), Constants.ACCOUNT_TYPE);
 
             //Configure automatic synchronization
             /*if(syncEnabled && !masterSyncEnabled) {
                 ContentResolver.setMasterSyncAutomatically(syncEnabled);
-			}*/
+			}
 
-            ContentResolver.setSyncAutomatically(account, Constants.AUTHORITY, syncEnabled);
+            ContentResolver.setSyncAutomatically(account, Constants.AUTHORITY, syncEnabled);*/
+            if(syncEnabled) {
+            	SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, Long.valueOf(syncTime), ctx);
+            } else {
+            	SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, ctx);
+            }
 
             syncEnablePref.setChecked(syncEnabled);
         } else if(SYNCTIMEPREF.equals(key)) {            
@@ -896,10 +901,10 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
             int prefSyncTimeIndex = prefSyncTimeValues.indexOf(syncTime);
             String prefSyncTimeEntry = prefSyncTimeEntries.get(prefSyncTimeIndex);
 
-            SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, getApplicationContext());
+            SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, ctx);
 
-            if (!syncTime.equals("0")) {
-                SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, Long.parseLong(syncTime), getApplicationContext());
+            if (!syncTime.equals("0") && syncEnabled) {
+                SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, Long.parseLong(syncTime), ctx);
             }
             
             if(lastSyncTime == 0) {
@@ -929,18 +934,6 @@ public class Preferences extends PreferenceActivity implements OnPreferenceChang
             notifLightsEnabled = (Boolean) newValue;
             notifLightsEnablePref.setChecked(notifLightsEnabled);
         }
-
-        //If preferences have changed, logout
-        if (USERIDPREF.equals(key) || SERVERPREF.equals(key)) {
-            Constants.setLogged(false);
-            Log.i(TAG, "Forced logout due to userid or server change in preferences");
-            
-            cleanDatabase();
-            Constants.setPreferencesChanged();
-        } else if (USERPASSWORDPREF.equals(key)) {
-            Constants.setLogged(false);
-            Log.i(TAG, "Forced logout due to user password change in preferences");
-        } 
         
         //Refresh preferences screen
         //((BaseAdapter)getPreferenceScreen().getRootAdapter()).notifyDataSetChanged();

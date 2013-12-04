@@ -385,10 +385,16 @@ public class DataBaseHelper {
      * @return A Model's subclass object
      *         or null if the row does not exist in the specified table
      */
-    public Model getRow(String table, String fieldName, String fieldValue) {
-        List<Entity> rows = db.getEntityList(table, fieldName + " = '" + fieldValue + "'");
+    public Model getRow(String table, String fieldName, Object fieldValue) {
+        List<Entity> rows;
         Entity ent;
         Model row = null;
+        
+        if(fieldValue instanceof String) {
+        	rows = db.getEntityList(table, fieldName + " = '" + fieldValue + "'");
+        } else {
+        	rows = db.getEntityList(table, fieldName + " = " + fieldValue + "");
+        }
 
         if (rows.size() > 0) {
             ent = rows.get(0);
@@ -406,10 +412,16 @@ public class DataBaseHelper {
      * @return The user found 
      *         or null if the user does not exist
      */
-    public User getUser(String fieldName, String fieldValue) {
-        List<Entity> rows = db.getEntityList(Constants.DB_TABLE_USERS, fieldName + " = '" + fieldValue + "'");
+    public User getUser(String fieldName, Object fieldValue) {
+        List<Entity> rows;
         Entity ent;
         User user = null;
+        
+        if(fieldValue instanceof String) {
+        	rows = db.getEntityList(Constants.DB_TABLE_USERS, fieldName + " = '" + fieldValue + "'");
+        } else {
+        	rows = db.getEntityList(Constants.DB_TABLE_USERS, fieldName + " = " + fieldValue + "");
+        }
 
         if (rows.size() > 0) {
             ent = rows.get(0);

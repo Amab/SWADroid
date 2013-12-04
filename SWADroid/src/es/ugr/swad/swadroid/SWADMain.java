@@ -66,7 +66,6 @@ import es.ugr.swad.swadroid.modules.rollcall.Rollcall;
 import es.ugr.swad.swadroid.modules.tests.Tests;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
 import es.ugr.swad.swadroid.sync.AccountAuthenticator;
-import es.ugr.swad.swadroid.sync.SyncUtils;
 import es.ugr.swad.swadroid.utils.Utils;
 
 /**
@@ -286,10 +285,9 @@ public class SWADMain extends MenuExpandableListActivity {
                 showConfigurationDialog();
 
                 //Configure automatic synchronization
+                prefs.setSyncTime(String.valueOf(Constants.DEFAULT_SYNC_TIME));
                 activity = new Intent(getBaseContext(), AccountAuthenticator.class);
                 startActivity(activity);
-                SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, Constants.DEFAULT_SYNC_TIME, this);
-                prefs.setSyncTime(String.valueOf(Constants.DEFAULT_SYNC_TIME));
 
                 prefs.setLastVersion(currentVersion);
                 firstRun = true;
@@ -316,12 +314,10 @@ public class SWADMain extends MenuExpandableListActivity {
                 }
 
                 //Configure automatic synchronization
-                if(Preferences.isSyncEnabled()) {
-                	activity = new Intent(getBaseContext(), AccountAuthenticator.class);
-                	startActivity(activity);
+                /*if(Preferences.isSyncEnabled()) {
                 	SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, this);
                 	SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, Long.valueOf(prefs.getSyncTime()), this);
-                }
+                }*/
 
                 prefs.setLastVersion(currentVersion);
             }
