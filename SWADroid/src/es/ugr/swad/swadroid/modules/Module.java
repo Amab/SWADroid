@@ -43,7 +43,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeoutException;
 
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.utils.Utils;
@@ -70,10 +69,6 @@ public abstract class Module extends MenuActivity {
      * SERVER param for webservice request.
      */
     private String SERVER; // = "swad.ugr.es";
-    /**
-     * Preferences of the activity.
-     */
-    protected static Preferences prefs = new Preferences();
     /**
      * Async Task for background jobs
      */
@@ -102,10 +97,6 @@ public abstract class Module extends MenuActivity {
      * Connection available flag
      */
     protected static boolean isConnected;
-    /**
-     * Application debuggable flag
-     */
-    protected static boolean isDebuggable;
     /**
      * Class Module's tag name for Logcat
      */
@@ -192,24 +183,6 @@ public abstract class Module extends MenuActivity {
      */
     public void setSOAP_ACTION(String SOAP_ACTION) {
         this.SOAP_ACTION = SOAP_ACTION;
-    }
-
-    /**
-     * Gets preferences of activity.
-     *
-     * @return Preferences of activity.
-     */
-    public Preferences getPrefs() {
-        return prefs;
-    }
-
-    /**
-     * Sets preferences of activity.
-     *
-     * @param prefs Preferences of activity.
-     */
-    public void setPrefs(Preferences prefs) {
-        Module.prefs = prefs;
     }
 
     /**

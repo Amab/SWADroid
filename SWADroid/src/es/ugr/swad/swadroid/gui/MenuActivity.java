@@ -47,7 +47,7 @@ public class MenuActivity extends Activity {
     /**
      * Application preferences.
      */
-    private static final Preferences prefs = new Preferences();
+    protected static final Preferences prefs = new Preferences();
     /**
      * Database Helper.
      */
