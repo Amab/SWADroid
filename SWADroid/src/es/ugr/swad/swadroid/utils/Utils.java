@@ -279,4 +279,20 @@ public class Utils {
     	return seenNotifCodes;
     }
 
+	/**
+     * Generates the stars sequence to be showed on password field
+     *
+     * @param size Length of the stars sequence
+     * @return
+     */
+    public static String getStarsSequence(int size) {
+        String stars = "";
+
+        for (int i = 0; i < size; i++) {
+            stars += "*";
+        }
+
+        return stars;
+    }
+
 }

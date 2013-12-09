@@ -267,14 +267,11 @@ public class SWADMain extends MenuExpandableListActivity {
         updateButton.setVisibility(View.VISIBLE);
 
         try {
-            //Initialize preferences
-            prefs.getPreferences(getBaseContext());
-
             //Initialize HTTPS connections
             SecureConnection.initSecureConnection();
 
             //Check if this is the first run after an install or upgrade
-            lastVersion = prefs.getLastVersion();
+            lastVersion = Preferences.getLastVersion();
             currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
             dbHelper.initializeDB();
             //lastVersion = 56;
@@ -285,11 +282,11 @@ public class SWADMain extends MenuExpandableListActivity {
                 showConfigurationDialog();
 
                 //Configure automatic synchronization
-                prefs.setSyncTime(String.valueOf(Constants.DEFAULT_SYNC_TIME));
+                Preferences.setSyncTime(String.valueOf(Constants.DEFAULT_SYNC_TIME));
                 activity = new Intent(getBaseContext(), AccountAuthenticator.class);
                 startActivity(activity);
 
-                prefs.setLastVersion(currentVersion);
+                Preferences.setLastVersion(currentVersion);
                 firstRun = true;
                 Constants.setSelectedCourseCode(-1);
 
@@ -308,9 +305,9 @@ public class SWADMain extends MenuExpandableListActivity {
                 	dbHelper.encryptUsers();
                 	
                 	//If the app is updating from an unencrypted user password version, encrypt user password
-                	prefs.upgradeCredentials();
+                	Preferences.upgradeCredentials();
                 	
-                	prefs.setSyncTime(String.valueOf(Constants.DEFAULT_SYNC_TIME));
+                	Preferences.setSyncTime(String.valueOf(Constants.DEFAULT_SYNC_TIME));
                 }
 
                 //Configure automatic synchronization
@@ -319,12 +316,12 @@ public class SWADMain extends MenuExpandableListActivity {
                 	SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, Long.valueOf(prefs.getSyncTime()), this);
                 }*/
 
-                prefs.setLastVersion(currentVersion);
+                Preferences.setLastVersion(currentVersion);
             }
 
             listCourses = dbHelper.getAllRows(Constants.DB_TABLE_COURSES, "", "shortName");
             if (listCourses.size() > 0) {
-                Course c = (Course) listCourses.get(prefs.getLastCourseSelected());
+                Course c = (Course) listCourses.get(Preferences.getLastCourseSelected());
                 Constants.setSelectedCourseCode(c.getId());
                 Constants.setSelectedCourseShortName(c.getShortName());
                 Constants.setSelectedCourseFullName(c.getFullName());
@@ -347,16 +344,9 @@ public class SWADMain extends MenuExpandableListActivity {
 
     }
 
-    /* (non-Javadoc)
-     * @see android.app.Activity#onStart()
-     */
-    @Override
-    protected void onStart() {
-        super.onStart();
-        prefs.getPreferences(getBaseContext());
-
-    }
-
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onResume()
+	 */
     @Override
     protected void onResume() {
         super.onResume();
@@ -424,8 +414,8 @@ public class SWADMain extends MenuExpandableListActivity {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner.setAdapter(adapter);
             spinner.setOnItemSelectedListener(new onItemSelectedListener());
-            if (prefs.getLastCourseSelected() < listCourses.size())
-                spinner.setSelection(prefs.getLastCourseSelected());
+            if (Preferences.getLastCourseSelected() < listCourses.size())
+                spinner.setSelection(Preferences.getLastCourseSelected());
             else
                 spinner.setSelection(0);
             	spinner.setOnTouchListener(Spinner_OnTouch);
@@ -450,7 +440,7 @@ public class SWADMain extends MenuExpandableListActivity {
         public void onItemSelected(AdapterView<?> parent, View view, int position,
                                    long id) {
             if (!listCourses.isEmpty()) {
-                prefs.setLastCourseSelected(position);
+            	Preferences.setLastCourseSelected(position);
                 Course courseSelected = (Course) listCourses.get(position);
                 courseCode = courseSelected.getId();
                 Constants.setSelectedCourseCode(courseCode);
@@ -498,21 +488,21 @@ public class SWADMain extends MenuExpandableListActivity {
             if (Constants.getSelectedCourseCode() != -1) {
                 courseSelected = (Course) dbHelper.getRow(Constants.DB_TABLE_COURSES, "id", String.valueOf(Constants.getSelectedCourseCode()));
             } else {
-                int lastSelected = prefs.getLastCourseSelected();
+                int lastSelected = Preferences.getLastCourseSelected();
                 if (lastSelected != -1 && lastSelected < listCourses.size()) {
                     courseSelected = (Course) listCourses.get(lastSelected);
                     Constants.setSelectedCourseCode(courseSelected.getId());
                     Constants.setSelectedCourseShortName(courseSelected.getShortName());
                     Constants.setSelectedCourseFullName(courseSelected.getFullName());
                     Constants.setCurrentUserRole(courseSelected.getUserRole());
-                    prefs.setLastCourseSelected(lastSelected);
+                    Preferences.setLastCourseSelected(lastSelected);
                 } else {
                     courseSelected = (Course) listCourses.get(0);
                     Constants.setSelectedCourseCode(courseSelected.getId());
                     Constants.setSelectedCourseShortName(courseSelected.getShortName());
                     Constants.setSelectedCourseFullName(courseSelected.getFullName());
                     Constants.setCurrentUserRole(courseSelected.getUserRole());
-                    prefs.setLastCourseSelected(0);
+                    Preferences.setLastCourseSelected(0);
                 }
             }
 
@@ -695,7 +685,7 @@ public class SWADMain extends MenuExpandableListActivity {
         Constants.setSelectedCourseShortName("");
         Constants.setSelectedCourseFullName("");
         Constants.setCurrentUserRole(-1);
-        prefs.setLastCourseSelected(-1);
+        Preferences.setLastCourseSelected(-1);
         dBCleaned = true;
         listCourses.clear();
         cleanSpinner();

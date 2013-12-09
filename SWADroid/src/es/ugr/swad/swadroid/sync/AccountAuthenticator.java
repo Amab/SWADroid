@@ -20,8 +20,6 @@ public class AccountAuthenticator extends AccountAuthenticatorActivity {
     @Override
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        Preferences prefs = new Preferences();
-        prefs.getPreferences(getBaseContext());
         Account account = new Account(getString(R.string.app_name), Constants.ACCOUNT_TYPE);
         AccountManager am = AccountManager.get(this);
         boolean accountCreated = am.addAccountExplicitly(account, getString(R.string.app_name), null);
@@ -52,7 +50,7 @@ public class AccountAuthenticator extends AccountAuthenticatorActivity {
         ContentResolver.setMasterSyncAutomatically(true);        
         Log.i(TAG, "Master auto-sync setting enabled");
         
-        SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, Long.valueOf(prefs.getSyncTime()), this);
+        SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, Long.valueOf(Preferences.getSyncTime()), this);
 
         finish();
     }

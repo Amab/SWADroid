@@ -34,6 +34,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.AlertNotification;
 import es.ugr.swad.swadroid.model.Model;
@@ -254,7 +255,7 @@ public class Notifications extends Module {
 
         dbCursor = dbHelper.getDb().getCursor(Constants.DB_TABLE_NOTIFICATIONS, selection, orderby);
         startManagingCursor(dbCursor);
-        adapter = new NotificationsCursorAdapter(this, dbCursor, prefs.getDBKey());
+        adapter = new NotificationsCursorAdapter(this, dbCursor, Preferences.getDBKey());
 
         //list = (ListView) this.findViewById(R.id.listItems);
         list = (PullToRefreshListView) this.findViewById(R.id.listItemsPullToRefresh);
@@ -287,7 +288,7 @@ public class Notifications extends Module {
         setMETHOD_NAME("getNotifications");
         receiver = new SyncReceiver(this);
         account = new Account(getString(R.string.app_name), accountType);
-        SIZE_LIMIT = prefs.getNotifLimit();
+        SIZE_LIMIT = Preferences.getNotifLimit();
     }
 
     /**
@@ -356,7 +357,7 @@ public class Notifications extends Module {
             IOException, XmlPullParserException {
     	
     	//Download new notifications from the server
-        SIZE_LIMIT = prefs.getNotifLimit();
+        SIZE_LIMIT = Preferences.getNotifLimit();
 
         if (ContentResolver.getSyncAutomatically(account, authority)) {
         	Log.i(TAG, "Automatic synchronization is enabled. Requesting asynchronous sync operation");

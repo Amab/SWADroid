@@ -3,10 +3,14 @@ package es.ugr.swad.swadroid.modules;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.widget.ImageView;
+
 import com.google.zxing.WriterException;
+
 import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.utils.QR;
+
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
@@ -34,7 +38,7 @@ public class GenerateQR extends Module {
     protected void onStart() {
         super.onStart();
         try {
-            Bitmap qrCode = QR.encode(this, prefs.getUserID());
+            Bitmap qrCode = QR.encode(this, Preferences.getUserID());
             ImageView qr_image = (ImageView) findViewById(R.id.qr_code_image);
             qr_image.setImageBitmap(qrCode);
         } catch (WriterException e) {

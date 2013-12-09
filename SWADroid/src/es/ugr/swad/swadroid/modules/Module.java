@@ -43,6 +43,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeoutException;
 
 import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.utils.Utils;
@@ -256,7 +257,6 @@ public abstract class Module extends MenuActivity {
         }
 
         super.onCreate(savedInstanceState);
-        prefs.getPreferences(getBaseContext());
 
         // Recover the launched async task if the activity is re-created
         connect = (Connect) getLastNonConfigurationInstance();
@@ -312,7 +312,7 @@ public abstract class Module extends MenuActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        SERVER = prefs.getServer();
+        SERVER = Preferences.getServer();
     }
 
     /*

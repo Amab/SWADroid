@@ -32,6 +32,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
+import es.ugr.swad.swadroid.PreferencesActivity;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.utils.Utils;
@@ -44,10 +45,10 @@ import es.ugr.swad.swadroid.utils.Utils;
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */
 public class MenuActivity extends Activity {
-    /**
-     * Application preferences.
-     */
-    protected static final Preferences prefs = new Preferences();
+	/**
+	 * Application preferences
+	 */
+	Preferences prefs = new Preferences(this);
     /**
      * Database Helper.
      */
@@ -61,21 +62,12 @@ public class MenuActivity extends Activity {
      */
     private static final String TAG = Constants.APP_TAG + " MenuActivity";
 
-    /* (non-Javadoc)
-     * @see android.app.Activity#onStart()
-     */
-    @Override
-    protected void onStart() {
-        super.onStart();
-        prefs.getPreferences(getBaseContext());
-    }
-
     /**
      * Shows Preferences screen
      */
     void viewPreferences() {
         Intent settingsActivity = new Intent(getBaseContext(),
-                Preferences.class);
+                PreferencesActivity.class);
         startActivity(settingsActivity);
     }
 
@@ -106,7 +98,7 @@ public class MenuActivity extends Activity {
      */
     void cleanDatabase() {
         dbHelper.cleanTables();
-        prefs.setLastCourseSelected(0);
+        Preferences.setLastCourseSelected(0);
         Utils.setDbCleaned(true);
         Toast.makeText(this, R.string.cleanDatabaseMsg, Toast.LENGTH_LONG).show();
         Log.i(Constants.APP_TAG, getString(R.string.cleanDatabaseMsg));
@@ -178,8 +170,11 @@ public class MenuActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Initialize database
         try {
+        	//Initialize preferences
+        	prefs = new Preferences(this);
+        	
+            //Initialize database
             dbHelper = new DataBaseHelper(this);
             getPackageManager().getApplicationInfo(
                     getPackageName(), 0);

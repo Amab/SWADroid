@@ -23,7 +23,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Test;
 import es.ugr.swad.swadroid.modules.Module;
@@ -54,10 +53,6 @@ public class TestsConfigDownload extends Module {
      * Tests tag name for Logcat
      */
     private static final String TAG = Constants.APP_TAG + " TestsConfigDownload";
-    /**
-     * Application preferences.
-     */
-    private static final Preferences prefs = new Preferences();
 
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
@@ -74,7 +69,6 @@ public class TestsConfigDownload extends Module {
     @Override
     protected void onStart() {
         super.onStart();
-        prefs.getPreferences(getBaseContext());
         try {
 
             if (isDebuggable) {
