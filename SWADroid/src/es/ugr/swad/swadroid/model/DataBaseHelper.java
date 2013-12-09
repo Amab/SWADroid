@@ -64,10 +64,6 @@ public class DataBaseHelper {
      */
     private final Context mCtx;
     /**
-     * Application preferences
-     */
-    private final Preferences prefs = new Preferences();
-    /**
      * Database name
      */
     //private String DBName = "swadroid_db_crypt";
@@ -91,8 +87,7 @@ public class DataBaseHelper {
      */
     public DataBaseHelper(Context ctx) throws XmlPullParserException, IOException {
         mCtx = ctx;
-        prefs.getPreferences(mCtx);
-        DBKey = prefs.getDBKey();
+        DBKey = Preferences.getDBKey();
         db = DataFramework.getInstance();
 
         //Initialize SQLCipher libraries
@@ -104,7 +99,7 @@ public class DataBaseHelper {
         //If the passphrase is empty, generate a random passphrase and recreate database
         if (DBKey.equals("")) {
             DBKey = Utils.randomString(DB_KEY_LENGTH);
-            prefs.setDBKey(DBKey);
+            Preferences.setDBKey(DBKey);
 
 			/*mCtx.deleteDatabase(DBName);
             SQLiteDatabase database = SQLiteDatabase.openOrCreateDatabase(mCtx.getDatabasePath("swadroid_db_crypt"), null);

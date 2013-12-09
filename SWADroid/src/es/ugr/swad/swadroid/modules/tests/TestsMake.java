@@ -30,7 +30,6 @@ import android.view.View;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.widget.CheckableLinearLayout;
 import es.ugr.swad.swadroid.gui.widget.NumberPicker;
@@ -87,10 +86,6 @@ public class TestsMake extends Module {
      * Tests tag name for Logcat
      */
     private static final String TAG = Constants.APP_TAG + " TestsMake";
-    /**
-     * Application preferences.
-     */
-    private static final Preferences prefs = new Preferences();
 
     /**
      * Sets layout maintaining tests action bar
@@ -762,7 +757,6 @@ public class TestsMake extends Module {
         tfAdapter.add(getString(R.string.trueMsg));
         tfAdapter.add(getString(R.string.falseMsg));
 
-        prefs.getPreferences(getBaseContext());
         String selection = "id=" + Long.toString(Constants.getSelectedCourseCode());
         Cursor dbCursor = dbHelper.getDb().getCursor(Constants.DB_TABLE_TEST_CONFIG, selection, null);
         startManagingCursor(dbCursor);

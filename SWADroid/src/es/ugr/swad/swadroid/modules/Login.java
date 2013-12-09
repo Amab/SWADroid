@@ -22,6 +22,7 @@ package es.ugr.swad.swadroid.modules;
 import android.os.Bundle;
 import android.util.Log;
 import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.utils.Utils;
@@ -109,8 +110,7 @@ public class Login extends Module {
 
         //If the application isn't logged, force login
         if (!Constants.isLogged()) {
-            //Remove left and right spaces
-            userID = prefs.getUserID().trim();
+            userID = Preferences.getUserID();
 
             //If the user ID is a DNI
             if (Utils.isValidDni(userID)) {
@@ -124,17 +124,10 @@ public class Login extends Module {
                 }
             }
 
-            //Encrypts user password with SHA-512 and encodes it to Base64UrlSafe
-            /*md = MessageDigest.getInstance("SHA-512");
-            md.update(prefs.getUserPassword().getBytes());
-            userPassword = Base64.encodeBytes(md.digest());
-            userPassword = userPassword.replace('+', '-').replace('/', '_').replace('=', ' ').replaceAll("\\s+", "").trim();*/
-
             //Creates webservice request, adds required params and sends request to webservice
             createRequest();
             addParam("userID", userID);
-            //addParam("userPassword", userPassword);
-            addParam("userPassword", prefs.getUserPassword());
+            addParam("userPassword", Preferences.getUserPassword());
             addParam("appKey", Constants.SWAD_APP_KEY);
             sendRequest(User.class, true);
 
