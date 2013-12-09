@@ -307,18 +307,10 @@ public class NotificationsSyncAdapterService extends Service {
     	Log.d(TAG, "Not logged");
 
         METHOD_NAME = "loginByUserPasswordKey";
-       /* MessageDigest md = MessageDigest.getInstance("SHA-512");
-        md.update(prefs.getUserPassword().getBytes());
-        String userPassword = Base64.encodeBytes(md.digest());
-        userPassword = userPassword.replace('+', '-').replace('/', '_').replace('=', ' ').replaceAll("\\s+", "").trim();*/
 
         createRequest();
         addParam("userID", Preferences.getUserID());
         addParam("userPassword", Preferences.getUserPassword());
-        Log.d(TAG, "[logUser] SERVER="+SERVER);
-        Log.d(TAG, "[logUser] SIZE_LIMIT="+SIZE_LIMIT);
-        Log.d(TAG, "[logUser] userID="+Preferences.getUserID());
-        Log.d(TAG, "[logUser] userPassword="+Preferences.getUserPassword());
         addParam("appKey", Constants.SWAD_APP_KEY);
         sendRequest(User.class, true);
 
