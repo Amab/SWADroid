@@ -195,47 +195,18 @@
                   android:theme="@android:style/Theme.NoTitleBar">
         </activity>
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+ 
         
         
         
         <activity
-                android:name=".modules.information.Introduction"
-                android:label="@string/introductionModuleLabel"
+                android:name=".modules.information.Information"
+                android:label="@string/informationModuleLabel"
                 android:theme="@@android:style/Theme.NoTitleBar">
         </activity>
+       
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+            
         
         
         
