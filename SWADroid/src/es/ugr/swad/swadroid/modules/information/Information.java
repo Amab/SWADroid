@@ -11,6 +11,7 @@ import java.security.NoSuchAlgorithmException;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.os.Bundle;
+import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -33,7 +34,12 @@ public class Information extends Module {
         ImageView moduleIcon;
         TextView moduleText;
         
+        this.findViewById(R.id.courseSelectedText).setVisibility(View.VISIBLE);
+        
         int requestCode = this.getIntent().getIntExtra("requestCode", 0);
+        
+        TextView courseNameText = (TextView) this.findViewById(R.id.courseSelectedText);
+        courseNameText.setText(Constants.getSelectedCourseShortName());
 
         switch (requestCode) {
         
