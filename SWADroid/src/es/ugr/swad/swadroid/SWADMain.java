@@ -625,6 +625,36 @@ public class SWADMain extends MenuExpandableListActivity {
             map.put(NAME, getString(R.string.introductionModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
             courseData.add(map);
+            //Theory Program category
+            map = new HashMap<String, Object>();
+            map.put(NAME, getString(R.string.theoryprogramModuleLabel));
+            map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
+            courseData.add(map);
+            //Practices Program category
+            map = new HashMap<String, Object>();
+            map.put(NAME, getString(R.string.practicesprogramModuleLabel));
+            map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
+            courseData.add(map);
+            //Theaching Guide category
+            map = new HashMap<String, Object>();
+            map.put(NAME, getString(R.string.teachingguideModuleLabel));
+            map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
+            courseData.add(map);
+            //Bibliography category
+            map = new HashMap<String, Object>();
+            map.put(NAME, getString(R.string.bibliographyModuleLabel));
+            map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
+            courseData.add(map);
+            //FAQs category
+            map = new HashMap<String, Object>();
+            map.put(NAME, getString(R.string.faqsModuleLabel));
+            map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
+            courseData.add(map);
+            //Links category
+            map = new HashMap<String, Object>();
+            map.put(NAME, getString(R.string.linksModuleLabel));
+            map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
+            courseData.add(map);
             
             //Evaluation category
             map = new HashMap<String, Object>();
