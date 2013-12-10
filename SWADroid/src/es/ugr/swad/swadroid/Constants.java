@@ -220,9 +220,49 @@ public class Constants {
     
     
     /**
+     * Request code for Information
+     */
+    public static final int INFORMATION_REQUEST_CODE = 27;
+    
+    /**
      * Request code for Introduction
      */
-    public static final int INTRODUCTION_REQUEST_CODE = 27;
+    public static final int INTRODUCTION_REQUEST_CODE = 28;
+    
+    /**
+     * Request code for FAQs
+     */
+    public static final int FAQS_REQUEST_CODE = 29;
+    
+    /**
+     * Request code for Bibliography
+     */
+    public static final int BIBLIOGRAPHY_REQUEST_CODE = 30;
+    
+    /**
+     * Request code for Practices Program
+     */
+    public static final int PRACTICESPROGRAM_REQUEST_CODE = 31;
+    
+    /**
+     * Request code for Theory Program
+     */
+    public static final int THEORYPROGRAM_REQUEST_CODE = 32;
+
+    /**
+     * Request code for Links
+     */
+    public static final int LINKS_REQUEST_CODE = 33;
+    
+    /**
+     * Request code for Teaching Guide
+     */
+    public static final int TEACHINGGUIDE_REQUEST_CODE = 34;
+    
+    
+    
+    
+    
     
     
     

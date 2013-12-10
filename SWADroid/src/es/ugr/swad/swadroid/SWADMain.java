@@ -60,7 +60,7 @@ import es.ugr.swad.swadroid.modules.Messages;
 import es.ugr.swad.swadroid.modules.Notices;
 import es.ugr.swad.swadroid.modules.downloads.DownloadsManager;
 import es.ugr.swad.swadroid.modules.groups.MyGroupsManager;
-import es.ugr.swad.swadroid.modules.information.Introduction;
+import es.ugr.swad.swadroid.modules.information.Information;
 import es.ugr.swad.swadroid.modules.notifications.Notifications;
 import es.ugr.swad.swadroid.modules.rollcall.Rollcall;
 import es.ugr.swad.swadroid.modules.tests.Tests;
@@ -225,9 +225,34 @@ public class SWADMain extends MenuExpandableListActivity {
         
         
     	} else if (keyword.equals(getString(R.string.introductionModuleLabel))) {
-    		activity = new Intent(getBaseContext(), Introduction.class);
-    		startActivityForResult(activity, Constants.INTRODUCTION_REQUEST_CODE);
-    	}
+    		activity = new Intent(getBaseContext(), Information.class);
+    		activity.putExtra("requestCode", Constants.INTRODUCTION_REQUEST_CODE);
+    		startActivityForResult(activity, Constants.INTRODUCTION_REQUEST_CODE);   		
+	    } else if (keyword.equals(getString(R.string.faqsModuleLabel))) {
+			activity = new Intent(getBaseContext(), Information.class);
+			activity.putExtra("requestCode", Constants.FAQS_REQUEST_CODE);
+			startActivityForResult(activity, Constants.FAQS_REQUEST_CODE);			
+		} else if (keyword.equals(getString(R.string.bibliographyModuleLabel))) {
+			activity = new Intent(getBaseContext(), Information.class);
+			activity.putExtra("requestCode", Constants.BIBLIOGRAPHY_REQUEST_CODE);
+			startActivityForResult(activity, Constants.BIBLIOGRAPHY_REQUEST_CODE);			
+		} else if (keyword.equals(getString(R.string.practicesprogramModuleLabel))) {
+			activity = new Intent(getBaseContext(), Information.class);
+			activity.putExtra("requestCode", Constants.PRACTICESPROGRAM_REQUEST_CODE);
+			startActivityForResult(activity, Constants.PRACTICESPROGRAM_REQUEST_CODE);			
+		} else if (keyword.equals(getString(R.string.theoryprogramModuleLabel))) {
+			activity = new Intent(getBaseContext(), Information.class);
+			activity.putExtra("requestCode", Constants.THEORYPROGRAM_REQUEST_CODE);
+			startActivityForResult(activity, Constants.THEORYPROGRAM_REQUEST_CODE);			
+		} else if (keyword.equals(getString(R.string.linksModuleLabel))) {
+			activity = new Intent(getBaseContext(), Information.class);
+			activity.putExtra("requestCode", Constants.LINKS_REQUEST_CODE);
+			startActivityForResult(activity, Constants.LINKS_REQUEST_CODE);			
+		} else if (keyword.equals(getString(R.string.teachingguideModuleLabel))) {
+			activity = new Intent(getBaseContext(), Information.class);
+			activity.putExtra("requestCode", Constants.TEACHINGGUIDE_REQUEST_CODE);
+			startActivityForResult(activity, Constants.TEACHINGGUIDE_REQUEST_CODE);
+		}
     
     
     
