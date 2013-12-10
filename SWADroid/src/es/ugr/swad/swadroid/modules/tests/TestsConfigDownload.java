@@ -138,7 +138,7 @@ public class TestsConfigDownload extends Module {
                     Log.d(TAG, "feedback=" + feedback);
                 }
 
-                Intent activity = new Intent(getBaseContext(), TestsQuestionsDownload.class);
+                Intent activity = new Intent(this, TestsQuestionsDownload.class);
                 activity.putExtra("timestamp", timestamp);
                 startActivityForResult(activity, Constants.TESTS_QUESTIONS_DOWNLOAD_REQUEST_CODE);
             }

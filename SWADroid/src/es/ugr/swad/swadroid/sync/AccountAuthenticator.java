@@ -47,10 +47,10 @@ public class AccountAuthenticator extends AccountAuthenticatorActivity {
         ContentResolver.setIsSyncable(account, Constants.AUTHORITY, 1);
         Log.i(TAG, "Account setted as syncable");
         
-        ContentResolver.setMasterSyncAutomatically(true);        
-        Log.i(TAG, "Master auto-sync setting enabled");
+        //ContentResolver.setMasterSyncAutomatically(true);        
+        //Log.i(TAG, "Master auto-sync setting enabled");
         
-        SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, Long.valueOf(Preferences.getSyncTime()), this);
+        //SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, Long.valueOf(Preferences.getSyncTime()), this);
 
         finish();
     }

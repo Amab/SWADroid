@@ -211,14 +211,7 @@ public class Constants {
     /**
      * Request code for Generate QR
      */
-    public static final int GENERATE_QR_REQUEST_CODE = 26;
-    
-    
-    
-    
-    
-    
-    
+    public static final int GENERATE_QR_REQUEST_CODE = 26;    
     /**
      * Request code for Information
      */
@@ -257,22 +250,11 @@ public class Constants {
     /**
      * Request code for Teaching Guide
      */
-    public static final int TEACHINGGUIDE_REQUEST_CODE = 34;
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    public static final int TEACHINGGUIDE_REQUEST_CODE = 34; 
     /**
      * Request code for NotificationMarkAsRead module
      */
-    public static final int NOTIFMARKALLASREAD_REQUEST_CODE = 28;    
+    public static final int NOTIFMARKALLASREAD_REQUEST_CODE = 35; 
     /**
      * Prefix tag name for Logcat
      */

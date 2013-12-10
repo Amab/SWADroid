@@ -93,17 +93,6 @@ public class NotificationsSyncAdapterService extends Service {
         public SyncAdapterImpl(Context context) {
             super(context, true);
             mContext = context;
-
-            try {
-                prefs = new Preferences(mContext);
-                dbHelper = new DataBaseHelper(mContext);
-            } catch (Exception e) {
-                e.printStackTrace();
-                errorMessage = e.getMessage();
-
-                //Send exception details to Bugsense
-                BugSenseHandler.sendException(e);
-            }
         }
 
         @Override
@@ -180,6 +169,17 @@ public class NotificationsSyncAdapterService extends Service {
         	BugSenseHandler.initAndStartSession(this, Constants.BUGSENSE_API_KEY);
         } catch (Exception e) {
         	Log.e(TAG, "Error initializing BugSense", e);
+        }
+        
+        try {
+            prefs = new Preferences(this);
+            dbHelper = new DataBaseHelper(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+            errorMessage = e.getMessage();
+
+            //Send exception details to Bugsense
+            BugSenseHandler.sendException(e);
         }
         
 		super.onCreate();
