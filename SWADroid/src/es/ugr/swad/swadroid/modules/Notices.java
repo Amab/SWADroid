@@ -31,7 +31,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.model.User;
@@ -59,11 +58,6 @@ public class Notices extends Module {
      */
     private String body;
     private Dialog noticeDialog;
-
-    /**
-     * Application preferences.
-     */
-    private static final Preferences prefs = new Preferences();
 
     /**
      * Selected course code
@@ -211,7 +205,6 @@ public class Notices extends Module {
     @Override
     protected void onStart() {
         super.onStart();
-        prefs.getPreferences(getBaseContext());
         selectedCourseCode = Constants.getSelectedCourseCode();
         launchNoticeDialog();
     }

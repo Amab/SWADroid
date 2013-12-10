@@ -20,13 +20,13 @@ package es.ugr.swad.swadroid.sync;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
 import es.ugr.swad.swadroid.Constants;
 
 /**
@@ -34,8 +34,11 @@ import es.ugr.swad.swadroid.Constants;
  *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
-@SuppressLint("NewApi")
 public class SyncUtils {
+    /**
+     * Login tag name for Logcat
+     */
+    public static final String TAG = Constants.APP_TAG + " SyncUtils";
 
     public static void addPeriodicSync(String authority, Bundle extras, long frequency, Context context) {
         long pollFrequencyMsec = frequency * 60000;
@@ -48,28 +51,41 @@ public class SyncUtils {
             PendingIntent operation = PeriodicSyncReceiver.createPendingIntent(context, authority, extras);
 
             manager.setInexactRepeating(type, triggerAtTime, pollFrequencyMsec, operation);
+            
+            Log.i(TAG, "Added periodic alarm with pollFrequency=" + pollFrequencyMsec);
         } else {
             AccountManager am = AccountManager.get(context);
             Account[] accounts = am.getAccountsByType(Constants.ACCOUNT_TYPE);
 
+            Log.d(TAG, "[addPeriodicSync] Number of accounts with type " + Constants.ACCOUNT_TYPE + " = " + accounts.length);
             for (Account a : accounts) {
+            	ContentResolver.setSyncAutomatically(a, Constants.AUTHORITY, true);
                 ContentResolver.addPeriodicSync(a, authority, extras, frequency * 60);
+                
+                Log.i(TAG, "Added periodic synchronization with pollFrequency=" + (frequency * 60)
+                		+ " for account " + a.toString());
             }
         }
     }
 
     public static void removePeriodicSync(String authority, Bundle extras, Context context) {
-        if (android.os.Build.VERSION.SDK_INT >= 8) {
-            AccountManager am = AccountManager.get(context);
-            Account[] accounts = am.getAccountsByType(Constants.ACCOUNT_TYPE);
+        if (android.os.Build.VERSION.SDK_INT < 8) {
+	        AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+	        PendingIntent operation = PeriodicSyncReceiver.createPendingIntent(context, authority, extras);
+	        manager.cancel(operation);
+	        
+            Log.i(TAG, "Removed periodic alarm");
+        } else {
+        	 AccountManager am = AccountManager.get(context);
+             Account[] accounts = am.getAccountsByType(Constants.ACCOUNT_TYPE);
 
-            for (Account a : accounts) {
-                ContentResolver.removePeriodicSync(a, authority, extras);
-            }
+             Log.d(TAG, "[removePeriodicSync] Number of accounts with type " + Constants.ACCOUNT_TYPE + " = " + accounts.length);
+             for (Account a : accounts) {
+            	 ContentResolver.setSyncAutomatically(a, Constants.AUTHORITY, false);
+                 ContentResolver.removePeriodicSync(a, authority, extras);
+                 
+                 Log.i(TAG, "Removed periodic synchronization for account " + a.toString());
+             }
         }
-
-        AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        PendingIntent operation = PeriodicSyncReceiver.createPendingIntent(context, authority, extras);
-        manager.cancel(operation);
     }
 }
