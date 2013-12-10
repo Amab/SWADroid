@@ -64,11 +64,11 @@ import java.util.concurrent.TimeoutException;
  */
 public class NotificationsSyncAdapterService extends Service {
     private static final String TAG = "NotificationsSyncAdapterService";
+	private static Preferences prefs;
     private static SyncAdapterImpl sSyncAdapter = null;
     private static int notifCount;
     private static final int NOTIF_ALERT_ID = 1982;
     private static int SIZE_LIMIT;
-    private static Preferences prefs;
     private static DataBaseHelper dbHelper;
     private static String METHOD_NAME = "";
     private static final String NAMESPACE = "urn:swad";
@@ -93,9 +93,9 @@ public class NotificationsSyncAdapterService extends Service {
         public SyncAdapterImpl(Context context) {
             super(context, true);
             mContext = context;
-            prefs = new Preferences();
 
             try {
+                prefs = new Preferences(mContext);
                 dbHelper = new DataBaseHelper(mContext);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -111,13 +111,12 @@ public class NotificationsSyncAdapterService extends Service {
             boolean sendException = true;
         	
         	try {
-                prefs.getPreferences(mContext);
-                SIZE_LIMIT = prefs.getNotifLimit();
-                SERVER = prefs.getServer();
+                SIZE_LIMIT = Preferences.getNotifLimit();
+                SERVER = Preferences.getServer();
                 NotificationsSyncAdapterService.performSync(mContext, account, extras, authority, provider, syncResult);
                 
                 //If synchronization was successful, update last synchronization time in preferences
-                prefs.setLastSyncTime(System.currentTimeMillis());
+                Preferences.setLastSyncTime(System.currentTimeMillis());
             } catch (Exception e) {                
                 if (e instanceof SoapFault) {
                     SoapFault es = (SoapFault) e;
@@ -308,14 +307,10 @@ public class NotificationsSyncAdapterService extends Service {
     	Log.d(TAG, "Not logged");
 
         METHOD_NAME = "loginByUserPasswordKey";
-       /* MessageDigest md = MessageDigest.getInstance("SHA-512");
-        md.update(prefs.getUserPassword().getBytes());
-        String userPassword = Base64.encodeBytes(md.digest());
-        userPassword = userPassword.replace('+', '-').replace('/', '_').replace('=', ' ').replaceAll("\\s+", "").trim();*/
 
         createRequest();
-        addParam("userID", prefs.getUserID());
-        addParam("userPassword", prefs.getUserPassword());
+        addParam("userID", Preferences.getUserID());
+        addParam("userPassword", Preferences.getUserPassword());
         addParam("appKey", Constants.SWAD_APP_KEY);
         sendRequest(User.class, true);
 

@@ -43,6 +43,7 @@ import java.util.List;
  * Students list module.
  *
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class StudentsList extends Module {
     private Dialog studentsDialog;
@@ -88,7 +89,7 @@ public class StudentsList extends Module {
 
         List<StudentItemModel> studentsList = new ArrayList<StudentItemModel>();
         for (long userCode : userIds) {
-            User u = dbHelper.getUser("userCode", String.valueOf(userCode));
+            User u = dbHelper.getUser("userCode", userCode);
             studentsList.add(new StudentItemModel(u));
         }
         // Arrange the list alphabetically

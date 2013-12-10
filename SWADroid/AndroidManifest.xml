@@ -49,7 +49,7 @@
             </intent-filter>
         </activity>
         <activity
-                android:name=".Preferences"
+                android:name=".PreferencesActivity"
                 android:label="@string/set_preferences">
         </activity>
         <activity
