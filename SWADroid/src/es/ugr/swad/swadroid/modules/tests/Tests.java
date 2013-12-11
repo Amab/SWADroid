@@ -61,12 +61,12 @@ public class Tests extends Module {
                 Intent activity;
                 switch (position) {
                     case 0:
-                        activity = new Intent(getBaseContext(), TestsConfigDownload.class);
+                        activity = new Intent(getApplicationContext(), TestsConfigDownload.class);
                         startActivityForResult(activity, Constants.TESTS_CONFIG_DOWNLOAD_REQUEST_CODE);
                         break;
 
                     case 1:
-                        activity = new Intent(getBaseContext(), TestsMake.class);
+                        activity = new Intent(getApplicationContext(), TestsMake.class);
                         startActivityForResult(activity, Constants.TESTS_MAKE_REQUEST_CODE);
                         break;
                 }

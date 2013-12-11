@@ -88,4 +88,25 @@ public class SyncUtils {
              }
         }
     }
+    
+    public static boolean isSyncAutomatically(Context context) {
+		boolean isSyncAutomatically = true;
+		
+    	if (android.os.Build.VERSION.SDK_INT >= 8) {
+	    	AccountManager am = AccountManager.get(context);
+	        Account[] accounts = am.getAccountsByType(Constants.ACCOUNT_TYPE);
+	
+	        Log.d(TAG, "[isSyncAutomatically] Number of accounts with type " + Constants.ACCOUNT_TYPE + " = " + accounts.length);
+	        for (Account a : accounts) {
+	        	if(!ContentResolver.getSyncAutomatically(a, Constants.AUTHORITY)) {
+	        		isSyncAutomatically = false;
+	        	}
+	        }
+    	} else {
+    		isSyncAutomatically = false;
+    		Log.e(TAG, "Operation isSyncAutomatically is not supported by build version " + android.os.Build.VERSION.SDK_INT);
+    	}
+    	
+    	return isSyncAutomatically;
+    }
 }
