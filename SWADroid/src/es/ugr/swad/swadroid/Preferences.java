@@ -140,11 +140,9 @@ public class Preferences {
     /**
      * Constructor
      */
-    public Preferences(Context ctx) {    	
-    	if(prefs == null) {
-    		prefs = PreferenceManager.getDefaultSharedPreferences(ctx);    	
-    		editor = prefs.edit();
-    	}
+    public Preferences(Context ctx) { 
+		prefs = PreferenceManager.getDefaultSharedPreferences(ctx);    	
+		editor = prefs.edit();
 	}
 
 	/**

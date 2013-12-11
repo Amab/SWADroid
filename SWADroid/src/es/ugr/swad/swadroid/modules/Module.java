@@ -233,7 +233,7 @@ public abstract class Module extends MenuActivity {
         } else {
             // If this is not the Login module, launch login check
             if (!(this instanceof Login)) {
-                Intent loginActivity = new Intent(getBaseContext(), Login.class);
+                Intent loginActivity = new Intent(this, Login.class);
                 startActivityForResult(loginActivity,
                         Constants.LOGIN_REQUEST_CODE);
             }
@@ -325,7 +325,7 @@ public abstract class Module extends MenuActivity {
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case Constants.LOGIN_REQUEST_CODE:
-                    // Toast.makeText(getBaseContext(), R.string.loginSuccessfulMsg,
+                    // Toast.makeText(getApplicationContext(), R.string.loginSuccessfulMsg,
                     // Toast.LENGTH_SHORT).show();
 
 				/*

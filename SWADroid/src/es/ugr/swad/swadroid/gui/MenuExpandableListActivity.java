@@ -67,8 +67,7 @@ public class MenuExpandableListActivity extends ExpandableListActivity {
      * Shows Preferences screen
      */
     protected void viewPreferences() {
-        Intent settingsActivity = new Intent(getBaseContext(),
-                PreferencesActivity.class);
+        Intent settingsActivity = new Intent(this, PreferencesActivity.class);
         startActivity(settingsActivity);
     }
 

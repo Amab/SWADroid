@@ -152,7 +152,7 @@ public class DownloadsManager extends MenuActivity {
                 if (nMyGroups == 0 && tree == null)
                     requestDirectoryTree();
             } else {
-                Intent activity = new Intent(getBaseContext(), GroupTypes.class);
+                Intent activity = new Intent(this, GroupTypes.class);
                 activity.putExtra("courseCode", Constants.getSelectedCourseCode());
                 startActivityForResult(activity, Constants.GROUPTYPES_REQUEST_CODE);
             }
@@ -340,7 +340,7 @@ public class DownloadsManager extends MenuActivity {
                         requestDirectoryTree();
                     break;
                 case Constants.GROUPTYPES_REQUEST_CODE:
-                    Intent activity = new Intent(getBaseContext(), Groups.class);
+                    Intent activity = new Intent(this, Groups.class);
                     activity.putExtra("courseCode", Constants.getSelectedCourseCode());
                     startActivityForResult(activity, Constants.GROUPS_REQUEST_CODE);
                     break;
@@ -502,7 +502,7 @@ public class DownloadsManager extends MenuActivity {
 
     private void requestDirectoryTree() {
         Intent activity;
-        activity = new Intent(getBaseContext(), DirectoryTreeDownload.class);
+        activity = new Intent(this, DirectoryTreeDownload.class);
         activity.putExtra("treeCode", downloadsAreaCode);
         activity.putExtra("groupCode", (int) chosenGroupCode);
         startActivityForResult(activity, Constants.DIRECTORY_TREE_REQUEST_CODE);
@@ -549,7 +549,7 @@ public class DownloadsManager extends MenuActivity {
      * @param fileSize  - file size of the file. It is used to show the download progress in the notification
      */
     private void downloadFile(String directory, String url, long fileSize) {
-        new FileDownloaderAsyncTask(getApplicationContext(), this.chosenNodeName, true, fileSize).execute(directory, url);
+        new FileDownloaderAsyncTask(this, this.chosenNodeName, true, fileSize).execute(directory, url);
     }
 
     /**
@@ -559,7 +559,7 @@ public class DownloadsManager extends MenuActivity {
      */
     private void requestGetFile(long fileCode) {
         Intent activity;
-        activity = new Intent(getBaseContext(), GetFile.class);
+        activity = new Intent(this, GetFile.class);
         activity.putExtra("fileCode", fileCode);
         //activity.putExtra("path", navigator.getPath() + fileName);
         startActivityForResult(activity, Constants.GETFILE_REQUEST_CODE);
@@ -631,7 +631,7 @@ public class DownloadsManager extends MenuActivity {
 
         refresh = true;
 
-        Intent activity = new Intent(getBaseContext(), GroupTypes.class);
+        Intent activity = new Intent(this, GroupTypes.class);
         activity.putExtra("courseCode", Constants.getSelectedCourseCode());
         startActivityForResult(activity, Constants.GROUPTYPES_REQUEST_CODE);
 

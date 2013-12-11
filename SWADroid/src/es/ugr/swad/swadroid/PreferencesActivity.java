@@ -170,8 +170,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
      * Clean data of all tables from database. Removes users photos from external storage
      */
     private void cleanDatabase() {
-        //dbHelper.emptyTable(Constants.DB_TABLE_NOTIFICATIONS);
-        //dbHelper.emptyTable(Constants.DB_TABLE_COURSES);
     	dbHelper.cleanTables();
         
         Preferences.setLastCourseSelected(0);
@@ -197,7 +195,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
 
         //Restore preferences
         addPreferencesFromResource(R.xml.preferences);
-        ctx = getBaseContext(); 
+        ctx = getApplicationContext(); 
 
         //Initialize database
         try {    		
@@ -476,7 +474,17 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
 	@Override
 	protected void onPause() {
 		super.onPause();
+		
+		//Set final password
     	Preferences.setUserPassword(userPassword);
+    	
+    	/*
+    	 * First run
+    	 * If syncEnable checkbox is checked but automatic synchronization is disabled, enable it
+    	 */
+    	if(syncEnablePref.isChecked() && !SyncUtils.isSyncAutomatically(this)) {
+    		SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, Long.valueOf(Preferences.getSyncTime()), this);
+    	}
 	}
 
 	/* (non-Javadoc)

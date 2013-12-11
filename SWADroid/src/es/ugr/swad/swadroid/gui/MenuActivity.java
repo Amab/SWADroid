@@ -48,7 +48,7 @@ public class MenuActivity extends Activity {
 	/**
 	 * Application preferences
 	 */
-	Preferences prefs = new Preferences(this);
+	Preferences prefs;
     /**
      * Database Helper.
      */
@@ -66,8 +66,7 @@ public class MenuActivity extends Activity {
      * Shows Preferences screen
      */
     void viewPreferences() {
-        Intent settingsActivity = new Intent(getBaseContext(),
-                PreferencesActivity.class);
+        Intent settingsActivity = new Intent(this, PreferencesActivity.class);
         startActivity(settingsActivity);
     }
 
