@@ -305,4 +305,14 @@
 	<string name="prefNotifLightsTitle">Luci</string>
 	<string name="prefNotifLightsSummary">Abilitare/disabilitare gli avvisi di luce per le nuove notifiche</string>
 
+	
+	<string name="informationModuleLabel">Informazioni</string> 
+    <string name="introductionModuleLabel">Introduzione</string>  
+    <string name="faqsModuleLabel">FAQs</string>
+    <string name="linksModuleLabel">Links</string>
+    <string name="bibliographyModuleLabel">Bibliografía</string>
+    <string name="practicesprogramModuleLabel">Pratiche di programma</string>
+    <string name="theoryprogramModuleLabel">Teoria del programma</string>
+    <string name="teachingguideModuleLabel">Guida didattica</string>
+    
 </resources>

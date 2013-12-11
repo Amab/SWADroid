@@ -308,4 +308,13 @@
 	<string name="prefNotifLightsTitle">lumières</string>
 	<string name="prefNotifLightsSummary">Activer/désactiver les alertes lumineuses pour les nouvelles notifications</string>
 
+	
+	<string name="informationModuleLabel">Informations</string> 
+    <string name="introductionModuleLabel">Introduction</string>  
+    <string name="faqsModuleLabel">FAQs</string>
+    <string name="linksModuleLabel">Links</string>
+    <string name="bibliographyModuleLabel">Références</string>
+    <string name="practicesprogramModuleLabel">Programme des pratiques</string>
+    <string name="theoryprogramModuleLabel">Théorie du programme</string>
+    <string name="teachingguideModuleLabel">Guide des cours</string>
 </resources>
