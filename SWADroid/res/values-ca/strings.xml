@@ -307,4 +307,14 @@
 	<string name="prefNotifLightsTitle">Indicadors lluminosos</string>
 	<string name="prefNotifLightsSummary">Activar/desactivar els indicadors lluminosos de les alertes de noves notificacions</string>
 
+	
+	
+	<string name="informationModuleLabel">Informació</string> 
+    <string name="introductionModuleLabel">Introducció</string>  
+    <string name="faqsModuleLabel">FAQs</string>
+    <string name="linksModuleLabel">Enllaços</string>
+    <string name="bibliographyModuleLabel">Bibliografia</string>
+    <string name="practicesprogramModuleLabel">Programa de Práctiques</string>
+    <string name="theoryprogramModuleLabel">Programa de Teoria</string>
+    <string name="teachingguideModuleLabel">Guia Docent</string>
 </resources>

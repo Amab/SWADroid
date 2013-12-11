@@ -219,4 +219,13 @@
 	<string name="prefNotifLightsTitle">Leuchten</string>
 	<string name="prefNotifLightsSummary">Aktivieren/Deaktivieren der Licht-Benachrichtigungen zu neuen Benachrichtigungen</string>
 
+	
+	<string name="informationModuleLabel">Informatie</string> 
+    <string name="introductionModuleLabel">Inleiding</string>  
+    <string name="faqsModuleLabel">FAQs</string>
+    <string name="linksModuleLabel">Links</string>
+    <string name="bibliographyModuleLabel">Referenties</string>
+    <string name="practicesprogramModuleLabel">Practices Programma</string>
+    <string name="theoryprogramModuleLabel">Theory Programma</string>
+    <string name="teachingguideModuleLabel">Pedagogisch begeleider</string>
 </resources>
