@@ -8,6 +8,10 @@ package es.ugr.swad.swadroid.modules.information;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Vector;
+
+import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.os.Bundle;
@@ -17,10 +21,26 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.Module;
 
 
 public class Information extends Module {
+	
+	/**
+     * Information Type
+     */
+    private String infoType;
+    
+    /**
+     * Information Content
+     */
+    private String infoContent;
+    
+    /**
+     * Request code to get course's information
+     */
+    private String requestCodeToAdd;
 
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +66,8 @@ public class Information extends Module {
         
         case Constants.INTRODUCTION_REQUEST_CODE : requestCode = 28;
         
+        	requestCodeToAdd = "introduction";
+        
             moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
             moduleIcon.setBackgroundResource(R.drawable.notif);
 
@@ -55,6 +77,8 @@ public class Information extends Module {
         break;
 
         case Constants.FAQS_REQUEST_CODE : requestCode = 29;
+        
+    		requestCodeToAdd = "";/*falta en la funcion que obtiene la informacion de las asignaturas*/
             
             moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
             moduleIcon.setBackgroundResource(R.drawable.notif);
@@ -66,6 +90,8 @@ public class Information extends Module {
         
         case Constants.BIBLIOGRAPHY_REQUEST_CODE : requestCode = 30;
         
+        	requestCodeToAdd = "bibliography";
+        
             moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
             moduleIcon.setBackgroundResource(R.drawable.notif);
 
@@ -75,6 +101,8 @@ public class Information extends Module {
         break;
         
         case Constants.PRACTICESPROGRAM_REQUEST_CODE : requestCode = 31;
+        
+        	requestCodeToAdd = "practicals";
         
             moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
             moduleIcon.setBackgroundResource(R.drawable.notif);
@@ -86,6 +114,8 @@ public class Information extends Module {
         
         case Constants.THEORYPROGRAM_REQUEST_CODE : requestCode = 32;
         
+        	requestCodeToAdd = "";/*falta en la funcion que obtiene la informacion de las asignaturas*/
+        
             moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
             moduleIcon.setBackgroundResource(R.drawable.notif);
 
@@ -96,6 +126,8 @@ public class Information extends Module {
         
         case Constants.LINKS_REQUEST_CODE : requestCode = 33;
         
+        	requestCodeToAdd = "links";
+        
             moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
             moduleIcon.setBackgroundResource(R.drawable.notif);
 
@@ -105,6 +137,8 @@ public class Information extends Module {
         break;
         
         case Constants.TEACHINGGUIDE_REQUEST_CODE : requestCode = 34;
+        
+        	requestCodeToAdd = "guide";
         
             moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
             moduleIcon.setBackgroundResource(R.drawable.notif);
@@ -123,6 +157,21 @@ public class Information extends Module {
 	protected void requestService() throws NoSuchAlgorithmException,
 			IOException, XmlPullParserException {
 		// TODO Auto-generated method stub
+		
+		createRequest();
+		addParam("wsKey", Constants.getLoggedUser().getWsKey());
+		addParam("courseCode", Constants.getSelectedCourseCode());
+		addParam("infoType", requestCodeToAdd);
+		sendRequest(User.class, false);
+		
+		 if (result != null) {
+			 
+			 ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);		 
+			 infoType = res.get(1).toString();
+			 infoContent = res.get(2).toString();
+			 
+		 }
+		
 		
 	}
 
