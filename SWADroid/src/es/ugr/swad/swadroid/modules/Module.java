@@ -71,10 +71,6 @@ public abstract class Module extends MenuActivity {
      */
     private String SERVER; // = "swad.ugr.es";
     /**
-     * Preferences of the activity.
-     */
-    protected static Preferences prefs = new Preferences();
-    /**
      * Async Task for background jobs
      */
     private Connect connect;
@@ -102,10 +98,6 @@ public abstract class Module extends MenuActivity {
      * Connection available flag
      */
     protected static boolean isConnected;
-    /**
-     * Application debuggable flag
-     */
-    protected static boolean isDebuggable;
     /**
      * Class Module's tag name for Logcat
      */
@@ -195,24 +187,6 @@ public abstract class Module extends MenuActivity {
     }
 
     /**
-     * Gets preferences of activity.
-     *
-     * @return Preferences of activity.
-     */
-    public Preferences getPrefs() {
-        return prefs;
-    }
-
-    /**
-     * Sets preferences of activity.
-     *
-     * @param prefs Preferences of activity.
-     */
-    public void setPrefs(Preferences prefs) {
-        Module.prefs = prefs;
-    }
-
-    /**
      * Gets webservice request.
      *
      * @return Webservice request.
@@ -259,7 +233,7 @@ public abstract class Module extends MenuActivity {
         } else {
             // If this is not the Login module, launch login check
             if (!(this instanceof Login)) {
-                Intent loginActivity = new Intent(getBaseContext(), Login.class);
+                Intent loginActivity = new Intent(this, Login.class);
                 startActivityForResult(loginActivity,
                         Constants.LOGIN_REQUEST_CODE);
             }
@@ -283,7 +257,6 @@ public abstract class Module extends MenuActivity {
         }
 
         super.onCreate(savedInstanceState);
-        prefs.getPreferences(getBaseContext());
 
         // Recover the launched async task if the activity is re-created
         connect = (Connect) getLastNonConfigurationInstance();
@@ -339,7 +312,7 @@ public abstract class Module extends MenuActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        SERVER = prefs.getServer();
+        SERVER = Preferences.getServer();
     }
 
     /*
@@ -352,7 +325,7 @@ public abstract class Module extends MenuActivity {
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case Constants.LOGIN_REQUEST_CODE:
-                    // Toast.makeText(getBaseContext(), R.string.loginSuccessfulMsg,
+                    // Toast.makeText(getApplicationContext(), R.string.loginSuccessfulMsg,
                     // Toast.LENGTH_SHORT).show();
 
 				/*

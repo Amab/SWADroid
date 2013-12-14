@@ -32,7 +32,7 @@ import es.ugr.swad.swadroid.model.User;
  * @author Jose Antonio Guerrero Aviles <cany20@gmail.com>
  */
 public class Constants {
-    /**
+	/**
      * SWAD application key
      */
     public static final String SWAD_APP_KEY = ""; //DELETE THE KEY BEFORE COMMIT!!!
@@ -211,28 +211,50 @@ public class Constants {
     /**
      * Request code for Generate QR
      */
-    public static final int GENERATE_QR_REQUEST_CODE = 26;
-    
-    
-    
-    
-    
-    
+    public static final int GENERATE_QR_REQUEST_CODE = 26;    
+    /**
+     * Request code for Information
+     */
+    public static final int INFORMATION_REQUEST_CODE = 27;
     
     /**
      * Request code for Introduction
      */
-    public static final int INTRODUCTION_REQUEST_CODE = 27;
+    public static final int INTRODUCTION_REQUEST_CODE = 28;
     
+    /**
+     * Request code for FAQs
+     */
+    public static final int FAQS_REQUEST_CODE = 29;
     
+    /**
+     * Request code for Bibliography
+     */
+    public static final int BIBLIOGRAPHY_REQUEST_CODE = 30;
     
+    /**
+     * Request code for Practices Program
+     */
+    public static final int PRACTICESPROGRAM_REQUEST_CODE = 31;
     
+    /**
+     * Request code for Theory Program
+     */
+    public static final int THEORYPROGRAM_REQUEST_CODE = 32;
+
+    /**
+     * Request code for Links
+     */
+    public static final int LINKS_REQUEST_CODE = 33;
     
-    
+    /**
+     * Request code for Teaching Guide
+     */
+    public static final int TEACHINGGUIDE_REQUEST_CODE = 34; 
     /**
      * Request code for NotificationMarkAsRead module
      */
-    public static final int NOTIFMARKALLASREAD_REQUEST_CODE = 28;    
+    public static final int NOTIFMARKALLASREAD_REQUEST_CODE = 35; 
     /**
      * Prefix tag name for Logcat
      */

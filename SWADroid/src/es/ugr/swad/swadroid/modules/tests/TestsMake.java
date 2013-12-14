@@ -30,7 +30,6 @@ import android.view.View;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.widget.CheckableLinearLayout;
 import es.ugr.swad.swadroid.gui.widget.NumberPicker;
@@ -87,10 +86,6 @@ public class TestsMake extends Module {
      * Tests tag name for Logcat
      */
     private static final String TAG = Constants.APP_TAG + " TestsMake";
-    /**
-     * Application preferences.
-     */
-    private static final Preferences prefs = new Preferences();
 
     /**
      * Sets layout maintaining tests action bar
@@ -236,7 +231,7 @@ public class TestsMake extends Module {
 
                 //If no tags selected, show a message to notice user
                 if (tagsList.isEmpty()) {
-                    Toast.makeText(getBaseContext(), R.string.testNoTagsSelectedMsg, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.testNoTagsSelectedMsg, Toast.LENGTH_LONG).show();
 
                     //If any tag is selected, show the answer types selection screen
                 } else {
@@ -291,7 +286,7 @@ public class TestsMake extends Module {
 
                 //If no answer types selected, show a message to notice user
                 if (answerTypesList.isEmpty()) {
-                    Toast.makeText(getBaseContext(), R.string.testNoAnswerTypesSelectedMsg, Toast.LENGTH_LONG)
+                    Toast.makeText(getApplicationContext(), R.string.testNoAnswerTypesSelectedMsg, Toast.LENGTH_LONG)
                             .show();
 
                     //If any answer type is selected, generate the test and show the first question screen
@@ -762,7 +757,6 @@ public class TestsMake extends Module {
         tfAdapter.add(getString(R.string.trueMsg));
         tfAdapter.add(getString(R.string.falseMsg));
 
-        prefs.getPreferences(getBaseContext());
         String selection = "id=" + Long.toString(Constants.getSelectedCourseCode());
         Cursor dbCursor = dbHelper.getDb().getCursor(Constants.DB_TABLE_TEST_CONFIG, selection, null);
         startManagingCursor(dbCursor);
@@ -777,11 +771,11 @@ public class TestsMake extends Module {
             if (test != null) {
                 setNumQuestions();
             } else {
-                Toast.makeText(getBaseContext(), R.string.testNoQuestionsCourseMsg, Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.testNoQuestionsCourseMsg, Toast.LENGTH_LONG).show();
                 finish();
             }
         } else {
-            Toast.makeText(getBaseContext(), R.string.testNoQuestionsMsg, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.testNoQuestionsMsg, Toast.LENGTH_LONG).show();
             finish();
         }
 
@@ -794,7 +788,7 @@ public class TestsMake extends Module {
 	/*@Override
 	protected void onStart() {
 		super.onStart();
-		prefs.getPreferences(getBaseContext());
+		prefs.getPreferences(this);
 		String selection ="id=" + Long.toString(Global.getSelectedCourseCode());
 		Cursor dbCursor = dbHelper.getDb().getCursor(Global.DB_TABLE_TEST_CONFIG,selection,null);
 		startManagingCursor(dbCursor);
@@ -809,11 +803,11 @@ public class TestsMake extends Module {
 			if(test != null) {
 				setNumQuestions();
 			} else {
-				Toast.makeText(getBaseContext(), R.string.testNoQuestionsCourseMsg, Toast.LENGTH_LONG).show();
+				Toast.makeText(this, R.string.testNoQuestionsCourseMsg, Toast.LENGTH_LONG).show();
 				finish();
 			}
 		} else {
-			Toast.makeText(getBaseContext(), R.string.testNoQuestionsMsg, Toast.LENGTH_LONG).show();
+			Toast.makeText(this, R.string.testNoQuestionsMsg, Toast.LENGTH_LONG).show();
 			finish();
 		}
 

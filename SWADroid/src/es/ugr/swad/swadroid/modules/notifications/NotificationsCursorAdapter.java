@@ -112,10 +112,10 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         int numRows = cursor.getCount();
         int cursorPosition = cursor.getPosition();
         String seenLocalString = cursor.getString(cursor.getColumnIndex("seenLocal"));
-        boolean seenLocal = Utils.parseStringBool(seenLocalString);
+        boolean seenLocal = (seenLocalString == null)? false : Utils.parseStringBool(seenLocalString);
         
         if(!seenLocal) {
-        	view.setBackgroundColor(context.getResources().getColor(R.color.notifications_background_yellow));
+        	view.setBackgroundColor(context.getResources().getColor(R.color.notifications_background_highlighted));
         } else {
         	view.setBackgroundColor(context.getResources().getColor(R.color.background));
         }

@@ -337,4 +337,14 @@
     <string name="prefNotifLightsSummary">Activar/desactivar los indicadores luminosos de las alertas de nuevas notificaciones</string>
     <string name="changelogTitle">Historial de cambios</string>
 
+    
+    
+   	<string name="informationModuleLabel">Información</string> 
+    <string name="introductionModuleLabel">Introducción</string>  
+    <string name="faqsModuleLabel">FAQs</string>
+    <string name="linksModuleLabel">Links</string>
+    <string name="bibliographyModuleLabel">Bibliografía</string>
+    <string name="practicesprogramModuleLabel">Programa de Prácticas</string>
+    <string name="theoryprogramModuleLabel">Programa de Teoría</string>
+    <string name="teachingguideModuleLabel">Guía Docente</string>
 </resources>

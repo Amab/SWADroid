@@ -295,4 +295,15 @@
     <string name="prefNotifLightsTitle">Lights</string>
     <string name="prefNotifLightsSummary">Włączanie/wyłączanie światła alerty dla nowych powiadomień</string>
 
+    
+    
+	<string name="informationModuleLabel">Wprowadzenie</string> 
+    <string name="introductionModuleLabel">Informacja</string>  
+    <string name="faqsModuleLabel">FAQs</string>
+    <string name="linksModuleLabel">Links</string>
+    <string name="bibliographyModuleLabel">Bibliografía</string>
+    <string name="practicesprogramModuleLabel">Program praktyk</string>
+    <string name="theoryprogramModuleLabel">Teoria programu</string>
+    <string name="teachingguideModuleLabel">Podręcznik nauczania</string>
+    
 </resources>

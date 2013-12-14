@@ -64,10 +64,6 @@ public class DataBaseHelper {
      */
     private final Context mCtx;
     /**
-     * Application preferences
-     */
-    private final Preferences prefs = new Preferences();
-    /**
      * Database name
      */
     //private String DBName = "swadroid_db_crypt";
@@ -91,8 +87,7 @@ public class DataBaseHelper {
      */
     public DataBaseHelper(Context ctx) throws XmlPullParserException, IOException {
         mCtx = ctx;
-        prefs.getPreferences(mCtx);
-        DBKey = prefs.getDBKey();
+        DBKey = Preferences.getDBKey();
         db = DataFramework.getInstance();
 
         //Initialize SQLCipher libraries
@@ -104,7 +99,7 @@ public class DataBaseHelper {
         //If the passphrase is empty, generate a random passphrase and recreate database
         if (DBKey.equals("")) {
             DBKey = Utils.randomString(DB_KEY_LENGTH);
-            prefs.setDBKey(DBKey);
+            Preferences.setDBKey(DBKey);
 
 			/*mCtx.deleteDatabase(DBName);
             SQLiteDatabase database = SQLiteDatabase.openOrCreateDatabase(mCtx.getDatabasePath("swadroid_db_crypt"), null);
@@ -385,10 +380,16 @@ public class DataBaseHelper {
      * @return A Model's subclass object
      *         or null if the row does not exist in the specified table
      */
-    public Model getRow(String table, String fieldName, String fieldValue) {
-        List<Entity> rows = db.getEntityList(table, fieldName + " = '" + fieldValue + "'");
+    public Model getRow(String table, String fieldName, Object fieldValue) {
+        List<Entity> rows;
         Entity ent;
         Model row = null;
+        
+        if(fieldValue instanceof String) {
+        	rows = db.getEntityList(table, fieldName + " = '" + fieldValue + "'");
+        } else {
+        	rows = db.getEntityList(table, fieldName + " = " + fieldValue + "");
+        }
 
         if (rows.size() > 0) {
             ent = rows.get(0);
@@ -406,10 +407,16 @@ public class DataBaseHelper {
      * @return The user found 
      *         or null if the user does not exist
      */
-    public User getUser(String fieldName, String fieldValue) {
-        List<Entity> rows = db.getEntityList(Constants.DB_TABLE_USERS, fieldName + " = '" + fieldValue + "'");
+    public User getUser(String fieldName, Object fieldValue) {
+        List<Entity> rows;
         Entity ent;
         User user = null;
+        
+        if(fieldValue instanceof String) {
+        	rows = db.getEntityList(Constants.DB_TABLE_USERS, fieldName + " = '" + fieldValue + "'");
+        } else {
+        	rows = db.getEntityList(Constants.DB_TABLE_USERS, fieldName + " = " + fieldValue + "");
+        }
 
         if (rows.size() > 0) {
             ent = rows.get(0);

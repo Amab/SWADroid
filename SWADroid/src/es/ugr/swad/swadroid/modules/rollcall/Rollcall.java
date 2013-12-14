@@ -137,11 +137,11 @@ public class Rollcall extends MenuExpandableListActivity {
             // Fill spinner with practice groups list from database
             fillGroupsSpinner(c);
         } else if (!groupTypes.isEmpty()) {
-            Intent activity = new Intent(getBaseContext(), Groups.class);
+            Intent activity = new Intent(this, Groups.class);
             activity.putExtra("courseCode", courseCode);
             startActivityForResult(activity, Constants.GROUPS_REQUEST_CODE);
         } else if (!groupTypesRequested) {
-            Intent activity = new Intent(getBaseContext(), GroupTypes.class);
+            Intent activity = new Intent(this, GroupTypes.class);
             activity.putExtra("courseCode", courseCode);
             startActivityForResult(activity, Constants.GROUPTYPES_REQUEST_CODE);
         }
@@ -177,7 +177,7 @@ public class Rollcall extends MenuExpandableListActivity {
 
         refreshRequested = true;
 
-        Intent activity = new Intent(getBaseContext(), GroupTypes.class);
+        Intent activity = new Intent(this, GroupTypes.class);
         activity.putExtra("courseCode", courseCode);
         startActivityForResult(activity, Constants.GROUPTYPES_REQUEST_CODE);
     }
@@ -192,7 +192,7 @@ public class Rollcall extends MenuExpandableListActivity {
         @SuppressWarnings("unchecked")
 		String keyword = (String) ((Map<String, Object>) o).get(NAME);
         Intent activity;
-        Context context = getBaseContext();
+        Context context = getApplicationContext();
         Cursor selectedGroup = (Cursor) practiceGroup.getSelectedItem();
         String groupName = selectedGroup.getString(2) + getString(R.string.groupSeparator) + selectedGroup.getString(3);
         PackageManager pm = getPackageManager();
@@ -351,7 +351,7 @@ public class Rollcall extends MenuExpandableListActivity {
                 List<Model> groupTypes = dbHelper.getAllRows(Constants.DB_TABLE_GROUP_TYPES, "courseCode = " + courseCode, "groupTypeName");
                 if (!groupTypes.isEmpty()) {
                     // If there are not group types, either groups. Therefore, there is no need to request groups
-                    Intent activity = new Intent(getBaseContext(), Groups.class);
+                    Intent activity = new Intent(getApplicationContext(), Groups.class);
                     activity.putExtra("courseCode", courseCode);
                     startActivityForResult(activity, Constants.GROUPS_REQUEST_CODE);
                 } else {
