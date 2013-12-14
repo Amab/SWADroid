@@ -442,7 +442,9 @@ public class NotificationsSyncAdapterService extends Service {
         SecureConnection.initSecureConnection();
 
         //If last login time > Global.RELOGIN_TIME, force login
-        if (System.currentTimeMillis() - Constants.getLastLoginTime() > Constants.RELOGIN_TIME) {
+        if (Constants.isLogged() &&
+        		((System.currentTimeMillis() - Constants.getLastLoginTime()) > Constants.RELOGIN_TIME)) {
+        	
             Constants.setLogged(false);
         }
 
