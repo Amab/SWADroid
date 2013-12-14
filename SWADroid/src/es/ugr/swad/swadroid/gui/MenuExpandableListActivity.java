@@ -32,6 +32,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
+import es.ugr.swad.swadroid.PreferencesActivity;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADMain;
 import es.ugr.swad.swadroid.model.DataBaseHelper;
@@ -45,10 +46,10 @@ import es.ugr.swad.swadroid.utils.Utils;
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */
 public class MenuExpandableListActivity extends ExpandableListActivity {
-    /**
-     * Application preferences.
-     */
-    protected static final Preferences prefs = new Preferences();
+	/**
+	 * Application preferences
+	 */
+	Preferences prefs;
     /**
      * Database Helper.
      */
@@ -62,21 +63,11 @@ public class MenuExpandableListActivity extends ExpandableListActivity {
      */
     private static final String TAG = Constants.APP_TAG + " MenuExpandableListActivity";
 
-    /* (non-Javadoc)
-     * @see android.app.Activity#onStart()
-     */
-    @Override
-    protected void onStart() {
-        super.onStart();
-        prefs.getPreferences(getBaseContext());
-    }
-
     /**
      * Shows Preferences screen
      */
     protected void viewPreferences() {
-        Intent settingsActivity = new Intent(getBaseContext(),
-                Preferences.class);
+        Intent settingsActivity = new Intent(this, PreferencesActivity.class);
         startActivity(settingsActivity);
     }
 
@@ -107,7 +98,7 @@ public class MenuExpandableListActivity extends ExpandableListActivity {
      */
     void cleanDatabase() {
         dbHelper.cleanTables();
-        prefs.setLastCourseSelected(0);
+        Preferences.setLastCourseSelected(0);
         Utils.setDbCleaned(true);
         Toast.makeText(this, R.string.cleanDatabaseMsg, Toast.LENGTH_LONG).show();
         if (this instanceof SWADMain) {
@@ -182,8 +173,11 @@ public class MenuExpandableListActivity extends ExpandableListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Initialize database
         try {
+        	//Initialize preferences
+        	prefs = new Preferences(this);
+        	
+            //Initialize database
             dbHelper = new DataBaseHelper(this);
             getPackageManager().getApplicationInfo(
                     getPackageName(), 0);

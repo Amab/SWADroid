@@ -83,7 +83,7 @@ public class NotificationsMarkAllAsRead extends Module {
             numMarkedNotifications = Integer.parseInt(soap.toString());
         }
         
-        Log.i(TAG, "Marked " + numMarkedNotifications + " notifications as read");
+        Log.i(TAG, "Marked " + numMarkedNotifications + " notifications as readed");
     	dbHelper.updateAllNotifications("seenRemote", Utils.parseBoolString(true));
         
         if(numMarkedNotifications != numMarkedNotificationsList) {	            

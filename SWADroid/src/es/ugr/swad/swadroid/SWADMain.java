@@ -60,7 +60,7 @@ import es.ugr.swad.swadroid.modules.Messages;
 import es.ugr.swad.swadroid.modules.Notices;
 import es.ugr.swad.swadroid.modules.downloads.DownloadsManager;
 import es.ugr.swad.swadroid.modules.groups.MyGroupsManager;
-import es.ugr.swad.swadroid.modules.information.Introduction;
+import es.ugr.swad.swadroid.modules.information.Information;
 import es.ugr.swad.swadroid.modules.notifications.Notifications;
 import es.ugr.swad.swadroid.modules.rollcall.Rollcall;
 import es.ugr.swad.swadroid.modules.tests.Tests;
@@ -78,6 +78,10 @@ import es.ugr.swad.swadroid.utils.Utils;
  * @author Jose Antonio Guerrero Aviles <cany20@gmail.com>
  */
 public class SWADMain extends MenuExpandableListActivity {
+	/**
+	 * Application preferences
+	 */
+	Preferences prefs;
     /**
      * Array of strings for main ListView
      */
@@ -189,50 +193,66 @@ public class SWADMain extends MenuExpandableListActivity {
 
         Intent activity;
         if (keyword.equals(getString(R.string.notificationsModuleLabel))) {
-            activity = new Intent(getBaseContext(), Notifications.class);
+            activity = new Intent(this, Notifications.class);
             startActivityForResult(activity, Constants.NOTIFICATIONS_REQUEST_CODE);
         } else if (keyword.equals(getString(R.string.testsModuleLabel))) {
-            activity = new Intent(getBaseContext(), Tests.class);
+            activity = new Intent(this, Tests.class);
             startActivityForResult(activity, Constants.TESTS_REQUEST_CODE);
         } else if (keyword.equals(getString(R.string.messagesModuleLabel))) {
-            activity = new Intent(getBaseContext(), Messages.class);
+            activity = new Intent(this, Messages.class);
             activity.putExtra("eventCode", Long.valueOf(0));
             startActivityForResult(activity, Constants.MESSAGES_REQUEST_CODE);
         } else if (keyword.equals(getString(R.string.noticesModuleLabel))) {
-            activity = new Intent(getBaseContext(), Notices.class);
+            activity = new Intent(this, Notices.class);
             startActivityForResult(activity, Constants.NOTICES_REQUEST_CODE);
         } else if (keyword.equals(getString(R.string.rollcallModuleLabel))) {
-            activity = new Intent(getBaseContext(), Rollcall.class);
+            activity = new Intent(this, Rollcall.class);
             startActivityForResult(activity, Constants.ROLLCALL_REQUEST_CODE);
         } else if (keyword.equals(getString(R.string.generateQRModuleLabel))) {
-            activity = new Intent(getBaseContext(), GenerateQR.class);
+            activity = new Intent(this, GenerateQR.class);
             startActivityForResult(activity, Constants.GENERATE_QR_REQUEST_CODE);
         } else if (keyword.equals(getString(R.string.documentsDownloadModuleLabel))) {
-            activity = new Intent(getBaseContext(), DownloadsManager.class);
+            activity = new Intent(this, DownloadsManager.class);
             activity.putExtra("downloadsAreaCode", Constants.DOCUMENTS_AREA_CODE);
             startActivityForResult(activity, Constants.DOWNLOADSMANAGER_REQUEST_CODE);
         } else if (keyword.equals(getString(R.string.sharedsDownloadModuleLabel))) {
-            activity = new Intent(getBaseContext(), DownloadsManager.class);
+            activity = new Intent(this, DownloadsManager.class);
             activity.putExtra("downloadsAreaCode", Constants.SHARE_AREA_CODE);
             startActivityForResult(activity, Constants.DOWNLOADSMANAGER_REQUEST_CODE);
         } else if (keyword.equals(getString(R.string.myGroupsModuleLabel))) {
-            activity = new Intent(getBaseContext(), MyGroupsManager.class);
+            activity = new Intent(this, MyGroupsManager.class);
             activity.putExtra("courseCode", Constants.getSelectedCourseCode());
-            startActivityForResult(activity, Constants.MYGROUPSMANAGER_REQUEST_CODE);
-        
-        
-        
-        
-        
-        
+            startActivityForResult(activity, Constants.MYGROUPSMANAGER_REQUEST_CODE);        
     	} else if (keyword.equals(getString(R.string.introductionModuleLabel))) {
-    		activity = new Intent(getBaseContext(), Introduction.class);
-    		startActivityForResult(activity, Constants.INTRODUCTION_REQUEST_CODE);
-    	}
-    
-    
-    
-
+    		activity = new Intent(this, Information.class);
+    		activity.putExtra("requestCode", Constants.INTRODUCTION_REQUEST_CODE);
+    		startActivityForResult(activity, Constants.INTRODUCTION_REQUEST_CODE);   		
+	    } else if (keyword.equals(getString(R.string.faqsModuleLabel))) {
+			activity = new Intent(this, Information.class);
+			activity.putExtra("requestCode", Constants.FAQS_REQUEST_CODE);
+			startActivityForResult(activity, Constants.FAQS_REQUEST_CODE);			
+		} else if (keyword.equals(getString(R.string.bibliographyModuleLabel))) {
+			activity = new Intent(this, Information.class);
+			activity.putExtra("requestCode", Constants.BIBLIOGRAPHY_REQUEST_CODE);
+			startActivityForResult(activity, Constants.BIBLIOGRAPHY_REQUEST_CODE);			
+		} else if (keyword.equals(getString(R.string.practicesprogramModuleLabel))) {
+			activity = new Intent(this, Information.class);
+			activity.putExtra("requestCode", Constants.PRACTICESPROGRAM_REQUEST_CODE);
+			startActivityForResult(activity, Constants.PRACTICESPROGRAM_REQUEST_CODE);			
+		} else if (keyword.equals(getString(R.string.theoryprogramModuleLabel))) {
+			activity = new Intent(this, Information.class);
+			activity.putExtra("requestCode", Constants.THEORYPROGRAM_REQUEST_CODE);
+			startActivityForResult(activity, Constants.THEORYPROGRAM_REQUEST_CODE);			
+		} else if (keyword.equals(getString(R.string.linksModuleLabel))) {
+			activity = new Intent(this, Information.class);
+			activity.putExtra("requestCode", Constants.LINKS_REQUEST_CODE);
+			startActivityForResult(activity, Constants.LINKS_REQUEST_CODE);			
+		} else if (keyword.equals(getString(R.string.teachingguideModuleLabel))) {
+			activity = new Intent(this, Information.class);
+			activity.putExtra("requestCode", Constants.TEACHINGGUIDE_REQUEST_CODE);
+			startActivityForResult(activity, Constants.TEACHINGGUIDE_REQUEST_CODE);
+		}
+        
         return true;
     }
 
@@ -268,30 +288,29 @@ public class SWADMain extends MenuExpandableListActivity {
         updateButton.setVisibility(View.VISIBLE);
 
         try {
-            //Initialize preferences
-            prefs.getPreferences(getBaseContext());
-
+        	//Initialize preferences
+        	prefs = new Preferences(this);
+        	
             //Initialize HTTPS connections
             SecureConnection.initSecureConnection();
 
             //Check if this is the first run after an install or upgrade
-            lastVersion = prefs.getLastVersion();
+            lastVersion = Preferences.getLastVersion();
             currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
             dbHelper.initializeDB();
-            //lastVersion = 55;
-            //currentVersion = 56;
+            //lastVersion = 56;
+            //currentVersion = 57;
 
             //If this is the first run, show configuration dialog
             if (lastVersion == 0) {
                 showConfigurationDialog();
 
                 //Configure automatic synchronization
-                activity = new Intent(getBaseContext(), AccountAuthenticator.class);
+                Preferences.setSyncTime(String.valueOf(Constants.DEFAULT_SYNC_TIME));
+                activity = new Intent(this, AccountAuthenticator.class);
                 startActivity(activity);
-                SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, Constants.DEFAULT_SYNC_TIME, this);
-                prefs.setSyncTime(String.valueOf(Constants.DEFAULT_SYNC_TIME));
 
-                prefs.setLastVersion(currentVersion);
+                Preferences.setLastVersion(currentVersion);
                 firstRun = true;
                 Constants.setSelectedCourseCode(-1);
 
@@ -310,56 +329,44 @@ public class SWADMain extends MenuExpandableListActivity {
                 	dbHelper.encryptUsers();
                 	
                 	//If the app is updating from an unencrypted user password version, encrypt user password
-                	prefs.upgradeCredentials();
+                	Preferences.upgradeCredentials();
                 	
-                	prefs.setSyncTime(String.valueOf(Constants.DEFAULT_SYNC_TIME));
+                	Preferences.setSyncTime(String.valueOf(Constants.DEFAULT_SYNC_TIME));
+                } else if(lastVersion < 57) {
+                	//Reconfigure automatic synchronization
+                	SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, this);                	
+                	if(!Preferences.getSyncTime().equals("0") && Preferences.isSyncEnabled()) {
+                		SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY,
+                				Long.valueOf(Preferences.getSyncTime()), this);
+                	}
                 }
 
-                //Configure automatic synchronization
-                if(Preferences.isSyncEnabled()) {
-                	activity = new Intent(getBaseContext(), AccountAuthenticator.class);
-                	startActivity(activity);
-                	SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, Long.valueOf(prefs.getSyncTime()), this);
-                }
-
-                prefs.setLastVersion(currentVersion);
+                Preferences.setLastVersion(currentVersion);
             }
 
             listCourses = dbHelper.getAllRows(Constants.DB_TABLE_COURSES, "", "shortName");
             if (listCourses.size() > 0) {
-                Course c = (Course) listCourses.get(prefs.getLastCourseSelected());
+                Course c = (Course) listCourses.get(Preferences.getLastCourseSelected());
                 Constants.setSelectedCourseCode(c.getId());
                 Constants.setSelectedCourseShortName(c.getShortName());
                 Constants.setSelectedCourseFullName(c.getFullName());
-                Constants.setCurrentUserRole(c.getUserRole());
+                Constants.setCurrentUserRole(c.getUserRole()); 
             } else {
                 Constants.setSelectedCourseCode(-1);
                 Constants.setSelectedCourseShortName("");
                 Constants.setSelectedCourseFullName("");
                 Constants.setCurrentUserRole(-1);
-                if (!firstRun && Utils.connectionAvailable(this))
-                    getCurrentCourses(); //at the first run, this will be launched after the preferences menu
             }
             currentRole = -1;
         } catch (Exception ex) {
             error(TAG, ex.getMessage(), ex, true);
         }
-        /*if(!firstRun && Module.connectionAvailable(this)){
-            getActualCourses();
-		}*/
 
     }
 
-    /* (non-Javadoc)
-     * @see android.app.Activity#onStart()
-     */
-    @Override
-    protected void onStart() {
-        super.onStart();
-        prefs.getPreferences(getBaseContext());
-
-    }
-
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onResume()
+	 */
     @Override
     protected void onResume() {
         super.onResume();
@@ -427,8 +434,8 @@ public class SWADMain extends MenuExpandableListActivity {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner.setAdapter(adapter);
             spinner.setOnItemSelectedListener(new onItemSelectedListener());
-            if (prefs.getLastCourseSelected() < listCourses.size())
-                spinner.setSelection(prefs.getLastCourseSelected());
+            if (Preferences.getLastCourseSelected() < listCourses.size())
+                spinner.setSelection(Preferences.getLastCourseSelected());
             else
                 spinner.setSelection(0);
             	spinner.setOnTouchListener(Spinner_OnTouch);
@@ -453,7 +460,7 @@ public class SWADMain extends MenuExpandableListActivity {
         public void onItemSelected(AdapterView<?> parent, View view, int position,
                                    long id) {
             if (!listCourses.isEmpty()) {
-                prefs.setLastCourseSelected(position);
+            	Preferences.setLastCourseSelected(position);
                 Course courseSelected = (Course) listCourses.get(position);
                 courseCode = courseSelected.getId();
                 Constants.setSelectedCourseCode(courseCode);
@@ -476,7 +483,7 @@ public class SWADMain extends MenuExpandableListActivity {
             if (event.getAction() == MotionEvent.ACTION_UP) {
 
                 if (dbHelper.getAllRows(Constants.DB_TABLE_COURSES).size() == 0) {
-                    if (Utils.connectionAvailable(getBaseContext()))
+                    if (Utils.connectionAvailable(getApplicationContext()))
                         getCurrentCourses();
                     //else
 
@@ -490,8 +497,8 @@ public class SWADMain extends MenuExpandableListActivity {
 
     private void getCurrentCourses() {
         Intent activity;
-        activity = new Intent(getBaseContext(), Courses.class);
-        Toast.makeText(getBaseContext(), R.string.coursesProgressDescription, Toast.LENGTH_LONG).show();
+        activity = new Intent(this, Courses.class);
+        Toast.makeText(this, R.string.coursesProgressDescription, Toast.LENGTH_LONG).show();
         startActivityForResult(activity, Constants.COURSES_REQUEST_CODE);
     }
 
@@ -501,21 +508,21 @@ public class SWADMain extends MenuExpandableListActivity {
             if (Constants.getSelectedCourseCode() != -1) {
                 courseSelected = (Course) dbHelper.getRow(Constants.DB_TABLE_COURSES, "id", String.valueOf(Constants.getSelectedCourseCode()));
             } else {
-                int lastSelected = prefs.getLastCourseSelected();
+                int lastSelected = Preferences.getLastCourseSelected();
                 if (lastSelected != -1 && lastSelected < listCourses.size()) {
                     courseSelected = (Course) listCourses.get(lastSelected);
                     Constants.setSelectedCourseCode(courseSelected.getId());
                     Constants.setSelectedCourseShortName(courseSelected.getShortName());
                     Constants.setSelectedCourseFullName(courseSelected.getFullName());
                     Constants.setCurrentUserRole(courseSelected.getUserRole());
-                    prefs.setLastCourseSelected(lastSelected);
+                    Preferences.setLastCourseSelected(lastSelected);
                 } else {
                     courseSelected = (Course) listCourses.get(0);
                     Constants.setSelectedCourseCode(courseSelected.getId());
                     Constants.setSelectedCourseShortName(courseSelected.getShortName());
                     Constants.setSelectedCourseFullName(courseSelected.getFullName());
                     Constants.setCurrentUserRole(courseSelected.getUserRole());
-                    prefs.setLastCourseSelected(0);
+                    Preferences.setLastCourseSelected(0);
                 }
             }
 
@@ -603,7 +610,7 @@ public class SWADMain extends MenuExpandableListActivity {
             map.put(NAME, getString(R.string.documentsDownloadModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.folder));
             courseData.add(map);
-            //shared area category
+            //Shared area category
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.sharedsDownloadModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.folder_users));
@@ -611,6 +618,36 @@ public class SWADMain extends MenuExpandableListActivity {
             //Introduction category
             /*map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.introductionModuleLabel));
+            map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
+            courseData.add(map);
+            //Theory Program category
+            map = new HashMap<String, Object>();
+            map.put(NAME, getString(R.string.theoryprogramModuleLabel));
+            map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
+            courseData.add(map);
+            //Practices Program category
+            map = new HashMap<String, Object>();
+            map.put(NAME, getString(R.string.practicesprogramModuleLabel));
+            map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
+            courseData.add(map);
+            //Teaching Guide category
+            map = new HashMap<String, Object>();
+            map.put(NAME, getString(R.string.teachingguideModuleLabel));
+            map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
+            courseData.add(map);
+            //Bibliography category
+            map = new HashMap<String, Object>();
+            map.put(NAME, getString(R.string.bibliographyModuleLabel));
+            map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
+            courseData.add(map);
+            //FAQs category
+            map = new HashMap<String, Object>();
+            map.put(NAME, getString(R.string.faqsModuleLabel));
+            map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
+            courseData.add(map);
+            //Links category
+            map = new HashMap<String, Object>();
+            map.put(NAME, getString(R.string.linksModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
             courseData.add(map);*/
             
@@ -698,7 +735,7 @@ public class SWADMain extends MenuExpandableListActivity {
         Constants.setSelectedCourseShortName("");
         Constants.setSelectedCourseFullName("");
         Constants.setCurrentUserRole(-1);
-        prefs.setLastCourseSelected(-1);
+        Preferences.setLastCourseSelected(-1);
         dBCleaned = true;
         listCourses.clear();
         cleanSpinner();

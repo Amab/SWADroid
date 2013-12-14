@@ -34,6 +34,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.AlertNotification;
 import es.ugr.swad.swadroid.model.Model;
@@ -254,7 +255,7 @@ public class Notifications extends Module {
 
         dbCursor = dbHelper.getDb().getCursor(Constants.DB_TABLE_NOTIFICATIONS, selection, orderby);
         startManagingCursor(dbCursor);
-        adapter = new NotificationsCursorAdapter(this, dbCursor, prefs.getDBKey());
+        adapter = new NotificationsCursorAdapter(this, dbCursor, Preferences.getDBKey());
 
         //list = (ListView) this.findViewById(R.id.listItems);
         list = (PullToRefreshListView) this.findViewById(R.id.listItemsPullToRefresh);
@@ -287,7 +288,7 @@ public class Notifications extends Module {
         setMETHOD_NAME("getNotifications");
         receiver = new SyncReceiver(this);
         account = new Account(getString(R.string.app_name), accountType);
-        SIZE_LIMIT = prefs.getNotifLimit();
+        SIZE_LIMIT = Preferences.getNotifLimit();
     }
 
     /**
@@ -322,28 +323,30 @@ public class Notifications extends Module {
     }
 
     /* (non-Javadoc)
-     * @see es.ugr.swad.swadroid.modules.Module#onResume()
+     * @see es.ugr.swad.swadroid.modules.Module#onStart()
      */
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onStart() {
+        super.onStart();
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(NotificationsSyncAdapterService.START_SYNC);
         intentFilter.addAction(NotificationsSyncAdapterService.STOP_SYNC);
         intentFilter.addAction(Intent.CATEGORY_DEFAULT);
         registerReceiver(receiver, intentFilter);
+        Log.i(TAG, "Registered receiver for automatic synchronization");
 
         refreshScreen();
     }
     
     /* (non-Javadoc)
-     * @see es.ugr.swad.swadroid.modules.Module#onPause()
+     * @see es.ugr.swad.swadroid.modules.Module#onStop()
      */
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onStop() {
+        super.onStop();
         unregisterReceiver(receiver);
+        Log.i(TAG, "Unregistered receiver for automatic synchronization");
     }
 
     /* (non-Javadoc)
@@ -354,13 +357,16 @@ public class Notifications extends Module {
             IOException, XmlPullParserException {
     	
     	//Download new notifications from the server
-        SIZE_LIMIT = prefs.getNotifLimit();
+        SIZE_LIMIT = Preferences.getNotifLimit();
 
-        account = new Account(getString(R.string.app_name), accountType);
         if (ContentResolver.getSyncAutomatically(account, authority)) {
+        	Log.i(TAG, "Automatic synchronization is enabled. Requesting asynchronous sync operation");
+        	
             //Call synchronization service
             ContentResolver.requestSync(account, authority, new Bundle());
         } else {
+        	Log.i(TAG, "Automatic synchronization is disabled. Requesting manual sync operation");
+        	
             //Calculates next timestamp to be requested
             Long timestamp = Long.valueOf(dbHelper.getFieldOfLastNotification("eventTime"));
             timestamp++;
@@ -392,8 +398,9 @@ public class Notifications extends Module {
                     String summary = pii.getProperty("summary").toString();
                     Integer status = Integer.valueOf(pii.getProperty("status").toString());
                     String content = pii.getProperty("content").toString();
+                    boolean notifReadSWAD = (status >= 4);
                     
-                    SWADNotification n = new SWADNotification(notifCode, eventCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, userPhoto, location, summary, status, content, false, false);
+                    SWADNotification n = new SWADNotification(notifCode, eventCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, userPhoto, location, summary, status, content, notifReadSWAD, notifReadSWAD);
                     dbHelper.insertNotification(n);
 
                     if(isDebuggable)
