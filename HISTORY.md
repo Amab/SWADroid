@@ -1,3 +1,15 @@
+##0.12.7 (2013-12-14)
+
+* Added notification read info from SWAD
+* Refactored preferences store
+* Updated BugSense library to version 3.6
+* Updated ksoap2-library to version 3.1.1
+* Fixed preferences reading on automatic synchronization
+* Fixed bug on preferences saving. Modified automatic synchronization configuration
+* Fixed bug on retrieving students list
+* Fixed NullPointerException on String2Boolean parsing
+* Fixed wrong field on tests config query
+
 ##0.12.6 (2013-11-24)
 
 * Added sending of "seen notifications" info to SWAD
@@ -19,7 +31,7 @@
 
 * Fixed ParseException in sessions date
 
-#0.12.3 (2013-11-09)
+##0.12.3 (2013-11-09)
 
 * Added authors and changelog WebView dialogs and reordered the preferences items
 * Added PullToRefresh-ListView library project
