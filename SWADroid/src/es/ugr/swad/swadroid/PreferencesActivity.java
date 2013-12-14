@@ -149,6 +149,16 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     private String userPassword;
 
     /**
+     * Synchronization preferences changed flag
+     */
+    private boolean syncPrefsChanged = false;
+
+    /**
+     * User password preference changed flag
+     */
+    private boolean userPasswordPrefChanged = false;
+
+    /**
      * Shows an error message.
      *
      * @param message Error message to show.
@@ -366,6 +376,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         	
         	//If preferences have changed, logout
         	logoutClean(key);
+        	syncPrefsChanged = true;
         } else if (Preferences.USERPASSWORDPREF.equals(key)) {            
             try {
             	userPassword = Crypto.encryptPassword((String) newValue);
@@ -374,6 +385,8 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
 	            //If preferences have changed, logout
 	            Constants.setLogged(false);
 	            Log.i(TAG, "Forced logout due to " + key + " change in preferences");
+	            userPasswordPrefChanged = true;
+	            syncPrefsChanged = true;
 			} catch (NoSuchAlgorithmException ex) {
 				error(TAG, ex.getMessage(), ex, true);
 			}
@@ -382,20 +395,14 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
             
             //If preferences have changed, logout
         	logoutClean(key);
+        	syncPrefsChanged = true;
         } else if(Preferences.SYNCENABLEPREF.equals(key)) {
         	boolean syncEnabled = (Boolean) newValue;
             Preferences.setSyncEnabled(syncEnabled);
-            
-            if(syncEnabled) {
-            	SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, Long.valueOf(Preferences.getSyncTime()), ctx);
-            } else {
-            	SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, ctx);
-            }
-
             syncEnablePref.setChecked(syncEnabled);
+            syncPrefsChanged = true;
         } else if(Preferences.SYNCTIMEPREF.equals(key)) { 
         	String syncTime = (String) newValue;
-        	boolean syncEnabled = Preferences.isSyncEnabled();
         	long lastSyncTime = Preferences.getLastSyncTime();
         	
         	Preferences.setSyncTime(syncTime);
@@ -404,12 +411,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
             List<String> prefSyncTimeEntries = Arrays.asList(getResources().getStringArray(R.array.prefSyncTimeEntries));
             int prefSyncTimeIndex = prefSyncTimeValues.indexOf(syncTime);
             String prefSyncTimeEntry = prefSyncTimeEntries.get(prefSyncTimeIndex);
-
-            SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, ctx);
-
-            if (!syncTime.equals("0") && syncEnabled) {
-                SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, Long.parseLong(syncTime), ctx);
-            }
             
             if(lastSyncTime == 0) {
             	syncEnablePref.setSummary(getString(R.string.lastSyncTimeLabel) + ": " 
@@ -425,6 +426,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
             }
             
             syncTimePref.setSummary(prefSyncTimeEntry);
+            syncPrefsChanged = true;
         } else if(Preferences.NOTIFLIMITPREF.equals(key)) {
         	 int notifLimit = (Integer) newValue;
         	 Preferences.setNotifLimit(notifLimit);
@@ -476,15 +478,18 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
 		super.onPause();
 		
 		//Set final password
-    	Preferences.setUserPassword(userPassword);
-    	
-    	/*
-    	 * First run
-    	 * If syncEnable checkbox is checked but automatic synchronization is disabled, enable it
-    	 */
-    	if(syncEnablePref.isChecked() && !SyncUtils.isSyncAutomatically(this)) {
-    		SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, Long.valueOf(Preferences.getSyncTime()), this);
-    	}
+		if(userPasswordPrefChanged) {
+	    	Preferences.setUserPassword(userPassword);
+		}
+
+        //Reconfigure automatic synchronization
+        if(syncPrefsChanged) {
+	        SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, ctx);
+	        if (!Preferences.getSyncTime().equals("0") && Preferences.isSyncEnabled()) {
+	            SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY,
+	            		Long.parseLong(Preferences.getSyncTime()), ctx);
+	        }
+        }
 	}
 
 	/* (non-Javadoc)
