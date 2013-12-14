@@ -610,13 +610,13 @@ public class SWADMain extends MenuExpandableListActivity {
             map.put(NAME, getString(R.string.documentsDownloadModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.folder));
             courseData.add(map);
-            //shared area category
+            //Shared area category
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.sharedsDownloadModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.folder_users));
             courseData.add(map);
             //Introduction category
-            map = new HashMap<String, Object>();
+            /*map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.introductionModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
             courseData.add(map);
@@ -630,7 +630,7 @@ public class SWADMain extends MenuExpandableListActivity {
             map.put(NAME, getString(R.string.practicesprogramModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
             courseData.add(map);
-            //Theaching Guide category
+            //Teaching Guide category
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.teachingguideModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
@@ -649,7 +649,7 @@ public class SWADMain extends MenuExpandableListActivity {
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.linksModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
-            courseData.add(map);
+            courseData.add(map);*/
             
             //Evaluation category
             map = new HashMap<String, Object>();
