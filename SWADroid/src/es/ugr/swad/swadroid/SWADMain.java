@@ -82,6 +82,10 @@ public class SWADMain extends MenuExpandableListActivity {
 	 * Application preferences
 	 */
 	Preferences prefs;
+	/**
+	 * SSL connection
+	 */
+	SecureConnection conn;
     /**
      * Array of strings for main ListView
      */
@@ -292,7 +296,9 @@ public class SWADMain extends MenuExpandableListActivity {
         	prefs = new Preferences(this);
         	
             //Initialize HTTPS connections
-            SecureConnection.initSecureConnection();
+            //SecureConnection.initUntrustedSecureConnection();
+        	conn = new SecureConnection();
+        	conn.initSecureConnection(this);
 
             //Check if this is the first run after an install or upgrade
             lastVersion = Preferences.getLastVersion();

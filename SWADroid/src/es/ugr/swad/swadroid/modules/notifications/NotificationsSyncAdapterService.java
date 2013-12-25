@@ -51,7 +51,10 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.security.KeyManagementException;
+import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -65,6 +68,7 @@ import java.util.concurrent.TimeoutException;
 public class NotificationsSyncAdapterService extends Service {
     private static final String TAG = "NotificationsSyncAdapterService";
 	private static Preferences prefs;
+	private static SecureConnection conn;
     private static SyncAdapterImpl sSyncAdapter = null;
     private static int notifCount;
     private static final int NOTIF_ALERT_ID = 1982;
@@ -123,8 +127,6 @@ public class NotificationsSyncAdapterService extends Service {
                 } else if (e instanceof TimeoutException) {
                 	errorMessage = mContext.getString(R.string.errorTimeoutMsg);
                 	sendException = false;
-                } else if (e instanceof IOException) {
-                	errorMessage = mContext.getString(R.string.errorConnectionMsg);
                 } else {
                 	errorMessage = e.getMessage();
                 	if((errorMessage == null) || errorMessage.equals("")) {
@@ -287,6 +289,7 @@ public class NotificationsSyncAdapterService extends Service {
 		        Log.d(TAG, connection.requestDump.toString());
 		        Log.d(TAG, connection.responseDump.toString());
 	        } catch (Exception e) {
+	        	Log.e(TAG, e.getMessage(), e);
 		        Log.e(TAG, connection.getHost() + " " + connection.getPath() + " " +
 		        connection.getPort());
 		        Log.e(TAG, connection.requestDump.toString());
@@ -431,7 +434,7 @@ public class NotificationsSyncAdapterService extends Service {
     }
 
     private static void performSync(Context context, Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
-            throws IOException, XmlPullParserException, NoSuchAlgorithmException, KeyManagementException {
+            throws IOException, XmlPullParserException, NoSuchAlgorithmException, KeyManagementException, KeyStoreException, CertificateException, UnrecoverableKeyException {
 
         //Notify synchronization start
         Intent startIntent = new Intent();
@@ -439,7 +442,9 @@ public class NotificationsSyncAdapterService extends Service {
         context.sendBroadcast(startIntent);
 
         //Initialize HTTPS connections
-        SecureConnection.initSecureConnection();
+        //SecureConnection.initUntrustedSecureConnection();
+    	conn = new SecureConnection();
+    	conn.initSecureConnection(context);
 
         //If last login time > Global.RELOGIN_TIME, force login
         if (Constants.isLogged() &&

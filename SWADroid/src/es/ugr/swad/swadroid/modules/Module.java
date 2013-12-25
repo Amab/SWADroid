@@ -420,6 +420,7 @@ public abstract class Module extends MenuActivity {
 		        Log.d(TAG, connection.requestDump.toString());
 		        Log.d(TAG, connection.responseDump.toString());
 	        } catch (Exception e) {
+	        	Log.e(TAG, e.getMessage(), e);
 		        Log.e(TAG, connection.getHost() + " " + connection.getPath() + " " +
 		        connection.getPort());
 		        Log.e(TAG, connection.requestDump.toString());
@@ -552,8 +553,6 @@ public abstract class Module extends MenuActivity {
                 } else if (e instanceof TimeoutException) {
                     errorMsg = getString(R.string.errorTimeoutMsg);
                     sendException = false;
-                } else if (e instanceof IOException) {
-                    errorMsg = getString(R.string.errorConnectionMsg);
                 } else {
                     errorMsg = e.getMessage();
                 	if((errorMsg == null) || errorMsg.equals("")) {
