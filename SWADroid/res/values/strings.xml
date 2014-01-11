@@ -351,5 +351,5 @@
     <string name="practicesprogramModuleLabel">Practices Program</string>
     <string name="theoryprogramModuleLabel">Theory Program</string>
     <string name="teachingguideModuleLabel">Teaching Guide</string>
-
+    <string name="pradoLoginToast">Remember you must enter SWAD\'s password, not e-Administration</string>
 </resources>

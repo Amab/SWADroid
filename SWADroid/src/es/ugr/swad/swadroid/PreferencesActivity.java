@@ -34,6 +34,7 @@ import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.bugsense.trace.BugSenseHandler;
 
@@ -363,6 +364,9 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
      * @see android.app.Activity#onPreferenceChange()
      */
     public boolean onPreferenceChange(Preference preference, Object newValue) {
+        // By default we store the value in the preferences
+        boolean returnValue = true;
+        
         String key = preference.getKey();
         
         if (Preferences.USERIDPREF.equals(key)) {
@@ -379,14 +383,25 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         	syncPrefsChanged = true;
         } else if (Preferences.USERPASSWORDPREF.equals(key)) {            
             try {
-            	userPassword = Crypto.encryptPassword((String) newValue);
-	            preference.setSummary(Utils.getStarsSequence(STARS_LENGTH));
-	            
-	            //If preferences have changed, logout
-	            Constants.setLogged(false);
-	            Log.i(TAG, "Forced logout due to " + key + " change in preferences");
-	            userPasswordPrefChanged = true;
-	            syncPrefsChanged = true;
+                String password = (String) newValue;
+
+                // Try to guest if user is using PRADO password
+                if (password.length() > 8) {
+                    userPassword = Crypto.encryptPassword(password);
+                    preference.setSummary(Utils.getStarsSequence(STARS_LENGTH));
+
+                    // If preferences have changed, logout
+                    Constants.setLogged(false);
+                    Log.i(TAG, "Forced logout due to " + key + " change in preferences");
+                    userPasswordPrefChanged = true;
+                    syncPrefsChanged = true;
+                } else {
+                    Toast.makeText(getApplicationContext(), R.string.pradoLoginToast,
+                            Toast.LENGTH_LONG).show();
+                    // Do not save the password to the preferences.
+                    returnValue = false; 
+                }
+                
 			} catch (NoSuchAlgorithmException ex) {
 				error(TAG, ex.getMessage(), ex, true);
 			}
@@ -445,7 +460,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
             notifLightsEnablePref.setChecked(notifLightsEnabled);
         }
         
-        return true;
+        return returnValue;
     }
     
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen,
