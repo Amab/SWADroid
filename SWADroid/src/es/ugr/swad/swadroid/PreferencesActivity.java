@@ -386,7 +386,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
                 String password = (String) newValue;
 
                 // Try to guest if user is using PRADO password
-                if (password.length() > 8) {
+                if ((password.length() >= 8) && !Utils.isLong(password)) {
                     userPassword = Crypto.encryptPassword(password);
                     preference.setSummary(Utils.getStarsSequence(STARS_LENGTH));
 
