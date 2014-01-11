@@ -27,6 +27,8 @@ import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Test;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.utils.Utils;
+import es.ugr.swad.swadroid.webservices.SOAPClient;
+
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
@@ -95,7 +97,7 @@ public class TestsConfigDownload extends Module {
         timestamp++;
 
         //Creates webservice request, adds required params and sends request to webservice
-        createRequest();
+        createRequest(SOAPClient.CLIENT_TYPE);
         addParam("wsKey", Constants.getLoggedUser().getWsKey());
         addParam("courseCode", (int) Constants.getSelectedCourseCode());
         sendRequest(Test.class, false);
