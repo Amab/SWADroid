@@ -11,7 +11,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Vector;
 
-import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.os.Bundle;
@@ -23,6 +22,7 @@ import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.Module;
+import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 
 public class Information extends Module {
@@ -158,7 +158,7 @@ public class Information extends Module {
 			IOException, XmlPullParserException {
 		// TODO Auto-generated method stub
 		
-		createRequest();
+		createRequest(SOAPClient.CLIENT_TYPE);
 		addParam("wsKey", Constants.getLoggedUser().getWsKey());
 		addParam("courseCode", Constants.getSelectedCourseCode());
 		addParam("infoType", requestCodeToAdd);
