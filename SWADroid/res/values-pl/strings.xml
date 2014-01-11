@@ -107,10 +107,7 @@
     <string name="initialDialogTitle">WAŻNE</string>
     <string name="upgradeMsg">Ze względu na zmiany w bazie danych, wszystkie dane zostały usunięte.\n\nDisculpe
         niedogodności."</string>
-    <string name="errorBadLoginMsg">Nazwa użytkownika lub hasło nieprawidłowe.\n\n
-         * Upewnij się, że wpisana nazwa użytkownika i hasło do bezpośredniego dostępu do SWAD, nie te z PRADO.\n\n
-         * Jeśli użytkownik jest nick, sprawdź, czy użytkownik jest poprzedzony @.\n\n
-         * Jeśli użytkownik jest ID, upewnij się, że usunięto ostatni list.</string>
+    <string name="errorBadLoginMsg">Nazwa użytkownika lub hasło nieprawidłowe</string>
     <string name="errorServerResponseMsg">Błąd w odpowiedzi serwera</string>
     <string name="errorBadAppKeyMsg">Key błędne. Proszę skontaktować się z deweloperem.</string>
     <string name="errorConnectionMsg">Błąd podczas łączenia się z serwerem</string>

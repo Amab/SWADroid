@@ -110,10 +110,7 @@
     <string name="upgradeMsg">Aufgrund von �nderungen in der Datenbank alle Testfragen Daten wurden
         gel�scht.\n\nBitte.
     </string>
-    <string name="errorBadLoginMsg">Benutzername oder Passwort sind nicht korrekt.\n\n
-         * Achten Sie darauf, von Ihnen eingegebene Benutzername und Passwort für den direkten Zugang zu SWAD, nicht die von PRADO.\n\n
-         * Wenn der Benutzer ist ein Spitzname, ob der Benutzer nach dem @.\n\n
-         * Wenn der Benutzer ist die ID, sicherzustellen, dass Sie den letzten Buchstaben entfernt.</string>
+    <string name="errorBadLoginMsg">Benutzername oder Passwort sind nicht korrekt</string>
     <string name="errorServerResponseMsg">Fehler in der Server-Antwort</string>
     <string name="errorConnectionMsg">Fehler bei der Verbindung zum Server</string>
     <string name="errorTimeoutMsg">Zeitlimit versucht, die Verbindung zum Server</string>
