@@ -116,10 +116,7 @@
     <string name="upgradeMsg">En raison de modifications dans la base de données toutes les données ont été
         supprimées.\n\nDisculpe la gêne occasionnée."
     </string>
-    <string name="errorBadLoginMsg">Nom d\'utilisateur ou mot de passe incorrect.\n\n
-         * Assurez-vous que vous avez entré le nom d\'utilisateur et mot de passe pour un accès direct à SWAD, pas celles de PRADO.\n\n
-         * Si l\'utilisateur est un surnom, vérifier que l\'utilisateur est précédée par le signe @.\n\n
-         * Si l\'utilisateur est l\'ID, assurez-vous que vous avez supprimé la dernière lettre.</string>
+    <string name="errorBadLoginMsg">Nom d\'utilisateur ou mot de passe incorrect</string>
     <string name="errorServerResponseMsg">Erreur dans la réponse du serveur</string>
     <string name="errorBadAppKeyMsg">Une mauvaise touche. S\'il vous plaît contacter le développeur.</string>
     <string name="errorConnectionMsg">Erreur lors de la connexion au serveur</string>

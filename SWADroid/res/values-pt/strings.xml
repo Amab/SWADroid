@@ -109,10 +109,7 @@
     <string name="initialDialogTitle">Importante</string>
     <string name="upgradeMsg">Devido a mudanças no banco de dados todos os dados foram apagados.\n\nDisculpe
         inconveniente.</string>
-    <string name="errorBadLoginMsg">Nome de usuário ou senha incorreta.\n\n
-         * Certifique-se de que você inseriu o nome de usuário e senha para acesso direto a SWAD, não aqueles de PRADO.\n\n
-         * Se o usuário for um apelido, verificar se o usuário é precedido pelo @.\n\n
-         * Se o usuário é o ID, certifique-se de ter removido a letra final.</string>
+    <string name="errorBadLoginMsg">Nome de usuário ou senha incorreta</string>
     <string name="errorServerResponseMsg">Erro na resposta do servidor</string>
     <string name="errorBadAppKeyMsg">Má aplicação da chave. Por favor, entre em contato com o desenvolvedor.</string>
     <string name="errorConnectionMsg">Erro ao se conectar ao servidor</string>

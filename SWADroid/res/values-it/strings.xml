@@ -113,10 +113,7 @@
     <string name="initialDialogTitle">IMPORTANTE</string>
     <string name="upgradeMsg">A causa dei cambiamenti nel database tutti i dati sono stati cancellati.\n\nDisculpe
         l\'inconveniente.</string>
-    <string name="errorBadLoginMsg">Nome utente o password non corretta.\n\n
-         * Assicurarsi di aver inserito il nome utente e la password per l\'accesso diretto a SWAD, non quelli del PRADO.\n\n
-         * Se l\'utente è un soprannome, verificare che l\'utente è preceduto dalla @.\n\n
-         * Se l\'utente è l\'ID, assicurarsi di aver tolto la lettera finale.</string>
+    <string name="errorBadLoginMsg">Nome utente o password non corretta</string>
     <string name="errorServerResponseMsg">Errore nella risposta del server</string>
     <string name="errorBadAppKeyMsg">Erronea applicazione chiave. Si prega di contattare lo sviluppatore.</string>
     <string name="errorConnectionMsg">Errore durante la connessione al server</string>
