@@ -27,6 +27,8 @@ import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.*;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.utils.Utils;
+import es.ugr.swad.swadroid.webservices.SOAPClient;
+
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -79,7 +81,7 @@ public class TestsQuestionsDownload extends Module {
             IOException, XmlPullParserException {
 
         //Creates webservice request, adds required params and sends request to webservice
-        createRequest();
+    	createRequest(SOAPClient.CLIENT_TYPE);
         addParam("wsKey", Constants.getLoggedUser().getWsKey());
         addParam("courseCode", (int) Constants.getSelectedCourseCode());
         addParam("beginTime", timestamp);
