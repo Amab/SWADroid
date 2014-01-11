@@ -223,6 +223,16 @@ public class Utils {
 	    return false;
 	}
 
+	public static boolean isLong(String str) {
+	    try {
+	    	Long.parseLong(str);
+	        return true;
+	    } catch (NumberFormatException nfe) {
+	        nfe.printStackTrace();
+	    }
+	    return false;
+	}
+
 	public static boolean isValidDni(String dni) {
 	    String dniPattern = "^[A-Z]?\\d{1,16}[A-Z]?$";    // (0 or 1 letter) + (1 to 16 digits) + (0 or 1 letter)
 	
