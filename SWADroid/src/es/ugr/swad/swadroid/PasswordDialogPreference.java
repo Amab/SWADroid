@@ -26,7 +26,7 @@ public class PasswordDialogPreference extends DialogPreference {
     @Override
     public void onClick(DialogInterface dialog, int which) {
                 
-        if ( which == DialogInterface.BUTTON_POSITIVE) {
+        if ( which == DialogInterface.BUTTON_POSITIVE ) {
             String value = mEditTextPassword.getText().toString();
             callChangeListener(value);
         }
@@ -35,6 +35,7 @@ public class PasswordDialogPreference extends DialogPreference {
     
     @Override
     protected void onBindDialogView(View view) {
+        
         mEditTextPassword = (EditText) view.findViewById(R.id.etpPassword);
         mEditTextPassword.setText("");
         
