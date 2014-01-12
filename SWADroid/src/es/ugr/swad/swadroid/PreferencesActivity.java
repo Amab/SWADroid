@@ -20,6 +20,7 @@
 package es.ugr.swad.swadroid;
 
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -28,12 +29,16 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.preference.DialogPreference;
+import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
+import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.bugsense.trace.BugSenseHandler;
@@ -203,7 +208,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        
         //Restore preferences
         addPreferencesFromResource(R.xml.preferences);
         ctx = getApplicationContext(); 
@@ -252,9 +257,9 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         notifSoundEnablePref.setOnPreferenceChangeListener(this);
         notifVibrateEnablePref.setOnPreferenceChangeListener(this);
         notifLightsEnablePref.setOnPreferenceChangeListener(this);
-
+        
         notifLimitPref.setProgress(Preferences.getNotifLimit());
-
+        
         userIDPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             /**
              * Called when a preference is selected.
