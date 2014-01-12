@@ -18,16 +18,6 @@
             android:password="true"
             android:title="@string/userPasswordTitle_preferences" />
 
-        <!--
-              <EditTextPreference
-            android:name="@string/userPasswordName_preferences"
-            android:defaultValue=""
-            android:hint="@string/userPasswordSummary_preferences"
-            android:key="userPasswordPref"
-            android:password="true"
-            android:title="@string/userPasswordTitle_preferences" />
-        -->
-
         <EditTextPreference
             android:name="@string/serverName_preferences"
             android:defaultValue=""
