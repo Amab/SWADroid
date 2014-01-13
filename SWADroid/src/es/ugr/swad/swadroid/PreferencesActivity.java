@@ -388,8 +388,10 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
                 // Try to guest if user is using PRADO password
                 if ((password.length() >= 8) && !Utils.isLong(password)) {
                     userPassword = Crypto.encryptPassword(password);
+                    // Restore default style if it was changed due to an error in the input
+                    userPasswordPref.setLayoutResource(R.layout.preference_child);
                     preference.setSummary(Utils.getStarsSequence(STARS_LENGTH));
-
+                    
                     // If preferences have changed, logout
                     Constants.setLogged(false);
                     Log.i(TAG, "Forced logout due to " + key + " change in preferences");
@@ -398,6 +400,8 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
                 } else {
                     Toast.makeText(getApplicationContext(), R.string.pradoLoginToast,
                             Toast.LENGTH_LONG).show();
+                    userPasswordPref.setLayoutResource(R.layout.preference_child_summary_error);
+                    userPasswordPref.setSummary(R.string.error_summary);
                     // Do not save the password to the preferences.
                     returnValue = false; 
                 }
