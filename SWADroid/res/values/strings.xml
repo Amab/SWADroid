@@ -118,10 +118,7 @@
     </string>
     <string name="initialDialogTitle">IMPORTANT</string>
     <string name="upgradeMsg">Due to changes in the database all data have been deleted.\n\nSorry.</string>
-    <string name="errorBadLoginMsg">Username or password incorrect.\n\n
-         * Make sure you entered the username and password for direct access to SWAD, NOT those for PRADO.\n\n
-         * If the user is a nickname, verify that the user is preceded by the @.\n\n
-         * If the user is the ID, make sure you have removed the final letter.</string>
+    <string name="errorBadLoginMsg">Username or password incorrect</string>
     <string name="errorServerResponseMsg">Error in server response</string>
     <string name="errorBadAppKeyMsg">Unknown application key. Please contact the developer</string>
     <string name="errorConnectionMsg">Error while connecting to server</string>
@@ -351,5 +348,5 @@
     <string name="practicesprogramModuleLabel">Practices Program</string>
     <string name="theoryprogramModuleLabel">Theory Program</string>
     <string name="teachingguideModuleLabel">Teaching Guide</string>
-
+    <string name="pradoLoginToast">Remember you must enter SWAD\'s password, not e-Administration</string>
 </resources>

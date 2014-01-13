@@ -30,6 +30,7 @@ import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.Model;
+import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
@@ -111,7 +112,7 @@ public class Courses extends Module {
             throws NoSuchAlgorithmException, IOException, XmlPullParserException {
 
         //Creates webservice request, adds required params and sends request to webservice
-        createRequest();
+        createRequest(SOAPClient.CLIENT_TYPE);
         addParam("wsKey", Constants.getLoggedUser().getWsKey());
         sendRequest(Course.class, false);
 

@@ -24,6 +24,7 @@ import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.utils.Utils;
+import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 import org.ksoap2.serialization.SoapPrimitive;
 import org.xmlpull.v1.XmlPullParserException;
@@ -71,7 +72,7 @@ public class NotificationsMarkAllAsRead extends Module {
         }
         
         //Creates webservice request, adds required params and sends request to webservice
-        createRequest();
+        createRequest(SOAPClient.CLIENT_TYPE);
         addParam("wsKey", Constants.getLoggedUser().getWsKey());
         addParam("notifications", seenNotifCodes);
         sendRequest(Integer.class, false);
@@ -83,7 +84,7 @@ public class NotificationsMarkAllAsRead extends Module {
             numMarkedNotifications = Integer.parseInt(soap.toString());
         }
         
-        Log.i(TAG, "Marked " + numMarkedNotifications + " notifications as read");
+        Log.i(TAG, "Marked " + numMarkedNotifications + " notifications as readed");
     	dbHelper.updateAllNotifications("seenRemote", Utils.parseBoolString(true));
         
         if(numMarkedNotifications != numMarkedNotificationsList) {	            

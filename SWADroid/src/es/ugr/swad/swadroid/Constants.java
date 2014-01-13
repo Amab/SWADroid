@@ -32,10 +32,10 @@ import es.ugr.swad.swadroid.model.User;
  * @author Jose Antonio Guerrero Aviles <cany20@gmail.com>
  */
 public class Constants {
-    /**
+	/**
      * SWAD application key
      */
-    public static final String SWAD_APP_KEY = "HTC-Desire"; //DELETE THE KEY BEFORE COMMIT!!!
+    public static final String SWAD_APP_KEY = ""; //DELETE THE KEY BEFORE COMMIT!!!
     /**
      * BugSense application key
      */
