@@ -65,7 +65,7 @@ public class Information extends Module {
         switch (requestCode) {
         
         
-        case 1 : requestCode = Constants.INTRODUCTION_REQUEST_CODE;
+        case Constants.INTRODUCTION_REQUEST_CODE:
         
          	infoTypeToAdd = "introduction";
         
@@ -77,7 +77,7 @@ public class Information extends Module {
         
         break;
 
-        case 2 : requestCode = Constants.FAQS_REQUEST_CODE;
+        case Constants.FAQS_REQUEST_CODE:
         
         	infoTypeToAdd = "";/*falta en la funcion que obtiene la informacion de las asignaturas*/
             
@@ -89,7 +89,7 @@ public class Information extends Module {
         
         break;
         
-        case 3 : requestCode = Constants.BIBLIOGRAPHY_REQUEST_CODE;
+        case Constants.BIBLIOGRAPHY_REQUEST_CODE:
         
         	infoTypeToAdd = "bibliography";
         
@@ -101,7 +101,7 @@ public class Information extends Module {
         
         break;
         
-        case 4 : requestCode = Constants.PRACTICESPROGRAM_REQUEST_CODE;
+        case Constants.PRACTICESPROGRAM_REQUEST_CODE:
         
     		infoTypeToAdd = "practicals";
         
@@ -113,7 +113,7 @@ public class Information extends Module {
         
         break;
         
-        case 5 : requestCode = Constants.THEORYPROGRAM_REQUEST_CODE;
+        case Constants.THEORYPROGRAM_REQUEST_CODE:
         
     		infoTypeToAdd = "";/*falta en la funcion que obtiene la informacion de las asignaturas*/
         
@@ -125,7 +125,7 @@ public class Information extends Module {
             
         break;
         
-        case 6 : requestCode = Constants.LINKS_REQUEST_CODE;
+        case  Constants.LINKS_REQUEST_CODE:
         
     		infoTypeToAdd = "links";
         
@@ -137,7 +137,7 @@ public class Information extends Module {
         
         break;
         
-        case 7 : requestCode = Constants.TEACHINGGUIDE_REQUEST_CODE;
+        case Constants.TEACHINGGUIDE_REQUEST_CODE:
         
     		infoTypeToAdd = "guide";
         
