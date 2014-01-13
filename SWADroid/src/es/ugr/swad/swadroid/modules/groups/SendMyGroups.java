@@ -26,6 +26,8 @@ import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.modules.Module;
+import es.ugr.swad.swadroid.webservices.SOAPClient;
+
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 import org.xmlpull.v1.XmlPullParserException;
@@ -106,7 +108,7 @@ public class SendMyGroups extends Module {
     @Override
     protected void requestService() throws NoSuchAlgorithmException,
             IOException, XmlPullParserException {
-        createRequest();
+    	createRequest(SOAPClient.CLIENT_TYPE);
         addParam("wsKey", Constants.getLoggedUser().getWsKey());
         addParam("courseCode", (int) courseCode);
         addParam("myGroups", myGroups);

@@ -82,6 +82,10 @@ public class SWADMain extends MenuExpandableListActivity {
 	 * Application preferences
 	 */
 	Preferences prefs;
+	/**
+	 * SSL connection
+	 */
+	SecureConnection conn;
     /**
      * Array of strings for main ListView
      */
@@ -292,7 +296,9 @@ public class SWADMain extends MenuExpandableListActivity {
         	prefs = new Preferences(this);
         	
             //Initialize HTTPS connections
-            SecureConnection.initSecureConnection();
+            //SecureConnection.initUntrustedSecureConnection();
+        	conn = new SecureConnection();
+        	conn.initSecureConnection(this);
 
             //Check if this is the first run after an install or upgrade
             lastVersion = Preferences.getLastVersion();
@@ -332,6 +338,13 @@ public class SWADMain extends MenuExpandableListActivity {
                 	Preferences.upgradeCredentials();
                 	
                 	Preferences.setSyncTime(String.valueOf(Constants.DEFAULT_SYNC_TIME));
+                } else if(lastVersion < 57) {
+                	//Reconfigure automatic synchronization
+                	SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, this);                	
+                	if(!Preferences.getSyncTime().equals("0") && Preferences.isSyncEnabled()) {
+                		SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY,
+                				Long.valueOf(Preferences.getSyncTime()), this);
+                	}
                 }
 
                 Preferences.setLastVersion(currentVersion);
@@ -603,7 +616,7 @@ public class SWADMain extends MenuExpandableListActivity {
             map.put(NAME, getString(R.string.documentsDownloadModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.folder));
             courseData.add(map);
-            //shared area category
+            //Shared area category
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.sharedsDownloadModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.folder_users));
@@ -623,7 +636,7 @@ public class SWADMain extends MenuExpandableListActivity {
             map.put(NAME, getString(R.string.practicesprogramModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
             courseData.add(map);
-            //Theaching Guide category
+            //Teaching Guide category
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.teachingguideModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.notif));

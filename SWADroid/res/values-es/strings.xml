@@ -125,10 +125,7 @@
         datos han sido borrados.\n\nDisculpe las
         molestias.
     </string>
-    <string name="errorBadLoginMsg">Usuario o contraseña incorrectos.\n\n
-        * Compruebe que ha introducido el usuario y contraseña de acceso directo a SWAD, NO los de PRADO.\n\n
-        * Si el usuario es un apodo, compruebe que el usuario va precedido de la arroba @.\n\n
-        * Si el usuario es el DNI, compruebe que ha eliminado la letra del final.</string>
+    <string name="errorBadLoginMsg">Usuario o contraseña incorrectos</string>
     <string name="errorServerResponseMsg">Error en respuesta del servidor</string>
     <string name="errorBadAppKeyMsg">Clave de aplicación incorrecta. Por favor, contacte con el desarrollador.</string>
     <string name="errorConnectionMsg">Error durante la conexión con el servidor</string>
@@ -347,4 +344,5 @@
     <string name="practicesprogramModuleLabel">Programa de Prácticas</string>
     <string name="theoryprogramModuleLabel">Programa de Teoría</string>
     <string name="teachingguideModuleLabel">Guía Docente</string>
+    <string name="pradoLoginToast">Recuerda que debes introducir la contraseña de SWAD, no la de Acceso identificado</string>
 </resources>

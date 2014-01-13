@@ -13,4 +13,11 @@ SWADroid/gen/es/ugr/swad/swadroid/BuildConfig.java
 SWADroid/gen/es/ugr/swad/swadroid/R.java
 SWADroid/gen/com/google/zxing/client/android/R.java
 gen/com/google/zxing/client/android/R.java
-
+Android-PullToRefresh/bin/
+Android-PullToRefresh/default.properties
+Android-PullToRefresh/.classpath
+Android-PullToRefresh/.project
+Android-PullToRefresh/.settings/
+Android-PullToRefresh/.DS_Store
+Android-PullToRefresh/gen/com/handmark/pulltorefresh/library/BuildConfig.java
+Android-PullToRefresh/gen/com/handmark/pulltorefresh/library/R.java
