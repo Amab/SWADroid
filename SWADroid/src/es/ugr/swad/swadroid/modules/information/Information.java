@@ -11,6 +11,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.os.Bundle;
@@ -28,14 +29,14 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
 public class Information extends Module {
 	
 	/**
-     * Information Type
+     * Information Type. String with the type of information (none, HTML, plain text...)
      */
-    private String infoType;
+    private String infoSrc;
     
     /**
-     * Information Content
+     * Information Content. String with the content of information.
      */
-    private String infoContent;
+    private String infoTxt;
     
     /**
      * Request code to get course's information
@@ -64,7 +65,7 @@ public class Information extends Module {
         switch (requestCode) {
         
         
-        case Constants.INTRODUCTION_REQUEST_CODE : requestCode = 28;
+        case 1 : requestCode = Constants.INTRODUCTION_REQUEST_CODE;
         
          	infoTypeToAdd = "introduction";
         
@@ -76,7 +77,7 @@ public class Information extends Module {
         
         break;
 
-        case Constants.FAQS_REQUEST_CODE : requestCode = 29;
+        case 2 : requestCode = Constants.FAQS_REQUEST_CODE;
         
         	infoTypeToAdd = "";/*falta en la funcion que obtiene la informacion de las asignaturas*/
             
@@ -88,7 +89,7 @@ public class Information extends Module {
         
         break;
         
-        case Constants.BIBLIOGRAPHY_REQUEST_CODE : requestCode = 30;
+        case 3 : requestCode = Constants.BIBLIOGRAPHY_REQUEST_CODE;
         
         	infoTypeToAdd = "bibliography";
         
@@ -100,7 +101,7 @@ public class Information extends Module {
         
         break;
         
-        case Constants.PRACTICESPROGRAM_REQUEST_CODE : requestCode = 31;
+        case 4 : requestCode = Constants.PRACTICESPROGRAM_REQUEST_CODE;
         
     		infoTypeToAdd = "practicals";
         
@@ -112,7 +113,7 @@ public class Information extends Module {
         
         break;
         
-        case Constants.THEORYPROGRAM_REQUEST_CODE : requestCode = 32;
+        case 5 : requestCode = Constants.THEORYPROGRAM_REQUEST_CODE;
         
     		infoTypeToAdd = "";/*falta en la funcion que obtiene la informacion de las asignaturas*/
         
@@ -124,7 +125,7 @@ public class Information extends Module {
             
         break;
         
-        case Constants.LINKS_REQUEST_CODE : requestCode = 33;
+        case 6 : requestCode = Constants.LINKS_REQUEST_CODE;
         
     		infoTypeToAdd = "links";
         
@@ -136,7 +137,7 @@ public class Information extends Module {
         
         break;
         
-        case Constants.TEACHINGGUIDE_REQUEST_CODE : requestCode = 34;
+        case 7 : requestCode = Constants.TEACHINGGUIDE_REQUEST_CODE;
         
     		infoTypeToAdd = "guide";
         
@@ -166,9 +167,12 @@ public class Information extends Module {
 		
 		 if (result != null) {
 			 
-			 ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);		 
-			 infoType = res.get(1).toString();
-			 infoContent = res.get(2).toString();
+			 //ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);	
+			 SoapObject soap = (SoapObject) result;
+			 //infoType = res.get(1).toString();
+			 //infoContent = res.get(2).toString();
+			 infoSrc = soap.getProperty(infoSrc).toString();
+			 infoTxt = soap.getPrimitiveProperty(infoTxt).toString();
 			 
 		 }
 		
