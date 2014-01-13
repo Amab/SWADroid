@@ -347,4 +347,5 @@
     
     
     <string name="pradoLoginToast">Recuerda que debes introducir la contraseña de SWAD, no la de Acceso identificado</string>
+	<string name="error_summary">Error: Recuerda que debes introducir la contraseña de SWAD, no la de Acceso identificado</string>
 </resources>
