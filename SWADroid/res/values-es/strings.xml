@@ -339,10 +339,12 @@
    	<string name="informationModuleLabel">Información</string> 
     <string name="introductionModuleLabel">Introducción</string>  
     <string name="faqsModuleLabel">FAQs</string>
-    <string name="linksModuleLabel">Links</string>
+    <string name="linksModuleLabel">Enlaces</string>
     <string name="bibliographyModuleLabel">Bibliografía</string>
     <string name="practicesprogramModuleLabel">Programa de Prácticas</string>
     <string name="theoryprogramModuleLabel">Programa de Teoría</string>
     <string name="teachingguideModuleLabel">Guía Docente</string>
+    
+    
     <string name="pradoLoginToast">Recuerda que debes introducir la contraseña de SWAD, no la de Acceso identificado</string>
 </resources>
