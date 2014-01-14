@@ -346,6 +346,7 @@
     <string name="teachingguideModuleLabel">Guía Docente</string>
     
     
-    <string name="pradoLoginToast">Recuerda que debes introducir la contraseña de SWAD, no la de Acceso identificado</string>
+    <string name="pradoLoginToast">La contraseña de SWAD tiene al menos 8 caracteres.</string>
 	<string name="error_summary">Error: Recuerda que debes introducir la contraseña de SWAD, no la de Acceso identificado</string>
+	<string name="passwordDialogTip">Recuerda que la contraseña de SWAD tiene que tener al menos 8 caracteres.</string>
 </resources>
