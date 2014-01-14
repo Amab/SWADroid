@@ -155,6 +155,11 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     private boolean syncPrefsChanged = false;
 
     /**
+     * SWAD server to use
+     */
+    private String mServer;
+    
+    /**
      * User password preference changed flag
      */
     private boolean userPasswordPrefChanged = false;
@@ -418,8 +423,9 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
 				error(TAG, ex.getMessage(), ex, true);
 			}
         } else if (Preferences.SERVERPREF.equals(key)) {
-            Preferences.setServer((String) newValue);
-            
+            mServer = newValue.toString();
+            Preferences.setServer(mServer);
+            serverPref.setSummary(mServer);
             //If preferences have changed, logout
         	logoutClean(key);
         	syncPrefsChanged = true;
@@ -534,7 +540,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         int prefSyncTimeIndex = prefSyncTimeValues.indexOf(Preferences.getSyncTime());
         String prefSyncTimeEntry = prefSyncTimeEntries.get(prefSyncTimeIndex);
         String stars = Utils.getStarsSequence(STARS_LENGTH);
-        String server = Preferences.getServer();
+        mServer = Preferences.getServer();
         
         userIDPref.setSummary(Preferences.getUserID());
         
@@ -544,8 +550,8 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         if (mIncorrectPassword)
         	highlightPasswordSummary();
         
-        if (!server.equals("")) {
-            serverPref.setSummary(server);
+        if (!mServer.equals("")) {
+            serverPref.setSummary(mServer);
         } else {
             serverPref.setSummary(Constants.DEFAULT_SERVER);
         }
@@ -582,6 +588,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     
     private void highlightPasswordSummary(){
     	userPasswordPref.setLayoutResource(R.layout.preference_child_summary_error);
-        userPasswordPref.setSummary(R.string.error_summary);
+        userPasswordPref.setSummary(mServer.equals("swad.ugr.es") ? R.string.error_summaryUGR : R.string.error_summary);
     }
 }
