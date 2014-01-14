@@ -364,6 +364,8 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
             }
         });
 
+        mServer = Preferences.getServer();
+        
         try {
             currentVersionPref.setSummary(getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
         } catch (NameNotFoundException e) {
