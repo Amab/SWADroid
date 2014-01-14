@@ -348,6 +348,7 @@
     <string name="practicesprogramModuleLabel">Practices Program</string>
     <string name="theoryprogramModuleLabel">Theory Program</string>
     <string name="teachingguideModuleLabel">Teaching Guide</string>
-    <string name="pradoLoginToast">Remember you must enter SWAD\'s password, not e-Administration</string>
+    <string name="pradoLoginToast">SWAD\'s password is at least 8 characters long.</string>
     <string name="error_summary">Error: Remember you must enter SWAD\'s password, not e-Administration</string>
+    <string name="passwordDialogTip">SWAD\'s password is at least 8 characters long.</string>
 </resources>
