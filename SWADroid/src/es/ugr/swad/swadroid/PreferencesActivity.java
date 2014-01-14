@@ -160,6 +160,13 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     private boolean userPasswordPrefChanged = false;
 
     /**
+     * User password has errors
+     */
+    private boolean mIncorrectPassword = false;
+    
+    private static final String PASSWORD_VALIDATE = "passw_validate";
+    
+    /**
      * Shows an error message.
      *
      * @param message Error message to show.
@@ -397,11 +404,12 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
                     Log.i(TAG, "Forced logout due to " + key + " change in preferences");
                     userPasswordPrefChanged = true;
                     syncPrefsChanged = true;
+                    mIncorrectPassword = false;
                 } else {
                     Toast.makeText(getApplicationContext(), R.string.pradoLoginToast,
                             Toast.LENGTH_LONG).show();
-                    userPasswordPref.setLayoutResource(R.layout.preference_child_summary_error);
-                    userPasswordPref.setSummary(R.string.error_summary);
+                    highlightPasswordSummary();
+                    mIncorrectPassword = true;
                     // Do not save the password to the preferences.
                     returnValue = false; 
                 }
@@ -500,7 +508,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
 		if(userPasswordPrefChanged) {
 	    	Preferences.setUserPassword(userPassword);
 		}
-
+	
         //Reconfigure automatic synchronization
         if(syncPrefsChanged) {
 	        SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, ctx);
@@ -530,9 +538,12 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         
         userIDPref.setSummary(Preferences.getUserID());
         
-        if (!Preferences.getUserPassword().equals(""))
+        if (!Preferences.getUserPassword().equals("") && !mIncorrectPassword)
             userPasswordPref.setSummary(stars);
-
+        
+        if (mIncorrectPassword)
+        	highlightPasswordSummary();
+        
         if (!server.equals("")) {
             serverPref.setSummary(server);
         } else {
@@ -549,5 +560,28 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         }
         
         syncTimePref.setSummary(prefSyncTimeEntry);
+    }
+    
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+    	super.onSaveInstanceState(outState);
+    	
+    	if (mIncorrectPassword)
+    		outState.putBoolean(PASSWORD_VALIDATE, mIncorrectPassword);
+    }
+    
+    @Override
+    protected void onRestoreInstanceState(Bundle state) {
+    	super.onRestoreInstanceState(state);
+    	
+    	if (state.getBoolean(PASSWORD_VALIDATE)){
+    		highlightPasswordSummary();
+    		mIncorrectPassword = true;
+    	}
+    }
+    
+    private void highlightPasswordSummary(){
+    	userPasswordPref.setLayoutResource(R.layout.preference_child_summary_error);
+        userPasswordPref.setSummary(R.string.error_summary);
     }
 }
