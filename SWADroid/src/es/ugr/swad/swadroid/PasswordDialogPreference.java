@@ -37,7 +37,6 @@ public class PasswordDialogPreference extends DialogPreference {
     protected void onBindDialogView(View view) {
         
         mEditTextPassword = (EditText) view.findViewById(R.id.etpPassword);
-        mEditTextPassword.setText("");
         
         super.onBindDialogView(view);
     }
