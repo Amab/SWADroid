@@ -304,4 +304,9 @@
     <string name="practicesprogramModuleLabel">Prácticas do programa</string>
     <string name="theoryprogramModuleLabel">Teoria do programa</string>
     <string name="teachingguideModuleLabel">Guia de ensino</string>
+    
+    <string name="pradoLoginToast">SWAD A senha é pelo menos 8 caracteres alfanuméricos.</string>
+	<string name="error_summaryUGR">Lembre-se de digitar o seu SWAD senha não identificou o acesso.</string>
+	<string name="error_summary">Erro: Sua senha deve ter pelo menos 8 caracteres alfanuméricos.</string>
+	<string name="passwordDialogTip">SWAD senha deve ser pelo menos 8 caracteres alfanuméricos.</string>
 </resources>
