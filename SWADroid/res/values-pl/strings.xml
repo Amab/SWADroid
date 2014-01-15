@@ -303,4 +303,9 @@
     <string name="theoryprogramModuleLabel">Teoria programu</string>
     <string name="teachingguideModuleLabel">Podręcznik nauczania</string>
     
+    <string name="pradoLoginToast">Swad hasło jest co najmniej 8 znaków alfanumerycznych.</string>
+	<string name="error_summaryUGR">Błąd: Pamiętaj, aby wpisać hasło SWAD nie zidentyfikował dostęp</string>
+	<string name="error_summary">Błąd: Hasło musi mieć co najmniej 8 znaków alfanumerycznych</string>
+	<string name="passwordDialogTip">Swad musi być co najmniej 8 znaków alfanumerycznych.</string>
+    
 </resources>

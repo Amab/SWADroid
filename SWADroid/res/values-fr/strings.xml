@@ -314,4 +314,9 @@
     <string name="practicesprogramModuleLabel">Programme des pratiques</string>
     <string name="theoryprogramModuleLabel">Théorie du programme</string>
     <string name="teachingguideModuleLabel">Guide des cours</string>
+    
+    <string name="pradoLoginToast">SWAD Le mot de passe est au moins 8 caractères alphanumériques.</string>
+	<string name="error_summaryUGR">N\'oubliez pas de saisir votre mot de passe SWAD pas identifié l\'accès</string>
+	<string name="error_summary">Erreur: Votre mot de passe doit comporter au moins 8 caractères alphanumériques</string>
+	<string name="passwordDialogTip">SWAD doit être d\'au moins 8 caractères alphanumériques. </string>
 </resources>
