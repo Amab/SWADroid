@@ -147,12 +147,12 @@ public class Preferences {
     public Preferences(Context ctx) { 
     	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
     		// If Android API >= 11 (HONEYCOMB) enable access to SharedPreferences from all application processes 
-    		prefs = ctx.getSharedPreferences(PREFS_NAME, ctx.MODE_MULTI_PROCESS);
+    		prefs = ctx.getSharedPreferences(PREFS_NAME, Context.MODE_MULTI_PROCESS);
 		} else {
 			/* If Android API < 11 (HONEYCOMB) access is enabled by default
 			 * MODE_MULTI_PROCESS is not defined
 			 */
-			prefs = ctx.getSharedPreferences(PREFS_NAME, ctx.MODE_PRIVATE);
+			prefs = ctx.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
 		}
 
 		editor = prefs.edit();
