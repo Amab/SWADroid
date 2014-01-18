@@ -312,9 +312,9 @@
     <string name="theoryprogramModuleLabel">Teoria del programma</string>
     <string name="teachingguideModuleLabel">Guida didattica</string>
     
-    <string name="pradoLoginToast">La password è di almeno 8 caratteri alfanumerici.</string>
-	<string name="error_summaryUGR">Errore: Ricordate di inserire il vostro SWAD password non identificato Access.</string>
-	<string name="error_summary">Errore: La password deve essere di almeno 8 caratteri alfanumerici.</string>
-	<string name="passwordDialogTip">SWAD password deve essere di almeno 8 caratteri alfanumerici.</string>
+    <string name="pradoLoginToast">La password è di almeno 8 caratteri alfanumerici</string>
+	<string name="error_summaryUGR">Errore: Ricordate di inserire il vostro SWAD password non identificato Access</string>
+	<string name="error_summary">Errore: La password deve essere di almeno 8 caratteri alfanumerici</string>
+	<string name="passwordDialogTip">SWAD password deve essere di almeno 8 caratteri alfanumerici</string>
     
 </resources>

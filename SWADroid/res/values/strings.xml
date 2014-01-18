@@ -349,8 +349,8 @@
     <string name="theoryprogramModuleLabel">Theory Program</string>
     <string name="teachingguideModuleLabel">Teaching Guide</string>
     
-    <string name="pradoLoginToast">SWAD\'s password is at least 8 alphanumeric characters long.</string>
+    <string name="pradoLoginToast">SWAD\'s password is at least 8 alphanumeric characters long</string>
     <string name="error_summaryUGR">Error: Remember you must enter SWAD\'s password, not e-Administration</string>
-    <string name="error_summary">Error: Password must be at least 8 alphanumeric characters.</string>
-    <string name="passwordDialogTip">SWAD\'s password is at least 8 alphanumeric characters long.</string>
+    <string name="error_summary">Error: Password must be at least 8 alphanumeric characters</string>
+    <string name="passwordDialogTip">SWAD\'s password is at least 8 alphanumeric characters long</string>
 </resources>
