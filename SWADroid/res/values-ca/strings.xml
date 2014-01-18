@@ -315,8 +315,8 @@
     <string name="theoryprogramModuleLabel">Programa de Teoria</string>
     <string name="teachingguideModuleLabel">Guia Docent</string>
     
-    <string name="pradoLoginToast">La contrasenya d\'SWAD té almenys 8 caràcters alfanumèrics.</string>
-	<string name="error_summaryUGR">Error: Recorda que has d\'introduir la contrasenya de SWAD, no la d\'Accés identificat.</string>
-	<string name="error_summary"> Error: La contrasenya ha de ser de mínim 8 caràcters alfanumèrics..</string>
-	<string name="passwordDialogTip">Recorda que la contrasenya d\'SWAD ha de tenir almenys 8 caràcters alfanumèrics.</string>
+    <string name="pradoLoginToast">La contrasenya d\'SWAD té almenys 8 caràcters alfanumèrics</string>
+	<string name="error_summaryUGR">Error: Recorda que has d\'introduir la contrasenya de SWAD, no la d\'Accés identificat</string>
+	<string name="error_summary"> Error: La contrasenya ha de ser de mínim 8 caràcters alfanumèrics</string>
+	<string name="passwordDialogTip">Recorda que la contrasenya d\'SWAD ha de tenir almenys 8 caràcters alfanumèrics</string>
 </resources>
