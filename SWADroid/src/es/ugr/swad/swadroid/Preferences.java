@@ -24,7 +24,7 @@ import es.ugr.swad.swadroid.utils.Crypto;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.preference.PreferenceManager;
+import android.os.Build;
 
 /**
  * Class for store the application preferences
@@ -36,6 +36,10 @@ public class Preferences {
      * Login tag name for Logcat
      */
     public static final String TAG = Constants.APP_TAG + " Preferences";
+    /**
+     * Preferences name
+     */
+    public static final String PREFS_NAME = "es.ugr.swad.swadroid_preferences";
     /**
      * Application preferences
      */
@@ -141,7 +145,16 @@ public class Preferences {
      * Constructor
      */
     public Preferences(Context ctx) { 
-		prefs = PreferenceManager.getDefaultSharedPreferences(ctx);    	
+    	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+    		// If Android API >= 11 (HONEYCOMB) enable access to SharedPreferences from all application processes 
+    		prefs = ctx.getSharedPreferences(PREFS_NAME, ctx.MODE_MULTI_PROCESS);
+		} else {
+			/* If Android API < 11 (HONEYCOMB) access is enabled by default
+			 * MODE_MULTI_PROCESS is not defined
+			 */
+			prefs = ctx.getSharedPreferences(PREFS_NAME, ctx.MODE_PRIVATE);
+		}
+
 		editor = prefs.edit();
 	}
 

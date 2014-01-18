@@ -216,9 +216,11 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        //Restore preferences
+        //Restore preferences        
+        getPreferenceManager().setSharedPreferencesName(Preferences.PREFS_NAME);
         addPreferencesFromResource(R.xml.preferences);
-        ctx = getApplicationContext(); 
+        
+        ctx = getApplicationContext();         
 
         //Initialize database
         try {    		
