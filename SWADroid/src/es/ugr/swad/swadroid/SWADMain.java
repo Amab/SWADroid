@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -296,9 +297,17 @@ public class SWADMain extends MenuExpandableListActivity {
         	prefs = new Preferences(this);
         	
             //Initialize HTTPS connections
-            //SecureConnection.initUntrustedSecureConnection();
-        	conn = new SecureConnection();
-        	conn.initSecureConnection(this);
+        	/*
+        	 * Terena root certificate is not included by default on Gingerbread and older
+        	 * If Android API < 11 (HONEYCOMB) add Terena certificate manually
+        	 */
+        	if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+        		conn = new SecureConnection();
+        		conn.initSecureConnection(this);        		
+        		Log.i(TAG, "Android API < 11 (HONEYCOMB). Adding Terena certificate manually");
+        	} else {
+        		Log.i(TAG, "Android API >= 11 (HONEYCOMB). Using Terena built-in certificate");
+        	}
 
             //Check if this is the first run after an install or upgrade
             lastVersion = Preferences.getLastVersion();
