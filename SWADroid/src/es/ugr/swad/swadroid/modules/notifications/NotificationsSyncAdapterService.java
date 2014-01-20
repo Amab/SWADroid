@@ -24,6 +24,7 @@ import android.app.Service;
 import android.content.*;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -407,10 +408,18 @@ public class NotificationsSyncAdapterService extends Service {
         startIntent.setAction(START_SYNC);
         context.sendBroadcast(startIntent);
 
-        //Initialize HTTPS connections
-        //SecureConnection.initUntrustedSecureConnection();
-    	conn = new SecureConnection();
-    	conn.initSecureConnection(context);
+      //Initialize HTTPS connections
+    	/*
+    	 * Terena root certificate is not included by default on Gingerbread and older
+    	 * If Android API < 11 (HONEYCOMB) add Terena certificate manually
+    	 */
+    	if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+    		conn = new SecureConnection();
+    		conn.initSecureConnection(context);        		
+    		Log.i(TAG, "Android API < 11 (HONEYCOMB). Adding Terena certificate manually");
+    	} else {
+    		Log.i(TAG, "Android API >= 11 (HONEYCOMB). Using Terena built-in certificate");
+    	}
 
         //If last login time > Global.RELOGIN_TIME, force login
         if (Constants.isLogged() &&
