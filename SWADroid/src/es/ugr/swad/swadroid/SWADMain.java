@@ -19,6 +19,9 @@
 
 package es.ugr.swad.swadroid;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -27,27 +30,28 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bugsense.trace.BugSenseHandler;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.gui.ImageExpandableListAdapter;
@@ -68,7 +72,14 @@ import es.ugr.swad.swadroid.modules.tests.Tests;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
 import es.ugr.swad.swadroid.sync.AccountAuthenticator;
 import es.ugr.swad.swadroid.sync.SyncUtils;
+import es.ugr.swad.swadroid.utils.Crypto;
 import es.ugr.swad.swadroid.utils.Utils;
+
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Main class of the application.
@@ -128,42 +139,39 @@ public class SWADMain extends MenuExpandableListActivity {
     private boolean dBCleaned = false;
 
     /**
+     * View for controlling the login progress
+     */
+    private LinearLayout mLoginStatus;
+    
+    /**
+     * View holding the login form
+     */
+    private ScrollView mLoginForm;
+    
+    /**
+     * View to show if the user is logged in
+     */
+    private ExpandableListView mExpandableList;
+    
+    private Spinner mSubjectsSpinner;
+    // Values for DNI and password at the time of the login attempt.
+    private String mDni;
+    private String mPassword;
+
+    // UI references for the login form.
+    private EditText mDniView;
+    private EditText mPasswordView;
+    private View mLoginFormView;
+    private View mLoginStatusView;
+    private TextView mLoginStatusMessageView;
+    
+    /**
      * Gets the database helper
      *
      * @return the database helper
      */
     public static DataBaseHelper getDbHelper() {
         return dbHelper;
-    }
-
-    /**
-     * Shows configuration dialog on first run.
-     */
-    void showConfigurationDialog() {
-    	DialogInterface.OnClickListener positiveListener = new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                viewPreferences();
-            }
-        };
-        
-    	DialogInterface.OnClickListener negativeListener = new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.cancel();
-                createSpinnerAdapter();
-            }
-        };
-        
-    	AlertDialog alertDialog = DialogFactory.createPositiveNegativeDialog(this,
-    			-1,
-    			R.string.initialDialogTitle,
-    			R.string.firstRunMsg,
-    			R.string.yesMsg,
-    			R.string.noMsg,
-    			positiveListener,
-    			negativeListener,
-    			null);
-    	
-    	alertDialog.show();
     }
 
     /**
@@ -270,18 +278,23 @@ public class SWADMain extends MenuExpandableListActivity {
         ImageView image;
         TextView text;
         Intent activity;
-
+        
         //Initialize Bugsense plugin
         try {
         	BugSenseHandler.initAndStartSession(this, Constants.BUGSENSE_API_KEY);
         } catch (Exception e) {
         	Log.e(TAG, "Error initializing BugSense", e);
         }
-
+        
         //Initialize screen
         super.onCreate(icicle);
         setContentView(R.layout.main);
 
+        //Initialize preferences
+        prefs = new Preferences(this);
+        
+        checkUserAndPassword();
+        
         image = (ImageView) this.findViewById(R.id.moduleIcon);
         image.setBackgroundResource(R.drawable.ic_launcher_swadroid);
 
@@ -293,8 +306,6 @@ public class SWADMain extends MenuExpandableListActivity {
         updateButton.setVisibility(View.VISIBLE);
 
         try {
-        	//Initialize preferences
-        	prefs = new Preferences(this);
         	
             //Initialize HTTPS connections
         	/*
@@ -317,9 +328,8 @@ public class SWADMain extends MenuExpandableListActivity {
             //currentVersion = 57;
 
             //If this is the first run, show configuration dialog
+            //startActivity(new Intent(this, LoginActivity.class));
             if (lastVersion == 0) {
-                showConfigurationDialog();
-
                 //Configure automatic synchronization
                 Preferences.setSyncTime(String.valueOf(Constants.DEFAULT_SYNC_TIME));
                 activity = new Intent(this, AccountAuthenticator.class);
@@ -429,6 +439,8 @@ public class SWADMain extends MenuExpandableListActivity {
                     setMenuDbClean();
                     createSpinnerAdapter();
                     createMenu();
+                    showProgress(false);
+                    mLoginForm.setVisibility(View.GONE);
                     break;
             }
         }
@@ -771,5 +783,146 @@ public class SWADMain extends MenuExpandableListActivity {
         pb.setVisibility(View.VISIBLE);
 
         getCurrentCourses();
+    }
+    
+    /**
+     * Check if the user has introduced an user and password, if doesn't, show login form
+     */
+    private void checkUserAndPassword() {
+        if (Preferences.getUserID().equals("") || Preferences.getUserPassword().equals("")) {
+            mExpandableList = (ExpandableListView) getExpandableListView();
+            mExpandableList.setVisibility(View.GONE);
+            mSubjectsSpinner = (Spinner) findViewById(R.id.spinner);
+            mSubjectsSpinner.setVisibility(View.GONE);
+            
+            mLoginForm = (ScrollView) findViewById(R.id.login_form);
+            mLoginForm.setVisibility(View.VISIBLE);
+            
+            setupLoginForm();
+        }
+    }
+    
+    private void setupLoginForm() {
+        mDniView = (EditText) findViewById(R.id.DNI);
+        mDniView.setText(mDni);
+
+        mPasswordView = (EditText) findViewById(R.id.password);
+        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+                if (id == R.id.login || id == EditorInfo.IME_NULL) {
+                    attemptLogin();
+                    return true;
+                }
+                return false;
+            }
+        });
+        
+        mLoginFormView = findViewById(R.id.login_form);
+        mLoginStatusView = findViewById(R.id.login_status);
+        mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
+
+        findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                attemptLogin();
+            }
+        });
+    }
+    
+    /**
+     * Attempts to sign in or register the account specified by the login form.
+     * If there are form errors (invalid DNI, missing fields, etc.), the
+     * errors are presented and no actual login attempt is made.
+     */
+    public void attemptLogin() {
+
+        // Reset errors.
+        mDniView.setError(null);
+        mPasswordView.setError(null);
+
+        // Store values at the time of the login attempt.
+        mDni = mDniView.getText().toString();
+        mPassword = mPasswordView.getText().toString();
+
+        boolean cancel = false;
+        View focusView = null;
+
+        // Check for a valid password.
+        if (TextUtils.isEmpty(mPassword)) {
+            mPasswordView.setError(getString(R.string.error_field_required));
+            focusView = mPasswordView;
+            cancel = true;
+        } else if (mPassword.length() < 8 && !Utils.isLong(mPassword)) {
+            mPasswordView.setError(getString(R.string.error_invalid_password));
+            focusView = mPasswordView;
+            cancel = true;
+        }
+
+        // Check for a valid DNI.
+        if (TextUtils.isEmpty(mDni)) {
+            mDniView.setError(getString(R.string.error_field_required));
+            focusView = mDniView;
+            cancel = true;
+        }
+
+        if (cancel) {
+            // There was an error; don't attempt login and focus the first
+            // form field with an error.
+            focusView.requestFocus();
+        } else {
+            // Show a progress spinner, and kick off a background task to
+            // perform the user login attempt.
+            mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
+            Preferences.setUserID(mDni);
+            try {
+                Preferences.setUserPassword(Crypto.encryptPassword(mPassword));
+            } catch (NoSuchAlgorithmException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            showProgress(true);
+            getCurrentCourses();
+        }
+    }
+    
+    /**
+     * Shows the progress UI and hides the login form.
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            mLoginStatusView.setVisibility(View.VISIBLE);
+            mLoginStatusView.animate()
+                    .setDuration(shortAnimTime)
+                    .alpha(show ? 1 : 0)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            mLoginStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
+                        }
+                    });
+
+            mLoginFormView.setVisibility(View.VISIBLE);
+            mLoginFormView.animate()
+                    .setDuration(shortAnimTime)
+                    .alpha(show ? 0 : 1)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            mLoginFormView.setVisibility(show ? View.VISIBLE : View.GONE);
+                        }
+                    });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            mLoginStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
     }
 }
