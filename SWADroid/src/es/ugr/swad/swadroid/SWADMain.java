@@ -389,23 +389,27 @@ public class SWADMain extends MenuExpandableListActivity {
 
     }
 
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onResume()
-	 */
+    /*
+     * (non-Javadoc)
+     * @see android.app.Activity#onResume()
+     */
     @Override
     protected void onResume() {
         super.onResume();
 
-        if (!Constants.isPreferencesChanged() && !Utils.isDbCleaned()) {
-            createSpinnerAdapter();
-            if (!firstRun) {
-                courseCode = Constants.getSelectedCourseCode();
-                createMenu();
+        if (!Constants.isPreferencesChanged()) {
+            if (!Utils.isDbCleaned()) {
+                createSpinnerAdapter();
+                if (!firstRun) {
+                    courseCode = Constants.getSelectedCourseCode();
+                    createMenu();
+                }
             }
         } else {
             Constants.setPreferencesChanged(false);
             Utils.setDbCleaned(false);
             setMenuDbClean();
+            checkUserAndPassword();
         }
     }
 

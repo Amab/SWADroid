@@ -397,7 +397,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         	//If preferences have changed, logout
         	logoutClean(key);
         	syncPrefsChanged = true;
-        } else if (Preferences.USERPASSWORDPREF.equals(key)) {            
+        } else if (Preferences.USERPASSWORDPREF.equals(key)) {
             try {
                 String password = (String) newValue;
 
