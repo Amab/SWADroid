@@ -162,6 +162,7 @@ public class SWADMain extends MenuExpandableListActivity {
     private View mLoginFormView;
     private View mLoginStatusView;
     private TextView mLoginStatusMessageView;
+    private ImageButton mUpdateButton;
     
     /**
      * Gets the database helper
@@ -291,7 +292,8 @@ public class SWADMain extends MenuExpandableListActivity {
         //Initialize preferences
         prefs = new Preferences(this);
         
-        checkUserAndPassword();
+        if (!Constants.isLogged())
+            loginForm();
         
         image = (ImageView) this.findViewById(R.id.moduleIcon);
         image.setBackgroundResource(R.drawable.ic_launcher_swadroid);
@@ -395,20 +397,19 @@ public class SWADMain extends MenuExpandableListActivity {
     protected void onResume() {
         super.onResume();
 
-        if (!Constants.isPreferencesChanged()) {
-            if (!Utils.isDbCleaned()) {
-                createSpinnerAdapter();
-                if (!firstRun) {
-                    courseCode = Constants.getSelectedCourseCode();
-                    createMenu();
-                }
+        if (!Constants.isPreferencesChanged() && !Utils.isDbCleaned()) {
+            createSpinnerAdapter();
+            if (!firstRun) {
+                courseCode = Constants.getSelectedCourseCode();
+                createMenu();
             }
         } else {
             Constants.setPreferencesChanged(false);
             Utils.setDbCleaned(false);
             setMenuDbClean();
-            checkUserAndPassword();
         }
+        if (!Constants.isLogged())
+            loginForm();
     }
 
     /* (non-Javadoc)
@@ -444,6 +445,8 @@ public class SWADMain extends MenuExpandableListActivity {
                     showProgress(false);
                     mLoginError = false;
                     mLoginForm.setVisibility(View.GONE);
+                    mSubjectsSpinner.setVisibility(View.VISIBLE);
+                    mUpdateButton.setVisibility(View.VISIBLE);
                     break;
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
@@ -782,36 +785,38 @@ public class SWADMain extends MenuExpandableListActivity {
      * @param v Actual view
      */
     public void onRefreshClick(View v) {
-        ImageButton updateButton = (ImageButton) this.findViewById(R.id.refresh);
         ProgressBar pb = (ProgressBar) this.findViewById(R.id.progress_refresh);
 
-        updateButton.setVisibility(View.GONE);
+        mUpdateButton.setVisibility(View.GONE);
         pb.setVisibility(View.VISIBLE);
 
         getCurrentCourses();
     }
     
     /**
-     * Check if the user has introduced an user and password, if doesn't, show login form
+     * Check if the user has introduced an user and password, if doesn't, show
+     * login form
      */
-    private void checkUserAndPassword() {
-        if (Preferences.getUserID().equals("") || Preferences.getUserPassword().equals("")) {
+    private void loginForm() {
             mExpandableList = (ExpandableListView) getExpandableListView();
             mExpandableList.setVisibility(View.GONE);
             mSubjectsSpinner = (Spinner) findViewById(R.id.spinner);
             mSubjectsSpinner.setVisibility(View.GONE);
+            mUpdateButton = (ImageButton) this.findViewById(R.id.refresh);
+            mUpdateButton.setVisibility(View.GONE);
             
             mLoginForm = (ScrollView) findViewById(R.id.login_form);
             mLoginForm.setVisibility(View.VISIBLE);
-            
+
             setupLoginForm();
-        }
     }
     
     private void setupLoginForm() {
         mDniView = (EditText) findViewById(R.id.DNI);
-
+        mDniView.setText("");
+        
         mPasswordView = (EditText) findViewById(R.id.password);
+        mPasswordView.setText("");
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
