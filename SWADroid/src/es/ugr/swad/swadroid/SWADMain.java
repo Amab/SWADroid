@@ -154,6 +154,7 @@ public class SWADMain extends MenuExpandableListActivity {
     
     private Spinner mSubjectsSpinner;
 
+    private boolean mLoginError = false;
     // UI references for the login form.
     private EditText mDniView;
     private EditText mPasswordView;
@@ -441,9 +442,13 @@ public class SWADMain extends MenuExpandableListActivity {
                     createSpinnerAdapter();
                     createMenu();
                     showProgress(false);
+                    mLoginError = false;
                     mLoginForm.setVisibility(View.GONE);
                     break;
             }
+        } else if (resultCode == Activity.RESULT_CANCELED) {
+            mLoginError = true;
+            showProgress(false);
         }
     }
 
@@ -922,7 +927,7 @@ public class SWADMain extends MenuExpandableListActivity {
                     .setListener(new AnimatorListenerAdapter() {
                         @Override
                         public void onAnimationEnd(Animator animation) {
-                            mLoginFormView.setVisibility(show ? View.VISIBLE : View.GONE);
+                            mLoginFormView.setVisibility(mLoginError ? View.VISIBLE : View.GONE);
                         }
                     });
         } else {
