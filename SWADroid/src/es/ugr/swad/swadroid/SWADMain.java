@@ -25,7 +25,6 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
@@ -154,13 +153,11 @@ public class SWADMain extends MenuExpandableListActivity {
     private ExpandableListView mExpandableList;
     
     private Spinner mSubjectsSpinner;
-    // Values for DNI and password at the time of the login attempt.
-    private String mDni;
-    private String mPassword;
 
     // UI references for the login form.
     private EditText mDniView;
     private EditText mPasswordView;
+    private EditText mServerView;
     private View mLoginFormView;
     private View mLoginStatusView;
     private TextView mLoginStatusMessageView;
@@ -808,7 +805,6 @@ public class SWADMain extends MenuExpandableListActivity {
     
     private void setupLoginForm() {
         mDniView = (EditText) findViewById(R.id.DNI);
-        mDniView.setText(mDni);
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -821,6 +817,9 @@ public class SWADMain extends MenuExpandableListActivity {
                 return false;
             }
         });
+        
+        mServerView = (EditText) findViewById(R.id.server);
+        mServerView.setText(Preferences.getServer());
         
         mLoginFormView = findViewById(R.id.login_form);
         mLoginStatusView = findViewById(R.id.login_status);
@@ -841,30 +840,34 @@ public class SWADMain extends MenuExpandableListActivity {
      */
     public void attemptLogin() {
 
+        // Values for DNI and password at the time of the login attempt.
+        String DniValue;
+        String passwordValue;
+        
         // Reset errors.
         mDniView.setError(null);
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        mDni = mDniView.getText().toString();
-        mPassword = mPasswordView.getText().toString();
+        DniValue = mDniView.getText().toString();
+        passwordValue = mPasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
         // Check for a valid password.
-        if (TextUtils.isEmpty(mPassword)) {
+        if (TextUtils.isEmpty(passwordValue)) {
             mPasswordView.setError(getString(R.string.error_field_required));
             focusView = mPasswordView;
             cancel = true;
-        } else if (mPassword.length() < 8 && !Utils.isLong(mPassword)) {
+        } else if (passwordValue.length() < 8 && !Utils.isLong(passwordValue)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
         }
 
         // Check for a valid DNI.
-        if (TextUtils.isEmpty(mDni)) {
+        if (TextUtils.isEmpty(DniValue)) {
             mDniView.setError(getString(R.string.error_field_required));
             focusView = mDniView;
             cancel = true;
@@ -878,9 +881,9 @@ public class SWADMain extends MenuExpandableListActivity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
-            Preferences.setUserID(mDni);
+            Preferences.setUserID(DniValue);
             try {
-                Preferences.setUserPassword(Crypto.encryptPassword(mPassword));
+                Preferences.setUserPassword(Crypto.encryptPassword(passwordValue));
             } catch (NoSuchAlgorithmException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
