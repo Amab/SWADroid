@@ -519,6 +519,9 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
 	    	Preferences.setUserPassword(userPassword);
 		}
 	
+		if (mIncorrectPassword)
+		    Constants.setLogged(false);
+		
         //Reconfigure automatic synchronization
         if(syncPrefsChanged) {
 	        SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, ctx);
