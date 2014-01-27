@@ -409,11 +409,11 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
                     preference.setSummary(Utils.getStarsSequence(STARS_LENGTH));
                     
                     // If preferences have changed, logout
-                    Constants.setLogged(false);
                     Log.i(TAG, "Forced logout due to " + key + " change in preferences");
                     userPasswordPrefChanged = true;
                     syncPrefsChanged = true;
                     mIncorrectPassword = false;
+                    Constants.setPreferencesChanged();
                 } else {
                     Toast.makeText(getApplicationContext(), R.string.pradoLoginToast,
                             Toast.LENGTH_LONG).show();

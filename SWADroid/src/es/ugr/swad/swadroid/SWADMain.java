@@ -19,6 +19,12 @@
 
 package es.ugr.swad.swadroid;
 
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -44,7 +50,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.ScrollView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -73,12 +78,6 @@ import es.ugr.swad.swadroid.sync.AccountAuthenticator;
 import es.ugr.swad.swadroid.sync.SyncUtils;
 import es.ugr.swad.swadroid.utils.Crypto;
 import es.ugr.swad.swadroid.utils.Utils;
-
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Main class of the application.
@@ -141,11 +140,6 @@ public class SWADMain extends MenuExpandableListActivity {
      * View for controlling the login progress
      */
     private LinearLayout mLoginStatus;
-    
-    /**
-     * View holding the login form
-     */
-    private ScrollView mLoginForm;
     
     /**
      * View to show if the user is logged in
@@ -284,7 +278,7 @@ public class SWADMain extends MenuExpandableListActivity {
         } catch (Exception e) {
         	Log.e(TAG, "Error initializing BugSense", e);
         }
-        
+
         //Initialize screen
         super.onCreate(icicle);
         setContentView(R.layout.main);
@@ -292,8 +286,10 @@ public class SWADMain extends MenuExpandableListActivity {
         //Initialize preferences
         prefs = new Preferences(this);
         
-        if (!Constants.isLogged())
-            loginForm();
+        initializeViews();
+        
+        if (isUserOrPasswordEmpty())
+            loginForm(true);
         
         image = (ImageView) this.findViewById(R.id.moduleIcon);
         image.setBackgroundResource(R.drawable.ic_launcher_swadroid);
@@ -397,19 +393,24 @@ public class SWADMain extends MenuExpandableListActivity {
     protected void onResume() {
         super.onResume();
 
-        if (!Constants.isPreferencesChanged() && !Utils.isDbCleaned()) {
-            createSpinnerAdapter();
-            if (!firstRun) {
-                courseCode = Constants.getSelectedCourseCode();
-                createMenu();
-            }
+		if (!Constants.isPreferencesChanged()) {
+			if (!Utils.isDbCleaned()) {
+				createSpinnerAdapter();
+				if (!firstRun) {
+					courseCode = Constants.getSelectedCourseCode();
+					createMenu();
+				}
+			}
         } else {
             Constants.setPreferencesChanged(false);
             Utils.setDbCleaned(false);
             setMenuDbClean();
         }
-        if (!Constants.isLogged())
-            loginForm();
+		
+		if(isUserOrPasswordEmpty())
+			loginForm(true);
+		else
+			loginForm(false);
     }
 
     /* (non-Javadoc)
@@ -444,14 +445,15 @@ public class SWADMain extends MenuExpandableListActivity {
                     createMenu();
                     showProgress(false);
                     mLoginError = false;
-                    mLoginForm.setVisibility(View.GONE);
+                    mLoginFormView.setVisibility(View.GONE);
                     mSubjectsSpinner.setVisibility(View.VISIBLE);
                     mUpdateButton.setVisibility(View.VISIBLE);
                     break;
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
-            mLoginError = true;
-            showProgress(false);
+            //mLoginError = true;
+            //showProgress(false);
+            //loginForm(true);
         }
     }
 
@@ -794,22 +796,32 @@ public class SWADMain extends MenuExpandableListActivity {
     }
     
     /**
-     * Check if the user has introduced an user and password, if doesn't, show
-     * login form
+     * @return true if user or password preference is empty
      */
-    private void loginForm() {
-            mExpandableList = (ExpandableListView) getExpandableListView();
-            mExpandableList.setVisibility(View.GONE);
-            mSubjectsSpinner = (Spinner) findViewById(R.id.spinner);
-            mSubjectsSpinner.setVisibility(View.GONE);
-            mUpdateButton = (ImageButton) this.findViewById(R.id.refresh);
-            mUpdateButton.setVisibility(View.GONE);
-            
-            mLoginForm = (ScrollView) findViewById(R.id.login_form);
-            mLoginForm.setVisibility(View.VISIBLE);
+	private boolean isUserOrPasswordEmpty() {
+		return TextUtils.isEmpty(Preferences.getUserID())
+				|| TextUtils.isEmpty(Preferences.getUserPassword());
+	}
+    
+	private void initializeViews(){
+		mExpandableList = (ExpandableListView) getExpandableListView();
+		mSubjectsSpinner = (Spinner) findViewById(R.id.spinner);
+		mUpdateButton = (ImageButton) findViewById(R.id.refresh);
+        mLoginFormView = findViewById(R.id.login_form);
+        mLoginStatusView = findViewById(R.id.login_status);
+	}
+	
+	/**
+	 * Shows a login form
+	 */
+	private void loginForm(boolean show) {
+		mExpandableList.setVisibility(show ? View.GONE : View.VISIBLE);
+		mSubjectsSpinner.setVisibility(show ? View.GONE : View.VISIBLE);
+		mUpdateButton.setVisibility(show ? View.GONE : View.VISIBLE);
+		mLoginFormView.setVisibility(show ? View.VISIBLE : View.GONE);
 
-            setupLoginForm();
-    }
+		setupLoginForm();
+	}
     
     private void setupLoginForm() {
         mDniView = (EditText) findViewById(R.id.DNI);
@@ -831,8 +843,6 @@ public class SWADMain extends MenuExpandableListActivity {
         mServerView = (EditText) findViewById(R.id.server);
         mServerView.setText(Preferences.getServer());
         
-        mLoginFormView = findViewById(R.id.login_form);
-        mLoginStatusView = findViewById(R.id.login_status);
         mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
 
         findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
@@ -853,6 +863,7 @@ public class SWADMain extends MenuExpandableListActivity {
         // Values for DNI and password at the time of the login attempt.
         String DniValue;
         String passwordValue;
+        String serverValue;
         
         // Reset errors.
         mDniView.setError(null);
@@ -861,7 +872,8 @@ public class SWADMain extends MenuExpandableListActivity {
         // Store values at the time of the login attempt.
         DniValue = mDniView.getText().toString();
         passwordValue = mPasswordView.getText().toString();
-
+        serverValue = mServerView.getText().toString();
+        
         boolean cancel = false;
         View focusView = null;
 
@@ -870,7 +882,7 @@ public class SWADMain extends MenuExpandableListActivity {
             mPasswordView.setError(getString(R.string.error_field_required));
             focusView = mPasswordView;
             cancel = true;
-        } else if (passwordValue.length() < 8 && !Utils.isLong(passwordValue)) {
+        } else if ((passwordValue.length() < 8) || Utils.isLong(passwordValue)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
@@ -882,7 +894,7 @@ public class SWADMain extends MenuExpandableListActivity {
             focusView = mDniView;
             cancel = true;
         }
-
+        
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
@@ -898,6 +910,7 @@ public class SWADMain extends MenuExpandableListActivity {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
+            Preferences.setServer(serverValue);
             showProgress(true);
             getCurrentCourses();
         }
