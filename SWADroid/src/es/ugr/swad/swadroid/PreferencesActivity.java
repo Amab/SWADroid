@@ -414,6 +414,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
                     syncPrefsChanged = true;
                     mIncorrectPassword = false;
                     Constants.setPreferencesChanged();
+                    Constants.setLogged(false);
                 } else {
                     Toast.makeText(getApplicationContext(), R.string.pradoLoginToast,
                             Toast.LENGTH_LONG).show();
