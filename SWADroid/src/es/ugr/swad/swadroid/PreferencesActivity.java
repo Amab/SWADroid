@@ -250,8 +250,8 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         notifVibrateEnablePref = (CheckBoxPreference) findPreference(Preferences.NOTIFVIBRATEENABLEPREF);
         notifLightsEnablePref = (CheckBoxPreference) findPreference(Preferences.NOTIFLIGHTSENABLEPREF);
 
-        userIDPref.setOnPreferenceChangeListener(this);
-        userPasswordPref.setOnPreferenceChangeListener(this);
+        //userIDPref.setOnPreferenceChangeListener(this);
+        //userPasswordPref.setOnPreferenceChangeListener(this);
         ratePref.setOnPreferenceChangeListener(this);
         twitterPref.setOnPreferenceChangeListener(this);
         facebookPref.setOnPreferenceChangeListener(this);
@@ -269,16 +269,17 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         
         notifLimitPref.setProgress(Preferences.getNotifLimit());
         
-        userIDPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+        //userIDPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             /**
              * Called when a preference is selected.
              * @param preference Preference selected.
              */
-            public boolean onPreferenceClick(Preference preference) {
+      /*      public boolean onPreferenceClick(Preference preference) {
                 //userID = prefs.getString(USERIDPREF, "");
                 return true;
             }
         });
+       */
         ratePref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             /**
              * Called when a preference is selected.
@@ -550,13 +551,14 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         String stars = Utils.getStarsSequence(STARS_LENGTH);
         mServer = Preferences.getServer();
         
-        userIDPref.setSummary(Preferences.getUserID());
+        /*userIDPref.setSummary(Preferences.getUserID());
         
         if (!Preferences.getUserPassword().equals("") && !mIncorrectPassword)
             userPasswordPref.setSummary(stars);
         
         if (mIncorrectPassword)
         	highlightPasswordSummary();
+        */
         
         if (!mServer.equals("")) {
             serverPref.setSummary(mServer);
