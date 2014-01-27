@@ -338,7 +338,6 @@ public class SWADMain extends MenuExpandableListActivity {
 
             //If this is an upgrade, show upgrade dialog
             } else if (lastVersion < currentVersion) {
-                loginForm(Constants.isLogged());
                 showUpgradeDialog(this);
                 dbHelper.upgradeDB(this);
                 
@@ -388,13 +387,16 @@ public class SWADMain extends MenuExpandableListActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-        if (!Constants.isPreferencesChanged() && !Utils.isDbCleaned()) {
+        
+        boolean showLoginForm = isUserOrPasswordEmpty() || (listCourses.size() == 0);
+        
+        loginForm(showLoginForm);
+    	if (!Constants.isPreferencesChanged() && !Utils.isDbCleaned()) {
             createSpinnerAdapter();
             if (!firstRun) {
                 courseCode = Constants.getSelectedCourseCode();
                 createMenu();
-            }
+        	}
         } else {
             Constants.setPreferencesChanged(false);
             Utils.setDbCleaned(false);
@@ -822,7 +824,7 @@ public class SWADMain extends MenuExpandableListActivity {
         mDniView.setText(Preferences.getUserID());
         
         mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setText(Preferences.getUserPassword());
+        mPasswordView.setText("");
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
