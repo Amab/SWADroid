@@ -858,6 +858,7 @@ public class SWADMain extends MenuExpandableListActivity {
         String DniValue;
         String passwordValue;
         String serverValue;
+        String toastMsg;
         
         // Reset errors.
         mDniView.setError(null);
@@ -867,19 +868,28 @@ public class SWADMain extends MenuExpandableListActivity {
         DniValue = mDniView.getText().toString();
         passwordValue = mPasswordView.getText().toString();
         serverValue = mServerView.getText().toString();
+        toastMsg = mServerView.getText().toString().equals("swad.ugr.es") ? getString(R.string.error_password_summaryUGR) : getString(R.string.error_invalid_password);
         
         boolean cancel = false;
         View focusView = null;
 
         // Check for a valid password.
         if (TextUtils.isEmpty(passwordValue)) {
-            mPasswordView.setError(getString(R.string.error_field_required));
-            focusView = mPasswordView;
-            cancel = true;
-        } else if ((passwordValue.length() < 8) || Utils.isLong(passwordValue)) {
+			mPasswordView.setError(getString(R.string.error_field_required));
+			focusView = mPasswordView;
+			cancel = true;
+        } else if ((passwordValue.length() < 8)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
+            Toast.makeText(getApplicationContext(), toastMsg,
+                    Toast.LENGTH_LONG).show();
+        } else if(Utils.isLong(passwordValue)) {
+			mPasswordView.setError(getString(R.string.error_incorrect_password));
+			focusView = mPasswordView;
+			cancel = true;
+			Toast.makeText(getApplicationContext(), toastMsg,
+                    Toast.LENGTH_LONG).show();
         }
 
         // Check for a valid DNI.
@@ -897,14 +907,13 @@ public class SWADMain extends MenuExpandableListActivity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
-            Preferences.setUserID(DniValue);
             try {
+                Preferences.setUserID(DniValue);
                 Preferences.setUserPassword(Crypto.encryptPassword(passwordValue));
+                Preferences.setServer(serverValue);
             } catch (NoSuchAlgorithmException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                error(TAG, e.getMessage(), e, true);
             }
-            Preferences.setServer(serverValue);
             showProgress(true);
             getCurrentCourses();
         }
