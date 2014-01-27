@@ -19,12 +19,6 @@
 
 package es.ugr.swad.swadroid;
 
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -78,6 +72,12 @@ import es.ugr.swad.swadroid.sync.AccountAuthenticator;
 import es.ugr.swad.swadroid.sync.SyncUtils;
 import es.ugr.swad.swadroid.utils.Crypto;
 import es.ugr.swad.swadroid.utils.Utils;
+
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Main class of the application.
@@ -285,11 +285,7 @@ public class SWADMain extends MenuExpandableListActivity {
 
         //Initialize preferences
         prefs = new Preferences(this);
-        
         initializeViews();
-        
-        if (isUserOrPasswordEmpty())
-            loginForm(true);
         
         image = (ImageView) this.findViewById(R.id.moduleIcon);
         image.setBackgroundResource(R.drawable.ic_launcher_swadroid);
@@ -324,8 +320,8 @@ public class SWADMain extends MenuExpandableListActivity {
             //currentVersion = 57;
 
             //If this is the first run, show configuration dialog
-            //startActivity(new Intent(this, LoginActivity.class));
             if (lastVersion == 0) {
+                loginForm(true);
                 //Configure automatic synchronization
                 Preferences.setSyncTime(String.valueOf(Constants.DEFAULT_SYNC_TIME));
                 activity = new Intent(this, AccountAuthenticator.class);
@@ -342,6 +338,7 @@ public class SWADMain extends MenuExpandableListActivity {
 
             //If this is an upgrade, show upgrade dialog
             } else if (lastVersion < currentVersion) {
+                loginForm(Constants.isLogged());
                 showUpgradeDialog(this);
                 dbHelper.upgradeDB(this);
                 
@@ -382,7 +379,6 @@ public class SWADMain extends MenuExpandableListActivity {
         } catch (Exception ex) {
             error(TAG, ex.getMessage(), ex, true);
         }
-
     }
 
     /*
@@ -393,24 +389,17 @@ public class SWADMain extends MenuExpandableListActivity {
     protected void onResume() {
         super.onResume();
 
-		if (!Constants.isPreferencesChanged()) {
-			if (!Utils.isDbCleaned()) {
-				createSpinnerAdapter();
-				if (!firstRun) {
-					courseCode = Constants.getSelectedCourseCode();
-					createMenu();
-				}
-			}
+        if (!Constants.isPreferencesChanged() && !Utils.isDbCleaned()) {
+            createSpinnerAdapter();
+            if (!firstRun) {
+                courseCode = Constants.getSelectedCourseCode();
+                createMenu();
+            }
         } else {
             Constants.setPreferencesChanged(false);
             Utils.setDbCleaned(false);
             setMenuDbClean();
         }
-		
-		if(isUserOrPasswordEmpty())
-			loginForm(true);
-		else
-			loginForm(false);
     }
 
     /* (non-Javadoc)
@@ -451,9 +440,14 @@ public class SWADMain extends MenuExpandableListActivity {
                     break;
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
-            //mLoginError = true;
-            //showProgress(false);
-            //loginForm(true);
+            switch (requestCode) {
+                //After get the list of courses, a dialog is launched to choice the course
+                case Constants.COURSES_REQUEST_CODE:
+                    mLoginError = true;
+                    showProgress(false);
+                    loginForm(true);
+                    break;
+            }
         }
     }
 
@@ -778,7 +772,7 @@ public class SWADMain extends MenuExpandableListActivity {
         listCourses.clear();
         cleanSpinner();
         ExpandableListView list = (ExpandableListView) this.findViewById(android.R.id.list);
-        list.setVisibility(View.INVISIBLE);
+        list.setVisibility(View.GONE);
     }
 
     /**
