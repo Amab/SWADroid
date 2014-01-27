@@ -819,10 +819,10 @@ public class SWADMain extends MenuExpandableListActivity {
     
     private void setupLoginForm() {
         mDniView = (EditText) findViewById(R.id.DNI);
-        mDniView.setText("");
+        mDniView.setText(Preferences.getUserID());
         
         mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setText("");
+        mPasswordView.setText(Preferences.getUserPassword());
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
