@@ -16,7 +16,7 @@
     <string name="set_preferences">Vorlieben</string>
     <string name="user_preferences">User-Daten</string>
     <string name="userIDName_preferences">User</string>
-    <string name="userIDSummary_preferences">DNI oder Benutzername</string>
+    <string name="userIDSummary_preferences">ID, Nickname oder E-Mail</string>
     <string name="userIDTitle_preferences">User</string>
     <string name="userPasswordName_preferences">Passwort</string>
     <string name="userPasswordSummary_preferences">Passwort</string>
@@ -227,7 +227,7 @@
     <string name="teachingguideModuleLabel">Pedagogisch begeleider</string>
     
     <string name="pradoLoginToast">SWAD Das Passwort ist mindestens 8 alphanumerischen Zeichen</string>
-	<string name="error_summaryUGR">Fehler: Denken Sie daran, geben Sie Ihr Passwort SWAD nicht identifiziert die Access</string>
-	<string name="error_summary">Fehler: Ihr Kennwort muss mindestens 8 alphanumerischen Zeichen</string>
+	<string name="error_password_summaryUGR">Fehler: Denken Sie daran, geben Sie Ihr Passwort SWAD nicht identifiziert die Access</string>
+	<string name="error_password_summary">Fehler: Ihr Kennwort muss mindestens 8 alphanumerischen Zeichen</string>
 	<string name="passwordDialogTip">SWAD Kennwort muss mindestens 8 alphanumerische Zeichen werden</string>
 </resources>

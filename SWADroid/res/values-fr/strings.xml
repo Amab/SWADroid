@@ -16,7 +16,7 @@
     <string name="set_preferences">Configuration</string>
     <string name="user_preferences">Données de l\'utilisateur</string>
     <string name="userIDName_preferences">Utilisateur</string>
-    <string name="userIDSummary_preferences">ID ou Pseudo</string>
+    <string name="userIDSummary_preferences">ID, Pseudo ou Email</string>
     <string name="userIDTitle_preferences">Utilisateur</string>
     <string name="userPasswordName_preferences">Mot de passe</string>
     <string name="userPasswordSummary_preferences">Mot de passe</string>
@@ -316,7 +316,7 @@
     <string name="teachingguideModuleLabel">Guide des cours</string>
     
     <string name="pradoLoginToast">SWAD Le mot de passe est au moins 8 caractères alphanumériques</string>
-	<string name="error_summaryUGR">N\'oubliez pas de saisir votre mot de passe SWAD pas identifié l\'accès</string>
-	<string name="error_summary">Erreur: Votre mot de passe doit comporter au moins 8 caractères alphanumériques</string>
+	<string name="error_password_summaryUGR">N\'oubliez pas de saisir votre mot de passe SWAD pas identifié l\'accès</string>
+	<string name="error_password_summary">Erreur: Votre mot de passe doit comporter au moins 8 caractères alphanumériques</string>
 	<string name="passwordDialogTip">SWAD doit être d\'au moins 8 caractères alphanumériques</string>
 </resources>

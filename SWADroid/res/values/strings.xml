@@ -18,7 +18,7 @@
     <string name="set_preferences">Preferences</string>
     <string name="user_preferences">User data</string>
     <string name="userIDName_preferences">User</string>
-    <string name="userIDSummary_preferences">DNI or Nickname</string>
+    <string name="userIDSummary_preferences">ID, Nickname or Email</string>
     <string name="userIDTitle_preferences">User</string>
     <string name="userPasswordName_preferences">Password</string>
     <string name="userPasswordSummary_preferences">Password</string>
@@ -350,7 +350,7 @@
     <string name="teachingguideModuleLabel">Teaching Guide</string>
     
     <string name="pradoLoginToast">SWAD\'s password is at least 8 alphanumeric characters long</string>
-    <string name="error_summaryUGR">Error: Remember you must enter SWAD\'s password, not e-Administration</string>
-    <string name="error_summary">Error: Password must be at least 8 alphanumeric characters</string>
+    <string name="error_password_summaryUGR">Error: Remember you must enter SWAD\'s password, not e-Administration</string>
+    <string name="error_password_summary">Error: Password must be at least 8 alphanumeric characters</string>
     <string name="passwordDialogTip">SWAD\'s password is at least 8 alphanumeric characters long</string>
 </resources>
