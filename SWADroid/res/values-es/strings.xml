@@ -17,7 +17,7 @@
     <string name="set_preferences">Configuración</string>
     <string name="user_preferences">Datos del usuario</string>
     <string name="userIDName_preferences">Usuario</string>
-    <string name="userIDSummary_preferences">DNI o Apodo</string>
+    <string name="userIDSummary_preferences">DNI, Apodo o Email</string>
     <string name="userIDTitle_preferences">Usuario</string>
     <string name="userPasswordName_preferences">Contraseña</string>
     <string name="userPasswordSummary_preferences">Contraseña</string>
@@ -347,7 +347,7 @@
     
     
     <string name="pradoLoginToast">La contraseña de SWAD tiene al menos 8 caracteres alfanuméricos</string>
-	<string name="error_summaryUGR">Error: Recuerda que debes introducir la contraseña de SWAD, no la de Acceso identificado</string>
-	<string name="error_summary">Error: La contraseña debe ser de mínimo 8 caracteres alfanuméricos</string>
+	<string name="error_password_summaryUGR">Error: Recuerda que debes introducir la contraseña de SWAD, no la de Acceso identificado</string>
+	<string name="error_password_summary">Error: La contraseña debe ser de mínimo 8 caracteres alfanuméricos</string>
 	<string name="passwordDialogTip">Recuerda que la contraseña de SWAD debe tener al menos 8 caracteres alfanuméricos</string>
 </resources>

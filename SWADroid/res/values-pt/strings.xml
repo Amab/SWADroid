@@ -16,7 +16,7 @@
     <string name="set_preferences">configuração</string>
     <string name="user_preferences">Dados do usuário</string>
     <string name="userIDName_preferences">Usuário</string>
-    <string name="userIDSummary_preferences">ID ou Apelido</string>
+    <string name="userIDSummary_preferences">ID, apelido ou E-mail</string>
     <string name="userIDTitle_preferences">Usuário</string>
     <string name="userPasswordName_preferences">Senha</string>
     <string name="userPasswordSummary_preferences">Senha</string>
@@ -306,7 +306,7 @@
     <string name="teachingguideModuleLabel">Guia de ensino</string>
     
     <string name="pradoLoginToast">SWAD A senha é pelo menos 8 caracteres alfanuméricos</string>
-	<string name="error_summaryUGR">Lembre-se de digitar o seu SWAD senha não identificou o acesso</string>
-	<string name="error_summary">Erro: Sua senha deve ter pelo menos 8 caracteres alfanuméricos</string>
+	<string name="error_password_summaryUGR">Lembre-se de digitar o seu SWAD senha não identificou o acesso</string>
+	<string name="error_password_summary">Erro: Sua senha deve ter pelo menos 8 caracteres alfanuméricos</string>
 	<string name="passwordDialogTip">SWAD senha deve ser pelo menos 8 caracteres alfanuméricos</string>
 </resources>

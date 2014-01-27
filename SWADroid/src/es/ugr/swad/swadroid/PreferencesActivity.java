@@ -596,6 +596,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     
     private void highlightPasswordSummary(){
     	userPasswordPref.setLayoutResource(R.layout.preference_child_summary_error);
-        userPasswordPref.setSummary(mServer.equals("swad.ugr.es") ? R.string.error_summaryUGR : R.string.error_summary);
+        userPasswordPref.setSummary(mServer.equals("swad.ugr.es") ? R.string.error_password_summaryUGR : R.string.error_password_summary);
     }
 }
