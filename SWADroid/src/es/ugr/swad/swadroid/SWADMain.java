@@ -42,7 +42,6 @@ import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
@@ -136,18 +135,6 @@ public class SWADMain extends MenuExpandableListActivity {
 
     private boolean dBCleaned = false;
 
-    /**
-     * View for controlling the login progress
-     */
-    private LinearLayout mLoginStatus;
-    
-    /**
-     * View to show if the user is logged in
-     */
-    private ExpandableListView mExpandableList;
-    
-    private Spinner mSubjectsSpinner;
-
     private boolean mLoginError = false;
     // UI references for the login form.
     private EditText mDniView;
@@ -155,6 +142,7 @@ public class SWADMain extends MenuExpandableListActivity {
     private EditText mServerView;
     private View mLoginFormView;
     private View mLoginStatusView;
+    private View mMainScreenView;
     private TextView mLoginStatusMessageView;
     private ImageButton mUpdateButton;
     
@@ -388,7 +376,7 @@ public class SWADMain extends MenuExpandableListActivity {
     protected void onResume() {
         super.onResume();
         
-        boolean showLoginForm = isUserOrPasswordEmpty() || (listCourses.size() == 0);
+        boolean showLoginForm = isUserOrPasswordEmpty() || (listCourses.size() == 0) || mLoginError;
         
         loginForm(showLoginForm);
     	if (!Constants.isPreferencesChanged() && !Utils.isDbCleaned()) {
@@ -436,9 +424,7 @@ public class SWADMain extends MenuExpandableListActivity {
                     createMenu();
                     showProgress(false);
                     mLoginError = false;
-                    mLoginFormView.setVisibility(View.GONE);
-                    mSubjectsSpinner.setVisibility(View.VISIBLE);
-                    mUpdateButton.setVisibility(View.VISIBLE);
+                    loginForm(false);
                     break;
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
@@ -800,9 +786,8 @@ public class SWADMain extends MenuExpandableListActivity {
 	}
     
 	private void initializeViews(){
-		mExpandableList = (ExpandableListView) getExpandableListView();
-		mSubjectsSpinner = (Spinner) findViewById(R.id.spinner);
 		mUpdateButton = (ImageButton) findViewById(R.id.refresh);
+	    mMainScreenView = findViewById(R.id.main_screen);
         mLoginFormView = findViewById(R.id.login_form);
         mLoginStatusView = findViewById(R.id.login_status);
 	}
@@ -811,9 +796,8 @@ public class SWADMain extends MenuExpandableListActivity {
 	 * Shows a login form
 	 */
 	private void loginForm(boolean show) {
-		mExpandableList.setVisibility(show ? View.GONE : View.VISIBLE);
-		mSubjectsSpinner.setVisibility(show ? View.GONE : View.VISIBLE);
 		mUpdateButton.setVisibility(show ? View.GONE : View.VISIBLE);
+	    mMainScreenView.setVisibility(show ? View.GONE : View.VISIBLE);
 		mLoginFormView.setVisibility(show ? View.VISIBLE : View.GONE);
 
 		setupLoginForm();
