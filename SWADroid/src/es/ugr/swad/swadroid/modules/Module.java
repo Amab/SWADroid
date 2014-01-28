@@ -42,6 +42,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeoutException;
 
 import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.utils.Utils;
@@ -414,6 +415,13 @@ public abstract class Module extends MenuActivity {
                     if (es.faultstring.equals("Bad log in")) {
                         errorMsg = getString(R.string.errorBadLoginMsg);
                         sendException = false;
+                	} else if (es.faultstring.equals("Bad web service key")) {
+                        errorMsg = getString(R.string.errorBadLoginMsg);
+                		sendException = false;
+                		
+                		//Force logout and reset password (this will show again the login screen)
+                		Constants.setLogged(false);
+                		Preferences.setUserPassword("");
                     } else if (es.faultstring.equals("Unknown application key")) {
                         errorMsg = getString(R.string.errorBadAppKeyMsg);
                     } else {

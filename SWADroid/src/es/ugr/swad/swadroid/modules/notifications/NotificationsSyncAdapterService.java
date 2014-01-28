@@ -113,6 +113,13 @@ public class NotificationsSyncAdapterService extends Service {
                     if (es.faultstring.equals("Bad log in")) {
                     	errorMessage = mContext.getString(R.string.errorBadLoginMsg);
                     	sendException = false;
+                	} else if (es.faultstring.equals("Bad web service key")) {
+                		errorMessage = mContext.getString(R.string.errorBadLoginMsg);
+                		sendException = false;
+                		
+                		//Force logout and reset password (this will show again the login screen)
+                		Constants.setLogged(false);
+                		Preferences.setUserPassword("");
                     } else if (es.faultstring.equals("Unknown application key")) {
                     	errorMessage = mContext.getString(R.string.errorBadAppKeyMsg);
                     } else {
