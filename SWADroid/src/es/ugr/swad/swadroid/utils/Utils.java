@@ -293,7 +293,7 @@ public class Utils {
      * Generates the stars sequence to be showed on password field
      *
      * @param size Length of the stars sequence
-     * @return
+     * @return Stars as a string concatenation of the specified length
      */
     public static String getStarsSequence(int size) {
         String stars = "";

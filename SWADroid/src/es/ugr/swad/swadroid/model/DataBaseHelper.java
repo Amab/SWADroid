@@ -1163,7 +1163,7 @@ public class DataBaseHelper {
      * Inserts a new record in database indicating that the user belongs
      * to the course and group specified, or updates it if already exists
      *
-     * @param u          User to be inserted
+     * @param userID     User to be inserted
      * @param courseCode Course code to be referenced
      * @param groupCode  Group code to be referenced
      */
