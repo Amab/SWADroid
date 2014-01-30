@@ -335,9 +335,10 @@ public abstract class Module extends MenuActivity {
         /**
          * Shows progress dialog and connects to SWAD in background
          *
+         * @param activity            Reference to Module activity
+         * @param show             	  Flag for show a progress dialog
          * @param progressDescription Description to be showed in dialog
          * @param progressTitle       Title to be showed in dialog
-         * @param isLogin             Flag for detect if this is the login module
          */
         public Connect(Module activity, boolean show,
                        String progressDescription, int progressTitle) {

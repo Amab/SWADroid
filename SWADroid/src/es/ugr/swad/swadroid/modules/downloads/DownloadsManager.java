@@ -555,7 +555,7 @@ public class DownloadsManager extends MenuActivity {
     /**
      * Method to request info file identified with @a fileCode to SWAD thought the web services GETFILE
      *
-     * @fileCode file code
+     * @param fileCode file code
      */
     private void requestGetFile(long fileCode) {
         Intent activity;

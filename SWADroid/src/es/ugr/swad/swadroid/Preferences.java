@@ -218,7 +218,7 @@ public class Preferences {
     /**
      * Sets server URL
      *
-     * @param Server URL
+     * @param server Server URL
      */
     public static void setServer(String server) {
     	editor = editor.putString(SERVERPREF, server);

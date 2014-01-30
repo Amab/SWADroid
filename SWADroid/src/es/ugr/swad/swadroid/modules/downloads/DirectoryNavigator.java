@@ -305,7 +305,7 @@ public class DirectoryNavigator {
      * Searches for a node in the current directory with the given name
      *
      * @param name Name of the node located on the current directory.
-     * @returns null in case it does not exists any node with the given name
+     * @return null in case it does not exists any node with the given name
      */
     DirectoryItem getDirectoryItem(String name) {
         DirectoryItem node = null;
@@ -329,7 +329,7 @@ public class DirectoryNavigator {
      * Searches for a node in the current directory with the given position
      *
      * @param position position where the node is located
-     * @returns null in case it does not exists any node located at the given position
+     * @return null in case it does not exists any node located at the given position
      */
     public DirectoryItem getDirectoryItem(int position) {
         DirectoryItem node = null;
@@ -344,7 +344,7 @@ public class DirectoryNavigator {
      * Identifies the node with name @a name and gets its file code in case the node is a file. In case the node is a directory returns -1
      *
      * @param name Name of the node located on the current directory.
-     * @returns -1 in case the node is a directory or it does not exists any node with the given name
+     * @return -1 in case the node is a directory or it does not exists any node with the given name
      * fileCode in case the node is a file
      */
     public long getFileCode(String name) {
