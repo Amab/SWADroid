@@ -17,7 +17,7 @@
     <string name="set_preferences">Configuració</string>
     <string name="user_preferences">Dades de l\'usuari</string>
     <string name="userIDName_preferences">Usuari</string>
-    <string name="userIDSummary_preferences">DNI o Sobrenom</string>
+    <string name="userIDSummary_preferences">DNI, Sobrenom o Email</string>
     <string name="userIDTitle_preferences">Usuari</string>
     <string name="userPasswordName_preferences">Contrasenya</string>
     <string name="userPasswordSummary_preferences">Contrasenya</string>
@@ -113,10 +113,7 @@
     <string name="initialDialogTitle">IMPORTANT</string>
     <string name="upgradeMsg">A causa de canvis en la base de dades totes les dades han estat esborrats.\n\nDisculpe
         les molèsties.</string>
-    <string name="errorBadLoginMsg">Usuari o contrasenya incorrectes.\n\n
-         * Comproveu que heu introduït l\'usuari i contrasenya d\'accés directe a SWAD, NO els de PRADO.\n\n
-         * Si l\'usuari és un sobrenom, comproveu que l\'usuari va precedit de l\'arrova @.\n\n
-         * Si l\'usuari és el DNI, comproveu que heu suprimit la lletra del final.</string>
+    <string name="errorBadLoginMsg">Usuari o contrasenya incorrectes</string>
     <string name="errorServerResponseMsg">Error en resposta del servidor</string>
     <string name="errorBadAppKeyMsg">Clau d\'aplicació incorrecta. Si us plau, contacti amb el desenvolupador.</string>
     <string name="errorConnectionMsg">Error durant la connexió amb el servidor</string>
@@ -317,4 +314,9 @@
     <string name="practicesprogramModuleLabel">Programa de Práctiques</string>
     <string name="theoryprogramModuleLabel">Programa de Teoria</string>
     <string name="teachingguideModuleLabel">Guia Docent</string>
+    
+    <string name="pradoLoginToast">La contrasenya d\'SWAD té almenys 8 caràcters alfanumèrics</string>
+	<string name="error_password_summaryUGR">Error: Recorda que has d\'introduir la contrasenya de SWAD, no la d\'Accés identificat</string>
+	<string name="error_password_summary"> Error: La contrasenya ha de ser de mínim 8 caràcters alfanumèrics</string>
+	<string name="passwordDialogTip">Recorda que la contrasenya d\'SWAD ha de tenir almenys 8 caràcters alfanumèrics</string>
 </resources>

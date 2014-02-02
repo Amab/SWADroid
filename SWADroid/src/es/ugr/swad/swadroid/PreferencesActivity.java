@@ -34,6 +34,7 @@ import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.bugsense.trace.BugSenseHandler;
 
@@ -154,10 +155,22 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     private boolean syncPrefsChanged = false;
 
     /**
+     * SWAD server to use
+     */
+    private String mServer;
+    
+    /**
      * User password preference changed flag
      */
     private boolean userPasswordPrefChanged = false;
 
+    /**
+     * User password has errors
+     */
+    private boolean mIncorrectPassword = false;
+    
+    private static final String PASSWORD_VALIDATE = "passw_validate";
+    
     /**
      * Shows an error message.
      *
@@ -202,10 +215,12 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //Restore preferences
+        
+        //Restore preferences        
+        getPreferenceManager().setSharedPreferencesName(Preferences.PREFS_NAME);
         addPreferencesFromResource(R.xml.preferences);
-        ctx = getApplicationContext(); 
+        
+        ctx = getApplicationContext();         
 
         //Initialize database
         try {    		
@@ -235,8 +250,8 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         notifVibrateEnablePref = (CheckBoxPreference) findPreference(Preferences.NOTIFVIBRATEENABLEPREF);
         notifLightsEnablePref = (CheckBoxPreference) findPreference(Preferences.NOTIFLIGHTSENABLEPREF);
 
-        userIDPref.setOnPreferenceChangeListener(this);
-        userPasswordPref.setOnPreferenceChangeListener(this);
+        //userIDPref.setOnPreferenceChangeListener(this);
+        //userPasswordPref.setOnPreferenceChangeListener(this);
         ratePref.setOnPreferenceChangeListener(this);
         twitterPref.setOnPreferenceChangeListener(this);
         facebookPref.setOnPreferenceChangeListener(this);
@@ -251,19 +266,20 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         notifSoundEnablePref.setOnPreferenceChangeListener(this);
         notifVibrateEnablePref.setOnPreferenceChangeListener(this);
         notifLightsEnablePref.setOnPreferenceChangeListener(this);
-
+        
         notifLimitPref.setProgress(Preferences.getNotifLimit());
-
-        userIDPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+        
+        //userIDPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             /**
              * Called when a preference is selected.
              * @param preference Preference selected.
              */
-            public boolean onPreferenceClick(Preference preference) {
+      /*      public boolean onPreferenceClick(Preference preference) {
                 //userID = prefs.getString(USERIDPREF, "");
                 return true;
             }
         });
+       */
         ratePref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             /**
              * Called when a preference is selected.
@@ -351,6 +367,8 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
             }
         });
 
+        mServer = Preferences.getServer();
+        
         try {
             currentVersionPref.setSummary(getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
         } catch (NameNotFoundException e) {
@@ -363,6 +381,9 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
      * @see android.app.Activity#onPreferenceChange()
      */
     public boolean onPreferenceChange(Preference preference, Object newValue) {
+        // By default we store the value in the preferences
+        boolean returnValue = true;
+        
         String key = preference.getKey();
         
         if (Preferences.USERIDPREF.equals(key)) {
@@ -377,22 +398,40 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         	//If preferences have changed, logout
         	logoutClean(key);
         	syncPrefsChanged = true;
-        } else if (Preferences.USERPASSWORDPREF.equals(key)) {            
+        } else if (Preferences.USERPASSWORDPREF.equals(key)) {
             try {
-            	userPassword = Crypto.encryptPassword((String) newValue);
-	            preference.setSummary(Utils.getStarsSequence(STARS_LENGTH));
-	            
-	            //If preferences have changed, logout
-	            Constants.setLogged(false);
-	            Log.i(TAG, "Forced logout due to " + key + " change in preferences");
-	            userPasswordPrefChanged = true;
-	            syncPrefsChanged = true;
+                String password = (String) newValue;
+
+                // Try to guest if user is using PRADO password
+                if ((password.length() >= 8) && !Utils.isLong(password)) {
+                    userPassword = Crypto.encryptPassword(password);
+                    // Restore default style if it was changed due to an error in the input
+                    userPasswordPref.setLayoutResource(R.layout.preference_child);
+                    preference.setSummary(Utils.getStarsSequence(STARS_LENGTH));
+                    
+                    // If preferences have changed, logout
+                    Log.i(TAG, "Forced logout due to " + key + " change in preferences");
+                    userPasswordPrefChanged = true;
+                    syncPrefsChanged = true;
+                    mIncorrectPassword = false;
+                    Constants.setPreferencesChanged();
+                    Constants.setLogged(false);
+                } else {
+                    Toast.makeText(getApplicationContext(), R.string.pradoLoginToast,
+                            Toast.LENGTH_LONG).show();
+                    highlightPasswordSummary();
+                    mIncorrectPassword = true;
+                    // Do not save the password to the preferences.
+                    returnValue = false; 
+                }
+                
 			} catch (NoSuchAlgorithmException ex) {
 				error(TAG, ex.getMessage(), ex, true);
 			}
         } else if (Preferences.SERVERPREF.equals(key)) {
-            Preferences.setServer((String) newValue);
-            
+            mServer = newValue.toString();
+            Preferences.setServer(mServer);
+            serverPref.setSummary(mServer);
             //If preferences have changed, logout
         	logoutClean(key);
         	syncPrefsChanged = true;
@@ -445,7 +484,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
             notifLightsEnablePref.setChecked(notifLightsEnabled);
         }
         
-        return true;
+        return returnValue;
     }
     
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen,
@@ -481,7 +520,10 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
 		if(userPasswordPrefChanged) {
 	    	Preferences.setUserPassword(userPassword);
 		}
-
+	
+		if (mIncorrectPassword)
+		    Constants.setLogged(false);
+		
         //Reconfigure automatic synchronization
         if(syncPrefsChanged) {
 	        SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, ctx);
@@ -507,15 +549,19 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         int prefSyncTimeIndex = prefSyncTimeValues.indexOf(Preferences.getSyncTime());
         String prefSyncTimeEntry = prefSyncTimeEntries.get(prefSyncTimeIndex);
         String stars = Utils.getStarsSequence(STARS_LENGTH);
-        String server = Preferences.getServer();
+        mServer = Preferences.getServer();
         
-        userIDPref.setSummary(Preferences.getUserID());
+        /*userIDPref.setSummary(Preferences.getUserID());
         
-        if (!Preferences.getUserPassword().equals(""))
+        if (!Preferences.getUserPassword().equals("") && !mIncorrectPassword)
             userPasswordPref.setSummary(stars);
-
-        if (!server.equals("")) {
-            serverPref.setSummary(server);
+        
+        if (mIncorrectPassword)
+        	highlightPasswordSummary();
+        */
+        
+        if (!mServer.equals("")) {
+            serverPref.setSummary(mServer);
         } else {
             serverPref.setSummary(Constants.DEFAULT_SERVER);
         }
@@ -530,5 +576,28 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         }
         
         syncTimePref.setSummary(prefSyncTimeEntry);
+    }
+    
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+    	super.onSaveInstanceState(outState);
+    	
+    	if (mIncorrectPassword)
+    		outState.putBoolean(PASSWORD_VALIDATE, mIncorrectPassword);
+    }
+    
+    @Override
+    protected void onRestoreInstanceState(Bundle state) {
+    	super.onRestoreInstanceState(state);
+    	
+    	if (state.getBoolean(PASSWORD_VALIDATE)){
+    		highlightPasswordSummary();
+    		mIncorrectPassword = true;
+    	}
+    }
+    
+    private void highlightPasswordSummary(){
+    	userPasswordPref.setLayoutResource(R.layout.preference_child_summary_error);
+        userPasswordPref.setSummary(mServer.equals("swad.ugr.es") ? R.string.error_password_summaryUGR : R.string.error_password_summary);
     }
 }

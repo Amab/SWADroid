@@ -16,7 +16,7 @@
     <string name="set_preferences">Konfiguracja</string>
     <string name="user_preferences">Dane użytkownika</string>
     <string name="userIDName_preferences">Użytkownik</string>
-    <string name="userIDSummary_preferences">ID lub Nick</string>
+    <string name="userIDSummary_preferences">Identyfikator, Imię lub email</string>
     <string name="userIDTitle_preferences">Użytkownik</string>
     <string name="userPasswordName_preferences">Hasło</string>
     <string name="userPasswordSummary_preferences">Hasło</string>
@@ -107,10 +107,7 @@
     <string name="initialDialogTitle">WAŻNE</string>
     <string name="upgradeMsg">Ze względu na zmiany w bazie danych, wszystkie dane zostały usunięte.\n\nDisculpe
         niedogodności."</string>
-    <string name="errorBadLoginMsg">Nazwa użytkownika lub hasło nieprawidłowe.\n\n
-         * Upewnij się, że wpisana nazwa użytkownika i hasło do bezpośredniego dostępu do SWAD, nie te z PRADO.\n\n
-         * Jeśli użytkownik jest nick, sprawdź, czy użytkownik jest poprzedzony @.\n\n
-         * Jeśli użytkownik jest ID, upewnij się, że usunięto ostatni list.</string>
+    <string name="errorBadLoginMsg">Nazwa użytkownika lub hasło nieprawidłowe</string>
     <string name="errorServerResponseMsg">Błąd w odpowiedzi serwera</string>
     <string name="errorBadAppKeyMsg">Key błędne. Proszę skontaktować się z deweloperem.</string>
     <string name="errorConnectionMsg">Błąd podczas łączenia się z serwerem</string>
@@ -305,5 +302,10 @@
     <string name="practicesprogramModuleLabel">Program praktyk</string>
     <string name="theoryprogramModuleLabel">Teoria programu</string>
     <string name="teachingguideModuleLabel">Podręcznik nauczania</string>
+    
+    <string name="pradoLoginToast">Swad hasło jest co najmniej 8 znaków alfanumerycznych</string>
+	<string name="error_password_summaryUGR">Błąd: Pamiętaj, aby wpisać hasło SWAD nie zidentyfikował dostęp</string>
+	<string name="error_password_summary">Błąd: Hasło musi mieć co najmniej 8 znaków alfanumerycznych</string>
+	<string name="passwordDialogTip">Swad musi być co najmniej 8 znaków alfanumerycznych</string>
     
 </resources>

@@ -23,24 +23,25 @@ import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.Module;
+import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 
 public class Information extends Module {
 	
 	/**
-     * Information Type
+     * Information Type. String with the type of information (none, HTML, plain text...)
      */
-    private String infoType;
+    private String infoSrc;
     
     /**
-     * Information Content
+     * Information Content. String with the content of information.
      */
-    private String infoContent;
+    private String infoTxt;
     
     /**
      * Request code to get course's information
      */
-    private String requestCodeToAdd;
+    private String infoTypeToAdd;
 
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,9 +65,9 @@ public class Information extends Module {
         switch (requestCode) {
         
         
-        case Constants.INTRODUCTION_REQUEST_CODE : requestCode = 28;
+        case Constants.INTRODUCTION_REQUEST_CODE:
         
-        	requestCodeToAdd = "introduction";
+         	infoTypeToAdd = "introduction";
         
             moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
             moduleIcon.setBackgroundResource(R.drawable.notif);
@@ -76,9 +77,9 @@ public class Information extends Module {
         
         break;
 
-        case Constants.FAQS_REQUEST_CODE : requestCode = 29;
+        case Constants.FAQS_REQUEST_CODE:
         
-    		requestCodeToAdd = "";/*falta en la funcion que obtiene la informacion de las asignaturas*/
+        	infoTypeToAdd = "";/*falta en la funcion que obtiene la informacion de las asignaturas*/
             
             moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
             moduleIcon.setBackgroundResource(R.drawable.notif);
@@ -88,9 +89,9 @@ public class Information extends Module {
         
         break;
         
-        case Constants.BIBLIOGRAPHY_REQUEST_CODE : requestCode = 30;
+        case Constants.BIBLIOGRAPHY_REQUEST_CODE:
         
-        	requestCodeToAdd = "bibliography";
+        	infoTypeToAdd = "bibliography";
         
             moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
             moduleIcon.setBackgroundResource(R.drawable.notif);
@@ -100,9 +101,9 @@ public class Information extends Module {
         
         break;
         
-        case Constants.PRACTICESPROGRAM_REQUEST_CODE : requestCode = 31;
+        case Constants.PRACTICESPROGRAM_REQUEST_CODE:
         
-        	requestCodeToAdd = "practicals";
+    		infoTypeToAdd = "practicals";
         
             moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
             moduleIcon.setBackgroundResource(R.drawable.notif);
@@ -112,9 +113,9 @@ public class Information extends Module {
         
         break;
         
-        case Constants.THEORYPROGRAM_REQUEST_CODE : requestCode = 32;
+        case Constants.THEORYPROGRAM_REQUEST_CODE:
         
-        	requestCodeToAdd = "";/*falta en la funcion que obtiene la informacion de las asignaturas*/
+    		infoTypeToAdd = "";/*falta en la funcion que obtiene la informacion de las asignaturas*/
         
             moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
             moduleIcon.setBackgroundResource(R.drawable.notif);
@@ -124,9 +125,9 @@ public class Information extends Module {
             
         break;
         
-        case Constants.LINKS_REQUEST_CODE : requestCode = 33;
+        case  Constants.LINKS_REQUEST_CODE:
         
-        	requestCodeToAdd = "links";
+    		infoTypeToAdd = "links";
         
             moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
             moduleIcon.setBackgroundResource(R.drawable.notif);
@@ -136,9 +137,9 @@ public class Information extends Module {
         
         break;
         
-        case Constants.TEACHINGGUIDE_REQUEST_CODE : requestCode = 34;
+        case Constants.TEACHINGGUIDE_REQUEST_CODE:
         
-        	requestCodeToAdd = "guide";
+    		infoTypeToAdd = "guide";
         
             moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
             moduleIcon.setBackgroundResource(R.drawable.notif);
@@ -158,17 +159,20 @@ public class Information extends Module {
 			IOException, XmlPullParserException {
 		// TODO Auto-generated method stub
 		
-		createRequest();
+		createRequest(SOAPClient.CLIENT_TYPE);
 		addParam("wsKey", Constants.getLoggedUser().getWsKey());
 		addParam("courseCode", Constants.getSelectedCourseCode());
-		addParam("infoType", requestCodeToAdd);
+		addParam("infoType", infoTypeToAdd);
 		sendRequest(User.class, false);
 		
 		 if (result != null) {
 			 
-			 ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);		 
-			 infoType = res.get(1).toString();
-			 infoContent = res.get(2).toString();
+			 //ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);	
+			 SoapObject soap = (SoapObject) result;
+			 //infoType = res.get(1).toString();
+			 //infoContent = res.get(2).toString();
+			 infoSrc = soap.getProperty(infoSrc).toString();
+			 infoTxt = soap.getPrimitiveProperty(infoTxt).toString();
 			 
 		 }
 		

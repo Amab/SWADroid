@@ -41,6 +41,7 @@ import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.utils.Utils;
+import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
@@ -174,7 +175,7 @@ public class Notifications extends Module {
     /**
      * Sends to SWAD the "seen notifications" info
      */
-    private void sendReadNotifications() {
+    private void sendReadedNotifications() {
         List<Model> markedNotificationsList;
         String seenNotifCodes;
         Intent activity;
@@ -317,7 +318,7 @@ public class Notifications extends Module {
         dbHelper.updateAllNotifications("seenLocal", Utils.parseBoolString(true));
         
         //Sends to SWAD the "seen notifications" info
-        sendReadNotifications();  
+        sendReadedNotifications();  
         
         refreshScreen();
     }
@@ -372,7 +373,7 @@ public class Notifications extends Module {
             timestamp++;
 
             //Creates webservice request, adds required params and sends request to webservice
-            createRequest();
+            createRequest(SOAPClient.CLIENT_TYPE);
             addParam("wsKey", Constants.getLoggedUser().getWsKey());
             addParam("beginTime", timestamp);
             sendRequest(SWADNotification.class, false);
@@ -458,7 +459,7 @@ public class Notifications extends Module {
             updateButton.setVisibility(View.VISIBLE);*/
             
             //Sends to SWAD the "seen notifications" info
-            sendReadNotifications();  
+            sendReadedNotifications();  
             
             refreshScreen();
             //Toast.makeText(this, R.string.notificationsDownloadedMsg, Toast.LENGTH_SHORT).show();

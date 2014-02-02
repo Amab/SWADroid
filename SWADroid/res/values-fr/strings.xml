@@ -16,7 +16,7 @@
     <string name="set_preferences">Configuration</string>
     <string name="user_preferences">Données de l\'utilisateur</string>
     <string name="userIDName_preferences">Utilisateur</string>
-    <string name="userIDSummary_preferences">ID ou Pseudo</string>
+    <string name="userIDSummary_preferences">ID, Pseudo ou Email</string>
     <string name="userIDTitle_preferences">Utilisateur</string>
     <string name="userPasswordName_preferences">Mot de passe</string>
     <string name="userPasswordSummary_preferences">Mot de passe</string>
@@ -116,10 +116,7 @@
     <string name="upgradeMsg">En raison de modifications dans la base de données toutes les données ont été
         supprimées.\n\nDisculpe la gêne occasionnée."
     </string>
-    <string name="errorBadLoginMsg">Nom d\'utilisateur ou mot de passe incorrect.\n\n
-         * Assurez-vous que vous avez entré le nom d\'utilisateur et mot de passe pour un accès direct à SWAD, pas celles de PRADO.\n\n
-         * Si l\'utilisateur est un surnom, vérifier que l\'utilisateur est précédée par le signe @.\n\n
-         * Si l\'utilisateur est l\'ID, assurez-vous que vous avez supprimé la dernière lettre.</string>
+    <string name="errorBadLoginMsg">Nom d\'utilisateur ou mot de passe incorrect</string>
     <string name="errorServerResponseMsg">Erreur dans la réponse du serveur</string>
     <string name="errorBadAppKeyMsg">Une mauvaise touche. S\'il vous plaît contacter le développeur.</string>
     <string name="errorConnectionMsg">Erreur lors de la connexion au serveur</string>
@@ -317,4 +314,9 @@
     <string name="practicesprogramModuleLabel">Programme des pratiques</string>
     <string name="theoryprogramModuleLabel">Théorie du programme</string>
     <string name="teachingguideModuleLabel">Guide des cours</string>
+    
+    <string name="pradoLoginToast">SWAD Le mot de passe est au moins 8 caractères alphanumériques</string>
+	<string name="error_password_summaryUGR">N\'oubliez pas de saisir votre mot de passe SWAD pas identifié l\'accès</string>
+	<string name="error_password_summary">Erreur: Votre mot de passe doit comporter au moins 8 caractères alphanumériques</string>
+	<string name="passwordDialogTip">SWAD doit être d\'au moins 8 caractères alphanumériques</string>
 </resources>
