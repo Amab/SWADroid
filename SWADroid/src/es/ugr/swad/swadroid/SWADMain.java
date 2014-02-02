@@ -304,8 +304,8 @@ public class SWADMain extends MenuExpandableListActivity {
             lastVersion = Preferences.getLastVersion();
             currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
             dbHelper.initializeDB();
-            //lastVersion = 56;
-            //currentVersion = 57;
+            //lastVersion = 57;
+            //currentVersion = 58;
 
             //If this is the first run, show configuration dialog
             if (lastVersion == 0) {
