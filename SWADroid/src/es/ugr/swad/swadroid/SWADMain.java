@@ -425,6 +425,13 @@ public class SWADMain extends MenuExpandableListActivity {
                     showProgress(false);
                     mLoginError = false;
                     loginForm(false);
+                    
+                    //User credentials are correct. Set periodic synchronization if enabled
+        	        if (!Preferences.getSyncTime().equals("0") && Preferences.isSyncEnabled()) {
+        	            SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY,
+        	            		Long.parseLong(Preferences.getSyncTime()), this);
+        	        }
+        	        
                     break;
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
@@ -434,6 +441,9 @@ public class SWADMain extends MenuExpandableListActivity {
                     mLoginError = true;
                     showProgress(false);
                     loginForm(true);
+                    
+                    //User credentials are wrong. Remove periodic synchronization
+                    SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, this);
                     break;
             }
         }
