@@ -19,12 +19,13 @@
 package es.ugr.swad.swadroid;
 
 import java.security.NoSuchAlgorithmException;
-
 import es.ugr.swad.swadroid.utils.Crypto;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.preference.PreferenceManager;
+import android.os.Build;
+import android.util.Log;
 
 /**
  * Class for store the application preferences
@@ -36,6 +37,10 @@ public class Preferences {
      * Login tag name for Logcat
      */
     public static final String TAG = Constants.APP_TAG + " Preferences";
+    /**
+     * Preferences name
+     */
+    public static final String PREFS_NAME = "es.ugr.swad.swadroid_preferences";
     /**
      * Application preferences
      */
@@ -140,8 +145,24 @@ public class Preferences {
     /**
      * Constructor
      */
-    public Preferences(Context ctx) { 
-		prefs = PreferenceManager.getDefaultSharedPreferences(ctx);    	
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	public Preferences(Context ctx) { 
+    	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+    		/*
+    		 *  If Android API >= 11 (HONEYCOMB) enable access to SharedPreferences from all processes
+    		 *  of the application 
+    		 */
+    		prefs = ctx.getSharedPreferences(PREFS_NAME, Context.MODE_MULTI_PROCESS);
+    		Log.i(TAG, "Android API >= 11 (HONEYCOMB). Enabling MODE_MULTI_PROCESS explicitly");
+		} else {
+			/* 
+			 * If Android API < 11 (HONEYCOMB) access is enabled by default
+			 * MODE_MULTI_PROCESS is not defined
+			 */
+			prefs = ctx.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+    		Log.i(TAG, "Android API < 11 (HONEYCOMB). MODE_MULTI_PROCESS is not defined and enabled by default");
+		}
+
 		editor = prefs.edit();
 	}
 
@@ -197,7 +218,7 @@ public class Preferences {
     /**
      * Sets server URL
      *
-     * @param Server URL
+     * @param server Server URL
      */
     public static void setServer(String server) {
     	editor = editor.putString(SERVERPREF, server);

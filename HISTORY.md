@@ -1,3 +1,19 @@
+##0.13 (2014-02-02)
+
+* Added login screen
+* Added SWAD certificate validation for SSL connections
+* Added initial support for RESTful webservices
+* Added Alejandro Alcalde as contributor
+* If the web service key is invalid, force logout and reset password
+  (this will show again the login screen)
+* Try to detect if user is logging with e-Administration credentials
+* Now Terena built-in certificate is used on Android API >= 11 (HONEYCOMB)
+* Updated target API version to 10 (GINGERBREAD_MR1)
+* Enabled MODE_MULTI_PROCESS in SharedPreferences for Android API >= 11
+  (HONEYCOMB) in order to allow access from components running on a
+  separate process (notifications service)
+* Modified "user or password incorrect" error message
+
 ##0.12.7 (2013-12-14)
 
 * Added notification read info from SWAD

@@ -30,11 +30,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import org.ksoap2.SoapEnvelope;
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.ksoap2.SoapFault;
-import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.serialization.SoapSerializationEnvelope;
-import org.ksoap2.transport.KeepAliveHttpsTransportSE;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
@@ -47,6 +46,9 @@ import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.utils.Utils;
+import es.ugr.swad.swadroid.webservices.IWebserviceClient;
+import es.ugr.swad.swadroid.webservices.RESTClient;
+import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
  * Superclass for encapsulate common behavior of all modules.
@@ -55,29 +57,17 @@ import es.ugr.swad.swadroid.utils.Utils;
  */
 public abstract class Module extends MenuActivity {
     /**
-     * SOAP_ACTION param for webservice request.
+     * Class Module's tag name for Logcat
      */
-    private String SOAP_ACTION = "";
-    /**
-     * METHOD_NAME param for webservice request.
-     */
-    private String METHOD_NAME = "";
-    /**
-     * NAMESPACE param for webservice request.
-     */
-    private static String NAMESPACE = "urn:swad";
-    /**
-     * SERVER param for webservice request.
-     */
-    private String SERVER; // = "swad.ugr.es";
+    private static final String TAG = Constants.APP_TAG + " Module";
     /**
      * Async Task for background jobs
      */
     private Connect connect;
     /**
-     * Webservice request.
+     * Client for SWAD webservices
      */
-    private SoapObject request;
+    private IWebserviceClient webserviceClient;
     /**
      * Webservice result.
      */
@@ -98,12 +88,10 @@ public abstract class Module extends MenuActivity {
      * Connection available flag
      */
     protected static boolean isConnected;
-    /**
-     * Class Module's tag name for Logcat
-     */
-    private static final String TAG = Constants.APP_TAG + " Module";
-
-    private KeepAliveHttpsTransportSE connection;
+	/**
+	 * METHOD_NAME param for webservice request.
+	 */
+	private String METHOD_NAME = "";
 
     /**
      * Connects to SWAD and gets user data.
@@ -111,7 +99,6 @@ public abstract class Module extends MenuActivity {
      * @throws NoSuchAlgorithmException
      * @throws IOException
      * @throws XmlPullParserException
-     * @throws SoapFault
      */
     protected abstract void requestService() throws NoSuchAlgorithmException,
             IOException, XmlPullParserException;
@@ -131,96 +118,6 @@ public abstract class Module extends MenuActivity {
      * Error handler
      */
     protected abstract void onError();
-
-    /**
-     * Gets METHOD_NAME parameter.
-     *
-     * @return METHOD_NAME parameter.
-     */
-    public String getMETHOD_NAME() {
-        return METHOD_NAME;
-    }
-
-    /**
-     * Sets METHOD_NAME parameter.
-     *
-     * @param METHOD_NAME METHOD_NAME parameter.
-     */
-    protected void setMETHOD_NAME(String METHOD_NAME) {
-        this.METHOD_NAME = METHOD_NAME;
-    }
-
-    /**
-     * Gets NAMESPACE parameter.
-     *
-     * @return NAMESPACE parameter.
-     */
-    public String getNAMESPACE() {
-        return NAMESPACE;
-    }
-
-    /**
-     * Sets NAMESPACE parameter.
-     *
-     * @param NAMESPACE NAMESPACE parameter.
-     */
-    public void setNAMESPACE(String NAMESPACE) {
-        Module.NAMESPACE = NAMESPACE;
-    }
-
-    /**
-     * Gets SOAP_ACTION parameter.
-     *
-     * @return SOAP_ACTION parameter.
-     */
-    public String getSOAP_ACTION() {
-        return SOAP_ACTION;
-    }
-
-    /**
-     * Sets SOAP_ACTION parameter.
-     *
-     * @param SOAP_ACTION SOAP_ACTION parameter.
-     */
-    public void setSOAP_ACTION(String SOAP_ACTION) {
-        this.SOAP_ACTION = SOAP_ACTION;
-    }
-
-    /**
-     * Gets webservice request.
-     *
-     * @return Webservice request.
-     */
-    public SoapObject getRequest() {
-        return request;
-    }
-
-    /**
-     * Sets webservice request.
-     *
-     * @param request Webservice request.
-     */
-    public void setRequest(SoapObject request) {
-        this.request = request;
-    }
-
-    /**
-     * Gets webservice result.
-     *
-     * @return Webservice result.
-     */
-    public Object getResult() {
-        return result;
-    }
-
-    /**
-     * Sets webservice result.
-     *
-     * @param result Webservice result.
-     */
-    public void setResult(Object result) {
-        this.result = result;
-    }
 
     /**
      * Run connection. Launch Login activity when required
@@ -249,12 +146,14 @@ public abstract class Module extends MenuActivity {
     protected void onCreate(Bundle savedInstanceState) {
         // Check if debug mode is enabled
         try {
-            getPackageManager().getApplicationInfo(
-                    getPackageName(), 0);
+            getPackageManager().getApplicationInfo(getPackageName(), 0);
 			isDebuggable = (ApplicationInfo.FLAG_DEBUGGABLE != 0);
         } catch (NameNotFoundException e1) {
             e1.printStackTrace();
         }
+        
+        //Initialize webservices client
+        webserviceClient = null;
 
         super.onCreate(savedInstanceState);
 
@@ -312,7 +211,6 @@ public abstract class Module extends MenuActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        SERVER = Preferences.getServer();
     }
 
     /*
@@ -345,11 +243,29 @@ public abstract class Module extends MenuActivity {
     }
 
     /**
+     * Sets METHOD_NAME parameter.
+     *
+     * @param METHOD_NAME METHOD_NAME parameter.
+     */
+    protected void setMETHOD_NAME(String METHOD_NAME) {
+        this.METHOD_NAME = METHOD_NAME;
+    }
+
+    /**
      * Creates webservice request.
      */
-    protected void createRequest() {
-        request = new SoapObject(NAMESPACE, METHOD_NAME);
-        result = null;
+    protected void createRequest(String clientType) {
+    	if(webserviceClient == null) {
+	    	if(clientType.equals(SOAPClient.CLIENT_TYPE)) {
+	    		webserviceClient = new SOAPClient();
+	    	} else if(clientType.equals(RESTClient.CLIENT_TYPE)) {
+	    		webserviceClient = new RESTClient();    		
+	    	}
+	
+	        webserviceClient.setMETHOD_NAME(METHOD_NAME);
+    	}
+    	
+    	webserviceClient.createRequest();
     }
 
     /**
@@ -359,81 +275,38 @@ public abstract class Module extends MenuActivity {
      * @param value Parameter value.
      */
     protected void addParam(String param, Object value) {
-        request.addProperty(param, value);
+    	webserviceClient.addParam(param, value);
     }
 
     /**
-     * Sends a request to the specified webservice in METHOD_NAME class
-     * constant.
-     *
+     * Sends a SOAP request to the specified webservice in METHOD_NAME class
+     * constant of the webservice client.
+     * 
      * @param cl     Class to be mapped
      * @param simple Flag for select simple or complex response
-     * @throws IOException
-     * @throws SoapFault
-     * @throws XmlPullParserException
+     * @throws XmlPullParserException 
+     * @throws IOException 
      */
-    protected void sendRequest(Class<?> cl, boolean simple) throws
-            IOException,
-            XmlPullParserException {
-
-        // Variables for URL splitting
-        String delimiter = "/";
-        String PATH;
-        String[] URLArray;
-        String URL;
-
-        // Split URL
-        URLArray = SERVER.split(delimiter, 2);
-        URL = URLArray[0];
-        if (URLArray.length == 2) {
-            PATH = delimiter + URLArray[1];
-        } else {
-            PATH = "";
-        }
-
-        /**
-         * Use of KeepAliveHttpsTransport deals with the problems with the
-         * Android ssl libraries having trouble with certificates and
-         * certificate authorities somehow messing up connecting/needing
-         * reconnects.
-         */
-        connection = new KeepAliveHttpsTransportSE(URL, 443, PATH, Constants.CONNECTION_TIMEOUT);
-        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-                SoapEnvelope.VER11);
-        System.setProperty("http.keepAlive", "false");
-        envelope.encodingStyle = SoapEnvelope.ENC;
-        envelope.setAddAdornments(false);
-        envelope.implicitTypes = true;
-        envelope.dotNet = false;
-        envelope.setOutputSoapObject(request);
-        
-        if(cl != null) {
-        	envelope.addMapping(NAMESPACE, cl.getSimpleName(), cl);
-        }
-        
-        if (isDebuggable) {
-	        connection.debug = true;
-	        try {
-	        	connection.call(SOAP_ACTION, envelope);
-		        Log.d(TAG, connection.getHost() + " " + connection.getPath() + " " +
-		        connection.getPort());
-		        Log.d(TAG, connection.requestDump.toString());
-		        Log.d(TAG, connection.responseDump.toString());
-	        } catch (Exception e) {
-		        Log.e(TAG, connection.getHost() + " " + connection.getPath() + " " +
-		        connection.getPort());
-		        Log.e(TAG, connection.requestDump.toString());
-		        Log.e(TAG, connection.responseDump.toString());
-	        }        	
-        } else {
-        	connection.call(SOAP_ACTION, envelope);        	
-        }
-
-        if (simple && !(envelope.getResponse() instanceof SoapFault)) {
-            result = envelope.bodyIn;
-        } else {
-            result = envelope.getResponse();
-        }
+    protected void sendRequest(Class<?> cl, boolean simple) throws IOException, XmlPullParserException {
+    	((SOAPClient) webserviceClient).sendRequest(cl, simple);
+    	result = webserviceClient.getResult();
+    }
+    
+    /** 
+     * Sends a REST request to the specified webservice in METHOD_NAME class
+     * constant of the webservice client.
+     * 
+     * @param cl     Class to be mapped
+     * @param simple Flag for select simple or complex response
+     * @param type Request type
+     * @param json JSON object to be sended
+     * @throws ClientProtocolException
+     * @throws IOException
+     * @throws JSONException
+     */
+    protected void sendRequest(Class<?> cl, boolean simple, RESTClient.REQUEST_TYPE type, JSONObject json) throws ClientProtocolException, IOException, JSONException {
+    	((RESTClient) webserviceClient).sendRequest(cl, simple, RESTClient.REQUEST_TYPE.GET, json);
+    	result = webserviceClient.getResult();
     }
 
     protected void startConnection(boolean showDialog,
@@ -462,9 +335,10 @@ public abstract class Module extends MenuActivity {
         /**
          * Shows progress dialog and connects to SWAD in background
          *
+         * @param activity            Reference to Module activity
+         * @param show             	  Flag for show a progress dialog
          * @param progressDescription Description to be showed in dialog
          * @param progressTitle       Title to be showed in dialog
-         * @param isLogin             Flag for detect if this is the login module
          */
         public Connect(Module activity, boolean show,
                        String progressDescription, int progressTitle) {
@@ -542,6 +416,13 @@ public abstract class Module extends MenuActivity {
                     if (es.faultstring.equals("Bad log in")) {
                         errorMsg = getString(R.string.errorBadLoginMsg);
                         sendException = false;
+                	} else if (es.faultstring.equals("Bad web service key")) {
+                        errorMsg = getString(R.string.errorBadLoginMsg);
+                		sendException = false;
+                		
+                		//Force logout and reset password (this will show again the login screen)
+                		Constants.setLogged(false);
+                		Preferences.setUserPassword("");
                     } else if (es.faultstring.equals("Unknown application key")) {
                         errorMsg = getString(R.string.errorBadAppKeyMsg);
                     } else {
@@ -552,8 +433,6 @@ public abstract class Module extends MenuActivity {
                 } else if (e instanceof TimeoutException) {
                     errorMsg = getString(R.string.errorTimeoutMsg);
                     sendException = false;
-                } else if (e instanceof IOException) {
-                    errorMsg = getString(R.string.errorConnectionMsg);
                 } else {
                     errorMsg = e.getMessage();
                 	if((errorMsg == null) || errorMsg.equals("")) {

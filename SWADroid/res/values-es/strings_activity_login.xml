@@ -1,0 +1,18 @@
+<resources>
+
+    <string name="title_activity_login">Identificarse</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">DNI, Apodo o Email</string>
+    <string name="prompt_password">Contraseña</string>
+    <string name="prompt_server">Servidor (sin http://)</string>
+    <string name="action_sign_in_register"><b>Identificarse</b></string>
+    <string name="action_sign_in_short">Identificarse</string>
+    <string name="action_forgot_password">He olvidado mi contraseña</string>
+    <string name="login_progress_signing_in">Identificándose&#8230;</string>
+    <string name="error_invalid_email">El usuario es inválido</string>
+    <string name="error_invalid_password">La contraseña debe ser de mínimo 8 caracteres alfanuméricos</string>
+    <string name="error_incorrect_password">La contraseña debe contener números y letras</string>
+    <string name="error_field_required">Este campo es obligatorio</string>
+
+</resources>

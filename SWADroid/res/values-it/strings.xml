@@ -16,7 +16,7 @@
     <string name="set_preferences">Impostazioni</string>
     <string name="user_preferences">Dati utente</string>
     <string name="userIDName_preferences">Utente</string>
-    <string name="userIDSummary_preferences">ID o Nickname</string>
+    <string name="userIDSummary_preferences">ID, Nickname o e-mail</string>
     <string name="userIDTitle_preferences">Utente</string>
     <string name="userPasswordName_preferences">Password</string>
     <string name="userPasswordSummary_preferences">Password</string>
@@ -113,10 +113,7 @@
     <string name="initialDialogTitle">IMPORTANTE</string>
     <string name="upgradeMsg">A causa dei cambiamenti nel database tutti i dati sono stati cancellati.\n\nDisculpe
         l\'inconveniente.</string>
-    <string name="errorBadLoginMsg">Nome utente o password non corretta.\n\n
-         * Assicurarsi di aver inserito il nome utente e la password per l\'accesso diretto a SWAD, non quelli del PRADO.\n\n
-         * Se l\'utente è un soprannome, verificare che l\'utente è preceduto dalla @.\n\n
-         * Se l\'utente è l\'ID, assicurarsi di aver tolto la lettera finale.</string>
+    <string name="errorBadLoginMsg">Nome utente o password non corretta</string>
     <string name="errorServerResponseMsg">Errore nella risposta del server</string>
     <string name="errorBadAppKeyMsg">Erronea applicazione chiave. Si prega di contattare lo sviluppatore.</string>
     <string name="errorConnectionMsg">Errore durante la connessione al server</string>
@@ -314,5 +311,10 @@
     <string name="practicesprogramModuleLabel">Pratiche di programma</string>
     <string name="theoryprogramModuleLabel">Teoria del programma</string>
     <string name="teachingguideModuleLabel">Guida didattica</string>
+    
+    <string name="pradoLoginToast">La password è di almeno 8 caratteri alfanumerici</string>
+	<string name="error_password_summaryUGR">Errore: Ricordate di inserire il vostro SWAD password non identificato Access</string>
+	<string name="error_password_summary">Errore: La password deve essere di almeno 8 caratteri alfanumerici</string>
+	<string name="passwordDialogTip">SWAD password deve essere di almeno 8 caratteri alfanumerici</string>
     
 </resources>

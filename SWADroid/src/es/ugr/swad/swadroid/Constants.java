@@ -469,7 +469,7 @@ public class Constants {
     /**
      * Sets user role in the current selected course
      *
-     * @param userRole: Role of the user: 0- unknown STUDENT_TYPE_CODE - student TEACHER_TYPE_CODE - teacher
+     * @param userRole Role of the user: 0- unknown STUDENT_TYPE_CODE - student TEACHER_TYPE_CODE - teacher
      */
     public static void setCurrentUserRole(int userRole) {
         if (userRole == 0 || userRole == TEACHER_TYPE_CODE || userRole == STUDENT_TYPE_CODE)

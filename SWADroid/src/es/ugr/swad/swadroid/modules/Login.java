@@ -26,6 +26,7 @@ import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.utils.Utils;
+import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.KvmSerializable;
@@ -125,7 +126,7 @@ public class Login extends Module {
             }
 
             //Creates webservice request, adds required params and sends request to webservice
-            createRequest();
+            createRequest(SOAPClient.CLIENT_TYPE);
             addParam("userID", userID);
             addParam("userPassword", Preferences.getUserPassword());
             addParam("appKey", Constants.SWAD_APP_KEY);

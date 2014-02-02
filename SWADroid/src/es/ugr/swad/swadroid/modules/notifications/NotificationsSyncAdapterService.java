@@ -24,6 +24,7 @@ import android.app.Service;
 import android.content.*;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -40,18 +41,21 @@ import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
 import es.ugr.swad.swadroid.utils.Utils;
+import es.ugr.swad.swadroid.webservices.IWebserviceClient;
+import es.ugr.swad.swadroid.webservices.RESTClient;
+import es.ugr.swad.swadroid.webservices.SOAPClient;
 
-import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.KvmSerializable;
 import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.serialization.SoapSerializationEnvelope;
-import org.ksoap2.transport.KeepAliveHttpsTransportSE;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.security.KeyManagementException;
+import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -65,21 +69,18 @@ import java.util.concurrent.TimeoutException;
 public class NotificationsSyncAdapterService extends Service {
     private static final String TAG = "NotificationsSyncAdapterService";
 	private static Preferences prefs;
+	private static SecureConnection conn;
     private static SyncAdapterImpl sSyncAdapter = null;
     private static int notifCount;
     private static final int NOTIF_ALERT_ID = 1982;
     private static int SIZE_LIMIT;
     private static DataBaseHelper dbHelper;
+    private static IWebserviceClient webserviceClient;
     private static String METHOD_NAME = "";
-    private static final String NAMESPACE = "urn:swad";
-    private final static String SOAP_ACTION = "";
-    private static String SERVER; // = "swad.ugr.es";
-    private static SoapObject request;
     private static Object result;
     private static String errorMessage = "";
     public static final String START_SYNC = "es.ugr.swad.swadroid.sync.start";
     public static final String STOP_SYNC = "es.ugr.swad.swadroid.sync.stop";
-    private static KeepAliveHttpsTransportSE connection;
     public static boolean isConnected;
     public static boolean isDebuggable;
 
@@ -101,7 +102,6 @@ public class NotificationsSyncAdapterService extends Service {
         	
         	try {
                 SIZE_LIMIT = Preferences.getNotifLimit();
-                SERVER = Preferences.getServer();
                 NotificationsSyncAdapterService.performSync(mContext, account, extras, authority, provider, syncResult);
                 
                 //If synchronization was successful, update last synchronization time in preferences
@@ -113,6 +113,13 @@ public class NotificationsSyncAdapterService extends Service {
                     if (es.faultstring.equals("Bad log in")) {
                     	errorMessage = mContext.getString(R.string.errorBadLoginMsg);
                     	sendException = false;
+                	} else if (es.faultstring.equals("Bad web service key")) {
+                		errorMessage = mContext.getString(R.string.errorBadLoginMsg);
+                		sendException = false;
+                		
+                		//Force logout and reset password (this will show again the login screen)
+                		Constants.setLogged(false);
+                		Preferences.setUserPassword("");
                     } else if (es.faultstring.equals("Unknown application key")) {
                     	errorMessage = mContext.getString(R.string.errorBadAppKeyMsg);
                     } else {
@@ -123,8 +130,6 @@ public class NotificationsSyncAdapterService extends Service {
                 } else if (e instanceof TimeoutException) {
                 	errorMessage = mContext.getString(R.string.errorTimeoutMsg);
                 	sendException = false;
-                } else if (e instanceof IOException) {
-                	errorMessage = mContext.getString(R.string.errorConnectionMsg);
                 } else {
                 	errorMessage = e.getMessage();
                 	if((errorMessage == null) || errorMessage.equals("")) {
@@ -174,6 +179,9 @@ public class NotificationsSyncAdapterService extends Service {
         try {
             prefs = new Preferences(this);
             dbHelper = new DataBaseHelper(this);
+            
+            //Initialize webservices client
+            webserviceClient = null;
         } catch (Exception e) {
             e.printStackTrace();
             errorMessage = e.getMessage();
@@ -230,77 +238,45 @@ public class NotificationsSyncAdapterService extends Service {
         return sSyncAdapter;
     }
 
-    private static void createRequest() {
-        request = new SoapObject(NAMESPACE, METHOD_NAME);
-        result = null;
+    /**
+     * Creates webservice request.
+     */
+    protected static void createRequest(String clientType) {
+    	if(webserviceClient == null) {
+	    	if(clientType.equals(SOAPClient.CLIENT_TYPE)) {
+	    		webserviceClient = new SOAPClient();
+	    	} else if(clientType.equals(RESTClient.CLIENT_TYPE)) {
+	    		webserviceClient = new RESTClient();    		
+	    	}
+	
+    	}
+
+        webserviceClient.setMETHOD_NAME(METHOD_NAME);
+    	webserviceClient.createRequest();
     }
 
-    private static void addParam(String param, Object value) {
-        request.addProperty(param, value);
+    /**
+     * Adds a parameter to webservice request.
+     *
+     * @param param Parameter name.
+     * @param value Parameter value.
+     */
+    protected static void addParam(String param, Object value) {
+    	webserviceClient.addParam(param, value);
     }
 
-    private static void sendRequest(Class<?> cl, boolean simple)
-            throws IOException, XmlPullParserException {
-
-    	// Variables for URL splitting
-        String delimiter = "/";
-        String PATH;
-        String[] URLArray;
-        String URL;
-
-        // Split URL
-        URLArray = SERVER.split(delimiter, 2);
-        URL = URLArray[0];
-        if (URLArray.length == 2) {
-            PATH = delimiter + URLArray[1];
-        } else {
-            PATH = "";
-        }
-
-        /**
-         * Use of KeepAliveHttpsTransport deals with the problems with the
-         * Android ssl libraries having trouble with certificates and
-         * certificate authorities somehow messing up connecting/needing
-         * reconnects.
-         */
-        connection = new KeepAliveHttpsTransportSE(URL, 443, PATH, Constants.CONNECTION_TIMEOUT);
-        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-                SoapEnvelope.VER11);
-        System.setProperty("http.keepAlive", "false");
-        envelope.encodingStyle = SoapEnvelope.ENC;
-        envelope.setAddAdornments(false);
-        envelope.implicitTypes = true;
-        envelope.dotNet = false;
-        envelope.setOutputSoapObject(request);
-        envelope.addMapping(NAMESPACE, cl.getSimpleName(), cl);
-        
-        if(cl != null) {
-        	envelope.addMapping(NAMESPACE, cl.getSimpleName(), cl);
-        }
-        
-        if (isDebuggable) {
-	        connection.debug = true;
-	        try {
-	        	connection.call(SOAP_ACTION, envelope);
-		        Log.d(TAG, connection.getHost() + " " + connection.getPath() + " " +
-		        connection.getPort());
-		        Log.d(TAG, connection.requestDump.toString());
-		        Log.d(TAG, connection.responseDump.toString());
-	        } catch (Exception e) {
-		        Log.e(TAG, connection.getHost() + " " + connection.getPath() + " " +
-		        connection.getPort());
-		        Log.e(TAG, connection.requestDump.toString());
-		        Log.e(TAG, connection.responseDump.toString());
-	        }        	
-        } else {
-        	connection.call(SOAP_ACTION, envelope);        	
-        }
-
-        if (simple && !(envelope.getResponse() instanceof SoapFault)) {
-            result = envelope.bodyIn;
-        } else {
-            result = envelope.getResponse();
-        }
+    /**
+     * Sends a SOAP request to the specified webservice in METHOD_NAME class
+     * constant of the webservice client.
+     * 
+     * @param cl     Class to be mapped
+     * @param simple Flag for select simple or complex response
+     * @throws XmlPullParserException 
+     * @throws IOException 
+     */
+    protected static void sendRequest(Class<?> cl, boolean simple) throws IOException, XmlPullParserException {
+    	((SOAPClient) webserviceClient).sendRequest(cl, simple);
+    	result = webserviceClient.getResult();
     }
     
     private static void logUser() throws IOException, XmlPullParserException {
@@ -308,7 +284,7 @@ public class NotificationsSyncAdapterService extends Service {
 
         METHOD_NAME = "loginByUserPasswordKey";
 
-        createRequest();
+        createRequest(SOAPClient.CLIENT_TYPE);
         addParam("userID", Preferences.getUserID());
         addParam("userPassword", Preferences.getUserPassword());
         addParam("appKey", Constants.SWAD_APP_KEY);
@@ -349,7 +325,8 @@ public class NotificationsSyncAdapterService extends Service {
 
         //Creates webservice request, adds required params and sends request to webservice
         METHOD_NAME = "getNotifications";
-        createRequest();
+        
+        createRequest(SOAPClient.CLIENT_TYPE);
         addParam("wsKey", Constants.getLoggedUser().getWsKey());
         addParam("beginTime", timestamp);
         sendRequest(SWADNotification.class, false);
@@ -396,7 +373,7 @@ public class NotificationsSyncAdapterService extends Service {
     /**
      * Sends to SWAD the "seen notifications" info
      */
-    private static void sendReadNotifications(Context context) {
+    private static void sendReadedNotifications(Context context) {
         List<Model> markedNotificationsList;
         String seenNotifCodes;
         Intent activity;
@@ -431,15 +408,25 @@ public class NotificationsSyncAdapterService extends Service {
     }
 
     private static void performSync(Context context, Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
-            throws IOException, XmlPullParserException, NoSuchAlgorithmException, KeyManagementException {
+            throws IOException, XmlPullParserException, NoSuchAlgorithmException, KeyManagementException, KeyStoreException, CertificateException, UnrecoverableKeyException {
 
         //Notify synchronization start
         Intent startIntent = new Intent();
         startIntent.setAction(START_SYNC);
         context.sendBroadcast(startIntent);
 
-        //Initialize HTTPS connections
-        SecureConnection.initSecureConnection();
+      //Initialize HTTPS connections
+    	/*
+    	 * Terena root certificate is not included by default on Gingerbread and older
+    	 * If Android API < 11 (HONEYCOMB) add Terena certificate manually
+    	 */
+    	if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+    		conn = new SecureConnection();
+    		conn.initSecureConnection(context);        		
+    		Log.i(TAG, "Android API < 11 (HONEYCOMB). Adding Terena certificate manually");
+    	} else {
+    		Log.i(TAG, "Android API >= 11 (HONEYCOMB). Using Terena built-in certificate");
+    	}
 
         //If last login time > Global.RELOGIN_TIME, force login
         if (Constants.isLogged() &&
@@ -468,7 +455,7 @@ public class NotificationsSyncAdapterService extends Service {
 	            		context.getString(R.string.app_name));
         	}
         	
-        	sendReadNotifications(context);
+        	sendReadedNotifications(context);
         }
 
         //Notify synchronization stop

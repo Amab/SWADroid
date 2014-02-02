@@ -34,6 +34,7 @@ import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.model.User;
+import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -147,7 +148,7 @@ public class Notices extends Module {
 
         readData();
 
-        createRequest();
+        createRequest(SOAPClient.CLIENT_TYPE);
 
         addParam("wsKey", Constants.getLoggedUser().getWsKey());
         addParam("courseCode", (int) selectedCourseCode);
