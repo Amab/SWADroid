@@ -614,7 +614,6 @@ public class SWADMain extends MenuExpandableListActivity {
             users.put(IMAGE, getResources().getDrawable(R.drawable.users));
             headerData.add(users);
 
-
             final ArrayList<ArrayList<HashMap<String, Object>>> childData = new ArrayList<ArrayList<HashMap<String, Object>>>();
 
             final ArrayList<HashMap<String, Object>> courseData = new ArrayList<HashMap<String, Object>>();
@@ -633,8 +632,6 @@ public class SWADMain extends MenuExpandableListActivity {
             childData.add(usersData);
 
             HashMap<String, Object> map = new HashMap<String, Object>();
-           
-            
   
             //Documents category
             map.put(NAME, getString(R.string.documentsDownloadModuleLabel));
@@ -645,41 +642,42 @@ public class SWADMain extends MenuExpandableListActivity {
             map.put(NAME, getString(R.string.sharedsDownloadModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.folder_users));
             courseData.add(map);
+            //TODO Disable Information options until the Information module is finished
             //Introduction category
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.introductionModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
-            courseData.add(map);
+            //courseData.add(map);
             //Theory Program category
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.theoryprogramModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
-            courseData.add(map);
+            //courseData.add(map);
             //Practices Program category
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.practicesprogramModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
-            courseData.add(map);
+            //courseData.add(map);
             //Teaching Guide category
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.teachingguideModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
-            courseData.add(map);
+            //courseData.add(map);
             //Bibliography category
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.bibliographyModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
-            courseData.add(map);
+            //courseData.add(map);
             //FAQs category
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.faqsModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
-            courseData.add(map);
+            //courseData.add(map);
             //Links category
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.linksModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
-            courseData.add(map);
+            //courseData.add(map);
             
             //Evaluation category
             map = new HashMap<String, Object>();
