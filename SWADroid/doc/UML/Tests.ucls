@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.1.4" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
+  realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
+  <class id="1" language="java" name="es.ugr.swad.swadroid.modules.tests.AnswerTypesArrayAdapter" project="SWADroid" 
+    file="/SWADroid/src/es/ugr/swad/swadroid/modules/tests/AnswerTypesArrayAdapter.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="151" width="242" x="41" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="es.ugr.swad.swadroid.modules.tests.TestsMake" project="SWADroid" 
+    file="/SWADroid/src/es/ugr/swad/swadroid/modules/tests/TestsMake.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="529" width="318" x="323" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="es.ugr.swad.swadroid.modules.tests.TestsQuestionsDownload" project="SWADroid" 
+    file="/SWADroid/src/es/ugr/swad/swadroid/modules/tests/TestsQuestionsDownload.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="223" width="170" x="681" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="es.ugr.swad.swadroid.modules.tests.TestsConfigDownload" project="SWADroid" 
+    file="/SWADroid/src/es/ugr/swad/swadroid/modules/tests/TestsConfigDownload.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="241" width="163" x="891" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="es.ugr.swad.swadroid.modules.tests.CheckedAnswersArrayAdapter" project="SWADroid" 
+    file="/SWADroid/src/es/ugr/swad/swadroid/modules/tests/CheckedAnswersArrayAdapter.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="205" width="422" x="1094" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="es.ugr.swad.swadroid.modules.tests.Tests" project="SWADroid" 
+    file="/SWADroid/src/es/ugr/swad/swadroid/modules/tests/Tests.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="205" width="173" x="1556" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="es.ugr.swad.swadroid.modules.tests.TagsArrayAdapter" project="SWADroid" 
+    file="/SWADroid/src/es/ugr/swad/swadroid/modules/tests/TagsArrayAdapter.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="151" width="241" x="1769" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>
