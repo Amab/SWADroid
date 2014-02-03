@@ -269,7 +269,10 @@ public class SOAPClient implements IWebserviceClient {
 		        Log.e(TAG, connection.getHost() + " " + connection.getPath() + " " +
 		        connection.getPort());
 		        Log.e(TAG, connection.requestDump.toString());
-		        Log.e(TAG, connection.responseDump.toString());
+		        
+		        if(connection.responseDump != null) {
+		        	Log.e(TAG, connection.responseDump.toString());
+		        }
 	        }        	
         } else {
         	connection.call(SOAP_ACTION, envelope);        	
