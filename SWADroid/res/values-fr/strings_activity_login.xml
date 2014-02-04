@@ -10,8 +10,8 @@
     <string name="action_sign_in_short">Connectez-vous.</string>
     <string name="action_forgot_password">Vous avez perdu votre mot de passe.</string>
     <string name="login_progress_signing_in">Connectez-vous&#8230;</string>
-    <string name="error_invalid_email">Nom d'utilisateur non valide.</string>
-    <string name="error_invalid_password">Mot de passe doit être d'au moins 8 caractères alphanumériques.</string>
+    <string name="error_invalid_email">Nom d\'utilisateur non valide.</string>
+    <string name="error_invalid_password">Mot de passe doit être d\'au moins 8 caractères alphanumériques.</string>
     <string name="error_incorrect_password">Le mot de passe doit contenir que des chiffres et des lettres.</string>
     <string name="error_field_required">Ce champ est obligatoire.</string>
 

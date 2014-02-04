@@ -9,7 +9,7 @@
     <string name="action_sign_in_register"><b>Entra.</b></string>
     <string name="action_sign_in_short">Entra.</string>
     <string name="action_forgot_password">Hai perso la password.</string>
-    <string name="login_progress_signing_in">L'accesso&#8230;</string>
+    <string name="login_progress_signing_in">L\'accesso&#8230;</string>
     <string name="error_invalid_email">Nome utente non valido.</string>
     <string name="error_invalid_password">La password deve essere di almeno 8 caratteri alfanumerici.</string>
     <string name="error_incorrect_password">La password deve contenere numeri e lettere.</string>
