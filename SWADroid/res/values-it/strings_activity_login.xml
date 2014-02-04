@@ -1,0 +1,18 @@
+<resources>
+
+    <string name="title_activity_login">Entra.</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">DNI, Nick o e-mail.</string>
+    <string name="prompt_password">Password.</string>
+    <string name="prompt_server">Server (senza http://).</string>
+    <string name="action_sign_in_register"><b>Entra.</b></string>
+    <string name="action_sign_in_short">Entra.</string>
+    <string name="action_forgot_password">Hai perso la password.</string>
+    <string name="login_progress_signing_in">L'accesso&#8230;</string>
+    <string name="error_invalid_email">Nome utente non valido.</string>
+    <string name="error_invalid_password">La password deve essere di almeno 8 caratteri alfanumerici.</string>
+    <string name="error_incorrect_password">La password deve contenere numeri e lettere.</string>
+    <string name="error_field_required">Questo campo è obbligatorio.</string>
+
+</resources>
