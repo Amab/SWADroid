@@ -56,6 +56,10 @@ import es.ugr.swad.swadroid.utils.Utils;
  */
 public class DataBaseHelper {
     /**
+     * DataBaseHelper tag name for Logcat
+     */
+    private static final String TAG = "DataBaseHelper";
+	/**
      * Field for access to the database backend
      */
     private DataFramework db;
@@ -79,6 +83,8 @@ public class DataBaseHelper {
      * Cryptographic object
      */
     private final Crypto crypto;
+    
+    private static boolean available=true;
 
     /**
      * Constructor
@@ -1939,24 +1945,44 @@ public class DataBaseHelper {
     /**
      * Begin a database transaction
      */
-    public void beginTransaction() {
+    public synchronized void beginTransaction() {
+    	while(!available) {
+	    	try {
+				wait();
+			} catch (InterruptedException e) {
+				BugSenseHandler.sendException(new DataBaseHelperException("Sinchronization interrupted"));
+			}
+    	}
+    	
+    	available=false;
         //db.getDB().execSQL("BEGIN;");
         db.startTransaction();
+        
+        Log.i(TAG, "Database locked");
     }
 
     /**
      * End a database transaction
      */
-    public void endTransaction() {
-        //db.getDB().execSQL("END;");
-        db.successfulTransaction();
-        db.endTransaction();
+    public synchronized void endTransaction() {
+    	if(db.inTransaction()) {
+	        //db.getDB().execSQL("END;");
+	        db.successfulTransaction();
+	        db.endTransaction();
+	        
+	        available=true;
+	        Log.i(TAG, "Database unlocked");
+	        
+	        notifyAll();
+    	} else {
+    		BugSenseHandler.sendException(new DataBaseHelperException("No active transactions"));
+    	}
     }
 
     /**
      * Compact the database
      */
-    void compactDB() {
+    private void compactDB() {
         db.getDB().execSQL("VACUUM;");
     }
 
