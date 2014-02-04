@@ -109,4 +109,19 @@ public class SyncUtils {
     	
     	return isSyncAutomatically;
     }
+    
+    public static boolean isPeriodicSynced(Context context) {
+    	boolean isPeriodicSynced = false;
+    	
+    	if (android.os.Build.VERSION.SDK_INT >= 8) {
+        	 AccountManager am = AccountManager.get(context);
+             Account[] accounts = am.getAccountsByType(Constants.ACCOUNT_TYPE);
+             
+             isPeriodicSynced = (accounts.length > 0);
+
+             Log.d(TAG, "[isPeriodicSynced] Number of accounts with type " + Constants.ACCOUNT_TYPE + " = " + accounts.length);
+        }
+    	
+    	return isPeriodicSynced;
+    }
 }

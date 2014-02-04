@@ -427,7 +427,8 @@ public class SWADMain extends MenuExpandableListActivity {
                     loginForm(false);
                     
                     //User credentials are correct. Set periodic synchronization if enabled
-        	        if (!Preferences.getSyncTime().equals("0") && Preferences.isSyncEnabled()) {
+        	        if (!Preferences.getSyncTime().equals("0")
+        	        		&& Preferences.isSyncEnabled() && SyncUtils.isPeriodicSynced(this)) {
         	            SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY,
         	            		Long.parseLong(Preferences.getSyncTime()), this);
         	        }
