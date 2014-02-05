@@ -83,8 +83,6 @@ public class DataBaseHelper {
      * Cryptographic object
      */
     private final Crypto crypto;
-    
-    private static boolean available=true;
 
     /**
      * Constructor
@@ -1946,7 +1944,7 @@ public class DataBaseHelper {
      * Begin a database transaction
      */
     public synchronized void beginTransaction() {
-    	while(!available) {
+    	while(db.inTransaction()) {
 	    	try {
 				wait();
 			} catch (InterruptedException e) {
@@ -1954,7 +1952,6 @@ public class DataBaseHelper {
 			}
     	}
     	
-    	available=false;
         //db.getDB().execSQL("BEGIN;");
         db.startTransaction();
         
@@ -1970,13 +1967,16 @@ public class DataBaseHelper {
 	        db.successfulTransaction();
 	        db.endTransaction();
 	        
-	        available=true;
 	        Log.i(TAG, "Database unlocked");
 	        
 	        notifyAll();
     	} else {
     		BugSenseHandler.sendException(new DataBaseHelperException("No active transactions"));
     	}
+    }
+    
+    public boolean isDbInTransaction() {
+    	return db.inTransaction();
     }
 
     /**
