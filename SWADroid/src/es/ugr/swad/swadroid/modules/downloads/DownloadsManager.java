@@ -606,7 +606,7 @@ public class DownloadsManager extends MenuActivity {
                 .append(res.getString(R.string.licenseType))
                 .append(" ")
                 .append(license)
-                .append(" ")
+                .append("\n")
                 .append(res.getString(R.string.creationTimeTitle))
                 .append(" ")
                 .append(dateShortFormat.format(d))
