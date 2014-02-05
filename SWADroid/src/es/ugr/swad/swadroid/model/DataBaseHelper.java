@@ -1063,6 +1063,8 @@ public class DataBaseHelper {
         List<Model> newModels = new ArrayList<Model>();
         List<Model> obsoleteModel = new ArrayList<Model>();
         List<Model> modifiedModel = new ArrayList<Model>();
+        
+        beginTransaction();
 
         newModels.addAll(currentModels);
         newModels.removeAll(modelsDB);
@@ -1104,6 +1106,8 @@ public class DataBaseHelper {
                 insertGroup((Group) model, courseCode[0]);
             }
         }
+        
+        endTransaction();
 
         return result;
     }
