@@ -187,6 +187,7 @@
     <string name="fileInfoTitle">Info</string>
     <string name="sizeFileTitle">Tamanho:</string>
     <string name="creationTimeTitle">Data</string>
+    <string name="licenseType">Licença:</string>
     <string name="uploaderTitle">Enviado por:</string>
     <string name="downloadFileTitle">descarregar</string>
     <string name="sdCardBusyTitle">Cartão SD não disponível</string>
