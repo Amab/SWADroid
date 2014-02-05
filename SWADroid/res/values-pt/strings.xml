@@ -310,4 +310,5 @@
 	<string name="error_password_summaryUGR">Lembre-se de digitar o seu SWAD senha não identificou o acesso</string>
 	<string name="error_password_summary">Erro: Sua senha deve ter pelo menos 8 caracteres alfanuméricos</string>
 	<string name="passwordDialogTip">SWAD senha deve ser pelo menos 8 caracteres alfanuméricos</string>
+	<string name="errorServerCertificateMsg">O certificado do servidor é inválido. Entre em contato com administrador SWAD</string>
 </resources>

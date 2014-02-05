@@ -130,6 +130,8 @@ public class NotificationsSyncAdapterService extends Service {
                 } else if (e instanceof TimeoutException) {
                 	errorMessage = mContext.getString(R.string.errorTimeoutMsg);
                 	sendException = false;
+                } else if(e instanceof CertificateException) {
+                	errorMessage = mContext.getString(R.string.errorServerCertificateMsg);
                 } else {
                 	errorMessage = e.getMessage();
                 	if((errorMessage == null) || errorMessage.equals("")) {

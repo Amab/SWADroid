@@ -319,4 +319,5 @@
 	<string name="error_password_summaryUGR">Error: Recorda que has d\'introduir la contrasenya de SWAD, no la d\'Accés identificat</string>
 	<string name="error_password_summary"> Error: La contrasenya ha de ser de mínim 8 caràcters alfanumèrics</string>
 	<string name="passwordDialogTip">Recorda que la contrasenya d\'SWAD ha de tenir almenys 8 caràcters alfanumèrics</string>
+	<string name="errorServerCertificateMsg">El certificat del servidor no és vàlid. Si us plau, poseu-vos en contacte amb l\'administrador SWAD</string>
 </resources>
