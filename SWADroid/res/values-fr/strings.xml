@@ -320,4 +320,5 @@
 	<string name="error_password_summaryUGR">N\'oubliez pas de saisir votre mot de passe SWAD pas identifié l\'accès</string>
 	<string name="error_password_summary">Erreur: Votre mot de passe doit comporter au moins 8 caractères alphanumériques</string>
 	<string name="passwordDialogTip">SWAD doit être d\'au moins 8 caractères alphanumériques</string>
+	<string name="errorServerCertificateMsg">Le certificat du serveur est invalide. S\'il vous plaît contacter l\'administrateur SWAD</string>
 </resources>

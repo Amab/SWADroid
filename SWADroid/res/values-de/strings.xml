@@ -230,4 +230,5 @@
 	<string name="error_password_summaryUGR">Fehler: Denken Sie daran, geben Sie Ihr Passwort SWAD nicht identifiziert die Access</string>
 	<string name="error_password_summary">Fehler: Ihr Kennwort muss mindestens 8 alphanumerischen Zeichen</string>
 	<string name="passwordDialogTip">SWAD Kennwort muss mindestens 8 alphanumerische Zeichen werden</string>
+	<string name="errorServerCertificateMsg">Das Server-Zertifikat ist ungültig. Bitte kontaktieren Sie SWAD Administrator</string>
 </resources>

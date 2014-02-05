@@ -39,6 +39,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.util.concurrent.TimeoutException;
 
 import es.ugr.swad.swadroid.Constants;
@@ -433,6 +434,8 @@ public abstract class Module extends MenuActivity {
                 } else if (e instanceof TimeoutException) {
                     errorMsg = getString(R.string.errorTimeoutMsg);
                     sendException = false;
+                } else if(e instanceof CertificateException) {
+                	 errorMsg = getString(R.string.errorServerCertificateMsg);
                 } else {
                     errorMsg = e.getMessage();
                 	if((errorMsg == null) || errorMsg.equals("")) {
