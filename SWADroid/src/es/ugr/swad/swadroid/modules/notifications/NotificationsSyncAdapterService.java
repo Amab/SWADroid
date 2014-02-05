@@ -135,7 +135,12 @@ public class NotificationsSyncAdapterService extends Service {
                 	if((errorMessage == null) || errorMessage.equals("")) {
                 		errorMessage = mContext.getString(R.string.errorConnectionMsg);
                 	}  
-                }             	
+                }           
+                
+                // Finish pending database transactions
+                if(dbHelper.isDbInTransaction()) {
+                	dbHelper.endTransaction();
+                }  	
 
                 e.printStackTrace();
 

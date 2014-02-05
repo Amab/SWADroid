@@ -443,6 +443,11 @@ public abstract class Module extends MenuActivity {
                 // Request finalized with errors
                 error(TAG, errorMsg, e, sendException);
                 setResult(RESULT_CANCELED);
+                
+                // Finish pending database transactions
+                if(dbHelper.isDbInTransaction()) {
+                	dbHelper.endTransaction();
+                }
 
                 onError();
             } else {
