@@ -211,6 +211,7 @@
     <string name="fileInfoTitle">Información de archivo</string>
     <string name="sizeFileTitle">Tamaño:</string>
     <string name="creationTimeTitle">Fecha:</string>
+    <string name="licenseType">Licencia:</string>
     <string name="uploaderTitle">Subido por:</string>
     <string name="downloadFileTitle">Descargar</string>
     <string name="sdCardBusyTitle">Tarjeta SD no disponible</string>

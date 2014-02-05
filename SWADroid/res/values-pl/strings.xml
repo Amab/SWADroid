@@ -184,6 +184,7 @@
     <string name="fileInfoTitle">Informacje o pliku</string>
     <string name="sizeFileTitle">Rozmiar:</string>
     <string name="creationTimeTitle">Data:</string>
+    <string name="licenseType">Licencja:</string>
     <string name="uploaderTitle">Przesłane przez:</string>
     <string name="downloadFileTitle">Pobierz</string>
     <string name="sdCardBusyTitle">Karta SD nie jest dostępny</string>

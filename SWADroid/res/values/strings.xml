@@ -210,6 +210,7 @@
     <string name="sizeFileTitle">Size:</string>
     <string name="creationTimeTitle">Date:</string>
     <string name="uploaderTitle">Uploaded by:</string>
+    <string name="licenseType">License:</string>
     <string name="downloadFileTitle">Download</string>
     <string name="sdCardBusyTitle">SD card unavailable</string>
     <string name="sdCardBusy">The SD casd is busy. To allow downloads, select "Turn off USB storage" in the
