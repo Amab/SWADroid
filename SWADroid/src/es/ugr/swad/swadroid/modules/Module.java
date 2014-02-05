@@ -42,6 +42,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.util.concurrent.TimeoutException;
 
+import javax.net.ssl.SSLException;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
@@ -100,9 +102,9 @@ public abstract class Module extends MenuActivity {
      * @throws NoSuchAlgorithmException
      * @throws IOException
      * @throws XmlPullParserException
+     * @throws Exception 
      */
-    protected abstract void requestService() throws NoSuchAlgorithmException,
-            IOException, XmlPullParserException;
+    protected abstract void requestService() throws Exception;
 
     /**
      * Launches action in a separate thread while shows a progress dialog in UI
@@ -285,10 +287,9 @@ public abstract class Module extends MenuActivity {
      * 
      * @param cl     Class to be mapped
      * @param simple Flag for select simple or complex response
-     * @throws XmlPullParserException 
-     * @throws IOException 
+     * @throws Exception 
      */
-    protected void sendRequest(Class<?> cl, boolean simple) throws IOException, XmlPullParserException {
+    protected void sendRequest(Class<?> cl, boolean simple) throws Exception {
     	((SOAPClient) webserviceClient).sendRequest(cl, simple);
     	result = webserviceClient.getResult();
     }
@@ -305,7 +306,7 @@ public abstract class Module extends MenuActivity {
      * @throws IOException
      * @throws JSONException
      */
-    protected void sendRequest(Class<?> cl, boolean simple, RESTClient.REQUEST_TYPE type, JSONObject json) throws ClientProtocolException, IOException, JSONException {
+    protected void sendRequest(Class<?> cl, boolean simple, RESTClient.REQUEST_TYPE type, JSONObject json) throws ClientProtocolException, CertificateException, IOException, JSONException {
     	((RESTClient) webserviceClient).sendRequest(cl, simple, RESTClient.REQUEST_TYPE.GET, json);
     	result = webserviceClient.getResult();
     }
@@ -429,13 +430,13 @@ public abstract class Module extends MenuActivity {
                     } else {
                         errorMsg = "Server error: " + es.getMessage();
                     }
+                } else if ((e instanceof CertificateException) || (e instanceof SSLException)) {
+               	    errorMsg = getString(R.string.errorServerCertificateMsg);
                 } else if (e instanceof XmlPullParserException) {
                     errorMsg = getString(R.string.errorServerResponseMsg);
                 } else if (e instanceof TimeoutException) {
                     errorMsg = getString(R.string.errorTimeoutMsg);
                     sendException = false;
-                } else if(e instanceof CertificateException) {
-                	 errorMsg = getString(R.string.errorServerCertificateMsg);
                 } else {
                     errorMsg = e.getMessage();
                 	if((errorMsg == null) || errorMsg.equals("")) {

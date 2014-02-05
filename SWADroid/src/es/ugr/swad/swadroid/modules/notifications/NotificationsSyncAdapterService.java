@@ -50,16 +50,13 @@ import org.ksoap2.serialization.KvmSerializable;
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.TimeoutException;
+
+import javax.net.ssl.SSLException;
 
 /**
  * Service for notifications sync adapter.
@@ -125,13 +122,13 @@ public class NotificationsSyncAdapterService extends Service {
                     } else {
                     	errorMessage = "Server error: " + es.getMessage();
                     }
+                } else if ((e instanceof CertificateException) || (e instanceof SSLException)) {
+                	errorMessage = mContext.getString(R.string.errorServerCertificateMsg);
                 } else if (e instanceof XmlPullParserException) {
                 	errorMessage = mContext.getString(R.string.errorServerResponseMsg);
                 } else if (e instanceof TimeoutException) {
                 	errorMessage = mContext.getString(R.string.errorTimeoutMsg);
                 	sendException = false;
-                } else if(e instanceof CertificateException) {
-                	errorMessage = mContext.getString(R.string.errorServerCertificateMsg);
                 } else {
                 	errorMessage = e.getMessage();
                 	if((errorMessage == null) || errorMessage.equals("")) {
@@ -278,15 +275,14 @@ public class NotificationsSyncAdapterService extends Service {
      * 
      * @param cl     Class to be mapped
      * @param simple Flag for select simple or complex response
-     * @throws XmlPullParserException 
-     * @throws IOException 
+     * @throws Exception 
      */
-    protected static void sendRequest(Class<?> cl, boolean simple) throws IOException, XmlPullParserException {
+    protected static void sendRequest(Class<?> cl, boolean simple) throws Exception {
     	((SOAPClient) webserviceClient).sendRequest(cl, simple);
     	result = webserviceClient.getResult();
     }
     
-    private static void logUser() throws IOException, XmlPullParserException {
+    private static void logUser() throws Exception {
     	Log.d(TAG, "Not logged");
 
         METHOD_NAME = "loginByUserPasswordKey";
@@ -323,7 +319,7 @@ public class NotificationsSyncAdapterService extends Service {
         }
     }
     
-    private static void getNotifications() throws IOException, XmlPullParserException {
+    private static void getNotifications() throws Exception {
     	Log.d(TAG, "Logged");
 
         //Calculates next timestamp to be requested
@@ -415,7 +411,7 @@ public class NotificationsSyncAdapterService extends Service {
     }
 
     private static void performSync(Context context, Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
-            throws IOException, XmlPullParserException, NoSuchAlgorithmException, KeyManagementException, KeyStoreException, CertificateException, UnrecoverableKeyException {
+            throws Exception {
 
         //Notify synchronization start
         Intent startIntent = new Intent();

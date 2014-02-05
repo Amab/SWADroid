@@ -33,13 +33,10 @@ import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 import org.ksoap2.serialization.SoapObject;
-import org.xmlpull.v1.XmlPullParserException;
-
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -86,7 +83,7 @@ public class RollcallConfigDownload extends Module {
     }
 
     @Override
-    protected void requestService() throws NoSuchAlgorithmException, IOException, XmlPullParserException {
+    protected void requestService() throws Exception {
         int userRole = Constants.STUDENT_TYPE_CODE;
         long courseCode = Constants.getSelectedCourseCode();
         long groupCode = getIntent().getLongExtra("groupCode", 0);

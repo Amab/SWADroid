@@ -27,10 +27,6 @@ import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 import org.ksoap2.serialization.SoapObject;
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 
 /**
  * DirectoryTreeDownload  gets directory tree of files of general documents of a course/group
@@ -50,8 +46,7 @@ public class DirectoryTreeDownload extends Module {
     }
 
     @Override
-    protected void requestService() throws NoSuchAlgorithmException,
-            IOException, XmlPullParserException {
+    protected void requestService() throws Exception {
     	createRequest(SOAPClient.CLIENT_TYPE);
         addParam("wsKey", Constants.getLoggedUser().getWsKey());
         addParam("courseCode", (int) Constants.getSelectedCourseCode());
