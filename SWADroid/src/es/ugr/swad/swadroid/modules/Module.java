@@ -241,7 +241,8 @@ public abstract class Module extends MenuActivity {
                     break;
             }
         } else {
-            setResult(RESULT_CANCELED);
+            setResult(RESULT_CANCELED);            
+            finish();
         }
     }
 
