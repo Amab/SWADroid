@@ -58,7 +58,7 @@ public class DataBaseHelper {
     /**
      * DataBaseHelper tag name for Logcat
      */
-    private static final String TAG = Constants.APP_TAG + "DataBaseHelper";
+    private static final String TAG = Constants.APP_TAG + " DataBaseHelper";
 	/**
      * Field for access to the database backend
      */
