@@ -448,9 +448,9 @@ public abstract class Module extends MenuActivity {
                 error(TAG, errorMsg, e, sendException);
                 setResult(RESULT_CANCELED);
                 
-                // Finish pending database transactions
+                // Launch database rollback
                 if(dbHelper.isDbInTransaction()) {
-                	dbHelper.endTransaction();
+                	dbHelper.endTransaction(false);
                 }
 
                 onError();
