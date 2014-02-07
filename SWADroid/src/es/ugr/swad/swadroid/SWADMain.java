@@ -145,6 +145,7 @@ public class SWADMain extends MenuExpandableListActivity {
     private View mMainScreenView;
     private TextView mLoginStatusMessageView;
     private ImageButton mUpdateButton;
+    private ProgressBar mProgressBar;
     
     /**
      * Gets the database helper
@@ -281,10 +282,6 @@ public class SWADMain extends MenuExpandableListActivity {
         text = (TextView) this.findViewById(R.id.moduleName);
         text.setText(R.string.app_name);
 
-
-        ImageButton updateButton = (ImageButton) this.findViewById(R.id.refresh);
-        updateButton.setVisibility(View.VISIBLE);
-
         try {
         	
             //Initialize HTTPS connections
@@ -413,11 +410,8 @@ public class SWADMain extends MenuExpandableListActivity {
             switch (requestCode) {
                 //After get the list of courses, a dialog is launched to choice the course
                 case Constants.COURSES_REQUEST_CODE:
-                    ImageButton updateButton = (ImageButton) this.findViewById(R.id.refresh);
-                    ProgressBar pb = (ProgressBar) this.findViewById(R.id.progress_refresh);
-
-                    pb.setVisibility(View.GONE);
-                    updateButton.setVisibility(View.VISIBLE);
+                    mProgressBar.setVisibility(View.GONE);
+                    mUpdateButton.setVisibility(View.VISIBLE);
 
                     setMenuDbClean();
                     createSpinnerAdapter();
@@ -444,7 +438,11 @@ public class SWADMain extends MenuExpandableListActivity {
                     loginForm(true);
                     
                     //User credentials are wrong. Remove periodic synchronization
-                    SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, this);
+                    SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, this);                    
+                    
+                    mUpdateButton.setVisibility(View.GONE);
+                    mProgressBar.setVisibility(View.VISIBLE);
+                    
                     break;
             }
         }
@@ -778,10 +776,8 @@ public class SWADMain extends MenuExpandableListActivity {
      * @param v Actual view
      */
     public void onRefreshClick(View v) {
-        ProgressBar pb = (ProgressBar) this.findViewById(R.id.progress_refresh);
-
         mUpdateButton.setVisibility(View.GONE);
-        pb.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.VISIBLE);
 
         getCurrentCourses();
     }
@@ -798,7 +794,11 @@ public class SWADMain extends MenuExpandableListActivity {
 		mUpdateButton = (ImageButton) findViewById(R.id.refresh);
 	    mMainScreenView = findViewById(R.id.main_screen);
         mLoginFormView = findViewById(R.id.login_form);
-        mLoginStatusView = findViewById(R.id.login_status);
+        mLoginStatusView = findViewById(R.id.login_status);        
+        mProgressBar = (ProgressBar) this.findViewById(R.id.progress_refresh);
+        
+        mUpdateButton.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.GONE);
 	}
 	
 	/**
@@ -806,6 +806,7 @@ public class SWADMain extends MenuExpandableListActivity {
 	 */
 	private void loginForm(boolean show) {
 		mUpdateButton.setVisibility(show ? View.GONE : View.VISIBLE);
+        mProgressBar.setVisibility(View.GONE);
 	    mMainScreenView.setVisibility(show ? View.GONE : View.VISIBLE);
 		mLoginFormView.setVisibility(show ? View.VISIBLE : View.GONE);
 
