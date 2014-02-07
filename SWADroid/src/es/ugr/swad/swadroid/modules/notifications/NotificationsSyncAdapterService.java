@@ -136,9 +136,9 @@ public class NotificationsSyncAdapterService extends Service {
                 	}  
                 }           
                 
-                // Finish pending database transactions
+                // Launch database rollback
                 if(dbHelper.isDbInTransaction()) {
-                	dbHelper.endTransaction();
+                	dbHelper.endTransaction(false);
                 }  	
 
                 e.printStackTrace();
@@ -369,7 +369,7 @@ public class NotificationsSyncAdapterService extends Service {
             //Clear old notifications to control database size
             dbHelper.clearOldNotifications(SIZE_LIMIT);
 
-            dbHelper.endTransaction();
+            dbHelper.endTransaction(true);
         }
     }
     

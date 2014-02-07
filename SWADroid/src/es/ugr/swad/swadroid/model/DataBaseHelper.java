@@ -1107,7 +1107,8 @@ public class DataBaseHelper {
             }
         }
         
-        endTransaction();
+        //Finish the pending transaction with successful status
+        endTransaction(true);
 
         return result;
     }
@@ -1965,10 +1966,13 @@ public class DataBaseHelper {
     /**
      * End a database transaction
      */
-    public synchronized void endTransaction() {
+    public synchronized void endTransaction(boolean successfulTransaction) {
     	if(db.inTransaction()) {
 	        //db.getDB().execSQL("END;");
-	        db.successfulTransaction();
+    		if(successfulTransaction) {
+    			db.successfulTransaction();
+    		}
+    		
 	        db.endTransaction();
 	        
 	        Log.i(TAG, "Database unlocked");

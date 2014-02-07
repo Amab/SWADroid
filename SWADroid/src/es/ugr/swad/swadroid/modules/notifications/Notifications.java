@@ -410,7 +410,7 @@ public class Notifications extends Module {
                 //Clear old notifications to control database size
                 dbHelper.clearOldNotifications(SIZE_LIMIT);
 
-                dbHelper.endTransaction();
+                dbHelper.endTransaction(true);
             }
         }
     }

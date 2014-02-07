@@ -209,7 +209,7 @@ public class TestsQuestionsDownload extends Module {
             //Test testConfig = (Test) dbHelper.getRow(Constants.DB_TABLE_TEST_CONFIG, "id", Long.toString(Constants.getSelectedCourseCode()));
             //testConfig.setEditTime(System.currentTimeMillis() / 1000L);
             //dbHelper.updateTestConfig(testConfig.getId(), testConfig);
-            dbHelper.endTransaction();
+            dbHelper.endTransaction(true);
         }
 
         //Request finalized without errors
