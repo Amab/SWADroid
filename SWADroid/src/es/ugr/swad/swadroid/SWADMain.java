@@ -831,6 +831,8 @@ public class SWADMain extends MenuExpandableListActivity {
         
         mServerView = (EditText) findViewById(R.id.server);
         mServerView.setText(Preferences.getServer());
+        if (mServerView.getText().toString().equals(Constants.DEFAULT_SERVER)) 
+            mPasswordView.setError(getString(R.string.error_password_summaryUGR));
         
         mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
 
