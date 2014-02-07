@@ -413,12 +413,14 @@ public class NotificationsSyncAdapterService extends Service {
     private static void performSync(Context context, Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
             throws Exception {
 
+        Intent notIntent = new Intent(context, Notifications.class);
+        
         //Notify synchronization start
         Intent startIntent = new Intent();
         startIntent.setAction(START_SYNC);
         context.sendBroadcast(startIntent);
 
-      //Initialize HTTPS connections
+        //Initialize HTTPS connections
     	/*
     	 * Terena root certificate is not included by default on Gingerbread and older
     	 * If Android API < 11 (HONEYCOMB) add Terena certificate manually
@@ -455,7 +457,8 @@ public class NotificationsSyncAdapterService extends Service {
 	            		NOTIF_ALERT_ID,
 	            		context.getString(R.string.app_name),
 	            		notifCount + " " + context.getString(R.string.notificationsAlertMsg),
-	            		context.getString(R.string.app_name));
+	            		context.getString(R.string.app_name),
+	            		notIntent);
         	}
         	
         	sendReadedNotifications(context);

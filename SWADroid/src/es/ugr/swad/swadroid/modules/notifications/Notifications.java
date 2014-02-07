@@ -44,6 +44,7 @@ import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 import org.ksoap2.serialization.SoapObject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -430,7 +431,9 @@ public class Notifications extends Module {
      * @see es.ugr.swad.swadroid.modules.Module#postConnect()
      */
     @Override
-    protected void postConnect() {   
+    protected void postConnect() {
+        Intent notIntent = new Intent(this, Notifications.class);
+        
         if (!ContentResolver.getSyncAutomatically(account, authority)) {
         	if (notifCount > 0) {
 	            //If the notifications counter exceeds the limit, set it to the max allowed
@@ -442,7 +445,8 @@ public class Notifications extends Module {
 	            		NOTIF_ALERT_ID,
 	            		getString(R.string.app_name),
 	            		notifCount + " " + getString(R.string.notificationsAlertMsg),
-	            		getString(R.string.app_name));
+	            		getString(R.string.app_name),
+	            		notIntent);
         	} else {
         		Toast.makeText(this, R.string.NoNotificationsMsg, Toast.LENGTH_LONG).show();
         	}
