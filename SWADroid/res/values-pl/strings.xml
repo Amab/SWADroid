@@ -305,7 +305,7 @@
     <string name="teachingguideModuleLabel">Podręcznik nauczania</string>
     
     <string name="pradoLoginToast">Swad hasło jest co najmniej 8 znaków alfanumerycznych</string>
-	<string name="error_password_summaryUGR">Błąd: Pamiętaj, aby wpisać hasło SWAD nie zidentyfikował dostęp</string>
+	<string name="error_password_summaryUGR">Pamiętaj, aby wpisać hasło SWAD nie zidentyfikował dostęp</string>
 	<string name="error_password_summary">Błąd: Hasło musi mieć co najmniej 8 znaków alfanumerycznych</string>
 	<string name="passwordDialogTip">Swad musi być co najmniej 8 znaków alfanumerycznych</string>
 	<string name="errorServerCertificateMsg">Certyfikat serwera jest nieprawidłowy. Prosimy o kontakt z administratorem Swad</string>
