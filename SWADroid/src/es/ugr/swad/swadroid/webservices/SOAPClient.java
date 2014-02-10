@@ -18,18 +18,11 @@
  */
 package es.ugr.swad.swadroid.webservices;
 
-import java.io.IOException;
-import java.security.cert.CertificateException;
-
-import javax.net.ssl.SSLException;
-
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.KeepAliveHttpsTransportSE;
-import org.xmlpull.v1.XmlPullParserException;
-
 import android.content.pm.ApplicationInfo;
 import android.util.Log;
 import es.ugr.swad.swadroid.Constants;
