@@ -164,10 +164,10 @@ public class TestsMake extends Module {
         numberPicker.setCurrent(test.getDef());        
         
         minNumQuestions = (TextView) findViewById(R.id.minTestNumQuestionsId);
-        minNumQuestions.setText(test.getMin() + "≤");
+        minNumQuestions.setText(test.getMin() + getString(R.string.lessOrEqualChar));
         
         maxNumQuestions = (TextView) findViewById(R.id.maxTestNumQuestionsId);
-        maxNumQuestions.setText("≤" + test.getMax());
+        maxNumQuestions.setText(getString(R.string.lessOrEqualChar) + test.getMax());
         
 
         acceptButton = (Button) findViewById(R.id.testNumQuestionsAcceptButton);
@@ -760,6 +760,7 @@ public class TestsMake extends Module {
         String selection = "id=" + Long.toString(Constants.getSelectedCourseCode());
         Cursor dbCursor = dbHelper.getDb().getCursor(Constants.DB_TABLE_TEST_CONFIG, selection, null);
         startManagingCursor(dbCursor);
+        
         if (dbCursor.getCount() > 0) {
             if (isDebuggable) {
                 Log.d(TAG, "selectedCourseCode = " + Long.toString(Constants.getSelectedCourseCode()));
