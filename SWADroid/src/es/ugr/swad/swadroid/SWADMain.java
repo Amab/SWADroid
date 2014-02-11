@@ -376,14 +376,14 @@ public class SWADMain extends MenuExpandableListActivity {
         boolean showLoginForm = isUserOrPasswordEmpty() || (listCourses.size() == 0) || mLoginError;
         
         loginForm(showLoginForm);
-    	if (!Constants.isPreferencesChanged() && !Utils.isDbCleaned()) {
+    	if (!Preferences.isPreferencesChanged() && !Utils.isDbCleaned()) {
             createSpinnerAdapter();
             if (!firstRun) {
                 courseCode = Constants.getSelectedCourseCode();
                 createMenu();
         	}
         } else {
-            Constants.setPreferencesChanged(false);
+            Preferences.setPreferencesChanged(false);
             Utils.setDbCleaned(false);
             setMenuDbClean();
         }

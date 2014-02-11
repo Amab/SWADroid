@@ -18,14 +18,21 @@
  */
 package es.ugr.swad.swadroid;
 
-import java.security.NoSuchAlgorithmException;
-import es.ugr.swad.swadroid.utils.Crypto;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Build;
 import android.util.Log;
+
+import es.ugr.swad.swadroid.model.DataBaseHelper;
+import es.ugr.swad.swadroid.utils.Crypto;
+import es.ugr.swad.swadroid.utils.Utils;
+
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Class for store the application preferences
@@ -141,7 +148,15 @@ public class Preferences {
      * Authors preference name
      */
     public static final String AUTHORSPREF = "authorsPref";
-
+    /**
+     * Database Helper.
+     */
+    private static DataBaseHelper dbHelper;
+    /**
+     * Indicates if there are changes on preferences
+     */
+    private static boolean preferencesChanged = false;
+    
     /**
      * Constructor
      */
@@ -163,6 +178,15 @@ public class Preferences {
     		Log.i(TAG, "Android API < 11 (HONEYCOMB). MODE_MULTI_PROCESS is not defined and enabled by default");
 		}
 
+    	try {
+            dbHelper = new DataBaseHelper(ctx);
+        } catch (XmlPullParserException e) {
+            Log.e(TAG, e.getMessage());
+            // TODO error(TAG, e.getMessage(), e, true);
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage());
+            // TODO error(TAG, e.getMessage(), e, true);
+        } 
 		editor = prefs.edit();
 	}
 
@@ -427,5 +451,49 @@ public class Preferences {
         String userPassword = getUserPassword();
         setUserPassword(Crypto.encryptPassword(userPassword));
     }
+    
+    /**
+     * Clean data of all tables from database. Removes users photos from external storage
+     */
+    private static void cleanDatabase() {
+        dbHelper.cleanTables();
+        
+        Preferences.setLastCourseSelected(0);
+        Utils.setDbCleaned(true);
+        
+        Log.i(TAG, "Database has been cleaned");
+    }
+    
+    public static void logoutClean(String key) {
+        Constants.setLogged(false);
+        Log.i(TAG, "Forced logout due to " + key + " change in preferences");
+        
+        cleanDatabase();
+        setPreferencesChanged();
+    }
 
+    public static void clearOldNotifications(int size) {
+        dbHelper.clearOldNotifications(size);
+    }
+    
+    public static boolean isPreferencesChanged() {
+        return preferencesChanged;
+    }
+
+    /**
+     * Set the fact that the preferences has changed
+     */
+    public static void setPreferencesChanged() {
+        preferencesChanged = true;
+    }
+
+    /**
+     * Indicates if the preferences has changed
+     *
+     * @param newState - true when the preferences has changed  and it was not handled it
+     *                 - false if the preferences has not changed
+     */
+    public static void setPreferencesChanged(boolean newState) {
+        preferencesChanged = newState;
+    }
 }

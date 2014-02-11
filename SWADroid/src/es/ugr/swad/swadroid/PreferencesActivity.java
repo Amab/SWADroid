@@ -65,10 +65,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
      */
     public Context ctx;
     /**
-     * Database Helper.
-     */
-    private static DataBaseHelper dbHelper;
-    /**
      * Stars length
      */
     private final int STARS_LENGTH = 8;
@@ -189,26 +185,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     	errorDialog.show();
     }
 
-    /**
-     * Clean data of all tables from database. Removes users photos from external storage
-     */
-    private void cleanDatabase() {
-    	dbHelper.cleanTables();
-        
-        Preferences.setLastCourseSelected(0);
-        Utils.setDbCleaned(true);
-        
-        Log.i(TAG, "Database has been cleaned");
-    }
-    
-    private void logoutClean(String key) {
-    	Constants.setLogged(false);
-        Log.i(TAG, "Forced logout due to " + key + " change in preferences");
-        
-        cleanDatabase();
-        Constants.setPreferencesChanged();
-    }
-
     /* (non-Javadoc)
      * @see android.app.Activity#onCreate()
      */
@@ -224,7 +200,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
 
         //Initialize database
         try {    		
-            dbHelper = new DataBaseHelper(this); 
             getPackageManager().getApplicationInfo(
                     getPackageName(), 0);
     		isDebuggable = (ApplicationInfo.FLAG_DEBUGGABLE != 0);
@@ -396,7 +371,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         	Log.i(TAG, "Resetted user password due to userid change"); 
         	
         	//If preferences have changed, logout
-        	logoutClean(key);
+        	Preferences.logoutClean(key);
         	syncPrefsChanged = true;
         } else if (Preferences.USERPASSWORDPREF.equals(key)) {
             try {
@@ -414,7 +389,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
                     userPasswordPrefChanged = true;
                     syncPrefsChanged = true;
                     mIncorrectPassword = false;
-                    Constants.setPreferencesChanged();
+                    Preferences.setPreferencesChanged();
                     Constants.setLogged(false);
                 } else {
                     Toast.makeText(getApplicationContext(), R.string.pradoLoginToast,
@@ -433,7 +408,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
             Preferences.setServer(mServer);
             serverPref.setSummary(mServer);
             //If preferences have changed, logout
-        	logoutClean(key);
+        	Preferences.logoutClean(key);
         	syncPrefsChanged = true;
         } else if(Preferences.SYNCENABLEPREF.equals(key)) {
         	boolean syncEnabled = (Boolean) newValue;
@@ -469,7 +444,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         } else if(Preferences.NOTIFLIMITPREF.equals(key)) {
         	 int notifLimit = (Integer) newValue;
         	 Preferences.setNotifLimit(notifLimit);
-             dbHelper.clearOldNotifications(notifLimit);
+        	 Preferences.clearOldNotifications(notifLimit);
         } else if(Preferences.NOTIFSOUNDENABLEPREF.equals(key)) {
             boolean notifSoundEnabled = (Boolean) newValue;
             Preferences.setNotifSoundEnabled(notifSoundEnabled);
