@@ -89,10 +89,6 @@ public class Constants {
      */
     private static int currentUserRole = -1;
     /**
-     * Indicates if there are changes on preferences
-     */
-    private static boolean preferencesChanged = false;
-    /**
      * Indicates if there are changes on db
      */
     public static boolean dbCleaned = false;
@@ -476,27 +472,6 @@ public class Constants {
             currentUserRole = userRole;
         else
             currentUserRole = -1;
-    }
-
-    public static boolean isPreferencesChanged() {
-        return preferencesChanged;
-    }
-
-    /**
-     * Set the fact that the preferences has changed
-     */
-    public static void setPreferencesChanged() {
-        preferencesChanged = true;
-    }
-
-    /**
-     * Indicates if the preferences has changed
-     *
-     * @param newState - true when the preferences has changed  and it was not handled it
-     *                 - false if the preferences has not changed
-     */
-    public static void setPreferencesChanged(boolean newState) {
-        preferencesChanged = newState;
     }
 
     public static void setSelectedCourseShortName(String currentCourseShortName) {
