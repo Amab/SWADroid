@@ -40,6 +40,7 @@ import es.ugr.swad.swadroid.gui.AlertNotification;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.modules.Module;
+import es.ugr.swad.swadroid.sync.SyncUtils;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
@@ -356,7 +357,7 @@ public class Notifications extends Module {
     	//Download new notifications from the server
         SIZE_LIMIT = Preferences.getNotifLimit();
 
-        if (ContentResolver.getSyncAutomatically(account, authority)) {
+        if (SyncUtils.isSyncAutomatically(getApplicationContext())) {
         	Log.i(TAG, "Automatic synchronization is enabled. Requesting asynchronous sync operation");
         	
             //Call synchronization service
@@ -434,7 +435,7 @@ public class Notifications extends Module {
     protected void postConnect() {
         Intent notIntent = new Intent(this, Notifications.class);
         
-        if (!ContentResolver.getSyncAutomatically(account, authority)) {
+        if (!SyncUtils.isSyncAutomatically(getApplicationContext())) {
         	if (notifCount > 0) {
 	            //If the notifications counter exceeds the limit, set it to the max allowed
 	            if (notifCount > SIZE_LIMIT) {
