@@ -31,6 +31,7 @@ import android.view.View.OnLongClickListener;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import es.ugr.swad.swadroid.R;
 
 /**

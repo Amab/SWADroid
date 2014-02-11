@@ -23,7 +23,11 @@ import es.ugr.swad.swadroid.utils.Utils;
 
 import org.ksoap2.serialization.PropertyInfo;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.StringTokenizer;
 
 /**
  * Class for store a test

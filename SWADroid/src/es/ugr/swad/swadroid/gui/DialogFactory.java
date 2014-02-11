@@ -1,11 +1,5 @@
 package es.ugr.swad.swadroid.gui;
 
-import java.io.InputStream;
-
-import org.apache.commons.io.IOUtils;
-
-import com.bugsense.trace.BugSenseHandler;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,7 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
+
+import com.bugsense.trace.BugSenseHandler;
+
 import es.ugr.swad.swadroid.R;
+
+import org.apache.commons.io.IOUtils;
+
+import java.io.InputStream;
 
 public class DialogFactory {
 	/**

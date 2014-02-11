@@ -30,6 +30,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.Preferences;
+import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.gui.MenuActivity;
+import es.ugr.swad.swadroid.utils.Utils;
+import es.ugr.swad.swadroid.webservices.IWebserviceClient;
+import es.ugr.swad.swadroid.webservices.RESTClient;
+import es.ugr.swad.swadroid.webservices.SOAPClient;
+
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,15 +52,6 @@ import java.security.cert.CertificateException;
 import java.util.concurrent.TimeoutException;
 
 import javax.net.ssl.SSLException;
-
-import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.Preferences;
-import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.gui.MenuActivity;
-import es.ugr.swad.swadroid.utils.Utils;
-import es.ugr.swad.swadroid.webservices.IWebserviceClient;
-import es.ugr.swad.swadroid.webservices.RESTClient;
-import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
  * Superclass for encapsulate common behavior of all modules.

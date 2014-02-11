@@ -20,6 +20,7 @@ package es.ugr.swad.swadroid.modules.notifications;
 
 import android.os.Bundle;
 import android.util.Log;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.modules.Module;

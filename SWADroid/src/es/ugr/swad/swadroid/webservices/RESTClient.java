@@ -18,15 +18,6 @@
  */
 package es.ugr.swad.swadroid.webservices;
 
-import java.io.IOException;
-import java.security.cert.CertificateException;
-
-import javax.net.ssl.SSLException;
-
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -34,6 +25,15 @@ import com.google.gson.GsonBuilder;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.security.cert.CertificateException;
+
+import javax.net.ssl.SSLException;
 
 /**
  * REST client for SWAD webservices

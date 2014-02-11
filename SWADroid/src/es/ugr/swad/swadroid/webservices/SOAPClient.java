@@ -18,15 +18,17 @@
  */
 package es.ugr.swad.swadroid.webservices;
 
+import android.content.pm.ApplicationInfo;
+import android.util.Log;
+
+import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.Preferences;
+
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.KeepAliveHttpsTransportSE;
-import android.content.pm.ApplicationInfo;
-import android.util.Log;
-import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.Preferences;
 
 /**
  * SOAP client for SWAD webservices

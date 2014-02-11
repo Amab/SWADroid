@@ -41,12 +41,6 @@ import android.widget.Toast;
 
 import com.google.zxing.client.android.Intents;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.ImageExpandableListAdapter;
@@ -62,6 +56,12 @@ import es.ugr.swad.swadroid.modules.rollcall.students.StudentItemModel;
 import es.ugr.swad.swadroid.modules.rollcall.students.StudentsArrayAdapter;
 import es.ugr.swad.swadroid.modules.rollcall.students.StudentsHistory;
 import es.ugr.swad.swadroid.utils.Utils;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Rollcall module.

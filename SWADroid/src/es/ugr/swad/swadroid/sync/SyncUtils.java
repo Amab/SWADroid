@@ -27,6 +27,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
+
 import es.ugr.swad.swadroid.Constants;
 
 /**

@@ -6,17 +6,19 @@
 
 package es.ugr.swad.swadroid.modules.information;
 
-import org.ksoap2.serialization.SoapObject;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
+
+import org.ksoap2.serialization.SoapObject;
 
 
 public class Information extends Module {

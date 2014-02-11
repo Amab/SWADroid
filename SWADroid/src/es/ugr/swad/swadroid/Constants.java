@@ -19,9 +19,9 @@
 
 package es.ugr.swad.swadroid;
 
-import java.util.Random;
-
 import es.ugr.swad.swadroid.model.User;
+
+import java.util.Random;
 
 /**
  * Constants of application.
