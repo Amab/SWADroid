@@ -98,9 +98,10 @@ public class SyncUtils {
 	
 	        Log.d(TAG, "[isSyncAutomatically] Number of accounts with type " + Constants.ACCOUNT_TYPE + " = " + accounts.length);
 	        for (Account a : accounts) {
-	        	if(!ContentResolver.getSyncAutomatically(a, Constants.AUTHORITY)) {
-	        		isSyncAutomatically = false;
-	        	}
+                if (!ContentResolver.getMasterSyncAutomatically()
+                        || !ContentResolver.getSyncAutomatically(a, Constants.AUTHORITY)) {
+                    isSyncAutomatically = false;
+                }
 	        }
     	} else {
     		isSyncAutomatically = false;
