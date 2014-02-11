@@ -143,9 +143,9 @@ public class NotificationsSyncAdapterService extends Service {
                 // Launch database rollback
                 if(dbHelper.isDbInTransaction()) {
                 	dbHelper.endTransaction(false);
-                }  	
-
-                e.printStackTrace();
+                }
+                
+	            Log.e(TAG, e.getMessage());
 
                 //Send exception details to Bugsense
                 if(sendException) {

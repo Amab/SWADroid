@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.content.res.Resources;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.WebView;
@@ -173,7 +174,7 @@ public class DialogFactory {
                 .setIcon(R.drawable.erroricon);
 
         if (ex != null) {
-            ex.printStackTrace();
+            Log.e(tag, ex.getMessage());
 
             // Send exception details to Bugsense
             if (!isDebuggable && sendException) {

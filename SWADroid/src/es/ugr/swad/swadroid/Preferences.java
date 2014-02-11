@@ -24,12 +24,13 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Build;
 import android.util.Log;
-
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.utils.Crypto;
 import es.ugr.swad.swadroid.utils.Utils;
 
 import org.xmlpull.v1.XmlPullParserException;
+
+import com.bugsense.trace.BugSenseHandler;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -178,15 +179,15 @@ public class Preferences {
     		Log.i(TAG, "Android API < 11 (HONEYCOMB). MODE_MULTI_PROCESS is not defined and enabled by default");
 		}
 
-    	try {
-            dbHelper = new DataBaseHelper(ctx);
-        } catch (XmlPullParserException e) {
-            Log.e(TAG, e.getMessage());
-            // TODO error(TAG, e.getMessage(), e, true);
-        } catch (IOException e) {
-            Log.e(TAG, e.getMessage());
-            // TODO error(TAG, e.getMessage(), e, true);
-        } 
+    	if(dbHelper == null) {
+	    	try {
+	            dbHelper = new DataBaseHelper(ctx);
+	        } catch (Exception e) {
+	            Log.e(TAG, e.getMessage());
+	            BugSenseHandler.sendException(e);
+	        }
+    	}
+    	
 		editor = prefs.edit();
 	}
 
