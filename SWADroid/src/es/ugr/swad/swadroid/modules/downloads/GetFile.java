@@ -21,6 +21,7 @@ package es.ugr.swad.swadroid.modules.downloads;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Group;
@@ -28,6 +29,7 @@ import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 import org.ksoap2.serialization.SoapPrimitive;
+
 import java.util.ArrayList;
 import java.util.Vector;
 

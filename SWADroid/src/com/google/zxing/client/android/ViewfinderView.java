@@ -24,8 +24,10 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
+
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.camera.CameraManager;
+
 import es.ugr.swad.swadroid.R;
 
 import java.util.ArrayList;

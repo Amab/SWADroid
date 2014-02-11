@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.GroupType;
@@ -11,6 +12,7 @@ import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 import org.ksoap2.serialization.SoapObject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;

@@ -17,6 +17,7 @@
 package com.google.zxing.client.android;
 
 import android.graphics.Bitmap;
+
 import com.google.zxing.LuminanceSource;
 
 /**

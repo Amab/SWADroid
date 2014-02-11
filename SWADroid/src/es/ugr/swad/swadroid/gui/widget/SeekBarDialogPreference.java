@@ -28,6 +28,7 @@ import android.view.View;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
+
 import es.ugr.swad.swadroid.R;
 
 /**

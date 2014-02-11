@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+
 import com.android.dataframework.core.Field;
 import com.android.dataframework.core.Table;
 

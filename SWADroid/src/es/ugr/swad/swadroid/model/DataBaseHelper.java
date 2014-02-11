@@ -30,6 +30,14 @@ import com.android.dataframework.DataFramework;
 import com.android.dataframework.Entity;
 import com.bugsense.trace.BugSenseHandler;
 
+import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.Preferences;
+import es.ugr.swad.swadroid.utils.Crypto;
+import es.ugr.swad.swadroid.utils.OldCrypto;
+import es.ugr.swad.swadroid.utils.Utils;
+
+import org.xmlpull.v1.XmlPullParserException;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
@@ -37,14 +45,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
-import org.xmlpull.v1.XmlPullParserException;
-
-import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.Preferences;
-import es.ugr.swad.swadroid.utils.Crypto;
-import es.ugr.swad.swadroid.utils.OldCrypto;
-import es.ugr.swad.swadroid.utils.Utils;
 
 //import net.sqlcipher.database.SQLiteDatabase;
 //import net.sqlcipher.database.SQLiteStatement;

@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
+
 import es.ugr.swad.swadroid.R;
 
 import java.util.List;
