@@ -179,6 +179,8 @@ public class Preferences {
     		Log.i(TAG, "Android API < 11 (HONEYCOMB). MODE_MULTI_PROCESS is not defined and enabled by default");
 		}
 
+    	editor = prefs.edit();
+    	
     	if(dbHelper == null) {
 	    	try {
 	            dbHelper = new DataBaseHelper(ctx);
@@ -187,8 +189,6 @@ public class Preferences {
 	            BugSenseHandler.sendException(e);
 	        }
     	}
-    	
-		editor = prefs.edit();
 	}
 
 	/**
