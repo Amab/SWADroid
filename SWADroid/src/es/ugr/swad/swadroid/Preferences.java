@@ -28,11 +28,8 @@ import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.utils.Crypto;
 import es.ugr.swad.swadroid.utils.Utils;
 
-import org.xmlpull.v1.XmlPullParserException;
-
 import com.bugsense.trace.BugSenseHandler;
 
-import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
 /**
