@@ -24,11 +24,12 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Build;
 import android.util.Log;
+
+import com.bugsense.trace.BugSenseHandler;
+
 import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.utils.Crypto;
 import es.ugr.swad.swadroid.utils.Utils;
-
-import com.bugsense.trace.BugSenseHandler;
 
 import java.security.NoSuchAlgorithmException;
 
