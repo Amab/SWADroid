@@ -25,6 +25,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
@@ -32,12 +33,15 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
@@ -146,6 +150,7 @@ public class SWADMain extends MenuExpandableListActivity {
     private TextView mLoginStatusMessageView;
     private ImageButton mUpdateButton;
     private ProgressBar mProgressBar;
+    private Button mWhyPasswordButton;
     
     /**
      * Gets the database helper
@@ -281,7 +286,7 @@ public class SWADMain extends MenuExpandableListActivity {
 
         text = (TextView) this.findViewById(R.id.moduleName);
         text.setText(R.string.app_name);
-
+        
         try {
         	
             //Initialize HTTPS connections
@@ -796,9 +801,19 @@ public class SWADMain extends MenuExpandableListActivity {
         mLoginFormView = findViewById(R.id.login_form);
         mLoginStatusView = findViewById(R.id.login_status);        
         mProgressBar = (ProgressBar) this.findViewById(R.id.progress_refresh);
+        mWhyPasswordButton = (Button) findViewById(R.id.why_password);
         
+        mWhyPasswordButton.setVisibility(View.GONE);
         mUpdateButton.setVisibility(View.VISIBLE);
         mProgressBar.setVisibility(View.GONE);
+        
+        mWhyPasswordButton.setOnClickListener(new OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                whyMyPasswordNotWorkDialog();                
+            }
+        });
 	}
 	
 	/**
@@ -810,6 +825,10 @@ public class SWADMain extends MenuExpandableListActivity {
 	    mMainScreenView.setVisibility(show ? View.GONE : View.VISIBLE);
 		mLoginFormView.setVisibility(show ? View.VISIBLE : View.GONE);
 
+		if (Preferences.getServer().equals(Constants.DEFAULT_SERVER)) {
+		    mWhyPasswordButton.setVisibility(show ? View.VISIBLE : View.GONE);
+		}
+		
 		setupLoginForm();
 	}
     
@@ -955,5 +974,23 @@ public class SWADMain extends MenuExpandableListActivity {
             mLoginStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
+    }
+
+    private void whyMyPasswordNotWorkDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        LayoutInflater inflater = getLayoutInflater();
+
+        builder.setView(inflater.inflate(R.layout.dialog_why_password, null))
+               .setTitle(R.string.why_password_dialog_title)
+               .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                   @Override
+                   public void onClick(DialogInterface dialog, int which) {
+                       dialog.dismiss();
+                   }
+               });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }
