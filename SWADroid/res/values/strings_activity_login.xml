@@ -14,5 +14,9 @@
     <string name="error_invalid_password">Password must be at least 8 alphanumeric characters</string>
     <string name="error_incorrect_password">The password should contain numbers and letters</string>
     <string name="error_field_required">This field is required</string>
+    <string name="why_password">Why my password does not work?</string>
+    <string name="why_password_dialog_title">Why my password does not work?</string>
+    <string name="why_password_dialog_message">Probably you are using your e-Administration password (4 digits). You must write your SWAD password.</string>
+    <string name="lost_password">I forgot my password.</string>
 
 </resources>
