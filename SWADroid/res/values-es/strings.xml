@@ -17,7 +17,7 @@
     <string name="set_preferences">Configuración</string>
     <string name="user_preferences">Datos del usuario</string>
     <string name="userIDName_preferences">Usuario</string>
-    <string name="userIDSummary_preferences">DNI o Apodo</string>
+    <string name="userIDSummary_preferences">DNI, Apodo o Email</string>
     <string name="userIDTitle_preferences">Usuario</string>
     <string name="userPasswordName_preferences">Contraseña</string>
     <string name="userPasswordSummary_preferences">Contraseña</string>
@@ -211,6 +211,7 @@
     <string name="fileInfoTitle">Información de archivo</string>
     <string name="sizeFileTitle">Tamaño:</string>
     <string name="creationTimeTitle">Fecha:</string>
+    <string name="licenseType">Licencia:</string>
     <string name="uploaderTitle">Subido por:</string>
     <string name="downloadFileTitle">Descargar</string>
     <string name="sdCardBusyTitle">Tarjeta SD no disponible</string>
@@ -346,5 +347,9 @@
     <string name="teachingguideModuleLabel">Guía Docente</string>
     
     
-    <string name="pradoLoginToast">Recuerda que debes introducir la contraseña de SWAD, no la de Acceso identificado</string>
+    <string name="pradoLoginToast">La contraseña de SWAD tiene al menos 8 caracteres alfanuméricos</string>
+	<string name="error_password_summaryUGR">Recuerda que debes introducir la contraseña de SWAD, no la de Acceso identificado (PRADO)</string>
+	<string name="error_password_summary">Error: La contraseña debe ser de mínimo 8 caracteres alfanuméricos</string>
+	<string name="passwordDialogTip">Recuerda que la contraseña de SWAD debe tener al menos 8 caracteres alfanuméricos</string>
+	<string name="errorServerCertificateMsg">El certificado del servidor no es válido. Por favor, contacte con el administrador de SWAD</string>
 </resources>

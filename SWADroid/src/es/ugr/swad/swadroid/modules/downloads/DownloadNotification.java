@@ -27,6 +27,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.webkit.MimeTypeMap;
+
 import es.ugr.swad.swadroid.R;
 
 import java.io.File;

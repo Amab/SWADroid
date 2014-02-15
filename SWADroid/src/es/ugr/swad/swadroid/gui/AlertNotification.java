@@ -25,9 +25,9 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
+
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.modules.notifications.Notifications;
 
 /**
  * Class for create notification alerts.
@@ -36,7 +36,7 @@ import es.ugr.swad.swadroid.modules.notifications.Notifications;
  */
 public class AlertNotification {
 	public static void alertNotif(Context context, int notifAlertId, String contentTitle, String contentText,
-			String ticker) {
+			String ticker, Intent activity) {
 		
     	//Obtain a reference to the notification service
         String ns = Context.NOTIFICATION_SERVICE;
@@ -53,6 +53,12 @@ public class AlertNotification {
             .setContentText(contentText)
             .setTicker(ticker);
             //.setLights(Color.GREEN, 500, 500);
+
+        //Launch activity on alert click
+    	if(activity != null) {
+            PendingIntent notificationsPendingIntent = PendingIntent.getActivity(context, 0, activity, 0);
+            notifBuilder.setContentIntent(notificationsPendingIntent);
+    	}
         
         //Add sound, vibration and lights
         if(Preferences.isNotifSoundEnabled()) {
@@ -70,15 +76,6 @@ public class AlertNotification {
         }
             
     	notifBuilder.setDefaults(defaults);
-
-        //Configure the Intent
-        Intent notIntent = new Intent(context,
-                Notifications.class);
-
-        PendingIntent notifPendingIntent = PendingIntent.getActivity(
-                context, 0, notIntent, 0);
-        
-        notifBuilder.setContentIntent(notifPendingIntent);
        
         //Create alert
         Notification notif = notifBuilder.build();

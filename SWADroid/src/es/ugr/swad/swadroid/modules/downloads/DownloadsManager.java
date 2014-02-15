@@ -22,6 +22,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -38,10 +39,6 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
@@ -49,6 +46,10 @@ import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.model.GroupType;
 import es.ugr.swad.swadroid.modules.GroupTypes;
 import es.ugr.swad.swadroid.modules.Groups;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Activity to navigate through the directory tree of documents and to manage
@@ -232,7 +233,7 @@ public class DownloadsManager extends MenuActivity {
                     //updateView(navigator.goToSubDirectory(chosenNodeName));
                 else { //it is a files therefore gets its information through web service GETFILE
                     chosenNodeName = node.getName();
-                    AlertDialog fileInfoDialog = createFileInfoDialog(node.getName(), node.getSize(), node.getTime(), node.getPublisher(), node.getFileCode());
+                    AlertDialog fileInfoDialog = createFileInfoDialog(node.getName(), node.getSize(), node.getTime(), node.getPublisher(), node.getFileCode(), node.getLicense());
                     fileInfoDialog.show();
                 }
             }
@@ -555,7 +556,7 @@ public class DownloadsManager extends MenuActivity {
     /**
      * Method to request info file identified with @a fileCode to SWAD thought the web services GETFILE
      *
-     * @fileCode file code
+     * @param fileCode file code
      */
     private void requestGetFile(long fileCode) {
         Intent activity;
@@ -569,7 +570,8 @@ public class DownloadsManager extends MenuActivity {
      * Method that shows information file and allows its download
      * It has a button to confirm the download. If It is confirmed  getFile will be requested to get the link
      */
-    private AlertDialog createFileInfoDialog(String name, long size, long time, String uploader, long fileCode) {
+    private AlertDialog createFileInfoDialog(String name, long size, long time, String uploader,
+            long fileCode, String license) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         AlertDialog dialog;
         final long code = fileCode;
@@ -585,10 +587,32 @@ public class DownloadsManager extends MenuActivity {
         else
             uploaderName = this.getResources().getString(R.string.unknown);
 
-        String message = this.getResources().getString(R.string.fileTitle) + " " + name + '\n' +
-                this.getResources().getString(R.string.sizeFileTitle) + " " + humanReadableByteCount(size, true) + '\n' +
-                this.getResources().getString(R.string.uploaderTitle) + " " + uploaderName + '\n' +
-                this.getResources().getString(R.string.creationTimeTitle) + " " + dateShortFormat.format(d) + "  " + (timeFormat.format(d));
+        StringBuilder message;
+        
+        Resources res = getResources();
+        
+        message = new StringBuilder(res.getString(R.string.fileTitle))
+                .append(" ")
+                .append(name)
+                .append("\n")
+                .append(getString(R.string.sizeFileTitle))
+                .append(" ")
+                .append(humanReadableByteCount(size, true))
+                .append("\n")
+                .append(res.getString(R.string.uploaderTitle))
+                .append(" ")
+                .append(uploaderName)
+                .append("\n")
+                .append(res.getString(R.string.licenseType))
+                .append(" ")
+                .append(license)
+                .append("\n")
+                .append(res.getString(R.string.creationTimeTitle))
+                .append(" ")
+                .append(dateShortFormat.format(d))
+                .append("  ")
+                .append(timeFormat.format(d));
+        
         builder.setTitle(name);
         builder.setMessage(message);
         builder.setPositiveButton(R.string.downloadFileTitle, new DialogInterface.OnClickListener() {

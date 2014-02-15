@@ -7,8 +7,8 @@ import android.accounts.AccountManager;
 import android.content.ContentResolver;
 import android.os.Bundle;
 import android.util.Log;
+
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 
 public class AccountAuthenticator extends AccountAuthenticatorActivity {

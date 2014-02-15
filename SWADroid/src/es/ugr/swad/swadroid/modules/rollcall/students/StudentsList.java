@@ -27,10 +27,12 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.Module;
+
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;

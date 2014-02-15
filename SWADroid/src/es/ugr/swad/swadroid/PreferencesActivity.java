@@ -40,7 +40,6 @@ import com.bugsense.trace.BugSenseHandler;
 
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.gui.widget.SeekBarDialogPreference;
-import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.sync.SyncUtils;
 import es.ugr.swad.swadroid.utils.Crypto;
 import es.ugr.swad.swadroid.utils.Utils;
@@ -64,10 +63,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
      * Application context
      */
     public Context ctx;
-    /**
-     * Database Helper.
-     */
-    private static DataBaseHelper dbHelper;
     /**
      * Stars length
      */
@@ -155,10 +150,22 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     private boolean syncPrefsChanged = false;
 
     /**
+     * SWAD server to use
+     */
+    private String mServer;
+    
+    /**
      * User password preference changed flag
      */
     private boolean userPasswordPrefChanged = false;
 
+    /**
+     * User password has errors
+     */
+    private boolean mIncorrectPassword = false;
+    
+    private static final String PASSWORD_VALIDATE = "passw_validate";
+    
     /**
      * Shows an error message.
      *
@@ -177,26 +184,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     	errorDialog.show();
     }
 
-    /**
-     * Clean data of all tables from database. Removes users photos from external storage
-     */
-    private void cleanDatabase() {
-    	dbHelper.cleanTables();
-        
-        Preferences.setLastCourseSelected(0);
-        Utils.setDbCleaned(true);
-        
-        Log.i(TAG, "Database has been cleaned");
-    }
-    
-    private void logoutClean(String key) {
-    	Constants.setLogged(false);
-        Log.i(TAG, "Forced logout due to " + key + " change in preferences");
-        
-        cleanDatabase();
-        Constants.setPreferencesChanged();
-    }
-
     /* (non-Javadoc)
      * @see android.app.Activity#onCreate()
      */
@@ -204,13 +191,14 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        //Restore preferences
+        //Restore preferences        
+        getPreferenceManager().setSharedPreferencesName(Preferences.PREFS_NAME);
         addPreferencesFromResource(R.xml.preferences);
-        ctx = getApplicationContext(); 
+        
+        ctx = getApplicationContext();         
 
         //Initialize database
         try {    		
-            dbHelper = new DataBaseHelper(this); 
             getPackageManager().getApplicationInfo(
                     getPackageName(), 0);
     		isDebuggable = (ApplicationInfo.FLAG_DEBUGGABLE != 0);
@@ -236,8 +224,8 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         notifVibrateEnablePref = (CheckBoxPreference) findPreference(Preferences.NOTIFVIBRATEENABLEPREF);
         notifLightsEnablePref = (CheckBoxPreference) findPreference(Preferences.NOTIFLIGHTSENABLEPREF);
 
-        userIDPref.setOnPreferenceChangeListener(this);
-        userPasswordPref.setOnPreferenceChangeListener(this);
+        //userIDPref.setOnPreferenceChangeListener(this);
+        //userPasswordPref.setOnPreferenceChangeListener(this);
         ratePref.setOnPreferenceChangeListener(this);
         twitterPref.setOnPreferenceChangeListener(this);
         facebookPref.setOnPreferenceChangeListener(this);
@@ -255,16 +243,17 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         
         notifLimitPref.setProgress(Preferences.getNotifLimit());
         
-        userIDPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+        //userIDPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             /**
              * Called when a preference is selected.
              * @param preference Preference selected.
              */
-            public boolean onPreferenceClick(Preference preference) {
+      /*      public boolean onPreferenceClick(Preference preference) {
                 //userID = prefs.getString(USERIDPREF, "");
                 return true;
             }
         });
+       */
         ratePref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             /**
              * Called when a preference is selected.
@@ -352,6 +341,8 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
             }
         });
 
+        mServer = Preferences.getServer();
+        
         try {
             currentVersionPref.setSummary(getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
         } catch (NameNotFoundException e) {
@@ -379,25 +370,31 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         	Log.i(TAG, "Resetted user password due to userid change"); 
         	
         	//If preferences have changed, logout
-        	logoutClean(key);
+        	Preferences.logoutClean(key);
         	syncPrefsChanged = true;
-        } else if (Preferences.USERPASSWORDPREF.equals(key)) {            
+        } else if (Preferences.USERPASSWORDPREF.equals(key)) {
             try {
                 String password = (String) newValue;
 
                 // Try to guest if user is using PRADO password
                 if ((password.length() >= 8) && !Utils.isLong(password)) {
                     userPassword = Crypto.encryptPassword(password);
+                    // Restore default style if it was changed due to an error in the input
+                    userPasswordPref.setLayoutResource(R.layout.preference_child);
                     preference.setSummary(Utils.getStarsSequence(STARS_LENGTH));
-
+                    
                     // If preferences have changed, logout
-                    Constants.setLogged(false);
                     Log.i(TAG, "Forced logout due to " + key + " change in preferences");
                     userPasswordPrefChanged = true;
                     syncPrefsChanged = true;
+                    mIncorrectPassword = false;
+                    Preferences.setPreferencesChanged();
+                    Constants.setLogged(false);
                 } else {
                     Toast.makeText(getApplicationContext(), R.string.pradoLoginToast,
                             Toast.LENGTH_LONG).show();
+                    highlightPasswordSummary();
+                    mIncorrectPassword = true;
                     // Do not save the password to the preferences.
                     returnValue = false; 
                 }
@@ -406,10 +403,11 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
 				error(TAG, ex.getMessage(), ex, true);
 			}
         } else if (Preferences.SERVERPREF.equals(key)) {
-            Preferences.setServer((String) newValue);
-            
+            mServer = newValue.toString();
+            Preferences.setServer(mServer);
+            serverPref.setSummary(mServer);
             //If preferences have changed, logout
-        	logoutClean(key);
+        	Preferences.logoutClean(key);
         	syncPrefsChanged = true;
         } else if(Preferences.SYNCENABLEPREF.equals(key)) {
         	boolean syncEnabled = (Boolean) newValue;
@@ -445,7 +443,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         } else if(Preferences.NOTIFLIMITPREF.equals(key)) {
         	 int notifLimit = (Integer) newValue;
         	 Preferences.setNotifLimit(notifLimit);
-             dbHelper.clearOldNotifications(notifLimit);
+        	 Preferences.clearOldNotifications(notifLimit);
         } else if(Preferences.NOTIFSOUNDENABLEPREF.equals(key)) {
             boolean notifSoundEnabled = (Boolean) newValue;
             Preferences.setNotifSoundEnabled(notifSoundEnabled);
@@ -496,7 +494,10 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
 		if(userPasswordPrefChanged) {
 	    	Preferences.setUserPassword(userPassword);
 		}
-
+	
+		if (mIncorrectPassword)
+		    Constants.setLogged(false);
+		
         //Reconfigure automatic synchronization
         if(syncPrefsChanged) {
 	        SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, ctx);
@@ -522,15 +523,19 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         int prefSyncTimeIndex = prefSyncTimeValues.indexOf(Preferences.getSyncTime());
         String prefSyncTimeEntry = prefSyncTimeEntries.get(prefSyncTimeIndex);
         String stars = Utils.getStarsSequence(STARS_LENGTH);
-        String server = Preferences.getServer();
+        mServer = Preferences.getServer();
         
-        userIDPref.setSummary(Preferences.getUserID());
+        /*userIDPref.setSummary(Preferences.getUserID());
         
-        if (!Preferences.getUserPassword().equals(""))
+        if (!Preferences.getUserPassword().equals("") && !mIncorrectPassword)
             userPasswordPref.setSummary(stars);
-
-        if (!server.equals("")) {
-            serverPref.setSummary(server);
+        
+        if (mIncorrectPassword)
+        	highlightPasswordSummary();
+        */
+        
+        if (!mServer.equals("")) {
+            serverPref.setSummary(mServer);
         } else {
             serverPref.setSummary(Constants.DEFAULT_SERVER);
         }
@@ -545,5 +550,28 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         }
         
         syncTimePref.setSummary(prefSyncTimeEntry);
+    }
+    
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+    	super.onSaveInstanceState(outState);
+    	
+    	if (mIncorrectPassword)
+    		outState.putBoolean(PASSWORD_VALIDATE, mIncorrectPassword);
+    }
+    
+    @Override
+    protected void onRestoreInstanceState(Bundle state) {
+    	super.onRestoreInstanceState(state);
+    	
+    	if (state.getBoolean(PASSWORD_VALIDATE)){
+    		highlightPasswordSummary();
+    		mIncorrectPassword = true;
+    	}
+    }
+    
+    private void highlightPasswordSummary(){
+    	userPasswordPref.setLayoutResource(R.layout.preference_child_summary_error);
+        userPasswordPref.setSummary(mServer.equals("swad.ugr.es") ? R.string.error_password_summaryUGR : R.string.error_password_summary);
     }
 }

@@ -30,6 +30,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.Preferences;
+import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.gui.MenuActivity;
+import es.ugr.swad.swadroid.utils.Utils;
+import es.ugr.swad.swadroid.webservices.IWebserviceClient;
+import es.ugr.swad.swadroid.webservices.RESTClient;
+import es.ugr.swad.swadroid.webservices.SOAPClient;
+
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,15 +48,10 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.util.concurrent.TimeoutException;
 
-import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.gui.MenuActivity;
-import es.ugr.swad.swadroid.utils.Utils;
-import es.ugr.swad.swadroid.webservices.IWebserviceClient;
-import es.ugr.swad.swadroid.webservices.RESTClient;
-import es.ugr.swad.swadroid.webservices.SOAPClient;
+import javax.net.ssl.SSLException;
 
 /**
  * Superclass for encapsulate common behavior of all modules.
@@ -98,9 +102,9 @@ public abstract class Module extends MenuActivity {
      * @throws NoSuchAlgorithmException
      * @throws IOException
      * @throws XmlPullParserException
+     * @throws Exception 
      */
-    protected abstract void requestService() throws NoSuchAlgorithmException,
-            IOException, XmlPullParserException;
+    protected abstract void requestService() throws Exception;
 
     /**
      * Launches action in a separate thread while shows a progress dialog in UI
@@ -237,7 +241,8 @@ public abstract class Module extends MenuActivity {
                     break;
             }
         } else {
-            setResult(RESULT_CANCELED);
+            setResult(RESULT_CANCELED);            
+            finish();
         }
     }
 
@@ -283,10 +288,9 @@ public abstract class Module extends MenuActivity {
      * 
      * @param cl     Class to be mapped
      * @param simple Flag for select simple or complex response
-     * @throws XmlPullParserException 
-     * @throws IOException 
+     * @throws Exception 
      */
-    protected void sendRequest(Class<?> cl, boolean simple) throws IOException, XmlPullParserException {
+    protected void sendRequest(Class<?> cl, boolean simple) throws Exception {
     	((SOAPClient) webserviceClient).sendRequest(cl, simple);
     	result = webserviceClient.getResult();
     }
@@ -303,7 +307,7 @@ public abstract class Module extends MenuActivity {
      * @throws IOException
      * @throws JSONException
      */
-    protected void sendRequest(Class<?> cl, boolean simple, RESTClient.REQUEST_TYPE type, JSONObject json) throws ClientProtocolException, IOException, JSONException {
+    protected void sendRequest(Class<?> cl, boolean simple, RESTClient.REQUEST_TYPE type, JSONObject json) throws ClientProtocolException, CertificateException, IOException, JSONException {
     	((RESTClient) webserviceClient).sendRequest(cl, simple, RESTClient.REQUEST_TYPE.GET, json);
     	result = webserviceClient.getResult();
     }
@@ -334,9 +338,10 @@ public abstract class Module extends MenuActivity {
         /**
          * Shows progress dialog and connects to SWAD in background
          *
+         * @param activity            Reference to Module activity
+         * @param show             	  Flag for show a progress dialog
          * @param progressDescription Description to be showed in dialog
          * @param progressTitle       Title to be showed in dialog
-         * @param isLogin             Flag for detect if this is the login module
          */
         public Connect(Module activity, boolean show,
                        String progressDescription, int progressTitle) {
@@ -414,11 +419,20 @@ public abstract class Module extends MenuActivity {
                     if (es.faultstring.equals("Bad log in")) {
                         errorMsg = getString(R.string.errorBadLoginMsg);
                         sendException = false;
+                	} else if (es.faultstring.equals("Bad web service key")) {
+                        errorMsg = getString(R.string.errorBadLoginMsg);
+                		sendException = false;
+                		
+                		//Force logout and reset password (this will show again the login screen)
+                		Constants.setLogged(false);
+                		Preferences.setUserPassword("");
                     } else if (es.faultstring.equals("Unknown application key")) {
                         errorMsg = getString(R.string.errorBadAppKeyMsg);
                     } else {
                         errorMsg = "Server error: " + es.getMessage();
                     }
+                } else if ((e instanceof CertificateException) || (e instanceof SSLException)) {
+               	    errorMsg = getString(R.string.errorServerCertificateMsg);
                 } else if (e instanceof XmlPullParserException) {
                     errorMsg = getString(R.string.errorServerResponseMsg);
                 } else if (e instanceof TimeoutException) {
@@ -434,6 +448,11 @@ public abstract class Module extends MenuActivity {
                 // Request finalized with errors
                 error(TAG, errorMsg, e, sendException);
                 setResult(RESULT_CANCELED);
+                
+                // Launch database rollback
+                if(dbHelper.isDbInTransaction()) {
+                	dbHelper.endTransaction(false);
+                }
 
                 onError();
             } else {

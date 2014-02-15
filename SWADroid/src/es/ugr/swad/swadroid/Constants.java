@@ -19,9 +19,9 @@
 
 package es.ugr.swad.swadroid;
 
-import java.util.Random;
-
 import es.ugr.swad.swadroid.model.User;
+
+import java.util.Random;
 
 /**
  * Constants of application.
@@ -88,10 +88,6 @@ public class Constants {
      * Role of the logged User in the current selected course
      */
     private static int currentUserRole = -1;
-    /**
-     * Indicates if there are changes on preferences
-     */
-    private static boolean preferencesChanged = false;
     /**
      * Indicates if there are changes on db
      */
@@ -469,34 +465,13 @@ public class Constants {
     /**
      * Sets user role in the current selected course
      *
-     * @param userRole: Role of the user: 0- unknown STUDENT_TYPE_CODE - student TEACHER_TYPE_CODE - teacher
+     * @param userRole Role of the user: 0- unknown STUDENT_TYPE_CODE - student TEACHER_TYPE_CODE - teacher
      */
     public static void setCurrentUserRole(int userRole) {
         if (userRole == 0 || userRole == TEACHER_TYPE_CODE || userRole == STUDENT_TYPE_CODE)
             currentUserRole = userRole;
         else
             currentUserRole = -1;
-    }
-
-    public static boolean isPreferencesChanged() {
-        return preferencesChanged;
-    }
-
-    /**
-     * Set the fact that the preferences has changed
-     */
-    public static void setPreferencesChanged() {
-        preferencesChanged = true;
-    }
-
-    /**
-     * Indicates if the preferences has changed
-     *
-     * @param newState - true when the preferences has changed  and it was not handled it
-     *                 - false if the preferences has not changed
-     */
-    public static void setPreferencesChanged(boolean newState) {
-        preferencesChanged = newState;
     }
 
     public static void setSelectedCourseShortName(String currentCourseShortName) {
