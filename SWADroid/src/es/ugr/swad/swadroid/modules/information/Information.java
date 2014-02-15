@@ -47,7 +47,6 @@ public class Information extends Module {
     protected void onCreate(Bundle savedInstanceState) {
 		
 		
-		
         super.onCreate(savedInstanceState);
         setContentView(R.layout.webview_information_screen_layout);
         WebView webview = (WebView) this.findViewById(R.id.contentWebView);
@@ -173,6 +172,12 @@ public class Information extends Module {
 			 //infoContent = res.get(2).toString();
 			 infoSrc = soap.getProperty(infoSrc).toString();
 			 infoTxt = soap.getPrimitiveProperty(infoTxt).toString();
+			 
+		 }
+		 
+		 else{
+			 
+			 
 			 
 		 }
 		
