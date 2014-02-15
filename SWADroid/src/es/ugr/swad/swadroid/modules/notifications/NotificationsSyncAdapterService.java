@@ -21,9 +21,14 @@ package es.ugr.swad.swadroid.modules.notifications;
 
 import android.accounts.Account;
 import android.app.Service;
-import android.content.*;
+import android.content.AbstractThreadedSyncAdapter;
+import android.content.ContentProviderClient;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SyncResult;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -49,16 +54,13 @@ import org.ksoap2.serialization.KvmSerializable;
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.TimeoutException;
+
+import javax.net.ssl.SSLException;
 
 /**
  * Service for notifications sync adapter.
@@ -112,11 +114,20 @@ public class NotificationsSyncAdapterService extends Service {
                     if (es.faultstring.equals("Bad log in")) {
                     	errorMessage = mContext.getString(R.string.errorBadLoginMsg);
                     	sendException = false;
+                	} else if (es.faultstring.equals("Bad web service key")) {
+                		errorMessage = mContext.getString(R.string.errorBadLoginMsg);
+                		sendException = false;
+                		
+                		//Force logout and reset password (this will show again the login screen)
+                		Constants.setLogged(false);
+                		Preferences.setUserPassword("");
                     } else if (es.faultstring.equals("Unknown application key")) {
                     	errorMessage = mContext.getString(R.string.errorBadAppKeyMsg);
                     } else {
                     	errorMessage = "Server error: " + es.getMessage();
                     }
+                } else if ((e instanceof CertificateException) || (e instanceof SSLException)) {
+                	errorMessage = mContext.getString(R.string.errorServerCertificateMsg);
                 } else if (e instanceof XmlPullParserException) {
                 	errorMessage = mContext.getString(R.string.errorServerResponseMsg);
                 } else if (e instanceof TimeoutException) {
@@ -127,9 +138,14 @@ public class NotificationsSyncAdapterService extends Service {
                 	if((errorMessage == null) || errorMessage.equals("")) {
                 		errorMessage = mContext.getString(R.string.errorConnectionMsg);
                 	}  
-                }             	
-
-                e.printStackTrace();
+                }           
+                
+                // Launch database rollback
+                if(dbHelper.isDbInTransaction()) {
+                	dbHelper.endTransaction(false);
+                }
+                
+	            Log.e(TAG, e.getMessage());
 
                 //Send exception details to Bugsense
                 if(sendException) {
@@ -263,15 +279,14 @@ public class NotificationsSyncAdapterService extends Service {
      * 
      * @param cl     Class to be mapped
      * @param simple Flag for select simple or complex response
-     * @throws XmlPullParserException 
-     * @throws IOException 
+     * @throws Exception 
      */
-    protected static void sendRequest(Class<?> cl, boolean simple) throws IOException, XmlPullParserException {
+    protected static void sendRequest(Class<?> cl, boolean simple) throws Exception {
     	((SOAPClient) webserviceClient).sendRequest(cl, simple);
     	result = webserviceClient.getResult();
     }
     
-    private static void logUser() throws IOException, XmlPullParserException {
+    private static void logUser() throws Exception {
     	Log.d(TAG, "Not logged");
 
         METHOD_NAME = "loginByUserPasswordKey";
@@ -308,7 +323,7 @@ public class NotificationsSyncAdapterService extends Service {
         }
     }
     
-    private static void getNotifications() throws IOException, XmlPullParserException {
+    private static void getNotifications() throws Exception {
     	Log.d(TAG, "Logged");
 
         //Calculates next timestamp to be requested
@@ -358,7 +373,7 @@ public class NotificationsSyncAdapterService extends Service {
             //Clear old notifications to control database size
             dbHelper.clearOldNotifications(SIZE_LIMIT);
 
-            dbHelper.endTransaction();
+            dbHelper.endTransaction(true);
         }
     }
     
@@ -400,17 +415,27 @@ public class NotificationsSyncAdapterService extends Service {
     }
 
     private static void performSync(Context context, Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
-            throws IOException, XmlPullParserException, NoSuchAlgorithmException, KeyManagementException, KeyStoreException, CertificateException, UnrecoverableKeyException {
+            throws Exception {
 
+        Intent notIntent = new Intent(context, Notifications.class);
+        
         //Notify synchronization start
         Intent startIntent = new Intent();
         startIntent.setAction(START_SYNC);
         context.sendBroadcast(startIntent);
 
         //Initialize HTTPS connections
-        //SecureConnection.initUntrustedSecureConnection();
-    	conn = new SecureConnection();
-    	conn.initSecureConnection(context);
+    	/*
+    	 * Terena root certificate is not included by default on Gingerbread and older
+    	 * If Android API < 11 (HONEYCOMB) add Terena certificate manually
+    	 */
+    	if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+    		conn = new SecureConnection();
+    		conn.initSecureConnection(context);        		
+    		Log.i(TAG, "Android API < 11 (HONEYCOMB). Adding Terena certificate manually");
+    	} else {
+    		Log.i(TAG, "Android API >= 11 (HONEYCOMB). Using Terena built-in certificate");
+    	}
 
         //If last login time > Global.RELOGIN_TIME, force login
         if (Constants.isLogged() &&
@@ -436,7 +461,8 @@ public class NotificationsSyncAdapterService extends Service {
 	            		NOTIF_ALERT_ID,
 	            		context.getString(R.string.app_name),
 	            		notifCount + " " + context.getString(R.string.notificationsAlertMsg),
-	            		context.getString(R.string.app_name));
+	            		context.getString(R.string.app_name),
+	            		notIntent);
         	}
         	
         	sendReadedNotifications(context);

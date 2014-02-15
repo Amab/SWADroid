@@ -31,9 +31,11 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.model.Model;
 
+import java.text.Normalizer;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -293,7 +295,7 @@ public class Utils {
      * Generates the stars sequence to be showed on password field
      *
      * @param size Length of the stars sequence
-     * @return
+     * @return Stars as a string concatenation of the specified length
      */
     public static String getStarsSequence(int size) {
         String stars = "";
@@ -304,5 +306,14 @@ public class Utils {
 
         return stars;
     }
-
+    
+    public static String unAccent(String s) {
+        //
+        // JDK1.5
+        //   use sun.text.Normalizer.normalize(s, Normalizer.DECOMP, 0);
+        //
+        String temp = Normalizer.normalize(s, Normalizer.Form.NFD);
+        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        return pattern.matcher(temp).replaceAll("");
+    }
 }

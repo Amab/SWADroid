@@ -18,13 +18,20 @@
  */
 package es.ugr.swad.swadroid;
 
-import java.security.NoSuchAlgorithmException;
-
-import es.ugr.swad.swadroid.utils.Crypto;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.preference.PreferenceManager;
+import android.os.Build;
+import android.util.Log;
+
+import com.bugsense.trace.BugSenseHandler;
+
+import es.ugr.swad.swadroid.model.DataBaseHelper;
+import es.ugr.swad.swadroid.utils.Crypto;
+import es.ugr.swad.swadroid.utils.Utils;
+
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Class for store the application preferences
@@ -36,6 +43,10 @@ public class Preferences {
      * Login tag name for Logcat
      */
     public static final String TAG = Constants.APP_TAG + " Preferences";
+    /**
+     * Preferences name
+     */
+    public static final String PREFS_NAME = "es.ugr.swad.swadroid_preferences";
     /**
      * Application preferences
      */
@@ -136,13 +147,46 @@ public class Preferences {
      * Authors preference name
      */
     public static final String AUTHORSPREF = "authorsPref";
-
+    /**
+     * Database Helper.
+     */
+    private static DataBaseHelper dbHelper;
+    /**
+     * Indicates if there are changes on preferences
+     */
+    private static boolean preferencesChanged = false;
+    
     /**
      * Constructor
      */
-    public Preferences(Context ctx) { 
-		prefs = PreferenceManager.getDefaultSharedPreferences(ctx);    	
-		editor = prefs.edit();
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	public Preferences(Context ctx) { 
+    	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+    		/*
+    		 *  If Android API >= 11 (HONEYCOMB) enable access to SharedPreferences from all processes
+    		 *  of the application 
+    		 */
+    		prefs = ctx.getSharedPreferences(PREFS_NAME, Context.MODE_MULTI_PROCESS);
+    		Log.i(TAG, "Android API >= 11 (HONEYCOMB). Enabling MODE_MULTI_PROCESS explicitly");
+		} else {
+			/* 
+			 * If Android API < 11 (HONEYCOMB) access is enabled by default
+			 * MODE_MULTI_PROCESS is not defined
+			 */
+			prefs = ctx.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+    		Log.i(TAG, "Android API < 11 (HONEYCOMB). MODE_MULTI_PROCESS is not defined and enabled by default");
+		}
+
+    	editor = prefs.edit();
+    	
+    	if(dbHelper == null) {
+	    	try {
+	            dbHelper = new DataBaseHelper(ctx);
+	        } catch (Exception e) {
+	            Log.e(TAG, e.getMessage());
+	            BugSenseHandler.sendException(e);
+	        }
+    	}
 	}
 
 	/**
@@ -197,7 +241,7 @@ public class Preferences {
     /**
      * Sets server URL
      *
-     * @param Server URL
+     * @param server Server URL
      */
     public static void setServer(String server) {
     	editor = editor.putString(SERVERPREF, server);
@@ -406,5 +450,49 @@ public class Preferences {
         String userPassword = getUserPassword();
         setUserPassword(Crypto.encryptPassword(userPassword));
     }
+    
+    /**
+     * Clean data of all tables from database. Removes users photos from external storage
+     */
+    private static void cleanDatabase() {
+        dbHelper.cleanTables();
+        
+        Preferences.setLastCourseSelected(0);
+        Utils.setDbCleaned(true);
+        
+        Log.i(TAG, "Database has been cleaned");
+    }
+    
+    public static void logoutClean(String key) {
+        Constants.setLogged(false);
+        Log.i(TAG, "Forced logout due to " + key + " change in preferences");
+        
+        cleanDatabase();
+        setPreferencesChanged();
+    }
 
+    public static void clearOldNotifications(int size) {
+        dbHelper.clearOldNotifications(size);
+    }
+    
+    public static boolean isPreferencesChanged() {
+        return preferencesChanged;
+    }
+
+    /**
+     * Set the fact that the preferences has changed
+     */
+    public static void setPreferencesChanged() {
+        preferencesChanged = true;
+    }
+
+    /**
+     * Indicates if the preferences has changed
+     *
+     * @param newState - true when the preferences has changed  and it was not handled it
+     *                 - false if the preferences has not changed
+     */
+    public static void setPreferencesChanged(boolean newState) {
+        preferencesChanged = newState;
+    }
 }

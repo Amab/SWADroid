@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Test;
@@ -29,10 +30,6 @@ import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -89,8 +86,7 @@ public class TestsConfigDownload extends Module {
      * @see es.ugr.swad.swadroid.modules.Module#requestService()
      */
     @Override
-    protected void requestService() throws NoSuchAlgorithmException,
-            IOException, XmlPullParserException {
+    protected void requestService() throws Exception {
 
         //Calculates next timestamp to be requested
         Long timestamp = Long.valueOf(dbHelper.getTimeOfLastTestUpdate(Constants.getSelectedCourseCode()));

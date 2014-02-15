@@ -22,7 +22,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
-import java.util.concurrent.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Finishes an activity after a period of inactivity if the device is on battery power.

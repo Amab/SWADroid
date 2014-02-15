@@ -18,7 +18,7 @@
     <string name="set_preferences">Preferences</string>
     <string name="user_preferences">User data</string>
     <string name="userIDName_preferences">User</string>
-    <string name="userIDSummary_preferences">DNI or Nickname</string>
+    <string name="userIDSummary_preferences">ID, Nickname or Email</string>
     <string name="userIDTitle_preferences">User</string>
     <string name="userPasswordName_preferences">Password</string>
     <string name="userPasswordSummary_preferences">Password</string>
@@ -210,6 +210,7 @@
     <string name="sizeFileTitle">Size:</string>
     <string name="creationTimeTitle">Date:</string>
     <string name="uploaderTitle">Uploaded by:</string>
+    <string name="licenseType">License:</string>
     <string name="downloadFileTitle">Download</string>
     <string name="sdCardBusyTitle">SD card unavailable</string>
     <string name="sdCardBusy">The SD casd is busy. To allow downloads, select "Turn off USB storage" in the
@@ -348,5 +349,11 @@
     <string name="practicesprogramModuleLabel">Practices Program</string>
     <string name="theoryprogramModuleLabel">Theory Program</string>
     <string name="teachingguideModuleLabel">Teaching Guide</string>
-    <string name="pradoLoginToast">Remember you must enter SWAD\'s password, not e-Administration</string>
+    
+    <string name="pradoLoginToast">SWAD\'s password is at least 8 alphanumeric characters long</string>
+    <string name="error_password_summaryUGR">Remember you must enter SWAD\'s password, not e-Administration (PRADO)</string>
+    <string name="error_password_summary">Error: Password must be at least 8 alphanumeric characters</string>
+    <string name="passwordDialogTip">SWAD\'s password is at least 8 alphanumeric characters long</string>
+    <string name="errorServerCertificateMsg">The server certificate is invalid. Please contact SWAD admininstrator</string>
+    <string name="lessOrEqualChar">≤</string>
 </resources>

@@ -21,6 +21,7 @@ package es.ugr.swad.swadroid.modules;
 
 import android.os.Bundle;
 import android.util.Log;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
@@ -31,10 +32,6 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.KvmSerializable;
 import org.ksoap2.serialization.SoapObject;
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 
 /**
  * Login module for connect to SWAD.
@@ -95,14 +92,12 @@ public class Login extends Module {
 
     /**
      * Connects to SWAD and gets user data.
+     * @throws Exception 
      *
-     * @throws NoSuchAlgorithmException
-     * @throws IOException
-     * @throws XmlPullParserException
      * @throws SoapFault
      */
     protected void requestService()
-            throws NoSuchAlgorithmException, IOException, XmlPullParserException {
+            throws Exception {
 
         //If last login time > Global.RELOGIN_TIME, force login
         if (System.currentTimeMillis() - Constants.getLastLoginTime() > Constants.RELOGIN_TIME) {

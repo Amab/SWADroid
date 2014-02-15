@@ -20,13 +20,24 @@ package es.ugr.swad.swadroid.modules.notifications;
 
 import android.accounts.Account;
 import android.app.Activity;
-import android.content.*;
+import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.*;
+import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bugsense.trace.BugSenseHandler;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -40,14 +51,12 @@ import es.ugr.swad.swadroid.gui.AlertNotification;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.modules.Module;
+import es.ugr.swad.swadroid.sync.SyncUtils;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 import org.ksoap2.serialization.SoapObject;
-import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -354,13 +363,12 @@ public class Notifications extends Module {
      * @see es.ugr.swad.swadroid.modules.Module#requestService()
      */
     @Override
-    protected void requestService() throws NoSuchAlgorithmException,
-            IOException, XmlPullParserException {
+    protected void requestService() throws Exception {
     	
     	//Download new notifications from the server
         SIZE_LIMIT = Preferences.getNotifLimit();
 
-        if (ContentResolver.getSyncAutomatically(account, authority)) {
+        if (SyncUtils.isSyncAutomatically(getApplicationContext())) {
         	Log.i(TAG, "Automatic synchronization is enabled. Requesting asynchronous sync operation");
         	
             //Call synchronization service
@@ -415,7 +423,7 @@ public class Notifications extends Module {
                 //Clear old notifications to control database size
                 dbHelper.clearOldNotifications(SIZE_LIMIT);
 
-                dbHelper.endTransaction();
+                dbHelper.endTransaction(true);
             }
         }
     }
@@ -435,8 +443,10 @@ public class Notifications extends Module {
      * @see es.ugr.swad.swadroid.modules.Module#postConnect()
      */
     @Override
-    protected void postConnect() {   
-        if (!ContentResolver.getSyncAutomatically(account, authority)) {
+    protected void postConnect() {
+        Intent notIntent = new Intent(this, Notifications.class);
+        
+        if (!SyncUtils.isSyncAutomatically(getApplicationContext())) {
         	if (notifCount > 0) {
 	            //If the notifications counter exceeds the limit, set it to the max allowed
 	            if (notifCount > SIZE_LIMIT) {
@@ -447,7 +457,8 @@ public class Notifications extends Module {
 	            		NOTIF_ALERT_ID,
 	            		getString(R.string.app_name),
 	            		notifCount + " " + getString(R.string.notificationsAlertMsg),
-	            		getString(R.string.app_name));
+	            		getString(R.string.app_name),
+	            		notIntent);
         	} else {
         		Toast.makeText(this, R.string.NoNotificationsMsg, Toast.LENGTH_LONG).show();
         	}

@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+
 import es.ugr.swad.swadroid.R;
 
 import java.util.LinkedHashMap;

@@ -6,24 +6,19 @@
 
 package es.ugr.swad.swadroid.modules.information;
 
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Vector;
-
-import org.ksoap2.serialization.SoapObject;
-import org.xmlpull.v1.XmlPullParserException;
-
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
+
+import org.ksoap2.serialization.SoapObject;
 
 
 public class Information extends Module {
@@ -154,8 +149,7 @@ public class Information extends Module {
     
     
 	@Override
-	protected void requestService() throws NoSuchAlgorithmException,
-			IOException, XmlPullParserException {
+	protected void requestService() throws Exception {
 		// TODO Auto-generated method stub
 		
 		createRequest(SOAPClient.CLIENT_TYPE);

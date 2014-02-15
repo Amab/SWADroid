@@ -21,12 +21,18 @@ package es.ugr.swad.swadroid.modules.downloads;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+
 import com.bugsense.trace.BugSenseHandler;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.utils.Utils;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;

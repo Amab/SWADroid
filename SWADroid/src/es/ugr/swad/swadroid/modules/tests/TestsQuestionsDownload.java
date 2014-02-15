@@ -22,18 +22,20 @@ import android.database.SQLException;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.model.*;
+import es.ugr.swad.swadroid.model.Model;
+import es.ugr.swad.swadroid.model.Test;
+import es.ugr.swad.swadroid.model.TestAnswer;
+import es.ugr.swad.swadroid.model.TestQuestion;
+import es.ugr.swad.swadroid.model.TestTag;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 import org.ksoap2.serialization.SoapObject;
-import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -77,8 +79,7 @@ public class TestsQuestionsDownload extends Module {
      * @see es.ugr.swad.swadroid.modules.Module#requestService()
      */
     @Override
-    protected void requestService() throws NoSuchAlgorithmException,
-            IOException, XmlPullParserException {
+    protected void requestService() throws Exception {
 
         //Creates webservice request, adds required params and sends request to webservice
     	createRequest(SOAPClient.CLIENT_TYPE);
@@ -214,7 +215,7 @@ public class TestsQuestionsDownload extends Module {
             //Test testConfig = (Test) dbHelper.getRow(Constants.DB_TABLE_TEST_CONFIG, "id", Long.toString(Constants.getSelectedCourseCode()));
             //testConfig.setEditTime(System.currentTimeMillis() / 1000L);
             //dbHelper.updateTestConfig(testConfig.getId(), testConfig);
-            dbHelper.endTransaction();
+            dbHelper.endTransaction(true);
         }
 
         //Request finalized without errors

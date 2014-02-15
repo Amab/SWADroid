@@ -17,7 +17,7 @@
     <string name="set_preferences">Configuració</string>
     <string name="user_preferences">Dades de l\'usuari</string>
     <string name="userIDName_preferences">Usuari</string>
-    <string name="userIDSummary_preferences">DNI o Sobrenom</string>
+    <string name="userIDSummary_preferences">DNI, Sobrenom o Email</string>
     <string name="userIDTitle_preferences">Usuari</string>
     <string name="userPasswordName_preferences">Contrasenya</string>
     <string name="userPasswordSummary_preferences">Contrasenya</string>
@@ -314,4 +314,10 @@
     <string name="practicesprogramModuleLabel">Programa de Práctiques</string>
     <string name="theoryprogramModuleLabel">Programa de Teoria</string>
     <string name="teachingguideModuleLabel">Guia Docent</string>
+    
+    <string name="pradoLoginToast">La contrasenya d\'SWAD té almenys 8 caràcters alfanumèrics</string>
+	<string name="error_password_summaryUGR">Recorda que has d\'introduir la contrasenya de SWAD, no la d\'Accés identificat</string>
+	<string name="error_password_summary"> Error: La contrasenya ha de ser de mínim 8 caràcters alfanumèrics</string>
+	<string name="passwordDialogTip">Recorda que la contrasenya d\'SWAD ha de tenir almenys 8 caràcters alfanumèrics</string>
+	<string name="errorServerCertificateMsg">El certificat del servidor no és vàlid. Si us plau, poseu-vos en contacte amb l\'administrador SWAD</string>
 </resources>

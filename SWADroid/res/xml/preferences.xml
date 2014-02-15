@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res-auto" >
-
+ 
     <PreferenceCategory android:title="@string/user_preferences" >
+<!-- 
         <EditTextPreference
             android:name="@string/userIDName_preferences"
             android:defaultValue=""
@@ -17,7 +18,7 @@
             android:key="userPasswordPref"
             android:password="true"
             android:title="@string/userPasswordTitle_preferences" />
-
+-->
         <EditTextPreference
             android:name="@string/serverName_preferences"
             android:defaultValue=""
