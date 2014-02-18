@@ -23,16 +23,13 @@ import org.ksoap2.serialization.SoapObject;
 
 public class Information extends Module {
 	
+    public static final String TAG = Constants.APP_TAG + " Information";
+	
 	/**
      * Information Type. String with the type of information (none, HTML, plain text...)
      */
     private String infoSrc;
-    
-    /**
-     * Information Content. String with the URL of information.
-     */
-    private String infoURL;
-    
+        
     /**
      * Information Content. String with the content of information.
      */
@@ -49,7 +46,7 @@ public class Information extends Module {
 		
         super.onCreate(savedInstanceState);
         setContentView(R.layout.webview_information_screen_layout);
-        WebView webview = (WebView) this.findViewById(R.id.contentWebView);
+        //WebView webview = (WebView) this.findViewById(R.id.contentWebView);
              
         ImageView moduleIcon;
         TextView moduleText;
@@ -148,10 +145,21 @@ public class Information extends Module {
         
         break;
         
-}
+        }
 
     }
     
+	@Override
+	protected void connect() {
+		// TODO Auto-generated method stub
+		
+        String progressDescription = getString(R.string.informationProgressDescription);
+        int progressTitle = R.string.informationProgressTitle;
+
+        startConnection(true, progressDescription, progressTitle);
+		
+	}
+
     
 	@Override
 	protected void requestService() throws Exception {
@@ -170,51 +178,51 @@ public class Information extends Module {
 			 //infoType = res.get(1).toString();
 			 //infoContent = res.get(2).toString();
 			 infoSrc = soap.getProperty(infoSrc).toString();
+			 infoTxt = soap.getPrimitiveProperty(infoTxt).toString();
 			 
-			 if (infoSrc.equals("none")) {
-		        		        	
-		        	infoTxt = "Información no disponible";//cargar el string traducible (no esta aun creado) 
-		     
-			 }
 			 
-			 else {
-				 
-				 if (infoSrc.equals("URL")) {
- 		        	
-			        	infoURL = soap.getPrimitiveProperty(infoTxt).toString();
-			     
-				 }
-				 
-				 else{
-				 
-					 infoTxt = soap.getPrimitiveProperty(infoTxt).toString();
-				 
-				 }
-			 }
-			 
-		  //Request finalized without errors
-		  setResult(RESULT_OK);
+			 //Request finalized without errors
+			 setResult(RESULT_OK);
 		        	
 		 }
 			 
 		 
 		 else{
 			 
-			 infoTxt = "es necesaria conexion a internet"; //poner el string traducible correspondiente, si no está, crearlo
+			 infoTxt = getString (R.string.connectionRequired);
 			 
 		 }	
 		
 	}
 
-	@Override
-	protected void connect() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	protected void postConnect() {
 		// TODO Auto-generated method stub
+		
+		 WebView webview = (WebView) this.findViewById(R.id.contentWebView);
+		
+		 if (infoSrc.equals("none")) {
+	        	
+	        	webview.loadData("Información no disponible", "text/html; charset=UTF-8", null);//cargar el string traducible (no esta aun creado) 
+	     
+		 }
+		 
+		 else {
+			 
+			 if (infoSrc.equals("URL")) {
+	        	
+		        	webview.loadUrl(infoTxt);
+		     
+			 }
+			 
+			 else{
+			 
+				 webview.loadData(infoTxt, "text/html; charset=UTF-8", null);
+			 
+			 }
+		 }
+		
 		finish();
 		
 	}
@@ -222,6 +230,8 @@ public class Information extends Module {
 	@Override
 	protected void onError() {
 		// TODO Auto-generated method stub
+		
+		finish();
 		
 	}
 
