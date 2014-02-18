@@ -1,18 +1,18 @@
 <resources>
 
-    <string name="title_activity_login">Zaloguj się.</string>
+    <string name="title_activity_login">Zaloguj się</string>
 
     <!-- Strings related to login -->
-    <string name="prompt_email">DNI, Nick lub E-mail.</string>
-    <string name="prompt_password">Hasło.</string>
-    <string name="prompt_server">Serwer (bez http://).</string>
-    <string name="action_sign_in_register"><b>Zaloguj się.</b></string>
-    <string name="action_sign_in_short">Zaloguj się.</string>
-    <string name="action_forgot_password">Odzyskaj zapomniane hasło.</string>
+    <string name="prompt_email">DNI, Nick lub E-mail</string>
+    <string name="prompt_password">Hasło</string>
+    <string name="prompt_server">Serwer (bez http://)</string>
+    <string name="action_sign_in_register"><b>Zaloguj się</b></string>
+    <string name="action_sign_in_short">Zaloguj się</string>
+    <string name="action_forgot_password">Odzyskaj zapomniane hasło</string>
     <string name="login_progress_signing_in">Podpisanie w&#8230;</string>
-    <string name="error_invalid_email">Nieprawidłowa nazwa użytkownika.</string>
-    <string name="error_invalid_password">Hasło musi mieć co najmniej 8 znaków alfanumerycznych.</string>
-    <string name="error_incorrect_password">Hasło powinno zawierać cyfry i litery.</string>
-    <string name="error_field_required">Pole to jest konieczne.</string>
+    <string name="error_invalid_email">Nieprawidłowa nazwa użytkownika</string>
+    <string name="error_invalid_password">Hasło musi mieć co najmniej 8 znaków alfanumerycznych</string>
+    <string name="error_incorrect_password">Hasło powinno zawierać cyfry i litery</string>
+    <string name="error_field_required">Pole to jest konieczne</string>
 
 </resources>
