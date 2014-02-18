@@ -29,6 +29,11 @@ public class Information extends Module {
     private String infoSrc;
     
     /**
+     * Information Content. String with the URL of information.
+     */
+    private String infoURL;
+    
+    /**
      * Information Content. String with the content of information.
      */
     private String infoTxt;
@@ -165,16 +170,39 @@ public class Information extends Module {
 			 //infoType = res.get(1).toString();
 			 //infoContent = res.get(2).toString();
 			 infoSrc = soap.getProperty(infoSrc).toString();
-			 infoTxt = soap.getPrimitiveProperty(infoTxt).toString();
 			 
+			 if (infoSrc.equals("none")) {
+		        		        	
+		        	infoTxt = "Información no disponible";//cargar el string traducible (no esta aun creado) 
+		     
+			 }
+			 
+			 else {
+				 
+				 if (infoSrc.equals("URL")) {
+ 		        	
+			        	infoURL = soap.getPrimitiveProperty(infoTxt).toString();
+			     
+				 }
+				 
+				 else{
+				 
+					 infoTxt = soap.getPrimitiveProperty(infoTxt).toString();
+				 
+				 }
+			 }
+			 
+		  //Request finalized without errors
+		  setResult(RESULT_OK);
+		        	
 		 }
+			 
 		 
 		 else{
 			 
+			 infoTxt = "es necesaria conexion a internet"; //poner el string traducible correspondiente, si no está, crearlo
 			 
-			 
-		 }
-		
+		 }	
 		
 	}
 
