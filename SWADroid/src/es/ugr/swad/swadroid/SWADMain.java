@@ -30,7 +30,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -41,7 +43,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
@@ -150,7 +151,8 @@ public class SWADMain extends MenuExpandableListActivity {
     private TextView mLoginStatusMessageView;
     private ImageButton mUpdateButton;
     private ProgressBar mProgressBar;
-    private Button mWhyPasswordButton;
+    private TextView mWhyPasswordText;
+    private TextView mLostPasswordText;
     
     /**
      * Gets the database helper
@@ -801,13 +803,23 @@ public class SWADMain extends MenuExpandableListActivity {
         mLoginFormView = findViewById(R.id.login_form);
         mLoginStatusView = findViewById(R.id.login_status);        
         mProgressBar = (ProgressBar) this.findViewById(R.id.progress_refresh);
-        mWhyPasswordButton = (Button) findViewById(R.id.why_password);
+        mWhyPasswordText = (TextView) findViewById(R.id.why_password);
+        mLostPasswordText = (TextView) findViewById(R.id.lost_password);
         
-        mWhyPasswordButton.setVisibility(View.GONE);
+        SpannableString lostPasswordUnderline = new SpannableString(getString(R.string.lost_password));
+        lostPasswordUnderline.setSpan(new UnderlineSpan(), 0, lostPasswordUnderline.length(), 0);
+        mLostPasswordText.setText(lostPasswordUnderline);
+        
+        SpannableString whyPasswordUnderline = new SpannableString(getString(R.string.why_password));
+        whyPasswordUnderline.setSpan(new UnderlineSpan(), 0, whyPasswordUnderline.length(), 0);
+        mWhyPasswordText.setText(whyPasswordUnderline);
+        
+        
+        mWhyPasswordText.setVisibility(View.GONE);
         mUpdateButton.setVisibility(View.VISIBLE);
         mProgressBar.setVisibility(View.GONE);
         
-        mWhyPasswordButton.setOnClickListener(new OnClickListener() {
+        mWhyPasswordText.setOnClickListener(new OnClickListener() {
             
             @Override
             public void onClick(View v) {
@@ -826,7 +838,7 @@ public class SWADMain extends MenuExpandableListActivity {
 		mLoginFormView.setVisibility(show ? View.VISIBLE : View.GONE);
 
 		if (Preferences.getServer().equals(Constants.DEFAULT_SERVER)) {
-		    mWhyPasswordButton.setVisibility(show ? View.VISIBLE : View.GONE);
+		    mWhyPasswordText.setVisibility(show ? View.VISIBLE : View.GONE);
 		}
 		
 		setupLoginForm();
