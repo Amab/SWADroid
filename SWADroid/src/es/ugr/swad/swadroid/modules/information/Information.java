@@ -196,7 +196,7 @@ public class Information extends Module {
 		WebView webview = (WebView) this.findViewById(R.id.contentWebView);
 
 		if (infoSrc.equals("none")) {
-			webview.loadData("Informaci�n no disponible",
+			webview.loadData(getString(R.string.emptyInformation),
 					"text/html; charset=UTF-8", null);// cargar el string
 														// traducible (no esta
 														// aun creado)
