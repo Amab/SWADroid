@@ -112,23 +112,25 @@
 
             <TextView
                 android:id="@+id/why_password"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/sign_in_button"
                 android:text="@string/why_password"
                 android:textAppearance="?android:attr/textAppearanceMedium"
+                android:gravity="center_horizontal"
                 android:textColor="@color/blue" />
 
             <TextView
                 android:id="@+id/lost_password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/sign_in_button"
-                android:layout_alignBottom="@id/sign_in_button"
-                android:layout_alignLeft="@id/why_password"
+                android:layout_alignLeft="@+id/server"
+                android:layout_alignTop="@+id/sign_in_button"
+                android:layout_toLeftOf="@id/sign_in_button"
                 android:text="@string/lost_password"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/blue" />
+
         </RelativeLayout>
     </ScrollView>
 
