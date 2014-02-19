@@ -349,6 +349,10 @@
     <string name="practicesprogramModuleLabel">Practices Program</string>
     <string name="theoryprogramModuleLabel">Theory Program</string>
     <string name="teachingguideModuleLabel">Teaching Guide</string>
+    <string name="informationProgressDescription">Getting information&#8230;\nWait, please&#8230;</string>
+    <string name="informationProgressTitle">Information</string>
+    <string name="emptyInformation">Information unavailable</string>
+    
     
     <string name="pradoLoginToast">SWAD\'s password is at least 8 alphanumeric characters long</string>
     <string name="error_password_summaryUGR">Remember you must enter SWAD\'s password, not e-Administration (PRADO)</string>

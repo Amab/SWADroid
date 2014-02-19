@@ -312,6 +312,10 @@
     <string name="practicesprogramModuleLabel">Pratiche di programma</string>
     <string name="theoryprogramModuleLabel">Teoria del programma</string>
     <string name="teachingguideModuleLabel">Guida didattica</string>
+    <string name="informationProgressDescription">Raccolta di informazioni&#8230;\nAttendere prego&#8230;</string>
+    <string name="informationProgressTitle">Informazioni</string>
+    <string name="emptyInformation">Informazioni no disponible</string>
+    
     
     <string name="pradoLoginToast">La password è di almeno 8 caratteri alfanumerici</string>
 	<string name="error_password_summaryUGR">Ricordate di inserire il vostro SWAD password non identificato Access</string>

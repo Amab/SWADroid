@@ -347,7 +347,7 @@
     <string name="teachingguideModuleLabel">Guía Docente</string>
     <string name="informationProgressDescription">Obteniendo información&#8230;\nPor favor, espere&#8230;</string>
     <string name="informationProgressTitle">Información</string>
-    
+    <string name="emptyInformation">Información no disponible</string>
     
     
     <string name="pradoLoginToast">La contraseña de SWAD tiene al menos 8 caracteres alfanuméricos</string>

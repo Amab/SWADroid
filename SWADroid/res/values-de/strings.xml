@@ -225,6 +225,11 @@
     <string name="practicesprogramModuleLabel">Practices Programma</string>
     <string name="theoryprogramModuleLabel">Theory Programma</string>
     <string name="teachingguideModuleLabel">Pedagogisch begeleider</string>
+    <string name="informationProgressDescription">Informatie opvragen &#8230;\nEven geduld aub&#8230;</string>
+    <string name="informationProgressTitle">Informatie</string>
+    <string name="emptyInformation">Informatie niet beschikbaar</string>
+    
+    
     
     <string name="pradoLoginToast">SWAD Das Passwort ist mindestens 8 alphanumerischen Zeichen</string>
 	<string name="error_password_summaryUGR">Denken Sie daran, geben Sie Ihr Passwort SWAD nicht identifiziert die Access</string>
