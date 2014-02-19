@@ -305,6 +305,10 @@
     <string name="practicesprogramModuleLabel">Prácticas do programa</string>
     <string name="theoryprogramModuleLabel">Teoria do programa</string>
     <string name="teachingguideModuleLabel">Guia de ensino</string>
+    <string name="informationProgressDescription">Coleta de informações&#8230;\nPor favor, espere&#8230;</string>
+    <string name="informationProgressTitle">Informação</string>
+    <string name="emptyInformation">Informação não disponível</string>
+    
     
     <string name="pradoLoginToast">SWAD A senha é pelo menos 8 caracteres alfanuméricos</string>
 	<string name="error_password_summaryUGR">Lembre-se de digitar o seu SWAD senha não identificou o acesso</string>

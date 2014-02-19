@@ -314,6 +314,11 @@
     <string name="practicesprogramModuleLabel">Programa de Práctiques</string>
     <string name="theoryprogramModuleLabel">Programa de Teoria</string>
     <string name="teachingguideModuleLabel">Guia Docent</string>
+    <string name="informationProgressDescription">Obtenint informació&#8230;\nSi us plau, esperi&#8230;</string>
+    <string name="informationProgressTitle">Informació</string>
+    <string name="emptyInformation">Informació no disponible</string>
+    
+    
     
     <string name="pradoLoginToast">La contrasenya d\'SWAD té almenys 8 caràcters alfanumèrics</string>
 	<string name="error_password_summaryUGR">Recorda que has d\'introduir la contrasenya de SWAD, no la d\'Accés identificat</string>
