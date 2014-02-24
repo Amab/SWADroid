@@ -91,7 +91,7 @@ import java.util.Map;
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  * @author Jose Antonio Guerrero Aviles <cany20@gmail.com>
  */
-public class SWADMain extends MenuExpandableListActivity {
+public class SWADMain extends MenuExpandableListActivity implements OnClickListener {
 	/**
 	 * Application preferences
 	 */
@@ -819,13 +819,7 @@ public class SWADMain extends MenuExpandableListActivity {
         mUpdateButton.setVisibility(View.VISIBLE);
         mProgressBar.setVisibility(View.GONE);
         
-        mWhyPasswordText.setOnClickListener(new OnClickListener() {
-            
-            @Override
-            public void onClick(View v) {
-                whyMyPasswordNotWorkDialog();                
-            }
-        });
+        mWhyPasswordText.setOnClickListener(this);
 	}
 	
 	/**
@@ -868,12 +862,7 @@ public class SWADMain extends MenuExpandableListActivity {
         
         mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
 
-        findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });
+        findViewById(R.id.sign_in_button).setOnClickListener(this);
     }
     
     /**
@@ -1005,4 +994,19 @@ public class SWADMain extends MenuExpandableListActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.why_password:
+                whyMyPasswordNotWorkDialog();
+                break;
+            case R.id.sign_in_button:
+                attemptLogin();
+                break;
+            default:
+                break;
+        }
+    }
+    
 }
