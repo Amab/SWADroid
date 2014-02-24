@@ -220,8 +220,7 @@
 
         <service
             android:name="es.ugr.swad.swadroid.sync.AccountAuthenticatorService"
-            android:exported="true"
-            android:process=":auth" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
@@ -232,8 +231,7 @@
         </service>
         <service
             android:name="es.ugr.swad.swadroid.modules.notifications.NotificationsSyncAdapterService"
-            android:exported="true"
-            android:process=":notifications" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
             </intent-filter>
