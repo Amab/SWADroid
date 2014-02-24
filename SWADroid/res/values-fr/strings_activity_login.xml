@@ -14,5 +14,8 @@
     <string name="error_invalid_password">Mot de passe doit être d\'au moins 8 caractères alphanumériques</string>
     <string name="error_incorrect_password">Le mot de passe doit contenir que des chiffres et des lettres</string>
     <string name="error_field_required">Ce champ est obligatoire</string>
-
+    <string name="why_password">Pourquoi mon mot de passe ne fonctionne pas?</string>
+    <string name="why_password_dialog_title">Pourquoi mon mot de passe ne fonctionne pas?</string>
+    <string name="why_password_dialog_message">Probablement que vous utilisez votre mot de passe e-administration (4 chiffres). Vous devez écrire votre mot de passe SWAD</string>
+    <string name="lost_password">J\'ai oublié mon mot de passe</string>
 </resources>
