@@ -14,5 +14,8 @@
     <string name="error_invalid_password">Hasło musi mieć co najmniej 8 znaków alfanumerycznych</string>
     <string name="error_incorrect_password">Hasło powinno zawierać cyfry i litery</string>
     <string name="error_field_required">Pole to jest konieczne</string>
-
+    <string name="why_password">Dlaczego moje hasło nie działa?</string>
+    <string name="why_password_dialog_title">Dlaczego moje hasło nie działa?</string>
+    <string name="why_password_dialog_message">Prawdopodobnie używasz hasła e-Administracja (4 cyfry). Musisz napisać hasła SWAD</string>
+    <string name="lost_password">Zapomniałem hasła</string>
 </resources>
