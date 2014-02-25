@@ -197,9 +197,7 @@ public class Information extends Module {
 
 		if (infoSrc.equals("none")) {
 			webview.loadData(getString(R.string.emptyInformation),
-					"text/html; charset=UTF-8", null);// cargar el string
-														// traducible (no esta
-														// aun creado)
+					"text/html; charset=UTF-8", null);
 		} else if (infoSrc.equals("URL")) {
 			webview.loadUrl(infoTxt);
 		} else {
