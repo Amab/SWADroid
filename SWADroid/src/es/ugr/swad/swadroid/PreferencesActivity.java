@@ -76,6 +76,10 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
      */
     private static Preference userPasswordPref;
     /**
+     * Log out Preference
+     */
+    private static Preference logOutPref;
+    /**
      * Current application version preference
      */
     private static Preference currentVersionPref;
@@ -208,6 +212,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
 
         userIDPref = findPreference(Preferences.USERIDPREF);
         userPasswordPref = findPreference(Preferences.USERPASSWORDPREF);
+        logOutPref = findPreference(Preferences.LOGOUTPREF);
         currentVersionPref = findPreference(Preferences.CURRENTVERSIONPREF);
         ratePref = findPreference(Preferences.RATEPREF);
         twitterPref = findPreference(Preferences.TWITTERPREF);
@@ -224,8 +229,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         notifVibrateEnablePref = (CheckBoxPreference) findPreference(Preferences.NOTIFVIBRATEENABLEPREF);
         notifLightsEnablePref = (CheckBoxPreference) findPreference(Preferences.NOTIFLIGHTSENABLEPREF);
 
-        //userIDPref.setOnPreferenceChangeListener(this);
-        //userPasswordPref.setOnPreferenceChangeListener(this);
         ratePref.setOnPreferenceChangeListener(this);
         twitterPref.setOnPreferenceChangeListener(this);
         facebookPref.setOnPreferenceChangeListener(this);
@@ -243,17 +246,18 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         
         notifLimitPref.setProgress(Preferences.getNotifLimit());
         
-        //userIDPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-            /**
-             * Called when a preference is selected.
-             * @param preference Preference selected.
-             */
-      /*      public boolean onPreferenceClick(Preference preference) {
-                //userID = prefs.getString(USERIDPREF, "");
+        logOutPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Preferences.logoutClean(Preferences.LOGOUTPREF);
+                Preferences.setUserID("");
+                Preferences.setUserPassword("");
+                finish();
                 return true;
             }
         });
-       */
+        
         ratePref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             /**
              * Called when a preference is selected.

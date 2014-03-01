@@ -108,6 +108,10 @@ public class Preferences {
      */
     public static final String SERVERPREF = "serverPref";
     /**
+     * Logout prefecence name
+     */
+    public static final String LOGOUTPREF = "logOutPref";
+    /**
      * Database passphrase preference name
      */
     public static final String DBKEYPREF = "DBKeyPref";
