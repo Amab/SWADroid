@@ -3,6 +3,8 @@
 
     <string name="app_name">SWADroid</string>
     <string name="serverName_preferences">Server</string>
+    <string name="logout_preferences">Abmelden von SWADroid</string>
+    <string name="logout_title_preferences">Abmelden</string>
     <string name="serverSummary_preferences">Server (ohne http://)</string>
     <string name="serverTitle_preferences">Server</string>
     <string name="loginModuleLabel">anmelden</string>
