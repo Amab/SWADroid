@@ -23,11 +23,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Build;
+import android.os.Bundle;
 import android.util.Log;
 
 import com.bugsense.trace.BugSenseHandler;
 
 import es.ugr.swad.swadroid.model.DataBaseHelper;
+import es.ugr.swad.swadroid.sync.SyncUtils;
 import es.ugr.swad.swadroid.utils.Crypto;
 import es.ugr.swad.swadroid.utils.Utils;
 
@@ -467,12 +469,16 @@ public class Preferences {
         Log.i(TAG, "Database has been cleaned");
     }
     
-    public static void logoutClean(String key) {
+    public static void logoutClean(Context context, String key) {
         Constants.setLogged(false);
         Log.i(TAG, "Forced logout due to " + key + " change in preferences");
         
         cleanDatabase();
         setPreferencesChanged();
+        
+        if(isSyncEnabled()) {
+        	SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, context);
+        }
     }
 
     public static void clearOldNotifications(int size) {

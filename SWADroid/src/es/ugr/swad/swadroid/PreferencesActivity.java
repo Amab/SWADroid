@@ -250,7 +250,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
             
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Preferences.logoutClean(Preferences.LOGOUTPREF);
+                Preferences.logoutClean(ctx, Preferences.LOGOUTPREF);
                 Preferences.setUserID("");
                 Preferences.setUserPassword("");
                 finish();
@@ -374,7 +374,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         	Log.i(TAG, "Resetted user password due to userid change"); 
         	
         	//If preferences have changed, logout
-        	Preferences.logoutClean(key);
+        	Preferences.logoutClean(ctx, key);
         	syncPrefsChanged = true;
         } else if (Preferences.USERPASSWORDPREF.equals(key)) {
             try {
@@ -411,7 +411,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
             Preferences.setServer(mServer);
             serverPref.setSummary(mServer);
             //If preferences have changed, logout
-        	Preferences.logoutClean(key);
+        	Preferences.logoutClean(ctx, key);
         	syncPrefsChanged = true;
         } else if(Preferences.SYNCENABLEPREF.equals(key)) {
         	boolean syncEnabled = (Boolean) newValue;
