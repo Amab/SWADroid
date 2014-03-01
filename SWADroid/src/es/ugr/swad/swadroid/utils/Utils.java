@@ -230,7 +230,7 @@ public class Utils {
 	    	Long.parseLong(str);
 	        return true;
 	    } catch (NumberFormatException nfe) {
-	        nfe.printStackTrace();
+	    	// Do nothing
 	    }
 	    return false;
 	}
