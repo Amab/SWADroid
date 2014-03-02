@@ -253,6 +253,11 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
                 Preferences.logoutClean(ctx, Preferences.LOGOUTPREF);
                 Preferences.setUserID("");
                 Preferences.setUserPassword("");
+                
+                
+                startActivity(new Intent(getBaseContext(), SWADMain.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                        | Intent.FLAG_ACTIVITY_SINGLE_TOP));
+
                 finish();
                 return true;
             }
