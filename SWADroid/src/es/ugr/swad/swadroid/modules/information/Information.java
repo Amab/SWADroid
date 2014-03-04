@@ -71,10 +71,7 @@ public class Information extends Module {
 
 		case Constants.FAQS_REQUEST_CODE:
 
-			infoTypeToAdd = "";/*
-								 * falta en la funcion que obtiene la
-								 * informacion de las asignaturas
-								 */
+			infoTypeToAdd = "FAQ";
 
 			moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
 			moduleIcon.setBackgroundResource(R.drawable.notif);
@@ -98,7 +95,7 @@ public class Information extends Module {
 
 		case Constants.PRACTICESPROGRAM_REQUEST_CODE:
 
-			infoTypeToAdd = "practicals";
+			infoTypeToAdd = "practicals";//syllabus(practicals)
 
 			moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
 			moduleIcon.setBackgroundResource(R.drawable.notif);
@@ -110,10 +107,7 @@ public class Information extends Module {
 
 		case Constants.THEORYPROGRAM_REQUEST_CODE:
 
-			infoTypeToAdd = "";/*
-								 * falta en la funcion que obtiene la
-								 * informacion de las asignaturas
-								 */
+			infoTypeToAdd = "lectures";//syllabus(lectures)
 
 			moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
 			moduleIcon.setBackgroundResource(R.drawable.notif);
@@ -148,6 +142,7 @@ public class Information extends Module {
 			break;
 
 		}
+		
 		
 		setMETHOD_NAME("getCourseInfo");
 	}
