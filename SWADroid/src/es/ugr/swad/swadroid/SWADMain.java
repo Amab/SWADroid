@@ -237,11 +237,11 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
 			activity = new Intent(this, Information.class);
 			activity.putExtra("requestCode", Constants.BIBLIOGRAPHY_REQUEST_CODE);
 			startActivityForResult(activity, Constants.BIBLIOGRAPHY_REQUEST_CODE);			
-		} else if (keyword.equals(getString(R.string.practicesprogramModuleLabel))) {
+		} else if (keyword.equals(getString(R.string.syllabusPracticalsModuleLabel))) {
 			activity = new Intent(this, Information.class);
 			activity.putExtra("requestCode", Constants.SYLLABUSPRACTICALS_REQUEST_CODE);
 			startActivityForResult(activity, Constants.SYLLABUSPRACTICALS_REQUEST_CODE);			
-		} else if (keyword.equals(getString(R.string.theoryprogramModuleLabel))) {
+		} else if (keyword.equals(getString(R.string.syllabusLecturesModuleLabel))) {
 			activity = new Intent(this, Information.class);
 			activity.putExtra("requestCode", Constants.SYLLABUSLECTURES_REQUEST_CODE);
 			startActivityForResult(activity, Constants.SYLLABUSLECTURES_REQUEST_CODE);			
@@ -656,12 +656,12 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
             courseData.add(map);
             //Theory Program category
             map = new HashMap<String, Object>();
-            map.put(NAME, getString(R.string.theoryprogramModuleLabel));
+            map.put(NAME, getString(R.string.syllabusLecturesModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
             courseData.add(map);
             //Practices Program category
             map = new HashMap<String, Object>();
-            map.put(NAME, getString(R.string.practicesprogramModuleLabel));
+            map.put(NAME, getString(R.string.syllabusPracticalsModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
             courseData.add(map);
             //Teaching Guide category
