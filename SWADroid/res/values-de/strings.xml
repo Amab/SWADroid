@@ -224,8 +224,8 @@
     <string name="faqsModuleLabel">FAQs</string>
     <string name="linksModuleLabel">Links</string>
     <string name="bibliographyModuleLabel">Referenties</string>
-    <string name="practicesprogramModuleLabel">Practices Programma</string>
-    <string name="theoryprogramModuleLabel">Theory Programma</string>
+    <string name="syllabusPracticalsModuleLabel">Practices Programma</string>
+    <string name="syllabusLecturesModuleLabel">Theory Programma</string>
     <string name="teachingguideModuleLabel">Pedagogisch begeleider</string>
     <string name="informationProgressDescription">Informatie opvragen &#8230;\nEven geduld aub&#8230;</string>
     <string name="informationProgressTitle">Informatie</string>
