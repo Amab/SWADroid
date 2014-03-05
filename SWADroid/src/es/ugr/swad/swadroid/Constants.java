@@ -252,6 +252,10 @@ public class Constants {
      */
     public static final int NOTIFMARKALLASREAD_REQUEST_CODE = 35; 
     /**
+     * Request code for Assessment
+     */
+    public static final int ASSESSMENT_REQUEST_CODE = 36; 
+    /**
      * Prefix tag name for Logcat
      */
     public static final String APP_TAG = "SWADroid";
