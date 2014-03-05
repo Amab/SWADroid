@@ -93,27 +93,27 @@ public class Information extends Module {
 
 			break;
 
-		case Constants.PRACTICESPROGRAM_REQUEST_CODE:
+		case Constants.SYLLABUSPRACTICALS_REQUEST_CODE:
 
-			infoTypeToAdd = "practicals";//syllabus(practicals)
+			infoTypeToAdd = "practicals";
 
 			moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
 			moduleIcon.setBackgroundResource(R.drawable.notif);
 
 			moduleText = (TextView) this.findViewById(R.id.moduleName);
-			moduleText.setText(R.string.practicesprogramModuleLabel);
+			moduleText.setText(R.string.syllabusPracticalsModuleLabel);
 
 			break;
 
-		case Constants.THEORYPROGRAM_REQUEST_CODE:
+		case Constants.SYLLABUSLECTURES_REQUEST_CODE:
 
-			infoTypeToAdd = "lectures";//syllabus(lectures)
+			infoTypeToAdd = "lectures";
 
 			moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
 			moduleIcon.setBackgroundResource(R.drawable.notif);
 
 			moduleText = (TextView) this.findViewById(R.id.moduleName);
-			moduleText.setText(R.string.theoryprogramModuleLabel);
+			moduleText.setText(R.string.syllabusLecturesModuleLabel);
 
 			break;
 

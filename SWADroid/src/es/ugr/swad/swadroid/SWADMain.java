@@ -239,12 +239,12 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
 			startActivityForResult(activity, Constants.BIBLIOGRAPHY_REQUEST_CODE);			
 		} else if (keyword.equals(getString(R.string.practicesprogramModuleLabel))) {
 			activity = new Intent(this, Information.class);
-			activity.putExtra("requestCode", Constants.PRACTICESPROGRAM_REQUEST_CODE);
-			startActivityForResult(activity, Constants.PRACTICESPROGRAM_REQUEST_CODE);			
+			activity.putExtra("requestCode", Constants.SYLLABUSPRACTICALS_REQUEST_CODE);
+			startActivityForResult(activity, Constants.SYLLABUSPRACTICALS_REQUEST_CODE);			
 		} else if (keyword.equals(getString(R.string.theoryprogramModuleLabel))) {
 			activity = new Intent(this, Information.class);
-			activity.putExtra("requestCode", Constants.THEORYPROGRAM_REQUEST_CODE);
-			startActivityForResult(activity, Constants.THEORYPROGRAM_REQUEST_CODE);			
+			activity.putExtra("requestCode", Constants.SYLLABUSLECTURES_REQUEST_CODE);
+			startActivityForResult(activity, Constants.SYLLABUSLECTURES_REQUEST_CODE);			
 		} else if (keyword.equals(getString(R.string.linksModuleLabel))) {
 			activity = new Intent(this, Information.class);
 			activity.putExtra("requestCode", Constants.LINKS_REQUEST_CODE);
