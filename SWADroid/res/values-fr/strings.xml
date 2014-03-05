@@ -314,8 +314,8 @@
     <string name="faqsModuleLabel">FAQs</string>
     <string name="linksModuleLabel">Links</string>
     <string name="bibliographyModuleLabel">Références</string>
-    <string name="practicesprogramModuleLabel">Programme des pratiques</string>
-    <string name="theoryprogramModuleLabel">Théorie du programme</string>
+    <string name="syllabusPracticalsModuleLabel">Programme des pratiques</string>
+    <string name="syllabusLecturesModuleLabel">Théorie du programme</string>
     <string name="teachingguideModuleLabel">Guide des cours</string>
     <string name="informationProgressDescription">La collecte d\'informations&#8230;\nS\'il vous plaît, attendre&#8230;</string>
     <string name="informationProgressTitle">Informations</string>
