@@ -231,12 +231,12 @@ public class Constants {
     /**
      * Request code for Practices Program
      */
-    public static final int PRACTICESPROGRAM_REQUEST_CODE = 31;
+    public static final int SYLLABUSPRACTICALS_REQUEST_CODE = 31;
     
     /**
      * Request code for Theory Program
      */
-    public static final int THEORYPROGRAM_REQUEST_CODE = 32;
+    public static final int SYLLABUSLECTURES_REQUEST_CODE = 32;
 
     /**
      * Request code for Links
