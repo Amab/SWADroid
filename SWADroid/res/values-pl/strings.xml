@@ -302,8 +302,8 @@
     <string name="faqsModuleLabel">FAQs</string>
     <string name="linksModuleLabel">Links</string>
     <string name="bibliographyModuleLabel">Bibliografía</string>
-    <string name="practicesprogramModuleLabel">Program praktyk</string>
-    <string name="theoryprogramModuleLabel">Teoria programu</string>
+    <string name="syllabusPracticalsModuleLabel">Program praktyk</string>
+    <string name="syllabusLecturesModuleLabel">Teoria programu</string>
     <string name="teachingguideModuleLabel">Podręcznik nauczania</string>
     <string name="informationProgressDescription">Zbieranie informacji&#8230;\nProszę czekać&#8230;</string>
     <string name="informationProgressTitle">Informacja</string>
