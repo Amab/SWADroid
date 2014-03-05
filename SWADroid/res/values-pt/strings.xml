@@ -307,6 +307,7 @@
     <string name="syllabusPracticalsModuleLabel">Prácticas do programa</string>
     <string name="syllabusLecturesModuleLabel">Teoria do programa</string>
     <string name="teachingguideModuleLabel">Guia de ensino</string>
+    <string name="assessmentModuleLabel">Sistema de Avaliação</string>
     <string name="informationProgressDescription">Coleta de informações&#8230;\nPor favor, espere&#8230;</string>
     <string name="informationProgressTitle">Informação</string>
     <string name="emptyInformation">Informação não disponível</string>
