@@ -305,6 +305,7 @@
     <string name="syllabusPracticalsModuleLabel">Program praktyk</string>
     <string name="syllabusLecturesModuleLabel">Teoria programu</string>
     <string name="teachingguideModuleLabel">Podręcznik nauczania</string>
+    <string name="assessmentModuleLabel">System oceny</string>
     <string name="informationProgressDescription">Zbieranie informacji&#8230;\nProszę czekać&#8230;</string>
     <string name="informationProgressTitle">Informacja</string>
     <string name="emptyInformation">Informacje niedostępne</string>
