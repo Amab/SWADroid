@@ -141,6 +141,18 @@ public class Information extends Module {
 
 			break;
 
+			
+		case Constants.ASSESSMENT_REQUEST_CODE:
+
+			infoTypeToAdd = "assessment";
+
+			moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
+			moduleIcon.setBackgroundResource(R.drawable.notif);
+
+			moduleText = (TextView) this.findViewById(R.id.moduleName);
+			moduleText.setText(R.string.assessmentModuleLabel);
+
+			break;
 		}
 		
 		

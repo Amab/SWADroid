@@ -253,7 +253,13 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
 			activity = new Intent(this, Information.class);
 			activity.putExtra("requestCode", Constants.TEACHINGGUIDE_REQUEST_CODE);
 			startActivityForResult(activity, Constants.TEACHINGGUIDE_REQUEST_CODE);
-		}
+    	} else if (keyword.equals(getString(R.string.assessmentModuleLabel))) {
+			activity = new Intent(this, Information.class);
+	    	activity.putExtra("requestCode",Constants.ASSESSMENT_REQUEST_CODE);
+	    	startActivityForResult(activity,Constants.ASSESSMENT_REQUEST_CODE);         
+    	   
+    	    }
+
         
         return true;
     }
@@ -684,11 +690,17 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
             map.put(NAME, getString(R.string.linksModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
             courseData.add(map);
+
             
             //Evaluation category
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.testsModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.test));
+            evaluationData.add(map);
+            //Assessment
+            map = new HashMap<String, Object>();
+            map.put(NAME, getString(R.string.assessmentModuleLabel));
+            map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
             evaluationData.add(map);
 
             //Messages category

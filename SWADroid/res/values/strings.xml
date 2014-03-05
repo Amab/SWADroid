@@ -350,6 +350,7 @@
     <string name="syllabusPracticalsModuleLabel">Practices Program</string>
     <string name="syllabusLecturesModuleLabel">Theory Program</string>
     <string name="teachingguideModuleLabel">Teaching Guide</string>
+    <string name="assessmentModuleLabel">Assessment</string>
     <string name="informationProgressDescription">Getting information&#8230;\nWait, please&#8230;</string>
     <string name="informationProgressTitle">Information</string>
     <string name="emptyInformation">Information unavailable</string>
