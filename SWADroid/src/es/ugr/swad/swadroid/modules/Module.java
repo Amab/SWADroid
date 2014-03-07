@@ -29,7 +29,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
@@ -40,6 +39,7 @@ import es.ugr.swad.swadroid.webservices.RESTClient;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpResponseException;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.ksoap2.SoapFault;
@@ -402,6 +402,7 @@ public abstract class Module extends MenuActivity {
         @Override
         protected void onPostExecute(Void unused) {
             String errorMsg;
+            int httpStatusCode;
             boolean sendException = true;
 
             if ((progressDialog != null) && progressDialog.isShowing()) {
@@ -438,6 +439,18 @@ public abstract class Module extends MenuActivity {
                 } else if (e instanceof TimeoutException) {
                     errorMsg = getString(R.string.errorTimeoutMsg);
                     sendException = false;
+                } else if (e instanceof HttpResponseException) {
+                	httpStatusCode = ((HttpResponseException) e).getStatusCode();
+                	
+                	if(httpStatusCode == 503) { // Service Unavailable
+                		errorMsg = getString(R.string.errorServiceUnavailableMsg);
+                		sendException = false;
+                	} else {
+                		errorMsg = e.getMessage();
+                    	if((errorMsg == null) || errorMsg.equals("")) {
+                    		errorMsg = getString(R.string.errorConnectionMsg);
+                    	}
+                	}
                 } else {
                     errorMsg = e.getMessage();
                 	if((errorMsg == null) || errorMsg.equals("")) {

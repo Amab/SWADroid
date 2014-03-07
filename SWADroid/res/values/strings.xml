@@ -125,6 +125,7 @@
     <string name="errorBadAppKeyMsg">Unknown application key. Please contact the developer</string>
     <string name="errorConnectionMsg">Error while connecting to server</string>
     <string name="errorTimeoutMsg">Timeout trying to connect to the server</string>
+    <string name="errorServiceUnavailableMsg">SWAD is under maintenance right now. Please try again later</string>
     <string name="sendingMessageMsg">Sending message&#8230;</string>
     <string name="messageSendedMsg">Message sended successfully</string>
     <string name="messageSendErrorMsg">Error while sending the message. Check the data in the message fields</string>

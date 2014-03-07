@@ -114,6 +114,7 @@
     <string name="errorBadAppKeyMsg">Key błędne. Proszę skontaktować się z deweloperem.</string>
     <string name="errorConnectionMsg">Błąd podczas łączenia się z serwerem</string>
     <string name="errorTimeoutMsg">Przekroczono limit czasu próbuje połączyć się z serwerem</string>
+    <string name="errorServiceUnavailableMsg">SWAD jest w konserwacji teraz. Spróbuj ponownie później</string>
     <string name="sendingMessageMsg">Wysyłanie wiadomości&#8230;</string>
     <string name="messageSendedMsg">Wiadomość wysłana</string>
     <string name="messageSendErrorMsg">Nie udało się wysłać wiadomości. Sprawdzić dane wejściowe</string>

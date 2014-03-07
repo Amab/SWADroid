@@ -134,6 +134,8 @@
     <string name="errorTimeoutMsg">Tiempo de espera agotado intentando conectar con el
         servidor
     </string>
+    <string name="errorServiceUnavailableMsg">SWAD se encuentra en mantenimiento en estos momentos.
+        Por favor, inténtelo más tarde</string>
     <string name="sendingMessageMsg">Enviando mensaje&#8230;</string>
     <string name="messageSendedMsg">Mensaje enviado</string>
     <string name="messageSendErrorMsg">Error al enviar el mensaje. Compruebe los datos introducidos</string>
