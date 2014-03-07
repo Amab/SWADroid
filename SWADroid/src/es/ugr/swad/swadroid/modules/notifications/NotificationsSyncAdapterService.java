@@ -49,6 +49,7 @@ import es.ugr.swad.swadroid.webservices.IWebserviceClient;
 import es.ugr.swad.swadroid.webservices.RESTClient;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
+import org.apache.http.client.HttpResponseException;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.KvmSerializable;
 import org.ksoap2.serialization.SoapObject;
@@ -100,6 +101,7 @@ public class NotificationsSyncAdapterService extends Service {
         @Override
         public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
             boolean sendException = true;
+            int httpStatusCode;
         	
         	try {
                 SIZE_LIMIT = Preferences.getNotifLimit();
@@ -133,6 +135,18 @@ public class NotificationsSyncAdapterService extends Service {
                 } else if (e instanceof TimeoutException) {
                 	errorMessage = mContext.getString(R.string.errorTimeoutMsg);
                 	sendException = false;
+                } else if (e instanceof HttpResponseException) {
+                	httpStatusCode = ((HttpResponseException) e).getStatusCode();
+                	
+                	if(httpStatusCode == 503) { // Service Unavailable
+                		errorMessage = mContext.getString(R.string.errorServiceUnavailableMsg);
+                		sendException = false;
+                	} else {
+                		errorMessage = e.getMessage();
+                    	if((errorMessage == null) || errorMessage.equals("")) {
+                    		errorMessage = mContext.getString(R.string.errorConnectionMsg);
+                    	}
+                	}
                 } else {
                 	errorMessage = e.getMessage();
                 	if((errorMessage == null) || errorMessage.equals("")) {

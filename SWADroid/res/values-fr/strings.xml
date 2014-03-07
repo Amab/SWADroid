@@ -123,6 +123,7 @@
     <string name="errorBadAppKeyMsg">Une mauvaise touche. S\'il vous plaît contacter le développeur.</string>
     <string name="errorConnectionMsg">Erreur lors de la connexion au serveur</string>
     <string name="errorTimeoutMsg">Chronométré à essayer de se connecter au serveur</string>
+    <string name="errorServiceUnavailableMsg">SWAD est en maintenance à l\'heure actuelle. S\'il vous plaît réessayer plus tard</string>
     <string name="sendingMessageMsg">Envoi du message&#8230;</string>
     <string name="messageSendedMsg">Message envoyé</string>
     <string name="messageSendErrorMsg">Impossible d\'envoyer le message. Vérifiez les données d\'entrée</string>

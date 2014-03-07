@@ -116,6 +116,7 @@
     <string name="errorServerResponseMsg">Fehler in der Server-Antwort</string>
     <string name="errorConnectionMsg">Fehler bei der Verbindung zum Server</string>
     <string name="errorTimeoutMsg">Zeitlimit versucht, die Verbindung zum Server</string>
+    <string name="errorServiceUnavailableMsg">SWAD ist jetzt unter Wartung. Bitte versuchen Sie es später noch einmal</string>
     <string name="sendingMessageMsg">Nachricht wird gesendet&#8230;</string>
     <string name="messageSendedMsg">Nachricht gesendet erfolgreich</string>
     <string name="messageSendErrorMsg">Fehler beim Senden der Nachricht. überprüfen Sie die Daten in der Nachricht

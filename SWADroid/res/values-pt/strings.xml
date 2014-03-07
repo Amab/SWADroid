@@ -116,6 +116,7 @@
     <string name="errorBadAppKeyMsg">Má aplicação da chave. Por favor, entre em contato com o desenvolvedor.</string>
     <string name="errorConnectionMsg">Erro ao se conectar ao servidor</string>
     <string name="errorTimeoutMsg">Expirou tentando se conectar ao servidor</string>
+    <string name="errorServiceUnavailableMsg">SWAD está em manutenção no momento. Por favor, tente novamente mais tarde</string>
     <string name="sendingMessageMsg">Enviando mensagem&#8230;</string>
     <string name="messageSendedMsg">Mensagem enviada</string>
     <string name="messageSendErrorMsg">Falha ao enviar a mensagem. Verifique os dados de entrada</string>

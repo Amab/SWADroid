@@ -120,6 +120,7 @@
     <string name="errorBadAppKeyMsg">Erronea applicazione chiave. Si prega di contattare lo sviluppatore.</string>
     <string name="errorConnectionMsg">Errore durante la connessione al server</string>
     <string name="errorTimeoutMsg">Timeout tenta di connettersi al server</string>
+    <string name="errorServiceUnavailableMsg">SWAD è in manutenzione al momento. Riprovare più tardi</string>
     <string name="sendingMessageMsg">Invio messaggio&#8230;</string>
     <string name="messageSendedMsg">Messaggio inviato</string>
     <string name="messageSendErrorMsg">Impossibile inviare il messaggio. Controllare i dati di input</string>
