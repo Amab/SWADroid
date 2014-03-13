@@ -7,6 +7,7 @@
 package es.ugr.swad.swadroid.modules.information;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageView;
@@ -185,12 +186,14 @@ public class Information extends Module {
 		addParam("courseCode", Constants.getSelectedCourseCode());
 		addParam("infoType", infoTypeToAdd);
 		sendRequest(User.class, true);
+		//Log.d("MIPETICION",infoTypeToAdd );
 
 		if (result != null) {
 			SoapObject soap = (SoapObject) result;
 			infoSrc = soap.getProperty("infoSrc").toString();
 			infoTxt = soap.getPrimitiveProperty("infoTxt").toString();
-
+			//Log.d("RespuestaSRC",infoSrc );
+			//Log.d("RespuestaTXT",infoTxt );
 			// Request finalized without errors
 			setResult(RESULT_OK);
 		} else {
@@ -214,6 +217,6 @@ public class Information extends Module {
 
 	@Override
 	protected void onError() {
-
+		finish();
 	}
 }

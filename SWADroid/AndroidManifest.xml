@@ -204,6 +204,7 @@
         <activity
             android:name="es.ugr.swad.swadroid.modules.information.Information"
             android:label="@string/informationModuleLabel"
+            android:configChanges="orientation"
             android:theme="@@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
