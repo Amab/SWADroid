@@ -203,14 +203,13 @@ public class Information extends Module {
 		WebView webview = (WebView) this.findViewById(R.id.info_webview_dialog);
 
 		if (infoSrc.equals("none")) {
-			webview.loadDataWithBaseURL("",(getString(R.string.emptyInformation)),"text/html","utf-8","");
+			webview.loadDataWithBaseURL(null,(getString(R.string.emptyInformation)),"text/html","utf-8",null);
 		} else if (infoSrc.equals("URL")) {
-			webview.loadDataWithBaseURL(infoTxt,"","text/html","utf-8","");
+			webview.loadDataWithBaseURL(infoTxt,null,"text/html","utf-8",null);
 		} else {
-			webview.loadDataWithBaseURL("",infoTxt,"text/html","utf-8","");
+			webview.loadDataWithBaseURL(null,infoTxt,"text/html","utf-8",null);
 		}
 
-		finish();
 	}
 
 	@Override
