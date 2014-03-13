@@ -184,12 +184,12 @@ public class Information extends Module {
 		addParam("wsKey", Constants.getLoggedUser().getWsKey());
 		addParam("courseCode", Constants.getSelectedCourseCode());
 		addParam("infoType", infoTypeToAdd);
-		sendRequest(User.class, false);
+		sendRequest(User.class, true);
 
 		if (result != null) {
 			SoapObject soap = (SoapObject) result;
-			infoSrc = soap.getProperty(infoSrc).toString();
-			infoTxt = soap.getPrimitiveProperty(infoTxt).toString();
+			infoSrc = soap.getProperty("infoSrc").toString();
+			infoTxt = soap.getPrimitiveProperty("infoTxt").toString();
 
 			// Request finalized without errors
 			setResult(RESULT_OK);
@@ -200,15 +200,14 @@ public class Information extends Module {
 
 	@Override
 	protected void postConnect() {
-		WebView webview = (WebView) this.findViewById(R.id.contentWebView);
+		WebView webview = (WebView) this.findViewById(R.id.info_webview_dialog);
 
 		if (infoSrc.equals("none")) {
-			webview.loadData(getString(R.string.emptyInformation),
-					"text/html; charset=UTF-8", null);
+			webview.loadDataWithBaseURL("",(getString(R.string.emptyInformation)),"text/html","utf-8","");
 		} else if (infoSrc.equals("URL")) {
-			webview.loadUrl(infoTxt);
+			webview.loadDataWithBaseURL(infoTxt,"","text/html","utf-8","");
 		} else {
-			webview.loadData(infoTxt, "text/html; charset=UTF-8", null);
+			webview.loadDataWithBaseURL("",infoTxt,"text/html","utf-8","");
 		}
 
 		finish();

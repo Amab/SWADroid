@@ -9,7 +9,7 @@
     		<include android:id="@+id/courseNameLayout" layout="@layout/course_or_group_name"/>
     		
 		    <WebView 
-				android:id="@+id/webview_dialog"
+				android:id="@+id/info_webview_dialog"
 				android:layout_width="match_parent"
 				android:layout_height="match_parent" >
 			</WebView>
