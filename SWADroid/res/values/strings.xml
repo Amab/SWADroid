@@ -182,7 +182,7 @@
     <string name="documentsDownloadProgressDescription">Getting files. \n\nDepending on the directory size, this could
         take several minutes.\n\nPlease wait&#8230;</string>
     <string name="clickToOpenFile">Click here to open the file</string>
-    <string name="sharedsDownloadModuleLabel">Shared area</string>
+    <string name="sharedsDownloadModuleLabel">Shared files</string>
     <string name="connectionRequired">Internet connection is required for this functionality</string>
     <string name="course">Course</string>
     <string name="msg_default_format">Format</string>
@@ -222,7 +222,7 @@
     <string name="vacants">Vacants</string>
     <string name="numStudent">No. of students:</string>
     <string name="maxStudent">Max.stud.</string>
-    <string name="myGroupsModuleLabel">My groups</string>
+    <string name="myGroupsModuleLabel">Groups</string>
     <string name="scan_no_photos">Failed to save the photos of students</string>
     <string name="noStudentsAvailableMsg">There are no students in this subject</string>
     <string name="studentsUpdated">students updated</string>

@@ -165,7 +165,7 @@
     <string name="documentsDownloadProgressDescription">Obtenint fitxers.\n\nDependiendo de la mida del directori,
         podria necessitar diversos minuts.\n\nSi us plau, esperi&#8230;</string>
     <string name="clickToOpenFile">Pulsi aquí per obrir el fitxer</string>
-    <string name="sharedsDownloadModuleLabel">Zona comú</string>
+    <string name="sharedsDownloadModuleLabel">Arxius compartits</string>
     <string name="connectionRequired">Per aquesta funcionalitat es necessita connexió a Internet</string>
     <string name="course">Assignatura</string>
     <string name="msg_default_format">Format</string>
@@ -202,7 +202,7 @@
         emmagatzematge USB\" a la notificació</string>
     <string name="vacants">Vacants</string>
     <string name="numStudent">Nombre d\'estudiants: </string>
-    <string name="myGroupsModuleLabel">Els meus grups</string>
+    <string name="myGroupsModuleLabel">Grups</string>
     <string name="scan_no_photos">No s\'han pogut desar les fotos dels estudiants</string>
     <string name="noStudentsAvailableMsg">Aquesta assignatura no té alumnes</string>
     <string name="studentsUpdated">alumnes actualitzats</string>
