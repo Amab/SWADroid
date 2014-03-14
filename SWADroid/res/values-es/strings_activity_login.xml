@@ -18,5 +18,8 @@
     <string name="why_password_dialog_title">¿Por qué no funciona mi contraseña?</string>
     <string name="why_password_dialog_message">Probablemente está introduciendo la contraseña de acceso identificado (4 dígitos). Debe introducir la contraseña usada para entrar directamente a SWAD</string>
     <string name="lost_password">He olvidado mi contraseña</string>
+    <string name="lost_password_dialog_title">Solicitar una nueva contraseña</string>
+    <string name="lost_password_edit_text_hint">DNI/pasaporte, @nickname o email</string>
+    <string name="lost_password_success">Contraseña cambiada, comprueba tu email</string>
 
 </resources>

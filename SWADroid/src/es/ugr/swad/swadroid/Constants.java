@@ -256,6 +256,10 @@ public class Constants {
      */
     public static final int ASSESSMENT_REQUEST_CODE = 36; 
     /**
+     * Request code for recover Password
+     */
+    public static final int RECOVER_PASSWORD_REQUEST_CODE = 37;
+    /**
      * Prefix tag name for Logcat
      */
     public static final String APP_TAG = "SWADroid";

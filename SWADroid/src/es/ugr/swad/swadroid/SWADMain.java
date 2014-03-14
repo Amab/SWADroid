@@ -65,6 +65,7 @@ import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.GenerateQR;
 import es.ugr.swad.swadroid.modules.Messages;
 import es.ugr.swad.swadroid.modules.Notices;
+import es.ugr.swad.swadroid.modules.RecoverPassword;
 import es.ugr.swad.swadroid.modules.downloads.DownloadsManager;
 import es.ugr.swad.swadroid.modules.groups.MyGroupsManager;
 import es.ugr.swad.swadroid.modules.information.Information;
@@ -128,6 +129,8 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
      * Tests tag name for Logcat
      */
     public static final String TAG = Constants.APP_TAG;
+    
+    public static final String USER_TO_RECOVER =  "es.ugr.swad.swadroid.USER_TO_RECOVER";
     /**
      * Indicates if it is the first run
      */
@@ -439,7 +442,10 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
         	            SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY,
         	            		Long.parseLong(Preferences.getSyncTime()), this);
         	        }
-        	        
+                    break;
+                case Constants.RECOVER_PASSWORD_REQUEST_CODE:
+                    Toast.makeText(getApplicationContext(), R.string.lost_password_success,
+                                   Toast.LENGTH_LONG).show();
                     break;
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
@@ -831,6 +837,7 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
         mProgressBar.setVisibility(View.GONE);
         
         mWhyPasswordText.setOnClickListener(this);
+        mLostPasswordText.setOnClickListener(this);
 	}
 	
 	/**
@@ -1006,6 +1013,28 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
         dialog.show();
     }
 
+    private void recoverPasswordDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        final EditText dni = new EditText(getApplicationContext());
+        dni.setHint("DNI");
+        
+        builder.setView(dni)
+               .setTitle(R.string.lost_password_dialog_title)
+               .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                   @Override
+                   public void onClick(DialogInterface dialog, int which) {
+                       dialog.dismiss();
+                       Intent i = new Intent(getBaseContext(), RecoverPassword.class);
+                       i.putExtra(USER_TO_RECOVER, dni.getText().toString());
+                       startActivityForResult(i, Constants.RECOVER_PASSWORD_REQUEST_CODE);
+                   }
+               });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+    
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -1014,6 +1043,9 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
                 break;
             case R.id.sign_in_button:
                 attemptLogin();
+                break;
+            case R.id.lost_password:
+                recoverPasswordDialog();
                 break;
             default:
                 break;

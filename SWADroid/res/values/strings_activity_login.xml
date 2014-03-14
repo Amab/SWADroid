@@ -18,5 +18,8 @@
     <string name="why_password_dialog_title">Why my password does not work?</string>
     <string name="why_password_dialog_message">Probably you are using your e-Administration password (4 digits). You must write your SWAD password</string>
     <string name="lost_password">I forgot my password</string>
+    <string name="lost_password_dialog_title">Request a new password</string>
+    <string name="lost_password_edit_text_hint">DNI/passport, @nickname or email</string>
+    <string name="lost_password_success">Password changed, check your email</string>
 
 </resources>
