@@ -611,20 +611,20 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
             evaluation.put(IMAGE, getResources().getDrawable(R.drawable.grades));
             headerData.add(evaluation);
 
+            final HashMap<String, Object> users = new HashMap<String, Object>();
+            users.put(NAME, getString(R.string.users));
+            users.put(IMAGE, getResources().getDrawable(R.drawable.users));
+            headerData.add(users);
+
             final HashMap<String, Object> messages = new HashMap<String, Object>();
             messages.put(NAME, getString(R.string.messages));
             messages.put(IMAGE, getResources().getDrawable(R.drawable.msg));
             headerData.add(messages);
 
-            final HashMap<String, Object> enrolment = new HashMap<String, Object>();
+            /*final HashMap<String, Object> enrolment = new HashMap<String, Object>();
             enrolment.put(NAME, getString(R.string.enrollment));
             enrolment.put(IMAGE, getResources().getDrawable(R.drawable.enrollment));
-            headerData.add(enrolment);
-
-            final HashMap<String, Object> users = new HashMap<String, Object>();
-            users.put(NAME, getString(R.string.users));
-            users.put(IMAGE, getResources().getDrawable(R.drawable.users));
-            headerData.add(users);
+            headerData.add(enrolment);*/
 
             final ArrayList<ArrayList<HashMap<String, Object>>> childData = new ArrayList<ArrayList<HashMap<String, Object>>>();
 
@@ -634,14 +634,14 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
             final ArrayList<HashMap<String, Object>> evaluationData = new ArrayList<HashMap<String, Object>>();
             childData.add(evaluationData);
 
+            ArrayList<HashMap<String, Object>> usersData = new ArrayList<HashMap<String, Object>>();
+            childData.add(usersData);
+
             final ArrayList<HashMap<String, Object>> messagesData = new ArrayList<HashMap<String, Object>>();
             childData.add(messagesData);
 
-            final ArrayList<HashMap<String, Object>> enrollmentData = new ArrayList<HashMap<String, Object>>();
-            childData.add(enrollmentData);
-
-            ArrayList<HashMap<String, Object>> usersData = new ArrayList<HashMap<String, Object>>();
-            childData.add(usersData);
+            /*final ArrayList<HashMap<String, Object>> enrollmentData = new ArrayList<HashMap<String, Object>>();
+            childData.add(enrollmentData);*/
 
             HashMap<String, Object> map = new HashMap<String, Object>();
   
@@ -690,18 +690,28 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
             map.put(NAME, getString(R.string.linksModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
             courseData.add(map);
-
             
             //Evaluation category
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.testsModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.test));
             evaluationData.add(map);
-            //Assessment
+            //Assessment category
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.assessmentModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
             evaluationData.add(map);
+
+            //Users category
+            map = new HashMap<String, Object>();
+            map.put(NAME, getString(R.string.myGroupsModuleLabel));
+            map.put(IMAGE, getResources().getDrawable(R.drawable.my_groups));
+            usersData.add(map);
+
+            map = new HashMap<String, Object>();
+            map.put(NAME, getString(R.string.generateQRModuleLabel));
+            map.put(IMAGE, getResources().getDrawable(R.drawable.scan_qr));
+            usersData.add(map);
 
             //Messages category
             map = new HashMap<String, Object>();
@@ -713,17 +723,6 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
             map.put(NAME, getString(R.string.messagesModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.msg_write));
             messagesData.add(map);
-
-            //Enrollment category
-            map = new HashMap<String, Object>();
-            map.put(NAME, getString(R.string.myGroupsModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.my_groups));
-            enrollmentData.add(map);
-
-            map = new HashMap<String, Object>();
-            map.put(NAME, getString(R.string.generateQRModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.scan_qr));
-            usersData.add(map);
 
             setListAdapter(new ImageExpandableListAdapter(
                     this,

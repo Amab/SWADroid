@@ -352,17 +352,17 @@ public class Constants {
      */
     public static final int EVALUATION_GROUP = 1;
     /**
+     * Group position inside the main menu for User group
+     */
+    public static final int USERS_GROUP = 2;
+    /**
      * Group position inside the main menu for Messages group
      */
-    public static final int MESSAGES_GROUP = 2;
+    public static final int MESSAGES_GROUP = 3;
     /**
      * Group position inside the main menu for Enrollment group
      */
-    public static final int ENROLLMENT_GROUP = 3;
-    /**
-     * Group position inside the main menu for User group
-     */
-    public static final int USERS_GROUP = 4;
+    public static final int ENROLLMENT_GROUP = 4;
     /**
      * Child position inside the messages menu for Notification
      */
