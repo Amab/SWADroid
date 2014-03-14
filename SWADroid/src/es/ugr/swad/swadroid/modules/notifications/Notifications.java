@@ -363,8 +363,7 @@ public class Notifications extends Module {
      * @see es.ugr.swad.swadroid.modules.Module#requestService()
      */
     @Override
-    protected void requestService() throws Exception {
-    	
+    protected void requestService() throws Exception {    	
     	//Download new notifications from the server
         SIZE_LIMIT = Preferences.getNotifLimit();
 
@@ -392,8 +391,10 @@ public class Notifications extends Module {
                 //Stores notifications data returned by webservice response
                 ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
                 SoapObject soap = (SoapObject) res.get(1);
-                notifCount = soap.getPropertyCount();
-                for (int i = 0; i < notifCount; i++) {
+                int numNotif = soap.getPropertyCount();
+                
+                notifCount = 0;
+                for (int i = 0; i < numNotif; i++) {
                     SoapObject pii = (SoapObject) soap.getProperty(i);
                     Long notifCode = Long.valueOf(pii.getProperty("notifCode").toString());
                     Long eventCode = Long.valueOf(pii.getProperty("notificationCode").toString());
@@ -411,6 +412,11 @@ public class Notifications extends Module {
                     
                     SWADNotification n = new SWADNotification(notifCode, eventCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, userPhoto, location, summary, status, content, notifReadSWAD, notifReadSWAD);
                     dbHelper.insertNotification(n);
+                    
+                    //Count unread notifications only
+                    if(!notifReadSWAD) {
+                    	notifCount++;
+                    }
 
                     if(isDebuggable)
                     	Log.d(TAG, n.toString());
