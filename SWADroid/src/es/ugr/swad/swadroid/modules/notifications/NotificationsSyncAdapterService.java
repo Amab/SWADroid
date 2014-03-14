@@ -358,8 +358,10 @@ public class NotificationsSyncAdapterService extends Service {
             //Stores notifications data returned by webservice response
             ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
             SoapObject soap = (SoapObject) res.get(1);
-            notifCount = soap.getPropertyCount();
-            for (int i = 0; i < notifCount; i++) {
+            int numNotif = soap.getPropertyCount();
+            
+            notifCount = 0;
+            for (int i = 0; i < numNotif; i++) {
             	SoapObject pii = (SoapObject) soap.getProperty(i);
                 Long notifCode = Long.valueOf(pii.getProperty("notifCode").toString());
                 Long eventCode = Long.valueOf(pii.getProperty("notificationCode").toString());
@@ -377,6 +379,11 @@ public class NotificationsSyncAdapterService extends Service {
                 
                 SWADNotification n = new SWADNotification(notifCode, eventCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, userPhoto, location, summary, status, content, notifReadSWAD, notifReadSWAD);
                 dbHelper.insertNotification(n);
+                
+                //Count unread notifications only
+                if(!notifReadSWAD) {
+                	notifCount++;
+                }
 
                 //Log.d(TAG, n.toString());
             }
