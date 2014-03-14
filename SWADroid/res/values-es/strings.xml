@@ -41,7 +41,9 @@
     <string name="author_title_preferences">Autores</string>
     <string name="loginTitle_menu">Conectar</string>
     <string name="loginProgressTitle">Identificación</string>
+    <string name="recoverPasswordProgressTitle">Recuperación de contraseña</string>
     <string name="loginProgressDescription">Conectando&#8230;</string>
+    <string name="recoverPasswordProgressDescription">Conectando&#8230;</string>
     <string name="coursesProgressTitle">Asignaturas</string>
     <string name="coursesProgressDescription">Obteniendo asignaturas&#8230;</string>
     <string name="notificationsProgressTitle">Notificaciones</string>

@@ -61,6 +61,10 @@
             android:label="@string/set_preferences" >
         </activity>
         <activity
+            android:name="es.ugr.swad.swadroid.modules.RecoverPassword"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>
+        <activity
             android:name="es.ugr.swad.swadroid.modules.Login"
             android:label="@string/loginModuleLabel"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
@@ -203,8 +207,8 @@
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.information.Information"
-            android:label="@string/informationModuleLabel"
             android:configChanges="orientation"
+            android:label="@string/informationModuleLabel"
             android:theme="@@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
@@ -221,7 +225,7 @@
 
         <service
             android:name="es.ugr.swad.swadroid.sync.AccountAuthenticatorService"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
@@ -232,7 +236,7 @@
         </service>
         <service
             android:name="es.ugr.swad.swadroid.modules.notifications.NotificationsSyncAdapterService"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
             </intent-filter>

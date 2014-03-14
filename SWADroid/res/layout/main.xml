@@ -115,9 +115,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/sign_in_button"
+                android:gravity="center_horizontal"
                 android:text="@string/why_password"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:gravity="center_horizontal"
                 android:textColor="@color/blue" />
 
             <TextView
@@ -130,7 +130,6 @@
                 android:text="@string/lost_password"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/blue" />
-
         </RelativeLayout>
     </ScrollView>
 

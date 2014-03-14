@@ -43,6 +43,8 @@
     <string name="loginTitle_menu">Login</string>
     <string name="loginProgressTitle">Login</string>
     <string name="loginProgressDescription">Connecting&#8230;</string>
+    <string name="recoverPasswordProgressTitle">Recover password</string>
+    <string name="recoverPasswordProgressDescription">Connecting&#8230;</string>
     <string name="coursesProgressTitle">Courses</string>
     <string name="coursesProgressDescription">Retrieving courses&#8230;</string>
     <string name="notificationsProgressTitle">Notifications</string>
