@@ -389,7 +389,7 @@ public class NotificationsSyncAdapterService extends Service {
             }
 
             //Request finalized without errors
-            Log.i(TAG, "Retrieved " + notifCount + " notifications");
+            Log.i(TAG, "Retrieved " + numNotif + " notifications (" + notifCount + " unread)");
 
             //Clear old notifications to control database size
             dbHelper.clearOldNotifications(SIZE_LIMIT);

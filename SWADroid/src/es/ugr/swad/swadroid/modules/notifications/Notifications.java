@@ -423,8 +423,8 @@ public class Notifications extends Module {
                 }
 
                 //Request finalized without errors
-                setResult(RESULT_OK);  
-                Log.i(TAG, "Retrieved " + notifCount + " notifications");
+                setResult(RESULT_OK);
+                Log.i(TAG, "Retrieved " + numNotif + " notifications (" + notifCount + " unread)");
 
                 //Clear old notifications to control database size
                 dbHelper.clearOldNotifications(SIZE_LIMIT);
