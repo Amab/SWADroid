@@ -20,17 +20,11 @@
 package es.ugr.swad.swadroid.modules;
 
 import android.os.Bundle;
-import android.util.Log;
-
-import org.ksoap2.serialization.KvmSerializable;
-import org.ksoap2.serialization.SoapObject;
 
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADMain;
 import es.ugr.swad.swadroid.model.User;
-import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
