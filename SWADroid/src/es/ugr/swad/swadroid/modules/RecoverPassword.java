@@ -20,6 +20,7 @@
 package es.ugr.swad.swadroid.modules;
 
 import android.os.Bundle;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
