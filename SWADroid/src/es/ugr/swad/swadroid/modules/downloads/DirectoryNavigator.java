@@ -28,6 +28,7 @@ import org.xml.sax.InputSource;
 
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -70,9 +71,9 @@ public class DirectoryNavigator {
      *
      * @param subDirectory The subdirectory where we will travel.
      * @return Return a list of items that are inside the subdirectory.
-     * @throws InvalidPath When the directory don't exist.
+     * @throws InvalidPathException When the directory don't exist.
      */
-    public ArrayList<DirectoryItem> goToSubDirectory(String subDirectory) throws InvalidPath {
+    public ArrayList<DirectoryItem> goToSubDirectory(String subDirectory) throws InvalidPathException {
         //We increase the path.
         path.add(subDirectory);
 
@@ -93,9 +94,9 @@ public class DirectoryNavigator {
      *
      * @param directoryPosition The position of the subdirectory where we will travel.
      * @return Return a list of items that are inside the subdirectory.
-     * @throws InvalidPath When the directory don't exist.
+     * @throws InvalidPathException When the directory don't exist.
      */
-    public ArrayList<DirectoryItem> goToSubDirectory(int directoryPosition) throws InvalidPath {
+    public ArrayList<DirectoryItem> goToSubDirectory(int directoryPosition) throws InvalidPathException {
         String subDirectory = currentItems.get(directoryPosition).getName();
 
         //We increase the path.
@@ -112,9 +113,9 @@ public class DirectoryNavigator {
      * Travel to the parent directory.
      *
      * @return Return a list of items that are inside the parent directory.
-     * @throws InvalidPath When the directory does not exist.
+     * @throws InvalidPathException When the directory does not exist.
      */
-    public ArrayList<DirectoryItem> goToParentDirectory() throws InvalidPath {
+    public ArrayList<DirectoryItem> goToParentDirectory() throws InvalidPathException {
 
         if (path.size() != 0) {
             //We decrease the path.
@@ -131,9 +132,9 @@ public class DirectoryNavigator {
      * Refresh the XML file and refresh the directory data. We throw an exception if the directory was erased.
      *
      * @return Return a list of items in the current directory.
-     * @throws InvalidPath When the directory don't exist.
+     * @throws InvalidPathException When the directory don't exist.
      */
-    public ArrayList<DirectoryItem> refresh(String fileXML) throws InvalidPath {
+    public ArrayList<DirectoryItem> refresh(String fileXML) throws InvalidPathException {
         this.XMLinfo = fileXML;
 
         Node node = goToDirectory();
@@ -146,9 +147,9 @@ public class DirectoryNavigator {
      * Go to the root directory.
      *
      * @return The items of the root directory.
-     * @throws InvalidPath When the directory don't exist.
+     * @throws InvalidPathException When the directory don't exist.
      */
-    public ArrayList<DirectoryItem> goToRoot() throws InvalidPath {
+    public ArrayList<DirectoryItem> goToRoot() throws InvalidPathException {
         path.clear();
 
         Node node = goToDirectory();
@@ -199,7 +200,7 @@ public class DirectoryNavigator {
                         Node data = fileData.item(j);
                         String tag = data.getNodeName();
                         Node firstChild = data.getFirstChild();
-                        if (firstChild != null)
+                        if (firstChild != null) {
                             if (tag.equals("code")) {
                                 fileCode = Long.valueOf(firstChild.getNodeValue());
                             } else if (tag.equals("size")) {
@@ -213,6 +214,7 @@ public class DirectoryNavigator {
                             } else if (tag.equals("photo")) {
                                 photo = firstChild.getNodeValue();
                             }
+                        }
                     }
 
                     item = new DirectoryItem(name, type, fileCode, size, time, license, publisher, photo);
@@ -220,6 +222,9 @@ public class DirectoryNavigator {
                 }
             }
         }
+
+        Collections.sort(items);
+        
         return items;
     }
 
@@ -227,9 +232,9 @@ public class DirectoryNavigator {
      * Go to the directory of the path.
      *
      * @return Return the node that correspond to the directory path.
-     * @throws InvalidPath When the directory don't exist.
+     * @throws InvalidPathException When the directory don't exist.
      */
-    private Node goToDirectory() throws InvalidPath {
+    private Node goToDirectory() throws InvalidPathException {
         //Instance of a DOM factory.
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setValidating(false);
@@ -273,7 +278,7 @@ public class DirectoryNavigator {
 
         //If we don't find the entire path, we throw an exception.
         if (directoryLevel != path.size()) {
-            throw new InvalidPath();
+            throw new InvalidPathException();
         } else {
             return currentNode;
         }
@@ -378,11 +383,6 @@ public class DirectoryNavigator {
  * @author Sergio Ropero Oliver.
  * @version 1.0
  */
-class InvalidPath extends IllegalArgumentException {
-
-    /**
-     *
-     */
+class InvalidPathException extends IllegalArgumentException {
     private static final long serialVersionUID = 1L;
-
 }
