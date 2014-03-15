@@ -19,12 +19,12 @@
 package es.ugr.swad.swadroid.gui;
 
 import android.app.AlertDialog;
-import android.app.ExpandableListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -46,7 +46,7 @@ import es.ugr.swad.swadroid.utils.Utils;
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */
-public class MenuExpandableListActivity extends ExpandableListActivity {
+public class MenuExpandableListActivity extends ActionBarActivity {
 	/**
 	 * Application preferences
 	 */

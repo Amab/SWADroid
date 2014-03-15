@@ -45,6 +45,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -156,6 +157,8 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
     private ProgressBar mProgressBar;
     private TextView mWhyPasswordText;
     private TextView mLostPasswordText;
+    private ExpandableListView mExpandableListview;
+    private OnChildClickListener mExpandableClickListener;
     
     /**
      * Gets the database helper
@@ -175,96 +178,6 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
         		R.raw.changes);
 
         alertDialog.show();
-    }
-
-    /* (non-Javadoc)
-     * @see android.app.ExpandableListActivity#onChildClick(android.widget.ExpandableListView, android.view.View, int, int, long)
-     */
-    @Override
-    public boolean onChildClick(ExpandableListView parent, View v,
-                                int groupPosition, int childPosition, long id) {
-        // Get the item that was clicked
-        Object o = this.getExpandableListAdapter().getChild(groupPosition, childPosition);
-        @SuppressWarnings("unchecked")
-		String keyword = (String) ((Map<String, Object>) o).get(NAME);
-        //boolean rollCallAndroidVersionOK = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.FROYO);
-        //PackageManager pm = getPackageManager();
-        //boolean rearCam;
-
-        //It would be safer to use the constant PackageManager.FEATURE_CAMERA_FRONT
-        //but since it is not defined for Android 2.2, I substituted the literal value
-        //frontCam = pm.hasSystemFeature("android.hardware.camera.front");
-        //rearCam = pm.hasSystemFeature(PackageManager.FEATURE_CAMERA);
-
-        Intent activity;
-        if (keyword.equals(getString(R.string.notificationsModuleLabel))) {
-            activity = new Intent(this, Notifications.class);
-            startActivityForResult(activity, Constants.NOTIFICATIONS_REQUEST_CODE);
-        } else if (keyword.equals(getString(R.string.testsModuleLabel))) {
-            activity = new Intent(this, Tests.class);
-            startActivityForResult(activity, Constants.TESTS_REQUEST_CODE);
-        } else if (keyword.equals(getString(R.string.messagesModuleLabel))) {
-            activity = new Intent(this, Messages.class);
-            activity.putExtra("eventCode", Long.valueOf(0));
-            startActivityForResult(activity, Constants.MESSAGES_REQUEST_CODE);
-        } else if (keyword.equals(getString(R.string.noticesModuleLabel))) {
-            activity = new Intent(this, Notices.class);
-            startActivityForResult(activity, Constants.NOTICES_REQUEST_CODE);
-        } else if (keyword.equals(getString(R.string.rollcallModuleLabel))) {
-            activity = new Intent(this, Rollcall.class);
-            startActivityForResult(activity, Constants.ROLLCALL_REQUEST_CODE);
-        } else if (keyword.equals(getString(R.string.generateQRModuleLabel))) {
-            activity = new Intent(this, GenerateQR.class);
-            startActivityForResult(activity, Constants.GENERATE_QR_REQUEST_CODE);
-        } else if (keyword.equals(getString(R.string.documentsDownloadModuleLabel))) {
-            activity = new Intent(this, DownloadsManager.class);
-            activity.putExtra("downloadsAreaCode", Constants.DOCUMENTS_AREA_CODE);
-            startActivityForResult(activity, Constants.DOWNLOADSMANAGER_REQUEST_CODE);
-        } else if (keyword.equals(getString(R.string.sharedsDownloadModuleLabel))) {
-            activity = new Intent(this, DownloadsManager.class);
-            activity.putExtra("downloadsAreaCode", Constants.SHARE_AREA_CODE);
-            startActivityForResult(activity, Constants.DOWNLOADSMANAGER_REQUEST_CODE);
-        } else if (keyword.equals(getString(R.string.myGroupsModuleLabel))) {
-            activity = new Intent(this, MyGroupsManager.class);
-            activity.putExtra("courseCode", Constants.getSelectedCourseCode());
-            startActivityForResult(activity, Constants.MYGROUPSMANAGER_REQUEST_CODE);        
-    	} else if (keyword.equals(getString(R.string.introductionModuleLabel))) {
-    		activity = new Intent(this, Information.class);
-    		activity.putExtra("requestCode", Constants.INTRODUCTION_REQUEST_CODE);
-    		startActivityForResult(activity, Constants.INTRODUCTION_REQUEST_CODE);   		
-	    } else if (keyword.equals(getString(R.string.faqsModuleLabel))) {
-			activity = new Intent(this, Information.class);
-			activity.putExtra("requestCode", Constants.FAQS_REQUEST_CODE);
-			startActivityForResult(activity, Constants.FAQS_REQUEST_CODE);			
-		} else if (keyword.equals(getString(R.string.bibliographyModuleLabel))) {
-			activity = new Intent(this, Information.class);
-			activity.putExtra("requestCode", Constants.BIBLIOGRAPHY_REQUEST_CODE);
-			startActivityForResult(activity, Constants.BIBLIOGRAPHY_REQUEST_CODE);			
-		} else if (keyword.equals(getString(R.string.syllabusPracticalsModuleLabel))) {
-			activity = new Intent(this, Information.class);
-			activity.putExtra("requestCode", Constants.SYLLABUSPRACTICALS_REQUEST_CODE);
-			startActivityForResult(activity, Constants.SYLLABUSPRACTICALS_REQUEST_CODE);			
-		} else if (keyword.equals(getString(R.string.syllabusLecturesModuleLabel))) {
-			activity = new Intent(this, Information.class);
-			activity.putExtra("requestCode", Constants.SYLLABUSLECTURES_REQUEST_CODE);
-			startActivityForResult(activity, Constants.SYLLABUSLECTURES_REQUEST_CODE);			
-		} else if (keyword.equals(getString(R.string.linksModuleLabel))) {
-			activity = new Intent(this, Information.class);
-			activity.putExtra("requestCode", Constants.LINKS_REQUEST_CODE);
-			startActivityForResult(activity, Constants.LINKS_REQUEST_CODE);			
-		} else if (keyword.equals(getString(R.string.teachingguideModuleLabel))) {
-			activity = new Intent(this, Information.class);
-			activity.putExtra("requestCode", Constants.TEACHINGGUIDE_REQUEST_CODE);
-			startActivityForResult(activity, Constants.TEACHINGGUIDE_REQUEST_CODE);
-    	} else if (keyword.equals(getString(R.string.assessmentModuleLabel))) {
-			activity = new Intent(this, Information.class);
-	    	activity.putExtra("requestCode",Constants.ASSESSMENT_REQUEST_CODE);
-	    	startActivityForResult(activity,Constants.ASSESSMENT_REQUEST_CODE);         
-    	   
-    	    }
-
-        
-        return true;
     }
 
     /* (non-Javadoc)
@@ -575,7 +488,7 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
             }
 
             if (courseSelected != null) {
-                if ((getExpandableListAdapter() == null) || dBCleaned) {
+                if ((mExpandableListview.getAdapter() == null) || dBCleaned) {
                     createBaseMenu();
                 }
                 int userRole = courseSelected.getUserRole();
@@ -593,9 +506,8 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
      * Sets currentRole to student role
      */
     private void createBaseMenu() {
-        ExpandableListView list = (ExpandableListView) this.findViewById(android.R.id.list);
-        list.setVisibility(View.VISIBLE);
-        if (getExpandableListAdapter() == null || currentRole == -1) {
+        mExpandableListview.setVisibility(View.VISIBLE);
+        if (mExpandableListview.getAdapter() == null || currentRole == -1) {
             //the menu base is equal to students menu.
             currentRole = Constants.STUDENT_TYPE_CODE;
             //Construct Expandable List
@@ -730,7 +642,7 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
             map.put(IMAGE, getResources().getDrawable(R.drawable.msg_write));
             messagesData.add(map);
 
-            setListAdapter(new ImageExpandableListAdapter(
+            mExpandableListview.setAdapter(new ImageExpandableListAdapter(
                     this,
                     headerData,
                     R.layout.image_list_item,
@@ -741,8 +653,6 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
                     null,
                     new int[]{}
             ));
-
-            getExpandableListView().setOnChildClickListener(this);
         }
     }
 
@@ -752,9 +662,9 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
     private void changeToStudentMenu() {
         if (currentRole == Constants.TEACHER_TYPE_CODE) {
             //Removes Publish Note from messages menu
-            ((ImageExpandableListAdapter) getExpandableListAdapter()).removeChild(Constants.MESSAGES_GROUP, Constants.PUBLISH_NOTE_CHILD);
+            ((ImageExpandableListAdapter) mExpandableListview.getAdapter()).removeChild(Constants.MESSAGES_GROUP, Constants.PUBLISH_NOTE_CHILD);
             //Removes Rollcall from users menu
-            ((ImageExpandableListAdapter) getExpandableListAdapter()).removeChild(Constants.USERS_GROUP, Constants.ROLLCALL_CHILD);
+            ((ImageExpandableListAdapter) mExpandableListview.getAdapter()).removeChild(Constants.USERS_GROUP, Constants.ROLLCALL_CHILD);
         }
         currentRole = Constants.STUDENT_TYPE_CODE;
     }
@@ -767,12 +677,12 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
             HashMap<String, Object> map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.noticesModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.note));
-            ((ImageExpandableListAdapter) getExpandableListAdapter()).addChild(Constants.MESSAGES_GROUP, Constants.PUBLISH_NOTE_CHILD, map);
+            ((ImageExpandableListAdapter) mExpandableListview.getAdapter()).addChild(Constants.MESSAGES_GROUP, Constants.PUBLISH_NOTE_CHILD, map);
 
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.rollcallModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.roll_call));
-            ((ImageExpandableListAdapter) getExpandableListAdapter()).addChild(Constants.USERS_GROUP, Constants.ROLLCALL_CHILD, map);
+            ((ImageExpandableListAdapter) mExpandableListview.getAdapter()).addChild(Constants.USERS_GROUP, Constants.ROLLCALL_CHILD, map);
         }
         currentRole = Constants.TEACHER_TYPE_CODE;
     }
@@ -790,8 +700,8 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
         dBCleaned = true;
         listCourses.clear();
         cleanSpinner();
-        ExpandableListView list = (ExpandableListView) this.findViewById(android.R.id.list);
-        list.setVisibility(View.GONE);
+        
+        mExpandableListview.setVisibility(View.GONE);
     }
 
     /**
@@ -822,6 +732,7 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
         mProgressBar = (ProgressBar) this.findViewById(R.id.progress_refresh);
         mWhyPasswordText = (TextView) findViewById(R.id.why_password);
         mLostPasswordText = (TextView) findViewById(R.id.lost_password);
+        mExpandableListview = (ExpandableListView) findViewById(R.id.expandableList);
         
         SpannableString lostPasswordUnderline = new SpannableString(getString(R.string.lost_password));
         lostPasswordUnderline.setSpan(new UnderlineSpan(), 0, lostPasswordUnderline.length(), 0);
@@ -838,6 +749,103 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
         
         mWhyPasswordText.setOnClickListener(this);
         mLostPasswordText.setOnClickListener(this);
+        
+        mExpandableClickListener = new OnChildClickListener() {
+            
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition,
+                    int childPosition, long id) {
+                // Get the item that was clicked
+                Object o = parent.getExpandableListAdapter().getChild(groupPosition, childPosition);
+                @SuppressWarnings("unchecked")
+                String keyword = (String) ((Map<String, Object>) o).get(NAME);
+                // boolean rollCallAndroidVersionOK =
+                // (android.os.Build.VERSION.SDK_INT >=
+                // android.os.Build.VERSION_CODES.FROYO);
+                // PackageManager pm = getPackageManager();
+                // boolean rearCam;
+
+                // It would be safer to use the constant
+                // PackageManager.FEATURE_CAMERA_FRONT
+                // but since it is not defined for Android 2.2, I substituted
+                // the literal value
+                // frontCam =
+                // pm.hasSystemFeature("android.hardware.camera.front");
+                // rearCam = pm.hasSystemFeature(PackageManager.FEATURE_CAMERA);
+
+                Intent activity;
+                Context ctx = getApplicationContext();
+                if (keyword.equals(getString(R.string.notificationsModuleLabel))) {
+                    activity = new Intent(ctx, Notifications.class);
+                    startActivityForResult(activity, Constants.NOTIFICATIONS_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.testsModuleLabel))) {
+                    activity = new Intent(ctx, Tests.class);
+                    startActivityForResult(activity, Constants.TESTS_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.messagesModuleLabel))) {
+                    activity = new Intent(ctx, Messages.class);
+                    activity.putExtra("eventCode", Long.valueOf(0));
+                    startActivityForResult(activity, Constants.MESSAGES_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.noticesModuleLabel))) {
+                    activity = new Intent(ctx, Notices.class);
+                    startActivityForResult(activity, Constants.NOTICES_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.rollcallModuleLabel))) {
+                    activity = new Intent(ctx, Rollcall.class);
+                    startActivityForResult(activity, Constants.ROLLCALL_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.generateQRModuleLabel))) {
+                    activity = new Intent(ctx, GenerateQR.class);
+                    startActivityForResult(activity, Constants.GENERATE_QR_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.documentsDownloadModuleLabel))) {
+                    activity = new Intent(ctx, DownloadsManager.class);
+                    activity.putExtra("downloadsAreaCode", Constants.DOCUMENTS_AREA_CODE);
+                    startActivityForResult(activity, Constants.DOWNLOADSMANAGER_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.sharedsDownloadModuleLabel))) {
+                    activity = new Intent(ctx, DownloadsManager.class);
+                    activity.putExtra("downloadsAreaCode", Constants.SHARE_AREA_CODE);
+                    startActivityForResult(activity, Constants.DOWNLOADSMANAGER_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.myGroupsModuleLabel))) {
+                    activity = new Intent(ctx, MyGroupsManager.class);
+                    activity.putExtra("courseCode", Constants.getSelectedCourseCode());
+                    startActivityForResult(activity, Constants.MYGROUPSMANAGER_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.introductionModuleLabel))) {
+                    activity = new Intent(ctx, Information.class);
+                    activity.putExtra("requestCode", Constants.INTRODUCTION_REQUEST_CODE);
+                    startActivityForResult(activity, Constants.INTRODUCTION_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.faqsModuleLabel))) {
+                    activity = new Intent(ctx, Information.class);
+                    activity.putExtra("requestCode", Constants.FAQS_REQUEST_CODE);
+                    startActivityForResult(activity, Constants.FAQS_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.bibliographyModuleLabel))) {
+                    activity = new Intent(ctx, Information.class);
+                    activity.putExtra("requestCode", Constants.BIBLIOGRAPHY_REQUEST_CODE);
+                    startActivityForResult(activity, Constants.BIBLIOGRAPHY_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.syllabusPracticalsModuleLabel))) {
+                    activity = new Intent(ctx, Information.class);
+                    activity.putExtra("requestCode", Constants.SYLLABUSPRACTICALS_REQUEST_CODE);
+                    startActivityForResult(activity, Constants.SYLLABUSPRACTICALS_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.syllabusLecturesModuleLabel))) {
+                    activity = new Intent(ctx, Information.class);
+                    activity.putExtra("requestCode", Constants.SYLLABUSLECTURES_REQUEST_CODE);
+                    startActivityForResult(activity, Constants.SYLLABUSLECTURES_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.linksModuleLabel))) {
+                    activity = new Intent(ctx, Information.class);
+                    activity.putExtra("requestCode", Constants.LINKS_REQUEST_CODE);
+                    startActivityForResult(activity, Constants.LINKS_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.teachingguideModuleLabel))) {
+                    activity = new Intent(ctx, Information.class);
+                    activity.putExtra("requestCode", Constants.TEACHINGGUIDE_REQUEST_CODE);
+                    startActivityForResult(activity, Constants.TEACHINGGUIDE_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.assessmentModuleLabel))) {
+                    activity = new Intent(ctx, Information.class);
+                    activity.putExtra("requestCode", Constants.ASSESSMENT_REQUEST_CODE);
+                    startActivityForResult(activity, Constants.ASSESSMENT_REQUEST_CODE);
+
+                }
+
+                return true;
+            }
+        };
+        
+        mExpandableListview.setOnChildClickListener(mExpandableClickListener);
 	}
 	
 	/**
@@ -1051,5 +1059,5 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
                 break;
         }
     }
-    
+
 }

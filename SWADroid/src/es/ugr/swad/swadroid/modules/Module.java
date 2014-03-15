@@ -29,6 +29,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
@@ -55,7 +56,7 @@ import javax.net.ssl.SSLException;
 
 /**
  * Superclass for encapsulate common behavior of all modules.
- *
+ * 
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public abstract class Module extends MenuActivity {
@@ -91,18 +92,18 @@ public abstract class Module extends MenuActivity {
      * Connection available flag
      */
     protected static boolean isConnected;
-	/**
-	 * METHOD_NAME param for webservice request.
-	 */
-	private String METHOD_NAME = "";
+    /**
+     * METHOD_NAME param for webservice request.
+     */
+    private String METHOD_NAME = "";
 
     /**
      * Connects to SWAD and gets user data.
-     *
+     * 
      * @throws NoSuchAlgorithmException
      * @throws IOException
      * @throws XmlPullParserException
-     * @throws Exception 
+     * @throws Exception
      */
     protected abstract void requestService() throws Exception;
 
@@ -129,20 +130,19 @@ public abstract class Module extends MenuActivity {
         isConnected = Utils.connectionAvailable(this);
         if (!isConnected) {
             Toast.makeText(this, R.string.errorMsgNoConnection,
-                    Toast.LENGTH_SHORT).show();
+                           Toast.LENGTH_SHORT).show();
         } else {
             // If this is not the Login module, launch login check
             if (!(this instanceof Login)) {
                 Intent loginActivity = new Intent(this, Login.class);
                 startActivityForResult(loginActivity,
-                        Constants.LOGIN_REQUEST_CODE);
+                                       Constants.LOGIN_REQUEST_CODE);
             }
         }
     }
 
     /*
      * (non-Javadoc)
-     *
      * @see android.app.Activity#onCreate()
      */
     @Override
@@ -150,12 +150,12 @@ public abstract class Module extends MenuActivity {
         // Check if debug mode is enabled
         try {
             getPackageManager().getApplicationInfo(getPackageName(), 0);
-			isDebuggable = (ApplicationInfo.FLAG_DEBUGGABLE != 0);
+            isDebuggable = (ApplicationInfo.FLAG_DEBUGGABLE != 0);
         } catch (NameNotFoundException e1) {
             e1.printStackTrace();
         }
-        
-        //Initialize webservices client
+
+        // Initialize webservices client
         webserviceClient = null;
 
         super.onCreate(savedInstanceState);
@@ -167,14 +167,13 @@ public abstract class Module extends MenuActivity {
         }
     }
 
-    @Override
-    public Object onRetainNonConfigurationInstance() {
-        return connect;
-    }
-
+    /*
+     * @Override public Object onRetainNonConfigurationInstance() { return
+     * connect; }
+     */
+    
     /*
      * (non-Javadoc)
-     *
      * @see android.app.Activity#onPause()
      */
     @Override
@@ -192,7 +191,6 @@ public abstract class Module extends MenuActivity {
 
     /*
      * (non-Javadoc)
-     *
      * @see android.app.Activity#onResume()
      */
     @Override
@@ -200,15 +198,14 @@ public abstract class Module extends MenuActivity {
         super.onResume();
 
         if (showDialog) {
-			if (progressDialog != null) {
-			    progressDialog.show();
-			}
-		}
+            if (progressDialog != null) {
+                progressDialog.show();
+            }
+        }
     }
 
     /*
      * (non-Javadoc)
-     *
      * @see android.app.Activity#onStart()
      */
     @Override
@@ -218,7 +215,6 @@ public abstract class Module extends MenuActivity {
 
     /*
      * (non-Javadoc)
-     *
      * @see android.app.Activity#onActivityResult()
      */
     @Override
@@ -226,13 +222,14 @@ public abstract class Module extends MenuActivity {
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case Constants.LOGIN_REQUEST_CODE:
-                    // Toast.makeText(getApplicationContext(), R.string.loginSuccessfulMsg,
+                    // Toast.makeText(getApplicationContext(),
+                    // R.string.loginSuccessfulMsg,
                     // Toast.LENGTH_SHORT).show();
 
-				/*
-                 * if(isDebuggable) Log.d(TAG,
-				 * getString(R.string.loginSuccessfulMsg));
-				 */
+                    /*
+                     * if(isDebuggable) Log.d(TAG,
+                     * getString(R.string.loginSuccessfulMsg));
+                     */
 
                     if (!(this instanceof Login)) {
                         connect();
@@ -241,14 +238,14 @@ public abstract class Module extends MenuActivity {
                     break;
             }
         } else {
-            setResult(RESULT_CANCELED);            
+            setResult(RESULT_CANCELED);
             finish();
         }
     }
 
     /**
      * Sets METHOD_NAME parameter.
-     *
+     * 
      * @param METHOD_NAME METHOD_NAME parameter.
      */
     protected void setMETHOD_NAME(String METHOD_NAME) {
@@ -259,47 +256,47 @@ public abstract class Module extends MenuActivity {
      * Creates webservice request.
      */
     protected void createRequest(String clientType) {
-    	if(webserviceClient == null) {
-	    	if(clientType.equals(SOAPClient.CLIENT_TYPE)) {
-	    		webserviceClient = new SOAPClient();
-	    	} else if(clientType.equals(RESTClient.CLIENT_TYPE)) {
-	    		webserviceClient = new RESTClient();    		
-	    	}
-	
-	        webserviceClient.setMETHOD_NAME(METHOD_NAME);
-    	}
-    	
-    	webserviceClient.createRequest();
+        if (webserviceClient == null) {
+            if (clientType.equals(SOAPClient.CLIENT_TYPE)) {
+                webserviceClient = new SOAPClient();
+            } else if (clientType.equals(RESTClient.CLIENT_TYPE)) {
+                webserviceClient = new RESTClient();
+            }
+
+            webserviceClient.setMETHOD_NAME(METHOD_NAME);
+        }
+
+        webserviceClient.createRequest();
     }
 
     /**
      * Adds a parameter to webservice request.
-     *
+     * 
      * @param param Parameter name.
      * @param value Parameter value.
      */
     protected void addParam(String param, Object value) {
-    	webserviceClient.addParam(param, value);
+        webserviceClient.addParam(param, value);
     }
 
     /**
      * Sends a SOAP request to the specified webservice in METHOD_NAME class
      * constant of the webservice client.
      * 
-     * @param cl     Class to be mapped
+     * @param cl Class to be mapped
      * @param simple Flag for select simple or complex response
-     * @throws Exception 
+     * @throws Exception
      */
     protected void sendRequest(Class<?> cl, boolean simple) throws Exception {
-    	((SOAPClient) webserviceClient).sendRequest(cl, simple);
-    	result = webserviceClient.getResult();
+        ((SOAPClient) webserviceClient).sendRequest(cl, simple);
+        result = webserviceClient.getResult();
     }
-    
-    /** 
+
+    /**
      * Sends a REST request to the specified webservice in METHOD_NAME class
      * constant of the webservice client.
      * 
-     * @param cl     Class to be mapped
+     * @param cl Class to be mapped
      * @param simple Flag for select simple or complex response
      * @param type Request type
      * @param json JSON object to be sended
@@ -307,13 +304,15 @@ public abstract class Module extends MenuActivity {
      * @throws IOException
      * @throws JSONException
      */
-    protected void sendRequest(Class<?> cl, boolean simple, RESTClient.REQUEST_TYPE type, JSONObject json) throws ClientProtocolException, CertificateException, IOException, JSONException {
-    	((RESTClient) webserviceClient).sendRequest(cl, simple, RESTClient.REQUEST_TYPE.GET, json);
-    	result = webserviceClient.getResult();
+    protected void sendRequest(Class<?> cl, boolean simple, RESTClient.REQUEST_TYPE type,
+            JSONObject json) throws ClientProtocolException, CertificateException, IOException,
+            JSONException {
+        ((RESTClient) webserviceClient).sendRequest(cl, simple, RESTClient.REQUEST_TYPE.GET, json);
+        result = webserviceClient.getResult();
     }
 
     protected void startConnection(boolean showDialog,
-                                   String progressDescription, int progressTitle) {
+            String progressDescription, int progressTitle) {
 
         connect = new Connect(this, showDialog, progressDescription, progressTitle);
         connect.execute();
@@ -337,14 +336,14 @@ public abstract class Module extends MenuActivity {
 
         /**
          * Shows progress dialog and connects to SWAD in background
-         *
-         * @param activity            Reference to Module activity
-         * @param show             	  Flag for show a progress dialog
+         * 
+         * @param activity Reference to Module activity
+         * @param show Flag for show a progress dialog
          * @param progressDescription Description to be showed in dialog
-         * @param progressTitle       Title to be showed in dialog
+         * @param progressTitle Title to be showed in dialog
          */
         public Connect(Module activity, boolean show,
-                       String progressDescription, int progressTitle) {
+                String progressDescription, int progressTitle) {
 
             super();
             this.progressDescription = progressDescription;
@@ -357,7 +356,6 @@ public abstract class Module extends MenuActivity {
 
         /*
          * (non-Javadoc)
-         *
          * @see android.app.Activity#onPreExecute()
          */
         @Override
@@ -371,13 +369,11 @@ public abstract class Module extends MenuActivity {
 
         /*
          * (non-Javadoc)
-         *
          * @see android.app.Activity#doInBackground()
          */
         @Override
         protected Void doInBackground(String... urls) {
-            if (isDebuggable)
-                Log.d(TAG, "doInBackground()");
+            if (isDebuggable) Log.d(TAG, "doInBackground()");
 
             try {
                 // Sends webservice request
@@ -396,7 +392,6 @@ public abstract class Module extends MenuActivity {
 
         /*
          * (non-Javadoc)
-         *
          * @see android.app.Activity#onPostExecute()
          */
         @Override
@@ -420,51 +415,52 @@ public abstract class Module extends MenuActivity {
                     if (es.faultstring.equals("Bad log in")) {
                         errorMsg = getString(R.string.errorBadLoginMsg);
                         sendException = false;
-                	} else if (es.faultstring.equals("Bad web service key")) {
+                    } else if (es.faultstring.equals("Bad web service key")) {
                         errorMsg = getString(R.string.errorBadLoginMsg);
-                		sendException = false;
-                		
-                		//Force logout and reset password (this will show again the login screen)
-                		Constants.setLogged(false);
-                		Preferences.setUserPassword("");
+                        sendException = false;
+
+                        // Force logout and reset password (this will show again
+                        // the login screen)
+                        Constants.setLogged(false);
+                        Preferences.setUserPassword("");
                     } else if (es.faultstring.equals("Unknown application key")) {
                         errorMsg = getString(R.string.errorBadAppKeyMsg);
                     } else {
                         errorMsg = "Server error: " + es.getMessage();
                     }
                 } else if ((e instanceof CertificateException) || (e instanceof SSLException)) {
-               	    errorMsg = getString(R.string.errorServerCertificateMsg);
+                    errorMsg = getString(R.string.errorServerCertificateMsg);
                 } else if (e instanceof XmlPullParserException) {
                     errorMsg = getString(R.string.errorServerResponseMsg);
                 } else if (e instanceof TimeoutException) {
                     errorMsg = getString(R.string.errorTimeoutMsg);
                     sendException = false;
                 } else if (e instanceof HttpResponseException) {
-                	httpStatusCode = ((HttpResponseException) e).getStatusCode();
-                	
-                	if(httpStatusCode == 503) { // Service Unavailable
-                		errorMsg = getString(R.string.errorServiceUnavailableMsg);
-                		sendException = false;
-                	} else {
-                		errorMsg = e.getMessage();
-                    	if((errorMsg == null) || errorMsg.equals("")) {
-                    		errorMsg = getString(R.string.errorConnectionMsg);
-                    	}
-                	}
+                    httpStatusCode = ((HttpResponseException) e).getStatusCode();
+
+                    if (httpStatusCode == 503) { // Service Unavailable
+                        errorMsg = getString(R.string.errorServiceUnavailableMsg);
+                        sendException = false;
+                    } else {
+                        errorMsg = e.getMessage();
+                        if ((errorMsg == null) || errorMsg.equals("")) {
+                            errorMsg = getString(R.string.errorConnectionMsg);
+                        }
+                    }
                 } else {
                     errorMsg = e.getMessage();
-                	if((errorMsg == null) || errorMsg.equals("")) {
-                		errorMsg = getString(R.string.errorConnectionMsg);
-                	}
+                    if ((errorMsg == null) || errorMsg.equals("")) {
+                        errorMsg = getString(R.string.errorConnectionMsg);
+                    }
                 }
 
                 // Request finalized with errors
                 error(TAG, errorMsg, e, sendException);
                 setResult(RESULT_CANCELED);
-                
+
                 // Launch database rollback
-                if(dbHelper.isDbInTransaction()) {
-                	dbHelper.endTransaction(false);
+                if (dbHelper.isDbInTransaction()) {
+                    dbHelper.endTransaction(false);
                 }
 
                 onError();

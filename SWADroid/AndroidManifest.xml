@@ -44,12 +44,12 @@
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher_swadroid"
-        android:label="@string/app_name" >
+        android:label="@string/app_name"
+        android:theme="@style/Theme.AppCompat.Light" >
         <activity
             android:name="es.ugr.swad.swadroid.SWADMain"
             android:icon="@drawable/ic_launcher_swadroid"
-            android:label="@string/app_name"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -60,55 +60,44 @@
             android:name="es.ugr.swad.swadroid.PreferencesActivity"
             android:label="@string/set_preferences" >
         </activity>
-        <activity
-            android:name="es.ugr.swad.swadroid.modules.RecoverPassword"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        <activity android:name="es.ugr.swad.swadroid.modules.RecoverPassword" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.Login"
-            android:label="@string/loginModuleLabel"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+            android:label="@string/loginModuleLabel" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.rollcall.Rollcall"
             android:label="@string/rollcallModuleLabel"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.rollcall.RollcallConfigDownload"
-            android:label="@string/rollcallModuleLabel"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+            android:label="@string/rollcallModuleLabel" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.rollcall.sessions.NewPracticeSession"
-            android:label="@string/sessionModuleLabel"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+            android:label="@string/sessionModuleLabel" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.rollcall.sessions.SessionsHistory"
-            android:label="@string/rollcallHistoryModuleLabel"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+            android:label="@string/rollcallHistoryModuleLabel" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.rollcall.sessions.SessionsList"
-            android:label="@string/sessionModuleLabel"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+            android:label="@string/sessionModuleLabel" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.rollcall.students.StudentsHistory"
-            android:label="@string/studentsHistoryModuleLabel"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+            android:label="@string/studentsHistoryModuleLabel" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.rollcall.students.StudentsList"
-            android:label="@string/sessionModuleLabel"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+            android:label="@string/sessionModuleLabel" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.Groups"
-            android:label="@string/rollcallModuleLabel"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+            android:label="@string/rollcallModuleLabel" >
         </activity>
         <activity
             android:name="com.google.zxing.client.android.CaptureActivity"
@@ -123,98 +112,81 @@
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.Courses"
-            android:label="@string/coursesModuleLabel"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+            android:label="@string/coursesModuleLabel" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.notifications.Notifications"
-            android:label="@string/notificationsModuleLabel"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:label="@string/notificationsModuleLabel" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.tests.Tests"
-            android:label="@string/testsModuleLabel"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:label="@string/testsModuleLabel" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.tests.TestsQuestionsDownload"
-            android:label="@string/testsModuleLabel"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+            android:label="@string/testsModuleLabel" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.tests.TestsConfigDownload"
-            android:label="@string/testsModuleLabel"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+            android:label="@string/testsModuleLabel" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.tests.TestsMake"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-            android:label="@string/testsModuleLabel"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:label="@string/testsModuleLabel" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.Messages"
-            android:label="@string/messagesModuleLabel"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+            android:label="@string/messagesModuleLabel" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.notifications.NotificationItem"
-            android:label="@string/notificationsModuleLabel"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:label="@string/notificationsModuleLabel" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.Notices"
-            android:label="@string/noticesModuleLabel"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+            android:label="@string/noticesModuleLabel" >
         </activity>
-        <activity
-            android:name="es.ugr.swad.swadroid.sync.AccountAuthenticator"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        <activity android:name="es.ugr.swad.swadroid.sync.AccountAuthenticator" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.downloads.DirectoryTreeDownload"
-            android:label="@string/documentsDownloadModuleLabel"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+            android:label="@string/documentsDownloadModuleLabel" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.downloads.GetFile"
-            android:label="@string/documentsDownloadModuleLabel"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+            android:label="@string/documentsDownloadModuleLabel" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.downloads.DownloadsManager"
             android:label="@string/documentsDownloadModuleLabel"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:parentActivityName="es.ugr.swad.swadroid.SWADMain" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.ugr.swad.swadroid.SWADMain" />
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.groups.MyGroupsManager"
-            android:label="@string/myGroupsModuleLabel"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:label="@string/myGroupsModuleLabel" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.GroupTypes"
-            android:label="@string/groupTypesModuleLabel"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+            android:label="@string/groupTypesModuleLabel" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.groups.SendMyGroups"
-            android:label="@string/sendMyGroupsProgressTitle"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+            android:label="@string/sendMyGroupsProgressTitle" >
         </activity>
-        <activity
-            android:name="es.ugr.swad.swadroid.modules.GenerateQR"
-            android:theme="@android:style/Theme.NoTitleBar" >
+        <activity android:name="es.ugr.swad.swadroid.modules.GenerateQR" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.information.Information"
             android:configChanges="orientation"
-            android:label="@string/informationModuleLabel"
-            android:theme="@@android:style/Theme.NoTitleBar" >
+            android:label="@string/informationModuleLabel" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.notifications.NotificationsMarkAllAsRead"
-            android:label="@string/notificationsMarkAllAsReadModuleLabel"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+            android:label="@string/notificationsMarkAllAsReadModuleLabel" >
         </activity>
 
         <provider

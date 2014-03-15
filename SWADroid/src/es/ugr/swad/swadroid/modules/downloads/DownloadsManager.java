@@ -18,11 +18,13 @@
  */
 package es.ugr.swad.swadroid.modules.downloads;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -269,7 +271,7 @@ public class DownloadsManager extends MenuActivity {
         progressbar.setVisibility(View.GONE);
         updateButton = (ImageButton) this.findViewById(R.id.refresh);
         updateButton.setVisibility(View.VISIBLE);
-
+        setupActionBar();
     }
 
 
@@ -661,6 +663,16 @@ public class DownloadsManager extends MenuActivity {
 
     }
 
+    /**
+     * Set up the {@link android.app.ActionBar}, if the API is available.
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private void setupActionBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+    }
+    
 //	/**
 //	 * This method is launched instead of onCreate when device rotates
 //	 * It prevents from repeating calls to web services when they are not necessary

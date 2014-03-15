@@ -174,7 +174,7 @@ public class DialogFactory {
                 .setIcon(R.drawable.erroricon);
 
         if (ex != null) {
-            Log.e(tag, ex.getMessage());
+            //Log.e(tag, ex.getMessage());
 
             // Send exception details to Bugsense
             if (!isDebuggable && sendException) {
