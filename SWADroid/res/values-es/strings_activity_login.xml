@@ -3,7 +3,7 @@
     <string name="title_activity_login">Identificarse</string>
 
     <!-- Strings related to login -->
-    <string name="prompt_email">DNI, Apodo o Email.</string>
+    <string name="prompt_email">DNI, Apodo o Email</string>
     <string name="prompt_password">Contraseña</string>
     <string name="prompt_server">Servidor (sin http://)</string>
     <string name="action_sign_in_register"><b>Identificarse</b></string>

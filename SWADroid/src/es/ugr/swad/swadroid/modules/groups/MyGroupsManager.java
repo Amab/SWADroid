@@ -195,6 +195,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
      */
     void showSuccessfulEnrollmentDialog() {        
     	AlertDialog dialog = DialogFactory.createNeutralDialog(this,
+    			-1,
     			R.string.resultEnrollment,
     			R.string.successfullEnrollment,
     			R.string.ok,
@@ -208,6 +209,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
      */
     void showFailedEnrollmentDialog() {
     	AlertDialog dialog = DialogFactory.createNeutralDialog(this,
+    			-1,
     			R.string.resultEnrollment,
     			R.string.failedEnrollment,
     			R.string.ok,
