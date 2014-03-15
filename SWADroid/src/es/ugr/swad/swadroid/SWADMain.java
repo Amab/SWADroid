@@ -35,6 +35,8 @@ import android.text.TextUtils;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -45,9 +47,6 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -151,8 +150,6 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
     private View mLoginStatusView;
     private View mMainScreenView;
     private TextView mLoginStatusMessageView;
-    private ImageButton mUpdateButton;
-    private ProgressBar mProgressBar;
     private TextView mWhyPasswordText;
     private TextView mLostPasswordText;
     private ExpandableListView mExpandableListview;
@@ -184,8 +181,6 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
     @Override
     public void onCreate(Bundle icicle) {
         int lastVersion, currentVersion;
-        ImageView image;
-        TextView text;
         Intent activity;
         
         //Initialize Bugsense plugin
@@ -202,12 +197,6 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
         //Initialize preferences
         prefs = new Preferences(this);
         initializeViews();
-        
-        image = (ImageView) this.findViewById(R.id.moduleIcon);
-        image.setBackgroundResource(R.drawable.ic_launcher_swadroid);
-
-        text = (TextView) this.findViewById(R.id.moduleName);
-        text.setText(R.string.app_name);
         
         try {
         	
@@ -337,8 +326,6 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
             switch (requestCode) {
                 //After get the list of courses, a dialog is launched to choice the course
                 case Constants.COURSES_REQUEST_CODE:
-                    mProgressBar.setVisibility(View.GONE);
-                    mUpdateButton.setVisibility(View.VISIBLE);
 
                     setMenuDbClean();
                     createSpinnerAdapter();
@@ -369,10 +356,7 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
                     
                     //User credentials are wrong. Remove periodic synchronization
                     SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, this);                    
-                    
-                    mUpdateButton.setVisibility(View.GONE);
-                    mProgressBar.setVisibility(View.VISIBLE);
-                    
+                                        
                     break;
             }
         }
@@ -708,8 +692,6 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
      * @param v Actual view
      */
     public void onRefreshClick(View v) {
-        mUpdateButton.setVisibility(View.GONE);
-        mProgressBar.setVisibility(View.VISIBLE);
 
         getCurrentCourses();
     }
@@ -723,11 +705,9 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
 	}
     
 	private void initializeViews(){
-		mUpdateButton = (ImageButton) findViewById(R.id.refresh);
 	    mMainScreenView = findViewById(R.id.main_screen);
         mLoginFormView = findViewById(R.id.login_form);
         mLoginStatusView = findViewById(R.id.login_status);        
-        mProgressBar = (ProgressBar) this.findViewById(R.id.progress_refresh);
         mWhyPasswordText = (TextView) findViewById(R.id.why_password);
         mLostPasswordText = (TextView) findViewById(R.id.lost_password);
         mExpandableListview = (ExpandableListView) findViewById(R.id.expandableList);
@@ -742,8 +722,6 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
         
         
         mWhyPasswordText.setVisibility(View.GONE);
-        mUpdateButton.setVisibility(View.VISIBLE);
-        mProgressBar.setVisibility(View.GONE);
         
         mWhyPasswordText.setOnClickListener(this);
         mLostPasswordText.setOnClickListener(this);
@@ -850,8 +828,6 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
 	 * Shows a login form
 	 */
 	private void loginForm(boolean show) {
-		mUpdateButton.setVisibility(show ? View.GONE : View.VISIBLE);
-        mProgressBar.setVisibility(View.GONE);
 	    mMainScreenView.setVisibility(show ? View.GONE : View.VISIBLE);
 		mLoginFormView.setVisibility(show ? View.VISIBLE : View.GONE);
 
@@ -1044,6 +1020,25 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_activity_actions, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_refresh:
+                getCurrentCourses();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        
     }
     
     @Override
