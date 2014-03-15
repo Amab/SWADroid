@@ -103,14 +103,9 @@ public class DownloadsManager extends MenuActivity {
      */
     private boolean refresh = false;
 
-    private ImageButton updateButton;
-    private ProgressBar progressbar;
-
     private TextView noConnectionText;
     private GridView grid;
 
-    private ImageView moduleIcon = null;
-    private TextView moduleText = null;
     private TextView currentPathText;
 
     private String chosenNodeName = null;
@@ -206,21 +201,6 @@ public class DownloadsManager extends MenuActivity {
         downloadsAreaCode = getIntent().getIntExtra("downloadsAreaCode",
                 Constants.DOCUMENTS_AREA_CODE);
 
-        //set the module bar
-        if (downloadsAreaCode == Constants.DOCUMENTS_AREA_CODE) {
-            moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
-            moduleIcon.setBackgroundResource(R.drawable.folder);
-
-            moduleText = (TextView) this.findViewById(R.id.moduleName);
-            moduleText.setText(R.string.documentsDownloadModuleLabel);
-        } else { // SHARE_AREA_CODE
-            moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
-            moduleIcon.setBackgroundResource(R.drawable.folder_users);
-
-            moduleText = (TextView) this.findViewById(R.id.moduleName);
-            moduleText.setText(R.string.sharedsDownloadModuleLabel);
-        }
-
         noConnectionText = (TextView) this.findViewById(R.id.noConnectionText);
 
         grid = (GridView) this.findViewById(R.id.gridview);
@@ -268,10 +248,6 @@ public class DownloadsManager extends MenuActivity {
 
         }));
 
-        progressbar = (ProgressBar) this.findViewById(R.id.progress_refresh);
-        progressbar.setVisibility(View.GONE);
-        updateButton = (ImageButton) this.findViewById(R.id.refresh);
-        updateButton.setVisibility(View.VISIBLE);
         setupActionBar();
     }
     
@@ -325,8 +301,6 @@ public class DownloadsManager extends MenuActivity {
                         setMainView();
                     } else {
                         refresh = false;
-                        updateButton.setVisibility(View.VISIBLE);
-                        progressbar.setVisibility(View.GONE);
                         if (!noConnectionView)
                             refresh();
                         else
@@ -375,8 +349,6 @@ public class DownloadsManager extends MenuActivity {
             setNoConnectionView();
             if (refresh) {
                 refresh = false;
-                updateButton.setVisibility(View.VISIBLE);
-                progressbar.setVisibility(View.GONE);
             }
         }
     }
@@ -395,8 +367,8 @@ public class DownloadsManager extends MenuActivity {
         this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
 
         TextView courseNameText = (TextView) this.findViewById(R.id.courseSelectedText);
+        
         courseNameText.setText(Constants.getSelectedCourseShortName());
-
         this.saveState = true;
         this.previousConnection = false;
 
@@ -674,8 +646,6 @@ public class DownloadsManager extends MenuActivity {
      * @param v Actual view
      */
     public void onRefreshClick(View v) {
-        updateButton.setVisibility(View.GONE);
-        progressbar.setVisibility(View.VISIBLE);
 
         refresh = true;
 
