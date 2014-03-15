@@ -24,6 +24,8 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ExpandableListView;
@@ -73,9 +75,6 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 
     private boolean refreshRequested = false;
 
-
-    private ImageButton updateButton;
-    private ProgressBar progressbar;
     private OnClickListener cancelClickListener = new DialogInterface.OnClickListener() {
         public void onClick(DialogInterface dialog, int id) {
             dialog.cancel();
@@ -135,19 +134,6 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 
         TextView courseNameText = (TextView) this.findViewById(R.id.courseSelectedText);
         courseNameText.setText(Constants.getSelectedCourseShortName());
-
-        ImageView moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
-        moduleIcon.setBackgroundResource(R.drawable.my_groups);
-
-        TextView moduleText = (TextView) this.findViewById(R.id.moduleName);
-        moduleText.setText(R.string.myGroupsModuleLabel);
-
-        progressbar = (ProgressBar) this.findViewById(R.id.progress_refresh);
-        progressbar.setVisibility(View.GONE);
-        updateButton = (ImageButton) this.findViewById(R.id.refresh);
-        updateButton.setVisibility(View.VISIBLE);
-
-
     }
 
     @Override
@@ -170,9 +156,6 @@ public class MyGroupsManager extends MenuExpandableListActivity {
                         mExpandableListView.setVisibility(View.VISIBLE);
                         this.findViewById(R.id.sendMyGroupsButton).setVisibility(View.VISIBLE);
                         this.findViewById(R.id.noGroupsText).setVisibility(View.GONE);
-
-                        updateButton.setVisibility(View.VISIBLE);
-                        progressbar.setVisibility(View.GONE);
 
                         refreshRequested = false;
 
@@ -199,8 +182,6 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 
         } else {
             if (refreshRequested) {
-                updateButton.setVisibility(View.VISIBLE);
-                progressbar.setVisibility(View.GONE);
 
                 refreshRequested = false;
             }
@@ -328,24 +309,24 @@ public class MyGroupsManager extends MenuExpandableListActivity {
         return children;
     }
 
-    /**
-     * Launches an action when refresh button is pushed.
-     * <p/>
-     * The listener onClick is set in action_bar.xml
-     *
-     * @param v Actual view
-     */
-    public void onRefreshClick(View v) {
-        updateButton.setVisibility(View.GONE);
-        progressbar.setVisibility(View.VISIBLE);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_refresh:
+                Intent activity = new Intent(this, GroupTypes.class);
+                activity.putExtra("courseCode", courseCode);
+                startActivityForResult(activity, Constants.GROUPTYPES_REQUEST_CODE);
+                return true;
 
-        refreshRequested = true;
-
-        Intent activity = new Intent(this, GroupTypes.class);
-        activity.putExtra("courseCode", courseCode);
-        startActivityForResult(activity, Constants.GROUPTYPES_REQUEST_CODE);
+            default:
+                return super.onOptionsItemSelected(item);
+        }
 
     }
 
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_activity_actions, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 }
