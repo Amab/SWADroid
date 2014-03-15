@@ -1026,6 +1026,12 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
 			         startActivityForResult(i, Constants.RECOVER_PASSWORD_REQUEST_CODE);
 			     }
 			 })
+			 .setNegativeButton(R.string.cancelMsg, new DialogInterface.OnClickListener() {
+			     @Override
+			     public void onClick(DialogInterface dialog, int which) {
+			         dialog.dismiss();
+			     }
+			 })
 			 .setCancelable(true);
 
         AlertDialog dialog = builder.create();
