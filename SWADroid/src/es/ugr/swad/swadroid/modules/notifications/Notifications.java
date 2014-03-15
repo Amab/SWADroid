@@ -28,12 +28,13 @@ import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -238,9 +239,6 @@ public class Notifications extends Module {
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //ImageButton updateButton;
-        ImageView image;
-        TextView text;
         //ListView list;
         final PullToRefreshListView list;
 
@@ -249,19 +247,6 @@ public class Notifications extends Module {
 
         this.findViewById(R.id.courseSelectedText).setVisibility(View.GONE);
         this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
-        this.findViewById(R.id.markAllRead).setVisibility(View.VISIBLE);
-
-        image = (ImageView) this.findViewById(R.id.moduleIcon);
-        image.setBackgroundResource(R.drawable.bell);
-
-        text = (TextView) this.findViewById(R.id.moduleName);
-        text.setText(R.string.notificationsModuleLabel);
-
-        //image = (ImageView)this.findViewById(R.id.title_sep_1);
-        //image.setVisibility(View.VISIBLE);
-
-        //updateButton = (ImageButton) this.findViewById(R.id.refresh);
-        //updateButton.setVisibility(View.VISIBLE);
 
         dbCursor = dbHelper.getDb().getCursor(Constants.DB_TABLE_NOTIFICATIONS, selection, orderby);
         startManagingCursor(dbCursor);
@@ -278,8 +263,6 @@ public class Notifications extends Module {
                 runConnection();
             }
         });
-
-        text = (TextView) this.findViewById(R.id.listText);
 
 		/*
          * If there aren't notifications to show, hide the notifications list and show the empty notifications
@@ -538,19 +521,30 @@ public class Notifications extends Module {
                 	error(TAG, errorMessage, null, true);
                 } else if (notifCount == 0) {
                     Toast.makeText(context, R.string.NoNotificationsMsg, Toast.LENGTH_LONG).show();
-                }
-
-                //ProgressBar pb = (ProgressBar) mActivity.findViewById(R.id.progress_refresh);
-                //ImageButton updateButton = (ImageButton) mActivity.findViewById(R.id.refresh);
-
-                //pb.setVisibility(View.GONE);
-                //updateButton.setVisibility(View.VISIBLE);
-                
-                //Sends to SWAD the "seen notifications" info
-                //sendReadNotifications();     
+                }  
                 
                 refreshScreen();
             }
+        }
+    }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.notification_activity_actions, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_markAllRead:
+                dbHelper.updateAllNotifications("seenLocal", Utils.parseBoolString(true));
+                sendReadedNotifications();
+                refreshScreen();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }
