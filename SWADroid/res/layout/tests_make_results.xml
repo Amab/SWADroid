@@ -6,13 +6,13 @@
                 android:background="@color/background">
     <include layout="@layout/action_bar"/>
 
-    <RelativeLayout
+    <!-- <RelativeLayout
             android:id="@+id/courseNameLayout"
             android:layout_below="@id/actionBarLayout"
             android:layout_height="wrap_content"
             android:layout_width="fill_parent">
         <include layout="@layout/course_or_group_name"/>
-    </RelativeLayout>
+    </RelativeLayout> -->
 
     <TextView
             android:id="@+id/testResultsText"

@@ -105,12 +105,12 @@ public class TestsMake extends Module {
      * @param layout Layout to be applied
      */
     private void setLayout(int layout) {
-        ImageView image;
-        TextView text;
+        //ImageView image;
+        //TextView text;
 
         setContentView(layout);
 
-        image = (ImageView) this.findViewById(R.id.moduleIcon);
+        /*image = (ImageView) this.findViewById(R.id.moduleIcon);
         image.setBackgroundResource(R.drawable.test);
 
         text = (TextView) this.findViewById(R.id.moduleName);
@@ -120,7 +120,10 @@ public class TestsMake extends Module {
         this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
 
         text = (TextView) this.findViewById(R.id.courseSelectedText);
-        text.setText(Constants.getSelectedCourseShortName());
+        text.setText(Constants.getSelectedCourseShortName());*/
+
+        getActionBar().setSubtitle(Constants.getSelectedCourseShortName());
+    	getActionBar().setIcon(R.drawable.test);
 
     }
 

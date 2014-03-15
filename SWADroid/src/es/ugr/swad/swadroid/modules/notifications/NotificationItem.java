@@ -68,6 +68,8 @@ public class NotificationItem extends MenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.single_notification_view);
 
+    	getActionBar().setIcon(R.drawable.bell);
+
         senderTextView = (TextView) this.findViewById(R.id.senderNameText);
         courseTextView = (TextView) this.findViewById(R.id.courseNameText);
         summaryTextView = (TextView) this.findViewById(R.id.summaryText);

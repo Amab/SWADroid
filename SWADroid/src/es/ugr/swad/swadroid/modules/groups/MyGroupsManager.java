@@ -30,9 +30,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import es.ugr.swad.swadroid.Constants;
@@ -134,6 +131,9 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 
         TextView courseNameText = (TextView) this.findViewById(R.id.courseSelectedText);
         courseNameText.setText(Constants.getSelectedCourseShortName());
+
+        //getActionBar().setSubtitle(Constants.getSelectedCourseShortName());
+    	getActionBar().setIcon(R.drawable.my_groups);
     }
 
     @Override

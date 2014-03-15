@@ -57,8 +57,8 @@ public class Information extends Module {
 		WebSettings settings = webview.getSettings();
 		settings.setDefaultTextEncodingName("utf-8");
 
-		ImageView moduleIcon;
-		TextView moduleText;
+		//ImageView moduleIcon;
+		//TextView moduleText;
 
 		this.findViewById(R.id.courseSelectedText).setVisibility(View.VISIBLE);
 
@@ -74,11 +74,14 @@ public class Information extends Module {
 
 			infoTypeToAdd = "introduction";
 
-			moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
+			/*moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
 			moduleIcon.setBackgroundResource(R.drawable.notif);
 
 			moduleText = (TextView) this.findViewById(R.id.moduleName);
-			moduleText.setText(R.string.introductionModuleLabel);
+			moduleText.setText(R.string.introductionModuleLabel);*/
+			
+			setTitle(R.string.introductionModuleLabel);
+			getActionBar().setIcon(R.drawable.notif);
 
 			break;
 
@@ -86,11 +89,14 @@ public class Information extends Module {
 
 			infoTypeToAdd = "FAQ";
 
-			moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
+			/*moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
 			moduleIcon.setBackgroundResource(R.drawable.notif);
 
 			moduleText = (TextView) this.findViewById(R.id.moduleName);
-			moduleText.setText(R.string.faqsModuleLabel);
+			moduleText.setText(R.string.faqsModuleLabel);*/
+			
+			setTitle(R.string.faqsModuleLabel);
+			getActionBar().setIcon(R.drawable.notif);
 
 			break;
 
@@ -98,11 +104,14 @@ public class Information extends Module {
 
 			infoTypeToAdd = "bibliography";
 
-			moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
+			/*moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
 			moduleIcon.setBackgroundResource(R.drawable.notif);
 
 			moduleText = (TextView) this.findViewById(R.id.moduleName);
-			moduleText.setText(R.string.bibliographyModuleLabel);
+			moduleText.setText(R.string.bibliographyModuleLabel);*/
+			
+			setTitle(R.string.bibliographyModuleLabel);
+			getActionBar().setIcon(R.drawable.notif);
 
 			break;
 
@@ -110,11 +119,14 @@ public class Information extends Module {
 
 			infoTypeToAdd = "practicals";
 
-			moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
+			/*moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
 			moduleIcon.setBackgroundResource(R.drawable.notif);
 
 			moduleText = (TextView) this.findViewById(R.id.moduleName);
-			moduleText.setText(R.string.syllabusPracticalsModuleLabel);
+			moduleText.setText(R.string.syllabusPracticalsModuleLabel);*/
+			
+			setTitle(R.string.syllabusPracticalsModuleLabel);
+			getActionBar().setIcon(R.drawable.notif);
 
 			break;
 
@@ -122,11 +134,14 @@ public class Information extends Module {
 
 			infoTypeToAdd = "lectures";
 
-			moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
+			/*moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
 			moduleIcon.setBackgroundResource(R.drawable.notif);
 
 			moduleText = (TextView) this.findViewById(R.id.moduleName);
-			moduleText.setText(R.string.syllabusLecturesModuleLabel);
+			moduleText.setText(R.string.syllabusLecturesModuleLabel);*/
+			
+			setTitle(R.string.syllabusLecturesModuleLabel);
+			getActionBar().setIcon(R.drawable.notif);
 
 			break;
 
@@ -134,11 +149,14 @@ public class Information extends Module {
 
 			infoTypeToAdd = "links";
 
-			moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
+			/*moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
 			moduleIcon.setBackgroundResource(R.drawable.notif);
 
 			moduleText = (TextView) this.findViewById(R.id.moduleName);
-			moduleText.setText(R.string.linksModuleLabel);
+			moduleText.setText(R.string.linksModuleLabel);*/
+			
+			setTitle(R.string.linksModuleLabel);
+			getActionBar().setIcon(R.drawable.notif);
 
 			break;
 
@@ -146,11 +164,14 @@ public class Information extends Module {
 
 			infoTypeToAdd = "guide";
 
-			moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
+			/*moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
 			moduleIcon.setBackgroundResource(R.drawable.notif);
 
 			moduleText = (TextView) this.findViewById(R.id.moduleName);
-			moduleText.setText(R.string.teachingguideModuleLabel);
+			moduleText.setText(R.string.teachingguideModuleLabel);*/
+			
+			setTitle(R.string.teachingguideModuleLabel);
+			getActionBar().setIcon(R.drawable.notif);
 
 			break;
 
@@ -159,15 +180,17 @@ public class Information extends Module {
 
 			infoTypeToAdd = "assessment";
 
-			moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
+			/*moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
 			moduleIcon.setBackgroundResource(R.drawable.notif);
 
 			moduleText = (TextView) this.findViewById(R.id.moduleName);
-			moduleText.setText(R.string.assessmentModuleLabel);
+			moduleText.setText(R.string.assessmentModuleLabel);*/
+			
+			setTitle(R.string.assessmentModuleLabel);
+			getActionBar().setIcon(R.drawable.notif);
 
 			break;
-		}
-		
+		}		
 		
 		setMETHOD_NAME("getCourseInfo");
 	}

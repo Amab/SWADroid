@@ -659,12 +659,12 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
             HashMap<String, Object> map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.noticesModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.note));
-            ((ImageExpandableListAdapter) mExpandableListview.getAdapter()).addChild(Constants.MESSAGES_GROUP, Constants.PUBLISH_NOTE_CHILD, map);
+            //((ImageExpandableListAdapter) mExpandableListview.getAdapter()).addChild(Constants.MESSAGES_GROUP, Constants.PUBLISH_NOTE_CHILD, map);
 
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.rollcallModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.roll_call));
-            ((ImageExpandableListAdapter) mExpandableListview.getAdapter()).addChild(Constants.USERS_GROUP, Constants.ROLLCALL_CHILD, map);
+            //((ImageExpandableListAdapter) mExpandableListview.getAdapter()).addChild(Constants.USERS_GROUP, Constants.ROLLCALL_CHILD, map);
         }
         currentRole = Constants.TEACHER_TYPE_CODE;
     }
