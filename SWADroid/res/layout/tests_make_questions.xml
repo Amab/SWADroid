@@ -14,7 +14,7 @@
             android:layout_below="@id/actionBarLayout"
             android:background="@color/title_background">
 
-        <include layout="@layout/course_or_group_name"/>
+        <!-- <include layout="@layout/course_or_group_name"/> -->
 
         <TextView
                 android:id="@+id/testMakeQuestionScore"

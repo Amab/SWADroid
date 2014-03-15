@@ -37,8 +37,6 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -464,7 +462,7 @@ public class DownloadsManager extends MenuActivity {
 
             TextView courseNameText = (TextView) this.findViewById(R.id.courseSelectedText);
             courseNameText.setText(Constants.getSelectedCourseShortName());
-
+            //getActionBar().setSubtitle(Constants.getSelectedCourseShortName());
         }
     }
 
@@ -663,6 +661,14 @@ public class DownloadsManager extends MenuActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+		
+        if(downloadsAreaCode == 1) {
+			setTitle(R.string.documentsDownloadModuleLabel);
+        	getActionBar().setIcon(R.drawable.folder);
+        } else {
+			setTitle(R.string.sharedsDownloadModuleLabel);
+			getActionBar().setIcon(R.drawable.folder_users);
+		}
     }
     
 //	/**

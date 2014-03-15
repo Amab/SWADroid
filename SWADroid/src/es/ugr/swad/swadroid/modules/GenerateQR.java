@@ -29,6 +29,9 @@ public class GenerateQR extends Module {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.generate_qr_layout);
+
+        setTitle(R.string.generateQRModuleLabel);
+    	getActionBar().setIcon(R.drawable.scan_qr);
     }
 
     /* (non-Javadoc)

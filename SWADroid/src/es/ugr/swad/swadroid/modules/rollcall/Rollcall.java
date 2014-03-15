@@ -111,6 +111,8 @@ public class Rollcall extends MenuExpandableListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_rollcall);
 
+    	getActionBar().setIcon(R.drawable.roll_call);
+
         courseCode = Constants.getSelectedCourseCode();
 
         ImageView image = (ImageView) this.findViewById(R.id.moduleIcon);

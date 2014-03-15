@@ -63,11 +63,13 @@ public class StudentsHistory extends Module {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.session_history);
 
-        ImageView image = (ImageView) this.findViewById(R.id.moduleIcon);
+        /*ImageView image = (ImageView) this.findViewById(R.id.moduleIcon);
         image.setBackgroundResource(R.drawable.students_check);
 
         TextView text = (TextView) this.findViewById(R.id.moduleName);
-        text.setText(R.string.studentsHistoryModuleLabel);
+        text.setText(R.string.studentsHistoryModuleLabel);*/
+
+    	getActionBar().setIcon(R.drawable.roll_call);        
 
         // Get selected course
         String where = "id =" + String.valueOf(Constants.getSelectedCourseCode());

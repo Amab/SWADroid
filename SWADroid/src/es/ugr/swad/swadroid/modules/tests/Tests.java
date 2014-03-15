@@ -24,10 +24,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.modules.Module;
@@ -58,7 +55,7 @@ public class Tests extends Module {
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        TextView text;
+        //TextView text;
         ListView list;
         String[] items = getResources().getStringArray(R.array.testMenuItems);
         OnItemClickListener clickListener = new OnItemClickListener() {
@@ -87,11 +84,14 @@ public class Tests extends Module {
         list.setAdapter(adapter);
         list.setOnItemClickListener(clickListener);
 
-        this.findViewById(R.id.courseSelectedText).setVisibility(View.VISIBLE);
-        this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
+        //this.findViewById(R.id.courseSelectedText).setVisibility(View.VISIBLE);
+        //this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
 
-        text = (TextView) this.findViewById(R.id.courseSelectedText);
-        text.setText(Constants.getSelectedCourseShortName());
+        //text = (TextView) this.findViewById(R.id.courseSelectedText);
+        //text.setText(Constants.getSelectedCourseShortName());
+
+        getActionBar().setSubtitle(Constants.getSelectedCourseShortName());
+    	getActionBar().setIcon(R.drawable.test);
     }
 
     /* (non-Javadoc)

@@ -243,6 +243,8 @@ public class Notifications extends Module {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_items_pulltorefresh);
 
+    	getActionBar().setIcon(R.drawable.bell);
+
         this.findViewById(R.id.courseSelectedText).setVisibility(View.GONE);
         this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
 
