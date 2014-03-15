@@ -362,4 +362,7 @@
 	<string name="error_password_summary">Error: La contraseña debe ser de mínimo 8 caracteres alfanuméricos</string>
 	<string name="passwordDialogTip">Recuerda que la contraseña de SWAD debe tener al menos 8 caracteres alfanuméricos</string>
 	<string name="errorServerCertificateMsg">El certificado del servidor no es válido. Por favor, contacte con el administrador de SWAD</string>
+	
+	<string name="notificationMarkAllRead">Marcar todas como leidas</string>
+	<string name="actionBarRefresh">Actualizar</string>
 </resources>

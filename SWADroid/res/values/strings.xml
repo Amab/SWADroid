@@ -365,4 +365,7 @@
     <string name="passwordDialogTip">SWAD\'s password is at least 8 alphanumeric characters long</string>
     <string name="errorServerCertificateMsg">The server certificate is invalid. Please contact SWAD admininstrator</string>
     <string name="lessOrEqualChar">≤</string>
+    
+    <string name="notificationMarkAllRead">Mark all as read</string>
+    <string name="actionBarRefresh">Refresh</string>
 </resources>
