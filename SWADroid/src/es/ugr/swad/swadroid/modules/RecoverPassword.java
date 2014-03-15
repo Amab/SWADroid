@@ -20,10 +20,8 @@
 package es.ugr.swad.swadroid.modules;
 
 import android.os.Bundle;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.SWADMain;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
@@ -35,6 +33,8 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
 public class RecoverPassword extends Module {
 
     public static final String TAG = Constants.APP_TAG + " RecoverPassword";
+
+	public static final String USER_TO_RECOVER =  "es.ugr.swad.swadroid.USER_TO_RECOVER";
 
     /**
      * User ID.
@@ -57,7 +57,7 @@ public class RecoverPassword extends Module {
     protected void requestService() throws Exception {
 
         createRequest(SOAPClient.CLIENT_TYPE);
-        addParam("userID", getIntent().getStringExtra(SWADMain.USER_TO_RECOVER));
+        addParam("userID", getIntent().getStringExtra(USER_TO_RECOVER));
         addParam("appKey", Constants.SWAD_APP_KEY);
         sendRequest(User.class, true);
 
