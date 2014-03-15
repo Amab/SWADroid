@@ -365,6 +365,10 @@ public class DirectoryNavigator {
         return node.getName();
 
     }
+    
+    public boolean isRootDirectory() {
+    	return (path.size() == 0);
+    }
 }
 
 /**

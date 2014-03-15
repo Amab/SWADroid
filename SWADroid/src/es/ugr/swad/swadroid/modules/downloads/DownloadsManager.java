@@ -28,6 +28,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -40,7 +41,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
@@ -273,7 +273,28 @@ public class DownloadsManager extends MenuActivity {
         updateButton.setVisibility(View.VISIBLE);
         setupActionBar();
     }
-
+    
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+    	//If back button is pressed, go to parent directory
+	    if ((keyCode == KeyEvent.KEYCODE_BACK))
+	    {
+	    	if (navigator != null) {
+	    		//If current directory is not the root, go to parent directory
+	    		if (!navigator.isRootDirectory()) {
+	                updateView(navigator.goToParentDirectory());
+	             //If current directory is the root, exit module
+	    		} else {
+	    			return super.onKeyDown(keyCode, event);
+	    		}
+            }
+		
+		    return true;	
+	    }
+	
+	    return super.onKeyDown(keyCode, event);
+    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {

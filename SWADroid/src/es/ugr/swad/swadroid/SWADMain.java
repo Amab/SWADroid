@@ -35,7 +35,6 @@ import android.text.TextUtils;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -131,7 +130,6 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
      */
     public static final String TAG = Constants.APP_TAG;
     
-    public static final String USER_TO_RECOVER =  "es.ugr.swad.swadroid.USER_TO_RECOVER";
     /**
      * Indicates if it is the first run
      */
@@ -1004,40 +1002,45 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
     }
 
     private void whyMyPasswordNotWorkDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        LayoutInflater inflater = getLayoutInflater();
-
-        builder.setView(inflater.inflate(R.layout.dialog_why_password, null))
-               .setTitle(R.string.why_password_dialog_title)
-               .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                   @Override
-                   public void onClick(DialogInterface dialog, int which) {
-                       dialog.dismiss();
-                   }
-               });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
+    	AlertDialog passwordNotWorkDialog = DialogFactory.createNeutralDialog(this,
+    			R.layout.dialog_why_password,
+    			R.string.why_password_dialog_title,
+        		-1,
+        		R.string.ok,
+        		new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+    	
+    	passwordNotWorkDialog.show();
     }
 
     private void recoverPasswordDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        final EditText dni = new EditText(getApplicationContext());
-        dni.setHint("DNI");
+        final EditText user = new EditText(getApplicationContext());
+        user.setHint(getString(R.string.prompt_email));
         
-        builder.setView(dni)
-               .setTitle(R.string.lost_password_dialog_title)
-               .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                   @Override
-                   public void onClick(DialogInterface dialog, int which) {
-                       dialog.dismiss();
-                       Intent i = new Intent(getBaseContext(), RecoverPassword.class);
-                       i.putExtra(USER_TO_RECOVER, dni.getText().toString());
-                       startActivityForResult(i, Constants.RECOVER_PASSWORD_REQUEST_CODE);
-                   }
-               });
+        builder.setView(user)
+			 .setTitle(R.string.lost_password_dialog_title)
+			 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+			     @Override
+			     public void onClick(DialogInterface dialog, int which) {
+			         dialog.dismiss();
+			         Intent i = new Intent(getBaseContext(), RecoverPassword.class);
+			         i.putExtra(RecoverPassword.USER_TO_RECOVER, user.getText().toString());
+			         startActivityForResult(i, Constants.RECOVER_PASSWORD_REQUEST_CODE);
+			     }
+			 })
+			 .setNegativeButton(R.string.cancelMsg, new DialogInterface.OnClickListener() {
+			     @Override
+			     public void onClick(DialogInterface dialog, int which) {
+			         dialog.dismiss();
+			     }
+			 })
+			 .setCancelable(true);
 
         AlertDialog dialog = builder.create();
         dialog.show();
