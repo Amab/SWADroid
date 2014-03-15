@@ -16,6 +16,7 @@ import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.Module;
+import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 import org.ksoap2.serialization.SoapObject;
@@ -216,6 +217,7 @@ public class Information extends Module {
 		} else if (infoSrc.equals("URL")) {
 			webview.loadDataWithBaseURL(infoTxt, null, "text/html", "utf-8", null);
 		} else {
+			infoTxt = Utils.fixLinks(infoTxt);
 			webview.loadDataWithBaseURL(null, infoTxt, "text/html", "utf-8", null);
 		}
 
