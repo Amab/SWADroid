@@ -285,23 +285,6 @@ public class Notifications extends Module {
     }
 
     /**
-     * Launches an action when refresh button is pushed
-     *
-     * @param v Actual view
-     */
-    public void onRefreshClick(View v) {
-        ImageButton updateButton = (ImageButton) this.findViewById(R.id.refresh);
-        ProgressBar pb = (ProgressBar) this.findViewById(R.id.progress_refresh);
-
-        updateButton.setVisibility(View.GONE);
-        pb.setVisibility(View.VISIBLE);
-
-        runConnection();
-        if (!isConnected)
-            onError();
-    }
-
-    /**
      * Launches an action when markAllRead button is pushed
      *
      * @param v Actual view

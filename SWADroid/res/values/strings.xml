@@ -367,5 +367,6 @@
     <string name="lessOrEqualChar">≤</string>
     
     <string name="notificationMarkAllRead">Mark all as read</string>
+    <string name="notificationReply">Reply</string>
     <string name="actionBarRefresh">Refresh</string>
 </resources>

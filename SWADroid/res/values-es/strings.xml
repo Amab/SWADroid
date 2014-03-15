@@ -364,5 +364,6 @@
 	<string name="errorServerCertificateMsg">El certificado del servidor no es válido. Por favor, contacte con el administrador de SWAD</string>
 	
 	<string name="notificationMarkAllRead">Marcar todas como leidas</string>
+	<string name="notificationReply">Responder</string>
 	<string name="actionBarRefresh">Actualizar</string>
 </resources>

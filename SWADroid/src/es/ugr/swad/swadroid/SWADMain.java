@@ -686,6 +686,7 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
         mExpandableListview.setVisibility(View.GONE);
     }
 
+    // TODO
     /**
      * Launches an action when refresh button is pushed
      *
