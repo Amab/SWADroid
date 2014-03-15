@@ -58,7 +58,6 @@ public class Tests extends Module {
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ImageView image;
         TextView text;
         ListView list;
         String[] items = getResources().getStringArray(R.array.testMenuItems);
@@ -82,12 +81,6 @@ public class Tests extends Module {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_items);
-
-        image = (ImageView) this.findViewById(R.id.moduleIcon);
-        image.setBackgroundResource(R.drawable.test);
-
-        text = (TextView) this.findViewById(R.id.moduleName);
-        text.setText(R.string.testsModuleLabel);
 
         adapter = new ArrayAdapter<String>(this, R.layout.simple_list_item, R.id.listText, items);
         list = (ListView) this.findViewById(R.id.listItems);
