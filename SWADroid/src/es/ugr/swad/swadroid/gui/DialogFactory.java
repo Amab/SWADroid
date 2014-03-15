@@ -86,22 +86,38 @@ public class DialogFactory {
     /**
      * Creates an AlertDialog with a neutral button
      * @param context Application context
+     * @param layoutId Resource id of dialog layout
      * @param titleId Resource id of dialog title string
      * @param messageId Resource id of dialog message string
      * @param buttonLabelId Resource id of button label string
      * @param clickListener ClickListener associated to the neutral button
      * @return AlertDialog with a neutral button
      */
-    public static AlertDialog createNeutralDialog(Context context, int titleId, int messageId, int buttonLabelId,
+    public static AlertDialog createNeutralDialog(Context context, int layoutId, int titleId, int messageId, int buttonLabelId,
     		OnClickListener clickListener) {
     	
+    	AlertDialog alertDialog;
     	AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context)
                 .setTitle(titleId)
-                .setMessage(messageId)
                 .setCancelable(false)
                 .setNeutralButton(buttonLabelId, clickListener);
     	
-    	return alertDialogBuilder.create();
+    	if(messageId != -1) {
+    		alertDialogBuilder.setMessage(messageId);
+    	}
+    	
+    	if(layoutId != -1) {    		
+    		FrameLayout frameView = new FrameLayout(context);
+    		alertDialogBuilder.setView(frameView);
+
+    		alertDialog = alertDialogBuilder.create();
+    		LayoutInflater inflater = alertDialog.getLayoutInflater();
+    		inflater.inflate(layoutId, frameView);
+    	} else {
+    		alertDialog = alertDialogBuilder.create();
+    	}
+    	
+    	return alertDialog;
     }
     
     /**

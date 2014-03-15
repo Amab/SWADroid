@@ -130,7 +130,7 @@ public class MenuExpandableListActivity extends ActionBarActivity {
      * Shows a dialog.
      */
     public void showDialog(int title, int message) {
-       AlertDialog dialog = DialogFactory.createNeutralDialog(this, title, message, R.string.close_dialog, null);
+       AlertDialog dialog = DialogFactory.createNeutralDialog(this, -1, title, message, R.string.close_dialog, null);
        dialog.show();
     }
 
