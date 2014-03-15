@@ -7,11 +7,11 @@
 package es.ugr.swad.swadroid.modules.information;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
