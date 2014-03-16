@@ -66,7 +66,10 @@ public class MyGroupsManager extends MenuExpandableListActivity {
     private boolean groupTypesRequested = false;
 
     private boolean refreshRequested = false;
-    
+
+    /**
+     * ActionBar menu
+     */
     private Menu menu;
 
     private OnClickListener cancelClickListener = new DialogInterface.OnClickListener() {
