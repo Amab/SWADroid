@@ -55,7 +55,7 @@ public class NotificationsMarkAllAsRead extends Module {
     @Override
     protected void onStart() {
         super.onStart();
-        setVisible(false);
+        
     }
     
     /* (non-Javadoc)

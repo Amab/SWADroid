@@ -60,6 +60,7 @@ public class TestsConfigDownload extends Module {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setMETHOD_NAME("getTestConfig");
+        getSupportActionBar().hide();
     }
 
     /* (non-Javadoc)

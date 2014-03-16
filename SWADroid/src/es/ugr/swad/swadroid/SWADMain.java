@@ -918,7 +918,7 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
             focusView = mDniView;
             cancel = true;
         }
-       
+        
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.

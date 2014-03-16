@@ -160,7 +160,7 @@ public class Messages extends Module {
     @Override
     protected void onStart() {
         super.onStart();
-        setVisible(false);
+        
         eventCode = getIntent().getLongExtra("eventCode", 0);
 
         messageDialog = DialogFactory.createPositiveNegativeDialog(this,

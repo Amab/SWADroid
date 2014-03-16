@@ -76,7 +76,7 @@ public class Courses extends Module {
     @Override
     protected void onStart() {
         super.onStart();
-        setVisible(false);
+        
         runConnection();
     }
 
