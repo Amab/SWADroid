@@ -182,8 +182,6 @@ public class MenuActivity extends ActionBarActivity {
         } catch (Exception ex) {
             error(TAG, ex.getMessage(), ex, true);
         }
-        
-        setVisible(false);
     }
 
     /* (non-Javadoc)
