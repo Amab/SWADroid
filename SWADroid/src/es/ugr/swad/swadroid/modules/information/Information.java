@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import es.ugr.swad.swadroid.Constants;
@@ -73,12 +72,6 @@ public class Information extends Module {
 		case Constants.INTRODUCTION_REQUEST_CODE:
 
 			infoTypeToAdd = "introduction";
-
-			/*moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
-			moduleIcon.setBackgroundResource(R.drawable.notif);
-
-			moduleText = (TextView) this.findViewById(R.id.moduleName);
-			moduleText.setText(R.string.introductionModuleLabel);*/
 			
 			setTitle(R.string.introductionModuleLabel);
 			getSupportActionBar().setIcon(R.drawable.notif);
@@ -88,12 +81,6 @@ public class Information extends Module {
 		case Constants.FAQS_REQUEST_CODE:
 
 			infoTypeToAdd = "FAQ";
-
-			/*moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
-			moduleIcon.setBackgroundResource(R.drawable.notif);
-
-			moduleText = (TextView) this.findViewById(R.id.moduleName);
-			moduleText.setText(R.string.faqsModuleLabel);*/
 			
 			setTitle(R.string.faqsModuleLabel);
 			getSupportActionBar().setIcon(R.drawable.notif);
@@ -103,12 +90,6 @@ public class Information extends Module {
 		case Constants.BIBLIOGRAPHY_REQUEST_CODE:
 
 			infoTypeToAdd = "bibliography";
-
-			/*moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
-			moduleIcon.setBackgroundResource(R.drawable.notif);
-
-			moduleText = (TextView) this.findViewById(R.id.moduleName);
-			moduleText.setText(R.string.bibliographyModuleLabel);*/
 			
 			setTitle(R.string.bibliographyModuleLabel);
 			getSupportActionBar().setIcon(R.drawable.notif);
@@ -118,12 +99,6 @@ public class Information extends Module {
 		case Constants.SYLLABUSPRACTICALS_REQUEST_CODE:
 
 			infoTypeToAdd = "practicals";
-
-			/*moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
-			moduleIcon.setBackgroundResource(R.drawable.notif);
-
-			moduleText = (TextView) this.findViewById(R.id.moduleName);
-			moduleText.setText(R.string.syllabusPracticalsModuleLabel);*/
 			
 			setTitle(R.string.syllabusPracticalsModuleLabel);
 			getSupportActionBar().setIcon(R.drawable.notif);
@@ -133,12 +108,6 @@ public class Information extends Module {
 		case Constants.SYLLABUSLECTURES_REQUEST_CODE:
 
 			infoTypeToAdd = "lectures";
-
-			/*moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
-			moduleIcon.setBackgroundResource(R.drawable.notif);
-
-			moduleText = (TextView) this.findViewById(R.id.moduleName);
-			moduleText.setText(R.string.syllabusLecturesModuleLabel);*/
 			
 			setTitle(R.string.syllabusLecturesModuleLabel);
 			getSupportActionBar().setIcon(R.drawable.notif);
@@ -148,12 +117,6 @@ public class Information extends Module {
 		case Constants.LINKS_REQUEST_CODE:
 
 			infoTypeToAdd = "links";
-
-			/*moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
-			moduleIcon.setBackgroundResource(R.drawable.notif);
-
-			moduleText = (TextView) this.findViewById(R.id.moduleName);
-			moduleText.setText(R.string.linksModuleLabel);*/
 			
 			setTitle(R.string.linksModuleLabel);
 			getSupportActionBar().setIcon(R.drawable.notif);
@@ -163,12 +126,6 @@ public class Information extends Module {
 		case Constants.TEACHINGGUIDE_REQUEST_CODE:
 
 			infoTypeToAdd = "guide";
-
-			/*moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
-			moduleIcon.setBackgroundResource(R.drawable.notif);
-
-			moduleText = (TextView) this.findViewById(R.id.moduleName);
-			moduleText.setText(R.string.teachingguideModuleLabel);*/
 			
 			setTitle(R.string.teachingguideModuleLabel);
 			getSupportActionBar().setIcon(R.drawable.notif);
@@ -179,12 +136,6 @@ public class Information extends Module {
 		case Constants.ASSESSMENT_REQUEST_CODE:
 
 			infoTypeToAdd = "assessment";
-
-			/*moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
-			moduleIcon.setBackgroundResource(R.drawable.notif);
-
-			moduleText = (TextView) this.findViewById(R.id.moduleName);
-			moduleText.setText(R.string.assessmentModuleLabel);*/
 			
 			setTitle(R.string.assessmentModuleLabel);
 			getSupportActionBar().setIcon(R.drawable.notif);
