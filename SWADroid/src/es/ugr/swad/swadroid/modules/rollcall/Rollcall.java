@@ -28,13 +28,13 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.ContextThemeWrapper;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -98,8 +98,6 @@ public class Rollcall extends MenuExpandableListActivity {
     private boolean groupTypesRequested = false;
     private boolean refreshRequested = false;
 
-    private ProgressBar progressbar;
-    private ImageButton updateButton;
     private ExpandableListView mExpandableListView;
     private OnChildClickListener mExpandableListListener;
 
@@ -110,21 +108,11 @@ public class Rollcall extends MenuExpandableListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_rollcall);
-        getSupportActionBar().hide();
+
     	getSupportActionBar().setIcon(R.drawable.roll_call);
 
         courseCode = Constants.getSelectedCourseCode();
 
-        ImageView image = (ImageView) this.findViewById(R.id.moduleIcon);
-        image.setBackgroundResource(R.drawable.roll_call);
-
-        TextView text = (TextView) this.findViewById(R.id.moduleName);
-        text.setText(R.string.rollcallModuleLabel);
-
-        progressbar = (ProgressBar) this.findViewById(R.id.progress_refresh);
-        progressbar.setVisibility(View.GONE);
-        updateButton = (ImageButton) this.findViewById(R.id.refresh);
-        updateButton.setVisibility(View.VISIBLE);
         mExpandableListView = (ExpandableListView) findViewById(android.R.id.list);
         mExpandableListListener = new OnChildClickListener() {
             
@@ -230,24 +218,6 @@ public class Rollcall extends MenuExpandableListActivity {
         practiceGroup.setEnabled(true);
 
         createBaseMenu();
-    }
-
-    /**
-     * Launches an action when refresh button is pushed.
-     * <p/>
-     * The listener onClick is set in action_bar.xml
-     *
-     * @param v Actual view
-     */
-    public void onRefreshClick(View v) {
-        updateButton.setVisibility(View.GONE);
-        progressbar.setVisibility(View.VISIBLE);
-
-        refreshRequested = true;
-
-        Intent activity = new Intent(this, GroupTypes.class);
-        activity.putExtra("courseCode", courseCode);
-        startActivityForResult(activity, Constants.GROUPTYPES_REQUEST_CODE);
     }
 
     private void showStudentsList() {
@@ -373,8 +343,6 @@ public class Rollcall extends MenuExpandableListActivity {
 
                 if (c.getCount() > 0 || refreshRequested) {
                     mExpandableListView.setVisibility(View.VISIBLE);
-                    updateButton.setVisibility(View.VISIBLE);
-                    progressbar.setVisibility(View.GONE);
 
                     refreshRequested = false;
                     fillGroupsSpinner(c);
@@ -519,4 +487,24 @@ public class Rollcall extends MenuExpandableListActivity {
         //getExpandableListView().setOnChildClickListener(this);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_refresh:
+                Intent activity = new Intent(this, GroupTypes.class);
+                activity.putExtra("courseCode", courseCode);
+                startActivityForResult(activity, Constants.GROUPTYPES_REQUEST_CODE);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_activity_actions, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 }
