@@ -72,11 +72,13 @@ public class RollcallConfigDownload extends Module {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setMETHOD_NAME("getUsers");
+        getSupportActionBar().hide();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        setVisible(false);
         try {
             if (isDebuggable) {
                 Log.d(TAG, "selectedCourseCode = " + Long.toString(Constants.getSelectedCourseCode()));

@@ -148,6 +148,7 @@ public abstract class Module extends MenuActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // Check if debug mode is enabled
+
         try {
             getPackageManager().getApplicationInfo(getPackageName(), 0);
             isDebuggable = (ApplicationInfo.FLAG_DEBUGGABLE != 0);

@@ -183,7 +183,7 @@ public class MenuActivity extends ActionBarActivity {
             error(TAG, ex.getMessage(), ex, true);
         }
     }
-
+    
     /* (non-Javadoc)
      * @see android.app.Activity#onPause()
      */

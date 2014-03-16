@@ -110,7 +110,7 @@ public class Rollcall extends MenuExpandableListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_rollcall);
-
+        getSupportActionBar().hide();
     	getSupportActionBar().setIcon(R.drawable.roll_call);
 
         courseCode = Constants.getSelectedCourseCode();
@@ -196,7 +196,7 @@ public class Rollcall extends MenuExpandableListActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
+        setVisible(false);
         List<Model> groupTypes = dbHelper.getAllRows(Constants.DB_TABLE_GROUP_TYPES, "courseCode = " + courseCode, "groupTypeName");
         Cursor c = dbHelper.getPracticeGroups(Constants.getSelectedCourseCode());
         startManagingCursor(c);

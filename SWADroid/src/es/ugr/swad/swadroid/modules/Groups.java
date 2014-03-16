@@ -72,11 +72,13 @@ public class Groups extends Module {
         super.onCreate(savedInstanceState);
         courseCode = getIntent().getLongExtra("courseCode", -1);
         setMETHOD_NAME("getGroups");
+        getSupportActionBar().hide();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        setVisible(false);
         try {
             runConnection();
         } catch (Exception e) {

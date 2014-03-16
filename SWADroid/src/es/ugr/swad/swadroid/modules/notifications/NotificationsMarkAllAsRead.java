@@ -48,9 +48,16 @@ public class NotificationsMarkAllAsRead extends Module {
         super.onCreate(savedInstanceState);
 
         setMETHOD_NAME("markNotificationsAsRead");
+        getSupportActionBar().hide();
         runConnection();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        setVisible(false);
+    }
+    
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#requestService()
      */

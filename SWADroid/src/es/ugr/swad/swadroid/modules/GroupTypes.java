@@ -47,11 +47,13 @@ public class GroupTypes extends Module {
         super.onCreate(savedInstanceState);
         courseCode = getIntent().getLongExtra("courseCode", -1);
         setMETHOD_NAME("getGroupTypes");
+        getSupportActionBar().hide();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        setVisible(false);
         try {
             runConnection();
         } catch (Exception e) {

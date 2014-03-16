@@ -89,11 +89,13 @@ public class DirectoryTreeDownload extends Module {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setMETHOD_NAME("getDirectoryTree");
+        getSupportActionBar().hide();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        setVisible(false);
         treeCode = getIntent().getIntExtra("treeCode", Constants.DOCUMENTS_AREA_CODE);
         group = getIntent().getIntExtra("groupCode", 0);
         runConnection();
