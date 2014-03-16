@@ -200,7 +200,8 @@
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.groups.SendMyGroups"
-            android:label="@string/sendMyGroupsProgressTitle" >
+            android:label="@string/sendMyGroupsProgressTitle" 
+            android:theme="@style/Theme.AppCompat.Light.Translucent" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.GenerateQR"
