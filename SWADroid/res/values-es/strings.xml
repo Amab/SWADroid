@@ -366,4 +366,5 @@
 	<string name="notificationMarkAllRead">Marcar todas como leidas</string>
 	<string name="notificationReply">Responder</string>
 	<string name="actionBarRefresh">Actualizar</string>
+	<string name="actionBarSave">Guardar</string>
 </resources>
