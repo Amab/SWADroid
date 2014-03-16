@@ -68,6 +68,7 @@ public class Login extends Module {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setMETHOD_NAME("loginByUserPasswordKey");
+        setVisible(false);
     }
 
     /* (non-Javadoc)

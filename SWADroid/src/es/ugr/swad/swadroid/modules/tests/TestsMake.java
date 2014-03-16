@@ -122,8 +122,8 @@ public class TestsMake extends Module {
         text = (TextView) this.findViewById(R.id.courseSelectedText);
         text.setText(Constants.getSelectedCourseShortName());*/
 
-        getActionBar().setSubtitle(Constants.getSelectedCourseShortName());
-    	getActionBar().setIcon(R.drawable.test);
+        getSupportActionBar().setSubtitle(Constants.getSelectedCourseShortName());
+    	getSupportActionBar().setIcon(R.drawable.test);
 
     }
 
