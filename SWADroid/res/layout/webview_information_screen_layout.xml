@@ -4,8 +4,6 @@
 		     android:layout_height="match_parent"
 		     android:background="@color/background"
 		     android:orientation="vertical">
-
-    		<include android:id="@+id/courseNameLayout" layout="@layout/course_or_group_name"/>
     		
 		    <WebView 
 				android:id="@+id/info_webview_dialog"

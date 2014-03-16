@@ -445,7 +445,7 @@ public class Rollcall extends MenuExpandableListActivity {
 
         map = new HashMap<String, Object>();
         map.put(NAME, getString(R.string.rollcallScanQR));
-        map.put(IMAGE, getResources().getDrawable(R.drawable.scan_qr));
+        map.put(IMAGE, getResources().getDrawable(R.drawable.qr));
         rollcallData.add(map);
 
         map = new HashMap<String, Object>();

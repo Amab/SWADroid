@@ -10,8 +10,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.TextView;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
@@ -63,9 +61,7 @@ public class Information extends Module {
 
 		int requestCode = this.getIntent().getIntExtra("requestCode", 0);
 
-		TextView courseNameText = (TextView) this
-				.findViewById(R.id.courseSelectedText);
-		courseNameText.setText(Constants.getSelectedCourseShortName());
+		getSupportActionBar().setSubtitle(Constants.getSelectedCourseShortName());
 
 		switch (requestCode) {
 
@@ -74,7 +70,7 @@ public class Information extends Module {
 			infoTypeToAdd = "introduction";
 			
 			setTitle(R.string.introductionModuleLabel);
-			getSupportActionBar().setIcon(R.drawable.notif);
+			getSupportActionBar().setIcon(R.drawable.info);
 
 			break;
 
@@ -83,7 +79,7 @@ public class Information extends Module {
 			infoTypeToAdd = "FAQ";
 			
 			setTitle(R.string.faqsModuleLabel);
-			getSupportActionBar().setIcon(R.drawable.notif);
+			getSupportActionBar().setIcon(R.drawable.faq);
 
 			break;
 
@@ -92,7 +88,7 @@ public class Information extends Module {
 			infoTypeToAdd = "bibliography";
 			
 			setTitle(R.string.bibliographyModuleLabel);
-			getSupportActionBar().setIcon(R.drawable.notif);
+			getSupportActionBar().setIcon(R.drawable.book);
 
 			break;
 
@@ -101,7 +97,7 @@ public class Information extends Module {
 			infoTypeToAdd = "practicals";
 			
 			setTitle(R.string.syllabusPracticalsModuleLabel);
-			getSupportActionBar().setIcon(R.drawable.notif);
+			getSupportActionBar().setIcon(R.drawable.lab);
 
 			break;
 
@@ -110,7 +106,7 @@ public class Information extends Module {
 			infoTypeToAdd = "lectures";
 			
 			setTitle(R.string.syllabusLecturesModuleLabel);
-			getSupportActionBar().setIcon(R.drawable.notif);
+			getSupportActionBar().setIcon(R.drawable.syllabus);
 
 			break;
 
@@ -119,7 +115,7 @@ public class Information extends Module {
 			infoTypeToAdd = "links";
 			
 			setTitle(R.string.linksModuleLabel);
-			getSupportActionBar().setIcon(R.drawable.notif);
+			getSupportActionBar().setIcon(R.drawable.link);
 
 			break;
 
@@ -128,7 +124,7 @@ public class Information extends Module {
 			infoTypeToAdd = "guide";
 			
 			setTitle(R.string.teachingguideModuleLabel);
-			getSupportActionBar().setIcon(R.drawable.notif);
+			getSupportActionBar().setIcon(R.drawable.file);
 
 			break;
 
@@ -138,7 +134,7 @@ public class Information extends Module {
 			infoTypeToAdd = "assessment";
 			
 			setTitle(R.string.assessmentModuleLabel);
-			getSupportActionBar().setIcon(R.drawable.notif);
+			getSupportActionBar().setIcon(R.drawable.ass);
 
 			break;
 		}		

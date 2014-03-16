@@ -31,7 +31,7 @@ public class GenerateQR extends Module {
         setContentView(R.layout.generate_qr_layout);
 
         setTitle(R.string.generateQRModuleLabel);
-    	getSupportActionBar().setIcon(R.drawable.scan_qr);
+    	getSupportActionBar().setIcon(R.drawable.qr);
     }
 
     /* (non-Javadoc)
