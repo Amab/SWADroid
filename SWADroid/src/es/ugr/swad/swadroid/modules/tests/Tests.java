@@ -25,11 +25,9 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.modules.Module;
-
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
@@ -50,13 +48,14 @@ public class Tests extends Module {
      * Tests tag name for Logcat
      */
     public static final String TAG = Constants.APP_TAG + " Tests";
+    public static final int RESULT_NO_QUESTIONS = 1; 
+    public static final int RESULT_NO_QUESTIONS_COURSE = 2; 
 
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //TextView text;
         ListView list;
         String[] items = getResources().getStringArray(R.array.testMenuItems);
         OnItemClickListener clickListener = new OnItemClickListener() {
@@ -73,7 +72,6 @@ public class Tests extends Module {
                         startActivityForResult(activity, Constants.TESTS_MAKE_REQUEST_CODE);
                         break;
                 }
-
             }
         };
 
@@ -85,17 +83,11 @@ public class Tests extends Module {
         list.setAdapter(adapter);
         list.setOnItemClickListener(clickListener);
 
-        //this.findViewById(R.id.courseSelectedText).setVisibility(View.VISIBLE);
-        //this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
-
-        //text = (TextView) this.findViewById(R.id.courseSelectedText);
-        //text.setText(Constants.getSelectedCourseShortName());
-
         getSupportActionBar().setSubtitle(Constants.getSelectedCourseShortName());
     	getSupportActionBar().setIcon(R.drawable.test);
     }
 
-    /* (non-Javadoc)
+	/* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#requestService()
      */
     @Override

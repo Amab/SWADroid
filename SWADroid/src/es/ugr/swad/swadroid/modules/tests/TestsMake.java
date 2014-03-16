@@ -25,6 +25,8 @@ import android.text.Html;
 import android.text.InputType;
 import android.util.Log;
 import android.util.SparseBooleanArray;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -38,7 +40,6 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.widget.CheckableLinearLayout;
@@ -95,6 +96,10 @@ public class TestsMake extends Module {
      */
     private int actualQuestion;
     /**
+     * ActionBar menu
+     */
+    private Menu menu;
+    /**
      * Tests tag name for Logcat
      */
     private static final String TAG = Constants.APP_TAG + " TestsMake";
@@ -105,64 +110,11 @@ public class TestsMake extends Module {
      * @param layout Layout to be applied
      */
     private void setLayout(int layout) {
-        //ImageView image;
-        //TextView text;
-
         setContentView(layout);
-
-        /*image = (ImageView) this.findViewById(R.id.moduleIcon);
-        image.setBackgroundResource(R.drawable.test);
-
-        text = (TextView) this.findViewById(R.id.moduleName);
-        text.setText(R.string.testsModuleLabel);
-
-        this.findViewById(R.id.courseSelectedText).setVisibility(View.VISIBLE);
-        this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
-
-        text = (TextView) this.findViewById(R.id.courseSelectedText);
-        text.setText(Constants.getSelectedCourseShortName());*/
 
         getSupportActionBar().setSubtitle(Constants.getSelectedCourseShortName());
     	getSupportActionBar().setIcon(R.drawable.test);
-
     }
-
-    /**
-     * Screen to select the number of questions in the test
-     */
-    /*@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	private void setNumQuestions() {
-        final android.widget.NumberPicker numberPicker;
-        Button acceptButton;
-        TextView minNumQuestions, maxNumQuestions;
-
-        setLayout(R.layout.tests_num_questions);
-
-        numberPicker = (android.widget.NumberPicker) findViewById(R.id.testNumQuestionsNumberPicker);
-        numberPicker.setMaxValue(test.getMax());
-        numberPicker.setMinValue(test.getMin());
-        numberPicker.setValue(test.getDef());
-        numberPicker.setWrapSelectorWheel(false);               
-        
-        minNumQuestions = (TextView) findViewById(R.id.minTestNumQuestionsId);
-        minNumQuestions.setText(test.getMin() + "≤");
-        
-        maxNumQuestions = (TextView) findViewById(R.id.maxTestNumQuestionsId);
-        maxNumQuestions.setText("≤" + test.getMax());
-
-        acceptButton = (Button) findViewById(R.id.testNumQuestionsAcceptButton);
-        acceptButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                numQuestions = numberPicker.getValue();
-
-                if (isDebuggable) {
-                    Log.d(TAG, "numQuestions=" + numQuestions);
-                }
-
-                setTags();
-            }
-        });
-    }*/
     
     /**
      * Screen to select the number of questions in the test
@@ -574,7 +526,6 @@ public class TestsMake extends Module {
         prev = (Button) findViewById(R.id.testMakePrevButton);
         next = (Button) findViewById(R.id.testMakeNextButton);
         eval = (Button) findViewById(R.id.testEvaluateButton);
-        //title_separator = (ImageView) findViewById(R.id.title_sep_2);
         bar = (TextProgressBar) findViewById(R.id.test_questions_bar);
 
         bar.setMax(size);
@@ -582,9 +533,12 @@ public class TestsMake extends Module {
         bar.setText(1 + "/" + size);
         bar.setTextColor(Color.BLUE);
         bar.setTextSize(20);
-
-        eval.setVisibility(View.VISIBLE);
-        //title_separator.setVisibility(View.VISIBLE);
+        
+        if(!test.isEvaluated()) {
+        	eval.setVisibility(View.VISIBLE);
+        	//Show evaluate button only
+    		menu.getItem(0).setVisible(true);
+        }
 
         actualQuestion = 0;
         prev.setOnClickListener(new View.OnClickListener() {
@@ -657,15 +611,9 @@ public class TestsMake extends Module {
             finish();
         }
     }
-
-    /**
-     * Launches an action when evaluate button is pushed
-     *
-     * @param v Actual view
-     */
-    public void onEvaluateClick(View v) {
-        TextView textView;
-        Button bt, evalBt;
+    
+    private void evaluateTest() {
+    	TextView textView;
         Float score, scoreDec;
         DecimalFormat df = new DecimalFormat("0.00");
         String feedback = test.getFeedback();
@@ -676,11 +624,9 @@ public class TestsMake extends Module {
         if (!feedback.equals(Test.FEEDBACK_NONE)) {
             if (!test.isEvaluated()) {
                 test.evaluate();
-                evalBt = (Button) findViewById(R.id.testEvaluateButton);
-                //sep2 = (ImageView) findViewById(R.id.title_sep_2);
-
-                evalBt.setVisibility(View.GONE);
-                //sep2.setVisibility(View.GONE);
+                
+            	//Hide evaluate button
+            	menu.getItem(0).setVisible(false);
             }
 
             score = test.getTotalScore();
@@ -693,19 +639,25 @@ public class TestsMake extends Module {
             if (scoreDec < 5) {
                 textView.setTextColor(getResources().getColor(R.color.red));
             }
-
-            bt = (Button) findViewById(R.id.testResultsButton);
-            if (feedback.equals(Test.FEEDBACK_MIN)) {
-                bt.setEnabled(false);
-                bt.setText(R.string.testNoDetailsMsg);
-            }
-
+            
             textView.setVisibility(View.VISIBLE);
-            bt.setVisibility(View.VISIBLE);
+            
+        	//Show details button only
+        	menu.getItem(1).setVisible(true);
+        	menu.getItem(2).setVisible(false);
         } else {
             textView = (TextView) findViewById(R.id.testResultsText);
             textView.setText(R.string.testNoResultsMsg);
         }
+    }
+
+    /**
+     * Launches an action when evaluate button is pushed
+     *
+     * @param v Actual view
+     */
+    public void onEvaluateClick(View v) {
+    	evaluateTest();
     }
 
     /**
@@ -715,19 +667,14 @@ public class TestsMake extends Module {
      */
     public void onShowResultsDetailsClick(View v) {
         Button evalBt, resBt;
-        //ImageView sep2, sep3;
 
         showTest();
 
         evalBt = (Button) findViewById(R.id.testEvaluateButton);
-        //sep2 = (ImageView) findViewById(R.id.title_sep_2);
         resBt = (Button) findViewById(R.id.testShowResultsButton);
-        //sep3 = (ImageView) findViewById(R.id.title_sep_3);
 
         evalBt.setVisibility(View.GONE);
-        //sep2.setVisibility(View.GONE);
         resBt.setVisibility(View.VISIBLE);
-        //sep3.setVisibility(View.VISIBLE);
     }
 
     /* (non-Javadoc)
@@ -742,7 +689,6 @@ public class TestsMake extends Module {
             public void onItemClick(AdapterView<?> parent, View v, int position,
                                     long id) {
 
-                //CheckedTextView chk = (CheckedTextView) v;
                 ListView lv = (ListView) parent;
                 int childCount = lv.getCount();
                 SparseBooleanArray checkedItems = lv.getCheckedItemPositions();
@@ -797,37 +743,41 @@ public class TestsMake extends Module {
 
         setResult(RESULT_OK);
     }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.tests_activity_actions, menu);
+        this.menu = menu;
+        
+        return super.onCreateOptionsMenu(menu);
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_evaluate: 
+            case R.id.action_show_totals:         	
+            	evaluateTest();
+            	
+                return true;
+            case R.id.action_show_details:
+            	if (test.getFeedback().equals(Test.FEEDBACK_MIN)) {
+                    Toast.makeText(this, R.string.testNoDetailsMsg, Toast.LENGTH_LONG).show();
+                } else {            	
+	            	//Show totals button only
+	            	menu.getItem(0).setVisible(false);
+	            	menu.getItem(1).setVisible(false);
+	            	menu.getItem(2).setVisible(true);
+	            	
+	            	showTest();
+                }
+            	            	
+                return true;
 
-	/* (non-Javadoc)
-     * @see es.ugr.swad.swadroid.modules.Module#onStart()
-	 */
-	/*@Override
-	protected void onStart() {
-		super.onStart();
-		prefs.getPreferences(this);
-		String selection ="id=" + Long.toString(Global.getSelectedCourseCode());
-		Cursor dbCursor = dbHelper.getDb().getCursor(Global.DB_TABLE_TEST_CONFIG,selection,null);
-		startManagingCursor(dbCursor);
-		if(dbCursor.getCount() > 0) {			
-			if(isDebuggable) {
-				Log.d(TAG, "selectedCourseCode = " + Long.toString(Global.getSelectedCourseCode()));
-			}
-
-			test = (Test) dbHelper.getRow(Global.DB_TABLE_TEST_CONFIG, "id",
-					Long.toString(Global.getSelectedCourseCode()));
-		
-			if(test != null) {
-				setNumQuestions();
-			} else {
-				Toast.makeText(this, R.string.testNoQuestionsCourseMsg, Toast.LENGTH_LONG).show();
-				finish();
-			}
-		} else {
-			Toast.makeText(this, R.string.testNoQuestionsMsg, Toast.LENGTH_LONG).show();
-			finish();
-		}
-
-	}*/
+            default:
+                return super.onOptionsItemSelected(item);
+        }        
+    }
 
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#requestService()
