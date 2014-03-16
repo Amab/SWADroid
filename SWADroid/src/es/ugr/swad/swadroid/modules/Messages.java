@@ -74,23 +74,7 @@ public class Messages extends Module {
      */
     private String body;
     
-    private Dialog messageDialog;
-    
-    /*private final OnClickListener positiveClickListener = new OnClickListener() {
-		@Override
-        public void onClick(DialogInterface dialog, int which) {
-            try {
-                /*if(isDebuggable) {
-                    Log.d(TAG, "notificationCode = " + Long.toString(notificationCode));
-				}*/
-
-            /*    runConnection();
-            } catch (Exception e) {
-                String errorMsg = getString(R.string.errorServerResponseMsg);
-                error(TAG, errorMsg, e, true);
-            }
-        }
-    };*/
+    private Dialog mMessageDialog;
     
     private final View.OnClickListener positiveClickListener = new View.OnClickListener() {
         @Override
@@ -129,9 +113,9 @@ public class Messages extends Module {
     private final OnShowListener showListener = new DialogInterface.OnShowListener() {
         @Override
         public void onShow(DialogInterface dialog) {
-            EditText receiversText = (EditText) messageDialog.findViewById(R.id.message_receivers_text);;
-            EditText subjectText = (EditText) messageDialog.findViewById(R.id.message_subject_text);;
-            Button b = ((AlertDialog) messageDialog).getButton(AlertDialog.BUTTON_POSITIVE);
+            EditText receiversText = (EditText) mMessageDialog.findViewById(R.id.message_receivers_text);;
+            EditText subjectText = (EditText) mMessageDialog.findViewById(R.id.message_subject_text);;
+            Button b = ((AlertDialog) mMessageDialog).getButton(AlertDialog.BUTTON_POSITIVE);
             
             b.setOnClickListener(positiveClickListener);
             
@@ -150,54 +134,40 @@ public class Messages extends Module {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setMETHOD_NAME("sendMessage");
-        getSupportActionBar().hide();
-    }
-
-    /* (non-Javadoc)
-     * @see es.ugr.swad.swadroid.modules.Module#onStart()
-     */
-    @Override
-    protected void onStart() {
-        super.onStart();
         
         eventCode = getIntent().getLongExtra("eventCode", 0);
+        mMessageDialog = DialogFactory.createPositiveNegativeDialog(this,
+                                                                    R.layout.dialog_messages,
+                                                                    R.string.messagesModuleLabel,
+                                                                    -1,
+                                                                    R.string.sendMsg,
+                                                                    R.string.cancelMsg,
+                                                                    // positiveClickListener,
+                                                                    null,
+                                                                    negativeClickListener,
+                                                                    cancelClickListener);
 
-        messageDialog = DialogFactory.createPositiveNegativeDialog(this,
-        		R.layout.dialog_messages,
-        		R.string.messagesModuleLabel,
-        		-1,
-        		R.string.sendMsg,
-        		R.string.cancelMsg,
-        		//positiveClickListener,
-        		null,
-        		negativeClickListener,
-        		cancelClickListener);
+        mMessageDialog.setOnShowListener(showListener);
+        mMessageDialog.show();
 
-        messageDialog.setOnShowListener(showListener);
-        messageDialog.show();
-    }
+        if (savedInstanceState != null) 
+            writeData();
 
-    /* (non-Javadoc)
-     * @see es.ugr.swad.swadroid.modules.Module#onPause()
-     */
-    @Override
-    protected void onPause() {
-        super.onPause();
-        messageDialog.dismiss();
+        setMETHOD_NAME("sendMessage");
+        getSupportActionBar().hide();
     }
 
     /**
      * Reads user input from Dialog
      */
     private void readData() {
-        EditText rcv = (EditText) messageDialog.findViewById(R.id.message_receivers_text);
+        EditText rcv = (EditText) mMessageDialog.findViewById(R.id.message_receivers_text);
         receivers = rcv.getText().toString();
 
-        EditText subj = (EditText) messageDialog.findViewById(R.id.message_subject_text);
+        EditText subj = (EditText) mMessageDialog.findViewById(R.id.message_subject_text);
         subject = subj.getText().toString();
 
-        EditText bd = (EditText) messageDialog.findViewById(R.id.message_body_text);
+        EditText bd = (EditText) mMessageDialog.findViewById(R.id.message_body_text);
         body = bd.getText().toString();
     }
 
@@ -205,13 +175,13 @@ public class Messages extends Module {
      * Writes user input to Dialog
      */
     private void writeData() {
-        EditText rcv = (EditText) messageDialog.findViewById(R.id.message_receivers_text);
+        EditText rcv = (EditText) mMessageDialog.findViewById(R.id.message_receivers_text);
         rcv.setText(receivers);
 
-        EditText subj = (EditText) messageDialog.findViewById(R.id.message_subject_text);
+        EditText subj = (EditText) mMessageDialog.findViewById(R.id.message_subject_text);
         subj.setText(subject);
 
-        EditText bd = (EditText) messageDialog.findViewById(R.id.message_body_text);
+        EditText bd = (EditText) mMessageDialog.findViewById(R.id.message_body_text);
         bd.setText(body);
     }
 
@@ -291,7 +261,7 @@ public class Messages extends Module {
         Toast.makeText(this, messageSended, Toast.LENGTH_LONG).show();
         Log.i(TAG, messageSended);
         
-        messageDialog.dismiss();
+        mMessageDialog.dismiss();
 
         finish();
     }
