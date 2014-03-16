@@ -78,7 +78,7 @@ public class RollcallConfigDownload extends Module {
     @Override
     protected void onStart() {
         super.onStart();
-        setVisible(false);
+        
         try {
             if (isDebuggable) {
                 Log.d(TAG, "selectedCourseCode = " + Long.toString(Constants.getSelectedCourseCode()));

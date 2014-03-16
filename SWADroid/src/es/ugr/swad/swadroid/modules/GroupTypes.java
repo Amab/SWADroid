@@ -53,7 +53,7 @@ public class GroupTypes extends Module {
     @Override
     protected void onStart() {
         super.onStart();
-        setVisible(false);
+        
         try {
             runConnection();
         } catch (Exception e) {

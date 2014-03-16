@@ -95,7 +95,7 @@ public class DirectoryTreeDownload extends Module {
     @Override
     protected void onStart() {
         super.onStart();
-        setVisible(false);
+        
         treeCode = getIntent().getIntExtra("treeCode", Constants.DOCUMENTS_AREA_CODE);
         group = getIntent().getIntExtra("groupCode", 0);
         runConnection();

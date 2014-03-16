@@ -64,7 +64,8 @@
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.Login"
-            android:label="@string/loginModuleLabel" >
+            android:label="@string/loginModuleLabel"
+            android:theme="@style/Theme.AppCompat.Light.Translucent" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.rollcall.Rollcall"
@@ -97,7 +98,8 @@
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.Groups"
-            android:label="@string/rollcallModuleLabel" >
+            android:label="@string/rollcallModuleLabel"
+            android:theme="@style/Theme.AppCompat.Light.Translucent" >
         </activity>
         <activity
             android:name="com.google.zxing.client.android.CaptureActivity"
@@ -112,7 +114,8 @@
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.Courses"
-            android:label="@string/coursesModuleLabel" >
+            android:label="@string/coursesModuleLabel"
+            android:theme="@style/Theme.AppCompat.Light.Translucent" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.notifications.Notifications"
@@ -128,11 +131,13 @@
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.tests.TestsQuestionsDownload"
-            android:label="@string/testsModuleLabel" >
+            android:label="@string/testsModuleLabel"
+            android:theme="@style/Theme.AppCompat.Light.Translucent" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.tests.TestsConfigDownload"
-            android:label="@string/testsModuleLabel" >
+            android:label="@string/testsModuleLabel"
+            android:theme="@style/Theme.AppCompat.Light.Translucent" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.tests.TestsMake"
@@ -141,7 +146,8 @@
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.Messages"
-            android:label="@string/messagesModuleLabel" >
+            android:label="@string/messagesModuleLabel"
+            android:theme="@style/Theme.AppCompat.Light.Translucent" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.notifications.NotificationItem"
@@ -159,11 +165,13 @@
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.downloads.DirectoryTreeDownload"
-            android:label="@string/documentsDownloadModuleLabel" >
+            android:label="@string/documentsDownloadModuleLabel"
+            android:theme="@style/Theme.AppCompat.Light.Translucent" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.downloads.GetFile"
-            android:label="@string/documentsDownloadModuleLabel" >
+            android:label="@string/documentsDownloadModuleLabel"
+            android:theme="@style/Theme.AppCompat.Light.Translucent" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.downloads.DownloadsManager"
@@ -183,7 +191,8 @@
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.GroupTypes"
-            android:label="@string/groupTypesModuleLabel" >
+            android:label="@string/groupTypesModuleLabel"
+            android:theme="@style/Theme.AppCompat.Light.Translucent" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.groups.SendMyGroups"

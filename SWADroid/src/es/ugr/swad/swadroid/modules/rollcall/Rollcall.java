@@ -196,7 +196,7 @@ public class Rollcall extends MenuExpandableListActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        setVisible(false);
+        
         List<Model> groupTypes = dbHelper.getAllRows(Constants.DB_TABLE_GROUP_TYPES, "courseCode = " + courseCode, "groupTypeName");
         Cursor c = dbHelper.getPracticeGroups(Constants.getSelectedCourseCode());
         startManagingCursor(c);
