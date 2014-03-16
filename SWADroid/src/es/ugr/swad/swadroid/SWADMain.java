@@ -154,7 +154,10 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
     private TextView mLostPasswordText;
     private ExpandableListView mExpandableListview;
     private OnChildClickListener mExpandableClickListener;
-    
+    private final ArrayList<HashMap<String, Object>> mHeaderData = new ArrayList<HashMap<String, Object>>();
+    private final ArrayList<ArrayList<HashMap<String, Object>>> mChildData = new ArrayList<ArrayList<HashMap<String, Object>>>();
+    private final ArrayList<HashMap<String, Object>> mMessagesData = new ArrayList<HashMap<String, Object>>();
+    private final ArrayList<HashMap<String, Object>> mUsersData = new ArrayList<HashMap<String, Object>>();
     /**
      * Gets the database helper
      *
@@ -494,7 +497,7 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
             //the menu base is equal to students menu.
             currentRole = Constants.STUDENT_TYPE_CODE;
             //Construct Expandable List
-            final ArrayList<HashMap<String, Object>> headerData = new ArrayList<HashMap<String, Object>>();
+            //final ArrayList<HashMap<String, Object>> mHeaderData = new ArrayList<HashMap<String, Object>>();
 
             //Order:
             // 1- Course
@@ -505,41 +508,41 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
             final HashMap<String, Object> courses = new HashMap<String, Object>();
             courses.put(NAME, getString(R.string.course));
             courses.put(IMAGE, getResources().getDrawable(R.drawable.blackboard));
-            headerData.add(courses);
+            mHeaderData.add(courses);
 
             final HashMap<String, Object> evaluation = new HashMap<String, Object>();
             evaluation.put(NAME, getString(R.string.evaluation));
             evaluation.put(IMAGE, getResources().getDrawable(R.drawable.grades));
-            headerData.add(evaluation);
+            mHeaderData.add(evaluation);
 
             final HashMap<String, Object> users = new HashMap<String, Object>();
             users.put(NAME, getString(R.string.users));
             users.put(IMAGE, getResources().getDrawable(R.drawable.users));
-            headerData.add(users);
+            mHeaderData.add(users);
 
             final HashMap<String, Object> messages = new HashMap<String, Object>();
             messages.put(NAME, getString(R.string.messages));
             messages.put(IMAGE, getResources().getDrawable(R.drawable.msg));
-            headerData.add(messages);
+            mHeaderData.add(messages);
 
             /*final HashMap<String, Object> enrolment = new HashMap<String, Object>();
             enrolment.put(NAME, getString(R.string.enrollment));
             enrolment.put(IMAGE, getResources().getDrawable(R.drawable.enrollment));
             headerData.add(enrolment);*/
 
-            final ArrayList<ArrayList<HashMap<String, Object>>> childData = new ArrayList<ArrayList<HashMap<String, Object>>>();
+            //final ArrayList<ArrayList<HashMap<String, Object>>> mChildData = new ArrayList<ArrayList<HashMap<String, Object>>>();
 
             final ArrayList<HashMap<String, Object>> courseData = new ArrayList<HashMap<String, Object>>();
-            childData.add(courseData);
+            mChildData.add(courseData);
 
             final ArrayList<HashMap<String, Object>> evaluationData = new ArrayList<HashMap<String, Object>>();
-            childData.add(evaluationData);
+            mChildData.add(evaluationData);
 
-            ArrayList<HashMap<String, Object>> usersData = new ArrayList<HashMap<String, Object>>();
-            childData.add(usersData);
+            //final ArrayList<HashMap<String, Object>> mUsersData = new ArrayList<HashMap<String, Object>>();
+            mChildData.add(mUsersData);
 
-            final ArrayList<HashMap<String, Object>> messagesData = new ArrayList<HashMap<String, Object>>();
-            childData.add(messagesData);
+            //final ArrayList<HashMap<String, Object>> mMessagesData = new ArrayList<HashMap<String, Object>>();
+            mChildData.add(mMessagesData);
 
             /*final ArrayList<HashMap<String, Object>> enrollmentData = new ArrayList<HashMap<String, Object>>();
             childData.add(enrollmentData);*/
@@ -607,31 +610,31 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.myGroupsModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.my_groups));
-            usersData.add(map);
+            mUsersData.add(map);
 
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.generateQRModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.scan_qr));
-            usersData.add(map);
+            mUsersData.add(map);
 
             //Messages category
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.notificationsModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.bell));
-            messagesData.add(map);
+            mMessagesData.add(map);
 
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.messagesModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.msg_write));
-            messagesData.add(map);
+            mMessagesData.add(map);
 
             mExpandableListview.setAdapter(new ImageExpandableListAdapter(
                     this,
-                    headerData,
+                    mHeaderData,
                     R.layout.image_list_item,
                     new String[]{NAME},            // the name of the field data
                     new int[]{R.id.listText}, // the text field to populate with the field data
-                    childData,
+                    mChildData,
                     0,
                     null,
                     new int[]{}
@@ -645,9 +648,9 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
     private void changeToStudentMenu() {
         if (currentRole == Constants.TEACHER_TYPE_CODE) {
             //Removes Publish Note from messages menu
-            ((ImageExpandableListAdapter) mExpandableListview.getAdapter()).removeChild(Constants.MESSAGES_GROUP, Constants.PUBLISH_NOTE_CHILD);
+            //((ImageExpandableListAdapter) mExpandableListview.getAdapter()).removeChild(Constants.MESSAGES_GROUP, Constants.PUBLISH_NOTE_CHILD);
             //Removes Rollcall from users menu
-            ((ImageExpandableListAdapter) mExpandableListview.getAdapter()).removeChild(Constants.USERS_GROUP, Constants.ROLLCALL_CHILD);
+            //((ImageExpandableListAdapter) mExpandableListview.getAdapter()).removeChild(Constants.USERS_GROUP, Constants.ROLLCALL_CHILD);
         }
         currentRole = Constants.STUDENT_TYPE_CODE;
     }
@@ -660,12 +663,23 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
             HashMap<String, Object> map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.noticesModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.note));
-            //((ImageExpandableListAdapter) mExpandableListview.getAdapter()).addChild(Constants.MESSAGES_GROUP, Constants.PUBLISH_NOTE_CHILD, map);
+            
+            mMessagesData.add(map);
 
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.rollcallModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.roll_call));
-            //((ImageExpandableListAdapter) mExpandableListview.getAdapter()).addChild(Constants.USERS_GROUP, Constants.ROLLCALL_CHILD, map);
+            mUsersData.add(map);
+
+            mExpandableListview.setAdapter(new ImageExpandableListAdapter(this, mHeaderData,
+                                                                          R.layout.image_list_item,
+                                                                          new String[] {
+                                                                              NAME
+                                                                          }, new int[] {
+                                                                              R.id.listText
+                                                                          },
+                                                                          mChildData, 0,
+                                                                          null, new int[] {}));
         }
         currentRole = Constants.TEACHER_TYPE_CODE;
     }
