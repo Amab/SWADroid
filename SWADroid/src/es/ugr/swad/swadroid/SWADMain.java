@@ -441,6 +441,7 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
     private void getCurrentCourses() {
         Intent activity;
         activity = new Intent(this, Courses.class);
+        
         Toast.makeText(this, R.string.coursesProgressDescription, Toast.LENGTH_LONG).show();
         startActivityForResult(activity, Constants.COURSES_REQUEST_CODE);
     }

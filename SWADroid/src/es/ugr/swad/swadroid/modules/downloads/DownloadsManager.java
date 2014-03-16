@@ -462,7 +462,7 @@ public class DownloadsManager extends MenuActivity {
 
             TextView courseNameText = (TextView) this.findViewById(R.id.courseSelectedText);
             courseNameText.setText(Constants.getSelectedCourseShortName());
-            //getActionBar().setSubtitle(Constants.getSelectedCourseShortName());
+            //getSupportActionBar().setSubtitle(Constants.getSelectedCourseShortName());
         }
     }
 
@@ -664,10 +664,10 @@ public class DownloadsManager extends MenuActivity {
 		
         if(downloadsAreaCode == 1) {
 			setTitle(R.string.documentsDownloadModuleLabel);
-        	getActionBar().setIcon(R.drawable.folder);
+			getSupportActionBar().setIcon(R.drawable.folder);
         } else {
 			setTitle(R.string.sharedsDownloadModuleLabel);
-			getActionBar().setIcon(R.drawable.folder_users);
+			getSupportActionBar().setIcon(R.drawable.folder_users);
 		}
     }
     

@@ -67,6 +67,7 @@ public class Courses extends Module {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setMETHOD_NAME("getCourses");
+        setVisible(false);
     }
 
     /* (non-Javadoc)

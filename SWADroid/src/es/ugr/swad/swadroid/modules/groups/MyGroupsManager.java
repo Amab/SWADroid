@@ -132,8 +132,8 @@ public class MyGroupsManager extends MenuExpandableListActivity {
         TextView courseNameText = (TextView) this.findViewById(R.id.courseSelectedText);
         courseNameText.setText(Constants.getSelectedCourseShortName());
 
-        //getActionBar().setSubtitle(Constants.getSelectedCourseShortName());
-    	getActionBar().setIcon(R.drawable.my_groups);
+        //getSupportActionBar().setSubtitle(Constants.getSelectedCourseShortName());
+    	getSupportActionBar().setIcon(R.drawable.my_groups);
     }
 
     @Override

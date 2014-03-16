@@ -69,7 +69,7 @@ public class StudentsHistory extends Module {
         TextView text = (TextView) this.findViewById(R.id.moduleName);
         text.setText(R.string.studentsHistoryModuleLabel);*/
 
-    	getActionBar().setIcon(R.drawable.roll_call);        
+    	getSupportActionBar().setIcon(R.drawable.roll_call);        
 
         // Get selected course
         String where = "id =" + String.valueOf(Constants.getSelectedCourseCode());

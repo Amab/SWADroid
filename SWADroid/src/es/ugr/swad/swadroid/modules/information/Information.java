@@ -81,7 +81,7 @@ public class Information extends Module {
 			moduleText.setText(R.string.introductionModuleLabel);*/
 			
 			setTitle(R.string.introductionModuleLabel);
-			getActionBar().setIcon(R.drawable.notif);
+			getSupportActionBar().setIcon(R.drawable.notif);
 
 			break;
 
@@ -96,7 +96,7 @@ public class Information extends Module {
 			moduleText.setText(R.string.faqsModuleLabel);*/
 			
 			setTitle(R.string.faqsModuleLabel);
-			getActionBar().setIcon(R.drawable.notif);
+			getSupportActionBar().setIcon(R.drawable.notif);
 
 			break;
 
@@ -111,7 +111,7 @@ public class Information extends Module {
 			moduleText.setText(R.string.bibliographyModuleLabel);*/
 			
 			setTitle(R.string.bibliographyModuleLabel);
-			getActionBar().setIcon(R.drawable.notif);
+			getSupportActionBar().setIcon(R.drawable.notif);
 
 			break;
 
@@ -126,7 +126,7 @@ public class Information extends Module {
 			moduleText.setText(R.string.syllabusPracticalsModuleLabel);*/
 			
 			setTitle(R.string.syllabusPracticalsModuleLabel);
-			getActionBar().setIcon(R.drawable.notif);
+			getSupportActionBar().setIcon(R.drawable.notif);
 
 			break;
 
@@ -141,7 +141,7 @@ public class Information extends Module {
 			moduleText.setText(R.string.syllabusLecturesModuleLabel);*/
 			
 			setTitle(R.string.syllabusLecturesModuleLabel);
-			getActionBar().setIcon(R.drawable.notif);
+			getSupportActionBar().setIcon(R.drawable.notif);
 
 			break;
 
@@ -156,7 +156,7 @@ public class Information extends Module {
 			moduleText.setText(R.string.linksModuleLabel);*/
 			
 			setTitle(R.string.linksModuleLabel);
-			getActionBar().setIcon(R.drawable.notif);
+			getSupportActionBar().setIcon(R.drawable.notif);
 
 			break;
 
@@ -171,7 +171,7 @@ public class Information extends Module {
 			moduleText.setText(R.string.teachingguideModuleLabel);*/
 			
 			setTitle(R.string.teachingguideModuleLabel);
-			getActionBar().setIcon(R.drawable.notif);
+			getSupportActionBar().setIcon(R.drawable.notif);
 
 			break;
 
@@ -187,7 +187,7 @@ public class Information extends Module {
 			moduleText.setText(R.string.assessmentModuleLabel);*/
 			
 			setTitle(R.string.assessmentModuleLabel);
-			getActionBar().setIcon(R.drawable.notif);
+			getSupportActionBar().setIcon(R.drawable.notif);
 
 			break;
 		}		
