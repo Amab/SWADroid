@@ -127,7 +127,11 @@
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.tests.Tests"
-            android:label="@string/testsModuleLabel" >
+            android:label="@string/testsModuleLabel"
+            android:parentActivityName="es.ugr.swad.swadroid.SWADMain" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.ugr.swad.swadroid.SWADMain" />
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.tests.TestsQuestionsDownload"
@@ -152,10 +156,10 @@
         <activity
             android:name="es.ugr.swad.swadroid.modules.notifications.NotificationItem"
             android:label="@string/notificationsModuleLabel"
-            android:parentActivityName=".modules.notifications.Notifications" >
+            android:parentActivityName="es.ugr.swad.swadroid.SWADMain" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".modules.notifications.Notifications" />
+                android:value="es.ugr.swad.swadroid.SWADMain" />
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.Notices"
@@ -198,16 +202,26 @@
             android:name="es.ugr.swad.swadroid.modules.groups.SendMyGroups"
             android:label="@string/sendMyGroupsProgressTitle" >
         </activity>
-        <activity android:name="es.ugr.swad.swadroid.modules.GenerateQR" >
+        <activity
+            android:name="es.ugr.swad.swadroid.modules.GenerateQR"
+            android:parentActivityName="es.ugr.swad.swadroid.SWADMain" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.ugr.swad.swadroid.SWADMain" />
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.information.Information"
             android:configChanges="orientation"
-            android:label="@string/informationModuleLabel" >
+            android:label="@string/informationModuleLabel"
+            android:parentActivityName="es.ugr.swad.swadroid.SWADMain" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.ugr.swad.swadroid.SWADMain" />
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.notifications.NotificationsMarkAllAsRead"
-            android:label="@string/notificationsMarkAllAsReadModuleLabel" >
+            android:label="@string/notificationsMarkAllAsReadModuleLabel"
+            android:theme="@style/Theme.AppCompat.Light.Translucent" >
         </activity>
 
         <provider
