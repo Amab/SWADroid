@@ -306,8 +306,6 @@
 	<string name="prefNotifVibrateSummary">Activar/desactivar la vibració de les alertes de noves notificacions</string>
 	<string name="prefNotifLightsTitle">Indicadors lluminosos</string>
 	<string name="prefNotifLightsSummary">Activar/desactivar els indicadors lluminosos de les alertes de noves notificacions</string>
-
-	
 	
 	<string name="informationModuleLabel">Informació</string> 
     <string name="introductionModuleLabel">Introducció</string>  
@@ -320,13 +318,16 @@
     <string name="assessmentModuleLabel">Sistema d\'avaluació</string>
     <string name="informationProgressDescription">Obtenint informació&#8230;\nSi us plau, esperi&#8230;</string>
     <string name="informationProgressTitle">Informació</string>
-    <string name="emptyInformation">Informació no disponible</string>
-    
-    
+    <string name="emptyInformation">Informació no disponible</string>    
     
     <string name="pradoLoginToast">La contrasenya d\'SWAD té almenys 8 caràcters alfanumèrics</string>
 	<string name="error_password_summaryUGR">Recorda que has d\'introduir la contrasenya de SWAD, no la d\'Accés identificat</string>
 	<string name="error_password_summary"> Error: La contrasenya ha de ser de mínim 8 caràcters alfanumèrics</string>
 	<string name="passwordDialogTip">Recorda que la contrasenya d\'SWAD ha de tenir almenys 8 caràcters alfanumèrics</string>
 	<string name="errorServerCertificateMsg">El certificat del servidor no és vàlid. Si us plau, poseu-vos en contacte amb l\'administrador SWAD</string>
+
+	<string name="notificationMarkAllRead">Marca totes com llegides</string>
+	<string name="notificationReply">Respondre</string>
+	<string name="actionBarRefresh">Actualitzar</string>
+	<string name="actionBarSave">Desa</string>
 </resources>
