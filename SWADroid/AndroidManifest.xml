@@ -70,7 +70,11 @@
         <activity
             android:name="es.ugr.swad.swadroid.modules.rollcall.Rollcall"
             android:label="@string/rollcallModuleLabel"
+            android:parentActivityName="es.ugr.swad.swadroid.SWADMain"
             android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.ugr.swad.swadroid.SWADMain" />
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.rollcall.RollcallConfigDownload"
@@ -163,7 +167,8 @@
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.Notices"
-            android:label="@string/noticesModuleLabel" >
+            android:label="@string/noticesModuleLabel"
+            android:theme="@style/Theme.AppCompat.Light.Translucent" >
         </activity>
         <activity android:name="es.ugr.swad.swadroid.sync.AccountAuthenticator" >
         </activity>
