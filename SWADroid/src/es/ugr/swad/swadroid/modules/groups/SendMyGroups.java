@@ -73,6 +73,7 @@ public class SendMyGroups extends Module {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().hide();
         courseCode = getIntent().getLongExtra("courseCode", -1);
         myGroups = getIntent().getStringExtra("myGroups");
         if (courseCode == -1 || myGroups == null) {
@@ -86,6 +87,7 @@ public class SendMyGroups extends Module {
     @Override
     protected void onStart() {
         super.onStart();
+        setVisible(false);
         try {
             runConnection();
         } catch (Exception e) {

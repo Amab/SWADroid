@@ -68,7 +68,8 @@ public class Login extends Module {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setMETHOD_NAME("loginByUserPasswordKey");
-        setVisible(false);
+        getSupportActionBar().hide();
+        //setVisible(false);
     }
 
     /* (non-Javadoc)
@@ -77,6 +78,7 @@ public class Login extends Module {
     @Override
     protected void onStart() {
         super.onStart();
+        setVisible(false);
         connect();
     }
 

@@ -151,6 +151,7 @@ public class Messages extends Module {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setMETHOD_NAME("sendMessage");
+        getSupportActionBar().hide();
     }
 
     /* (non-Javadoc)
@@ -159,7 +160,7 @@ public class Messages extends Module {
     @Override
     protected void onStart() {
         super.onStart();
-
+        setVisible(false);
         eventCode = getIntent().getLongExtra("eventCode", 0);
 
         messageDialog = DialogFactory.createPositiveNegativeDialog(this,
