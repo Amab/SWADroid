@@ -562,37 +562,37 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
             //Introduction category
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.introductionModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
+            map.put(IMAGE, getResources().getDrawable(R.drawable.info));
             courseData.add(map);
             //Theory Program category
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.syllabusLecturesModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
+            map.put(IMAGE, getResources().getDrawable(R.drawable.syllabus));
             courseData.add(map);
             //Practices Program category
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.syllabusPracticalsModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
+            map.put(IMAGE, getResources().getDrawable(R.drawable.lab));
             courseData.add(map);
             //Teaching Guide category
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.teachingguideModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
+            map.put(IMAGE, getResources().getDrawable(R.drawable.file));
             courseData.add(map);
             //Bibliography category
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.bibliographyModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
+            map.put(IMAGE, getResources().getDrawable(R.drawable.book));
             courseData.add(map);
             //FAQs category
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.faqsModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
+            map.put(IMAGE, getResources().getDrawable(R.drawable.faq));
             courseData.add(map);
             //Links category
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.linksModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
+            map.put(IMAGE, getResources().getDrawable(R.drawable.link));
             courseData.add(map);
             
             //Evaluation category
@@ -603,7 +603,7 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
             //Assessment category
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.assessmentModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
+            map.put(IMAGE, getResources().getDrawable(R.drawable.ass));
             evaluationData.add(map);
 
             //Users category
@@ -614,13 +614,13 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
 
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.generateQRModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.scan_qr));
+            map.put(IMAGE, getResources().getDrawable(R.drawable.qr));
             mUsersData.add(map);
 
             //Messages category
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.notificationsModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.bell));
+            map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
             mMessagesData.add(map);
 
             map = new HashMap<String, Object>();
