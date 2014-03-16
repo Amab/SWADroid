@@ -27,11 +27,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
-import android.widget.TextView;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.DialogFactory;
@@ -66,11 +63,11 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 
     private ArrayList<Model> groupTypes;
 
-    //private HashMap<Long,ArrayList<Group>> groups;
-
     private boolean groupTypesRequested = false;
 
     private boolean refreshRequested = false;
+    
+    private Menu menu;
 
     private OnClickListener cancelClickListener = new DialogInterface.OnClickListener() {
         public void onClick(DialogInterface dialog, int id) {
@@ -123,16 +120,8 @@ public class MyGroupsManager extends MenuExpandableListActivity {
                 return result;
             }
         };
-        
-        this.findViewById(R.id.courseSelectedText).setVisibility(View.VISIBLE);
-        //in this module the group will not be chosen through the spinner,
-        //only will be shown the selected course name
-        this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
 
-        TextView courseNameText = (TextView) this.findViewById(R.id.courseSelectedText);
-        courseNameText.setText(Constants.getSelectedCourseShortName());
-
-        //getSupportActionBar().setSubtitle(Constants.getSelectedCourseShortName());
+        getSupportActionBar().setSubtitle(Constants.getSelectedCourseShortName());
     	getSupportActionBar().setIcon(R.drawable.my_groups);
     }
 
@@ -154,7 +143,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
                 case Constants.GROUPS_REQUEST_CODE:
                     if (dbHelper.getGroups(courseCode).size() > 0 || refreshRequested) {
                         mExpandableListView.setVisibility(View.VISIBLE);
-                        this.findViewById(R.id.sendMyGroupsButton).setVisibility(View.VISIBLE);
+                        menu.getItem(0).setVisible(true);
                         this.findViewById(R.id.noGroupsText).setVisibility(View.GONE);
 
                         refreshRequested = false;
@@ -245,22 +234,9 @@ public class MyGroupsManager extends MenuExpandableListActivity {
         dialog.show();
     }
 
-/*	private String getRequestedGroups(){
-        ArrayList<Long> requestedGroupCodes = ((EnrollmentExpandableListAdapter)mExpandableListView.getExpandableListAdapter()).getChosenGroupCodes();
-		String text = "";
-		for(int i = 0; i < requestedGroupCodes.size(); ++i){
-			long groupCode = requestedGroupCodes.get(i).longValue();
-			Group g = dbHelper.getGroup(groupCode);
-			GroupType gT = dbHelper.getGroupTypeFromGroup(groupCode);
-			text += gT.getGroupTypeName() + " : " + g.getGroupName() + "\n";
-		}
-		return text;
-	}
-*/
-
     private void setEmptyMenu() {
         mExpandableListView.setVisibility(View.GONE);
-        this.findViewById(R.id.sendMyGroupsButton).setVisibility(View.GONE);
+        menu.getItem(0).setVisible(false);
         this.findViewById(R.id.noGroupsText).setVisibility(View.VISIBLE);
     }
 
@@ -274,24 +250,10 @@ public class MyGroupsManager extends MenuExpandableListActivity {
         int collapsedGroups = mExpandableListView.getExpandableListAdapter().getGroupCount();
         for (int i = 0; i < collapsedGroups; ++i)
             mExpandableListView.expandGroup(i);
-
-        Button button = (Button) this.findViewById(R.id.sendMyGroupsButton);
-
-        View.OnClickListener buttonListener = new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                showConfirmEnrollmentDialog();
-            }
-
-        };
-        button.setOnClickListener(buttonListener);
-
     }
 
     @Override
     protected void onStop() {
-
         if (mExpandableListView.getExpandableListAdapter() != null) {
             HashMap<Long, ArrayList<Group>> updatedChildren = getHashMapGroups(groupTypes);
             ((EnrollmentExpandableListAdapter) mExpandableListView.getExpandableListAdapter()).resetChildren(updatedChildren);
@@ -317,6 +279,10 @@ public class MyGroupsManager extends MenuExpandableListActivity {
                 activity.putExtra("courseCode", courseCode);
                 startActivityForResult(activity, Constants.GROUPTYPES_REQUEST_CODE);
                 return true;
+                
+            case R.id.action_save:
+            	showConfirmEnrollmentDialog();
+                return true;
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -326,7 +292,9 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_activity_actions, menu);
+        getMenuInflater().inflate(R.menu.groups_activity_actions, menu);
+        this.menu = menu;
+        
         return super.onCreateOptionsMenu(menu);
     }
 }
