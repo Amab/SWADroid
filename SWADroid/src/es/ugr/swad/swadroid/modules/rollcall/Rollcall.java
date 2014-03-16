@@ -33,11 +33,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.client.android.Intents;
@@ -176,9 +174,9 @@ public class Rollcall extends MenuExpandableListActivity {
         };
 
         mExpandableListView.setOnChildClickListener(mExpandableListListener);
-        
-        TextView courseNameText = (TextView) this.findViewById(R.id.courseSelectedText);
-        courseNameText.setText(Constants.getSelectedCourseShortName());
+
+        getSupportActionBar().setSubtitle(Constants.getSelectedCourseShortName());
+    	getSupportActionBar().setIcon(R.drawable.roll_call);
     }
 
     @Override
