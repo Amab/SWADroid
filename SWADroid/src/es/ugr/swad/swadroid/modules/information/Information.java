@@ -57,10 +57,6 @@ public class Information extends Module {
 
 		//ImageView moduleIcon;
 		//TextView moduleText;
-
-		this.findViewById(R.id.courseSelectedText);
-		//this.findViewById(R.id.courseSelectedText).setVisibility(View.VISIBLE);
-
 	
 		int requestCode = this.getIntent().getIntExtra("requestCode", 0);
 
