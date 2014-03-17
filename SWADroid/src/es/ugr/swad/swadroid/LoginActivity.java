@@ -22,6 +22,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -34,7 +35,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.RecoverPassword;
@@ -286,6 +286,7 @@ public class LoginActivity extends Activity implements OnClickListener {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         final EditText user = new EditText(getApplicationContext());
+        user.setTextColor(Color.BLACK);
         user.setHint(getString(R.string.prompt_email));
 
         builder.setView(user)

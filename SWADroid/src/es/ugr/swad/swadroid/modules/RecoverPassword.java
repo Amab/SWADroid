@@ -19,8 +19,11 @@
 
 package es.ugr.swad.swadroid.modules;
 
-import android.os.Bundle;
+import org.ksoap2.serialization.SoapObject;
 
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
@@ -36,16 +39,17 @@ public class RecoverPassword extends Module {
     public static final String TAG = Constants.APP_TAG + " RecoverPassword";
 
 	public static final String USER_TO_RECOVER =  "es.ugr.swad.swadroid.USER_TO_RECOVER";
-
+    
     /**
-     * User ID.
+     * Web service result 
      */
-    private String userID;
+    private int success;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setMETHOD_NAME("getNewPassword");
+        getSupportActionBar().hide();
     }
 
     @Override
@@ -56,19 +60,15 @@ public class RecoverPassword extends Module {
 
     @Override
     protected void requestService() throws Exception {
-
         createRequest(SOAPClient.CLIENT_TYPE);
         addParam("userID", getIntent().getStringExtra(USER_TO_RECOVER));
         addParam("appKey", Constants.SWAD_APP_KEY);
         sendRequest(User.class, true);
 
-        // if (result != null
-        // &&
-        // "getNewPasswordOut{success=1;}".equalsIgnoreCase(result.toString().trim()))
-        // {
-        // KvmSerializable ks = (KvmSerializable) result;
-        // SoapObject soap = (SoapObject) result;
-        // }
+        if (result != null) {
+            SoapObject soap = (SoapObject) result;
+            success = Integer.parseInt(soap.getProperty("success").toString());
+        }
 
         // Request finalized without errors
         setResult(RESULT_OK);
@@ -84,6 +84,11 @@ public class RecoverPassword extends Module {
 
     @Override
     protected void postConnect() {
+        String newPasswordSended = getString(R.string.lost_password_success);
+        
+        Toast.makeText(this, newPasswordSended, Toast.LENGTH_LONG).show();
+        Log.i(TAG, newPasswordSended);
+        
         finish();
     }
 
