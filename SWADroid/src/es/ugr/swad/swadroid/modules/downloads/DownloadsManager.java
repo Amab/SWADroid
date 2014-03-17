@@ -361,12 +361,10 @@ public class DownloadsManager extends MenuActivity {
         noConnectionText.setVisibility(View.VISIBLE);
         grid.setVisibility(View.GONE);
 
-        this.findViewById(R.id.courseSelectedText).setVisibility(View.VISIBLE);
         this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
 
-        TextView courseNameText = (TextView) this.findViewById(R.id.courseSelectedText);
+        getSupportActionBar().setSubtitle(Constants.getSelectedCourseShortName());
         
-        courseNameText.setText(Constants.getSelectedCourseShortName());
         this.saveState = true;
         this.previousConnection = false;
 
@@ -440,7 +438,6 @@ public class DownloadsManager extends MenuActivity {
     private void loadGroupsSpinner(List<Group> currentGroups) {
 
         if (!currentGroups.isEmpty()) { //there are groups in the selected course, therefore the groups spinner should be loaded
-            this.findViewById(R.id.courseSelectedText).setVisibility(View.GONE);
             Spinner groupsSpinner = (Spinner) this.findViewById(R.id.groupSpinner);
             groupsSpinner.setVisibility(View.VISIBLE);
 
@@ -457,12 +454,9 @@ public class DownloadsManager extends MenuActivity {
             groupsSpinner.setOnItemSelectedListener(new onGroupSelectedListener());
             groupsSpinner.setSelection(groupPosition);
         } else {
-            this.findViewById(R.id.courseSelectedText).setVisibility(View.VISIBLE);
             this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
 
-            TextView courseNameText = (TextView) this.findViewById(R.id.courseSelectedText);
-            courseNameText.setText(Constants.getSelectedCourseShortName());
-            //getSupportActionBar().setSubtitle(Constants.getSelectedCourseShortName());
+            getSupportActionBar().setSubtitle(Constants.getSelectedCourseShortName());
         }
     }
 

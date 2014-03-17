@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
        android:background="@color/title_background">
-    <TextView
+<!--     <TextView
             android:id="@+id/courseSelectedText"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
@@ -12,7 +12,7 @@
             android:paddingLeft="12dip"
             android:singleLine="true"
             android:background="@color/title_background"
-            />
+            /> -->
 
     <Spinner
             android:id="@+id/groupSpinner"
