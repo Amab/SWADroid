@@ -549,85 +549,90 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
 
             HashMap<String, Object> map = new HashMap<String, Object>();
   
-            //Documents category
+            
+            //Course category
+            //Introduction
+            map = new HashMap<String, Object>();
+            map.put(NAME, getString(R.string.introductionModuleLabel));
+            map.put(IMAGE, getResources().getDrawable(R.drawable.info));
+            courseData.add(map);
+            //Teaching Guide
+            map = new HashMap<String, Object>();
+            map.put(NAME, getString(R.string.teachingguideModuleLabel));
+            map.put(IMAGE, getResources().getDrawable(R.drawable.file));
+            courseData.add(map);
+            //Syllabus (lectures)
+            map = new HashMap<String, Object>();
+            map.put(NAME, getString(R.string.syllabusLecturesModuleLabel));
+            map.put(IMAGE, getResources().getDrawable(R.drawable.syllabus));
+            courseData.add(map);
+            //Syllabus (practicals)
+            map = new HashMap<String, Object>();
+            map.put(NAME, getString(R.string.syllabusPracticalsModuleLabel));
+            map.put(IMAGE, getResources().getDrawable(R.drawable.lab));
+            courseData.add(map);
+            //Documents
             map.put(NAME, getString(R.string.documentsDownloadModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.folder));
             courseData.add(map);
-            //Shared area category
+            //Shared area 
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.sharedsDownloadModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.folder_users));
             courseData.add(map);
             //TODO Disable Information options until the Information module is finished
-            //Introduction category
-            map = new HashMap<String, Object>();
-            map.put(NAME, getString(R.string.introductionModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.info));
-            courseData.add(map);
-            //Theory Program category
-            map = new HashMap<String, Object>();
-            map.put(NAME, getString(R.string.syllabusLecturesModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.syllabus));
-            courseData.add(map);
-            //Practices Program category
-            map = new HashMap<String, Object>();
-            map.put(NAME, getString(R.string.syllabusPracticalsModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.lab));
-            courseData.add(map);
-            //Teaching Guide category
-            map = new HashMap<String, Object>();
-            map.put(NAME, getString(R.string.teachingguideModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.file));
-            courseData.add(map);
-            //Bibliography category
+            //Bibliography
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.bibliographyModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.book));
             courseData.add(map);
-            //FAQs category
+            //FAQs
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.faqsModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.faq));
             courseData.add(map);
-            //Links category
+            //Links
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.linksModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.link));
             courseData.add(map);
             
             //Evaluation category
+            //Assessment system
+            map = new HashMap<String, Object>();
+            map.put(NAME, getString(R.string.assessmentModuleLabel));
+            map.put(IMAGE, getResources().getDrawable(R.drawable.info));
+            evaluationData.add(map);
+            //Test
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.testsModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.test));
             evaluationData.add(map);
-            //Assessment category
-            map = new HashMap<String, Object>();
-            map.put(NAME, getString(R.string.assessmentModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.ass));
-            evaluationData.add(map);
 
             //Users category
+            //Groups
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.myGroupsModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.my_groups));
             mUsersData.add(map);
-
+            //Generate QR code
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.generateQRModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.qr));
             mUsersData.add(map);
-
+            
             //Messages category
+            //Notifications
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.notificationsModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
             mMessagesData.add(map);
-
+            //Messages
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.messagesModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.msg_write));
             mMessagesData.add(map);
-
+            
             mExpandableListview.setAdapter(new ImageExpandableListAdapter(
                     this,
                     mHeaderData,

@@ -70,7 +70,43 @@ public class Information extends Module {
 			infoTypeToAdd = "introduction";
 			
 			setTitle(R.string.introductionModuleLabel);
-			getSupportActionBar().setIcon(R.drawable.info);
+			getSupportActionBar().setIcon(R.drawable.info_black);
+
+			break;
+			
+		case Constants.TEACHINGGUIDE_REQUEST_CODE:
+
+			infoTypeToAdd = "guide";
+			
+			setTitle(R.string.teachingguideModuleLabel);
+			getSupportActionBar().setIcon(R.drawable.file_black);
+
+			break;
+			
+		case Constants.SYLLABUSLECTURES_REQUEST_CODE:
+
+			infoTypeToAdd = "lectures";
+			
+			setTitle(R.string.syllabusLecturesModuleLabel);
+			getSupportActionBar().setIcon(R.drawable.syllabus_black);
+
+			break;
+			
+		case Constants.SYLLABUSPRACTICALS_REQUEST_CODE:
+
+			infoTypeToAdd = "practicals";
+			
+			setTitle(R.string.syllabusPracticalsModuleLabel);
+			getSupportActionBar().setIcon(R.drawable.lab_black);
+
+			break;
+			
+		case Constants.BIBLIOGRAPHY_REQUEST_CODE:
+
+			infoTypeToAdd = "bibliography";
+			
+			setTitle(R.string.bibliographyModuleLabel);
+			getSupportActionBar().setIcon(R.drawable.book_black);
 
 			break;
 
@@ -79,52 +115,17 @@ public class Information extends Module {
 			infoTypeToAdd = "FAQ";
 			
 			setTitle(R.string.faqsModuleLabel);
-			getSupportActionBar().setIcon(R.drawable.faq);
+			getSupportActionBar().setIcon(R.drawable.faq_black);
 
 			break;
 
-		case Constants.BIBLIOGRAPHY_REQUEST_CODE:
-
-			infoTypeToAdd = "bibliography";
-			
-			setTitle(R.string.bibliographyModuleLabel);
-			getSupportActionBar().setIcon(R.drawable.book);
-
-			break;
-
-		case Constants.SYLLABUSPRACTICALS_REQUEST_CODE:
-
-			infoTypeToAdd = "practicals";
-			
-			setTitle(R.string.syllabusPracticalsModuleLabel);
-			getSupportActionBar().setIcon(R.drawable.lab);
-
-			break;
-
-		case Constants.SYLLABUSLECTURES_REQUEST_CODE:
-
-			infoTypeToAdd = "lectures";
-			
-			setTitle(R.string.syllabusLecturesModuleLabel);
-			getSupportActionBar().setIcon(R.drawable.syllabus);
-
-			break;
 
 		case Constants.LINKS_REQUEST_CODE:
 
 			infoTypeToAdd = "links";
 			
 			setTitle(R.string.linksModuleLabel);
-			getSupportActionBar().setIcon(R.drawable.link);
-
-			break;
-
-		case Constants.TEACHINGGUIDE_REQUEST_CODE:
-
-			infoTypeToAdd = "guide";
-			
-			setTitle(R.string.teachingguideModuleLabel);
-			getSupportActionBar().setIcon(R.drawable.file);
+			getSupportActionBar().setIcon(R.drawable.link_black);
 
 			break;
 
@@ -134,7 +135,7 @@ public class Information extends Module {
 			infoTypeToAdd = "assessment";
 			
 			setTitle(R.string.assessmentModuleLabel);
-			getSupportActionBar().setIcon(R.drawable.ass);
+			getSupportActionBar().setIcon(R.drawable.ass_black);
 
 			break;
 		}		
