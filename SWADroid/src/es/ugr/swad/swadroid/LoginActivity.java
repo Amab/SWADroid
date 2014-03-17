@@ -43,6 +43,12 @@ import es.ugr.swad.swadroid.utils.Utils;
 
 import java.security.NoSuchAlgorithmException;
 
+
+/**
+ * 
+ * @author Alejandro Alcalde <algui91@gmail.com>
+ *
+ */
 public class LoginActivity extends Activity implements OnClickListener {
 
     public static final String TAG = "LoginActivity";
