@@ -217,7 +217,7 @@
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.information.Information"
-            android:configChanges="orientation"
+            android:configChanges="orientation|screenSize"
             android:label="@string/informationModuleLabel"
             android:parentActivityName="es.ugr.swad.swadroid.SWADMain" >
             <meta-data
