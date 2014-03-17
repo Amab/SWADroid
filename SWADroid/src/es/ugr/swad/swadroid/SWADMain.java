@@ -548,6 +548,7 @@ public class SWADMain extends MenuExpandableListActivity {
             map.put(IMAGE, getResources().getDrawable(R.drawable.lab));
             courseData.add(map);
             //Documents
+            map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.documentsDownloadModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.folder));
             courseData.add(map);
