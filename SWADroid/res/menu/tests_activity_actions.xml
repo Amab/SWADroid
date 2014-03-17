@@ -3,6 +3,11 @@
     xmlns:swadroid="http://schemas.android.com/apk/res-auto" >
 
     <item
+        android:id="@+id/action_score"
+        android:visible="false"
+        swadroid:showAsAction="ifRoom|withText"/>
+
+    <item
         android:id="@+id/action_evaluate"
         android:icon="@drawable/ic_action_accept"
         android:title="@string/testEvaluateMsg"
@@ -11,14 +16,12 @@
 
     <item
         android:id="@+id/action_show_details"
-        android:icon="@drawable/ic_action_refresh"
         android:title="@string/testShowResultsDetailsMsg"
         android:visible="false"
         swadroid:showAsAction="ifRoom|withText"/>
 
     <item
         android:id="@+id/action_show_totals"
-        android:icon="@drawable/ic_action_read"
         android:title="@string/testShowResultsMsg"
         android:visible="false"
         swadroid:showAsAction="ifRoom|withText"/>

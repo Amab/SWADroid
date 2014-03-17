@@ -112,9 +112,6 @@ public class TestsMake extends Module {
      */
     private void setLayout(int layout) {
         setContentView(layout);
-
-        getSupportActionBar().setSubtitle(Constants.getSelectedCourseShortName());
-    	getSupportActionBar().setIcon(R.drawable.test);
     }
     
     /**
@@ -283,6 +280,7 @@ public class TestsMake extends Module {
         TextView textCorrectAnswer = (TextView) findViewById(R.id.testMakeCorrectAnswer);
         EditText textAnswer = (EditText) findViewById(R.id.testMakeEditText);
         ImageView img = (ImageView) findViewById(R.id.testMakeCorrectAnswerImage);
+    	MenuItem actionScoreItem = menu.findItem(R.id.action_score);
         CheckedAnswersArrayAdapter checkedAnswersAdapter;
         String answerType = question.getAnswerType();
         String feedback = test.getFeedback();
@@ -311,7 +309,6 @@ public class TestsMake extends Module {
 
         questionFeedback.setVisibility(View.GONE);
         answerFeedback.setVisibility(View.GONE);
-        score.setVisibility(View.GONE);
         textAnswer.setVisibility(View.GONE);
         textCorrectAnswer.setVisibility(View.GONE);
         testMakeList.setVisibility(View.GONE);
@@ -439,11 +436,13 @@ public class TestsMake extends Module {
             } else if (questionScore < 0) {
                 score.setTextColor(getResources().getColor(R.color.red));
             } else {
-                score.setTextColor(Color.WHITE);
+                score.setTextColor(Color.BLACK);
             }
-
+            
             score.setText(df.format(questionScore));
-            score.setVisibility(View.VISIBLE);
+
+            actionScoreItem.setActionView(score);
+            actionScoreItem.setVisible(true);
         }
     }
 
@@ -520,13 +519,12 @@ public class TestsMake extends Module {
      */
     private void showTest() {
         final TextProgressBar bar;
-        Button prev, next, eval;
+        Button prev, next;
         final int size = test.getQuestions().size();
 
         setLayout(R.layout.tests_make_questions);
         prev = (Button) findViewById(R.id.testMakePrevButton);
         next = (Button) findViewById(R.id.testMakeNextButton);
-        eval = (Button) findViewById(R.id.testEvaluateButton);
         bar = (TextProgressBar) findViewById(R.id.test_questions_bar);
 
         bar.setMax(size);
@@ -536,9 +534,8 @@ public class TestsMake extends Module {
         bar.setTextSize(20);
         
         if(!test.isEvaluated()) {
-        	eval.setVisibility(View.VISIBLE);
         	//Show evaluate button only
-    		menu.getItem(0).setVisible(true);
+        	menu.findItem(R.id.action_evaluate).setVisible(true);
         }
 
         actualQuestion = 0;
@@ -627,7 +624,7 @@ public class TestsMake extends Module {
                 test.evaluate();
                 
             	//Hide evaluate button
-            	menu.getItem(0).setVisible(false);
+            	menu.findItem(R.id.action_evaluate).setVisible(false);
             }
 
             score = test.getTotalScore();
@@ -644,8 +641,8 @@ public class TestsMake extends Module {
             textView.setVisibility(View.VISIBLE);
             
         	//Show details button only
-        	menu.getItem(1).setVisible(true);
-        	menu.getItem(2).setVisible(false);
+        	menu.findItem(R.id.action_show_details).setVisible(true);
+        	menu.findItem(R.id.action_show_totals).setVisible(false);
         } else {
             textView = (TextView) findViewById(R.id.testResultsText);
             textView.setText(R.string.testNoResultsMsg);
@@ -685,6 +682,9 @@ public class TestsMake extends Module {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setLayout(R.layout.layout_with_action_bar);
+
+        getSupportActionBar().setSubtitle(Constants.getSelectedCourseShortName());
+    	getSupportActionBar().setIcon(R.drawable.test);
 
         tagsAnswersTypeItemClickListener = new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position,
@@ -757,7 +757,8 @@ public class TestsMake extends Module {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_evaluate: 
-            case R.id.action_show_totals:         	
+            case R.id.action_show_totals:
+            	menu.findItem(R.id.action_score).setVisible(false);
             	evaluateTest();
             	
                 return true;
@@ -766,9 +767,9 @@ public class TestsMake extends Module {
                     Toast.makeText(this, R.string.testNoDetailsMsg, Toast.LENGTH_LONG).show();
                 } else {            	
 	            	//Show totals button only
-	            	menu.getItem(0).setVisible(false);
-	            	menu.getItem(1).setVisible(false);
-	            	menu.getItem(2).setVisible(true);
+	            	menu.findItem(R.id.action_evaluate).setVisible(false);
+	            	menu.findItem(R.id.action_show_details).setVisible(false);
+	            	menu.findItem(R.id.action_show_totals).setVisible(true);
 	            	
 	            	showTest();
                 }

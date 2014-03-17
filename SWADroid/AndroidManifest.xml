@@ -151,6 +151,9 @@
             android:name="es.ugr.swad.swadroid.modules.tests.TestsMake"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:label="@string/testsModuleLabel" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.ugr.swad.swadroid.modules.tests.Tests" />
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.Messages"
