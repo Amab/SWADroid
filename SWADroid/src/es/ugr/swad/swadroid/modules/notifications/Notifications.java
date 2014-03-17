@@ -245,7 +245,6 @@ public class Notifications extends Module {
 
     	getSupportActionBar().setIcon(R.drawable.notif);
 
-        this.findViewById(R.id.courseSelectedText).setVisibility(View.GONE);
         this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
 
         dbCursor = dbHelper.getDb().getCursor(Constants.DB_TABLE_NOTIFICATIONS, selection, orderby);
