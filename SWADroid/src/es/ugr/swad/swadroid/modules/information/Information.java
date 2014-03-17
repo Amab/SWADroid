@@ -7,6 +7,7 @@
 package es.ugr.swad.swadroid.modules.information;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -66,7 +67,7 @@ public class Information extends Module {
 			infoTypeToAdd = "introduction";
 			
 			setTitle(R.string.introductionModuleLabel);
-			getSupportActionBar().setIcon(R.drawable.info_black);
+			getSupportActionBar().setIcon(R.drawable.info);
 
 			break;
 			
