@@ -7,6 +7,7 @@
 package es.ugr.swad.swadroid.modules.information;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -57,8 +58,10 @@ public class Information extends Module {
 		//ImageView moduleIcon;
 		//TextView moduleText;
 
-		this.findViewById(R.id.courseSelectedText).setVisibility(View.VISIBLE);
+		this.findViewById(R.id.courseSelectedText);
+		//this.findViewById(R.id.courseSelectedText).setVisibility(View.VISIBLE);
 
+	
 		int requestCode = this.getIntent().getIntExtra("requestCode", 0);
 
 		getSupportActionBar().setSubtitle(Constants.getSelectedCourseShortName());
@@ -70,7 +73,7 @@ public class Information extends Module {
 			infoTypeToAdd = "introduction";
 			
 			setTitle(R.string.introductionModuleLabel);
-			getSupportActionBar().setIcon(R.drawable.info_black);
+			getSupportActionBar().setIcon(R.drawable.info);
 
 			break;
 			
