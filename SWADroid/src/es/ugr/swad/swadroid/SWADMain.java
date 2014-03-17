@@ -19,37 +19,26 @@
 
 package es.ugr.swad.swadroid;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.SpannableString;
 import android.text.TextUtils;
-import android.text.style.UnderlineSpan;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bugsense.trace.BugSenseHandler;
@@ -64,7 +53,6 @@ import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.GenerateQR;
 import es.ugr.swad.swadroid.modules.Messages;
 import es.ugr.swad.swadroid.modules.Notices;
-import es.ugr.swad.swadroid.modules.RecoverPassword;
 import es.ugr.swad.swadroid.modules.downloads.DownloadsManager;
 import es.ugr.swad.swadroid.modules.groups.MyGroupsManager;
 import es.ugr.swad.swadroid.modules.information.Information;
@@ -74,10 +62,8 @@ import es.ugr.swad.swadroid.modules.tests.Tests;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
 import es.ugr.swad.swadroid.sync.AccountAuthenticator;
 import es.ugr.swad.swadroid.sync.SyncUtils;
-import es.ugr.swad.swadroid.utils.Crypto;
 import es.ugr.swad.swadroid.utils.Utils;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -91,7 +77,7 @@ import java.util.Map;
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  * @author Jose Antonio Guerrero Aviles <cany20@gmail.com>
  */
-public class SWADMain extends MenuExpandableListActivity implements OnClickListener {
+public class SWADMain extends MenuExpandableListActivity {
 	/**
 	 * Application preferences
 	 */
@@ -141,17 +127,6 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
 
     private boolean dBCleaned = false;
 
-    private boolean mLoginError = false;
-    // UI references for the login form.
-    private EditText mDniView;
-    private EditText mPasswordView;
-    private EditText mServerView;
-    private View mLoginFormView;
-    private View mLoginStatusView;
-    private View mMainScreenView;
-    private TextView mLoginStatusMessageView;
-    private TextView mWhyPasswordText;
-    private TextView mLostPasswordText;
     private ExpandableListView mExpandableListview;
     private OnChildClickListener mExpandableClickListener;
     private final ArrayList<HashMap<String, Object>> mHeaderData = new ArrayList<HashMap<String, Object>>();
@@ -192,14 +167,16 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
         } catch (Exception e) {
         	Log.e(TAG, "Error initializing BugSense", e);
         }
-
+        
         //Initialize screen
         super.onCreate(icicle);
-        setContentView(R.layout.main);
 
+        setContentView(R.layout.main);
+        initializeMainViews();
+        
+        
         //Initialize preferences
         prefs = new Preferences(this);
-        initializeViews();
         
         try {
         	
@@ -225,7 +202,6 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
 
             //If this is the first run, show configuration dialog
             if (lastVersion == 0) {
-                loginForm(true);
                 //Configure automatic synchronization
                 Preferences.setSyncTime(String.valueOf(Constants.DEFAULT_SYNC_TIME));
                 activity = new Intent(this, AccountAuthenticator.class);
@@ -291,20 +267,22 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
-        
-        boolean showLoginForm = isUserOrPasswordEmpty() || (listCourses.size() == 0) || mLoginError;
-        
-        loginForm(showLoginForm);
-    	if (!Preferences.isPreferencesChanged() && !Utils.isDbCleaned()) {
-            createSpinnerAdapter();
-            if (!firstRun) {
-                courseCode = Constants.getSelectedCourseCode();
-                createMenu();
-        	}
+
+        if (isUserOrPasswordEmpty() && (listCourses.size() == 0)) {
+            startActivityForResult(new Intent(this, LoginActivity.class), Constants.LOGIN_REQUEST_CODE);
         } else {
-            Preferences.setPreferencesChanged(false);
-            Utils.setDbCleaned(false);
-            setMenuDbClean();
+
+            if (!Preferences.isPreferencesChanged() && !Utils.isDbCleaned()) {
+                createSpinnerAdapter();
+                if (!firstRun) {
+                    courseCode = Constants.getSelectedCourseCode();
+                    createMenu();
+                }
+            } else {
+                Preferences.setPreferencesChanged(false);
+                Utils.setDbCleaned(false);
+                setMenuDbClean();
+            }
         }
     }
 
@@ -333,10 +311,7 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
                     setMenuDbClean();
                     createSpinnerAdapter();
                     createMenu();
-                    showProgress(false);
-                    mLoginError = false;
-                    loginForm(false);
-                    
+
                     //User credentials are correct. Set periodic synchronization if enabled
         	        if (!Preferences.getSyncTime().equals("0")
         	        		&& Preferences.isSyncEnabled() && SyncUtils.isPeriodicSynced(this)) {
@@ -348,18 +323,19 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
                     Toast.makeText(getApplicationContext(), R.string.lost_password_success,
                                    Toast.LENGTH_LONG).show();
                     break;
+                case Constants.LOGIN_REQUEST_CODE:
+                    getCurrentCourses();
+                    break;
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
             switch (requestCode) {
                 //After get the list of courses, a dialog is launched to choice the course
                 case Constants.COURSES_REQUEST_CODE:
-                    mLoginError = true;
-                    showProgress(false);
-                    loginForm(true);
-                    
                     //User credentials are wrong. Remove periodic synchronization
                     SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, this);                    
-                                        
+                    break;
+                case Constants.LOGIN_REQUEST_CODE:
+                    finish();
                     break;
             }
         }
@@ -725,27 +701,8 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
 				|| TextUtils.isEmpty(Preferences.getUserPassword());
 	}
     
-	private void initializeViews(){
-	    mMainScreenView = findViewById(R.id.main_screen);
-        mLoginFormView = findViewById(R.id.login_form);
-        mLoginStatusView = findViewById(R.id.login_status);        
-        mWhyPasswordText = (TextView) findViewById(R.id.why_password);
-        mLostPasswordText = (TextView) findViewById(R.id.lost_password);
+	private void initializeMainViews() {
         mExpandableListview = (ExpandableListView) findViewById(R.id.expandableList);
-        
-        SpannableString lostPasswordUnderline = new SpannableString(getString(R.string.lost_password));
-        lostPasswordUnderline.setSpan(new UnderlineSpan(), 0, lostPasswordUnderline.length(), 0);
-        mLostPasswordText.setText(lostPasswordUnderline);
-        
-        SpannableString whyPasswordUnderline = new SpannableString(getString(R.string.why_password));
-        whyPasswordUnderline.setSpan(new UnderlineSpan(), 0, whyPasswordUnderline.length(), 0);
-        mWhyPasswordText.setText(whyPasswordUnderline);
-        
-        
-        mWhyPasswordText.setVisibility(View.GONE);
-        
-        mWhyPasswordText.setOnClickListener(this);
-        mLostPasswordText.setOnClickListener(this);
         
         mExpandableClickListener = new OnChildClickListener() {
             
@@ -844,204 +801,6 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
         
         mExpandableListview.setOnChildClickListener(mExpandableClickListener);
 	}
-	
-	/**
-	 * Shows a login form
-	 */
-	private void loginForm(boolean show) {
-	    mMainScreenView.setVisibility(show ? View.GONE : View.VISIBLE);
-		mLoginFormView.setVisibility(show ? View.VISIBLE : View.GONE);
-
-		if (Preferences.getServer().equals(Constants.DEFAULT_SERVER)) {
-		    mWhyPasswordText.setVisibility(show ? View.VISIBLE : View.GONE);
-		}
-		
-		setupLoginForm();
-	}
-    
-    private void setupLoginForm() {
-        mDniView = (EditText) findViewById(R.id.DNI);
-        mDniView.setText(Preferences.getUserID());
-        
-        mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setText("");
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
-                }
-                return false;
-            }
-        });
-        
-        mServerView = (EditText) findViewById(R.id.server);
-        mServerView.setText(Preferences.getServer());
-        if (mServerView.getText().toString().equals(Constants.DEFAULT_SERVER)) 
-            mPasswordView.setError(getString(R.string.error_password_summaryUGR));
-        
-        mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
-
-        findViewById(R.id.sign_in_button).setOnClickListener(this);
-    }
-    
-    /**
-     * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid DNI, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
-     */
-    public void attemptLogin() {
-
-        // Values for DNI and password at the time of the login attempt.
-        String DniValue;
-        String passwordValue;
-        String serverValue;
-        String toastMsg;
-        
-        // Reset errors.
-        mDniView.setError(null);
-        mPasswordView.setError(null);
-        
-        // Store values at the time of the login attempt.
-        DniValue = mDniView.getText().toString();
-        passwordValue = mPasswordView.getText().toString();
-        serverValue = mServerView.getText().toString();
-        toastMsg = mServerView.getText().toString().equals("swad.ugr.es") ? getString(R.string.error_password_summaryUGR) : getString(R.string.error_invalid_password);
-        
-        boolean cancel = false;
-        View focusView = null;
-
-        // Check for a valid password.
-        if (TextUtils.isEmpty(passwordValue)) {
-			mPasswordView.setError(getString(R.string.error_field_required));
-			focusView = mPasswordView;
-			cancel = true;
-        } else if ((passwordValue.length() < 8)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
-            cancel = true;
-            Toast.makeText(getApplicationContext(), toastMsg,
-                    Toast.LENGTH_LONG).show();
-        } else if(Utils.isLong(passwordValue)) {
-			mPasswordView.setError(getString(R.string.error_incorrect_password));
-			focusView = mPasswordView;
-			cancel = true;
-			Toast.makeText(getApplicationContext(), toastMsg,
-                    Toast.LENGTH_LONG).show();
-        }
-
-        // Check for a valid DNI.
-        if (TextUtils.isEmpty(DniValue)) {
-            mDniView.setError(getString(R.string.error_field_required));
-            focusView = mDniView;
-            cancel = true;
-        }
-        
-        if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
-            focusView.requestFocus();
-        } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
-            try {
-                Preferences.setUserID(DniValue);
-                Preferences.setUserPassword(Crypto.encryptPassword(passwordValue));
-                Preferences.setServer(serverValue);
-            } catch (NoSuchAlgorithmException e) {
-                error(TAG, e.getMessage(), e, true);
-            }
-            showProgress(true);
-            getCurrentCourses();
-        }
-    }
-    
-    /**
-     * Shows the progress UI and hides the login form.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-            mLoginStatusView.setVisibility(View.VISIBLE);
-            mLoginStatusView.animate()
-                    .setDuration(shortAnimTime)
-                    .alpha(show ? 1 : 0)
-                    .setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            mLoginStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
-                        }
-                    });
-
-            mLoginFormView.setVisibility(View.VISIBLE);
-            mLoginFormView.animate()
-                    .setDuration(shortAnimTime)
-                    .alpha(show ? 0 : 1)
-                    .setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            mLoginFormView.setVisibility(mLoginError ? View.VISIBLE : View.GONE);
-                        }
-                    });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mLoginStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
-    }
-
-    private void whyMyPasswordNotWorkDialog() {
-    	AlertDialog passwordNotWorkDialog = DialogFactory.createNeutralDialog(this,
-    			R.layout.dialog_why_password,
-    			R.string.why_password_dialog_title,
-        		-1,
-        		R.string.ok,
-        		new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-    	
-    	passwordNotWorkDialog.show();
-    }
-
-    private void recoverPasswordDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        final EditText user = new EditText(getApplicationContext());
-        user.setHint(getString(R.string.prompt_email));
-        
-        builder.setView(user)
-			 .setTitle(R.string.lost_password_dialog_title)
-			 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-			     @Override
-			     public void onClick(DialogInterface dialog, int which) {
-			         dialog.dismiss();
-			         Intent i = new Intent(getBaseContext(), RecoverPassword.class);
-			         i.putExtra(RecoverPassword.USER_TO_RECOVER, user.getText().toString());
-			         startActivityForResult(i, Constants.RECOVER_PASSWORD_REQUEST_CODE);
-			     }
-			 })
-			 .setNegativeButton(R.string.cancelMsg, new DialogInterface.OnClickListener() {
-			     @Override
-			     public void onClick(DialogInterface dialog, int which) {
-			         dialog.dismiss();
-			     }
-			 })
-			 .setCancelable(true);
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -1060,23 +819,6 @@ public class SWADMain extends MenuExpandableListActivity implements OnClickListe
                 return super.onOptionsItemSelected(item);
         }
         
-    }
-    
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.why_password:
-                whyMyPasswordNotWorkDialog();
-                break;
-            case R.id.sign_in_button:
-                attemptLogin();
-                break;
-            case R.id.lost_password:
-                recoverPasswordDialog();
-                break;
-            default:
-                break;
-        }
     }
 
 }
