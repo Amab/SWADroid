@@ -55,11 +55,6 @@ public class Information extends Module {
 		WebSettings settings = webview.getSettings();
 		settings.setDefaultTextEncodingName("utf-8");
 
-		//ImageView moduleIcon;
-		//TextView moduleText;
-
-		this.findViewById(R.id.courseSelectedText).setVisibility(View.VISIBLE);
-
 		int requestCode = this.getIntent().getIntExtra("requestCode", 0);
 
 		getSupportActionBar().setSubtitle(Constants.getSelectedCourseShortName());
