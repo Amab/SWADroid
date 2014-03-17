@@ -4,20 +4,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/background">
-    <!-- <include layout="@layout/action_bar"/> -->
-
-    <!-- <RelativeLayout android:layout_below="@id/actionBarLayout"
-        			android:id="@+id/courseNameLayout"
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent">
-        <include layout="@layout/course_or_group_name"/>
-    </RelativeLayout> -->
     
 	<RelativeLayout
         android:id="@+id/testNumQuestionsContent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-   		android:layout_centerInParent="true"
         android:orientation="vertical">
 
 	    <TextView
@@ -25,6 +16,7 @@
 	            android:layout_width="match_parent"
 	            android:layout_height="wrap_content"
 	            android:gravity="center"
+		        android:layout_marginTop="20dip"
 		        android:layout_marginBottom="20dip"
 	            android:textColor="@color/foreground1"
 	            android:textSize="20sp"

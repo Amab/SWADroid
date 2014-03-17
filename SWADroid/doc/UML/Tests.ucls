@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<class-diagram version="1.1.4" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
+<class-diagram version="1.1.5" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
   realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
   <class id="1" language="java" name="es.ugr.swad.swadroid.modules.tests.AnswerTypesArrayAdapter" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/tests/AnswerTypesArrayAdapter.java" binary="false" 
