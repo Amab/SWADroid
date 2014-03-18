@@ -20,13 +20,14 @@ package es.ugr.swad.swadroid.gui;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
 
+import es.ugr.swad.swadroid.BuildConfig;
 import es.ugr.swad.swadroid.R;
 
 import java.util.ArrayList;
@@ -44,7 +45,14 @@ public class ImageExpandableListAdapter extends SimpleExpandableListAdapter {
     private final ArrayList<HashMap<String, Object>> groupData;
     private final ArrayList<ArrayList<HashMap<String, Object>>> childData;
     Context context;
-
+    
+    private static final String TAG = "ImageExpandableListAdapter";
+    private static int convertViewCounter = 0;
+    
+    static class ViewHolder{
+        TextView tvListText;
+    }
+    
 
     public ImageExpandableListAdapter(Context context,
                                       ArrayList<HashMap<String, Object>> groupData, int expandedGroupLayout,
@@ -59,7 +67,7 @@ public class ImageExpandableListAdapter extends SimpleExpandableListAdapter {
         this.childData = childData;
         layoutInflater = LayoutInflater.from(context);
     }
-
+    
     /* (non-Javadoc)
      * @see android.widget.SimpleExpandableListAdapter#getGroupView(int, boolean, android.view.View, android.view.ViewGroup)
      */
@@ -68,25 +76,81 @@ public class ImageExpandableListAdapter extends SimpleExpandableListAdapter {
     public View getGroupView(int groupPosition, boolean isExpanded,
                              View convertView, ViewGroup parent) {
 
-        final View v = super.getGroupView(groupPosition, isExpanded, convertView, parent);
-
+        ViewHolder holder;
+        
+        if (BuildConfig.DEBUG) {
+            Log.v(TAG, "in getView for position " + groupPosition
+                    + ", convertView is "
+                    + ((convertView == null) ? "null" : "being recycled"));
+        }
+        
+        if (convertView == null) {
+            
+            convertView = layoutInflater.inflate(R.layout.image_list_item, parent, false);
+            
+            convertViewCounter++;
+            
+            if (BuildConfig.DEBUG) {
+                Log.v(TAG, convertViewCounter + " convertViews have been created");
+            }
+            
+            holder = new ViewHolder();
+            
+            holder.tvListText = (TextView) convertView.findViewById(R.id.listText);
+            convertView.setTag(holder);
+            
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
+        
         // Populate your custom view here
-        ((TextView) v.findViewById(R.id.listText)).setText((String) ((Map<String, Object>) getGroup(groupPosition)).get(NAME));
-        ((ImageView) v.findViewById(R.id.listIcon)).setImageDrawable((Drawable) ((Map<String, Object>) getGroup(groupPosition)).get(IMAGE));
-
-        return v;
+        holder.tvListText.setText((String) ((Map<String, Object>) getGroup(groupPosition)).get(NAME));
+        Drawable d = (Drawable) ((Map<String, Object>) getGroup(groupPosition)).get(IMAGE);
+        holder.tvListText.setCompoundDrawablesWithIntrinsicBounds(d, null, null, null);
+        holder.tvListText.setTextSize(20);
+        
+        
+        return convertView;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        final View v = super.getChildView(groupPosition, childPosition, isLastChild, convertView, parent);
+    public View getChildView(int groupPosition, int childPosition, boolean isLastChild,
+            View convertView, ViewGroup parent) {
+
+        ViewHolder holder;
+
+        if (BuildConfig.DEBUG) {
+            Log.v(TAG, "in getChildView for position " + groupPosition + ", childPos "
+                    + childPosition + " convertView is "
+                    + ((convertView == null) ? "null" : "being recycled"));
+        }
+        if (convertView == null) {
+            
+            convertView = layoutInflater.inflate(R.layout.image_list_item, parent, false);
+            
+            convertViewCounter++;
+            
+            if (BuildConfig.DEBUG) {
+                Log.v(TAG, convertViewCounter + " convertViews for child have been created");
+            }
+            
+            holder = new ViewHolder();
+
+            holder.tvListText = (TextView) convertView.findViewById(R.id.listText);
+            convertView.setTag(holder);
+
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
 
         // Populate your custom view here
-        ((TextView) v.findViewById(R.id.listText)).setText((String) ((Map<String, Object>) getChild(groupPosition, childPosition)).get(NAME));
-        ((ImageView) v.findViewById(R.id.listIcon)).setImageDrawable((Drawable) ((Map<String, Object>) getChild(groupPosition, childPosition)).get(IMAGE));
+        holder.tvListText.setText((String) ((Map<String, Object>) getChild(groupPosition, childPosition)).get(NAME));
+        Drawable d = (Drawable) ((Map<String, Object>) getChild(groupPosition, childPosition)).get(IMAGE);
+        holder.tvListText.setCompoundDrawablesWithIntrinsicBounds(d, null, null, null);
+        holder.tvListText.setTextSize(18);
 
-        return v;
+        return convertView;
     }
 
     /* (non-Javadoc)
