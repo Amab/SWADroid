@@ -21,5 +21,6 @@
     <string name="lost_password_dialog_title">Solicitar una nueva contraseña</string>
     <string name="lost_password_edit_text_hint">DNI/pasaporte, @nickname o email</string>
     <string name="lost_password_success">Contraseña cambiada, comprueba tu email</string>
+    <string name="lost_password_failure">El reseteo de la contraseña falló</string>
 
 </resources>
