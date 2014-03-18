@@ -40,11 +40,9 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.widget.CheckableLinearLayout;
-import es.ugr.swad.swadroid.gui.widget.NumberPicker;
 import es.ugr.swad.swadroid.gui.widget.TextProgressBar;
 import es.ugr.swad.swadroid.model.Test;
 import es.ugr.swad.swadroid.model.TestAnswer;
@@ -117,36 +115,53 @@ public class TestsMake extends Module {
     /**
      * Screen to select the number of questions in the test
      */
-    private void setNumQuestions() {
-        final NumberPicker numberPicker;
+    private void setNumQuestions() {        
         Button acceptButton;
-        TextView minNumQuestions, maxNumQuestions;
 
         setLayout(R.layout.tests_num_questions);
 
-        numberPicker = (NumberPicker) findViewById(R.id.testNumQuestionsNumberPicker);
-        numberPicker.setRange(test.getMin(), test.getMax());
-        numberPicker.setCurrent(test.getDef());        
-        
-        minNumQuestions = (TextView) findViewById(R.id.minTestNumQuestionsId);
-        minNumQuestions.setText(test.getMin() + getString(R.string.lessOrEqualChar));
-        
-        maxNumQuestions = (TextView) findViewById(R.id.maxTestNumQuestionsId);
-        maxNumQuestions.setText(getString(R.string.lessOrEqualChar) + test.getMax());
-        
-
         acceptButton = (Button) findViewById(R.id.testNumQuestionsAcceptButton);
-        acceptButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                numQuestions = numberPicker.getCurrent();
 
-                if (isDebuggable) {
-                    Log.d(TAG, "numQuestions=" + numQuestions);
+        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+            final android.widget.NumberPicker numberPicker = 
+            		(android.widget.NumberPicker) findViewById(R.id.testNumQuestionsNumberPicker);
+            
+	        numberPicker.setMaxValue(test.getMax());
+	        numberPicker.setMinValue(test.getMin());
+	        numberPicker.setValue(test.getDef());
+	        numberPicker.setVisibility(View.VISIBLE);
+	        
+	        acceptButton.setOnClickListener(new View.OnClickListener() {
+	            public void onClick(View v) {
+	            	numQuestions = numberPicker.getValue();
+
+	                if (isDebuggable) {
+	                    Log.d(TAG, "numQuestions=" + numQuestions);
+	                }
+
+	                setTags();
+	            }
+	        });
+        } else {
+        	final es.ugr.swad.swadroid.gui.widget.NumberPicker numberPickerOld =
+        		(es.ugr.swad.swadroid.gui.widget.NumberPicker) findViewById(R.id.testNumQuestionsNumberPickerOld);
+    		
+        	numberPickerOld.setRange(test.getMin(), test.getMax());
+        	numberPickerOld.setCurrent(test.getDef()); 
+        	numberPickerOld.setVisibility(View.VISIBLE);
+        	
+            acceptButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {                	
+                	numQuestions = numberPickerOld.getCurrent();
+
+                    if (isDebuggable) {
+                        Log.d(TAG, "numQuestions=" + numQuestions);
+                    }
+
+                    setTags();
                 }
-
-                setTags();
-            }
-        });
+            });    
+        }
     }
 
     /**
@@ -681,7 +696,6 @@ public class TestsMake extends Module {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setLayout(R.layout.layout_with_action_bar);
 
         getSupportActionBar().setSubtitle(Constants.getSelectedCourseShortName());
     	getSupportActionBar().setIcon(R.drawable.test);
