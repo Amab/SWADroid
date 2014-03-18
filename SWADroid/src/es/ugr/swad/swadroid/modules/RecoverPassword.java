@@ -86,7 +86,7 @@ public class RecoverPassword extends Module {
     protected void postConnect() {
         String newPasswordSended = getString(R.string.lost_password_success);
         
-        Toast.makeText(this, newPasswordSended, Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, newPasswordSended, Toast.LENGTH_LONG).show();
         Log.i(TAG, newPasswordSended);
         
         finish();

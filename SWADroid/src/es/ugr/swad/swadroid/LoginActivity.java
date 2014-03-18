@@ -35,6 +35,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.RecoverPassword;
@@ -211,6 +212,10 @@ public class LoginActivity extends Activity implements OnClickListener {
                     mFromPreferece = false;
                     mLoginError = false;
                     finish();
+                    break;
+                case Constants.RECOVER_PASSWORD_REQUEST_CODE:
+                    Toast.makeText(getApplicationContext(), R.string.lost_password_success,
+                                   Toast.LENGTH_LONG).show();
                     break;
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {

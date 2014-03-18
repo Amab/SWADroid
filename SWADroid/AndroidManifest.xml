@@ -60,7 +60,9 @@
             android:name="es.ugr.swad.swadroid.PreferencesActivity"
             android:label="@string/set_preferences" >
         </activity>
-        <activity android:name="es.ugr.swad.swadroid.modules.RecoverPassword" >
+        <activity
+            android:name="es.ugr.swad.swadroid.modules.RecoverPassword"
+            android:theme="@style/Theme.AppCompat.Light.Translucent" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.Login"
