@@ -319,10 +319,6 @@ public class SWADMain extends MenuExpandableListActivity {
         	            		Long.parseLong(Preferences.getSyncTime()), this);
         	        }
                     break;
-                case Constants.RECOVER_PASSWORD_REQUEST_CODE:
-                    Toast.makeText(getApplicationContext(), R.string.lost_password_success,
-                                   Toast.LENGTH_LONG).show();
-                    break;
                 case Constants.LOGIN_REQUEST_CODE:
                     getCurrentCourses();
                     break;
