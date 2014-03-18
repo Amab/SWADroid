@@ -222,7 +222,10 @@ public class LoginActivity extends Activity implements OnClickListener {
             switch (requestCode) {
                 case Constants.LOGIN_REQUEST_CODE:
                     mLoginError = true;
-                    showProgress(false);  
+                    showProgress(false);
+                    break;
+                case Constants.RECOVER_PASSWORD_REQUEST_CODE:
+                    Toast.makeText(this, R.string.lost_password_failure, Toast.LENGTH_LONG).show();
                     break;
             }
         }

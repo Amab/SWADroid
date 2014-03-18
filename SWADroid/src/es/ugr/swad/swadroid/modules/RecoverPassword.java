@@ -19,15 +19,17 @@
 
 package es.ugr.swad.swadroid.modules;
 
-import org.ksoap2.serialization.SoapObject;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
+import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
+
+import org.ksoap2.serialization.SoapObject;
 
 /**
  * Recover password module in case user does not remember it
@@ -69,9 +71,6 @@ public class RecoverPassword extends Module {
             SoapObject soap = (SoapObject) result;
             success = Integer.parseInt(soap.getProperty("success").toString());
         }
-
-        // Request finalized without errors
-        setResult(RESULT_OK);
     }
 
     @Override
@@ -84,10 +83,12 @@ public class RecoverPassword extends Module {
 
     @Override
     protected void postConnect() {
-        String newPasswordSended = getString(R.string.lost_password_success);
         
-        //Toast.makeText(this, newPasswordSended, Toast.LENGTH_LONG).show();
-        Log.i(TAG, newPasswordSended);
+        if (!Utils.parseIntBool(success)) {
+            setResult(RESULT_CANCELED);
+        } else {
+            setResult(RESULT_OK);
+        }
         
         finish();
     }
