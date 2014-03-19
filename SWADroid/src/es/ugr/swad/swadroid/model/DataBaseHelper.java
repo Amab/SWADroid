@@ -851,7 +851,7 @@ public class DataBaseHelper {
                 ent.save();
             }
         } else {
-            throw new SQLException();
+            throw new SQLException("Duplicated tag");
         }
     }
 
