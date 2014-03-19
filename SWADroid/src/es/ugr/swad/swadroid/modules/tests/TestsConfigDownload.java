@@ -22,7 +22,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Test;
@@ -30,8 +29,7 @@ import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
-import java.util.ArrayList;
-import java.util.Vector;
+import org.ksoap2.serialization.SoapObject;
 
 /**
  * Tests module for download and update questions
@@ -97,15 +95,15 @@ public class TestsConfigDownload extends Module {
         createRequest(SOAPClient.CLIENT_TYPE);
         addParam("wsKey", Constants.getLoggedUser().getWsKey());
         addParam("courseCode", (int) Constants.getSelectedCourseCode());
-        sendRequest(Test.class, false);
+        sendRequest(Test.class, true);
 
         if (result != null) {
             //Stores tests data returned by webservice response
-            ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
+			SoapObject soap = (SoapObject) result;
 
-            Integer pluggable = Integer.valueOf(res.get(0).toString());
+            Integer pluggable = Integer.valueOf(soap.getProperty("pluggable").toString());
             isPluggable = Utils.parseIntBool(pluggable);
-            numQuestions = Integer.valueOf(res.get(1).toString());
+            numQuestions = Integer.valueOf(soap.getProperty("numQuestions").toString());
 
             //If the teacher doesn't allows questions download, notify to user
             if (!isPluggable) {
@@ -117,10 +115,10 @@ public class TestsConfigDownload extends Module {
 
                 //If there are questions and the teacher allows their download, process the questions data
             } else {
-                Integer minQuestions = Integer.valueOf(res.get(2).toString());
-                Integer defQuestions = Integer.valueOf(res.get(3).toString());
-                Integer maxQuestions = Integer.valueOf(res.get(4).toString());
-                String feedback = res.get(5).toString();
+                Integer minQuestions = Integer.valueOf(soap.getProperty("minQuestions").toString());
+                Integer defQuestions = Integer.valueOf(soap.getProperty("defQuestions").toString());
+                Integer maxQuestions = Integer.valueOf(soap.getProperty("maxQuestions").toString());
+                String feedback = soap.getProperty("feedback").toString();
                 Test tDB = (Test) dbHelper.getRow(Constants.DB_TABLE_TEST_CONFIG, "id",
                         Long.toString(Constants.getSelectedCourseCode()));
 
