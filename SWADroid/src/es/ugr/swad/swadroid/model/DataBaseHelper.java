@@ -1904,6 +1904,7 @@ public class DataBaseHelper {
      */
     public void emptyTable(String table) {
         db.emptyTable(table);
+        Log.d(TAG, "Emptied table " + table);
     }
 
     /**
@@ -1913,6 +1914,7 @@ public class DataBaseHelper {
      */
     public void deleteTable(String table) {
         db.deleteTable(table);
+        Log.d(TAG, "Deleted table " + table);
     }
 
     /**
@@ -1920,6 +1922,7 @@ public class DataBaseHelper {
      */
     public void clearDB() {
         db.deleteTables();
+        Log.d(TAG, "All tables deleted");
     }
 
     /**
