@@ -30,7 +30,6 @@ import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 import org.ksoap2.SoapFault;
-import org.ksoap2.serialization.KvmSerializable;
 import org.ksoap2.serialization.SoapObject;
 
 /**
@@ -130,21 +129,19 @@ public class Login extends Module {
             sendRequest(User.class, true);
 
             if (result != null) {
-                KvmSerializable ks = (KvmSerializable) result;
                 SoapObject soap = (SoapObject) result;
 
                 //Stores user data returned by webservice response
                 loggedUser = new User(
-                        Long.parseLong(ks.getProperty(0).toString()),                    // id
-                        soap.getProperty("wsKey").toString(),                            // wsKey
-                        soap.getProperty("userID").toString(),                            // userID
-                        //soap.getProperty("userNickname").toString(),					// userNickname
-                        null,                                                            // userNickname
+                        Long.parseLong(soap.getProperty("userCode").toString()),        // userCode
+                        soap.getProperty("wsKey").toString(),                           // wsKey
+                        soap.getProperty("userID").toString(),                          // userID
+                        null,                                                           // userNickname
                         soap.getProperty("userSurname1").toString(),                    // userSurname1
                         soap.getProperty("userSurname2").toString(),                    // userSurname2
-                        soap.getProperty("userFirstname").toString(),                    // userFirstname
-                        soap.getProperty("userPhoto").toString(),                        // photoPath
-                        Integer.parseInt(soap.getProperty("userRole").toString())        // userRole
+                        soap.getProperty("userFirstname").toString(),                   // userFirstname
+                        soap.getProperty("userPhoto").toString(),                       // photoPath
+                        Integer.parseInt(soap.getProperty("userRole").toString())       // userRole
                 );
 
                 Constants.setLogged(true);
