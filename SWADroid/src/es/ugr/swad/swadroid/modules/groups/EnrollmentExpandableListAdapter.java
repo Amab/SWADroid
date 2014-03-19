@@ -23,6 +23,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
@@ -119,6 +120,7 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
             holder.relativeLayout = (RelativeLayout) convertView.findViewById(R.id.groupsLayout);
             holder.imagePadlock = (ImageView) convertView.findViewById(R.id.padlockIcon);
             holder.checkBox = (CheckBox) convertView.findViewById(R.id.checkBox);
+            holder.checkBox.setOnClickListener(checkListener);
             holder.radioButton = (RadioButton) convertView.findViewById(R.id.radioButton);
             holder.nStudentText = (TextView) convertView.findViewById(R.id.nStudentText);
             holder.vacantsText = (TextView) convertView.findViewById(R.id.vacantsText);
@@ -150,6 +152,10 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
         int open = group.getOpen();
         int member = group.getMember();
 
+        // Para porde hacer click en el checkbox
+        Group g = (Group) getChild(groupPosition, childPosition);
+        holder.checkBox.setTag(g);
+        
         boolean freeSpot = false;
         if (maxStudents != -1) {
             if (group.getCurrentStudents() < maxStudents)
@@ -394,4 +400,17 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
         }
     }
 
+    private OnClickListener checkListener = new OnClickListener()
+    {
+
+        @Override
+        public void onClick(View v)
+        {
+
+            Group d = (Group) v.getTag();
+           ((CheckBox) v).setChecked(!d.isMember());
+           d.setMember(d.isMember() ? 0:1);
+        }
+    };
+    
 }
