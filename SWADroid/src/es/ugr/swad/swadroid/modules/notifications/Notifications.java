@@ -237,7 +237,6 @@ public class Notifications extends Module {
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //ListView list;
         final PullToRefreshListView list;
 
         super.onCreate(savedInstanceState);
@@ -268,13 +267,10 @@ public class Notifications extends Module {
 		 * message
 		 */
         if (dbCursor.getCount() == 0) {
-            //list.setVisibility(View.GONE);
-            //text.setVisibility(View.VISIBLE);
         	String emptyMsgArray[]={getString(R.string.notificationsEmptyListMsg)};
         	ArrayAdapter<String> adapter =new ArrayAdapter<String>(getApplicationContext(), R.layout.list_item, emptyMsgArray);
         	list.setAdapter(adapter);
         	list.setOnItemClickListener(null);
-        	//list.setDividerHeight(0);
         }
 
         setMETHOD_NAME("getNotifications");
@@ -433,18 +429,11 @@ public class Notifications extends Module {
         	} else {
         		Toast.makeText(this, R.string.NoNotificationsMsg, Toast.LENGTH_LONG).show();
         	}
-
-            /*ProgressBar pb = (ProgressBar) this.findViewById(R.id.progress_refresh);
-            ImageButton updateButton = (ImageButton) this.findViewById(R.id.refresh);
-
-            pb.setVisibility(View.GONE);
-            updateButton.setVisibility(View.VISIBLE);*/
             
             //Sends to SWAD the "seen notifications" info
             sendReadedNotifications();  
             
             refreshScreen();
-            //Toast.makeText(this, R.string.notificationsDownloadedMsg, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -453,11 +442,7 @@ public class Notifications extends Module {
      */
     @Override
     protected void onError() {
-        /*ProgressBar pb = (ProgressBar) this.findViewById(R.id.progress_refresh);
-        ImageButton updateButton = (ImageButton) this.findViewById(R.id.refresh);
 
-        pb.setVisibility(View.GONE);
-        updateButton.setVisibility(View.VISIBLE);*/
     }
 
     /**
@@ -484,10 +469,9 @@ public class Notifications extends Module {
      * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
      */
     private class SyncReceiver extends BroadcastReceiver {
-        //private final Notifications mActivity;
 
         public SyncReceiver(Notifications activity) {
-            //mActivity = activity;
+
         }
 
         @Override
