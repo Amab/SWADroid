@@ -1,60 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/groupsLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:focusable="false"
-        >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/groupsLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="false"
+    android:orientation="horizontal" >
+
     <ImageView
-            android:id="@+id/padlockIcon"
-            android:layout_width="wrap_content"
+        android:id="@+id/padlockIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:focusable="false"
+        android:paddingLeft="5dp"
+        android:paddingTop="5dp"
+        android:src="@drawable/padlock_red" />
+
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:focusable="false"
+        android:textColor="@android:color/black"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="false"
+        android:orientation="vertical" >
+
+        <RadioButton
+            android:id="@+id/radioButton"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/padlock_red"
-            android:layout_alignParentLeft="true"
-            android:paddingTop="5dp"
-            android:paddingLeft="5dp"
-            android:focusable="false"
             android:clickable="false"
-            />
-    <CheckBox android:id="@+id/checkBox"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_toRightOf="@id/padlockIcon"
-              android:textColor="@android:color/black"
-              android:focusable="false"
-              android:clickable="false"
-              android:visibility="gone"/>
-    <RadioButton android:id="@+id/radioButton"
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content"
-                 android:layout_toRightOf="@id/padlockIcon"
-                 android:textColor="@android:color/black"
-                 android:focusable="false"
-                 android:clickable="false"
-            />
-    <TextView
+            android:focusable="false"
+            android:textColor="@android:color/black" />
+
+        <TextView
             android:id="@+id/vacantsText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_below="@id/padlockIcon"
-            android:layout_toRightOf="@id/padlockIcon"
-            android:text="@string/vacants"
-            android:focusable="false"
             android:clickable="false"
-            android:textColor="@color/sgilight_gray_32"
-            />
-    <TextView
+            android:focusable="false"
+            android:gravity="center"
+            android:text="@string/vacants"
+            android:textColor="@color/sgilight_gray_32" />
+
+        <TextView
             android:id="@+id/nStudentText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/vacantsText"
-            android:layout_toRightOf="@id/padlockIcon"
+            android:clickable="false"
+            android:focusable="false"
             android:gravity="center"
             android:text="@string/numStudent"
-            android:focusable="false"
-            android:clickable="false"
-            android:textColor="@color/sgilight_gray_32"
-            />
-</RelativeLayout>
+            android:textColor="@color/sgilight_gray_32" />
+    </LinearLayout>
+
+</LinearLayout>

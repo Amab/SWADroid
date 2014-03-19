@@ -28,8 +28,8 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import es.ugr.swad.swadroid.Constants;
@@ -67,7 +67,7 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
     }
 
     private static class ChildHolder {
-        RelativeLayout relativeLayout;
+        LinearLayout linearLayout;
         ImageView imagePadlock;
         CheckBox checkBox;
         RadioButton radioButton;
@@ -117,7 +117,7 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
         if (convertView == null) {
             convertView = mInflater.inflate(layoutChild, parent, false);
             holder = new ChildHolder();
-            holder.relativeLayout = (RelativeLayout) convertView.findViewById(R.id.groupsLayout);
+            holder.linearLayout = (LinearLayout) convertView.findViewById(R.id.groupsLayout);
             holder.imagePadlock = (ImageView) convertView.findViewById(R.id.padlockIcon);
             holder.checkBox = (CheckBox) convertView.findViewById(R.id.checkBox);
             holder.checkBox.setOnClickListener(checkListener);
@@ -139,9 +139,9 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 
         boolean isCurrentMember = realMembership.get(groupTypeCode)[childPosition];
         if (isCurrentMember) {
-            holder.relativeLayout.setBackgroundColor(context.getResources().getColor(R.color.lightskyblue));
+            holder.linearLayout.setBackgroundColor(context.getResources().getColor(R.color.lightskyblue));
         } else {
-            holder.relativeLayout.setBackgroundColor(context.getResources().getColor(android.R.color.white));
+            holder.linearLayout.setBackgroundColor(context.getResources().getColor(android.R.color.white));
         }
 
 
@@ -178,7 +178,7 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
             holder.nStudentText.setTextColor(context.getResources().getColor(R.color.sgilight_gray_32));
             holder.radioButton.setEnabled(true);
             holder.radioButton.setTextColor(context.getResources().getColor(android.R.color.black));
-            holder.relativeLayout.setEnabled(true);
+            holder.linearLayout.setEnabled(true);
             holder.vacantsText.setEnabled(true);
             holder.vacantsText.setTextColor(context.getResources().getColor(R.color.sgilight_gray_32));
         } else {
@@ -189,7 +189,7 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
             holder.nStudentText.setTextColor(context.getResources().getColor(R.color.sgilight_gray));
             holder.radioButton.setEnabled(false);
             holder.radioButton.setTextColor(context.getResources().getColor(R.color.sgilight_gray));
-            holder.relativeLayout.setEnabled(false);
+            holder.linearLayout.setEnabled(false);
             holder.vacantsText.setEnabled(false);
             holder.vacantsText.setTextColor(context.getResources().getColor(R.color.sgilight_gray));
         }
