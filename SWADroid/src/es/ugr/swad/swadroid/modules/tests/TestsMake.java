@@ -99,6 +99,14 @@ public class TestsMake extends Module {
      */
     private Menu menu;
     /**
+     * Possible values for screen steps
+     */
+    private enum ScreenStep {MENU, NUM_QUESTIONS, TAGS, ANSWER_TYPES, TEST}
+    /**
+     * Step of actual screen
+     */
+    private ScreenStep screenStep;
+    /**
      * Tests tag name for Logcat
      */
     private static final String TAG = Constants.APP_TAG + " TestsMake";
@@ -112,66 +120,98 @@ public class TestsMake extends Module {
         setContentView(layout);
     }
     
+    private void setNumQuestions() {
+    	if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+            android.widget.NumberPicker numberPicker = 
+            		(android.widget.NumberPicker) findViewById(R.id.testNumQuestionsNumberPicker);
+            
+    		numQuestions = numberPicker.getValue();
+    	} else {
+        	es.ugr.swad.swadroid.gui.widget.NumberPicker numberPickerOld =
+            		(es.ugr.swad.swadroid.gui.widget.NumberPicker) findViewById(R.id.testNumQuestionsNumberPickerOld);
+        	
+    		numQuestions = numberPickerOld.getCurrent();
+    	}
+
+        if (isDebuggable) {
+            Log.d(TAG, "numQuestions=" + numQuestions);
+        }
+
+        selectTags();
+    }
+    
     /**
      * Screen to select the number of questions in the test
      */
-    private void setNumQuestions() {        
-        Button acceptButton;
+    private void selectNumQuestions() {          
+        screenStep = ScreenStep.NUM_QUESTIONS;
 
         setLayout(R.layout.tests_num_questions);
 
-        acceptButton = (Button) findViewById(R.id.testNumQuestionsAcceptButton);
-
         if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
-            final android.widget.NumberPicker numberPicker = 
+            android.widget.NumberPicker numberPicker = 
             		(android.widget.NumberPicker) findViewById(R.id.testNumQuestionsNumberPicker);
             
 	        numberPicker.setMaxValue(test.getMax());
 	        numberPicker.setMinValue(test.getMin());
 	        numberPicker.setValue(test.getDef());
 	        numberPicker.setVisibility(View.VISIBLE);
-	        
-	        acceptButton.setOnClickListener(new View.OnClickListener() {
-	            public void onClick(View v) {
-	            	numQuestions = numberPicker.getValue();
-
-	                if (isDebuggable) {
-	                    Log.d(TAG, "numQuestions=" + numQuestions);
-	                }
-
-	                setTags();
-	            }
-	        });
         } else {
-        	final es.ugr.swad.swadroid.gui.widget.NumberPicker numberPickerOld =
+        	es.ugr.swad.swadroid.gui.widget.NumberPicker numberPickerOld =
         		(es.ugr.swad.swadroid.gui.widget.NumberPicker) findViewById(R.id.testNumQuestionsNumberPickerOld);
     		
         	numberPickerOld.setRange(test.getMin(), test.getMax());
         	numberPickerOld.setCurrent(test.getDef()); 
         	numberPickerOld.setVisibility(View.VISIBLE);
-        	
-            acceptButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {                	
-                	numQuestions = numberPickerOld.getCurrent();
+        }
+    }
 
-                    if (isDebuggable) {
-                        Log.d(TAG, "numQuestions=" + numQuestions);
-                    }
+    /**
+     * Function to set the tags that will be present in the test
+     */
+    private void setTags() {
+        ListView checkBoxesList = (ListView) findViewById(R.id.testTagsList);
+        TagsArrayAdapter tagsAdapter = (TagsArrayAdapter) checkBoxesList.getAdapter();
+    	int childsCount = checkBoxesList.getCount();
+        SparseBooleanArray checkedItems = checkBoxesList.getCheckedItemPositions();
+        tagsList = new ArrayList<TestTag>();
 
-                    setTags();
+        //If "All tags" item checked, add the whole list to the list of selected tags
+        if (checkedItems.get(0, false)) {
+            tagsList.add(new TestTag(0, null, "all", 0));
+
+        //If "All tags" item is not checked, add the selected items to the list of selected tags
+        } else {
+            for (int i = 0; i < childsCount; i++) {
+                if (checkedItems.get(i, false)) {
+                    tagsList.add(tagsAdapter.getItem(i));
                 }
-            });    
+            }
+        }
+
+        if (isDebuggable) {
+            Log.d(TAG, "tagsList=" + tagsList.toString());
+        }
+
+        //If no tags selected, show a message to notice user
+        if (tagsList.isEmpty()) {
+            Toast.makeText(getApplicationContext(), R.string.testNoTagsSelectedMsg, Toast.LENGTH_LONG).show();
+
+            //If any tag is selected, show the answer types selection screen
+        } else {
+            selectAnswerTypes();
         }
     }
 
     /**
      * Screen to select the tags that will be present in the test
      */
-    private void setTags() {
-        Button acceptButton;
-        final ListView checkBoxesList;
-        final TagsArrayAdapter tagsAdapter;
-        final List<TestTag> allTagsList = dbHelper.getOrderedCourseTags(Constants.getSelectedCourseCode());
+    private void selectTags() {
+        ListView checkBoxesList;
+        TagsArrayAdapter tagsAdapter;
+        List<TestTag> allTagsList = dbHelper.getOrderedCourseTags(Constants.getSelectedCourseCode());
+        
+        screenStep = ScreenStep.TAGS;
 
         //Add "All tags" item in list's top
         allTagsList.add(0, new TestTag(0, getResources().getString(R.string.allMsg), 0));
@@ -184,50 +224,55 @@ public class TestsMake extends Module {
         checkBoxesList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         checkBoxesList.setOnItemClickListener(tagsAnswersTypeItemClickListener);
         checkBoxesList.setDividerHeight(0);
+    }
 
-        acceptButton = (Button) findViewById(R.id.testTagsAcceptButton);
-        acceptButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                int childsCount = checkBoxesList.getCount();
-                SparseBooleanArray checkedItems = checkBoxesList.getCheckedItemPositions();
-                tagsList = new ArrayList<TestTag>();
+    /**
+     * Function to set the answer types that will be present in the test
+     */
+    private void setAnswerTypes() {
+        ListView checkBoxesList = (ListView) findViewById(R.id.testAnswerTypesList);
+        AnswerTypesArrayAdapter answerTypesAdapter = (AnswerTypesArrayAdapter) checkBoxesList.getAdapter();
+    	int childsCount = checkBoxesList.getCount();
+        SparseBooleanArray checkedItems = checkBoxesList.getCheckedItemPositions();
+        answerTypesList = new ArrayList<String>();
 
-                //If "All tags" item checked, add the whole list to the list of selected tags
-                if (checkedItems.get(0, false)) {
-                    tagsList.add(new TestTag(0, null, "all", 0));
-
-                    //If "All tags" item is not checked, add the selected items to the list of selected tags
-                } else {
-                    for (int i = 0; i < childsCount; i++) {
-                        if (checkedItems.get(i, false)) {
-                            tagsList.add(tagsAdapter.getItem(i));
-                        }
-                    }
-                }
-
-                if (isDebuggable) {
-                    Log.d(TAG, "tagsList=" + tagsList.toString());
-                }
-
-                //If no tags selected, show a message to notice user
-                if (tagsList.isEmpty()) {
-                    Toast.makeText(getApplicationContext(), R.string.testNoTagsSelectedMsg, Toast.LENGTH_LONG).show();
-
-                    //If any tag is selected, show the answer types selection screen
-                } else {
-                    setAnswerTypes();
+		/*
+         * If "All tags" item checked, add the whole list to the list of selected answer types,
+		 * else, add the selected items to the list of selected answer types
+		 */
+        if (checkedItems.get(0, false)) {
+            answerTypesList.add("all");
+        } else {
+            for (int i = 1; i < childsCount; i++) {
+                if (checkedItems.get(i, false)) {
+                    answerTypesList.add((String) answerTypesAdapter.getItem(i));
                 }
             }
-        });
+        }
+
+        if (isDebuggable) {
+            Log.d(TAG, "answerTypesList=" + answerTypesList.toString());
+        }
+
+        //If no answer types selected, show a message to notice user
+        if (answerTypesList.isEmpty()) {
+            Toast.makeText(getApplicationContext(), R.string.testNoAnswerTypesSelectedMsg, Toast.LENGTH_LONG)
+                    .show();
+
+            //If any answer type is selected, generate the test and show the first question screen
+        } else {
+            makeTest();
+        }
     }
 
     /**
      * Screen to select the answer types that will be present in the test
      */
-    private void setAnswerTypes() {
-        Button acceptButton;
-        final ListView checkBoxesList;
-        final AnswerTypesArrayAdapter answerTypesAdapter;
+    private void selectAnswerTypes() {
+        ListView checkBoxesList;
+        AnswerTypesArrayAdapter answerTypesAdapter;
+        
+        screenStep = ScreenStep.ANSWER_TYPES;
 
         setLayout(R.layout.tests_answer_types);
 
@@ -238,43 +283,6 @@ public class TestsMake extends Module {
         checkBoxesList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         checkBoxesList.setOnItemClickListener(tagsAnswersTypeItemClickListener);
         checkBoxesList.setDividerHeight(0);
-
-        acceptButton = (Button) findViewById(R.id.testAnswerTypesAcceptButton);
-        acceptButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                int childsCount = checkBoxesList.getCount();
-                SparseBooleanArray checkedItems = checkBoxesList.getCheckedItemPositions();
-                answerTypesList = new ArrayList<String>();
-
-				/*
-                 * If "All tags" item checked, add the whole list to the list of selected answer types,
-				 * else, add the selected items to the list of selected answer types
-				 */
-                if (checkedItems.get(0, false)) {
-                    answerTypesList.add("all");
-                } else {
-                    for (int i = 1; i < childsCount; i++) {
-                        if (checkedItems.get(i, false)) {
-                            answerTypesList.add((String) answerTypesAdapter.getItem(i));
-                        }
-                    }
-                }
-
-                if (isDebuggable) {
-                    Log.d(TAG, "answerTypesList=" + answerTypesList.toString());
-                }
-
-                //If no answer types selected, show a message to notice user
-                if (answerTypesList.isEmpty()) {
-                    Toast.makeText(getApplicationContext(), R.string.testNoAnswerTypesSelectedMsg, Toast.LENGTH_LONG)
-                            .show();
-
-                    //If any answer type is selected, generate the test and show the first question screen
-                } else {
-                    makeTest();
-                }
-            }
-        });
     }
 
     /**
@@ -551,6 +559,7 @@ public class TestsMake extends Module {
         if(!test.isEvaluated()) {
         	//Show evaluate button only
         	menu.findItem(R.id.action_evaluate).setVisible(true);
+			menu.findItem(R.id.action_accept).setVisible(false);
         }
 
         actualQuestion = 0;
@@ -696,6 +705,8 @@ public class TestsMake extends Module {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        screenStep = ScreenStep.MENU;
 
         getSupportActionBar().setSubtitle(Constants.getSelectedCourseShortName());
     	getSupportActionBar().setIcon(R.drawable.test);
@@ -746,7 +757,7 @@ public class TestsMake extends Module {
                     Long.toString(Constants.getSelectedCourseCode()));
 
             if (test != null) {
-                setNumQuestions();
+                selectNumQuestions();
             } else {
                 Toast.makeText(this, R.string.testNoQuestionsCourseMsg, Toast.LENGTH_LONG).show();
                 finish();
@@ -770,6 +781,25 @@ public class TestsMake extends Module {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+        	case R.id.action_accept:
+        	switch (screenStep) {
+        		case NUM_QUESTIONS:
+        			setNumQuestions();
+        			
+        			break;
+        		case TAGS:        			
+        			setTags();
+        			
+        			break;
+        		case ANSWER_TYPES:
+        			setAnswerTypes();
+        			
+        			break;
+        		default:
+        			menu.findItem(R.id.action_accept).setVisible(false);
+        	}
+        		
+        		return true;
             case R.id.action_evaluate: 
             case R.id.action_show_totals:
             	menu.findItem(R.id.action_score).setVisible(false);
