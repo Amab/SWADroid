@@ -18,15 +18,19 @@
  */
 package es.ugr.swad.swadroid.modules.tests;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.gui.ImageListAdapter;
+import es.ugr.swad.swadroid.gui.ImageListItem;
 import es.ugr.swad.swadroid.gui.MenuActivity;
 
 /**
@@ -35,11 +39,11 @@ import es.ugr.swad.swadroid.gui.MenuActivity;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Helena Rodríguez Gijon <hrgijon@gmail.com>
  */
-public class Tests extends MenuActivity {
+public class Tests extends MenuActivity implements OnItemClickListener {
     /**
      * Array adapter for showing menu options
      */
-    private ArrayAdapter<String> adapter;
+    private ImageListAdapter adapter;
     /**
      * Tests tag name for Logcat
      */
@@ -52,34 +56,43 @@ public class Tests extends MenuActivity {
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ListView list;
-        String[] items = getResources().getStringArray(R.array.testMenuItems);
-        OnItemClickListener clickListener = new OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent activity;
-                switch (position) {
-                    case 0:
-                        activity = new Intent(getApplicationContext(), TestsConfigDownload.class);
-                        startActivityForResult(activity, Constants.TESTS_CONFIG_DOWNLOAD_REQUEST_CODE);
-                        break;
-
-                    case 1:
-                        activity = new Intent(getApplicationContext(), TestsMake.class);
-                        startActivityForResult(activity, Constants.TESTS_MAKE_REQUEST_CODE);
-                        break;
-                }
-            }
-        };
+        ListView listView;
+        String[] titles = getResources().getStringArray(R.array.testMenuItems);
+        Integer[] images = {R.drawable.refresh, R.drawable.test};
+        List<ImageListItem> imageListItems = new ArrayList<ImageListItem>();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_items);
 
-        adapter = new ArrayAdapter<String>(this, R.layout.simple_list_item, R.id.listText, items);
-        list = (ListView) this.findViewById(R.id.listItems);
-        list.setAdapter(adapter);
-        list.setOnItemClickListener(clickListener);
+        for (int i = 0; i < titles.length; i++) {
+            ImageListItem item = new ImageListItem(images[i], titles[i]);
+            imageListItems.add(item);
+        }
+
+        adapter = new ImageListAdapter(this, R.layout.list_image_items, imageListItems);
+        listView = (ListView) this.findViewById(R.id.listItems);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(this);
 
         getSupportActionBar().setSubtitle(Constants.getSelectedCourseShortName());
     	getSupportActionBar().setIcon(R.drawable.test);
+    }
+    
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position,
+            long id) {
+    	
+    	Intent activity;
+        switch (position) {
+            case 0:
+                activity = new Intent(getApplicationContext(), TestsConfigDownload.class);
+                startActivityForResult(activity, Constants.TESTS_CONFIG_DOWNLOAD_REQUEST_CODE);
+                break;
+
+            case 1:
+                activity = new Intent(getApplicationContext(), TestsMake.class);
+                startActivityForResult(activity, Constants.TESTS_MAKE_REQUEST_CODE);
+                break;
+        }
     }
 }
