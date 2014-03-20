@@ -41,12 +41,4 @@
             android:textSize="30sp"
             android:visibility="gone" />
     </RelativeLayout>
-
-    <Button
-        android:id="@+id/testNumQuestionsAcceptButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:text="@string/acceptMsg" />
-
 </RelativeLayout>

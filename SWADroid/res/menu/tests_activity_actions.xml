@@ -8,6 +8,12 @@
         swadroid:showAsAction="ifRoom|withText"/>
 
     <item
+        android:id="@+id/action_accept"
+        android:icon="@drawable/ic_action_accept"
+        android:title="@string/acceptMsg"
+        swadroid:showAsAction="ifRoom|withText"/>
+
+    <item
         android:id="@+id/action_evaluate"
         android:icon="@drawable/ic_action_accept"
         android:title="@string/testEvaluateMsg"
