@@ -25,15 +25,9 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.modules.Module;
-
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
+import es.ugr.swad.swadroid.gui.MenuActivity;
 
 /**
  * Tests module for download questions and evaluate user skills in a course
@@ -41,7 +35,7 @@ import java.security.NoSuchAlgorithmException;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Helena Rodríguez Gijon <hrgijon@gmail.com>
  */
-public class Tests extends Module {
+public class Tests extends MenuActivity {
     /**
      * Array adapter for showing menu options
      */
@@ -87,38 +81,5 @@ public class Tests extends Module {
 
         getSupportActionBar().setSubtitle(Constants.getSelectedCourseShortName());
     	getSupportActionBar().setIcon(R.drawable.test);
-    }
-
-	/* (non-Javadoc)
-     * @see es.ugr.swad.swadroid.modules.Module#requestService()
-     */
-    @Override
-    protected void requestService() throws NoSuchAlgorithmException,
-            IOException, XmlPullParserException {
-
-    }
-
-    /* (non-Javadoc)
-     * @see es.ugr.swad.swadroid.modules.Module#connect()
-     */
-    @Override
-    protected void connect() {
-
-    }
-
-    /* (non-Javadoc)
-     * @see es.ugr.swad.swadroid.modules.Module#postConnect()
-     */
-    @Override
-    protected void postConnect() {
-
-    }
-
-    /* (non-Javadoc)
-     * @see es.ugr.swad.swadroid.modules.Module#onError()
-     */
-    @Override
-    protected void onError() {
-
     }
 }
