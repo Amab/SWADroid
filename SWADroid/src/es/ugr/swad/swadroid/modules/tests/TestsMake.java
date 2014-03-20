@@ -42,19 +42,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.gui.widget.CheckableLinearLayout;
 import es.ugr.swad.swadroid.gui.widget.TextProgressBar;
 import es.ugr.swad.swadroid.model.Test;
 import es.ugr.swad.swadroid.model.TestAnswer;
 import es.ugr.swad.swadroid.model.TestQuestion;
 import es.ugr.swad.swadroid.model.TestTag;
-import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.utils.Utils;
 
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +61,7 @@ import java.util.List;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Helena Rodríguez Gijon <hrgijon@gmail.com>
  */
-public class TestsMake extends Module {
+public class TestsMake extends MenuActivity {
     /**
      * Test's number of questions
      */
@@ -823,38 +819,5 @@ public class TestsMake extends Module {
             default:
                 return super.onOptionsItemSelected(item);
         }        
-    }
-
-    /* (non-Javadoc)
-     * @see es.ugr.swad.swadroid.modules.Module#requestService()
-     */
-    @Override
-    protected void requestService() throws NoSuchAlgorithmException,
-            IOException, XmlPullParserException {
-
-    }
-
-    /* (non-Javadoc)
-     * @see es.ugr.swad.swadroid.modules.Module#connect()
-     */
-    @Override
-    protected void connect() {
-
-    }
-
-    /* (non-Javadoc)
-     * @see es.ugr.swad.swadroid.modules.Module#postConnect()
-     */
-    @Override
-    protected void postConnect() {
-
-    }
-
-    /* (non-Javadoc)
-     * @see es.ugr.swad.swadroid.modules.Module#onError()
-     */
-    @Override
-    protected void onError() {
-
     }
 }
