@@ -86,7 +86,7 @@ public class TestsQuestionsDownload extends Module {
     	createRequest(SOAPClient.CLIENT_TYPE);
         addParam("wsKey", Constants.getLoggedUser().getWsKey());
         addParam("courseCode", (int) Constants.getSelectedCourseCode());
-        addParam("beginTime", 0);
+        addParam("beginTime", timestamp);
         sendRequest(Test.class, false);
 
         if (result != null) {
@@ -99,6 +99,8 @@ public class TestsQuestionsDownload extends Module {
             SoapObject questionTagsListObject = (SoapObject) res.get(3);
             List<TestTag> tagsList = new ArrayList<TestTag>();
             List<Model> tagsListDB = dbHelper.getAllRows(Constants.DB_TABLE_TEST_TAGS);
+            List<Model> questionsListDB = dbHelper.getAllRows(Constants.DB_TABLE_TEST_QUESTIONS);
+            List<Model> answersListDB = dbHelper.getAllRows(Constants.DB_TABLE_TEST_ANSWERS);
 
             //Read tags info from webservice response
             int listSize = tagsListObject.getPropertyCount();
@@ -117,14 +119,6 @@ public class TestsQuestionsDownload extends Module {
 
             //Read questions info from webservice response
             dbHelper.beginTransaction();
-            
-        	//Deletes previous data
-        	dbHelper.emptyTable(Constants.DB_TABLE_TEST_QUESTION_TAGS);
-        	dbHelper.emptyTable(Constants.DB_TABLE_TEST_QUESTION_ANSWERS);
-        	dbHelper.emptyTable(Constants.DB_TABLE_TEST_QUESTIONS_COURSE);
-        	dbHelper.emptyTable(Constants.DB_TABLE_TEST_TAGS);
-        	dbHelper.emptyTable(Constants.DB_TABLE_TEST_QUESTIONS);
-        	dbHelper.emptyTable(Constants.DB_TABLE_TEST_ANSWERS);
 
             listSize = questionsListObject.getPropertyCount();
             for (int i = 0; i < listSize; i++) {
@@ -136,11 +130,21 @@ public class TestsQuestionsDownload extends Module {
                 String questionFeedback = pii.getProperty("feedback").toString();
                 TestQuestion q = new TestQuestion(qstCod, stem, anstype, Utils.parseIntBool(shuffle), questionFeedback);
 
-                //Insert in database
-                dbHelper.insertTestQuestion(q, Constants.getSelectedCourseCode());
+                //If it's a new question, insert in database
+                try {
+                    dbHelper.insertTestQuestion(q, Constants.getSelectedCourseCode());
 
-                if (isDebuggable)
-                    Log.d(TAG, "INSERTED: " + q.toString());
+                    if (isDebuggable)
+                        Log.d(TAG, "INSERTED: " + q.toString());
+
+                    //If it's an updated question, update it's row in database
+                } catch (SQLException e) {
+                    TestQuestion old = (TestQuestion) questionsListDB.get(questionsListDB.indexOf(q));
+                    dbHelper.updateTestQuestion(old, q, Constants.getSelectedCourseCode());
+
+                    if (isDebuggable)
+                        Log.d(TAG, "UPDATED: " + q.toString());
+                }
             }
 
             Log.i(TAG, "Retrieved " + listSize + " questions");
@@ -156,11 +160,21 @@ public class TestsQuestionsDownload extends Module {
                 String answerFeeback = pii.getProperty("answerFeedback").toString();
                 TestAnswer a = new TestAnswer(0, ansIndex, qstCod, Utils.parseIntBool(correct), answer, answerFeeback);
 
-                //Insert in database
-                dbHelper.insertTestAnswer(a, qstCod);
+                //If it's a new answer, insert in database
+                try {
+                    dbHelper.insertTestAnswer(a, qstCod);
 
-                if (isDebuggable)
-                    Log.d(TAG, "INSERTED: " + a.toString());
+                    if (isDebuggable)
+                        Log.d(TAG, "INSERTED: " + a.toString());
+
+                    //If it's an updated answer, update it's row in database
+                } catch (SQLException e) {
+                    TestAnswer old = (TestAnswer) answersListDB.get(answersListDB.indexOf(a));
+                    dbHelper.updateTestAnswer(old, a, qstCod);
+
+                    if (isDebuggable)
+                        Log.d(TAG, "UPDATED: " + a.toString());
+                }
             }
 
             Log.i(TAG, "Retrieved " + listSize + " answers");
