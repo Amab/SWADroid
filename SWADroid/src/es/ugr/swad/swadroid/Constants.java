@@ -392,17 +392,17 @@ public class Constants {
      */
     public static final int SHARED_AREA_CHILD = 1;
     /**
+     * Child position inside the users menu for Groups
+     */
+    public static final int MYGROUPS_CHILD = 0;
+    /**
      * Child position inside the users menu for Generate QR
      */
-    public static final int GENERATE_QR_CHILD = 0;
+    public static final int GENERATE_QR_CHILD = 1;
     /**
      * Child position inside the users menu for Rollcall
      */
-    public static final int ROLLCALL_CHILD = 1;
-    /**
-     * Child position inside the enrollment menu for My Groups
-     */
-    public static final int MYGROUPS_CHILD = 0;
+    public static final int ROLLCALL_CHILD = 2;
 
     /**
      * Checks if user is already logged on SWAD

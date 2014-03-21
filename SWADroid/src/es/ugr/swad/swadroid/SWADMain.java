@@ -127,7 +127,8 @@ public class SWADMain extends MenuExpandableListActivity {
 
     private boolean dBCleaned = false;
 
-    private ExpandableListView mExpandableListview;
+    private ExpandableListView mExpandableListView;
+    private ImageExpandableListAdapter mExpandableListAdapter;
     private OnChildClickListener mExpandableClickListener;
     private final ArrayList<HashMap<String, Object>> mHeaderData = new ArrayList<HashMap<String, Object>>();
     private final ArrayList<ArrayList<HashMap<String, Object>>> mChildData = new ArrayList<ArrayList<HashMap<String, Object>>>();
@@ -446,7 +447,7 @@ public class SWADMain extends MenuExpandableListActivity {
             }
 
             if (courseSelected != null) {
-                if ((mExpandableListview.getAdapter() == null) || dBCleaned) {
+                if ((mExpandableListView.getAdapter() == null) || dBCleaned) {
                     createBaseMenu();
                 }
                 int userRole = courseSelected.getUserRole();
@@ -464,12 +465,10 @@ public class SWADMain extends MenuExpandableListActivity {
      * Sets currentRole to student role
      */
     private void createBaseMenu() {
-        mExpandableListview.setVisibility(View.VISIBLE);
-        if (mExpandableListview.getAdapter() == null || currentRole == -1) {
+        mExpandableListView.setVisibility(View.VISIBLE);
+        if (mExpandableListView.getAdapter() == null || currentRole == -1) {
             //the menu base is equal to students menu.
             currentRole = Constants.STUDENT_TYPE_CODE;
-            //Construct Expandable List
-            //final ArrayList<HashMap<String, Object>> mHeaderData = new ArrayList<HashMap<String, Object>>();
 
             //Order:
             // 1- Course
@@ -497,30 +496,16 @@ public class SWADMain extends MenuExpandableListActivity {
             messages.put(IMAGE, getResources().getDrawable(R.drawable.msg));
             mHeaderData.add(messages);
 
-            /*final HashMap<String, Object> enrolment = new HashMap<String, Object>();
-            enrolment.put(NAME, getString(R.string.enrollment));
-            enrolment.put(IMAGE, getResources().getDrawable(R.drawable.enrollment));
-            headerData.add(enrolment);*/
-
-            //final ArrayList<ArrayList<HashMap<String, Object>>> mChildData = new ArrayList<ArrayList<HashMap<String, Object>>>();
-
             final ArrayList<HashMap<String, Object>> courseData = new ArrayList<HashMap<String, Object>>();
             mChildData.add(courseData);
-
+            
             final ArrayList<HashMap<String, Object>> evaluationData = new ArrayList<HashMap<String, Object>>();
             mChildData.add(evaluationData);
 
-            //final ArrayList<HashMap<String, Object>> mUsersData = new ArrayList<HashMap<String, Object>>();
             mChildData.add(mUsersData);
-
-            //final ArrayList<HashMap<String, Object>> mMessagesData = new ArrayList<HashMap<String, Object>>();
             mChildData.add(mMessagesData);
 
-            /*final ArrayList<HashMap<String, Object>> enrollmentData = new ArrayList<HashMap<String, Object>>();
-            childData.add(enrollmentData);*/
-
-            HashMap<String, Object> map = new HashMap<String, Object>();
-  
+            HashMap<String, Object> map;
             
             //Course category
             //Introduction
@@ -553,7 +538,6 @@ public class SWADMain extends MenuExpandableListActivity {
             map.put(NAME, getString(R.string.sharedsDownloadModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.folder_users));
             courseData.add(map);
-            //TODO Disable Information options until the Information module is finished
             //Bibliography
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.bibliographyModuleLabel));
@@ -606,17 +590,19 @@ public class SWADMain extends MenuExpandableListActivity {
             map.put(IMAGE, getResources().getDrawable(R.drawable.msg_write));
             mMessagesData.add(map);
             
-            mExpandableListview.setAdapter(new ImageExpandableListAdapter(
+            mExpandableListAdapter = new ImageExpandableListAdapter(
                     this,
                     mHeaderData,
                     R.layout.image_list_item,
-                    new String[]{NAME},            // the name of the field data
+                    new String[]{NAME},       // the name of the field data
                     new int[]{R.id.listText}, // the text field to populate with the field data
                     mChildData,
                     0,
                     null,
                     new int[]{}
-            ));
+            );
+            
+            mExpandableListView.setAdapter(mExpandableListAdapter);
         }
     }
 
@@ -626,10 +612,11 @@ public class SWADMain extends MenuExpandableListActivity {
     private void changeToStudentMenu() {
         if (currentRole == Constants.TEACHER_TYPE_CODE) {
             //Removes Publish Note from messages menu
-            //((ImageExpandableListAdapter) mExpandableListview.getAdapter()).removeChild(Constants.MESSAGES_GROUP, Constants.PUBLISH_NOTE_CHILD);
+        	mExpandableListAdapter.removeChild(Constants.MESSAGES_GROUP, Constants.PUBLISH_NOTE_CHILD);
             //Removes Rollcall from users menu
-            //((ImageExpandableListAdapter) mExpandableListview.getAdapter()).removeChild(Constants.USERS_GROUP, Constants.ROLLCALL_CHILD);
+        	mExpandableListAdapter.removeChild(Constants.USERS_GROUP, Constants.ROLLCALL_CHILD);
         }
+        
         currentRole = Constants.STUDENT_TYPE_CODE;
     }
 
@@ -648,17 +635,21 @@ public class SWADMain extends MenuExpandableListActivity {
             map.put(NAME, getString(R.string.rollcallModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.roll_call));
             mUsersData.add(map);
+            
+            mExpandableListAdapter = new ImageExpandableListAdapter(this, mHeaderData,
+                    R.layout.image_list_item,
+                    new String[] {
+                        NAME
+                    }, new int[] {
+                        R.id.listText
+                    },
+                    mChildData, 0,
+                    null, new int[] {}
+            );
 
-            mExpandableListview.setAdapter(new ImageExpandableListAdapter(this, mHeaderData,
-                                                                          R.layout.image_list_item,
-                                                                          new String[] {
-                                                                              NAME
-                                                                          }, new int[] {
-                                                                              R.id.listText
-                                                                          },
-                                                                          mChildData, 0,
-                                                                          null, new int[] {}));
+            mExpandableListView.setAdapter(mExpandableListAdapter);
         }
+        
         currentRole = Constants.TEACHER_TYPE_CODE;
     }
 
@@ -676,7 +667,7 @@ public class SWADMain extends MenuExpandableListActivity {
         listCourses.clear();
         cleanSpinner();
         
-        mExpandableListview.setVisibility(View.GONE);
+        mExpandableListView.setVisibility(View.GONE);
     }
 
     // TODO
@@ -699,7 +690,7 @@ public class SWADMain extends MenuExpandableListActivity {
 	}
     
 	private void initializeMainViews() {
-        mExpandableListview = (ExpandableListView) findViewById(R.id.expandableList);
+        mExpandableListView = (ExpandableListView) findViewById(R.id.expandableList);
         
         mExpandableClickListener = new OnChildClickListener() {
             
@@ -796,7 +787,7 @@ public class SWADMain extends MenuExpandableListActivity {
             }
         };
         
-        mExpandableListview.setOnChildClickListener(mExpandableClickListener);
+        mExpandableListView.setOnChildClickListener(mExpandableClickListener);
 	}
     
     @Override
