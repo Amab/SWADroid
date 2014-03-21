@@ -225,7 +225,8 @@
         almacenamiento USB" en la notificación
     </string>
     <string name="vacants">Vacantes</string>
-    <string name="numStudent">Nº de estudiantes:</string>
+    <string name="numStudent">Nº de estudiantes</string>
+    <string name="maxStudent">Máx. estudiantes</string>
     <string name="myGroupsModuleLabel">Grupos</string>
     <string name="scan_no_photos">No se han podido guardar las fotos de los estudiantes</string>
     <string name="noStudentsAvailableMsg">Esta asignatura no tiene alumnos</string>
