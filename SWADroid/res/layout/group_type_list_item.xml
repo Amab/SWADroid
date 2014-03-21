@@ -11,7 +11,6 @@
         android:layout_toRightOf="@id/padlockIcon"
         android:paddingLeft="35dp"
         android:paddingRight="10dp"
-        android:text="Group Type Name"
         android:textColor="@android:color/black"
         android:textSize="20sp" />
 

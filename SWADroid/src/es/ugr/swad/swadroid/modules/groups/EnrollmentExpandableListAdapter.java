@@ -71,8 +71,9 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
         ImageView imagePadlock;
         CheckBox checkBox;
         RadioButton radioButton;
-        TextView nStudentText;
         TextView vacantsText;
+        TextView nStudentText;
+        TextView maxStudentText;
         ColorStateList oldColor;
     }
 
@@ -122,8 +123,9 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
             holder.checkBox = (CheckBox) convertView.findViewById(R.id.checkBox);
             holder.checkBox.setOnClickListener(checkListener);
             holder.radioButton = (RadioButton) convertView.findViewById(R.id.radioButton);
-            holder.nStudentText = (TextView) convertView.findViewById(R.id.nStudentText);
             holder.vacantsText = (TextView) convertView.findViewById(R.id.vacantsText);
+            holder.nStudentText = (TextView) convertView.findViewById(R.id.nStudentText);
+            holder.maxStudentText = (TextView) convertView.findViewById(R.id.maxStudentText);
             holder.oldColor = holder.vacantsText.getTextColors();
             convertView.setTag(holder);
         } else {
@@ -176,6 +178,8 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
             holder.imagePadlock.setEnabled(true);
             holder.nStudentText.setEnabled(true);
             holder.nStudentText.setTextColor(context.getResources().getColor(R.color.sgilight_gray_32));
+            holder.maxStudentText.setEnabled(true);
+            holder.maxStudentText.setTextColor(context.getResources().getColor(R.color.sgilight_gray_32));
             holder.radioButton.setEnabled(true);
             holder.radioButton.setTextColor(context.getResources().getColor(android.R.color.black));
             holder.linearLayout.setEnabled(true);
@@ -187,6 +191,8 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
             holder.imagePadlock.setEnabled(false);
             holder.nStudentText.setEnabled(false);
             holder.nStudentText.setTextColor(context.getResources().getColor(R.color.sgilight_gray));
+            holder.maxStudentText.setEnabled(false);
+            holder.maxStudentText.setTextColor(context.getResources().getColor(R.color.sgilight_gray));
             holder.radioButton.setEnabled(false);
             holder.radioButton.setTextColor(context.getResources().getColor(R.color.sgilight_gray));
             holder.linearLayout.setEnabled(false);
@@ -219,11 +225,12 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
             }
         }
 
-        holder.nStudentText.setText(context.getString(R.string.numStudent) + " " + String.valueOf(students));
+        holder.nStudentText.setText(context.getString(R.string.numStudent) + ": " + String.valueOf(students));
 
         if (maxStudents != -1) {
             int vacants = maxStudents - students;
-            holder.vacantsText.setText(context.getString(R.string.vacants) + " : " + String.valueOf(vacants));
+            holder.maxStudentText.setText(context.getString(R.string.maxStudent) + ": " + String.valueOf(maxStudents));
+            holder.vacantsText.setText(context.getString(R.string.vacants) + ": " + String.valueOf(vacants));
             if (vacants == 0) {
                 holder.vacantsText.setTextColor(context.getResources().getColor(R.color.sgi_salmon));
                 holder.vacantsText.setTypeface(null, Typeface.BOLD);
@@ -231,7 +238,8 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
                 holder.vacantsText.setTypeface(null, Typeface.NORMAL);
 
         } else {
-            holder.vacantsText.setText(context.getString(R.string.vacants) + " : " + context.getString(R.string.withoutLimit));
+            holder.maxStudentText.setVisibility(View.GONE);
+            holder.vacantsText.setText(context.getString(R.string.vacants) + ": " + context.getString(R.string.withoutLimit));
             holder.vacantsText.setTypeface(null, Typeface.NORMAL);
         }
 

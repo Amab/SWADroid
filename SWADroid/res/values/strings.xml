@@ -222,8 +222,8 @@
         notification
     </string>
     <string name="vacants">Vacants</string>
-    <string name="numStudent">No. of students:</string>
-    <string name="maxStudent">Max.stud.</string>
+    <string name="numStudent">No. of students</string>
+    <string name="maxStudent">Max. students</string>
     <string name="myGroupsModuleLabel">Groups</string>
     <string name="scan_no_photos">Failed to save the photos of students</string>
     <string name="noStudentsAvailableMsg">There are no students in this subject</string>

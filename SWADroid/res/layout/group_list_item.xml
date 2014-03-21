@@ -12,24 +12,24 @@
         android:layout_height="wrap_content"
         android:clickable="false"
         android:focusable="false"
-        android:paddingLeft="5dp"
-        android:paddingTop="5dp"
+        android:paddingLeft="5dip"
+        android:paddingTop="5dip"
         android:src="@drawable/padlock_red" />
-
-    <CheckBox
-        android:id="@+id/checkBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="false"
-        android:focusable="false"
-        android:textColor="@android:color/black"
-        android:visibility="gone" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:focusable="false"
         android:orientation="vertical" >
+
+	    <CheckBox
+	        android:id="@+id/checkBox"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:clickable="false"
+	        android:focusable="false"
+	        android:textColor="@android:color/black"
+	        android:visibility="gone" />
 
         <RadioButton
             android:id="@+id/radioButton"
@@ -46,6 +46,7 @@
             android:clickable="false"
             android:focusable="false"
             android:gravity="center"
+        	android:paddingLeft="7dip"
             android:text="@string/vacants"
             android:textColor="@color/sgilight_gray_32" />
 
@@ -56,8 +57,19 @@
             android:clickable="false"
             android:focusable="false"
             android:gravity="center"
+        	android:paddingLeft="7dip"
             android:text="@string/numStudent"
             android:textColor="@color/sgilight_gray_32" />
-    </LinearLayout>
 
+        <TextView
+            android:id="@+id/maxStudentText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:focusable="false"
+            android:gravity="center"
+        	android:paddingLeft="7dip"
+            android:text="@string/maxStudent"
+            android:textColor="@color/sgilight_gray_32" />
+    </LinearLayout>
 </LinearLayout>
