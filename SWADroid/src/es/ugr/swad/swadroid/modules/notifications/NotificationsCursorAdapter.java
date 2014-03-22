@@ -170,10 +170,10 @@ public class NotificationsCursorAdapter extends CursorAdapter {
                 notificationIcon.setImageResource(R.drawable.desk);
             } else if (type.equals("documentFile")) {
                 type = context.getString(R.string.documentFile);
-                notificationIcon.setImageResource(R.drawable.folder);
+                notificationIcon.setImageResource(R.drawable.file);
             } else if (type.equals("sharedFile")) {
                 type = context.getString(R.string.sharedFile);
-                notificationIcon.setImageResource(R.drawable.folder_users);
+                notificationIcon.setImageResource(R.drawable.file);
             } else if (type.equals("enrollment")) {
                 type = context.getString(R.string.enrollment);
                 notificationIcon.setImageResource(R.drawable.enrollment);
