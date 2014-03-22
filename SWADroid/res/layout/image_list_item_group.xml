@@ -13,7 +13,10 @@
         android:paddingBottom="5dip"
         android:paddingLeft="30dip"
         android:paddingTop="5dip"
-        android:textColor="@color/foreground1" >
+        android:textSize="20dip"
+        android:textStyle="bold"
+        android:textColor="@color/foreground1"
+        android:background="@color/gray_goose" >
     </TextView>
 
 </LinearLayout>
