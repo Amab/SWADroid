@@ -86,7 +86,7 @@ public class ImageExpandableListAdapter extends SimpleExpandableListAdapter {
         
         if (convertView == null) {
             
-            convertView = layoutInflater.inflate(R.layout.image_list_item, parent, false);
+            convertView = layoutInflater.inflate(R.layout.image_list_item_group, parent, false);
             
             convertViewCounter++;
             
