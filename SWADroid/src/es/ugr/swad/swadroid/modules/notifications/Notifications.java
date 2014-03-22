@@ -125,7 +125,6 @@ public class Notifications extends Module {
      */
     private OnItemClickListener clickListener = new OnItemClickListener() {
         public void onItemClick(AdapterView<?> av, View v, int position, long rowId) {
-            //adapter.toggleContentVisibility(position);
             TextView id = (TextView) v.findViewById(R.id.notifCode);
             TextView code = (TextView) v.findViewById(R.id.eventCode);
             TextView type = (TextView) v.findViewById(R.id.eventType);
@@ -164,17 +163,12 @@ public class Notifications extends Module {
         startManagingCursor(dbCursor);
         adapter.changeCursor(dbCursor);
 
-        //TextView text = (TextView) this.findViewById(R.id.listText);
-        //ListView list = (ListView) this.findViewById(R.id.listItems);
         PullToRefreshListView list = (PullToRefreshListView) this.findViewById(R.id.listItemsPullToRefresh);
 
         //If there are notifications to show, hide the empty notifications message and show the notifications list
         if (dbCursor.getCount() > 0) {
-            //text.setVisibility(View.GONE);
-            //list.setVisibility(View.VISIBLE);
             list.setAdapter(adapter);
             list.setOnItemClickListener(clickListener);
-        	//list.setDividerHeight(1);
         }        
 
     	list.onRefreshComplete();
@@ -250,7 +244,6 @@ public class Notifications extends Module {
         startManagingCursor(dbCursor);
         adapter = new NotificationsCursorAdapter(this, dbCursor, Preferences.getDBKey());
 
-        //list = (ListView) this.findViewById(R.id.listItems);
         list = (PullToRefreshListView) this.findViewById(R.id.listItemsPullToRefresh);
         list.setAdapter(adapter);
         list.setOnItemClickListener(clickListener);
