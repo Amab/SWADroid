@@ -24,8 +24,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
-
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 
@@ -49,14 +49,16 @@ public class AlertNotification {
     	NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(context)
             .setAutoCancel(true)
             .setSmallIcon(R.drawable.ic_launcher_swadroid)
+            .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),R.drawable.ic_launcher_swadroid))
             .setContentTitle(contentTitle)
             .setContentText(contentText)
-            .setTicker(ticker);
+            .setTicker(ticker)
+        	.setWhen(System.currentTimeMillis());
             //.setLights(Color.GREEN, 500, 500);
 
         //Launch activity on alert click
     	if(activity != null) {
-            PendingIntent notificationsPendingIntent = PendingIntent.getActivity(context, 0, activity, 0);
+            PendingIntent notificationsPendingIntent = PendingIntent.getActivity(context, 0, activity, Intent.FLAG_ACTIVITY_NEW_TASK);
             notifBuilder.setContentIntent(notificationsPendingIntent);
     	}
         
