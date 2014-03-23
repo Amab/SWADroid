@@ -621,7 +621,7 @@ public class SWADMain extends MenuExpandableListActivity {
             //Removes Publish Note from messages menu
         	mExpandableListAdapter.removeChild(Constants.MESSAGES_GROUP, Constants.PUBLISH_NOTE_CHILD);
             //Removes Rollcall from users menu
-        	mExpandableListAdapter.removeChild(Constants.USERS_GROUP, Constants.ROLLCALL_CHILD);
+        	//mExpandableListAdapter.removeChild(Constants.USERS_GROUP, Constants.ROLLCALL_CHILD);
         }
         
         currentRole = Constants.STUDENT_TYPE_CODE;
@@ -638,10 +638,10 @@ public class SWADMain extends MenuExpandableListActivity {
             
             mMessagesData.add(map);
 
-            map = new HashMap<String, Object>();
+            /*map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.rollcallModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.roll_call));
-            mUsersData.add(map);
+            mUsersData.add(map);*/
             
             mExpandableListAdapter = new ImageExpandableListAdapter(this, mHeaderData,
                     R.layout.image_list_item,
