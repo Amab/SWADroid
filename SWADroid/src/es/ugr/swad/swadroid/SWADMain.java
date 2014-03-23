@@ -19,6 +19,9 @@
 
 package es.ugr.swad.swadroid;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -319,6 +322,8 @@ public class SWADMain extends MenuExpandableListActivity {
         	            SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY,
         	            		Long.parseLong(Preferences.getSyncTime()), this);
         	        }
+        	        
+        	        showProgress(false);
                     break;
                 case Constants.LOGIN_REQUEST_CODE:
                     getCurrentCourses();
@@ -329,7 +334,8 @@ public class SWADMain extends MenuExpandableListActivity {
                 //After get the list of courses, a dialog is launched to choice the course
                 case Constants.COURSES_REQUEST_CODE:
                     //User credentials are wrong. Remove periodic synchronization
-                    SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, this);                    
+                    SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, this);  
+                    showProgress(false);
                     break;
                 case Constants.LOGIN_REQUEST_CODE:
                     finish();
@@ -415,10 +421,11 @@ public class SWADMain extends MenuExpandableListActivity {
     };
 
     private void getCurrentCourses() {
+    	
+    	showProgress(true);
+    	
         Intent activity;
         activity = new Intent(this, Courses.class);
-        
-        Toast.makeText(this, R.string.coursesProgressDescription, Toast.LENGTH_LONG).show();
         startActivityForResult(activity, Constants.COURSES_REQUEST_CODE);
     }
 
@@ -531,8 +538,7 @@ public class SWADMain extends MenuExpandableListActivity {
             //Documents
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.documentsDownloadModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.folder));
-            courseData.add(map);
+            map.put(IMAGE, getResources().getDrawable(R.drawable.folder));            courseData.add(map);
             //Shared area 
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.sharedsDownloadModuleLabel));
@@ -789,7 +795,53 @@ public class SWADMain extends MenuExpandableListActivity {
         
         mExpandableListView.setOnChildClickListener(mExpandableClickListener);
 	}
-    
+ 
+	
+    /**
+     * Shows the progress UI and hides the login form.
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+    	
+    	final View course_list = findViewById(R.id.courses_list_view);
+        final View progressAnimation = findViewById(R.id.get_courses_status);
+        
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+            
+            progressAnimation.setVisibility(View.VISIBLE);
+            progressAnimation.animate()
+                            .setDuration(shortAnimTime)
+                            .alpha(show ? 1 : 0)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    progressAnimation.setVisibility(show ? View.VISIBLE : View.GONE);
+                                }
+                            });
+
+            course_list.setVisibility(View.VISIBLE);
+            course_list.animate()
+                          .setDuration(shortAnimTime)
+                          .alpha(show ? 0 : 1)
+                          .setListener(new AnimatorListenerAdapter() {
+                              @Override
+                              public void onAnimationEnd(Animator animation) {
+                            	  course_list.setVisibility(show ? View.GONE
+                                          : View.VISIBLE);
+                              }
+                          });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+        	progressAnimation.setVisibility(show ? View.VISIBLE : View.GONE);
+        	course_list.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
+    }
+	
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_activity_actions, menu);
