@@ -488,7 +488,7 @@ public class SWADMain extends MenuExpandableListActivity {
 
             final HashMap<String, Object> evaluation = new HashMap<String, Object>();
             evaluation.put(NAME, getString(R.string.evaluation));
-            evaluation.put(IMAGE, getResources().getDrawable(R.drawable.grades));
+            evaluation.put(IMAGE, getResources().getDrawable(R.drawable.ass));
             mHeaderData.add(evaluation);
 
             final HashMap<String, Object> users = new HashMap<String, Object>();
