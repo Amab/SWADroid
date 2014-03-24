@@ -21,6 +21,7 @@ package es.ugr.swad.swadroid.modules.tests;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.text.Html;
 import android.text.InputType;
 import android.util.Log;
@@ -460,7 +461,7 @@ public class TestsMake extends MenuActivity {
             
             score.setText(df.format(questionScore));
 
-            actionScoreItem.setActionView(score);
+            MenuItemCompat.setActionView(actionScoreItem, score);
             actionScoreItem.setVisible(true);
         }
     }
