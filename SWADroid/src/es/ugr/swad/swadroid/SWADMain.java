@@ -42,8 +42,6 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
-import android.widget.Toast;
-
 import com.bugsense.trace.BugSenseHandler;
 
 import es.ugr.swad.swadroid.gui.DialogFactory;
