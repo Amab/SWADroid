@@ -100,10 +100,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
      */
     private static Preference googlePlusPref;
     /**
-     * Mailing list preference
-     */
-    private static Preference mailingListPref;
-    /**
      * Blog preference
      */
     private static Preference blogPref;
@@ -218,7 +214,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         twitterPref = findPreference(Preferences.TWITTERPREF);
         facebookPref = findPreference(Preferences.FACEBOOKPREF);
         googlePlusPref = findPreference(Preferences.GOOGLEPLUSPREF);
-        mailingListPref = findPreference(Preferences.MAILINGLISTPREF);
         blogPref = findPreference(Preferences.BLOGPREF);
         sharePref = findPreference(Preferences.SHAREPREF);
         serverPref = findPreference(Preferences.SERVERPREF);
@@ -233,7 +228,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         twitterPref.setOnPreferenceChangeListener(this);
         facebookPref.setOnPreferenceChangeListener(this);
         googlePlusPref.setOnPreferenceChangeListener(this);
-        mailingListPref.setOnPreferenceChangeListener(this);
         blogPref.setOnPreferenceChangeListener(this);
         sharePref.setOnPreferenceChangeListener(this);
         serverPref.setOnPreferenceChangeListener(this);
@@ -307,18 +301,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
             public boolean onPreferenceClick(Preference preference) {
                 Intent urlIntent = new Intent(Intent.ACTION_VIEW);
                 urlIntent.setData(Uri.parse(getString(R.string.googlePlusURL)));
-                startActivity(urlIntent);
-                return true;
-            }
-        });
-        mailingListPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-            /**
-             * Called when a preference is selected.
-             * @param preference Preference selected.
-             */
-            public boolean onPreferenceClick(Preference preference) {
-                Intent urlIntent = new Intent(Intent.ACTION_VIEW);
-                urlIntent.setData(Uri.parse(getString(R.string.mailingListURL)));
                 startActivity(urlIntent);
                 return true;
             }

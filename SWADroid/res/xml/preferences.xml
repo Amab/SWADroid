@@ -119,11 +119,6 @@
             android:key="googlePlusPref"
             android:summary="@string/googlePlusURL"
             android:title="@string/googlePlusTitle" />
-        <Preference
-            android:defaultValue=""
-            android:key="mailingListPref"
-            android:summary="@string/mailingListURL"
-            android:title="@string/mailingListTitle" />
     </PreferenceCategory>
 
 </PreferenceScreen>

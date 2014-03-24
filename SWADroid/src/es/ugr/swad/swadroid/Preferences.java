@@ -94,10 +94,6 @@ public class Preferences {
      */
     public static final String GOOGLEPLUSPREF = "googlePlusPref";
     /**
-     * Mailing list preference name
-     */
-    public static final String MAILINGLISTPREF = "mailingListPref";
-    /**
      * Blog preference name
      */
     public static final String BLOGPREF = "blogPref";
