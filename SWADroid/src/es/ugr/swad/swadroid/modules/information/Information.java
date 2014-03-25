@@ -7,6 +7,7 @@
 package es.ugr.swad.swadroid.modules.information;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
@@ -178,14 +179,15 @@ public class Information extends Module {
 	}
 
 	@Override
-	protected void postConnect() {		
-		if (infoSrc.equals("none") || infoSrc.equals("editor") || infoTxt.equals(Constants.NULL_VALUE)) {
+	protected void postConnect() {
+		Log.d("MIPETICION", infoSrc);
+		Log.d("MIPETICION2", infoTxt);
+		if (infoSrc.equals("none")) {
 			webview.loadDataWithBaseURL(null,(getString(R.string.emptyInformation)), "text/html", "utf-8", null);
 		} else if (infoSrc.equals("URL")) {
 			webview.loadDataWithBaseURL(infoTxt, null, "text/html", "utf-8", null);
 		} else {
-			infoTxt = Utils.fixLinks(infoTxt);
-			webview.loadDataWithBaseURL(null, infoTxt, "text/html", "utf-8", null);
+			webview.loadDataWithBaseURL(null,infoTxt, "text/html", "utf-8", null);
 		}
 
 	}
