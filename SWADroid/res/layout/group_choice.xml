@@ -4,7 +4,6 @@
               android:layout_height="match_parent"
               android:orientation="vertical"
               android:background="@color/background">
-    <include layout="@layout/action_bar"/>
 
     <TextView
             android:id="@+id/listText"
@@ -17,14 +16,6 @@
             android:text="@string/myGroupsModuleLabel">
     </TextView>
 
-    <include android:id="@+id/courseNameLayout" layout="@layout/course_or_group_name"/>
-    <Button
-            android:id="@+id/sendMyGroupsButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/changeGroups"
-            />
     <ExpandableListView
             android:id="@+id/android:list"
             android:layout_width="match_parent"

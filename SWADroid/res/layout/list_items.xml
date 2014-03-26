@@ -4,7 +4,6 @@
               android:layout_height="match_parent"
               android:background="@color/background"
               android:orientation="vertical">
-    <include layout="@layout/action_bar"/>
 
     <TextView
             android:id="@+id/listText"
@@ -12,12 +11,9 @@
             android:layout_height="wrap_content"
             android:padding="20dip"
             android:textColor="@color/foreground1"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:visibility="gone">
     </TextView>
-
-
-    <include android:id="@+id/courseNameLayout" layout="@layout/course_or_group_name"/>
 
     <ListView
             android:id="@+id/listItems"

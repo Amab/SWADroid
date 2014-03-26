@@ -5,12 +5,6 @@
               android:background="@color/background"
               android:orientation="vertical">
 
-    <include layout="@layout/action_bar"/>
-
-    <include
-            android:id="@+id/courseNameLayout"
-            layout="@layout/course_or_group_name"/>
-
     <Spinner
             android:id="@+id/spGroup"
             android:layout_width="fill_parent"

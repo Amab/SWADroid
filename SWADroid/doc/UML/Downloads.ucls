@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.1.4" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
+  realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
+  <class id="1" language="java" name="es.ugr.swad.swadroid.modules.downloads.DownloadNotification" project="SWADroid" 
+    file="/SWADroid/src/es/ugr/swad/swadroid/modules/downloads/DownloadNotification.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="277" width="231" x="41" y="840"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="es.ugr.swad.swadroid.modules.downloads.DownloadsManager.onGroupSelectedListener" 
+    project="SWADroid" file="/SWADroid/src/es/ugr/swad/swadroid/modules/downloads/DownloadsManager.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="115" width="272" x="1330" y="840"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="es.ugr.swad.swadroid.modules.downloads.DirectoryTreeDownload.DirectoryTree" 
+    project="SWADroid" file="/SWADroid/src/es/ugr/swad/swadroid/modules/downloads/DirectoryTreeDownload.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="97" width="186" x="372" y="840"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="es.ugr.swad.swadroid.modules.downloads.NodeAdapter.ViewHolder" project="SWADroid" 
+    file="/SWADroid/src/es/ugr/swad/swadroid/modules/downloads/NodeAdapter.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="115" width="186" x="730" y="1265"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="es.ugr.swad.swadroid.modules.downloads.FileDownloader" project="SWADroid" 
+    file="/SWADroid/src/es/ugr/swad/swadroid/modules/downloads/FileDownloader.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="151" width="200" x="824" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="es.ugr.swad.swadroid.modules.downloads.FileDownloaderAsyncTask" project="SWADroid" 
+    file="/SWADroid/src/es/ugr/swad/swadroid/modules/downloads/FileDownloaderAsyncTask.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="403" width="291" x="41" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="es.ugr.swad.swadroid.modules.downloads.DirectoryNavigator" project="SWADroid" 
+    file="/SWADroid/src/es/ugr/swad/swadroid/modules/downloads/DirectoryNavigator.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="385" width="269" x="1021" y="840"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="8" language="java" name="es.ugr.swad.swadroid.modules.downloads.GetFile" project="SWADroid" 
+    file="/SWADroid/src/es/ugr/swad/swadroid/modules/downloads/GetFile.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="241" width="186" x="1064" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="es.ugr.swad.swadroid.modules.downloads.DirectoryTreeDownload" project="SWADroid" 
+    file="/SWADroid/src/es/ugr/swad/swadroid/modules/downloads/DirectoryTreeDownload.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="223" width="186" x="372" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="10" language="java" name="es.ugr.swad.swadroid.modules.downloads.NodeAdapter" project="SWADroid" 
+    file="/SWADroid/src/es/ugr/swad/swadroid/modules/downloads/NodeAdapter.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="187" width="251" x="730" y="840"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="11" language="java" name="es.ugr.swad.swadroid.modules.downloads.InvalidPath" project="SWADroid" 
+    file="/SWADroid/src/es/ugr/swad/swadroid/modules/downloads/DirectoryNavigator.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="97" width="186" x="598" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="12" language="java" name="es.ugr.swad.swadroid.modules.downloads.DirectoryItem" project="SWADroid" 
+    file="/SWADroid/src/es/ugr/swad/swadroid/modules/downloads/DirectoryItem.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="547" width="319" x="956" y="1265"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="13" language="java" name="es.ugr.swad.swadroid.modules.downloads.DownloadsManager" project="SWADroid" 
+    file="/SWADroid/src/es/ugr/swad/swadroid/modules/downloads/DownloadsManager.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="763" width="312" x="1290" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <association id="14">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="15" name="list"/>      
+      <multiplicity id="16" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="12" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="17">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="18" name="mNotification"/>      
+      <multiplicity id="19" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="20">    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="21" name="navigator"/>      
+      <multiplicity id="22" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="7" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="23">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="4"/>  
+  </nesting>  
+  <nesting id="24">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="2"/>  
+  </nesting>  
+  <association id="25">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="26" name="currentItems"/>      
+      <multiplicity id="27" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="12" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="28">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="3"/>  
+  </nesting>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

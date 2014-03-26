@@ -1,11 +1,5 @@
 package es.ugr.swad.swadroid.gui;
 
-import java.io.InputStream;
-
-import org.apache.commons.io.IOUtils;
-
-import com.bugsense.trace.BugSenseHandler;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,7 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
+
+import com.bugsense.trace.BugSenseHandler;
+
 import es.ugr.swad.swadroid.R;
+
+import org.apache.commons.io.IOUtils;
+
+import java.io.InputStream;
 
 public class DialogFactory {
 	/**
@@ -84,22 +85,38 @@ public class DialogFactory {
     /**
      * Creates an AlertDialog with a neutral button
      * @param context Application context
+     * @param layoutId Resource id of dialog layout
      * @param titleId Resource id of dialog title string
      * @param messageId Resource id of dialog message string
      * @param buttonLabelId Resource id of button label string
      * @param clickListener ClickListener associated to the neutral button
      * @return AlertDialog with a neutral button
      */
-    public static AlertDialog createNeutralDialog(Context context, int titleId, int messageId, int buttonLabelId,
+    public static AlertDialog createNeutralDialog(Context context, int layoutId, int titleId, int messageId, int buttonLabelId,
     		OnClickListener clickListener) {
     	
+    	AlertDialog alertDialog;
     	AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context)
                 .setTitle(titleId)
-                .setMessage(messageId)
                 .setCancelable(false)
                 .setNeutralButton(buttonLabelId, clickListener);
     	
-    	return alertDialogBuilder.create();
+    	if(messageId != -1) {
+    		alertDialogBuilder.setMessage(messageId);
+    	}
+    	
+    	if(layoutId != -1) {    		
+    		FrameLayout frameView = new FrameLayout(context);
+    		alertDialogBuilder.setView(frameView);
+
+    		alertDialog = alertDialogBuilder.create();
+    		LayoutInflater inflater = alertDialog.getLayoutInflater();
+    		inflater.inflate(layoutId, frameView);
+    	} else {
+    		alertDialog = alertDialogBuilder.create();
+    	}
+    	
+    	return alertDialog;
     }
     
     /**
@@ -172,7 +189,7 @@ public class DialogFactory {
                 .setIcon(R.drawable.erroricon);
 
         if (ex != null) {
-            ex.printStackTrace();
+            //Log.e(tag, ex.getMessage());
 
             // Send exception details to Bugsense
             if (!isDebuggable && sendException) {

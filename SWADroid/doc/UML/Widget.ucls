@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.1.4" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
+  realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
+  <class id="1" language="java" name="es.ugr.swad.swadroid.gui.widget.TextProgressBar" project="SWADroid" 
+    file="/SWADroid/src/es/ugr/swad/swadroid/gui/widget/TextProgressBar.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="223" width="224" x="45" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="es.ugr.swad.swadroid.gui.widget.NumberPickerButton" project="SWADroid" 
+    file="/SWADroid/src/es/ugr/swad/swadroid/gui/widget/NumberPickerButton.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="223" width="245" x="563" y="840"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="es.ugr.swad.swadroid.gui.widget.NumberPicker" project="SWADroid" 
+    file="/SWADroid/src/es/ugr/swad/swadroid/gui/widget/NumberPicker.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="763" width="256" x="848" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="4" language="java" name="es.ugr.swad.swadroid.gui.widget.NumberPicker.Formatter" project="SWADroid" 
+    file="/SWADroid/src/es/ugr/swad/swadroid/gui/widget/NumberPicker.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="79" width="146" x="848" y="840"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <interface id="5" language="java" name="es.ugr.swad.swadroid.gui.widget.NumberPicker.OnChangedListener" 
+    project="SWADroid" file="/SWADroid/src/es/ugr/swad/swadroid/gui/widget/NumberPicker.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="79" width="208" x="1034" y="840"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="6" language="java" name="es.ugr.swad.swadroid.gui.widget.SeekBarDialogPreference.SavedState" 
+    project="SWADroid" file="/SWADroid/src/es/ugr/swad/swadroid/gui/widget/SeekBarDialogPreference.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="187" width="189" x="1968" y="840"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="es.ugr.swad.swadroid.gui.widget.ExpandedListView" project="SWADroid" 
+    file="/SWADroid/src/es/ugr/swad/swadroid/gui/widget/ExpandedListView.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="115" width="217" x="309" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="8" language="java" name="es.ugr.swad.swadroid.gui.widget.CheckableLinearLayout" project="SWADroid" 
+    file="/SWADroid/src/es/ugr/swad/swadroid/gui/widget/CheckableLinearLayout.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="223" width="242" x="566" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="es.ugr.swad.swadroid.gui.widget.NumberPicker.NumberRangeKeyListener" 
+    project="SWADroid" file="/SWADroid/src/es/ugr/swad/swadroid/gui/widget/NumberPicker.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="133" width="303" x="1282" y="840"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="10" language="java" name="es.ugr.swad.swadroid.gui.widget.SeekBarDialogPreference" project="SWADroid" 
+    file="/SWADroid/src/es/ugr/swad/swadroid/gui/widget/SeekBarDialogPreference.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="511" width="254" x="1903" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="11" language="java" name="es.ugr.swad.swadroid.gui.widget.NumberPicker.NumberPickerInputFilter" 
+    project="SWADroid" file="/SWADroid/src/es/ugr/swad/swadroid/gui/widget/NumberPicker.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="97" width="303" x="1625" y="840"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <association id="12">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="13" name="TWO_DIGIT_FORMATTER"/>      
+      <multiplicity id="14" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="15">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="9"/>  
+  </nesting>  
+  <association id="16">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="17" name="mNumberPicker"/>      
+      <multiplicity id="18" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="19">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="20" name="mIncrementButton"/>      
+      <multiplicity id="21" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="22">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="6"/>  
+  </nesting>  
+  <nesting id="23">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="5"/>  
+  </nesting>  
+  <association id="24">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="25" name="mFormatter"/>      
+      <multiplicity id="26" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="27">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="28" name="mDecrementButton"/>      
+      <multiplicity id="29" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="30">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="31" name="mListener"/>      
+      <multiplicity id="32" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="33">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="11"/>  
+  </nesting>  
+  <nesting id="34">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="4"/>  
+  </nesting>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

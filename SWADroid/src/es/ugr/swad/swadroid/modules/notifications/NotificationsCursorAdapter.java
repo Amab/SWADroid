@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.utils.Crypto;
@@ -138,16 +139,6 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         TextView content = (TextView) view.findViewById(R.id.eventText);
         TextView contentMsg = (TextView) view.findViewById(R.id.eventMsg);
         ImageView notificationIcon = (ImageView) view.findViewById(R.id.notificationIcon);
-        //ImageView messageReplyButton = (ImageView) view.findViewById(R.id.messageReplyButton);
-        /*
-        OnClickListener replyMessageListener = new OnClickListener() {
-			public void onClick(View v) {				
-				Intent activity = new Intent(context.getApplicationContext(), Messages.class);
-				activity.putExtra("notificationCode", notificationCode);
-				activity.putExtra("summary", summary.getText().toString());
-				context.startActivity(activity);
-			}        	
-        };*/
 
         if (eventType != null) {
             notifCodeHided.setText(notifCode.toString());
@@ -155,7 +146,6 @@ public class NotificationsCursorAdapter extends CursorAdapter {
             seenLocalHided.setText(seenLocalString);
             eventUserPhoto.setText(crypto.decrypt(userPhoto));
             type = crypto.decrypt(cursor.getString(cursor.getColumnIndex("eventType")));
-            //messageReplyButton.setVisibility(View.GONE);
 
             if (type.equals("examAnnouncement")) {
                 type = context.getString(R.string.examAnnouncement);
@@ -169,8 +159,6 @@ public class NotificationsCursorAdapter extends CursorAdapter {
             } else if (type.equals("message")) {
                 type = context.getString(R.string.message);
                 notificationIcon.setImageResource(R.drawable.msg_received);
-                //messageReplyButton.setOnClickListener(replyMessageListener);
-                //messageReplyButton.setVisibility(View.VISIBLE);
             } else if (type.equals("forumPostCourse")) {
                 type = context.getString(R.string.forumPostCourse);
                 notificationIcon.setImageResource(R.drawable.forum);
@@ -182,13 +170,13 @@ public class NotificationsCursorAdapter extends CursorAdapter {
                 notificationIcon.setImageResource(R.drawable.desk);
             } else if (type.equals("documentFile")) {
                 type = context.getString(R.string.documentFile);
-                notificationIcon.setImageResource(R.drawable.folder);
+                notificationIcon.setImageResource(R.drawable.file);
             } else if (type.equals("sharedFile")) {
                 type = context.getString(R.string.sharedFile);
-                notificationIcon.setImageResource(R.drawable.folder_users);
+                notificationIcon.setImageResource(R.drawable.file);
             } else if (type.equals("enrollment")) {
                 type = context.getString(R.string.enrollment);
-                notificationIcon.setImageResource(R.drawable.user_ok);
+                notificationIcon.setImageResource(R.drawable.enrollment);
             } else if (type.equals("enrollmentRequest")) {
                 type = context.getString(R.string.enrollmentRequest);
                 notificationIcon.setImageResource(R.drawable.enrollment_request);
@@ -274,28 +262,4 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         LayoutInflater vi = LayoutInflater.from(context);
         return vi.inflate(R.layout.list_item_notifications, parent, false);
     }
-
-    /**
-     * If the notification is not a mark, shows or hides its content
-     * If the notification is a mark, launches a WebView activity to show it
-     * @param position Notification position in the ListView
-     */
-    /*public void toggleContentVisibility(int position) {
-        String viewType, marksType;
-		View view = this.getView(position, null, null);
-		TextView eventType = (TextView) view.findViewById(R.id.eventType);
-		TextView content = (TextView) view.findViewById(R.id.eventText);
-		
-		viewType = String.valueOf(eventType.getText());
-		marksType = ctx.getString(R.string.marksFile);
-
-		if(viewType.equals(marksType)) {			
-			Intent activity = new Intent(ctx.getApplicationContext(), NotificationItem.class);
-			activity.putExtra("content", content.getText().toString());
-			ctx.startActivity(activity);
-		} else {			
-			contentVisible[position] = !contentVisible[position];			
-			this.notifyDataSetChanged();
-		}
-	}*/
 }

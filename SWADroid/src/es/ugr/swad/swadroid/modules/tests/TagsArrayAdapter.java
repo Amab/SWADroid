@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckedTextView;
+
 import es.ugr.swad.swadroid.model.TestTag;
 
 import java.util.List;

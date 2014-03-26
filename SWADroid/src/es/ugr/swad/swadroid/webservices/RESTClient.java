@@ -18,12 +18,6 @@
  */
 package es.ugr.swad.swadroid.webservices;
 
-import java.io.IOException;
-
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -32,25 +26,34 @@ import com.google.gson.GsonBuilder;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.security.cert.CertificateException;
+
+import javax.net.ssl.SSLException;
+
 /**
  * REST client for SWAD webservices
  * 
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
- *
+ * 
  */
 public class RESTClient implements IWebserviceClient {
-    /**
-     * Class Module's tag name for Logcat
-     */
-    private static final String TAG = Constants.APP_TAG + " RESTClient";
-    /**
-     * Client type for webservices
-     */
-    public static final String CLIENT_TYPE = "REST";
-    /**
-     * SERVER param for webservice request.
-     */
-    private String SERVER;
+	/**
+	 * Class Module's tag name for Logcat
+	 */
+	private static final String TAG = Constants.APP_TAG + " RESTClient";
+	/**
+	 * Client type for webservices
+	 */
+	public static final String CLIENT_TYPE = "REST";
+	/**
+	 * SERVER param for webservice request.
+	 */
+	private String SERVER;
 	/**
 	 * METHOD_NAME param for webservice request.
 	 */
@@ -59,28 +62,34 @@ public class RESTClient implements IWebserviceClient {
 	 * Complete URL for webservice request.
 	 */
 	private String URL;
-    /**
-     * Webservice result.
-     */
-    private Object result;
-    /**
-     * Supported request types
-     */
-    public enum REQUEST_TYPE {GET, POST, PUT, DELETE};
+	/**
+	 * Webservice result.
+	 */
+	private Object result;
 
-    /**
-     * Default constructor
-     */
+	/**
+	 * Supported request types
+	 */
+	public enum REQUEST_TYPE {
+		GET, POST, PUT, DELETE
+	};
+
+	/**
+	 * Default constructor
+	 */
 	public RESTClient() {
-		SERVER = Preferences.getServer();  // = "swad.ugr.es";
+		SERVER = Preferences.getServer(); // = "swad.ugr.es";
 		METHOD_NAME = "";
 		URL = "";
 	}
-	
+
 	/**
 	 * Field constructor
-	 * @param SERVER SERVER param for webservice request
-	 * @param METHOD_NAME METHOD_NAME param for webservice request
+	 * 
+	 * @param SERVER
+	 *            SERVER param for webservice request
+	 * @param METHOD_NAME
+	 *            METHOD_NAME param for webservice request
 	 */
 	public RESTClient(String SERVER, String METHOD_NAME) {
 		this.SERVER = SERVER;
@@ -91,13 +100,13 @@ public class RESTClient implements IWebserviceClient {
 	@Override
 	public void createRequest() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void addParam(String param, Object value) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -107,38 +116,44 @@ public class RESTClient implements IWebserviceClient {
 	}
 
 	/**
-	 * Gets the result returned by the webservice 
+	 * Gets the result returned by the webservice
 	 * 
-	 * @return The result returned by the webservice 
+	 * @return The result returned by the webservice
 	 */
 	@Override
 	public Object getResult() {
 		return result;
 	}
-	
+
 	public void sendRequest(Class<?> cl, boolean simple, REQUEST_TYPE type,
-			JSONObject json) throws ClientProtocolException, IOException,
-			JSONException {
-    	
-    	Log.i(TAG, "Sending REST request (" + type + ") to " + SERVER + " and URL " + URL);
-		
-		switch(type) {
-			case GET: 		result = RestEasy.doGet(URL);
-					  		break;
-			case POST:		result = RestEasy.doPost(URL, json);
-			  		  		break;
-			case PUT: 		result = RestEasy.doPut(URL, json);
-			  		  		break;
-			case DELETE: 	result  = false;
-						 	RestEasy.doDelete(URL);
-						 	result = true;
-						 	break;
-			default:		throw new ClientProtocolException(type + " method not supported");
+			JSONObject json) throws ClientProtocolException,
+			SSLException, CertificateException, IOException, JSONException {
+
+		Log.i(TAG, "Sending REST request (" + type + ") to " + SERVER
+				+ " and URL " + URL);
+
+		switch (type) {
+		case GET:
+			result = RestEasy.doGet(URL);
+			break;
+		case POST:
+			result = RestEasy.doPost(URL, json);
+			break;
+		case PUT:
+			result = RestEasy.doPut(URL, json);
+			break;
+		case DELETE:
+			result = false;
+			RestEasy.doDelete(URL);
+			result = true;
+			break;
+		default:
+			throw new ClientProtocolException(type + " method not supported");
 		}
-		
-		if(!simple) {
+
+		if (!simple) {
 			GsonBuilder gsonBuilder = new GsonBuilder();
-            //gsonBuilder.setDateFormat("M/d/yy hh:mm a");
+			// gsonBuilder.setDateFormat("M/d/yy hh:mm a");
 			Gson gson = gsonBuilder.create();
 			result = gson.fromJson(((JSONObject) result).toString(), cl);
 		}

@@ -22,12 +22,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
@@ -58,16 +59,16 @@ public class NotificationItem extends MenuActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        TextView text, senderTextView, courseTextView, summaryTextView, dateTextView, timeTextView;
-        ImageView image, userPhotoView;
-        //ImageView imageSep;
-        ImageButton replyButton;
+        TextView senderTextView, courseTextView, summaryTextView, dateTextView, timeTextView;
+        ImageView userPhotoView;
         WebView webview;
         Intent activity;
         String type = this.getIntent().getStringExtra("notificationType");
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.single_notification_view);
+
+    	getSupportActionBar().setIcon(R.drawable.notif);
 
         senderTextView = (TextView) this.findViewById(R.id.senderNameText);
         courseTextView = (TextView) this.findViewById(R.id.courseNameText);
@@ -76,22 +77,6 @@ public class NotificationItem extends MenuActivity {
         webview = (WebView) this.findViewById(R.id.contentWebView);
         dateTextView = (TextView) this.findViewById(R.id.notifDate);
         timeTextView = (TextView) this.findViewById(R.id.notifTime);
-
-        image = (ImageView) this.findViewById(R.id.moduleIcon);
-        image.setBackgroundResource(R.drawable.notif);
-
-        text = (TextView) this.findViewById(R.id.moduleName);
-        text.setText(R.string.notificationsModuleLabel);
-
-        //imageSep = (ImageView)this.findViewById(R.id.title_sep_4);
-        //imageSep.setVisibility(View.VISIBLE);
-
-        replyButton = (ImageButton) this.findViewById(R.id.messageReplyButton);
-        if (type.equals(getString(R.string.message))) {
-            replyButton.setVisibility(View.VISIBLE);
-        } else {
-            replyButton.setVisibility(View.GONE);
-        }
 
         notifCode = Long.valueOf(this.getIntent().getStringExtra("notifCode")); 
         eventCode = Long.valueOf(this.getIntent().getStringExtra("eventCode"));
@@ -144,18 +129,6 @@ public class NotificationItem extends MenuActivity {
         }
     }
 
-    /**
-     * Launches an action when reply message button is pushed
-     *
-     * @param v Actual view
-     */
-    public void onReplyMessageClick(View v) {
-        Intent activity = new Intent(this, Messages.class);
-        activity.putExtra("eventCode", eventCode);
-        activity.putExtra("summary", summary);
-        startActivity(activity);
-    }
-
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onActivityResult(int, int, android.content.Intent)
 	 */
@@ -170,5 +143,27 @@ public class NotificationItem extends MenuActivity {
 				Log.e(TAG, "Error marking notification " + notifCode + " as read in SWAD");
 			}
 		}
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+	    getMenuInflater().inflate(R.menu.notification_single_activity_actions, menu);
+	    return super.onCreateOptionsMenu(menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+            case R.id.action_reply:
+                Intent activity = new Intent(this, Messages.class);
+                activity.putExtra("eventCode", eventCode);
+                activity.putExtra("summary", summary);
+                startActivity(activity);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+	    
 	}
 }

@@ -30,6 +30,14 @@ import com.android.dataframework.DataFramework;
 import com.android.dataframework.Entity;
 import com.bugsense.trace.BugSenseHandler;
 
+import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.Preferences;
+import es.ugr.swad.swadroid.utils.Crypto;
+import es.ugr.swad.swadroid.utils.OldCrypto;
+import es.ugr.swad.swadroid.utils.Utils;
+
+import org.xmlpull.v1.XmlPullParserException;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
@@ -37,14 +45,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
-import org.xmlpull.v1.XmlPullParserException;
-
-import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.Preferences;
-import es.ugr.swad.swadroid.utils.Crypto;
-import es.ugr.swad.swadroid.utils.OldCrypto;
-import es.ugr.swad.swadroid.utils.Utils;
 
 //import net.sqlcipher.database.SQLiteDatabase;
 //import net.sqlcipher.database.SQLiteStatement;
@@ -56,6 +56,10 @@ import es.ugr.swad.swadroid.utils.Utils;
  */
 public class DataBaseHelper {
     /**
+     * DataBaseHelper tag name for Logcat
+     */
+    private static final String TAG = Constants.APP_TAG + " DataBaseHelper";
+	/**
      * Field for access to the database backend
      */
     private DataFramework db;
@@ -847,7 +851,7 @@ public class DataBaseHelper {
                 ent.save();
             }
         } else {
-            throw new SQLException();
+            throw new SQLException("Duplicated tag");
         }
     }
 
@@ -1059,6 +1063,8 @@ public class DataBaseHelper {
         List<Model> newModels = new ArrayList<Model>();
         List<Model> obsoleteModel = new ArrayList<Model>();
         List<Model> modifiedModel = new ArrayList<Model>();
+        
+        beginTransaction();
 
         newModels.addAll(currentModels);
         newModels.removeAll(modelsDB);
@@ -1100,6 +1106,9 @@ public class DataBaseHelper {
                 insertGroup((Group) model, courseCode[0]);
             }
         }
+        
+        //Finish the pending transaction with successful status
+        endTransaction(true);
 
         return result;
     }
@@ -1895,6 +1904,7 @@ public class DataBaseHelper {
      */
     public void emptyTable(String table) {
         db.emptyTable(table);
+        Log.d(TAG, "Emptied table " + table);
     }
 
     /**
@@ -1904,6 +1914,7 @@ public class DataBaseHelper {
      */
     public void deleteTable(String table) {
         db.deleteTable(table);
+        Log.d(TAG, "Deleted table " + table);
     }
 
     /**
@@ -1911,6 +1922,7 @@ public class DataBaseHelper {
      */
     public void clearDB() {
         db.deleteTables();
+        Log.d(TAG, "All tables deleted");
     }
 
     /**
@@ -1939,24 +1951,49 @@ public class DataBaseHelper {
     /**
      * Begin a database transaction
      */
-    public void beginTransaction() {
+    public synchronized void beginTransaction() {
+    	while(db.inTransaction()) {
+	    	try {
+				wait();
+			} catch (InterruptedException e) {
+				BugSenseHandler.sendException(new DataBaseHelperException("Sinchronization interrupted"));
+			}
+    	}
+    	
         //db.getDB().execSQL("BEGIN;");
         db.startTransaction();
+        
+        Log.i(TAG, "Database locked");
     }
 
     /**
      * End a database transaction
      */
-    public void endTransaction() {
-        //db.getDB().execSQL("END;");
-        db.successfulTransaction();
-        db.endTransaction();
+    public synchronized void endTransaction(boolean successfulTransaction) {
+    	if(db.inTransaction()) {
+	        //db.getDB().execSQL("END;");
+    		if(successfulTransaction) {
+    			db.successfulTransaction();
+    		}
+    		
+	        db.endTransaction();
+	        
+	        Log.i(TAG, "Database unlocked");
+	        
+	        notifyAll();
+    	} else {
+    		BugSenseHandler.sendException(new DataBaseHelperException("No active transactions"));
+    	}
+    }
+    
+    public boolean isDbInTransaction() {
+    	return db.inTransaction();
     }
 
     /**
      * Compact the database
      */
-    void compactDB() {
+    private void compactDB() {
         db.getDB().execSQL("VACUUM;");
     }
 

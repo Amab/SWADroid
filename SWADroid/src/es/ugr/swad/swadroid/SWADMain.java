@@ -31,23 +31,17 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ExpandableListView;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
+import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.bugsense.trace.BugSenseHandler;
 
 import es.ugr.swad.swadroid.gui.DialogFactory;
@@ -69,10 +63,8 @@ import es.ugr.swad.swadroid.modules.tests.Tests;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
 import es.ugr.swad.swadroid.sync.AccountAuthenticator;
 import es.ugr.swad.swadroid.sync.SyncUtils;
-import es.ugr.swad.swadroid.utils.Crypto;
 import es.ugr.swad.swadroid.utils.Utils;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -123,6 +115,7 @@ public class SWADMain extends MenuExpandableListActivity {
      * Tests tag name for Logcat
      */
     public static final String TAG = Constants.APP_TAG;
+    
     /**
      * Indicates if it is the first run
      */
@@ -135,17 +128,13 @@ public class SWADMain extends MenuExpandableListActivity {
 
     private boolean dBCleaned = false;
 
-    private boolean mLoginError = false;
-    // UI references for the login form.
-    private EditText mDniView;
-    private EditText mPasswordView;
-    private EditText mServerView;
-    private View mLoginFormView;
-    private View mLoginStatusView;
-    private View mMainScreenView;
-    private TextView mLoginStatusMessageView;
-    private ImageButton mUpdateButton;
-    
+    private ExpandableListView mExpandableListView;
+    private ImageExpandableListAdapter mExpandableListAdapter;
+    private OnChildClickListener mExpandableClickListener;
+    private final ArrayList<HashMap<String, Object>> mHeaderData = new ArrayList<HashMap<String, Object>>();
+    private final ArrayList<ArrayList<HashMap<String, Object>>> mChildData = new ArrayList<ArrayList<HashMap<String, Object>>>();
+    private final ArrayList<HashMap<String, Object>> mMessagesData = new ArrayList<HashMap<String, Object>>();
+    private final ArrayList<HashMap<String, Object>> mUsersData = new ArrayList<HashMap<String, Object>>();
     /**
      * Gets the database helper
      *
@@ -167,97 +156,11 @@ public class SWADMain extends MenuExpandableListActivity {
     }
 
     /* (non-Javadoc)
-     * @see android.app.ExpandableListActivity#onChildClick(android.widget.ExpandableListView, android.view.View, int, int, long)
-     */
-    @Override
-    public boolean onChildClick(ExpandableListView parent, View v,
-                                int groupPosition, int childPosition, long id) {
-        // Get the item that was clicked
-        Object o = this.getExpandableListAdapter().getChild(groupPosition, childPosition);
-        @SuppressWarnings("unchecked")
-		String keyword = (String) ((Map<String, Object>) o).get(NAME);
-        //boolean rollCallAndroidVersionOK = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.FROYO);
-        //PackageManager pm = getPackageManager();
-        //boolean rearCam;
-
-        //It would be safer to use the constant PackageManager.FEATURE_CAMERA_FRONT
-        //but since it is not defined for Android 2.2, I substituted the literal value
-        //frontCam = pm.hasSystemFeature("android.hardware.camera.front");
-        //rearCam = pm.hasSystemFeature(PackageManager.FEATURE_CAMERA);
-
-        Intent activity;
-        if (keyword.equals(getString(R.string.notificationsModuleLabel))) {
-            activity = new Intent(this, Notifications.class);
-            startActivityForResult(activity, Constants.NOTIFICATIONS_REQUEST_CODE);
-        } else if (keyword.equals(getString(R.string.testsModuleLabel))) {
-            activity = new Intent(this, Tests.class);
-            startActivityForResult(activity, Constants.TESTS_REQUEST_CODE);
-        } else if (keyword.equals(getString(R.string.messagesModuleLabel))) {
-            activity = new Intent(this, Messages.class);
-            activity.putExtra("eventCode", Long.valueOf(0));
-            startActivityForResult(activity, Constants.MESSAGES_REQUEST_CODE);
-        } else if (keyword.equals(getString(R.string.noticesModuleLabel))) {
-            activity = new Intent(this, Notices.class);
-            startActivityForResult(activity, Constants.NOTICES_REQUEST_CODE);
-        } else if (keyword.equals(getString(R.string.rollcallModuleLabel))) {
-            activity = new Intent(this, Rollcall.class);
-            startActivityForResult(activity, Constants.ROLLCALL_REQUEST_CODE);
-        } else if (keyword.equals(getString(R.string.generateQRModuleLabel))) {
-            activity = new Intent(this, GenerateQR.class);
-            startActivityForResult(activity, Constants.GENERATE_QR_REQUEST_CODE);
-        } else if (keyword.equals(getString(R.string.documentsDownloadModuleLabel))) {
-            activity = new Intent(this, DownloadsManager.class);
-            activity.putExtra("downloadsAreaCode", Constants.DOCUMENTS_AREA_CODE);
-            startActivityForResult(activity, Constants.DOWNLOADSMANAGER_REQUEST_CODE);
-        } else if (keyword.equals(getString(R.string.sharedsDownloadModuleLabel))) {
-            activity = new Intent(this, DownloadsManager.class);
-            activity.putExtra("downloadsAreaCode", Constants.SHARE_AREA_CODE);
-            startActivityForResult(activity, Constants.DOWNLOADSMANAGER_REQUEST_CODE);
-        } else if (keyword.equals(getString(R.string.myGroupsModuleLabel))) {
-            activity = new Intent(this, MyGroupsManager.class);
-            activity.putExtra("courseCode", Constants.getSelectedCourseCode());
-            startActivityForResult(activity, Constants.MYGROUPSMANAGER_REQUEST_CODE);        
-    	} else if (keyword.equals(getString(R.string.introductionModuleLabel))) {
-    		activity = new Intent(this, Information.class);
-    		activity.putExtra("requestCode", Constants.INTRODUCTION_REQUEST_CODE);
-    		startActivityForResult(activity, Constants.INTRODUCTION_REQUEST_CODE);   		
-	    } else if (keyword.equals(getString(R.string.faqsModuleLabel))) {
-			activity = new Intent(this, Information.class);
-			activity.putExtra("requestCode", Constants.FAQS_REQUEST_CODE);
-			startActivityForResult(activity, Constants.FAQS_REQUEST_CODE);			
-		} else if (keyword.equals(getString(R.string.bibliographyModuleLabel))) {
-			activity = new Intent(this, Information.class);
-			activity.putExtra("requestCode", Constants.BIBLIOGRAPHY_REQUEST_CODE);
-			startActivityForResult(activity, Constants.BIBLIOGRAPHY_REQUEST_CODE);			
-		} else if (keyword.equals(getString(R.string.practicesprogramModuleLabel))) {
-			activity = new Intent(this, Information.class);
-			activity.putExtra("requestCode", Constants.PRACTICESPROGRAM_REQUEST_CODE);
-			startActivityForResult(activity, Constants.PRACTICESPROGRAM_REQUEST_CODE);			
-		} else if (keyword.equals(getString(R.string.theoryprogramModuleLabel))) {
-			activity = new Intent(this, Information.class);
-			activity.putExtra("requestCode", Constants.THEORYPROGRAM_REQUEST_CODE);
-			startActivityForResult(activity, Constants.THEORYPROGRAM_REQUEST_CODE);			
-		} else if (keyword.equals(getString(R.string.linksModuleLabel))) {
-			activity = new Intent(this, Information.class);
-			activity.putExtra("requestCode", Constants.LINKS_REQUEST_CODE);
-			startActivityForResult(activity, Constants.LINKS_REQUEST_CODE);			
-		} else if (keyword.equals(getString(R.string.teachingguideModuleLabel))) {
-			activity = new Intent(this, Information.class);
-			activity.putExtra("requestCode", Constants.TEACHINGGUIDE_REQUEST_CODE);
-			startActivityForResult(activity, Constants.TEACHINGGUIDE_REQUEST_CODE);
-		}
-        
-        return true;
-    }
-
-    /* (non-Javadoc)
      * @see android.app.Activity#onCreate()
      */
     @Override
     public void onCreate(Bundle icicle) {
         int lastVersion, currentVersion;
-        ImageView image;
-        TextView text;
         Intent activity;
         
         //Initialize Bugsense plugin
@@ -266,25 +169,17 @@ public class SWADMain extends MenuExpandableListActivity {
         } catch (Exception e) {
         	Log.e(TAG, "Error initializing BugSense", e);
         }
-
+        
         //Initialize screen
         super.onCreate(icicle);
-        setContentView(R.layout.main);
 
+        setContentView(R.layout.main);
+        initializeMainViews();
+        
+        
         //Initialize preferences
         prefs = new Preferences(this);
-        initializeViews();
         
-        image = (ImageView) this.findViewById(R.id.moduleIcon);
-        image.setBackgroundResource(R.drawable.ic_launcher_swadroid);
-
-        text = (TextView) this.findViewById(R.id.moduleName);
-        text.setText(R.string.app_name);
-
-
-        ImageButton updateButton = (ImageButton) this.findViewById(R.id.refresh);
-        updateButton.setVisibility(View.VISIBLE);
-
         try {
         	
             //Initialize HTTPS connections
@@ -309,7 +204,6 @@ public class SWADMain extends MenuExpandableListActivity {
 
             //If this is the first run, show configuration dialog
             if (lastVersion == 0) {
-                loginForm(true);
                 //Configure automatic synchronization
                 Preferences.setSyncTime(String.valueOf(Constants.DEFAULT_SYNC_TIME));
                 activity = new Intent(this, AccountAuthenticator.class);
@@ -375,20 +269,22 @@ public class SWADMain extends MenuExpandableListActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        
-        boolean showLoginForm = isUserOrPasswordEmpty() || (listCourses.size() == 0) || mLoginError;
-        
-        loginForm(showLoginForm);
-    	if (!Constants.isPreferencesChanged() && !Utils.isDbCleaned()) {
-            createSpinnerAdapter();
-            if (!firstRun) {
-                courseCode = Constants.getSelectedCourseCode();
-                createMenu();
-        	}
+
+        if (isUserOrPasswordEmpty() && (listCourses.size() == 0)) {
+            startActivityForResult(new Intent(this, LoginActivity.class), Constants.LOGIN_REQUEST_CODE);
         } else {
-            Constants.setPreferencesChanged(false);
-            Utils.setDbCleaned(false);
-            setMenuDbClean();
+
+            if (!Preferences.isPreferencesChanged() && !Utils.isDbCleaned()) {
+                createSpinnerAdapter();
+                if (!firstRun) {
+                    courseCode = Constants.getSelectedCourseCode();
+                    createMenu();
+                }
+            } else {
+                Preferences.setPreferencesChanged(false);
+                Utils.setDbCleaned(false);
+                setMenuDbClean();
+            }
         }
     }
 
@@ -413,37 +309,34 @@ public class SWADMain extends MenuExpandableListActivity {
             switch (requestCode) {
                 //After get the list of courses, a dialog is launched to choice the course
                 case Constants.COURSES_REQUEST_CODE:
-                    ImageButton updateButton = (ImageButton) this.findViewById(R.id.refresh);
-                    ProgressBar pb = (ProgressBar) this.findViewById(R.id.progress_refresh);
-
-                    pb.setVisibility(View.GONE);
-                    updateButton.setVisibility(View.VISIBLE);
 
                     setMenuDbClean();
                     createSpinnerAdapter();
                     createMenu();
-                    showProgress(false);
-                    mLoginError = false;
-                    loginForm(false);
-                    
+
                     //User credentials are correct. Set periodic synchronization if enabled
-        	        if (!Preferences.getSyncTime().equals("0") && Preferences.isSyncEnabled()) {
+        	        if (!Preferences.getSyncTime().equals("0")
+        	        		&& Preferences.isSyncEnabled() && SyncUtils.isPeriodicSynced(this)) {
         	            SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY,
         	            		Long.parseLong(Preferences.getSyncTime()), this);
         	        }
         	        
+        	        showProgress(false);
+                    break;
+                case Constants.LOGIN_REQUEST_CODE:
+                    getCurrentCourses();
                     break;
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
             switch (requestCode) {
                 //After get the list of courses, a dialog is launched to choice the course
                 case Constants.COURSES_REQUEST_CODE:
-                    mLoginError = true;
-                    showProgress(false);
-                    loginForm(true);
-                    
                     //User credentials are wrong. Remove periodic synchronization
-                    SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, this);
+                    SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, this);  
+                    showProgress(false);
+                    break;
+                case Constants.LOGIN_REQUEST_CODE:
+                    finish();
                     break;
             }
         }
@@ -526,9 +419,11 @@ public class SWADMain extends MenuExpandableListActivity {
     };
 
     private void getCurrentCourses() {
+    	
+    	showProgress(true);
+    	
         Intent activity;
         activity = new Intent(this, Courses.class);
-        Toast.makeText(this, R.string.coursesProgressDescription, Toast.LENGTH_LONG).show();
         startActivityForResult(activity, Constants.COURSES_REQUEST_CODE);
     }
 
@@ -557,7 +452,7 @@ public class SWADMain extends MenuExpandableListActivity {
             }
 
             if (courseSelected != null) {
-                if ((getExpandableListAdapter() == null) || dBCleaned) {
+                if ((mExpandableListView.getAdapter() == null) || dBCleaned) {
                     createBaseMenu();
                 }
                 int userRole = courseSelected.getUserRole();
@@ -575,13 +470,10 @@ public class SWADMain extends MenuExpandableListActivity {
      * Sets currentRole to student role
      */
     private void createBaseMenu() {
-        ExpandableListView list = (ExpandableListView) this.findViewById(android.R.id.list);
-        list.setVisibility(View.VISIBLE);
-        if (getExpandableListAdapter() == null || currentRole == -1) {
+        mExpandableListView.setVisibility(View.VISIBLE);
+        if (mExpandableListView.getAdapter() == null || currentRole == -1) {
             //the menu base is equal to students menu.
             currentRole = Constants.STUDENT_TYPE_CODE;
-            //Construct Expandable List
-            final ArrayList<HashMap<String, Object>> headerData = new ArrayList<HashMap<String, Object>>();
 
             //Order:
             // 1- Course
@@ -591,135 +483,131 @@ public class SWADMain extends MenuExpandableListActivity {
             // 5- Users
             final HashMap<String, Object> courses = new HashMap<String, Object>();
             courses.put(NAME, getString(R.string.course));
-            courses.put(IMAGE, getResources().getDrawable(R.drawable.blackboard));
-            headerData.add(courses);
+            courses.put(IMAGE, getResources().getDrawable(R.drawable.crs));
+            mHeaderData.add(courses);
 
             final HashMap<String, Object> evaluation = new HashMap<String, Object>();
             evaluation.put(NAME, getString(R.string.evaluation));
-            evaluation.put(IMAGE, getResources().getDrawable(R.drawable.grades));
-            headerData.add(evaluation);
-
-            final HashMap<String, Object> messages = new HashMap<String, Object>();
-            messages.put(NAME, getString(R.string.messages));
-            messages.put(IMAGE, getResources().getDrawable(R.drawable.msg));
-            headerData.add(messages);
-
-            final HashMap<String, Object> enrolment = new HashMap<String, Object>();
-            enrolment.put(NAME, getString(R.string.enrollment));
-            enrolment.put(IMAGE, getResources().getDrawable(R.drawable.enrollment));
-            headerData.add(enrolment);
+            evaluation.put(IMAGE, getResources().getDrawable(R.drawable.ass));
+            mHeaderData.add(evaluation);
 
             final HashMap<String, Object> users = new HashMap<String, Object>();
             users.put(NAME, getString(R.string.users));
             users.put(IMAGE, getResources().getDrawable(R.drawable.users));
-            headerData.add(users);
+            mHeaderData.add(users);
 
-            final ArrayList<ArrayList<HashMap<String, Object>>> childData = new ArrayList<ArrayList<HashMap<String, Object>>>();
+            final HashMap<String, Object> messages = new HashMap<String, Object>();
+            messages.put(NAME, getString(R.string.messages));
+            messages.put(IMAGE, getResources().getDrawable(R.drawable.msg));
+            mHeaderData.add(messages);
 
             final ArrayList<HashMap<String, Object>> courseData = new ArrayList<HashMap<String, Object>>();
-            childData.add(courseData);
-
+            mChildData.add(courseData);
+            
             final ArrayList<HashMap<String, Object>> evaluationData = new ArrayList<HashMap<String, Object>>();
-            childData.add(evaluationData);
+            mChildData.add(evaluationData);
 
-            final ArrayList<HashMap<String, Object>> messagesData = new ArrayList<HashMap<String, Object>>();
-            childData.add(messagesData);
+            mChildData.add(mUsersData);
+            mChildData.add(mMessagesData);
 
-            final ArrayList<HashMap<String, Object>> enrollmentData = new ArrayList<HashMap<String, Object>>();
-            childData.add(enrollmentData);
-
-            ArrayList<HashMap<String, Object>> usersData = new ArrayList<HashMap<String, Object>>();
-            childData.add(usersData);
-
-            HashMap<String, Object> map = new HashMap<String, Object>();
-  
-            //Documents category
-            map.put(NAME, getString(R.string.documentsDownloadModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.folder));
+            HashMap<String, Object> map;
+            
+            //Course category
+            //Introduction
+            map = new HashMap<String, Object>();
+            map.put(NAME, getString(R.string.introductionModuleLabel));
+            map.put(IMAGE, getResources().getDrawable(R.drawable.info));
             courseData.add(map);
-            //Shared area category
+            //Teaching Guide
+            map = new HashMap<String, Object>();
+            map.put(NAME, getString(R.string.teachingguideModuleLabel));
+            map.put(IMAGE, getResources().getDrawable(R.drawable.file));
+            courseData.add(map);
+            //Syllabus (lectures)
+            map = new HashMap<String, Object>();
+            map.put(NAME, getString(R.string.syllabusLecturesModuleLabel));
+            map.put(IMAGE, getResources().getDrawable(R.drawable.syllabus));
+            courseData.add(map);
+            //Syllabus (practicals)
+            map = new HashMap<String, Object>();
+            map.put(NAME, getString(R.string.syllabusPracticalsModuleLabel));
+            map.put(IMAGE, getResources().getDrawable(R.drawable.lab));
+            courseData.add(map);
+            //Documents
+            map = new HashMap<String, Object>();
+            map.put(NAME, getString(R.string.documentsDownloadModuleLabel));
+            map.put(IMAGE, getResources().getDrawable(R.drawable.folder));            
+            courseData.add(map);
+            //Shared area 
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.sharedsDownloadModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.folder_users));
             courseData.add(map);
-            //TODO Disable Information options until the Information module is finished
-            //Introduction category
-            map = new HashMap<String, Object>();
-            map.put(NAME, getString(R.string.introductionModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
-            //courseData.add(map);
-            //Theory Program category
-            map = new HashMap<String, Object>();
-            map.put(NAME, getString(R.string.theoryprogramModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
-            //courseData.add(map);
-            //Practices Program category
-            map = new HashMap<String, Object>();
-            map.put(NAME, getString(R.string.practicesprogramModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
-            //courseData.add(map);
-            //Teaching Guide category
-            map = new HashMap<String, Object>();
-            map.put(NAME, getString(R.string.teachingguideModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
-            //courseData.add(map);
-            //Bibliography category
+            //Bibliography
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.bibliographyModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
-            //courseData.add(map);
-            //FAQs category
+            map.put(IMAGE, getResources().getDrawable(R.drawable.book));
+            courseData.add(map);
+            //FAQs
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.faqsModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
-            //courseData.add(map);
-            //Links category
+            map.put(IMAGE, getResources().getDrawable(R.drawable.faq));
+            courseData.add(map);
+            //Links
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.linksModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
-            //courseData.add(map);
+            map.put(IMAGE, getResources().getDrawable(R.drawable.link));
+            courseData.add(map);
             
             //Evaluation category
+            //Assessment system
+            map = new HashMap<String, Object>();
+            map.put(NAME, getString(R.string.assessmentModuleLabel));
+            map.put(IMAGE, getResources().getDrawable(R.drawable.info));
+            evaluationData.add(map);
+            //Test
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.testsModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.test));
             evaluationData.add(map);
 
-            //Messages category
-            map = new HashMap<String, Object>();
-            map.put(NAME, getString(R.string.notificationsModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.bell));
-            messagesData.add(map);
-
-            map = new HashMap<String, Object>();
-            map.put(NAME, getString(R.string.messagesModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.msg_write));
-            messagesData.add(map);
-
-            //Enrollment category
+            //Users category
+            //Groups
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.myGroupsModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.my_groups));
-            enrollmentData.add(map);
-
+            mUsersData.add(map);
+            //Generate QR code
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.generateQRModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.scan_qr));
-            usersData.add(map);
-
-            setListAdapter(new ImageExpandableListAdapter(
+            map.put(IMAGE, getResources().getDrawable(R.drawable.qr));
+            mUsersData.add(map);
+            
+            //Messages category
+            //Notifications
+            map = new HashMap<String, Object>();
+            map.put(NAME, getString(R.string.notificationsModuleLabel));
+            map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
+            mMessagesData.add(map);
+            //Messages
+            map = new HashMap<String, Object>();
+            map.put(NAME, getString(R.string.messagesModuleLabel));
+            map.put(IMAGE, getResources().getDrawable(R.drawable.msg_write));
+            mMessagesData.add(map);
+            
+            mExpandableListAdapter = new ImageExpandableListAdapter(
                     this,
-                    headerData,
+                    mHeaderData,
                     R.layout.image_list_item,
-                    new String[]{NAME},            // the name of the field data
+                    new String[]{NAME},       // the name of the field data
                     new int[]{R.id.listText}, // the text field to populate with the field data
-                    childData,
+                    mChildData,
                     0,
                     null,
                     new int[]{}
-            ));
-
-            getExpandableListView().setOnChildClickListener(this);
+            );
+            
+            mExpandableListView.setAdapter(mExpandableListAdapter);
         }
     }
 
@@ -729,10 +617,11 @@ public class SWADMain extends MenuExpandableListActivity {
     private void changeToStudentMenu() {
         if (currentRole == Constants.TEACHER_TYPE_CODE) {
             //Removes Publish Note from messages menu
-            ((ImageExpandableListAdapter) getExpandableListAdapter()).removeChild(Constants.MESSAGES_GROUP, Constants.PUBLISH_NOTE_CHILD);
+        	mExpandableListAdapter.removeChild(Constants.MESSAGES_GROUP, Constants.PUBLISH_NOTE_CHILD);
             //Removes Rollcall from users menu
-            ((ImageExpandableListAdapter) getExpandableListAdapter()).removeChild(Constants.USERS_GROUP, Constants.ROLLCALL_CHILD);
+        	//mExpandableListAdapter.removeChild(Constants.USERS_GROUP, Constants.ROLLCALL_CHILD);
         }
+        
         currentRole = Constants.STUDENT_TYPE_CODE;
     }
 
@@ -744,13 +633,28 @@ public class SWADMain extends MenuExpandableListActivity {
             HashMap<String, Object> map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.noticesModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.note));
-            ((ImageExpandableListAdapter) getExpandableListAdapter()).addChild(Constants.MESSAGES_GROUP, Constants.PUBLISH_NOTE_CHILD, map);
+            
+            mMessagesData.add(map);
 
-            map = new HashMap<String, Object>();
+            /*map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.rollcallModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.roll_call));
-            ((ImageExpandableListAdapter) getExpandableListAdapter()).addChild(Constants.USERS_GROUP, Constants.ROLLCALL_CHILD, map);
+            mUsersData.add(map);*/
+            
+            mExpandableListAdapter = new ImageExpandableListAdapter(this, mHeaderData,
+                    R.layout.image_list_item,
+                    new String[] {
+                        NAME
+                    }, new int[] {
+                        R.id.listText
+                    },
+                    mChildData, 0,
+                    null, new int[] {}
+            );
+
+            mExpandableListView.setAdapter(mExpandableListAdapter);
         }
+        
         currentRole = Constants.TEACHER_TYPE_CODE;
     }
 
@@ -767,20 +671,17 @@ public class SWADMain extends MenuExpandableListActivity {
         dBCleaned = true;
         listCourses.clear();
         cleanSpinner();
-        ExpandableListView list = (ExpandableListView) this.findViewById(android.R.id.list);
-        list.setVisibility(View.GONE);
+        
+        mExpandableListView.setVisibility(View.GONE);
     }
 
+    // TODO
     /**
      * Launches an action when refresh button is pushed
      *
      * @param v Actual view
      */
     public void onRefreshClick(View v) {
-        ProgressBar pb = (ProgressBar) this.findViewById(R.id.progress_refresh);
-
-        mUpdateButton.setVisibility(View.GONE);
-        pb.setVisibility(View.VISIBLE);
 
         getCurrentCourses();
     }
@@ -793,163 +694,170 @@ public class SWADMain extends MenuExpandableListActivity {
 				|| TextUtils.isEmpty(Preferences.getUserPassword());
 	}
     
-	private void initializeViews(){
-		mUpdateButton = (ImageButton) findViewById(R.id.refresh);
-	    mMainScreenView = findViewById(R.id.main_screen);
-        mLoginFormView = findViewById(R.id.login_form);
-        mLoginStatusView = findViewById(R.id.login_status);
-	}
-	
-	/**
-	 * Shows a login form
-	 */
-	private void loginForm(boolean show) {
-		mUpdateButton.setVisibility(show ? View.GONE : View.VISIBLE);
-	    mMainScreenView.setVisibility(show ? View.GONE : View.VISIBLE);
-		mLoginFormView.setVisibility(show ? View.VISIBLE : View.GONE);
-
-		setupLoginForm();
-	}
-    
-    private void setupLoginForm() {
-        mDniView = (EditText) findViewById(R.id.DNI);
-        mDniView.setText(Preferences.getUserID());
+	private void initializeMainViews() {
+        mExpandableListView = (ExpandableListView) findViewById(R.id.expandableList);
         
-        mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setText("");
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        mExpandableClickListener = new OnChildClickListener() {
+            
             @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition,
+                    int childPosition, long id) {
+                // Get the item that was clicked
+                Object o = parent.getExpandableListAdapter().getChild(groupPosition, childPosition);
+                @SuppressWarnings("unchecked")
+                String keyword = (String) ((Map<String, Object>) o).get(NAME);
+                // boolean rollCallAndroidVersionOK =
+                // (android.os.Build.VERSION.SDK_INT >=
+                // android.os.Build.VERSION_CODES.FROYO);
+                // PackageManager pm = getPackageManager();
+                // boolean rearCam;
+
+                // It would be safer to use the constant
+                // PackageManager.FEATURE_CAMERA_FRONT
+                // but since it is not defined for Android 2.2, I substituted
+                // the literal value
+                // frontCam =
+                // pm.hasSystemFeature("android.hardware.camera.front");
+                // rearCam = pm.hasSystemFeature(PackageManager.FEATURE_CAMERA);
+
+                Intent activity;
+                Context ctx = getApplicationContext();
+                if (keyword.equals(getString(R.string.notificationsModuleLabel))) {
+                    activity = new Intent(ctx, Notifications.class);
+                    startActivityForResult(activity, Constants.NOTIFICATIONS_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.testsModuleLabel))) {
+                    activity = new Intent(ctx, Tests.class);
+                    startActivityForResult(activity, Constants.TESTS_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.messagesModuleLabel))) {
+                    activity = new Intent(ctx, Messages.class);
+                    activity.putExtra("eventCode", Long.valueOf(0));
+                    startActivityForResult(activity, Constants.MESSAGES_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.noticesModuleLabel))) {
+                    activity = new Intent(ctx, Notices.class);
+                    startActivityForResult(activity, Constants.NOTICES_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.rollcallModuleLabel))) {
+                    activity = new Intent(ctx, Rollcall.class);
+                    startActivityForResult(activity, Constants.ROLLCALL_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.generateQRModuleLabel))) {
+                    activity = new Intent(ctx, GenerateQR.class);
+                    startActivityForResult(activity, Constants.GENERATE_QR_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.documentsDownloadModuleLabel))) {
+                    activity = new Intent(ctx, DownloadsManager.class);
+                    activity.putExtra("downloadsAreaCode", Constants.DOCUMENTS_AREA_CODE);
+                    startActivityForResult(activity, Constants.DOWNLOADSMANAGER_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.sharedsDownloadModuleLabel))) {
+                    activity = new Intent(ctx, DownloadsManager.class);
+                    activity.putExtra("downloadsAreaCode", Constants.SHARE_AREA_CODE);
+                    startActivityForResult(activity, Constants.DOWNLOADSMANAGER_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.myGroupsModuleLabel))) {
+                    activity = new Intent(ctx, MyGroupsManager.class);
+                    activity.putExtra("courseCode", Constants.getSelectedCourseCode());
+                    startActivityForResult(activity, Constants.MYGROUPSMANAGER_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.introductionModuleLabel))) {
+                    activity = new Intent(ctx, Information.class);
+                    activity.putExtra("requestCode", Constants.INTRODUCTION_REQUEST_CODE);
+                    startActivityForResult(activity, Constants.INTRODUCTION_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.faqsModuleLabel))) {
+                    activity = new Intent(ctx, Information.class);
+                    activity.putExtra("requestCode", Constants.FAQS_REQUEST_CODE);
+                    startActivityForResult(activity, Constants.FAQS_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.bibliographyModuleLabel))) {
+                    activity = new Intent(ctx, Information.class);
+                    activity.putExtra("requestCode", Constants.BIBLIOGRAPHY_REQUEST_CODE);
+                    startActivityForResult(activity, Constants.BIBLIOGRAPHY_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.syllabusPracticalsModuleLabel))) {
+                    activity = new Intent(ctx, Information.class);
+                    activity.putExtra("requestCode", Constants.SYLLABUSPRACTICALS_REQUEST_CODE);
+                    startActivityForResult(activity, Constants.SYLLABUSPRACTICALS_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.syllabusLecturesModuleLabel))) {
+                    activity = new Intent(ctx, Information.class);
+                    activity.putExtra("requestCode", Constants.SYLLABUSLECTURES_REQUEST_CODE);
+                    startActivityForResult(activity, Constants.SYLLABUSLECTURES_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.linksModuleLabel))) {
+                    activity = new Intent(ctx, Information.class);
+                    activity.putExtra("requestCode", Constants.LINKS_REQUEST_CODE);
+                    startActivityForResult(activity, Constants.LINKS_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.teachingguideModuleLabel))) {
+                    activity = new Intent(ctx, Information.class);
+                    activity.putExtra("requestCode", Constants.TEACHINGGUIDE_REQUEST_CODE);
+                    startActivityForResult(activity, Constants.TEACHINGGUIDE_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.assessmentModuleLabel))) {
+                    activity = new Intent(ctx, Information.class);
+                    activity.putExtra("requestCode", Constants.ASSESSMENT_REQUEST_CODE);
+                    startActivityForResult(activity, Constants.ASSESSMENT_REQUEST_CODE);
+
                 }
-                return false;
+
+                return true;
             }
-        });
+        };
         
-        mServerView = (EditText) findViewById(R.id.server);
-        mServerView.setText(Preferences.getServer());
-        
-        mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
-
-        findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });
-    }
-    
-    /**
-     * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid DNI, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
-     */
-    public void attemptLogin() {
-
-        // Values for DNI and password at the time of the login attempt.
-        String DniValue;
-        String passwordValue;
-        String serverValue;
-        String toastMsg;
-        
-        // Reset errors.
-        mDniView.setError(null);
-        mPasswordView.setError(null);
-
-        // Store values at the time of the login attempt.
-        DniValue = mDniView.getText().toString();
-        passwordValue = mPasswordView.getText().toString();
-        serverValue = mServerView.getText().toString();
-        toastMsg = mServerView.getText().toString().equals("swad.ugr.es") ? getString(R.string.error_password_summaryUGR) : getString(R.string.error_invalid_password);
-        
-        boolean cancel = false;
-        View focusView = null;
-
-        // Check for a valid password.
-        if (TextUtils.isEmpty(passwordValue)) {
-			mPasswordView.setError(getString(R.string.error_field_required));
-			focusView = mPasswordView;
-			cancel = true;
-        } else if ((passwordValue.length() < 8)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
-            cancel = true;
-            Toast.makeText(getApplicationContext(), toastMsg,
-                    Toast.LENGTH_LONG).show();
-        } else if(Utils.isLong(passwordValue)) {
-			mPasswordView.setError(getString(R.string.error_incorrect_password));
-			focusView = mPasswordView;
-			cancel = true;
-			Toast.makeText(getApplicationContext(), toastMsg,
-                    Toast.LENGTH_LONG).show();
-        }
-
-        // Check for a valid DNI.
-        if (TextUtils.isEmpty(DniValue)) {
-            mDniView.setError(getString(R.string.error_field_required));
-            focusView = mDniView;
-            cancel = true;
-        }
-        
-        if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
-            focusView.requestFocus();
-        } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
-            try {
-                Preferences.setUserID(DniValue);
-                Preferences.setUserPassword(Crypto.encryptPassword(passwordValue));
-                Preferences.setServer(serverValue);
-            } catch (NoSuchAlgorithmException e) {
-                error(TAG, e.getMessage(), e, true);
-            }
-            showProgress(true);
-            getCurrentCourses();
-        }
-    }
-    
+        mExpandableListView.setOnChildClickListener(mExpandableClickListener);
+	}
+ 
+	
     /**
      * Shows the progress UI and hides the login form.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
+    	
+    	final View course_list = findViewById(R.id.courses_list_view);
+        final View progressAnimation = findViewById(R.id.get_courses_status);
+        
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+            
+            progressAnimation.setVisibility(View.VISIBLE);
+            progressAnimation.animate()
+                            .setDuration(shortAnimTime)
+                            .alpha(show ? 1 : 0)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    progressAnimation.setVisibility(show ? View.VISIBLE : View.GONE);
+                                }
+                            });
 
-            mLoginStatusView.setVisibility(View.VISIBLE);
-            mLoginStatusView.animate()
-                    .setDuration(shortAnimTime)
-                    .alpha(show ? 1 : 0)
-                    .setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            mLoginStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
-                        }
-                    });
-
-            mLoginFormView.setVisibility(View.VISIBLE);
-            mLoginFormView.animate()
-                    .setDuration(shortAnimTime)
-                    .alpha(show ? 0 : 1)
-                    .setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            mLoginFormView.setVisibility(mLoginError ? View.VISIBLE : View.GONE);
-                        }
-                    });
+            course_list.setVisibility(View.VISIBLE);
+            course_list.animate()
+                          .setDuration(shortAnimTime)
+                          .alpha(show ? 0 : 1)
+                          .setListener(new AnimatorListenerAdapter() {
+                              @Override
+                              public void onAnimationEnd(Animator animation) {
+                            	  course_list.setVisibility(show ? View.GONE
+                                          : View.VISIBLE);
+                              }
+                          });
         } else {
             // The ViewPropertyAnimator APIs are not available, so simply show
             // and hide the relevant UI components.
-            mLoginStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+        	progressAnimation.setVisibility(show ? View.VISIBLE : View.GONE);
+        	course_list.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
+	
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_activity_actions, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_refresh:
+                getCurrentCourses();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        
+    }
+
 }

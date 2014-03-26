@@ -28,24 +28,17 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.ContextThemeWrapper;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
-import android.widget.ImageButton;
-import android.widget.ImageView;
+import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.client.android.Intents;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
@@ -62,6 +55,12 @@ import es.ugr.swad.swadroid.modules.rollcall.students.StudentItemModel;
 import es.ugr.swad.swadroid.modules.rollcall.students.StudentsArrayAdapter;
 import es.ugr.swad.swadroid.modules.rollcall.students.StudentsHistory;
 import es.ugr.swad.swadroid.utils.Utils;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Rollcall module.
@@ -97,8 +96,8 @@ public class Rollcall extends MenuExpandableListActivity {
     private boolean groupTypesRequested = false;
     private boolean refreshRequested = false;
 
-    private ProgressBar progressbar;
-    private ImageButton updateButton;
+    private ExpandableListView mExpandableListView;
+    private OnChildClickListener mExpandableListListener;
 
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.MenuExpandableListActivity#onCreate(android.os.Bundle)
@@ -108,27 +107,82 @@ public class Rollcall extends MenuExpandableListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_rollcall);
 
+    	getSupportActionBar().setIcon(R.drawable.roll_call);
+
         courseCode = Constants.getSelectedCourseCode();
 
-        ImageView image = (ImageView) this.findViewById(R.id.moduleIcon);
-        image.setBackgroundResource(R.drawable.roll_call);
+        mExpandableListView = (ExpandableListView) findViewById(android.R.id.list);
+        mExpandableListListener = new OnChildClickListener() {
+            
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition,
+                    int childPosition, long id) {
+             // Get the item that was clicked
+                Object o = parent.getExpandableListAdapter().getChild(groupPosition, childPosition);
+                @SuppressWarnings("unchecked")
+                String keyword = (String) ((Map<String, Object>) o).get(NAME);
+                Intent activity;
+                Context context = getApplicationContext();
+                Cursor selectedGroup = (Cursor) practiceGroup.getSelectedItem();
+                String groupName = selectedGroup.getString(2) + getString(R.string.groupSeparator) + selectedGroup.getString(3);
+                PackageManager pm = getPackageManager();
+                //boolean rollCallAndroidVersionFROYO = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.FROYO);
+                boolean hasRearCam = pm.hasSystemFeature(PackageManager.FEATURE_CAMERA);
 
-        TextView text = (TextView) this.findViewById(R.id.moduleName);
-        text.setText(R.string.rollcallModuleLabel);
+                if (keyword.equals(getString(R.string.studentsUpdate))) {
+                    activity = new Intent(context, RollcallConfigDownload.class);
+                    activity.putExtra("groupCode", (long) 0);
+                    startActivity(activity);
+                } else if (keyword.equals(getString(R.string.studentsSelect))) {
+                    activity = new Intent(context, StudentsHistory.class);
+                    activity.putExtra("groupName", groupName);
+                    startActivityForResult(activity, Constants.STUDENTS_HISTORY_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.newTitle))) {
+                    activity = new Intent(context, NewPracticeSession.class);
+                    activity.putExtra("groupCode", selectedGroup.getLong(1));
+                    activity.putExtra("groupName", groupName);
+                    startActivity(activity);
+                } else if (keyword.equals(getString(R.string.sessionsSelect))) {
+                    activity = new Intent(context, SessionsHistory.class);
+                    activity.putExtra("groupCode", selectedGroup.getLong(1));
+                    activity.putExtra("groupName", groupName);
+                    startActivityForResult(activity, Constants.ROLLCALL_HISTORY_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.rollcallScanQR))) {
+                    //This module requires Android 2.2 or higher
+                    //if(rollCallAndroidVersionFROYO) {
+                    // Check if device has a rear camera
+                    if (hasRearCam) {
+                        activity = new Intent(Intents.Scan.ACTION);
+                        activity.putExtra("SCAN_MODE", "QR_CODE_MODE");
+                        activity.putExtra("SCAN_FORMATS", "QR_CODE");
+                        startActivityForResult(activity, Constants.SCAN_QR_REQUEST_CODE);
+                    } else {
+                        //If the device has no rear camera available show error message
+                        //error(getString(R.string.noRearCamera));
+                        error(TAG, getString(R.string.noCameraFound), null, false);
+                    }
+                    /*} else {
+                        //If Android version < 2.2 show error message
+                        error(getString(R.string.froyoFunctionMsg) + "\n(System: " + android.os.Build.VERSION.RELEASE + ")");
+                    }*/
+                } else if (keyword.equals(getString(R.string.rollcallManual))) {
+                    showStudentsList();
+                }
 
-        progressbar = (ProgressBar) this.findViewById(R.id.progress_refresh);
-        progressbar.setVisibility(View.GONE);
-        updateButton = (ImageButton) this.findViewById(R.id.refresh);
-        updateButton.setVisibility(View.VISIBLE);
+                return true;
+            }
+        };
 
-        TextView courseNameText = (TextView) this.findViewById(R.id.courseSelectedText);
-        courseNameText.setText(Constants.getSelectedCourseShortName());
+        mExpandableListView.setOnChildClickListener(mExpandableListListener);
+
+        getSupportActionBar().setSubtitle(Constants.getSelectedCourseShortName());
+    	getSupportActionBar().setIcon(R.drawable.roll_call);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-
+        
         List<Model> groupTypes = dbHelper.getAllRows(Constants.DB_TABLE_GROUP_TYPES, "courseCode = " + courseCode, "groupTypeName");
         Cursor c = dbHelper.getPracticeGroups(Constants.getSelectedCourseCode());
         startManagingCursor(c);
@@ -162,84 +216,6 @@ public class Rollcall extends MenuExpandableListActivity {
         practiceGroup.setEnabled(true);
 
         createBaseMenu();
-    }
-
-    /**
-     * Launches an action when refresh button is pushed.
-     * <p/>
-     * The listener onClick is set in action_bar.xml
-     *
-     * @param v Actual view
-     */
-    public void onRefreshClick(View v) {
-        updateButton.setVisibility(View.GONE);
-        progressbar.setVisibility(View.VISIBLE);
-
-        refreshRequested = true;
-
-        Intent activity = new Intent(this, GroupTypes.class);
-        activity.putExtra("courseCode", courseCode);
-        startActivityForResult(activity, Constants.GROUPTYPES_REQUEST_CODE);
-    }
-
-    /* (non-Javadoc)
-     * @see android.app.ExpandableListActivity#onChildClick(android.widget.ExpandableListView, android.view.View, int, int, long)
-     */
-    @Override
-    public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-        // Get the item that was clicked
-        Object o = getExpandableListAdapter().getChild(groupPosition, childPosition);
-        @SuppressWarnings("unchecked")
-		String keyword = (String) ((Map<String, Object>) o).get(NAME);
-        Intent activity;
-        Context context = getApplicationContext();
-        Cursor selectedGroup = (Cursor) practiceGroup.getSelectedItem();
-        String groupName = selectedGroup.getString(2) + getString(R.string.groupSeparator) + selectedGroup.getString(3);
-        PackageManager pm = getPackageManager();
-        //boolean rollCallAndroidVersionFROYO = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.FROYO);
-        boolean hasRearCam = pm.hasSystemFeature(PackageManager.FEATURE_CAMERA);
-
-        if (keyword.equals(getString(R.string.studentsUpdate))) {
-            activity = new Intent(context, RollcallConfigDownload.class);
-            activity.putExtra("groupCode", (long) 0);
-            startActivity(activity);
-        } else if (keyword.equals(getString(R.string.studentsSelect))) {
-            activity = new Intent(context, StudentsHistory.class);
-            activity.putExtra("groupName", groupName);
-            startActivityForResult(activity, Constants.STUDENTS_HISTORY_REQUEST_CODE);
-        } else if (keyword.equals(getString(R.string.newTitle))) {
-            activity = new Intent(context, NewPracticeSession.class);
-            activity.putExtra("groupCode", selectedGroup.getLong(1));
-            activity.putExtra("groupName", groupName);
-            startActivity(activity);
-        } else if (keyword.equals(getString(R.string.sessionsSelect))) {
-            activity = new Intent(context, SessionsHistory.class);
-            activity.putExtra("groupCode", selectedGroup.getLong(1));
-            activity.putExtra("groupName", groupName);
-            startActivityForResult(activity, Constants.ROLLCALL_HISTORY_REQUEST_CODE);
-        } else if (keyword.equals(getString(R.string.rollcallScanQR))) {
-            //This module requires Android 2.2 or higher
-            //if(rollCallAndroidVersionFROYO) {
-            // Check if device has a rear camera
-            if (hasRearCam) {
-                activity = new Intent(Intents.Scan.ACTION);
-                activity.putExtra("SCAN_MODE", "QR_CODE_MODE");
-                activity.putExtra("SCAN_FORMATS", "QR_CODE");
-                startActivityForResult(activity, Constants.SCAN_QR_REQUEST_CODE);
-            } else {
-                //If the device has no rear camera available show error message
-                //error(getString(R.string.noRearCamera));
-                error(TAG, getString(R.string.noCameraFound), null, false);
-            }
-            /*} else {
-                //If Android version < 2.2 show error message
-				error(getString(R.string.froyoFunctionMsg) + "\n(System: " + android.os.Build.VERSION.RELEASE + ")");
-			}*/
-        } else if (keyword.equals(getString(R.string.rollcallManual))) {
-            showStudentsList();
-        }
-
-        return true;
     }
 
     private void showStudentsList() {
@@ -355,7 +331,7 @@ public class Rollcall extends MenuExpandableListActivity {
                     activity.putExtra("courseCode", courseCode);
                     startActivityForResult(activity, Constants.GROUPS_REQUEST_CODE);
                 } else {
-                    getExpandableListView().setVisibility(View.GONE);
+                    mExpandableListView.setVisibility(View.GONE);
                 }
                 break;
             case Constants.GROUPS_REQUEST_CODE:
@@ -364,14 +340,12 @@ public class Rollcall extends MenuExpandableListActivity {
                 startManagingCursor(c);
 
                 if (c.getCount() > 0 || refreshRequested) {
-                    getExpandableListView().setVisibility(View.VISIBLE);
-                    updateButton.setVisibility(View.VISIBLE);
-                    progressbar.setVisibility(View.GONE);
+                    mExpandableListView.setVisibility(View.VISIBLE);
 
                     refreshRequested = false;
                     fillGroupsSpinner(c);
                 } else {
-                    getExpandableListView().setVisibility(View.GONE);
+                    mExpandableListView.setVisibility(View.GONE);
                     practiceGroup = (Spinner) this.findViewById(R.id.spGroup);
                     practiceGroup.setEnabled(false);
 
@@ -471,7 +445,7 @@ public class Rollcall extends MenuExpandableListActivity {
 
         map = new HashMap<String, Object>();
         map.put(NAME, getString(R.string.rollcallScanQR));
-        map.put(IMAGE, getResources().getDrawable(R.drawable.scan_qr));
+        map.put(IMAGE, getResources().getDrawable(R.drawable.qr));
         rollcallData.add(map);
 
         map = new HashMap<String, Object>();
@@ -479,19 +453,56 @@ public class Rollcall extends MenuExpandableListActivity {
         map.put(IMAGE, getResources().getDrawable(R.drawable.rollcall_manual));
         rollcallData.add(map);
 
-        setListAdapter(new ImageExpandableListAdapter(
-                this,
-                headerData,
-                R.layout.image_list_item,
-                new String[]{NAME},            // the name of the field data
-                new int[]{R.id.listText},    // the text field to populate with the field data
-                childData,
-                0,
-                null,
-                new int[]{}
-        ));
+        mExpandableListView.setAdapter(new ImageExpandableListAdapter(
+                                                                      this,
+                                                                      headerData,
+                                                                      R.layout.image_list_item,
+                                                                      new String[] {
+                                                                          NAME
+                                                                      }, // the
+                                                                         // name
+                                                                         // of
+                                                                         // the
+                                                                         // field
+                                                                         // data
+                                                                      new int[] {
+                                                                          R.id.listText
+                                                                      }, // the
+                                                                         // text
+                                                                         // field
+                                                                         // to
+                                                                         // populate
+                                                                         // with
+                                                                         // the
+                                                                         // field
+                                                                         // data
+                                                                      childData,
+                                                                      0,
+                                                                      null,
+                                                                      new int[] {}
+                           ));
 
-        getExpandableListView().setOnChildClickListener(this);
+        //getExpandableListView().setOnChildClickListener(this);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_refresh:
+                Intent activity = new Intent(this, GroupTypes.class);
+                activity.putExtra("courseCode", courseCode);
+                startActivityForResult(activity, Constants.GROUPTYPES_REQUEST_CODE);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_activity_actions, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 }
