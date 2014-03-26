@@ -7,7 +7,6 @@
 package es.ugr.swad.swadroid.modules.information;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
@@ -15,7 +14,6 @@ import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.Module;
-import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 import org.ksoap2.serialization.SoapObject;
@@ -180,16 +178,13 @@ public class Information extends Module {
 
 	@Override
 	protected void postConnect() {
-		Log.d("MIPETICION", infoSrc);
-		Log.d("MIPETICION2", infoTxt);
-		if (infoSrc.equals("none")) {
+		if (infoSrc.equals("none") || infoTxt.equals("") || infoTxt.equals(Constants.NULL_VALUE)) {
 			webview.loadDataWithBaseURL(null,(getString(R.string.emptyInformation)), "text/html", "utf-8", null);
 		} else if (infoSrc.equals("URL")) {
-			webview.loadDataWithBaseURL(infoTxt, null, "text/html", "utf-8", null);
+			webview.loadUrl(infoTxt);
 		} else {
-			webview.loadDataWithBaseURL(null,infoTxt, "text/html", "utf-8", null);
+			webview.loadDataWithBaseURL(null, infoTxt, "text/html", "utf-8", null);
 		}
-
 	}
 
 	@Override
