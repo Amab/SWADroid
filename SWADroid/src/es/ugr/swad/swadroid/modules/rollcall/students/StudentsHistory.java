@@ -23,14 +23,19 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.*;
+import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.modules.rollcall.sessions.SessionsList;
+
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
@@ -57,11 +62,13 @@ public class StudentsHistory extends Module {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.session_history);
 
-        ImageView image = (ImageView) this.findViewById(R.id.moduleIcon);
+        /*ImageView image = (ImageView) this.findViewById(R.id.moduleIcon);
         image.setBackgroundResource(R.drawable.students_check);
 
         TextView text = (TextView) this.findViewById(R.id.moduleName);
-        text.setText(R.string.studentsHistoryModuleLabel);
+        text.setText(R.string.studentsHistoryModuleLabel);*/
+
+    	getSupportActionBar().setIcon(R.drawable.roll_call);        
 
         // Get selected course
         String where = "id =" + String.valueOf(Constants.getSelectedCourseCode());

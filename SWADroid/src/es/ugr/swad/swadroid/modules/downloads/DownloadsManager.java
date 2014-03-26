@@ -18,13 +18,17 @@
  */
 package es.ugr.swad.swadroid.modules.downloads;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -33,14 +37,8 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
@@ -49,6 +47,10 @@ import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.model.GroupType;
 import es.ugr.swad.swadroid.modules.GroupTypes;
 import es.ugr.swad.swadroid.modules.Groups;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Activity to navigate through the directory tree of documents and to manage
@@ -99,14 +101,9 @@ public class DownloadsManager extends MenuActivity {
      */
     private boolean refresh = false;
 
-    private ImageButton updateButton;
-    private ProgressBar progressbar;
-
     private TextView noConnectionText;
     private GridView grid;
 
-    private ImageView moduleIcon = null;
-    private TextView moduleText = null;
     private TextView currentPathText;
 
     private String chosenNodeName = null;
@@ -202,21 +199,6 @@ public class DownloadsManager extends MenuActivity {
         downloadsAreaCode = getIntent().getIntExtra("downloadsAreaCode",
                 Constants.DOCUMENTS_AREA_CODE);
 
-        //set the module bar
-        if (downloadsAreaCode == Constants.DOCUMENTS_AREA_CODE) {
-            moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
-            moduleIcon.setBackgroundResource(R.drawable.folder);
-
-            moduleText = (TextView) this.findViewById(R.id.moduleName);
-            moduleText.setText(R.string.documentsDownloadModuleLabel);
-        } else { // SHARE_AREA_CODE
-            moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
-            moduleIcon.setBackgroundResource(R.drawable.folder_users);
-
-            moduleText = (TextView) this.findViewById(R.id.moduleName);
-            moduleText.setText(R.string.sharedsDownloadModuleLabel);
-        }
-
         noConnectionText = (TextView) this.findViewById(R.id.noConnectionText);
 
         grid = (GridView) this.findViewById(R.id.gridview);
@@ -232,7 +214,7 @@ public class DownloadsManager extends MenuActivity {
                     //updateView(navigator.goToSubDirectory(chosenNodeName));
                 else { //it is a files therefore gets its information through web service GETFILE
                     chosenNodeName = node.getName();
-                    AlertDialog fileInfoDialog = createFileInfoDialog(node.getName(), node.getSize(), node.getTime(), node.getPublisher(), node.getFileCode());
+                    AlertDialog fileInfoDialog = createFileInfoDialog(node.getName(), node.getSize(), node.getTime(), node.getPublisher(), node.getFileCode(), node.getLicense());
                     fileInfoDialog.show();
                 }
             }
@@ -264,13 +246,30 @@ public class DownloadsManager extends MenuActivity {
 
         }));
 
-        progressbar = (ProgressBar) this.findViewById(R.id.progress_refresh);
-        progressbar.setVisibility(View.GONE);
-        updateButton = (ImageButton) this.findViewById(R.id.refresh);
-        updateButton.setVisibility(View.VISIBLE);
-
+        setupActionBar();
     }
-
+    
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+    	//If back button is pressed, go to parent directory
+	    if ((keyCode == KeyEvent.KEYCODE_BACK))
+	    {
+	    	if (navigator != null) {
+	    		//If current directory is not the root, go to parent directory
+	    		if (!navigator.isRootDirectory()) {
+	                updateView(navigator.goToParentDirectory());
+	             //If current directory is the root, exit module
+	    		} else {
+	    			return super.onKeyDown(keyCode, event);
+	    		}
+            }
+		
+		    return true;	
+	    }
+	
+	    return super.onKeyDown(keyCode, event);
+    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -300,8 +299,6 @@ public class DownloadsManager extends MenuActivity {
                         setMainView();
                     } else {
                         refresh = false;
-                        updateButton.setVisibility(View.VISIBLE);
-                        progressbar.setVisibility(View.GONE);
                         if (!noConnectionView)
                             refresh();
                         else
@@ -350,8 +347,6 @@ public class DownloadsManager extends MenuActivity {
             setNoConnectionView();
             if (refresh) {
                 refresh = false;
-                updateButton.setVisibility(View.VISIBLE);
-                progressbar.setVisibility(View.GONE);
             }
         }
     }
@@ -366,12 +361,10 @@ public class DownloadsManager extends MenuActivity {
         noConnectionText.setVisibility(View.VISIBLE);
         grid.setVisibility(View.GONE);
 
-        this.findViewById(R.id.courseSelectedText).setVisibility(View.VISIBLE);
         this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
 
-        TextView courseNameText = (TextView) this.findViewById(R.id.courseSelectedText);
-        courseNameText.setText(Constants.getSelectedCourseShortName());
-
+        getSupportActionBar().setSubtitle(Constants.getSelectedCourseShortName());
+        
         this.saveState = true;
         this.previousConnection = false;
 
@@ -445,7 +438,6 @@ public class DownloadsManager extends MenuActivity {
     private void loadGroupsSpinner(List<Group> currentGroups) {
 
         if (!currentGroups.isEmpty()) { //there are groups in the selected course, therefore the groups spinner should be loaded
-            this.findViewById(R.id.courseSelectedText).setVisibility(View.GONE);
             Spinner groupsSpinner = (Spinner) this.findViewById(R.id.groupSpinner);
             groupsSpinner.setVisibility(View.VISIBLE);
 
@@ -462,12 +454,9 @@ public class DownloadsManager extends MenuActivity {
             groupsSpinner.setOnItemSelectedListener(new onGroupSelectedListener());
             groupsSpinner.setSelection(groupPosition);
         } else {
-            this.findViewById(R.id.courseSelectedText).setVisibility(View.VISIBLE);
             this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
 
-            TextView courseNameText = (TextView) this.findViewById(R.id.courseSelectedText);
-            courseNameText.setText(Constants.getSelectedCourseShortName());
-
+            getSupportActionBar().setSubtitle(Constants.getSelectedCourseShortName());
         }
     }
 
@@ -569,7 +558,8 @@ public class DownloadsManager extends MenuActivity {
      * Method that shows information file and allows its download
      * It has a button to confirm the download. If It is confirmed  getFile will be requested to get the link
      */
-    private AlertDialog createFileInfoDialog(String name, long size, long time, String uploader, long fileCode) {
+    private AlertDialog createFileInfoDialog(String name, long size, long time, String uploader,
+            long fileCode, String license) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         AlertDialog dialog;
         final long code = fileCode;
@@ -585,10 +575,32 @@ public class DownloadsManager extends MenuActivity {
         else
             uploaderName = this.getResources().getString(R.string.unknown);
 
-        String message = this.getResources().getString(R.string.fileTitle) + " " + name + '\n' +
-                this.getResources().getString(R.string.sizeFileTitle) + " " + humanReadableByteCount(size, true) + '\n' +
-                this.getResources().getString(R.string.uploaderTitle) + " " + uploaderName + '\n' +
-                this.getResources().getString(R.string.creationTimeTitle) + " " + dateShortFormat.format(d) + "  " + (timeFormat.format(d));
+        StringBuilder message;
+        
+        Resources res = getResources();
+        
+        message = new StringBuilder(res.getString(R.string.fileTitle))
+                .append(" ")
+                .append(name)
+                .append("\n")
+                .append(getString(R.string.sizeFileTitle))
+                .append(" ")
+                .append(humanReadableByteCount(size, true))
+                .append("\n")
+                .append(res.getString(R.string.uploaderTitle))
+                .append(" ")
+                .append(uploaderName)
+                .append("\n")
+                .append(res.getString(R.string.licenseType))
+                .append(" ")
+                .append(license)
+                .append("\n")
+                .append(res.getString(R.string.creationTimeTitle))
+                .append(" ")
+                .append(dateShortFormat.format(d))
+                .append("  ")
+                .append(timeFormat.format(d));
+        
         builder.setTitle(name);
         builder.setMessage(message);
         builder.setPositiveButton(R.string.downloadFileTitle, new DialogInterface.OnClickListener() {
@@ -626,8 +638,6 @@ public class DownloadsManager extends MenuActivity {
      * @param v Actual view
      */
     public void onRefreshClick(View v) {
-        updateButton.setVisibility(View.GONE);
-        progressbar.setVisibility(View.VISIBLE);
 
         refresh = true;
 
@@ -637,6 +647,24 @@ public class DownloadsManager extends MenuActivity {
 
     }
 
+    /**
+     * Set up the {@link android.app.ActionBar}, if the API is available.
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private void setupActionBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+		
+        if(downloadsAreaCode == 1) {
+			setTitle(R.string.documentsDownloadModuleLabel);
+			getSupportActionBar().setIcon(R.drawable.folder);
+        } else {
+			setTitle(R.string.sharedsDownloadModuleLabel);
+			getSupportActionBar().setIcon(R.drawable.folder_users);
+		}
+    }
+    
 //	/**
 //	 * This method is launched instead of onCreate when device rotates
 //	 * It prevents from repeating calls to web services when they are not necessary

@@ -19,9 +19,15 @@
 package es.ugr.swad.swadroid.model;
 
 import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.utils.Utils;
+
 import org.ksoap2.serialization.PropertyInfo;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.StringTokenizer;
 
 /**
  * Class for store a test
@@ -361,17 +367,21 @@ public class Test extends Model {
         //Remove spaces
         StringTokenizer tokens = new StringTokenizer(s);
         StringBuilder buff = new StringBuilder();
+        
         while (tokens.hasMoreTokens()) {
             buff.append(" ").append(tokens.nextToken());
         }
+        
         s = buff.toString().trim();
 
         //Remove accents
-        s = s.replace('á', 'a');
+        s = Utils.unAccent(s);
+        
+        /*s = s.replace('á', 'a');
         s = s.replace('é', 'e');
         s = s.replace('í', 'i');
         s = s.replace('ó', 'o');
-        s = s.replace('ú', 'u');
+        s = s.replace('ú', 'u');*/
 
         return s;
     }

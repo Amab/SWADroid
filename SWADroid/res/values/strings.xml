@@ -3,6 +3,8 @@
 
     <string name="app_name">SWADroid</string>
     <string name="serverName_preferences">Server</string>
+    <string name="logout_preferences">Log Out of SWADroid</string>
+    <string name="logout_title_preferences">Log Out</string>
     <string name="serverSummary_preferences">Server (without http://)</string>
     <string name="serverTitle_preferences">Server</string>
     <string name="loginModuleLabel">Login</string>
@@ -41,6 +43,8 @@
     <string name="loginTitle_menu">Login</string>
     <string name="loginProgressTitle">Login</string>
     <string name="loginProgressDescription">Connecting&#8230;</string>
+    <string name="recoverPasswordProgressTitle">Recover password</string>
+    <string name="recoverPasswordProgressDescription">Connecting&#8230;</string>
     <string name="coursesProgressTitle">Courses</string>
     <string name="coursesProgressDescription">Retrieving courses&#8230;</string>
     <string name="notificationsProgressTitle">Notifications</string>
@@ -123,6 +127,7 @@
     <string name="errorBadAppKeyMsg">Unknown application key. Please contact the developer</string>
     <string name="errorConnectionMsg">Error while connecting to server</string>
     <string name="errorTimeoutMsg">Timeout trying to connect to the server</string>
+    <string name="errorServiceUnavailableMsg">SWAD is under maintenance right now. Please try again later</string>
     <string name="sendingMessageMsg">Sending message&#8230;</string>
     <string name="messageSendedMsg">Message sended successfully</string>
     <string name="messageSendErrorMsg">Error while sending the message. Check the data in the message fields</string>
@@ -179,7 +184,7 @@
     <string name="documentsDownloadProgressDescription">Getting files. \n\nDepending on the directory size, this could
         take several minutes.\n\nPlease wait&#8230;</string>
     <string name="clickToOpenFile">Click here to open the file</string>
-    <string name="sharedsDownloadModuleLabel">Shared area</string>
+    <string name="sharedsDownloadModuleLabel">Shared files</string>
     <string name="connectionRequired">Internet connection is required for this functionality</string>
     <string name="course">Course</string>
     <string name="msg_default_format">Format</string>
@@ -210,15 +215,16 @@
     <string name="sizeFileTitle">Size:</string>
     <string name="creationTimeTitle">Date:</string>
     <string name="uploaderTitle">Uploaded by:</string>
+    <string name="licenseType">License:</string>
     <string name="downloadFileTitle">Download</string>
     <string name="sdCardBusyTitle">SD card unavailable</string>
     <string name="sdCardBusy">The SD casd is busy. To allow downloads, select "Turn off USB storage" in the
         notification
     </string>
     <string name="vacants">Vacants</string>
-    <string name="numStudent">No. of students:</string>
-    <string name="maxStudent">Max.stud.</string>
-    <string name="myGroupsModuleLabel">My groups</string>
+    <string name="numStudent">No. of students</string>
+    <string name="maxStudent">Max. students</string>
+    <string name="myGroupsModuleLabel">Groups</string>
     <string name="scan_no_photos">Failed to save the photos of students</string>
     <string name="noStudentsAvailableMsg">There are no students in this subject</string>
     <string name="studentsUpdated">students updated</string>
@@ -339,18 +345,29 @@
     <string name="changelogTitle">Changelog</string>
     
     
-    
     <string name="informationModuleLabel">Information</string> 
     <string name="introductionModuleLabel">Introduction</string>  
     <string name="faqsModuleLabel">FAQs</string>
     <string name="linksModuleLabel">Links</string>
     <string name="bibliographyModuleLabel">Bibliography</string>
-    <string name="practicesprogramModuleLabel">Practices Program</string>
-    <string name="theoryprogramModuleLabel">Theory Program</string>
+    <string name="syllabusPracticalsModuleLabel">Practices Program</string>
+    <string name="syllabusLecturesModuleLabel">Theory Program</string>
     <string name="teachingguideModuleLabel">Teaching Guide</string>
+    <string name="assessmentModuleLabel">Assessment</string>
+    <string name="informationProgressDescription">Getting information&#8230;\nWait, please&#8230;</string>
+    <string name="informationProgressTitle">Information</string>
+    <string name="emptyInformation">Information unavailable</string>
+    
     
     <string name="pradoLoginToast">SWAD\'s password is at least 8 alphanumeric characters long</string>
-    <string name="error_password_summaryUGR">Error: Remember you must enter SWAD\'s password, not e-Administration</string>
+    <string name="error_password_summaryUGR">Remember you must enter SWAD\'s password, not e-Administration (PRADO)</string>
     <string name="error_password_summary">Error: Password must be at least 8 alphanumeric characters</string>
     <string name="passwordDialogTip">SWAD\'s password is at least 8 alphanumeric characters long</string>
+    <string name="errorServerCertificateMsg">The server certificate is invalid. Please contact SWAD admininstrator</string>
+    <string name="lessOrEqualChar">≤</string>
+    
+    <string name="notificationMarkAllRead">Mark all as read</string>
+    <string name="notificationReply">Reply</string>
+    <string name="actionBarRefresh">Refresh</string>
+	<string name="actionBarSave">Save</string>
 </resources>

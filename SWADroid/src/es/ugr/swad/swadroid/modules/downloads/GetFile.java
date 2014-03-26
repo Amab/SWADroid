@@ -21,6 +21,7 @@ package es.ugr.swad.swadroid.modules.downloads;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Group;
@@ -28,10 +29,7 @@ import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 import org.ksoap2.serialization.SoapPrimitive;
-import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -62,6 +60,7 @@ public class GetFile extends Module {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().hide();
         fileCode = getIntent().getLongExtra("fileCode", -1);
 
         if (fileCode == -1) {
@@ -75,6 +74,7 @@ public class GetFile extends Module {
     @Override
     protected void onStart() {
         super.onStart();
+        
         try {
             runConnection();
         } catch (Exception e) {
@@ -93,12 +93,13 @@ public class GetFile extends Module {
     }
 
     @Override
-    protected void requestService() throws NoSuchAlgorithmException,
-            IOException, XmlPullParserException {
+    protected void requestService() throws Exception {
+    	
     	createRequest(SOAPClient.CLIENT_TYPE);
         addParam("wsKey", Constants.getLoggedUser().getWsKey());
         addParam("fileCode", (int) fileCode);
         sendRequest(Group.class, false);
+        
         if (result != null) {
             ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
             SoapPrimitive soapP = (SoapPrimitive) res.get(1);

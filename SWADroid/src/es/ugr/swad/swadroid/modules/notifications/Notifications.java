@@ -20,13 +20,23 @@ package es.ugr.swad.swadroid.modules.notifications;
 
 import android.accounts.Account;
 import android.app.Activity;
-import android.content.*;
+import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.*;
+import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bugsense.trace.BugSenseHandler;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -40,14 +50,12 @@ import es.ugr.swad.swadroid.gui.AlertNotification;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.modules.Module;
+import es.ugr.swad.swadroid.sync.SyncUtils;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 import org.ksoap2.serialization.SoapObject;
-import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -117,7 +125,6 @@ public class Notifications extends Module {
      */
     private OnItemClickListener clickListener = new OnItemClickListener() {
         public void onItemClick(AdapterView<?> av, View v, int position, long rowId) {
-            //adapter.toggleContentVisibility(position);
             TextView id = (TextView) v.findViewById(R.id.notifCode);
             TextView code = (TextView) v.findViewById(R.id.eventCode);
             TextView type = (TextView) v.findViewById(R.id.eventType);
@@ -156,17 +163,12 @@ public class Notifications extends Module {
         startManagingCursor(dbCursor);
         adapter.changeCursor(dbCursor);
 
-        //TextView text = (TextView) this.findViewById(R.id.listText);
-        //ListView list = (ListView) this.findViewById(R.id.listItems);
         PullToRefreshListView list = (PullToRefreshListView) this.findViewById(R.id.listItemsPullToRefresh);
 
         //If there are notifications to show, hide the empty notifications message and show the notifications list
         if (dbCursor.getCount() > 0) {
-            //text.setVisibility(View.GONE);
-            //list.setVisibility(View.VISIBLE);
             list.setAdapter(adapter);
             list.setOnItemClickListener(clickListener);
-        	//list.setDividerHeight(1);
         }        
 
     	list.onRefreshComplete();
@@ -229,36 +231,19 @@ public class Notifications extends Module {
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //ImageButton updateButton;
-        ImageView image;
-        TextView text;
-        //ListView list;
         final PullToRefreshListView list;
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_items_pulltorefresh);
 
-        this.findViewById(R.id.courseSelectedText).setVisibility(View.GONE);
+    	getSupportActionBar().setIcon(R.drawable.notif);
+
         this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
-        this.findViewById(R.id.markAllRead).setVisibility(View.VISIBLE);
-
-        image = (ImageView) this.findViewById(R.id.moduleIcon);
-        image.setBackgroundResource(R.drawable.bell);
-
-        text = (TextView) this.findViewById(R.id.moduleName);
-        text.setText(R.string.notificationsModuleLabel);
-
-        //image = (ImageView)this.findViewById(R.id.title_sep_1);
-        //image.setVisibility(View.VISIBLE);
-
-        //updateButton = (ImageButton) this.findViewById(R.id.refresh);
-        //updateButton.setVisibility(View.VISIBLE);
 
         dbCursor = dbHelper.getDb().getCursor(Constants.DB_TABLE_NOTIFICATIONS, selection, orderby);
         startManagingCursor(dbCursor);
         adapter = new NotificationsCursorAdapter(this, dbCursor, Preferences.getDBKey());
 
-        //list = (ListView) this.findViewById(R.id.listItems);
         list = (PullToRefreshListView) this.findViewById(R.id.listItemsPullToRefresh);
         list.setAdapter(adapter);
         list.setOnItemClickListener(clickListener);
@@ -270,43 +255,21 @@ public class Notifications extends Module {
             }
         });
 
-        text = (TextView) this.findViewById(R.id.listText);
-
 		/*
          * If there aren't notifications to show, hide the notifications list and show the empty notifications
 		 * message
 		 */
         if (dbCursor.getCount() == 0) {
-            //list.setVisibility(View.GONE);
-            //text.setVisibility(View.VISIBLE);
         	String emptyMsgArray[]={getString(R.string.notificationsEmptyListMsg)};
         	ArrayAdapter<String> adapter =new ArrayAdapter<String>(getApplicationContext(), R.layout.list_item, emptyMsgArray);
         	list.setAdapter(adapter);
         	list.setOnItemClickListener(null);
-        	//list.setDividerHeight(0);
         }
 
         setMETHOD_NAME("getNotifications");
         receiver = new SyncReceiver(this);
         account = new Account(getString(R.string.app_name), accountType);
         SIZE_LIMIT = Preferences.getNotifLimit();
-    }
-
-    /**
-     * Launches an action when refresh button is pushed
-     *
-     * @param v Actual view
-     */
-    public void onRefreshClick(View v) {
-        ImageButton updateButton = (ImageButton) this.findViewById(R.id.refresh);
-        ProgressBar pb = (ProgressBar) this.findViewById(R.id.progress_refresh);
-
-        updateButton.setVisibility(View.GONE);
-        pb.setVisibility(View.VISIBLE);
-
-        runConnection();
-        if (!isConnected)
-            onError();
     }
 
     /**
@@ -354,13 +317,11 @@ public class Notifications extends Module {
      * @see es.ugr.swad.swadroid.modules.Module#requestService()
      */
     @Override
-    protected void requestService() throws NoSuchAlgorithmException,
-            IOException, XmlPullParserException {
-    	
+    protected void requestService() throws Exception {    	
     	//Download new notifications from the server
         SIZE_LIMIT = Preferences.getNotifLimit();
 
-        if (ContentResolver.getSyncAutomatically(account, authority)) {
+        if (SyncUtils.isSyncAutomatically(getApplicationContext())) {
         	Log.i(TAG, "Automatic synchronization is enabled. Requesting asynchronous sync operation");
         	
             //Call synchronization service
@@ -384,8 +345,10 @@ public class Notifications extends Module {
                 //Stores notifications data returned by webservice response
                 ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
                 SoapObject soap = (SoapObject) res.get(1);
-                notifCount = soap.getPropertyCount();
-                for (int i = 0; i < notifCount; i++) {
+                int numNotif = soap.getPropertyCount();
+                
+                notifCount = 0;
+                for (int i = 0; i < numNotif; i++) {
                     SoapObject pii = (SoapObject) soap.getProperty(i);
                     Long notifCode = Long.valueOf(pii.getProperty("notifCode").toString());
                     Long eventCode = Long.valueOf(pii.getProperty("notificationCode").toString());
@@ -403,19 +366,24 @@ public class Notifications extends Module {
                     
                     SWADNotification n = new SWADNotification(notifCode, eventCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, userPhoto, location, summary, status, content, notifReadSWAD, notifReadSWAD);
                     dbHelper.insertNotification(n);
+                    
+                    //Count unread notifications only
+                    if(!notifReadSWAD) {
+                    	notifCount++;
+                    }
 
                     if(isDebuggable)
                     	Log.d(TAG, n.toString());
                 }
 
                 //Request finalized without errors
-                setResult(RESULT_OK);  
-                Log.i(TAG, "Retrieved " + notifCount + " notifications");
+                setResult(RESULT_OK);
+                Log.i(TAG, "Retrieved " + numNotif + " notifications (" + notifCount + " unread)");
 
                 //Clear old notifications to control database size
                 dbHelper.clearOldNotifications(SIZE_LIMIT);
 
-                dbHelper.endTransaction();
+                dbHelper.endTransaction(true);
             }
         }
     }
@@ -435,8 +403,10 @@ public class Notifications extends Module {
      * @see es.ugr.swad.swadroid.modules.Module#postConnect()
      */
     @Override
-    protected void postConnect() {   
-        if (!ContentResolver.getSyncAutomatically(account, authority)) {
+    protected void postConnect() {
+        Intent notIntent = new Intent(this, Notifications.class);
+        
+        if (!SyncUtils.isSyncAutomatically(getApplicationContext())) {
         	if (notifCount > 0) {
 	            //If the notifications counter exceeds the limit, set it to the max allowed
 	            if (notifCount > SIZE_LIMIT) {
@@ -447,22 +417,16 @@ public class Notifications extends Module {
 	            		NOTIF_ALERT_ID,
 	            		getString(R.string.app_name),
 	            		notifCount + " " + getString(R.string.notificationsAlertMsg),
-	            		getString(R.string.app_name));
+	            		getString(R.string.app_name),
+	            		notIntent);
         	} else {
         		Toast.makeText(this, R.string.NoNotificationsMsg, Toast.LENGTH_LONG).show();
         	}
-
-            /*ProgressBar pb = (ProgressBar) this.findViewById(R.id.progress_refresh);
-            ImageButton updateButton = (ImageButton) this.findViewById(R.id.refresh);
-
-            pb.setVisibility(View.GONE);
-            updateButton.setVisibility(View.VISIBLE);*/
             
             //Sends to SWAD the "seen notifications" info
             sendReadedNotifications();  
             
             refreshScreen();
-            //Toast.makeText(this, R.string.notificationsDownloadedMsg, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -471,11 +435,7 @@ public class Notifications extends Module {
      */
     @Override
     protected void onError() {
-        /*ProgressBar pb = (ProgressBar) this.findViewById(R.id.progress_refresh);
-        ImageButton updateButton = (ImageButton) this.findViewById(R.id.refresh);
 
-        pb.setVisibility(View.GONE);
-        updateButton.setVisibility(View.VISIBLE);*/
     }
 
     /**
@@ -502,10 +462,9 @@ public class Notifications extends Module {
      * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
      */
     private class SyncReceiver extends BroadcastReceiver {
-        //private final Notifications mActivity;
 
         public SyncReceiver(Notifications activity) {
-            //mActivity = activity;
+
         }
 
         @Override
@@ -521,19 +480,30 @@ public class Notifications extends Module {
                 	error(TAG, errorMessage, null, true);
                 } else if (notifCount == 0) {
                     Toast.makeText(context, R.string.NoNotificationsMsg, Toast.LENGTH_LONG).show();
-                }
-
-                //ProgressBar pb = (ProgressBar) mActivity.findViewById(R.id.progress_refresh);
-                //ImageButton updateButton = (ImageButton) mActivity.findViewById(R.id.refresh);
-
-                //pb.setVisibility(View.GONE);
-                //updateButton.setVisibility(View.VISIBLE);
-                
-                //Sends to SWAD the "seen notifications" info
-                //sendReadNotifications();     
+                }  
                 
                 refreshScreen();
             }
+        }
+    }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.notification_activity_actions, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_markAllRead:
+                dbHelper.updateAllNotifications("seenLocal", Utils.parseBoolString(true));
+                sendReadedNotifications();
+                refreshScreen();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }

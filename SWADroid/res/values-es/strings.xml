@@ -3,6 +3,8 @@
 
     <string name="app_name">SWADroid</string>
     <string name="serverName_preferences">Servidor</string>
+    <string name="logout_preferences">Cerrar sesión en SWADroid</string>
+    <string name="logout_title_preferences">Cerrar Sesión</string>
     <string name="serverSummary_preferences">Servidor (sin http://)</string>
     <string name="serverTitle_preferences">Servidor</string>
     <string name="loginModuleLabel">Conectar</string>
@@ -39,7 +41,9 @@
     <string name="author_title_preferences">Autores</string>
     <string name="loginTitle_menu">Conectar</string>
     <string name="loginProgressTitle">Identificación</string>
+    <string name="recoverPasswordProgressTitle">Recuperación de contraseña</string>
     <string name="loginProgressDescription">Conectando&#8230;</string>
+    <string name="recoverPasswordProgressDescription">Conectando&#8230;</string>
     <string name="coursesProgressTitle">Asignaturas</string>
     <string name="coursesProgressDescription">Obteniendo asignaturas&#8230;</string>
     <string name="notificationsProgressTitle">Notificaciones</string>
@@ -132,6 +136,8 @@
     <string name="errorTimeoutMsg">Tiempo de espera agotado intentando conectar con el
         servidor
     </string>
+    <string name="errorServiceUnavailableMsg">SWAD se encuentra en mantenimiento en estos momentos.
+        Por favor, inténtelo más tarde</string>
     <string name="sendingMessageMsg">Enviando mensaje&#8230;</string>
     <string name="messageSendedMsg">Mensaje enviado</string>
     <string name="messageSendErrorMsg">Error al enviar el mensaje. Compruebe los datos introducidos</string>
@@ -179,7 +185,7 @@
     <string name="documentsDownloadProgressDescription">Obteniendo archivos.\n\nDependiendo del tamaño del directorio,
         podría necesitar varios minutos.\n\nPor favor, espere&#8230;</string>
     <string name="clickToOpenFile">Pulse aquí para abrir el archivo</string>
-    <string name="sharedsDownloadModuleLabel">Zona común</string>
+    <string name="sharedsDownloadModuleLabel">Archivos compartidos</string>
     <string name="connectionRequired">Para esta funcionalidad se necesita conexión a Internet</string>
     <string name="course">Asignatura</string>
     <string name="msg_default_format">Formato</string>
@@ -211,6 +217,7 @@
     <string name="fileInfoTitle">Información de archivo</string>
     <string name="sizeFileTitle">Tamaño:</string>
     <string name="creationTimeTitle">Fecha:</string>
+    <string name="licenseType">Licencia:</string>
     <string name="uploaderTitle">Subido por:</string>
     <string name="downloadFileTitle">Descargar</string>
     <string name="sdCardBusyTitle">Tarjeta SD no disponible</string>
@@ -218,8 +225,9 @@
         almacenamiento USB" en la notificación
     </string>
     <string name="vacants">Vacantes</string>
-    <string name="numStudent">Nº de estudiantes:</string>
-    <string name="myGroupsModuleLabel">Mis grupos</string>
+    <string name="numStudent">Nº de estudiantes</string>
+    <string name="maxStudent">Máx. estudiantes</string>
+    <string name="myGroupsModuleLabel">Grupos</string>
     <string name="scan_no_photos">No se han podido guardar las fotos de los estudiantes</string>
     <string name="noStudentsAvailableMsg">Esta asignatura no tiene alumnos</string>
     <string name="studentsUpdated">alumnos actualizados</string>
@@ -341,13 +349,23 @@
     <string name="faqsModuleLabel">FAQs</string>
     <string name="linksModuleLabel">Enlaces</string>
     <string name="bibliographyModuleLabel">Bibliografía</string>
-    <string name="practicesprogramModuleLabel">Programa de Prácticas</string>
-    <string name="theoryprogramModuleLabel">Programa de Teoría</string>
+    <string name="syllabusPracticalsModuleLabel">Programa de Prácticas</string>
+    <string name="syllabusLecturesModuleLabel">Programa de Teoría</string>
     <string name="teachingguideModuleLabel">Guía Docente</string>
+    <string name="assessmentModuleLabel">Sistema de Evaluación</string>
+    <string name="informationProgressDescription">Obteniendo información&#8230;\nPor favor, espere&#8230;</string>
+    <string name="informationProgressTitle">Información</string>
+    <string name="emptyInformation">Información no disponible</string>
     
     
     <string name="pradoLoginToast">La contraseña de SWAD tiene al menos 8 caracteres alfanuméricos</string>
-	<string name="error_password_summaryUGR">Error: Recuerda que debes introducir la contraseña de SWAD, no la de Acceso identificado</string>
+	<string name="error_password_summaryUGR">Recuerda que debes introducir la contraseña de SWAD, no la de Acceso identificado (PRADO)</string>
 	<string name="error_password_summary">Error: La contraseña debe ser de mínimo 8 caracteres alfanuméricos</string>
 	<string name="passwordDialogTip">Recuerda que la contraseña de SWAD debe tener al menos 8 caracteres alfanuméricos</string>
+	<string name="errorServerCertificateMsg">El certificado del servidor no es válido. Por favor, contacte con el administrador de SWAD</string>
+	
+	<string name="notificationMarkAllRead">Marcar todas como leidas</string>
+	<string name="notificationReply">Responder</string>
+	<string name="actionBarRefresh">Actualizar</string>
+	<string name="actionBarSave">Guardar</string>
 </resources>

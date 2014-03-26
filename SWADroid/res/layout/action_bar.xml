@@ -116,22 +116,22 @@
             android:paddingRight="5dip"
             android:visibility="gone"/>
 
-    <ProgressBar
-            android:id="@+id/progress_refresh"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignWithParentIfMissing="true"
-            android:indeterminateBehavior="repeat"
-            android:indeterminateDrawable="@drawable/rotate_refresh"
-            android:maxHeight="40dp"
-            android:maxWidth="40dp"
-            android:minHeight="40dp"
-            android:minWidth="40dp"
-            android:padding="5dp"
-            android:visibility="gone"/>
+<!--     <ProgressBar -->
+<!--             android:id="@+id/progress_refresh" -->
+<!--             android:layout_width="wrap_content" -->
+<!--             android:layout_height="match_parent" -->
+<!--             android:layout_alignParentBottom="true" -->
+<!--             android:layout_alignParentRight="true" -->
+<!--             android:layout_alignParentTop="true" -->
+<!--             android:layout_alignWithParentIfMissing="true" -->
+<!--             android:indeterminateBehavior="repeat" -->
+<!--             android:indeterminateDrawable="@drawable/rotate_refresh" -->
+<!--             android:maxHeight="40dp" -->
+<!--             android:maxWidth="40dp" -->
+<!--             android:minHeight="40dp" -->
+<!--             android:minWidth="40dp" -->
+<!--             android:padding="5dp" -->
+<!--             android:visibility="gone"/> -->
 
     <!-- <ImageView
     	android:id="@+id/title_sep_4"
@@ -144,34 +144,34 @@
         android:background="@color/title_separator"
         android:visibility="gone"/>  -->
 
-    <ImageButton
-            android:id="@+id/messageReplyButton"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignWithParentIfMissing="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:onClick="onReplyMessageClick"
-            android:background="@drawable/msg_reply"
-            android:clickable="true"
-            android:visibility="gone"/>
+<!--     <ImageButton -->
+<!--             android:id="@+id/messageReplyButton" -->
+<!--             android:layout_width="wrap_content" -->
+<!--             android:layout_height="match_parent" -->
+<!--             android:layout_alignWithParentIfMissing="true" -->
+<!--             android:layout_alignParentTop="true" -->
+<!--             android:layout_alignParentBottom="true" -->
+<!--             android:layout_alignParentRight="true" -->
+<!--             android:onClick="onReplyMessageClick" -->
+<!--             android:background="@drawable/msg_reply" -->
+<!--             android:clickable="true" -->
+<!--             android:visibility="gone"/> -->
 
-    <ImageButton
-            android:id="@+id/markAllRead"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignWithParentIfMissing="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:src="@drawable/btn_check_buttonless_on"
-            android:onClick="onMarkAllReadClick"
-            android:background="@drawable/title_button"
-            android:scaleType="centerCrop"
-            android:paddingLeft="3dip"
-            android:paddingRight="5dip"
-            android:visibility="gone"/>
+<!--     <ImageButton -->
+<!--             android:id="@+id/markAllRead" -->
+<!--             android:layout_width="wrap_content" -->
+<!--             android:layout_height="wrap_content" -->
+<!--             android:layout_alignWithParentIfMissing="true" -->
+<!--             android:layout_alignParentTop="true" -->
+<!--             android:layout_alignParentBottom="true" -->
+<!--             android:layout_alignParentRight="true" -->
+<!--             android:src="@drawable/btn_check_buttonless_on" -->
+<!--             android:onClick="onMarkAllReadClick" -->
+<!--             android:background="@drawable/title_button" -->
+<!--             android:scaleType="centerCrop" -->
+<!--             android:paddingLeft="3dip" -->
+<!--             android:paddingRight="5dip" -->
+<!--             android:visibility="gone"/> -->
 
 </RelativeLayout>
 

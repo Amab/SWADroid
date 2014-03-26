@@ -21,7 +21,11 @@ package es.ugr.swad.swadroid.modules.notifications;
 
 import android.accounts.Account;
 import android.app.Service;
-import android.content.*;
+import android.content.AbstractThreadedSyncAdapter;
+import android.content.ContentProviderClient;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SyncResult;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
@@ -45,21 +49,19 @@ import es.ugr.swad.swadroid.webservices.IWebserviceClient;
 import es.ugr.swad.swadroid.webservices.RESTClient;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
+import org.apache.http.client.HttpResponseException;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.KvmSerializable;
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.TimeoutException;
+
+import javax.net.ssl.SSLException;
 
 /**
  * Service for notifications sync adapter.
@@ -99,6 +101,7 @@ public class NotificationsSyncAdapterService extends Service {
         @Override
         public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
             boolean sendException = true;
+            int httpStatusCode;
         	
         	try {
                 SIZE_LIMIT = Preferences.getNotifLimit();
@@ -125,19 +128,38 @@ public class NotificationsSyncAdapterService extends Service {
                     } else {
                     	errorMessage = "Server error: " + es.getMessage();
                     }
+                } else if ((e instanceof CertificateException) || (e instanceof SSLException)) {
+                	errorMessage = mContext.getString(R.string.errorServerCertificateMsg);
                 } else if (e instanceof XmlPullParserException) {
                 	errorMessage = mContext.getString(R.string.errorServerResponseMsg);
                 } else if (e instanceof TimeoutException) {
                 	errorMessage = mContext.getString(R.string.errorTimeoutMsg);
                 	sendException = false;
+                } else if (e instanceof HttpResponseException) {
+                	httpStatusCode = ((HttpResponseException) e).getStatusCode();
+                	
+                	if(httpStatusCode == 503) { // Service Unavailable
+                		errorMessage = mContext.getString(R.string.errorServiceUnavailableMsg);
+                		sendException = false;
+                	} else {
+                		errorMessage = e.getMessage();
+                    	if((errorMessage == null) || errorMessage.equals("")) {
+                    		errorMessage = mContext.getString(R.string.errorConnectionMsg);
+                    	}
+                	}
                 } else {
                 	errorMessage = e.getMessage();
                 	if((errorMessage == null) || errorMessage.equals("")) {
                 		errorMessage = mContext.getString(R.string.errorConnectionMsg);
                 	}  
-                }             	
-
-                e.printStackTrace();
+                }           
+                
+                // Launch database rollback
+                if(dbHelper.isDbInTransaction()) {
+                	dbHelper.endTransaction(false);
+                }
+                
+	            Log.e(TAG, e.getMessage());
 
                 //Send exception details to Bugsense
                 if(sendException) {
@@ -271,15 +293,14 @@ public class NotificationsSyncAdapterService extends Service {
      * 
      * @param cl     Class to be mapped
      * @param simple Flag for select simple or complex response
-     * @throws XmlPullParserException 
-     * @throws IOException 
+     * @throws Exception 
      */
-    protected static void sendRequest(Class<?> cl, boolean simple) throws IOException, XmlPullParserException {
+    protected static void sendRequest(Class<?> cl, boolean simple) throws Exception {
     	((SOAPClient) webserviceClient).sendRequest(cl, simple);
     	result = webserviceClient.getResult();
     }
     
-    private static void logUser() throws IOException, XmlPullParserException {
+    private static void logUser() throws Exception {
     	Log.d(TAG, "Not logged");
 
         METHOD_NAME = "loginByUserPasswordKey";
@@ -316,7 +337,7 @@ public class NotificationsSyncAdapterService extends Service {
         }
     }
     
-    private static void getNotifications() throws IOException, XmlPullParserException {
+    private static void getNotifications() throws Exception {
     	Log.d(TAG, "Logged");
 
         //Calculates next timestamp to be requested
@@ -337,8 +358,10 @@ public class NotificationsSyncAdapterService extends Service {
             //Stores notifications data returned by webservice response
             ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
             SoapObject soap = (SoapObject) res.get(1);
-            notifCount = soap.getPropertyCount();
-            for (int i = 0; i < notifCount; i++) {
+            int numNotif = soap.getPropertyCount();
+            
+            notifCount = 0;
+            for (int i = 0; i < numNotif; i++) {
             	SoapObject pii = (SoapObject) soap.getProperty(i);
                 Long notifCode = Long.valueOf(pii.getProperty("notifCode").toString());
                 Long eventCode = Long.valueOf(pii.getProperty("notificationCode").toString());
@@ -356,17 +379,22 @@ public class NotificationsSyncAdapterService extends Service {
                 
                 SWADNotification n = new SWADNotification(notifCode, eventCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, userPhoto, location, summary, status, content, notifReadSWAD, notifReadSWAD);
                 dbHelper.insertNotification(n);
+                
+                //Count unread notifications only
+                if(!notifReadSWAD) {
+                	notifCount++;
+                }
 
                 //Log.d(TAG, n.toString());
             }
 
             //Request finalized without errors
-            Log.i(TAG, "Retrieved " + notifCount + " notifications");
+            Log.i(TAG, "Retrieved " + numNotif + " notifications (" + notifCount + " unread)");
 
             //Clear old notifications to control database size
             dbHelper.clearOldNotifications(SIZE_LIMIT);
 
-            dbHelper.endTransaction();
+            dbHelper.endTransaction(true);
         }
     }
     
@@ -408,14 +436,16 @@ public class NotificationsSyncAdapterService extends Service {
     }
 
     private static void performSync(Context context, Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
-            throws IOException, XmlPullParserException, NoSuchAlgorithmException, KeyManagementException, KeyStoreException, CertificateException, UnrecoverableKeyException {
+            throws Exception {
 
+        Intent notIntent = new Intent(context, Notifications.class);
+        
         //Notify synchronization start
         Intent startIntent = new Intent();
         startIntent.setAction(START_SYNC);
         context.sendBroadcast(startIntent);
 
-      //Initialize HTTPS connections
+        //Initialize HTTPS connections
     	/*
     	 * Terena root certificate is not included by default on Gingerbread and older
     	 * If Android API < 11 (HONEYCOMB) add Terena certificate manually
@@ -452,7 +482,8 @@ public class NotificationsSyncAdapterService extends Service {
 	            		NOTIF_ALERT_ID,
 	            		context.getString(R.string.app_name),
 	            		notifCount + " " + context.getString(R.string.notificationsAlertMsg),
-	            		context.getString(R.string.app_name));
+	            		context.getString(R.string.app_name),
+	            		notIntent);
         	}
         	
         	sendReadedNotifications(context);

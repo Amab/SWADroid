@@ -40,7 +40,7 @@ package es.ugr.swad.swadroid.modules.downloads;
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  * @version 1.0
  */
-public class DirectoryItem {
+public class DirectoryItem implements Comparable<DirectoryItem> {
     private String name;
     private String type;
     private long fileCode = -1;
@@ -164,4 +164,18 @@ public class DirectoryItem {
         return photo;
     }
 
+	@Override
+	public int compareTo(DirectoryItem another) {
+		int result;
+    	
+    	if (this.isFolder() && !another.isFolder()) {
+    		result = -1;
+    	} else if (!another.isFolder() && this.isFolder()) {
+    		result = 1;
+    	} else {
+    		result = this.name.compareToIgnoreCase(another.name);
+    	}
+    	
+    	return result;
+	}
 }

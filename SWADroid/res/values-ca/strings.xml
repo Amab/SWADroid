@@ -3,6 +3,8 @@
 
     <string name="app_name">SWADroid</string>
     <string name="serverName_preferences">Servidor</string>
+    <string name="logout_preferences">Sortir de SWADroid</string>
+    <string name="logout_title_preferences">finalitzar la sessió</string>
     <string name="serverSummary_preferences">Servidor (sense http://)</string>
     <string name="serverTitle_preferences">Servidor</string>
     <string name="loginModuleLabel">Connectar</string>
@@ -118,6 +120,7 @@
     <string name="errorBadAppKeyMsg">Clau d\'aplicació incorrecta. Si us plau, contacti amb el desenvolupador.</string>
     <string name="errorConnectionMsg">Error durant la connexió amb el servidor</string>
     <string name="errorTimeoutMsg">Temps d\'espera esgotat intentant connectar amb el servidor</string>
+    <string name="errorServiceUnavailableMsg">SWAD es troba en manteniment en aquests moments. Torneu-ho més tard</string>
     <string name="sendingMessageMsg">Enviant missatge&#8230;</string>
     <string name="messageSendedMsg">Missatge enviat</string>
     <string name="messageSendErrorMsg">L\'enviament del missatge. Comprovi les dades introduïdes</string>
@@ -162,7 +165,7 @@
     <string name="documentsDownloadProgressDescription">Obtenint fitxers.\n\nDependiendo de la mida del directori,
         podria necessitar diversos minuts.\n\nSi us plau, esperi&#8230;</string>
     <string name="clickToOpenFile">Pulsi aquí per obrir el fitxer</string>
-    <string name="sharedsDownloadModuleLabel">Zona comú</string>
+    <string name="sharedsDownloadModuleLabel">Arxius compartits</string>
     <string name="connectionRequired">Per aquesta funcionalitat es necessita connexió a Internet</string>
     <string name="course">Assignatura</string>
     <string name="msg_default_format">Format</string>
@@ -198,8 +201,9 @@
     <string name="sdCardBusy">La targeta SD està ocupada ara mateix. Per permetre descàrregues, seleccioneu \"Desactiva
         emmagatzematge USB\" a la notificació</string>
     <string name="vacants">Vacants</string>
-    <string name="numStudent">Nombre d\'estudiants: </string>
-    <string name="myGroupsModuleLabel">Els meus grups</string>
+    <string name="numStudent">Nombre d\'estudiants</string>
+    <string name="maxStudent">Màx. estudiants</string>
+    <string name="myGroupsModuleLabel">Grups</string>
     <string name="scan_no_photos">No s\'han pogut desar les fotos dels estudiants</string>
     <string name="noStudentsAvailableMsg">Aquesta assignatura no té alumnes</string>
     <string name="studentsUpdated">alumnes actualitzats</string>
@@ -303,20 +307,28 @@
 	<string name="prefNotifVibrateSummary">Activar/desactivar la vibració de les alertes de noves notificacions</string>
 	<string name="prefNotifLightsTitle">Indicadors lluminosos</string>
 	<string name="prefNotifLightsSummary">Activar/desactivar els indicadors lluminosos de les alertes de noves notificacions</string>
-
-	
 	
 	<string name="informationModuleLabel">Informació</string> 
     <string name="introductionModuleLabel">Introducció</string>  
     <string name="faqsModuleLabel">FAQs</string>
     <string name="linksModuleLabel">Enllaços</string>
     <string name="bibliographyModuleLabel">Bibliografia</string>
-    <string name="practicesprogramModuleLabel">Programa de Práctiques</string>
-    <string name="theoryprogramModuleLabel">Programa de Teoria</string>
+    <string name="syllabusPracticalsModuleLabel">Programa de Práctiques</string>
+    <string name="syllabusLecturesModuleLabel">Programa de Teoria</string>
     <string name="teachingguideModuleLabel">Guia Docent</string>
+    <string name="assessmentModuleLabel">Sistema d\'avaluació</string>
+    <string name="informationProgressDescription">Obtenint informació&#8230;\nSi us plau, esperi&#8230;</string>
+    <string name="informationProgressTitle">Informació</string>
+    <string name="emptyInformation">Informació no disponible</string>    
     
     <string name="pradoLoginToast">La contrasenya d\'SWAD té almenys 8 caràcters alfanumèrics</string>
-	<string name="error_password_summaryUGR">Error: Recorda que has d\'introduir la contrasenya de SWAD, no la d\'Accés identificat</string>
+	<string name="error_password_summaryUGR">Recorda que has d\'introduir la contrasenya de SWAD, no la d\'Accés identificat</string>
 	<string name="error_password_summary"> Error: La contrasenya ha de ser de mínim 8 caràcters alfanumèrics</string>
 	<string name="passwordDialogTip">Recorda que la contrasenya d\'SWAD ha de tenir almenys 8 caràcters alfanumèrics</string>
+	<string name="errorServerCertificateMsg">El certificat del servidor no és vàlid. Si us plau, poseu-vos en contacte amb l\'administrador SWAD</string>
+
+	<string name="notificationMarkAllRead">Marca totes com llegides</string>
+	<string name="notificationReply">Respondre</string>
+	<string name="actionBarRefresh">Actualitzar</string>
+	<string name="actionBarSave">Desa</string>
 </resources>

@@ -30,12 +30,19 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.TextView;
+import android.widget.TimePicker;
+import android.widget.Toast;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.modules.Module;
+
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;

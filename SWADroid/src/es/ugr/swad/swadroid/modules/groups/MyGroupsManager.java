@@ -24,8 +24,12 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.*;
+import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.DialogFactory;
@@ -60,21 +64,24 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 
     private ArrayList<Model> groupTypes;
 
-    //private HashMap<Long,ArrayList<Group>> groups;
-
     private boolean groupTypesRequested = false;
 
     private boolean refreshRequested = false;
 
+    /**
+     * ActionBar menu
+     */
+    private Menu menu;
 
-    private ImageButton updateButton;
-    private ProgressBar progressbar;
     private OnClickListener cancelClickListener = new DialogInterface.OnClickListener() {
         public void onClick(DialogInterface dialog, int id) {
             dialog.cancel();
         }
     };
 
+    private ExpandableListView mExpandableListView;
+    private OnChildClickListener mExpandableListListener;
+    
     @Override
     protected void onStart() {
         super.onStart();
@@ -105,26 +112,21 @@ public class MyGroupsManager extends MenuExpandableListActivity {
         courseCode = getIntent().getLongExtra("courseCode", -1);
 
         setContentView(R.layout.group_choice);
-        this.findViewById(R.id.courseSelectedText).setVisibility(View.VISIBLE);
-        //in this module the group will not be chosen through the spinner,
-        //only will be shown the selected course name
-        this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
+        
+        mExpandableListView = (ExpandableListView) findViewById(android.R.id.list);
+        mExpandableListListener = new OnChildClickListener() {
+            
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition,
+                    int childPosition, long id) {
+                boolean result = ((EnrollmentExpandableListAdapter) mExpandableListView.getExpandableListAdapter()).checkItem(groupPosition, childPosition);
+                ((EnrollmentExpandableListAdapter) mExpandableListView.getExpandableListAdapter()).notifyDataSetChanged();
+                return result;
+            }
+        };
 
-        TextView courseNameText = (TextView) this.findViewById(R.id.courseSelectedText);
-        courseNameText.setText(Constants.getSelectedCourseShortName());
-
-        ImageView moduleIcon = (ImageView) this.findViewById(R.id.moduleIcon);
-        moduleIcon.setBackgroundResource(R.drawable.my_groups);
-
-        TextView moduleText = (TextView) this.findViewById(R.id.moduleName);
-        moduleText.setText(R.string.myGroupsModuleLabel);
-
-        progressbar = (ProgressBar) this.findViewById(R.id.progress_refresh);
-        progressbar.setVisibility(View.GONE);
-        updateButton = (ImageButton) this.findViewById(R.id.refresh);
-        updateButton.setVisibility(View.VISIBLE);
-
-
+        getSupportActionBar().setSubtitle(Constants.getSelectedCourseShortName());
+    	getSupportActionBar().setIcon(R.drawable.my_groups);
     }
 
     @Override
@@ -144,12 +146,9 @@ public class MyGroupsManager extends MenuExpandableListActivity {
                     break;
                 case Constants.GROUPS_REQUEST_CODE:
                     if (dbHelper.getGroups(courseCode).size() > 0 || refreshRequested) {
-                        getExpandableListView().setVisibility(View.VISIBLE);
-                        this.findViewById(R.id.sendMyGroupsButton).setVisibility(View.VISIBLE);
+                        mExpandableListView.setVisibility(View.VISIBLE);
+                        menu.getItem(0).setVisible(true);
                         this.findViewById(R.id.noGroupsText).setVisibility(View.GONE);
-
-                        updateButton.setVisibility(View.VISIBLE);
-                        progressbar.setVisibility(View.GONE);
 
                         refreshRequested = false;
 
@@ -162,13 +161,13 @@ public class MyGroupsManager extends MenuExpandableListActivity {
                     int success = data.getIntExtra("success", 0);
                     if (success == 0) { //no enrollment was made
                         HashMap<Long, ArrayList<Group>> currentGroups = getHashMapGroups(groupTypes);
-                        ((EnrollmentExpandableListAdapter) getExpandableListView().getExpandableListAdapter()).resetChildren(currentGroups);
-                        ((EnrollmentExpandableListAdapter) getExpandableListView().getExpandableListAdapter()).notifyDataSetChanged();
+                        ((EnrollmentExpandableListAdapter) mExpandableListView.getExpandableListAdapter()).resetChildren(currentGroups);
+                        ((EnrollmentExpandableListAdapter) mExpandableListView.getExpandableListAdapter()).notifyDataSetChanged();
                         showFailedEnrollmentDialog();
                     } else {
                         HashMap<Long, ArrayList<Group>> currentGroups = getHashMapGroups(groupTypes);
-                        ((EnrollmentExpandableListAdapter) getExpandableListView().getExpandableListAdapter()).resetChildren(currentGroups);
-                        ((EnrollmentExpandableListAdapter) getExpandableListView().getExpandableListAdapter()).notifyDataSetChanged();
+                        ((EnrollmentExpandableListAdapter) mExpandableListView.getExpandableListAdapter()).resetChildren(currentGroups);
+                        ((EnrollmentExpandableListAdapter) mExpandableListView.getExpandableListAdapter()).notifyDataSetChanged();
                         showSuccessfulEnrollmentDialog();
                     }
                     break;
@@ -176,8 +175,6 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 
         } else {
             if (refreshRequested) {
-                updateButton.setVisibility(View.VISIBLE);
-                progressbar.setVisibility(View.GONE);
 
                 refreshRequested = false;
             }
@@ -189,6 +186,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
      */
     void showSuccessfulEnrollmentDialog() {        
     	AlertDialog dialog = DialogFactory.createNeutralDialog(this,
+    			-1,
     			R.string.resultEnrollment,
     			R.string.successfullEnrollment,
     			R.string.ok,
@@ -202,6 +200,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
      */
     void showFailedEnrollmentDialog() {
     	AlertDialog dialog = DialogFactory.createNeutralDialog(this,
+    			-1,
     			R.string.resultEnrollment,
     			R.string.failedEnrollment,
     			R.string.ok,
@@ -218,7 +217,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
     	OnClickListener positiveClickListener = new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 dialog.cancel();
-                String myGroups = ((EnrollmentExpandableListAdapter) getExpandableListView().getExpandableListAdapter()).getChosenGroupCodesAsString();
+                String myGroups = ((EnrollmentExpandableListAdapter) mExpandableListView.getExpandableListAdapter()).getChosenGroupCodesAsString();
                 Intent activity = new Intent(getApplicationContext(), SendMyGroups.class);
                 activity.putExtra("courseCode", courseCode);
                 activity.putExtra("myGroups", myGroups);
@@ -239,22 +238,9 @@ public class MyGroupsManager extends MenuExpandableListActivity {
         dialog.show();
     }
 
-/*	private String getRequestedGroups(){
-        ArrayList<Long> requestedGroupCodes = ((EnrollmentExpandableListAdapter)getExpandableListView().getExpandableListAdapter()).getChosenGroupCodes();
-		String text = "";
-		for(int i = 0; i < requestedGroupCodes.size(); ++i){
-			long groupCode = requestedGroupCodes.get(i).longValue();
-			Group g = dbHelper.getGroup(groupCode);
-			GroupType gT = dbHelper.getGroupTypeFromGroup(groupCode);
-			text += gT.getGroupTypeName() + " : " + g.getGroupName() + "\n";
-		}
-		return text;
-	}
-*/
-
     private void setEmptyMenu() {
-        getExpandableListView().setVisibility(View.GONE);
-        this.findViewById(R.id.sendMyGroupsButton).setVisibility(View.GONE);
+        mExpandableListView.setVisibility(View.GONE);
+        menu.getItem(0).setVisible(false);
         this.findViewById(R.id.noGroupsText).setVisibility(View.VISIBLE);
     }
 
@@ -263,43 +249,18 @@ public class MyGroupsManager extends MenuExpandableListActivity {
         HashMap<Long, ArrayList<Group>> children = getHashMapGroups(groupTypes);
         int currentRole = Constants.getCurrentUserRole();
         EnrollmentExpandableListAdapter adapter = new EnrollmentExpandableListAdapter(this, groupTypes, children, R.layout.group_type_list_item, R.layout.group_list_item, currentRole);
-        getExpandableListView().setAdapter(adapter);
+        mExpandableListView.setAdapter(adapter);
 
-        int collapsedGroups = getExpandableListView().getExpandableListAdapter().getGroupCount();
+        int collapsedGroups = mExpandableListView.getExpandableListAdapter().getGroupCount();
         for (int i = 0; i < collapsedGroups; ++i)
-            getExpandableListView().expandGroup(i);
-
-        getExpandableListView().setOnChildClickListener(this);
-
-        Button button = (Button) this.findViewById(R.id.sendMyGroupsButton);
-
-        View.OnClickListener buttonListener = new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                showConfirmEnrollmentDialog();
-            }
-
-        };
-        button.setOnClickListener(buttonListener);
-
-    }
-
-
-    @Override
-    public boolean onChildClick(ExpandableListView parent, View v,
-                                int groupPosition, int childPosition, long id) {
-        boolean result = ((EnrollmentExpandableListAdapter) getExpandableListView().getExpandableListAdapter()).checkItem(groupPosition, childPosition);
-        ((EnrollmentExpandableListAdapter) getExpandableListView().getExpandableListAdapter()).notifyDataSetChanged();
-        return result;
+            mExpandableListView.expandGroup(i);
     }
 
     @Override
     protected void onStop() {
-
-        if (getExpandableListView().getExpandableListAdapter() != null) {
+        if (mExpandableListView.getExpandableListAdapter() != null) {
             HashMap<Long, ArrayList<Group>> updatedChildren = getHashMapGroups(groupTypes);
-            ((EnrollmentExpandableListAdapter) getExpandableListView().getExpandableListAdapter()).resetChildren(updatedChildren);
+            ((EnrollmentExpandableListAdapter) mExpandableListView.getExpandableListAdapter()).resetChildren(updatedChildren);
         }
         super.onStop();
     }
@@ -314,24 +275,30 @@ public class MyGroupsManager extends MenuExpandableListActivity {
         return children;
     }
 
-    /**
-     * Launches an action when refresh button is pushed.
-     * <p/>
-     * The listener onClick is set in action_bar.xml
-     *
-     * @param v Actual view
-     */
-    public void onRefreshClick(View v) {
-        updateButton.setVisibility(View.GONE);
-        progressbar.setVisibility(View.VISIBLE);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_refresh:
+                Intent activity = new Intent(this, GroupTypes.class);
+                activity.putExtra("courseCode", courseCode);
+                startActivityForResult(activity, Constants.GROUPTYPES_REQUEST_CODE);
+                return true;
+                
+            case R.id.action_save:
+            	showConfirmEnrollmentDialog();
+                return true;
 
-        refreshRequested = true;
-
-        Intent activity = new Intent(this, GroupTypes.class);
-        activity.putExtra("courseCode", courseCode);
-        startActivityForResult(activity, Constants.GROUPTYPES_REQUEST_CODE);
+            default:
+                return super.onOptionsItemSelected(item);
+        }
 
     }
 
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.groups_activity_actions, menu);
+        this.menu = menu;
+        
+        return super.onCreateOptionsMenu(menu);
+    }
 }

@@ -20,6 +20,7 @@ package es.ugr.swad.swadroid.modules.notifications;
 
 import android.os.Bundle;
 import android.util.Log;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.modules.Module;
@@ -27,10 +28,6 @@ import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 import org.ksoap2.serialization.SoapPrimitive;
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 
 /**
  * Notifications module for mark as read user's notifications
@@ -51,15 +48,21 @@ public class NotificationsMarkAllAsRead extends Module {
         super.onCreate(savedInstanceState);
 
         setMETHOD_NAME("markNotificationsAsRead");
+        getSupportActionBar().hide();
         runConnection();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        
+    }
+    
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#requestService()
      */
     @Override
-    protected void requestService() throws NoSuchAlgorithmException,
-            IOException, XmlPullParserException {
+    protected void requestService() throws Exception {
 
         int numMarkedNotifications = 0;
         String seenNotifCodes = this.getIntent().getStringExtra("seenNotifCodes");

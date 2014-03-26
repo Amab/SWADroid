@@ -33,10 +33,7 @@ import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 import org.ksoap2.serialization.SoapObject;
-import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -70,6 +67,7 @@ public class Courses extends Module {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setMETHOD_NAME("getCourses");
+        getSupportActionBar().hide();
     }
 
     /* (non-Javadoc)
@@ -78,6 +76,7 @@ public class Courses extends Module {
     @Override
     protected void onStart() {
         super.onStart();
+        
         runConnection();
     }
 
@@ -109,7 +108,7 @@ public class Courses extends Module {
      */
     @Override
     protected void requestService()
-            throws NoSuchAlgorithmException, IOException, XmlPullParserException {
+            throws Exception {
 
         //Creates webservice request, adds required params and sends request to webservice
         createRequest(SOAPClient.CLIENT_TYPE);

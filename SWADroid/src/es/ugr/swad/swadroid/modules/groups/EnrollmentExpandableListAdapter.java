@@ -23,8 +23,15 @@ import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.CheckBox;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.TextView;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Group;
@@ -60,12 +67,13 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
     }
 
     private static class ChildHolder {
-        RelativeLayout relativeLayout;
+        LinearLayout linearLayout;
         ImageView imagePadlock;
         CheckBox checkBox;
         RadioButton radioButton;
-        TextView nStudentText;
         TextView vacantsText;
+        TextView nStudentText;
+        TextView maxStudentText;
         ColorStateList oldColor;
     }
 
@@ -110,12 +118,14 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
         if (convertView == null) {
             convertView = mInflater.inflate(layoutChild, parent, false);
             holder = new ChildHolder();
-            holder.relativeLayout = (RelativeLayout) convertView.findViewById(R.id.groupsLayout);
+            holder.linearLayout = (LinearLayout) convertView.findViewById(R.id.groupsLayout);
             holder.imagePadlock = (ImageView) convertView.findViewById(R.id.padlockIcon);
             holder.checkBox = (CheckBox) convertView.findViewById(R.id.checkBox);
+            holder.checkBox.setOnClickListener(checkListener);
             holder.radioButton = (RadioButton) convertView.findViewById(R.id.radioButton);
-            holder.nStudentText = (TextView) convertView.findViewById(R.id.nStudentText);
             holder.vacantsText = (TextView) convertView.findViewById(R.id.vacantsText);
+            holder.nStudentText = (TextView) convertView.findViewById(R.id.nStudentText);
+            holder.maxStudentText = (TextView) convertView.findViewById(R.id.maxStudentText);
             holder.oldColor = holder.vacantsText.getTextColors();
             convertView.setTag(holder);
         } else {
@@ -131,9 +141,9 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 
         boolean isCurrentMember = realMembership.get(groupTypeCode)[childPosition];
         if (isCurrentMember) {
-            holder.relativeLayout.setBackgroundColor(context.getResources().getColor(R.color.lightskyblue));
+            holder.linearLayout.setBackgroundColor(context.getResources().getColor(R.color.lightskyblue));
         } else {
-            holder.relativeLayout.setBackgroundColor(context.getResources().getColor(android.R.color.white));
+            holder.linearLayout.setBackgroundColor(context.getResources().getColor(android.R.color.white));
         }
 
 
@@ -144,6 +154,10 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
         int open = group.getOpen();
         int member = group.getMember();
 
+        // Para porde hacer click en el checkbox
+        Group g = (Group) getChild(groupPosition, childPosition);
+        holder.checkBox.setTag(g);
+        
         boolean freeSpot = false;
         if (maxStudents != -1) {
             if (group.getCurrentStudents() < maxStudents)
@@ -164,9 +178,11 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
             holder.imagePadlock.setEnabled(true);
             holder.nStudentText.setEnabled(true);
             holder.nStudentText.setTextColor(context.getResources().getColor(R.color.sgilight_gray_32));
+            holder.maxStudentText.setEnabled(true);
+            holder.maxStudentText.setTextColor(context.getResources().getColor(R.color.sgilight_gray_32));
             holder.radioButton.setEnabled(true);
             holder.radioButton.setTextColor(context.getResources().getColor(android.R.color.black));
-            holder.relativeLayout.setEnabled(true);
+            holder.linearLayout.setEnabled(true);
             holder.vacantsText.setEnabled(true);
             holder.vacantsText.setTextColor(context.getResources().getColor(R.color.sgilight_gray_32));
         } else {
@@ -175,9 +191,11 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
             holder.imagePadlock.setEnabled(false);
             holder.nStudentText.setEnabled(false);
             holder.nStudentText.setTextColor(context.getResources().getColor(R.color.sgilight_gray));
+            holder.maxStudentText.setEnabled(false);
+            holder.maxStudentText.setTextColor(context.getResources().getColor(R.color.sgilight_gray));
             holder.radioButton.setEnabled(false);
             holder.radioButton.setTextColor(context.getResources().getColor(R.color.sgilight_gray));
-            holder.relativeLayout.setEnabled(false);
+            holder.linearLayout.setEnabled(false);
             holder.vacantsText.setEnabled(false);
             holder.vacantsText.setTextColor(context.getResources().getColor(R.color.sgilight_gray));
         }
@@ -207,11 +225,12 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
             }
         }
 
-        holder.nStudentText.setText(context.getString(R.string.numStudent) + " " + String.valueOf(students));
+        holder.nStudentText.setText(context.getString(R.string.numStudent) + ": " + String.valueOf(students));
 
         if (maxStudents != -1) {
             int vacants = maxStudents - students;
-            holder.vacantsText.setText(context.getString(R.string.vacants) + " : " + String.valueOf(vacants));
+            holder.maxStudentText.setText(context.getString(R.string.maxStudent) + ": " + String.valueOf(maxStudents));
+            holder.vacantsText.setText(context.getString(R.string.vacants) + ": " + String.valueOf(vacants));
             if (vacants == 0) {
                 holder.vacantsText.setTextColor(context.getResources().getColor(R.color.sgi_salmon));
                 holder.vacantsText.setTypeface(null, Typeface.BOLD);
@@ -219,7 +238,8 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
                 holder.vacantsText.setTypeface(null, Typeface.NORMAL);
 
         } else {
-            holder.vacantsText.setText(context.getString(R.string.vacants) + " : " + context.getString(R.string.withoutLimit));
+            holder.maxStudentText.setVisibility(View.GONE);
+            holder.vacantsText.setText(context.getString(R.string.vacants) + ": " + context.getString(R.string.withoutLimit));
             holder.vacantsText.setTypeface(null, Typeface.NORMAL);
         }
 
@@ -388,4 +408,17 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
         }
     }
 
+    private OnClickListener checkListener = new OnClickListener()
+    {
+
+        @Override
+        public void onClick(View v)
+        {
+
+            Group d = (Group) v.getTag();
+           ((CheckBox) v).setChecked(!d.isMember());
+           d.setMember(d.isMember() ? 0:1);
+        }
+    };
+    
 }

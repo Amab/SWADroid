@@ -18,18 +18,19 @@
  */
 package es.ugr.swad.swadroid.gui;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.PreferencesActivity;
@@ -44,7 +45,7 @@ import es.ugr.swad.swadroid.utils.Utils;
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */
-public class MenuActivity extends Activity {
+public class MenuActivity extends ActionBarActivity {
 	/**
 	 * Application preferences
 	 */
@@ -125,7 +126,7 @@ public class MenuActivity extends Activity {
      * Shows a dialog.
      */
     public void showDialog(int title, int message) {
-        AlertDialog dialog = DialogFactory.createNeutralDialog(this, title, message, R.string.close_dialog, null);
+        AlertDialog dialog = DialogFactory.createNeutralDialog(this, -1, title, message, R.string.close_dialog, null);
         dialog.show();
      }
 
@@ -182,7 +183,7 @@ public class MenuActivity extends Activity {
             error(TAG, ex.getMessage(), ex, true);
         }
     }
-
+    
     /* (non-Javadoc)
      * @see android.app.Activity#onPause()
      */

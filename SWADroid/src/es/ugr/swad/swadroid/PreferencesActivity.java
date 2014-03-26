@@ -40,7 +40,6 @@ import com.bugsense.trace.BugSenseHandler;
 
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.gui.widget.SeekBarDialogPreference;
-import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.sync.SyncUtils;
 import es.ugr.swad.swadroid.utils.Crypto;
 import es.ugr.swad.swadroid.utils.Utils;
@@ -65,10 +64,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
      */
     public Context ctx;
     /**
-     * Database Helper.
-     */
-    private static DataBaseHelper dbHelper;
-    /**
      * Stars length
      */
     private final int STARS_LENGTH = 8;
@@ -80,6 +75,10 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
      * User password preference
      */
     private static Preference userPasswordPref;
+    /**
+     * Log out Preference
+     */
+    private static Preference logOutPref;
     /**
      * Current application version preference
      */
@@ -100,10 +99,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
      * Google Plus preference
      */
     private static Preference googlePlusPref;
-    /**
-     * Mailing list preference
-     */
-    private static Preference mailingListPref;
     /**
      * Blog preference
      */
@@ -189,26 +184,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     	errorDialog.show();
     }
 
-    /**
-     * Clean data of all tables from database. Removes users photos from external storage
-     */
-    private void cleanDatabase() {
-    	dbHelper.cleanTables();
-        
-        Preferences.setLastCourseSelected(0);
-        Utils.setDbCleaned(true);
-        
-        Log.i(TAG, "Database has been cleaned");
-    }
-    
-    private void logoutClean(String key) {
-    	Constants.setLogged(false);
-        Log.i(TAG, "Forced logout due to " + key + " change in preferences");
-        
-        cleanDatabase();
-        Constants.setPreferencesChanged();
-    }
-
     /* (non-Javadoc)
      * @see android.app.Activity#onCreate()
      */
@@ -224,7 +199,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
 
         //Initialize database
         try {    		
-            dbHelper = new DataBaseHelper(this); 
             getPackageManager().getApplicationInfo(
                     getPackageName(), 0);
     		isDebuggable = (ApplicationInfo.FLAG_DEBUGGABLE != 0);
@@ -234,12 +208,12 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
 
         userIDPref = findPreference(Preferences.USERIDPREF);
         userPasswordPref = findPreference(Preferences.USERPASSWORDPREF);
+        logOutPref = findPreference(Preferences.LOGOUTPREF);
         currentVersionPref = findPreference(Preferences.CURRENTVERSIONPREF);
         ratePref = findPreference(Preferences.RATEPREF);
         twitterPref = findPreference(Preferences.TWITTERPREF);
         facebookPref = findPreference(Preferences.FACEBOOKPREF);
         googlePlusPref = findPreference(Preferences.GOOGLEPLUSPREF);
-        mailingListPref = findPreference(Preferences.MAILINGLISTPREF);
         blogPref = findPreference(Preferences.BLOGPREF);
         sharePref = findPreference(Preferences.SHAREPREF);
         serverPref = findPreference(Preferences.SERVERPREF);
@@ -250,13 +224,10 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         notifVibrateEnablePref = (CheckBoxPreference) findPreference(Preferences.NOTIFVIBRATEENABLEPREF);
         notifLightsEnablePref = (CheckBoxPreference) findPreference(Preferences.NOTIFLIGHTSENABLEPREF);
 
-        //userIDPref.setOnPreferenceChangeListener(this);
-        //userPasswordPref.setOnPreferenceChangeListener(this);
         ratePref.setOnPreferenceChangeListener(this);
         twitterPref.setOnPreferenceChangeListener(this);
         facebookPref.setOnPreferenceChangeListener(this);
         googlePlusPref.setOnPreferenceChangeListener(this);
-        mailingListPref.setOnPreferenceChangeListener(this);
         blogPref.setOnPreferenceChangeListener(this);
         sharePref.setOnPreferenceChangeListener(this);
         serverPref.setOnPreferenceChangeListener(this);
@@ -269,17 +240,23 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         
         notifLimitPref.setProgress(Preferences.getNotifLimit());
         
-        //userIDPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-            /**
-             * Called when a preference is selected.
-             * @param preference Preference selected.
-             */
-      /*      public boolean onPreferenceClick(Preference preference) {
-                //userID = prefs.getString(USERIDPREF, "");
+        logOutPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Preferences.logoutClean(ctx, Preferences.LOGOUTPREF);
+                Preferences.setUserID("");
+                Preferences.setUserPassword("");
+                Constants.setLogged(false);
+                
+                startActivity(new Intent(getBaseContext(), LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                        | Intent.FLAG_ACTIVITY_SINGLE_TOP).putExtra("fromPreference", true));
+
+                finish();
                 return true;
             }
         });
-       */
+        
         ratePref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             /**
              * Called when a preference is selected.
@@ -324,18 +301,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
             public boolean onPreferenceClick(Preference preference) {
                 Intent urlIntent = new Intent(Intent.ACTION_VIEW);
                 urlIntent.setData(Uri.parse(getString(R.string.googlePlusURL)));
-                startActivity(urlIntent);
-                return true;
-            }
-        });
-        mailingListPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-            /**
-             * Called when a preference is selected.
-             * @param preference Preference selected.
-             */
-            public boolean onPreferenceClick(Preference preference) {
-                Intent urlIntent = new Intent(Intent.ACTION_VIEW);
-                urlIntent.setData(Uri.parse(getString(R.string.mailingListURL)));
                 startActivity(urlIntent);
                 return true;
             }
@@ -396,7 +361,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         	Log.i(TAG, "Resetted user password due to userid change"); 
         	
         	//If preferences have changed, logout
-        	logoutClean(key);
+        	Preferences.logoutClean(ctx, key);
         	syncPrefsChanged = true;
         } else if (Preferences.USERPASSWORDPREF.equals(key)) {
             try {
@@ -414,7 +379,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
                     userPasswordPrefChanged = true;
                     syncPrefsChanged = true;
                     mIncorrectPassword = false;
-                    Constants.setPreferencesChanged();
+                    Preferences.setPreferencesChanged();
                     Constants.setLogged(false);
                 } else {
                     Toast.makeText(getApplicationContext(), R.string.pradoLoginToast,
@@ -433,7 +398,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
             Preferences.setServer(mServer);
             serverPref.setSummary(mServer);
             //If preferences have changed, logout
-        	logoutClean(key);
+        	Preferences.logoutClean(ctx, key);
         	syncPrefsChanged = true;
         } else if(Preferences.SYNCENABLEPREF.equals(key)) {
         	boolean syncEnabled = (Boolean) newValue;
@@ -469,7 +434,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         } else if(Preferences.NOTIFLIMITPREF.equals(key)) {
         	 int notifLimit = (Integer) newValue;
         	 Preferences.setNotifLimit(notifLimit);
-             dbHelper.clearOldNotifications(notifLimit);
+        	 Preferences.clearOldNotifications(notifLimit);
         } else if(Preferences.NOTIFSOUNDENABLEPREF.equals(key)) {
             boolean notifSoundEnabled = (Boolean) newValue;
             Preferences.setNotifSoundEnabled(notifSoundEnabled);

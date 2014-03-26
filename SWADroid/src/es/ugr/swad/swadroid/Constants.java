@@ -19,9 +19,9 @@
 
 package es.ugr.swad.swadroid;
 
-import java.util.Random;
-
 import es.ugr.swad.swadroid.model.User;
+
+import java.util.Random;
 
 /**
  * Constants of application.
@@ -88,10 +88,6 @@ public class Constants {
      * Role of the logged User in the current selected course
      */
     private static int currentUserRole = -1;
-    /**
-     * Indicates if there are changes on preferences
-     */
-    private static boolean preferencesChanged = false;
     /**
      * Indicates if there are changes on db
      */
@@ -235,12 +231,12 @@ public class Constants {
     /**
      * Request code for Practices Program
      */
-    public static final int PRACTICESPROGRAM_REQUEST_CODE = 31;
+    public static final int SYLLABUSPRACTICALS_REQUEST_CODE = 31;
     
     /**
      * Request code for Theory Program
      */
-    public static final int THEORYPROGRAM_REQUEST_CODE = 32;
+    public static final int SYLLABUSLECTURES_REQUEST_CODE = 32;
 
     /**
      * Request code for Links
@@ -255,6 +251,14 @@ public class Constants {
      * Request code for NotificationMarkAsRead module
      */
     public static final int NOTIFMARKALLASREAD_REQUEST_CODE = 35; 
+    /**
+     * Request code for Assessment
+     */
+    public static final int ASSESSMENT_REQUEST_CODE = 36; 
+    /**
+     * Request code for recover Password
+     */
+    public static final int RECOVER_PASSWORD_REQUEST_CODE = 37;
     /**
      * Prefix tag name for Logcat
      */
@@ -352,17 +356,17 @@ public class Constants {
      */
     public static final int EVALUATION_GROUP = 1;
     /**
+     * Group position inside the main menu for User group
+     */
+    public static final int USERS_GROUP = 2;
+    /**
      * Group position inside the main menu for Messages group
      */
-    public static final int MESSAGES_GROUP = 2;
+    public static final int MESSAGES_GROUP = 3;
     /**
      * Group position inside the main menu for Enrollment group
      */
-    public static final int ENROLLMENT_GROUP = 3;
-    /**
-     * Group position inside the main menu for User group
-     */
-    public static final int USERS_GROUP = 4;
+    public static final int ENROLLMENT_GROUP = 4;
     /**
      * Child position inside the messages menu for Notification
      */
@@ -388,17 +392,17 @@ public class Constants {
      */
     public static final int SHARED_AREA_CHILD = 1;
     /**
+     * Child position inside the users menu for Groups
+     */
+    public static final int MYGROUPS_CHILD = 0;
+    /**
      * Child position inside the users menu for Generate QR
      */
-    public static final int GENERATE_QR_CHILD = 0;
+    public static final int GENERATE_QR_CHILD = 1;
     /**
      * Child position inside the users menu for Rollcall
      */
-    public static final int ROLLCALL_CHILD = 1;
-    /**
-     * Child position inside the enrollment menu for My Groups
-     */
-    public static final int MYGROUPS_CHILD = 0;
+    public static final int ROLLCALL_CHILD = 2;
 
     /**
      * Checks if user is already logged on SWAD
@@ -476,27 +480,6 @@ public class Constants {
             currentUserRole = userRole;
         else
             currentUserRole = -1;
-    }
-
-    public static boolean isPreferencesChanged() {
-        return preferencesChanged;
-    }
-
-    /**
-     * Set the fact that the preferences has changed
-     */
-    public static void setPreferencesChanged() {
-        preferencesChanged = true;
-    }
-
-    /**
-     * Indicates if the preferences has changed
-     *
-     * @param newState - true when the preferences has changed  and it was not handled it
-     *                 - false if the preferences has not changed
-     */
-    public static void setPreferencesChanged(boolean newState) {
-        preferencesChanged = newState;
     }
 
     public static void setSelectedCourseShortName(String currentCourseShortName) {

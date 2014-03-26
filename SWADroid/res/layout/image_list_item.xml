@@ -1,24 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:orientation="horizontal">
-
-    <ImageView
-            android:id="@+id/listIcon"
-            android:layout_gravity="center_vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="35dip">
-    </ImageView>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" >
 
     <TextView
-            android:id="@+id/listText"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:padding="20dip"
-            android:textColor="@color/foreground1"
-            android:textSize="24sp">
+        android:id="@+id/listText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawablePadding="10dp"
+        android:gravity="center_vertical"
+        android:paddingBottom="5dip"
+        android:paddingLeft="30dip"
+        android:paddingTop="5dip"
+        android:textColor="@color/foreground1" >
     </TextView>
+
 </LinearLayout>

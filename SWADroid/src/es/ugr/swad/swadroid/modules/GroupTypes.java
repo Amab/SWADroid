@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.GroupType;
@@ -11,10 +12,7 @@ import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 import org.ksoap2.serialization.SoapObject;
-import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -49,11 +47,13 @@ public class GroupTypes extends Module {
         super.onCreate(savedInstanceState);
         courseCode = getIntent().getLongExtra("courseCode", -1);
         setMETHOD_NAME("getGroupTypes");
+        getSupportActionBar().hide();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        
         try {
             runConnection();
         } catch (Exception e) {
@@ -72,8 +72,7 @@ public class GroupTypes extends Module {
     }
 
     @Override
-    protected void requestService() throws NoSuchAlgorithmException,
-            IOException, XmlPullParserException {
+    protected void requestService() throws Exception {
     	createRequest(SOAPClient.CLIENT_TYPE);
         addParam("wsKey", Constants.getLoggedUser().getWsKey());
         addParam("courseCode", (int) Constants.getSelectedCourseCode());

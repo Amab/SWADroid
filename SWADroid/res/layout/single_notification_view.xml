@@ -1,85 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/background"
-              android:orientation="vertical">
-    <include layout="@layout/action_bar"/>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background" >
 
-    <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:orientation="horizontal">
+    <RelativeLayout
+        android:id="@+id/not_item_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
 
         <ImageView
-                android:id="@+id/notifUserPhoto"
-                android:layout_width="65dip"
-                android:layout_height="81dip"
-                android:scaleType="centerCrop"
-                android:src="@raw/usr_bl"/>
+            android:id="@+id/notifUserPhoto"
+            android:layout_width="65dip"
+            android:layout_height="81dip"
+            android:layout_alignParentLeft="true"
+            android:scaleType="centerCrop"
+            android:src="@raw/usr_bl" />
 
-        <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:orientation="vertical">
+        <TextView
+            android:id="@+id/senderNameText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="7dip"
+            android:layout_toRightOf="@id/notifUserPhoto"
+            android:textColor="@color/foreground1"
+            android:textSize="16sp" />
 
-            <TextView
-                    android:id="@+id/senderNameText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/foreground1"
-                    android:textSize="16sp"
-                    android:layout_marginLeft="7dip">
-            </TextView>
+        <TextView
+            android:id="@+id/courseNameText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/senderNameText"
+            android:layout_marginLeft="7dip"
+            android:layout_toRightOf="@id/notifUserPhoto"
+            android:textColor="@color/foreground1"
+            android:textSize="16sp" />
 
-            <TextView
-                    android:id="@+id/courseNameText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/foreground1"
-                    android:textSize="16sp"
-                    android:layout_marginLeft="7dip"/>
+        <TextView
+            android:id="@+id/notifDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/courseNameText"
+            android:layout_marginLeft="7dip"
+            android:layout_toRightOf="@id/notifUserPhoto"
+            android:textColor="@color/foreground2" />
 
-            <RelativeLayout
-                    android:id="@+id/notifDateAndTime"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/notifTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/notifDate"
+            android:layout_marginLeft="7dp"
+            android:layout_toRightOf="@id/notifDate"
+            android:textColor="@color/foreground2" />
 
-                <TextView
-                        android:id="@+id/notifDate"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:layout_marginLeft="7dp"
-                        android:textColor="@color/foreground2"/>
-
-                <TextView
-                        android:id="@+id/notifTime"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBaseline="@id/notifDate"
-                        android:layout_toRightOf="@id/notifDate"
-                        android:layout_marginLeft="7dp"
-                        android:textColor="@color/foreground2"/>
-
-            </RelativeLayout>
-
-            <TextView
-                    android:id="@+id/summaryText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/foreground1"
-                    android:textStyle="bold"
-                    android:textSize="16sp"
-                    android:layout_marginLeft="7dip"/>
-        </LinearLayout>
-    </LinearLayout>
+        <TextView
+            android:id="@+id/summaryText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/notifUserPhoto"
+            android:layout_marginLeft="7dip"
+            android:layout_toRightOf="@id/notifUserPhoto"
+            android:textColor="@color/foreground1"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
 
     <WebView
-            android:id="@+id/contentWebView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+        android:id="@+id/contentWebView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/not_item_header" />
 
-</LinearLayout>
+</RelativeLayout>
