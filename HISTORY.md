@@ -1,3 +1,189 @@
+##1.0 (2014-03-26)
+
+* Amab (88):
+      Re-enable Information module
+      Fixed NullPointerException on log messages
+      Added project documentation
+      Updated gitignore
+      Ensure that periodic synchronization is disabled before enabling
+      Added thread synchronization to database transactions. Closes #92
+      Modified Logcat tag for DataBaseHelper class
+      Fixed display of file licenses
+      Finished error management of database transactions
+      Added transactions management to groups and group types database     operations
+      Added server certificate error management
+      Completed server certificate error management
+      Added database rollback when an error occurs
+      Fixed Logcat tag
+      Finish background activity when an error occurs
+      Fixed refresh button display on main activity
+      Fixed launching of Notifications activity when an action bar alert is     clicked
+      Fixed encoding issues between GNU/Linux (UTF-8) and other systems
+      Optimize imports
+      Modified error logcat
+      Optimize imports
+      Fixed hint of server field
+      Modified text appearance of "why_password" dialog
+      Removed end point of messages
+      Added missing code in Information module
+      Untrack library jar
+      Now the services are launched in the main application process
+      Updated ksoap2-android library to 3.2.0
+      Updated ES Translations
+      Removed log message
+      Added periodic synchronization removal on logout
+      Added management of HTTP status code 503 (Service Unavailable)
+      Alert about unread notifications only
+      Modified log messages
+      Reorganized the main menu
+      Used DialogFactory for WhyMyPasswordNotWork dialog
+      Added cancel button to password recovery dialog
+      Removed unused translations
+      Now the back button goes to the parent directory in downloads module. If     the current directory is the root, exits the module
+      Completed Information module
+      Added parsing of links
+      Untracked project.properties
+      Fixed
+      Added grouping of folders in downloads module
+      Updated target SDK version to 19
+      Added course name as subtitle (incomplete) and customized icons by     module in ActionBar
+      Completed groups ActionBar
+      Completed groups GUI
+      Save icon updated with local version
+      Added comments
+      Completed RollCall ActionBar
+      Updated icons to set Font Awesome
+      Added buttons to Tests ActionBar (incomplete)
+      Fixed icon references
+      Fixed syllabusPracticals option menu
+      Added course name as subtitle in downloads module
+      Added padding to image
+      Completed recover password module
+      Added links to web pages of authors. Added José Antonio Guerrero Avilés     as contributor
+      Removed old title bar from Tests module
+      Fixed a misspelling
+      Added CA translations for RecoverPassword Module
+      Added built-in NumberPicker for Android 3.0 or higher
+      Code cleaning
+      Now all properties are readed by name
+      Added log messages
+      Added SQLException error message
+      Modified synchronization of tests data. Now the old data is erased. All     data from the tests are always downloaded
+      Added package.html to Information module
+      Completed Tests ActionBar
+      Reversed the changes in the synchronization of data from tests
+      Migrated TestsMake from Module to MenuActivity and removed specific     Module code
+      Migrated Tests from Module to MenuActivity and removed specific Module     code
+      Added images to Tests main menu
+      Updated enrollment and enrollment request icons
+      Fixed wrong management for Users items
+      Completed Groups GUI
+      Modified icons
+      Modified appearance of categories on main menu
+      Code cleaning
+      Fixed launching of Notifications Activity from a notification alert
+      Modified appearance of categories on Groups module
+      Disabled Rollcall module
+      Optimized imports
+      Fixed setActionView incompatibility with Android versions < 3.0
+      Modified icon of Evaluation category
+      Removed mailing list from preferences
+      Completed Information module
+      
+* Alejandro Alcalde (67):
+      Added Catalan translations
+      Fixed typo in English strigs
+      Fixed translation typos
+      Added German translations
+      Added French translations
+      Added Italian translations
+      Added Polish Translations
+      Added Portuguese Translations
+      Added licence field to file information dialog
+      Remembering the user to introduce swad password, Not PRADO
+      Refactoring Preferences class
+      Fix sync bug when Android sync is disabled
+      Organize imports
+      Fixed NullPointerException in Preferences
+      Added PRADO logo in Login Screen
+      Redesign login activity
+      Resolved merge conflict
+      Adding additional info to login screen
+      Fixed views overlap in login screen
+      Added CA Translations
+      Added DE Translations
+      Added FR Translations
+      Added IT Translations
+      Added PL Translations
+      Added PT Translations
+      Organize onclicks events in one method
+      Added log out option in preferences
+      Updated CA Translations
+      Updated DE Translations
+      Updated FR Translations
+      Updated IT Translations
+      Updated PL Translations
+      Updated PT Translations
+      Remove back stack on logout
+      Added recover password option
+      Optimize imports
+      Starting support ActionBar
+      Added refresh item to ActionBar
+      Added ActionBar to Notifications Activity
+      Added actionBar to NotificationSingle
+      Optimize imports
+      Added ActionBar To DownloadsManager
+      Removing old action_bar from Tests
+      Bringing action bar to Groups Activity
+      Fixed gui problem
+      Added Up Button for Groups Activity
+      Changed visibility of MenuActivity
+      Replaced getActionBar with getSupportActionBar
+      Hide Modules Activities
+      Hide modules performing network connections
+      Added Up button in all activiies
+      Saving message data between activity states
+      Fixed menu items for teachers
+      Organize imports
+      Added LoginActivity separated from SWADMain
+      Fixed NullPointerException in Information
+      Autoring LoginActivity class
+      Fixed recoverPassword activity transparency
+      Finished RecoverPassword Module
+      Optimized main menu list
+      Added support for teacher inscribing in groups
+      Reduced text size of Groups Inscription Activity
+      Fixed notification icon in single notifications
+      Added ActionBar to Login Activity
+      Added Progress animation when getting courses
+      Fixed code formating
+      Optimized notification item layout
+
+* Jose Antonio Guerrero Aviles (23):
+      Commit for can do pull
+      Added processing the information received on information module
+      Finished information module
+      Commit for can do pull
+      Finished implementation of information module and added new translates.
+      Deleted some notes
+      Fixed some bugs at functions on information modules (because was added     new information at Web Service getCourseInfo)
+      Fixed some errors ar information module and EN and CA translations     (because translation at WS getCourseInfo was not equal).
+      Fixed some errors at DE translations (because translation at WS     getCourseInfo was not equal).
+      Fixed some errors at ES translations (because translation at WS     getCourseInfo was not equal).
+      Fixed some errors at FR translations (because translation at WS     getCourseInfo was not equal).
+      Fixed some errors at IT, PL and PT translations (because translation at     WS getCourseInfo was not equal).
+      Errors correction  caused for the translations at WS getCourseInfo     finished
+      Fixed some bugs, changed some variable names and added assessment into     Evaluation.
+      Added assessment translations.
+      Fixed some bugs at information module
+      Fixed some bugs at information module
+      Fixed some bugs at information modules
+      Changed information module order. Updated icons.
+      Added new icons
+      Fixed bugs.     Now when change orientation screen, module dont recharge the information
+      Fixed bugs
+      Fixed some bugs at information module
+
 ##0.13 (2014-02-02)
 
 * Added login screen
