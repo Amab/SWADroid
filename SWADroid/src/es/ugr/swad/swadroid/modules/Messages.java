@@ -18,29 +18,38 @@
  */
 package es.ugr.swad.swadroid.modules;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
+import android.content.DialogInterface.OnKeyListener;
 import android.content.DialogInterface.OnShowListener;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.Toast;
+import android.widget.LinearLayout.LayoutParams;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
+import es.ugr.swad.swadroid.modules.rollcall.students.*;
 
 import org.ksoap2.serialization.SoapObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -74,22 +83,20 @@ public class Messages extends Module {
      * Message's body
      */
     private String body;
+
     
-    private Dialog mMessageDialog;
-    
-    private Button add;
-    
+    /*
     private final View.OnClickListener positiveClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
         	/*if(isDebuggable) {
 	            Log.d(TAG, "notificationCode = " + Long.toString(notificationCode));
-			}*/
+			}
 
             try {
                 /*if(isDebuggable) {
                     Log.i(TAG, "selectedCourseCode = " + Long.toString(courseCode));
-				}*/
+				}
 
                 runConnection();
             } catch (Exception e) {
@@ -129,7 +136,7 @@ public class Messages extends Module {
                 receiversText.setVisibility(View.GONE);
             }
         }
-    };
+    };*/
 
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
@@ -140,50 +147,71 @@ public class Messages extends Module {
         
         eventCode = getIntent().getLongExtra("eventCode", 0);
         setContentView(R.layout.messages_screen);
-        
-        /*mMessageDialog = DialogFactory.createPositiveNegativeDialog(this,
-                                                                    R.layout.messages_screen,
-                                                                    R.string.messagesModuleLabel,
-                                                                    -1,
-                                                                    R.string.sendMsg,
-                                                                    R.string.cancelMsg,
-                                                                    // positiveClickListener,
-                                                                    null,
-                                                                    negativeClickListener,
-                                                                    cancelClickListener);
-
-        mMessageDialog.setOnShowListener(showListener);
-        mMessageDialog.show();
-
+        setTitle(R.string.messagesModuleLabel);
+        getSupportActionBar().setIcon(R.drawable.msg);
+       
         if (savedInstanceState != null) 
             writeData();
 
         setMETHOD_NAME("sendMessage");
-        getSupportActionBar().hide();*/
+        //getSupportActionBar().hide();
         
-        add = (Button) findViewById(R.id.addRcv);
+        ImageButton add = (ImageButton) findViewById(R.id.addRcv);
         
-        add.setOnClickListener(new OnClickListener() {
+        add.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				
+				Toast.makeText(getBaseContext(), "Boton para añadir usuarios", Toast.LENGTH_SHORT).show();
+				/*setContentView(R.layout.users_listview);
+				setTitle("Prueba");
+				getSupportActionBar().setIcon(R.drawable.info);*/
+			}
+		});
+        
+        
+        Button send = (Button) findViewById(R.id.sendMsg);
+        send.setOnClickListener(new View.OnClickListener() {
+			
+        	public void onClick(View view) {
+            	/*if(isDebuggable) {
+    	            Log.d(TAG, "notificationCode = " + Long.toString(notificationCode));
+    			}*/
+
+                try {
+                    /*if(isDebuggable) {
+                        Log.i(TAG, "selectedCourseCode = " + Long.toString(courseCode));
+    				}*/
+
+                    runConnection();
+                } catch (Exception e) {
+                    String errorMsg = getString(R.string.errorServerResponseMsg);
+                    error(TAG, errorMsg, e, true);
+                }
+            }
+		});
+        
+        Button cancel = (Button) findViewById(R.id.cancelMsg);
+        cancel.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View v) {
+				setResult(RESULT_CANCELED);
+				finish();
 			}
 		});
         
     }
-
+    
     /**
      * Reads user input from Dialog
      */
     private void readData() {
-        EditText rcv = (EditText) mMessageDialog.findViewById(R.id.message_receivers_text);
+        EditText rcv = (EditText) /*mMessageDialog.*/findViewById(R.id.message_receivers_text);
         receivers = rcv.getText().toString();
 
-        EditText subj = (EditText) mMessageDialog.findViewById(R.id.message_subject_text);
+        EditText subj = (EditText) /*mMessageDialog.*/findViewById(R.id.message_subject_text);
         subject = subj.getText().toString();
 
-        EditText bd = (EditText) mMessageDialog.findViewById(R.id.message_body_text);
+        EditText bd = (EditText) /*mMessageDialog.*/findViewById(R.id.message_body_text);
         body = bd.getText().toString();
         
     }
@@ -192,13 +220,13 @@ public class Messages extends Module {
      * Writes user input to Dialog
      */
     private void writeData() {
-        EditText rcv = (EditText) mMessageDialog.findViewById(R.id.message_receivers_text);
+        EditText rcv = (EditText) /*mMessageDialog.*/findViewById(R.id.message_receivers_text);
         rcv.setText(receivers);
 
-        EditText subj = (EditText) mMessageDialog.findViewById(R.id.message_subject_text);
+        EditText subj = (EditText) /*mMessageDialog.*/findViewById(R.id.message_subject_text);
         subj.setText(subject);
 
-        EditText bd = (EditText) mMessageDialog.findViewById(R.id.message_body_text);
+        EditText bd = (EditText) /*mMessageDialog.*/findViewById(R.id.message_body_text);
         bd.setText(body);
     }
 
@@ -278,7 +306,7 @@ public class Messages extends Module {
         Toast.makeText(this, messageSended, Toast.LENGTH_LONG).show();
         Log.i(TAG, messageSended);
         
-        mMessageDialog.dismiss();
+        //mMessageDialog.dismiss();
 
         finish();
     }
