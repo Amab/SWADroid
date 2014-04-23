@@ -1,0 +1,53 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" >
+
+        <EditText
+            android:id="@+id/message_receivers_text"
+            android:layout_width="254dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/message_receivers_title"
+            android:textColor="@color/foreground1" />
+    </RelativeLayout>
+
+    <ImageButton
+        android:id="@+id/addRcv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:src="@android:drawable/ic_input_add" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/relativeLayout1"
+        android:orientation="vertical" >
+
+        <EditText
+            android:id="@+id/message_subject_text"
+            android:layout_width="306dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/message_subject_title"
+            android:textColor="@color/foreground1" />
+
+        <EditText
+            android:id="@+id/message_body_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/message_body_title"
+            android:textColor="@color/foreground1" />
+    </LinearLayout>
+
+</RelativeLayout>
