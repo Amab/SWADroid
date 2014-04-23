@@ -1,6 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
 
     <RelativeLayout
         android:id="@+id/relativeLayout1"
@@ -18,14 +22,6 @@
             android:textColor="@color/foreground1" />
     </RelativeLayout>
 
-    <ImageButton
-        android:id="@+id/addRcv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:src="@android:drawable/ic_input_add" />
-
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
@@ -37,7 +33,7 @@
 
         <EditText
             android:id="@+id/message_subject_text"
-            android:layout_width="306dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/message_subject_title"
             android:textColor="@color/foreground1" />
@@ -49,5 +45,31 @@
             android:hint="@string/message_body_title"
             android:textColor="@color/foreground1" />
     </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/addRcv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/relativeLayout1"
+        android:layout_alignParentRight="true"
+        android:src="@android:drawable/ic_input_add" />
+
+    <Button
+        android:id="@+id/cancelMsg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="40dp"
+        android:text="@string/cancelMsg" />
+
+    <Button
+        android:id="@+id/sendMsg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="40dp"
+        android:text="@string/sendMsg" />
 
 </RelativeLayout>
