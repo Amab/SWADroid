@@ -85,23 +85,7 @@ public class Messages extends Module {
      */
     private String body;
 
-    private Dialog filterdialog;
-    
-    
-    private final OnClickListener negativeClickListener = new OnClickListener() {
-    	@Override
-        public void onClick(DialogInterface dialog, int which) {
-            finish();
-        }
-    };
-    
-    private final OnCancelListener cancelClickListener = new DialogInterface.OnCancelListener() {
-        public void onCancel(DialogInterface dialog) {
-            setResult(RESULT_CANCELED);
-            finish();
-        }
-    };
-    
+ 
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
      */
@@ -135,7 +119,8 @@ public class Messages extends Module {
 				filt.setOnClickListener(new View.OnClickListener() {
 					
 					public void onClick(View v) {
-
+						setContentView(R.layout.dialog_filter_list);
+						
 					}
 				});
 				
