@@ -139,6 +139,11 @@
     <string name="noticePublished">Notice published</string>
     <string name="noticeSendError">Error while publishing the new notice</string>
     <string name="sendMsg">Send</string>
+    
+    
+    <string name="addRcv">Agregar Destinatario</string>
+    
+    
     <string name="cleanDatabaseMsg">The database has been cleaned</string>
     <string name="shareBodyMsg">I\'m using #SWADroid in my Android mobile for access to
         the e-learning platform SWAD.\nGet it for free here:

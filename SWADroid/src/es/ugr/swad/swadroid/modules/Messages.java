@@ -29,6 +29,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import es.ugr.swad.swadroid.Constants;
@@ -75,6 +76,8 @@ public class Messages extends Module {
     private String body;
     
     private Dialog mMessageDialog;
+    
+    private Button add;
     
     private final View.OnClickListener positiveClickListener = new View.OnClickListener() {
         @Override
@@ -136,8 +139,10 @@ public class Messages extends Module {
         super.onCreate(savedInstanceState);
         
         eventCode = getIntent().getLongExtra("eventCode", 0);
-        mMessageDialog = DialogFactory.createPositiveNegativeDialog(this,
-                                                                    R.layout.dialog_messages,
+        setContentView(R.layout.messages_screen);
+        
+        /*mMessageDialog = DialogFactory.createPositiveNegativeDialog(this,
+                                                                    R.layout.messages_screen,
                                                                     R.string.messagesModuleLabel,
                                                                     -1,
                                                                     R.string.sendMsg,
@@ -154,7 +159,18 @@ public class Messages extends Module {
             writeData();
 
         setMETHOD_NAME("sendMessage");
-        getSupportActionBar().hide();
+        getSupportActionBar().hide();*/
+        
+        add = (Button) findViewById(R.id.addRcv);
+        
+        add.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+        
     }
 
     /**
@@ -169,6 +185,7 @@ public class Messages extends Module {
 
         EditText bd = (EditText) mMessageDialog.findViewById(R.id.message_body_text);
         body = bd.getText().toString();
+        
     }
 
     /**
