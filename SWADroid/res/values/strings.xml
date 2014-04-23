@@ -142,6 +142,8 @@
     
     
     <string name="addRcv">Add Recievers</string>
+    <string name="selectRcv">Select Recievers</string>
+    <string name="filters">Filters</string>
     
     
     <string name="cleanDatabaseMsg">The database has been cleaned</string>

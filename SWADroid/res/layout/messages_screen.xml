@@ -46,14 +46,6 @@
             android:textColor="@color/foreground1" />
     </LinearLayout>
 
-    <ImageButton
-        android:id="@+id/addRcv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/relativeLayout1"
-        android:layout_alignParentRight="true"
-        android:src="@android:drawable/ic_input_add" />
-
     <Button
         android:id="@+id/cancelMsg"
         android:layout_width="wrap_content"
@@ -71,5 +63,13 @@
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="40dp"
         android:text="@string/sendMsg" />
+
+    <ImageButton
+        android:id="@+id/addRcv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/linearLayout1"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/ic_action_add_person" />
 
 </RelativeLayout>
