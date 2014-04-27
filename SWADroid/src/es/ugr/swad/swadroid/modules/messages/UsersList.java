@@ -41,7 +41,7 @@ public class UsersList extends MenuActivity {
 			}
 		});	
 		
-		Button cancelList = (Button) findViewById(R.id.cancelFilters);
+		Button cancelList = (Button) findViewById(R.id.cancelList);
 		cancelList.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
@@ -50,7 +50,7 @@ public class UsersList extends MenuActivity {
 			}
 		});
 		
-		Button acceptList = (Button) findViewById(R.id.acceptFilters);
+		Button acceptList = (Button) findViewById(R.id.acceptList);
 		acceptList.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
