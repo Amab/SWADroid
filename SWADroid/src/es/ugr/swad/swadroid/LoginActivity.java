@@ -159,7 +159,7 @@ public class LoginActivity extends ActionBarActivity implements OnClickListener 
             mPasswordView.setError(getString(R.string.error_field_required));
             focusView = mPasswordView;
             cancel = true;
-        } else if ((passwordValue.length() < 8)) {
+        } else if ((passwordValue.length() < 6)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
