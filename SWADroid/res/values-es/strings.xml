@@ -153,8 +153,12 @@
     
     
     <string name="addRcv">Añadir Destinatarios</string>
-    <string name="selectRcv">Seleccionar Destinatarios</string>
-    <string name="filters">Filtros</string>
+    <string name="selectRcvModuleLabel">Seleccionar Destinatarios</string>
+    <string name="filterUsersListModuleLabel">Filtrar Destinatarios</string>
+	<string name="acceptFilters">Filtrar</string>
+   	<string name="cancelFilters">Cancel</string>
+    
+
     
     <string name="cleanDatabaseMsg">Todos los datos de la base de datos han sido borrados</string>
     <string name="shareBodyMsg">Estoy usando #SWADroid en mi Android para acceder a la

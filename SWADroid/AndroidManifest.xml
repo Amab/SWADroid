@@ -158,7 +158,17 @@
                 android:value="es.ugr.swad.swadroid.modules.tests.Tests" />
         </activity>
         <activity
-            android:name="es.ugr.swad.swadroid.modules.Messages"
+            android:name="es.ugr.swad.swadroid.modules.messages.Messages"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/messagesModuleLabel">
+        </activity>
+                <activity
+            android:name="es.ugr.swad.swadroid.modules.messages.FilterUsersList"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/filterUsersListModuleLabel">
+        </activity>
+                <activity
+            android:name="es.ugr.swad.swadroid.modules.messages.UsersList"
             android:configChanges="orientation|screenSize"
             android:label="@string/messagesModuleLabel">
         </activity>

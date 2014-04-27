@@ -4,4 +4,21 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+    <Button
+        android:id="@+id/acceptFilters"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/button1"
+        android:text="@string/acceptFilters" />
+
+    <Button
+        android:id="@+id/cancelFilters"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="88dp"
+        android:text="@string/cancelFilters"/>
+
 </RelativeLayout>

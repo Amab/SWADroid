@@ -142,8 +142,10 @@
     
     
     <string name="addRcv">Add Recievers</string>
-    <string name="selectRcv">Select Recievers</string>
-    <string name="filters">Filters</string>
+    <string name="selectRcvModuleLabel">Select Recievers</string>
+    <string name="filterUsersListModuleLabel">Filter Recievers</string>
+	<string name="acceptFilters">Filter</string>
+   	<string name="cancelFilters">Cancel</string>
     
     
     <string name="cleanDatabaseMsg">The database has been cleaned</string>

@@ -16,41 +16,24 @@
  *  You should have received a copy of the GNU General Public License
  *  along with SWADroid.  If not, see <http://www.gnu.org/licenses/>.
  */
-package es.ugr.swad.swadroid.modules;
+package es.ugr.swad.swadroid.modules.messages;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
+import java.util.ArrayList;
+import java.util.Vector;
+import org.ksoap2.serialization.SoapObject;
 import android.content.Intent;
-import android.content.DialogInterface.OnCancelListener;
-import android.content.DialogInterface.OnClickListener;
-import android.content.DialogInterface.OnKeyListener;
-import android.content.DialogInterface.OnShowListener;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.Toast;
-import android.widget.LinearLayout.LayoutParams;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.model.User;
+import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
-import es.ugr.swad.swadroid.modules.rollcall.students.*;
-
-import org.ksoap2.serialization.SoapObject;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Vector;
 
 /**
  * Module for send messages.
@@ -102,48 +85,16 @@ public class Messages extends Module {
             writeData();
 
         setMETHOD_NAME("sendMessage");
-        //getSupportActionBar().hide();
         
         ImageButton add = (ImageButton) findViewById(R.id.addRcv);
-        
         add.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				
-				setContentView(R.layout.users_listview);
-				setTitle(R.string.selectRcv);
-				getSupportActionBar().setIcon(R.drawable.users);
-				//TODO cargar la lista en el ListView
-				
-				ImageButton filt = (ImageButton) findViewById(R.id.filter);
-				filt.setOnClickListener(new View.OnClickListener() {
+				Intent callUsersList = new Intent (getBaseContext(), UsersList.class);
+				startActivity(callUsersList);
 					
-					public void onClick(View v) {
-						setContentView(R.layout.dialog_filter_list);
-						
-					}
-				});
-				
-				Button cancelList = (Button) findViewById(R.id.cancelList);
-				cancelList.setOnClickListener(new View.OnClickListener() {
-					
-					public void onClick(View v) {
-						setResult(RESULT_CANCELED);
-						finish();
-					}
-				});
-				
-				Button acceptList = (Button) findViewById(R.id.acceptList);
-				acceptList.setOnClickListener(new View.OnClickListener() {
-					
-					public void onClick(View v) {
-						//TODO filtrar la lista y cargarla filtrada en el ListView
-					}
-				});
-				
 			}
-		});
-        
+		});     
         
         Button send = (Button) findViewById(R.id.sendMsg);
         send.setOnClickListener(new View.OnClickListener() {
