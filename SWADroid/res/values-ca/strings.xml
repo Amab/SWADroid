@@ -132,6 +132,15 @@
     <string name="noticePublished">Avís publicat</string>
     <string name="noticeSendError">Error en publicar el nou avís</string>
     <string name="sendMsg">Enviar</string>
+    
+    <string name="addRcv">Afegir Destinataris</string>
+    <string name="selectRcvModuleLabel">Seleccionar Destinataris</string>
+    <string name="filterUsersListModuleLabel">Filtrar Destinataris</string>
+    <string name="acceptFilters">Filtrar</string>
+   	<string name="cancelFilters">Cancelar</string>
+    
+    
+    
     <string name="cleanDatabaseMsg">Totes les dades de la base de dades han estat esborrats</string>
     <string name="shareBodyMsg">Estic usant # SWADroid al meu Android per accedir a la plataforma de teleformació SWAD.
         \nObtenlo gratis aquí: https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid</string>
