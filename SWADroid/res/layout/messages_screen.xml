@@ -7,11 +7,12 @@
     android:orientation="vertical" >
 
     <LinearLayout
-        android:id="@+id/relativeLayout1"
+        android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" >
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/addRcv" >
 
         <EditText
             android:id="@+id/message_receivers_text"
@@ -23,12 +24,13 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout1"
+        android:id="@+id/linearLayout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/relativeLayout1"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/relativeLayout1"
+        android:layout_below="@+id/linearLayout1"
         android:orientation="vertical" >
 
         <EditText
@@ -46,30 +48,38 @@
             android:textColor="@color/foreground1" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/cancelMsg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="40dp"
-        android:text="@string/cancelMsg" />
-
-    <Button
-        android:id="@+id/sendMsg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="40dp"
-        android:text="@string/sendMsg" />
-
     <ImageButton
         android:id="@+id/addRcv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/linearLayout1"
+        android:layout_above="@+id/linearLayout2"
         android:layout_alignParentRight="true"
         android:src="@drawable/ic_action_add_person" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:gravity="bottom" >
+
+        <Button
+            android:id="@+id/sendMsg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/cancelMsg"
+            android:text="@string/sendMsg" />
+
+        <Button
+            android:id="@+id/cancelMsg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="79dp"
+            android:text="@string/cancelMsg" />
+    </RelativeLayout>
 
 </RelativeLayout>
