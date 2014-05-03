@@ -18,6 +18,10 @@
  */
 package es.ugr.swad.swadroid.modules.notifications;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,12 +32,10 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.modules.messages.Messages;
-import es.ugr.swad.swadroid.utils.DownloadImageTask;
 import es.ugr.swad.swadroid.utils.Utils;
 
 /**
@@ -63,7 +65,7 @@ public class NotificationItem extends MenuActivity {
         ImageView userPhotoView;
         WebView webview;
         Intent activity;
-        String type = this.getIntent().getStringExtra("notificationType");
+        //String type = this.getIntent().getStringExtra("notificationType");
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.single_notification_view);
@@ -100,7 +102,18 @@ public class NotificationItem extends MenuActivity {
                 && (userPhoto != null) && !userPhoto.equals("")
                 && !userPhoto.equals(Constants.NULL_VALUE)) {
             //userPhotoView.setImageURI(Uri.parse(userPhoto));
-            new DownloadImageTask(userPhotoView).execute(userPhoto);
+            //new DownloadImageTask(userPhotoView).execute(userPhoto);
+        	DisplayImageOptions options = new DisplayImageOptions.Builder()
+            .cacheInMemory(true)
+            .build();
+        	
+			ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
+			            .defaultDisplayImageOptions(options)
+			            .build();
+			
+			ImageLoader.getInstance().init(config);
+			
+			ImageLoader.getInstance().displayImage(userPhoto, userPhotoView);
         } else {
             Log.d("NotificationItem", "No connection or no photo " + userPhoto);
         }
