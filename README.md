@@ -1,6 +1,6 @@
 # SWADroid
 
-Android client for e-learning platform SWAD.
+Android client for e-learning platform [SWAD][swad].
 
 [Install from Google Play][apk]
 
@@ -68,6 +68,7 @@ SWADroid is an open source project.  I encourage contributions.
 The Github team has also been kind enough to write up some great [documentation][doc_contrib] on working with pull requests. Contributions should be performed on [topic branches][topic_br] in your personal forks - just issue your pull requests from there.
 
 
+[swad]: http://openswad.org/
 [gplv3]: http://www.gnu.org/licenses/gpl.html
 [lgplv3]: http://www.gnu.org/licenses/lgpl.html
 [mit]: http://www.opensource.org/licenses/mit-license.php
