@@ -6,7 +6,6 @@ Android client for e-learning platform SWAD.
 
 * Code: `git clone git://github.com/Amab/SWADroid.git`
 * Issue tracker: <https://github.com/Amab/SWADroid/issues>
-* Mailing list: <https://groups.google.com/forum/#!forum/swadroid>
 * Twitter: <http://twitter.com/SWADroid>
 * Facebook: <https://www.facebook.com/SWADroid>
 * Google+: <https://plus.google.com/115615684349730524355/posts>
