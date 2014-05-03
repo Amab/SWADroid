@@ -48,7 +48,7 @@ SWADroid uses [ZXing][zxing-library] library developed by [Sean Owen][zxing-auth
 SWADroid uses [Android-PullToRefresh][android-pulltorefresh-library] library developed by [chrisbanes][android-pulltorefresh-author] and licensed under [Apache License 2.0][apache2].
 
 [![Copyright and License](http://www.apache.org/images/feather-small.gif)][apache2]
-SWADroid uses [Universal Image Loader][universal-image-loader-library] library developed by [Sergey Tarasevich][universal-image-loader-author] and licensed under [Apache License 2.0][apache2]
+SWADroid uses [Universal Image Loader][universal-image-loader-library] library developed by [Sergey Tarasevich][universal-image-loader-author] and licensed under [Apache License 2.0][apache2].
 
 ## Author
 
