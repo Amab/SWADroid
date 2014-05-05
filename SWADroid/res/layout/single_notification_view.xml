@@ -21,6 +21,7 @@
             android:id="@+id/senderNameText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+        	android:layout_marginTop="7dip"
             android:layout_marginLeft="7dip"
             android:layout_toRightOf="@id/notifUserPhoto"
             android:textColor="@color/foreground1"
@@ -31,6 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/senderNameText"
+        	android:layout_marginTop="7dip"
             android:layout_marginLeft="7dip"
             android:layout_toRightOf="@id/notifUserPhoto"
             android:textColor="@color/foreground1"
@@ -41,6 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/courseNameText"
+        	android:layout_marginTop="7dip"
             android:layout_marginLeft="7dip"
             android:layout_toRightOf="@id/notifUserPhoto"
             android:textColor="@color/foreground2" />
@@ -53,23 +56,23 @@
             android:layout_marginLeft="7dp"
             android:layout_toRightOf="@id/notifDate"
             android:textColor="@color/foreground2" />
-
-        <TextView
-            android:id="@+id/summaryText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/notifUserPhoto"
-            android:layout_marginLeft="7dip"
-            android:layout_toRightOf="@id/notifUserPhoto"
-            android:textColor="@color/foreground1"
-            android:textSize="16sp"
-            android:textStyle="bold" />
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/summaryText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/not_item_header"
+        android:layout_marginTop="7dip"
+        android:layout_marginLeft="7dip"
+        android:textColor="@color/foreground1"
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
     <WebView
         android:id="@+id/contentWebView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/not_item_header" />
+        android:layout_height="wrap_content"
+        android:layout_below="@id/summaryText" />
 
 </RelativeLayout>

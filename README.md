@@ -1,12 +1,11 @@
 # SWADroid
 
-Android client for e-learning platform SWAD.
+Android client for e-learning platform [SWAD][swad].
 
 [Install from Google Play][apk]
 
 * Code: `git clone git://github.com/Amab/SWADroid.git`
 * Issue tracker: <https://github.com/Amab/SWADroid/issues>
-* Mailing list: <https://groups.google.com/forum/#!forum/swadroid>
 * Twitter: <http://twitter.com/SWADroid>
 * Facebook: <https://www.facebook.com/SWADroid>
 * Google+: <https://plus.google.com/115615684349730524355/posts>
@@ -42,10 +41,13 @@ SWADroid uses [Android DataFrameWork][androiddataframework-library] library deve
 SWADroid uses [ksoap2-android][ksoap2-library] library developed by [Manfred Moser][ksoap2-author] and licensed under [MIT][mit].
 
 [![Copyright and License](http://www.apache.org/images/feather-small.gif)][apache2]
-SWADroid uses [ZXing][zxing-library] library developed by [Sean Owen][zxing-author] and licensed under [Apache License 2.0][apache2]
+SWADroid uses [ZXing][zxing-library] library developed by [Sean Owen][zxing-author] and licensed under [Apache License 2.0][apache2].
 
 [![Copyright and License](http://www.apache.org/images/feather-small.gif)][apache2]
-SWADroid uses [Android-PullToRefresh][android-pulltorefresh-library] library developed by [chrisbanes][android-pulltorefresh-author] and licensed under [Apache License 2.0][apache2]
+SWADroid uses [Android-PullToRefresh][android-pulltorefresh-library] library developed by [chrisbanes][android-pulltorefresh-author] and licensed under [Apache License 2.0][apache2].
+
+[![Copyright and License](http://www.apache.org/images/feather-small.gif)][apache2]
+SWADroid uses [Universal Image Loader][universal-image-loader-library] library developed by [Sergey Tarasevich][universal-image-loader-author] and licensed under [Apache License 2.0][apache2].
 
 ## Author
 
@@ -66,6 +68,7 @@ SWADroid is an open source project.  I encourage contributions.
 The Github team has also been kind enough to write up some great [documentation][doc_contrib] on working with pull requests. Contributions should be performed on [topic branches][topic_br] in your personal forks - just issue your pull requests from there.
 
 
+[swad]: http://openswad.org/
 [gplv3]: http://www.gnu.org/licenses/gpl.html
 [lgplv3]: http://www.gnu.org/licenses/lgpl.html
 [mit]: http://www.opensource.org/licenses/mit-license.php
@@ -79,5 +82,7 @@ The Github team has also been kind enough to write up some great [documentation]
 [zxing-author]: https://github.com/srowen
 [android-pulltorefresh-library]: https://github.com/chrisbanes/Android-PullToRefresh
 [android-pulltorefresh-author]: https://github.com/chrisbanes
+[universal-image-loader-library]: https://github.com/nostra13/Android-Universal-Image-Loader
+[universal-image-loader-author]: https://github.com/nostra13
 [apache2]: http://www.apache.org/licenses/LICENSE-2.0
 [apk]: https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid
