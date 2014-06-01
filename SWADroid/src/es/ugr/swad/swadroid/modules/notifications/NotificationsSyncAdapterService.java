@@ -38,8 +38,8 @@ import com.bugsense.trace.BugSenseHandler;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.AlertNotification;
-import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.model.User;
@@ -159,7 +159,7 @@ public class NotificationsSyncAdapterService extends Service {
                 	dbHelper.endTransaction(false);
                 }
                 
-	            Log.e(TAG, e.getMessage());
+	            Log.e(TAG, errorMessage, e);
 
                 //Send exception details to Bugsense
                 if(sendException) {
@@ -187,8 +187,8 @@ public class NotificationsSyncAdapterService extends Service {
             getPackageManager().getApplicationInfo(
                     getPackageName(), 0);
 			isDebuggable = (ApplicationInfo.FLAG_DEBUGGABLE != 0);
-        } catch (NameNotFoundException e1) {
-            e1.printStackTrace();
+        } catch (NameNotFoundException e) {
+        	Log.e(TAG, "Error getting debuggable flag", e);
         }
         
 		//Initialize Bugsense plugin
@@ -205,8 +205,7 @@ public class NotificationsSyncAdapterService extends Service {
             //Initialize webservices client
             webserviceClient = null;
         } catch (Exception e) {
-            e.printStackTrace();
-            errorMessage = e.getMessage();
+            Log.e(TAG, "Error initializing database and preferences", e);
 
             //Send exception details to Bugsense
             BugSenseHandler.sendException(e);
