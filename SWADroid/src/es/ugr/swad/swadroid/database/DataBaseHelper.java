@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with SWADroid.  If not, see <http://www.gnu.org/licenses/>.
  */
-package es.ugr.swad.swadroid.model;
+package es.ugr.swad.swadroid.database;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -32,6 +32,19 @@ import com.bugsense.trace.BugSenseHandler;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
+import es.ugr.swad.swadroid.model.Course;
+import es.ugr.swad.swadroid.model.Group;
+import es.ugr.swad.swadroid.model.GroupType;
+import es.ugr.swad.swadroid.model.Model;
+import es.ugr.swad.swadroid.model.Pair;
+import es.ugr.swad.swadroid.model.PairTable;
+import es.ugr.swad.swadroid.model.PracticeSession;
+import es.ugr.swad.swadroid.model.SWADNotification;
+import es.ugr.swad.swadroid.model.Test;
+import es.ugr.swad.swadroid.model.TestAnswer;
+import es.ugr.swad.swadroid.model.TestQuestion;
+import es.ugr.swad.swadroid.model.TestTag;
+import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.utils.Crypto;
 import es.ugr.swad.swadroid.utils.OldCrypto;
 import es.ugr.swad.swadroid.utils.Utils;
@@ -45,9 +58,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
-//import net.sqlcipher.database.SQLiteDatabase;
-//import net.sqlcipher.database.SQLiteStatement;
 
 /**
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
@@ -67,10 +77,6 @@ public class DataBaseHelper {
      * Application context
      */
     private final Context mCtx;
-    /**
-     * Database name
-     */
-    //private String DBName = "swadroid_db_crypt";
     /**
      * Database passphrase
      */
@@ -94,20 +100,12 @@ public class DataBaseHelper {
         DBKey = Preferences.getDBKey();
         db = DataFramework.getInstance();
 
-        //Initialize SQLCipher libraries
-        //SQLiteDatabase.loadLibs(mCtx);
-
-        //db.open(mCtx, mCtx.getPackageName(), DBKey);
         db.open(mCtx, mCtx.getPackageName());
 
         //If the passphrase is empty, generate a random passphrase and recreate database
         if (DBKey.equals("")) {
             DBKey = Utils.randomString(DB_KEY_LENGTH);
             Preferences.setDBKey(DBKey);
-
-			/*mCtx.deleteDatabase(DBName);
-            SQLiteDatabase database = SQLiteDatabase.openOrCreateDatabase(mCtx.getDatabasePath("swadroid_db_crypt"), null);
-			database.close();*/
         }
 
         crypto = new Crypto(DBKey);
@@ -1960,7 +1958,6 @@ public class DataBaseHelper {
 			}
     	}
     	
-        //db.getDB().execSQL("BEGIN;");
         db.startTransaction();
         
         Log.i(TAG, "Database locked");
@@ -1971,7 +1968,6 @@ public class DataBaseHelper {
      */
     public synchronized void endTransaction(boolean successfulTransaction) {
     	if(db.inTransaction()) {
-	        //db.getDB().execSQL("END;");
     		if(successfulTransaction) {
     			db.successfulTransaction();
     		}
