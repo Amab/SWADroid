@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<class-diagram version="1.1.4" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
+<class-diagram version="1.1.6" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
   realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
   <class id="1" language="java" name="es.ugr.swad.swadroid.model.PracticeSession" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/model/PracticeSession.java" binary="false" corner="BOTTOM_RIGHT">    
@@ -118,8 +118,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="14" language="java" name="es.ugr.swad.swadroid.model.DataBaseHelper" project="SWADroid" 
-    file="/SWADroid/src/es/ugr/swad/swadroid/model/DataBaseHelper.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="14" language="java" name="es.ugr.swad.swadroid.database.DataBaseHelper" project="SWADroid" 
+    file="/SWADroid/src/es/ugr/swad/swadroid/database/DataBaseHelper.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="1609" width="535" x="771" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
@@ -128,74 +128,74 @@
     </display>  
   </class>  
   <generalization id="15">    
-    <end type="SOURCE" refId="8"/>    
+    <end type="SOURCE" refId="3"/>    
     <end type="TARGET" refId="10"/>  
   </generalization>  
   <generalization id="16">    
-    <end type="SOURCE" refId="5"/>    
+    <end type="SOURCE" refId="6"/>    
     <end type="TARGET" refId="10"/>  
   </generalization>  
-  <association id="17">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="18" name="values"/>      
-      <multiplicity id="19" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="11" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="20">    
-    <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="10"/>  
-  </generalization>  
-  <generalization id="21">    
+  <generalization id="17">    
     <bendpoint x="3043" y="2867"/>    
     <bendpoint x="3043" y="1686"/>    
     <end type="SOURCE" refId="2"/>    
     <end type="TARGET" refId="10"/>  
   </generalization>  
-  <association id="22">    
+  <generalization id="18">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="10"/>  
+  </generalization>  
+  <generalization id="19">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="10"/>  
+  </generalization>  
+  <association id="20">    
     <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="23" name="questions"/>      
-      <multiplicity id="24" minimum="0" maximum="2147483647"/>    
+      <attribute id="21" name="questions"/>      
+      <multiplicity id="22" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="13" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="25">    
+  <generalization id="23">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="10"/>  
+  </generalization>  
+  <association id="24">    
     <end type="SOURCE" refId="13" navigable="false">      
-      <attribute id="26" name="answers"/>      
-      <multiplicity id="27" minimum="0" maximum="2147483647"/>    
+      <attribute id="25" name="answers"/>      
+      <multiplicity id="26" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="2" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <generalization id="28">    
-    <end type="SOURCE" refId="7"/>    
+  <generalization id="27">    
+    <end type="SOURCE" refId="9"/>    
     <end type="TARGET" refId="10"/>  
   </generalization>  
-  <generalization id="29">    
-    <end type="SOURCE" refId="12"/>    
-    <end type="TARGET" refId="10"/>  
-  </generalization>  
-  <generalization id="30">    
+  <association id="28">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="29" name="values"/>      
+      <multiplicity id="30" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="31">    
     <bendpoint x="2086" y="1686"/>    
     <end type="SOURCE" refId="13"/>    
     <end type="TARGET" refId="10"/>  
   </generalization>  
-  <generalization id="31">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="10"/>  
-  </generalization>  
   <generalization id="32">    
-    <end type="SOURCE" refId="9"/>    
+    <end type="SOURCE" refId="12"/>    
     <end type="TARGET" refId="10"/>  
   </generalization>  
   <generalization id="33">    
-    <end type="SOURCE" refId="3"/>    
+    <end type="SOURCE" refId="1"/>    
     <end type="TARGET" refId="10"/>  
   </generalization>  
   <generalization id="34">    
-    <end type="SOURCE" refId="6"/>    
+    <end type="SOURCE" refId="4"/>    
     <end type="TARGET" refId="10"/>  
   </generalization>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
