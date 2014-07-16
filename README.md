@@ -44,9 +44,6 @@ SWADroid uses [ksoap2-android][ksoap2-library] library developed by [Manfred Mos
 SWADroid uses [ZXing][zxing-library] library developed by [Sean Owen][zxing-author] and licensed under [Apache License 2.0][apache2].
 
 [![Copyright and License](http://www.apache.org/images/feather-small.gif)][apache2]
-SWADroid uses [Android-PullToRefresh][android-pulltorefresh-library] library developed by [chrisbanes][android-pulltorefresh-author] and licensed under [Apache License 2.0][apache2].
-
-[![Copyright and License](http://www.apache.org/images/feather-small.gif)][apache2]
 SWADroid uses [Universal Image Loader][universal-image-loader-library] library developed by [Sergey Tarasevich][universal-image-loader-author] and licensed under [Apache License 2.0][apache2].
 
 ## Author
@@ -80,8 +77,6 @@ The Github team has also been kind enough to write up some great [documentation]
 [androiddataframework-author]: http://www.javielinux.com/quiensoy.php
 [zxing-library]: http://code.google.com/p/zxing/
 [zxing-author]: https://github.com/srowen
-[android-pulltorefresh-library]: https://github.com/chrisbanes/Android-PullToRefresh
-[android-pulltorefresh-author]: https://github.com/chrisbanes
 [universal-image-loader-library]: https://github.com/nostra13/Android-Universal-Image-Loader
 [universal-image-loader-author]: https://github.com/nostra13
 [apache2]: http://www.apache.org/licenses/LICENSE-2.0
