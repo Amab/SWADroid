@@ -40,7 +40,7 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
  *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
- * @author José Antonio Guerrero Avilés <cany20@gmail.com>
+ * @author Jose Antonio Guerrero Aviles <cany20@gmail.com>
  */
 public class Messages extends Module {
     /**
