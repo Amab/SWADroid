@@ -26,22 +26,17 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v4.widget.SwipeRefreshLayout;
-import com.bugsense.trace.BugSenseHandler;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
@@ -52,7 +47,9 @@ import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.sync.SyncUtils;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
+
 import org.ksoap2.serialization.SoapObject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -64,23 +61,12 @@ import java.util.Vector;
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */
-public class Notifications extends Module implements SwipeRefreshLayout.OnRefreshListener {
+public class Notifications extends Module implements
+		SwipeRefreshLayout.OnRefreshListener {
 	/**
 	 * Max size to store notifications
 	 */
 	private int SIZE_LIMIT;
-	/**
-	 * Notifications adapter for showing the data
-	 */
-	private NotificationsCursorAdapter adapter;
-	/**
-	 * Cursor for database access
-	 */
-	private Cursor dbCursor;
-	/**
-	 * Cursor selection parameter
-	 */
-	private final String selection = null;
 	/**
 	 * Cursor orderby parameter
 	 */
@@ -124,14 +110,40 @@ public class Notifications extends Module implements SwipeRefreshLayout.OnRefres
 	/**
 	 * ListView container for notifications
 	 */
-	ListView list;
+	ExpandableListView list;
+	/**
+	 * Adapter container for notifications
+	 */
+	NotificationsExpandableListAdapter adapter;
+	/**
+	 * TextView for the empty notifications message
+	 */
+	TextView emptyNotifTextView;
+	/**
+	 * List of groups for ExpandableListView
+	 */
+	ArrayList<String> groupItem;
+	/**
+	 * List of childs for ExpandableListView
+	 */
+	ArrayList<List<Model>> childItem;
+	/**
+	 * Id for the not seen notifications group
+	 */
+	int NOT_SEEN_GROUP_ID = 0;
+	/**
+	 * Id for the seen notifications group
+	 */
+	int SEEN_GROUP_ID = 1;
 	/**
 	 * ListView click listener
 	 */
-	private OnItemClickListener clickListener = new OnItemClickListener() {
-		public void onItemClick(AdapterView<?> av, View v, int position,
-				long rowId) {
-			TextView id = (TextView) v.findViewById(R.id.notifCode);
+	private OnChildClickListener clickListener = new OnChildClickListener() {
+		@Override
+		public boolean onChildClick(ExpandableListView parent, View v,
+				int groupPosition, int childPosition, long id) {
+			
+			TextView notifCode = (TextView) v.findViewById(R.id.notifCode);
 			TextView code = (TextView) v.findViewById(R.id.eventCode);
 			TextView type = (TextView) v.findViewById(R.id.eventType);
 			TextView userPhoto = (TextView) v.findViewById(R.id.eventUserPhoto);
@@ -145,7 +157,7 @@ public class Notifications extends Module implements SwipeRefreshLayout.OnRefres
 
 			Intent activity = new Intent(getApplicationContext(),
 					NotificationItem.class);
-			activity.putExtra("notifCode", id.getText().toString());
+			activity.putExtra("notifCode", notifCode.getText().toString());
 			activity.putExtra("eventCode", code.getText().toString());
 			activity.putExtra("notificationType", type.getText().toString());
 			activity.putExtra("userPhoto", userPhoto.getText().toString());
@@ -157,6 +169,8 @@ public class Notifications extends Module implements SwipeRefreshLayout.OnRefres
 			activity.putExtra("time", time.getText().toString());
 			activity.putExtra("seenLocal", seenLocalText.getText().toString());
 			startActivity(activity);
+			
+			return true;
 		}
 	};
 
@@ -165,19 +179,7 @@ public class Notifications extends Module implements SwipeRefreshLayout.OnRefres
 	 */
 	private void refreshScreen() {
 		// Refresh data on screen
-		stopManagingCursor(dbCursor);
-		dbCursor = dbHelper.getDb().getCursor(Constants.DB_TABLE_NOTIFICATIONS,
-				selection, orderby);
-		startManagingCursor(dbCursor);
-		adapter.changeCursor(dbCursor);
-		
-		// If there are notifications to show, hide the empty notifications
-		// message and show the notifications list
-		if (dbCursor.getCount() > 0) {
-			list.setAdapter(adapter);
-			list.setOnItemClickListener(clickListener);
-		}
-
+		setChildGroupData();
 		hideSwipeProgress();
 	}
 
@@ -251,35 +253,48 @@ public class Notifications extends Module implements SwipeRefreshLayout.OnRefres
 	 * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
 	 */
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.list_items_pulltorefresh);
 
 		getSupportActionBar().setIcon(R.drawable.notif);
 
 		this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
-		
-		refreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
-		list = (ListView) findViewById(R.id.list_pulltorefresh);		
 
+		refreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+		list = (ExpandableListView) findViewById(R.id.list_pulltorefresh);
+		emptyNotifTextView = (TextView) findViewById(R.id.list_item_title);
+		
+		groupItem = new ArrayList<String>();
+		childItem = new ArrayList<List<Model>>();
+
+		//Init ExpandableListView
 		initSwipeOptions();
 
-		dbCursor = dbHelper.getDb().getCursor(Constants.DB_TABLE_NOTIFICATIONS,
-				selection, orderby);
-		startManagingCursor(dbCursor);
-		adapter = new NotificationsCursorAdapter(this, dbCursor,
-				Preferences.getDBKey());
+		//Set ExpandableListView data
+		setGroupData();
+		setChildGroupData();
 
 		/*
 		 * If there aren't notifications to show, hide the notifications list
 		 * and show the empty notifications message
 		 */
-		if (dbCursor.getCount() == 0) {
-			String emptyMsgArray[] = { getString(R.string.notificationsEmptyListMsg) };
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-					getApplicationContext(), R.layout.list_item, emptyMsgArray);
-			list.setAdapter(adapter);
-			list.setOnItemClickListener(null);
+		if (dbHelper.getAllRowsCount(Constants.DB_TABLE_NOTIFICATIONS) == 0) {
+			Log.d(TAG, "[onCreate] Notifications table is empty");
+			
+			emptyNotifTextView.setText(R.string.notificationsEmptyListMsg);
+			emptyNotifTextView.setVisibility(View.VISIBLE);
+
+			list.setOnChildClickListener(null);
+			list.setVisibility(View.GONE);
+		} else {
+			Log.d(TAG, "[onCreate] Notifications table is not empty");
+			
+			emptyNotifTextView.setVisibility(View.GONE);
+			list.setVisibility(View.VISIBLE);
+			
+			//Expand the not seen notifications group
+			list.expandGroup(NOT_SEEN_GROUP_ID);
 		}
 
 		setMETHOD_NAME("getNotifications");
@@ -554,27 +569,22 @@ public class Notifications extends Module implements SwipeRefreshLayout.OnRefres
 		}
 	}
 
-	/*@Override
-	public void setContentView(int layoutResID) {
-		View v = getLayoutInflater().inflate(layoutResID, refreshLayout, false);
-		setContentView(v);
-	}
-
-	@Override
-	public void setContentView(View view) {
-		setContentView(view, view.getLayoutParams());
-	}
-
-	@Override
-	public void setContentView(View view, ViewGroup.LayoutParams params) {
-		refreshLayout.addView(view, params);
-		initSwipeOptions();
-	}*/
+	/*
+	 * @Override public void setContentView(int layoutResID) { View v =
+	 * getLayoutInflater().inflate(layoutResID, refreshLayout, false);
+	 * setContentView(v); }
+	 * 
+	 * @Override public void setContentView(View view) { setContentView(view,
+	 * view.getLayoutParams()); }
+	 * 
+	 * @Override public void setContentView(View view, ViewGroup.LayoutParams
+	 * params) { refreshLayout.addView(view, params); initSwipeOptions(); }
+	 */
 
 	private void initSwipeOptions() {
 		refreshLayout.setOnRefreshListener(this);
 		setAppearance();
-		//disableSwipe();
+		// disableSwipe();
 	}
 
 	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
@@ -621,5 +631,46 @@ public class Notifications extends Module implements SwipeRefreshLayout.OnRefres
 	public void onRefresh() {
 		showSwipeProgress();
 		runConnection();
+	}
+
+	public void setGroupData() {
+		groupItem.add(getString(R.string.notSeenLabel));
+		groupItem.add(getString(R.string.seenLabel));
+	}
+
+	public void setChildGroupData() {	
+		List<Model> child;
+		
+		//Clear data
+		childItem.clear();
+		
+		//Add data for not seen notifications		 
+		child = dbHelper.getAllRows(Constants.DB_TABLE_NOTIFICATIONS,
+				"seenLocal='" + Utils.parseBoolString(false) + "'", orderby);
+		childItem.add(child);
+		
+		//Add data for seen notifications	
+		child = dbHelper.getAllRows(Constants.DB_TABLE_NOTIFICATIONS,
+				"seenLocal='" + Utils.parseBoolString(true) + "'", orderby);
+		childItem.add(child);
+		
+		Log.d(TAG, "groups size=" + childItem.size());
+		Log.d(TAG, "not seen children size=" + childItem.get(NOT_SEEN_GROUP_ID).size());
+		Log.d(TAG, "seen children size=" + childItem.get(SEEN_GROUP_ID).size());
+		
+		adapter = new NotificationsExpandableListAdapter(this, groupItem, childItem);
+
+		if(dbHelper.getAllRowsCount(Constants.DB_TABLE_NOTIFICATIONS) > 0) {
+			Log.d(TAG, "[setChildGroupData] Notifications table is not empty");
+			
+			emptyNotifTextView.setVisibility(View.GONE);
+			list.setAdapter(adapter);
+			list.setOnChildClickListener(clickListener);
+		} else {
+			Log.d(TAG, "[setChildGroupData] Notifications table is empty");
+			
+			list.setVisibility(View.GONE);
+			emptyNotifTextView.setVisibility(View.VISIBLE);
+		}
 	}
 }

@@ -372,6 +372,27 @@ public class DataBaseHelper {
 
         return result;
     }
+    
+    /**
+     * Gets count of all rows of specified table
+     *
+     * @param table Table containing the rows
+     * @return Count of all rows of specified table
+     */
+    public int getAllRowsCount(String table) {
+        return db.getEntityListCount(table, null);
+    }
+    
+    /**
+     * Gets count of all rows of specified table
+    *
+    * @param table   Table containing the rows
+    * @param where   Where condition of SQL sentence
+    * @return Count of all rows of specified table
+    */
+   public int getAllRowsCount(String table, String where) {
+       return db.getEntityListCount(table, where);
+   }
 
     /**
      * Gets a row of specified table

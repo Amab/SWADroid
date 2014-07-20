@@ -36,7 +36,7 @@ import es.ugr.swad.swadroid.utils.Utils;
 import java.util.Date;
 
 /**
- * Custom adapter for display notifications
+ * Custom CursorAdapter for display notifications
  *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
