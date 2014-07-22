@@ -382,4 +382,6 @@
 		
 	<string name="actionBarRefresh">Actualizar</string>
 	<string name="actionBarSave">Guardar</string>
+	
+	<string name="actionBarAddUser">Agregar usuario</string>
 </resources>

@@ -24,6 +24,8 @@ import org.ksoap2.serialization.SoapObject;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -86,7 +88,7 @@ public class Messages extends Module {
 
         setMETHOD_NAME("sendMessage");
         
-        ImageButton add = (ImageButton) findViewById(R.id.addRcv);
+        /*ImageButton add = (ImageButton) findViewById(R.id.addRcv);
         add.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
@@ -94,7 +96,7 @@ public class Messages extends Module {
 				startActivity(callUsersList);
 					
 			}
-		});     
+		});  */   
         
         Button send = (Button) findViewById(R.id.sendMsg);
         send.setOnClickListener(new View.OnClickListener() {
@@ -275,4 +277,27 @@ public class Messages extends Module {
 
         super.onSaveInstanceState(outState);
     }
+
+
+	public boolean onCreateOptionsMenu(Menu menu) {
+	    getMenuInflater().inflate(R.menu.messages_main_activity_actions, menu);
+	    return super.onCreateOptionsMenu(menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	        case R.id.action_addUser:
+	        	
+	        	Intent callUsersList = new Intent (getBaseContext(), UsersList.class);
+				startActivity(callUsersList);
+	            
+	            return true;
+	
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	    
+	}
+
 }

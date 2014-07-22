@@ -30,12 +30,12 @@ public class FilterUsersList extends MenuActivity {
 		cancelFIlters.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				setResult(RESULT_CANCELED);
+				//setResult(RESULT_CANCELED);
 				finish();
 			}
 		});
 		
-		Button acceptFIlters = (Button) findViewById(R.id.cancelFilters);
+		Button acceptFIlters = (Button) findViewById(R.id.acceptFilters);
 		acceptFIlters.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {

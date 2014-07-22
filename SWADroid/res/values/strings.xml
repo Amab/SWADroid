@@ -382,4 +382,6 @@
 	
     <string name="actionBarRefresh">Refresh</string>
 	<string name="actionBarSave">Save</string>
+	
+	<string name="actionBarAddUser">Add User</string>
 </resources>

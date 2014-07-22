@@ -343,4 +343,6 @@
 	
 	<string name="actionBarRefresh">Actualitzar</string>
 	<string name="actionBarSave">Desa</string>
+	
+	<string name="actionBarAddUser">Afegir Usuari</string>
 </resources>
