@@ -8,6 +8,8 @@ package es.ugr.swad.swadroid.modules.messages;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -30,6 +32,7 @@ public class UsersList extends MenuActivity {
 		getSupportActionBar().setIcon(R.drawable.users);
 		//TODO cargar la lista en el ListView
 		
+		/*
 		ImageButton filt = (ImageButton) findViewById(R.id.filter);
 		filt.setOnClickListener(new View.OnClickListener() {
 
@@ -39,7 +42,7 @@ public class UsersList extends MenuActivity {
 				startActivity(callFilterUsersList);
 				
 			}
-		});	
+		});	*/
 		
 		Button cancelList = (Button) findViewById(R.id.cancelList);
 		cancelList.setOnClickListener(new View.OnClickListener() {
@@ -91,5 +94,27 @@ public class UsersList extends MenuActivity {
 
 	protected void onError() {
 		
+	}
+	
+	 @Override
+		public boolean onCreateOptionsMenu(Menu menu) {
+		    getMenuInflater().inflate(R.menu.users_list_activity_actions, menu);
+		    return super.onCreateOptionsMenu(menu);
+	}
+		
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	        case R.id.action_filter_users:
+	        	
+				Intent callFilterUsersList = new Intent (getBaseContext(), FilterUsersList.class);
+				startActivity(callFilterUsersList);
+				
+	            return true;
+	
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+		    
 	}
 }

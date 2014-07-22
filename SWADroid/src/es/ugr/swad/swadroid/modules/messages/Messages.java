@@ -279,6 +279,7 @@ public class Messages extends Module {
     }
 
 
+    @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 	    getMenuInflater().inflate(R.menu.messages_main_activity_actions, menu);
 	    return super.onCreateOptionsMenu(menu);
