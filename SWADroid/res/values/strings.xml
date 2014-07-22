@@ -377,6 +377,9 @@
     
     <string name="notificationMarkAllRead">Mark all as read</string>
     <string name="notificationReply">Reply</string>
+	<string name="seenLabel">Seen</string>
+	<string name="notSeenLabel">Not seen</string>
+	
     <string name="actionBarRefresh">Refresh</string>
 	<string name="actionBarSave">Save</string>
 </resources>

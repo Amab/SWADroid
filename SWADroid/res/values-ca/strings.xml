@@ -338,6 +338,9 @@
 
 	<string name="notificationMarkAllRead">Marca totes com llegides</string>
 	<string name="notificationReply">Respondre</string>
+	<string name="seenLabel">Llegides</string>
+	<string name="notSeenLabel">No llegides</string>
+	
 	<string name="actionBarRefresh">Actualitzar</string>
 	<string name="actionBarSave">Desa</string>
 </resources>

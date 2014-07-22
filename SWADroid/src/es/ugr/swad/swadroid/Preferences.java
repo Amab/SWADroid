@@ -28,7 +28,7 @@ import android.util.Log;
 
 import com.bugsense.trace.BugSenseHandler;
 
-import es.ugr.swad.swadroid.model.DataBaseHelper;
+import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.sync.SyncUtils;
 import es.ugr.swad.swadroid.utils.Crypto;
 import es.ugr.swad.swadroid.utils.Utils;
