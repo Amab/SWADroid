@@ -11,12 +11,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/addRcv" >
+        android:layout_alignParentTop="true" >
 
         <EditText
             android:id="@+id/message_receivers_text"
-            android:layout_width="254dp"
+            android:layout_width="320dp"
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/message_receivers_title"
@@ -47,14 +46,6 @@
             android:hint="@string/message_body_title"
             android:textColor="@color/foreground1" />
     </LinearLayout>
-
-    <ImageButton
-        android:id="@+id/addRcv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/linearLayout2"
-        android:layout_alignParentRight="true"
-        android:src="@drawable/ic_action_add_person" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
