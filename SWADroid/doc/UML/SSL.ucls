@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<class-diagram version="1.1.4" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
+<class-diagram version="1.1.6" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
   realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
   <class id="1" language="java" name="es.ugr.swad.swadroid.ssl.UntrustedTrustManager" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/ssl/UntrustedTrustManager.java" binary="false" corner="BOTTOM_RIGHT">    
@@ -42,25 +42,25 @@
     name="es.ugr.swad.swadroid.ssl.AdditionalKeyStoresSSLSocketFactory.AdditionalKeyStoresTrustManager" 
     project="SWADroid" file="/SWADroid/src/es/ugr/swad/swadroid/ssl/AdditionalKeyStoresSSLSocketFactory.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="151" width="274" x="343" y="336"/>    
+    <position height="151" width="275" x="343" y="336"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <association id="6">    
+  <nesting id="6">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="5"/>  
+  </nesting>  
+  <association id="7">    
     <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="7" name="untrustedHN"/>      
-      <multiplicity id="8" minimum="0" maximum="1"/>    
+      <attribute id="8" name="untrustedHN"/>      
+      <multiplicity id="9" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="3" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <nesting id="9">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="5"/>  
-  </nesting>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
     accessors="true" visibility="true">    
     <attributes public="true" package="true" protected="true" private="true" static="true"/>    

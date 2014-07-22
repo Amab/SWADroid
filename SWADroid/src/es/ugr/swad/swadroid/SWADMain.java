@@ -42,13 +42,14 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
+
 import com.bugsense.trace.BugSenseHandler;
 
+import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.gui.ImageExpandableListAdapter;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.model.Course;
-import es.ugr.swad.swadroid.model.DataBaseHelper;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.GenerateQR;
@@ -65,6 +66,7 @@ import es.ugr.swad.swadroid.sync.AccountAuthenticator;
 import es.ugr.swad.swadroid.sync.SyncUtils;
 import es.ugr.swad.swadroid.utils.Utils;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -161,7 +163,6 @@ public class SWADMain extends MenuExpandableListActivity {
     @Override
     public void onCreate(Bundle icicle) {
         int lastVersion, currentVersion;
-        Intent activity;
         
         //Initialize Bugsense plugin
         try {
@@ -189,7 +190,8 @@ public class SWADMain extends MenuExpandableListActivity {
         	 */
         	if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
         		conn = new SecureConnection();
-        		conn.initSecureConnection(this);        		
+        		conn.initSecureConnection(this); 
+        		//conn.initUntrustedSecureConnection();
         		Log.i(TAG, "Android API < 11 (HONEYCOMB). Adding Terena certificate manually");
         	} else {
         		Log.i(TAG, "Android API >= 11 (HONEYCOMB). Using Terena built-in certificate");
@@ -204,43 +206,11 @@ public class SWADMain extends MenuExpandableListActivity {
 
             //If this is the first run, show configuration dialog
             if (lastVersion == 0) {
-                //Configure automatic synchronization
-                Preferences.setSyncTime(String.valueOf(Constants.DEFAULT_SYNC_TIME));
-                activity = new Intent(this, AccountAuthenticator.class);
-                startActivity(activity);
-
-                Preferences.setLastVersion(currentVersion);
-                firstRun = true;
-                Constants.setSelectedCourseCode(-1);
-
-                Constants.setSelectedCourseShortName("");
-                Constants.setSelectedCourseFullName("");
-
-                Constants.setCurrentUserRole(-1);
+            	firstRun(currentVersion);
 
             //If this is an upgrade, show upgrade dialog
             } else if (lastVersion < currentVersion) {
-                showUpgradeDialog(this);
-                dbHelper.upgradeDB(this);
-                
-                if(lastVersion < 52) {
-                	//Encrypts users table
-                	dbHelper.encryptUsers();
-                	
-                	//If the app is updating from an unencrypted user password version, encrypt user password
-                	Preferences.upgradeCredentials();
-                	
-                	Preferences.setSyncTime(String.valueOf(Constants.DEFAULT_SYNC_TIME));
-                } else if(lastVersion < 57) {
-                	//Reconfigure automatic synchronization
-                	SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, this);                	
-                	if(!Preferences.getSyncTime().equals("0") && Preferences.isSyncEnabled()) {
-                		SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY,
-                				Long.valueOf(Preferences.getSyncTime()), this);
-                	}
-                }
-
-                Preferences.setLastVersion(currentVersion);
+            	upgradeApp(lastVersion, currentVersion);
             }
 
             listCourses = dbHelper.getAllRows(Constants.DB_TABLE_COURSES, "", "shortName");
@@ -300,6 +270,56 @@ public class SWADMain extends MenuExpandableListActivity {
         }
 		
 		super.onDestroy();
+	}
+	
+	/**
+	 * Initializes application on first run
+	 * @param currentVersion Current version of application
+	 */
+	private void firstRun(int currentVersion) {
+        Intent activity = new Intent(this, AccountAuthenticator.class);
+        
+		 //Configure automatic synchronization
+        Preferences.setSyncTime(String.valueOf(Constants.DEFAULT_SYNC_TIME));
+        startActivity(activity);
+
+        Preferences.setLastVersion(currentVersion);
+        firstRun = true;
+        Constants.setSelectedCourseCode(-1);
+
+        Constants.setSelectedCourseShortName("");
+        Constants.setSelectedCourseFullName("");
+
+        Constants.setCurrentUserRole(-1);
+	}
+	
+	/**
+	 * Makes appropriate changes on application upgrade
+	 * @param lastVersion Version from which the application is updated
+	 * @param currentVersion Version to which the application is updated
+	 */
+	private void upgradeApp(int lastVersion, int currentVersion) throws NoSuchAlgorithmException {
+		showUpgradeDialog(this);
+        dbHelper.upgradeDB(this);
+        
+        if(lastVersion < 52) {
+        	//Encrypts users table
+        	dbHelper.encryptUsers();
+        	
+        	//If the app is updating from an unencrypted user password version, encrypt user password
+        	Preferences.upgradeCredentials();
+        	
+        	Preferences.setSyncTime(String.valueOf(Constants.DEFAULT_SYNC_TIME));
+        } else if(lastVersion < 57) {
+        	//Reconfigure automatic synchronization
+        	SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, this);                	
+        	if(!Preferences.getSyncTime().equals("0") && Preferences.isSyncEnabled()) {
+        		SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY,
+        				Long.valueOf(Preferences.getSyncTime()), this);
+        	}
+        }
+
+        Preferences.setLastVersion(currentVersion);
 	}
 
 	@Override
@@ -675,14 +695,12 @@ public class SWADMain extends MenuExpandableListActivity {
         mExpandableListView.setVisibility(View.GONE);
     }
 
-    // TODO
     /**
      * Launches an action when refresh button is pushed
      *
      * @param v Actual view
      */
     public void onRefreshClick(View v) {
-
         getCurrentCourses();
     }
     
