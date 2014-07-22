@@ -384,5 +384,5 @@
 	<string name="actionBarSave">Save</string>
 	
 	<string name="actionBarAddUser">Add users</string>
-	<string name="actionBarFilterUser">Filter users</string>
+	<string name="actionBarFilterUsers">Filter users</string>
 </resources>

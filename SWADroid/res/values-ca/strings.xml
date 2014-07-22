@@ -345,6 +345,6 @@
 	<string name="actionBarSave">Desa</string>
 	
 	<string name="actionBarAddUser">Afegir usuaris</string>
-	<string name="actionBarFilterUser">Filtrar usuaris</string>
+	<string name="actionBarFilterUsers">Filtrar usuaris</string>
 	
 </resources>
