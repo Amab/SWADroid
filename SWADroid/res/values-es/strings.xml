@@ -384,5 +384,5 @@
 	<string name="actionBarSave">Guardar</string>
 	
 	<string name="actionBarAddUser">Agregar usuarios</string>
-	<string name="actionBarFilterUser">Filtrar usuarios</string>
+	<string name="actionBarFilterUsers">Filtrar usuarios</string>
 </resources>
