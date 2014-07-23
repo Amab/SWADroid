@@ -385,4 +385,8 @@
 	
 	<string name="actionBarAddUser">Add users</string>
 	<string name="actionBarFilterUsers">Filter users</string>
+	
+	<string name="Filters_All">All</string>
+	<string name="Filters_Teachers">Teachers</string>
+	<string name="Filters_Students">Students</string>
 </resources>
