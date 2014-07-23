@@ -292,9 +292,6 @@ public class Notifications extends Module implements
 			
 			emptyNotifTextView.setVisibility(View.GONE);
 			list.setVisibility(View.VISIBLE);
-			
-			//Expand the not seen notifications group
-			list.expandGroup(NOT_SEEN_GROUP_ID);
 		}
 
 		setMETHOD_NAME("getNotifications");
@@ -666,6 +663,9 @@ public class Notifications extends Module implements
 			emptyNotifTextView.setVisibility(View.GONE);
 			list.setAdapter(adapter);
 			list.setOnChildClickListener(clickListener);
+			
+			//Expand the not seen notifications group
+			list.expandGroup(NOT_SEEN_GROUP_ID);
 		} else {
 			Log.d(TAG, "[setChildGroupData] Notifications table is empty");
 			
