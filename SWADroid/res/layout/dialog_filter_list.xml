@@ -29,23 +29,30 @@
         android:layout_alignParentTop="true"
         android:orientation="vertical" >
 
-        <RadioButton
-            android:id="@+id/radioButton1"
+        <RadioGroup
+            android:id="@+id/Filters_Users_Options"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Filters_All"/>
+            android:layout_height="wrap_content" >
 
-        <RadioButton
-            android:id="@+id/radioButton2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Filters_Teachers" />
+            <RadioButton
+                android:id="@+id/Filters_All"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Filters_All" />
 
-        <RadioButton
-            android:id="@+id/radioButton3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Filters_Students" />
+            <RadioButton
+                android:id="@+id/Filters_Teachers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Filters_Teachers" />
+
+            <RadioButton
+                android:id="@+id/Filters_Students"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Filters_Students" />
+
+        </RadioGroup>
     </LinearLayout>
 
 </RelativeLayout>

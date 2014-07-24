@@ -12,38 +12,22 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
-import es.ugr.swad.swadroid.modules.Module;
+import es.ugr.swad.swadroid.modules.rollcall.RollcallConfigDownload;
 
 public class UsersList extends MenuActivity {
 
 	public static final String TAG = Constants.APP_TAG + " Users List";
-
 	
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.users_listview);
 		setTitle(R.string.selectRcvModuleLabel);
 		getSupportActionBar().setIcon(R.drawable.users);
-		//TODO cargar la lista en el ListView
-		
-		/*
-		ImageButton filt = (ImageButton) findViewById(R.id.filter);
-		filt.setOnClickListener(new View.OnClickListener() {
-
-			public void onClick(View v) {
-
-				Intent callFilterUsersList = new Intent (getBaseContext(), FilterUsersList.class);
-				startActivity(callFilterUsersList);
-				
-			}
-		});	*/
-		
+	
 		Button cancelList = (Button) findViewById(R.id.cancelList);
 		cancelList.setOnClickListener(new View.OnClickListener() {
 			
@@ -57,7 +41,7 @@ public class UsersList extends MenuActivity {
 		acceptList.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				//TODO Aceptar la lista y cargarla filtrada en el ListView
+				//TODO Aceptar la lista y añadirla a los destinatarios
 			}
 		});
 		
@@ -109,6 +93,14 @@ public class UsersList extends MenuActivity {
 	        	
 				Intent callFilterUsersList = new Intent (getBaseContext(), FilterUsersList.class);
 				startActivity(callFilterUsersList);
+				
+	            return true;
+	            
+	        //Refresh users list    
+	        case R.id.action_refresh_users:
+	        	
+				Intent refreshUsersList = new Intent (getBaseContext(), RollcallConfigDownload.class);
+				startActivity(refreshUsersList);
 				
 	            return true;
 	

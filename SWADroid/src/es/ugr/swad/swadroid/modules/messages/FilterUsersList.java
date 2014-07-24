@@ -9,6 +9,7 @@ package es.ugr.swad.swadroid.modules.messages;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioButton;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
@@ -25,7 +26,8 @@ public class FilterUsersList extends MenuActivity {
 		setContentView(R.layout.dialog_filter_list);
 		setTitle(R.string.filterUsersListModuleLabel);
 		getSupportActionBar().setIcon(R.drawable.users);	
-		
+
+        
 		Button cancelFIlters = (Button) findViewById(R.id.cancelFilters);
 		cancelFIlters.setOnClickListener(new View.OnClickListener() {
 			
