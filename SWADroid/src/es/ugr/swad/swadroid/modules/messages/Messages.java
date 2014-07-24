@@ -29,7 +29,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Toast;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
@@ -82,21 +81,14 @@ public class Messages extends Module {
         setContentView(R.layout.messages_screen);
         setTitle(R.string.messagesModuleLabel);
         getSupportActionBar().setIcon(R.drawable.msg);
+        
+        
        
         if (savedInstanceState != null) 
             writeData();
 
         setMETHOD_NAME("sendMessage");
-        
-        /*ImageButton add = (ImageButton) findViewById(R.id.addRcv);
-        add.setOnClickListener(new View.OnClickListener() {
-			
-			public void onClick(View v) {
-				Intent callUsersList = new Intent (getBaseContext(), UsersList.class);
-				startActivity(callUsersList);
-					
-			}
-		});  */   
+
         
         Button send = (Button) findViewById(R.id.sendMsg);
         send.setOnClickListener(new View.OnClickListener() {
@@ -130,7 +122,22 @@ public class Messages extends Module {
         
     }
     
-    /**
+    @Override
+	protected void onStart() {
+		super.onStart();
+		
+        EditText rcv = (EditText) findViewById(R.id.message_receivers_text);
+        EditText subj = (EditText) findViewById(R.id.message_subject_text);
+
+        
+        if (eventCode != 0) {
+        	
+            subj.setText("Re: " + getIntent().getStringExtra("summary"));
+            rcv.setVisibility(View.GONE);
+        }
+	}
+
+	/**
      * Reads user input
      */
     private void readData() {

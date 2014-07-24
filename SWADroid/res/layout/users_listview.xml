@@ -11,36 +11,33 @@
         android:gravity="right"
         android:orientation="vertical" >
 
-        <ListView
+        <ExpandableListView
             android:id="@+id/users_listview"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:background="@color/background" >
-        </ListView>
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="90dp"
-        android:orientation="vertical" >
-
-        <Button
-            android:id="@+id/cancelList"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@+id/acceptList"
-            android:text="@string/cancelMsg" />
-
-        <Button
-            android:id="@+id/acceptList"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="96dp"
+            android:layout_alignParentTop="true"
+            android:layout_above="@+id/cancelList"
+            android:background="@color/background" >
+        </ExpandableListView>
+        
+        <Button 
+            android:id="@+id/cancelList" 
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content" 
+            android:layout_alignParentBottom="true" 
+            android:layout_toRightOf="@+id/acceptList" 
+            android:text="@string/cancelMsg" />
+        
+        <Button 
+            android:id="@+id/acceptList" 
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content" 
+            android:layout_alignParentBottom="true" 
+            android:layout_alignParentLeft="true" 
+            android:layout_marginLeft="96dp" 
             android:text="@string/acceptMsg" />
+
     </RelativeLayout>
 
 </LinearLayout>
