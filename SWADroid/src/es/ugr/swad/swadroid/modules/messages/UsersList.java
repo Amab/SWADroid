@@ -16,6 +16,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -31,7 +33,7 @@ public class UsersList extends MenuActivity {
 
 	public static final String TAG = Constants.APP_TAG + " Users List";
     private List<StudentItemModel> studentsList;
-    
+    private CharSequence rcvs = "";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +56,13 @@ public class UsersList extends MenuActivity {
 			
 			public void onClick(View v) {
 				//TODO Aceptar la lista y añadirla a los destinatarios
+				for (StudentItemModel user : studentsList)
+                    if (user.isSelected()){
+                    	String us = user.getUserNickname();
+                    	rcvs = rcvs + us + ",";
+                    }
 			}
+			
 		});
 		
 	}
@@ -62,7 +70,7 @@ public class UsersList extends MenuActivity {
     @Override
     protected void onStart() {
         super.onStart();
-		//TODO cargar la lista de usuarios que hay en la memoria del teléfono
+
 		/*La primera vez deberá cargar una lista vacía y para obtener la primera lista, 
 		 * habrá que pulsar en el botón actualizar de la actionbar. A partir de este momento,
 		 * tendremos una lista de usuarios en la memoria del teléfono y cuando  entre aquí la segunda

@@ -44,7 +44,7 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
  * @author Jose Antonio Guerrero Aviles <cany20@gmail.com>
  */
 public class Messages extends Module {
-    /**
+	/**
      * Messages tag name for Logcat
      */
     private static final String TAG = Constants.APP_TAG + " Messages";
@@ -252,6 +252,13 @@ public class Messages extends Module {
     protected void onError() {
 
     }
+    
+    @Override
+	protected void onRestart() {
+
+		super.onRestart();
+	}
+    
 
     /* (non-Javadoc)
      * @see android.app.Activity#onRestoreInstanceState(android.os.Bundle)
