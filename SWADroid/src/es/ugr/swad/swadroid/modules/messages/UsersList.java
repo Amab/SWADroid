@@ -10,14 +10,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -33,7 +32,8 @@ public class UsersList extends MenuActivity {
 
 	public static final String TAG = Constants.APP_TAG + " Users List";
     private List<StudentItemModel> studentsList;
-    private CharSequence rcvs = "";
+    private String rcvs = "";
+    private String rcvs_Aux = "";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,14 +55,23 @@ public class UsersList extends MenuActivity {
 		acceptList.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				//TODO Aceptar la lista y añadirla a los destinatarios
-				for (StudentItemModel user : studentsList)
+				
+				//Aceptar la lista y añadirla a los destinatarios
+				for (StudentItemModel user : studentsList){
                     if (user.isSelected()){
                     	String us = user.getUserNickname();
-                    	rcvs = rcvs + us + ",";
+                    	rcvs_Aux = rcvs_Aux + "@" + us + ",";
+                    	
+                    	//Elimino la ultima coma de la cadena, ya que no hay más usuarios para añadir
+                    	rcvs = rcvs_Aux.substring(0, rcvs_Aux.length()-1);
                     }
+				}
+				
+				Intent resultData = new Intent();
+				resultData.putExtra("ListaRcvs", rcvs);
+				setResult(Activity.RESULT_OK, resultData);
+                finish();
 			}
-			
 		});
 		
 	}

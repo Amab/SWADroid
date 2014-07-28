@@ -20,14 +20,15 @@ package es.ugr.swad.swadroid.modules.messages;
 
 import java.util.ArrayList;
 import java.util.Vector;
+
 import org.ksoap2.serialization.SoapObject;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import es.ugr.swad.swadroid.Constants;
@@ -88,37 +89,6 @@ public class Messages extends Module {
             writeData();
 
         setMETHOD_NAME("sendMessage");
-
-        
-        Button send = (Button) findViewById(R.id.sendMsg);
-        send.setOnClickListener(new View.OnClickListener() {
-			
-        	public void onClick(View view) {
-            	/*if(isDebuggable) {
-    	            Log.d(TAG, "notificationCode = " + Long.toString(notificationCode));
-    			}*/
-
-                try {
-                    /*if(isDebuggable) {
-                        Log.i(TAG, "selectedCourseCode = " + Long.toString(courseCode));
-    				}*/
-
-                    runConnection();
-                } catch (Exception e) {
-                    String errorMsg = getString(R.string.errorServerResponseMsg);
-                    error(TAG, errorMsg, e, true);
-                }
-            }
-		});
-        
-        Button cancel = (Button) findViewById(R.id.cancelMsg);
-        cancel.setOnClickListener(new View.OnClickListener() {
-			
-			public void onClick(View v) {
-				//setResult(RESULT_CANCELED);
-				finish();
-			}
-		});
         
     }
     
@@ -292,8 +262,17 @@ public class Messages extends Module {
         super.onSaveInstanceState(outState);
     }
 
-
     @Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	
+    	if (data != null) {
+    		receivers = data.getStringExtra("ListaRcvs");
+    		writeData();
+        }
+		super.onActivityResult(requestCode, resultCode, data);
+	}
+
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 	    getMenuInflater().inflate(R.menu.messages_main_activity_actions, menu);
 	    return super.onCreateOptionsMenu(menu);
@@ -305,10 +284,29 @@ public class Messages extends Module {
 	        case R.id.action_addUser:
 	        	
 	        	Intent callUsersList = new Intent (getBaseContext(), UsersList.class);
-				startActivity(callUsersList);
+				startActivityForResult(callUsersList, 0, null);
 	            
 	            return true;
-	
+	            
+	        case R.id.action_sendMsg:
+	        	
+            	/*if(isDebuggable) {
+	            Log.d(TAG, "notificationCode = " + Long.toString(notificationCode));
+			}*/
+
+            try {
+                /*if(isDebuggable) {
+                    Log.i(TAG, "selectedCourseCode = " + Long.toString(courseCode));
+				}*/
+
+                runConnection();
+            } catch (Exception e) {
+                String errorMsg = getString(R.string.errorServerResponseMsg);
+                error(TAG, errorMsg, e, true);
+            }
+            
+            return true;
+            
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }

@@ -7,5 +7,11 @@
         android:icon="@drawable/ic_action_add_person"
         android:title="@string/actionBarAddUser"
         swadroid:showAsAction="ifRoom|withText"/>
+    
+    <item
+        android:id="@+id/action_sendMsg"
+        android:icon="@drawable/ic_action_send_now"
+        android:title="@string/sendMsg"
+        swadroid:showAsAction="ifRoom|withText"/>
 
 </menu>
