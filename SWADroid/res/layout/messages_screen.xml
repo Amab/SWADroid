@@ -46,23 +46,6 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:gravity="bottom" >
-
-        <Button
-            android:id="@+id/sendMsg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_toLeftOf="@+id/cancelMsg"
-            android:text="@string/sendMsg" />
-
-        <Button
-            android:id="@+id/cancelMsg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginRight="79dp"
-            android:text="@string/cancelMsg" />
     </RelativeLayout>
 
 </RelativeLayout>
