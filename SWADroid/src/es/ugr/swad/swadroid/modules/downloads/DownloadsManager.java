@@ -528,10 +528,7 @@ public class DownloadsManager extends MenuActivity {
      */
     private String getDirectoryPath() {
         File downloadDir =
-                new File(
-                         Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-                                    .getAbsolutePath()
-                                 + File.separator + "SwadDroid");
+                new File(Constants.DOWNLOADS_PATH);
         downloadDir.mkdirs();
         return downloadDir.toString();
     }

@@ -56,13 +56,13 @@ public class UsersList extends MenuActivity {
 			
 			public void onClick(View v) {
 				
-				//Aceptar la lista y añadirla a los destinatarios
+				//Aceptar la lista y aï¿½adirla a los destinatarios
 				for (StudentItemModel user : studentsList){
                     if (user.isSelected()){
                     	String us = user.getUserNickname();
                     	rcvs_Aux = rcvs_Aux + "@" + us + ",";
                     	
-                    	//Elimino la ultima coma de la cadena, ya que no hay más usuarios para añadir
+                    	//Elimino la ultima coma de la cadena, ya que no hay mï¿½s usuarios para aï¿½adir
                     	rcvs = rcvs_Aux.substring(0, rcvs_Aux.length()-1);
                     }
 				}
@@ -80,11 +80,11 @@ public class UsersList extends MenuActivity {
     protected void onStart() {
         super.onStart();
 
-		/*La primera vez deberá cargar una lista vacía y para obtener la primera lista, 
-		 * habrá que pulsar en el botón actualizar de la actionbar. A partir de este momento,
-		 * tendremos una lista de usuarios en la memoria del teléfono y cuando  entre aquí la segunda
-		 * vez y sucesivas, será esa la lista que se cargue. Si queremos, podemos volver a pulsar el
-		 * botón actualizar por si hay nuevos usuarios.*/
+		/*La primera vez deberï¿½ cargar una lista vacï¿½a y para obtener la primera lista, 
+		 * habrï¿½ que pulsar en el botï¿½n actualizar de la actionbar. A partir de este momento,
+		 * tendremos una lista de usuarios en la memoria del telï¿½fono y cuando  entre aquï¿½ la segunda
+		 * vez y sucesivas, serï¿½ esa la lista que se cargue. Si queremos, podemos volver a pulsar el
+		 * botï¿½n actualizar por si hay nuevos usuarios.*/
 
         	showStudentsList();
 	
