@@ -36,6 +36,7 @@ import android.util.Log;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.model.Model;
 
+import java.io.File;
 import java.text.Normalizer;
 import java.util.Iterator;
 import java.util.List;
@@ -192,7 +193,9 @@ public class Utils {
 
             request.allowScanningByMediaScanner();
             request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-            request.setDestinationInExternalPublicDir(Constants.DOWNLOADS_PATH, fileName);
+            request.setDestinationInExternalPublicDir(
+                                                      Environment.DIRECTORY_DOWNLOADS + File.separator + Constants.DIRECTORY_SWADDROID,
+                                                      fileName);
 
             // get download service and enqueue file
             manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);

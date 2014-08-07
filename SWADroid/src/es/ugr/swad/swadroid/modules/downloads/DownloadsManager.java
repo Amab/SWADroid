@@ -528,8 +528,8 @@ public class DownloadsManager extends MenuActivity {
      */
     private String getDirectoryPath() {
         File downloadDir =
-                new File(Constants.DOWNLOADS_PATH);
-        downloadDir.mkdirs();
+                new File(Constants.DOWNLOADS_PATH_BASE);
+        downloadDir.mkdir();
         return downloadDir.toString();
     }
 
