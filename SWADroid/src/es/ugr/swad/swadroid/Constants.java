@@ -409,10 +409,11 @@ public class Constants {
     /**
      * Path for downloaded files
      */
-    public static final String DOWNLOADS_PATH =
+    public static final String DIRECTORY_SWADDROID = "SwadDroid";
+    public static final String DOWNLOADS_PATH_BASE =
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
                                                           .getAbsolutePath()
-                                                          + File.separator + "SwadDroid";
+                                                          + File.separator + DIRECTORY_SWADDROID;
     
     /**
      * Checks if user is already logged on SWAD
