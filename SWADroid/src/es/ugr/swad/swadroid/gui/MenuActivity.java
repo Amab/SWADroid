@@ -30,6 +30,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.PreferencesActivity;

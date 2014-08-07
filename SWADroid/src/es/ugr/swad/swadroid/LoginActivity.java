@@ -15,8 +15,6 @@
 
 package es.ugr.swad.swadroid;
 
-import java.security.NoSuchAlgorithmException;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -38,11 +36,14 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.RecoverPassword;
 import es.ugr.swad.swadroid.utils.Crypto;
 import es.ugr.swad.swadroid.utils.Utils;
+
+import java.security.NoSuchAlgorithmException;
 
 
 /**

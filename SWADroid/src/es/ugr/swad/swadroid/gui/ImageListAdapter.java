@@ -1,8 +1,5 @@
 package es.ugr.swad.swadroid.gui;
 
-import java.util.List;
-
-import es.ugr.swad.swadroid.R;
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,6 +8,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import es.ugr.swad.swadroid.R;
+
+import java.util.List;
  
 public class ImageListAdapter extends ArrayAdapter<ImageListItem> {
  
