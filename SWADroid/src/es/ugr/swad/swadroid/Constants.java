@@ -19,8 +19,11 @@
 
 package es.ugr.swad.swadroid;
 
+import android.os.Environment;
+
 import es.ugr.swad.swadroid.model.User;
 
+import java.io.File;
 import java.util.Random;
 
 /**
@@ -403,7 +406,14 @@ public class Constants {
      * Child position inside the users menu for Rollcall
      */
     public static final int ROLLCALL_CHILD = 2;
-
+    /**
+     * Path for downloaded files
+     */
+    public static final String DOWNLOADS_PATH =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                                                          .getAbsolutePath()
+                                                          + File.separator + "SwadDroid";
+    
     /**
      * Checks if user is already logged on SWAD
      *

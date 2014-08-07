@@ -191,7 +191,7 @@ public class Utils {
 
             request.allowScanningByMediaScanner();
             request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
+            request.setDestinationInExternalPublicDir(Constants.DOWNLOADS_PATH, fileName);
 
             // get download service and enqueue file
             manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
