@@ -19,6 +19,7 @@
 
 package es.ugr.swad.swadroid.utils;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.DownloadManager;
 import android.content.Context;
@@ -307,12 +308,19 @@ public class Utils {
         return stars;
     }
     
+    @SuppressLint("NewApi")
     public static String unAccent(String s) {
         //
         // JDK1.5
         //   use sun.text.Normalizer.normalize(s, Normalizer.DECOMP, 0);
         //
-        String temp = Normalizer.normalize(s, Normalizer.Form.NFD);
+        String temp;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
+            temp = Normalizer.normalize(s, Normalizer.Form.NFD);
+        } else {
+            /* TODO Fall back on some default behavior */
+            temp = s;
+        }
         Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
         return pattern.matcher(temp).replaceAll("");
     }
