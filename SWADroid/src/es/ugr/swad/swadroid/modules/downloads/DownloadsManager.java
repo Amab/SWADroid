@@ -217,8 +217,13 @@ public class DownloadsManager extends MenuActivity {
                     //updateView(navigator.goToSubDirectory(chosenNodeName));
                 else { //it is a files therefore gets its information through web service GETFILE
                     chosenNodeName = node.getName();
-                    AlertDialog fileInfoDialog = createFileInfoDialog(node.getName(), node.getSize(), node.getTime(), node.getPublisher(), node.getFileCode(), node.getLicense());
-                    fileInfoDialog.show();
+                    File f = new File(Constants.DOWNLOADS_PATH + File.separator + chosenNodeName);
+                    if (isDownloaded(f)) {
+                        viewFile(f);
+                    } else {
+                        AlertDialog fileInfoDialog = createFileInfoDialog(node.getName(), node.getSize(), node.getTime(), node.getPublisher(), node.getFileCode(), node.getLicense());
+                        fileInfoDialog.show();
+                    }
                 }
             }
         }));
@@ -534,7 +539,36 @@ public class DownloadsManager extends MenuActivity {
         downloadDir.mkdir();
         return downloadDir.toString();
     }
+    
+    /**
+     * Check if a file is already downloaded or not
+     * @param f File to check
+     * @return False if not downloaded, True otherwise.
+     */
+    private boolean isDownloaded(File f) {
+        if (f.exists() && f.length() == fileSize) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    /**
+     * Start an intent to view the file
+     * @param f The file to view.
+     */
+    private void viewFile(File f) {
+        String filenameArray[] = this.chosenNodeName.split("\\.");
+        String ext = filenameArray[filenameArray.length - 1];
+        String mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(ext);
 
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setDataAndType(Uri.fromFile(f), mime);
+
+        startActivity(intent);
+    }
+    
     /**
      * it initializes the download the file from the url @a url and stores it in the directory name @directory
      *
@@ -543,22 +577,7 @@ public class DownloadsManager extends MenuActivity {
      * @param fileSize  - file size of the file. It is used to show the download progress in the notification
      */
     private void downloadFile(String directory, String url, long fileSize) {
-        File f = new File(Constants.DOWNLOADS_PATH + File.separator + this.chosenNodeName);
-        if (f.exists() && f.length() == fileSize) {
-
-            String filenameArray[] = this.chosenNodeName.split("\\.");
-            String ext = filenameArray[filenameArray.length - 1];
-            String mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(ext);
-            
-            Intent intent = new Intent();
-            intent.setAction(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.fromFile(f), mime);
-            
-            startActivity(intent);
-        } else {
-            new FileDownloaderAsyncTask(this, this.chosenNodeName, true, fileSize).execute(directory,
-                                                                                           url);
-        }
+        new FileDownloaderAsyncTask(this, this.chosenNodeName, true, fileSize).execute(directory, url);
     }
 
     /**
