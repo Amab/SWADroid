@@ -18,20 +18,21 @@
  */
 package es.ugr.swad.swadroid.modules.tests;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.ImageListAdapter;
 import es.ugr.swad.swadroid.gui.ImageListItem;
 import es.ugr.swad.swadroid.gui.MenuActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Tests module for download questions and evaluate user skills in a course

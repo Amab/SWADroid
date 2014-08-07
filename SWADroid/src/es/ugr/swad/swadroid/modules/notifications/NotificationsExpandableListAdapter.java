@@ -18,15 +18,6 @@
  */
 package es.ugr.swad.swadroid.modules.notifications;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.model.Model;
-import es.ugr.swad.swadroid.model.SWADNotification;
-import es.ugr.swad.swadroid.utils.Utils;
 import android.app.Activity;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -35,6 +26,16 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.model.Model;
+import es.ugr.swad.swadroid.model.SWADNotification;
+import es.ugr.swad.swadroid.utils.Utils;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Custom ExpandableListAdapter for display notifications

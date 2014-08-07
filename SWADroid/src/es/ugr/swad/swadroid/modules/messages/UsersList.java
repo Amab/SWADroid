@@ -6,10 +6,6 @@
 
 package es.ugr.swad.swadroid.modules.messages;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
@@ -27,6 +24,10 @@ import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.rollcall.RollcallConfigDownload;
 import es.ugr.swad.swadroid.modules.rollcall.students.StudentItemModel;
 import es.ugr.swad.swadroid.modules.rollcall.students.StudentsArrayAdapter;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class UsersList extends MenuActivity {
 
