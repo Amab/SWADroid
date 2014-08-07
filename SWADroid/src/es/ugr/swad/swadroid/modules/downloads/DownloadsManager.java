@@ -48,6 +48,7 @@ import es.ugr.swad.swadroid.model.GroupType;
 import es.ugr.swad.swadroid.modules.GroupTypes;
 import es.ugr.swad.swadroid.modules.Groups;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -523,11 +524,16 @@ public class DownloadsManager extends MenuActivity {
     }
 
     /**
-     * it gets the directory path where the files will be located.This will be /$EXTERNAL_STORAGE/$DOWNLOADS
+     * Get the directory path where the files will be located.This will be /$EXTERNAL_STORAGE/$DOWNLOADS
      */
     private String getDirectoryPath() {
-        //String downloadsDirName = Environment.getExternalStorageDirectory()+File.separator+"download";
-        return getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
+        File downloadDir =
+                new File(
+                         Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                                    .getAbsolutePath()
+                                 + File.separator + "SwadDroid");
+        downloadDir.mkdirs();
+        return downloadDir.toString();
     }
 
     /**
