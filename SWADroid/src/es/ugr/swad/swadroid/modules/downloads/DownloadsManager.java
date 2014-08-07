@@ -24,6 +24,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -31,6 +32,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -528,7 +530,7 @@ public class DownloadsManager extends MenuActivity {
      */
     private String getDirectoryPath() {
         File downloadDir =
-                new File(Constants.DOWNLOADS_PATH_BASE);
+                new File(Constants.DOWNLOADS_PATH);
         downloadDir.mkdir();
         return downloadDir.toString();
     }
@@ -541,7 +543,22 @@ public class DownloadsManager extends MenuActivity {
      * @param fileSize  - file size of the file. It is used to show the download progress in the notification
      */
     private void downloadFile(String directory, String url, long fileSize) {
-        new FileDownloaderAsyncTask(this, this.chosenNodeName, true, fileSize).execute(directory, url);
+        File f = new File(Constants.DOWNLOADS_PATH + File.separator + this.chosenNodeName);
+        if (f.exists() && f.length() == fileSize) {
+
+            String filenameArray[] = this.chosenNodeName.split("\\.");
+            String ext = filenameArray[filenameArray.length - 1];
+            String mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(ext);
+            
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_VIEW);
+            intent.setDataAndType(Uri.fromFile(f), mime);
+            
+            startActivity(intent);
+        } else {
+            new FileDownloaderAsyncTask(this, this.chosenNodeName, true, fileSize).execute(directory,
+                                                                                           url);
+        }
     }
 
     /**
