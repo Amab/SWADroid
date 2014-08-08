@@ -140,7 +140,7 @@ public class FileDownloaderAsyncTask extends AsyncTask<String, Integer, Boolean>
             if (output.exists()) {
                 int i = 1;
                 do {
-                    output = new File(this.getDownloadDir(), basename + "-" + String.valueOf(i) + extension);
+                    output = new File(download_dir, basename + "-" + String.valueOf(i) + extension);
                     ++i;
                 } while (output.exists());
                 this.fileName = basename + "-" + String.valueOf(i - 1) + extension;
