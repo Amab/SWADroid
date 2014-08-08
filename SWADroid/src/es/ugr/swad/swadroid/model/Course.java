@@ -65,7 +65,7 @@ public class Course extends Model {
      *
      * @return user role (2 = student, 3 = teacher)
      */
-    public int getUserRole() {
+    public int userRole {
         return userRole;
     }
 
@@ -122,7 +122,7 @@ public class Course extends Model {
      */
     @Override
     public String toString() {
-        return "Course [getId()=" + getId() + " getUserRole()=" + getUserRole() + "getShortName=" + shortName + "getFullName=" + fullName + "]";
+        return "Course [getId()=" + getId() + " userRole=" + userRole + "getShortName=" + shortName + "getFullName=" + fullName + "]";
     }
 
     /* (non-Javadoc)
@@ -205,7 +205,7 @@ public class Course extends Model {
     public boolean equals(Object obj) {
         if (!super.equals(obj)) return false;
         Course other = (Course) obj;
-        return userRole == other.getUserRole() && shortName.compareTo(other.getShortName()) == 0 && fullName.compareTo(other.getFullName()) == 0;
+        return userRole == other.userRole && shortName.compareTo(other.getShortName()) == 0 && fullName.compareTo(other.getFullName()) == 0;
     }
 
 }
