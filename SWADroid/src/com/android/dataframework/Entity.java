@@ -286,7 +286,7 @@ public class Entity {
 					out += getString(arString[i]);
 				}
 			} else if (arString[i].equals(DataFramework.KEY_ID)) {
-				out += getId();
+				out += mId;
 			} else {
 				out += arString[i];
 			}
