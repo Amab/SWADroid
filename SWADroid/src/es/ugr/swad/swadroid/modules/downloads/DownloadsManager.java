@@ -42,6 +42,7 @@ import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
@@ -511,9 +512,9 @@ public class DownloadsManager extends MenuActivity {
     /**
      * It checks if the external storage is available
      *
-     * @return 0 - if external storage can not be read either wrote
-     *         1 - if external storage can only be read
-     *         2 - if external storage can be read and wrote
+     * @return 0 - if external storage can not be read either wrote <br/>
+     *         1 - if external storage can only be read <br/>
+     *         2 - if external storage can be read and wrote <br/>
      */
 
     private int checkMediaAvailability() {
@@ -584,7 +585,13 @@ public class DownloadsManager extends MenuActivity {
      * @param fileSize  - file size of the file. It is used to show the download progress in the notification
      */
     private void downloadFile(String directory, String url, long fileSize) {
-        new FileDownloaderAsyncTask(this, this.chosenNodeName, true, fileSize).execute(directory, url);
+        // Check if external storage is available
+        int storageState = checkMediaAvailability(); 
+        if ( storageState == 2) {
+            new FileDownloaderAsyncTask(this, this.chosenNodeName, true, fileSize).execute(directory, url);
+        } else {
+            Toast.makeText(this, R.string.sdCardBusyTitle, Toast.LENGTH_LONG).show();
+        }
     }
 
     /**
