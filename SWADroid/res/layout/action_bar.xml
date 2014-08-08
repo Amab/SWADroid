@@ -72,7 +72,6 @@
 
     <Button
             android:id="@+id/testEvaluateButton"
-            android:layout_toLeftOf="@+id/progress_refresh"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:padding="8dip"
