@@ -21,6 +21,7 @@ package es.ugr.swad.swadroid.modules.downloads;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -44,6 +45,7 @@ import android.widget.TextView;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.model.GroupType;
@@ -217,6 +219,7 @@ public class DownloadsManager extends MenuActivity {
                     //updateView(navigator.goToSubDirectory(chosenNodeName));
                 else { //it is a files therefore gets its information through web service GETFILE
                     chosenNodeName = node.getName();
+                    fileSize = node.getSize();
                     File f = new File(Constants.DOWNLOADS_PATH + File.separator + chosenNodeName);
                     if (isDownloaded(f)) {
                         viewFile(f);
@@ -562,11 +565,15 @@ public class DownloadsManager extends MenuActivity {
         String ext = filenameArray[filenameArray.length - 1];
         String mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(ext);
 
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.fromFile(f), mime);
+        Intent viewFileIntent = new Intent();
+        viewFileIntent.setAction(Intent.ACTION_VIEW);
+        viewFileIntent.setDataAndType(Uri.fromFile(f), mime);
 
-        startActivity(intent);
+        try {
+            startActivity(viewFileIntent);
+        } catch (ActivityNotFoundException e) {
+            showDialog(R.string.errorMsgLaunchingActivity, R.string.errorNoAppForIntent);
+        }
     }
     
     /**

@@ -389,4 +389,7 @@
 	<string name="Filters_All">Todo</string>
 	<string name="Filters_Teachers">Profesores</string>
 	<string name="Filters_Students">Alumnos</string>
+	
+	<string name="errorNoAppForIntent">No hay ninguna aplicación registrada para abrir el tipo de archivo seleccionado.</string>
+	
 </resources>
