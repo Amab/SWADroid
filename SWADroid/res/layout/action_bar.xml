@@ -101,7 +101,6 @@
 
     <ImageButton
             android:id="@+id/refresh"
-            android:layout_toLeftOf="@+id/progress_refresh"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignWithParentIfMissing="true"
