@@ -65,7 +65,7 @@ public class Course extends Model {
      *
      * @return user role (2 = student, 3 = teacher)
      */
-    public int userRole {
+    public int getUserRole() {
         return userRole;
     }
 
