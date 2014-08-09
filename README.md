@@ -55,7 +55,7 @@ SWADroid uses [Universal Image Loader][universal-image-loader-library] library d
 * Helena Rodríguez Gijón
 * Antonio Aguilera Malagón
 * José Antonio Guerrero Avilés
-* Alejandro Alcalde
+* [Alejandro Alcalde][blogAlex]
 
 ## Contributing
 
@@ -80,3 +80,4 @@ The Github team has also been kind enough to write up some great [documentation]
 [universal-image-loader-author]: https://github.com/nostra13
 [apache2]: http://www.apache.org/licenses/LICENSE-2.0
 [apk]: https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid
+[blogAlex]: http://elbauldelprogramador.com/ "Blog personal"
