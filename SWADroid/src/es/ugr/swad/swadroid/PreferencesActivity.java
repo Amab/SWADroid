@@ -64,18 +64,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
      */
     public Context ctx;
     /**
-     * Stars length
-     */
-    private final int STARS_LENGTH = 8;
-    /**
-     * User ID preference
-     */
-    private static Preference userIDPref;
-    /**
-     * User password preference
-     */
-    private static Preference userPasswordPref;
-    /**
      * Log out Preference
      */
     private static Preference logOutPref;
@@ -199,8 +187,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         	error(TAG, ex.getMessage(), ex, true);
         }
 
-        userIDPref = findPreference(Preferences.USERIDPREF);
-        userPasswordPref = findPreference(Preferences.USERPASSWORDPREF);
         logOutPref = findPreference(Preferences.LOGOUTPREF);
         currentVersionPref = findPreference(Preferences.CURRENTVERSIONPREF);
         ratePref = findPreference(Preferences.RATEPREF);
@@ -350,7 +336,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         	
         	//Reset user password on userid change
         	Preferences.setUserPassword("");
-        	userPasswordPref.setSummary("");
         	Log.i(TAG, "Resetted user password due to userid change"); 
         	
         	//If preferences have changed, logout
@@ -363,9 +348,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
                 // Try to guest if user is using PRADO password
                 if ((password.length() >= 8) && !Utils.isLong(password)) {
                     userPassword = Crypto.encryptPassword(password);
-                    // Restore default style if it was changed due to an error in the input
-                    userPasswordPref.setLayoutResource(R.layout.preference_child);
-                    preference.setSummary(Utils.getStarsSequence(STARS_LENGTH));
                     
                     // If preferences have changed, logout
                     Log.i(TAG, "Forced logout due to " + key + " change in preferences");
@@ -500,17 +482,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         List<String> prefSyncTimeEntries = Arrays.asList(getResources().getStringArray(R.array.prefSyncTimeEntries));
         int prefSyncTimeIndex = prefSyncTimeValues.indexOf(Preferences.getSyncTime());
         String prefSyncTimeEntry = prefSyncTimeEntries.get(prefSyncTimeIndex);
-        String stars = Utils.getStarsSequence(STARS_LENGTH);
         mServer = Preferences.getServer();
-        
-        /*userIDPref.setSummary(Preferences.getUserID());
-        
-        if (!Preferences.getUserPassword().equals("") && !mIncorrectPassword)
-            userPasswordPref.setSummary(stars);
-        
-        if (mIncorrectPassword)
-        	highlightPasswordSummary();
-        */
         
         if (!mServer.equals("")) {
             serverPref.setSummary(mServer);
