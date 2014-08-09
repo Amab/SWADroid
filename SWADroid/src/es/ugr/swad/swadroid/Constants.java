@@ -38,11 +38,11 @@ public class Constants {
 	/**
      * SWAD application key
      */
-    public static final String SWAD_APP_KEY = ""; //DELETE THE KEY BEFORE COMMIT!!!
+    public static final String SWAD_APP_KEY = "HTC-Desire"; //DELETE THE KEY BEFORE COMMIT!!!
     /**
      * BugSense application key
      */
-    public static final String BUGSENSE_API_KEY = ""; //DELETE THE KEY BEFORE COMMIT!!!
+    public static final String BUGSENSE_API_KEY = "e8811d7b"; //DELETE THE KEY BEFORE COMMIT!!!
     /**
      * Server URL
      */
