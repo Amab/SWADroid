@@ -158,13 +158,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
      * User password preference changed flag
      */
     private boolean userPasswordPrefChanged = false;
-
-    /**
-     * User password has errors
-     */
-    private boolean mIncorrectPassword = false;
-    
-    private static final String PASSWORD_VALIDATE = "passw_validate";
     
     /**
      * Shows an error message.
@@ -378,14 +371,11 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
                     Log.i(TAG, "Forced logout due to " + key + " change in preferences");
                     userPasswordPrefChanged = true;
                     syncPrefsChanged = true;
-                    mIncorrectPassword = false;
                     Preferences.setPreferencesChanged();
                     Constants.setLogged(false);
                 } else {
                     Toast.makeText(getApplicationContext(), R.string.pradoLoginToast,
                             Toast.LENGTH_LONG).show();
-                    highlightPasswordSummary();
-                    mIncorrectPassword = true;
                     // Do not save the password to the preferences.
                     returnValue = false; 
                 }
@@ -485,10 +475,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
 		if(userPasswordPrefChanged) {
 	    	Preferences.setUserPassword(userPassword);
 		}
-	
-		if (mIncorrectPassword)
-		    Constants.setLogged(false);
-		
+			
         //Reconfigure automatic synchronization
         if(syncPrefsChanged) {
 	        SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, ctx);
@@ -541,28 +528,5 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         }
         
         syncTimePref.setSummary(prefSyncTimeEntry);
-    }
-    
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-    	super.onSaveInstanceState(outState);
-    	
-    	if (mIncorrectPassword)
-    		outState.putBoolean(PASSWORD_VALIDATE, mIncorrectPassword);
-    }
-    
-    @Override
-    protected void onRestoreInstanceState(Bundle state) {
-    	super.onRestoreInstanceState(state);
-    	
-    	if (state.getBoolean(PASSWORD_VALIDATE)){
-    		highlightPasswordSummary();
-    		mIncorrectPassword = true;
-    	}
-    }
-    
-    private void highlightPasswordSummary(){
-    	userPasswordPref.setLayoutResource(R.layout.preference_child_summary_error);
-        userPasswordPref.setSummary(mServer.equals("swad.ugr.es") ? R.string.error_password_summaryUGR : R.string.error_password_summary);
     }
 }
