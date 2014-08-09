@@ -227,7 +227,7 @@
     <string name="licenseType">License:</string>
     <string name="downloadFileTitle">Download</string>
     <string name="sdCardBusyTitle">SD card unavailable</string>
-    <string name="sdCardBusy">The SD casd is busy. To allow downloads, select "Turn off USB storage" in the
+    <string name="sdCardBusy">The SD casd is busy. To allow downloads, select “Turn off USB storage” in the
         notification
     </string>
     <string name="vacants">Vacants</string>
@@ -238,7 +238,7 @@
     <string name="noStudentsAvailableMsg">There are no students in this subject</string>
     <string name="studentsUpdated">students updated</string>
     <string name="scan_no_students">No students found\n
-        Try "Update students"
+        Try “Update students”
     </string>
     <string name="photoContentDescription">Photo of student</string>
     <string name="noCameraFound">The device has no camera</string>
@@ -302,9 +302,9 @@
         belong downloaded practice groups. Therefore, until the error is resolved,
         is only allowed to use the application with a single subject.\n\nThe selected subject
         must have practice groups defined in SWAD.\n\nYou can delete this
-        configuration anytime using the "Clean Database" option\n\nDo you want to continue?
+        configuration anytime using the “Clean Database” option\n\nDo you want to continue?
     </string>
-    <string name="noRollcallAllowedMsg">Rollcall for the selected subject is not allowed. Try "Clean database"</string>
+    <string name="noRollcallAllowedMsg">Rollcall for the selected subject is not allowed. Try “Clean database”</string>
     <string name="froyoFunctionMsg">This function needs Android 2.2 or higher</string>
     <string name="noRearCamera">This function needs a rear camera</string>
     <string name="groupTypesProgressDescription">Retrieving group types&#8230;\nPlease wait&#8230;</string>

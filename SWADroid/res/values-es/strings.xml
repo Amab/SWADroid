@@ -232,8 +232,8 @@
     <string name="uploaderTitle">Subido por:</string>
     <string name="downloadFileTitle">Descargar</string>
     <string name="sdCardBusyTitle">Tarjeta SD no disponible</string>
-    <string name="sdCardBusy">La tarjeta SD está ocupada ahora mismo. Para permitir descargas, selecciona "Desactiva
-        almacenamiento USB" en la notificación
+    <string name="sdCardBusy">La tarjeta SD está ocupada ahora mismo. Para permitir descargas, selecciona “Desactiva
+        almacenamiento USB” en la notificación
     </string>
     <string name="vacants">Vacantes</string>
     <string name="numStudent">Nº de estudiantes</string>
@@ -243,7 +243,7 @@
     <string name="noStudentsAvailableMsg">Esta asignatura no tiene alumnos</string>
     <string name="studentsUpdated">alumnos actualizados</string>
     <string name="scan_no_students">Ningún alumno encontrado\n
-        Intente "Actualizar alumnos"
+        Intente “Actualizar alumnos”
     </string>
     <string name="photoContentDescription">Foto del estudiante</string>
     <string name="noCameraFound">El dispositivo no dispone de cámara</string>
