@@ -13,6 +13,9 @@
         android:clickable="false"
         android:focusable="false"
         android:paddingLeft="5dip"
+        android:paddingStart="5dip"
+        android:paddingRight="0dip"
+        android:paddingEnd="0dip"
         android:paddingTop="5dip"
         android:src="@drawable/padlock_red" />
 
@@ -47,6 +50,9 @@
             android:focusable="false"
             android:gravity="center"
         	android:paddingLeft="7dip"
+        	android:paddingStart="7dip"
+        	android:paddingRight="0dip"
+        	android:paddingEnd="0dip"
             android:text="@string/vacants"
             android:textColor="@color/sgilight_gray_32" />
 
@@ -58,6 +64,9 @@
             android:focusable="false"
             android:gravity="center"
         	android:paddingLeft="7dip"
+        	android:paddingStart="7dip"
+        	android:paddingRight="0dip"
+        	android:paddingEnd="0dip"
             android:text="@string/numStudent"
             android:textColor="@color/sgilight_gray_32" />
 
@@ -69,6 +78,9 @@
             android:focusable="false"
             android:gravity="center"
         	android:paddingLeft="7dip"
+        	android:paddingStart="7dip"
+        	android:paddingRight="0dip"
+        	android:paddingEnd="0dip"
             android:text="@string/maxStudent"
             android:textColor="@color/sgilight_gray_32" />
     </LinearLayout>
