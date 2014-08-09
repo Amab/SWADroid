@@ -57,7 +57,7 @@ SWADroid uses [Android-PullToRefresh][android-pulltorefresh-library] library dev
 * Helena Rodríguez Gijón
 * Antonio Aguilera Malagón
 * José Antonio Guerrero Avilés
-* Alejandro Alcalde
+* [Alejandro Alcalde][blogAlex]
 
 ## Contributing
 
@@ -81,3 +81,4 @@ The Github team has also been kind enough to write up some great [documentation]
 [android-pulltorefresh-author]: https://github.com/chrisbanes
 [apache2]: http://www.apache.org/licenses/LICENSE-2.0
 [apk]: https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid
+[blogAlex]: http://elbauldelprogramador.com/ "Blog personal"
