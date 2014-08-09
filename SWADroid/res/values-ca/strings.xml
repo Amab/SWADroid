@@ -207,8 +207,8 @@
     <string name="uploaderTitle">Carregat per:</string>
     <string name="downloadFileTitle">Descarregar</string>
     <string name="sdCardBusyTitle">Targeta SD no disponible</string>
-    <string name="sdCardBusy">La targeta SD està ocupada ara mateix. Per permetre descàrregues, seleccioneu \"Desactiva
-        emmagatzematge USB\" a la notificació</string>
+    <string name="sdCardBusy">La targeta SD està ocupada ara mateix. Per permetre descàrregues, seleccioneu \“Desactiva
+        emmagatzematge USB\” a la notificació</string>
     <string name="vacants">Vacants</string>
     <string name="numStudent">Nombre d\'estudiants</string>
     <string name="maxStudent">Màx. estudiants</string>
@@ -216,7 +216,7 @@
     <string name="scan_no_photos">No s\'han pogut desar les fotos dels estudiants</string>
     <string name="noStudentsAvailableMsg">Aquesta assignatura no té alumnes</string>
     <string name="studentsUpdated">alumnes actualitzats</string>
-    <string name="scan_no_students">Cap alumne trobat \n Proveu \"Actualitzar alumnes\"</string>
+    <string name="scan_no_students">Cap alumne trobat \n Proveu \“Actualitzar alumnes\”</string>
     <string name="photoContentDescription">Foto del estudiant</string>
     <string name="noCameraFound">El dispositiu no disposa de càmera</string>
     <string name="saveMsg">Desar</string>
