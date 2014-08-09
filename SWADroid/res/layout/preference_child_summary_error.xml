@@ -6,6 +6,7 @@
     android:baselineAligned="false"
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:paddingEnd="?android:attr/scrollbarSize"
+	android:paddingRight="?android:attr/scrollbarSize"
     android:paddingStart="16dip" 
     android:paddingLeft="16dip">
 
