@@ -12,6 +12,9 @@
         android:gravity="center_vertical"
         android:paddingBottom="5dip"
         android:paddingLeft="30dip"
+        android:paddingStart="30dip"
+        android:paddingRight="0dip"
+        android:paddingEnd="0dip"
         android:paddingTop="5dip"
         android:textColor="@color/foreground1" >
     </TextView>

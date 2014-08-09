@@ -141,9 +141,9 @@
     <string name="sendMsg">Send</string>
     
     
-    <string name="addRcv">Add Recievers</string>
-    <string name="selectRcvModuleLabel">Select Recievers</string>
-    <string name="filterUsersListModuleLabel">Filter Recievers</string>
+    <string name="addRcv">Add Receivers</string>
+    <string name="selectRcvModuleLabel">Select Receivers</string>
+    <string name="filterUsersListModuleLabel">Filter Receivers</string>
 	<string name="acceptFilters">Filter</string>
    	<string name="cancelFilters">Cancel</string>
     

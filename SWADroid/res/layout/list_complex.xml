@@ -4,6 +4,9 @@
               android:orientation="vertical"
               android:paddingBottom="10dip"
               android:paddingLeft="15dip"
+              android:paddingStart="15dip"
+              android:paddingRight="0dip"
+              android:paddingEnd="0dip"
               android:paddingTop="10dip">
 
     <TextView

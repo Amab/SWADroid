@@ -18,8 +18,10 @@
  */
 package es.ugr.swad.swadroid.modules.tests;
 
+import android.annotation.TargetApi;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.text.Html;
@@ -41,7 +43,6 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
@@ -52,7 +53,6 @@ import es.ugr.swad.swadroid.model.TestAnswer;
 import es.ugr.swad.swadroid.model.TestQuestion;
 import es.ugr.swad.swadroid.model.TestTag;
 import es.ugr.swad.swadroid.utils.Utils;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -118,7 +118,8 @@ public class TestsMake extends MenuActivity {
         setContentView(layout);
     }
     
-    private void setNumQuestions() {
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	private void setNumQuestions() {
     	if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
             android.widget.NumberPicker numberPicker = 
             		(android.widget.NumberPicker) findViewById(R.id.testNumQuestionsNumberPicker);
@@ -141,7 +142,8 @@ public class TestsMake extends MenuActivity {
     /**
      * Screen to select the number of questions in the test
      */
-    private void selectNumQuestions() {          
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	private void selectNumQuestions() {          
         screenStep = ScreenStep.NUM_QUESTIONS;
 
         setLayout(R.layout.tests_num_questions);
