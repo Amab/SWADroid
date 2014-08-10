@@ -136,7 +136,7 @@ public class FileDownloaderAsyncTask extends AsyncTask<String, Integer, Boolean>
         //			basename = "tmp";
 
         try {
-            File output = new File(this.getDownloadDir(), this.fileName);
+            File output = new File(download_dir, this.fileName);
             if (output.exists()) {
                 int i = 1;
                 do {
