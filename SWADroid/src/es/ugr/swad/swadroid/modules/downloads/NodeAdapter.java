@@ -23,7 +23,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import es.ugr.swad.swadroid.R;
@@ -48,7 +47,6 @@ public class NodeAdapter extends BaseAdapter {
 
     static class ViewHolder {
         TextView text;
-        ImageView image;
     }
 
     @Override
@@ -84,28 +82,18 @@ public class NodeAdapter extends BaseAdapter {
 
             holder = new ViewHolder();
             holder.text = (TextView) convertView.findViewById(R.id.icon_text);
-            holder.image = (ImageView) convertView.findViewById(R.id.icon_image);
 
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        // Trying to use ellipsizing only when it is needed, it does not work
-        /*
-         *
-		String nodeName = ((DirectoryItem)list.get(position)).getName();
-		if(!isTooLarge(holder.text,nodeName)) 
-			holder.text.setEllipsize(null); //if the text fits in two lines, the ellipsizing is turn off
-		else
-			holder.text.setEllipsize(TextUtils.TruncateAt.END); //if the text does not fit in two lines, the ellipsizing is set to end
-		*/
 
         holder.text.setText(list.get(position).getName());
 
         if (list.get(position).isFolder()) {
-            holder.image.setImageResource(R.drawable.folder_open);
+            holder.text.setCompoundDrawablesRelativeWithIntrinsicBounds(0, R.drawable.folder_open, 0, 0);
         } else {
-            holder.image.setImageResource(R.drawable.file);
+            holder.text.setCompoundDrawablesRelativeWithIntrinsicBounds(0, R.drawable.file, 0, 0);
         }
 
         return convertView;
