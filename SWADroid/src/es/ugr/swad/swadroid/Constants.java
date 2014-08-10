@@ -36,13 +36,15 @@ import java.util.Random;
  */
 public class Constants {
 	/**
-     * SWAD application key
-     */
-    public static final String SWAD_APP_KEY = ""; //DELETE THE KEY BEFORE COMMIT!!!
+	 * SWAD application key
+	 * @deprecated Use {@link Config#SWAD_APP_KEY} instead
+	 */
+	public static final String SWAD_APP_KEY = Config.SWAD_APP_KEY;
     /**
-     * BugSense application key
-     */
-    public static final String BUGSENSE_API_KEY = ""; //DELETE THE KEY BEFORE COMMIT!!!
+	 * BugSense application key
+	 * @deprecated Use {@link Config#BUGSENSE_API_KEY} instead
+	 */
+	public static final String BUGSENSE_API_KEY = Config.BUGSENSE_API_KEY;
     /**
      * Server URL
      */
