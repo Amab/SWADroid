@@ -90,15 +90,6 @@ public class NodeAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        // Trying to use ellipsizing only when it is needed, it does not work
-        /*
-         *
-		String nodeName = ((DirectoryItem)list.get(position)).getName();
-		if(!isTooLarge(holder.text,nodeName)) 
-			holder.text.setEllipsize(null); //if the text fits in two lines, the ellipsizing is turn off
-		else
-			holder.text.setEllipsize(TextUtils.TruncateAt.END); //if the text does not fit in two lines, the ellipsizing is set to end
-		*/
 
         holder.text.setText(list.get(position).getName());
 
@@ -115,14 +106,4 @@ public class NodeAdapter extends BaseAdapter {
         list = newBrowser;
         notifyDataSetInvalidated();
     }
-    /**
-     * Method to messure if the @a newText fits or not in the width of @a text
-     * IT DOES NOT WORK CORRECTLY
-     * */
-/*	private boolean isTooLarge (TextView text, String newText) {
-	    float textWidth = text.getPaint().measureText(newText);
-	    return (textWidth >= text. getWidth ());
-	}
-*/
-
 }
