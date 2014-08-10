@@ -90,8 +90,8 @@ public class Field {
 		sql += " " + getSQLType();
 		if (mObligatory)
 			sql += " not null";
-		if (getTextDefault()!=null) {
-			sql += " DEFAULT '" + getTextDefault() + "'";
+		if (mTextDefault!=null) {
+			sql += " DEFAULT '" + mTextDefault + "'";
 		}
 
 		return sql;
