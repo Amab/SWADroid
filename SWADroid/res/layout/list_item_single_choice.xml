@@ -1,32 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
-<es.ugr.swad.swadroid.gui.widget.CheckableLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                   android:id="@+id/listItem"
-                                                   android:orientation="vertical"
-                                                   android:layout_width="match_parent"
-                                                   android:layout_height="wrap_content"
-                                                   android:background="@android:color/transparent">
+<?xml version='1.0' encoding='UTF-8'?>
+<es.ugr.swad.swadroid.gui.widget.CheckableLinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/listItem" android:orientation="vertical" android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@android:color/transparent">
 
-    <CheckedTextView
-            android:id="@android:id/text1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:checkMark="?android:attr/listChoiceIndicatorSingle"
-            android:paddingLeft="6dip"
-            android:paddingRight="6dip"
-            android:textColor="@color/foreground1"
-            />
+    <CheckedTextView android:id="@android:id/text1" android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:checkMark="?android:attr/listChoiceIndicatorSingle" android:paddingLeft="6dip" android:paddingRight="6dip" android:textColor="@color/foreground1"/>
 
-    <TextView
-            android:id="@android:id/text2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/foreground2"
-            android:padding="5dip"
-            android:visibility="gone"/>
+    <TextView android:id="@android:id/text2" android:layout_width="match_parent" android:layout_height="wrap_content" android:textColor="@color/foreground2" android:padding="5dip" android:visibility="gone"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dip"
-        android:background="@android:color/darker_gray"/>
+    <View android:layout_width="match_parent" android:layout_height="1dip" android:background="@android:color/darker_gray"/>
 </es.ugr.swad.swadroid.gui.widget.CheckableLinearLayout>
