@@ -201,7 +201,6 @@
     <string name="photoContentDescription">Photo of student</string>
     <string name="noCameraFound">The device has no camera</string>
     <string name="saveMsg">Save</string>
-    <string name="addSessionTitle_menu">New practice session</string>
     <string name="groupsProgressDescription">Retrieving groups…\n\nPlease wait…</string>
     <string name="groupsProgressTitle">Groups</string>
     <string name="noGroupsAvailableMsg">No groups for selected subject</string>

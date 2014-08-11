@@ -202,7 +202,6 @@
     <string name="photoContentDescription">Foto del estudiante</string>
     <string name="noCameraFound">El dispositivo no dispone de cámara</string>
     <string name="saveMsg">Guardar</string>
-    <string name="addSessionTitle_menu">Nueva sesión de prácticas</string>
     <string name="noGroupsAvailableMsg">No existen grupos para la asignatura seleccionada</string>
     <string name="sessionCourseText">Asignatura</string>
     <string name="sessionGroupText">Grupo</string>
