@@ -168,6 +168,7 @@ public class DataBaseHelper {
 
         return new Pair<String, String>(firstParam, secondParam);
     }
+    
     /**
      * Gets ParTable class from table
      * @param <T>
@@ -180,7 +181,6 @@ public class DataBaseHelper {
 		return new Pair<Class,Class>(firstClass,secondClass);
 	}*/
 
-
     /**
      * Creates a Model's subclass object looking at the table selected
      *
@@ -188,7 +188,6 @@ public class DataBaseHelper {
      * @param ent   Cursor to the table rows
      * @return A Model's subclass object
      */
-    @SuppressWarnings("rawtypes")
     private Model createObjectByTable(String table, Entity ent) {
         Model o = null;
         Pair<String, String> params;
@@ -227,7 +226,7 @@ public class DataBaseHelper {
                     Utils.parseStringBool(ent.getString("seenRemote")));
         } else if (table.equals(Constants.DB_TABLE_TEST_QUESTIONS)) {
             id = ent.getInt("id");
-            PairTable q = (PairTable) getRow(Constants.DB_TABLE_TEST_QUESTIONS_COURSE, "qstCod", Long.toString(id));
+            PairTable<?, ?> q = (PairTable<?, ?>) getRow(Constants.DB_TABLE_TEST_QUESTIONS_COURSE, "qstCod", Long.toString(id));
 
             if (q != null) {
                 o = new TestQuestion(id,
@@ -242,7 +241,7 @@ public class DataBaseHelper {
         } else if (table.equals(Constants.DB_TABLE_TEST_ANSWERS)) {
             id = ent.getId();
             int ansInd = ent.getInt("ansInd");
-            PairTable a = (PairTable) getRow(Constants.DB_TABLE_TEST_QUESTION_ANSWERS, "ansCod", Long.toString(id));
+            PairTable<?, ?> a = (PairTable<?, ?>) getRow(Constants.DB_TABLE_TEST_QUESTION_ANSWERS, "ansCod", Long.toString(id));
 
             if (a != null) {
                 o = new TestAnswer(id,
@@ -309,7 +308,6 @@ public class DataBaseHelper {
                     ent.getLong("openTime"));
         } else if (table.equals(Constants.DB_TABLE_PRACTICE_SESSIONS)) {
             SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-            //java.text.DateFormat format = SimpleDateFormat.getDateTimeInstance();
 
             try {
                 o = new PracticeSession(ent.getId(),
@@ -584,23 +582,6 @@ public class DataBaseHelper {
         return groups;
     }
 
-    /**
-     *
-     * */
-    public Cursor getCursorGroupsOfType(long groupTypeCode) {
-        String select = "SELECT g.* " +
-                " FROM " +
-                Constants.DB_TABLE_GROUPS + " g, " + Constants.DB_TABLE_GROUPS_GROUPTYPES + " ggt" +
-                " WHERE " +
-                "g.id = ggt.grpCod AND ggt.grpTypCod = ? ORDER BY groupName";
-
-        SQLiteDatabase db = DataFramework.getInstance().getDB();
-        //TODO sustituir rawquery por getCursor(String table, String[] fields, String selection,
-        //String[] selectionArgs, String groupby, String having, String orderby, String limit)
-        return db.rawQuery(select, new String[]{String.valueOf(groupTypeCode)});
-
-    }
-
     public Cursor getCursor(String table, String where, String orderby) {
         return db.getCursor(table, where, orderby);
     }
@@ -612,7 +593,6 @@ public class DataBaseHelper {
     public GroupType getGroupTypeFromGroup(long groupCode) {
         long groupTypeCode = getGroupTypeCodeFromGroup(groupCode);
         return (GroupType) getRow(Constants.DB_TABLE_GROUP_TYPES, "id", String.valueOf(groupTypeCode));
-
     }
 
     /**
@@ -1049,10 +1029,8 @@ public class DataBaseHelper {
         if (rows.isEmpty()) {
             insertPairTable(new PairTable<Long, Long>(Constants.DB_TABLE_GROUPS_GROUPTYPES, groupTypeCode, groupCode));
         } else {
-			@SuppressWarnings({ "unchecked", "rawtypes" })
-			PairTable<Integer, Integer> prev = new PairTable(Constants.DB_TABLE_GROUPS_GROUPTYPES, rows.get(0).getValue("grpTypCod"), rows.get(0).getValue("grpCod"));
-			@SuppressWarnings({ "unchecked", "rawtypes" })
-			PairTable<Integer, Integer> current = new PairTable(Constants.DB_TABLE_GROUPS_GROUPTYPES, groupTypeCode, groupCode);
+			PairTable<Object, Object> prev = new PairTable<Object, Object>(Constants.DB_TABLE_GROUPS_GROUPTYPES, rows.get(0).getValue("grpTypCod"), rows.get(0).getValue("grpCod"));
+			PairTable<Object, Object> current = new PairTable<Object, Object>(Constants.DB_TABLE_GROUPS_GROUPTYPES, groupTypeCode, groupCode);
             updatePairTable(prev, current);
         }
 		/*}else returnValue = false;*/
@@ -1537,10 +1515,8 @@ public class DataBaseHelper {
                         insertPairTable(new PairTable<Long, Long>(Constants.DB_TABLE_GROUPS_GROUPTYPES, groupTypeCode[0], groupCode));
 
                     } else {
-                        @SuppressWarnings({ "rawtypes", "unchecked" })
-						PairTable<Integer, Integer> prev = new PairTable(Constants.DB_TABLE_GROUPS_GROUPTYPES, rows.get(0).getValue("grpTypCod"), rows.get(0).getValue("grpCod"));
-                        @SuppressWarnings({ "rawtypes", "unchecked" })
-						PairTable<Integer, Integer> current = new PairTable(Constants.DB_TABLE_GROUPS_GROUPTYPES, groupTypeCode[0], groupCode);
+						PairTable<Object, Object> prev = new PairTable<Object, Object>(Constants.DB_TABLE_GROUPS_GROUPTYPES, rows.get(0).getValue("grpTypCod"), rows.get(0).getValue("grpCod"));
+						PairTable<Object, Object> current = new PairTable<Object, Object>(Constants.DB_TABLE_GROUPS_GROUPTYPES, groupTypeCode[0], groupCode);
                         updatePairTable(prev, current);
 
                     }
@@ -1549,42 +1525,6 @@ public class DataBaseHelper {
             return returnValue;
         } else
             return false;
-    }
-
-	private <T> boolean updateRelationship(Pair<String, String> tables, Pair<String, String> idsTables, String relationTable, Pair<String, T> remainField, Pair<String, T> changedField) {
-
-
-        return true;
-    }
-
-    /**
-     * Updates a group in database
-     *
-     * @param prev Group to be updated
-     */
-    public void updateGroup(Group prev, Group currentGroup) {
-        List<Entity> rows = db.getEntityList(Constants.DB_TABLE_GROUPS, "id = " + prev.getId());
-        if (!rows.isEmpty()) {
-            insertEntity(Constants.DB_TABLE_GROUPS, currentGroup, rows.get(0));
-        }
-        /*if (prev.getId() != currentGroup.getId()) {
-            //TODO in this case, the relationships with group types and courses should be updated
-
-        }*/
-    }
-
-
-    /**
-     * Updates an existing group type
-     */
-	private boolean updateGroupType(GroupType prv, GroupType current) {
-        List<Entity> rows = db.getEntityList(Constants.DB_TABLE_GROUP_TYPES, "id=" + prv.getId());
-        boolean returnValue = true;
-        if (!rows.isEmpty()) {
-            Entity ent = rows.get(0); //the group type with a given group type code is unique
-            insertEntity(Constants.DB_TABLE_GROUP_TYPES, current, ent);
-        } else returnValue = false;
-        return returnValue;
     }
 
     /**
@@ -1632,8 +1572,15 @@ public class DataBaseHelper {
      * @param fieldName Name field to search
      * @param value     Value field of row to be removed
      */
-    void removeAllRows(String table, String fieldName, long value) {
-        List<Entity> rows = db.getEntityList(table, fieldName + "= " + value);
+    public void removeAllRows(String table, String fieldName, Object value) {
+        List<Entity> rows;
+        
+        if(value instanceof String) {
+        	rows = db.getEntityList(table, fieldName + "='" + value + "'");
+        } else {
+        	rows = db.getEntityList(table, fieldName + "= " + value);
+        }
+        
         for (Entity ent : rows) {
             ent.delete();
         }
