@@ -1,24 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Needs to remove the "s" from "https" for the menus -->
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/share_menu"
-          android:title="@string/shareTitle_menu"
-          android:icon="@android:drawable/ic_menu_share"
-          android:showAsAction="ifRoom|withText">
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/share_menu"
+        android:icon="@android:drawable/ic_menu_share"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/shareTitle_menu">
     </item>
-    <item android:id="@+id/rate_menu"
-          android:title="@string/rateTitle_menu"
-          android:icon="@drawable/ic_menu_star"
-          android:showAsAction="ifRoom|withText">
+    <item
+        android:id="@+id/rate_menu"
+        android:icon="@drawable/ic_menu_star"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/rateTitle_menu">
     </item>
-    <!--<item android:id="@+id/clean_database_menu"
-          android:title="@string/cleanDatabaseTitle_menu"
-          android:icon="@android:drawable/ic_menu_delete"
-          android:showAsAction="ifRoom|withText">
-    </item>-->
-    <item android:id="@+id/preferences_menu"
-          android:title="@string/preferencesTitle_menu"
-          android:icon="@android:drawable/ic_menu_manage"
-          android:showAsAction="ifRoom|withText">
+    <item
+        android:id="@+id/clean_database_menu"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:title="@string/cleanDatabaseTitle_menu">
     </item>
+    <item
+        android:id="@+id/preferences_menu"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/preferencesTitle_menu">
+    </item>
+
 </menu>

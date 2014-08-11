@@ -1,3 +1,4 @@
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
 
     <string name="title_activity_login">Identificar-se</string>
@@ -9,8 +10,7 @@
     <string name="action_sign_in_register"><b>Identificar-se</b></string>
     <string name="action_sign_in_short">Identificar-se</string>
     <string name="action_forgot_password">He oblidat la contrasenya </string>
-    <string name="login_progress_signing_in">Identificant&#8230;</string>
-    <string name="error_invalid_email">L\'usuari no és vàlid</string>
+    <string name="login_progress_signing_in">Identificant…</string>
     <string name="error_invalid_password">La contrasenya ha de ser de mínim 6 caràcters alfanumèrics</string>
     <string name="error_incorrect_password">La contrasenya ha de contenir números i lletres</string>
     <string name="error_field_required">Aquest camp és obligatori</string>
@@ -19,7 +19,6 @@
     <string name="why_password_dialog_message">Probablement està introduint la contrasenya d\'accés identificat (4 dígits). Ha d\'introduir la contrasenya utilitzada per entrar directament a SWAD</string>
     <string name="lost_password">He oblidat la contrasenya</string>
     <string name="lost_password_dialog_title"> Demana una contrasenya nova</string>
-    <string name="lost_password_edit_text_hint">DNI/passaport, @àlies o email</string>
     <string name="lost_password_success">Contrasenya canviada, comprova el teu email</string>
     <string name="lost_password_failure">El reinici de la contrasenya ha fallat</string>
 </resources>
