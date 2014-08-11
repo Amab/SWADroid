@@ -180,7 +180,6 @@
     <string name="photoContentDescription">Foto del estudiant</string>
     <string name="noCameraFound">El dispositiu no disposa de càmera</string>
     <string name="saveMsg">Desar</string>
-    <string name="addSessionTitle_menu">Nova sessió de pràctiques</string>
     <string name="noGroupsAvailableMsg">No hi ha grups per a l\'assignatura seleccionada</string>
     <string name="sessionCourseText">Assignatura</string>
     <string name="sessionGroupText">Grup</string>
