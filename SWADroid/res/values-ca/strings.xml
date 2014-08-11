@@ -102,14 +102,10 @@
     <string name="publishingNotice">Publicant avís…</string>
     <string name="noticePublished">Avís publicat</string>
     <string name="sendMsg">Enviar</string>
-    
     <string name="selectRcvModuleLabel">Seleccionar Destinataris</string>
     <string name="filterUsersListModuleLabel">Filtrar Destinataris</string>
     <string name="acceptFilters">Filtrar</string>
-   	<string name="cancelFilters">Cancelar</string>
-    
-    
-    
+    <string name="cancelFilters">Cancelar</string>
     <string name="cleanDatabaseMsg">Totes les dades de la base de dades han estat esborrats</string>
     <string name="shareBodyMsg">Estic usant # SWADroid al meu Android per accedir a la plataforma de teleformació SWAD.
         \nObtenlo gratis aquí: https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid</string>
@@ -144,8 +140,7 @@
     <string name="msg_default_type">Tipus</string>
     <string name="msg_default_time">Temps</string>
     <string name="msg_default_meta">Metadata</string>
-    <string name="msg_default_status">Poseu un codi de barres a l\'interior del rectangle del visor per escanejar."
-    </string>
+    <string name="msg_default_status">Poseu un codi de barres a l\'interior del rectangle del visor per escanejar."</string>
     <string name="msg_camera_framework_bug">Ho sentim, la càmera d\'Android ha trobat un problema. Potser haureu
         reiniciar el dispositiu.</string>
     <string name="button_ok">OK</string>
@@ -236,14 +231,12 @@
         inscrit en els grups desitjats</string>
     <string name="confirmEnrollments">Confirmar inscripcions sol · licitades </string>
     <string name="areYouSure"> Esteu segur que vol inscriure en els grups seleccionats?</string>
-    <string name="failedEnrollment">Ho sentim però la inscripció en els grups seleccionats no es va poder realitzar"
-    </string>
+    <string name="failedEnrollment">Ho sentim però la inscripció en els grups seleccionats no es va poder realitzar"</string>
     <string name="groupTypesProgressDescription">Obtenint tipus de grup… \nSi us plau, esperi…</string>
     <string name="groupsProgressDescription">Obtenint grups… \nSi us plau, esperi…</string>
     <string name="groupTypesProgressTitle">Tipus de grups</string>
     <string name="groupsProgressTitle">Grups</string>
-    <string name="sendMyGroupsProgressDescription">Enviant inscripció a grups… \nSi us plau, esperi…"
-    </string>
+    <string name="sendMyGroupsProgressDescription">Enviant inscripció a grups… \nSi us plau, esperi…"</string>
     <string name="sendMyGroupsProgressTitle">Inscripció a grups</string>
     <string name="withoutLimit">sense límit</string>
     <string name="downloadProblemTitle">Problema en descàrrega</string>
@@ -261,16 +254,15 @@
     <string name="contents_sms">Adreça SMS</string>
     <string name="contents_text">Text pla</string>
     <string name="lastSyncTimeLabel">Darrera sincronització</string>
-	<string name="neverLabel">Mai</string>
-	<string name="prefNotifSoundTitle">So</string>
-	<string name="prefNotifSoundSummary">Activar/desactivar el so de les alertes de noves notificacions</string>
-	<string name="prefNotifVibrateTitle">Vibració</string>
-	<string name="prefNotifVibrateSummary">Activar/desactivar la vibració de les alertes de noves notificacions</string>
-	<string name="prefNotifLightsTitle">Indicadors lluminosos</string>
-	<string name="prefNotifLightsSummary">Activar/desactivar els indicadors lluminosos de les alertes de noves notificacions</string>
-	
-	<string name="informationModuleLabel">Informació</string> 
-    <string name="introductionModuleLabel">Introducció</string>  
+    <string name="neverLabel">Mai</string>
+    <string name="prefNotifSoundTitle">So</string>
+    <string name="prefNotifSoundSummary">Activar/desactivar el so de les alertes de noves notificacions</string>
+    <string name="prefNotifVibrateTitle">Vibració</string>
+    <string name="prefNotifVibrateSummary">Activar/desactivar la vibració de les alertes de noves notificacions</string>
+    <string name="prefNotifLightsTitle">Indicadors lluminosos</string>
+    <string name="prefNotifLightsSummary">Activar/desactivar els indicadors lluminosos de les alertes de noves notificacions</string>
+    <string name="informationModuleLabel">Informació</string>
+    <string name="introductionModuleLabel">Introducció</string>
     <string name="faqsModuleLabel">FAQs</string>
     <string name="linksModuleLabel">Enllaços</string>
     <string name="bibliographyModuleLabel">Bibliografia</string>
@@ -280,26 +272,21 @@
     <string name="assessmentModuleLabel">Sistema d\'avaluació</string>
     <string name="informationProgressDescription">Obtenint informació…\nSi us plau, esperi…</string>
     <string name="informationProgressTitle">Informació</string>
-    <string name="emptyInformation">Informació no disponible</string>    
-    
+    <string name="emptyInformation">Informació no disponible</string>
     <string name="pradoLoginToast">La contrasenya d\'SWAD té almenys 8 caràcters alfanumèrics</string>
-	<string name="error_password_summaryUGR">Recorda que has d\'introduir la contrasenya de SWAD, no la d\'Accés identificat</string>
-	<string name="passwordDialogTip">Recorda que la contrasenya d\'SWAD ha de tenir almenys 8 caràcters alfanumèrics</string>
-	<string name="errorServerCertificateMsg">El certificat del servidor no és vàlid. Si us plau, poseu-vos en contacte amb l\'administrador SWAD</string>
+    <string name="error_password_summaryUGR">Recorda que has d\'introduir la contrasenya de SWAD, no la d\'Accés identificat</string>
+    <string name="passwordDialogTip">Recorda que la contrasenya d\'SWAD ha de tenir almenys 8 caràcters alfanumèrics</string>
+    <string name="errorServerCertificateMsg">El certificat del servidor no és vàlid. Si us plau, poseu-vos en contacte amb l\'administrador SWAD</string>
+    <string name="notificationMarkAllRead">Marca totes com llegides</string>
+    <string name="notificationReply">Respondre</string>
+    <string name="seenLabel">Llegides</string>
+    <string name="notSeenLabel">No llegides</string>
+    <string name="actionBarRefresh">Actualitzar</string>
+    <string name="actionBarSave">Desa</string>
+    <string name="actionBarAddUser">Afegir usuaris</string>
+    <string name="actionBarFilterUsers">Filtrar usuaris</string>
+    <string name="Filters_All">Tot</string>
+    <string name="Filters_Teachers">Professors</string>
+    <string name="Filters_Students">Alumnes</string>
 
-	<string name="notificationMarkAllRead">Marca totes com llegides</string>
-	<string name="notificationReply">Respondre</string>
-	<string name="seenLabel">Llegides</string>
-	<string name="notSeenLabel">No llegides</string>
-	
-	<string name="actionBarRefresh">Actualitzar</string>
-	<string name="actionBarSave">Desa</string>
-	
-	<string name="actionBarAddUser">Afegir usuaris</string>
-	<string name="actionBarFilterUsers">Filtrar usuaris</string>
-	
-	<string name="Filters_All">Tot</string>
-	<string name="Filters_Teachers">Professors</string>
-	<string name="Filters_Students">Alumnes</string>
-	
 </resources>

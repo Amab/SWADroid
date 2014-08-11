@@ -20,4 +20,5 @@
     <string name="lost_password_dialog_title">Request a new password</string>
     <string name="lost_password_success">Password changed, check your email</string>
     <string name="lost_password_failure">Password reset failed</string>
+
 </resources>

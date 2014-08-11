@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
-       android:background="@color/title_background">
+    android:background="@color/title_background" >
 
     <Spinner
-            android:id="@+id/groupSpinner"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:prompt="@string/selectZoneTitle"
-            android:visibility="gone"
-            />
+        android:id="@+id/groupSpinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:prompt="@string/selectZoneTitle"
+        android:visibility="gone" />
 
 </merge>

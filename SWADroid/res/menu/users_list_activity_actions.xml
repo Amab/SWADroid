@@ -7,7 +7,6 @@
         android:icon="@drawable/ic_action_search"
         android:title="@string/actionBarFilterUsers"
         swadroid:showAsAction="ifRoom|withText"/>
-    
     <item
         android:id="@+id/action_refresh_users"
         android:icon="@drawable/ic_action_refresh"

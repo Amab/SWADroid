@@ -5,7 +5,7 @@
     android:background="@color/background"
     android:orientation="vertical" >
 
-<!--     <include layout="@layout/action_bar" /> -->
+    <!-- <include layout="@layout/action_bar" /> -->
 
     <include layout="@layout/course_or_group_name" />
 
