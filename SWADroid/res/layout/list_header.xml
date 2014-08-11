@@ -1,11 +1,2 @@
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-          android:id="@+id/list_header_title"
-          style="?android:attr/listSeparatorTextViewStyle"
-          android:layout_width="fill_parent"
-          android:layout_height="wrap_content"
-          android:paddingBottom="2dip"
-          android:paddingLeft="5dip"
-          android:paddingStart="5dip"
-          android:paddingRight="0dip"
-          android:paddingEnd="0dip"
-          android:paddingTop="2dip"/>
+<?xml version='1.0' encoding='UTF-8'?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/list_header_title" style="?android:attr/listSeparatorTextViewStyle" android:layout_width="fill_parent" android:layout_height="wrap_content" android:paddingBottom="2dip" android:paddingLeft="5dip" android:paddingStart="5dip" android:paddingRight="0dip" android:paddingEnd="0dip" android:paddingTop="2dip"/>
