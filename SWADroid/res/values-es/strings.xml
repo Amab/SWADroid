@@ -37,15 +37,13 @@
     <string name="notificationsProgressTitle">Notificaciones</string>
     <string name="notificationsProgressDescription">Obteniendo nuevas notificaciones…</string>
     <string name="notificationsEmptyListMsg">No se ha descargado ninguna notificación.\n\nPara descargar las
-        notificaciones más recientes deslice este mensaje hacia abajo.
-    </string>
+        notificaciones más recientes deslice este mensaje hacia abajo.</string>
     <string name="testsDownloadProgressTitle">Tests</string>
     <string name="testsDownloadProgressDescription">Sincronizando preguntas de test.\n\nDependiendo del número de
         preguntas a sincronizar, el procesamiento de los datos puede tardar unos minutos.\n\nPor favor,
         espere…</string>
     <string name="errorMsgLaunchingActivity">Ha ocurrido un error durante la ejecución de la
-        operación
-    </string>
+        operación</string>
     <string name="errorMsgNoConnection">No hay conexión</string>
     <string name="examAnnouncement">Convocatoria de examen</string>
     <string name="marksFile">Calificaciones</string>
@@ -72,19 +70,15 @@
     <string name="cancelMsg">Cancelar</string>
     <string name="allMsg">Todos</string>
     <string name="selectCourseTitle">Seleccione asignatura</string>
-    <string name="noQuestionsAvailableTestsDownloadMsg">No hay preguntas de test disponibles para esta asignatura
-    </string>
+    <string name="noQuestionsAvailableTestsDownloadMsg">No hay preguntas de test disponibles para esta asignatura</string>
     <string name="noQuestionsPluggableTestsDownloadMsg">El profesor de esta asignatura no permite la descarga de las
-        preguntas de test
-    </string>
+        preguntas de test</string>
     <string name="questionsTestsDownloadSuccesfulMsg">Preguntas de test sincronizadas</string>
     <string name="testNoQuestionsCourseMsg">No se ha descargado ninguna pregunta de test para esta asignatura</string>
     <string name="testNoQuestionsMsg">Antes de realizar un test debe descargar las preguntas de test de al menos una
-        asignatura
-    </string>
+        asignatura</string>
     <string name="testNoQuestionsMeetsSpecifiedCriteriaMsg">No hay ninguna pregunta que se ajuste a los criterios
-        especificados
-    </string>
+        especificados</string>
     <string name="testNumQuestionsMsg">Indique el número de preguntas del test</string>
     <string name="testTagsMsg">Seleccione los descriptores que desea incluir en el test</string>
     <string name="testNoTagsSelectedMsg">Debe seleccionar al menos un descriptor</string>
@@ -101,8 +95,7 @@
     <string name="errorBadAppKeyMsg">Clave de aplicación incorrecta. Por favor, contacte con el desarrollador.</string>
     <string name="errorConnectionMsg">Error durante la conexión con el servidor</string>
     <string name="errorTimeoutMsg">Tiempo de espera agotado intentando conectar con el
-        servidor
-    </string>
+        servidor</string>
     <string name="errorServiceUnavailableMsg">SWAD se encuentra en mantenimiento en estos momentos.
         Por favor, inténtelo más tarde</string>
     <string name="sendingMessageMsg">Enviando mensaje…</string>
@@ -114,21 +107,14 @@
     <string name="publishingNotice">Publicando aviso…</string>
     <string name="noticePublished">Aviso publicado</string>
     <string name="sendMsg">Enviar</string>
-    
-    
-    
     <string name="selectRcvModuleLabel">Seleccionar Destinatarios</string>
     <string name="filterUsersListModuleLabel">Filtrar Destinatarios</string>
-	<string name="acceptFilters">Filtrar</string>
-   	<string name="cancelFilters">Cancel</string>
-    
-
-    
+    <string name="acceptFilters">Filtrar</string>
+    <string name="cancelFilters">Cancel</string>
     <string name="cleanDatabaseMsg">Todos los datos de la base de datos han sido borrados</string>
     <string name="shareBodyMsg">Estoy usando #SWADroid en mi Android para acceder a la
         plataforma de teleformación SWAD.\nObtenlo gratis aquí:
-        https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid
-    </string>
+        https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid</string>
     <string name="twitterTitle">Twitter</string>
     <string name="facebookTitle">Facebook</string>
     <string name="googlePlusTitle">Google+</string>
@@ -141,9 +127,8 @@
     <string name="prefSyncEnableSummary">Habilitar la sincronización automática</string>
     <string name="prefCatNotifTitle">Notificaciones</string>
     <string name="prefNotifLimitTitle">Límite de notificaciones</string>
-    <string name="prefNotifLimitDialogMessage">Seleccione el número máximo de notificaciones que serán almacenadas:
-    </string>
-    <string name="prefNotifLimitSuffix">notificaciones</string>  
+    <string name="prefNotifLimitDialogMessage">Seleccione el número máximo de notificaciones que serán almacenadas:</string>
+    <string name="prefNotifLimitSuffix">notificaciones</string>
     <string name="notificationsAlertMsg">nuevas notificaciones</string>
     <string name="footMessageMsg">Enviado desde</string>
     <string name="marksMsg">Pulse sobre la notificación para ver la calificación.</string>
@@ -161,11 +146,9 @@
     <string name="msg_default_time">Tiempo</string>
     <string name="msg_default_meta">Metadata</string>
     <string name="msg_default_status">Coloque un código de barras en el interior del rectángulo del visor para
-        escanear.
-    </string>
+        escanear.</string>
     <string name="msg_camera_framework_bug">Lo sentimos, la cámara de Android ha encontrado un problema. Es posible que
-        necesite reiniciar el dispositivo.
-    </string>
+        necesite reiniciar el dispositivo.</string>
     <string name="button_ok">OK</string>
     <string name="scan_valid_student">Alumno de esta asignatura</string>
     <string name="scan_not_valid_student">Alumno de otra asignatura</string>
@@ -187,8 +170,7 @@
     <string name="downloadFileTitle">Descargar</string>
     <string name="sdCardBusyTitle">Tarjeta SD no disponible</string>
     <string name="sdCardBusy">La tarjeta SD está ocupada ahora mismo. Para permitir descargas, selecciona “Desactiva
-        almacenamiento USB” en la notificación
-    </string>
+        almacenamiento USB” en la notificación</string>
     <string name="vacants">Vacantes</string>
     <string name="numStudent">Nº de estudiantes</string>
     <string name="maxStudent">Máx. estudiantes</string>
@@ -197,8 +179,7 @@
     <string name="noStudentsAvailableMsg">Esta asignatura no tiene alumnos</string>
     <string name="studentsUpdated">alumnos actualizados</string>
     <string name="scan_no_students">Ningún alumno encontrado\n
-        Intente “Actualizar alumnos”
-    </string>
+        Intente “Actualizar alumnos”</string>
     <string name="photoContentDescription">Foto del estudiante</string>
     <string name="noCameraFound">El dispositivo no dispone de cámara</string>
     <string name="saveMsg">Guardar</string>
@@ -221,8 +202,7 @@
     <string name="sendingStatePending">Pendiente</string>
     <string name="session">Sesión:</string>
     <string name="noPracticeSessionsAvailableMsg">No existen sesiones de prácticas del grupo seleccionado en la base de
-        datos
-    </string>
+        datos</string>
     <string name="sessionNoStudentsMsg">Ningún alumno ha asistido a esta sesión</string>
     <string name="studentsHistoryModuleLabel">Historial de alumnos</string>
     <string name="sessionsTitle">Sesiones de prácticas</string>
@@ -242,18 +222,15 @@
     <string name="sessionsSelect">Consultar sesiones</string>
     <string name="studentsSelect">Consultar estudiantes</string>
     <string name="rollcallErrorNoConnection">No hay conexión con el servidor.
-        Se han guardado los datos de asistencia en la base de datos.
-    </string>
+        Se han guardado los datos de asistencia en la base de datos.</string>
     <string name="rollcallHistoryModuleLabel">Historial de sesiones</string>
     <string name="rollcallNoStudentsSelected">No se ha seleccionado ningún estudiante</string>
     <string name="rollcallNoPracticeSessions">No existen sesiones de prácticas definidas para la asignatura y grupo
         seleccionados.
-        Seleccione: Sesiones de prácticas - Nueva
-    </string>
+        Seleccione: Sesiones de prácticas - Nueva</string>
     <string name="rollcallSaved">Datos de asistencia guardados correctamente</string>
     <string name="rollcallWebServiceNotAvailable">El servicio web para enviar a SWAD los datos de asistencia no está
-        disponible.
-    </string>
+        disponible.</string>
     <string name="rollcallEvent">Evento de pasar lista</string>
     <string name="groupSeparator">:</string>
     <string name="groupTypesModuleLabel">Conseguir tipos de grupo</string>
@@ -261,12 +238,10 @@
     <string name="noGroupsText">No se han creado grupos dentro de la asignatura</string>
     <string name="resultEnrollment">Resultado de la inscripción</string>
     <string name="successfullEnrollment">Todas las inscripciones se han realizado con éxito. Por favor, compruebe que
-        está inscrito en los grupos deseados
-    </string>
+        está inscrito en los grupos deseados</string>
     <string name="confirmEnrollments">Confirmar inscripciones solicitadas</string>
     <string name="areYouSure">¿Seguro que quiere inscribirse en los grupos seleccionados?</string>
-    <string name="failedEnrollment">Lo sentimos pero la inscripción en los grupos seleccionados no se pudo realizar
-    </string>
+    <string name="failedEnrollment">Lo sentimos pero la inscripción en los grupos seleccionados no se pudo realizar</string>
     <string name="groupTypesProgressDescription">Obteniendo tipos de grupo…\nPor favor, espere…</string>
     <string name="groupsProgressDescription">Obteniendo grupos…\nPor favor, espere…</string>
     <string name="groupTypesProgressTitle">Tipos de grupos</string>
@@ -288,7 +263,7 @@
     <string name="contents_location">Coordenadas geográficas</string>
     <string name="contents_phone">Número de teléfono</string>
     <string name="contents_sms">Dirección SMS</string>
-    <string name="contents_text">Texto</string>    
+    <string name="contents_text">Texto</string>
     <string name="lastSyncTimeLabel">Última sincronización</string>
     <string name="neverLabel">Nunca</string>
     <string name="prefNotifSoundTitle">Sonido</string>
@@ -298,11 +273,8 @@
     <string name="prefNotifLightsTitle">Led</string>
     <string name="prefNotifLightsSummary">Activar/desactivar los indicadores luminosos de las alertas de nuevas notificaciones</string>
     <string name="changelogTitle">Historial de cambios</string>
-
-    
-    
-   	<string name="informationModuleLabel">Información</string> 
-    <string name="introductionModuleLabel">Introducción</string>  
+    <string name="informationModuleLabel">Información</string>
+    <string name="introductionModuleLabel">Introducción</string>
     <string name="faqsModuleLabel">FAQs</string>
     <string name="linksModuleLabel">Enlaces</string>
     <string name="bibliographyModuleLabel">Bibliografía</string>
@@ -313,28 +285,21 @@
     <string name="informationProgressDescription">Obteniendo información…\nPor favor, espere…</string>
     <string name="informationProgressTitle">Información</string>
     <string name="emptyInformation">Información no disponible</string>
-    
-    
     <string name="pradoLoginToast">La contraseña de SWAD tiene al menos 8 caracteres alfanuméricos</string>
-	<string name="error_password_summaryUGR">Recuerda que debes introducir la contraseña de SWAD, no la de Acceso identificado (PRADO)</string>
-	<string name="passwordDialogTip">Recuerda que la contraseña de SWAD debe tener al menos 8 caracteres alfanuméricos</string>
-	<string name="errorServerCertificateMsg">El certificado del servidor no es válido. Por favor, contacte con el administrador de SWAD</string>
-	
-	<string name="notificationMarkAllRead">Marcar todas como leidas</string>
-	<string name="notificationReply">Responder</string>
-	<string name="seenLabel">Leídas</string>
-	<string name="notSeenLabel">No leídas</string>
-		
-	<string name="actionBarRefresh">Actualizar</string>
-	<string name="actionBarSave">Guardar</string>
-	
-	<string name="actionBarAddUser">Agregar usuarios</string>
-	<string name="actionBarFilterUsers">Filtrar usuarios</string>
-	
-	<string name="Filters_All">Todo</string>
-	<string name="Filters_Teachers">Profesores</string>
-	<string name="Filters_Students">Alumnos</string>
-	
-	<string name="errorNoAppForIntent">No hay ninguna aplicación registrada para abrir el tipo de archivo seleccionado.</string>
-	
+    <string name="error_password_summaryUGR">Recuerda que debes introducir la contraseña de SWAD, no la de Acceso identificado (PRADO)</string>
+    <string name="passwordDialogTip">Recuerda que la contraseña de SWAD debe tener al menos 8 caracteres alfanuméricos</string>
+    <string name="errorServerCertificateMsg">El certificado del servidor no es válido. Por favor, contacte con el administrador de SWAD</string>
+    <string name="notificationMarkAllRead">Marcar todas como leidas</string>
+    <string name="notificationReply">Responder</string>
+    <string name="seenLabel">Leídas</string>
+    <string name="notSeenLabel">No leídas</string>
+    <string name="actionBarRefresh">Actualizar</string>
+    <string name="actionBarSave">Guardar</string>
+    <string name="actionBarAddUser">Agregar usuarios</string>
+    <string name="actionBarFilterUsers">Filtrar usuarios</string>
+    <string name="Filters_All">Todo</string>
+    <string name="Filters_Teachers">Profesores</string>
+    <string name="Filters_Students">Alumnos</string>
+    <string name="errorNoAppForIntent">No hay ninguna aplicación registrada para abrir el tipo de archivo seleccionado.</string>
+
 </resources>

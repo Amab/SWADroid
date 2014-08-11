@@ -1,15 +1,59 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/actionBarLayout" android:layout_width="match_parent" android:layout_height="50dip" android:background="@android:color/white" android:orientation="horizontal">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/actionBarLayout"
+    android:layout_width="match_parent"
+    android:layout_height="50dip"
+    android:background="@android:color/white"
+    android:orientation="horizontal" >
 
     <!-- Home -->
-    <ImageButton android:id="@+id/home_button" android:layout_width="wrap_content" android:layout_height="match_parent" android:layout_alignParentLeft="true" android:background="@drawable/navigation_button" android:contentDescription="@string/home_icon" android:onClick="onRefreshClick" android:padding="4dp" android:scaleType="centerCrop" android:src="@drawable/home"/>
+
+    <ImageButton
+        android:id="@+id/home_button"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:background="@drawable/navigation_button"
+        android:contentDescription="@string/home_icon"
+        android:onClick="onRefreshClick"
+        android:padding="4dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/home" />
 
     <!-- Parent -->
-    <ImageButton android:id="@+id/parent_button" android:layout_width="wrap_content" android:layout_height="match_parent" android:layout_toRightOf="@+id/home_button" android:contentDescription="@string/parent_icon" android:background="@drawable/navigation_button" android:onClick="onRefreshClick" android:padding="4dp" android:scaleType="centerCrop" android:src="@drawable/parent"/>
-    <TextView android:id="@+id/path" android:layout_toRightOf="@id/parent_button" android:layout_centerVertical="true" android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="4dp" android:textColor="@android:color/black" android:textSize="18sp" android:textStyle="bold" android:ellipsize="start" android:singleLine="true">
+
+    <ImageButton
+        android:id="@+id/parent_button"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@+id/home_button"
+        android:background="@drawable/navigation_button"
+        android:contentDescription="@string/parent_icon"
+        android:onClick="onRefreshClick"
+        android:padding="4dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/parent" />
+
+    <TextView
+        android:id="@+id/path"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/parent_button"
+        android:ellipsize="start"
+        android:padding="4dp"
+        android:singleLine="true"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:textStyle="bold" >
     </TextView>
 
-
-    <View android:id="@+id/view_separator" android:layout_width="fill_parent" android:layout_height="2dip" android:layout_alignParentBottom="true" android:layout_alignParentLeft="true" android:background="@color/sgilight_gray"/>
+    <View
+        android:id="@+id/view_separator"
+        android:layout_width="fill_parent"
+        android:layout_height="2dip"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:background="@color/sgilight_gray" />
 
 </RelativeLayout>

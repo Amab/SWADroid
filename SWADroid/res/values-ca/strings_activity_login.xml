@@ -20,4 +20,5 @@
     <string name="lost_password_dialog_title"> Demana una contrasenya nova</string>
     <string name="lost_password_success">Contrasenya canviada, comprova el teu email</string>
     <string name="lost_password_failure">El reinici de la contrasenya ha fallat</string>
+
 </resources>

@@ -21,8 +21,8 @@
             android:id="@+id/senderNameText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-        	android:layout_marginTop="7dip"
             android:layout_marginLeft="7dip"
+            android:layout_marginTop="7dip"
             android:layout_toRightOf="@id/notifUserPhoto"
             android:textColor="@color/foreground1"
             android:textSize="16sp" />
@@ -32,8 +32,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/senderNameText"
-        	android:layout_marginTop="7dip"
             android:layout_marginLeft="7dip"
+            android:layout_marginTop="7dip"
             android:layout_toRightOf="@id/notifUserPhoto"
             android:textColor="@color/foreground1"
             android:textSize="16sp" />
@@ -43,8 +43,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/courseNameText"
-        	android:layout_marginTop="7dip"
             android:layout_marginLeft="7dip"
+            android:layout_marginTop="7dip"
             android:layout_toRightOf="@id/notifUserPhoto"
             android:textColor="@color/foreground2" />
 
@@ -63,8 +63,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/not_item_header"
-        android:layout_marginTop="7dip"
         android:layout_marginLeft="7dip"
+        android:layout_marginTop="7dip"
         android:textColor="@color/foreground1"
         android:textSize="16sp"
         android:textStyle="bold" />

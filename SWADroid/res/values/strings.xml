@@ -38,14 +38,12 @@
     <string name="notificationsProgressTitle">Notifications</string>
     <string name="notificationsProgressDescription">Retrieving new notifications…</string>
     <string name="notificationsEmptyListMsg">Did not download any notification.\n\nTo download most recent
-        notifications slide down this message.
-    </string>
+        notifications slide down this message.</string>
     <string name="testsDownloadProgressTitle">Tests</string>
     <string name="testsDownloadProgressDescription">Synchronizing test questions.\n\nDepending on the number of
         questions to synchronize, the data processing can take several minutes.\n\nPlease wait…</string>
     <string name="errorMsgLaunchingActivity">An error occurred during the execution of the
-        operation
-    </string>
+        operation</string>
     <string name="errorMsgNoConnection">No connection found</string>
     <string name="examAnnouncement">Exam announcement</string>
     <string name="marksFile">Marks file</string>
@@ -77,11 +75,9 @@
     <string name="questionsTestsDownloadSuccesfulMsg">Questions downloaded successfully</string>
     <string name="testNoQuestionsCourseMsg">Not downloaded any test question for this course</string>
     <string name="testNoQuestionsMsg">Before performing a test you should download the test questions for at least
-        one course
-    </string>
+        one course</string>
     <string name="testNoQuestionsMeetsSpecifiedCriteriaMsg">There is no question that meets the specified
-        criteria
-    </string>
+        criteria</string>
     <string name="testNumQuestionsMsg">Indicate the number of test questions</string>
     <string name="testTagsMsg">Select the tags that will be included in the test</string>
     <string name="testNoTagsSelectedMsg">You must select at least one tag</string>
@@ -108,19 +104,14 @@
     <string name="publishingNotice">Publishing notice…</string>
     <string name="noticePublished">Notice published</string>
     <string name="sendMsg">Send</string>
-    
-    
     <string name="selectRcvModuleLabel">Select Receivers</string>
     <string name="filterUsersListModuleLabel">Filter Receivers</string>
-	<string name="acceptFilters">Filter</string>
-   	<string name="cancelFilters">Cancel</string>
-    
-    
+    <string name="acceptFilters">Filter</string>
+    <string name="cancelFilters">Cancel</string>
     <string name="cleanDatabaseMsg">The database has been cleaned</string>
     <string name="shareBodyMsg">I\'m using #SWADroid in my Android mobile for access to
         the e-learning platform SWAD.\nGet it for free here:
-        https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid
-    </string>
+        https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid</string>
     <string name="marketURL">market://details?id=es.ugr.swad.swadroid</string>
     <string name="marketWebURL">http://goo.gl/Wgo1y</string>
     <string name="twitterURL">https://twitter.com/#!/SWADroid</string>
@@ -163,8 +154,7 @@
     <string name="msg_default_meta">Metadata</string>
     <string name="msg_default_status">Place a barcode inside the viewfinder rectangle to scan it.</string>
     <string name="msg_camera_framework_bug">Sorry, the Android camera encountered a problem. You may need to restart the
-        device.
-    </string>
+        device.</string>
     <string name="button_ok">OK</string>
     <string name="scan_valid_student">Student of this subject</string>
     <string name="scan_not_valid_student">Student of another subject</string>
@@ -186,8 +176,7 @@
     <string name="downloadFileTitle">Download</string>
     <string name="sdCardBusyTitle">SD card unavailable</string>
     <string name="sdCardBusy">The SD casd is busy. To allow downloads, select “Turn off USB storage” in the
-        notification
-    </string>
+        notification</string>
     <string name="vacants">Vacants</string>
     <string name="numStudent">No. of students</string>
     <string name="maxStudent">Max. students</string>
@@ -196,8 +185,7 @@
     <string name="noStudentsAvailableMsg">There are no students in this subject</string>
     <string name="studentsUpdated">students updated</string>
     <string name="scan_no_students">No students found\n
-        Try “Update students”
-    </string>
+        Try “Update students”</string>
     <string name="photoContentDescription">Photo of student</string>
     <string name="noCameraFound">The device has no camera</string>
     <string name="saveMsg">Save</string>
@@ -221,8 +209,7 @@
     <string name="sendingState">Sending to SWAD:</string>
     <string name="sendingStatePending">Pending</string>
     <string name="session">Session:</string>
-    <string name="noPracticeSessionsAvailableMsg">There are no practice sessions of selected group in the database
-    </string>
+    <string name="noPracticeSessionsAvailableMsg">There are no practice sessions of selected group in the database</string>
     <string name="sessionNoStudentsMsg">No student has attended this session</string>
     <string name="studentsHistoryModuleLabel">History of students</string>
     <string name="sessionsTitle">Practice sessions</string>
@@ -241,13 +228,11 @@
     <string name="sessionsSelect">Check sessions</string>
     <string name="studentsSelect">Check students</string>
     <string name="rollcallErrorNoConnection">No connection to the server.
-        Rollcall data saved in database.
-    </string>
+        Rollcall data saved in database.</string>
     <string name="rollcallHistoryModuleLabel">History of sessions</string>
     <string name="rollcallNoStudentsSelected">No students selected</string>
     <string name="rollcallNoPracticeSessions">There are no practice sessions defined for the subject and selected group.
-        Select: Practice sessions - New
-    </string>
+        Select: Practice sessions - New</string>
     <string name="rollcallSaved">Rollcall data stored properly</string>
     <string name="rollcallWebServiceNotAvailable">The web service to send SWAD rollcall data is not available.</string>
     <string name="rollcallEvent">Rollcall event</string>
@@ -261,8 +246,7 @@
     <string name="noGroupsText">No groups have been created in the course</string>
     <string name="resultEnrollment">Result on the enrollment</string>
     <string name="successfullEnrollment">All the enrollments were made successfully. Please check that you are enrolled
-        in your wished groups
-    </string>
+        in your wished groups</string>
     <string name="confirmEnrollments">Confirm requested enrollments</string>
     <string name="areYouSure">Are you sure, that you want to enroll on the selected groups?</string>
     <string name="ok">OK</string>
@@ -280,8 +264,8 @@
     <string name="contents_email">Email address</string>
     <string name="contents_location">Geographic coordinates</string>
     <string name="contents_phone">Phone number</string>
-    <string name="contents_sms">SMS address</string>    
-    <string name="contents_text">Plain text</string>  
+    <string name="contents_sms">SMS address</string>
+    <string name="contents_text">Plain text</string>
     <string name="lastSyncTimeLabel">Last synchronization</string>
     <string name="neverLabel">Never</string>
     <string name="prefNotifSoundKey">prefNotifSoundEnable</string>
@@ -294,10 +278,8 @@
     <string name="prefNotifLightsTitle">Led</string>
     <string name="prefNotifLightsSummary">Enable/disable led alerts for new notifications</string>
     <string name="changelogTitle">Changelog</string>
-    
-    
-    <string name="informationModuleLabel">Information</string> 
-    <string name="introductionModuleLabel">Introduction</string>  
+    <string name="informationModuleLabel">Information</string>
+    <string name="introductionModuleLabel">Introduction</string>
     <string name="faqsModuleLabel">FAQs</string>
     <string name="linksModuleLabel">Links</string>
     <string name="bibliographyModuleLabel">Bibliography</string>
@@ -308,26 +290,21 @@
     <string name="informationProgressDescription">Getting information…\nWait, please…</string>
     <string name="informationProgressTitle">Information</string>
     <string name="emptyInformation">Information unavailable</string>
-    
-    
     <string name="pradoLoginToast">SWAD\'s password is at least 8 alphanumeric characters long</string>
     <string name="error_password_summaryUGR">Remember you must enter SWAD\'s password, not e-Administration (PRADO)</string>
     <string name="passwordDialogTip">SWAD\'s password is at least 8 alphanumeric characters long</string>
     <string name="errorServerCertificateMsg">The server certificate is invalid. Please contact SWAD admininstrator</string>
     <string name="notificationMarkAllRead">Mark all as read</string>
     <string name="notificationReply">Reply</string>
-	<string name="seenLabel">Seen</string>
-	<string name="notSeenLabel">Not seen</string>
-	
+    <string name="seenLabel">Seen</string>
+    <string name="notSeenLabel">Not seen</string>
     <string name="actionBarRefresh">Refresh</string>
-	<string name="actionBarSave">Save</string>
-	
-	<string name="actionBarAddUser">Add users</string>
-	<string name="actionBarFilterUsers">Filter users</string>
-	
-	<string name="Filters_All">All</string>
-	<string name="Filters_Teachers">Teachers</string>
-	<string name="Filters_Students">Students</string>
-	
-	<string name="errorNoAppForIntent">There are no registered applications to open the selected file type.</string>
+    <string name="actionBarSave">Save</string>
+    <string name="actionBarAddUser">Add users</string>
+    <string name="actionBarFilterUsers">Filter users</string>
+    <string name="Filters_All">All</string>
+    <string name="Filters_Teachers">Teachers</string>
+    <string name="Filters_Students">Students</string>
+    <string name="errorNoAppForIntent">There are no registered applications to open the selected file type.</string>
+
 </resources>
