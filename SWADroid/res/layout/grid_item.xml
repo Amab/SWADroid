@@ -3,8 +3,6 @@
     android:id="@+id/widget44"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_x="201px"
-    android:layout_y="165px"
     android:gravity="center_horizontal"
     android:orientation="vertical" >
 
