@@ -43,6 +43,7 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
@@ -53,6 +54,7 @@ import es.ugr.swad.swadroid.model.TestAnswer;
 import es.ugr.swad.swadroid.model.TestQuestion;
 import es.ugr.swad.swadroid.model.TestTag;
 import es.ugr.swad.swadroid.utils.Utils;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
