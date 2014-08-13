@@ -30,14 +30,14 @@
                 android:layout_marginRight="3dip"
                 android:text="@string/session"
                 android:textColor="@color/foreground1"
-                android:textSize="20dip" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/toptext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/foreground1"
-                android:textSize="20dip"
+                android:textSize="20sp"
                 android:textStyle="bold" />
         </LinearLayout>
 

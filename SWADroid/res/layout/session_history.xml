@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:textColor="@color/title_background"
-        android:textSize="18dip"
+        android:textSize="18sp"
         android:textStyle="bold|italic" />
 
     <ListView

@@ -22,7 +22,7 @@
         android:layout_marginLeft="5dip"
         android:layout_weight="1"
         android:textColor="@color/foreground1"
-        android:textSize="20dip"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
     <CheckBox
