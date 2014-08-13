@@ -18,6 +18,13 @@
  */
 package es.ugr.swad.swadroid.ssl;
 
+import android.content.Context;
+import android.os.Build;
+import android.util.Log;
+
+import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.Preferences;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
@@ -39,12 +46,6 @@ import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.X509TrustManager;
-
-import android.content.Context;
-import android.os.Build;
-import android.util.Log;
-import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.Preferences;
 
 /**
  * Establishes a secure connection.
