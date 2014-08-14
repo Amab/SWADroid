@@ -80,7 +80,6 @@ public class MyGroupsManager extends MenuExpandableListActivity {
     };
 
     private ExpandableListView mExpandableListView;
-    private OnChildClickListener mExpandableListListener;
     
     @Override
     protected void onStart() {
@@ -114,16 +113,6 @@ public class MyGroupsManager extends MenuExpandableListActivity {
         setContentView(R.layout.group_choice);
         
         mExpandableListView = (ExpandableListView) findViewById(android.R.id.list);
-        mExpandableListListener = new OnChildClickListener() {
-            
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition,
-                    int childPosition, long id) {
-                boolean result = ((EnrollmentExpandableListAdapter) mExpandableListView.getExpandableListAdapter()).checkItem(groupPosition, childPosition);
-                ((EnrollmentExpandableListAdapter) mExpandableListView.getExpandableListAdapter()).notifyDataSetChanged();
-                return result;
-            }
-        };
 
         getSupportActionBar().setSubtitle(Constants.getSelectedCourseShortName());
     	getSupportActionBar().setIcon(R.drawable.my_groups);
