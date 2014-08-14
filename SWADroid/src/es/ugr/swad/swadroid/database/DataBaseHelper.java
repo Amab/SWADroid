@@ -58,6 +58,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
@@ -307,7 +308,7 @@ public class DataBaseHelper {
                     ent.getInt("multiple"),
                     ent.getLong("openTime"));
         } else if (table.equals(Constants.DB_TABLE_PRACTICE_SESSIONS)) {
-            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
 
             try {
                 o = new PracticeSession(ent.getId(),
