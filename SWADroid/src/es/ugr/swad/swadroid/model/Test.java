@@ -64,10 +64,6 @@ public class Test extends Model {
      */
     public static final List<String> FEEDBACK_VALUES = Arrays.asList(FEEDBACK_NONE, FEEDBACK_MIN, FEEDBACK_MEDIUM, FEEDBACK_HIGH, FEEDBACK_MAX);
     /**
-     * Tests tag name for Logcat
-     */
-    private static final String TAG = Constants.APP_TAG + " TestsMake";
-    /**
      * List of questions and related answers
      */
     private List<TestQuestion> questions;
