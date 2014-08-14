@@ -3,7 +3,6 @@
     android:id="@+id/actionBarLayout"
     android:layout_width="match_parent"
     android:layout_height="50dip"
-    android:background="@color/title_background"
     android:orientation="horizontal" >
 
     <!-- Logo -->
