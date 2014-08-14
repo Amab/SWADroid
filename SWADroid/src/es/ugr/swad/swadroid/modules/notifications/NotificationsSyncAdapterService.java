@@ -70,6 +70,7 @@ import javax.net.ssl.SSLException;
  */
 public class NotificationsSyncAdapterService extends Service {
     private static final String TAG = "NotificationsSyncAdapterService";
+    private static Preferences prefs;
 	private static SecureConnection conn;
     private static SyncAdapterImpl sSyncAdapter = null;
     private static int notifCount;
@@ -198,6 +199,7 @@ public class NotificationsSyncAdapterService extends Service {
         }
         
         try {
+            prefs = new Preferences(this);
             dbHelper = new DataBaseHelper(this);            
             //Initialize webservices client
             webserviceClient = null;
