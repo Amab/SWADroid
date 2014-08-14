@@ -19,7 +19,6 @@
 package es.ugr.swad.swadroid.modules.groups;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.support.v4.util.LongSparseArray;
 import android.view.LayoutInflater;
@@ -73,7 +72,6 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
         TextView vacantsText;
         TextView nStudentText;
         TextView maxStudentText;
-        ColorStateList oldColor;
     }
 
     private final LayoutInflater mInflater;
@@ -126,7 +124,6 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
             holder.vacantsText = (TextView) convertView.findViewById(R.id.vacantsText);
             holder.nStudentText = (TextView) convertView.findViewById(R.id.nStudentText);
             holder.maxStudentText = (TextView) convertView.findViewById(R.id.maxStudentText);
-            holder.oldColor = holder.vacantsText.getTextColors();
             convertView.setTag(holder);
         } else {
             holder = (ChildHolder) convertView.getTag();
