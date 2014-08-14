@@ -57,7 +57,8 @@ public class RESTClient implements IWebserviceClient {
 	/**
 	 * METHOD_NAME param for webservice request.
 	 */
-	private String METHOD_NAME;
+	@SuppressWarnings("unused")
+    private String METHOD_NAME;
 	/**
 	 * Complete URL for webservice request.
 	 */
