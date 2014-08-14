@@ -29,7 +29,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
-import android.widget.ExpandableListView.OnChildClickListener;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
