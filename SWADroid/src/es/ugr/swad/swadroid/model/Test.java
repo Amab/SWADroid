@@ -18,7 +18,6 @@
  */
 package es.ugr.swad.swadroid.model;
 
-import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.utils.Utils;
 
 import org.ksoap2.serialization.PropertyInfo;
