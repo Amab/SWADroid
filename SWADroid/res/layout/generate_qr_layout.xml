@@ -1,7 +1,17 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/generate_qr_layout" android:layout_width="match_parent" android:layout_height="match_parent" android:gravity="center" android:orientation="vertical">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/generate_qr_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical" >
 
-    <ImageView android:id="@+id/qr_code_image" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_gravity="center" android:padding="5dip">
+    <ImageView
+        android:id="@+id/qr_code_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:padding="5dip" >
     </ImageView>
 
 </LinearLayout>
