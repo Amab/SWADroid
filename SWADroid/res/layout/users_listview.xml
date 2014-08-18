@@ -11,15 +11,15 @@
         android:gravity="right"
         android:orientation="vertical" >
 
-        <ListView
-            android:id="@+id/users_listview"
+        <ExpandableListView
+            android:id="@+id/users_explistview"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_above="@+id/cancelList"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:background="@color/background" >
-        </ListView>
+        </ExpandableListView>
 
         <Button
             android:id="@+id/cancelList"

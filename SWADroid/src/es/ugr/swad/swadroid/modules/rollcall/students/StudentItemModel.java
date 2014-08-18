@@ -28,7 +28,7 @@ import es.ugr.swad.swadroid.model.User;
  * @author José Antonio Guerrero Avilés <cany20@gmail.com>
  */
 
-public class StudentItemModel implements Comparable<StudentItemModel> {
+public class StudentItemModel implements Comparable<StudentItemModel>{
     private final User student;
     private boolean selected;
 
@@ -76,5 +76,24 @@ public class StudentItemModel implements Comparable<StudentItemModel> {
 
 	public String getUserNickname() {
 		return student.getUserNickname();
+	}
+	
+	public String getUserSurname1() {
+		return student.getUserSurname1();
+	}
+	
+	public String getUserSurname2() {
+		return student.getUserSurname2();
+	}
+	public String getUserFirstName() {
+		return student.getUserFirstname();
+	}
+	
+	public int getUserRole() {
+		return student.getUserRole();
+	}
+
+	public String getFullName() {
+		return student.getUserSurname1()+student.getUserSurname2()+","+student.getPhotoFileName();
 	}
 }

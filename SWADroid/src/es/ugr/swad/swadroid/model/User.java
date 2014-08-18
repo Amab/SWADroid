@@ -28,6 +28,7 @@ import java.util.Hashtable;
  *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
+ * @author José Antonio Guerrero Avilés <cany20@gmail.com>
  */
 public class User extends Model {
     /**

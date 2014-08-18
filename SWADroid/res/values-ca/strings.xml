@@ -201,8 +201,10 @@
     <string name="noSessionsAvailableMsg">No hi ha sessions de pràctiques a la base de dades</string>
     <string name="rollcallModuleLabel">Passar llista</string>
     <string name="studentsTitle">Estudiants</string>
-    <string name="studentsDownloadProgressDescription">Sincronitzant estudiants.\n\nDependiendo del nombre d\'estudiants
+    <string name="studentsDownloadProgressDescription">Sincronitzant usuaris.\n\nDependiendo del nombre d\'usuaris
         a sincronitzar, el processament de les dades pot trigar uns minuts.\n\nSi us plau, esperi…</string>
+        
+    <string name="usersDownloadProgressTitle">Usuaris</string>
     <string name="studentsList">Llista d\'estudiants</string>
     <string name="studentsDownloadProgressTitle">Estudiants</string>
     <string name="studentsPresent">Estudiants presents</string>
@@ -288,5 +290,7 @@
     <string name="Filters_All">Tot</string>
     <string name="Filters_Teachers">Professors</string>
     <string name="Filters_Students">Alumnes</string>
+    <string name="title_activity_downloadUsers">Descarregar usuaris</string>
+	<string name="title_activity_users_list">Llista d\'usuaris</string>
 
 </resources>

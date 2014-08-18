@@ -31,7 +31,7 @@ public abstract class Model implements KvmSerializable {
      */
     private long id;
 
-    Model(long id) {
+    protected Model(long id) {
         super();
         this.id = id;
     }

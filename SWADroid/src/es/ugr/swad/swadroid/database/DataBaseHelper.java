@@ -64,6 +64,7 @@ import java.util.Locale;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
+ * @author José Antonio Guerrero Avilés <cany20@gmail.com>
  */
 public class DataBaseHelper {
     /**
@@ -284,11 +285,11 @@ public class DataBaseHelper {
             o = new User(ent.getInt("userCode"),
                     null,                                // wsKey
                     ent.getString("userID"),
-                    ent.getString("userNickname"),
-                    ent.getString("userSurname1"),
-                    ent.getString("userSurname2"),
-                    ent.getString("userFirstname"),
-                    ent.getString("photoPath"),
+                    crypto.decrypt(ent.getString("userNickname")),
+                    crypto.decrypt(ent.getString("userSurname1")),
+                    crypto.decrypt(ent.getString("userSurname2")),
+                    crypto.decrypt(ent.getString("userFirstname")),
+                    crypto.decrypt(ent.getString("photoPath")),
                     ent.getInt("userRole"));
         } else if (table.equals(Constants.DB_TABLE_GROUPS)) {
             long groupTypeCode = getGroupTypeCodeFromGroup(ent.getLong("id"));

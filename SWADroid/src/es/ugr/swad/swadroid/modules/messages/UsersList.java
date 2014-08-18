@@ -6,28 +6,22 @@
 
 package es.ugr.swad.swadroid.modules.messages;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ListView;
-import android.widget.Toast;
-
+import android.widget.ExpandableListView;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
+import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.model.User;
-import es.ugr.swad.swadroid.modules.rollcall.RollcallConfigDownload;
 import es.ugr.swad.swadroid.modules.rollcall.students.StudentItemModel;
-import es.ugr.swad.swadroid.modules.rollcall.students.StudentsArrayAdapter;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class UsersList extends MenuActivity {
 
@@ -36,13 +30,59 @@ public class UsersList extends MenuActivity {
     private String rcvs = "";
     private String rcvs_Aux = "";
 	
+    /**
+	 * List of groups for ExpandableListView
+	 */
+	ArrayList<String> groupItem;
+	/**
+	 * List of childs for ExpandableListView
+	 */
+	ArrayList<List<Model>> childItem;
+	/**
+	 * Adapter container for users
+	 */
+	ExpandableStudentsListAdapter adapter;
+	/**
+	 * ListView container for notifications
+	 */
+	ExpandableListView list;
+	/**
+	 * Id for the teachers group
+	 */
+	int TEACHERS_GROUP_ID = 0;
+	/**
+	 * Id for the students group
+	 */
+	int STUDENTS_GROUP_ID = 1;
+	/**
+	 * Cursor orderby parameter
+	 */
+	private final String orderby = "userSurname1 DESC";
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.users_listview);
 		setTitle(R.string.selectRcvModuleLabel);
 		getSupportActionBar().setIcon(R.drawable.users);
-	        
+		
+		list = (ExpandableListView) findViewById(R.id.users_explistview);
+		
+		groupItem = new ArrayList<String>();
+		childItem = new ArrayList<List<Model>>();
+		
+		//Download the users list
+		downloadStudentsList();
+		
+		//Load users list
+		//loadStudentsList();
+		
+		//Set ExpandableListView data
+		setGroupData();
+		setChildGroupData();
+		
+		
 		Button cancelList = (Button) findViewById(R.id.cancelList);
 		cancelList.setOnClickListener(new View.OnClickListener() {
 			
@@ -74,20 +114,15 @@ public class UsersList extends MenuActivity {
                 finish();
 			}
 		});
+	
 		
 	}
 
-    @Override
+
+	@Override
     protected void onStart() {
         super.onStart();
-
-		/*La primera vez deber� cargar una lista vac�a y para obtener la primera lista, 
-		 * habr� que pulsar en el bot�n actualizar de la actionbar. A partir de este momento,
-		 * tendremos una lista de usuarios en la memoria del tel�fono y cuando  entre aqu� la segunda
-		 * vez y sucesivas, ser� esa la lista que se cargue. Si queremos, podemos volver a pulsar el
-		 * bot�n actualizar por si hay nuevos usuarios.*/
-
-        	showStudentsList();
+       	//downloadStudentsList();
 	
         /*try {
             runConnection();
@@ -98,10 +133,7 @@ public class UsersList extends MenuActivity {
     }
 
 	protected void connect() {
-		/*String progressDescription = getString(R.string.informationProgressDescription);
-		int progressTitle = R.string.informationProgressTitle;
-
-		startConnection(true, progressDescription, progressTitle);*/
+		
 	}
 
 
@@ -119,7 +151,16 @@ public class UsersList extends MenuActivity {
 		
 	}
 	
-	 private void showStudentsList() {
+	 private void downloadStudentsList() {
+		 
+		 	Intent donwloadUsersList = new Intent (getBaseContext(), DownloadUsers.class);
+			startActivity(donwloadUsersList);
+			
+			//Set ExpandableListView data
+			//setGroupData();
+			//setChildGroupData();
+			/*setResult(RESULT_OK);
+			
 	        List<Long> idList = dbHelper.getUsersCourse(Constants.getSelectedCourseCode());
 	        if (!idList.isEmpty()) {
 	            studentsList = new ArrayList<StudentItemModel>();
@@ -130,49 +171,55 @@ public class UsersList extends MenuActivity {
 	            }
 	            // Arrange the list alphabetically
 	            Collections.sort(studentsList);
-	            
-	            // Show the list of students in the ListView
-	            ListView lv = (ListView) findViewById(R.id.users_listview);
-	            lv.setAdapter(new StudentsArrayAdapter(this, studentsList, Constants.ROLLCALL_REQUEST_CODE));
 
 	            
 	        } else {
 	            Toast.makeText(this, R.string.scan_no_students, Toast.LENGTH_LONG).show();
-	        }
+	        }*/
 	    }
-	 
+
 	
-	 @Override
-		public boolean onCreateOptionsMenu(Menu menu) {
-		    getMenuInflater().inflate(R.menu.users_list_activity_actions, menu);
-		    return super.onCreateOptionsMenu(menu);
-	}
+	private void setChildGroupData() {
 		
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-	    switch (item.getItemId()) {
-	        case R.id.action_filter_users:
-	        	
-				Intent callFilterUsersList = new Intent (getBaseContext(), FilterUsersList.class);
-				startActivity(callFilterUsersList);
-				
-	            return true;
-	            
-	        //Refresh users list    
-	        case R.id.action_refresh_users:
-	        					
-				Intent refreshUsersList;
-				Context context = getApplicationContext();
-				
-				refreshUsersList = new Intent(context, RollcallConfigDownload.class);
-				refreshUsersList.putExtra("groupCode", (long) 0);
-		        startActivity(refreshUsersList);
-				
-	            return true;
-	
-	        default:
-	            return super.onOptionsItemSelected(item);
-	    }
-		    
+		List<Model> child = null;
+
+		//Clear data
+		childItem.clear();
+
+		
+		//Add data for teachers 
+		child = dbHelper.getAllRows(Constants.DB_TABLE_USERS,"userRole='"
+				+ Constants.TEACHER_TYPE_CODE+"'", orderby);		
+		childItem.add(0,child);
+		
+		//Add data for students	
+		child.clear();
+		child = dbHelper.getAllRows(Constants.DB_TABLE_USERS,"userRole='"
+				+ Constants.TEACHER_TYPE_CODE+"'", orderby);
+
+		childItem.add(1,child);
+
+		
+		Log.d(TAG, "groups size=" + childItem.size());
+		Log.d(TAG, "teachers children size=" + childItem.get(TEACHERS_GROUP_ID).size());
+		Log.d(TAG, "students children size=" + childItem.get(STUDENTS_GROUP_ID).size());
+		
+		adapter = new ExpandableStudentsListAdapter(this, groupItem, childItem, Constants.getCurrentUserRole());
+		list.setAdapter(adapter);
+		
+		if(dbHelper.getAllRowsCount(Constants.DB_TABLE_USERS) > 0) {
+			Log.d(TAG, "[setChildGroupData] Users table is not empty");
+
+		} else {
+			Log.d(TAG, "[setChildGroupData] Users table is empty");
+
+		}
+	}
+
+	private void setGroupData() {
+		
+		groupItem.add(getString(R.string.Filters_Teachers));
+		groupItem.add(getString(R.string.Filters_Students));
+		
 	}
 }
