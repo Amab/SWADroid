@@ -48,7 +48,7 @@ public class NotificationItem extends MenuActivity {
     /**
      * NotificationsItem tag name for Logcat
      */
-    private static final String TAG = Constants.APP_TAG + " Notificationsitem";
+    private static final String TAG = Constants.APP_TAG + " NotificationsItem";
     private Long notifCode;
     private Long eventCode;
     private String sender;
