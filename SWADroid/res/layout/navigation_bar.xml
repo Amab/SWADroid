@@ -3,6 +3,7 @@
     android:id="@+id/actionBarLayout"
     android:layout_width="match_parent"
     android:layout_height="50dip"
+    android:background="@android:color/white"
     android:orientation="horizontal" >
 
     <!-- Home -->
