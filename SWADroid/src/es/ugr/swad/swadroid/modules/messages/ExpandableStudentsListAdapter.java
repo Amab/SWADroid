@@ -130,7 +130,7 @@ public class ExpandableStudentsListAdapter extends BaseExpandableListAdapter{
         final String fullName = u.getUserSurname1() 
         						+' '
         						+u.getUserSurname2()
-        						+ ","
+        						+ ", "
         						+ u.getUserFirstname();
         
         final String photoFileName = u.getPhotoFileName();
