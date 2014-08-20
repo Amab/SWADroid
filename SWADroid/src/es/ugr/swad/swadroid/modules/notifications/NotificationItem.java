@@ -28,11 +28,9 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
@@ -48,9 +46,10 @@ public class NotificationItem extends MenuActivity {
     /**
      * NotificationsItem tag name for Logcat
      */
-    private static final String TAG = Constants.APP_TAG + " Notificationsitem";
+    private static final String TAG = Constants.APP_TAG + " NotificationsItem";
     private Long notifCode;
     private Long eventCode;
+    private String notificationType;
     private String sender;
     private String userPhoto;
     private String course;
@@ -60,7 +59,7 @@ public class NotificationItem extends MenuActivity {
     private String time;
     private boolean seenLocal;
 
-    @Override
+	@Override
     protected void onCreate(Bundle savedInstanceState) {
         TextView senderTextView, courseTextView, summaryTextView, dateTextView, timeTextView;
         ImageView userPhotoView;
@@ -83,6 +82,7 @@ public class NotificationItem extends MenuActivity {
 
         notifCode = Long.valueOf(this.getIntent().getStringExtra("notifCode")); 
         eventCode = Long.valueOf(this.getIntent().getStringExtra("eventCode"));
+        notificationType = this.getIntent().getStringExtra("notificationType");
         sender = this.getIntent().getStringExtra("sender");
         userPhoto = this.getIntent().getStringExtra("userPhoto");
         course = this.getIntent().getStringExtra("course");
@@ -161,7 +161,12 @@ public class NotificationItem extends MenuActivity {
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-	    getMenuInflater().inflate(R.menu.notification_single_activity_actions, menu);
+	    getMenuInflater().inflate(R.menu.notification_single_activity_actions, menu);	 
+	    
+	    if (!notificationType.equals(getString(R.string.message))) {
+	    	menu.removeItem(R.id.action_reply);
+	    }
+	    
 	    return super.onCreateOptionsMenu(menu);
 	}
 	
