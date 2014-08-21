@@ -29,7 +29,7 @@ import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
- * Rollcall config download module.
+ * Download users list.
  *
  * @author José Antonio Guerrero Avilés <cany20@gmail.com>
  */
