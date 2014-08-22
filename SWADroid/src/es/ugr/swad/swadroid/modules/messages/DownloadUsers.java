@@ -1,5 +1,6 @@
 package es.ugr.swad.swadroid.modules.messages;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -7,11 +8,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import org.apache.http.util.ByteArrayBuffer;
 import org.ksoap2.serialization.SoapObject;
 
 import android.os.Bundle;
@@ -45,7 +50,7 @@ public class DownloadUsers extends Module{
      */
     private static final int PHOTO_FILE_MAX_SIZE = 30 * 1024;    // 30 KB
     /**
-     * Rollcall Config Download tag name for Logcat
+     * Download Users tag name for Logcat
      */
     private static final String TAG = Constants.APP_TAG + " Downloadusers";
 
@@ -142,7 +147,50 @@ public class DownloadUsers extends Module{
     }
 
     private void downloadFile(String url) {
-        if (url != null) {
+    	
+    	String filepath = null;
+		try
+    	{   
+    	  URL nurl = new URL(url);
+    	  HttpURLConnection urlConnection = (HttpURLConnection) nurl.openConnection();
+    	  urlConnection.setRequestMethod("GET");
+    	  urlConnection.setDoOutput(true);                   
+    	  urlConnection.connect();                  
+    	  File SDCardRoot = getExternalFilesDir(null);
+    	  String filename = url.substring(url.lastIndexOf('/') + 1);  
+    	  Log.i("Local filename:",""+filename+"  SDCardRoot: "+SDCardRoot.toString());
+    	  File file = new File(SDCardRoot,filename);
+    	  if(file.createNewFile())
+    	  {
+    	    file.createNewFile();
+    	  }                 
+    	  FileOutputStream fileOutput = new FileOutputStream(file);
+    	  InputStream inputStream = urlConnection.getInputStream();
+    	  int totalSize = urlConnection.getContentLength();
+    	  int downloadedSize = 0;   
+    	  byte[] buffer = new byte[PHOTO_FILE_MAX_SIZE];
+    	  int bufferLength = 0;
+    	  while ( (bufferLength = inputStream.read(buffer)) > 0 ) 
+    	  {                 
+    	    fileOutput.write(buffer, 0, bufferLength);                  
+    	    downloadedSize += bufferLength;                 
+    	    Log.i("Progress:","downloadedSize:"+downloadedSize+"totalSize:"+ totalSize) ;
+    	  }             
+    	  fileOutput.close();
+    	  if(downloadedSize==totalSize) filepath=file.getPath();    
+    	} 
+    	catch (MalformedURLException e) 
+    	{
+    	  e.printStackTrace();
+    	} 
+    	catch (IOException e)
+    	{
+    	  filepath=null;
+    	  e.printStackTrace();
+    	}
+    	Log.i("filepath:"," "+filepath);
+    	//return filepath;
+        /*if (url != null) {
             // Check the status of the external memory
             String status = Environment.getExternalStorageState();
             if (status.equals(Environment.MEDIA_MOUNTED)) {
@@ -189,7 +237,7 @@ public class DownloadUsers extends Module{
                     }
                 }
             }
-        }
+        }*/
     }
 
     @Override

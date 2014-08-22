@@ -4,10 +4,13 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +21,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.model.User;
@@ -119,11 +121,12 @@ public class ExpandableStudentsListAdapter extends BaseExpandableListAdapter{
 		return convertView;
 	}
 
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
 	@Override
 	public View getChildView(int groupPosition, int childPosition,
 			boolean isLastChild, View convertView, ViewGroup parent) {
 		
-        Bitmap bMap;
+        Bitmap bMap = null;
 
         User u = (User) childItem.get(groupPosition).get(childPosition);
         
@@ -153,15 +156,27 @@ public class ExpandableStudentsListAdapter extends BaseExpandableListAdapter{
         // If user has no photo, show default photo
         if (photoFileName == null) {
             bMap = BitmapFactory.decodeStream(image.getResources().openRawResource(R.raw.usr_bl));
+            
         } else {
-            String photoPath = activity.getBaseContext().getExternalFilesDir(null) + "/" + photoFileName;
+        	
+            //String photoPath = activity.getBaseContext().getExternalFilesDir(null) + "/" + photoFileName;
+            String photoPath = new File(activity.getBaseContext().getExternalFilesDir(null), photoFileName).getAbsolutePath();
             File photoFile = new File(photoPath);
-            //if (photoFile.exists()) {
-                //bMap = BitmapFactory.decodeFile(photoPath);
-            //} else {
-                // If photoFile does not exist (has been deleted), show default photo
+            //Log.i("filepath2:"," "+photoPath);
+            
+            if (photoFile.exists()) {
+            	
+            	Log.i("filepath2:"," "+photoPath);
+                final BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inJustDecodeBounds = false;
+                bMap = BitmapFactory.decodeFile(photoPath, options);
+                
+            } 
+            
+            if (bMap == null) {
+                // If photoFile does not exist (has been deleted) or can't be loaded, show default photo
                 bMap = BitmapFactory.decodeStream(image.getResources().openRawResource(R.raw.usr_bl));
-            //}
+            }
         }
 
         // Calculate the dimensions of the image to display as a function of the resolution of the screen
@@ -169,11 +184,18 @@ public class ExpandableStudentsListAdapter extends BaseExpandableListAdapter{
 
         widthScale = 1200;
         heightScale = 2000;
+        Log.i("tamaños:","bMapWidth "+bMap.getWidth());
+        Log.i("tamaños:","bMapHeigh "+bMap.getHeight());
+        Log.i("tamaños:","displayWidth "+display.getWidth());
+        Log.i("tamaños:","displayHeigh "+display.getHeight());
+        
         bMapScaledWidth = (bMap.getWidth() * display.getWidth()) / widthScale;
         bMapScaledHeight = (bMap.getHeight() * display.getHeight()) / heightScale;
 
-        Bitmap bMapScaled = Bitmap.createScaledBitmap(bMap, bMapScaledWidth, bMapScaledHeight, true);
+        Bitmap bMapScaled = null;
+        bMapScaled = Bitmap.createScaledBitmap(bMap, bMapScaledWidth, bMapScaledHeight, true);
         image.setImageBitmap(bMapScaled);
+        //image.setImageBitmap(bMap);
         text.setText(fullName);
         checkbox.setChecked((new StudentItemModel(u)).isSelected());
 
