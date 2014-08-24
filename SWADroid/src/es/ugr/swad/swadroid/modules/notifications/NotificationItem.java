@@ -28,11 +28,10 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.gui.ImageFactory;
 import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.modules.messages.Messages;
 import es.ugr.swad.swadroid.utils.Utils;
@@ -103,18 +102,8 @@ public class NotificationItem extends MenuActivity {
                 && (userPhoto != null) && !userPhoto.equals("")
                 && !userPhoto.equals(Constants.NULL_VALUE)) {
             //userPhotoView.setImageURI(Uri.parse(userPhoto));
-            //new DownloadImageTask(userPhotoView).execute(userPhoto);
-        	DisplayImageOptions options = new DisplayImageOptions.Builder()
-            .cacheInMemory(true)
-            .build();
-        	
-			ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
-			            .defaultDisplayImageOptions(options)
-			            .build();
-			
-			ImageLoader.getInstance().init(config);
-			
-			ImageLoader.getInstance().displayImage(userPhoto, userPhotoView);
+            //new DownloadImageTask(userPhotoView).execute(userPhoto);			
+			ImageFactory.displayImage(getApplicationContext(), userPhoto, userPhotoView, true, false);
         } else {
             Log.d("NotificationItem", "No connection or no photo " + userPhoto);
         }
