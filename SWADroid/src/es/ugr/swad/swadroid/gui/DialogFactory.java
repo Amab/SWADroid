@@ -18,7 +18,11 @@ import es.ugr.swad.swadroid.R;
 import org.apache.commons.io.IOUtils;
 
 import java.io.InputStream;
-
+/**
+ * Class for create dialogs.
+ *
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ */
 public class DialogFactory {
 	/**
 	 * Creates a Webview dialog with HTML content.
