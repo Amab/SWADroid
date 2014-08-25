@@ -196,17 +196,7 @@ public class ExpandableStudentsListAdapter extends BaseExpandableListAdapter{
 			
 			ImageLoader.getInstance().init(config);
 			ImageLoader.getInstance().displayImage(photoFileName, image);
-			// Calculate the dimensions of the image to display as a function of the resolution of the screen
-            //Display display = ((WindowManager) activity.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
 
-            //widthScale = 1200;
-            //heightScale = 2000;
-            //bMapScaledWidth = (image.getWidth() * display.getWidth()) / widthScale;
-            //bMapScaledHeight = (image.getHeight() * display.getHeight()) / heightScale;
-            
-            //LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(bMapScaledWidth, bMapScaledHeight);
-            //image.setLayoutParams(layoutParams);
-			
         } 
         else {
             Log.d("ExpLVStudentList", "No connection or no photo " + photoFileName);

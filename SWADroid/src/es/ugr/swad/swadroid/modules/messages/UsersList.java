@@ -81,16 +81,6 @@ public class UsersList extends MenuActivity {
 		setGroupData();
 		setChildGroupData();
 		
-		
-		Button cancelList = (Button) findViewById(R.id.cancelList);
-		cancelList.setOnClickListener(new View.OnClickListener() {
-			
-			public void onClick(View v) {
-				setResult(RESULT_CANCELED);
-				finish();
-			}
-		});
-		
 		Button acceptList = (Button) findViewById(R.id.acceptList);
 		acceptList.setOnClickListener(new View.OnClickListener() {
 			
@@ -120,6 +110,7 @@ public class UsersList extends MenuActivity {
 	@Override
     protected void onStart() {
 		super.onStart();
+		setChildGroupData();
     }
 
 	protected void connect() {
@@ -145,6 +136,7 @@ public class UsersList extends MenuActivity {
 		 
 		 	Intent donwloadUsersList = new Intent (getBaseContext(), DownloadUsers.class);
 			startActivity(donwloadUsersList);
+			setChildGroupData();
 
 	}
 
