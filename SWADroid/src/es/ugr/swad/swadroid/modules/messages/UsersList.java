@@ -7,6 +7,8 @@
 package es.ugr.swad.swadroid.modules.messages;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import android.app.Activity;
@@ -75,9 +77,6 @@ public class UsersList extends MenuActivity {
 		//Download the users list
 		downloadStudentsList();
 		
-		//Load users list
-		//loadStudentsList();
-		
 		//Set ExpandableListView data
 		setGroupData();
 		setChildGroupData();
@@ -114,22 +113,13 @@ public class UsersList extends MenuActivity {
                 finish();
 			}
 		});
-	
 		
 	}
 
 
 	@Override
     protected void onStart() {
-        super.onStart();
-       	//downloadStudentsList();
-	
-        /*try {
-            runConnection();
-        } catch (Exception e) {
-            String errorMsg = getString(R.string.errorServerResponseMsg);
-            error(TAG, errorMsg, e, true);
-        }*/
+		super.onStart();
     }
 
 	protected void connect() {
@@ -155,28 +145,8 @@ public class UsersList extends MenuActivity {
 		 
 		 	Intent donwloadUsersList = new Intent (getBaseContext(), DownloadUsers.class);
 			startActivity(donwloadUsersList);
-			
-			//Set ExpandableListView data
-			//setGroupData();
-			//setChildGroupData();
-			/*setResult(RESULT_OK);
-			
-	        List<Long> idList = dbHelper.getUsersCourse(Constants.getSelectedCourseCode());
-	        if (!idList.isEmpty()) {
-	            studentsList = new ArrayList<StudentItemModel>();
 
-	            for (Long userCode : idList) {
-	                User u = dbHelper.getUser("userCode", String.valueOf(userCode));
-	                studentsList.add(new StudentItemModel(u));
-	            }
-	            // Arrange the list alphabetically
-	            Collections.sort(studentsList);
-
-	            
-	        } else {
-	            Toast.makeText(this, R.string.scan_no_students, Toast.LENGTH_LONG).show();
-	        }*/
-	    }
+	}
 
 	
 	private void setChildGroupData() {
@@ -198,7 +168,6 @@ public class UsersList extends MenuActivity {
 				+ Constants.TEACHER_TYPE_CODE+"'", orderby);
 
 		childItem.add(1,child);
-
 		
 		Log.d(TAG, "groups size=" + childItem.size());
 		Log.d(TAG, "teachers children size=" + childItem.get(TEACHERS_GROUP_ID).size());

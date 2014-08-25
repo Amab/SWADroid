@@ -1,14 +1,34 @@
 package es.ugr.swad.swadroid.modules.messages;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.entity.BufferedHttpEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
 import android.view.Display;
@@ -125,7 +145,7 @@ public class ExpandableStudentsListAdapter extends BaseExpandableListAdapter{
 	@Override
 	public View getChildView(int groupPosition, int childPosition,
 			boolean isLastChild, View convertView, ViewGroup parent) {
-		
+
         Bitmap bMap = null;
 
         User u = (User) childItem.get(groupPosition).get(childPosition);
@@ -137,9 +157,10 @@ public class ExpandableStudentsListAdapter extends BaseExpandableListAdapter{
         						+ u.getUserFirstname();
         
         final String photoFileName = u.getPhotoFileName();
+        Log.i("fileNAME:"," "+photoFileName);
         
         if (convertView == null) {
-        	convertView = minflater.inflate(R.layout.messages_child_item, null);
+        	convertView = minflater.inflate(R.layout.messages_child_item, parent, false);
         }
         
         ImageView image = (ImageView) convertView.findViewById(R.id.imageView1);
@@ -151,51 +172,35 @@ public class ExpandableStudentsListAdapter extends BaseExpandableListAdapter{
                 checkbox.setSelected(buttonView.isChecked());
             }
         });
-
-
+       
+  
         // If user has no photo, show default photo
         if (photoFileName == null) {
             bMap = BitmapFactory.decodeStream(image.getResources().openRawResource(R.raw.usr_bl));
-            
         } else {
-        	
-            //String photoPath = activity.getBaseContext().getExternalFilesDir(null) + "/" + photoFileName;
-            String photoPath = new File(activity.getBaseContext().getExternalFilesDir(null), photoFileName).getAbsolutePath();
+            String photoPath = activity.getBaseContext().getExternalFilesDir(null) + "/" + photoFileName;
             File photoFile = new File(photoPath);
-            //Log.i("filepath2:"," "+photoPath);
-            
             if (photoFile.exists()) {
-            	
-            	Log.i("filepath2:"," "+photoPath);
-                final BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inJustDecodeBounds = false;
-                bMap = BitmapFactory.decodeFile(photoPath, options);
-                
-            } 
-            
-            if (bMap == null) {
-                // If photoFile does not exist (has been deleted) or can't be loaded, show default photo
+                bMap = BitmapFactory.decodeFile(photoPath);
+            } else {
+                // If photoFile does not exist (has been deleted), show default photo
                 bMap = BitmapFactory.decodeStream(image.getResources().openRawResource(R.raw.usr_bl));
             }
         }
 
         // Calculate the dimensions of the image to display as a function of the resolution of the screen
-        Display display = ((WindowManager) activity.getBaseContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        Display display = ((WindowManager) activity.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
 
         widthScale = 1200;
         heightScale = 2000;
-        Log.i("tamaños:","bMapWidth "+bMap.getWidth());
-        Log.i("tamaños:","bMapHeigh "+bMap.getHeight());
-        Log.i("tamaños:","displayWidth "+display.getWidth());
-        Log.i("tamaños:","displayHeigh "+display.getHeight());
-        
         bMapScaledWidth = (bMap.getWidth() * display.getWidth()) / widthScale;
         bMapScaledHeight = (bMap.getHeight() * display.getHeight()) / heightScale;
 
-        Bitmap bMapScaled = null;
-        bMapScaled = Bitmap.createScaledBitmap(bMap, bMapScaledWidth, bMapScaledHeight, true);
+        Bitmap bMapScaled = Bitmap.createScaledBitmap(bMap, bMapScaledWidth, bMapScaledHeight, true);
         image.setImageBitmap(bMapScaled);
-        //image.setImageBitmap(bMap);
+
+        //new DownloadImageTask((ImageView) convertView.findViewById(R.id.imageView1)).execute(u.getUserPhoto());
+        
         text.setText(fullName);
         checkbox.setChecked((new StudentItemModel(u)).isSelected());
 
@@ -219,4 +224,51 @@ public class ExpandableStudentsListAdapter extends BaseExpandableListAdapter{
 	public void onGroupExpanded(int groupPosition) {
 		super.onGroupExpanded(groupPosition);
 	}
+	
+	private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+		ImageView bmImage;
+
+		public DownloadImageTask(ImageView bmImage) {
+		    this.bmImage = bmImage;
+		}
+
+		protected Bitmap doInBackground(String... urls) {
+		    String urldisplay = urls[0];
+		    Log.i("URLSDISPLAY:"," "+urldisplay);
+		    Bitmap bMap = null;
+		    try {
+		        InputStream in = new java.net.URL(urldisplay).openStream();
+		        bMap = BitmapFactory.decodeStream(in);
+		    } catch (Exception e) {
+		        Log.e("Error", e.getMessage());
+		        e.printStackTrace();
+		    }
+		    Bitmap bMapScaled = null;
+		    
+		    if (bMap == null){
+		    	bMapScaled = BitmapFactory.decodeStream(activity.getResources().openRawResource(R.raw.usr_bl));
+		    }
+		    // Calculate the dimensions of the image to display as a function of the resolution of the screen
+	        Display display = ((WindowManager) activity.getBaseContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+
+	        widthScale = 1200;
+	        heightScale = 2000;
+	        Log.i("tamaños:","bMapWidth "+bMap.getWidth());
+	        Log.i("tamaños:","bMapHeigh "+bMap.getHeight());
+	        Log.i("tamaños:","displayWidth "+display.getWidth());
+	        Log.i("tamaños:","displayHeigh "+display.getHeight());
+	        
+	        bMapScaledWidth = (bMap.getWidth() * display.getWidth()) / widthScale;
+	        bMapScaledHeight = (bMap.getHeight() * display.getHeight()) / heightScale;
+
+	        bMapScaled = Bitmap.createScaledBitmap(bMap, bMapScaledWidth, bMapScaledHeight, true);
+		    
+			return bMapScaled;
+		}
+
+		protected void onPostExecute(Bitmap result) {
+		   bmImage.setImageBitmap(result);
+		}
+	}
+
 }

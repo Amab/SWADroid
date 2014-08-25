@@ -133,7 +133,8 @@ public class DownloadUsers extends Module{
                 
                 // If user's picture URL is not empty, download and save it in phone memory
                 if(!userPhoto.equals("")) {
-                	downloadFile(userPhoto);
+                	//downloadFile(userPhoto);
+                	download(userPhoto,u.getPhotoFileName());
                 }
             }    // end for (int i=0; i < usersCount; i++)
 
@@ -189,8 +190,8 @@ public class DownloadUsers extends Module{
     	  e.printStackTrace();
     	}
     	Log.i("filepath:"," "+filepath);
-    	//return filepath;
-        /*if (url != null) {
+    	/*
+    	if (url != null) {
             // Check the status of the external memory
             String status = Environment.getExternalStorageState();
             if (status.equals(Environment.MEDIA_MOUNTED)) {
@@ -269,5 +270,25 @@ public class DownloadUsers extends Module{
 
     }
 
+    public void download(String Url, String name) throws IOException {
+        URL url = new URL (Url);
+        InputStream input = url.openStream();
+        try {
+            File storagePath = new File(Environment.getExternalStorageDirectory(), name);
+
+            OutputStream output = new FileOutputStream (storagePath);
+            try {
+                byte[] buffer = new byte[2048];
+                int bytesRead = 0;
+                while ((bytesRead = input.read(buffer, 0, buffer.length)) >= 0) {
+                    output.write(buffer, 0, bytesRead);
+                }
+            } finally {
+                output.close();
+            }
+        } finally {
+            input.close();
+        }
+      }
 
 }
