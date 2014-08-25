@@ -1,32 +1,14 @@
 package es.ugr.swad.swadroid.modules.messages;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Vector;
 
-import org.apache.http.util.ByteArrayBuffer;
 import org.ksoap2.serialization.SoapObject;
 
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
-
-import com.bugsense.trace.BugSenseHandler;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
@@ -46,14 +28,10 @@ public class DownloadUsers extends Module{
      */
     private int numUsers;
     /**
-     * Maximum size of a student photo (in bytes)
-     */
-    private static final int PHOTO_FILE_MAX_SIZE = 30 * 1024;    // 30 KB
-    /**
      * Download Users tag name for Logcat
      */
     private static final String TAG = Constants.APP_TAG + " Downloadusers";
-
+    
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
      */
@@ -95,6 +73,7 @@ public class DownloadUsers extends Module{
         sendRequest(User.class, false);
 
         if (result != null) {
+        	
             // Stores users data returned by webservice response
             ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
             SoapObject soap = (SoapObject) res.get(1);
@@ -131,6 +110,7 @@ public class DownloadUsers extends Module{
                 dbHelper.insertUser(u);
                 dbHelper.insertUserCourse(userCode, courseCode, groupCode);
                 
+                
             }    // end for (int i=0; i < usersCount; i++)
 
             if (isDebuggable) {
@@ -152,12 +132,8 @@ public class DownloadUsers extends Module{
 
     @Override
     protected void postConnect() {
-        String status = Environment.getExternalStorageState();
-        if (!status.equals(Environment.MEDIA_MOUNTED)) {
-            Toast.makeText(this, R.string.scan_no_photos, Toast.LENGTH_LONG).show();
-        }
 
-        if (numUsers == 0) {
+    	if (numUsers == 0) {
             Toast.makeText(this, R.string.noStudentsAvailableMsg, Toast.LENGTH_LONG).show();
         } else {
             String msg = String.valueOf(numUsers) + " " + getResources().getString(R.string.studentsUpdated);

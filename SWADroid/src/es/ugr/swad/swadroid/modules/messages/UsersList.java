@@ -7,17 +7,20 @@
 package es.ugr.swad.swadroid.modules.messages;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
@@ -28,7 +31,7 @@ import es.ugr.swad.swadroid.modules.rollcall.students.StudentItemModel;
 public class UsersList extends MenuActivity {
 
 	public static final String TAG = Constants.APP_TAG + " Users List";
-    private List<StudentItemModel> studentsList;
+    private List<StudentItemModel> usersList;
     private String rcvs = "";
     private String rcvs_Aux = "";
 	
@@ -60,7 +63,31 @@ public class UsersList extends MenuActivity {
 	 * Cursor orderby parameter
 	 */
 	private final String orderby = "userSurname1 DESC";
-	
+	/**
+	 * ListView click listener
+	 */
+	private OnChildClickListener clickListener = new OnChildClickListener() {
+		@Override
+		public boolean onChildClick(ExpandableListView parent, View v,
+				int groupPosition, int childPosition, long id) {
+		
+			Log.d("dentro", "dentro del click listener");
+			final CheckBox checkbox = (CheckBox) v.findViewById(R.id.check);
+			User u = (User) childItem.get(groupPosition).get(childPosition);
+
+					StudentItemModel us = new StudentItemModel(u);
+					
+					if (checkbox.isSelected()){
+						usersList.add(childPosition, us);
+						Log.d("agregado", us.getFullName());
+					}
+					else{	
+						usersList.remove(childPosition);
+					}
+					
+					return true;
+		}
+	};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +102,7 @@ public class UsersList extends MenuActivity {
 		childItem = new ArrayList<List<Model>>();
 		
 		//Download the users list
-		downloadStudentsList();
+		downloadUsersList();
 		
 		//Set ExpandableListView data
 		setGroupData();
@@ -86,15 +113,17 @@ public class UsersList extends MenuActivity {
 			
 			public void onClick(View v) {
 				
-				//Aceptar la lista y aï¿½adirla a los destinatarios
-				for (StudentItemModel user : studentsList){
-                    if (user.isSelected()){
-                    	String us = user.getUserNickname();
-                    	rcvs_Aux = rcvs_Aux + "@" + us + ",";
-                    	
-                    	//Elimino la ultima coma de la cadena, ya que no hay mï¿½s usuarios para aï¿½adir
-                    	rcvs = rcvs_Aux.substring(0, rcvs_Aux.length()-1);
-                    }
+				//Aceptar la lista y añadirla a los destinatarios
+				
+				if (usersList != null){
+					for (StudentItemModel u : usersList){
+					
+	                    	String us = u.getUserNickname();
+	                    	rcvs_Aux = rcvs_Aux + "@" + us + ",";
+	                    	
+	                    	//Elimino la ultima coma de la cadena, ya que no hay más usuarios para añadir
+	                    	rcvs = rcvs_Aux.substring(0, rcvs_Aux.length()-1);
+					}
 				}
 				
 				Intent resultData = new Intent();
@@ -110,7 +139,6 @@ public class UsersList extends MenuActivity {
 	@Override
     protected void onStart() {
 		super.onStart();
-		setChildGroupData();
     }
 
 	protected void connect() {
@@ -132,7 +160,7 @@ public class UsersList extends MenuActivity {
 		
 	}
 	
-	 private void downloadStudentsList() {
+	 private void downloadUsersList() {
 		 
 		 	Intent donwloadUsersList = new Intent (getBaseContext(), DownloadUsers.class);
 			startActivity(donwloadUsersList);
@@ -152,14 +180,13 @@ public class UsersList extends MenuActivity {
 		//Add data for teachers 
 		child = dbHelper.getAllRows(Constants.DB_TABLE_USERS,"userRole='"
 				+ Constants.TEACHER_TYPE_CODE+"'", orderby);		
-		childItem.add(0,child);
+		childItem.add(child);
 		
 		//Add data for students	
-		child.clear();
-		child = dbHelper.getAllRows(Constants.DB_TABLE_USERS,"userRole='"
+		child = dbHelper.getAllRows(Constants.DB_TABLE_USERS,"userRole!='"
 				+ Constants.TEACHER_TYPE_CODE+"'", orderby);
 
-		childItem.add(1,child);
+		childItem.add(child);
 		
 		Log.d(TAG, "groups size=" + childItem.size());
 		Log.d(TAG, "teachers children size=" + childItem.get(TEACHERS_GROUP_ID).size());
@@ -167,6 +194,7 @@ public class UsersList extends MenuActivity {
 		
 		adapter = new ExpandableStudentsListAdapter(this, groupItem, childItem, Constants.getCurrentUserRole());
 		list.setAdapter(adapter);
+		list.setOnChildClickListener(clickListener);
 		
 		if(dbHelper.getAllRowsCount(Constants.DB_TABLE_USERS) > 0) {
 			Log.d(TAG, "[setChildGroupData] Users table is not empty");
@@ -184,5 +212,32 @@ public class UsersList extends MenuActivity {
 		
 	}
 	
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+	    getMenuInflater().inflate(R.menu.users_list_activity_actions, menu);
+	    return super.onCreateOptionsMenu(menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	        case R.id.action_refresh_users:
+	        	
+	        	Intent reefreshUserList = new Intent (getBaseContext(), DownloadUsers.class);
+				startActivityForResult(reefreshUserList, 0);
+	            
+	            return true;
+	            
+	        case R.id.action_sendMsg:
+	        	
+            
+            return true;
+            
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	    
+	}
 	
 }

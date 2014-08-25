@@ -83,9 +83,7 @@ public class Messages extends Module {
         setContentView(R.layout.messages_screen);
         setTitle(R.string.messagesModuleLabel);
         getSupportActionBar().setIcon(R.drawable.msg);
-        
-        
-       
+
         if (savedInstanceState != null) 
             writeData();
 

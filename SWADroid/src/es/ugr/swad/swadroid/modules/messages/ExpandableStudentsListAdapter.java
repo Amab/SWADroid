@@ -1,38 +1,13 @@
 package es.ugr.swad.swadroid.modules.messages;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.entity.BufferedHttpEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
 import android.view.Display;
@@ -44,8 +19,12 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Model;
@@ -179,7 +158,6 @@ public class ExpandableStudentsListAdapter extends BaseExpandableListAdapter{
                 checkbox.setSelected(buttonView.isChecked());
             }
         });
-        
         // Calculate the dimensions of the screen to resize the photos
         Display display = ((WindowManager) activity.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         
@@ -212,22 +190,7 @@ public class ExpandableStudentsListAdapter extends BaseExpandableListAdapter{
             image.setImageBitmap(bMapScaled);            
            
         }
-  /*
-        // If user has no photo, show default photo
-        if (photoFileName == null) {
-            bMap = BitmapFactory.decodeStream(image.getResources().openRawResource(R.raw.usr_bl));
-        } else {
-            String photoPath = activity.getBaseContext().getExternalFilesDir(null) + "/" + photoFileName;
-            File photoFile = new File(photoPath);
-            if (photoFile.exists()) {
-                bMap = BitmapFactory.decodeFile(photoPath);
-            } else {
-                // If photoFile does not exist (has been deleted), show default photo
-                bMap = BitmapFactory.decodeStream(image.getResources().openRawResource(R.raw.usr_bl));
-            }
-        }
 
-*/
         text.setText(fullName);
         checkbox.setChecked((new StudentItemModel(u)).isSelected());
 
