@@ -275,12 +275,14 @@
         <activity
             android:name="es.ugr.swad.swadroid.modules.messages.DownloadUsers"
             android:label="@string/title_activity_downloadUsers"
+            android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
         
        <activity
             android:name="es.ugr.swad.swadroid.modules.messages.UsersList"
             android:label="@string/title_activity_users_list"
+            android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
     </application>

@@ -131,11 +131,6 @@ public class DownloadUsers extends Module{
                 dbHelper.insertUser(u);
                 dbHelper.insertUserCourse(userCode, courseCode, groupCode);
                 
-                // If user's picture URL is not empty, download and save it in phone memory
-                if(!userPhoto.equals("")) {
-                	//downloadFile(userPhoto);
-                	download(userPhoto,u.getPhotoFileName());
-                }
             }    // end for (int i=0; i < usersCount; i++)
 
             if (isDebuggable) {
@@ -145,100 +140,6 @@ public class DownloadUsers extends Module{
 
         // Request finalized without errors
         setResult(RESULT_OK);
-    }
-
-    private void downloadFile(String url) {
-    	
-    	String filepath = null;
-		try
-    	{   
-    	  URL nurl = new URL(url);
-    	  HttpURLConnection urlConnection = (HttpURLConnection) nurl.openConnection();
-    	  urlConnection.setRequestMethod("GET");
-    	  urlConnection.setDoOutput(true);                   
-    	  urlConnection.connect();                  
-    	  File SDCardRoot = getExternalFilesDir(null);
-    	  String filename = url.substring(url.lastIndexOf('/') + 1);  
-    	  Log.i("Local filename:",""+filename+"  SDCardRoot: "+SDCardRoot.toString());
-    	  File file = new File(SDCardRoot,filename);
-    	  if(file.createNewFile())
-    	  {
-    	    file.createNewFile();
-    	  }                 
-    	  FileOutputStream fileOutput = new FileOutputStream(file);
-    	  InputStream inputStream = urlConnection.getInputStream();
-    	  int totalSize = urlConnection.getContentLength();
-    	  int downloadedSize = 0;   
-    	  byte[] buffer = new byte[PHOTO_FILE_MAX_SIZE];
-    	  int bufferLength = 0;
-    	  while ( (bufferLength = inputStream.read(buffer)) > 0 ) 
-    	  {                 
-    	    fileOutput.write(buffer, 0, bufferLength);                  
-    	    downloadedSize += bufferLength;                 
-    	    Log.i("Progress:","downloadedSize:"+downloadedSize+"totalSize:"+ totalSize) ;
-    	  }             
-    	  fileOutput.close();
-    	  if(downloadedSize==totalSize) filepath=file.getPath();    
-    	} 
-    	catch (MalformedURLException e) 
-    	{
-    	  e.printStackTrace();
-    	} 
-    	catch (IOException e)
-    	{
-    	  filepath=null;
-    	  e.printStackTrace();
-    	}
-    	Log.i("filepath:"," "+filepath);
-    	/*
-    	if (url != null) {
-            // Check the status of the external memory
-            String status = Environment.getExternalStorageState();
-            if (status.equals(Environment.MEDIA_MOUNTED)) {
-                // Create a path where we will place our private file on external storage.
-                String fileName = url.substring(url.lastIndexOf('/') + 1);
-                File file = new File(getExternalFilesDir(null), fileName);
-                URI imageUrl;
-
-                try {
-                    imageUrl = new URI(url);
-                    HttpURLConnection conn = (HttpURLConnection) imageUrl.toURL().openConnection();
-                    conn.connect();
-
-                    InputStream is = conn.getInputStream();
-                    OutputStream os = new FileOutputStream(file);
-
-                    byte[] buff = new byte[PHOTO_FILE_MAX_SIZE];
-
-                    int bytesRead;
-                    ByteArrayOutputStream bao = new ByteArrayOutputStream();
-
-                    while ((bytesRead = is.read(buff)) != -1) {
-                        bao.write(buff, 0, bytesRead);
-                    }
-
-                    os.write(bao.toByteArray());
-
-                    is.close();
-                    os.close();
-                } catch (IOException e) {
-                    Log.e(TAG, "Error IO: " + e.getMessage());
-                    e.printStackTrace();
-
-                    //Send exception details to Bugsense
-                    if (!isDebuggable) {
-                        BugSenseHandler.sendException(e);
-                    }
-                } catch (URISyntaxException e) {
-                    e.printStackTrace();
-
-                    //Send exception details to Bugsense
-                    if (!isDebuggable) {
-                        BugSenseHandler.sendException(e);
-                    }
-                }
-            }
-        }*/
     }
 
     @Override
@@ -269,26 +170,4 @@ public class DownloadUsers extends Module{
     protected void onError() {
 
     }
-
-    public void download(String Url, String name) throws IOException {
-        URL url = new URL (Url);
-        InputStream input = url.openStream();
-        try {
-            File storagePath = new File(Environment.getExternalStorageDirectory(), name);
-
-            OutputStream output = new FileOutputStream (storagePath);
-            try {
-                byte[] buffer = new byte[2048];
-                int bytesRead = 0;
-                while ((bytesRead = input.read(buffer, 0, buffer.length)) >= 0) {
-                    output.write(buffer, 0, bytesRead);
-                }
-            } finally {
-                output.close();
-            }
-        } finally {
-            input.close();
-        }
-      }
-
 }
