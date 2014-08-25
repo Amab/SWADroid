@@ -62,7 +62,7 @@ public class UsersList extends MenuActivity {
 	/**
 	 * Cursor orderby parameter
 	 */
-	private final String orderby = "userSurname1 DESC";
+	private final String orderby = "userSurname1 ASC, userSurname2 ASC, userFirstname ASC";
 	/**
 	 * ListView click listener
 	 */
@@ -179,7 +179,7 @@ public class UsersList extends MenuActivity {
 		
 		//Add data for teachers 
 		child = dbHelper.getAllRows(Constants.DB_TABLE_USERS,"userRole='"
-				+ Constants.TEACHER_TYPE_CODE+"'", orderby);		
+				+ Constants.TEACHER_TYPE_CODE+"'", orderby);
 		childItem.add(child);
 		
 		//Add data for students	
@@ -228,11 +228,7 @@ public class UsersList extends MenuActivity {
 				startActivityForResult(reefreshUserList, 0);
 	            
 	            return true;
-	            
-	        case R.id.action_sendMsg:
-	        	
-            
-            return true;
+
             
 	        default:
 	            return super.onOptionsItemSelected(item);
