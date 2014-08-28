@@ -965,7 +965,7 @@ public class DataBaseHelper {
 
         if (rows.isEmpty()) {
             ent = new Entity(Constants.DB_TABLE_USERS);
-        } else {
+        } else {/*
             // If user exists and has photo, delete the old photo file
             if (u.getPhotoFileName() != null) {
                 File externalPath = Environment.getExternalStorageDirectory();
@@ -973,7 +973,7 @@ public class DataBaseHelper {
                 File file = new File(externalPath.getAbsolutePath() + "/Android/data/" + packageName + "/", u.getPhotoFileName());
                 //File file = new File(db.getContext().getExternalFilesDir(null), u.getPhotoFileName());
                 file.delete();
-            }
+            }*/
             ent = rows.get(0);
         }
         

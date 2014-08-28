@@ -284,7 +284,7 @@ public class Messages extends Module {
 	        	
 	        	Intent callUsersList = new Intent (getBaseContext(), UsersList.class);
 				startActivityForResult(callUsersList, 0);
-	            
+	        	//startActivity(callUsersList);
 	            return true;
 	            
 	        case R.id.action_sendMsg:

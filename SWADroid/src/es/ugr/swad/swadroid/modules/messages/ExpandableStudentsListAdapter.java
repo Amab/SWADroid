@@ -19,6 +19,8 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -46,23 +48,21 @@ public class ExpandableStudentsListAdapter extends BaseExpandableListAdapter{
 	private Activity activity;
 	
 	private int widthScale, heightScale, bMapScaledWidth, bMapScaledHeight;
-	private final int callerId;
+
 	
 	
 	public ExpandableStudentsListAdapter(ArrayList<String> grList,
-			ArrayList<List<Model>> childItem2, int callerId) {
+			ArrayList<List<Model>> childItem2) {
 		groupItem = grList;
         this.childItem = childItem2;
-        this.callerId = callerId;
 	}
 
 	public ExpandableStudentsListAdapter(Activity act, ArrayList<String> grList,
-			ArrayList<List<Model>> childItem2, int callerId) {
+			ArrayList<List<Model>> childItem2) {
 		groupItem = grList;
 		activity = act;
 		minflater = LayoutInflater.from(activity);
         this.childItem = childItem2;
-        this.callerId = callerId;
 	}
 
 	public void setInflater(LayoutInflater mInflater, Activity act) {
@@ -127,7 +127,6 @@ public class ExpandableStudentsListAdapter extends BaseExpandableListAdapter{
 		return convertView;
 	}
 
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
 	@Override
 	public View getChildView(int groupPosition, int childPosition,
 			boolean isLastChild, View convertView, ViewGroup parent) {
@@ -171,10 +170,18 @@ public class ExpandableStudentsListAdapter extends BaseExpandableListAdapter{
         	
 			ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(activity.getApplicationContext())
 			            					.defaultDisplayImageOptions(options).build();
-			
 			ImageLoader.getInstance().init(config);
 			ImageLoader.getInstance().displayImage(photoFileName, image);
-
+			
+			
+			/*widthScale = 1200;
+            heightScale = 2000;
+            bMapScaledWidth = (image.getWidth() * display.getWidth()) / widthScale;
+            bMapScaledHeight = (image.getHeight() * display.getHeight()) / heightScale;
+            
+            LinearLayout.LayoutParams params = new LayoutParams(bMapScaledWidth, bMapScaledHeight);
+            image.setLayoutParams(params);*/
+            
         } 
         else {
             Log.d("ExpLVStudentList", "No connection or no photo " + photoFileName);
@@ -192,6 +199,7 @@ public class ExpandableStudentsListAdapter extends BaseExpandableListAdapter{
         }
 
         text.setText(fullName);
+        text.setTag(u.getUserNickname());
         checkbox.setChecked((new StudentItemModel(u)).isSelected());
 
 

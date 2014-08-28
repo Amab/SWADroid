@@ -7,6 +7,7 @@
 package es.ugr.swad.swadroid.modules.messages;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import android.app.Activity;
@@ -16,11 +17,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.TextView;
+import android.widget.Toast;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
@@ -62,7 +65,7 @@ public class UsersList extends MenuActivity {
 	/**
 	 * Cursor orderby parameter
 	 */
-	private final String orderby = "userSurname1 ASC, userSurname2 ASC, userFirstname ASC";
+	private final String orderby = "userSurname1 ASC,userSurname2 ASC,userFirstname ASC";
 	/**
 	 * ListView click listener
 	 */
@@ -72,17 +75,18 @@ public class UsersList extends MenuActivity {
 				int groupPosition, int childPosition, long id) {
 		
 			Log.d("dentro", "dentro del click listener");
-			final CheckBox checkbox = (CheckBox) v.findViewById(R.id.check);
 			User u = (User) childItem.get(groupPosition).get(childPosition);
 
 					StudentItemModel us = new StudentItemModel(u);
 					
-					if (checkbox.isSelected()){
+					if (!usersList.contains(us)){
 						usersList.add(childPosition, us);
 						Log.d("agregado", us.getFullName());
+						Toast.makeText(getBaseContext(), "usuario añadido a la lista", Toast.LENGTH_SHORT).show();
 					}
 					else{	
 						usersList.remove(childPosition);
+						Toast.makeText(getBaseContext(), "usuario eliminado de la lista", Toast.LENGTH_SHORT).show();
 					}
 					
 					return true;
@@ -94,7 +98,7 @@ public class UsersList extends MenuActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.users_listview);
 		setTitle(R.string.selectRcvModuleLabel);
-		getSupportActionBar().setIcon(R.drawable.users);
+		getSupportActionBar().setIcon(R.drawable.users);	
 		
 		list = (ExpandableListView) findViewById(R.id.users_explistview);
 		
@@ -114,23 +118,30 @@ public class UsersList extends MenuActivity {
 			public void onClick(View v) {
 				
 				//Aceptar la lista y añadirla a los destinatarios
-				
-				if (usersList != null){
-					for (StudentItemModel u : usersList){
+				/*if (!childItem.isEmpty()){
 					
-	                    	String us = u.getUserNickname();
+					for (int i = 1; i < list.getChildCount(); i ++){
+						
+						View mivista = list.getChildAt(i);
+						CheckBox cb = (CheckBox) mivista.findViewById(R.id.check);
+						
+						if (cb.isChecked()){
+							
+							TextView tv = (TextView) mivista.findViewById(R.id.TextView1);
+	                    	String us = (String) tv.getTag();
 	                    	rcvs_Aux = rcvs_Aux + "@" + us + ",";
-	                    	
-	                    	//Elimino la ultima coma de la cadena, ya que no hay más usuarios para añadir
-	                    	rcvs = rcvs_Aux.substring(0, rcvs_Aux.length()-1);
+		                    	
+						}
 					}
+	        		//Elimino la ultima coma de la cadena, ya que no hay más usuarios para añadir
+	        		rcvs = rcvs_Aux.substring(0, rcvs_Aux.length()-1);
+					*/
+					Intent resultData = new Intent();
+					resultData.putExtra("ListaRcvs", rcvs);
+					setResult(Activity.RESULT_OK, resultData);
+	                finish();
 				}
-				
-				Intent resultData = new Intent();
-				resultData.putExtra("ListaRcvs", rcvs);
-				setResult(Activity.RESULT_OK, resultData);
-                finish();
-			}
+			//}
 		});
 		
 	}
@@ -139,22 +150,10 @@ public class UsersList extends MenuActivity {
 	@Override
     protected void onStart() {
 		super.onStart();
+		setChildGroupData();
+
+
     }
-
-	protected void connect() {
-		
-	}
-
-
-	protected void requestService() throws Exception {
-		
-	}
-
-
-	protected void postConnect() {
-		
-	}
-
 
 	protected void onError() {
 		
@@ -167,7 +166,6 @@ public class UsersList extends MenuActivity {
 			setChildGroupData();
 
 	}
-
 	
 	private void setChildGroupData() {
 		
@@ -179,28 +177,32 @@ public class UsersList extends MenuActivity {
 		
 		//Add data for teachers 
 		child = dbHelper.getAllRows(Constants.DB_TABLE_USERS,"userRole='"
-				+ Constants.TEACHER_TYPE_CODE+"'", orderby);
+				+ Constants.TEACHER_TYPE_CODE+"'", orderby);		
 		childItem.add(child);
 		
 		//Add data for students	
-		child = dbHelper.getAllRows(Constants.DB_TABLE_USERS,"userRole!='"
+		//child.clear();
+		child = dbHelper.getAllRows(Constants.DB_TABLE_USERS,"userRole<>'"
 				+ Constants.TEACHER_TYPE_CODE+"'", orderby);
-
+		
 		childItem.add(child);
 		
 		Log.d(TAG, "groups size=" + childItem.size());
 		Log.d(TAG, "teachers children size=" + childItem.get(TEACHERS_GROUP_ID).size());
 		Log.d(TAG, "students children size=" + childItem.get(STUDENTS_GROUP_ID).size());
 		
-		adapter = new ExpandableStudentsListAdapter(this, groupItem, childItem, Constants.getCurrentUserRole());
-		list.setAdapter(adapter);
-		list.setOnChildClickListener(clickListener);
+		adapter = new ExpandableStudentsListAdapter(this, groupItem, childItem);
+		
+		
 		
 		if(dbHelper.getAllRowsCount(Constants.DB_TABLE_USERS) > 0) {
 			Log.d(TAG, "[setChildGroupData] Users table is not empty");
+			list.setAdapter(adapter);
+			list.setOnChildClickListener(clickListener);
 
 		} else {
 			Log.d(TAG, "[setChildGroupData] Users table is empty");
+			list.setOnChildClickListener(null);
 
 		}
 	}

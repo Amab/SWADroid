@@ -18,7 +18,8 @@
             android:layout_above="@+id/acceptList"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:background="@color/background" >
+            android:background="@color/background" 
+            android:descendantFocusability="blocksDescendants">
         </ExpandableListView>
 
         <Button

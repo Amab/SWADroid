@@ -96,4 +96,8 @@ public class StudentItemModel implements Comparable<StudentItemModel>{
 	public String getFullName() {
 		return student.getUserSurname1()+student.getUserSurname2()+","+student.getPhotoFileName();
 	}
+
+	public String getUserPhoto() {
+		return student.getUserPhoto();
+	}
 }

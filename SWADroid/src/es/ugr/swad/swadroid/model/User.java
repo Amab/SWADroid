@@ -21,6 +21,8 @@ package es.ugr.swad.swadroid.model;
 
 import org.ksoap2.serialization.PropertyInfo;
 
+import es.ugr.swad.swadroid.modules.rollcall.students.StudentItemModel;
+
 import java.util.Hashtable;
 
 /**
@@ -30,7 +32,7 @@ import java.util.Hashtable;
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  * @author José Antonio Guerrero Avilés <cany20@gmail.com>
  */
-public class User extends Model {
+public class User extends Model implements Comparable<User> {
     /**
      * Webservices session key.
      */
@@ -369,5 +371,18 @@ public class User extends Model {
                 break;
         }
     }
+
+	@Override
+	public int compareTo(User item) {
+		if (this.getUserSurname1().compareToIgnoreCase(item.getUserSurname1()) == 0) {
+            if (this.getUserSurname2().compareToIgnoreCase(item.getUserSurname2()) == 0) {
+                return this.getUserFirstname().compareTo(item.getUserFirstname());
+            } else {
+                return this.getUserSurname2().compareToIgnoreCase(item.getUserSurname2());
+            }
+        } else {
+            return this.getUserSurname1().compareToIgnoreCase(item.getUserSurname1());
+        }
+	}
 
 }
