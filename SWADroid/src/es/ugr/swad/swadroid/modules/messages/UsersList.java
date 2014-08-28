@@ -6,173 +6,240 @@
 
 package es.ugr.swad.swadroid.modules.messages;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.Toast;
-
-import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.gui.MenuActivity;
-import es.ugr.swad.swadroid.model.User;
-import es.ugr.swad.swadroid.modules.rollcall.RollcallConfigDownload;
-import es.ugr.swad.swadroid.modules.rollcall.students.StudentItemModel;
-import es.ugr.swad.swadroid.modules.rollcall.students.StudentsArrayAdapter;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.TextView;
+import android.widget.Toast;
+import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.gui.MenuActivity;
+import es.ugr.swad.swadroid.model.Model;
+import es.ugr.swad.swadroid.model.User;
+import es.ugr.swad.swadroid.modules.rollcall.students.StudentItemModel;
+
 public class UsersList extends MenuActivity {
 
 	public static final String TAG = Constants.APP_TAG + " Users List";
-    private List<StudentItemModel> studentsList;
+    private List<StudentItemModel> usersList;
     private String rcvs = "";
     private String rcvs_Aux = "";
 	
+    /**
+	 * List of groups for ExpandableListView
+	 */
+	ArrayList<String> groupItem;
+	/**
+	 * List of childs for ExpandableListView
+	 */
+	ArrayList<List<User>> childItem;
+	/**
+	 * Adapter container for users
+	 */
+	ExpandableStudentsListAdapter adapter;
+	/**
+	 * ListView container for notifications
+	 */
+	ExpandableListView list;
+	/**
+	 * Id for the teachers group
+	 */
+	int TEACHERS_GROUP_ID = 0;
+	/**
+	 * Id for the students group
+	 */
+	int STUDENTS_GROUP_ID = 1;
+	/**
+	 * Cursor orderby parameter
+	 */
+	private final String orderby = "userSurname1 ASC,userSurname2 ASC,userFirstname ASC";
+	/**
+	 * ListView click listener
+	 */
+	/*private OnChildClickListener clickListener = new OnChildClickListener() {
+		@Override
+		public boolean onChildClick(ExpandableListView parent, View v,
+				int groupPosition, int childPosition, long id) {
+		
+			Log.d("dentro", "dentro del click listener");
+			User u = (User) childItem.get(groupPosition).get(childPosition);
+
+					StudentItemModel us = new StudentItemModel(u);
+					
+					if (!usersList.contains(us)){
+						usersList.add(childPosition, us);
+						Log.d("agregado", us.getFullName());
+						Toast.makeText(getBaseContext(), "usuario añadido a la lista", Toast.LENGTH_SHORT).show();
+					}
+					else{	
+						usersList.remove(childPosition);
+						Toast.makeText(getBaseContext(), "usuario eliminado de la lista", Toast.LENGTH_SHORT).show();
+					}
+					
+					return true;
+		}
+	};
+	*/
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.users_listview);
 		setTitle(R.string.selectRcvModuleLabel);
-		getSupportActionBar().setIcon(R.drawable.users);
-	        
-		Button cancelList = (Button) findViewById(R.id.cancelList);
-		cancelList.setOnClickListener(new View.OnClickListener() {
-			
-			public void onClick(View v) {
-				setResult(RESULT_CANCELED);
-				finish();
-			}
-		});
+		getSupportActionBar().setIcon(R.drawable.users);	
+		
+		list = (ExpandableListView) findViewById(R.id.users_explistview);
+		
+		groupItem = new ArrayList<String>();
+		childItem = new ArrayList<List<User>>();
+		
+		//Download the users list
+		downloadUsersList();
+		
+		//Set ExpandableListView data
+		setGroupData();
+		setChildGroupData();
 		
 		Button acceptList = (Button) findViewById(R.id.acceptList);
 		acceptList.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
 				
-				//Aceptar la lista y aï¿½adirla a los destinatarios
-				for (StudentItemModel user : studentsList){
-                    if (user.isSelected()){
-                    	String us = user.getUserNickname();
-                    	rcvs_Aux = rcvs_Aux + "@" + us + ",";
-                    	
-                    	//Elimino la ultima coma de la cadena, ya que no hay mï¿½s usuarios para aï¿½adir
-                    	rcvs = rcvs_Aux.substring(0, rcvs_Aux.length()-1);
-                    }
+				//Aceptar la lista y añadirla a los destinatarios
+				if (!childItem.isEmpty()){
+					
+					for (int i = 0; i < childItem.size(); i ++){		
+						Log.i("info","childitemsize = "+childItem.size());
+						int tam = childItem.get(i).size();
+						Log.i("info","tam hijos = "+tam);
+						for(int j = 0; j < tam; j++){
+							User usu = childItem.get(i).get(j);
+							Log.i("info","un hijo = "+usu.getUserNickname());
+							if (usu.isSelected()){
+								String us = usu.getUserNickname().toString();
+								rcvs_Aux = rcvs_Aux + "@" + us + ",";
+								Log.i("info","rcvs = "+rcvs_Aux);
+							}
+		                    	
+						}
+					}
+	        		//Elimino la ultima coma de la cadena si he añadido algun usuario
+					if(!rcvs_Aux.isEmpty()) rcvs = rcvs_Aux.substring(0, rcvs_Aux.length()-1);
 				}
-				
 				Intent resultData = new Intent();
 				resultData.putExtra("ListaRcvs", rcvs);
 				setResult(Activity.RESULT_OK, resultData);
                 finish();
+				
 			}
 		});
 		
 	}
 
-    @Override
+
+	@Override
     protected void onStart() {
-        super.onStart();
+		super.onStart();
+		setChildGroupData();
 
-		/*La primera vez deberï¿½ cargar una lista vacï¿½a y para obtener la primera lista, 
-		 * habrï¿½ que pulsar en el botï¿½n actualizar de la actionbar. A partir de este momento,
-		 * tendremos una lista de usuarios en la memoria del telï¿½fono y cuando  entre aquï¿½ la segunda
-		 * vez y sucesivas, serï¿½ esa la lista que se cargue. Si queremos, podemos volver a pulsar el
-		 * botï¿½n actualizar por si hay nuevos usuarios.*/
 
-        	showStudentsList();
-	
-        /*try {
-            runConnection();
-        } catch (Exception e) {
-            String errorMsg = getString(R.string.errorServerResponseMsg);
-            error(TAG, errorMsg, e, true);
-        }*/
     }
-
-	protected void connect() {
-		/*String progressDescription = getString(R.string.informationProgressDescription);
-		int progressTitle = R.string.informationProgressTitle;
-
-		startConnection(true, progressDescription, progressTitle);*/
-	}
-
-
-	protected void requestService() throws Exception {
-		
-	}
-
-
-	protected void postConnect() {
-		
-	}
-
 
 	protected void onError() {
 		
 	}
 	
-	 private void showStudentsList() {
-	        List<Long> idList = dbHelper.getUsersCourse(Constants.getSelectedCourseCode());
-	        if (!idList.isEmpty()) {
-	            studentsList = new ArrayList<StudentItemModel>();
+	 private void downloadUsersList() {
+		 
+		 	Intent donwloadUsersList = new Intent (getBaseContext(), DownloadUsers.class);
+			startActivity(donwloadUsersList);
+			setChildGroupData();
 
-	            for (Long userCode : idList) {
-	                User u = dbHelper.getUser("userCode", String.valueOf(userCode));
-	                studentsList.add(new StudentItemModel(u));
-	            }
-	            // Arrange the list alphabetically
-	            Collections.sort(studentsList);
-	            
-	            // Show the list of students in the ListView
-	            ListView lv = (ListView) findViewById(R.id.users_listview);
-	            lv.setAdapter(new StudentsArrayAdapter(this, studentsList, Constants.ROLLCALL_REQUEST_CODE));
-
-	            
-	        } else {
-	            Toast.makeText(this, R.string.scan_no_students, Toast.LENGTH_LONG).show();
-	        }
-	    }
-	 
-	
-	 @Override
-		public boolean onCreateOptionsMenu(Menu menu) {
-		    getMenuInflater().inflate(R.menu.users_list_activity_actions, menu);
-		    return super.onCreateOptionsMenu(menu);
 	}
+	
+	private void setChildGroupData() {
 		
+		List<User> child = null;
+
+		//Clear data
+		childItem.clear();
+
+		
+		//Add data for teachers 
+		child = dbHelper.getAllRows(Constants.DB_TABLE_USERS,"userRole='"
+				+ Constants.TEACHER_TYPE_CODE+"'", orderby);	
+		Collections.sort(child);
+		childItem.add(child);
+		
+		//Add data for students	
+		//child.clear();
+		child = dbHelper.getAllRows(Constants.DB_TABLE_USERS,"userRole<>'"
+				+ Constants.TEACHER_TYPE_CODE+"'", orderby);
+		
+		Collections.sort(child);
+		childItem.add(child);
+		
+		Log.d(TAG, "groups size=" + childItem.size());
+		Log.d(TAG, "teachers children size=" + childItem.get(TEACHERS_GROUP_ID).size());
+		Log.d(TAG, "students children size=" + childItem.get(STUDENTS_GROUP_ID).size());
+		
+		adapter = new ExpandableStudentsListAdapter(this, groupItem, childItem);
+		
+		
+		
+		if(dbHelper.getAllRowsCount(Constants.DB_TABLE_USERS) > 0) {
+			Log.d(TAG, "[setChildGroupData] Users table is not empty");
+			list.setAdapter(adapter);
+			//list.setOnChildClickListener(clickListener);
+
+		} else {
+			Log.d(TAG, "[setChildGroupData] Users table is empty");
+			list.setOnChildClickListener(null);
+
+		}
+	}
+
+	private void setGroupData() {
+		
+		groupItem.add(getString(R.string.Filters_Teachers));
+		groupItem.add(getString(R.string.Filters_Students));
+		
+	}
+	
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+	    getMenuInflater().inflate(R.menu.users_list_activity_actions, menu);
+	    return super.onCreateOptionsMenu(menu);
+	}
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
-	        case R.id.action_filter_users:
-	        	
-				Intent callFilterUsersList = new Intent (getBaseContext(), FilterUsersList.class);
-				startActivity(callFilterUsersList);
-				
-	            return true;
-	            
-	        //Refresh users list    
 	        case R.id.action_refresh_users:
-	        					
-				Intent refreshUsersList;
-				Context context = getApplicationContext();
-				
-				refreshUsersList = new Intent(context, RollcallConfigDownload.class);
-				refreshUsersList.putExtra("groupCode", (long) 0);
-		        startActivity(refreshUsersList);
-				
+	        	
+	        	Intent reefreshUserList = new Intent (getBaseContext(), DownloadUsers.class);
+				startActivityForResult(reefreshUserList, 0);
+	            
 	            return true;
-	
+
+            
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
-		    
+	    
 	}
+	
 }

@@ -57,7 +57,7 @@ public class Messages extends Module {
     /**
      * Message's receivers
      */
-    private String receivers;
+    private String receivers = "";
     /**
      * Names of receivers
      */
@@ -83,9 +83,7 @@ public class Messages extends Module {
         setContentView(R.layout.messages_screen);
         setTitle(R.string.messagesModuleLabel);
         getSupportActionBar().setIcon(R.drawable.msg);
-        
-        
-       
+
         if (savedInstanceState != null) 
             writeData();
 
@@ -265,12 +263,19 @@ public class Messages extends Module {
 
     @Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-    	
+		
+    	super.onActivityResult(requestCode, resultCode, data);
+
     	if (data != null) {
-    		receivers = data.getStringExtra("ListaRcvs");
+    		if (receivers.isEmpty()){
+    			receivers = data.getStringExtra("ListaRcvs");
+			}
+			else{
+    			receivers = receivers + "," + data.getStringExtra("ListaRcvs");
+
+			}
     		writeData();
         }
-		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 	@Override
@@ -286,7 +291,7 @@ public class Messages extends Module {
 	        	
 	        	Intent callUsersList = new Intent (getBaseContext(), UsersList.class);
 				startActivityForResult(callUsersList, 0);
-	            
+	        	//startActivity(callUsersList);
 	            return true;
 	            
 	        case R.id.action_sendMsg:

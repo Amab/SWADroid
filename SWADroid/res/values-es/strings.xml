@@ -212,6 +212,8 @@
     <string name="studentsDownloadProgressDescription">Sincronizando estudiantes.\n\nDependiendo del número de
         estudiantes a sincronizar, el procesamiento de los datos puede tardar unos minutos.\n\nPor favor,
         espere…</string>
+    <string name="usersDownloadProgressTitle">Usuarios</string>
+        
     <string name="studentsList">Lista de estudiantes</string>
     <string name="studentsDownloadProgressTitle">Estudiantes</string>
     <string name="studentsPresent">Estudiantes presentes</string>
@@ -301,5 +303,7 @@
     <string name="Filters_Teachers">Profesores</string>
     <string name="Filters_Students">Alumnos</string>
     <string name="errorNoAppForIntent">No hay ninguna aplicación registrada para abrir el tipo de archivo seleccionado.</string>
+	<string name="title_activity_downloadUsers">Descargar usuarios</string>
+	<string name="title_activity_users_list">Lista de usuarios</string>
 
 </resources>

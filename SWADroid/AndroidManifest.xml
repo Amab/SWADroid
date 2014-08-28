@@ -162,16 +162,7 @@
             android:configChanges="orientation|screenSize"
             android:label="@string/messagesModuleLabel">
         </activity>
-                <activity
-            android:name="es.ugr.swad.swadroid.modules.messages.FilterUsersList"
-            android:configChanges="orientation|screenSize"
-            android:label="@string/filterUsersListModuleLabel">
-        </activity>
-                <activity
-            android:name="es.ugr.swad.swadroid.modules.messages.UsersList"
-            android:configChanges="orientation|screenSize"
-            android:label="@string/messagesModuleLabel">
-        </activity>
+        
         <activity
             android:name="es.ugr.swad.swadroid.modules.notifications.NotificationItem"
             android:label="@string/notificationsModuleLabel"
@@ -277,6 +268,20 @@
         <activity
             android:name="es.ugr.swad.swadroid.LoginActivity"
             android:label="@string/title_activity_login"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+        </activity>
+        
+        <activity
+            android:name="es.ugr.swad.swadroid.modules.messages.DownloadUsers"
+            android:label="@string/title_activity_downloadUsers"
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+        </activity>
+        
+       <activity
+            android:name="es.ugr.swad.swadroid.modules.messages.UsersList"
+            android:label="@string/title_activity_users_list"
+            android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
     </application>

@@ -45,6 +45,7 @@ import es.ugr.swad.swadroid.model.TestAnswer;
 import es.ugr.swad.swadroid.model.TestQuestion;
 import es.ugr.swad.swadroid.model.TestTag;
 import es.ugr.swad.swadroid.model.User;
+import es.ugr.swad.swadroid.modules.rollcall.students.StudentItemModel;
 import es.ugr.swad.swadroid.utils.Crypto;
 import es.ugr.swad.swadroid.utils.OldCrypto;
 import es.ugr.swad.swadroid.utils.Utils;
@@ -65,6 +66,7 @@ import java.util.Locale;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
+ * @author José Antonio Guerrero Avilés <cany20@gmail.com>
  */
 public class DataBaseHelper {
     /**
@@ -285,12 +287,13 @@ public class DataBaseHelper {
             o = new User(ent.getInt("userCode"),
                     null,                                // wsKey
                     ent.getString("userID"),
-                    ent.getString("userNickname"),
-                    ent.getString("userSurname1"),
-                    ent.getString("userSurname2"),
-                    ent.getString("userFirstname"),
-                    ent.getString("photoPath"),
+                    crypto.decrypt(ent.getString("userNickname")),
+                    crypto.decrypt(ent.getString("userSurname1")),
+                    crypto.decrypt(ent.getString("userSurname2")),
+                    crypto.decrypt(ent.getString("userFirstname")),
+                    crypto.decrypt(ent.getString("photoPath")),
                     ent.getInt("userRole"));
+            Log.d("lista" ,crypto.decrypt(ent.getString("userSurname1")).toString()+" "+crypto.decrypt(ent.getString("userSurname2")).toString()+","+crypto.decrypt(ent.getString("userFirstname")).toString());
         } else if (table.equals(Constants.DB_TABLE_GROUPS)) {
             long groupTypeCode = getGroupTypeCodeFromGroup(ent.getLong("id"));
             o = new Group(ent.getLong("id"),
@@ -963,7 +966,7 @@ public class DataBaseHelper {
 
         if (rows.isEmpty()) {
             ent = new Entity(Constants.DB_TABLE_USERS);
-        } else {
+        } else {/*
             // If user exists and has photo, delete the old photo file
             if (u.getPhotoFileName() != null) {
                 File externalPath = Environment.getExternalStorageDirectory();
@@ -971,7 +974,7 @@ public class DataBaseHelper {
                 File file = new File(externalPath.getAbsolutePath() + "/Android/data/" + packageName + "/", u.getPhotoFileName());
                 //File file = new File(db.getContext().getExternalFilesDir(null), u.getPhotoFileName());
                 file.delete();
-            }
+            }*/
             ent = rows.get(0);
         }
         

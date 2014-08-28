@@ -21,6 +21,8 @@ package es.ugr.swad.swadroid.model;
 
 import org.ksoap2.serialization.PropertyInfo;
 
+import es.ugr.swad.swadroid.modules.rollcall.students.StudentItemModel;
+
 import java.util.Hashtable;
 
 /**
@@ -28,8 +30,9 @@ import java.util.Hashtable;
  *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
+ * @author José Antonio Guerrero Avilés <cany20@gmail.com>
  */
-public class User extends Model {
+public class User extends Model implements Comparable<User> {
     /**
      * Webservices session key.
      */
@@ -62,7 +65,11 @@ public class User extends Model {
      * User role. 1:guest 2: student 3: teacher
      */
     private int userRole;
-
+    /**
+     * For check if an user is selected
+     */
+    private boolean isSelected;
+    
     private static final PropertyInfo PI_wsKey = new PropertyInfo();
     private static final PropertyInfo PI_userID = new PropertyInfo();
     private static final PropertyInfo PI_userNickname = new PropertyInfo();
@@ -368,5 +375,26 @@ public class User extends Model {
                 break;
         }
     }
+
+	@Override
+	public int compareTo(User item) {
+		if (this.getUserSurname1().compareToIgnoreCase(item.getUserSurname1()) == 0) {
+            if (this.getUserSurname2().compareToIgnoreCase(item.getUserSurname2()) == 0) {
+                return this.getUserFirstname().compareTo(item.getUserFirstname());
+            } else {
+                return this.getUserSurname2().compareToIgnoreCase(item.getUserSurname2());
+            }
+        } else {
+            return this.getUserSurname1().compareToIgnoreCase(item.getUserSurname1());
+        }
+	}
+	
+	public boolean isSelected(){
+		return isSelected;	
+	}
+	
+	public void setSelected(boolean selected){
+		isSelected = selected;	
+	}
 
 }

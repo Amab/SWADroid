@@ -8,35 +8,28 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="0.81"
-        android:gravity="right"
+        android:gravity="center_horizontal"
         android:orientation="vertical" >
 
-        <ListView
-            android:id="@+id/users_listview"
+        <ExpandableListView
+            android:id="@+id/users_explistview"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_above="@+id/cancelList"
+            android:layout_above="@+id/acceptList"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:background="@color/background" >
-        </ListView>
-
-        <Button
-            android:id="@+id/cancelList"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@+id/acceptList"
-            android:text="@string/cancelMsg" />
+            android:background="@color/background" 
+            android:descendantFocusability="blocksDescendants">
+        </ExpandableListView>
 
         <Button
             android:id="@+id/acceptList"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="96dp"
+            android:layout_centerHorizontal="true"
             android:text="@string/acceptMsg" />
+
     </RelativeLayout>
 
 </LinearLayout>

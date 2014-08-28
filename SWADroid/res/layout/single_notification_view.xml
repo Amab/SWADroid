@@ -13,8 +13,8 @@
             android:id="@+id/notifUserPhoto"
             android:layout_width="65dip"
             android:layout_height="81dip"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:scaleType="centerCrop"
             android:src="@raw/usr_bl" />
 
