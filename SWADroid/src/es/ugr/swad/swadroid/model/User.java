@@ -65,7 +65,11 @@ public class User extends Model implements Comparable<User> {
      * User role. 1:guest 2: student 3: teacher
      */
     private int userRole;
-
+    /**
+     * For check if an user is selected
+     */
+    private boolean isSelected;
+    
     private static final PropertyInfo PI_wsKey = new PropertyInfo();
     private static final PropertyInfo PI_userID = new PropertyInfo();
     private static final PropertyInfo PI_userNickname = new PropertyInfo();
@@ -383,6 +387,14 @@ public class User extends Model implements Comparable<User> {
         } else {
             return this.getUserSurname1().compareToIgnoreCase(item.getUserSurname1());
         }
+	}
+	
+	public boolean isSelected(){
+		return isSelected;	
+	}
+	
+	public void setSelected(boolean selected){
+		isSelected = selected;	
 	}
 
 }

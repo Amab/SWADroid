@@ -45,7 +45,7 @@ public class UsersList extends MenuActivity {
 	/**
 	 * List of childs for ExpandableListView
 	 */
-	ArrayList<List<Model>> childItem;
+	ArrayList<List<User>> childItem;
 	/**
 	 * Adapter container for users
 	 */
@@ -69,7 +69,7 @@ public class UsersList extends MenuActivity {
 	/**
 	 * ListView click listener
 	 */
-	private OnChildClickListener clickListener = new OnChildClickListener() {
+	/*private OnChildClickListener clickListener = new OnChildClickListener() {
 		@Override
 		public boolean onChildClick(ExpandableListView parent, View v,
 				int groupPosition, int childPosition, long id) {
@@ -92,7 +92,7 @@ public class UsersList extends MenuActivity {
 					return true;
 		}
 	};
-	
+	*/
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -103,7 +103,7 @@ public class UsersList extends MenuActivity {
 		list = (ExpandableListView) findViewById(R.id.users_explistview);
 		
 		groupItem = new ArrayList<String>();
-		childItem = new ArrayList<List<Model>>();
+		childItem = new ArrayList<List<User>>();
 		
 		//Download the users list
 		downloadUsersList();
@@ -118,30 +118,32 @@ public class UsersList extends MenuActivity {
 			public void onClick(View v) {
 				
 				//Aceptar la lista y añadirla a los destinatarios
-				/*if (!childItem.isEmpty()){
+				if (!childItem.isEmpty()){
 					
-					for (int i = 1; i < list.getChildCount(); i ++){
-						
-						View mivista = list.getChildAt(i);
-						CheckBox cb = (CheckBox) mivista.findViewById(R.id.check);
-						
-						if (cb.isChecked()){
-							
-							TextView tv = (TextView) mivista.findViewById(R.id.TextView1);
-	                    	String us = (String) tv.getTag();
-	                    	rcvs_Aux = rcvs_Aux + "@" + us + ",";
+					for (int i = 0; i < childItem.size(); i ++){		
+						Log.i("info","childitemsize = "+childItem.size());
+						int tam = childItem.get(i).size();
+						Log.i("info","tam hijos = "+tam);
+						for(int j = 0; j < tam; j++){
+							User usu = childItem.get(i).get(j);
+							Log.i("info","un hijo = "+usu.getUserNickname());
+							if (usu.isSelected()){
+								String us = usu.getUserNickname().toString();
+								rcvs_Aux = rcvs_Aux + "@" + us + ",";
+								Log.i("info","rcvs = "+rcvs_Aux);
+							}
 		                    	
 						}
 					}
 	        		//Elimino la ultima coma de la cadena, ya que no hay más usuarios para añadir
 	        		rcvs = rcvs_Aux.substring(0, rcvs_Aux.length()-1);
-					*/
-					Intent resultData = new Intent();
-					resultData.putExtra("ListaRcvs", rcvs);
-					setResult(Activity.RESULT_OK, resultData);
-	                finish();
 				}
-			//}
+				Intent resultData = new Intent();
+				resultData.putExtra("ListaRcvs", rcvs);
+				setResult(Activity.RESULT_OK, resultData);
+                finish();
+				
+			}
 		});
 		
 	}
@@ -169,7 +171,7 @@ public class UsersList extends MenuActivity {
 	
 	private void setChildGroupData() {
 		
-		List<Model> child = null;
+		List<User> child = null;
 
 		//Clear data
 		childItem.clear();
@@ -177,7 +179,8 @@ public class UsersList extends MenuActivity {
 		
 		//Add data for teachers 
 		child = dbHelper.getAllRows(Constants.DB_TABLE_USERS,"userRole='"
-				+ Constants.TEACHER_TYPE_CODE+"'", orderby);		
+				+ Constants.TEACHER_TYPE_CODE+"'", orderby);	
+		Collections.sort(child);
 		childItem.add(child);
 		
 		//Add data for students	
@@ -185,6 +188,7 @@ public class UsersList extends MenuActivity {
 		child = dbHelper.getAllRows(Constants.DB_TABLE_USERS,"userRole<>'"
 				+ Constants.TEACHER_TYPE_CODE+"'", orderby);
 		
+		Collections.sort(child);
 		childItem.add(child);
 		
 		Log.d(TAG, "groups size=" + childItem.size());
@@ -198,7 +202,7 @@ public class UsersList extends MenuActivity {
 		if(dbHelper.getAllRowsCount(Constants.DB_TABLE_USERS) > 0) {
 			Log.d(TAG, "[setChildGroupData] Users table is not empty");
 			list.setAdapter(adapter);
-			list.setOnChildClickListener(clickListener);
+			//list.setOnChildClickListener(clickListener);
 
 		} else {
 			Log.d(TAG, "[setChildGroupData] Users table is empty");

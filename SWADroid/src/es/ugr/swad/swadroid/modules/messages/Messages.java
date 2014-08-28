@@ -265,7 +265,7 @@ public class Messages extends Module {
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
     	
     	if (data != null) {
-    		receivers = data.getStringExtra("ListaRcvs");
+    		receivers = receivers + "," + data.getStringExtra("ListaRcvs");
     		writeData();
         }
 		super.onActivityResult(requestCode, resultCode, data);

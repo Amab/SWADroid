@@ -43,7 +43,7 @@ import es.ugr.swad.swadroid.utils.Utils;
 public class ExpandableStudentsListAdapter extends BaseExpandableListAdapter{
 
 	private ArrayList<String> groupItem;
-	private ArrayList<List<Model>> childItem;
+	private ArrayList<List<User>> childItem;
 	private LayoutInflater minflater;
 	private Activity activity;
 	
@@ -52,13 +52,13 @@ public class ExpandableStudentsListAdapter extends BaseExpandableListAdapter{
 	
 	
 	public ExpandableStudentsListAdapter(ArrayList<String> grList,
-			ArrayList<List<Model>> childItem2) {
+			ArrayList<List<User>> childItem2) {
 		groupItem = grList;
         this.childItem = childItem2;
 	}
 
 	public ExpandableStudentsListAdapter(Activity act, ArrayList<String> grList,
-			ArrayList<List<Model>> childItem2) {
+			ArrayList<List<User>> childItem2) {
 		groupItem = grList;
 		activity = act;
 		minflater = LayoutInflater.from(activity);
@@ -133,7 +133,7 @@ public class ExpandableStudentsListAdapter extends BaseExpandableListAdapter{
 
         Bitmap bMap = null;
 
-        User u = (User) childItem.get(groupPosition).get(childPosition);
+        final User u = (User) childItem.get(groupPosition).get(childPosition);
         
         final String fullName = u.getUserSurname1() 
         						+' '
@@ -155,6 +155,7 @@ public class ExpandableStudentsListAdapter extends BaseExpandableListAdapter{
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 checkbox.setSelected(buttonView.isChecked());
+                u.setSelected(isChecked);
             }
         });
         // Calculate the dimensions of the screen to resize the photos
