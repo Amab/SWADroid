@@ -135,8 +135,8 @@ public class UsersList extends MenuActivity {
 		                    	
 						}
 					}
-	        		//Elimino la ultima coma de la cadena, ya que no hay más usuarios para añadir
-	        		rcvs = rcvs_Aux.substring(0, rcvs_Aux.length()-1);
+	        		//Elimino la ultima coma de la cadena si he añadido algun usuario
+					if(!rcvs_Aux.isEmpty()) rcvs = rcvs_Aux.substring(0, rcvs_Aux.length()-1);
 				}
 				Intent resultData = new Intent();
 				resultData.putExtra("ListaRcvs", rcvs);

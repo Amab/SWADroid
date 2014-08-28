@@ -57,7 +57,7 @@ public class Messages extends Module {
     /**
      * Message's receivers
      */
-    private String receivers;
+    private String receivers = "";
     /**
      * Names of receivers
      */
@@ -263,12 +263,19 @@ public class Messages extends Module {
 
     @Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-    	
+		
+    	super.onActivityResult(requestCode, resultCode, data);
+
     	if (data != null) {
-    		receivers = receivers + "," + data.getStringExtra("ListaRcvs");
+    		if (receivers.isEmpty()){
+    			receivers = data.getStringExtra("ListaRcvs");
+			}
+			else{
+    			receivers = receivers + "," + data.getStringExtra("ListaRcvs");
+
+			}
     		writeData();
         }
-		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 	@Override
