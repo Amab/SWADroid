@@ -58,6 +58,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
@@ -191,8 +192,8 @@ public class DataBaseHelper {
      * @param ent   Cursor to the table rows
      * @return A Model's subclass object
      */
-    private Model createObjectByTable(String table, Entity ent) {
-        Model o = null;
+    private <T extends Model> T createObjectByTable(String table, Entity ent) {
+    	Model o = null;
         Pair<String, String> params;
         long id;
 
@@ -329,7 +330,7 @@ public class DataBaseHelper {
             }
         }
 
-        return o;
+        return (T) o;
     }
 
     /**
@@ -338,10 +339,10 @@ public class DataBaseHelper {
      * @param table Table containing the rows
      * @return A list of Model's subclass objects
      */
-    public List<Model> getAllRows(String table) {
-        List<Model> result = new ArrayList<Model>();
+    public <T extends Model> List<T>  getAllRows(String table) {
+        List<T> result = new ArrayList<T>();
         List<Entity> rows = db.getEntityList(table);
-        Model row;
+        T row;
 
         for (Entity ent : rows) {
             row = createObjectByTable(table, ent);
@@ -360,10 +361,10 @@ public class DataBaseHelper {
      * @param orderby Orderby part of SQL sentence
      * @return A list of Model's subclass objects
      */
-    public List<Model> getAllRows(String table, String where, String orderby) {
-        List<Model> result = new ArrayList<Model>();
+    public <T extends Model> List<T> getAllRows(String table, String where, String orderby) {
+        List<T> result = new ArrayList<T>();
         List<Entity> rows = db.getEntityList(table, where, orderby);
-        Model row;
+        T row;
 
         if (rows != null) {
             for (Entity ent : rows) {
@@ -405,10 +406,10 @@ public class DataBaseHelper {
      * @return A Model's subclass object
      *         or null if the row does not exist in the specified table
      */
-    public Model getRow(String table, String fieldName, Object fieldValue) {
+    public <T extends Model> T getRow(String table, String fieldName, Object fieldValue) {
         List<Entity> rows;
         Entity ent;
-        Model row = null;
+        T row = null;
         
         if(fieldValue instanceof String) {
         	rows = db.getEntityList(table, fieldName + " = '" + fieldValue + "'");
@@ -1060,7 +1061,7 @@ public class DataBaseHelper {
 
     public boolean insertCollection(String table, List<Model> currentModels, long... courseCode) {
         boolean result = true;
-        List<Model> modelsDB = getAllRows(table);
+        Collection<? extends Model> modelsDB = getAllRows(table);
         List<Model> newModels = new ArrayList<Model>();
         List<Model> obsoleteModel = new ArrayList<Model>();
         List<Model> modifiedModel = new ArrayList<Model>();
