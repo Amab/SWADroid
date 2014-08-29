@@ -213,12 +213,13 @@ public class MyGroupsManager extends MenuExpandableListActivity {
             }
         };
         
-    	AlertDialog dialog = DialogFactory.createPositiveNegativeDialog(this,
+    	AlertDialog dialog = DialogFactory.createWarningDialog(this,
     			-1,
     			R.string.confirmEnrollments,
     			R.string.areYouSure,
     			R.string.yesMsg,
     			R.string.noMsg,
+    			false,
     			positiveClickListener,
     			cancelClickListener,
     			null);
