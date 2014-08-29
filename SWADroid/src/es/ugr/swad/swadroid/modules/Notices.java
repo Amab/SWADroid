@@ -124,11 +124,13 @@ public class Notices extends Module {
 
     private void launchNoticeDialog() {       
         noticeDialog = DialogFactory.createPositiveNegativeDialog(this,
+        		R.drawable.announce,
         		R.layout.dialog_notice,
         		R.string.noticesModuleLabel,
         		-1,
         		R.string.sendMsg,
         		R.string.cancelMsg,
+        		false,
         		//positiveClickListener,
         		null,
         		negativeClickListener,
