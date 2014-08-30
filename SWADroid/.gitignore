@@ -5,6 +5,7 @@ bin/
 default.properties
 .classpath
 .project
+.directory
 .settings/
 .DS_Store
 src/es/ugr/swad/Config.java
