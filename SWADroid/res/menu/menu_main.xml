@@ -17,6 +17,7 @@
     <item
         android:id="@+id/clean_database_menu"
         android:icon="@android:drawable/ic_menu_delete"
+        android:showAsAction="ifRoom|withText"
         android:title="@string/cleanDatabaseTitle_menu">
     </item>
     <item

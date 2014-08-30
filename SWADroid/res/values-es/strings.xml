@@ -15,6 +15,7 @@
     <string name="noticesModuleLabel">Publicar aviso</string>
     <string name="generateQRModuleLabel">Generar código QR</string>
     <string name="title_error_dialog">ERROR</string>
+    <string name="areYouSure">¿Está usted seguro?</string>
     <string name="close_dialog">Cerrar</string>
     <string name="set_preferences">Configuración</string>
     <string name="user_preferences">Datos del usuario</string>
@@ -112,6 +113,9 @@
     <string name="acceptFilters">Filtrar</string>
     <string name="cancelFilters">Cancel</string>
     <string name="cleanDatabaseMsg">Todos los datos de la base de datos han sido borrados</string>
+    <string name="cleanDatabaseDialogMsg">Todos los datos de la base de datos serán borrados.\n\n
+        Se borrarán las notificaciones, tests, información de grupos y listados de usuarios.\n\n
+        ¿Está seguro de que desea borrar todos los datos de la base de datos?</string>
     <string name="shareBodyMsg">Estoy usando #SWADroid en mi Android para acceder a la
         plataforma de teleformación SWAD.\nObtenlo gratis aquí:
         https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid</string>
@@ -240,7 +244,7 @@
     <string name="successfullEnrollment">Todas las inscripciones se han realizado con éxito. Por favor, compruebe que
         está inscrito en los grupos deseados</string>
     <string name="confirmEnrollments">Confirmar inscripciones solicitadas</string>
-    <string name="areYouSure">¿Seguro que quiere inscribirse en los grupos seleccionados?</string>
+    <string name="areYouSureGroups">¿Seguro que quiere inscribirse en los grupos seleccionados?</string>
     <string name="failedEnrollment">Lo sentimos pero la inscripción en los grupos seleccionados no se pudo realizar</string>
     <string name="groupTypesProgressDescription">Obteniendo tipos de grupo…\nPor favor, espere…</string>
     <string name="groupsProgressDescription">Obteniendo grupos…\nPor favor, espere…</string>
