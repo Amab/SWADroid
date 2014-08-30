@@ -22,7 +22,6 @@ import android.database.SQLException;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Model;
@@ -31,6 +30,7 @@ import es.ugr.swad.swadroid.model.TestAnswer;
 import es.ugr.swad.swadroid.model.TestQuestion;
 import es.ugr.swad.swadroid.model.TestTag;
 import es.ugr.swad.swadroid.modules.Module;
+import es.ugr.swad.swadroid.utils.TimeUtils;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
@@ -81,6 +81,8 @@ public class TestsQuestionsDownload extends Module {
      */
     @Override
     protected void requestService() throws Exception {
+    	long timeBefore = System.currentTimeMillis();
+    	long timeAfter;
 
         //Creates webservice request, adds required params and sends request to webservice
     	createRequest(SOAPClient.CLIENT_TYPE);
@@ -102,9 +104,13 @@ public class TestsQuestionsDownload extends Module {
             List<Model> questionsListDB = dbHelper.getAllRows(Constants.DB_TABLE_TEST_QUESTIONS);
             List<Model> answersListDB = dbHelper.getAllRows(Constants.DB_TABLE_TEST_ANSWERS);
 
+            int listSizeTags = tagsListObject.getPropertyCount();
+            int listSizeQuestions = questionsListObject.getPropertyCount();
+            int listSizeAnswers = answersListObject.getPropertyCount();
+            int listSizeQuestionTags = questionTagsListObject.getPropertyCount();
+
             //Read tags info from webservice response
-            int listSize = tagsListObject.getPropertyCount();
-            for (int i = 0; i < listSize; i++) {
+            for (int i = 0; i < listSizeTags; i++) {
                 SoapObject pii = (SoapObject) tagsListObject.getProperty(i);
                 Integer tagCod = Integer.valueOf(pii.getProperty("tagCode").toString());
                 String tagTxt = pii.getProperty("tagText").toString();
@@ -115,13 +121,10 @@ public class TestsQuestionsDownload extends Module {
                     Log.d(TAG, tag.toString());
             }
 
-            Log.i(TAG, "Retrieved " + listSize + " tags");
-
             //Read questions info from webservice response
             dbHelper.beginTransaction();
 
-            listSize = questionsListObject.getPropertyCount();
-            for (int i = 0; i < listSize; i++) {
+            for (int i = 0; i < listSizeQuestions; i++) {
                 SoapObject pii = (SoapObject) questionsListObject.getProperty(i);
                 Integer qstCod = Integer.valueOf(pii.getProperty("questionCode").toString());
                 String anstype = pii.getProperty("answerType").toString();
@@ -147,11 +150,8 @@ public class TestsQuestionsDownload extends Module {
                 }
             }
 
-            Log.i(TAG, "Retrieved " + listSize + " questions");
-
             //Read answers info from webservice response
-            listSize = answersListObject.getPropertyCount();
-            for (int i = 0; i < listSize; i++) {
+            for (int i = 0; i < listSizeAnswers; i++) {
                 SoapObject pii = (SoapObject) answersListObject.getProperty(i);
                 Integer qstCod = Integer.valueOf(pii.getProperty("questionCode").toString());
                 Integer ansIndex = Integer.valueOf(pii.getProperty("answerIndex").toString());
@@ -177,11 +177,8 @@ public class TestsQuestionsDownload extends Module {
                 }
             }
 
-            Log.i(TAG, "Retrieved " + listSize + " answers");
-
             //Read relationships between questions and tags from webservice response
-            listSize = questionTagsListObject.getPropertyCount();
-            for (int i = 0; i < listSize; i++) {
+            for (int i = 0; i < listSizeQuestionTags; i++) {
                 SoapObject pii = (SoapObject) questionTagsListObject.getProperty(i);
                 Integer qstCod = Integer.valueOf(pii.getProperty("questionCode").toString());
                 Integer tagCod = Integer.valueOf(pii.getProperty("tagCode").toString());
@@ -210,13 +207,19 @@ public class TestsQuestionsDownload extends Module {
                 }
             }
 
-            Log.i(TAG, "Retrieved " + listSize + " relationships between questions and tags");
-
             //Update last time test was updated
             //Test testConfig = (Test) dbHelper.getRow(Constants.DB_TABLE_TEST_CONFIG, "id", Long.toString(Constants.getSelectedCourseCode()));
             //testConfig.setEditTime(System.currentTimeMillis() / 1000L);
             //dbHelper.updateTestConfig(testConfig.getId(), testConfig);
             dbHelper.endTransaction(true);
+            
+            timeAfter = System.currentTimeMillis();
+
+            Log.i(TAG, "Retrieved " + listSizeTags + " tags");
+            Log.i(TAG, "Retrieved " + listSizeQuestions + " questions");
+            Log.i(TAG, "Retrieved " + listSizeAnswers + " answers");
+            Log.i(TAG, "Retrieved " + listSizeQuestionTags + " relationships between questions and tags");
+            Log.i(TAG, "Time elapsed = " + TimeUtils.millisToLongDHMS(timeAfter - timeBefore));
         }
 
         //Request finalized without errors
