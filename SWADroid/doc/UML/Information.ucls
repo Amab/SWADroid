@@ -3,7 +3,7 @@
   realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
   <class id="1" language="java" name="es.ugr.swad.swadroid.modules.information.Information" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/information/Information.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="277" width="188" x="122" y="-23"/>    
+    <position height="277" width="187" x="41" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      

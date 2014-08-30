@@ -3,7 +3,7 @@
   realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
   <class id="1" language="java" name="es.ugr.swad.swadroid.gui.ImageListItem" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/gui/ImageListItem.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="205" width="143" x="314" y="37"/>    
+    <position height="205" width="140" x="2779" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -12,7 +12,7 @@
   </class>  
   <class id="2" language="java" name="es.ugr.swad.swadroid.gui.ImageExpandableListAdapter" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/gui/ImageExpandableListAdapter.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="367" width="759" x="1693" y="37"/>    
+    <position height="367" width="768" x="1395" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -21,7 +21,7 @@
   </class>  
   <class id="3" language="java" name="es.ugr.swad.swadroid.gui.AlertNotification" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/gui/AlertNotification.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="97" width="273" x="2492" y="37"/>    
+    <position height="97" width="273" x="407" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -30,7 +30,7 @@
   </class>  
   <class id="4" language="java" name="es.ugr.swad.swadroid.gui.ImageListAdapter.ViewHolder" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/gui/ImageListAdapter.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="115" width="137" x="497" y="444"/>    
+    <position height="115" width="140" x="2203" y="498"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -39,7 +39,7 @@
   </class>  
   <class id="5" language="java" name="es.ugr.swad.swadroid.gui.ImageListAdapter" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/gui/ImageListAdapter.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="115" width="267" x="497" y="37"/>    
+    <position height="115" width="265" x="2203" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -48,7 +48,7 @@
   </class>  
   <class id="6" language="java" name="es.ugr.swad.swadroid.gui.MenuExpandableListActivity" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/gui/MenuExpandableListActivity.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="367" width="233" x="41" y="37"/>    
+    <position height="421" width="231" x="2508" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -57,36 +57,46 @@
   </class>  
   <class id="7" language="java" name="es.ugr.swad.swadroid.gui.MenuActivity" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/gui/MenuActivity.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="349" width="233" x="1420" y="37"/>    
+    <position height="385" width="231" x="2959" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="8" language="java" name="es.ugr.swad.swadroid.gui.DialogFactory" project="SWADroid" 
+  <class id="8" language="java" name="es.ugr.swad.swadroid.gui.ImageFactory" project="SWADroid" 
+    file="/SWADroid/src/es/ugr/swad/swadroid/gui/ImageFactory.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="97" width="326" x="41" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="es.ugr.swad.swadroid.gui.DialogFactory" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/gui/DialogFactory.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="169" width="576" x="804" y="37"/>    
+    <position height="187" width="635" x="720" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="9" language="java" name="es.ugr.swad.swadroid.gui.ImageExpandableListAdapter.ViewHolder" project="SWADroid" 
-    file="/SWADroid/src/es/ugr/swad/swadroid/gui/ImageExpandableListAdapter.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="97" width="121" x="1693" y="444"/>    
+  <class id="10" language="java" name="es.ugr.swad.swadroid.gui.ImageExpandableListAdapter.ViewHolder" 
+    project="SWADroid" file="/SWADroid/src/es/ugr/swad/swadroid/gui/ImageExpandableListAdapter.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="97" width="126" x="1395" y="498"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <nesting id="10">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="9"/>  
-  </nesting>  
   <nesting id="11">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="10"/>  
+  </nesting>  
+  <nesting id="12">    
     <end type="SOURCE" refId="5"/>    
     <end type="TARGET" refId="4"/>  
   </nesting>  

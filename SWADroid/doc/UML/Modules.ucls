@@ -3,7 +3,7 @@
   realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
   <class id="1" language="java" name="es.ugr.swad.swadroid.modules.RecoverPassword" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/RecoverPassword.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="241" width="170" x="1556" y="588"/>    
+    <position height="241" width="162" x="41" y="588"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -12,7 +12,7 @@
   </class>  
   <class id="2" language="java" name="es.ugr.swad.swadroid.modules.Groups" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/Groups.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="277" width="185" x="1331" y="588"/>    
+    <position height="277" width="189" x="1363" y="588"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -21,7 +21,7 @@
   </class>  
   <class id="3" language="java" name="es.ugr.swad.swadroid.modules.Module" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/Module.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="511" width="354" x="634" y="37"/>    
+    <position height="511" width="350" x="654" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -30,7 +30,7 @@
   </class>  
   <class id="4" language="java" name="es.ugr.swad.swadroid.modules.Login" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/Login.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="241" width="139" x="220" y="588"/>    
+    <position height="241" width="137" x="243" y="588"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -39,7 +39,7 @@
   </class>  
   <class id="5" language="java" name="es.ugr.swad.swadroid.modules.Notices" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/Notices.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="439" width="207" x="859" y="588"/>    
+    <position height="439" width="211" x="1112" y="588"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -48,7 +48,7 @@
   </class>  
   <class id="6" language="java" name="es.ugr.swad.swadroid.modules.GroupTypes" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/GroupTypes.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="259" width="185" x="634" y="588"/>    
+    <position height="259" width="189" x="654" y="588"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -57,7 +57,7 @@
   </class>  
   <class id="7" language="java" name="es.ugr.swad.swadroid.modules.Courses" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/Courses.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="259" width="185" x="1106" y="588"/>    
+    <position height="259" width="189" x="883" y="588"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -66,7 +66,7 @@
   </class>  
   <class id="8" language="java" name="es.ugr.swad.swadroid.modules.GenerateQR" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/GenerateQR.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="205" width="139" x="41" y="588"/>    
+    <position height="205" width="137" x="1592" y="588"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -75,51 +75,51 @@
   </class>  
   <class id="9" language="java" name="es.ugr.swad.swadroid.modules.Module.Connect" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/Module.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="223" width="195" x="399" y="588"/>    
+    <position height="223" width="194" x="420" y="588"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <association id="10">    
+  <generalization id="10">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="3"/>  
+  </generalization>  
+  <generalization id="11">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="3"/>  
+  </generalization>  
+  <nesting id="12">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="9"/>  
+  </nesting>  
+  <generalization id="13">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="3"/>  
+  </generalization>  
+  <association id="14">    
     <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="11" name="connect"/>      
-      <multiplicity id="12" minimum="0" maximum="1"/>    
+      <attribute id="15" name="connect"/>      
+      <multiplicity id="16" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="9" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <generalization id="13">    
-    <end type="SOURCE" refId="7"/>    
-    <end type="TARGET" refId="3"/>  
-  </generalization>  
-  <generalization id="14">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="3"/>  
-  </generalization>  
-  <generalization id="15">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="3"/>  
-  </generalization>  
-  <generalization id="16">    
-    <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="3"/>  
-  </generalization>  
   <generalization id="17">    
     <end type="SOURCE" refId="5"/>    
     <end type="TARGET" refId="3"/>  
   </generalization>  
-  <nesting id="18">    
-    <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="9"/>  
-  </nesting>  
+  <generalization id="18">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="3"/>  
+  </generalization>  
   <generalization id="19">    
     <end type="SOURCE" refId="8"/>    
     <end type="TARGET" refId="3"/>  
   </generalization>  
   <generalization id="20">    
-    <end type="SOURCE" refId="6"/>    
+    <end type="SOURCE" refId="4"/>    
     <end type="TARGET" refId="3"/>  
   </generalization>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 

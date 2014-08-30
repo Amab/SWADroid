@@ -4,7 +4,7 @@
   <class id="1" language="java" name="es.ugr.swad.swadroid.modules.tests.AnswerTypesArrayAdapter" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/tests/AnswerTypesArrayAdapter.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="151" width="242" x="41" y="37"/>    
+    <position height="151" width="250" x="1875" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -13,7 +13,7 @@
   </class>  
   <class id="2" language="java" name="es.ugr.swad.swadroid.modules.tests.TestsMake" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/tests/TestsMake.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="583" width="318" x="736" y="37"/>    
+    <position height="583" width="321" x="837" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -23,7 +23,7 @@
   <class id="3" language="java" name="es.ugr.swad.swadroid.modules.tests.TestsQuestionsDownload" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/tests/TestsQuestionsDownload.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="223" width="170" x="323" y="37"/>    
+    <position height="223" width="170" x="627" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -33,7 +33,7 @@
   <class id="4" language="java" name="es.ugr.swad.swadroid.modules.tests.TestsConfigDownload" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/tests/TestsConfigDownload.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="241" width="163" x="533" y="37"/>    
+    <position height="241" width="161" x="1198" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -43,7 +43,7 @@
   <class id="5" language="java" name="es.ugr.swad.swadroid.modules.tests.CheckedAnswersArrayAdapter" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/tests/CheckedAnswersArrayAdapter.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="205" width="423" x="1094" y="37"/>    
+    <position height="205" width="436" x="1399" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -52,7 +52,7 @@
   </class>  
   <class id="6" language="java" name="es.ugr.swad.swadroid.modules.tests.Tests" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/tests/Tests.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="187" width="253" x="1557" y="37"/>    
+    <position height="187" width="259" x="328" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -61,7 +61,7 @@
   </class>  
   <class id="7" language="java" name="es.ugr.swad.swadroid.modules.tests.TagsArrayAdapter" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/tests/TagsArrayAdapter.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="151" width="244" x="1850" y="37"/>    
+    <position height="151" width="247" x="41" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -70,7 +70,7 @@
   </class>  
   <enumeration id="8" language="java" name="es.ugr.swad.swadroid.modules.tests.TestsMake.ScreenStep" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/tests/TestsMake.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="169" width="182" x="736" y="660"/>    
+    <position height="169" width="175" x="837" y="660"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      

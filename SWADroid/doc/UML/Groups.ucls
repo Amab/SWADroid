@@ -3,7 +3,7 @@
   realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
   <class id="1" language="java" name="es.ugr.swad.swadroid.modules.groups.SendMyGroups" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/groups/SendMyGroups.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="277" width="170" x="613" y="37"/>    
+    <position height="277" width="168" x="41" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -12,7 +12,7 @@
   </class>  
   <class id="2" language="java" name="es.ugr.swad.swadroid.modules.groups.MyGroupsManager" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/groups/MyGroupsManager.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="457" width="385" x="823" y="37"/>    
+    <position height="439" width="404" x="840" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -22,7 +22,7 @@
   <class id="3" language="java" name="es.ugr.swad.swadroid.modules.groups.EnrollmentExpandableListAdapter.ChildHolder" 
     project="SWADroid" file="/SWADroid/src/es/ugr/swad/swadroid/modules/groups/EnrollmentExpandableListAdapter.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="223" width="170" x="41" y="588"/>    
+    <position height="205" width="168" x="371" y="588"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -32,7 +32,7 @@
   <class id="4" language="java" name="es.ugr.swad.swadroid.modules.groups.EnrollmentExpandableListAdapter" 
     project="SWADroid" file="/SWADroid/src/es/ugr/swad/swadroid/modules/groups/EnrollmentExpandableListAdapter.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="511" width="532" x="41" y="37"/>    
+    <position height="511" width="551" x="249" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -42,7 +42,7 @@
   <class id="5" language="java" name="es.ugr.swad.swadroid.modules.groups.EnrollmentExpandableListAdapter.GroupHolder" 
     project="SWADroid" file="/SWADroid/src/es/ugr/swad/swadroid/modules/groups/EnrollmentExpandableListAdapter.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="115" width="199" x="251" y="588"/>    
+    <position height="115" width="204" x="127" y="588"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -51,11 +51,11 @@
   </class>  
   <nesting id="6">    
     <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="3"/>  
+    <end type="TARGET" refId="5"/>  
   </nesting>  
   <nesting id="7">    
     <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="5"/>  
+    <end type="TARGET" refId="3"/>  
   </nesting>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
     accessors="true" visibility="true">    

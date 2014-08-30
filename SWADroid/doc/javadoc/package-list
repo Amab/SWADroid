@@ -1,10 +1,11 @@
+android.support.v7.appcompat
 com.android.dataframework
 com.android.dataframework.core
 com.google.zxing.client.android
 com.google.zxing.client.android.camera
 com.google.zxing.client.android.encode
-com.handmark.pulltorefresh.library
 es.ugr.swad.swadroid
+es.ugr.swad.swadroid.database
 es.ugr.swad.swadroid.gui
 es.ugr.swad.swadroid.gui.widget
 es.ugr.swad.swadroid.model
@@ -12,6 +13,7 @@ es.ugr.swad.swadroid.modules
 es.ugr.swad.swadroid.modules.downloads
 es.ugr.swad.swadroid.modules.groups
 es.ugr.swad.swadroid.modules.information
+es.ugr.swad.swadroid.modules.messages
 es.ugr.swad.swadroid.modules.notifications
 es.ugr.swad.swadroid.modules.rollcall
 es.ugr.swad.swadroid.modules.rollcall.sessions
