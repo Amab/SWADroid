@@ -15,6 +15,7 @@
     <string name="generateQRModuleLabel">Generar codi QR</string>
     <string name="noticesModuleLabel">Publicar anunci</string>
     <string name="title_error_dialog">ERROR</string>
+    <string name="areYouSure">Està vostè segur?</string>
     <string name="close_dialog">Tancar</string>
     <string name="set_preferences">Configuració</string>
     <string name="user_preferences">Dades de l\'usuari</string>
@@ -107,6 +108,9 @@
     <string name="acceptFilters">Filtrar</string>
     <string name="cancelFilters">Cancelar</string>
     <string name="cleanDatabaseMsg">Totes les dades de la base de dades han estat esborrats</string>
+    <string name="cleanDatabaseDialogMsg">Totes les dades de la base de dades seran esborrats.\n\n
+         S\'esborraran les notificacions, tests, informació de grups i llistats d\'usuaris.\n\n
+         Esteu segur que voleu esborrar tots els dades de la base de dades?</string>
     <string name="shareBodyMsg">Estic usant # SWADroid al meu Android per accedir a la plataforma de teleformació SWAD.
         \nObtenlo gratis aquí: https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid</string>
     <string name="twitterTitle">Twitter</string>
@@ -230,7 +234,7 @@
     <string name="successfullEnrollment">Totes les inscripcions s\'han realitzat amb èxit. Si us plau, comprovi que està
         inscrit en els grups desitjats</string>
     <string name="confirmEnrollments">Confirmar inscripcions sol · licitades </string>
-    <string name="areYouSure"> Esteu segur que vol inscriure en els grups seleccionats?</string>
+    <string name="areYouSureGroups"> Esteu segur que vol inscriure en els grups seleccionats?</string>
     <string name="failedEnrollment">Ho sentim però la inscripció en els grups seleccionats no es va poder realitzar"</string>
     <string name="groupTypesProgressDescription">Obtenint tipus de grup… \nSi us plau, esperi…</string>
     <string name="groupsProgressDescription">Obtenint grups… \nSi us plau, esperi…</string>

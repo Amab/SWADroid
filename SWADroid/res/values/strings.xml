@@ -16,6 +16,7 @@
     <string name="noticesModuleLabel">Publish notice</string>
     <string name="generateQRModuleLabel">Generate QR code</string>
     <string name="title_error_dialog">ERROR</string>
+    <string name="areYouSure">Are you sure?</string>
     <string name="close_dialog">Close</string>
     <string name="set_preferences">Preferences</string>
     <string name="user_preferences">User data</string>
@@ -109,6 +110,9 @@
     <string name="acceptFilters">Filter</string>
     <string name="cancelFilters">Cancel</string>
     <string name="cleanDatabaseMsg">The database has been cleaned</string>
+    <string name="cleanDatabaseDialogMsg">All data in the database will be deleted.\n\n
+         Notifications, tests, group information and lists of users will be deleted.\n\n
+         Are you sure you want to delete all data in the database?</string>
     <string name="shareBodyMsg">I\'m using #SWADroid in my Android mobile for access to
         the e-learning platform SWAD.\nGet it for free here:
         https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid</string>
@@ -248,7 +252,7 @@
     <string name="successfullEnrollment">All the enrollments were made successfully. Please check that you are enrolled
         in your wished groups</string>
     <string name="confirmEnrollments">Confirm requested enrollments</string>
-    <string name="areYouSure">Are you sure, that you want to enroll on the selected groups?</string>
+    <string name="areYouSureGroups">Are you sure, that you want to enroll on the selected groups?</string>
     <string name="ok">OK</string>
     <string name="failedEnrollment">Sorry but the enrollment on the selected groups could not be performed</string>
     <string name="withoutLimit">unlimited</string>
