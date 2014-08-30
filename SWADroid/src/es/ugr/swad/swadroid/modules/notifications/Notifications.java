@@ -316,21 +316,22 @@ public class Notifications extends Module implements
 
 		refreshScreen();
 	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see es.ugr.swad.swadroid.modules.Module#onStart()
+	 * @see es.ugr.swad.swadroid.modules.Module#onResume()
 	 */
 	@Override
-	protected void onStart() {
-		super.onStart();
-
+	protected void onResume() {
+		super.onResume();
+		
 		IntentFilter intentFilter = new IntentFilter();
 		intentFilter.addAction(NotificationsSyncAdapterService.START_SYNC);
 		intentFilter.addAction(NotificationsSyncAdapterService.STOP_SYNC);
 		intentFilter.addAction(Intent.CATEGORY_DEFAULT);
 		registerReceiver(receiver, intentFilter);
+		
 		Log.i(TAG, "Registered receiver for automatic synchronization");
 
 		refreshScreen();
@@ -339,11 +340,11 @@ public class Notifications extends Module implements
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see es.ugr.swad.swadroid.modules.Module#onStop()
+	 * @see es.ugr.swad.swadroid.modules.Module#onPause()
 	 */
 	@Override
-	protected void onStop() {
-		super.onStop();
+	protected void onPause() {
+		super.onPause();
 		unregisterReceiver(receiver);
 		Log.i(TAG, "Unregistered receiver for automatic synchronization");
 	}
@@ -662,6 +663,8 @@ public class Notifications extends Module implements
 			Log.d(TAG, "[setChildGroupData] Notifications table is not empty");
 			
 			emptyNotifTextView.setVisibility(View.GONE);
+			list.setVisibility(View.VISIBLE);
+			
 			list.setAdapter(adapter);
 			list.setOnChildClickListener(clickListener);
 			
