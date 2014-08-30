@@ -3,7 +3,7 @@
   realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
   <class id="1" language="java" name="es.ugr.swad.swadroid.SWADMain" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/SWADMain.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="817" width="315" x="409" y="37"/>    
+    <position height="817" width="318" x="970" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -12,7 +12,7 @@
   </class>  
   <class id="2" language="java" name="es.ugr.swad.swadroid.PasswordDialogPreference" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/PasswordDialogPreference.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="151" width="260" x="764" y="37"/>    
+    <position height="151" width="264" x="295" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -21,7 +21,7 @@
   </class>  
   <class id="3" language="java" name="es.ugr.swad.swadroid.LoginActivity" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/LoginActivity.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="439" width="208" x="1415" y="37"/>    
+    <position height="439" width="214" x="41" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -30,7 +30,7 @@
   </class>  
   <class id="4" language="java" name="es.ugr.swad.swadroid.Constants" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/Constants.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="1969" width="311" x="1064" y="37"/>    
+    <position height="2005" width="295" x="1532" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -39,7 +39,7 @@
   </class>  
   <class id="5" language="java" name="es.ugr.swad.swadroid.SWADMain.onItemSelectedListener" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/SWADMain.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="115" width="272" x="539" y="2046"/>    
+    <position height="115" width="279" x="1097" y="2082"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -48,7 +48,7 @@
   </class>  
   <class id="6" language="java" name="es.ugr.swad.swadroid.PreferencesActivity" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/PreferencesActivity.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="727" width="328" x="41" y="37"/>    
+    <position height="583" width="331" x="599" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -57,21 +57,30 @@
   </class>  
   <class id="7" language="java" name="es.ugr.swad.swadroid.Preferences" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/Preferences.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="1195" width="219" x="280" y="2046"/>    
+    <position height="1195" width="213" x="844" y="2082"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <nesting id="8">    
+  <class id="8" language="java" name="es.ugr.swad.swadroid.Config" project="SWADroid" 
+    file="/SWADroid/src/es/ugr/swad/swadroid/Config.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="115" width="164" x="1328" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <nesting id="9">    
     <end type="SOURCE" refId="1"/>    
     <end type="TARGET" refId="5"/>  
   </nesting>  
-  <association id="9">    
+  <association id="10">    
     <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="10" name="prefs"/>      
-      <multiplicity id="11" minimum="0" maximum="1"/>    
+      <attribute id="11" name="prefs"/>      
+      <multiplicity id="12" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="7" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  

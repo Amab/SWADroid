@@ -25,7 +25,7 @@ import es.ugr.swad.swadroid.model.User;
  * Student item model.
  *
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
- * @author José Antonio Guerrero Avilés <cany20@gmail.com>
+ * @author Jose Antonio Guerrero Aviles <cany20@gmail.com>
  */
 
 public class StudentItemModel implements Comparable<StudentItemModel> {

@@ -3,177 +3,190 @@
   realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
   <class id="1" language="java" name="es.ugr.swad.swadroid.model.PracticeSession" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/model/PracticeSession.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="403" width="271" x="1218" y="264"/>    
+    <position height="403" width="272" x="979" y="264"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="2" language="java" name="es.ugr.swad.swadroid.model.Group" project="SWADroid" 
-    file="/SWADroid/src/es/ugr/swad/swadroid/model/Group.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="745" width="254" x="609" y="264"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="3" language="java" name="es.ugr.swad.swadroid.model.PairTable" project="SWADroid" 
-    file="/SWADroid/src/es/ugr/swad/swadroid/model/PairTable.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="331" width="254" x="2432" y="264"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="4" language="java" name="es.ugr.swad.swadroid.model.TestAnswer" project="SWADroid" 
+  <class id="2" language="java" name="es.ugr.swad.swadroid.model.TestAnswer" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/model/TestAnswer.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="853" width="254" x="2098" y="2176"/>    
+    <position height="853" width="255" x="2787" y="2176"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="5" language="java" name="es.ugr.swad.swadroid.model.GroupType" project="SWADroid" 
-    file="/SWADroid/src/es/ugr/swad/swadroid/model/GroupType.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="511" width="254" x="2138" y="264"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="6" language="java" name="es.ugr.swad.swadroid.model.Model" project="SWADroid" 
-    file="/SWADroid/src/es/ugr/swad/swadroid/model/Model.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="187" width="136" x="1438" y="37"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="7" language="java" name="es.ugr.swad.swadroid.model.SWADNotification" project="SWADroid" 
+  <class id="3" language="java" name="es.ugr.swad.swadroid.model.SWADNotification" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/model/SWADNotification.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="1141" width="528" x="41" y="264"/>    
+    <position height="1141" width="529" x="2492" y="264"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="8" language="java" name="es.ugr.swad.swadroid.model.Pair" project="SWADroid" 
-    file="/SWADroid/src/es/ugr/swad/swadroid/model/Pair.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="223" width="152" x="2432" y="1445"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="9" language="java" name="es.ugr.swad.swadroid.model.Course" project="SWADroid" 
-    file="/SWADroid/src/es/ugr/swad/swadroid/model/Course.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="439" width="254" x="1823" y="264"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="10" language="java" name="es.ugr.swad.swadroid.model.TestQuestion" project="SWADroid" 
-    file="/SWADroid/src/es/ugr/swad/swadroid/model/TestQuestion.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="691" width="274" x="1178" y="1445"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="11" language="java" name="es.ugr.swad.swadroid.model.TestTag" project="SWADroid" 
-    file="/SWADroid/src/es/ugr/swad/swadroid/model/TestTag.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="475" width="254" x="1529" y="264"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="12" language="java" name="es.ugr.swad.swadroid.model.Test" project="SWADroid" 
+  <class id="4" language="java" name="es.ugr.swad.swadroid.model.Test" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/model/Test.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="997" width="254" x="903" y="264"/>    
+    <position height="979" width="255" x="1586" y="264"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <generalization id="13">    
-    <end type="SOURCE" refId="7"/>    
-    <end type="TARGET" refId="6"/>  
-  </generalization>  
-  <association id="14">    
-    <end type="SOURCE" refId="12" navigable="false">      
-      <attribute id="15" name="questions"/>      
-      <multiplicity id="16" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="17">    
+  <class id="5" language="java" name="es.ugr.swad.swadroid.model.TestTag" project="SWADroid" 
+    file="/SWADroid/src/es/ugr/swad/swadroid/model/TestTag.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="475" width="255" x="684" y="264"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="es.ugr.swad.swadroid.model.User" project="SWADroid" 
+    file="/SWADroid/src/es/ugr/swad/swadroid/model/User.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="763" width="308" x="41" y="264"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="es.ugr.swad.swadroid.model.Group" project="SWADroid" 
+    file="/SWADroid/src/es/ugr/swad/swadroid/model/Group.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="745" width="255" x="1902" y="264"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="8" language="java" name="es.ugr.swad.swadroid.model.PairTable" project="SWADroid" 
+    file="/SWADroid/src/es/ugr/swad/swadroid/model/PairTable.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="331" width="255" x="389" y="264"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="es.ugr.swad.swadroid.model.GroupType" project="SWADroid" 
+    file="/SWADroid/src/es/ugr/swad/swadroid/model/GroupType.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="511" width="255" x="2197" y="264"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="10" language="java" name="es.ugr.swad.swadroid.model.Model" project="SWADroid" 
+    file="/SWADroid/src/es/ugr/swad/swadroid/model/Model.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="187" width="138" x="1862" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="11" language="java" name="es.ugr.swad.swadroid.model.Pair" project="SWADroid" 
+    file="/SWADroid/src/es/ugr/swad/swadroid/model/Pair.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="223" width="151" x="389" y="1445"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="12" language="java" name="es.ugr.swad.swadroid.model.Course" project="SWADroid" 
+    file="/SWADroid/src/es/ugr/swad/swadroid/model/Course.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="439" width="255" x="1291" y="264"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="13" language="java" name="es.ugr.swad.swadroid.model.TestQuestion" project="SWADroid" 
+    file="/SWADroid/src/es/ugr/swad/swadroid/model/TestQuestion.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="691" width="275" x="1862" y="1445"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <generalization id="14">    
+    <bendpoint x="3051" y="1445"/>    
+    <bendpoint x="3051" y="264"/>    
     <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="6"/>  
+    <end type="TARGET" refId="10"/>  
   </generalization>  
-  <association id="18">    
-    <end type="SOURCE" refId="10" navigable="false">      
-      <attribute id="19" name="answers"/>      
-      <multiplicity id="20" minimum="0" maximum="2147483647"/>    
+  <association id="15">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="16" name="questions"/>      
+      <multiplicity id="17" minimum="0" maximum="2147483647"/>    
     </end>    
-    <end type="TARGET" refId="4" navigable="true"/>    
+    <end type="TARGET" refId="13" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <generalization id="21">    
-    <bendpoint x="2107" y="1445"/>    
-    <bendpoint x="2107" y="264"/>    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="6"/>  
+  <generalization id="18">    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="10"/>  
   </generalization>  
-  <generalization id="22">    
-    <end type="SOURCE" refId="9"/>    
-    <end type="TARGET" refId="6"/>  
+  <generalization id="19">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="10"/>  
   </generalization>  
+  <association id="20">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="21" name="values"/>      
+      <multiplicity id="22" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
   <generalization id="23">    
     <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="6"/>  
+    <end type="TARGET" refId="10"/>  
   </generalization>  
   <generalization id="24">    
-    <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="6"/>  
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="10"/>  
   </generalization>  
   <generalization id="25">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="6"/>  
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="10"/>  
   </generalization>  
   <generalization id="26">    
-    <end type="SOURCE" refId="11"/>    
-    <end type="TARGET" refId="6"/>  
+    <bendpoint x="1871" y="264"/>    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="10"/>  
   </generalization>  
   <generalization id="27">    
-    <bendpoint x="1187" y="264"/>    
-    <end type="SOURCE" refId="10"/>    
-    <end type="TARGET" refId="6"/>  
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="10"/>  
   </generalization>  
   <generalization id="28">    
-    <end type="SOURCE" refId="12"/>    
-    <end type="TARGET" refId="6"/>  
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="10"/>  
   </generalization>  
-  <association id="29">    
-    <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="30" name="values"/>      
-      <multiplicity id="31" minimum="0" maximum="1"/>    
+  <generalization id="29">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="10"/>  
+  </generalization>  
+  <generalization id="30">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="10"/>  
+  </generalization>  
+  <association id="31">    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="32" name="answers"/>      
+      <multiplicity id="33" minimum="0" maximum="2147483647"/>    
     </end>    
-    <end type="TARGET" refId="8" navigable="true"/>    
+    <end type="TARGET" refId="2" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 

@@ -4,7 +4,7 @@
   <class id="1" language="java" name="es.ugr.swad.swadroid.modules.rollcall.RollcallConfigDownload" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/rollcall/RollcallConfigDownload.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="259" width="169" x="1108" y="37"/>    
+    <position height="259" width="166" x="1316" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -13,7 +13,7 @@
   </class>  
   <class id="2" language="java" name="es.ugr.swad.swadroid.modules.rollcall.Rollcall" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/rollcall/Rollcall.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="421" width="249" x="1895" y="37"/>    
+    <position height="421" width="250" x="780" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -23,7 +23,7 @@
   <class id="3" language="java" name="es.ugr.swad.swadroid.modules.rollcall.sessions.SeparatedListAdapter" 
     project="SWADroid" file="/SWADroid/src/es/ugr/swad/swadroid/modules/rollcall/sessions/SeparatedListAdapter.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="295" width="208" x="1647" y="37"/>    
+    <position height="295" width="206" x="1522" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -33,7 +33,7 @@
   <class id="4" language="java" name="es.ugr.swad.swadroid.modules.rollcall.sessions.SessionsArrayAdapter" 
     project="SWADroid" file="/SWADroid/src/es/ugr/swad/swadroid/modules/rollcall/sessions/SessionsArrayAdapter.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="115" width="290" x="1317" y="37"/>    
+    <position height="115" width="300" x="2436" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -43,7 +43,7 @@
   <class id="5" language="java" name="es.ugr.swad.swadroid.modules.rollcall.sessions.SessionsHistory" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/rollcall/sessions/SessionsHistory.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="205" width="208" x="860" y="37"/>    
+    <position height="205" width="206" x="1070" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -53,7 +53,7 @@
   <class id="6" language="java" name="es.ugr.swad.swadroid.modules.rollcall.sessions.SessionItemModel" 
     project="SWADroid" file="/SWADroid/src/es/ugr/swad/swadroid/modules/rollcall/sessions/SessionItemModel.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="187" width="208" x="1193" y="1074"/>    
+    <position height="187" width="206" x="2530" y="1074"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -63,7 +63,7 @@
   <class id="7" language="java" name="es.ugr.swad.swadroid.modules.rollcall.sessions.SessionsList" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/rollcall/sessions/SessionsList.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="259" width="208" x="365" y="37"/>    
+    <position height="259" width="206" x="289" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -73,7 +73,7 @@
   <class id="8" language="java" name="es.ugr.swad.swadroid.modules.rollcall.sessions.SessionsArrayAdapter.ViewHolder" 
     project="SWADroid" file="/SWADroid/src/es/ugr/swad/swadroid/modules/rollcall/sessions/SessionsArrayAdapter.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="115" width="208" x="1441" y="1074"/>    
+    <position height="115" width="206" x="2284" y="1074"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -83,7 +83,7 @@
   <class id="9" language="java" name="es.ugr.swad.swadroid.modules.rollcall.sessions.NewPracticeSession" 
     project="SWADroid" file="/SWADroid/src/es/ugr/swad/swadroid/modules/rollcall/sessions/NewPracticeSession.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="997" width="282" x="43" y="37"/>    
+    <position height="997" width="278" x="1768" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -93,7 +93,7 @@
   <class id="10" language="java" name="es.ugr.swad.swadroid.modules.rollcall.students.StudentItemModel" 
     project="SWADroid" file="/SWADroid/src/es/ugr/swad/swadroid/modules/rollcall/students/StudentItemModel.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="241" width="207" x="2184" y="1074"/>    
+    <position height="259" width="205" x="780" y="1074"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -103,7 +103,7 @@
   <class id="11" language="java" name="es.ugr.swad.swadroid.modules.rollcall.students.StudentsArrayAdapter.ViewHolder" 
     project="SWADroid" file="/SWADroid/src/es/ugr/swad/swadroid/modules/rollcall/students/StudentsArrayAdapter.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="133" width="207" x="2431" y="1074"/>    
+    <position height="133" width="205" x="2039" y="1074"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -113,7 +113,7 @@
   <class id="12" language="java" name="es.ugr.swad.swadroid.modules.rollcall.students.StudentsArrayAdapter" 
     project="SWADroid" file="/SWADroid/src/es/ugr/swad/swadroid/modules/rollcall/students/StudentsArrayAdapter.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="223" width="304" x="2431" y="37"/>    
+    <position height="223" width="310" x="2086" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -123,7 +123,7 @@
   <class id="13" language="java" name="es.ugr.swad.swadroid.modules.rollcall.students.StudentsHistory" 
     project="SWADroid" file="/SWADroid/src/es/ugr/swad/swadroid/modules/rollcall/students/StudentsHistory.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="223" width="207" x="2184" y="37"/>    
+    <position height="223" width="205" x="535" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -133,53 +133,53 @@
   <class id="14" language="java" name="es.ugr.swad.swadroid.modules.rollcall.students.StudentsList" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/rollcall/students/StudentsList.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="241" width="207" x="613" y="37"/>    
+    <position height="241" width="205" x="44" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <nesting id="15">    
-    <end type="SOURCE" refId="12"/>    
-    <end type="TARGET" refId="11"/>  
-  </nesting>  
-  <association id="16">    
+  <association id="15">    
     <end type="SOURCE" refId="13" navigable="false">      
-      <attribute id="17" name="studentsList"/>      
-      <multiplicity id="18" minimum="0" maximum="2147483647"/>    
+      <attribute id="16" name="studentsList"/>      
+      <multiplicity id="17" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="10" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="19">    
+  <association id="18">    
     <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="20" name="list"/>      
-      <multiplicity id="21" minimum="0" maximum="2147483647"/>    
+      <attribute id="19" name="list"/>      
+      <multiplicity id="20" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="6" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="22">    
-    <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="23" name="studentsList"/>      
-      <multiplicity id="24" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="25">    
-    <end type="SOURCE" refId="12" navigable="false">      
-      <attribute id="26" name="list"/>      
-      <multiplicity id="27" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <nesting id="28">    
+  <nesting id="21">    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="11"/>  
+  </nesting>  
+  <nesting id="22">    
     <end type="SOURCE" refId="4"/>    
     <end type="TARGET" refId="8"/>  
   </nesting>  
+  <association id="23">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="24" name="studentsList"/>      
+      <multiplicity id="25" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="26">    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="27" name="list"/>      
+      <multiplicity id="28" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
     accessors="true" visibility="true">    
     <attributes public="true" package="true" protected="true" private="true" static="true"/>    

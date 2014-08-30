@@ -3,7 +3,7 @@
   realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
   <class id="1" language="java" name="es.ugr.swad.swadroid.utils.OldCrypto" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/utils/OldCrypto.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="187" width="159" x="41" y="37"/>    
+    <position height="187" width="161" x="41" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -12,7 +12,7 @@
   </class>  
   <class id="2" language="java" name="es.ugr.swad.swadroid.utils.Utils" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/utils/Utils.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="457" width="359" x="969" y="37"/>    
+    <position height="457" width="360" x="1196" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -21,7 +21,7 @@
   </class>  
   <class id="3" language="java" name="es.ugr.swad.swadroid.utils.Base64.OutputStream" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/utils/Base64.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="385" width="182" x="574" y="1002"/>    
+    <position height="385" width="180" x="344" y="1002"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -30,45 +30,54 @@
   </class>  
   <class id="4" language="java" name="es.ugr.swad.swadroid.utils.Base64" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/utils/Base64.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="925" width="250" x="471" y="37"/>    
+    <position height="925" width="253" x="454" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="5" language="java" name="es.ugr.swad.swadroid.utils.Base64.InputStream" project="SWADroid" 
+  <class id="5" language="java" name="es.ugr.swad.swadroid.utils.TimeUtils" project="SWADroid" 
+    file="/SWADroid/src/es/ugr/swad/swadroid/utils/TimeUtils.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="241" width="174" x="982" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="es.ugr.swad.swadroid.utils.Base64.InputStream" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/utils/Base64.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="295" width="166" x="368" y="1002"/>    
+    <position height="295" width="162" x="564" y="1002"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="6" language="java" name="es.ugr.swad.swadroid.utils.QR" project="SWADroid" 
+  <class id="7" language="java" name="es.ugr.swad.swadroid.utils.QR" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/utils/QR.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="97" width="168" x="761" y="37"/>    
+    <position height="97" width="172" x="242" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="7" language="java" name="es.ugr.swad.swadroid.utils.Crypto" project="SWADroid" 
+  <class id="8" language="java" name="es.ugr.swad.swadroid.utils.Crypto" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/utils/Crypto.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="277" width="191" x="240" y="37"/>    
+    <position height="277" width="195" x="747" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <nesting id="8">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="5"/>  
-  </nesting>  
   <nesting id="9">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="6"/>  
+  </nesting>  
+  <nesting id="10">    
     <end type="SOURCE" refId="4"/>    
     <end type="TARGET" refId="3"/>  
   </nesting>  

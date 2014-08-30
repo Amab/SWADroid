@@ -1,108 +1,119 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <class-diagram version="1.1.6" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
   realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
-  <class id="1" language="java" name="es.ugr.swad.swadroid.modules.notifications.Notifications.SyncReceiver" 
+  <class id="1" language="java" name="es.ugr.swad.swadroid.modules.notifications.NotificationsExpandableListAdapter" 
+    project="SWADroid" 
+    file="/SWADroid/src/es/ugr/swad/swadroid/modules/notifications/NotificationsExpandableListAdapter.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="421" width="446" x="649" y="876"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="es.ugr.swad.swadroid.modules.notifications.Notifications.SyncReceiver" 
     project="SWADroid" file="/SWADroid/src/es/ugr/swad/swadroid/modules/notifications/Notifications.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="97" width="192" x="546" y="786"/>    
+    <position height="97" width="191" x="418" y="876"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="2" language="java" name="es.ugr.swad.swadroid.modules.notifications.NotificationItem" project="SWADroid" 
+  <class id="3" language="java" name="es.ugr.swad.swadroid.modules.notifications.NotificationItem" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/notifications/NotificationItem.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="349" width="233" x="273" y="37"/>    
+    <position height="367" width="230" x="45" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="3" language="java" 
+  <class id="4" language="java" 
     name="es.ugr.swad.swadroid.modules.notifications.NotificationsSyncAdapterService.SyncAdapterImpl" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/notifications/NotificationsSyncAdapterService.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="115" width="399" x="819" y="786"/>    
+    <position height="115" width="404" x="1135" y="876"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="4" language="java" name="es.ugr.swad.swadroid.modules.notifications.NotificationsSyncAdapterService" 
+  <class id="5" language="java" name="es.ugr.swad.swadroid.modules.notifications.NotificationsSyncAdapterService" 
     project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/notifications/NotificationsSyncAdapterService.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="583" width="426" x="819" y="37"/>    
+    <position height="583" width="432" x="1135" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="5" language="java" name="es.ugr.swad.swadroid.modules.notifications.Notifications" project="SWADroid" 
+  <class id="6" language="java" name="es.ugr.swad.swadroid.modules.notifications.Notifications" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/notifications/Notifications.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="709" width="233" x="546" y="37"/>    
+    <position height="799" width="230" x="546" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="6" language="java" name="es.ugr.swad.swadroid.modules.notifications.NotificationsMarkAllAsRead" 
+  <class id="7" language="java" name="es.ugr.swad.swadroid.modules.notifications.NotificationsMarkAllAsRead" 
     project="SWADroid" file="/SWADroid/src/es/ugr/swad/swadroid/modules/notifications/NotificationsMarkAllAsRead.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="205" width="192" x="41" y="37"/>    
+    <position height="205" width="191" x="315" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="7" language="java" name="es.ugr.swad.swadroid.modules.notifications.NotificationsCursorAdapter" 
+  <class id="8" language="java" name="es.ugr.swad.swadroid.modules.notifications.NotificationsCursorAdapter" 
     project="SWADroid" file="/SWADroid/src/es/ugr/swad/swadroid/modules/notifications/NotificationsCursorAdapter.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="223" width="276" x="230" y="786"/>    
+    <position height="205" width="279" x="816" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <association id="8">    
+  <association id="9">    
     <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="9" name="receiver"/>      
-      <multiplicity id="10" minimum="0" maximum="1"/>    
+      <attribute id="10" name="sSyncAdapter"/>      
+      <multiplicity id="11" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="12">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="4"/>  
+  </nesting>  
+  <association id="13">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="14" name="adapter"/>      
+      <multiplicity id="15" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="1" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <nesting id="11">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="3"/>  
+  <nesting id="16">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="2"/>  
   </nesting>  
-  <association id="12">    
-    <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="13" name="sSyncAdapter"/>      
-      <multiplicity id="14" minimum="0" maximum="1"/>    
+  <association id="17">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="18" name="receiver"/>      
+      <multiplicity id="19" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="3" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <nesting id="15">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="1"/>  
-  </nesting>  
-  <association id="16">    
-    <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="17" name="adapter"/>      
-      <multiplicity id="18" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="7" navigable="true"/>    
+    <end type="TARGET" refId="2" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 

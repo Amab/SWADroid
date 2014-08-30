@@ -3,7 +3,7 @@
   realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
   <class id="1" language="java" name="es.ugr.swad.swadroid.sync.DummyProvider" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/sync/DummyProvider.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="187" width="247" x="41" y="37"/>    
+    <position height="187" width="247" x="627" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -13,7 +13,7 @@
   <class id="2" language="java" name="es.ugr.swad.swadroid.sync.AccountAuthenticatorService.AccountAuthenticatorImpl" 
     project="SWADroid" file="/SWADroid/src/es/ugr/swad/swadroid/sync/AccountAuthenticatorService.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="223" width="414" x="518" y="264"/>    
+    <position height="223" width="423" x="346" y="264"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -22,7 +22,7 @@
   </class>  
   <class id="3" language="java" name="es.ugr.swad.swadroid.sync.PeriodicSyncReceiver" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/sync/PeriodicSyncReceiver.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="133" width="303" x="1096" y="37"/>    
+    <position height="133" width="300" x="914" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -31,7 +31,7 @@
   </class>  
   <class id="4" language="java" name="es.ugr.swad.swadroid.sync.AccountAuthenticatorService" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/sync/AccountAuthenticatorService.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="115" width="236" x="518" y="37"/>    
+    <position height="115" width="241" x="346" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -40,7 +40,7 @@
   </class>  
   <class id="5" language="java" name="es.ugr.swad.swadroid.sync.AccountAuthenticator" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/sync/AccountAuthenticator.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="115" width="150" x="328" y="37"/>    
+    <position height="115" width="148" x="1254" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -49,7 +49,7 @@
   </class>  
   <class id="6" language="java" name="es.ugr.swad.swadroid.sync.SyncUtils" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/sync/SyncUtils.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="169" width="262" x="794" y="37"/>    
+    <position height="169" width="265" x="41" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      

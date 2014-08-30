@@ -4,7 +4,7 @@
   <class id="1" language="java" name="es.ugr.swad.swadroid.modules.downloads.DownloadNotification" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/downloads/DownloadNotification.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="277" width="231" x="1344" y="804"/>    
+    <position height="277" width="230" x="1114" y="840"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -14,7 +14,7 @@
   <class id="2" language="java" name="es.ugr.swad.swadroid.modules.downloads.DownloadsManager.onGroupSelectedListener" 
     project="SWADroid" file="/SWADroid/src/es/ugr/swad/swadroid/modules/downloads/DownloadsManager.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="115" width="272" x="115" y="804"/>    
+    <position height="115" width="279" x="498" y="840"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -24,7 +24,7 @@
   <class id="3" language="java" name="es.ugr.swad.swadroid.modules.downloads.DirectoryTreeDownload.DirectoryTree" 
     project="SWADroid" file="/SWADroid/src/es/ugr/swad/swadroid/modules/downloads/DirectoryTreeDownload.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="97" width="186" x="1118" y="804"/>    
+    <position height="97" width="183" x="1439" y="840"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -33,7 +33,7 @@
   </class>  
   <class id="4" language="java" name="es.ugr.swad.swadroid.modules.downloads.NodeAdapter.ViewHolder" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/downloads/NodeAdapter.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="115" width="186" x="786" y="1247"/>    
+    <position height="115" width="183" x="817" y="1265"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -43,7 +43,7 @@
   <class id="5" language="java" name="es.ugr.swad.swadroid.modules.downloads.InvalidPathException" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/downloads/DirectoryNavigator.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="97" width="186" x="652" y="37"/>    
+    <position height="97" width="183" x="880" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -52,7 +52,7 @@
   </class>  
   <class id="6" language="java" name="es.ugr.swad.swadroid.modules.downloads.FileDownloader" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/downloads/FileDownloader.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="151" width="200" x="878" y="37"/>    
+    <position height="151" width="194" x="264" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -62,7 +62,7 @@
   <class id="7" language="java" name="es.ugr.swad.swadroid.modules.downloads.FileDownloaderAsyncTask" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/downloads/FileDownloaderAsyncTask.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="403" width="292" x="1344" y="37"/>    
+    <position height="403" width="296" x="1103" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -72,7 +72,7 @@
   <class id="8" language="java" name="es.ugr.swad.swadroid.modules.downloads.DirectoryNavigator" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/downloads/DirectoryNavigator.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="403" width="270" x="427" y="804"/>    
+    <position height="385" width="272" x="186" y="840"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -81,7 +81,7 @@
   </class>  
   <class id="9" language="java" name="es.ugr.swad.swadroid.modules.downloads.GetFile" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/downloads/GetFile.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="241" width="186" x="43" y="37"/>    
+    <position height="241" width="183" x="41" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -91,7 +91,7 @@
   <class id="10" language="java" name="es.ugr.swad.swadroid.modules.downloads.DirectoryTreeDownload" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/downloads/DirectoryTreeDownload.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="223" width="186" x="1118" y="37"/>    
+    <position height="223" width="183" x="1439" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -100,7 +100,7 @@
   </class>  
   <class id="11" language="java" name="es.ugr.swad.swadroid.modules.downloads.NodeAdapter" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/downloads/NodeAdapter.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="187" width="251" x="737" y="804"/>    
+    <position height="187" width="257" x="817" y="840"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -109,7 +109,7 @@
   </class>  
   <class id="12" language="java" name="es.ugr.swad.swadroid.modules.downloads.DirectoryItem" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/downloads/DirectoryItem.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="565" width="319" x="427" y="1247"/>    
+    <position height="565" width="318" x="459" y="1265"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -119,55 +119,55 @@
   <class id="13" language="java" name="es.ugr.swad.swadroid.modules.downloads.DownloadsManager" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/modules/downloads/DownloadsManager.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="727" width="343" x="269" y="37"/>    
+    <position height="763" width="342" x="498" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <association id="14">    
+  <nesting id="14">    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="4"/>  
+  </nesting>  
+  <nesting id="15">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="2"/>  
+  </nesting>  
+  <association id="16">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="17" name="mNotification"/>      
+      <multiplicity id="18" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="19">    
     <end type="SOURCE" refId="13" navigable="false">      
-      <attribute id="15" name="navigator"/>      
-      <multiplicity id="16" minimum="0" maximum="1"/>    
+      <attribute id="20" name="navigator"/>      
+      <multiplicity id="21" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="8" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="17">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="18" name="currentItems"/>      
-      <multiplicity id="19" minimum="0" maximum="2147483647"/>    
+  <association id="22">    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="23" name="list"/>      
+      <multiplicity id="24" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="12" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <nesting id="20">    
+  <nesting id="25">    
     <end type="SOURCE" refId="10"/>    
     <end type="TARGET" refId="3"/>  
   </nesting>  
-  <association id="21">    
-    <end type="SOURCE" refId="11" navigable="false">      
-      <attribute id="22" name="list"/>      
-      <multiplicity id="23" minimum="0" maximum="2147483647"/>    
+  <association id="26">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="27" name="currentItems"/>      
+      <multiplicity id="28" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="12" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <nesting id="24">    
-    <end type="SOURCE" refId="11"/>    
-    <end type="TARGET" refId="4"/>  
-  </nesting>  
-  <nesting id="25">    
-    <end type="SOURCE" refId="13"/>    
-    <end type="TARGET" refId="2"/>  
-  </nesting>  
-  <association id="26">    
-    <end type="SOURCE" refId="7" navigable="false">      
-      <attribute id="27" name="mNotification"/>      
-      <multiplicity id="28" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="1" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
