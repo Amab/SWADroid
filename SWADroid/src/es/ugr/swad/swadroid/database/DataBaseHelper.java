@@ -62,6 +62,8 @@ import java.util.List;
 import java.util.Locale;
 
 /**
+ * Helper for database operations
+ * 
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
