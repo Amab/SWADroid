@@ -164,7 +164,7 @@ public class TestsConfigDownload extends Module {
      */
     @Override
     protected void postConnect() {
-        if (numQuestions == 0) {
+        if (isPluggable && (numQuestions == 0)) {
             Toast.makeText(this, R.string.noQuestionsAvailableTestsDownloadMsg, Toast.LENGTH_LONG).show();
         } else if (!isPluggable) {
             Toast.makeText(this, R.string.noQuestionsPluggableTestsDownloadMsg, Toast.LENGTH_LONG).show();
