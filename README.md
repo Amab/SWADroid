@@ -1,6 +1,6 @@
 # SWADroid
 
-Android client for e-learning platform [![SWADroid](https://openswad.org/logo/swad84x24.png "OpenSWAD")][swad].
+Android client for e-learning platform [![SWADroid](https://openswad.org/logo/swad84x24.png "OpenSWAD")][swad]
 
 [![SWADroid](http://developer.android.com/images/brand/en_generic_rgb_wo_45.png "Install from Google Play")][apk]
 
