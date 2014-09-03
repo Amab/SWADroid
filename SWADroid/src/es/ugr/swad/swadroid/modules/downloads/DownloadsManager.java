@@ -208,13 +208,10 @@ public class DownloadsManager extends MenuActivity {
         grid.setOnItemClickListener((new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-                //TextView text = (TextView) v.findViewById(R.id.icon_text);
-                //chosenNodeName = text.getText().toString();
-                //DirectoryItem node = navigator.getDirectoryItem(chosenNodeName);
+
                 DirectoryItem node = navigator.getDirectoryItem(position);
                 if (node.getFileCode() == -1) //it is a directory therefore navigates into it
                     updateView(navigator.goToSubDirectory(position));
-                    //updateView(navigator.goToSubDirectory(chosenNodeName));
                 else { //it is a files therefore gets its information through web service GETFILE
                     chosenNodeName = node.getName();
                     fileSize = node.getSize();
@@ -320,7 +317,7 @@ public class DownloadsManager extends MenuActivity {
                     if (this.checkMediaAvailability() == 2) {
                         Log.i(TAG, "External storage is available");
                         String url = data.getExtras().getString("link");
-                        downloadFile(getDirectoryPath(), url, fileSize);
+                        downloadFile(Constants.DIRECTORY_SWADROID, url, fileSize);
                         //Toast.makeText(this, chosenNodeName +" "+ this.getResources().getString(R.string.notificationDownloadTitle) , Toast.LENGTH_LONG).show();
                     } else { //if the sd card is busy, it shows a alert dialog
                         Log.i(TAG, "External storage is NOT available");
@@ -530,16 +527,6 @@ public class DownloadsManager extends MenuActivity {
         }
         return returnValue;
     }
-
-    /**
-     * Get the directory path where the files will be located.This will be /$EXTERNAL_STORAGE/$DOWNLOADS
-     */
-    private String getDirectoryPath() {
-        File downloadDir =
-                new File(Constants.DOWNLOADS_PATH);
-        downloadDir.mkdir();
-        return downloadDir.toString();
-    }
     
     /**
      * Check if a file is already downloaded or not
@@ -585,7 +572,8 @@ public class DownloadsManager extends MenuActivity {
         // Check if external storage is available
         int storageState = checkMediaAvailability(); 
         if ( storageState == 2) {
-            new FileDownloaderAsyncTask(this, this.chosenNodeName, fileSize).execute(directory, url);
+            new FileDownloaderAsyncTask(this, this.chosenNodeName, fileSize)
+            .execute(directory, url);
         } else {
             Toast.makeText(this, R.string.sdCardBusyTitle, Toast.LENGTH_LONG).show();
         }
