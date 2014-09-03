@@ -40,15 +40,11 @@ import java.net.URLConnection;
 /**
  * Download the file located at the given URL, save it to a file.
  * It also launches the notification on bar status and erases it when the download is completed or failed.
- * . Note that we are responsible for the deletion of
- * the file when it is no longer needed.
- * @throws MalformedUrlException: if a malformed URL is given as parameter.
- * @throws IOException: most probably because the connection to the server fails.
- * @throws FileNotFoundException: if the URL points to a non-existent file or to a directory - such as "www.ugr.es/"
+ * Note that we are responsible for the deletion of the file when it is no longer needed.
  *
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
- * @author Víctor Terrón <vterron@iaa.es>
+ * @author Victor Terron <vterron@iaa.es>
  */
 
 
@@ -294,8 +290,6 @@ public class FileDownloaderAsyncTask extends AsyncTask<String, Integer, Boolean>
             isDownloadManagerSWADroid = true;
             downloadSuccess = downloadFileCustom(basename, extension);
         }
-
-//		Log.d(TAG, "Terminado");
 
         return downloadSuccess;
     }
