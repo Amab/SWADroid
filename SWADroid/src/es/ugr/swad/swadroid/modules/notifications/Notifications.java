@@ -37,6 +37,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import es.ugr.swad.swadroid.Constants;
@@ -44,6 +45,7 @@ import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.AlertNotificationFactory;
+import es.ugr.swad.swadroid.gui.SwipeListViewTouchListener;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.modules.Login;
@@ -604,7 +606,7 @@ public class Notifications extends Module implements
 		// Create a ListView-specific touch listener. ListViews are given special treatment because
 		// by default they handle touches for their list items... i.e. they're in charge of drawing
 		// the pressed state (the list selector), handling list item clicks, etc.
-		/*SwipeListViewTouchListener touchListener =
+		SwipeListViewTouchListener touchListener =
 		    new SwipeListViewTouchListener(
 		    		list,
 		        new SwipeListViewTouchListener.OnSwipeCallback() {		    			
@@ -639,6 +641,16 @@ public class Notifications extends Module implements
 		                    refreshScreen();
 		            	}
 		            }
+
+					@Override
+					public void onStartSwipe() {		            	
+		            	disableSwipe();
+					}
+
+					@Override
+					public void onStopSwipe() {
+						enableSwipe();
+					}
 		        },
 		        true,
 		        true);
@@ -646,7 +658,7 @@ public class Notifications extends Module implements
 		list.setOnTouchListener(touchListener);
 		// Setting this scroll listener is required to ensure that during ListView scrolling,
 		// we don't look for swipes.
-		list.setOnScrollListener(touchListener.makeScrollListener());*/
+		list.setOnScrollListener(touchListener.makeScrollListener());
 	}
 
 	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
@@ -693,6 +705,10 @@ public class Notifications extends Module implements
 	public void onRefresh() {
 		showSwipeProgress();
 		runConnection();
+		
+		if(!isConnected) {
+			hideSwipeProgress();
+		}
 	}
 
 	public void setGroupData() {
