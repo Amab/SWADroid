@@ -39,22 +39,34 @@ import org.ksoap2.serialization.SoapObject;
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  */
 public class Login extends Module {
-    /**
-     * Logged user
-     */
-    private User loggedUser;
-    /**
-     * Digest for user password.
-     */
-    //private MessageDigest md;
+	/**
+	 * User returned by the webservice
+	 */
+    private User user;
     /**
      * User ID.
      */
     private String userID;
-    /**
-     * User password.
-     */
-    //private String userPassword;
+	/**
+	 * Time to force relogin
+	 */
+	public static final int RELOGIN_TIME = 86400000; //24h
+	/**
+	 * User logged flag
+	 */
+	private static boolean logged;
+	/**
+	 * Logged user
+	 */
+	private static User loggedUser;
+	/**
+	 * Time of application's last login
+	 */
+	private static long lastLoginTime;
+	/**
+	 * Role of the logged User in the current selected course
+	 */
+	private static int currentUserRole = -1;
     /**
      * Login tag name for Logcat
      */
@@ -101,12 +113,12 @@ public class Login extends Module {
             throws Exception {
 
         //If last login time > Global.RELOGIN_TIME, force login
-        if (System.currentTimeMillis() - Constants.getLastLoginTime() > Constants.RELOGIN_TIME) {
-            Constants.setLogged(false);
+        if (System.currentTimeMillis() - Login.getLastLoginTime() > Login.RELOGIN_TIME) {
+            Login.setLogged(false);
         }
 
         //If the application isn't logged, force login
-        if (!Constants.isLogged()) {
+        if (!Login.isLogged()) {
             userID = Preferences.getUserID();
 
             //If the user ID is a DNI
@@ -132,7 +144,7 @@ public class Login extends Module {
                 SoapObject soap = (SoapObject) result;
 
                 //Stores user data returned by webservice response
-                loggedUser = new User(
+                user = new User(
                         Long.parseLong(soap.getProperty("userCode").toString()),        // userCode
                         soap.getProperty("wsKey").toString(),                           // wsKey
                         soap.getProperty("userID").toString(),                          // userID
@@ -144,24 +156,24 @@ public class Login extends Module {
                         Integer.parseInt(soap.getProperty("userRole").toString())       // userRole
                 );
 
-                Constants.setLogged(true);
-                Constants.setLoggedUser(loggedUser);
+                Login.setLogged(true);
+                Login.setLoggedUser(user);
 
                 //Update application last login time
-                Constants.setLastLoginTime(System.currentTimeMillis());
+                Login.setLastLoginTime(System.currentTimeMillis());
 
         		if(isDebuggable) {
-        			Log.d(TAG, "id=" + loggedUser.getId());
-        			Log.d(TAG, "wsKey=" + loggedUser.getWsKey());
-        			Log.d(TAG, "userID=" + loggedUser.getUserID());
-        			Log.d(TAG, "userNickname=" + loggedUser.getUserNickname());
-        			Log.d(TAG, "userSurname1=" + loggedUser.getUserSurname1());
-        			Log.d(TAG, "userSurname2=" + loggedUser.getUserSurname2());
-        			Log.d(TAG, "userFirstName=" + loggedUser.getUserFirstname());
-        			Log.d(TAG, "userPhoto=" + loggedUser.getUserPhoto());
-        			Log.d(TAG, "userRole=" + loggedUser.getUserRole());
-        			Log.d(TAG, "isLogged=" + Constants.isLogged());
-        			Log.d(TAG, "lastLoginTime=" + Constants.getLastLoginTime());
+        			Log.d(TAG, "id=" + user.getId());
+        			Log.d(TAG, "wsKey=" + user.getWsKey());
+        			Log.d(TAG, "userID=" + user.getUserID());
+        			Log.d(TAG, "userNickname=" + user.getUserNickname());
+        			Log.d(TAG, "userSurname1=" + user.getUserSurname1());
+        			Log.d(TAG, "userSurname2=" + user.getUserSurname2());
+        			Log.d(TAG, "userFirstName=" + user.getUserFirstname());
+        			Log.d(TAG, "userPhoto=" + user.getUserPhoto());
+        			Log.d(TAG, "userRole=" + user.getUserRole());
+        			Log.d(TAG, "isLogged=" + Login.isLogged());
+        			Log.d(TAG, "lastLoginTime=" + Login.getLastLoginTime());
         		}
             }
         }
@@ -185,4 +197,78 @@ public class Login extends Module {
     protected void onError() {
 
     }
+
+	/**
+	 * Checks if user is already logged on SWAD
+	 *
+	 * @return User logged flag
+	 */
+	public static boolean isLogged() {
+	    return logged;
+	}
+
+	/**
+	 * Sets user logged flag
+	 *
+	 * @param logged User logged flag
+	 */
+	public static void setLogged(boolean logged) {
+	    Login.logged = logged;
+	}
+
+	/**
+	 * Gets the user logged on SWAD
+	 */
+	public static User getLoggedUser() {
+	    return loggedUser;
+	}
+
+	/**
+	 * Sets the user logged on SWAD
+	 */
+	public static void setLoggedUser(User loggedUser) {
+		Login.loggedUser = loggedUser;
+	}
+
+	/**
+	 * Gets start time of application
+	 *
+	 * @return Start time of application
+	 */
+	public static long getLastLoginTime() {
+	    return lastLoginTime;
+	}
+
+	/**
+	 * Sets start time of application
+	 *
+	 * @param l Start time of application
+	 */
+	public static void setLastLoginTime(long l) {
+		Login.lastLoginTime = l;
+	}
+
+	/**
+	 * Sets user role in the current selected course
+	 *
+	 * @param userRole Role of the user: 0- unknown STUDENT_TYPE_CODE - student TEACHER_TYPE_CODE - teacher
+	 */
+	public static void setCurrentUserRole(int userRole) {
+	    if (userRole == 0 || userRole == Constants.TEACHER_TYPE_CODE || userRole == Constants.STUDENT_TYPE_CODE)
+	        currentUserRole = userRole;
+	    else
+	        currentUserRole = -1;
+	}
+
+	/**
+	 * Gets the role of the logged user in the current selected course
+	 *
+	 * @return -1 if the user role has not been fixed,
+	 *         0  if the user role is unknown
+	 *         2 (STUDENT_TYPE_CODE) if the user is a student
+	 *         3 (TEACHER_TYPE_CODE) if the user is a teacher
+	 */
+	public static int getCurrentUserRole() {
+	    return currentUserRole;
+	}
 }

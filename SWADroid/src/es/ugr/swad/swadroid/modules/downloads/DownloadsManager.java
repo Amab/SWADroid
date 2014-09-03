@@ -48,6 +48,7 @@ import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.model.GroupType;
+import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.GroupTypes;
 import es.ugr.swad.swadroid.modules.Groups;
 
@@ -140,7 +141,7 @@ public class DownloadsManager extends MenuActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        List<Group> allGroups = dbHelper.getGroups(Constants.getSelectedCourseCode());
+        List<Group> allGroups = dbHelper.getGroups(Courses.getSelectedCourseCode());
         int nGroups = allGroups.size();
 
         if (!saveState) {
@@ -154,7 +155,7 @@ public class DownloadsManager extends MenuActivity {
                     requestDirectoryTree();
             } else {
                 Intent activity = new Intent(this, GroupTypes.class);
-                activity.putExtra("courseCode", Constants.getSelectedCourseCode());
+                activity.putExtra("courseCode", Courses.getSelectedCourseCode());
                 startActivityForResult(activity, Constants.GROUPTYPES_REQUEST_CODE);
             }
         } else {
@@ -344,7 +345,7 @@ public class DownloadsManager extends MenuActivity {
                     break;
                 case Constants.GROUPTYPES_REQUEST_CODE:
                     Intent activity = new Intent(this, Groups.class);
-                    activity.putExtra("courseCode", Constants.getSelectedCourseCode());
+                    activity.putExtra("courseCode", Courses.getSelectedCourseCode());
                     startActivityForResult(activity, Constants.GROUPS_REQUEST_CODE);
                     break;
             }
@@ -369,7 +370,7 @@ public class DownloadsManager extends MenuActivity {
 
         this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
 
-        getSupportActionBar().setSubtitle(Constants.getSelectedCourseShortName());
+        getSupportActionBar().setSubtitle(Courses.getSelectedCourseShortName());
         
         this.saveState = true;
         this.previousConnection = false;
@@ -426,7 +427,7 @@ public class DownloadsManager extends MenuActivity {
      * Get the list of the groups of the course with a documents zone to whom the user belongs
      */
     private List<Group> getFilteredGroups() {
-        List<Group> currentGroups = dbHelper.getGroups(Constants.getSelectedCourseCode());
+        List<Group> currentGroups = dbHelper.getGroups(Courses.getSelectedCourseCode());
         //remove groups that do not have a file zone assigned
         int j = 0;
         while (j < currentGroups.size()) {
@@ -448,7 +449,7 @@ public class DownloadsManager extends MenuActivity {
             groupsSpinner.setVisibility(View.VISIBLE);
 
             ArrayList<String> spinnerNames = new ArrayList<String>(currentGroups.size() + 1);
-            spinnerNames.add(getString(R.string.course) + "-" + Constants.getSelectedCourseShortName());
+            spinnerNames.add(getString(R.string.course) + "-" + Courses.getSelectedCourseShortName());
             for (Group g : currentGroups) {
                 GroupType gType = dbHelper.getGroupTypeFromGroup(g.getId());
                 spinnerNames.add(getString(R.string.group) + "-" + gType.getGroupTypeName() + " " + g.getGroupName());
@@ -462,7 +463,7 @@ public class DownloadsManager extends MenuActivity {
         } else {
             this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
 
-            getSupportActionBar().setSubtitle(Constants.getSelectedCourseShortName());
+            getSupportActionBar().setSubtitle(Courses.getSelectedCourseShortName());
         }
     }
 
@@ -668,7 +669,7 @@ public class DownloadsManager extends MenuActivity {
         refresh = true;
 
         Intent activity = new Intent(this, GroupTypes.class);
-        activity.putExtra("courseCode", Constants.getSelectedCourseCode());
+        activity.putExtra("courseCode", Courses.getSelectedCourseCode());
         startActivityForResult(activity, Constants.GROUPTYPES_REQUEST_CODE);
 
     }

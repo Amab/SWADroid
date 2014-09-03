@@ -4,9 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.model.GroupType;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
@@ -74,8 +74,8 @@ public class GroupTypes extends Module {
     @Override
     protected void requestService() throws Exception {
     	createRequest(SOAPClient.CLIENT_TYPE);
-        addParam("wsKey", Constants.getLoggedUser().getWsKey());
-        addParam("courseCode", (int) Constants.getSelectedCourseCode());
+        addParam("wsKey", Login.getLoggedUser().getWsKey());
+        addParam("courseCode", (int) Courses.getSelectedCourseCode());
         sendRequest(GroupTypes.class, false);
 
         if (result != null) {
@@ -102,7 +102,7 @@ public class GroupTypes extends Module {
                 }
             }
 
-            dbHelper.insertCollection(Constants.DB_TABLE_GROUP_TYPES, groupsSWAD);
+            dbHelper.insertCollection(DataBaseHelper.DB_TABLE_GROUP_TYPES, groupsSWAD);
 
             setResult(RESULT_OK);
         }

@@ -47,10 +47,10 @@ import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.camera.CameraManager;
 
-import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.model.User;
+import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.utils.Utils;
 
 import java.io.File;
@@ -307,13 +307,13 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 
         if (validDni || validNickname) {
             String fieldName = (validDni) ? "userID" : "userNickname";
-            u = (User) dbHelper.getRow(Constants.DB_TABLE_USERS, fieldName, qrContent);
+            u = (User) dbHelper.getRow(DataBaseHelper.DB_TABLE_USERS, fieldName, qrContent);
 
             if (u != null) {
                 idList.add(u.getUserID());
 
                 // Check if the specified user is enrolled in the selected course
-                if (dbHelper.isUserEnrolledCourse(u.getUserID(), Constants.getSelectedCourseCode())) {
+                if (dbHelper.isUserEnrolledCourse(u.getUserID(), Courses.getSelectedCourseCode())) {
                     messageResult = getString(R.string.scan_valid_student);
                     iconResult = R.drawable.ok;
                     soundResult = sounds[0]; // Positive sound

@@ -22,12 +22,12 @@ package es.ugr.swad.swadroid.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.model.Model;
 
 import java.text.Normalizer;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,6 +39,15 @@ import java.util.regex.Pattern;
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */
 public class Utils {
+	/**
+	 * Random generator
+	 */
+	public static final Random rnd = new Random();
+	/**
+	 * Base string to generate random alphanumeric strings
+	 */
+	public static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	
     /**
      * Generates a random string of length len
      *
@@ -48,22 +57,8 @@ public class Utils {
     public static String randomString(int len) {
         StringBuilder sb = new StringBuilder(len);
         for (int i = 0; i < len; i++)
-            sb.append(Constants.AB.charAt(Constants.rnd.nextInt(Constants.AB.length())));
+            sb.append(Utils.AB.charAt(Utils.rnd.nextInt(Utils.AB.length())));
         return sb.toString();
-    }
-
-    /**
-     * Indicates if the db was cleaned
-     */
-    public static boolean isDbCleaned() {
-        return Constants.dbCleaned;
-    }
-
-    /**
-     * Set the fact that the db was cleaned
-     */
-    public static void setDbCleaned(boolean state) {
-        Constants.dbCleaned = state;
     }
 
     /**
@@ -231,4 +226,5 @@ public class Utils {
         Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
         return pattern.matcher(temp).replaceAll("");
     }
+
 }

@@ -18,6 +18,7 @@
  */
 package es.ugr.swad.swadroid.gui;
 
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -36,7 +37,6 @@ import es.ugr.swad.swadroid.PreferencesActivity;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADMain;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
-import es.ugr.swad.swadroid.utils.Utils;
 
 /**
  * Superclass for add the options menu to all children classes of ExpandableListActivity
@@ -81,7 +81,7 @@ public class MenuExpandableListActivity extends ActionBarActivity {
         public void onClick(DialogInterface dialog, int id) {            
             dbHelper.cleanTables();
             Preferences.setLastCourseSelected(0);
-            Utils.setDbCleaned(true);
+            DataBaseHelper.setDbCleaned(true);
             Toast.makeText(getApplicationContext(), R.string.cleanDatabaseMsg, Toast.LENGTH_LONG).show();
             if (isSWADMain) {
                 setMenuDbClean();

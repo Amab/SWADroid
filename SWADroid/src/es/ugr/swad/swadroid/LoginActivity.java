@@ -36,7 +36,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.RecoverPassword;
@@ -53,7 +52,7 @@ import java.security.NoSuchAlgorithmException;
  */
 public class LoginActivity extends ActionBarActivity implements OnClickListener {
 
-    public static final String TAG = "LoginActivity";
+    public static final String TAG = Constants.APP_TAG + " LoginActivity";
 
     private boolean mLoginError = false;
     // UI references for the login form.
@@ -208,7 +207,7 @@ public class LoginActivity extends ActionBarActivity implements OnClickListener 
             switch (requestCode) {
                 case Constants.LOGIN_REQUEST_CODE:
                     showProgress(false);
-                    Constants.setLogged(true);
+                    Login.setLogged(true);
                     setResult(RESULT_OK);
                     mFromPreferece = false;
                     mLoginError = false;

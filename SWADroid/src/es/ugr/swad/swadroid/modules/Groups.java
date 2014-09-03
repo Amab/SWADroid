@@ -22,9 +22,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
@@ -111,7 +111,7 @@ public class Groups extends Module {
     @Override
     protected void requestService() throws Exception {
     	createRequest(SOAPClient.CLIENT_TYPE);
-        addParam("wsKey", Constants.getLoggedUser().getWsKey());
+        addParam("wsKey", Login.getLoggedUser().getWsKey());
         addParam("courseCode", (int) courseCode);
         sendRequest(Group.class, false);
 
@@ -142,7 +142,7 @@ public class Groups extends Module {
                 }
             }
 
-            dbHelper.insertCollection(Constants.DB_TABLE_GROUPS, groupsSWAD, courseCode);
+            dbHelper.insertCollection(DataBaseHelper.DB_TABLE_GROUPS, groupsSWAD, courseCode);
             //TODO remove obsolete groups
             /*for(int i = 0; i < groupsSWAD.size(); ++i){
                 Group g = (Group) groupsSWAD.get(i);

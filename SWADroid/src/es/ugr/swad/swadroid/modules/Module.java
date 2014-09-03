@@ -422,7 +422,7 @@ public abstract class Module extends MenuActivity {
 
                         // Force logout and reset password (this will show again
                         // the login screen)
-                        Constants.setLogged(false);
+                        Login.setLogged(false);
                         Preferences.setUserPassword("");
                     } else if (es.faultstring.equals("Unknown application key")) {
                         errorMsg = getString(R.string.errorBadAppKeyMsg);

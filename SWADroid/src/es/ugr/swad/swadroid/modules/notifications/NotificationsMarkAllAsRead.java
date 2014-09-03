@@ -20,9 +20,9 @@ package es.ugr.swad.swadroid.modules.notifications;
 
 import android.os.Bundle;
 import android.util.Log;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
@@ -76,7 +76,7 @@ public class NotificationsMarkAllAsRead extends Module {
         
         //Creates webservice request, adds required params and sends request to webservice
         createRequest(SOAPClient.CLIENT_TYPE);
-        addParam("wsKey", Constants.getLoggedUser().getWsKey());
+        addParam("wsKey", Login.getLoggedUser().getWsKey());
         addParam("notifications", seenNotifCodes);
         sendRequest(Integer.class, false);
         

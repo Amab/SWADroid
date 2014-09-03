@@ -147,7 +147,7 @@ public class Notices extends Module {
 
         createRequest(SOAPClient.CLIENT_TYPE);
 
-        addParam("wsKey", Constants.getLoggedUser().getWsKey());
+        addParam("wsKey", Login.getLoggedUser().getWsKey());
         addParam("courseCode", (int) selectedCourseCode);
         addParam("body", body);
 
@@ -204,7 +204,7 @@ public class Notices extends Module {
     @Override
     protected void onStart() {
         super.onStart();
-        selectedCourseCode = Constants.getSelectedCourseCode();
+        selectedCourseCode = Courses.getSelectedCourseCode();
         launchNoticeDialog();
     }
 
