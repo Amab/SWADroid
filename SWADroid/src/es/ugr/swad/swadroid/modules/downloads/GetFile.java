@@ -35,12 +35,10 @@ import java.util.Vector;
 
 /**
  * Module to get information of a file located in SWAD
- * It makes use of the web service getFile (see http://swad.ugr.es/ws/#getFile)
- * It needs as extra data:
- * - (long) fileCode It indicates the file which information is requested
- * It returns as extra data:
- * - (string) link : temporal URL to download the file
- * - (
+ * It makes use of the web service getFile (see {@linktourl http://swad.ugr.es/ws/#getFile})
+ * 
+ * @param fileCode It indicates the file which information is requested
+ * @return link temporal URL to download the file
  *
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */

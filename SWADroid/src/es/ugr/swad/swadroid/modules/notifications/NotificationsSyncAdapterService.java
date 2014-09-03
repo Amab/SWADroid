@@ -20,6 +20,8 @@
 package es.ugr.swad.swadroid.modules.notifications;
 
 import android.accounts.Account;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
@@ -39,7 +41,7 @@ import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
-import es.ugr.swad.swadroid.gui.AlertNotification;
+import es.ugr.swad.swadroid.gui.AlertNotificationFactory;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.model.User;
@@ -436,7 +438,11 @@ public class NotificationsSyncAdapterService extends Service {
     private static void performSync(Context context, Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
             throws Exception {
 
-        Intent notIntent = new Intent(context, Notifications.class);
+		Notification notif;
+		PendingIntent pendingIntent = PendingIntent.getActivity(context,
+				0, 
+				new Intent(context, Notifications.class), 
+				Intent.FLAG_ACTIVITY_NEW_TASK);
         
         //Notify synchronization start
         Intent startIntent = new Intent();
@@ -475,13 +481,21 @@ public class NotificationsSyncAdapterService extends Service {
 	            if (notifCount > SIZE_LIMIT) {
 	                notifCount = SIZE_LIMIT;
 	            }
-	            
-	        	AlertNotification.alertNotif(context,
-	            		NOTIF_ALERT_ID,
-	            		context.getString(R.string.app_name),
-	            		notifCount + " " + context.getString(R.string.notificationsAlertMsg),
-	            		context.getString(R.string.app_name),
-	            		notIntent);
+
+				notif = AlertNotificationFactory.createAlertNotification(context,
+						context.getString(R.string.app_name),
+						notifCount + " "
+						+ context.getString(R.string.notificationsAlertMsg),
+						context.getString(R.string.app_name),
+						pendingIntent,
+						R.drawable.ic_launcher_swadroid,
+						R.drawable.ic_launcher_swadroid,
+						true,
+						true,
+						false,
+						false);
+				
+				AlertNotificationFactory.showAlertNotification(context, notif, NOTIF_ALERT_ID);
         	}
         	
         	sendReadedNotifications(context);

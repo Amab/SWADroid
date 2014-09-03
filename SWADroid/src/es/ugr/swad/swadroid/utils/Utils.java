@@ -176,7 +176,9 @@ public class Utils {
      * @param description description of the download notification
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static boolean downloadFileGingerbread(Context context, String url, String fileName, String title, String description) {
+    public static boolean downloadFileGingerbread(Context context, String url, String fileName, String title,
+    		String description) {
+    	
         DownloadManager.Request request;
         DownloadManager manager;
 
@@ -193,8 +195,7 @@ public class Utils {
             request.allowScanningByMediaScanner();
             request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
             request.setDestinationInExternalPublicDir(
-                                                      Environment.DIRECTORY_DOWNLOADS + File.separator + Constants.DIRECTORY_SWADROID,
-                                                      fileName);
+                    Environment.DIRECTORY_DOWNLOADS + File.separator + Constants.DIRECTORY_SWADROID, fileName);
 
             // get download service and enqueue file
             manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);

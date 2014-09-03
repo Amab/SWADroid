@@ -141,7 +141,7 @@ public class NotificationItem extends MenuActivity {
 		
 		if(requestCode == Constants.NOTIFMARKALLASREAD_REQUEST_CODE) {
 			if (resultCode == Activity.RESULT_OK) {
-				Log.i(TAG, "Notification " + notifCode + " marked as read in SWAD");
+				Log.i(TAG, "Notification " + notifCode + " marked as readed in SWAD");
 			} else {
 				Log.e(TAG, "Error marking notification " + notifCode + " as read in SWAD");
 			}
