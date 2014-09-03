@@ -18,6 +18,7 @@
  */
 package es.ugr.swad.swadroid.gui;
 
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -35,7 +36,6 @@ import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.PreferencesActivity;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
-import es.ugr.swad.swadroid.utils.Utils;
 
 /**
  * Superclass for add the options menu to all children classes of Activity
@@ -78,7 +78,7 @@ public class MenuActivity extends ActionBarActivity {
             
             dbHelper.cleanTables();
             Preferences.setLastCourseSelected(0);
-            Utils.setDbCleaned(true);
+            DataBaseHelper.setDbCleaned(true);
             Toast.makeText(getApplicationContext(), R.string.cleanDatabaseMsg, Toast.LENGTH_LONG).show();
             Log.i(Constants.APP_TAG, getString(R.string.cleanDatabaseMsg));
         }

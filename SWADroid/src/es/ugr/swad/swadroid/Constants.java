@@ -21,10 +21,7 @@ package es.ugr.swad.swadroid;
 
 import android.os.Environment;
 
-import es.ugr.swad.swadroid.model.User;
-
 import java.io.File;
-import java.util.Random;
 
 /**
  * Constants of application.
@@ -66,53 +63,9 @@ public class Constants {
      */
     public static final int CONNECTION_TIMEOUT = 60000;
     /**
-     * User logged flag
-     */
-    private static boolean logged;
-    /**
-     * Logged user
-     */
-    private static User loggedUser;
-    /**
-     * Time of application's last login
-     */
-    private static long lastLoginTime;
-    /**
-     * Code of the chosen course. All next actions are referred to this course.
-     */
-    private static long selectedCourseCode = -1;
-    /**
-     * Short name of the chosen course.
-     */
-    private static String selectedCourseShortName;
-    /**
-     * Short name of the full course.
-     */
-    private static String selectedCourseFullName;
-    /**
-     * Role of the logged User in the current selected course
-     */
-    private static int currentUserRole = -1;
-    /**
-     * Indicates if there are changes on db
-     */
-    public static boolean dbCleaned = false;
-    /**
-     * Base string to generate random alphanumeric strings
-     */
-    public static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    /**
-     * Random generator
-     */
-    public static final Random rnd = new Random();
-    /**
      * Null value returned by webservices when a field is empty
      */
     public static final String NULL_VALUE = "anyType{}";
-    /**
-     * Time to force relogin
-     */
-    public static final int RELOGIN_TIME = 86400000; //24h
     /**
      * Request code for Login module.
      */
@@ -269,74 +222,6 @@ public class Constants {
      */
     public static final String APP_TAG = "SWADroid";
     /**
-     * Table name for courses
-     */
-    public static final String DB_TABLE_COURSES = "courses";
-    /**
-     * Table name for notifications
-     */
-    public static final String DB_TABLE_NOTIFICATIONS = "notifications";
-    /**
-     * Table name for test's answers
-     */
-    public static final String DB_TABLE_TEST_ANSWERS = "tst_answers";
-    /**
-     * Table name for test's questions
-     */
-    public static final String DB_TABLE_TEST_QUESTIONS = "tst_questions";
-    /**
-     * Table name for test's tags
-     */
-    public static final String DB_TABLE_TEST_TAGS = "tst_tags";
-    /**
-     * Table name for test's configuration
-     */
-    public static final String DB_TABLE_TEST_CONFIG = "tst_config";
-    /**
-     * Table name for relationship between test's questions and tags
-     */
-    public static final String DB_TABLE_TEST_QUESTION_TAGS = "tst_question_tags";
-    /**
-     * Table name for relationship between test's questions and courses
-     */
-    public static final String DB_TABLE_TEST_QUESTIONS_COURSE = "tst_questions_course";
-    /**
-     * Table name for relationship between test's questions and answers
-     */
-    public static final String DB_TABLE_TEST_QUESTION_ANSWERS = "tst_question_answers";
-    /**
-     * Table name for users
-     */
-    public static final String DB_TABLE_USERS = "users";
-    /**
-     * Table name for relationship between users and courses
-     */
-    public static final String DB_TABLE_USERS_COURSES = "users_courses";
-    /**
-     * Table name for groups
-     */
-    public static final String DB_TABLE_GROUPS = "groups";
-    /**
-     * Table name for relationship between groups and courses
-     */
-    public static final String DB_TABLE_GROUPS_COURSES = "group_course";
-    /**
-     * Table name for group types
-     */
-    public static final String DB_TABLE_GROUP_TYPES = "group_types";
-    /**
-     * Table name for relationship between groups and group types
-     */
-    public static final String DB_TABLE_GROUPS_GROUPTYPES = "group_grouptypes";
-    /**
-     * Table name for practice sessions
-     */
-    public static final String DB_TABLE_PRACTICE_SESSIONS = "practice_sessions";
-    /**
-     * Table name for rollcall
-     */
-    public static final String DB_TABLE_ROLLCALL = "rollcall";
-    /**
      * Student userRole for getUsers web service.
      */
     public static final int STUDENT_TYPE_CODE = 2;
@@ -414,114 +299,4 @@ public class Constants {
     public static final String DIRECTORY_SWADROID = "SWADroid";
     public static final String DOWNLOADS_PATH =
             Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + DIRECTORY_SWADROID;
-    
-    /**
-     * Checks if user is already logged on SWAD
-     *
-     * @return User logged flag
-     */
-    public static boolean isLogged() {
-        return logged;
-    }
-
-    /**
-     * Sets user logged flag
-     *
-     * @param logged User logged flag
-     */
-    public static void setLogged(boolean logged) {
-        Constants.logged = logged;
-    }
-
-    /**
-     * Gets the user logged on SWAD
-     */
-    public static User getLoggedUser() {
-        return loggedUser;
-    }
-
-    /**
-     * Sets the user logged on SWAD
-     */
-    public static void setLoggedUser(User loggedUser) {
-        Constants.loggedUser = loggedUser;
-    }
-
-    /**
-     * Gets start time of application
-     *
-     * @return Start time of application
-     */
-    public static long getLastLoginTime() {
-        return lastLoginTime;
-    }
-
-    /**
-     * Sets start time of application
-     *
-     * @param l Start time of application
-     */
-    public static void setLastLoginTime(long l) {
-        Constants.lastLoginTime = l;
-    }
-
-    /**
-     * Gets code of current course
-     * return -1 if no course chosen; code of current course in other case
-     */
-    public static long getSelectedCourseCode() {
-        return selectedCourseCode;
-    }
-
-    /**
-     * Sets code of current course
-     */
-    public static void setSelectedCourseCode(long currentCourseCode) {
-        //if (currentCourseCode > 0) selectedCourseCode = currentCourseCode;
-        selectedCourseCode = currentCourseCode;
-    }
-
-    /**
-     * Sets user role in the current selected course
-     *
-     * @param userRole Role of the user: 0- unknown STUDENT_TYPE_CODE - student TEACHER_TYPE_CODE - teacher
-     */
-    public static void setCurrentUserRole(int userRole) {
-        if (userRole == 0 || userRole == TEACHER_TYPE_CODE || userRole == STUDENT_TYPE_CODE)
-            currentUserRole = userRole;
-        else
-            currentUserRole = -1;
-    }
-
-    public static void setSelectedCourseShortName(String currentCourseShortName) {
-        selectedCourseShortName = currentCourseShortName;
-
-    }
-
-    public static void setSelectedCourseFullName(String currentCourseFullName) {
-        selectedCourseFullName = currentCourseFullName;
-
-    }
-
-    public static String getSelectedCourseShortName() {
-        return selectedCourseShortName;
-
-    }
-
-    public static String getSelectedCourseFullName() {
-        return selectedCourseFullName;
-
-    }
-
-    /**
-     * Gets the role of the logged user in the current selected course
-     *
-     * @return -1 if the user role has not been fixed,
-     *         0  if the user role is unknown
-     *         2 (STUDENT_TYPE_CODE) if the user is a student
-     *         3 (TEACHER_TYPE_CODE) if the user is a teacher
-     */
-    public static int getCurrentUserRole() {
-        return currentUserRole;
-    }
 }

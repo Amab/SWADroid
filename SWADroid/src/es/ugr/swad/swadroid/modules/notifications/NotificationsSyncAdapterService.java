@@ -45,6 +45,7 @@ import es.ugr.swad.swadroid.gui.AlertNotificationFactory;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.model.User;
+import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.IWebserviceClient;
@@ -123,7 +124,7 @@ public class NotificationsSyncAdapterService extends Service {
                 		sendException = false;
                 		
                 		//Force logout and reset password (this will show again the login screen)
-                		Constants.setLogged(false);
+                		Login.setLogged(false);
                 		Preferences.setUserPassword("");
                     } else if (es.faultstring.equals("Unknown application key")) {
                     	errorMessage = mContext.getString(R.string.errorBadAppKeyMsg);
@@ -329,11 +330,11 @@ public class NotificationsSyncAdapterService extends Service {
                     Integer.parseInt(soap.getProperty("userRole").toString())        // userRole
             );
 
-            Constants.setLoggedUser(loggedUser);
-            Constants.setLogged(true);
+            Login.setLoggedUser(loggedUser);
+            Login.setLogged(true);
 
             //Update application last login time
-            Constants.setLastLoginTime(System.currentTimeMillis());
+            Login.setLastLoginTime(System.currentTimeMillis());
         }
     }
     
@@ -348,7 +349,7 @@ public class NotificationsSyncAdapterService extends Service {
         METHOD_NAME = "getNotifications";
         
         createRequest(SOAPClient.CLIENT_TYPE);
-        addParam("wsKey", Constants.getLoggedUser().getWsKey());
+        addParam("wsKey", Login.getLoggedUser().getWsKey());
         addParam("beginTime", timestamp);
         sendRequest(SWADNotification.class, false);
 
@@ -409,7 +410,7 @@ public class NotificationsSyncAdapterService extends Service {
         
         if(isConnected) {
 	    	//Construct a list of seen notifications in state "pending to mark as read in SWAD" 
-	        markedNotificationsList = dbHelper.getAllRows(Constants.DB_TABLE_NOTIFICATIONS,
+	        markedNotificationsList = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_NOTIFICATIONS,
 	        		"seenLocal='" + Utils.parseBoolString(true)
 	        		+ "' AND seenRemote='" + Utils.parseBoolString(false) + "'", null);
 	        
@@ -463,17 +464,17 @@ public class NotificationsSyncAdapterService extends Service {
     	}
 
         //If last login time > Global.RELOGIN_TIME, force login
-        if (Constants.isLogged() &&
-        		((System.currentTimeMillis() - Constants.getLastLoginTime()) > Constants.RELOGIN_TIME)) {
+        if (Login.isLogged() &&
+        		((System.currentTimeMillis() - Login.getLastLoginTime()) > Login.RELOGIN_TIME)) {
         	
-            Constants.setLogged(false);
+            Login.setLogged(false);
         }
 
-        if (!Constants.isLogged()) {
+        if (!Login.isLogged()) {
         	logUser();
         }
 
-        if (Constants.isLogged()) {
+        if (Login.isLogged()) {
         	getNotifications();
         	
         	if (notifCount > 0) {

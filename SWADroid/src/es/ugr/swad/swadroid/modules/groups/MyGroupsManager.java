@@ -29,15 +29,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.model.Model;
+import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.GroupTypes;
 import es.ugr.swad.swadroid.modules.Groups;
+import es.ugr.swad.swadroid.modules.Login;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,7 +86,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
     protected void onStart() {
         super.onStart();
 
-        List<Model> groupTypes = dbHelper.getAllRows(Constants.DB_TABLE_GROUP_TYPES, "courseCode = " + courseCode, "groupTypeName");
+        List<Model> groupTypes = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_GROUP_TYPES, "courseCode = " + courseCode, "groupTypeName");
         List<Group> groups = dbHelper.getGroups(courseCode);
         if ((!groupTypes.isEmpty()) && (!groups.isEmpty())) {
             setMenu();
@@ -113,7 +115,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
         
         mExpandableListView = (ExpandableListView) findViewById(android.R.id.list);
 
-        getSupportActionBar().setSubtitle(Constants.getSelectedCourseShortName());
+        getSupportActionBar().setSubtitle(Courses.getSelectedCourseShortName());
     	getSupportActionBar().setIcon(R.drawable.my_groups);
     }
 
@@ -124,7 +126,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
             switch (requestCode) {
                 case Constants.GROUPTYPES_REQUEST_CODE:
                     groupTypesRequested = true;
-                    if (dbHelper.getAllRows(Constants.DB_TABLE_GROUP_TYPES, "courseCode = " + courseCode, "groupTypeName").size() > 0) {
+                    if (dbHelper.getAllRows(DataBaseHelper.DB_TABLE_GROUP_TYPES, "courseCode = " + courseCode, "groupTypeName").size() > 0) {
                         //If there are not group types, either groups. Therefore, there is no need to request groups
                         Intent activity = new Intent(getApplicationContext(), Groups.class);
                         activity.putExtra("courseCode", courseCode);
@@ -233,9 +235,9 @@ public class MyGroupsManager extends MenuExpandableListActivity {
     }
 
     private void setMenu() {
-        groupTypes = (ArrayList<Model>) dbHelper.getAllRows(Constants.DB_TABLE_GROUP_TYPES, "courseCode =" + String.valueOf(courseCode), "groupTypeName");
+        groupTypes = (ArrayList<Model>) dbHelper.getAllRows(DataBaseHelper.DB_TABLE_GROUP_TYPES, "courseCode =" + String.valueOf(courseCode), "groupTypeName");
         LongSparseArray<ArrayList<Group>> children = getHashMapGroups(groupTypes);
-        int currentRole = Constants.getCurrentUserRole();
+        int currentRole = Login.getCurrentUserRole();
         EnrollmentExpandableListAdapter adapter = new EnrollmentExpandableListAdapter(this, groupTypes, children, R.layout.group_type_list_item, R.layout.group_list_item, currentRole);
         mExpandableListView.setAdapter(adapter);
 

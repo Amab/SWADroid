@@ -24,11 +24,14 @@ import android.util.Log;
 import android.widget.Toast;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.model.Test;
 import es.ugr.swad.swadroid.model.TestAnswer;
 import es.ugr.swad.swadroid.model.TestQuestion;
 import es.ugr.swad.swadroid.model.TestTag;
+import es.ugr.swad.swadroid.modules.Courses;
+import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.utils.TimeUtils;
 import es.ugr.swad.swadroid.utils.Utils;
@@ -86,8 +89,8 @@ public class TestsQuestionsDownload extends Module {
 
         //Creates webservice request, adds required params and sends request to webservice
     	createRequest(SOAPClient.CLIENT_TYPE);
-        addParam("wsKey", Constants.getLoggedUser().getWsKey());
-        addParam("courseCode", (int) Constants.getSelectedCourseCode());
+        addParam("wsKey", Login.getLoggedUser().getWsKey());
+        addParam("courseCode", (int) Courses.getSelectedCourseCode());
         addParam("beginTime", timestamp);
         sendRequest(Test.class, false);
 
@@ -100,9 +103,9 @@ public class TestsQuestionsDownload extends Module {
             SoapObject answersListObject = (SoapObject) res.get(2);
             SoapObject questionTagsListObject = (SoapObject) res.get(3);
             List<TestTag> tagsList = new ArrayList<TestTag>();
-            List<Model> tagsListDB = dbHelper.getAllRows(Constants.DB_TABLE_TEST_TAGS);
-            List<Model> questionsListDB = dbHelper.getAllRows(Constants.DB_TABLE_TEST_QUESTIONS);
-            List<Model> answersListDB = dbHelper.getAllRows(Constants.DB_TABLE_TEST_ANSWERS);
+            List<Model> tagsListDB = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_TEST_TAGS);
+            List<Model> questionsListDB = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_TEST_QUESTIONS);
+            List<Model> answersListDB = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_TEST_ANSWERS);
 
             int listSizeTags = tagsListObject.getPropertyCount();
             int listSizeQuestions = questionsListObject.getPropertyCount();
@@ -135,7 +138,7 @@ public class TestsQuestionsDownload extends Module {
 
                 //If it's a new question, insert in database
                 try {
-                    dbHelper.insertTestQuestion(q, Constants.getSelectedCourseCode());
+                    dbHelper.insertTestQuestion(q, Courses.getSelectedCourseCode());
 
                     if (isDebuggable)
                         Log.d(TAG, "INSERTED: " + q.toString());
@@ -143,7 +146,7 @@ public class TestsQuestionsDownload extends Module {
                     //If it's an updated question, update it's row in database
                 } catch (SQLException e) {
                     TestQuestion old = (TestQuestion) questionsListDB.get(questionsListDB.indexOf(q));
-                    dbHelper.updateTestQuestion(old, q, Constants.getSelectedCourseCode());
+                    dbHelper.updateTestQuestion(old, q, Courses.getSelectedCourseCode());
 
                     if (isDebuggable)
                         Log.d(TAG, "UPDATED: " + q.toString());

@@ -42,9 +42,11 @@ import android.widget.Toast;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.AlertNotificationFactory;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.model.SWADNotification;
+import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.sync.SyncUtils;
 import es.ugr.swad.swadroid.utils.Utils;
@@ -198,7 +200,7 @@ public class Notifications extends Module implements
 			// Construct a list of seen notifications in state
 			// "pending to mark as read in SWAD"
 			markedNotificationsList = dbHelper.getAllRows(
-					Constants.DB_TABLE_NOTIFICATIONS,
+					DataBaseHelper.DB_TABLE_NOTIFICATIONS,
 					"seenLocal='" + Utils.parseBoolString(true)
 							+ "' AND seenRemote='"
 							+ Utils.parseBoolString(false) + "'", null);
@@ -281,7 +283,7 @@ public class Notifications extends Module implements
 		 * If there aren't notifications to show, hide the notifications list
 		 * and show the empty notifications message
 		 */
-		if (dbHelper.getAllRowsCount(Constants.DB_TABLE_NOTIFICATIONS) == 0) {
+		if (dbHelper.getAllRowsCount(DataBaseHelper.DB_TABLE_NOTIFICATIONS) == 0) {
 			Log.d(TAG, "[onCreate] Notifications table is empty");
 			
 			emptyNotifTextView.setText(R.string.notificationsEmptyListMsg);
@@ -378,7 +380,7 @@ public class Notifications extends Module implements
 			// Creates webservice request, adds required params and sends
 			// request to webservice
 			createRequest(SOAPClient.CLIENT_TYPE);
-			addParam("wsKey", Constants.getLoggedUser().getWsKey());
+			addParam("wsKey", Login.getLoggedUser().getWsKey());
 			addParam("beginTime", timestamp);
 			sendRequest(SWADNotification.class, false);
 
@@ -521,7 +523,7 @@ public class Notifications extends Module implements
 	 */
 	public void clearNotifications(Context context) {
 		try {
-			dbHelper.emptyTable(Constants.DB_TABLE_NOTIFICATIONS);
+			dbHelper.emptyTable(DataBaseHelper.DB_TABLE_NOTIFICATIONS);
 		} catch (Exception e) {
 			error(TAG, e.getMessage(), e, true);
 		}
@@ -705,12 +707,12 @@ public class Notifications extends Module implements
 		childItem.clear();
 		
 		//Add data for not seen notifications		 
-		child = dbHelper.getAllRows(Constants.DB_TABLE_NOTIFICATIONS,
+		child = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_NOTIFICATIONS,
 				"seenLocal='" + Utils.parseBoolString(false) + "'", orderby);
 		childItem.add(child);
 		
 		//Add data for seen notifications	
-		child = dbHelper.getAllRows(Constants.DB_TABLE_NOTIFICATIONS,
+		child = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_NOTIFICATIONS,
 				"seenLocal='" + Utils.parseBoolString(true) + "'", orderby);
 		childItem.add(child);
 		
@@ -720,7 +722,7 @@ public class Notifications extends Module implements
 		
 		adapter = new NotificationsExpandableListAdapter(this, groupItem, childItem);
 
-		if(dbHelper.getAllRowsCount(Constants.DB_TABLE_NOTIFICATIONS) > 0) {
+		if(dbHelper.getAllRowsCount(DataBaseHelper.DB_TABLE_NOTIFICATIONS) > 0) {
 			Log.d(TAG, "[setChildGroupData] Notifications table is not empty");
 			
 			emptyNotifTextView.setVisibility(View.GONE);

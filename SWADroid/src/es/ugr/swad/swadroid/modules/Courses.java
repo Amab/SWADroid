@@ -28,6 +28,7 @@ import com.bugsense.trace.BugSenseHandler;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
@@ -50,6 +51,18 @@ public class Courses extends Module {
      * Courses tag name for Logcat
      */
     private static final String TAG = Constants.APP_TAG + " Courses";
+	/**
+	 * Code of the chosen course. All next actions are referred to this course.
+	 */
+	private static long selectedCourseCode = -1;
+	/**
+	 * Short name of the chosen course.
+	 */
+	private static String selectedCourseShortName;
+	/**
+	 * Short name of the full course.
+	 */
+	private static String selectedCourseFullName;
 
     @Override
     protected void runConnection() {
@@ -112,12 +125,12 @@ public class Courses extends Module {
 
         //Creates webservice request, adds required params and sends request to webservice
         createRequest(SOAPClient.CLIENT_TYPE);
-        addParam("wsKey", Constants.getLoggedUser().getWsKey());
+        addParam("wsKey", Login.getLoggedUser().getWsKey());
         sendRequest(Course.class, false);
 
         if (result != null) {
             //Stores courses data returned by webservice response
-            List<Model> coursesDB = dbHelper.getAllRows(Constants.DB_TABLE_COURSES);
+            List<Model> coursesDB = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_COURSES);
             List<Model> coursesSWAD = new ArrayList<Model>();
             List<Model> newCourses = new ArrayList<Model>();
             List<Model> obsoleteCourses = new ArrayList<Model>();
@@ -161,7 +174,7 @@ public class Courses extends Module {
             csSize = obsoleteCourses.size();
             for (int i = 0; i < csSize; i++) {
                 Course c = (Course) obsoleteCourses.get(i);
-                dbHelper.removeRow(Constants.DB_TABLE_COURSES, c.getId());
+                dbHelper.removeRow(DataBaseHelper.DB_TABLE_COURSES, c.getId());
             }
 
             Log.i(TAG, "Deleted " + csSize + " old courses");
@@ -211,7 +224,7 @@ public class Courses extends Module {
      */
     public void clearCourses(Context context) {
         try {
-            dbHelper.emptyTable(Constants.DB_TABLE_COURSES);
+            dbHelper.emptyTable(DataBaseHelper.DB_TABLE_COURSES);
         } catch (Exception e) {
             e.printStackTrace();
 
@@ -221,4 +234,40 @@ public class Courses extends Module {
             }
         }
     }
+
+	/**
+	 * Gets code of current course
+	 * return -1 if no course chosen; code of current course in other case
+	 */
+	public static long getSelectedCourseCode() {
+	    return selectedCourseCode;
+	}
+
+	/**
+	 * Sets code of current course
+	 */
+	public static void setSelectedCourseCode(long currentCourseCode) {
+	    //if (currentCourseCode > 0) selectedCourseCode = currentCourseCode;
+	    selectedCourseCode = currentCourseCode;
+	}
+
+	public static void setSelectedCourseShortName(String currentCourseShortName) {
+	    selectedCourseShortName = currentCourseShortName;
+	
+	}
+
+	public static void setSelectedCourseFullName(String currentCourseFullName) {
+	    selectedCourseFullName = currentCourseFullName;
+	
+	}
+
+	public static String getSelectedCourseShortName() {
+	    return selectedCourseShortName;
+	
+	}
+
+	public static String getSelectedCourseFullName() {
+	    return selectedCourseFullName;
+	
+	}
 }

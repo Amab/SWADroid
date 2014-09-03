@@ -53,6 +53,7 @@ import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.GenerateQR;
+import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.Notices;
 import es.ugr.swad.swadroid.modules.downloads.DownloadsManager;
 import es.ugr.swad.swadroid.modules.groups.MyGroupsManager;
@@ -213,18 +214,18 @@ public class SWADMain extends MenuExpandableListActivity {
             	upgradeApp(lastVersion, currentVersion);
             }
 
-            listCourses = dbHelper.getAllRows(Constants.DB_TABLE_COURSES, "", "shortName");
+            listCourses = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_COURSES, "", "shortName");
             if (listCourses.size() > 0) {
                 Course c = (Course) listCourses.get(Preferences.getLastCourseSelected());
-                Constants.setSelectedCourseCode(c.getId());
-                Constants.setSelectedCourseShortName(c.getShortName());
-                Constants.setSelectedCourseFullName(c.getFullName());
-                Constants.setCurrentUserRole(c.getUserRole()); 
+                Courses.setSelectedCourseCode(c.getId());
+                Courses.setSelectedCourseShortName(c.getShortName());
+                Courses.setSelectedCourseFullName(c.getFullName());
+                Login.setCurrentUserRole(c.getUserRole()); 
             } else {
-                Constants.setSelectedCourseCode(-1);
-                Constants.setSelectedCourseShortName("");
-                Constants.setSelectedCourseFullName("");
-                Constants.setCurrentUserRole(-1);
+                Courses.setSelectedCourseCode(-1);
+                Courses.setSelectedCourseShortName("");
+                Courses.setSelectedCourseFullName("");
+                Login.setCurrentUserRole(-1);
             }
             currentRole = -1;
         } catch (Exception ex) {
@@ -244,15 +245,15 @@ public class SWADMain extends MenuExpandableListActivity {
             startActivityForResult(new Intent(this, LoginActivity.class), Constants.LOGIN_REQUEST_CODE);
         } else {
 
-            if (!Preferences.isPreferencesChanged() && !Utils.isDbCleaned()) {
+            if (!Preferences.isPreferencesChanged() && !DataBaseHelper.isDbCleaned()) {
                 createSpinnerAdapter();
                 if (!firstRun) {
-                    courseCode = Constants.getSelectedCourseCode();
+                    courseCode = Courses.getSelectedCourseCode();
                     createMenu();
                 }
             } else {
                 Preferences.setPreferencesChanged(false);
-                Utils.setDbCleaned(false);
+                DataBaseHelper.setDbCleaned(false);
                 setMenuDbClean();
             }
         }
@@ -285,12 +286,12 @@ public class SWADMain extends MenuExpandableListActivity {
 
         Preferences.setLastVersion(currentVersion);
         firstRun = true;
-        Constants.setSelectedCourseCode(-1);
+        Courses.setSelectedCourseCode(-1);
 
-        Constants.setSelectedCourseShortName("");
-        Constants.setSelectedCourseFullName("");
+        Courses.setSelectedCourseShortName("");
+        Courses.setSelectedCourseFullName("");
 
-        Constants.setCurrentUserRole(-1);
+        Login.setCurrentUserRole(-1);
 	}
 	
 	/**
@@ -364,8 +365,8 @@ public class SWADMain extends MenuExpandableListActivity {
 
     private void createSpinnerAdapter() {
         Spinner spinner = (Spinner) this.findViewById(R.id.spinner);
-        listCourses = dbHelper.getAllRows(Constants.DB_TABLE_COURSES, null, "fullName");
-        dbCursor = dbHelper.getDb().getCursor(Constants.DB_TABLE_COURSES, null, "fullName");
+        listCourses = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_COURSES, null, "fullName");
+        dbCursor = dbHelper.getDb().getCursor(DataBaseHelper.DB_TABLE_COURSES, null, "fullName");
         startManagingCursor(dbCursor);
         if (listCourses.size() != 0) {
             SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
@@ -406,10 +407,10 @@ public class SWADMain extends MenuExpandableListActivity {
             	Preferences.setLastCourseSelected(position);
                 Course courseSelected = (Course) listCourses.get(position);
                 courseCode = courseSelected.getId();
-                Constants.setSelectedCourseCode(courseCode);
-                Constants.setSelectedCourseShortName(courseSelected.getShortName());
-                Constants.setSelectedCourseFullName(courseSelected.getFullName());
-                Constants.setCurrentUserRole(courseSelected.getUserRole());
+                Courses.setSelectedCourseCode(courseCode);
+                Courses.setSelectedCourseShortName(courseSelected.getShortName());
+                Courses.setSelectedCourseFullName(courseSelected.getFullName());
+                Login.setCurrentUserRole(courseSelected.getUserRole());
                 createMenu();
             }
         }
@@ -425,7 +426,7 @@ public class SWADMain extends MenuExpandableListActivity {
         public boolean onTouch(View v, MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_UP) {
 
-                if (dbHelper.getAllRows(Constants.DB_TABLE_COURSES).size() == 0) {
+                if (dbHelper.getAllRows(DataBaseHelper.DB_TABLE_COURSES).size() == 0) {
                     if (Utils.connectionAvailable(getApplicationContext()))
                         getCurrentCourses();
                     //else
@@ -450,23 +451,23 @@ public class SWADMain extends MenuExpandableListActivity {
     private void createMenu() {
         if (listCourses.size() != 0) {
             Course courseSelected;
-            if (Constants.getSelectedCourseCode() != -1) {
-                courseSelected = (Course) dbHelper.getRow(Constants.DB_TABLE_COURSES, "id", String.valueOf(Constants.getSelectedCourseCode()));
+            if (Courses.getSelectedCourseCode() != -1) {
+                courseSelected = (Course) dbHelper.getRow(DataBaseHelper.DB_TABLE_COURSES, "id", String.valueOf(Courses.getSelectedCourseCode()));
             } else {
                 int lastSelected = Preferences.getLastCourseSelected();
                 if (lastSelected != -1 && lastSelected < listCourses.size()) {
                     courseSelected = (Course) listCourses.get(lastSelected);
-                    Constants.setSelectedCourseCode(courseSelected.getId());
-                    Constants.setSelectedCourseShortName(courseSelected.getShortName());
-                    Constants.setSelectedCourseFullName(courseSelected.getFullName());
-                    Constants.setCurrentUserRole(courseSelected.getUserRole());
+                    Courses.setSelectedCourseCode(courseSelected.getId());
+                    Courses.setSelectedCourseShortName(courseSelected.getShortName());
+                    Courses.setSelectedCourseFullName(courseSelected.getFullName());
+                    Login.setCurrentUserRole(courseSelected.getUserRole());
                     Preferences.setLastCourseSelected(lastSelected);
                 } else {
                     courseSelected = (Course) listCourses.get(0);
-                    Constants.setSelectedCourseCode(courseSelected.getId());
-                    Constants.setSelectedCourseShortName(courseSelected.getShortName());
-                    Constants.setSelectedCourseFullName(courseSelected.getFullName());
-                    Constants.setCurrentUserRole(courseSelected.getUserRole());
+                    Courses.setSelectedCourseCode(courseSelected.getId());
+                    Courses.setSelectedCourseShortName(courseSelected.getShortName());
+                    Courses.setSelectedCourseFullName(courseSelected.getFullName());
+                    Login.setCurrentUserRole(courseSelected.getUserRole());
                     Preferences.setLastCourseSelected(0);
                 }
             }
@@ -682,11 +683,11 @@ public class SWADMain extends MenuExpandableListActivity {
      * Creates an empty Menu and spinner when the data base is empty
      */
     protected void setMenuDbClean() {
-        Utils.setDbCleaned(false);
-        Constants.setSelectedCourseCode(-1);
-        Constants.setSelectedCourseShortName("");
-        Constants.setSelectedCourseFullName("");
-        Constants.setCurrentUserRole(-1);
+        DataBaseHelper.setDbCleaned(false);
+        Courses.setSelectedCourseCode(-1);
+        Courses.setSelectedCourseShortName("");
+        Courses.setSelectedCourseFullName("");
+        Login.setCurrentUserRole(-1);
         Preferences.setLastCourseSelected(-1);
         dBCleaned = true;
         listCourses.clear();
@@ -769,7 +770,7 @@ public class SWADMain extends MenuExpandableListActivity {
                     startActivityForResult(activity, Constants.DOWNLOADSMANAGER_REQUEST_CODE);
                 } else if (keyword.equals(getString(R.string.myGroupsModuleLabel))) {
                     activity = new Intent(ctx, MyGroupsManager.class);
-                    activity.putExtra("courseCode", Constants.getSelectedCourseCode());
+                    activity.putExtra("courseCode", Courses.getSelectedCourseCode());
                     startActivityForResult(activity, Constants.MYGROUPSMANAGER_REQUEST_CODE);
                 } else if (keyword.equals(getString(R.string.introductionModuleLabel))) {
                     activity = new Intent(ctx, Information.class);

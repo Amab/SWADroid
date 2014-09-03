@@ -16,11 +16,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.model.User;
+import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.rollcall.RollcallConfigDownload;
 import es.ugr.swad.swadroid.modules.rollcall.students.StudentItemModel;
 import es.ugr.swad.swadroid.modules.rollcall.students.StudentsArrayAdapter;
@@ -120,7 +120,7 @@ public class UsersList extends MenuActivity {
 	}
 	
 	 private void showStudentsList() {
-	        List<Long> idList = dbHelper.getUsersCourse(Constants.getSelectedCourseCode());
+	        List<Long> idList = dbHelper.getUsersCourse(Courses.getSelectedCourseCode());
 	        if (!idList.isEmpty()) {
 	            studentsList = new ArrayList<StudentItemModel>();
 

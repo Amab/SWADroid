@@ -21,10 +21,10 @@ package es.ugr.swad.swadroid.modules.downloads;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Group;
+import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
@@ -94,7 +94,7 @@ public class GetFile extends Module {
     protected void requestService() throws Exception {
     	
     	createRequest(SOAPClient.CLIENT_TYPE);
-        addParam("wsKey", Constants.getLoggedUser().getWsKey());
+        addParam("wsKey", Login.getLoggedUser().getWsKey());
         addParam("fileCode", (int) fileCode);
         sendRequest(Group.class, false);
         

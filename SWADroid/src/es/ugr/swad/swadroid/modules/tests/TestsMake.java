@@ -43,9 +43,9 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.gui.widget.CheckableLinearLayout;
 import es.ugr.swad.swadroid.gui.widget.TextProgressBar;
@@ -53,6 +53,7 @@ import es.ugr.swad.swadroid.model.Test;
 import es.ugr.swad.swadroid.model.TestAnswer;
 import es.ugr.swad.swadroid.model.TestQuestion;
 import es.ugr.swad.swadroid.model.TestTag;
+import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.utils.Utils;
 
 import java.text.DecimalFormat;
@@ -211,7 +212,7 @@ public class TestsMake extends MenuActivity {
     private void selectTags() {
         ListView checkBoxesList;
         TagsArrayAdapter tagsAdapter;
-        List<TestTag> allTagsList = dbHelper.getOrderedCourseTags(Constants.getSelectedCourseCode());
+        List<TestTag> allTagsList = dbHelper.getOrderedCourseTags(Courses.getSelectedCourseCode());
         
         screenStep = ScreenStep.TAGS;
 
@@ -616,7 +617,7 @@ public class TestsMake extends MenuActivity {
         List<TestQuestion> questions;
 
         //Generates the test
-        questions = dbHelper.getRandomCourseQuestionsByTagAndAnswerType(Constants.getSelectedCourseCode(), tagsList, answerTypesList,
+        questions = dbHelper.getRandomCourseQuestionsByTagAndAnswerType(Courses.getSelectedCourseCode(), tagsList, answerTypesList,
                 numQuestions);
         if (!questions.isEmpty()) {
             test.setQuestions(questions);
@@ -710,7 +711,7 @@ public class TestsMake extends MenuActivity {
         
         screenStep = ScreenStep.MENU;
 
-        getSupportActionBar().setSubtitle(Constants.getSelectedCourseShortName());
+        getSupportActionBar().setSubtitle(Courses.getSelectedCourseShortName());
     	getSupportActionBar().setIcon(R.drawable.test);
 
         tagsAnswersTypeItemClickListener = new OnItemClickListener() {
@@ -746,17 +747,17 @@ public class TestsMake extends MenuActivity {
         tfAdapter.add(getString(R.string.trueMsg));
         tfAdapter.add(getString(R.string.falseMsg));
 
-        String selection = "id=" + Long.toString(Constants.getSelectedCourseCode());
-        Cursor dbCursor = dbHelper.getDb().getCursor(Constants.DB_TABLE_TEST_CONFIG, selection, null);
+        String selection = "id=" + Long.toString(Courses.getSelectedCourseCode());
+        Cursor dbCursor = dbHelper.getDb().getCursor(DataBaseHelper.DB_TABLE_TEST_CONFIG, selection, null);
         startManagingCursor(dbCursor);
         
         if (dbCursor.getCount() > 0) {
             if (isDebuggable) {
-                Log.d(TAG, "selectedCourseCode = " + Long.toString(Constants.getSelectedCourseCode()));
+                Log.d(TAG, "selectedCourseCode = " + Long.toString(Courses.getSelectedCourseCode()));
             }
 
-            test = (Test) dbHelper.getRow(Constants.DB_TABLE_TEST_CONFIG, "id",
-                    Long.toString(Constants.getSelectedCourseCode()));
+            test = (Test) dbHelper.getRow(DataBaseHelper.DB_TABLE_TEST_CONFIG, "id",
+                    Long.toString(Courses.getSelectedCourseCode()));
 
             if (test != null) {
                 selectNumQuestions();
