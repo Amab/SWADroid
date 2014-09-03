@@ -200,7 +200,8 @@
         <activity
             android:name="es.ugr.swad.swadroid.modules.downloads.DownloadsManager"
             android:label="@string/documentsDownloadModuleLabel"
-            android:parentActivityName="es.ugr.swad.swadroid.SWADMain" >
+            android:parentActivityName="es.ugr.swad.swadroid.SWADMain"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="es.ugr.swad.swadroid.SWADMain" />
