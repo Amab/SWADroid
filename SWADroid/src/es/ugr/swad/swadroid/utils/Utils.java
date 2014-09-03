@@ -68,11 +68,11 @@ public class Utils {
      * @return true if there is a connection available, false in other case
      */
     public static boolean connectionAvailable(Context ctx) {
-        boolean connAvailable = false;
-        ConnectivityManager connec = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
+        //boolean connAvailable = false;
+        ConnectivityManager cm = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         //Survey all networks (wifi, gprs...)
-        NetworkInfo[] networks = connec.getAllNetworkInfo();
+        /*NetworkInfo[] networks = cm.getAllNetworkInfo();
 
         for (NetworkInfo network : networks) {
             //If any of them has a connection available, put boolean to true
@@ -80,9 +80,14 @@ public class Utils {
                 connAvailable = true;
             }
         }
+        
+        return connAvailable;*/
 
         //If boolean remains false there is no connection available
-        return connAvailable;
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                              activeNetwork.isConnectedOrConnecting();
+        return isConnected;
     }
 
     /**
