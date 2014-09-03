@@ -81,7 +81,7 @@ public class NotificationsExpandableListAdapter extends
 
 	@Override
 	public long getChildId(int groupPosition, int childPosition) {
-		return 0;
+		return childItem.get(groupPosition).get(childPosition).getId();
 	}
 
 	@Override

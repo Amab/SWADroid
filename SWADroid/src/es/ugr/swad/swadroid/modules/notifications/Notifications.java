@@ -21,6 +21,8 @@ package es.ugr.swad.swadroid.modules.notifications;
 import android.accounts.Account;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -35,13 +37,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.gui.AlertNotification;
+import es.ugr.swad.swadroid.gui.AlertNotificationFactory;
+import es.ugr.swad.swadroid.gui.SwipeListViewTouchListener;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.modules.Module;
@@ -462,7 +465,11 @@ public class Notifications extends Module implements
 	 */
 	@Override
 	protected void postConnect() {
-		Intent notIntent = new Intent(this, Notifications.class);
+		Notification notif;
+		PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(),
+				0, 
+				new Intent(this, Notifications.class), 
+				Intent.FLAG_ACTIVITY_NEW_TASK);
 
 		if (!SyncUtils.isSyncAutomatically(getApplicationContext())) {
 			if (notifCount > 0) {
@@ -472,11 +479,20 @@ public class Notifications extends Module implements
 					notifCount = SIZE_LIMIT;
 				}
 
-				AlertNotification.alertNotif(getApplicationContext(),
-						NOTIF_ALERT_ID, getString(R.string.app_name),
+				notif = AlertNotificationFactory.createAlertNotification(getApplicationContext(),
+						getString(R.string.app_name),
 						notifCount + " "
-								+ getString(R.string.notificationsAlertMsg),
-						getString(R.string.app_name), notIntent);
+						+ getString(R.string.notificationsAlertMsg),
+						getString(R.string.app_name),
+						pendingIntent,
+						R.drawable.ic_launcher_swadroid,
+						R.drawable.ic_launcher_swadroid,
+						true,
+						true,
+						false,
+						false);
+				
+				AlertNotificationFactory.showAlertNotification(getApplicationContext(), notif, NOTIF_ALERT_ID);
 			} else {
 				Toast.makeText(this, R.string.NoNotificationsMsg,
 						Toast.LENGTH_LONG).show();
@@ -584,6 +600,53 @@ public class Notifications extends Module implements
 		refreshLayout.setOnRefreshListener(this);
 		setAppearance();
 		// disableSwipe();
+		
+		// Create a ListView-specific touch listener. ListViews are given special treatment because
+		// by default they handle touches for their list items... i.e. they're in charge of drawing
+		// the pressed state (the list selector), handling list item clicks, etc.
+		/*SwipeListViewTouchListener touchListener =
+		    new SwipeListViewTouchListener(
+		    		list,
+		        new SwipeListViewTouchListener.OnSwipeCallback() {		    			
+		            @Override
+		            public void onSwipeLeft(ListView listView, int [] reverseSortedPositions) {
+		            	int notSeenChildrenCount = adapter.getChildrenCount(NOT_SEEN_GROUP_ID);
+		            	long childId;
+		            	
+		            	if(reverseSortedPositions[0] <= notSeenChildrenCount) {
+		            		childId = adapter.getChildId(NOT_SEEN_GROUP_ID, reverseSortedPositions[0]-1);
+		            		
+		            		//Set notification as seen locally
+		                    dbHelper.updateNotification(childId, "seenLocal", Utils.parseBoolString(true));
+		                    sendReadedNotifications();
+		                    
+		                    refreshScreen();
+		            	}
+		            }
+
+		            @Override
+		            public void onSwipeRight(ListView listView, int [] reverseSortedPositions) {
+		            	int notSeenChildrenCount = adapter.getChildrenCount(NOT_SEEN_GROUP_ID);
+		            	long childId;
+		            	
+		            	if(reverseSortedPositions[0] <= notSeenChildrenCount) {
+		            		childId = adapter.getChildId(NOT_SEEN_GROUP_ID, reverseSortedPositions[0]-1);
+		            		
+		            		//Set notification as seen locally
+		                    dbHelper.updateNotification(childId, "seenLocal", Utils.parseBoolString(true));
+		                    sendReadedNotifications();
+		                    
+		                    refreshScreen();
+		            	}
+		            }
+		        },
+		        true,
+		        true);
+		
+		list.setOnTouchListener(touchListener);
+		// Setting this scroll listener is required to ensure that during ListView scrolling,
+		// we don't look for swipes.
+		list.setOnScrollListener(touchListener.makeScrollListener());*/
 	}
 
 	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
@@ -617,7 +680,7 @@ public class Notifications extends Module implements
 
 	/**
 	 * Disables swipe gesture. It prevents manual gestures but keeps the option
-	 * tu show refreshing programatically.
+	 * to show refreshing programatically.
 	 */
 	public void disableSwipe() {
 		refreshLayout.setEnabled(false);

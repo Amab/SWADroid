@@ -18,7 +18,6 @@
  */
 package es.ugr.swad.swadroid.modules.downloads;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -26,9 +25,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.support.v4.app.NotificationCompat;
 import android.webkit.MimeTypeMap;
-
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.gui.AlertNotificationFactory;
 
 import java.io.File;
 import java.util.List;
@@ -46,10 +46,10 @@ import java.util.List;
 public class DownloadNotification {
     private final Context mContext;
     private final int NOTIFICATION_ID = 19982;
-    private Notification mNotification;
+    private NotificationCompat.Builder mNotifBuilder;
     private final NotificationManager mNotificationManager;
     private PendingIntent mContentIntent;
-    private CharSequence mContentTitle;
+    private String mContentTitle;
 
     public DownloadNotification(Context context) {
         mContext = context;
@@ -66,34 +66,35 @@ public class DownloadNotification {
      * @param fileName name of file that is downloading. It is show on the notification.
      */
     public void createNotification(String fileName) {
-
         mNotificationManager.cancel(NOTIFICATION_ID);
         //create the notification
-        int icon = android.R.drawable.stat_sys_download;
-        CharSequence tickerText = mContext.getString(R.string.app_name) + " " + mContext.getString(R.string.notificationDownloadTitle); //Initial text that appears in the status bar
-        long when = System.currentTimeMillis();
-        mNotification = new Notification(icon, tickerText, when);
+        String tickerText = mContext.getString(R.string.notificationDownloadTitle); //Initial text that appears in the status bar
 
         //create the content which is shown in the notification pulldown
-        // mContentTitle = "Your download is in progress";
         mContentTitle = fileName; //Full title of the notification in the pull down
-        CharSequence contentText = "0%" + " " + mContext.getString(R.string.complete);  //Text of the notification in the pull down
+        String contentText = "0%" + " " + mContext.getString(R.string.complete);  //Text of the notification in the pull down
 
         //you have to set a PendingIntent on a notification to tell the system what you want it to do when the notification is selected
         //I don't want to use this here so I'm just creating a blank one
-        Intent notificationIntent = new Intent();
-        mContentIntent = PendingIntent.getActivity(mContext, 0, notificationIntent, 0);
-
-        //add the additional content and intent to the notification
-        mNotification.setLatestEventInfo(mContext, mContentTitle, contentText, mContentIntent);
-
-        //make this notification appear in the 'Ongoing events' section
-        mNotification.flags = Notification.FLAG_ONGOING_EVENT;
-
-        mNotification.contentIntent = mContentIntent;
+        mContentIntent = PendingIntent.getActivity(mContext, 0, new Intent(), 0);
+        
+        mNotifBuilder = AlertNotificationFactory.createProgressNotificationBuilder(mContext,
+        		mContentTitle,
+        		contentText,
+        		tickerText,
+				mContentIntent,
+				android.R.drawable.stat_sys_download,
+				android.R.drawable.stat_sys_download,
+				true,
+				false,
+				true, //make this notification appear in the 'Ongoing events' section
+				false,
+				100,
+				0,
+				false);
 
         //show the notification
-        mNotificationManager.notify(NOTIFICATION_ID, mNotification);
+        AlertNotificationFactory.showAlertNotification(mContext, mNotifBuilder.build(), NOTIFICATION_ID);
     }
 
     /**
@@ -102,11 +103,9 @@ public class DownloadNotification {
      * @param percentageComplete
      */
     public void progressUpdate(int percentageComplete) {
-        //build up the new status message
-        CharSequence contentText = percentageComplete + "% " + mContext.getString(R.string.complete);
-        //publish it to the status bar
-        mNotification.setLatestEventInfo(mContext, mContentTitle, contentText, mContentIntent);
-        mNotificationManager.notify(NOTIFICATION_ID, mNotification);
+        mNotifBuilder.setProgress(100, percentageComplete, false);
+        
+        AlertNotificationFactory.showAlertNotification(mContext, mNotifBuilder.build(), NOTIFICATION_ID);
     }
 
     /**
@@ -117,14 +116,10 @@ public class DownloadNotification {
      * @param fileName      name of the just downloaded file
      */
     public void completedDownload(String directoryPath, String fileName) {
-
         mNotificationManager.cancel(NOTIFICATION_ID);
 
         //create the notification
-        int icon = android.R.drawable.stat_sys_download_done;
-        CharSequence tickerText = mContext.getString(R.string.app_name) + " " + mContext.getString(R.string.downloadCompletedTitle); //Initial text that appears in the status bar
-        long when = System.currentTimeMillis();
-        mNotification = new Notification(icon, tickerText, when);
+        String tickerText = mContext.getString(R.string.downloadCompletedTitle); //Initial text that appears in the status bar
 
 
         //activity that will be launched when the notification is clicked.
@@ -135,7 +130,7 @@ public class DownloadNotification {
 
 
         //build up the new status message
-        CharSequence contentText;
+        String contentText;
         if (notificationIntent != null) {
             contentText = mContext.getString(R.string.clickToOpenFile);
             mContentTitle = fileName; //Full title of the notification in the pull down
@@ -143,23 +138,23 @@ public class DownloadNotification {
             contentText = mContext.getString(R.string.noApp);
             mContentTitle = directoryPath + File.separator + fileName;
         }
-        //publish it to the status bar
-        mNotification.setLatestEventInfo(mContext, mContentTitle, contentText, mContentIntent);
-
-
-        //add the additional content and intent to the notification
-        mNotification.setLatestEventInfo(mContext, mContentTitle, contentText, mContentIntent);
-        //Flag_auto_cancel allows to the notification to erases itself when is clicked. 
-        mNotification.flags = Notification.FLAG_AUTO_CANCEL;
-
-        //Add sound, vibration and lights
-        mNotification.defaults |= Notification.DEFAULT_SOUND;
-        //notif.defaults |= Notification.DEFAULT_VIBRATE;
-        mNotification.defaults |= Notification.DEFAULT_LIGHTS;
-
-        mNotification.contentIntent = mContentIntent;
-        mNotificationManager.notify(NOTIFICATION_ID, mNotification);
-
+        
+        mNotifBuilder = AlertNotificationFactory.createProgressNotificationBuilder(mContext,
+        		mContentTitle,
+        		contentText,
+        		tickerText,
+        		mContentIntent,
+				android.R.drawable.stat_sys_download_done,
+				android.R.drawable.stat_sys_download_done,
+				true,
+				true,
+				true, //make this notification appear in the 'Ongoing events' section
+				false,
+				100,
+				0,
+				false);
+        
+        AlertNotificationFactory.showAlertNotification(mContext, mNotifBuilder.build(), NOTIFICATION_ID);
     }
 
     /**
@@ -169,28 +164,32 @@ public class DownloadNotification {
     public void eraseNotification(String fileName) {
         //remove the notification from the status bar
         mNotificationManager.cancel(NOTIFICATION_ID);
-        //create the notification
-        int icon = android.R.drawable.stat_sys_warning;
-        CharSequence tickerText = mContext.getString(R.string.app_name) + " " + mContext.getString(R.string.downloadProblemTitle); //Initial text that appears in the status bar
-        long when = System.currentTimeMillis();
-        mNotification = new Notification(icon, tickerText, when);
+        
+        String tickerText = mContext.getString(R.string.downloadProblemTitle); //Initial text that appears in the status bar
+
         mContentTitle = fileName;
         //build up the new status message
-        CharSequence contentText = mContext.getString(R.string.downloadProblemMsg);
-        //publish it to the status bar
-        mNotification.setLatestEventInfo(mContext, mContentTitle, contentText, mContentIntent);
-        mNotification.flags = Notification.FLAG_AUTO_CANCEL;
-
-        //Add sound, vibration and lights
-        mNotification.defaults |= Notification.DEFAULT_SOUND;
-        //notif.defaults |= Notification.DEFAULT_VIBRATE;
-        mNotification.defaults |= Notification.DEFAULT_LIGHTS;
+        String contentText = mContext.getString(R.string.downloadProblemMsg);
 
         Intent notificationIntent = new Intent();
         mContentIntent = PendingIntent.getActivity(mContext, 0, notificationIntent, 0);
-
-        mNotification.contentIntent = mContentIntent;
-        mNotificationManager.notify(NOTIFICATION_ID, mNotification);
+        
+        mNotifBuilder = AlertNotificationFactory.createProgressNotificationBuilder(mContext,
+        		mContentTitle,
+        		contentText,
+        		tickerText,
+        		mContentIntent,
+				android.R.drawable.stat_sys_warning,
+				android.R.drawable.stat_sys_warning,
+				true,
+				false,
+				true, //make this notification appear in the 'Ongoing events' section
+				false,
+				100,
+				0,
+				false);
+        
+        AlertNotificationFactory.showAlertNotification(mContext, mNotifBuilder.build(), NOTIFICATION_ID);
     }
 
     /**
