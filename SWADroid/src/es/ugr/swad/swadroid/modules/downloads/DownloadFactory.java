@@ -30,7 +30,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.util.Log;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.utils.Utils;
@@ -58,37 +57,34 @@ public class DownloadFactory {
 	public static boolean downloadFile(Context context, String url, String fileName, String title,
 			String description) {
 		
-	    DownloadManager.Request request;
-	    DownloadManager manager;
-	
-	    Log.d(TAG, "URL received: " + url);
-	
+	    DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+	    DownloadManager manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE); // get download service and 
+	    
+	    //Create dastination directory if not exists
+	    File downloadDirectory = new File(Constants.DOWNLOADS_PATH);
+	    if (!downloadDirectory.exists()){
+	    	downloadDirectory.mkdir();
+	        
+	        Log.i(TAG, "Created directory " + Constants.DOWNLOADS_PATH);
+	    }
+        
+        request.setDescription(title);
+        request.setTitle(description);
+        request.setDestinationInExternalPublicDir(Constants.DIRECTORY_SWADROID, fileName);
+        
 	    // in order for this if to run, you must use the android 3.2 to compile your app
 	    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 	        Log.i(TAG, "Downloading file " + fileName + " with DownloadManager >= HONEYCOMB");
 	
-	        request = new DownloadManager.Request(Uri.parse(url));
-	        request.setDescription(title);
-	        request.setTitle(description);
-	
 	        request.allowScanningByMediaScanner();
 	        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-	        request.setDestinationInExternalPublicDir(
-	                Environment.DIRECTORY_DOWNLOADS + File.separator + Constants.DIRECTORY_SWADROID, fileName);
 	
-	        // get download service and enqueue file
-	        manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+	        // enqueue file
 	        manager.enqueue(request);
 	    } else if (Utils.isHTTPUrl(url)) {
 	        Log.i(TAG, "Downloading file " + fileName + " with DownloadManager GINGERBREAD");
 	
-	        request = new DownloadManager.Request(Uri.parse(url));
-	        request.setDescription(title);
-	        request.setTitle(description);
-	        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
-	
-	        // get download service and enqueue file
-	        manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+	        // enqueue file
 	        manager.enqueue(request);
 	    } else {
 	        Log.e(TAG, "Can only download HTTP URIs with DownloadManager GINGERBREAD");

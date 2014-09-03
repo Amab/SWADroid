@@ -27,7 +27,6 @@ import com.bugsense.trace.BugSenseHandler;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 
-import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -44,7 +43,6 @@ import java.net.URL;
 
 public class FileDownloaderAsyncTask extends AsyncTask<String, Integer, Boolean> {
     private final Context mContext;
-    private File download_dir;
     private URL url;
     private String fileName = "";
     private boolean downloadSuccess = true;
@@ -58,11 +56,6 @@ public class FileDownloaderAsyncTask extends AsyncTask<String, Integer, Boolean>
     public FileDownloaderAsyncTask(Context context, String fileName, long fileSize) {
         this.fileName = fileName;
         this.mContext = context;
-    }
-
-    /* Return the path to the directory where files are saved */
-    File getDownloadDir() {
-        return this.download_dir;
     }
 
     @Override
