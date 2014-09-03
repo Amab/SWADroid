@@ -55,7 +55,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Activity to navigate through the directory tree of documents and to manage
@@ -586,7 +585,7 @@ public class DownloadsManager extends MenuActivity {
         // Check if external storage is available
         int storageState = checkMediaAvailability(); 
         if ( storageState == 2) {
-            new FileDownloaderAsyncTask(this, this.chosenNodeName, true, fileSize).execute(directory, url);
+            new FileDownloaderAsyncTask(this, this.chosenNodeName, fileSize).execute(directory, url);
         } else {
             Toast.makeText(this, R.string.sdCardBusyTitle, Toast.LENGTH_LONG).show();
         }
@@ -636,7 +635,7 @@ public class DownloadsManager extends MenuActivity {
                 .append("\n")
                 .append(getString(R.string.sizeFileTitle))
                 .append(" ")
-                .append(humanReadableByteCount(size, true))
+                .append(DownloadFactory.humanReadableByteCount(size, true))
                 .append("\n")
                 .append(res.getString(R.string.uploaderTitle))
                 .append(" ")
@@ -667,18 +666,6 @@ public class DownloadsManager extends MenuActivity {
 
         dialog = builder.create();
         return dialog;
-    }
-
-    /**
-     * Method to show file size in bytes in a human readable way
-     * http://stackoverflow.com/questions/3758606/how-to-convert-byte-size-into-human-readable-format-in-java
-     */
-    private static String humanReadableByteCount(long bytes, boolean si) {
-        int unit = si ? 1000 : 1024;
-        if (bytes < unit) return bytes + " B";
-        int exp = (int) (Math.log(bytes) / Math.log(unit));
-        String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp - 1) + (si ? "" : "i");
-        return String.format(Locale.getDefault(), "%.1f %sB", bytes / Math.pow(unit, exp), pre);
     }
 
     /**
@@ -715,20 +702,4 @@ public class DownloadsManager extends MenuActivity {
 			getSupportActionBar().setIcon(R.drawable.folder_users);
 		}
     }
-
-	/** 
-	 * This method is launched instead of onCreate when device rotates
-	 * It prevents from repeating calls to web services when they are not necessary
-	 * */
-	/*@Override
-	public void onConfigurationChanged(Configuration newConfig) {        
-	    super.onConfigurationChanged(newConfig);
-	    Log.i(TAG,"Device rotation");
-	    // Checks the orientation of the screen
-	    if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-	        Log.i(TAG,"onConfigChanged - Landscape");
-	    } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
-	    	Log.i(TAG,"onConfigChanged - Portrait");
-	    }
-	}*/
 }
