@@ -24,6 +24,7 @@ import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
@@ -43,7 +44,6 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
@@ -168,7 +168,6 @@ public class DownloadsManager extends MenuActivity {
                 setNoConnectionView();
             }
         }
-
     }
 
     @Override
@@ -717,20 +716,20 @@ public class DownloadsManager extends MenuActivity {
 			getSupportActionBar().setIcon(R.drawable.folder_users);
 		}
     }
-    
-//	/**
-//	 * This method is launched instead of onCreate when device rotates
-//	 * It prevents from repeating calls to web services when they are not necessary
-//	 * */
-//	@Override
-//	public void onConfigurationChanged(Configuration newConfig) {        
-//	    super.onConfigurationChanged(newConfig);
-//	    Log.i(TAG,"Device rotation");
-//	    // Checks the orientation of the screen
-///*	    if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-//	        Log.i(TAG,"onConfigChanged - Landscape");
-//	    } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
-//	    	Log.i(TAG,"onConfigChanged - Portrait");
-//	    }*/
-//	}
+
+	/** 
+	 * This method is launched instead of onCreate when device rotates
+	 * It prevents from repeating calls to web services when they are not necessary
+	 * */
+	/*@Override
+	public void onConfigurationChanged(Configuration newConfig) {        
+	    super.onConfigurationChanged(newConfig);
+	    Log.i(TAG,"Device rotation");
+	    // Checks the orientation of the screen
+	    if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+	        Log.i(TAG,"onConfigChanged - Landscape");
+	    } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+	    	Log.i(TAG,"onConfigChanged - Portrait");
+	    }
+	}*/
 }
