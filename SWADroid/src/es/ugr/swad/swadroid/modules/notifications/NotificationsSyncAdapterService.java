@@ -408,31 +408,27 @@ public class NotificationsSyncAdapterService extends Service {
         Intent activity;
         int numMarkedNotificationsList;
         
-        if(isConnected) {
-	    	//Construct a list of seen notifications in state "pending to mark as read in SWAD" 
-	        markedNotificationsList = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_NOTIFICATIONS,
-	        		"seenLocal='" + Utils.parseBoolString(true)
-	        		+ "' AND seenRemote='" + Utils.parseBoolString(false) + "'", null);
-	        
-	        numMarkedNotificationsList = markedNotificationsList.size();
+    	//Construct a list of seen notifications in state "pending to mark as read in SWAD" 
+        markedNotificationsList = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_NOTIFICATIONS,
+        		"seenLocal='" + Utils.parseBoolString(true)
+        		+ "' AND seenRemote='" + Utils.parseBoolString(false) + "'", null);
+        
+        numMarkedNotificationsList = markedNotificationsList.size();
+        if(isDebuggable)
+        	Log.d(TAG, "numMarkedNotificationsList=" + numMarkedNotificationsList);
+        
+        if(numMarkedNotificationsList > 0) {            
+            //Creates a string of notification codes separated by commas from the previous list
+            seenNotifCodes = Utils.getSeenNotificationCodes(markedNotificationsList);
 	        if(isDebuggable)
-	        	Log.d(TAG, "numMarkedNotificationsList=" + numMarkedNotificationsList);
-	        
-	        if(numMarkedNotificationsList > 0) {            
-	            //Creates a string of notification codes separated by commas from the previous list
-	            seenNotifCodes = Utils.getSeenNotificationCodes(markedNotificationsList);
-		        if(isDebuggable)
-		        	Log.d(TAG, "seenNotifCodes=" + seenNotifCodes);
-	
-	            //Sends "seen notifications" info to the server
-		        activity = new Intent(context, NotificationsMarkAllAsRead.class);
-		        activity.putExtra("seenNotifCodes", seenNotifCodes);
-		        activity.putExtra("numMarkedNotificationsList", numMarkedNotificationsList);
-		        activity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		        context.startActivity(activity);
-	        }
-        } else {
-        	Log.w(TAG, "Not connected: Sending of notifications read info to SWAD was deferred");
+	        	Log.d(TAG, "seenNotifCodes=" + seenNotifCodes);
+
+            //Sends "seen notifications" info to the server
+	        activity = new Intent(context, NotificationsMarkAllAsRead.class);
+	        activity.putExtra("seenNotifCodes", seenNotifCodes);
+	        activity.putExtra("numMarkedNotificationsList", numMarkedNotificationsList);
+	        activity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	        context.startActivity(activity);
         }
     }
 
