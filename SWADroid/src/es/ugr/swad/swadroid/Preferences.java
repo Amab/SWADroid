@@ -28,10 +28,10 @@ import android.util.Log;
 
 import com.bugsense.trace.BugSenseHandler;
 
-import es.ugr.swad.swadroid.model.DataBaseHelper;
+import es.ugr.swad.swadroid.database.DataBaseHelper;
+import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.sync.SyncUtils;
 import es.ugr.swad.swadroid.utils.Crypto;
-import es.ugr.swad.swadroid.utils.Utils;
 
 import java.security.NoSuchAlgorithmException;
 
@@ -460,13 +460,13 @@ public class Preferences {
         dbHelper.cleanTables();
         
         Preferences.setLastCourseSelected(0);
-        Utils.setDbCleaned(true);
+        DataBaseHelper.setDbCleaned(true);
         
         Log.i(TAG, "Database has been cleaned");
     }
     
     public static void logoutClean(Context context, String key) {
-        Constants.setLogged(false);
+        Login.setLogged(false);
         Log.i(TAG, "Forced logout due to " + key + " change in preferences");
         
         cleanDatabase();

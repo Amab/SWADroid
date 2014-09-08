@@ -20,6 +20,8 @@
 package es.ugr.swad.swadroid.modules.notifications;
 
 import android.accounts.Account;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
@@ -38,11 +40,12 @@ import com.bugsense.trace.BugSenseHandler;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.gui.AlertNotification;
-import es.ugr.swad.swadroid.model.DataBaseHelper;
+import es.ugr.swad.swadroid.database.DataBaseHelper;
+import es.ugr.swad.swadroid.gui.AlertNotificationFactory;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.model.User;
+import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.IWebserviceClient;
@@ -70,7 +73,7 @@ import javax.net.ssl.SSLException;
  */
 public class NotificationsSyncAdapterService extends Service {
     private static final String TAG = "NotificationsSyncAdapterService";
-	private static Preferences prefs;
+    private static Preferences prefs;
 	private static SecureConnection conn;
     private static SyncAdapterImpl sSyncAdapter = null;
     private static int notifCount;
@@ -121,7 +124,7 @@ public class NotificationsSyncAdapterService extends Service {
                 		sendException = false;
                 		
                 		//Force logout and reset password (this will show again the login screen)
-                		Constants.setLogged(false);
+                		Login.setLogged(false);
                 		Preferences.setUserPassword("");
                     } else if (es.faultstring.equals("Unknown application key")) {
                     	errorMessage = mContext.getString(R.string.errorBadAppKeyMsg);
@@ -159,7 +162,7 @@ public class NotificationsSyncAdapterService extends Service {
                 	dbHelper.endTransaction(false);
                 }
                 
-	            Log.e(TAG, e.getMessage());
+	            Log.e(TAG, errorMessage, e);
 
                 //Send exception details to Bugsense
                 if(sendException) {
@@ -187,8 +190,8 @@ public class NotificationsSyncAdapterService extends Service {
             getPackageManager().getApplicationInfo(
                     getPackageName(), 0);
 			isDebuggable = (ApplicationInfo.FLAG_DEBUGGABLE != 0);
-        } catch (NameNotFoundException e1) {
-            e1.printStackTrace();
+        } catch (NameNotFoundException e) {
+        	Log.e(TAG, "Error getting debuggable flag", e);
         }
         
 		//Initialize Bugsense plugin
@@ -200,13 +203,11 @@ public class NotificationsSyncAdapterService extends Service {
         
         try {
             prefs = new Preferences(this);
-            dbHelper = new DataBaseHelper(this);
-            
+            dbHelper = new DataBaseHelper(this);            
             //Initialize webservices client
             webserviceClient = null;
         } catch (Exception e) {
-            e.printStackTrace();
-            errorMessage = e.getMessage();
+            Log.e(TAG, "Error initializing database and preferences", e);
 
             //Send exception details to Bugsense
             BugSenseHandler.sendException(e);
@@ -329,11 +330,11 @@ public class NotificationsSyncAdapterService extends Service {
                     Integer.parseInt(soap.getProperty("userRole").toString())        // userRole
             );
 
-            Constants.setLoggedUser(loggedUser);
-            Constants.setLogged(true);
+            Login.setLoggedUser(loggedUser);
+            Login.setLogged(true);
 
             //Update application last login time
-            Constants.setLastLoginTime(System.currentTimeMillis());
+            Login.setLastLoginTime(System.currentTimeMillis());
         }
     }
     
@@ -348,7 +349,7 @@ public class NotificationsSyncAdapterService extends Service {
         METHOD_NAME = "getNotifications";
         
         createRequest(SOAPClient.CLIENT_TYPE);
-        addParam("wsKey", Constants.getLoggedUser().getWsKey());
+        addParam("wsKey", Login.getLoggedUser().getWsKey());
         addParam("beginTime", timestamp);
         sendRequest(SWADNotification.class, false);
 
@@ -407,38 +408,38 @@ public class NotificationsSyncAdapterService extends Service {
         Intent activity;
         int numMarkedNotificationsList;
         
-        if(isConnected) {
-	    	//Construct a list of seen notifications in state "pending to mark as read in SWAD" 
-	        markedNotificationsList = dbHelper.getAllRows(Constants.DB_TABLE_NOTIFICATIONS,
-	        		"seenLocal='" + Utils.parseBoolString(true)
-	        		+ "' AND seenRemote='" + Utils.parseBoolString(false) + "'", null);
-	        
-	        numMarkedNotificationsList = markedNotificationsList.size();
+    	//Construct a list of seen notifications in state "pending to mark as read in SWAD" 
+        markedNotificationsList = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_NOTIFICATIONS,
+        		"seenLocal='" + Utils.parseBoolString(true)
+        		+ "' AND seenRemote='" + Utils.parseBoolString(false) + "'", null);
+        
+        numMarkedNotificationsList = markedNotificationsList.size();
+        if(isDebuggable)
+        	Log.d(TAG, "numMarkedNotificationsList=" + numMarkedNotificationsList);
+        
+        if(numMarkedNotificationsList > 0) {            
+            //Creates a string of notification codes separated by commas from the previous list
+            seenNotifCodes = Utils.getSeenNotificationCodes(markedNotificationsList);
 	        if(isDebuggable)
-	        	Log.d(TAG, "numMarkedNotificationsList=" + numMarkedNotificationsList);
-	        
-	        if(numMarkedNotificationsList > 0) {            
-	            //Creates a string of notification codes separated by commas from the previous list
-	            seenNotifCodes = Utils.getSeenNotificationCodes(markedNotificationsList);
-		        if(isDebuggable)
-		        	Log.d(TAG, "seenNotifCodes=" + seenNotifCodes);
-	
-	            //Sends "seen notifications" info to the server
-		        activity = new Intent(context, NotificationsMarkAllAsRead.class);
-		        activity.putExtra("seenNotifCodes", seenNotifCodes);
-		        activity.putExtra("numMarkedNotificationsList", numMarkedNotificationsList);
-		        activity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		        context.startActivity(activity);
-	        }
-        } else {
-        	Log.w(TAG, "Not connected: Sending of notifications read info to SWAD was deferred");
+	        	Log.d(TAG, "seenNotifCodes=" + seenNotifCodes);
+
+            //Sends "seen notifications" info to the server
+	        activity = new Intent(context, NotificationsMarkAllAsRead.class);
+	        activity.putExtra("seenNotifCodes", seenNotifCodes);
+	        activity.putExtra("numMarkedNotificationsList", numMarkedNotificationsList);
+	        activity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	        context.startActivity(activity);
         }
     }
 
     private static void performSync(Context context, Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
             throws Exception {
 
-        Intent notIntent = new Intent(context, Notifications.class);
+		Notification notif;
+		PendingIntent pendingIntent = PendingIntent.getActivity(context,
+				0, 
+				new Intent(context, Notifications.class), 
+				Intent.FLAG_ACTIVITY_NEW_TASK);
         
         //Notify synchronization start
         Intent startIntent = new Intent();
@@ -459,17 +460,17 @@ public class NotificationsSyncAdapterService extends Service {
     	}
 
         //If last login time > Global.RELOGIN_TIME, force login
-        if (Constants.isLogged() &&
-        		((System.currentTimeMillis() - Constants.getLastLoginTime()) > Constants.RELOGIN_TIME)) {
+        if (Login.isLogged() &&
+        		((System.currentTimeMillis() - Login.getLastLoginTime()) > Login.RELOGIN_TIME)) {
         	
-            Constants.setLogged(false);
+            Login.setLogged(false);
         }
 
-        if (!Constants.isLogged()) {
+        if (!Login.isLogged()) {
         	logUser();
         }
 
-        if (Constants.isLogged()) {
+        if (Login.isLogged()) {
         	getNotifications();
         	
         	if (notifCount > 0) {
@@ -477,13 +478,21 @@ public class NotificationsSyncAdapterService extends Service {
 	            if (notifCount > SIZE_LIMIT) {
 	                notifCount = SIZE_LIMIT;
 	            }
-	            
-	        	AlertNotification.alertNotif(context,
-	            		NOTIF_ALERT_ID,
-	            		context.getString(R.string.app_name),
-	            		notifCount + " " + context.getString(R.string.notificationsAlertMsg),
-	            		context.getString(R.string.app_name),
-	            		notIntent);
+
+				notif = AlertNotificationFactory.createAlertNotification(context,
+						context.getString(R.string.app_name),
+						notifCount + " "
+						+ context.getString(R.string.notificationsAlertMsg),
+						context.getString(R.string.app_name),
+						pendingIntent,
+						R.drawable.ic_launcher_swadroid,
+						R.drawable.ic_launcher_swadroid,
+						true,
+						true,
+						false,
+						false);
+				
+				AlertNotificationFactory.showAlertNotification(context, notif, NOTIF_ALERT_ID);
         	}
         	
         	sendReadedNotifications(context);

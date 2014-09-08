@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="es.ugr.swad.swadroid"
     android:installLocation="auto"
-    android:versionCode="59"
-    android:versionName="1.0" >
+    android:versionCode="60"
+    android:versionName="1.1" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -28,7 +28,7 @@
         android:required="false" />
 
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="9"
         android:targetSdkVersion="19" >
     </uses-sdk>
 
@@ -62,12 +62,12 @@
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.RecoverPassword"
-            android:theme="@style/Theme.AppCompat.Light.Translucent" >
+            android:theme="@style/Theme.AppCompat.Translucent" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.Login"
             android:label="@string/loginModuleLabel"
-            android:theme="@style/Theme.AppCompat.Light.Translucent" >
+            android:theme="@style/Theme.AppCompat.Translucent" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.rollcall.Rollcall"
@@ -105,7 +105,7 @@
         <activity
             android:name="es.ugr.swad.swadroid.modules.Groups"
             android:label="@string/rollcallModuleLabel"
-            android:theme="@style/Theme.AppCompat.Light.Translucent" >
+            android:theme="@style/Theme.AppCompat.Translucent" >
         </activity>
         <activity
             android:name="com.google.zxing.client.android.CaptureActivity"
@@ -121,7 +121,7 @@
         <activity
             android:name="es.ugr.swad.swadroid.modules.Courses"
             android:label="@string/coursesModuleLabel"
-            android:theme="@style/Theme.AppCompat.Light.Translucent" >
+            android:theme="@style/Theme.AppCompat.Translucent" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.notifications.Notifications"
@@ -142,12 +142,12 @@
         <activity
             android:name="es.ugr.swad.swadroid.modules.tests.TestsQuestionsDownload"
             android:label="@string/testsModuleLabel"
-            android:theme="@style/Theme.AppCompat.Light.Translucent" >
+            android:theme="@style/Theme.AppCompat.Translucent" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.tests.TestsConfigDownload"
             android:label="@string/testsModuleLabel"
-            android:theme="@style/Theme.AppCompat.Light.Translucent" >
+            android:theme="@style/Theme.AppCompat.Translucent" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.tests.TestsMake"
@@ -158,9 +158,19 @@
                 android:value="es.ugr.swad.swadroid.modules.tests.Tests" />
         </activity>
         <activity
-            android:name="es.ugr.swad.swadroid.modules.Messages"
-            android:label="@string/messagesModuleLabel"
-            android:theme="@style/Theme.AppCompat.Light.Translucent" >
+            android:name="es.ugr.swad.swadroid.modules.messages.Messages"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/messagesModuleLabel">
+        </activity>
+                <activity
+            android:name="es.ugr.swad.swadroid.modules.messages.FilterUsersList"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/filterUsersListModuleLabel">
+        </activity>
+                <activity
+            android:name="es.ugr.swad.swadroid.modules.messages.UsersList"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/messagesModuleLabel">
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.notifications.NotificationItem"
@@ -173,24 +183,25 @@
         <activity
             android:name="es.ugr.swad.swadroid.modules.Notices"
             android:label="@string/noticesModuleLabel"
-            android:theme="@style/Theme.AppCompat.Light.Translucent" >
+            android:theme="@style/Theme.AppCompat.Translucent" >
         </activity>
         <activity android:name="es.ugr.swad.swadroid.sync.AccountAuthenticator" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.downloads.DirectoryTreeDownload"
             android:label="@string/documentsDownloadModuleLabel"
-            android:theme="@style/Theme.AppCompat.Light.Translucent" >
+            android:theme="@style/Theme.AppCompat.Translucent" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.downloads.GetFile"
             android:label="@string/documentsDownloadModuleLabel"
-            android:theme="@style/Theme.AppCompat.Light.Translucent" >
+            android:theme="@style/Theme.AppCompat.Translucent" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.downloads.DownloadsManager"
             android:label="@string/documentsDownloadModuleLabel"
-            android:parentActivityName="es.ugr.swad.swadroid.SWADMain" >
+            android:parentActivityName="es.ugr.swad.swadroid.SWADMain"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="es.ugr.swad.swadroid.SWADMain" />
@@ -206,12 +217,12 @@
         <activity
             android:name="es.ugr.swad.swadroid.modules.GroupTypes"
             android:label="@string/groupTypesModuleLabel"
-            android:theme="@style/Theme.AppCompat.Light.Translucent" >
+            android:theme="@style/Theme.AppCompat.Translucent" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.groups.SendMyGroups"
             android:label="@string/sendMyGroupsProgressTitle"
-            android:theme="@style/Theme.AppCompat.Light.Translucent" >
+            android:theme="@style/Theme.AppCompat.Translucent" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.GenerateQR"
@@ -232,7 +243,7 @@
         <activity
             android:name="es.ugr.swad.swadroid.modules.notifications.NotificationsMarkAllAsRead"
             android:label="@string/notificationsMarkAllAsReadModuleLabel"
-            android:theme="@style/Theme.AppCompat.Light.Translucent" >
+            android:theme="@style/Theme.AppCompat.Translucent" >
         </activity>
 
         <provider

@@ -37,10 +37,11 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.model.Course;
+import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.Module;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -144,8 +145,8 @@ public class NewPracticeSession extends Module {
         Button btCancel = (Button) newSessionDialog.findViewById(R.id.btCancel);
 
         // Get selected course
-        String where = "id =" + String.valueOf(Constants.getSelectedCourseCode());
-        Course selectedCourse = (Course) dbHelper.getAllRows(Constants.DB_TABLE_COURSES, where, "fullName").get(0);
+        String where = "id =" + String.valueOf(Courses.getSelectedCourseCode());
+        Course selectedCourse = (Course) dbHelper.getAllRows(DataBaseHelper.DB_TABLE_COURSES, where, "fullName").get(0);
         String courseName = selectedCourse.getFullName();
 
         // Get selected groupCode, groupName
@@ -214,7 +215,7 @@ public class NewPracticeSession extends Module {
                 String site = etSite.getText().length() == 0 ? "" : etSite.getText().toString();
                 String description = etDescription.getText().length() == 0 ? "" : etDescription.getText().toString();
 
-                inserted = dbHelper.insertPracticeSession(Constants.getSelectedCourseCode(),
+                inserted = dbHelper.insertPracticeSession(Courses.getSelectedCourseCode(),
                         groupCode,
                         btStartDate.getText().toString() + " " + btStartTime.getText().toString(),
                         btEndDate.getText().toString() + " " + btEndTime.getText().toString(),

@@ -32,7 +32,6 @@ import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertPath;
 import java.security.cert.CertPathValidator;
@@ -45,10 +44,7 @@ import java.util.ArrayList;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
 /**
@@ -64,11 +60,11 @@ public class SecureConnection {
 	/**
 	 * HostnameVerifier that accepts untrusted certificates.
 	 */
-	private static final UntrustedHostnameVerifier untrustedHN = new UntrustedHostnameVerifier();
+	//private static final UntrustedHostnameVerifier untrustedHN = new UntrustedHostnameVerifier();
 	/**
 	 * TrustManager that accepts untrusted certificates.
 	 */
-	private static final TrustManager[] untrustedTM = new TrustManager[] { new UntrustedTrustManager() };
+	//private static final TrustManager[] untrustedTM = new TrustManager[] { new UntrustedTrustManager() };
 
 	/**
 	 * Terena CA certificate
@@ -96,125 +92,6 @@ public class SecureConnection {
 			is.close();
 		}
 		return ca;
-	}
-
-	/**
-	 * Trust only Terena's CA. Terena cert is injected as byte[]. Following best
-	 * practices from
-	 * https://developer.android.com/training/articles/security-ssl
-	 * .html#UnknownCa
-	 */
-	private static void trustTerenaOnly() throws KeyStoreException,
-			IOException, CertificateException, NoSuchAlgorithmException,
-			KeyManagementException {
-		// Create a KeyStore containing our trusted CAs
-		String keyStoreType = KeyStore.getDefaultType();
-		final KeyStore keyStore = KeyStore.getInstance(keyStoreType);
-		keyStore.load(null, null);
-		keyStore.setCertificateEntry("Terena-root",
-				getCertificate(TERENACER.getBytes("UTF-8")));
-		// if your HTTPd is not sending the full chain, add class3 cert to the
-		// key store
-		// keyStore.setCertificateEntry("Terena-class3",
-		// getCertificate(TERENACLASS3DER));
-
-		// Create a TrustManager that trusts the CAs in our KeyStore
-		final TrustManagerFactory tmf = TrustManagerFactory
-				.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-		tmf.init(keyStore);
-
-		// Create an SSLContext that uses our TrustManager
-		SSLContext sslContext = SSLContext.getInstance("TLS");
-
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-			// may work on HC+, but there is no AVD or device to test it
-			sslContext.init(null, tmf.getTrustManagers(), null);
-		} else {
-			// looks like CLR is broken in lower APIs. implement out own checks
-			// here :x
-			// see http://stackoverflow.com/q/18713966/2331953
-			HttpsURLConnection
-					.setDefaultHostnameVerifier(new HostnameVerifier() {
-						@Override
-						public boolean verify(String hostname,
-								SSLSession session) {
-							try {
-								// check if hostname matches DN
-								String dn = session.getPeerCertificateChain()[0]
-										.getSubjectDN().toString();
-
-								Log.d(TAG, "DN=" + dn);
-								if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
-									return dn.contains("CN=" + hostname);
-								} else {
-									// no SNI on API<9, but I know the first
-									// vhost's hostname
-									return dn.contains("CN=" + hostname)
-											|| dn.contains("CN="
-													+ Preferences.getServer());
-								}
-							} catch (Exception e) {
-								Log.e(TAG, "unexpected exception", e);
-								return false;
-							}
-						}
-					});
-
-			// build our own trust manager
-			X509TrustManager tm = new X509TrustManager() {
-				public X509Certificate[] getAcceptedIssuers() {
-					// nothing to do
-					return new X509Certificate[0];
-				}
-
-				@Override
-				public void checkClientTrusted(final X509Certificate[] chain,
-						final String authType) throws CertificateException {
-					// nothing to do
-				}
-
-				@Override
-				public void checkServerTrusted(final X509Certificate[] chain,
-						final String authType) throws CertificateException {
-					// nothing to do
-					Log.d(TAG, "checkServerTrusted(" + chain + ")");
-					X509Certificate cert = chain[0];
-
-					cert.checkValidity();
-
-					CertificateFactory cf = CertificateFactory
-							.getInstance("X.509");
-					ArrayList<X509Certificate> list = new ArrayList<X509Certificate>();
-					list.add(cert);
-					CertPath cp = cf.generateCertPath(list);
-					try {
-						PKIXParameters params = new PKIXParameters(keyStore);
-						params.setRevocationEnabled(false); // CLR is broken,
-															// remember?
-						CertPathValidator cpv = CertPathValidator
-								.getInstance(CertPathValidator.getDefaultType());
-						cpv.validate(cp, params);
-					} catch (KeyStoreException e) {
-						Log.e(TAG, "invalid key store", e);
-						throw new CertificateException(e);
-					} catch (InvalidAlgorithmParameterException e) {
-						Log.e(TAG, "invalid algorithm", e);
-						throw new CertificateException(e);
-					} catch (NoSuchAlgorithmException e) {
-						Log.e(TAG, "no such algorithm", e);
-						throw new CertificateException(e);
-					} catch (CertPathValidatorException e) {
-						Log.e(TAG, "verification failed");
-						throw new CertificateException(e);
-					}
-					Log.d(TAG, "verification successful");
-				}
-			};
-			sslContext.init(null, new X509TrustManager[] { tm }, null);
-		}
-
-		HttpsURLConnection.setDefaultSSLSocketFactory(sslContext
-				.getSocketFactory());
 	}
 
 	/**
@@ -325,7 +202,7 @@ public class SecureConnection {
 	 * @throws NoSuchAlgorithmException
 	 * @throws KeyManagementException
 	 */
-	public static void initUntrustedSecureConnection()
+	/*public static void initUntrustedSecureConnection()
 			throws NoSuchAlgorithmException, KeyManagementException {
 		SSLContext sc = SSLContext.getInstance("TLS");
 		sc.init(null, untrustedTM, new SecureRandom());
@@ -333,7 +210,7 @@ public class SecureConnection {
 		HttpsURLConnection.setDefaultHostnameVerifier(untrustedHN);
 
 		Log.w(TAG, "Untrusted secure connection initialized");
-	}
+	}*/
 
 	/**
 	 * Initialize certificate verification in application.
@@ -352,7 +229,6 @@ public class SecureConnection {
 			KeyStoreException, CertificateException, IOException,
 			UnrecoverableKeyException {
 
-		// trustTerenaOnly();
 		trustTerena();
 		Log.i(TAG, "Secure connection initialized");
 	}

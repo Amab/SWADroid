@@ -48,8 +48,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 //TODO look for a more efficient navigation
 public class DirectoryNavigator {
 
-    private String TAG = "SWADroid DirectoryNavigator";
-
     private String XMLinfo;
 
     private final ArrayList<String> path;

@@ -29,6 +29,8 @@ import com.bugsense.trace.BugSenseHandler;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
+import es.ugr.swad.swadroid.modules.Courses;
+import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
@@ -81,7 +83,7 @@ public class RollcallConfigDownload extends Module {
         
         try {
             if (isDebuggable) {
-                Log.d(TAG, "selectedCourseCode = " + Long.toString(Constants.getSelectedCourseCode()));
+                Log.d(TAG, "selectedCourseCode = " + Long.toString(Courses.getSelectedCourseCode()));
             }
             runConnection();
         } catch (Exception e) {
@@ -93,12 +95,12 @@ public class RollcallConfigDownload extends Module {
     @Override
     protected void requestService() throws Exception {
         int userRole = Constants.STUDENT_TYPE_CODE;
-        long courseCode = Constants.getSelectedCourseCode();
+        long courseCode = Courses.getSelectedCourseCode();
         long groupCode = getIntent().getLongExtra("groupCode", 0);
 
         // Creates webservice request, adds required params and sends request to webservice
         createRequest(SOAPClient.CLIENT_TYPE);
-        addParam("wsKey", Constants.getLoggedUser().getWsKey());
+        addParam("wsKey", Login.getLoggedUser().getWsKey());
         addParam("courseCode", (int) courseCode);
         addParam("groupCode", (int) groupCode);
         addParam("userRole", userRole);

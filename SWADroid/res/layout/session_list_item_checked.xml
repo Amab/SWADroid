@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
-              android:background="@color/background"
-              android:gravity="center_vertical"
-              android:orientation="horizontal"
-              android:padding="6dip">
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/background"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="6dip" >
 
     <ImageView
-            android:id="@+id/icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="6dip"
-            android:contentDescription="@string/rollcallEvent"
-            android:src="@drawable/sessions"/>
+        android:id="@+id/icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="6dip"
+        android:contentDescription="@string/rollcallEvent"
+        android:src="@drawable/sessions" />
 
     <TextView
-            android:id="@+id/sessionStart"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dip"
-            android:layout_weight="1"
-            android:textColor="@color/foreground1"
-            android:textSize="20dip"
-            android:textStyle="bold"/>
+        android:id="@+id/sessionStart"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dip"
+        android:layout_weight="1"
+        android:textColor="@color/foreground1"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <CheckBox
-            android:id="@+id/checkBox1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+        android:id="@+id/checkBox1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

@@ -24,23 +24,24 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.util.LongSparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
-import android.widget.ExpandableListView.OnChildClickListener;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.model.Model;
+import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.GroupTypes;
 import es.ugr.swad.swadroid.modules.Groups;
+import es.ugr.swad.swadroid.modules.Login;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -80,13 +81,12 @@ public class MyGroupsManager extends MenuExpandableListActivity {
     };
 
     private ExpandableListView mExpandableListView;
-    private OnChildClickListener mExpandableListListener;
     
     @Override
     protected void onStart() {
         super.onStart();
 
-        List<Model> groupTypes = dbHelper.getAllRows(Constants.DB_TABLE_GROUP_TYPES, "courseCode = " + courseCode, "groupTypeName");
+        List<Model> groupTypes = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_GROUP_TYPES, "courseCode = " + courseCode, "groupTypeName");
         List<Group> groups = dbHelper.getGroups(courseCode);
         if ((!groupTypes.isEmpty()) && (!groups.isEmpty())) {
             setMenu();
@@ -114,18 +114,8 @@ public class MyGroupsManager extends MenuExpandableListActivity {
         setContentView(R.layout.group_choice);
         
         mExpandableListView = (ExpandableListView) findViewById(android.R.id.list);
-        mExpandableListListener = new OnChildClickListener() {
-            
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition,
-                    int childPosition, long id) {
-                boolean result = ((EnrollmentExpandableListAdapter) mExpandableListView.getExpandableListAdapter()).checkItem(groupPosition, childPosition);
-                ((EnrollmentExpandableListAdapter) mExpandableListView.getExpandableListAdapter()).notifyDataSetChanged();
-                return result;
-            }
-        };
 
-        getSupportActionBar().setSubtitle(Constants.getSelectedCourseShortName());
+        getSupportActionBar().setSubtitle(Courses.getSelectedCourseShortName());
     	getSupportActionBar().setIcon(R.drawable.my_groups);
     }
 
@@ -136,7 +126,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
             switch (requestCode) {
                 case Constants.GROUPTYPES_REQUEST_CODE:
                     groupTypesRequested = true;
-                    if (dbHelper.getAllRows(Constants.DB_TABLE_GROUP_TYPES, "courseCode = " + courseCode, "groupTypeName").size() > 0) {
+                    if (dbHelper.getAllRows(DataBaseHelper.DB_TABLE_GROUP_TYPES, "courseCode = " + courseCode, "groupTypeName").size() > 0) {
                         //If there are not group types, either groups. Therefore, there is no need to request groups
                         Intent activity = new Intent(getApplicationContext(), Groups.class);
                         activity.putExtra("courseCode", courseCode);
@@ -160,12 +150,12 @@ public class MyGroupsManager extends MenuExpandableListActivity {
                 case Constants.SENDMYGROUPS_REQUEST_CODE:
                     int success = data.getIntExtra("success", 0);
                     if (success == 0) { //no enrollment was made
-                        HashMap<Long, ArrayList<Group>> currentGroups = getHashMapGroups(groupTypes);
+                        LongSparseArray<ArrayList<Group>> currentGroups = getHashMapGroups(groupTypes);
                         ((EnrollmentExpandableListAdapter) mExpandableListView.getExpandableListAdapter()).resetChildren(currentGroups);
                         ((EnrollmentExpandableListAdapter) mExpandableListView.getExpandableListAdapter()).notifyDataSetChanged();
                         showFailedEnrollmentDialog();
                     } else {
-                        HashMap<Long, ArrayList<Group>> currentGroups = getHashMapGroups(groupTypes);
+                        LongSparseArray<ArrayList<Group>> currentGroups = getHashMapGroups(groupTypes);
                         ((EnrollmentExpandableListAdapter) mExpandableListView.getExpandableListAdapter()).resetChildren(currentGroups);
                         ((EnrollmentExpandableListAdapter) mExpandableListView.getExpandableListAdapter()).notifyDataSetChanged();
                         showSuccessfulEnrollmentDialog();
@@ -216,7 +206,6 @@ public class MyGroupsManager extends MenuExpandableListActivity {
     private void showConfirmEnrollmentDialog() {
     	OnClickListener positiveClickListener = new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                dialog.cancel();
                 String myGroups = ((EnrollmentExpandableListAdapter) mExpandableListView.getExpandableListAdapter()).getChosenGroupCodesAsString();
                 Intent activity = new Intent(getApplicationContext(), SendMyGroups.class);
                 activity.putExtra("courseCode", courseCode);
@@ -225,12 +214,13 @@ public class MyGroupsManager extends MenuExpandableListActivity {
             }
         };
         
-    	AlertDialog dialog = DialogFactory.createPositiveNegativeDialog(this,
+    	AlertDialog dialog = DialogFactory.createWarningDialog(this,
     			-1,
     			R.string.confirmEnrollments,
-    			R.string.areYouSure,
+    			R.string.areYouSureGroups,
     			R.string.yesMsg,
     			R.string.noMsg,
+    			false,
     			positiveClickListener,
     			cancelClickListener,
     			null);
@@ -245,9 +235,9 @@ public class MyGroupsManager extends MenuExpandableListActivity {
     }
 
     private void setMenu() {
-        groupTypes = (ArrayList<Model>) dbHelper.getAllRows(Constants.DB_TABLE_GROUP_TYPES, "courseCode =" + String.valueOf(courseCode), "groupTypeName");
-        HashMap<Long, ArrayList<Group>> children = getHashMapGroups(groupTypes);
-        int currentRole = Constants.getCurrentUserRole();
+        groupTypes = (ArrayList<Model>) dbHelper.getAllRows(DataBaseHelper.DB_TABLE_GROUP_TYPES, "courseCode =" + String.valueOf(courseCode), "groupTypeName");
+        LongSparseArray<ArrayList<Group>> children = getHashMapGroups(groupTypes);
+        int currentRole = Login.getCurrentUserRole();
         EnrollmentExpandableListAdapter adapter = new EnrollmentExpandableListAdapter(this, groupTypes, children, R.layout.group_type_list_item, R.layout.group_list_item, currentRole);
         mExpandableListView.setAdapter(adapter);
 
@@ -259,14 +249,14 @@ public class MyGroupsManager extends MenuExpandableListActivity {
     @Override
     protected void onStop() {
         if (mExpandableListView.getExpandableListAdapter() != null) {
-            HashMap<Long, ArrayList<Group>> updatedChildren = getHashMapGroups(groupTypes);
+            LongSparseArray<ArrayList<Group>> updatedChildren = getHashMapGroups(groupTypes);
             ((EnrollmentExpandableListAdapter) mExpandableListView.getExpandableListAdapter()).resetChildren(updatedChildren);
         }
         super.onStop();
     }
 
-    private HashMap<Long, ArrayList<Group>> getHashMapGroups(ArrayList<Model> groupTypes) {
-        HashMap<Long, ArrayList<Group>> children = new HashMap<Long, ArrayList<Group>>();
+    private LongSparseArray<ArrayList<Group>> getHashMapGroups(ArrayList<Model> groupTypes) {
+        LongSparseArray<ArrayList<Group>> children = new LongSparseArray<ArrayList<Group>>();
         for (Model groupType : groupTypes) {
             long groupTypeCode = groupType.getId();
             ArrayList<Group> groups = (ArrayList<Group>) dbHelper.getGroupsOfType(groupTypeCode);

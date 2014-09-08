@@ -1,4 +1,5 @@
-<resources>
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
 
     <string name="title_activity_login">Sign in</string>
 
@@ -8,10 +9,8 @@
     <string name="prompt_server">Server (without http://)</string>
     <string name="action_sign_in_register"><b>Sign in</b></string>
     <string name="action_sign_in_short">Sign in</string>
-    <string name="action_forgot_password">Recover lost password</string>
-    <string name="login_progress_signing_in">Signing in&#8230;</string>
-    <string name="error_invalid_email">This DNI is invalid</string>
-    <string name="error_invalid_password">Password must be at least 8 alphanumeric characters</string>
+    <string name="login_progress_signing_in">Signing in…</string>
+    <string name="error_invalid_password">Password must be at least 6 alphanumeric characters</string>
     <string name="error_incorrect_password">The password should contain numbers and letters</string>
     <string name="error_field_required">This field is required</string>
     <string name="why_password">Why my password does not work?</string>
@@ -19,7 +18,7 @@
     <string name="why_password_dialog_message">Probably you are using your e-Administration password (4 digits). You must write your SWAD password</string>
     <string name="lost_password">I forgot my password</string>
     <string name="lost_password_dialog_title">Request a new password</string>
-    <string name="lost_password_edit_text_hint">DNI/passport, @nickname or email</string>
     <string name="lost_password_success">Password changed, check your email</string>
     <string name="lost_password_failure">Password reset failed</string>
+
 </resources>

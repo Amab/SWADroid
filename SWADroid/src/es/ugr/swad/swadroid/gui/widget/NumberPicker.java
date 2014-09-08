@@ -34,6 +34,8 @@ import android.widget.TextView;
 
 import es.ugr.swad.swadroid.R;
 
+import java.util.Locale;
+
 /**
  * This class has been pulled from the Android platform source code, its an internal widget that hasn't been
  * made public so its included in the project in this fashion for use with the preferences screen; I have made
@@ -338,9 +340,9 @@ public class NumberPicker extends LinearLayout implements OnClickListener,
             String result = String.valueOf(dest.subSequence(0, dstart))
                     + filtered
                     + dest.subSequence(dend, dest.length());
-            String str = String.valueOf(result).toLowerCase();
+            String str = String.valueOf(result).toLowerCase(Locale.getDefault());
             for (String val : mDisplayedValues) {
-                val = val.toLowerCase();
+                val = val.toLowerCase(Locale.getDefault());
                 if (val.startsWith(str)) {
                     return filtered;
                 }
@@ -400,8 +402,8 @@ public class NumberPicker extends LinearLayout implements OnClickListener,
             for (int i = 0; i < mDisplayedValues.length; i++) {
 
                 /* Don't force the user to type in jan when ja will do */
-                str = str.toLowerCase();
-                if (mDisplayedValues[i].toLowerCase().startsWith(str)) {
+                str = str.toLowerCase(Locale.getDefault());
+                if (mDisplayedValues[i].toLowerCase(Locale.getDefault()).startsWith(str)) {
                     return mStart + i;
                 }
             }

@@ -9,10 +9,11 @@ package es.ugr.swad.swadroid.modules.information;
 import android.os.Bundle;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
+import es.ugr.swad.swadroid.modules.Courses;
+import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
@@ -55,7 +56,7 @@ public class Information extends Module {
 
 		int requestCode = this.getIntent().getIntExtra("requestCode", 0);
 
-		getSupportActionBar().setSubtitle(Constants.getSelectedCourseShortName());
+		getSupportActionBar().setSubtitle(Courses.getSelectedCourseShortName());
 
 		switch (requestCode) {
 
@@ -159,8 +160,8 @@ public class Information extends Module {
 	@Override
 	protected void requestService() throws Exception {
 		createRequest(SOAPClient.CLIENT_TYPE);
-		addParam("wsKey", Constants.getLoggedUser().getWsKey());
-		addParam("courseCode", Constants.getSelectedCourseCode());
+		addParam("wsKey", Login.getLoggedUser().getWsKey());
+		addParam("courseCode", Courses.getSelectedCourseCode());
 		addParam("infoType", infoTypeToAdd);
 		sendRequest(User.class, true);
 

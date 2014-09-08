@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<class-diagram version="1.1.4" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
+<class-diagram version="1.1.6" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
   realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
   <interface id="1" language="java" name="es.ugr.swad.swadroid.webservices.IWebserviceClient" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/webservices/IWebserviceClient.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="133" width="182" x="75" y="570"/>    
+    <position height="133" width="177" x="509" y="570"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -12,7 +12,7 @@
   </interface>  
   <class id="2" language="java" name="es.ugr.swad.swadroid.webservices.SOAPClient" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/webservices/SOAPClient.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="493" width="216" x="41" y="37"/>    
+    <position height="493" width="219" x="704" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -21,7 +21,7 @@
   </class>  
   <class id="3" language="java" name="es.ugr.swad.swadroid.webservices.RESTClient" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/webservices/RESTClient.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="295" width="354" x="297" y="37"/>    
+    <position height="295" width="350" x="314" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -30,7 +30,7 @@
   </class>  
   <enumeration id="4" language="java" name="es.ugr.swad.swadroid.webservices.RESTClient.REQUEST_TYPE" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/webservices/RESTClient.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="151" width="160" x="297" y="570"/>    
+    <position height="151" width="154" x="314" y="570"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -39,25 +39,25 @@
   </enumeration>  
   <class id="5" language="java" name="es.ugr.swad.swadroid.webservices.RestEasy" project="SWADroid" 
     file="/SWADroid/src/es/ugr/swad/swadroid/webservices/RestEasy.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="169" width="234" x="691" y="37"/>    
+    <position height="169" width="233" x="41" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <realization id="6">    
+  <nesting id="6">    
     <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="1"/>  
-  </realization>  
+    <end type="TARGET" refId="4"/>  
+  </nesting>  
   <realization id="7">    
     <end type="SOURCE" refId="2"/>    
     <end type="TARGET" refId="1"/>  
   </realization>  
-  <nesting id="8">    
+  <realization id="8">    
     <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="4"/>  
-  </nesting>  
+    <end type="TARGET" refId="1"/>  
+  </realization>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
     accessors="true" visibility="true">    
     <attributes public="true" package="true" protected="true" private="true" static="true"/>    

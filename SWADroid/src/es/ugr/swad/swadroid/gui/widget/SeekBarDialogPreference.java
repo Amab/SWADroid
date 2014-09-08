@@ -173,9 +173,9 @@ public class SeekBarDialogPreference extends DialogPreference {
 
         // set the state's value with the class member that holds current setting value
         final SavedState myState = new SavedState(superState);
-        myState.minProgress = getMinProgress();
-        myState.maxProgress = getMaxProgress();
-        myState.progress = getProgress();
+        myState.minProgress = mMinProgress;
+        myState.maxProgress = mMaxProgress;
+        myState.progress = mProgress;
 
         return myState;
     }

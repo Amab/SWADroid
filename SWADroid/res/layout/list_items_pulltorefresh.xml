@@ -1,15 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/background"
-              android:orientation="vertical">
-<!--     <include layout="@layout/action_bar"/> -->
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical" >
 
-    <include android:id="@+id/courseNameLayout" layout="@layout/course_or_group_name"/>
-    
-	<com.handmark.pulltorefresh.library.PullToRefreshListView
-            android:id="@+id/listItemsPullToRefresh"
-            style="@style/PullToRefresh"/>
+    <!-- <include layout="@layout/action_bar"/> -->
+
+    <include
+        android:id="@+id/courseNameLayout"
+        layout="@layout/course_or_group_name" />
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/background"
+            android:orientation="vertical" >
+
+            <include layout="@layout/list_item" />
+
+            <ExpandableListView
+                android:id="@+id/list_pulltorefresh"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>

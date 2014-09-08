@@ -18,7 +18,6 @@
  */
 package es.ugr.swad.swadroid.model;
 
-import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.utils.Utils;
 
 import org.ksoap2.serialization.PropertyInfo;
@@ -63,10 +62,6 @@ public class Test extends Model {
      * Feedback values
      */
     public static final List<String> FEEDBACK_VALUES = Arrays.asList(FEEDBACK_NONE, FEEDBACK_MIN, FEEDBACK_MEDIUM, FEEDBACK_HIGH, FEEDBACK_MAX);
-    /**
-     * Tests tag name for Logcat
-     */
-    private static final String TAG = Constants.APP_TAG + " TestsMake";
     /**
      * List of questions and related answers
      */

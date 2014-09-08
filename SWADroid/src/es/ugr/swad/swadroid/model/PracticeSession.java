@@ -5,6 +5,7 @@ import org.ksoap2.serialization.PropertyInfo;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Hashtable;
+import java.util.Locale;
 
 
 /**
@@ -77,7 +78,7 @@ public class PracticeSession extends Model {
      * @return the sessionStart
      */
     public String getSessionStart() {
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
 
         return format.format(sessionStart);
     }
@@ -86,7 +87,7 @@ public class PracticeSession extends Model {
      * @return the sessionEnd
      */
     public String getSessionEnd() {
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
 
         return format.format(sessionEnd);
     }

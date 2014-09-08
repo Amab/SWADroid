@@ -1,2 +1,15 @@
-/project.properties
-/SWADroid.iml
+project.properties
+SWADroid.iml
+gen/
+bin/
+default.properties
+.classpath
+.project
+.directory
+.settings/
+.DS_Store
+src/es/ugr/swad/Config.java
+gen/es/ugr/swad/BuildConfig.java
+gen/es/ugr/swad/R.java
+gen/com/google/zxing/client/android/R.java
+/javadoc.xml

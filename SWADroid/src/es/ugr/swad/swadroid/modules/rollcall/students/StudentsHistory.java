@@ -28,11 +28,12 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.User;
+import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.modules.rollcall.sessions.SessionsList;
 
@@ -71,8 +72,8 @@ public class StudentsHistory extends Module {
     	getSupportActionBar().setIcon(R.drawable.roll_call);        
 
         // Get selected course
-        String where = "id =" + String.valueOf(Constants.getSelectedCourseCode());
-        Course selectedCourse = (Course) dbHelper.getAllRows(Constants.DB_TABLE_COURSES, where, "fullName").get(0);
+        String where = "id =" + String.valueOf(Courses.getSelectedCourseCode());
+        Course selectedCourse = (Course) dbHelper.getAllRows(DataBaseHelper.DB_TABLE_COURSES, where, "fullName").get(0);
         String courseName = selectedCourse.getFullName();
 
         // Get selected groupName
@@ -86,7 +87,7 @@ public class StudentsHistory extends Module {
     }
 
     private void showStudentsList() {
-        List<Long> idList = dbHelper.getUsersCourse(Constants.getSelectedCourseCode());
+        List<Long> idList = dbHelper.getUsersCourse(Courses.getSelectedCourseCode());
 
         if (idList.size() > 0) {
             studentsList = new ArrayList<StudentItemModel>();
