@@ -109,6 +109,7 @@
     <string name="notice_body_title">Aviso</string>
     <string name="publishingNotice">Publicando aviso…</string>
     <string name="noticePublished">Aviso publicado</string>
+    <string name="noContentNoticeMsg">Debe introducir el contenido del aviso</string>
     <string name="sendMsg">Enviar</string>
     <string name="selectRcvModuleLabel">Seleccionar Destinatarios</string>
     <string name="filterUsersListModuleLabel">Filtrar Destinatarios</string>
