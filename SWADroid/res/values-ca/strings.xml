@@ -96,12 +96,15 @@
     <string name="errorServiceUnavailableMsg">SWAD es troba en manteniment en aquests moments. Torneu-ho més tard</string>
     <string name="sendingMessageMsg">Enviant missatge…</string>
     <string name="messageSendedMsg">Missatge enviat</string>
+    <string name="noReceiversMsg">Ha d\'indicar com a mínim un destinatari</string>
+    <string name="noSubjectMessageMsg">Heu d\'introduir l\'assumpte del missatge</string>
     <string name="message_receivers_title">Destinataris (separats per comes)</string>
     <string name="message_subject_title">Assumpte</string>
     <string name="message_body_title">Missatge</string>
     <string name="notice_body_title">Avís</string>
     <string name="publishingNotice">Publicant avís…</string>
     <string name="noticePublished">Avís publicat</string>
+    <string name="noContentNoticeMsg">Heu d\'introduir el contingut de l\'avís</string>
     <string name="sendMsg">Enviar</string>
     <string name="selectRcvModuleLabel">Seleccionar Destinataris</string>
     <string name="filterUsersListModuleLabel">Filtrar Destinataris</string>

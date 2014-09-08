@@ -70,6 +70,18 @@ public class Messages extends Module {
      * Message's body
      */
     private String body;
+    /**
+     * Receivers EditText
+     */
+    EditText rcvEditText;
+    /**
+     * Subject EditText
+     */
+    EditText subjEditText;
+    /**
+     * Body EditText
+     */
+    EditText bodyEditText;
 
  
     /* (non-Javadoc)
@@ -83,28 +95,26 @@ public class Messages extends Module {
         setContentView(R.layout.messages_screen);
         setTitle(R.string.messagesModuleLabel);
         getSupportActionBar().setIcon(R.drawable.msg);
-        
-        
+		
+        rcvEditText = (EditText) findViewById(R.id.message_receivers_text);
+        subjEditText = (EditText) findViewById(R.id.message_subject_text);
+        bodyEditText = (EditText) findViewById(R.id.message_body_text);       
        
         if (savedInstanceState != null) 
             writeData();
 
-        setMETHOD_NAME("sendMessage");
-        
+        setMETHOD_NAME("sendMessage");        
     }
     
     @Override
 	protected void onStart() {
 		super.onStart();
-		
-        EditText rcv = (EditText) findViewById(R.id.message_receivers_text);
-        EditText subj = (EditText) findViewById(R.id.message_subject_text);
 
         
         if (eventCode != 0) {
         	
-            subj.setText("Re: " + getIntent().getStringExtra("summary"));
-            rcv.setVisibility(View.GONE);
+            subjEditText.setText("Re: " + getIntent().getStringExtra("summary"));
+            rcvEditText.setVisibility(View.GONE);
         }
 	}
 
@@ -112,29 +122,18 @@ public class Messages extends Module {
      * Reads user input
      */
     private void readData() {
-        EditText rcv = (EditText) findViewById(R.id.message_receivers_text);
-        receivers = rcv.getText().toString();
-
-        EditText subj = (EditText) findViewById(R.id.message_subject_text);
-        subject = subj.getText().toString();
-
-        EditText bd = (EditText) findViewById(R.id.message_body_text);
-        body = bd.getText().toString();
-        
+        receivers = rcvEditText.getText().toString();
+        subject = subjEditText.getText().toString();
+        body = bodyEditText.getText().toString();        
     }
 
     /**
      * Writes user input
      */
     private void writeData() {
-        EditText rcv = (EditText) findViewById(R.id.message_receivers_text);
-        rcv.setText(receivers);
-
-        EditText subj = (EditText) findViewById(R.id.message_subject_text);
-        subj.setText(subject);
-
-        EditText bd = (EditText) findViewById(R.id.message_body_text);
-        bd.setText(body);
+        rcvEditText.setText(receivers);
+        subjEditText.setText(subject);
+        bodyEditText.setText(body);
     }
 
     /**
@@ -282,31 +281,27 @@ public class Messages extends Module {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
-	        case R.id.action_addUser:
-	        	
+	        case R.id.action_addUser:	        	
 	        	Intent callUsersList = new Intent (getBaseContext(), UsersList.class);
 				startActivityForResult(callUsersList, 0);
 	            
 	            return true;
 	            
 	        case R.id.action_sendMsg:
-	        	
-            	/*if(isDebuggable) {
-	            Log.d(TAG, "notificationCode = " + Long.toString(notificationCode));
-			}*/
-
-            try {
-                /*if(isDebuggable) {
-                    Log.i(TAG, "selectedCourseCode = " + Long.toString(courseCode));
-				}*/
-
-                runConnection();
-            } catch (Exception e) {
-                String errorMsg = getString(R.string.errorServerResponseMsg);
-                error(TAG, errorMsg, e, true);
-            }
+	            try {	
+	            	if(rcvEditText.getText().length() == 0) {
+	            		Toast.makeText(this, R.string.noReceiversMsg, Toast.LENGTH_LONG).show();
+	            	} else if(subjEditText.getText().length() == 0) {
+	            		Toast.makeText(this, R.string.noSubjectMessageMsg, Toast.LENGTH_LONG).show();
+	            	} else {
+	                    runConnection();            		
+	            	}
+	            } catch (Exception e) {
+	                String errorMsg = getString(R.string.errorServerResponseMsg);
+	                error(TAG, errorMsg, e, true);
+	            }
             
-            return true;
+	            return true;
             
 	        default:
 	            return super.onOptionsItemSelected(item);
