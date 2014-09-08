@@ -101,6 +101,8 @@
         Por favor, inténtelo más tarde</string>
     <string name="sendingMessageMsg">Enviando mensaje…</string>
     <string name="messageSendedMsg">Mensaje enviado</string>
+    <string name="noReceiversMsg">Debe indicar al menos un destinatario</string>
+    <string name="noSubjectMessageMsg">Debe introducir el asunto del mensaje</string>
     <string name="message_receivers_title">Destinatarios (separados por comas)</string>
     <string name="message_subject_title">Asunto</string>
     <string name="message_body_title">Mensaje</string>
