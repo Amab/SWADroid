@@ -54,46 +54,29 @@ public class Notices extends Module {
      * Notice's body
      */
     private String body;
+    /**
+     * Notice's Dialog
+     */
     private Dialog noticeDialog;
+    /**
+     * Notice's EditText
+     */
+    private EditText bodyEditText;
 
     /**
      * Selected course code
      */
     private long selectedCourseCode = 0;
-
-    /*private final OnClickListener positiveClickListener = new OnClickListener() {
-		@Override
-        public void onClick(DialogInterface dialog, int which) {
-            if (isDebuggable) {
-                Log.i(TAG, "on click positive before send request to server");
-            }
-
-            try {
-                /*if(isDebuggable) {
-                    Log.i(TAG, "selectedCourseCode = " + Long.toString(courseCode));
-				}*/
-
-            /*    runConnection();
-            } catch (Exception e) {
-                String errorMsg = getString(R.string.errorServerResponseMsg);
-                error(TAG, errorMsg, e, true);
-            }
-        }
-    };*/
     
     private final View.OnClickListener positiveClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-        	if (isDebuggable) {
-                Log.i(TAG, "on click positive before send request to server");
-            }
-
             try {
-                /*if(isDebuggable) {
-                    Log.i(TAG, "selectedCourseCode = " + Long.toString(courseCode));
-				}*/
-
-                runConnection();
+            	if(bodyEditText.getText().length() == 0) {
+            		Toast.makeText(getApplicationContext(), R.string.noContentNoticeMsg, Toast.LENGTH_LONG).show();
+            	} else {
+                    runConnection();
+            	}
             } catch (Exception e) {
                 String errorMsg = getString(R.string.errorServerResponseMsg);
                 error(TAG, errorMsg, e, true);
@@ -136,8 +119,10 @@ public class Notices extends Module {
         		negativeClickListener,
         		cancelClickListener);
         
-        noticeDialog.setOnShowListener(showListener);
+        noticeDialog.setOnShowListener(showListener);        
         noticeDialog.show();
+        
+        bodyEditText = (EditText) noticeDialog.findViewById(R.id.notice_body_text);
     }
 
     @Override
@@ -179,13 +164,11 @@ public class Notices extends Module {
     }
 
     private void readData() {
-        EditText bd = (EditText) noticeDialog.findViewById(R.id.notice_body_text);
-        body = bd.getText().toString();
+        body = bodyEditText.getText().toString();
     }
 
     private void writeData() {
-        EditText bd = (EditText) noticeDialog.findViewById(R.id.notice_body_text);
-        bd.setText(body);
+        bodyEditText.setText(body);
     }
 
     @Override

@@ -104,6 +104,7 @@
     <string name="notice_body_title">Avís</string>
     <string name="publishingNotice">Publicant avís…</string>
     <string name="noticePublished">Avís publicat</string>
+    <string name="noContentNoticeMsg">Heu d\'introduir el contingut de l\'avís</string>
     <string name="sendMsg">Enviar</string>
     <string name="selectRcvModuleLabel">Seleccionar Destinataris</string>
     <string name="filterUsersListModuleLabel">Filtrar Destinataris</string>
