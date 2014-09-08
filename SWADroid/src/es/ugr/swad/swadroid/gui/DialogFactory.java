@@ -8,13 +8,18 @@ import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.content.res.Resources;
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
+
 import com.bugsense.trace.BugSenseHandler;
+
 import es.ugr.swad.swadroid.R;
+
 import org.apache.commons.io.IOUtils;
+
 import java.io.InputStream;
 /**
  * Class for create dialogs.
@@ -260,7 +265,7 @@ public class DialogFactory {
     	}
 
         if (ex != null) {
-            //Log.e(tag, ex.getMessage());
+            Log.e(tag, ex.getMessage(), ex);
 
             // Send exception details to Bugsense
             if (!isDebuggable && sendException) {

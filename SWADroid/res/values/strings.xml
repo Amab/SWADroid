@@ -98,12 +98,15 @@
     <string name="errorServiceUnavailableMsg">SWAD is under maintenance right now. Please try again later</string>
     <string name="sendingMessageMsg">Sending message…</string>
     <string name="messageSendedMsg">Message sended successfully</string>
+    <string name="noReceiversMsg">You must specify at least one recipient</string>
+    <string name="noSubjectMessageMsg">You must enter the subject of the message</string>
     <string name="message_receivers_title">Receivers (separated by comma)</string>
     <string name="message_subject_title">Subject</string>
     <string name="message_body_title">Message</string>
     <string name="notice_body_title">Notice</string>
     <string name="publishingNotice">Publishing notice…</string>
     <string name="noticePublished">Notice published</string>
+    <string name="noContentNoticeMsg">You must enter the contents of the notice</string>
     <string name="sendMsg">Send</string>
     <string name="selectRcvModuleLabel">Select Receivers</string>
     <string name="filterUsersListModuleLabel">Filter Receivers</string>
