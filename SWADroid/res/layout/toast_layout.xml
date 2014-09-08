@@ -1,34 +1,33 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/toast_layout_root"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-              android:background="#DAAA"
-              android:orientation="vertical"
-              android:padding="10dip">
+    android:id="@+id/toast_layout_root"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:padding="10dip" >
 
     <LinearLayout
-            android:layout_width="fill_parent"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:padding="10dip" >
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal"
-            android:padding="10dip">
+            android:layout_marginRight="10dip" />
 
         <ImageView
-                android:id="@+id/image"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_marginRight="10dip"/>
-
-        <ImageView
-                android:id="@+id/icon"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"/>
+            android:id="@+id/icon"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent" />
     </LinearLayout>
 
     <TextView
-            android:id="@+id/text"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:textColor="#FFF"/>
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:textColor="#FFF" />
 
 </LinearLayout>

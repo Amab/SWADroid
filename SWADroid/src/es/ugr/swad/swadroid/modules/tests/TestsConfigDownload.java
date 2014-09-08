@@ -24,7 +24,10 @@ import android.util.Log;
 import android.widget.Toast;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.model.Test;
+import es.ugr.swad.swadroid.modules.Courses;
+import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
@@ -70,7 +73,7 @@ public class TestsConfigDownload extends Module {
         try {
 
             if (isDebuggable) {
-                Log.d(TAG, "selectedCourseCode = " + Long.toString(Constants.getSelectedCourseCode()));
+                Log.d(TAG, "selectedCourseCode = " + Long.toString(Courses.getSelectedCourseCode()));
             }
 
             runConnection();
@@ -88,13 +91,13 @@ public class TestsConfigDownload extends Module {
     protected void requestService() throws Exception {
 
         //Calculates next timestamp to be requested
-        Long timestamp = Long.valueOf(dbHelper.getTimeOfLastTestUpdate(Constants.getSelectedCourseCode()));
+        Long timestamp = Long.valueOf(dbHelper.getTimeOfLastTestUpdate(Courses.getSelectedCourseCode()));
         timestamp++;
 
         //Creates webservice request, adds required params and sends request to webservice
         createRequest(SOAPClient.CLIENT_TYPE);
-        addParam("wsKey", Constants.getLoggedUser().getWsKey());
-        addParam("courseCode", (int) Constants.getSelectedCourseCode());
+        addParam("wsKey", Login.getLoggedUser().getWsKey());
+        addParam("courseCode", (int) Courses.getSelectedCourseCode());
         sendRequest(Test.class, true);
 
         if (result != null) {
@@ -119,14 +122,17 @@ public class TestsConfigDownload extends Module {
                 Integer defQuestions = Integer.valueOf(soap.getProperty("defQuestions").toString());
                 Integer maxQuestions = Integer.valueOf(soap.getProperty("maxQuestions").toString());
                 String feedback = soap.getProperty("feedback").toString();
-                Test tDB = (Test) dbHelper.getRow(Constants.DB_TABLE_TEST_CONFIG, "id",
-                        Long.toString(Constants.getSelectedCourseCode()));
+                Test tDB = (Test) dbHelper.getRow(DataBaseHelper.DB_TABLE_TEST_CONFIG, "id",
+                        Long.toString(Courses.getSelectedCourseCode()));
 
-                //If not exists a test configuration for this course, insert to database
-                if (tDB == null) {
-                    Test t = new Test(Constants.getSelectedCourseCode(), minQuestions, defQuestions, maxQuestions, feedback, System.currentTimeMillis() / 1000L);
-                    dbHelper.insertTestConfig(t);
+                //If exists a test configuration for this course, remove from database
+                if (tDB != null) {
+                	dbHelper.removeRow(DataBaseHelper.DB_TABLE_TEST_CONFIG, Courses.getSelectedCourseCode());
+                	Log.i(TAG, "Removed old test configuration for course " + Courses.getSelectedCourseFullName());
                 }
+                
+                Test t = new Test(Courses.getSelectedCourseCode(), minQuestions, defQuestions, maxQuestions, feedback, System.currentTimeMillis() / 1000L);
+                dbHelper.insertTestConfig(t);
 
                 if (isDebuggable) {
                     Log.d(TAG, "minQuestions=" + minQuestions);
@@ -161,7 +167,7 @@ public class TestsConfigDownload extends Module {
      */
     @Override
     protected void postConnect() {
-        if (numQuestions == 0) {
+        if (isPluggable && (numQuestions == 0)) {
             Toast.makeText(this, R.string.noQuestionsAvailableTestsDownloadMsg, Toast.LENGTH_LONG).show();
         } else if (!isPluggable) {
             Toast.makeText(this, R.string.noQuestionsPluggableTestsDownloadMsg, Toast.LENGTH_LONG).show();

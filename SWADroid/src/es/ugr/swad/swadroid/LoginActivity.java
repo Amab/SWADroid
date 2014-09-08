@@ -15,8 +15,6 @@
 
 package es.ugr.swad.swadroid;
 
-import java.security.NoSuchAlgorithmException;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -44,6 +42,8 @@ import es.ugr.swad.swadroid.modules.RecoverPassword;
 import es.ugr.swad.swadroid.utils.Crypto;
 import es.ugr.swad.swadroid.utils.Utils;
 
+import java.security.NoSuchAlgorithmException;
+
 
 /**
  * 
@@ -52,7 +52,7 @@ import es.ugr.swad.swadroid.utils.Utils;
  */
 public class LoginActivity extends ActionBarActivity implements OnClickListener {
 
-    public static final String TAG = "LoginActivity";
+    public static final String TAG = Constants.APP_TAG + " LoginActivity";
 
     private boolean mLoginError = false;
     // UI references for the login form.
@@ -159,7 +159,7 @@ public class LoginActivity extends ActionBarActivity implements OnClickListener 
             mPasswordView.setError(getString(R.string.error_field_required));
             focusView = mPasswordView;
             cancel = true;
-        } else if ((passwordValue.length() < 8)) {
+        } else if ((passwordValue.length() < 6)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
@@ -207,7 +207,7 @@ public class LoginActivity extends ActionBarActivity implements OnClickListener 
             switch (requestCode) {
                 case Constants.LOGIN_REQUEST_CODE:
                     showProgress(false);
-                    Constants.setLogged(true);
+                    Login.setLogged(true);
                     setResult(RESULT_OK);
                     mFromPreferece = false;
                     mLoginError = false;

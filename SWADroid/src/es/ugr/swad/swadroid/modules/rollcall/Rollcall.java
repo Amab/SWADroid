@@ -42,11 +42,13 @@ import com.google.zxing.client.android.Intents;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.ImageExpandableListAdapter;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.model.PracticeSession;
 import es.ugr.swad.swadroid.model.User;
+import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.GroupTypes;
 import es.ugr.swad.swadroid.modules.Groups;
 import es.ugr.swad.swadroid.modules.rollcall.sessions.NewPracticeSession;
@@ -109,7 +111,7 @@ public class Rollcall extends MenuExpandableListActivity {
 
     	getSupportActionBar().setIcon(R.drawable.roll_call);
 
-        courseCode = Constants.getSelectedCourseCode();
+        courseCode = Courses.getSelectedCourseCode();
 
         mExpandableListView = (ExpandableListView) findViewById(android.R.id.list);
         mExpandableListListener = new OnChildClickListener() {
@@ -175,7 +177,7 @@ public class Rollcall extends MenuExpandableListActivity {
 
         mExpandableListView.setOnChildClickListener(mExpandableListListener);
 
-        getSupportActionBar().setSubtitle(Constants.getSelectedCourseShortName());
+        getSupportActionBar().setSubtitle(Courses.getSelectedCourseShortName());
     	getSupportActionBar().setIcon(R.drawable.roll_call);
     }
 
@@ -183,8 +185,8 @@ public class Rollcall extends MenuExpandableListActivity {
     protected void onStart() {
         super.onStart();
         
-        List<Model> groupTypes = dbHelper.getAllRows(Constants.DB_TABLE_GROUP_TYPES, "courseCode = " + courseCode, "groupTypeName");
-        Cursor c = dbHelper.getPracticeGroups(Constants.getSelectedCourseCode());
+        List<Model> groupTypes = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_GROUP_TYPES, "courseCode = " + courseCode, "groupTypeName");
+        Cursor c = dbHelper.getPracticeGroups(Courses.getSelectedCourseCode());
         startManagingCursor(c);
 
         if (!groupTypes.isEmpty() && c.getCount() > 0) {
@@ -219,7 +221,7 @@ public class Rollcall extends MenuExpandableListActivity {
     }
 
     private void showStudentsList() {
-        List<Long> idList = dbHelper.getUsersCourse(Constants.getSelectedCourseCode());
+        List<Long> idList = dbHelper.getUsersCourse(Courses.getSelectedCourseCode());
         if (!idList.isEmpty()) {
             studentsList = new ArrayList<StudentItemModel>();
 
@@ -268,7 +270,7 @@ public class Rollcall extends MenuExpandableListActivity {
     }
 
     private void storeRollcallData() {
-        long selectedCourse = Constants.getSelectedCourseCode();
+        long selectedCourse = Courses.getSelectedCourseCode();
         Cursor selectedGroup = (Cursor) practiceGroup.getSelectedItem();
         long groupId = selectedGroup.getLong(1);
         PracticeSession ps;
@@ -324,7 +326,7 @@ public class Rollcall extends MenuExpandableListActivity {
         switch (requestCode) {
             case Constants.GROUPTYPES_REQUEST_CODE:
                 groupTypesRequested = true;
-                List<Model> groupTypes = dbHelper.getAllRows(Constants.DB_TABLE_GROUP_TYPES, "courseCode = " + courseCode, "groupTypeName");
+                List<Model> groupTypes = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_GROUP_TYPES, "courseCode = " + courseCode, "groupTypeName");
                 if (!groupTypes.isEmpty()) {
                     // If there are not group types, either groups. Therefore, there is no need to request groups
                     Intent activity = new Intent(getApplicationContext(), Groups.class);
@@ -336,7 +338,7 @@ public class Rollcall extends MenuExpandableListActivity {
                 break;
             case Constants.GROUPS_REQUEST_CODE:
                 // Check if course has practice groups
-                Cursor c = dbHelper.getPracticeGroups(Constants.getSelectedCourseCode());
+                Cursor c = dbHelper.getPracticeGroups(Courses.getSelectedCourseCode());
                 startManagingCursor(c);
 
                 if (c.getCount() > 0 || refreshRequested) {
@@ -364,7 +366,7 @@ public class Rollcall extends MenuExpandableListActivity {
                             if (u != null) {
                                 studentsList.add(new StudentItemModel(u));
                                 // Check if the specified user is enrolled in the selected course
-                                enrolledStudents.add(dbHelper.isUserEnrolledCourse(id, Constants.getSelectedCourseCode()));
+                                enrolledStudents.add(dbHelper.isUserEnrolledCourse(id, Courses.getSelectedCourseCode()));
                             }
                         }
                         // Mark as attending the students enrolled in selected course

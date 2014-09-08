@@ -1,36 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"              
-              android:padding="3dip"
-              android:background="@color/background">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="3dip" >
 
-     <EditText
-             android:id="@+id/notice_body_text"
-             android:hint="@string/notice_body_title"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:textColor="@color/foreground1">
-     </EditText>
-<!-- 
-     <LinearLayout
-                   android:layout_width="match_parent"
-                   android:layout_height="wrap_content"
-                   android:gravity="center_horizontal">
+    <EditText
+        android:id="@+id/notice_body_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/notice_body_title" >
+    </EditText>
 
-         <Button
-                 android:id="@+id/notice_button_accept"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:text="@string/sendMsg">
-         </Button>
-         <Button
-                 android:id="@+id/notice_button_cancel"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:text="@string/cancelMsg">
-         </Button>
-     </LinearLayout>
--->
 </LinearLayout>

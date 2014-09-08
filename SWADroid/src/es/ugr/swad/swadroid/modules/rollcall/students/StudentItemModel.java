@@ -25,7 +25,9 @@ import es.ugr.swad.swadroid.model.User;
  * Student item model.
  *
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
+ * @author Jose Antonio Guerrero Aviles <cany20@gmail.com>
  */
+
 public class StudentItemModel implements Comparable<StudentItemModel> {
     private final User student;
     private boolean selected;
@@ -71,4 +73,8 @@ public class StudentItemModel implements Comparable<StudentItemModel> {
             return this.student.getUserSurname1().compareToIgnoreCase(item.student.getUserSurname1());
         }
     }
+
+	public String getUserNickname() {
+		return student.getUserNickname();
+	}
 }

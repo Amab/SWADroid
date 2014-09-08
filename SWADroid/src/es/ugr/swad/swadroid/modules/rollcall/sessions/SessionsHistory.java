@@ -29,11 +29,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.PracticeSession;
+import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.modules.rollcall.students.StudentsList;
 
@@ -70,8 +71,8 @@ public class SessionsHistory extends Module {
         text.setText(R.string.rollcallHistoryModuleLabel);
 
         // Get selected course
-        String where = "id =" + String.valueOf(Constants.getSelectedCourseCode());
-        Course selectedCourse = (Course) dbHelper.getAllRows(Constants.DB_TABLE_COURSES, where, "fullName").get(0);
+        String where = "id =" + String.valueOf(Courses.getSelectedCourseCode());
+        Course selectedCourse = (Course) dbHelper.getAllRows(DataBaseHelper.DB_TABLE_COURSES, where, "fullName").get(0);
         String courseName = selectedCourse.getFullName();
 
         // Get selected groupCode, groupName
@@ -82,7 +83,7 @@ public class SessionsHistory extends Module {
         TextView title = (TextView) this.findViewById(R.id.listText);
         title.setText(courseName + " - " + groupName);
 
-        sessions = dbHelper.getPracticeSessions(Constants.getSelectedCourseCode(), groupCode);
+        sessions = dbHelper.getPracticeSessions(Courses.getSelectedCourseCode(), groupCode);
         int numSessions = sessions.size();
         if (numSessions > 0) {
             String[] sessionsStarts = new String[numSessions];

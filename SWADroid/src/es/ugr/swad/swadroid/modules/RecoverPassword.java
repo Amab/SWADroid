@@ -20,8 +20,6 @@
 package es.ugr.swad.swadroid.modules;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;

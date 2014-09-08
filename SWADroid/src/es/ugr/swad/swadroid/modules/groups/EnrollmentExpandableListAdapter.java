@@ -19,8 +19,8 @@
 package es.ugr.swad.swadroid.modules.groups;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.graphics.Typeface;
+import android.support.v4.util.LongSparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -40,8 +40,6 @@ import es.ugr.swad.swadroid.model.Model;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Adapter to populate with data  an expandable list.
@@ -53,9 +51,9 @@ import java.util.Map;
 
 public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 
-    private HashMap<Long, ArrayList<Group>> children = null;
+    private LongSparseArray<ArrayList<Group>> children = null;
     private ArrayList<Model> groups = null;
-    private final HashMap<Long, boolean[]> realMembership = new HashMap<Long, boolean[]>();
+    private final LongSparseArray<boolean[]> realMembership = new LongSparseArray<boolean[]>();
 
     private int role = -1;
     private int layoutGroup = 0;
@@ -74,13 +72,12 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
         TextView vacantsText;
         TextView nStudentText;
         TextView maxStudentText;
-        ColorStateList oldColor;
     }
 
     private final LayoutInflater mInflater;
     private final Context context;
 
-    public EnrollmentExpandableListAdapter(Context context, ArrayList<Model> groups, HashMap<Long, ArrayList<Group>> children, int layoutGroup, int layoutChild, int currentRole) {
+    public EnrollmentExpandableListAdapter(Context context, ArrayList<Model> groups, LongSparseArray<ArrayList<Group>> children, int layoutGroup, int layoutChild, int currentRole) {
         super();
         this.context = context;
         this.groups = groups;
@@ -90,11 +87,12 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
         this.role = currentRole;
 
         //Initialize real inscription
-        for (Map.Entry<Long, ArrayList<Group>> entry : this.children.entrySet()) {
-            Long groupTypeCode = entry.getKey();
-            ArrayList<Group> groupsChildren = entry.getValue();
+        for (int i = 0; i < children.size(); i++) {
+            Long groupTypeCode = children.keyAt(i);
+            ArrayList<Group> groupsChildren = children.get(groupTypeCode);
             realMembership.put(groupTypeCode, new boolean[groupsChildren.size()]);
         }
+        
         setRealInscription();
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -126,7 +124,6 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
             holder.vacantsText = (TextView) convertView.findViewById(R.id.vacantsText);
             holder.nStudentText = (TextView) convertView.findViewById(R.id.nStudentText);
             holder.maxStudentText = (TextView) convertView.findViewById(R.id.maxStudentText);
-            holder.oldColor = holder.vacantsText.getTextColors();
             convertView.setTag(holder);
         } else {
             holder = (ChildHolder) convertView.getTag();
@@ -345,7 +342,6 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
                 for (int i = 0; i < children.size(); ++i) {
                     Group g = children.get(i);
                     if (i != childPosition) g.setMember(0);
-
                 }
             }
 
@@ -355,24 +351,26 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
         return result;
     }
 
-    public void resetChildren(HashMap<Long, ArrayList<Group>> children) {
+    public void resetChildren(LongSparseArray<ArrayList<Group>> children) {
         this.children = children;
         setRealInscription();
     }
 
     public String getChosenGroupCodesAsString() {
         String groupCodes = "";
-        for (Map.Entry<Long, ArrayList<Group>> entry : this.children.entrySet()) {
-            ArrayList<Group> children = entry.getValue();
+
+        Long key;
+        for (int i = 0; i < children.size(); i++) {
+            key = children.keyAt(i);
+            ArrayList<Group> child = children.get(key);
             Group g;
-            for (Group aChildren : children) {
+            for (Group aChildren : child) {
                 g = aChildren;
                 if (g.getMember() == 1) {
                     long code = g.getId();
-                    if (groupCodes.compareTo("") != 0)
-                        groupCodes = groupCodes.concat("," + String.valueOf(code));
-                    else
-                        groupCodes = groupCodes.concat(String.valueOf(code));
+                    if (groupCodes.compareTo("") != 0) groupCodes =
+                            groupCodes.concat("," + String.valueOf(code));
+                    else groupCodes = groupCodes.concat(String.valueOf(code));
                 }
             }
         }
@@ -381,10 +379,12 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 
     public ArrayList<Long> getChosenGroupCodes() {
         ArrayList<Long> groupCodes = new ArrayList<Long>();
-        for (Map.Entry<Long, ArrayList<Group>> entry : this.children.entrySet()) {
-            ArrayList<Group> children = entry.getValue();
+        Long key;
+        for (int i = 0; i < children.size(); i++) {
+            key = children.keyAt(i);
+            ArrayList<Group> child = children.get(key);
             Group g;
-            for (Group aChildren : children) {
+            for (Group aChildren : child) {
                 g = aChildren;
                 if (g.getMember() == 1) {
                     groupCodes.add(g.getId());
@@ -395,15 +395,14 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
     }
 
     private void setRealInscription() {
-        for (Map.Entry<Long, ArrayList<Group>> entry : this.children.entrySet()) {
-            Long groupTypeCode = entry.getKey();
-            ArrayList<Group> children = entry.getValue();
+        
+        for (int i = 0; i < children.size(); i++) {
+            Long groupTypeCode = children.keyAt(i);
+            ArrayList<Group> childs = children.get(groupTypeCode);
             Group g;
-            for (int i = 0; i < children.size(); ++i) {
-                g = children.get(i);
-                realMembership.get(groupTypeCode)[i] = g.getMember() == 1;
-
-
+            for (int k = 0; k < childs.size(); ++k) {
+                g = childs.get(k);
+                realMembership.get(groupTypeCode)[k] = g.getMember() == 1;
             }
         }
     }

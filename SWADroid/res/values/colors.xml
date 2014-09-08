@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <!--
  Copyright (C) 2008 ZXing authors
 
@@ -14,12 +14,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-
 <resources>
 
     <color name="red">#ff0000</color>
     <color name="green">#339900</color>
-    
     <color name="title_text">#ffffffff</color>
     <color name="foreground1">#000000</color>
     <color name="foreground2">#848484</color>
@@ -27,7 +25,6 @@
     <color name="title_background">#000000</color>
     <color name="notifications_background_highlighted">#CCFFFF</color>
     <color name="result_view">#b0000000</color>
-    <color name="title_separator">#ffffff</color>
     <color name="transparent">#00000000</color>
     <color name="result_minor_text">#ffc0c0c0</color>
     <color name="result_text">#ffffffff</color>
@@ -38,17 +35,12 @@
     <color name="viewfinder_laser">#ffff0000</color>
     <color name="viewfinder_mask">#60000000</color>
     <color name="possible_result_points">#c0ffff00</color>
-    <color name="pale_yellow">#f2eca1</color>
-    <color name="dark_grey">#383838</color>
     <color name="sgilight_gray">#C1C1C1</color>
     <color name="sgilight_gray_32">#515151</color>
-    <color name="gray_cloud">#B6B6B4</color>
     <color name="gray_goose">#D1D0CE</color>
-    <color name="platinum">#E5E4E2</color>
     <color name="lightskyblue">#DDECF1</color>
     <color name="sgi_salmon">#C67171</color>
     <color name="white">#ffffff</color>
     <color name="blue">#0000ff</color>
-    
 
 </resources>

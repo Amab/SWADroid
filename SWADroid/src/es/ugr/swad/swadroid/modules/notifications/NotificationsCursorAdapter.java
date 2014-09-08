@@ -36,12 +36,11 @@ import es.ugr.swad.swadroid.utils.Utils;
 import java.util.Date;
 
 /**
- * Custom adapter for display notifications
+ * Custom CursorAdapter for display notifications
  *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class NotificationsCursorAdapter extends CursorAdapter {
-    private Context ctx;
     private boolean[] contentVisible;
     private String DBKey;
     private Crypto crypto;
@@ -55,7 +54,6 @@ public class NotificationsCursorAdapter extends CursorAdapter {
     public NotificationsCursorAdapter(Context context, Cursor c) {
         super(context, c, true);
 
-        ctx = context;
         int numRows = c.getCount();
 
         contentVisible = new boolean[numRows];
@@ -76,7 +74,6 @@ public class NotificationsCursorAdapter extends CursorAdapter {
 
         DBKey = key;
         crypto = new Crypto(DBKey);
-        ctx = context;
         int numRows = c.getCount();
 
         contentVisible = new boolean[numRows];

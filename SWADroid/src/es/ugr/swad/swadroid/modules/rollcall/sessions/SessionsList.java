@@ -27,11 +27,11 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.model.PracticeSession;
+import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.Module;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -101,7 +101,7 @@ public class SessionsList extends Module {
 
     private void initialize() {
         List<SessionItemModel> sessionList;
-        long courseCode = Constants.getSelectedCourseCode();
+        long courseCode = Courses.getSelectedCourseCode();
         Intent intent = getIntent();
         long studentId = intent.getLongExtra("studentId", (long) 0);
         boolean existSessions = false;

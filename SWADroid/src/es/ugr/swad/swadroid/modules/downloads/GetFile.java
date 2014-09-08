@@ -21,10 +21,10 @@ package es.ugr.swad.swadroid.modules.downloads;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Group;
+import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
@@ -35,12 +35,10 @@ import java.util.Vector;
 
 /**
  * Module to get information of a file located in SWAD
- * It makes use of the web service getFile (see http://swad.ugr.es/ws/#getFile)
- * It needs as extra data:
- * - (long) fileCode It indicates the file which information is requested
- * It returns as extra data:
- * - (string) link : temporal URL to download the file
- * - (
+ * It makes use of the web service getFile (see {@linktourl http://swad.ugr.es/ws/#getFile})
+ * 
+ * @param fileCode It indicates the file which information is requested
+ * @return link temporal URL to download the file
  *
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */
@@ -96,7 +94,7 @@ public class GetFile extends Module {
     protected void requestService() throws Exception {
     	
     	createRequest(SOAPClient.CLIENT_TYPE);
-        addParam("wsKey", Constants.getLoggedUser().getWsKey());
+        addParam("wsKey", Login.getLoggedUser().getWsKey());
         addParam("fileCode", (int) fileCode);
         sendRequest(Group.class, false);
         

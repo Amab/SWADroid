@@ -31,9 +31,9 @@ import android.widget.TextView;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.gui.ImageFactory;
 import es.ugr.swad.swadroid.gui.MenuActivity;
-import es.ugr.swad.swadroid.modules.Messages;
-import es.ugr.swad.swadroid.utils.DownloadImageTask;
+import es.ugr.swad.swadroid.modules.messages.Messages;
 import es.ugr.swad.swadroid.utils.Utils;
 
 /**
@@ -45,9 +45,10 @@ public class NotificationItem extends MenuActivity {
     /**
      * NotificationsItem tag name for Logcat
      */
-    private static final String TAG = Constants.APP_TAG + " Notificationsitem";
+    private static final String TAG = Constants.APP_TAG + " NotificationsItem";
     private Long notifCode;
     private Long eventCode;
+    private String notificationType;
     private String sender;
     private String userPhoto;
     private String course;
@@ -57,13 +58,13 @@ public class NotificationItem extends MenuActivity {
     private String time;
     private boolean seenLocal;
 
-    @Override
+	@Override
     protected void onCreate(Bundle savedInstanceState) {
         TextView senderTextView, courseTextView, summaryTextView, dateTextView, timeTextView;
         ImageView userPhotoView;
         WebView webview;
         Intent activity;
-        String type = this.getIntent().getStringExtra("notificationType");
+        //String type = this.getIntent().getStringExtra("notificationType");
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.single_notification_view);
@@ -80,6 +81,7 @@ public class NotificationItem extends MenuActivity {
 
         notifCode = Long.valueOf(this.getIntent().getStringExtra("notifCode")); 
         eventCode = Long.valueOf(this.getIntent().getStringExtra("eventCode"));
+        notificationType = this.getIntent().getStringExtra("notificationType");
         sender = this.getIntent().getStringExtra("sender");
         userPhoto = this.getIntent().getStringExtra("userPhoto");
         course = this.getIntent().getStringExtra("course");
@@ -100,7 +102,8 @@ public class NotificationItem extends MenuActivity {
                 && (userPhoto != null) && !userPhoto.equals("")
                 && !userPhoto.equals(Constants.NULL_VALUE)) {
             //userPhotoView.setImageURI(Uri.parse(userPhoto));
-            new DownloadImageTask(userPhotoView).execute(userPhoto);
+            //new DownloadImageTask(userPhotoView).execute(userPhoto);			
+			ImageFactory.displayImage(getApplicationContext(), userPhoto, userPhotoView, true, false);
         } else {
             Log.d("NotificationItem", "No connection or no photo " + userPhoto);
         }
@@ -138,7 +141,7 @@ public class NotificationItem extends MenuActivity {
 		
 		if(requestCode == Constants.NOTIFMARKALLASREAD_REQUEST_CODE) {
 			if (resultCode == Activity.RESULT_OK) {
-				Log.i(TAG, "Notification " + notifCode + " marked as read in SWAD");
+				Log.i(TAG, "Notification " + notifCode + " marked as readed in SWAD");
 			} else {
 				Log.e(TAG, "Error marking notification " + notifCode + " as read in SWAD");
 			}
@@ -147,7 +150,12 @@ public class NotificationItem extends MenuActivity {
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-	    getMenuInflater().inflate(R.menu.notification_single_activity_actions, menu);
+	    getMenuInflater().inflate(R.menu.notification_single_activity_actions, menu);	 
+	    
+	    if (!notificationType.equals(getString(R.string.message))) {
+	    	menu.removeItem(R.id.action_reply);
+	    }
+	    
 	    return super.onCreateOptionsMenu(menu);
 	}
 	

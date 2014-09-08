@@ -192,8 +192,8 @@ public class Group extends Model {
 
     @Override
     public String toString() {
-        return "Group [name=" + groupName + ", getId()=" + getId() + ", getGroupTypeCode()=" + getGroupTypeCode() + ", getMaxStudents()=" + getMaxStudents() + ", getCurrentStudents()="
-                + getCurrentStudents() + ", getOpen()=" + getOpen() + ", getDocumentsArea()=" + getDocumentsArea() + ", getMember()= " + getMember();
+        return "Group [name=" + groupName + ", getId()=" + getId() + ", getGroupTypeCode()=" + groupTypeCode + ", getMaxStudents()=" + maxStudents + ", getCurrentStudents()="
+                + students + ", getOpen()=" + open + ", getDocumentsArea()=" + fileZones + ", getMember()= " + member;
     }
 
     /**

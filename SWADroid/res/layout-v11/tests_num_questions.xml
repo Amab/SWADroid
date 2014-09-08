@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/testNumQuestionsContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/testNumQuestionsText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dip"
+            android:layout_marginTop="20dip"
+            android:gravity="center"
+            android:text="@string/testNumQuestionsMsg"
+            android:textColor="@color/foreground1"
+            android:textSize="20sp" />
+
+        <NumberPicker
+            android:id="@+id/testNumQuestionsNumberPicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/testNumQuestionsText"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            android:width="100dip" />
+    </RelativeLayout>
+
+</RelativeLayout>

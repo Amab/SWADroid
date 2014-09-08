@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
 
     <string name="app_name">SWADroid</string>
@@ -15,57 +15,39 @@
     <string name="generateQRModuleLabel">Generar codi QR</string>
     <string name="noticesModuleLabel">Publicar anunci</string>
     <string name="title_error_dialog">ERROR</string>
+    <string name="areYouSure">Està vostè segur?</string>
     <string name="close_dialog">Tancar</string>
     <string name="set_preferences">Configuració</string>
     <string name="user_preferences">Dades de l\'usuari</string>
-    <string name="userIDName_preferences">Usuari</string>
-    <string name="userIDSummary_preferences">DNI, Sobrenom o Email</string>
-    <string name="userIDTitle_preferences">Usuari</string>
     <string name="userPasswordName_preferences">Contrasenya</string>
     <string name="userPasswordSummary_preferences">Contrasenya</string>
     <string name="userPasswordTitle_preferences">Contrasenya</string>
-    <string name="saveMsg_preferences">Configuració guardada</string>
-    <string name="saveSummary_preferences">Guarda la configuració actual</string>
-    <string name="saveTitle_preferences">Desa la configuració</string>
     <string name="preferencesTitle_menu">Configuració</string>
     <string name="shareTitle_menu">Compartir SWADroid</string>
     <string name="rateTitle_menu">Qualificar</string>
     <string name="cleanDatabaseTitle_menu">Netejar base de dades</string>
     <string name="about_preferences">sobre</string>
     <string name="versionTitle_preferences">Versió de l\'aplicació</string>
-    <string name="author_preferences">Coordinador: Antonio Cañas Vargas
-        \nJuan Miguel Boyero Corral
-        \nHelena Rodríguez Gijón
-        \nAntonio Aguilera Malagón
-    </string>
     <string name="author_title_preferences">Autors</string>
-    <string name="loginTitle_menu">Connectar</string>
     <string name="loginProgressTitle">Identificació</string>
-    <string name="loginProgressDescription">Connectant&#8230;</string>
+    <string name="loginProgressDescription">Connectant…</string>
     <string name="coursesProgressTitle">Assignatures</string>
-    <string name="coursesProgressDescription">Obtenint assignatures&#8230;</string>
+    <string name="coursesProgressDescription">Obtenint assignatures…</string>
     <string name="notificationsProgressTitle">Notificacions</string>
-    <string name="notificationsProgressDescription">Obtenint noves notificacions&#8230;</string>
+    <string name="notificationsProgressDescription">Obtenint noves notificacions…</string>
     <string name="notificationsEmptyListMsg">No s\'ha descarregat cap notificació.\n\nPer descarregar les
          notificacions més recents llisqui aquest missatge cap avall.</string>
-    <string name="notificationsDownloadedMsg">Notificacions descarregades</string>
     <string name="testsDownloadProgressTitle">Tests</string>
     <string name="testsDownloadProgressDescription">Sincronitzant preguntes de test.\n\nDependiendo del nombre de
-        preguntes a sincronitzar, el processament de les dades pot trigar uns minuts.\n\nSi us plau, esperi&#8230;</string>
+        preguntes a sincronitzar, el processament de les dades pot trigar uns minuts.\n\nSi us plau, esperi…</string>
     <string name="errorMsgLaunchingActivity">S\'ha produït un error durant l\'execució de l\'operació</string>
-    <string name="errorMsgWorkaroundEmulator">Merda. Aquest error de l\'emulador d\'Android ha tornat a aparèixer.
-        Reintentant&#8230;</string>
     <string name="errorMsgNoConnection">No hi ha connexió</string>
-    <string name="errorCopyMsg_DB">Error copiant base de dades</string>
-    <string name="upgradeMsg_DB">Actualitzant base de dades&#8230;</string>
-    <string name="loginSuccessfulMsg">Connectat</string>
     <string name="examAnnouncement">Convocatòria d\'examen</string>
     <string name="marksFile">Qualificacions</string>
     <string name="notice">Avís</string>
     <string name="message">Missatge</string>
     <string name="forumPostCourse">Missatge en un fòrum</string>
     <string name="forumReply">Resposta a fòrum</string>
-    <string name="content">Contingut</string>
     <string name="messages">Missatges</string>
     <string name="evaluation">Avaluació</string>
     <string name="assignment">Activitat</string>
@@ -75,8 +57,6 @@
     <string name="enrollment">Inscripció</string>
     <string name="enrollmentRequest">Petició d\'inscripció</string>
     <string name="unknownNotification">Notificació desconeguda</string>
-    <string name="fromMsg">D\'</string>
-    <string name="dateMsg">Data</string>
     <string name="noSubjectMsg">Sense assumpte</string>
     <string name="noContentMsg">Sense contingut</string>
     <string name="yesMsg">Sí</string>
@@ -87,7 +67,6 @@
     <string name="cancelMsg">Cancel·lar</string>
     <string name="allMsg">Tots</string>
     <string name="selectCourseTitle">Seleccioneu assignatura</string>
-    <string name="noCourseSelectedMsg">Heu de seleccionar una assignatura per descarregar les preguntes de test</string>
     <string name="noQuestionsAvailableTestsDownloadMsg">No hi ha preguntes de test disponibles per a aquesta
         assignatura</string>
     <string name="noQuestionsPluggableTestsDownloadMsg">El professor d\'aquesta assignatura no permet la descàrrega de
@@ -109,36 +88,37 @@
     <string name="testShowResultsDetailsMsg">Veure detalls</string>
     <string name="testNoDetailsMsg">El professor no permet veure els detalls</string>
     <string name="testNoResultsMsg">El professor no permet veure els resultats del test</string>
-    <string name="firstRunMsg">Abans d\'utilitzar l\'aplicació per primera vegada ha d\'introduir el nom d\'usuari i la
-        contrasenya d\'accés a SWAD a la pantalla de configuració.\n\nPodeu accedir a la pantalla de configuració des del
-        menú de l\'aplicació en qualsevol moment.\n\nVoleu obrir ara la pantalla de configuració?</string>
-    <string name="initialDialogTitle">IMPORTANT</string>
-    <string name="upgradeMsg">A causa de canvis en la base de dades totes les dades han estat esborrats.\n\nDisculpe
-        les molèsties.</string>
     <string name="errorBadLoginMsg">Usuari o contrasenya incorrectes</string>
     <string name="errorServerResponseMsg">Error en resposta del servidor</string>
     <string name="errorBadAppKeyMsg">Clau d\'aplicació incorrecta. Si us plau, contacti amb el desenvolupador.</string>
     <string name="errorConnectionMsg">Error durant la connexió amb el servidor</string>
     <string name="errorTimeoutMsg">Temps d\'espera esgotat intentant connectar amb el servidor</string>
     <string name="errorServiceUnavailableMsg">SWAD es troba en manteniment en aquests moments. Torneu-ho més tard</string>
-    <string name="sendingMessageMsg">Enviant missatge&#8230;</string>
+    <string name="sendingMessageMsg">Enviant missatge…</string>
     <string name="messageSendedMsg">Missatge enviat</string>
-    <string name="messageSendErrorMsg">L\'enviament del missatge. Comprovi les dades introduïdes</string>
+    <string name="noReceiversMsg">Ha d\'indicar com a mínim un destinatari</string>
+    <string name="noSubjectMessageMsg">Heu d\'introduir l\'assumpte del missatge</string>
     <string name="message_receivers_title">Destinataris (separats per comes)</string>
     <string name="message_subject_title">Assumpte</string>
     <string name="message_body_title">Missatge</string>
     <string name="notice_body_title">Avís</string>
-    <string name="publishingNotice">Publicant avís&#8230;</string>
+    <string name="publishingNotice">Publicant avís…</string>
     <string name="noticePublished">Avís publicat</string>
-    <string name="noticeSendError">Error en publicar el nou avís</string>
+    <string name="noContentNoticeMsg">Heu d\'introduir el contingut de l\'avís</string>
     <string name="sendMsg">Enviar</string>
+    <string name="selectRcvModuleLabel">Seleccionar Destinataris</string>
+    <string name="filterUsersListModuleLabel">Filtrar Destinataris</string>
+    <string name="acceptFilters">Filtrar</string>
+    <string name="cancelFilters">Cancelar</string>
     <string name="cleanDatabaseMsg">Totes les dades de la base de dades han estat esborrats</string>
+    <string name="cleanDatabaseDialogMsg">Totes les dades de la base de dades seran esborrats.\n\n
+         S\'esborraran les notificacions, tests, informació de grups i llistats d\'usuaris.\n\n
+         Esteu segur que voleu esborrar tots els dades de la base de dades?</string>
     <string name="shareBodyMsg">Estic usant # SWADroid al meu Android per accedir a la plataforma de teleformació SWAD.
         \nObtenlo gratis aquí: https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid</string>
     <string name="twitterTitle">Twitter</string>
     <string name="facebookTitle">Facebook</string>
     <string name="googlePlusTitle">Google+</string>
-    <string name="mailingListTitle">Llista de correu</string>
     <string name="blogTitle">Bloc</string>
     <string name="marketTitle">Google Play</string>
     <string name="prefCatSyncTitle">Sincronització</string>
@@ -151,19 +131,14 @@
     <string name="prefNotifLimitDialogMessage">Seleccioneu el nombre màxim de notificacions que seran
         emmagatzemades:</string>
     <string name="prefNotifLimitSuffix">notificacions</string>
-    <string name="notificationsAlertTitle">SWADroid</string>
     <string name="notificationsAlertMsg">noves notificacions</string>
     <string name="footMessageMsg">Enviat des</string>
     <string name="marksMsg">Premi sobre la notificació per veure la qualificació.</string>
     <string name="clickToGetCourses">Premi aquí per aconseguir els seus assignatures</string>
-    <string name="attendanceModuleLabel">Passar llista</string>
     <string name="users">Usuaris</string>
-    <string name="usersDownloadProgressTitle">Estudiants</string>
-    <string name="usersDownloadProgressDescription">Sincronitzant estudiants.\n\nDependiendo del nombre d\'estudiants a
-        sincronitzar, el processament de les dades pot trigar uns minuts.\n\nSi us plau, esperi&#8230;</string>
     <string name="documentsDownloadModuleLabel">Documents</string>
     <string name="documentsDownloadProgressDescription">Obtenint fitxers.\n\nDependiendo de la mida del directori,
-        podria necessitar diversos minuts.\n\nSi us plau, esperi&#8230;</string>
+        podria necessitar diversos minuts.\n\nSi us plau, esperi…</string>
     <string name="clickToOpenFile">Pulsi aquí per obrir el fitxer</string>
     <string name="sharedsDownloadModuleLabel">Arxius compartits</string>
     <string name="connectionRequired">Per aquesta funcionalitat es necessita connexió a Internet</string>
@@ -172,8 +147,7 @@
     <string name="msg_default_type">Tipus</string>
     <string name="msg_default_time">Temps</string>
     <string name="msg_default_meta">Metadata</string>
-    <string name="msg_default_status">Poseu un codi de barres a l\'interior del rectangle del visor per escanejar."
-    </string>
+    <string name="msg_default_status">Poseu un codi de barres a l\'interior del rectangle del visor per escanejar."</string>
     <string name="msg_camera_framework_bug">Ho sentim, la càmera d\'Android ha trobat un problema. Potser haureu
         reiniciar el dispositiu.</string>
     <string name="button_ok">OK</string>
@@ -184,22 +158,19 @@
     <string name="scan_not_valid_code">Codi QR no vàlid</string>
     <string name="scan_data_not_found">No hi ha dades d\'aquest alumne</string>
     <string name="scan_no_codes">No s\'ha detectat cap codi QR vàlid</string>
-    <string name="usersPresent">Estudiants presents</string>
     <string name="NoNotificationsMsg">No hi ha noves notificacions</string>
     <string name="home_icon">Mostra la carpeta inicial</string>
     <string name="parent_icon">Mostra la carpeta superior a l\'actual</string>
-    <string name="refresh_icon">Actualitzar</string>
     <string name="group">Grup</string>
-    <string name="notificationDownloadTitle">Descarregant&#8230;</string>
+    <string name="notificationDownloadTitle">Descarregant…</string>
     <string name="complete">complet</string>
-    <string name="fileInfoTitle">Informació del fitxer</string>
     <string name="sizeFileTitle">tamany</string>
     <string name="creationTimeTitle">Data:</string>
     <string name="uploaderTitle">Carregat per:</string>
     <string name="downloadFileTitle">Descarregar</string>
     <string name="sdCardBusyTitle">Targeta SD no disponible</string>
-    <string name="sdCardBusy">La targeta SD està ocupada ara mateix. Per permetre descàrregues, seleccioneu \"Desactiva
-        emmagatzematge USB\" a la notificació</string>
+    <string name="sdCardBusy">La targeta SD està ocupada ara mateix. Per permetre descàrregues, seleccioneu \“Desactiva
+        emmagatzematge USB\” a la notificació</string>
     <string name="vacants">Vacants</string>
     <string name="numStudent">Nombre d\'estudiants</string>
     <string name="maxStudent">Màx. estudiants</string>
@@ -207,13 +178,11 @@
     <string name="scan_no_photos">No s\'han pogut desar les fotos dels estudiants</string>
     <string name="noStudentsAvailableMsg">Aquesta assignatura no té alumnes</string>
     <string name="studentsUpdated">alumnes actualitzats</string>
-    <string name="scan_no_students">Cap alumne trobat \n Proveu \"Actualitzar alumnes\"</string>
+    <string name="scan_no_students">Cap alumne trobat \n Proveu \“Actualitzar alumnes\”</string>
     <string name="photoContentDescription">Foto del estudiant</string>
     <string name="noCameraFound">El dispositiu no disposa de càmera</string>
     <string name="saveMsg">Desar</string>
-    <string name="addSessionTitle_menu">Nova sessió de pràctiques</string>
     <string name="noGroupsAvailableMsg">No hi ha grups per a l\'assignatura seleccionada</string>
-    <string name="groupsUpdated">Grups actualitzats</string>
     <string name="sessionCourseText">Assignatura</string>
     <string name="sessionGroupText">Grup</string>
     <string name="sessionEndText">Fi</string>
@@ -225,13 +194,11 @@
     <string name="sessionModuleLabel">Nova sessió de pràctiques</string>
     <string name="confirmExitMsg">Esteu segur que voleu sortir sense desar els canvis?</string>
     <string name="selectGroupTitle">Seleccioneu grup</string>
-    <string name="clickToGetGroups">Premi aquí per aconseguir els seus grups</string>
     <string name="sessionCreated">Sessió de pràctiques creada correctament</string>
     <string name="sessionNotCreated">Ja hi ha la sessió de pràctiques especificada</string>
     <string name="sessionChoose">Trieu la sessió de pràctiques</string>
     <string name="sendingState">Enviament a SWAD: </string>
     <string name="sendingStatePending">Pendent</string>
-    <string name="sendingStateSent">enviat</string>
     <string name="session">Sessió: </string>
     <string name="noPracticeSessionsAvailableMsg">No hi ha sessions de pràctiques del grup seleccionat a la base de
         dades</string>
@@ -239,11 +206,10 @@
     <string name="studentsHistoryModuleLabel">Historial d\'alumnes</string>
     <string name="sessionsTitle">Sessions de pràctiques</string>
     <string name="noSessionsAvailableMsg">No hi ha sessions de pràctiques a la base de dades</string>
-    <string name="listSampleModuleLabel">Prova</string>
     <string name="rollcallModuleLabel">Passar llista</string>
     <string name="studentsTitle">Estudiants</string>
     <string name="studentsDownloadProgressDescription">Sincronitzant estudiants.\n\nDependiendo del nombre d\'estudiants
-        a sincronitzar, el processament de les dades pot trigar uns minuts.\n\nSi us plau, esperi&#8230;</string>
+        a sincronitzar, el processament de les dades pot trigar uns minuts.\n\nSi us plau, esperi…</string>
     <string name="studentsList">Llista d\'estudiants</string>
     <string name="studentsDownloadProgressTitle">Estudiants</string>
     <string name="studentsPresent">Estudiants presents</string>
@@ -263,26 +229,21 @@
     <string name="rollcallWebServiceNotAvailable">El servei web per enviar SWAD les dades d\'assistència no està
         disponible.</string>
     <string name="rollcallEvent">Esdeveniment de passar llista</string>
-    <string name="froyoFunctionMsg">Aquesta funció requereix Android 2.2 o superior</string>
-    <string name="noRearCamera">Aquesta funció requereix una càmera posterior</string>
     <string name="groupSeparator">: </string>
     <string name="groupTypesModuleLabel">Aconseguir tipus de grup</string>
     <string name="openingTime">Obertura: </string>
     <string name="noGroupsText">No s\'han creat grups dins de l\'assignatura</string>
-    <string name="changeGroups">Canviar de grups</string>
     <string name="resultEnrollment">Resultat de la inscripció</string>
     <string name="successfullEnrollment">Totes les inscripcions s\'han realitzat amb èxit. Si us plau, comprovi que està
         inscrit en els grups desitjats</string>
     <string name="confirmEnrollments">Confirmar inscripcions sol · licitades </string>
-    <string name="areYouSure"> Esteu segur que vol inscriure en els grups seleccionats?</string>
-    <string name="failedEnrollment">Ho sentim però la inscripció en els grups seleccionats no es va poder realitzar"
-    </string>
-    <string name="groupTypesProgressDescription">Obtenint tipus de grup&#8230; \nSi us plau, esperi&#8230;</string>
-    <string name="groupsProgressDescription">Obtenint grups&#8230; \nSi us plau, esperi&#8230;</string>
+    <string name="areYouSureGroups"> Esteu segur que vol inscriure en els grups seleccionats?</string>
+    <string name="failedEnrollment">Ho sentim però la inscripció en els grups seleccionats no es va poder realitzar"</string>
+    <string name="groupTypesProgressDescription">Obtenint tipus de grup… \nSi us plau, esperi…</string>
+    <string name="groupsProgressDescription">Obtenint grups… \nSi us plau, esperi…</string>
     <string name="groupTypesProgressTitle">Tipus de grups</string>
     <string name="groupsProgressTitle">Grups</string>
-    <string name="sendMyGroupsProgressDescription">Enviant inscripció a grups&#8230; \nSi us plau, esperi&#8230;"
-    </string>
+    <string name="sendMyGroupsProgressDescription">Enviant inscripció a grups… \nSi us plau, esperi…"</string>
     <string name="sendMyGroupsProgressTitle">Inscripció a grups</string>
     <string name="withoutLimit">sense límit</string>
     <string name="downloadProblemTitle">Problema en descàrrega</string>
@@ -300,16 +261,15 @@
     <string name="contents_sms">Adreça SMS</string>
     <string name="contents_text">Text pla</string>
     <string name="lastSyncTimeLabel">Darrera sincronització</string>
-	<string name="neverLabel">Mai</string>
-	<string name="prefNotifSoundTitle">So</string>
-	<string name="prefNotifSoundSummary">Activar/desactivar el so de les alertes de noves notificacions</string>
-	<string name="prefNotifVibrateTitle">Vibració</string>
-	<string name="prefNotifVibrateSummary">Activar/desactivar la vibració de les alertes de noves notificacions</string>
-	<string name="prefNotifLightsTitle">Indicadors lluminosos</string>
-	<string name="prefNotifLightsSummary">Activar/desactivar els indicadors lluminosos de les alertes de noves notificacions</string>
-	
-	<string name="informationModuleLabel">Informació</string> 
-    <string name="introductionModuleLabel">Introducció</string>  
+    <string name="neverLabel">Mai</string>
+    <string name="prefNotifSoundTitle">So</string>
+    <string name="prefNotifSoundSummary">Activar/desactivar el so de les alertes de noves notificacions</string>
+    <string name="prefNotifVibrateTitle">Vibració</string>
+    <string name="prefNotifVibrateSummary">Activar/desactivar la vibració de les alertes de noves notificacions</string>
+    <string name="prefNotifLightsTitle">Indicadors lluminosos</string>
+    <string name="prefNotifLightsSummary">Activar/desactivar els indicadors lluminosos de les alertes de noves notificacions</string>
+    <string name="informationModuleLabel">Informació</string>
+    <string name="introductionModuleLabel">Introducció</string>
     <string name="faqsModuleLabel">FAQs</string>
     <string name="linksModuleLabel">Enllaços</string>
     <string name="bibliographyModuleLabel">Bibliografia</string>
@@ -317,18 +277,23 @@
     <string name="syllabusLecturesModuleLabel">Programa de Teoria</string>
     <string name="teachingguideModuleLabel">Guia Docent</string>
     <string name="assessmentModuleLabel">Sistema d\'avaluació</string>
-    <string name="informationProgressDescription">Obtenint informació&#8230;\nSi us plau, esperi&#8230;</string>
+    <string name="informationProgressDescription">Obtenint informació…\nSi us plau, esperi…</string>
     <string name="informationProgressTitle">Informació</string>
-    <string name="emptyInformation">Informació no disponible</string>    
-    
+    <string name="emptyInformation">Informació no disponible</string>
     <string name="pradoLoginToast">La contrasenya d\'SWAD té almenys 8 caràcters alfanumèrics</string>
-	<string name="error_password_summaryUGR">Recorda que has d\'introduir la contrasenya de SWAD, no la d\'Accés identificat</string>
-	<string name="error_password_summary"> Error: La contrasenya ha de ser de mínim 8 caràcters alfanumèrics</string>
-	<string name="passwordDialogTip">Recorda que la contrasenya d\'SWAD ha de tenir almenys 8 caràcters alfanumèrics</string>
-	<string name="errorServerCertificateMsg">El certificat del servidor no és vàlid. Si us plau, poseu-vos en contacte amb l\'administrador SWAD</string>
+    <string name="error_password_summaryUGR">Recorda que has d\'introduir la contrasenya de SWAD, no la d\'Accés identificat</string>
+    <string name="passwordDialogTip">Recorda que la contrasenya d\'SWAD ha de tenir almenys 8 caràcters alfanumèrics</string>
+    <string name="errorServerCertificateMsg">El certificat del servidor no és vàlid. Si us plau, poseu-vos en contacte amb l\'administrador SWAD</string>
+    <string name="notificationMarkAllRead">Marca totes com llegides</string>
+    <string name="notificationReply">Respondre</string>
+    <string name="seenLabel">Llegides</string>
+    <string name="notSeenLabel">No llegides</string>
+    <string name="actionBarRefresh">Actualitzar</string>
+    <string name="actionBarSave">Desa</string>
+    <string name="actionBarAddUser">Afegir usuaris</string>
+    <string name="actionBarFilterUsers">Filtrar usuaris</string>
+    <string name="Filters_All">Tot</string>
+    <string name="Filters_Teachers">Professors</string>
+    <string name="Filters_Students">Alumnes</string>
 
-	<string name="notificationMarkAllRead">Marca totes com llegides</string>
-	<string name="notificationReply">Respondre</string>
-	<string name="actionBarRefresh">Actualitzar</string>
-	<string name="actionBarSave">Desa</string>
 </resources>

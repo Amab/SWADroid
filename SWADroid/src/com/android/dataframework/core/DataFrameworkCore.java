@@ -317,7 +317,7 @@ public class DataFrameworkCore {
 				System.out.println("tabla: "+ tableName);
 				
 		    	String[] aux = t.getFieldsToArray();
-		        Cursor c = getDB().query(tableName, aux, null, null, null, null, null);
+		        Cursor c = mDb.query(tableName, aux, null, null, null, null, null);
 
 	    		c.moveToFirst();
 	        	

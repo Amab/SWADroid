@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:pulltorefresh="http://schemas.android.com/apk/res-auto">
 
-    <style name="PullToRefresh">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="ptrHeaderTextColor">@color/foreground1</item>
-        <item name="ptrHeaderBackground">@color/gray_goose</item>
-    </style>
-
     <style name="LoginFormContainer">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">16dp</item>
+    </style>
+
+    <style name="Theme.AppCompat.Translucent" parent="@style/Theme.AppCompat.Light">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation</item>
     </style>
 
 </resources>

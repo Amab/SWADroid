@@ -18,8 +18,10 @@
  */
 package es.ugr.swad.swadroid.modules.tests;
 
+import android.annotation.TargetApi;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.text.Html;
@@ -43,6 +45,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.gui.widget.CheckableLinearLayout;
 import es.ugr.swad.swadroid.gui.widget.TextProgressBar;
@@ -50,6 +53,7 @@ import es.ugr.swad.swadroid.model.Test;
 import es.ugr.swad.swadroid.model.TestAnswer;
 import es.ugr.swad.swadroid.model.TestQuestion;
 import es.ugr.swad.swadroid.model.TestTag;
+import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.utils.Utils;
 
 import java.text.DecimalFormat;
@@ -117,7 +121,8 @@ public class TestsMake extends MenuActivity {
         setContentView(layout);
     }
     
-    private void setNumQuestions() {
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	private void setNumQuestions() {
     	if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
             android.widget.NumberPicker numberPicker = 
             		(android.widget.NumberPicker) findViewById(R.id.testNumQuestionsNumberPicker);
@@ -140,7 +145,8 @@ public class TestsMake extends MenuActivity {
     /**
      * Screen to select the number of questions in the test
      */
-    private void selectNumQuestions() {          
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	private void selectNumQuestions() {          
         screenStep = ScreenStep.NUM_QUESTIONS;
 
         setLayout(R.layout.tests_num_questions);
@@ -206,7 +212,7 @@ public class TestsMake extends MenuActivity {
     private void selectTags() {
         ListView checkBoxesList;
         TagsArrayAdapter tagsAdapter;
-        List<TestTag> allTagsList = dbHelper.getOrderedCourseTags(Constants.getSelectedCourseCode());
+        List<TestTag> allTagsList = dbHelper.getOrderedCourseTags(Courses.getSelectedCourseCode());
         
         screenStep = ScreenStep.TAGS;
 
@@ -611,7 +617,7 @@ public class TestsMake extends MenuActivity {
         List<TestQuestion> questions;
 
         //Generates the test
-        questions = dbHelper.getRandomCourseQuestionsByTagAndAnswerType(Constants.getSelectedCourseCode(), tagsList, answerTypesList,
+        questions = dbHelper.getRandomCourseQuestionsByTagAndAnswerType(Courses.getSelectedCourseCode(), tagsList, answerTypesList,
                 numQuestions);
         if (!questions.isEmpty()) {
             test.setQuestions(questions);
@@ -705,7 +711,7 @@ public class TestsMake extends MenuActivity {
         
         screenStep = ScreenStep.MENU;
 
-        getSupportActionBar().setSubtitle(Constants.getSelectedCourseShortName());
+        getSupportActionBar().setSubtitle(Courses.getSelectedCourseShortName());
     	getSupportActionBar().setIcon(R.drawable.test);
 
         tagsAnswersTypeItemClickListener = new OnItemClickListener() {
@@ -741,17 +747,17 @@ public class TestsMake extends MenuActivity {
         tfAdapter.add(getString(R.string.trueMsg));
         tfAdapter.add(getString(R.string.falseMsg));
 
-        String selection = "id=" + Long.toString(Constants.getSelectedCourseCode());
-        Cursor dbCursor = dbHelper.getDb().getCursor(Constants.DB_TABLE_TEST_CONFIG, selection, null);
+        String selection = "id=" + Long.toString(Courses.getSelectedCourseCode());
+        Cursor dbCursor = dbHelper.getDb().getCursor(DataBaseHelper.DB_TABLE_TEST_CONFIG, selection, null);
         startManagingCursor(dbCursor);
         
         if (dbCursor.getCount() > 0) {
             if (isDebuggable) {
-                Log.d(TAG, "selectedCourseCode = " + Long.toString(Constants.getSelectedCourseCode()));
+                Log.d(TAG, "selectedCourseCode = " + Long.toString(Courses.getSelectedCourseCode()));
             }
 
-            test = (Test) dbHelper.getRow(Constants.DB_TABLE_TEST_CONFIG, "id",
-                    Long.toString(Constants.getSelectedCourseCode()));
+            test = (Test) dbHelper.getRow(DataBaseHelper.DB_TABLE_TEST_CONFIG, "id",
+                    Long.toString(Courses.getSelectedCourseCode()));
 
             if (test != null) {
                 selectNumQuestions();

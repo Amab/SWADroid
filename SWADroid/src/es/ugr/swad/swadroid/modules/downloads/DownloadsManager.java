@@ -21,9 +21,11 @@ package es.ugr.swad.swadroid.modules.downloads;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -31,6 +33,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -39,15 +42,17 @@ import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
-
+import android.widget.Toast;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.model.GroupType;
+import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.GroupTypes;
 import es.ugr.swad.swadroid.modules.Groups;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -136,7 +141,7 @@ public class DownloadsManager extends MenuActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        List<Group> allGroups = dbHelper.getGroups(Constants.getSelectedCourseCode());
+        List<Group> allGroups = dbHelper.getGroups(Courses.getSelectedCourseCode());
         int nGroups = allGroups.size();
 
         if (!saveState) {
@@ -150,7 +155,7 @@ public class DownloadsManager extends MenuActivity {
                     requestDirectoryTree();
             } else {
                 Intent activity = new Intent(this, GroupTypes.class);
-                activity.putExtra("courseCode", Constants.getSelectedCourseCode());
+                activity.putExtra("courseCode", Courses.getSelectedCourseCode());
                 startActivityForResult(activity, Constants.GROUPTYPES_REQUEST_CODE);
             }
         } else {
@@ -162,7 +167,6 @@ public class DownloadsManager extends MenuActivity {
                 setNoConnectionView();
             }
         }
-
     }
 
     @Override
@@ -205,17 +209,20 @@ public class DownloadsManager extends MenuActivity {
         grid.setOnItemClickListener((new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-                //TextView text = (TextView) v.findViewById(R.id.icon_text);
-                //chosenNodeName = text.getText().toString();
-                //DirectoryItem node = navigator.getDirectoryItem(chosenNodeName);
+
                 DirectoryItem node = navigator.getDirectoryItem(position);
                 if (node.getFileCode() == -1) //it is a directory therefore navigates into it
                     updateView(navigator.goToSubDirectory(position));
-                    //updateView(navigator.goToSubDirectory(chosenNodeName));
                 else { //it is a files therefore gets its information through web service GETFILE
                     chosenNodeName = node.getName();
-                    AlertDialog fileInfoDialog = createFileInfoDialog(node.getName(), node.getSize(), node.getTime(), node.getPublisher(), node.getFileCode(), node.getLicense());
-                    fileInfoDialog.show();
+                    fileSize = node.getSize();
+                    File f = new File(Constants.DOWNLOADS_PATH + File.separator + chosenNodeName);
+                    if (isDownloaded(f)) {
+                        viewFile(f);
+                    } else {
+                        AlertDialog fileInfoDialog = createFileInfoDialog(node.getName(), node.getSize(), node.getTime(), node.getPublisher(), node.getFileCode(), node.getLicense());
+                        fileInfoDialog.show();
+                    }
                 }
             }
         }));
@@ -311,7 +318,7 @@ public class DownloadsManager extends MenuActivity {
                     if (this.checkMediaAvailability() == 2) {
                         Log.i(TAG, "External storage is available");
                         String url = data.getExtras().getString("link");
-                        downloadFile(getDirectoryPath(), url, fileSize);
+                        downloadFile(Constants.DIRECTORY_SWADROID, url, fileSize);
                         //Toast.makeText(this, chosenNodeName +" "+ this.getResources().getString(R.string.notificationDownloadTitle) , Toast.LENGTH_LONG).show();
                     } else { //if the sd card is busy, it shows a alert dialog
                         Log.i(TAG, "External storage is NOT available");
@@ -338,7 +345,7 @@ public class DownloadsManager extends MenuActivity {
                     break;
                 case Constants.GROUPTYPES_REQUEST_CODE:
                     Intent activity = new Intent(this, Groups.class);
-                    activity.putExtra("courseCode", Constants.getSelectedCourseCode());
+                    activity.putExtra("courseCode", Courses.getSelectedCourseCode());
                     startActivityForResult(activity, Constants.GROUPS_REQUEST_CODE);
                     break;
             }
@@ -363,7 +370,7 @@ public class DownloadsManager extends MenuActivity {
 
         this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
 
-        getSupportActionBar().setSubtitle(Constants.getSelectedCourseShortName());
+        getSupportActionBar().setSubtitle(Courses.getSelectedCourseShortName());
         
         this.saveState = true;
         this.previousConnection = false;
@@ -420,7 +427,7 @@ public class DownloadsManager extends MenuActivity {
      * Get the list of the groups of the course with a documents zone to whom the user belongs
      */
     private List<Group> getFilteredGroups() {
-        List<Group> currentGroups = dbHelper.getGroups(Constants.getSelectedCourseCode());
+        List<Group> currentGroups = dbHelper.getGroups(Courses.getSelectedCourseCode());
         //remove groups that do not have a file zone assigned
         int j = 0;
         while (j < currentGroups.size()) {
@@ -442,7 +449,7 @@ public class DownloadsManager extends MenuActivity {
             groupsSpinner.setVisibility(View.VISIBLE);
 
             ArrayList<String> spinnerNames = new ArrayList<String>(currentGroups.size() + 1);
-            spinnerNames.add(getString(R.string.course) + "-" + Constants.getSelectedCourseShortName());
+            spinnerNames.add(getString(R.string.course) + "-" + Courses.getSelectedCourseShortName());
             for (Group g : currentGroups) {
                 GroupType gType = dbHelper.getGroupTypeFromGroup(g.getId());
                 spinnerNames.add(getString(R.string.group) + "-" + gType.getGroupTypeName() + " " + g.getGroupName());
@@ -456,7 +463,7 @@ public class DownloadsManager extends MenuActivity {
         } else {
             this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
 
-            getSupportActionBar().setSubtitle(Constants.getSelectedCourseShortName());
+            getSupportActionBar().setSubtitle(Courses.getSelectedCourseShortName());
         }
     }
 
@@ -500,9 +507,9 @@ public class DownloadsManager extends MenuActivity {
     /**
      * It checks if the external storage is available
      *
-     * @return 0 - if external storage can not be read either wrote
-     *         1 - if external storage can only be read
-     *         2 - if external storage can be read and wrote
+     * @return 0 - if external storage can not be read either wrote <br/>
+     *         1 - if external storage can only be read <br/>
+     *         2 - if external storage can be read and wrote <br/>
      */
 
     private int checkMediaAvailability() {
@@ -521,15 +528,40 @@ public class DownloadsManager extends MenuActivity {
         }
         return returnValue;
     }
-
+    
     /**
-     * it gets the directory path where the files will be located.This will be /$EXTERNAL_STORAGE/$DOWNLOADS
+     * Check if a file is already downloaded or not
+     * @param f File to check
+     * @return False if not downloaded, True otherwise.
      */
-    private String getDirectoryPath() {
-        //String downloadsDirName = Environment.getExternalStorageDirectory()+File.separator+"download";
-        return getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
+    private boolean isDownloaded(File f) {
+        if (f.exists() && f.length() == fileSize) {
+            return true;
+        } else {
+            return false;
+        }
     }
+    
+    /**
+     * Start an intent to view the file
+     * @param f The file to view.
+     */
+    private void viewFile(File f) {
+        String filenameArray[] = this.chosenNodeName.split("\\.");
+        String ext = filenameArray[filenameArray.length - 1];
+        String mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(ext);
 
+        Intent viewFileIntent = new Intent();
+        viewFileIntent.setAction(Intent.ACTION_VIEW);
+        viewFileIntent.setDataAndType(Uri.fromFile(f), mime);
+
+        try {
+            startActivity(viewFileIntent);
+        } catch (ActivityNotFoundException e) {
+            showDialog(R.string.errorMsgLaunchingActivity, R.string.errorNoAppForIntent);
+        }
+    }
+    
     /**
      * it initializes the download the file from the url @a url and stores it in the directory name @directory
      *
@@ -538,7 +570,14 @@ public class DownloadsManager extends MenuActivity {
      * @param fileSize  - file size of the file. It is used to show the download progress in the notification
      */
     private void downloadFile(String directory, String url, long fileSize) {
-        new FileDownloaderAsyncTask(this, this.chosenNodeName, true, fileSize).execute(directory, url);
+        // Check if external storage is available
+        int storageState = checkMediaAvailability(); 
+        if ( storageState == 2) {
+            new FileDownloaderAsyncTask(this, this.chosenNodeName, fileSize)
+            .execute(directory, url);
+        } else {
+            Toast.makeText(this, R.string.sdCardBusyTitle, Toast.LENGTH_LONG).show();
+        }
     }
 
     /**
@@ -585,7 +624,7 @@ public class DownloadsManager extends MenuActivity {
                 .append("\n")
                 .append(getString(R.string.sizeFileTitle))
                 .append(" ")
-                .append(humanReadableByteCount(size, true))
+                .append(DownloadFactory.humanReadableByteCount(size, true))
                 .append("\n")
                 .append(res.getString(R.string.uploaderTitle))
                 .append(" ")
@@ -619,18 +658,6 @@ public class DownloadsManager extends MenuActivity {
     }
 
     /**
-     * Method to show file size in bytes in a human readable way
-     * http://stackoverflow.com/questions/3758606/how-to-convert-byte-size-into-human-readable-format-in-java
-     */
-    private static String humanReadableByteCount(long bytes, boolean si) {
-        int unit = si ? 1000 : 1024;
-        if (bytes < unit) return bytes + " B";
-        int exp = (int) (Math.log(bytes) / Math.log(unit));
-        String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp - 1) + (si ? "" : "i");
-        return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
-    }
-
-    /**
      * Launches an action when refresh button is pushed.
      * <p/>
      * The listener onClick is set in action_bar.xml
@@ -642,7 +669,7 @@ public class DownloadsManager extends MenuActivity {
         refresh = true;
 
         Intent activity = new Intent(this, GroupTypes.class);
-        activity.putExtra("courseCode", Constants.getSelectedCourseCode());
+        activity.putExtra("courseCode", Courses.getSelectedCourseCode());
         startActivityForResult(activity, Constants.GROUPTYPES_REQUEST_CODE);
 
     }
@@ -664,20 +691,4 @@ public class DownloadsManager extends MenuActivity {
 			getSupportActionBar().setIcon(R.drawable.folder_users);
 		}
     }
-    
-//	/**
-//	 * This method is launched instead of onCreate when device rotates
-//	 * It prevents from repeating calls to web services when they are not necessary
-//	 * */
-//	@Override
-//	public void onConfigurationChanged(Configuration newConfig) {        
-//	    super.onConfigurationChanged(newConfig);
-//	    Log.i(TAG,"Device rotation");
-//	    // Checks the orientation of the screen
-///*	    if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-//	        Log.i(TAG,"onConfigChanged - Landscape");
-//	    } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
-//	    	Log.i(TAG,"onConfigChanged - Portrait");
-//	    }*/
-//	}
 }

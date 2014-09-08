@@ -8,15 +8,18 @@
         android:id="@+id/listText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/gray_goose"
         android:drawablePadding="10dp"
         android:gravity="center_vertical"
         android:paddingBottom="5dip"
+        android:paddingEnd="0dip"
         android:paddingLeft="30dip"
+        android:paddingRight="0dip"
+        android:paddingStart="30dip"
         android:paddingTop="5dip"
-        android:textSize="20dip"
-        android:textStyle="bold"
         android:textColor="@color/foreground1"
-        android:background="@color/gray_goose" >
+        android:textSize="20sp"
+        android:textStyle="bold" >
     </TextView>
 
 </LinearLayout>

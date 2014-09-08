@@ -12,7 +12,10 @@
         android:layout_height="wrap_content"
         android:clickable="false"
         android:focusable="false"
+        android:paddingEnd="0dip"
         android:paddingLeft="5dip"
+        android:paddingRight="0dip"
+        android:paddingStart="5dip"
         android:paddingTop="5dip"
         android:src="@drawable/padlock_red" />
 
@@ -22,14 +25,14 @@
         android:focusable="false"
         android:orientation="vertical" >
 
-	    <CheckBox
-	        android:id="@+id/checkBox"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:clickable="false"
-	        android:focusable="false"
-	        android:textColor="@android:color/black"
-	        android:visibility="gone" />
+        <CheckBox
+            android:id="@+id/checkBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:focusable="false"
+            android:textColor="@android:color/black"
+            android:visibility="gone" />
 
         <RadioButton
             android:id="@+id/radioButton"
@@ -46,7 +49,10 @@
             android:clickable="false"
             android:focusable="false"
             android:gravity="center"
-        	android:paddingLeft="7dip"
+            android:paddingEnd="0dip"
+            android:paddingLeft="7dip"
+            android:paddingRight="0dip"
+            android:paddingStart="7dip"
             android:text="@string/vacants"
             android:textColor="@color/sgilight_gray_32" />
 
@@ -57,7 +63,10 @@
             android:clickable="false"
             android:focusable="false"
             android:gravity="center"
-        	android:paddingLeft="7dip"
+            android:paddingEnd="0dip"
+            android:paddingLeft="7dip"
+            android:paddingRight="0dip"
+            android:paddingStart="7dip"
             android:text="@string/numStudent"
             android:textColor="@color/sgilight_gray_32" />
 
@@ -68,8 +77,12 @@
             android:clickable="false"
             android:focusable="false"
             android:gravity="center"
-        	android:paddingLeft="7dip"
+            android:paddingEnd="0dip"
+            android:paddingLeft="7dip"
+            android:paddingRight="0dip"
+            android:paddingStart="7dip"
             android:text="@string/maxStudent"
             android:textColor="@color/sgilight_gray_32" />
     </LinearLayout>
+
 </LinearLayout>
