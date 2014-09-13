@@ -57,8 +57,11 @@ public class DownloadFactory {
 	public static boolean downloadFile(Context context, String url, String fileName, String title,
 			String description) {
 		
-	    DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-	    DownloadManager manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE); // get download service and 
+		Uri uri = Uri.parse(url);	 
+	    DownloadManager managerHoneycomb;
+		DownloadManager.Request requestHoneycomb;
+	    es.ugr.swad.swadroid.modules.downloads.DownloadManager managerGingerbread;
+	    es.ugr.swad.swadroid.modules.downloads.DownloadManager.Request requestGingerbread;
 	    
 	    //Create dastination directory if not exists
 	    File downloadDirectory = new File(Constants.DOWNLOADS_PATH);
@@ -67,28 +70,39 @@ public class DownloadFactory {
 	        
 	        Log.i(TAG, "Created directory " + Constants.DOWNLOADS_PATH);
 	    }
-        
-        request.setDescription(title);
-        request.setTitle(description);
-        request.setDestinationInExternalPublicDir(Constants.DIRECTORY_SWADROID, fileName);
-        
-	    // in order for this if to run, you must use the android 3.2 to compile your app
-	    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-	        Log.i(TAG, "Downloading file " + fileName + " with DownloadManager >= HONEYCOMB");
-	
-	        request.allowScanningByMediaScanner();
-	        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-	
-	        // enqueue file
-	        manager.enqueue(request);
-	    } else if (Utils.isHTTPUrl(url)) {
-	        Log.i(TAG, "Downloading file " + fileName + " with DownloadManager GINGERBREAD");
-	
-	        // enqueue file
-	        manager.enqueue(request);
-	    } else {
-	        Log.e(TAG, "Can only download HTTP URIs with DownloadManager GINGERBREAD");
-	        return false;
+	    
+	    if((Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) && !Utils.isHTTPUrl(url)) {
+	    	//DownloadManager GINGERBREAD (HTTPS support)
+	        Log.i(TAG, "Downloading file " + fileName + " with custom DownloadManager GINGERBREAD (HTTPS support)");
+	        
+		    managerGingerbread = new es.ugr.swad.swadroid.modules.downloads.DownloadManager(context.getContentResolver(), "es.ugr.swad.swadroid.modules.downloads");
+		    requestGingerbread = new es.ugr.swad.swadroid.modules.downloads.DownloadManager.Request(uri);
+
+	        requestGingerbread.setDescription(title);
+	        requestGingerbread.setTitle(description);
+	        requestGingerbread.setDestinationInExternalPublicDir(Constants.DIRECTORY_SWADROID, fileName);
+	        
+	    	managerGingerbread.enqueue(requestGingerbread);
+	    } else {	        
+		    managerHoneycomb = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+		    requestHoneycomb = new DownloadManager.Request(uri);
+	        
+	        requestHoneycomb.setDescription(title);
+	        requestHoneycomb.setTitle(description);
+	        requestHoneycomb.setDestinationInExternalPublicDir(Constants.DIRECTORY_SWADROID, fileName);
+
+	    	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+	    		//DownloadManager HONEYCOMB
+		        Log.i(TAG, "Downloading file " + fileName + " with DownloadManager >= HONEYCOMB");
+		        
+		        requestHoneycomb.allowScanningByMediaScanner();
+		        requestHoneycomb.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);	    		
+	    	} else {
+		    	//DownloadManager GINGERBREAD (HTTP) 
+		        Log.i(TAG, "Downloading file " + fileName + " with DownloadManager GINGERBREAD (HTTP)");
+	    	}
+	    	
+	    	managerHoneycomb.enqueue(requestHoneycomb);
 	    }
 	
 	    return true;
