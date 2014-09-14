@@ -186,16 +186,16 @@ public class SWADMain extends MenuExpandableListActivity {
         	
             //Initialize HTTPS connections
         	/*
-        	 * Terena root certificate is not included by default on Gingerbread and older
-        	 * If Android API < 11 (HONEYCOMB) add Terena certificate manually
+        	 * SSL root certificates for SWAD are not included by default on Gingerbread and older
+        	 * If Android API < 11 (HONEYCOMB) add SSL certificates manually
         	 */
         	if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
         		conn = new SecureConnection();
         		conn.initSecureConnection(this); 
         		//conn.initUntrustedSecureConnection();
-        		Log.i(TAG, "Android API < 11 (HONEYCOMB). Adding Terena certificate manually");
+        		Log.i(TAG, "Android API < 11 (HONEYCOMB). Adding SSL certificates manually");
         	} else {
-        		Log.i(TAG, "Android API >= 11 (HONEYCOMB). Using Terena built-in certificate");
+        		Log.i(TAG, "Android API >= 11 (HONEYCOMB). Using SSL built-in certificates");
         	}
 
             //Check if this is the first run after an install or upgrade
