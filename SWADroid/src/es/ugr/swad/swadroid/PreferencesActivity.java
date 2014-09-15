@@ -317,7 +317,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         try {
             currentVersionPref.setSummary(getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
         } catch (NameNotFoundException e) {
-            e.printStackTrace();
+            Log.e(TAG, e.getMessage(), e);
             BugSenseHandler.sendException(e);
         }
     }
