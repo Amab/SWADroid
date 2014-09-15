@@ -63,7 +63,7 @@ public class DownloadFactory {
 	    es.ugr.swad.swadroid.modules.downloads.DownloadManager managerGingerbread;
 	    es.ugr.swad.swadroid.modules.downloads.DownloadManager.Request requestGingerbread;
 	    
-	    //Create dastination directory if not exists
+	    //Create destination directory if not exists
 	    File downloadDirectory = new File(Constants.DOWNLOADS_PATH);
 	    if (!downloadDirectory.exists()){
 	    	downloadDirectory.mkdir();
