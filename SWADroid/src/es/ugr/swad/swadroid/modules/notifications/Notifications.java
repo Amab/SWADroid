@@ -37,6 +37,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -661,6 +662,28 @@ public class Notifications extends Module implements
 			list.setOnScrollListener(touchListener.makeScrollListener(refreshLayout));	
 		} else {
 			Log.w(TAG, "SwipeListViewTouchListener requires Android 3.1 (HONEYCOMB_MR1) or newer");
+			list.setOnScrollListener(new AbsListView.OnScrollListener() {@
+	            Override
+	            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+	            }
+
+	            @
+	            Override
+	            public void onScroll(AbsListView absListView, int firstVisibleItem,
+	                    int visibleItemCount, int totalItemCount) {
+	            	
+	            	boolean enable = false;
+			        if(list != null && list.getChildCount() > 0){
+			            // check if the first item of the list is visible
+			            boolean firstItemVisible = list.getFirstVisiblePosition() == 0;
+			            // check if the top of the first item is visible
+			            boolean topOfFirstItemVisible = list.getChildAt(0).getTop() == 0;
+			            // enabling or disabling the refresh layout
+			            enable = firstItemVisible && topOfFirstItemVisible;
+			        }
+			        refreshLayout.setEnabled(enable);
+	            }
+	        });	
 		}
 	}
 
