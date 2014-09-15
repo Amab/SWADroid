@@ -658,7 +658,7 @@ public class Notifications extends Module implements
 			list.setOnTouchListener(touchListener);
 			// Setting this scroll listener is required to ensure that during ListView scrolling,
 			// we don't look for swipes.
-			list.setOnScrollListener(touchListener.makeScrollListener());
+			list.setOnScrollListener(touchListener.makeScrollListener(refreshLayout));	
 		} else {
 			Log.w(TAG, "SwipeListViewTouchListener requires Android 3.1 (HONEYCOMB_MR1) or newer");
 		}
