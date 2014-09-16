@@ -780,6 +780,8 @@ public class Notifications extends Module implements
 			
 			list.setVisibility(View.GONE);
 			emptyNotifTextView.setVisibility(View.VISIBLE);
+			
+			enableSwipe();
 		}
 	}
 }
