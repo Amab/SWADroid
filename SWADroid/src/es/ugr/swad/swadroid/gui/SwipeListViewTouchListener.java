@@ -28,6 +28,7 @@ import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.graphics.Rect;
 import android.os.Build;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -142,6 +143,46 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
      * If a scroll listener is already assigned, the caller should still pass scroll changes
      * through to this listener. This will ensure that this
      * {@link SwipeListViewTouchListener} is paused during list view scrolling.</p>
+     * @param refreshLayout 
+     *
+     * @see {@link SwipeListViewTouchListener}
+     */
+    public AbsListView.OnScrollListener makeScrollListener(final SwipeRefreshLayout refreshLayout) {
+        return new AbsListView.OnScrollListener() {@
+            Override
+            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+                setEnabled(scrollState != AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL);
+            }
+
+            @
+            Override
+            public void onScroll(AbsListView absListView, int firstVisibleItem,
+                    int visibleItemCount, int totalItemCount) {
+            	
+            	boolean enable = false;
+		        if(mListView != null && mListView.getChildCount() > 0){
+		            // check if the first item of the list is visible
+		            boolean firstItemVisible = mListView.getFirstVisiblePosition() == 0;
+		            // check if the top of the first item is visible
+		            boolean topOfFirstItemVisible = mListView.getChildAt(0).getTop() == 0;
+		            // enabling or disabling the refresh layout
+		            enable = firstItemVisible && topOfFirstItemVisible;
+		        }
+		        refreshLayout.setEnabled(enable);
+            }
+        };
+    }
+    
+
+
+    /**
+     * Returns an {@link android.widget.AbsListView.OnScrollListener} to be added to the
+     * {@link ListView} using
+     * {@link ListView#setOnScrollListener(android.widget.AbsListView.OnScrollListener)}.
+     * If a scroll listener is already assigned, the caller should still pass scroll changes
+     * through to this listener. This will ensure that this
+     * {@link SwipeListViewTouchListener} is paused during list view scrolling.</p>
+     * @param refreshLayout 
      *
      * @see {@link SwipeListViewTouchListener}
      */
@@ -154,7 +195,9 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
 
             @
             Override
-            public void onScroll(AbsListView absListView, int i, int i1, int i2) {}
+            public void onScroll(AbsListView absListView, int firstVisibleItem,
+                    int visibleItemCount, int totalItemCount) {
+            }
         };
     }
 
@@ -191,7 +234,7 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
                     }
                 }
 
-                if (mDownView != null) {
+                if ((mDownView != null) && (mListView != null)) {
                     mDownX = motionEvent.getRawX();
                     mDownPosition = mListView.getPositionForView(mDownView);
 

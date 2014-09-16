@@ -37,6 +37,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -598,62 +599,92 @@ public class Notifications extends Module implements
 		setAppearance();
 		// disableSwipe();
 		
-		// Create a ListView-specific touch listener. ListViews are given special treatment because
-		// by default they handle touches for their list items... i.e. they're in charge of drawing
-		// the pressed state (the list selector), handling list item clicks, etc.
-		SwipeListViewTouchListener touchListener =
-		    new SwipeListViewTouchListener(
-		    		list,
-		        new SwipeListViewTouchListener.OnSwipeCallback() {		    			
-		            @Override
-		            public void onSwipeLeft(ListView listView, int [] reverseSortedPositions) {
-		            	int notSeenChildrenCount = adapter.getChildrenCount(NOT_SEEN_GROUP_ID);
-		            	long childId;
-		            	
-		            	if(reverseSortedPositions[0] <= notSeenChildrenCount) {
-		            		childId = adapter.getChildId(NOT_SEEN_GROUP_ID, reverseSortedPositions[0]-1);
-		            		
-		            		//Set notification as seen locally
-		                    dbHelper.updateNotification(childId, "seenLocal", Utils.parseBoolString(true));
-		                    sendReadedNotifications();
-		                    
-		                    refreshScreen();
-		            	}
-		            }
+		/*
+		 * Create a ListView-specific touch listener. ListViews are given special treatment because
+		 * by default they handle touches for their list items... i.e. they're in charge of drawing
+		 * the pressed state (the list selector), handling list item clicks, etc.
+		 * 
+		 * Requires Android 3.1 (HONEYCOMB_MR1) or newer
+		 */
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
+			SwipeListViewTouchListener touchListener =
+			    new SwipeListViewTouchListener(
+			    		list,
+			        new SwipeListViewTouchListener.OnSwipeCallback() {		    			
+			            @Override
+			            public void onSwipeLeft(ListView listView, int [] reverseSortedPositions) {
+			            	int notSeenChildrenCount = adapter.getChildrenCount(NOT_SEEN_GROUP_ID);
+			            	long childId;
+			            	
+			            	if(reverseSortedPositions[0] <= notSeenChildrenCount) {
+			            		childId = adapter.getChildId(NOT_SEEN_GROUP_ID, reverseSortedPositions[0]-1);
+			            		
+			            		//Set notification as seen locally
+			                    dbHelper.updateNotification(childId, "seenLocal", Utils.parseBoolString(true));
+			                    sendReadedNotifications();
+			                    
+			                    refreshScreen();
+			            	}
+			            }
+	
+			            @Override
+			            public void onSwipeRight(ListView listView, int [] reverseSortedPositions) {
+			            	int notSeenChildrenCount = adapter.getChildrenCount(NOT_SEEN_GROUP_ID);
+			            	long childId;
+			            	
+			            	if(reverseSortedPositions[0] <= notSeenChildrenCount) {
+			            		childId = adapter.getChildId(NOT_SEEN_GROUP_ID, reverseSortedPositions[0]-1);
+			            		
+			            		//Set notification as seen locally
+			                    dbHelper.updateNotification(childId, "seenLocal", Utils.parseBoolString(true));
+			                    sendReadedNotifications();
+			                    
+			                    refreshScreen();
+			            	}
+			            }
+	
+						@Override
+						public void onStartSwipe() {		            	
+			            	disableSwipe();
+						}
+	
+						@Override
+						public void onStopSwipe() {
+							enableSwipe();
+						}
+			        },
+			        true,
+			        true);
+			
+			list.setOnTouchListener(touchListener);
+			// Setting this scroll listener is required to ensure that during ListView scrolling,
+			// we don't look for swipes.
+			list.setOnScrollListener(touchListener.makeScrollListener(refreshLayout));	
+		} else {
+			Log.w(TAG, "SwipeListViewTouchListener requires Android 3.1 (HONEYCOMB_MR1) or newer");
+			list.setOnScrollListener(new AbsListView.OnScrollListener() {@
+	            Override
+	            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+	            }
 
-		            @Override
-		            public void onSwipeRight(ListView listView, int [] reverseSortedPositions) {
-		            	int notSeenChildrenCount = adapter.getChildrenCount(NOT_SEEN_GROUP_ID);
-		            	long childId;
-		            	
-		            	if(reverseSortedPositions[0] <= notSeenChildrenCount) {
-		            		childId = adapter.getChildId(NOT_SEEN_GROUP_ID, reverseSortedPositions[0]-1);
-		            		
-		            		//Set notification as seen locally
-		                    dbHelper.updateNotification(childId, "seenLocal", Utils.parseBoolString(true));
-		                    sendReadedNotifications();
-		                    
-		                    refreshScreen();
-		            	}
-		            }
-
-					@Override
-					public void onStartSwipe() {		            	
-		            	disableSwipe();
-					}
-
-					@Override
-					public void onStopSwipe() {
-						enableSwipe();
-					}
-		        },
-		        true,
-		        true);
-		
-		list.setOnTouchListener(touchListener);
-		// Setting this scroll listener is required to ensure that during ListView scrolling,
-		// we don't look for swipes.
-		list.setOnScrollListener(touchListener.makeScrollListener());
+	            @
+	            Override
+	            public void onScroll(AbsListView absListView, int firstVisibleItem,
+	                    int visibleItemCount, int totalItemCount) {
+	            	
+	            	boolean enable = false;
+			        if(list != null && list.getChildCount() > 0){
+			            // check if the first item of the list is visible
+			            boolean firstItemVisible = list.getFirstVisiblePosition() == 0;
+			            // check if the top of the first item is visible
+			            boolean topOfFirstItemVisible = list.getChildAt(0).getTop() == 0;
+			            // enabling or disabling the refresh layout
+			            enable = firstItemVisible && topOfFirstItemVisible;
+			        }
+			        refreshLayout.setEnabled(enable);
+	            }
+	        });	
+		}
 	}
 
 	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
@@ -749,6 +780,8 @@ public class Notifications extends Module implements
 			
 			list.setVisibility(View.GONE);
 			emptyNotifTextView.setVisibility(View.VISIBLE);
+			
+			enableSwipe();
 		}
 	}
 }
