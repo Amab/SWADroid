@@ -29,7 +29,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
@@ -48,6 +47,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.net.SocketTimeoutException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.util.concurrent.TimeoutException;
@@ -433,7 +433,7 @@ public abstract class Module extends MenuActivity {
                     errorMsg = getString(R.string.errorServerCertificateMsg);
                 } else if (e instanceof XmlPullParserException) {
                     errorMsg = getString(R.string.errorServerResponseMsg);
-                } else if (e instanceof TimeoutException) {
+                } else if ((e instanceof TimeoutException) || (e instanceof SocketTimeoutException)) {
                     errorMsg = getString(R.string.errorTimeoutMsg);
                     sendException = false;
                 } else if (e instanceof HttpResponseException) {
