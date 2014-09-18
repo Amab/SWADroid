@@ -58,6 +58,7 @@ import org.ksoap2.serialization.KvmSerializable;
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.net.SocketTimeoutException;
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.List;
@@ -135,7 +136,7 @@ public class NotificationsSyncAdapterService extends Service {
                 	errorMessage = mContext.getString(R.string.errorServerCertificateMsg);
                 } else if (e instanceof XmlPullParserException) {
                 	errorMessage = mContext.getString(R.string.errorServerResponseMsg);
-                } else if (e instanceof TimeoutException) {
+                } else if ((e instanceof TimeoutException) || (e instanceof SocketTimeoutException)) {
                 	errorMessage = mContext.getString(R.string.errorTimeoutMsg);
                 	sendException = false;
                 } else if (e instanceof HttpResponseException) {

@@ -99,7 +99,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     /**
      * Server preference
      */
-    private static Preference serverPref;
+    //private static Preference serverPref;
     /**
      * Synchronization time preference
      */
@@ -141,7 +141,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     /**
      * SWAD server to use
      */
-    private String mServer;
+    //private String mServer;
     
     /**
      * User password preference changed flag
@@ -196,7 +196,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         googlePlusPref = findPreference(Preferences.GOOGLEPLUSPREF);
         blogPref = findPreference(Preferences.BLOGPREF);
         sharePref = findPreference(Preferences.SHAREPREF);
-        serverPref = findPreference(Preferences.SERVERPREF);
+        //serverPref = findPreference(Preferences.SERVERPREF);
         syncTimePref = findPreference(Preferences.SYNCTIMEPREF);
         syncEnablePref = (CheckBoxPreference) findPreference(Preferences.SYNCENABLEPREF);
         notifLimitPref = (SeekBarDialogPreference) findPreference(Preferences.NOTIFLIMITPREF);
@@ -210,7 +210,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         googlePlusPref.setOnPreferenceChangeListener(this);
         blogPref.setOnPreferenceChangeListener(this);
         sharePref.setOnPreferenceChangeListener(this);
-        serverPref.setOnPreferenceChangeListener(this);
+        //serverPref.setOnPreferenceChangeListener(this);
         notifLimitPref.setOnPreferenceChangeListener(this);
         syncEnablePref.setOnPreferenceChangeListener(this);
         syncTimePref.setOnPreferenceChangeListener(this);
@@ -312,7 +312,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
             }
         });
 
-        mServer = Preferences.getServer();
+        //mServer = Preferences.getServer();
         
         try {
             currentVersionPref.setSummary(getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
@@ -366,13 +366,13 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
 			} catch (NoSuchAlgorithmException ex) {
 				error(TAG, ex.getMessage(), ex, true);
 			}
-        } else if (Preferences.SERVERPREF.equals(key)) {
+        /*} else if (Preferences.SERVERPREF.equals(key)) {
             mServer = newValue.toString();
             Preferences.setServer(mServer);
             serverPref.setSummary(mServer);
             //If preferences have changed, logout
         	Preferences.logoutClean(ctx, key);
-        	syncPrefsChanged = true;
+        	syncPrefsChanged = true;*/
         } else if(Preferences.SYNCENABLEPREF.equals(key)) {
         	boolean syncEnabled = (Boolean) newValue;
             Preferences.setSyncEnabled(syncEnabled);
@@ -483,13 +483,13 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         List<String> prefSyncTimeEntries = Arrays.asList(getResources().getStringArray(R.array.prefSyncTimeEntries));
         int prefSyncTimeIndex = prefSyncTimeValues.indexOf(Preferences.getSyncTime());
         String prefSyncTimeEntry = prefSyncTimeEntries.get(prefSyncTimeIndex);
-        mServer = Preferences.getServer();
+        /*mServer = Preferences.getServer();
         
         if (!mServer.equals("")) {
             serverPref.setSummary(mServer);
         } else {
             serverPref.setSummary(Constants.DEFAULT_SERVER);
-        }
+        }*/
         
         if(lastSyncTime == 0) {
         	syncEnablePref.setSummary(getString(R.string.lastSyncTimeLabel) + ": " 
