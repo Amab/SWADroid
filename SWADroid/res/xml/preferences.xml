@@ -19,13 +19,13 @@
             android:key="userPasswordPref"
             android:password="true"
             android:title="@string/userPasswordTitle_preferences" />
-        -->
         <EditTextPreference
             android:name="@string/serverName_preferences"
             android:defaultValue=""
             android:hint="@string/serverSummary_preferences"
             android:key="serverPref"
             android:title="@string/serverTitle_preferences" />
+        -->
 
         <Preference
             android:defaultValue=""
