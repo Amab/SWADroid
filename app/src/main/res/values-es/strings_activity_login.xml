@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="title_activity_login">Identificarse</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">DNI, Apodo o Email</string>
+    <string name="prompt_password">Contraseña</string>
+    <string name="prompt_server">Servidor (sin http://)</string>
+    <string name="action_sign_in_register"><b>Identificarse</b></string>
+    <string name="action_sign_in_short">Identificarse</string>
+    <string name="login_progress_signing_in">Identificándose…</string>
+    <string name="error_invalid_password">La contraseña debe ser de mínimo 6 caracteres alfanuméricos</string>
+    <string name="error_incorrect_password">La contraseña debe contener números y letras</string>
+    <string name="error_field_required">Este campo es obligatorio</string>
+    <string name="why_password">¿Por qué no funciona mi contraseña?</string>
+    <string name="why_password_dialog_title">¿Por qué no funciona mi contraseña?</string>
+    <string name="why_password_dialog_message">Probablemente está introduciendo la contraseña de acceso identificado (4 dígitos). Debe introducir la contraseña usada para entrar directamente a SWAD</string>
+    <string name="lost_password">He olvidado mi contraseña</string>
+    <string name="lost_password_dialog_title">Solicitar una nueva contraseña</string>
+    <string name="lost_password_success">Contraseña cambiada, comprueba tu email</string>
+    <string name="lost_password_failure">El reseteo de la contraseña falló</string>
+
+</resources>
