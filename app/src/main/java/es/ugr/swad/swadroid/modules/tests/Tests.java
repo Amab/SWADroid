@@ -30,6 +30,7 @@ import java.util.List;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.SWADroidTracker;
 import es.ugr.swad.swadroid.gui.ImageListAdapter;
 import es.ugr.swad.swadroid.gui.ImageListItem;
 import es.ugr.swad.swadroid.gui.MenuActivity;
@@ -65,6 +66,8 @@ public class Tests extends MenuActivity implements OnItemClickListener {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_items);
+
+        SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
 
         for (int i = 0; i < titles.length; i++) {
             ImageListItem item = new ImageListItem(images[i], titles[i]);

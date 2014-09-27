@@ -133,6 +133,7 @@ public class LoginActivity extends ActionBarActivity implements OnClickListener 
      * are presented and no actual login attempt is made.
      */
     public void attemptLogin() {
+        SWADroidTracker.sendScreenView(getApplicationContext(), "SWADroid Login");
 
         // Values for DNI and password at the time of the login attempt.
         String DniValue;
@@ -274,6 +275,8 @@ public class LoginActivity extends ActionBarActivity implements OnClickListener 
     }
 
     private void whyMyPasswordNotWorkDialog() {
+        SWADroidTracker.sendScreenView(getApplicationContext(), "SWADroid WhyMyPasswordNotWork");
+
         AlertDialog passwordNotWorkDialog =
                 DialogFactory.createNeutralDialog(this,
                                                   R.layout.dialog_why_password,
@@ -292,6 +295,8 @@ public class LoginActivity extends ActionBarActivity implements OnClickListener 
     }
 
     private void recoverPasswordDialog() {
+        SWADroidTracker.sendScreenView(getApplicationContext(), "SWADroid RecoverPassword");
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         final EditText user = new EditText(getApplicationContext());

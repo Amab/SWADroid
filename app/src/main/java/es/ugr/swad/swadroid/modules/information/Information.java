@@ -14,6 +14,7 @@ import org.ksoap2.serialization.SoapObject;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.SWADroidTracker;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.Login;
@@ -142,6 +143,8 @@ public class Information extends Module {
     @Override
     protected void onStart() {
         super.onStart();
+
+        SWADroidTracker.sendScreenView(getApplicationContext(), TAG + " " + infoTypeToAdd);
         try {
             runConnection();
         } catch (Exception e) {

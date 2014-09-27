@@ -115,7 +115,7 @@ public class SWADMain extends MenuExpandableListActivity {
      */
     private List<Model> listCourses;
     /**
-     * Tests tag name for Logcat
+     * SWADMain tag name for Logcat
      */
     public static final String TAG = Constants.APP_TAG;
     
@@ -164,6 +164,8 @@ public class SWADMain extends MenuExpandableListActivity {
     @Override
     public void onCreate(Bundle icicle) {
         int lastVersion, currentVersion;
+
+        SWADroidTracker.initTracker(getApplicationContext());
         
         //Initialize Mint plugin
         try {
@@ -258,6 +260,8 @@ public class SWADMain extends MenuExpandableListActivity {
                 setMenuDbClean();
             }
         }
+
+        SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
     }
 
     /* (non-Javadoc)

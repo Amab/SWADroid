@@ -50,6 +50,7 @@ import java.util.List;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.SWADroidTracker;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.gui.widget.CheckableLinearLayout;
@@ -168,6 +169,8 @@ public class TestsMake extends MenuActivity {
         	numberPickerOld.setCurrent(test.getDef()); 
         	numberPickerOld.setVisibility(View.VISIBLE);
         }
+
+        SWADroidTracker.sendScreenView(getApplicationContext(), TAG + " NumQuestions");
     }
 
     /**
@@ -228,6 +231,8 @@ public class TestsMake extends MenuActivity {
         checkBoxesList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         checkBoxesList.setOnItemClickListener(tagsAnswersTypeItemClickListener);
         checkBoxesList.setDividerHeight(0);
+
+        SWADroidTracker.sendScreenView(getApplicationContext(), TAG + " Tags");
     }
 
     /**
@@ -287,6 +292,8 @@ public class TestsMake extends MenuActivity {
         checkBoxesList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         checkBoxesList.setOnItemClickListener(tagsAnswersTypeItemClickListener);
         checkBoxesList.setDividerHeight(0);
+
+        SWADroidTracker.sendScreenView(getApplicationContext(), TAG + " AnswerTypes");
     }
 
     /**
@@ -609,6 +616,8 @@ public class TestsMake extends MenuActivity {
         });
 
         showQuestion(0);
+
+        SWADroidTracker.sendScreenView(getApplicationContext(), TAG + " Question");
     }
 
     /**
@@ -633,6 +642,8 @@ public class TestsMake extends MenuActivity {
             //Shows the test
             showTest();
         } else {
+            SWADroidTracker.sendScreenView(getApplicationContext(), TAG + " No questions criteria");
+
             Toast.makeText(this, R.string.testNoQuestionsMeetsSpecifiedCriteriaMsg, Toast.LENGTH_LONG).show();
             finish();
         }
@@ -674,6 +685,8 @@ public class TestsMake extends MenuActivity {
         } else {
             textView = (TextView) findViewById(R.id.testResultsText);
             textView.setText(R.string.testNoResultsMsg);
+
+            SWADroidTracker.sendScreenView(getApplicationContext(), TAG + " Feedback " + Test.FEEDBACK_NONE);
         }
     }
 
@@ -763,6 +776,8 @@ public class TestsMake extends MenuActivity {
             if (test != null) {
                 selectNumQuestions();
             } else {
+                SWADroidTracker.sendScreenView(getApplicationContext(), TAG + " No questions");
+
                 Toast.makeText(this, R.string.testNoQuestionsCourseMsg, Toast.LENGTH_LONG).show();
                 finish();
             }
@@ -812,6 +827,7 @@ public class TestsMake extends MenuActivity {
                 return true;
             case R.id.action_show_details:
             	if (test.getFeedback().equals(Test.FEEDBACK_MIN)) {
+                    SWADroidTracker.sendScreenView(getApplicationContext(), TAG + " Feedback " + Test.FEEDBACK_MIN);
                     Toast.makeText(this, R.string.testNoDetailsMsg, Toast.LENGTH_LONG).show();
                 } else {            	
 	            	//Show totals button only

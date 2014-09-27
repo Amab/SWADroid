@@ -14,6 +14,7 @@ import java.security.NoSuchAlgorithmException;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.SWADroidTracker;
 import es.ugr.swad.swadroid.utils.QR;
 
 public class GenerateQR extends Module {
@@ -40,6 +41,7 @@ public class GenerateQR extends Module {
     @Override
     protected void onStart() {
         super.onStart();
+        SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
         try {
             Bitmap qrCode = QR.encode(this, Preferences.getUserID());
             ImageView qr_image = (ImageView) findViewById(R.id.qr_code_image);
