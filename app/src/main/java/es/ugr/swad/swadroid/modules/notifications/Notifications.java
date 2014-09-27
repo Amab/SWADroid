@@ -51,6 +51,7 @@ import java.util.Vector;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.SWADroidTracker;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.AlertNotificationFactory;
 import es.ugr.swad.swadroid.gui.SwipeListViewTouchListener;
@@ -327,6 +328,7 @@ public class Notifications extends Module implements
 	@Override
 	protected void onResume() {
 		super.onResume();
+        SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
 		
 		IntentFilter intentFilter = new IntentFilter();
 		intentFilter.addAction(NotificationsSyncAdapterService.START_SYNC);

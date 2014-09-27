@@ -31,6 +31,7 @@ import android.widget.TextView;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.SWADroidTracker;
 import es.ugr.swad.swadroid.gui.ImageFactory;
 import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.modules.messages.Messages;
@@ -130,6 +131,7 @@ public class NotificationItem extends MenuActivity {
         		Log.w(TAG, "Not connected: Marking the notification " + notifCode + " as read in SWAD was deferred");
         	}
         }
+        SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
     }
 
 	/* (non-Javadoc)

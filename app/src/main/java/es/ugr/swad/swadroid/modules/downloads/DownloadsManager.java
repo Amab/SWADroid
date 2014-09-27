@@ -51,6 +51,7 @@ import java.util.List;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.SWADroidTracker;
 import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.model.GroupType;
@@ -142,6 +143,8 @@ public class DownloadsManager extends MenuActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
+
         List<Group> allGroups = dbHelper.getGroups(Courses.getSelectedCourseCode());
         int nGroups = allGroups.size();
 
