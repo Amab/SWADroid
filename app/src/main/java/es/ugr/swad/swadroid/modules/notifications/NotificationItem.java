@@ -106,7 +106,7 @@ public class NotificationItem extends MenuActivity {
             //new DownloadImageTask(userPhotoView).execute(userPhoto);			
 			ImageFactory.displayImage(getApplicationContext(), userPhoto, userPhotoView, true, false);
         } else {
-            Log.d("NotificationItem", "No connection or no photo " + userPhoto);
+            Log.d(TAG, "No connection or no photo " + userPhoto);
         }
 
         content = Utils.fixLinks(content);
