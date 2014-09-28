@@ -445,7 +445,6 @@ public class SWADMain extends MenuExpandableListActivity {
     };
 
     private void getCurrentCourses() {
-    	
     	showProgress(true);
     	
         Intent activity;

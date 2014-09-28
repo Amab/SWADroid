@@ -42,6 +42,7 @@ public class GenerateQR extends Module {
     protected void onStart() {
         super.onStart();
         SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
+
         try {
             Bitmap qrCode = QR.encode(this, Preferences.getUserID());
             ImageView qr_image = (ImageView) findViewById(R.id.qr_code_image);

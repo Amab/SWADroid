@@ -34,6 +34,7 @@ import java.util.Vector;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.SWADroidTracker;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.Model;
@@ -89,6 +90,8 @@ public class Courses extends Module {
     @Override
     protected void onStart() {
         super.onStart();
+
+        SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
         
         runConnection();
     }
