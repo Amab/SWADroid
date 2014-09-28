@@ -13,6 +13,7 @@ import java.util.Vector;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.SWADroidTracker;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.model.GroupType;
 import es.ugr.swad.swadroid.model.Model;
@@ -54,6 +55,8 @@ public class GroupTypes extends Module {
     @Override
     protected void onStart() {
         super.onStart();
+
+        SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
         
         try {
             runConnection();

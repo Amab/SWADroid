@@ -25,6 +25,7 @@ import org.ksoap2.serialization.SoapPrimitive;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.SWADroidTracker;
 import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.utils.Utils;
@@ -56,7 +57,8 @@ public class NotificationsMarkAllAsRead extends Module {
     @Override
     protected void onStart() {
         super.onStart();
-        
+
+        SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
     }
     
     /* (non-Javadoc)
