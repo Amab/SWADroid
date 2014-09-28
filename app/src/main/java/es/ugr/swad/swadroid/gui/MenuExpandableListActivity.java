@@ -171,13 +171,15 @@ public class MenuExpandableListActivity extends ActionBarActivity {
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);	 
-	    
-	    if (!isSWADMain) {
-	    	menu.removeItem(R.id.clean_database_menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+	    if (isSWADMain) {
+            menu.findItem(R.id.clean_database_menu).setVisible(true);
+            menu.findItem(R.id.share_menu).setVisible(true);
+            menu.findItem(R.id.rate_menu).setVisible(true);
 	    }
-	    
-        return true;
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     /* (non-Javadoc)
