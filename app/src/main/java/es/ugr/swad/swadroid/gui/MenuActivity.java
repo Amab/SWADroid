@@ -165,8 +165,7 @@ public class MenuActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
     	getMenuInflater().inflate(R.menu.menu_main, menu);
-    	menu.removeItem(R.id.clean_database_menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     /* (non-Javadoc)
