@@ -28,7 +28,6 @@ import android.util.Log;
 
 import com.android.dataframework.DataFramework;
 import com.android.dataframework.Entity;
-import com.splunk.mint.Mint;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -44,6 +43,7 @@ import java.util.Locale;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
+import es.ugr.swad.swadroid.SWADroidTracker;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.model.GroupType;
@@ -184,7 +184,7 @@ public class DataBaseHelper {
             Preferences.setDBKey(DBKey);
         }
 
-        crypto = new Crypto(DBKey);
+        crypto = new Crypto(ctx, DBKey);
         //Log.d("DataBaseHelper", "DBKey=" + DBKey);
     }
 
@@ -394,10 +394,8 @@ public class DataBaseHelper {
                         ent.getString("site"),
                         ent.getString("description"));
             } catch (ParseException e) {
-                e.printStackTrace();
-
-                //Send exception details to Mint
-                Mint.logException(e);
+                //Send exception details to Google Analytics
+                SWADroidTracker.sendException(mCtx, e, false);
             }
         }
 
@@ -1918,14 +1916,14 @@ public class DataBaseHelper {
         String type, surname1, surname2, firstname, photo, location, summary, content;
 
         for (Entity ent : rows) {
-            type = crypto.encrypt(OldCrypto.decrypt(DBKey, ent.getString("eventType")));
-            surname1 = crypto.encrypt(OldCrypto.decrypt(DBKey, ent.getString("userSurname1")));
-            surname2 = crypto.encrypt(OldCrypto.decrypt(DBKey, ent.getString("userSurname2")));
-            firstname = crypto.encrypt(OldCrypto.decrypt(DBKey, ent.getString("userFirstname")));
-            photo = crypto.encrypt(OldCrypto.decrypt(DBKey, ent.getString("userPhoto")));
-            location = crypto.encrypt(OldCrypto.decrypt(DBKey, ent.getString("location")));
-            summary = crypto.encrypt(OldCrypto.decrypt(DBKey, ent.getString("summary")));
-            content = crypto.encrypt(OldCrypto.decrypt(DBKey, ent.getString("content")));
+            type = crypto.encrypt(OldCrypto.decrypt(mCtx, DBKey, ent.getString("eventType")));
+            surname1 = crypto.encrypt(OldCrypto.decrypt(mCtx, DBKey, ent.getString("userSurname1")));
+            surname2 = crypto.encrypt(OldCrypto.decrypt(mCtx, DBKey, ent.getString("userSurname2")));
+            firstname = crypto.encrypt(OldCrypto.decrypt(mCtx, DBKey, ent.getString("userFirstname")));
+            photo = crypto.encrypt(OldCrypto.decrypt(mCtx, DBKey, ent.getString("userPhoto")));
+            location = crypto.encrypt(OldCrypto.decrypt(mCtx, DBKey, ent.getString("location")));
+            summary = crypto.encrypt(OldCrypto.decrypt(mCtx, DBKey, ent.getString("summary")));
+            content = crypto.encrypt(OldCrypto.decrypt(mCtx, DBKey, ent.getString("content")));
 
             ent.setValue("eventType", type);
             ent.setValue("userSurname1", surname1);
@@ -1998,7 +1996,8 @@ public class DataBaseHelper {
 	    	try {
 				wait();
 			} catch (InterruptedException e) {
-				Mint.logException(new DataBaseHelperException("Sinchronization interrupted"));
+                //Send exception details to Google Analytics
+                SWADroidTracker.sendException(mCtx, e, false);
 			}
     	}
     	
@@ -2022,7 +2021,8 @@ public class DataBaseHelper {
 	        
 	        notifyAll();
     	} else {
-    		Mint.logException(new DataBaseHelperException("No active transactions"));
+            //Send exception details to Google Analytics
+            SWADroidTracker.sendException(mCtx, new DataBaseHelperException("No active transactions"), false);
     	}
     }
     

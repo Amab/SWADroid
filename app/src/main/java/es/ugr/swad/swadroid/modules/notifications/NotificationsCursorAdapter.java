@@ -73,7 +73,7 @@ public class NotificationsCursorAdapter extends CursorAdapter {
         super(context, c, true);
 
         DBKey = key;
-        crypto = new Crypto(DBKey);
+        crypto = new Crypto(context, DBKey);
         int numRows = c.getCount();
 
         contentVisible = new boolean[numRows];

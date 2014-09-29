@@ -187,7 +187,7 @@ public class DownloadsManager extends MenuActivity {
                 if (previousConnection) {
                     this.tree = savedInstanceState.getString("tree");
                     String path = savedInstanceState.getString("path");
-                    this.navigator = new DirectoryNavigator(this.tree);
+                    this.navigator = new DirectoryNavigator(getApplicationContext(), this.tree);
                     if (path.equals("/")) {
                         int firstBar = path.indexOf('/', 0);
                         int nextBar = path.indexOf('/', firstBar + 1);
@@ -395,7 +395,7 @@ public class DownloadsManager extends MenuActivity {
 
         ArrayList<DirectoryItem> items;
         if (!(this.saveState && this.previousConnection)) {
-            navigator = new DirectoryNavigator(tree);
+            navigator = new DirectoryNavigator(getApplicationContext(), tree);
             items = navigator
                     .goToRoot();
         } else {

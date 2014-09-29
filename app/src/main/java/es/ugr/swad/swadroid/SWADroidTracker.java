@@ -24,8 +24,10 @@ package es.ugr.swad.swadroid;
 import android.content.Context;
 import android.util.Log;
 
+import com.google.android.gms.analytics.ExceptionReporter;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.StandardExceptionParser;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -81,6 +83,25 @@ public class SWADroidTracker {
         return mTrackers.get(TrackerName.APP_TRACKER);
     }
 
+    public static void initTracker(Context context) {
+        // Initialize a tracker using a Google Analytics property ID.
+        if(GooglePlayServicesUtil.isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS) {
+            GoogleAnalytics.getInstance(context).newTracker(Config.ANALYTICS_API_KEY);
+
+            Thread.UncaughtExceptionHandler exceptionHandler = new ExceptionReporter(
+                    getTracker(context),                              // Currently used Tracker.
+                    Thread.getDefaultUncaughtExceptionHandler(),      // Current default uncaught exception handler.
+                    context);                                         // Context of the application.
+
+            // Make exceptionHandler the new default uncaught exception handler.
+            Thread.setDefaultUncaughtExceptionHandler(exceptionHandler);
+
+            Log.i(TAG, "Google Play Services available. SWADroidTracker enabled");
+        } else {
+            Log.w(TAG, "Google Play Services not available. SWADroidTracker disabled");
+        }
+    }
+
     public static void sendScreenView(Context context, String path) {
         if(GooglePlayServicesUtil.isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS) {
             // Get tracker.
@@ -124,13 +145,27 @@ public class SWADroidTracker {
         }
     }
 
-    public static void initTracker(Context context) {
-        // Initialize a tracker using a Google Analytics property ID.
+    public static void sendException(Context context, Exception e, boolean fatal) {
         if(GooglePlayServicesUtil.isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS) {
-            GoogleAnalytics.getInstance(context).newTracker(Config.ANALYTICS_API_KEY);
-            Log.i(TAG, "Google Play Services available. SWADroidTracker enabled");
-        } else {
-            Log.w(TAG, "Google Play Services not available. SWADroidTracker disabled");
+            // Get tracker.
+            Tracker t = getTracker(context);
+
+            // Build and send exception.
+            /*t.send(new HitBuilders.ExceptionBuilder()
+                    .setDescription(e.getCause().toString())
+                    .setFatal(fatal)
+                    .build());*/
+
+            t.send(new HitBuilders.ExceptionBuilder()
+                            .setDescription(
+                                    new StandardExceptionParser(context, null)
+                                            .getDescription(Thread.currentThread().getName(), e))
+                            .setFatal(fatal)
+                            .build()
+            );
+
+
+            Log.e(TAG, e.getMessage(), e);
         }
     }
 }

@@ -35,8 +35,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.splunk.mint.Mint;
-
 import org.apache.http.client.HttpResponseException;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.KvmSerializable;
@@ -55,6 +53,7 @@ import javax.net.ssl.SSLException;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.SWADroidTracker;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.AlertNotificationFactory;
 import es.ugr.swad.swadroid.model.Model;
@@ -89,6 +88,10 @@ public class NotificationsSyncAdapterService extends Service {
     public static final String STOP_SYNC = "es.ugr.swad.swadroid.sync.stop";
     public static boolean isConnected;
     public static boolean isDebuggable;
+    /**
+     * Application context
+     */
+    public static Context mCtx;
 
     public NotificationsSyncAdapterService() {
         super();
@@ -100,6 +103,7 @@ public class NotificationsSyncAdapterService extends Service {
         public SyncAdapterImpl(Context context) {
             super(context, true);
             mContext = context;
+            mCtx = context;
         }
 
         @Override
@@ -162,12 +166,12 @@ public class NotificationsSyncAdapterService extends Service {
                 if(dbHelper.isDbInTransaction()) {
                 	dbHelper.endTransaction(false);
                 }
-                
-	            Log.e(TAG, errorMessage, e);
 
-                //Send exception details to Mint
+                //Send exception details to Google Analytics
                 if(sendException) {
-                	Mint.logException(e);
+                    SWADroidTracker.sendException(mContext, e, false);
+                } else {
+                    Log.e(TAG, errorMessage, e);
                 }
                 
                 //Notify synchronization stop
@@ -195,13 +199,6 @@ public class NotificationsSyncAdapterService extends Service {
         	Log.e(TAG, "Error getting debuggable flag", e);
         }
         
-		//Initialize Mint plugin
-        try {
-        	Mint.initAndStartSession(this, Constants.MINT_API_KEY);
-        } catch (Exception e) {
-        	Log.e(TAG, "Error initializing Mint", e);
-        }
-        
         try {
             prefs = new Preferences(this);
             dbHelper = new DataBaseHelper(this);            
@@ -210,8 +207,8 @@ public class NotificationsSyncAdapterService extends Service {
         } catch (Exception e) {
             Log.e(TAG, "Error initializing database and preferences", e);
 
-            //Send exception details to Mint
-            Mint.logException(e);
+            //Send exception details to Google Analytics
+            SWADroidTracker.sendException(mCtx, e, false);
         }
         
 		super.onCreate();
@@ -227,20 +224,6 @@ public class NotificationsSyncAdapterService extends Service {
         //  unless explicitly stopped, and it's process is killed, we want it to
         //  be restarted
         return START_STICKY;
-	}
-
-	/* (non-Javadoc)
-	 * @see android.app.Service#onDestroy()
-	 */
-	@Override
-	public void onDestroy() {
-		try {
-			Mint.closeSession(this);
-		} catch (Exception e) {
-			Log.e(TAG, "Error closing Mint", e);
-        }
-		
-		super.onDestroy();
 	}
 
 	@Override

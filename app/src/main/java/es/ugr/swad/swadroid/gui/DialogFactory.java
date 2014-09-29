@@ -14,13 +14,13 @@ import android.view.View;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
 
-import com.splunk.mint.Mint;
-
 import org.apache.commons.io.IOUtils;
 
 import java.io.InputStream;
 
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.SWADroidTracker;
+
 /**
  * Class for create dialogs.
  *
@@ -267,9 +267,9 @@ public class DialogFactory {
         if (ex != null) {
             Log.e(tag, ex.getMessage(), ex);
 
-            // Send exception details to Mint
+            // Send exception details to Google Analytics
             if (!isDebuggable && sendException) {
-                Mint.logExceptionMessage(tag, message, ex);
+                SWADroidTracker.sendException(context, ex, false);
             }
         }
         

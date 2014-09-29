@@ -26,8 +26,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.splunk.mint.Mint;
-
 import java.security.NoSuchAlgorithmException;
 
 import es.ugr.swad.swadroid.database.DataBaseHelper;
@@ -157,12 +155,18 @@ public class Preferences {
      * Indicates if there are changes on preferences
      */
     private static boolean preferencesChanged = false;
+    /**
+     * Application context
+     */
+    private static Context mContext;
     
     /**
      * Constructor
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	public Preferences(Context ctx) { 
+	public Preferences(Context ctx) {
+        mContext = ctx;
+
     	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
     		/*
     		 *  If Android API >= 11 (HONEYCOMB) enable access to SharedPreferences from all processes
@@ -186,7 +190,7 @@ public class Preferences {
 	            dbHelper = new DataBaseHelper(ctx);
 	        } catch (Exception e) {
 	            Log.e(TAG, e.getMessage());
-	            Mint.logException(e);
+                SWADroidTracker.sendException(mContext, e, false);
 	        }
     	}
 	}

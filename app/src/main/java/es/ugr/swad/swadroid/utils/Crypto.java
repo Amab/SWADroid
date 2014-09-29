@@ -20,7 +20,8 @@
 
 package es.ugr.swad.swadroid.utils;
 
-import com.splunk.mint.Mint;
+import android.content.Context;
+import android.util.Log;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -33,12 +34,19 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
 
+import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.SWADroidTracker;
+
 /**
  * Cryptographic class for encryption purposes.
  *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class Crypto {
+    /**
+     * Crypto tag name for Logcat
+     */
+    public static final String TAG = Constants.APP_TAG + " Crypto";
 
     private Cipher ecipher;
     private Cipher dcipher;
@@ -48,8 +56,14 @@ public class Crypto {
 
     // Iteration count
     private final int iterationCount = 1979;
+    /**
+     * Application context
+     */
+    public Context mContext;
 
-    public Crypto(String passPhrase) {
+    public Crypto(Context ctx, String passPhrase) {
+        mContext = ctx;
+
         try {
             // Create the key
             KeySpec keySpec = new PBEKeySpec(passPhrase.toCharArray(), salt,
@@ -67,10 +81,8 @@ public class Crypto {
             ecipher.init(Cipher.ENCRYPT_MODE, key, paramSpec);
             dcipher.init(Cipher.DECRYPT_MODE, key, paramSpec);
         } catch (Exception e) {
-            e.printStackTrace();
-
-            //Send exception details to Mint
-            Mint.logException(e);
+            //Send exception details to Google Analytics
+            SWADroidTracker.sendException(mContext, e, false);
         }
     }
 
@@ -87,10 +99,9 @@ public class Crypto {
             rVal = toHex(enc);
         } catch (Exception e) {
             rVal = "Error encrypting: " + e.getMessage();
-            e.printStackTrace();
 
-            //Send exception details to Mint
-            Mint.logException(e);
+            //Send exception details to Google Analytics
+            SWADroidTracker.sendException(mContext, e, false);
         }
         return rVal;
     }
@@ -108,10 +119,9 @@ public class Crypto {
             rVal = new String(utf8, "UTF8");
         } catch (Exception e) {
             rVal = "Error encrypting: " + e.getMessage();
-            e.printStackTrace();
 
-            //Send exception details to Mint
-            Mint.logException(e);
+            //Send exception details to Google Analytics
+            SWADroidTracker.sendException(mContext, e, false);
         }
         return rVal;
     }

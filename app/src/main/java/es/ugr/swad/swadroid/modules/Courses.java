@@ -24,8 +24,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.splunk.mint.Mint;
-
 import org.ksoap2.serialization.SoapObject;
 
 import java.util.ArrayList;
@@ -231,9 +229,9 @@ public class Courses extends Module {
         } catch (Exception e) {
             e.printStackTrace();
 
-            //Send exception details to Mint
+            //Send exception details to Google Analytics
             if (!isDebuggable) {
-                Mint.logException(e);
+                SWADroidTracker.sendException(context, e, false);
             }
         }
     }
