@@ -43,8 +43,6 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 
-import com.splunk.mint.Mint;
-
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -167,14 +165,6 @@ public class SWADMain extends MenuExpandableListActivity {
 
         SWADroidTracker.initTracker(getApplicationContext());
         
-        //Initialize Mint plugin
-        try {
-        	Mint.initAndStartSession(this, Constants.MINT_API_KEY);
-            Mint.enableDebug();
-        } catch (Exception e) {
-        	Log.e(TAG, "Error initializing Mint", e);
-        }
-        
         //Initialize screen
         super.onCreate(icicle);
 
@@ -263,20 +253,6 @@ public class SWADMain extends MenuExpandableListActivity {
 
         SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
     }
-
-    /* (non-Javadoc)
-	 * @see android.app.Activity#onDestroy()
-	 */
-	@Override
-	protected void onDestroy() {
-		try {
-			Mint.closeSession(this);
-		} catch (Exception e) {
-			Log.e(TAG, "Error closing Mint", e);
-        }
-		
-		super.onDestroy();
-	}
 	
 	/**
 	 * Initializes application on first run

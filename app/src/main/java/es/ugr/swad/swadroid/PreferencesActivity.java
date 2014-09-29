@@ -36,8 +36,6 @@ import android.preference.PreferenceScreen;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.splunk.mint.Mint;
-
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Date;
@@ -57,7 +55,7 @@ import es.ugr.swad.swadroid.utils.Utils;
  */
 public class PreferencesActivity extends PreferenceActivity implements OnPreferenceChangeListener {
     /**
-     * Login tag name for Logcat
+     * PreferencesActivity tag name for Logcat
      */
     public static final String TAG = Constants.APP_TAG + " PreferencesActivity";
     /**
@@ -317,8 +315,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         try {
             currentVersionPref.setSummary(getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
         } catch (NameNotFoundException e) {
-            Log.e(TAG, e.getMessage(), e);
-            Mint.logException(e);
+            SWADroidTracker.sendException(getApplicationContext(), e, false);
         }
     }
 

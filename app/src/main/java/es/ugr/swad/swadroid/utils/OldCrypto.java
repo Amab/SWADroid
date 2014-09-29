@@ -19,7 +19,8 @@
 
 package es.ugr.swad.swadroid.utils;
 
-import com.splunk.mint.Mint;
+import android.content.Context;
+import android.util.Log;
 
 import java.security.MessageDigest;
 import java.security.SecureRandom;
@@ -29,37 +30,41 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
+import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.SWADroidTracker;
+
 /**
  * Cryptographic class for encryption purposes.
  *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class OldCrypto {
-    public static String encrypt(String seed, String cleartext) {
+    /**
+     * OldCrypto tag name for Logcat
+     */
+    public static final String TAG = Constants.APP_TAG + " OldCrypto";
+
+    public static String encrypt(Context ctx, String seed, String cleartext) {
         try {
             byte[] rawKey = getRawKey(seed.getBytes("UTF-8"));
             byte[] result = encrypt(rawKey, cleartext.getBytes("UTF-8"));
             return Base64.encodeBytes(result);
         } catch (Exception e) {
-            e.printStackTrace();
-
-            //Send exception details to Mint
-            Mint.logException(e);
+            //Send exception details to Google Analytics
+            SWADroidTracker.sendException(ctx, e, false);
         }
         return "error";
     }
 
-    public static String decrypt(String seed, String encrypted) {
+    public static String decrypt(Context ctx, String seed, String encrypted) {
         try {
             byte[] rawKey = getRawKey(seed.getBytes("UTF-8"));
             byte[] enc = Base64.decode(encrypted);
             byte[] result = decrypt(rawKey, enc);
             return new String(result, "UTF-8");
         } catch (Exception e) {
-            e.printStackTrace();
-
-            //Send exception details to Mint
-            Mint.logException(e);
+            //Send exception details to Google Analytics
+            SWADroidTracker.sendException(ctx, e, false);
         }
         return "error";
     }
@@ -87,7 +92,7 @@ public class OldCrypto {
         return cipher.doFinal(encrypted);
     }
 
-    public static String md5(final String s) {
+    public static String md5(Context ctx, final String s) {
         try {
             MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
             digest.update(s.getBytes("UTF-8"));
@@ -103,10 +108,8 @@ public class OldCrypto {
             }
             return hexString.toString();
         } catch (Exception e) {
-            e.printStackTrace();
-
-            //Send exception details to Mint
-            Mint.logException(e);
+            //Send exception details to Google Analytics
+            SWADroidTracker.sendException(ctx, e, false);
         }
         return "error";
     }

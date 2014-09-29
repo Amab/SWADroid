@@ -38,11 +38,6 @@ public class Constants {
 	 */
 	public static final String SWAD_APP_KEY = Config.SWAD_APP_KEY;
     /**
-	 * Mint application key
-	 * @deprecated Use {@link Config#MINT_API_KEY} instead
-	 */
-	public static final String MINT_API_KEY = Config.MINT_API_KEY;
-    /**
      * Server URL
      */
     public static final String DEFAULT_SERVER = "swad.ugr.es";

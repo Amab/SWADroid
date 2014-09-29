@@ -24,8 +24,6 @@ import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.splunk.mint.Mint;
-
 import org.ksoap2.serialization.SoapObject;
 
 import java.io.ByteArrayOutputStream;
@@ -42,6 +40,7 @@ import java.util.Vector;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.SWADroidTracker;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.Login;
@@ -189,21 +188,9 @@ public class RollcallConfigDownload extends Module {
 
                     is.close();
                     os.close();
-                } catch (IOException e) {
-                    Log.e(TAG, "Error IO: " + e.getMessage());
-                    e.printStackTrace();
-
-                    //Send exception details to Mint
-                    if (!isDebuggable) {
-                        Mint.logException(e);
-                    }
-                } catch (URISyntaxException e) {
-                    e.printStackTrace();
-
-                    //Send exception details to Mint
-                    if (!isDebuggable) {
-                        Mint.logException(e);
-                    }
+                } catch (Exception e) {
+                    //Send exception details to Google Analytics
+                    SWADroidTracker.sendException(getApplicationContext(), e, false);
                 }
             }
         }

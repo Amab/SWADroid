@@ -18,7 +18,7 @@
  */
 package es.ugr.swad.swadroid.modules.downloads;
 
-import com.splunk.mint.Mint;
+import android.content.Context;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -33,6 +33,8 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+
+import es.ugr.swad.swadroid.SWADroidTracker;
 
 
 /**
@@ -53,15 +55,20 @@ public class DirectoryNavigator {
     private final ArrayList<String> path;
 
     private ArrayList<DirectoryItem> currentItems;
+    /**
+     * Application context
+     */
+    public Context mContext;
 
     /**
      * Constructor.
      *
      * @param fileXML File where we obtain all the information.
      */
-    public DirectoryNavigator(String fileXML) {
+    public DirectoryNavigator(Context ctx, String fileXML) {
         this.XMLinfo = fileXML;
         this.path = new ArrayList<String>();
+        this.mContext = ctx;
     }
 
     /**
@@ -268,10 +275,8 @@ public class DirectoryNavigator {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
-
-            //Send exception details to Mint
-            Mint.logException(e);
+            //Send exception details to Google Analytics
+            SWADroidTracker.sendException(mContext, e, false);
         }
 
         //If we don't find the entire path, we throw an exception.

@@ -83,10 +83,9 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="ksoap2-j2se-3.3.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-5.2.08" level="project" />
-    <orderEntry type="library" exported="" name="support-v4-20.0.0" level="project" />
     <orderEntry type="library" exported="" name="commons-io-2.4" level="project" />
+    <orderEntry type="library" exported="" name="support-v4-20.0.0" level="project" />
     <orderEntry type="library" exported="" name="ksoap2-android-3.3.0" level="project" />
-    <orderEntry type="library" exported="" name="mint-4.0.1" level="project" />
     <orderEntry type="library" exported="" name="kxml-2.2.4" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-20.0.0" level="project" />
     <orderEntry type="library" exported="" name="kobjects-j2me-0.0-SNAPSHOT-20040926-2" level="project" />

@@ -59,7 +59,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
     /**
      * Tests tag name for Logcat
      */
-    public static final String TAG = Constants.APP_TAG + "Groups Manager";
+    public static final String TAG = Constants.APP_TAG + " Groups Manager";
     /**
      * Course code of current selected course
      */

@@ -22,13 +22,12 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.splunk.mint.Mint;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.SWADroidTracker;
 
 /**
  * Download the file located at the given URL, save it to a file.
@@ -69,8 +68,8 @@ public class FileDownloaderAsyncTask extends AsyncTask<String, Integer, Boolean>
         } catch (MalformedURLException e) {
             Log.e(TAG, "Incorrect URL", e);
 
-            //Send exception details to Mint
-            Mint.logException(e);
+            //Send exception details to Google Analytics
+            SWADroidTracker.sendException(mContext, e, false);
 
             downloadSuccess = false;
             return false;
