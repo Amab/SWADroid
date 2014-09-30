@@ -82,6 +82,8 @@ public class SWADroidTracker {
 
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(context);
             Tracker t = analytics.newTracker(Config.ANALYTICS_API_KEY);
+            t.enableExceptionReporting(true);
+            t.enableAutoActivityTracking(true);
             mTrackers.put(TrackerName.APP_TRACKER, t);
 
         }
@@ -93,12 +95,31 @@ public class SWADroidTracker {
         if(isTrackerEnabled(context)) {
             GoogleAnalytics.getInstance(context).newTracker(Config.ANALYTICS_API_KEY);
 
-            Thread.UncaughtExceptionHandler exceptionHandler = new ExceptionReporter(
+            /*Thread.UncaughtExceptionHandler exceptionHandler = new ExceptionReporter(
                     getTracker(context),                              // Currently used Tracker.
                     Thread.getDefaultUncaughtExceptionHandler(),      // Current default uncaught exception handler.
                     context);                                         // Context of the application.
 
             // Make exceptionHandler the new default uncaught exception handler.
+            Thread.setDefaultUncaughtExceptionHandler(exceptionHandler);*/
+
+            ExceptionReporter exceptionHandler =
+                    new ExceptionReporter(
+                            getTracker(context),
+                            Thread.getDefaultUncaughtExceptionHandler(),
+                            context);
+
+            StandardExceptionParser exceptionParser =
+                    new StandardExceptionParser(context, null) {
+                        @Override
+                        public String getDescription(String threadName, Throwable t) {
+                            return "{" + threadName + "} " + Log.getStackTraceString(t);
+                        }
+                    };
+
+            exceptionHandler.setExceptionParser(exceptionParser);
+
+            // Make myHandler the new default uncaught exception handler.
             Thread.setDefaultUncaughtExceptionHandler(exceptionHandler);
 
             Log.i(TAG, "Google Play Services available. SWADroidTracker enabled");
@@ -161,14 +182,19 @@ public class SWADroidTracker {
                     .setFatal(fatal)
                     .build());*/
 
+            StandardExceptionParser exceptionParser =
+                    new StandardExceptionParser(context, null) {
+                        @Override
+                        public String getDescription(String threadName, Throwable t) {
+                            return "{" + threadName + "} " + Log.getStackTraceString(t);
+                        }
+                    };
+
             t.send(new HitBuilders.ExceptionBuilder()
-                            .setDescription(
-                                    new StandardExceptionParser(context, null)
-                                            .getDescription(Thread.currentThread().getName(), e))
+                            .setDescription(exceptionParser.getDescription(Thread.currentThread().getName(), e))
                             .setFatal(fatal)
                             .build()
             );
-
 
             Log.e(TAG, e.getMessage(), e);
         }
