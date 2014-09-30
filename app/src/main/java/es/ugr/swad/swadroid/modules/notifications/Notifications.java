@@ -647,8 +647,8 @@ public class Notifications extends Module implements
 			            }
 	
 						@Override
-						public void onStartSwipe() {		            	
-			            	disableSwipe();
+						public void onStartSwipe() {
+                            disableSwipe();
 						}
 	
 						@Override
@@ -662,16 +662,15 @@ public class Notifications extends Module implements
 			list.setOnTouchListener(touchListener);
 			// Setting this scroll listener is required to ensure that during ListView scrolling,
 			// we don't look for swipes.
-			list.setOnScrollListener(touchListener.makeScrollListener(refreshLayout));	
+			list.setOnScrollListener(touchListener.makeScrollListener(refreshLayout));
 		} else {
 			Log.w(TAG, "SwipeListViewTouchListener requires Android 3.1 (HONEYCOMB_MR1) or newer");
-			list.setOnScrollListener(new AbsListView.OnScrollListener() {@
-	            Override
+			list.setOnScrollListener(new AbsListView.OnScrollListener() {
+                @Override
 	            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
 	            }
 
-	            @
-	            Override
+	            @Override
 	            public void onScroll(AbsListView absListView, int firstVisibleItem,
 	                    int visibleItemCount, int totalItemCount) {
 	            	
@@ -717,6 +716,7 @@ public class Notifications extends Module implements
 	 */
 	public void enableSwipe() {
 		refreshLayout.setEnabled(true);
+        //Log.d(TAG, "RefreshLayout Swipe ENABLED");
 	}
 
 	/**
@@ -724,7 +724,8 @@ public class Notifications extends Module implements
 	 * to show refreshing programatically.
 	 */
 	public void disableSwipe() {
-		refreshLayout.setEnabled(false);
+        refreshLayout.setEnabled(false);
+        //Log.d(TAG, "RefreshLayout Swipe DISABLED");
 	}
 
 	/**

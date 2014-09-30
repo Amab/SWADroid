@@ -37,8 +37,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import es.ugr.swad.swadroid.Constants;
+
 @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
 public class SwipeListViewTouchListener implements View.OnTouchListener {
+    /**
+     * SwipeListViewTouchListener tag name for Logcat
+     */
+    private static final String TAG = Constants.APP_TAG + " SwipeListViewTouchListener";
+
     // Cached ViewConfiguration and system-wide constant values
     private int mSlop;
     private int mMinFlingVelocity;
@@ -148,14 +155,13 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
      * @see {@link SwipeListViewTouchListener}
      */
     public AbsListView.OnScrollListener makeScrollListener(final SwipeRefreshLayout refreshLayout) {
-        return new AbsListView.OnScrollListener() {@
-            Override
+        return new AbsListView.OnScrollListener() {
+            @Override
             public void onScrollStateChanged(AbsListView absListView, int scrollState) {
                 setEnabled(scrollState != AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL);
             }
 
-            @
-            Override
+            @Override
             public void onScroll(AbsListView absListView, int firstVisibleItem,
                     int visibleItemCount, int totalItemCount) {
             	
@@ -169,11 +175,11 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
 		            enable = firstItemVisible && topOfFirstItemVisible;
 		        }
 		        refreshLayout.setEnabled(enable);
+
+                //Log.d(TAG, "RefreshLayout Swipe enabled=" + enable);
             }
         };
     }
-    
-
 
     /**
      * Returns an {@link android.widget.AbsListView.OnScrollListener} to be added to the
@@ -182,27 +188,24 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
      * If a scroll listener is already assigned, the caller should still pass scroll changes
      * through to this listener. This will ensure that this
      * {@link SwipeListViewTouchListener} is paused during list view scrolling.</p>
-     * @param refreshLayout 
      *
      * @see {@link SwipeListViewTouchListener}
      */
     public AbsListView.OnScrollListener makeScrollListener() {
-        return new AbsListView.OnScrollListener() {@
-            Override
+        return new AbsListView.OnScrollListener() {
+            @Override
             public void onScrollStateChanged(AbsListView absListView, int scrollState) {
                 setEnabled(scrollState != AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL);
             }
 
-            @
-            Override
+            @Override
             public void onScroll(AbsListView absListView, int firstVisibleItem,
                     int visibleItemCount, int totalItemCount) {
             }
         };
     }
 
-    @
-    Override
+    @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         if (mViewWidth < 2) {
             mViewWidth = mListView.getWidth();
@@ -249,8 +252,6 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
             {
                 if (mVelocityTracker == null) {
                     break;
-                } else {
-                	mCallback.onStopSwipe();
                 }
 
                 float deltaX = motionEvent.getRawX() - mDownX;
@@ -269,7 +270,7 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
                     swipeRight = mVelocityTracker.getXVelocity() > 0;
                 }
                 if (swipe) {
-                    // sufficent swipe value
+                    // sufficient swipe value
                     final View downView = mDownView; // mDownView gets null'd before animation ends
                     final int downPosition = mDownPosition;
                     final boolean toTheRight = swipeRight;
@@ -320,7 +321,7 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
                 }
 
                 if (mSwiping) {
-                	mCallback.onStartSwipe();
+                    mCallback.onStartSwipe();
                     mDownView.setTranslationX(deltaX);
                     mDownView.setAlpha(Math.max(0f, Math.min(1f,
                         1f - 2f * Math.abs(deltaX) / mViewWidth)));
@@ -341,8 +342,7 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
             this.view = view;
         }
 
-        @
-        Override
+        @Override
         public int compareTo(PendingSwipeData other) {
             // Sort by descending position
             return other.position - position;
