@@ -57,7 +57,7 @@ public class SWADroidTracker {
         ECOMMERCE_TRACKER, // Tracker used by all ecommerce transactions from a company.
     }
 
-    static HashMap<TrackerName, Tracker> mTrackers = new HashMap<TrackerName, Tracker>();
+    private static HashMap<TrackerName, Tracker> mTrackers = new HashMap<TrackerName, Tracker>();
 
     /*static synchronized Tracker getTracker(Context context, TrackerName trackerId) {
         if (!mTrackers.containsKey(trackerId)) {
@@ -72,7 +72,12 @@ public class SWADroidTracker {
         return mTrackers.get(trackerId);
     }*/
 
-    static synchronized Tracker getTracker(Context context) {
+    private static boolean isTrackerEnabled(Context context) {
+        return (!Config.ANALYTICS_API_KEY.isEmpty()
+                && (GooglePlayServicesUtil.isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS));
+    }
+
+    private static synchronized Tracker getTracker(Context context) {
         if (!mTrackers.containsKey(TrackerName.APP_TRACKER)) {
 
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(context);
@@ -85,7 +90,7 @@ public class SWADroidTracker {
 
     public static void initTracker(Context context) {
         // Initialize a tracker using a Google Analytics property ID.
-        if(GooglePlayServicesUtil.isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS) {
+        if(isTrackerEnabled(context)) {
             GoogleAnalytics.getInstance(context).newTracker(Config.ANALYTICS_API_KEY);
 
             Thread.UncaughtExceptionHandler exceptionHandler = new ExceptionReporter(
@@ -103,7 +108,7 @@ public class SWADroidTracker {
     }
 
     public static void sendScreenView(Context context, String path) {
-        if(GooglePlayServicesUtil.isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS) {
+        if(isTrackerEnabled(context)) {
             // Get tracker.
             Tracker t = getTracker(context);
 
@@ -119,7 +124,7 @@ public class SWADroidTracker {
     }
 
     public static void sendScreenView(Context context, String path, String category, String action, String label) {
-        if(GooglePlayServicesUtil.isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS) {
+        if(isTrackerEnabled(context)) {
             // Get tracker.
             Tracker t = getTracker(context);
 
@@ -146,7 +151,7 @@ public class SWADroidTracker {
     }
 
     public static void sendException(Context context, Exception e, boolean fatal) {
-        if(GooglePlayServicesUtil.isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS) {
+        if(isTrackerEnabled(context)) {
             // Get tracker.
             Tracker t = getTracker(context);
 
