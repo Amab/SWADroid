@@ -73,8 +73,9 @@ public class SWADroidTracker {
     }*/
 
     private static boolean isTrackerEnabled(Context context) {
-        return (!Config.ANALYTICS_API_KEY.isEmpty()
-                && (GooglePlayServicesUtil.isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS));
+        /*return (!Config.ANALYTICS_API_KEY.isEmpty()
+                && (GooglePlayServicesUtil.isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS));*/
+        return (!Config.ANALYTICS_API_KEY.isEmpty());
     }
 
     private static synchronized Tracker getTracker(Context context) {
