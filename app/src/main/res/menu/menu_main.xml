@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:swadroid="http://schemas.android.com/apk/res-auto" >
+
+    <item
+        android:id="@+id/share_menu"
+        android:icon="@android:drawable/ic_menu_share"
+        android:title="@string/shareTitle_menu"
+        android:visible="false"
+        swadroid:showAsAction="ifRoom|withText">
+    </item>
+    <item
+        android:id="@+id/rate_menu"
+        android:icon="@drawable/ic_menu_star"
+        android:title="@string/rateTitle_menu"
+        android:visible="false"
+        swadroid:showAsAction="ifRoom|withText">
+    </item>
+    <item
+        android:id="@+id/clean_database_menu"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:title="@string/cleanDatabaseTitle_menu"
+        android:visible="false"
+        swadroid:showAsAction="ifRoom|withText">
+    </item>
+    <item
+        android:id="@+id/preferences_menu"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:title="@string/preferencesTitle_menu"
+        swadroid:showAsAction="ifRoom|withText">
+    </item>
+
+</menu>
