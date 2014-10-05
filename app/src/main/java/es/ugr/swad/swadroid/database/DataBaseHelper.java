@@ -1961,14 +1961,17 @@ public class DataBaseHelper {
      * Delete all tables from database
      */
     public void clearDB() {
+        SWADroidTracker.sendScreenView(mCtx, TAG + " clearDB");
         db.deleteTables();
-        Log.d(TAG, "All tables deleted");
+        Log.i(TAG, "All tables deleted");
     }
 
     /**
      * Clean data of all tables from database. Removes users photos from external storage
      */
     public void cleanTables() {
+        SWADroidTracker.sendScreenView(mCtx, TAG + " cleanTables");
+
         db.emptyTables();
         compactDB();
 
@@ -1986,6 +1989,8 @@ public class DataBaseHelper {
                 }
             }
         }
+
+        Log.i(TAG, "All tables emptied");
     }
 
     /**
@@ -2035,6 +2040,7 @@ public class DataBaseHelper {
      */
     private void compactDB() {
         db.getDB().execSQL("VACUUM;");
+        Log.i(TAG, "Database compacted");
     }
 
     /**
@@ -2074,6 +2080,8 @@ public class DataBaseHelper {
             db.getDB().execSQL("CREATE TABLE " + DataBaseHelper.DB_TABLE_NOTIFICATIONS + " (_id integer primary key autoincrement, notifCode long, eventCode long, eventType text, eventTime text,"
                     + " userSurname1 text, userSurname2 text, userFirstname text, userPhoto text, location text, summary text, status text, content text, seenLocal text, seenRemote text); ");
         }
+
+        Log.i(TAG, "Database upgraded");
 
         compactDB();
     }
