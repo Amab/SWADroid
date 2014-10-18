@@ -27,11 +27,6 @@
         android:name="android.hardware.camera.autofocus"
         android:required="false" />
 
-    <uses-sdk
-        android:minSdkVersion="9"
-        android:targetSdkVersion="19" >
-    </uses-sdk>
-
     <supports-screens
         android:anyDensity="true"
         android:largeScreens="true"
