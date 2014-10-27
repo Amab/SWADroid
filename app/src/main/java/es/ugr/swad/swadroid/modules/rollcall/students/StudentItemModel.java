@@ -61,6 +61,8 @@ public class StudentItemModel implements Comparable<StudentItemModel> {
         return student.getPhotoFileName();
     }
 
+    public String getUserPhoto() { return student.getUserPhoto(); }
+
     @Override
     public int compareTo(StudentItemModel item) {
         if (this.student.getUserSurname1().compareToIgnoreCase(item.student.getUserSurname1()) == 0) {

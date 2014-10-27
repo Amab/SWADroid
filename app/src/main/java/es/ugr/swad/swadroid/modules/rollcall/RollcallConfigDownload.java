@@ -26,21 +26,11 @@ import android.widget.Toast;
 
 import org.ksoap2.serialization.SoapObject;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Vector;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.SWADroidTracker;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.Login;
@@ -57,10 +47,6 @@ public class RollcallConfigDownload extends Module {
      * Number of available students
      */
     private int numStudents;
-    /**
-     * Maximum size of a student photo (in bytes)
-     */
-    private static final int PHOTO_FILE_MAX_SIZE = 30 * 1024;    // 30 KB
     /**
      * Rollcall Config Download tag name for Logcat
      */
@@ -135,65 +121,19 @@ public class RollcallConfigDownload extends Module {
                         userSurname1,
                         userSurname2,
                         userFirstName,
-                        userPhoto,                    // photoPath
+                        userPhoto,                   // photoPath
                         userRole);
 
                 // Inserts user in database or updates it if already exists
                 dbHelper.insertUser(u);
                 dbHelper.insertUserCourse(userCode, courseCode, groupCode);
-                
-                // If user's picture URL is not empty, download and save it in phone memory
-                if(!userPhoto.equals("")) {
-                	downloadFile(userPhoto);
-                }
             }    // end for (int i=0; i < usersCount; i++)
 
-            if (isDebuggable) {
-                Log.d(TAG, "Retrieved " + numStudents + " users");
-            }
+             Log.i(TAG, "Retrieved " + numStudents + " users");
         }    // end if (result != null)
 
         // Request finalized without errors
         setResult(RESULT_OK);
-    }
-
-    private void downloadFile(String url) {
-        if (url != null) {
-            // Check the status of the external memory
-            String status = Environment.getExternalStorageState();
-            if (status.equals(Environment.MEDIA_MOUNTED)) {
-                // Create a path where we will place our private file on external storage.
-                String fileName = url.substring(url.lastIndexOf('/') + 1);
-                File file = new File(getExternalFilesDir(null), fileName);
-                URI imageUrl;
-
-                try {
-                    imageUrl = new URI(url);
-                    HttpURLConnection conn = (HttpURLConnection) imageUrl.toURL().openConnection();
-                    conn.connect();
-
-                    InputStream is = conn.getInputStream();
-                    OutputStream os = new FileOutputStream(file);
-
-                    byte[] buff = new byte[PHOTO_FILE_MAX_SIZE];
-
-                    int bytesRead;
-                    ByteArrayOutputStream bao = new ByteArrayOutputStream();
-
-                    while ((bytesRead = is.read(buff)) != -1) {
-                        bao.write(buff, 0, bytesRead);
-                    }
-
-                    os.write(bao.toByteArray());
-
-                    is.close();
-                    os.close();
-                } catch (Exception e) {
-                    //Send exception details to Google Analytics
-                    SWADroidTracker.sendException(getApplicationContext(), e, false);
-                }
-            }
-        }
     }
 
     @Override

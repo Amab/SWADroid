@@ -39,29 +39,40 @@ public class ImageFactory {
 	 * @param imageView ImageView in which the image will be displayed
 	 * @param cacheMemory Indicates if the image should be cached in memory
 	 * @param cacheDisk Indicates if the image should be cached on disk
+     * @param imageEmpty Image resource showed on empty URL
+     * @param imageFail Image resource showed on failed image loading
+     * @param imageLoading Image resource showed on image loading
 	 */
 	public static void displayImage(Context ctx, String uri, ImageView imageView,
-			boolean cacheMemory, boolean cacheDisk) {
-		
+			boolean cacheMemory, boolean cacheDisk, int imageEmpty, int imageFail, int imageLoading) {
+
+        ImageLoader loader = ImageLoader.getInstance();
 		Builder builder = new DisplayImageOptions.Builder();
 		DisplayImageOptions options;
-		
-		if(cacheMemory) {
-			builder.cacheInMemory(true);
-		}
-		
-		if(cacheDisk) {
-			builder.cacheOnDisk(true);
-		}
-		
-		options = builder.build();
+
+		builder.cacheInMemory(cacheMemory);
+		builder.cacheOnDisk(cacheDisk);
+
+        if(imageEmpty == -1) {
+            builder.showImageForEmptyUri(imageLoading);
+        }
+
+        if(imageFail == -1) {
+            builder.showImageOnFail(imageLoading);
+        }
+
+        if(imageLoading == -1) {
+            builder.showImageOnLoading(imageLoading);
+        }
+
+        options = builder.build();
     	
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(ctx)
 		            .defaultDisplayImageOptions(options)
 		            .build();
-		
-		ImageLoader.getInstance().init(config);
-		
-		ImageLoader.getInstance().displayImage(uri, imageView);
+
+        loader.init(config);
+
+        loader.displayImage(uri, imageView);
 	}
 }

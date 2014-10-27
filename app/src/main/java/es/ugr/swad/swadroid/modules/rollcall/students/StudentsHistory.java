@@ -62,7 +62,7 @@ public class StudentsHistory extends Module {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.session_history);
+        setContentView(R.layout.list_items);
 
         /*ImageView image = (ImageView) this.findViewById(R.id.moduleIcon);
         image.setBackgroundResource(R.drawable.students_check);
@@ -75,14 +75,13 @@ public class StudentsHistory extends Module {
         // Get selected course
         String where = "id =" + String.valueOf(Courses.getSelectedCourseCode());
         Course selectedCourse = (Course) dbHelper.getAllRows(DataBaseHelper.DB_TABLE_COURSES, where, "fullName").get(0);
-        String courseName = selectedCourse.getFullName();
+        String courseName = selectedCourse.getShortName();
 
         // Get selected groupName
         Intent intent = getIntent();
         String groupName = intent.getStringExtra("groupName");
 
-        TextView title = (TextView) this.findViewById(R.id.listText);
-        title.setText(courseName + " - " + groupName);
+        getSupportActionBar().setSubtitle(courseName + " - " + groupName);
 
         showStudentsList();
     }
