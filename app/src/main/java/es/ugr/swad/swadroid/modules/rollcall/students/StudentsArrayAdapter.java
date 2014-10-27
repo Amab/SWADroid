@@ -20,25 +20,20 @@
 package es.ugr.swad.swadroid.modules.rollcall.students;
 
 import android.app.Activity;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.io.File;
 import java.util.List;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.gui.ImageFactory;
 
 /**
  * Students array adapter.
@@ -48,7 +43,6 @@ import es.ugr.swad.swadroid.R;
 public class StudentsArrayAdapter extends ArrayAdapter<StudentItemModel> {
     private final List<StudentItemModel> list;
     private final Activity context;
-    private int widthScale, heightScale, bMapScaledWidth, bMapScaledHeight;
     private final int callerId;
 
     public static final String TAG = Constants.APP_TAG + " InteractiveArrayAdapter";
@@ -69,7 +63,6 @@ public class StudentsArrayAdapter extends ArrayAdapter<StudentItemModel> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view;
-        Bitmap bMap;
 
         if (convertView == null) {
             LayoutInflater inflator = context.getLayoutInflater();
@@ -96,31 +89,11 @@ public class StudentsArrayAdapter extends ArrayAdapter<StudentItemModel> {
 
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
-        String photoFileName = list.get(position).getPhotoFileName();
+        String userPhoto = list.get(position).getUserPhoto();
         // If user has no photo, show default photo
-        if (photoFileName == null) {
-            bMap = BitmapFactory.decodeStream(viewHolder.image.getResources().openRawResource(R.raw.usr_bl));
-        } else {
-            String photoPath = getContext().getExternalFilesDir(null) + "/" + photoFileName;
-            File photoFile = new File(photoPath);
-            if (photoFile.exists()) {
-                bMap = BitmapFactory.decodeFile(photoPath);
-            } else {
-                // If photoFile does not exist (has been deleted), show default photo
-                bMap = BitmapFactory.decodeStream(viewHolder.image.getResources().openRawResource(R.raw.usr_bl));
-            }
-        }
+        ImageFactory.displayImage(context, userPhoto, viewHolder.image, true, true,
+                R.raw.usr_bl, R.raw.usr_bl, R.raw.usr_bl);
 
-        // Calculate the dimensions of the image to display as a function of the resolution of the screen
-        Display display = ((WindowManager) this.context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-
-        widthScale = 1200;
-        heightScale = 2000;
-        bMapScaledWidth = (bMap.getWidth() * display.getWidth()) / widthScale;
-        bMapScaledHeight = (bMap.getHeight() * display.getHeight()) / heightScale;
-
-        Bitmap bMapScaled = Bitmap.createScaledBitmap(bMap, bMapScaledWidth, bMapScaledHeight, true);
-        viewHolder.image.setImageBitmap(bMapScaled);
         viewHolder.text.setText(list.get(position).toString());
         viewHolder.checkbox.setChecked(list.get(position).isSelected());
         if (callerId == Constants.STUDENTS_LIST_REQUEST_CODE || callerId == Constants.STUDENTS_HISTORY_REQUEST_CODE)

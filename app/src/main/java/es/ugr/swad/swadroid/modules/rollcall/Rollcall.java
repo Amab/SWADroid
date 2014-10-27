@@ -185,7 +185,9 @@ public class Rollcall extends MenuExpandableListActivity {
     protected void onStart() {
         super.onStart();
         
-        List<Model> groupTypes = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_GROUP_TYPES, "courseCode = " + courseCode, "groupTypeName");
+        List<Model> groupTypes = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_GROUP_TYPES,
+                "courseCode = " + courseCode, "groupTypeName");
+
         Cursor c = dbHelper.getPracticeGroups(Courses.getSelectedCourseCode());
         startManagingCursor(c);
 
@@ -253,9 +255,11 @@ public class Rollcall extends MenuExpandableListActivity {
 
                         storeRollcallData();
                         if (!Utils.connectionAvailable(ctx)) {
-                            Toast.makeText(ctx, R.string.rollcallErrorNoConnection, Toast.LENGTH_LONG).show();
+                            Toast.makeText(ctx, R.string.rollcallErrorNoConnection,
+                                    Toast.LENGTH_LONG).show();
                         } else {
-                            Toast.makeText(ctx, R.string.rollcallWebServiceNotAvailable, Toast.LENGTH_LONG).show();
+                            Toast.makeText(ctx, R.string.rollcallWebServiceNotAvailable,
+                                    Toast.LENGTH_LONG).show();
                             // TODO: send rollcall data to SWAD
                         }
                     }

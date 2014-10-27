@@ -63,7 +63,7 @@ public class SessionsHistory extends Module {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.session_history);
+        setContentView(R.layout.list_items);
 
         ImageView image = (ImageView) this.findViewById(R.id.moduleIcon);
         image.setBackgroundResource(R.drawable.session_check);
