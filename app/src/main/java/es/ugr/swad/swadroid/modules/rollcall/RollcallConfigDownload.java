@@ -136,6 +136,7 @@ public class RollcallConfigDownload extends Module {
                         userSurname2,
                         userFirstName,
                         userPhoto,                    // photoPath
+                        null,
                         userRole);
 
                 // Inserts user in database or updates it if already exists

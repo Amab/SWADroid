@@ -148,11 +148,12 @@ public class Login extends Module {
                         Long.parseLong(soap.getProperty("userCode").toString()),        // userCode
                         soap.getProperty("wsKey").toString(),                           // wsKey
                         soap.getProperty("userID").toString(),                          // userID
-                        null,                                                           // userNickname
+                        soap.getProperty("userNickname").toString(),                    // userNickname
                         soap.getProperty("userSurname1").toString(),                    // userSurname1
                         soap.getProperty("userSurname2").toString(),                    // userSurname2
                         soap.getProperty("userFirstname").toString(),                   // userFirstname
                         soap.getProperty("userPhoto").toString(),                       // photoPath
+                        soap.getProperty("userBirthday").toString(),                    // userBirthday
                         Integer.parseInt(soap.getProperty("userRole").toString())       // userRole
                 );
 
@@ -171,6 +172,7 @@ public class Login extends Module {
         			Log.d(TAG, "userSurname2=" + user.getUserSurname2());
         			Log.d(TAG, "userFirstName=" + user.getUserFirstname());
         			Log.d(TAG, "userPhoto=" + user.getUserPhoto());
+                    Log.d(TAG, "userBirthday=" + user.getUserBirthday().getTime());
         			Log.d(TAG, "userRole=" + user.getUserRole());
         			Log.d(TAG, "isLogged=" + Login.isLogged());
         			Log.d(TAG, "lastLoginTime=" + Login.getLastLoginTime());
