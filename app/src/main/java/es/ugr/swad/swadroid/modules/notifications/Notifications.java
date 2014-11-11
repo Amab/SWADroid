@@ -399,7 +399,7 @@ public class Notifications extends Module implements
 					Long notifCode = Long.valueOf(pii.getProperty("notifCode")
 							.toString());
 					Long eventCode = Long.valueOf(pii.getProperty(
-							"notificationCode").toString());
+							"eventCode").toString());
 					String eventType = pii.getProperty("eventType").toString();
 					Long eventTime = Long.valueOf(pii.getProperty("eventTime")
 							.toString());

@@ -349,7 +349,7 @@ public class NotificationsSyncAdapterService extends Service {
             for (int i = 0; i < numNotif; i++) {
             	SoapObject pii = (SoapObject) soap.getProperty(i);
                 Long notifCode = Long.valueOf(pii.getProperty("notifCode").toString());
-                Long eventCode = Long.valueOf(pii.getProperty("notificationCode").toString());
+                Long eventCode = Long.valueOf(pii.getProperty("eventCode").toString());
                 String eventType = pii.getProperty("eventType").toString();
                 Long eventTime = Long.valueOf(pii.getProperty("eventTime").toString());
                 String userSurname1 = pii.getProperty("userSurname1").toString();

@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 21
-    buildToolsVersion "21.0.2"
+    buildToolsVersion "21.1.1"
 
     defaultConfig {
         applicationId "es.ugr.swad.swadroid"
@@ -24,7 +24,7 @@ android {
 dependencies {
     compile 'com.android.support:support-v4:21.0.0'
     compile 'com.android.support:appcompat-v7:21.0.0'
-    compile 'com.google.android.gms:play-services:6.1.11'
+    compile 'com.google.android.gms:play-services:6.1.71'
     compile 'com.google.zxing:core:2.1'
     compile 'com.google.code.gson:gson:2.3'
     compile 'com.google.code.ksoap2-android:ksoap2-android:3.3.0'
