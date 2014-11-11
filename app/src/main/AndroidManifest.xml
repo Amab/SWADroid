@@ -76,7 +76,7 @@
                 android:value="es.ugr.swad.swadroid.SWADMain" />
         </activity>
         <activity
-            android:name="es.ugr.swad.swadroid.modules.rollcall.RollcallConfigDownload"
+            android:name=".modules.rollcall.EventsDownload"
             android:label="@string/rollcallModuleLabel" >
         </activity>
         <activity

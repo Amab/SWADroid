@@ -193,6 +193,8 @@
     <string name="studentsUpdated">students updated</string>
     <string name="scan_no_students">No students found\n
         Try “Update students”</string>
+    <string name="noEventsAvailableMsg">There are no events in this subject</string>
+    <string name="eventsUpdated">events updated</string>
     <string name="photoContentDescription">Photo of student</string>
     <string name="noCameraFound">The device has no camera</string>
     <string name="saveMsg">Save</string>
@@ -225,8 +227,11 @@
     <string name="studentsTitle">Students</string>
     <string name="studentsDownloadProgressDescription">Synchronizing users.\n\nDepending on the number of
         users to synchronize, the data processing can take several minutes.\n\nPlease wait…</string>
-    <string name="studentsList">Students list</string>
     <string name="studentsDownloadProgressTitle">Students</string>
+    <string name="eventsDownloadProgressDescription">Synchronizing events.\n\nDepending on the number of
+        events to synchronize, the data processing can take several minutes.\n\nPlease wait…</string>
+    <string name="eventsDownloadProgressTitle">Events</string>
+    <string name="studentsList">Students list</string>
     <string name="studentsPresent">Present students</string>
     <string name="studentsUpdate">Update</string>
     <string name="newTitle">New</string>

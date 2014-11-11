@@ -132,7 +132,7 @@ public class Rollcall extends MenuExpandableListActivity {
                 boolean hasRearCam = pm.hasSystemFeature(PackageManager.FEATURE_CAMERA);
 
                 if (keyword.equals(getString(R.string.studentsUpdate))) {
-                    activity = new Intent(context, RollcallConfigDownload.class);
+                    activity = new Intent(context, EventsDownload.class);
                     activity.putExtra("groupCode", (long) 0);
                     startActivity(activity);
                 } else if (keyword.equals(getString(R.string.studentsSelect))) {

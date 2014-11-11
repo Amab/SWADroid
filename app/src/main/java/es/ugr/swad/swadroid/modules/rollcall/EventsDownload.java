@@ -35,22 +35,24 @@ import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.Module;
+import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
  * Rollcall config download module.
  *
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
-public class RollcallConfigDownload extends Module {
+public class EventsDownload extends Module {
     /**
-     * Number of available students
+     * Number of available events
      */
-    private int numStudents;
+    private int numEvents;
     /**
      * Rollcall Config Download tag name for Logcat
      */
-    private static final String TAG = Constants.APP_TAG + " RollcallConfigDownload";
+    private static final String TAG = Constants.APP_TAG + " EventsDownload";
 
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
@@ -58,7 +60,7 @@ public class RollcallConfigDownload extends Module {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setMETHOD_NAME("getUsers");
+        setMETHOD_NAME("getAttendanceEvents");
         getSupportActionBar().hide();
     }
 
@@ -79,33 +81,35 @@ public class RollcallConfigDownload extends Module {
 
     @Override
     protected void requestService() throws Exception {
-        int userRole = Constants.STUDENT_TYPE_CODE;
         long courseCode = Courses.getSelectedCourseCode();
-        long groupCode = getIntent().getLongExtra("groupCode", 0);
 
         // Creates webservice request, adds required params and sends request to webservice
         createRequest(SOAPClient.CLIENT_TYPE);
         addParam("wsKey", Login.getLoggedUser().getWsKey());
         addParam("courseCode", (int) courseCode);
-        addParam("groupCode", (int) groupCode);
-        addParam("userRole", userRole);
         sendRequest(User.class, false);
 
         if (result != null) {
             // Stores users data returned by webservice response
             ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
             SoapObject soap = (SoapObject) res.get(1);
-            numStudents = soap.getPropertyCount();
-            for (int i = 0; i < numStudents; i++) {
+            numEvents = soap.getPropertyCount();
+            for (int i = 0; i < numEvents; i++) {
                 SoapObject pii = (SoapObject) soap.getProperty(i);
 
-                long userCode = Long.valueOf(pii.getProperty("userCode").toString());
-                String userID = pii.getProperty("userID").toString();
+                long attendanceEventCode = Long.valueOf(pii.getProperty("attendanceEventCode").toString());
+                boolean hidden = Utils.parseStringBool(pii.getProperty("hidden").toString());
                 String userNickname = pii.getProperty("userNickname").toString();
                 String userSurname1 = pii.getProperty("userSurname1").toString();
                 String userSurname2 = pii.getProperty("userSurname2").toString();
                 String userFirstName = pii.getProperty("userFirstname").toString();
                 String userPhoto = pii.getProperty("userPhoto").toString();
+                int startTime = Integer.parseInt(pii.getProperty("startTime").toString());
+                int endTime = Integer.parseInt(pii.getProperty("endTime").toString());
+                boolean commentsTeachersVisible = Utils.parseStringBool(pii.getProperty("commentsTeachersVisible").toString());
+                String title = pii.getProperty("title").toString();
+                String text = pii.getProperty("text").toString();
+                String groups = pii.getProperty("groups").toString();
 
                 if (userNickname.equalsIgnoreCase(Constants.NULL_VALUE)) userNickname = "";
                 if (userSurname1.equalsIgnoreCase(Constants.NULL_VALUE)) userSurname1 = "";
@@ -113,23 +117,13 @@ public class RollcallConfigDownload extends Module {
                 if (userFirstName.equalsIgnoreCase(Constants.NULL_VALUE)) userFirstName = "";
                 if (userPhoto.equalsIgnoreCase(Constants.NULL_VALUE)) userPhoto = "";
 
-                User u = new User(
-                        userCode,                    // id
-                        null,                        // wsKey
-                        userID,
-                        userNickname,
-                        userSurname1,
-                        userSurname2,
-                        userFirstName,
-                        userPhoto,                   // photoPath
-                        userRole);
+                if (title.equalsIgnoreCase(Constants.NULL_VALUE)) title = "";
+                if (text.equalsIgnoreCase(Constants.NULL_VALUE)) text = "";
+                if (groups.equalsIgnoreCase(Constants.NULL_VALUE)) groups = "";
 
-                // Inserts user in database or updates it if already exists
-                dbHelper.insertUser(u);
-                dbHelper.insertUserCourse(userCode, courseCode, groupCode);
-            }    // end for (int i=0; i < usersCount; i++)
+            }
 
-             Log.i(TAG, "Retrieved " + numStudents + " users");
+            Log.i(TAG, "Retrieved " + numEvents + " events");
         }    // end if (result != null)
 
         // Request finalized without errors
@@ -138,23 +132,18 @@ public class RollcallConfigDownload extends Module {
 
     @Override
     protected void connect() {
-        String progressDescription = getString(R.string.studentsDownloadProgressDescription);
-        int progressTitle = R.string.studentsDownloadProgressTitle;
+        String progressDescription = getString(R.string.eventsDownloadProgressDescription);
+        int progressTitle = R.string.eventsDownloadProgressTitle;
 
-        startConnection(true, progressDescription, progressTitle);
+        startConnection(false, progressDescription, progressTitle);
     }
 
     @Override
     protected void postConnect() {
-        String status = Environment.getExternalStorageState();
-        if (!status.equals(Environment.MEDIA_MOUNTED)) {
-            Toast.makeText(this, R.string.scan_no_photos, Toast.LENGTH_LONG).show();
-        }
-
-        if (numStudents == 0) {
-            Toast.makeText(this, R.string.noStudentsAvailableMsg, Toast.LENGTH_LONG).show();
+        if (numEvents == 0) {
+            Toast.makeText(this, R.string.noEventsAvailableMsg, Toast.LENGTH_LONG).show();
         } else {
-            String msg = String.valueOf(numStudents) + " " + getResources().getString(R.string.studentsUpdated);
+            String msg = String.valueOf(numEvents) + " " + getResources().getString(R.string.eventsUpdated);
             Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
         }
         finish();
