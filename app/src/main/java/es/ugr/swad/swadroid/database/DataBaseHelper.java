@@ -356,15 +356,21 @@ public class DataBaseHelper {
                     null,
                     ent.getInt("tagInd"));
         } else if (table.equals(DataBaseHelper.DB_TABLE_USERS)) {
-            o = new User(ent.getInt("userCode"),
-                    null,                                // wsKey
-                    ent.getString("userID"),
-                    ent.getString("userNickname"),
-                    ent.getString("userSurname1"),
-                    ent.getString("userSurname2"),
-                    ent.getString("userFirstname"),
-                    ent.getString("photoPath"),
-                    ent.getInt("userRole"));
+            try {
+                o = new User(ent.getInt("userCode"),
+                        null,                                // wsKey
+                        ent.getString("userID"),
+                        ent.getString("userNickname"),
+                        ent.getString("userSurname1"),
+                        ent.getString("userSurname2"),
+                        ent.getString("userFirstname"),
+                        ent.getString("photoPath"),
+                        null,                               //userBirthday
+                        ent.getInt("userRole"));
+            } catch (ParseException e) {
+                //Send exception details to Google Analytics
+                SWADroidTracker.sendException(mCtx, e, false);
+            }
         } else if (table.equals(DataBaseHelper.DB_TABLE_GROUPS)) {
             long groupTypeCode = getGroupTypeCodeFromGroup(ent.getLong("id"));
             o = new Group(ent.getLong("id"),
@@ -515,17 +521,23 @@ public class DataBaseHelper {
 
         if (rows.size() > 0) {
             ent = rows.get(0);
-            
-            user = new User(
-            		ent.getLong("userCode"),
-            		null,
-		            crypto.decrypt(ent.getString("userID")),
-		            crypto.decrypt(ent.getString("userNickname")),
-		            crypto.decrypt(ent.getString("userSurname1")),
-		            crypto.decrypt(ent.getString("userSurname2")),
-		            crypto.decrypt(ent.getString("userFirstname")),
-		            crypto.decrypt(ent.getString("photoPath")),
-		            ent.getInt("userRole"));
+
+            try {
+                user = new User(
+                        ent.getLong("userCode"),
+                        null,
+                        crypto.decrypt(ent.getString("userID")),
+                        crypto.decrypt(ent.getString("userNickname")),
+                        crypto.decrypt(ent.getString("userSurname1")),
+                        crypto.decrypt(ent.getString("userSurname2")),
+                        crypto.decrypt(ent.getString("userFirstname")),
+                        crypto.decrypt(ent.getString("photoPath")),
+                        null,
+                        ent.getInt("userRole"));
+            } catch (ParseException e) {
+                //Send exception details to Google Analytics
+                SWADroidTracker.sendException(mCtx, e, false);
+            }
         }
 
         return user;

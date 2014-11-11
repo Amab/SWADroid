@@ -302,16 +302,16 @@ public class NotificationsSyncAdapterService extends Service {
 
             //Stores user data returned by webservice response
             User loggedUser = new User(
-                    Long.parseLong(ks.getProperty(0).toString()),                    // id
-                    soap.getProperty("wsKey").toString(),                            // wsKey
-                    soap.getProperty("userID").toString(),                            // userID
-                    //soap.getProperty("userNickname").toString(),					// userNickname
-                    null,                                                            // userNickname
+                    Long.parseLong(soap.getProperty("userCode").toString()),        // userCode
+                    soap.getProperty("wsKey").toString(),                           // wsKey
+                    soap.getProperty("userID").toString(),                          // userID
+                    soap.getProperty("userNickname").toString(),                    // userNickname
                     soap.getProperty("userSurname1").toString(),                    // userSurname1
                     soap.getProperty("userSurname2").toString(),                    // userSurname2
-                    soap.getProperty("userFirstname").toString(),                    // userFirstname
-                    soap.getProperty("userPhoto").toString(),                        // userPhoto
-                    Integer.parseInt(soap.getProperty("userRole").toString())        // userRole
+                    soap.getProperty("userFirstname").toString(),                   // userFirstname
+                    soap.getProperty("userPhoto").toString(),                       // photoPath
+                    soap.getProperty("userBirthday").toString(),                    // userBirthday
+                    Integer.parseInt(soap.getProperty("userRole").toString())       // userRole
             );
 
             Login.setLoggedUser(loggedUser);
@@ -349,7 +349,7 @@ public class NotificationsSyncAdapterService extends Service {
             for (int i = 0; i < numNotif; i++) {
             	SoapObject pii = (SoapObject) soap.getProperty(i);
                 Long notifCode = Long.valueOf(pii.getProperty("notifCode").toString());
-                Long eventCode = Long.valueOf(pii.getProperty("notificationCode").toString());
+                Long eventCode = Long.valueOf(pii.getProperty("eventCode").toString());
                 String eventType = pii.getProperty("eventType").toString();
                 Long eventTime = Long.valueOf(pii.getProperty("eventTime").toString());
                 String userSurname1 = pii.getProperty("userSurname1").toString();
