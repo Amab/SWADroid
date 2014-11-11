@@ -26,7 +26,7 @@ import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.Courses;
-import es.ugr.swad.swadroid.modules.rollcall.RollcallConfigDownload;
+import es.ugr.swad.swadroid.modules.rollcall.EventsDownload;
 import es.ugr.swad.swadroid.modules.rollcall.students.StudentItemModel;
 import es.ugr.swad.swadroid.modules.rollcall.students.StudentsArrayAdapter;
 
@@ -165,7 +165,7 @@ public class UsersList extends MenuActivity {
 				Intent refreshUsersList;
 				Context context = getApplicationContext();
 				
-				refreshUsersList = new Intent(context, RollcallConfigDownload.class);
+				refreshUsersList = new Intent(context, EventsDownload.class);
 				refreshUsersList.putExtra("groupCode", (long) 0);
 		        startActivity(refreshUsersList);
 				
