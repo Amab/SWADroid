@@ -50,7 +50,7 @@ public class GetFile extends Module {
     /**
      * GetFile tag name for Logcat
      */
-    private static final String TAG = Constants.APP_TAG + "GetFile";
+    private static final String TAG = Constants.APP_TAG + " GetFile";
 
     /**
      * Unique identificator of file
