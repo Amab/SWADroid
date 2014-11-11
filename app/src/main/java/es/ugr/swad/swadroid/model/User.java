@@ -21,7 +21,11 @@ package es.ugr.swad.swadroid.model;
 
 import org.ksoap2.serialization.PropertyInfo;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Hashtable;
+import java.util.Locale;
 
 /**
  * User data.
@@ -59,6 +63,10 @@ public class User extends Model {
      */
     private String userPhoto;
     /**
+     * User birthday.
+     */
+    private Calendar userBirthday;
+    /**
      * User role. 1:guest 2: student 3: teacher
      */
     private int userRole;
@@ -70,6 +78,7 @@ public class User extends Model {
     private static final PropertyInfo PI_userSurname2 = new PropertyInfo();
     private static final PropertyInfo PI_userFirstname = new PropertyInfo();
     private static final PropertyInfo PI_userPhoto = new PropertyInfo();
+    private static final PropertyInfo PI_userBirthday = new PropertyInfo();
     private static final PropertyInfo PI_userRole = new PropertyInfo();
 
     @SuppressWarnings("unused")
@@ -81,6 +90,7 @@ public class User extends Model {
             PI_userSurname2,
             PI_userFirstname,
             PI_userPhoto,
+            PI_userBirthday,
             PI_userRole
     };
 
@@ -95,10 +105,12 @@ public class User extends Model {
      * @param userSurname2  User last surname.
      * @param userFirstname User name.
      * @param userPhoto     Full path where user's picture is stored.
+     * @param userBirthday  User birthday.
      * @param userRole      User role.
      */
     public User(long id, String wsKey, String userID, String userNickname, String userSurname1,
-                String userSurname2, String userFirstname, String userPhoto, int userRole) {
+                String userSurname2, String userFirstname, String userPhoto, String userBirthday,
+                int userRole) throws ParseException {
         super(id);
         this.wsKey = wsKey;
         this.userID = userID;
@@ -107,6 +119,7 @@ public class User extends Model {
         this.userSurname2 = userSurname2;
         this.userFirstname = userFirstname;
         this.userPhoto = userPhoto;
+        setUserBirthday(userBirthday);
         this.userRole = userRole;
     }
 
@@ -222,6 +235,31 @@ public class User extends Model {
     }
 
     /**
+     * Gets user birthday.
+     *
+     * @return User birthday.
+     */
+    public Calendar getUserBirthday() {
+        return userBirthday;
+    }
+
+    /**
+     * Sets user birthday.
+     *
+     * @param userBirthday User birthday.
+     */
+    public void setUserBirthday(String userBirthday) throws ParseException {
+        if((userBirthday != null) && !userBirthday.equals("00000000")) {
+            this.userBirthday = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+
+            this.userBirthday.setTime(sdf.parse(userBirthday));
+        } else {
+            this.userBirthday = null;
+        }
+    }
+
+    /**
      * Sets Full path where user's picture is stored.
      *
      * @param userPhoto the userPhoto to set
@@ -292,6 +330,9 @@ public class User extends Model {
                 object = userPhoto;
                 break;
             case 7:
+                object = userBirthday;
+                break;
+            case 8:
                 object = userRole;
                 break;
         }
@@ -300,7 +341,7 @@ public class User extends Model {
     }
 
     public int getPropertyCount() {
-        return 8;
+        return 9;
     }
 
     public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo propertyInfo) {
@@ -334,6 +375,10 @@ public class User extends Model {
                 propertyInfo.name = "userPhoto";
                 break;
             case 7:
+                propertyInfo.type = PropertyInfo.STRING_CLASS;
+                propertyInfo.name = "userBirthday";
+                break;
+            case 8:
                 propertyInfo.type = PropertyInfo.INTEGER_CLASS;
                 propertyInfo.name = "userRole";
                 break;
@@ -364,6 +409,9 @@ public class User extends Model {
                 userPhoto = (String) obj;
                 break;
             case 7:
+                userBirthday = (Calendar) obj;
+                break;
+            case 8:
                 userRole = (Integer) obj;
                 break;
         }
