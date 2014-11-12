@@ -42,6 +42,7 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -105,10 +106,6 @@ public class SWADMain extends MenuExpandableListActivity {
      */
     private long courseCode;
     /**
-     * Cursor for database access
-     */
-    private Cursor dbCursor;
-    /**
      * User courses list
      */
     private List<Model> listCourses;
@@ -131,7 +128,6 @@ public class SWADMain extends MenuExpandableListActivity {
 
     private ExpandableListView mExpandableListView;
     private ImageExpandableListAdapter mExpandableListAdapter;
-    private OnChildClickListener mExpandableClickListener;
     private final ArrayList<HashMap<String, Object>> mHeaderData = new ArrayList<HashMap<String, Object>>();
     private final ArrayList<ArrayList<HashMap<String, Object>>> mChildData = new ArrayList<ArrayList<HashMap<String, Object>>>();
     private final ArrayList<HashMap<String, Object>> mMessagesData = new ArrayList<HashMap<String, Object>>();
@@ -347,7 +343,10 @@ public class SWADMain extends MenuExpandableListActivity {
     private void createSpinnerAdapter() {
         Spinner spinner = (Spinner) this.findViewById(R.id.spinner);
         listCourses = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_COURSES, null, "fullName");
-        dbCursor = dbHelper.getDb().getCursor(DataBaseHelper.DB_TABLE_COURSES, null, "fullName");
+        /*
+      Cursor for database access
+     */
+        Cursor dbCursor = dbHelper.getDb().getCursor(DataBaseHelper.DB_TABLE_COURSES, null, "fullName");
         startManagingCursor(dbCursor);
         if (listCourses.size() != 0) {
             SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
@@ -423,8 +422,7 @@ public class SWADMain extends MenuExpandableListActivity {
     private void getCurrentCourses() {
     	showProgress(true);
     	
-        Intent activity;
-        activity = new Intent(this, Courses.class);
+        Intent activity = new Intent(this, Courses.class);
         startActivityForResult(activity, Constants.COURSES_REQUEST_CODE);
     }
 
@@ -695,32 +693,19 @@ public class SWADMain extends MenuExpandableListActivity {
     
 	private void initializeMainViews() {
         mExpandableListView = (ExpandableListView) findViewById(R.id.expandableList);
-        
-        mExpandableClickListener = new OnChildClickListener() {
-            
+
+        OnChildClickListener mExpandableClickListener = new OnChildClickListener() {
+
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition,
-                    int childPosition, long id) {
+                                        int childPosition, long id) {
                 // Get the item that was clicked
                 Object o = parent.getExpandableListAdapter().getChild(groupPosition, childPosition);
                 @SuppressWarnings("unchecked")
                 String keyword = (String) ((Map<String, Object>) o).get(NAME);
-                // boolean rollCallAndroidVersionOK =
-                // (android.os.Build.VERSION.SDK_INT >=
-                // android.os.Build.VERSION_CODES.FROYO);
-                // PackageManager pm = getPackageManager();
-                // boolean rearCam;
-
-                // It would be safer to use the constant
-                // PackageManager.FEATURE_CAMERA_FRONT
-                // but since it is not defined for Android 2.2, I substituted
-                // the literal value
-                // frontCam =
-                // pm.hasSystemFeature("android.hardware.camera.front");
-                // rearCam = pm.hasSystemFeature(PackageManager.FEATURE_CAMERA);
-
                 Intent activity;
                 Context ctx = getApplicationContext();
+
                 if (keyword.equals(getString(R.string.notificationsModuleLabel))) {
                     activity = new Intent(ctx, Notifications.class);
                     startActivityForResult(activity, Constants.NOTIFICATIONS_REQUEST_CODE);
@@ -735,11 +720,26 @@ public class SWADMain extends MenuExpandableListActivity {
                     activity = new Intent(ctx, Notices.class);
                     startActivityForResult(activity, Constants.NOTICES_REQUEST_CODE);
                 } else if (keyword.equals(getString(R.string.rollcallModuleLabel))) {
-                    activity = new Intent(ctx, Rollcall.class);
-                    startActivityForResult(activity, Constants.ROLLCALL_REQUEST_CODE);
+                    if (Utils.connectionAvailable(ctx)) {
+                        activity = new Intent(ctx, Rollcall.class);
+                        startActivityForResult(activity, Constants.ROLLCALL_REQUEST_CODE);
+                    } else {
+                        Toast.makeText(ctx, R.string.noConnectionMsg, Toast.LENGTH_LONG).show();
+                    }
                 } else if (keyword.equals(getString(R.string.generateQRModuleLabel))) {
-                    activity = new Intent(ctx, GenerateQR.class);
-                    startActivityForResult(activity, Constants.GENERATE_QR_REQUEST_CODE);
+                    //If the user is not logged, launch login for get user nickname
+                    if (!Login.isLogged() || (Login.getLoggedUser() == null)) {
+                        activity = new Intent(ctx, Login.class);
+                        startActivity(activity);
+                    }
+
+                    //Launch QR module only if the user has a nickname
+                    if (Login.isLogged() && !Login.getLoggedUser().getUserNickname().equals(Constants.NULL_VALUE)) {
+                        activity = new Intent(ctx, GenerateQR.class);
+                        startActivityForResult(activity, Constants.GENERATE_QR_REQUEST_CODE);
+                    } else {
+                        Toast.makeText(ctx, R.string.errorNoUserNickname, Toast.LENGTH_LONG).show();
+                    }
                 } else if (keyword.equals(getString(R.string.documentsDownloadModuleLabel))) {
                     activity = new Intent(ctx, DownloadsManager.class);
                     activity.putExtra("downloadsAreaCode", Constants.DOCUMENTS_AREA_CODE);
@@ -784,7 +784,6 @@ public class SWADMain extends MenuExpandableListActivity {
                     activity = new Intent(ctx, Information.class);
                     activity.putExtra("requestCode", Constants.ASSESSMENT_REQUEST_CODE);
                     startActivityForResult(activity, Constants.ASSESSMENT_REQUEST_CODE);
-
                 }
 
                 return true;

@@ -6,18 +6,13 @@ import android.widget.ImageView;
 
 import com.google.zxing.WriterException;
 
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADroidTracker;
+import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.utils.QR;
 
-public class GenerateQR extends Module {
+public class GenerateQR extends MenuActivity {
     /**
      * Messages tag name for Logcat
      */
@@ -41,36 +36,15 @@ public class GenerateQR extends Module {
     @Override
     protected void onStart() {
         super.onStart();
+        ImageView qr_image = (ImageView) findViewById(R.id.qr_code_image);
+
         SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
 
         try {
-            Bitmap qrCode = QR.encode(this, Preferences.getUserID());
-            ImageView qr_image = (ImageView) findViewById(R.id.qr_code_image);
+            Bitmap qrCode = QR.encode(this, "@" + Login.getLoggedUser().getUserNickname());
             qr_image.setImageBitmap(qrCode);
         } catch (WriterException e) {
             error(TAG, e.getMessage(), e, true);
         }
     }
-
-    @Override
-    protected void requestService() throws NoSuchAlgorithmException,
-            IOException, XmlPullParserException {
-
-    }
-
-    @Override
-    protected void connect() {
-
-    }
-
-    @Override
-    protected void postConnect() {
-
-    }
-
-    @Override
-    protected void onError() {
-
-    }
-
 }
