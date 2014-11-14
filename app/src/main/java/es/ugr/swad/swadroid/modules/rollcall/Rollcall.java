@@ -20,16 +20,15 @@
 package es.ugr.swad.swadroid.modules.rollcall;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -38,6 +37,7 @@ import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.model.Event;
 import es.ugr.swad.swadroid.modules.Courses;
+import es.ugr.swad.swadroid.modules.notifications.NotificationItem;
 
 /**
  * Rollcall module.
@@ -81,6 +81,8 @@ public class Rollcall extends MenuExpandableListActivity implements
         refreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container_list);
         emptyEventsTextView = (TextView) findViewById(R.id.list_item_title);
         lvEvents = (ListView) findViewById(R.id.list_pulltorefresh);
+
+        lvEvents.setOnItemClickListener(clickListener);
 
         refreshLayout.setOnRefreshListener(this);
         refreshLayout.setEnabled(true);
@@ -157,4 +159,19 @@ public class Rollcall extends MenuExpandableListActivity implements
 
         hideSwipeProgress();
     }
+
+    /**
+     * ListView click listener
+     */
+    private ListView.OnItemClickListener clickListener = new ListView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            TextView attendanceEventCode = (TextView) view.findViewById(R.id.eventCodeText);
+
+            Intent activity = new Intent(getApplicationContext(),
+                    UsersDownload.class);
+            activity.putExtra("attendanceEventCode", attendanceEventCode.getText().toString());
+            startActivity(activity);
+        }
+    };
 }
