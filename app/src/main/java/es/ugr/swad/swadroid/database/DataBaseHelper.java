@@ -34,12 +34,9 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
-import java.util.Locale;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
@@ -50,7 +47,6 @@ import es.ugr.swad.swadroid.model.GroupType;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.model.Pair;
 import es.ugr.swad.swadroid.model.PairTable;
-import es.ugr.swad.swadroid.model.PracticeSession;
 import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.model.Test;
 import es.ugr.swad.swadroid.model.TestAnswer;
@@ -85,10 +81,6 @@ public class DataBaseHelper {
      * Database passphrase
      */
     private String DBKey;
-    /**
-     * Database passphrase length
-     */
-    private final int DB_KEY_LENGTH = 128;
     /**
      * Cryptographic object
      */
@@ -157,14 +149,14 @@ public class DataBaseHelper {
 	 * Table name for relationship between groups and group types
 	 */
 	public static final String DB_TABLE_GROUPS_GROUPTYPES = "group_grouptypes";
-	/**
-	 * Table name for practice sessions
-	 */
-	public static final String DB_TABLE_PRACTICE_SESSIONS = "practice_sessions";
-	/**
-	 * Table name for rollcall
-	 */
-	public static final String DB_TABLE_ROLLCALL = "rollcall";
+    /**
+     * Table name for practice sessions
+     */
+    public static final String DB_TABLE_PRACTICE_SESSIONS = "practice_sessions";
+    /**
+     * Table name for rollcall
+     */
+    public static final String DB_TABLE_ROLLCALL = "rollcall";
 
     /**
      * Constructor
@@ -180,6 +172,10 @@ public class DataBaseHelper {
 
         //If the passphrase is empty, generate a random passphrase and recreate database
         if (DBKey.equals("")) {
+            /*
+      Database passphrase length
+     */
+            int DB_KEY_LENGTH = 128;
             DBKey = Utils.randomString(DB_KEY_LENGTH);
             Preferences.setDBKey(DBKey);
         }
@@ -388,21 +384,6 @@ public class DataBaseHelper {
                     ent.getInt("mandatory"),
                     ent.getInt("multiple"),
                     ent.getLong("openTime"));
-        } else if (table.equals(DataBaseHelper.DB_TABLE_PRACTICE_SESSIONS)) {
-            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
-
-            try {
-                o = new PracticeSession(ent.getId(),
-                        ent.getInt("crsCod"),
-                        ent.getInt("grpCod"),
-                        format.parse(ent.getString("startDate")),
-                        format.parse(ent.getString("endDate")),
-                        ent.getString("site"),
-                        ent.getString("description"));
-            } catch (ParseException e) {
-                //Send exception details to Google Analytics
-                SWADroidTracker.sendException(mCtx, e, false);
-            }
         }
 
         return (T) o;
@@ -562,60 +543,6 @@ public class DataBaseHelper {
     }
 
     /**
-     * Gets the actual practice session in progress for the selected course and group
-     *
-     * @param courseCode Course code to be referenced
-     * @param groupId    Group code to be referenced
-     * @return The practice session in progress if any, or null otherwise
-     */
-    public PracticeSession getPracticeSessionInProgress(long courseCode, long groupId) {
-        String table = DataBaseHelper.DB_TABLE_PRACTICE_SESSIONS;
-        Calendar cal = Calendar.getInstance();
-        Calendar startDate = Calendar.getInstance();
-        Calendar endDate = Calendar.getInstance();
-
-        List<Entity> rows = db.getEntityList(table, "crsCod = " + courseCode + " AND grpCod = " + groupId);
-        PracticeSession ps;
-
-        if (rows != null) {
-            for (Entity ent : rows) {
-                ps = (PracticeSession) createObjectByTable(table, ent);
-                startDate.setTime(ps.getSessionStartDate());
-                endDate.setTime(ps.getSessionEndDate());
-
-                if (cal.after(startDate) && cal.before(endDate)) {
-                    return ps;
-                }
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Gets practice sessions for the selected course and group
-     *
-     * @param courseCode Course code to be referenced
-     * @param groupId    Group code to be referenced
-     * @return The list of practice sessions
-     */
-    public List<PracticeSession> getPracticeSessions(long courseCode, long groupId) {
-        List<PracticeSession> sessions = new ArrayList<PracticeSession>();
-        String table = DataBaseHelper.DB_TABLE_PRACTICE_SESSIONS;
-        String where = "crsCod = " + courseCode + " AND grpCod = " + groupId;
-
-        List<Entity> rows = db.getEntityList(table, where, "startDate asc");
-        PracticeSession ps;
-
-        if (rows != null) {
-            for (Entity ent : rows) {
-                ps = (PracticeSession) createObjectByTable(table, ent);
-                sessions.add(ps);
-            }
-        }
-        return sessions;
-    }
-
-    /**
      * Gets the group which code is given
      *
      * @param groupId long that identifies uniquely the searched group
@@ -750,30 +677,6 @@ public class DataBaseHelper {
 
         SQLiteDatabase db = DataFramework.getInstance().getDB();
         return db.rawQuery(select, new String[]{String.valueOf(courseCode)});
-    }
-
-    /**
-     * Gets the user codes of students in the selected session
-     *
-     * @param sessionId Session code to be referenced
-     * @return A list of User's id
-     */
-    public List<Long> getStudentsAtSession(long sessionId) {
-        List<Long> result = new ArrayList<Long>();
-
-        List<Entity> rows = db.getEntityList(DataBaseHelper.DB_TABLE_ROLLCALL, "sessCod = " + sessionId);
-        if (rows != null) {
-            for (Entity ent : rows) {
-                result.add(ent.getLong("usrCod"));
-            }
-        }
-        return result;
-    }
-
-    public boolean hasAttendedSession(long userCode, long sessionId) {
-        List<Entity> rows = db.getEntityList(DataBaseHelper.DB_TABLE_ROLLCALL, "usrCod = " + userCode + " AND sessCod = " + sessionId);
-
-        return (rows.size() > 0);
     }
 
     /**
@@ -1195,61 +1098,6 @@ public class DataBaseHelper {
 
         return result;
     }
-
-    /**
-     * Inserts the rollcall data of a student to a practice session in database
-     *
-     * @param l        User code of student
-     * @param sessCode Practice session code
-     */
-    public void insertRollcallData(long l, long sessCode) {
-        List<Entity> rows = db.getEntityList(DataBaseHelper.DB_TABLE_ROLLCALL, "sessCod = " + sessCode + " AND usrCod = " + l);
-
-        if (rows.isEmpty()) {
-            Entity ent = new Entity(DataBaseHelper.DB_TABLE_ROLLCALL);
-
-            ent.setValue("sessCod", sessCode);
-            ent.setValue("usrCod", l);
-            ent.save();
-        }
-    }
-
-    /**
-     * Inserts a practice session in database
-     *
-     * @param courseCode  Course code to be referenced
-     * @param groupCode   Group code to be referenced
-     * @param startDate   Start date-time of session
-     * @param endDate     End date-time of session
-     * @param site        Site where session takes place
-     * @param description Optional description of practice session
-     * @return True if practice session does not exist in database and is inserted. False otherwise.
-     */
-    public boolean insertPracticeSession(long courseCode, long groupCode, String startDate, String endDate, String site, String description) {
-        String where = "crsCod = '" + courseCode + "' AND " +
-                "grpCod = '" + groupCode + "' AND " +
-                "startDate = '" + startDate + "' AND " +
-                "endDate = '" + endDate + "'";
-        List<Entity> rows = db.getEntityList(DataBaseHelper.DB_TABLE_PRACTICE_SESSIONS, where);
-
-        if (rows.isEmpty()) {
-            Entity ent = new Entity(DataBaseHelper.DB_TABLE_PRACTICE_SESSIONS);
-
-            ent.setValue("crsCod", courseCode);
-            ent.setValue("grpCod", groupCode);
-            ent.setValue("startDate", startDate);
-            ent.setValue("endDate", endDate);
-            if (site != null && !site.equals(""))
-                ent.setValue("site", site);
-            if (description != null && !description.equals(""))
-                ent.setValue("description", description);
-            ent.save();
-            return true;
-        } else {
-            return false;
-        }
-    }
-
 
     /**
      * Inserts a new record in database indicating that the user belongs
@@ -2091,6 +1939,14 @@ public class DataBaseHelper {
         	db.getDB().execSQL("DROP TABLE " + DataBaseHelper.DB_TABLE_NOTIFICATIONS + ";");
             db.getDB().execSQL("CREATE TABLE " + DataBaseHelper.DB_TABLE_NOTIFICATIONS + " (_id integer primary key autoincrement, notifCode long, eventCode long, eventType text, eventTime text,"
                     + " userSurname1 text, userSurname2 text, userFirstname text, userPhoto text, location text, summary text, status text, content text, seenLocal text, seenRemote text); ");
+        }
+
+        /* version 16-17
+		 * removed old Rollcall tables
+		 * */
+        if (dbVersion == 17) {
+            deleteTable(DB_TABLE_PRACTICE_SESSIONS);
+            deleteTable(DB_TABLE_ROLLCALL);
         }
 
         Log.i(TAG, "Database upgraded");

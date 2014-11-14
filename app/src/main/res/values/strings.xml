@@ -203,16 +203,14 @@
     <string name="sendingState">Sending to SWAD:</string>
     <string name="sendingStatePending">Pending</string>
     <string name="rollcallModuleLabel">Rollcall</string>
-    <string name="studentsTitle">Students</string>
-    <string name="studentsDownloadProgressDescription">Synchronizing users.\n\nDepending on the number of
+    <string name="usersTitle">Users</string>
+    <string name="usersDownloadProgressDescription">Synchronizing users.\n\nDepending on the number of
         users to synchronize, the data processing can take several minutes.\n\nPlease wait…</string>
-    <string name="studentsDownloadProgressTitle">Students</string>
+    <string name="usersDownloadProgressTitle">Users</string>
     <string name="eventsDownloadProgressDescription">Synchronizing events.\n\nDepending on the number of
         events to synchronize, the data processing can take several minutes.\n\nPlease wait…</string>
     <string name="eventsDownloadProgressTitle">Events</string>
-    <string name="studentsList">Students list</string>
-    <string name="studentsPresent">Present students</string>
-    <string name="studentsUpdate">Update</string>
+    <string name="usersUpdate">Update</string>
     <string name="newTitle">New</string>
     <string name="rollcallScanQR">Scan QR</string>
     <string name="rollcallManual">Manual mode</string>
@@ -289,5 +287,7 @@
     <string name="errorNoAppForIntent">There are no registered applications to open the selected file type.</string>
     <string name="errorNoUserNickname">You must set a nickname in SWAD</string>
     <string name="event">Event</string>
+    <string name="usersUpdated">users updated</string>
+    <string name="noUsersAvailableMsg">There are no users in this event</string>
 
 </resources>

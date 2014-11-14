@@ -186,13 +186,11 @@
     <string name="sendingState">Enviament a SWAD: </string>
     <string name="sendingStatePending">Pendent</string>
     <string name="rollcallModuleLabel">Passar llista</string>
-    <string name="studentsTitle">Estudiants</string>
-    <string name="studentsDownloadProgressDescription">Sincronitzant estudiants.\n\nDependiendo del nombre d\'estudiants
+    <string name="usersTitle">Usuaris</string>
+    <string name="usersDownloadProgressDescription">Sincronitzant usuaris.\n\nDependiendo del nombre d\'usuaris
         a sincronitzar, el processament de les dades pot trigar uns minuts.\n\nSi us plau, esperi…</string>
-    <string name="studentsList">Llista d\'estudiants</string>
-    <string name="studentsDownloadProgressTitle">Estudiants</string>
-    <string name="studentsPresent">Estudiants presents</string>
-    <string name="studentsUpdate">Actualitzar</string>
+    <string name="usersDownloadProgressTitle">Usuaris</string>
+    <string name="usersUpdate">Actualitzar</string>
     <string name="newTitle">Nova</string>
     <string name="rollcallScanQR">Escanejar QR</string>
     <string name="rollcallManual">Mode manual</string>
@@ -274,5 +272,7 @@
     <string name="recoverPasswordProgressTitle">Recuperació de contrasenya</string>
     <string name="changelogTitle">Historial de canvis</string>
     <string name="event">Esdeveniment</string>
+    <string name="usersUpdated">usuaris actualitzats</string>
+    <string name="noUsersAvailableMsg">No hi ha usuaris en aquest esdeveniment</string>
 
 </resources>

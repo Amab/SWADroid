@@ -193,14 +193,12 @@
     <string name="sendingState">Envío a SWAD:</string>
     <string name="sendingStatePending">Pendiente</string>
     <string name="rollcallModuleLabel">Pasar lista</string>
-    <string name="studentsTitle">Estudiantes</string>
-    <string name="studentsDownloadProgressDescription">Sincronizando estudiantes.\n\nDependiendo del número de
-        estudiantes a sincronizar, el procesamiento de los datos puede tardar unos minutos.\n\nPor favor,
+    <string name="usersTitle">Usuarios</string>
+    <string name="usersDownloadProgressDescription">Sincronizando usuarios.\n\nDependiendo del número de
+        usuarios a sincronizar, el procesamiento de los datos puede tardar unos minutos.\n\nPor favor,
         espere…</string>
-    <string name="studentsList">Lista de estudiantes</string>
-    <string name="studentsDownloadProgressTitle">Estudiantes</string>
-    <string name="studentsPresent">Estudiantes presentes</string>
-    <string name="studentsUpdate">Actualizar</string>
+    <string name="usersDownloadProgressTitle">Usuarios</string>
+    <string name="usersUpdate">Actualizar</string>
     <string name="newTitle">Nueva</string>
     <string name="rollcallScanQR">Escanear QR</string>
     <string name="rollcallManual">Modo manual</string>
@@ -280,5 +278,7 @@
     <string name="eventsDownloadProgressDescription">Sincronización de eventos.\n\nDependiendo del número de eventos a sincronizar, el procesamiento de los datos puede tardar varios minutos.\n\nPor favor, espere...</string>
     <string name="noEventsAvailableMsg">No hay eventos en esta asignatura</string>
     <string name="event">Evento</string>
+    <string name="usersUpdated">usuarios actualizados</string>
+    <string name="noUsersAvailableMsg">No hay usuarios en este evento</string>
 
 </resources>

@@ -543,7 +543,7 @@ public class SWADNotification extends Model {
      * @see org.ksoap2.serialization.KvmSerializable#getPropertyCount()
      */
     public int getPropertyCount() {
-        return 10;
+        return PI_PROP_ARRAY.length;
     }
 
     /* (non-Javadoc)
