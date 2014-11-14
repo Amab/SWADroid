@@ -77,27 +77,8 @@
         </activity>
         <activity
             android:name=".modules.rollcall.EventsDownload"
-            android:label="@string/rollcallModuleLabel" >
-        </activity>
-        <activity
-            android:name="es.ugr.swad.swadroid.modules.rollcall.sessions.NewPracticeSession"
-            android:label="@string/sessionModuleLabel" >
-        </activity>
-        <activity
-            android:name="es.ugr.swad.swadroid.modules.rollcall.sessions.SessionsHistory"
-            android:label="@string/rollcallHistoryModuleLabel" >
-        </activity>
-        <activity
-            android:name="es.ugr.swad.swadroid.modules.rollcall.sessions.SessionsList"
-            android:label="@string/sessionModuleLabel" >
-        </activity>
-        <activity
-            android:name="es.ugr.swad.swadroid.modules.rollcall.students.StudentsHistory"
-            android:label="@string/studentsHistoryModuleLabel" >
-        </activity>
-        <activity
-            android:name="es.ugr.swad.swadroid.modules.rollcall.students.StudentsList"
-            android:label="@string/sessionModuleLabel" >
+            android:label="@string/rollcallModuleLabel"
+            android:theme="@style/Theme.AppCompat.Translucent" >
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.Groups"

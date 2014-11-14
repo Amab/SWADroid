@@ -182,38 +182,16 @@
     <string name="numStudent">Nº de estudiantes</string>
     <string name="maxStudent">Máx. estudiantes</string>
     <string name="myGroupsModuleLabel">Grupos</string>
-    <string name="scan_no_photos">No se han podido guardar las fotos de los estudiantes</string>
-    <string name="noStudentsAvailableMsg">Esta asignatura no tiene alumnos</string>
-    <string name="studentsUpdated">alumnos actualizados</string>
-    <string name="scan_no_students">Ningún alumno encontrado\n
-        Intente “Actualizar alumnos”</string>
+    <string name="eventsEmptyListMsg">No se ha descargado ningún evento.\n\nPara descargar los
+        eventos más recientes deslice este mensaje hacia abajo.</string>
     <string name="photoContentDescription">Foto del estudiante</string>
     <string name="noCameraFound">El dispositivo no dispone de cámara</string>
     <string name="saveMsg">Guardar</string>
     <string name="noGroupsAvailableMsg">No existen grupos para la asignatura seleccionada</string>
-    <string name="sessionCourseText">Asignatura</string>
-    <string name="sessionGroupText">Grupo</string>
-    <string name="sessionEndText">Fin</string>
-    <string name="sessionButtonCreate">Crear</string>
-    <string name="sessionSiteText">Lugar (opcional)</string>
-    <string name="sessionButtonCancel">Cancelar</string>
-    <string name="sessionStartText">Inicio</string>
-    <string name="sessionDescriptionText">Descripción (opcional)</string>
-    <string name="sessionModuleLabel">Nueva sesión de prácticas</string>
     <string name="confirmExitMsg">¿Seguro que desea salir sin guardar los cambios?</string>
     <string name="selectGroupTitle">Seleccione grupo</string>
-    <string name="sessionCreated">Sesión de prácticas creada correctamente</string>
-    <string name="sessionNotCreated">Ya existe la sesión de prácticas especificada</string>
-    <string name="sessionChoose">Elija la sesión de prácticas</string>
     <string name="sendingState">Envío a SWAD:</string>
     <string name="sendingStatePending">Pendiente</string>
-    <string name="session">Sesión:</string>
-    <string name="noPracticeSessionsAvailableMsg">No existen sesiones de prácticas del grupo seleccionado en la base de
-        datos</string>
-    <string name="sessionNoStudentsMsg">Ningún alumno ha asistido a esta sesión</string>
-    <string name="studentsHistoryModuleLabel">Historial de alumnos</string>
-    <string name="sessionsTitle">Sesiones de prácticas</string>
-    <string name="noSessionsAvailableMsg">No existen sesiones de prácticas en la base de datos</string>
     <string name="rollcallModuleLabel">Pasar lista</string>
     <string name="studentsTitle">Estudiantes</string>
     <string name="studentsDownloadProgressDescription">Sincronizando estudiantes.\n\nDependiendo del número de
@@ -226,18 +204,6 @@
     <string name="newTitle">Nueva</string>
     <string name="rollcallScanQR">Escanear QR</string>
     <string name="rollcallManual">Modo manual</string>
-    <string name="sessionsSelect">Consultar sesiones</string>
-    <string name="studentsSelect">Consultar estudiantes</string>
-    <string name="rollcallErrorNoConnection">No hay conexión con el servidor.
-        Se han guardado los datos de asistencia en la base de datos.</string>
-    <string name="rollcallHistoryModuleLabel">Historial de sesiones</string>
-    <string name="rollcallNoStudentsSelected">No se ha seleccionado ningún estudiante</string>
-    <string name="rollcallNoPracticeSessions">No existen sesiones de prácticas definidas para la asignatura y grupo
-        seleccionados.
-        Seleccione: Sesiones de prácticas - Nueva</string>
-    <string name="rollcallSaved">Datos de asistencia guardados correctamente</string>
-    <string name="rollcallWebServiceNotAvailable">El servicio web para enviar a SWAD los datos de asistencia no está
-        disponible.</string>
     <string name="rollcallEvent">Evento de pasar lista</string>
     <string name="groupSeparator">:</string>
     <string name="groupTypesModuleLabel">Conseguir tipos de grupo</string>
@@ -308,5 +274,11 @@
     <string name="Filters_Teachers">Profesores</string>
     <string name="Filters_Students">Alumnos</string>
     <string name="errorNoAppForIntent">No hay ninguna aplicación registrada para abrir el tipo de archivo seleccionado.</string>
+    <string name="errorNoUserNickname">Debe definir un apodo en SWAD</string>
+    <string name="eventsDownloadProgressTitle">Eventos</string>
+    <string name="eventsUpdated">eventos actualizados</string>
+    <string name="eventsDownloadProgressDescription">Sincronización de eventos.\n\nDependiendo del número de eventos a sincronizar, el procesamiento de los datos puede tardar varios minutos.\n\nPor favor, espere...</string>
+    <string name="noEventsAvailableMsg">No hay eventos en esta asignatura</string>
+    <string name="event">Evento</string>
 
 </resources>

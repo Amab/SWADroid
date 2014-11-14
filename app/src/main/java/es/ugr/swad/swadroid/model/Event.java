@@ -20,9 +20,16 @@
  */
 package es.ugr.swad.swadroid.model;
 
+import android.support.v4.text.TextUtilsCompat;
+import android.text.TextUtils;
+
 import org.ksoap2.serialization.PropertyInfo;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Hashtable;
+import java.util.List;
 
 /**
  * Class for store a rollcall event
@@ -30,7 +37,6 @@ import java.util.Hashtable;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class Event extends Model {
-    private long attendanceEventCode;
     private boolean hidden;
     private String userNickname;
     private String userSurname1;
@@ -58,87 +64,155 @@ public class Event extends Model {
     private static final PropertyInfo[] PI_PROP_ARRAY =
             {
                     PI_id,
-                    PI_userRole,
-                    PI_shortName,
-                    PI_fullName
+                    PI_hidden,
+                    PI_userNickname,
+                    PI_userSurname1,
+                    PI_userSurname2,
+                    PI_userFirstName,
+                    PI_userPhoto,
+                    PI_startTime,
+                    PI_endTime,
+                    PI_commentsTeachersVisible,
+                    PI_title,
+                    PI_groups
             };
 
     /**
      * Constructor
-     *
-     * @param id Course identifier
      */
-    public Event(long id, int userRole, String shortName, String fullName) {
-        super(id);
-        this.userRole = userRole;
-        this.shortName = shortName;
-        this.fullName = fullName;
+    public Event(long attendanceEventCode, boolean hidden, String userNickname,
+                 String userSurname1, String userSurname2, String userFirstName, String userPhoto,
+                 int startTime, int endTime, boolean commentsTeachersVisible, String title, String text,
+                 String groups) {
+        super(attendanceEventCode);
+        this.hidden = hidden;
+        this.userNickname = userNickname;
+        this.userSurname1 = userSurname1;
+        this.userSurname2 = userSurname2;
+        this.userFirstName = userFirstName;
+        this.userPhoto = userPhoto;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.commentsTeachersVisible = commentsTeachersVisible;
+        this.title = title;
+        this.text = text;
+        this.groups = groups;
     }
 
-
-    /**
-     * Gets user role inside the course
-     *
-     * @return user role (2 = student, 3 = teacher)
-     */
-    public int getUserRole() {
-        return userRole;
+    public boolean isHidden() {
+        return hidden;
     }
 
-    /**
-     * Gets short course name
-     *
-     * @return Short course name
-     */
-    public String getShortName() {
-        return shortName;
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
     }
 
-    /**
-     * Sets short course name
-     *
-     * @param shortName short course name
-     */
-    public void setShortName(String shortName) {
-        this.shortName = shortName;
+    public String getUserNickname() {
+        return userNickname;
     }
 
-    /**
-     * Gets short course name
-     *
-     * @return Full course name
-     */
-    public String getFullName() {
-        return fullName;
+    public void setUserNickname(String userNickname) {
+        this.userNickname = userNickname;
     }
 
-    /**
-     * Sets short course name
-     */
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public String getUserSurname1() {
+        return userSurname1;
     }
 
-
-    /* (non-Javadoc)
-     * @see java.lang.Object#hashCode()
-     */
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + userRole;
-        result = prime * result + ((shortName == null) ? 0 : shortName.hashCode());
-        result = prime * result + ((fullName == null) ? 0 : fullName.hashCode());
-        return result;
+    public void setUserSurname1(String userSurname1) {
+        this.userSurname1 = userSurname1;
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString() {
-        return "Course [getId()=" + getId() + " userRole=" + userRole + "getShortName=" + shortName + "getFullName=" + fullName + "]";
+    public String getUserSurname2() {
+        return userSurname2;
+    }
+
+    public void setUserSurname2(String userSurname2) {
+        this.userSurname2 = userSurname2;
+    }
+
+    public String getUserFirstName() {
+        return userFirstName;
+    }
+
+    public void setUserFirstName(String userFirstName) {
+        this.userFirstName = userFirstName;
+    }
+
+    public String getUserPhoto() {
+        return userPhoto;
+    }
+
+    public void setUserPhoto(String userPhoto) {
+        this.userPhoto = userPhoto;
+    }
+
+    public int getStartTime() {
+        return startTime;
+    }
+
+    public Calendar getStartTimeCalendar() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(startTime * 1000L);
+        return calendar;
+    }
+
+    public void setStartTime(int startTime) {
+        this.startTime = startTime;
+    }
+
+    public int getEndTime() {
+        return endTime;
+    }
+
+    public Calendar getEndTimeCalendar() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(endTime * 1000L);
+        return calendar;
+    }
+
+    public void setEndTime(int endTime) {
+        this.endTime = endTime;
+    }
+
+    public boolean isCommentsTeachersVisible() {
+        return commentsTeachersVisible;
+    }
+
+    public void setCommentsTeachersVisible(boolean commentsTeachersVisible) {
+        this.commentsTeachersVisible = commentsTeachersVisible;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public String getGroups() {
+        return groups;
+    }
+
+    public void setGroups(String groups) {
+        this.groups = groups;
+    }
+
+    public List<String> getGroupsList() {
+        return new ArrayList(Arrays.asList(groups));
+    }
+
+    public void setGroupsList(List<String> groups) {
+        this.groups = TextUtils.join(",", groups);
     }
 
     /* (non-Javadoc)
@@ -151,13 +225,40 @@ public class Event extends Model {
                 object = this.getId();
                 break;
             case 1:
-                object = userRole;
+                object = hidden;
                 break;
             case 2:
-                object = shortName;
+                object = userNickname;
                 break;
             case 3:
-                object = fullName;
+                object = userSurname1;
+                break;
+            case 4:
+                object = userSurname2;
+                break;
+            case 5:
+                object = userFirstName;
+                break;
+            case 6:
+                object = userPhoto;
+                break;
+            case 7:
+                object = startTime;
+                break;
+            case 8:
+                object = endTime;
+                break;
+            case 9:
+                object = commentsTeachersVisible;
+                break;
+            case 10:
+                object = title;
+                break;
+            case 11:
+                object = text;
+                break;
+            case 12:
+                object = groups;
                 break;
         }
 
@@ -178,19 +279,59 @@ public class Event extends Model {
         switch (param) {
             case 0:
                 propertyInfo.type = PropertyInfo.LONG_CLASS;
-                propertyInfo.name = "id";
+                propertyInfo.name = "attendanceEventCode";
                 break;
             case 1:
-                propertyInfo.type = PropertyInfo.INTEGER_CLASS;
-                propertyInfo.name = "userRole";
+                propertyInfo.type = PropertyInfo.BOOLEAN_CLASS;
+                propertyInfo.name = "hidden";
                 break;
             case 2:
                 propertyInfo.type = PropertyInfo.STRING_CLASS;
-                propertyInfo.name = "shortName";
+                propertyInfo.name = "userNickname";
                 break;
             case 3:
                 propertyInfo.type = PropertyInfo.STRING_CLASS;
-                propertyInfo.name = "fullName";
+                propertyInfo.name = "userSurname1";
+                break;
+            case 4:
+                propertyInfo.type = PropertyInfo.STRING_CLASS;
+                propertyInfo.name = "userSurname2";
+                break;
+            case 5:
+                propertyInfo.type = PropertyInfo.STRING_CLASS;
+                propertyInfo.name = "userFirstName";
+                break;
+            case 6:
+                propertyInfo.type = PropertyInfo.STRING_CLASS;
+                propertyInfo.name = "userPhoto";
+                break;
+            case 7:
+                propertyInfo.type = PropertyInfo.INTEGER_CLASS;
+                propertyInfo.name = "startTime";
+                break;
+            case 8:
+                propertyInfo.type = PropertyInfo.INTEGER_CLASS;
+                propertyInfo.name = "endTime";
+                break;
+            case 9:
+                propertyInfo.type = PropertyInfo.BOOLEAN_CLASS;
+                propertyInfo.name = "commentsTeachersVisible";
+                break;
+            case 10:
+                propertyInfo.type = PropertyInfo.STRING_CLASS;
+                propertyInfo.name = "commentsTeachersVisible";
+                break;
+            case 11:
+                propertyInfo.type = PropertyInfo.STRING_CLASS;
+                propertyInfo.name = "title";
+                break;
+            case 12:
+                propertyInfo.type = PropertyInfo.STRING_CLASS;
+                propertyInfo.name = "text";
+                break;
+            case 13:
+                propertyInfo.type = PropertyInfo.STRING_CLASS;
+                propertyInfo.name = "groups";
                 break;
 
         }
@@ -205,23 +346,107 @@ public class Event extends Model {
                 this.setId((Long) obj);
                 break;
             case 1:
-                userRole = (Integer) obj;
+                hidden = (Boolean) obj;
                 break;
             case 2:
-                shortName = (String) obj;
+                userNickname = (String) obj;
                 break;
             case 3:
-                fullName = (String) obj;
+                userSurname1 = (String) obj;
+                break;
+            case 4:
+                userSurname2 = (String) obj;
+                break;
+            case 5:
+                userFirstName = (String) obj;
+                break;
+            case 6:
+                userPhoto = (String) obj;
+                break;
+            case 7:
+                startTime = (Integer) obj;
+                break;
+            case 8:
+                endTime = (Integer) obj;
+                break;
+            case 9:
+                commentsTeachersVisible = (Boolean) obj;
+                break;
+            case 10:
+                title = (String) obj;
+                break;
+            case 11:
+                text = (String) obj;
+                break;
+            case 12:
+                groups = (String) obj;
                 break;
 
         }
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (!super.equals(obj)) return false;
-        Event other = (Event) obj;
-        return userRole == other.userRole && shortName.compareTo(other.getShortName()) == 0 && fullName.compareTo(other.getFullName()) == 0;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Event)) return false;
+        if (!super.equals(o)) return false;
+
+        Event event = (Event) o;
+
+        if (commentsTeachersVisible != event.commentsTeachersVisible) return false;
+        if (endTime != event.endTime) return false;
+        if (hidden != event.hidden) return false;
+        if (startTime != event.startTime) return false;
+        if (groups != null ? !groups.equals(event.groups) : event.groups != null) return false;
+        if (text != null ? !text.equals(event.text) : event.text != null) return false;
+        if (title != null ? !title.equals(event.title) : event.title != null) return false;
+        if (userFirstName != null ? !userFirstName.equals(event.userFirstName) : event.userFirstName != null)
+            return false;
+        if (userNickname != null ? !userNickname.equals(event.userNickname) : event.userNickname != null)
+            return false;
+        if (userPhoto != null ? !userPhoto.equals(event.userPhoto) : event.userPhoto != null)
+            return false;
+        if (userSurname1 != null ? !userSurname1.equals(event.userSurname1) : event.userSurname1 != null)
+            return false;
+        if (userSurname2 != null ? !userSurname2.equals(event.userSurname2) : event.userSurname2 != null)
+            return false;
+
+        return true;
     }
 
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (hidden ? 1 : 0);
+        result = 31 * result + (userNickname != null ? userNickname.hashCode() : 0);
+        result = 31 * result + (userSurname1 != null ? userSurname1.hashCode() : 0);
+        result = 31 * result + (userSurname2 != null ? userSurname2.hashCode() : 0);
+        result = 31 * result + (userFirstName != null ? userFirstName.hashCode() : 0);
+        result = 31 * result + (userPhoto != null ? userPhoto.hashCode() : 0);
+        result = 31 * result + startTime;
+        result = 31 * result + endTime;
+        result = 31 * result + (commentsTeachersVisible ? 1 : 0);
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (text != null ? text.hashCode() : 0);
+        result = 31 * result + (groups != null ? groups.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Event{" +
+                "hidden=" + hidden +
+                ", userNickname='" + userNickname + '\'' +
+                ", userSurname1='" + userSurname1 + '\'' +
+                ", userSurname2='" + userSurname2 + '\'' +
+                ", userFirstName='" + userFirstName + '\'' +
+                ", userPhoto='" + userPhoto + '\'' +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", commentsTeachersVisible=" + commentsTeachersVisible +
+                ", title='" + title + '\'' +
+                ", text='" + text + '\'' +
+                ", groups='" + groups + '\'' +
+                '}';
+    }
 }

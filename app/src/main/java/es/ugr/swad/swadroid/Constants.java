@@ -116,7 +116,7 @@ public class Constants {
     /**
      * Request code for Rollcall Config Download module.
      */
-    public static final int ROLLCALL_CONFIG_DOWNLOAD_REQUEST_CODE = 15;
+    public static final int ROLLCALL_EVENTS_DOWNLOAD_REQUEST_CODE = 15;
     /**
      * Request code for Rollcall History module.
      */
