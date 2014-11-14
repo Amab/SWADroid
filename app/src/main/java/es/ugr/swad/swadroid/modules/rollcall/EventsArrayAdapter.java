@@ -47,6 +47,7 @@ public class EventsArrayAdapter extends ArrayAdapter<Event> {
     }
 
     static class ViewHolder {
+        TextView eventCode;
         TextView title;
         TextView startTime;
         TextView endTime;
@@ -62,6 +63,7 @@ public class EventsArrayAdapter extends ArrayAdapter<Event> {
             view = inflator.inflate(R.layout.event_list_item, null);
 
             final ViewHolder viewHolder = new ViewHolder();
+            viewHolder.eventCode = (TextView) view.findViewById(R.id.eventCodeText);
             viewHolder.title = (TextView) view.findViewById(R.id.toptext);
             viewHolder.startTime = (TextView) view.findViewById(R.id.startTimeTextView);
             viewHolder.endTime = (TextView) view.findViewById(R.id.endTimeTextView);
@@ -73,6 +75,7 @@ public class EventsArrayAdapter extends ArrayAdapter<Event> {
 
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
+        viewHolder.eventCode.setText(String.valueOf(event.getId()));
         viewHolder.title.setText(event.getTitle());
         viewHolder.startTime.setText(event.getStartTimeCalendar().getTime().toString());
         viewHolder.endTime.setText(event.getEndTimeCalendar().getTime().toString());
