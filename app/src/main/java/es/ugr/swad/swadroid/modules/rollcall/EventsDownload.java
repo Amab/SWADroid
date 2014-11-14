@@ -47,11 +47,11 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
  */
 public class EventsDownload extends Module {
     /**
-     * Number of available events
+     * Number of events associated to the selected course
      */
     private int numEvents;
     /**
-     * Rollcall Config Download tag name for Logcat
+     * Rollcall Events Download tag name for Logcat
      */
     private static final String TAG = Constants.APP_TAG + " EventsDownload";
 
@@ -91,7 +91,7 @@ public class EventsDownload extends Module {
         sendRequest(Event.class, false);
 
         if (result != null) {
-            // Stores users data returned by webservice response
+            // Stores events data returned by webservice response
             ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
             SoapObject soap = (SoapObject) res.get(1);
             numEvents = soap.getPropertyCount();

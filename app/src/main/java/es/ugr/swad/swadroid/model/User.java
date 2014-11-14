@@ -341,7 +341,7 @@ public class User extends Model {
     }
 
     public int getPropertyCount() {
-        return 9;
+        return PI_PROP_ARRAY.length;
     }
 
     public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo propertyInfo) {

@@ -25,6 +25,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -36,8 +37,8 @@ import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.model.Event;
+import es.ugr.swad.swadroid.model.UserAttendance;
 import es.ugr.swad.swadroid.modules.Courses;
-import es.ugr.swad.swadroid.modules.notifications.NotificationItem;
 
 /**
  * Rollcall module.
@@ -55,6 +56,10 @@ public class Rollcall extends MenuExpandableListActivity implements
      * Course events
      */
     static List<Event> eventsList;
+    /**
+     * Map of users hashed by eventCode
+     */
+    static SparseArray<List<UserAttendance>> usersMap;
     /**
      * ListView of events
      */
@@ -170,7 +175,8 @@ public class Rollcall extends MenuExpandableListActivity implements
 
             Intent activity = new Intent(getApplicationContext(),
                     UsersDownload.class);
-            activity.putExtra("attendanceEventCode", attendanceEventCode.getText().toString());
+            activity.putExtra("attendanceEventCode",
+                    Integer.valueOf(attendanceEventCode.getText().toString()));
             startActivity(activity);
         }
     };

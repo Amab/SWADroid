@@ -81,6 +81,11 @@
             android:theme="@style/Theme.AppCompat.Translucent" >
         </activity>
         <activity
+            android:name=".modules.rollcall.UsersDownload"
+            android:label="@string/rollcallModuleLabel"
+            android:theme="@style/Theme.AppCompat.Translucent" >
+        </activity>
+        <activity
             android:name="es.ugr.swad.swadroid.modules.Groups"
             android:label="@string/rollcallModuleLabel"
             android:theme="@style/Theme.AppCompat.Translucent" >
