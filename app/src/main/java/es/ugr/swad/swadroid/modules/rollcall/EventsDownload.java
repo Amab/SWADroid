@@ -27,10 +27,12 @@ import android.widget.Toast;
 import org.ksoap2.serialization.SoapObject;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.model.Event;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.Login;
@@ -39,9 +41,8 @@ import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
- * Rollcall config download module.
+ * Rollcall events download module.
  *
- * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class EventsDownload extends Module {
@@ -87,13 +88,18 @@ public class EventsDownload extends Module {
         createRequest(SOAPClient.CLIENT_TYPE);
         addParam("wsKey", Login.getLoggedUser().getWsKey());
         addParam("courseCode", (int) courseCode);
-        sendRequest(User.class, false);
+        sendRequest(Event.class, false);
 
         if (result != null) {
             // Stores users data returned by webservice response
             ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
             SoapObject soap = (SoapObject) res.get(1);
             numEvents = soap.getPropertyCount();
+
+            if(numEvents > 0) {
+                Rollcall.eventsList = new ArrayList<Event>();
+            }
+
             for (int i = 0; i < numEvents; i++) {
                 SoapObject pii = (SoapObject) soap.getProperty(i);
 
@@ -121,6 +127,9 @@ public class EventsDownload extends Module {
                 if (text.equalsIgnoreCase(Constants.NULL_VALUE)) text = "";
                 if (groups.equalsIgnoreCase(Constants.NULL_VALUE)) groups = "";
 
+                Rollcall.eventsList.add(new Event(attendanceEventCode, hidden, userNickname, userSurname1,
+                        userSurname2, userFirstName, userPhoto, startTime, endTime,
+                        commentsTeachersVisible, title, text, groups));
             }
 
             Log.i(TAG, "Retrieved " + numEvents + " events");

@@ -28,7 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="3dip"
-                android:text="@string/session"
+                android:text="@string/event"
                 android:textColor="@color/foreground1"
                 android:textSize="20sp" />
 
@@ -44,7 +44,8 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -59,6 +60,32 @@
                 android:layout_height="wrap_content"
                 android:text="@string/sendingStatePending"
                 android:textColor="@color/red" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/startTimeTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="3dip"
+                android:textColor="@color/green" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="3dip"
+                android:text=" - "
+                android:textColor="@color/foreground1" />
+
+            <TextView
+                android:id="@+id/endTimeTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/green" />
         </LinearLayout>
     </LinearLayout>
 
