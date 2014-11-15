@@ -29,6 +29,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -258,6 +259,17 @@ public class DownloadsManager extends MenuActivity {
         }));
 
         setupActionBar();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if ((navigator != null) && (!navigator.isRootDirectory())) {
+            //If current directory is not the root, go to parent directory
+            updateView(navigator.goToParentDirectory());
+        } else {
+            //If current directory is the root, exit module
+            super.onBackPressed();
+        }
     }
     
     @Override
