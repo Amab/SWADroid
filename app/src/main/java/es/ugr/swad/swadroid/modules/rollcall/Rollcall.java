@@ -173,10 +173,11 @@ public class Rollcall extends MenuExpandableListActivity implements
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             TextView attendanceEventCode = (TextView) view.findViewById(R.id.eventCodeText);
 
+            //TODO Replace UsersDownload with UsersActivity
             Intent activity = new Intent(getApplicationContext(),
                     UsersDownload.class);
             activity.putExtra("attendanceEventCode",
-                    Integer.valueOf(attendanceEventCode.getText().toString()));
+                    Integer.parseInt(attendanceEventCode.getText().toString()));
             startActivity(activity);
         }
     };

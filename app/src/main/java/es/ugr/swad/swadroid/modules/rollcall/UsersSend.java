@@ -37,6 +37,7 @@ import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.UserAttendance;
 import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.Module;
+import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
@@ -44,15 +45,19 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
  *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
-public class UsersDownload extends Module {
+public class UsersSend extends Module {
     /**
-     * Number of users associated to the selected event
+     * Number of users marked as present in the event
      */
     private int numUsers;
     /**
-     * List of users associated to the selected event
+     * Result of webservice call.
      */
-    List<UserAttendance> usersList;
+    private int success;
+    /**
+     * List of user codes separated with commas
+     */
+    String usersCodes;
     /**
      * Code of event associated to the users list
      */
@@ -60,7 +65,7 @@ public class UsersDownload extends Module {
     /**
      * Rollcall Users Download tag name for Logcat
      */
-    private static final String TAG = Constants.APP_TAG + " UsersDownload";
+    private static final String TAG = Constants.APP_TAG + " UsersSend";
 
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
@@ -68,7 +73,7 @@ public class UsersDownload extends Module {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setMETHOD_NAME("getAttendanceUsers");
+        setMETHOD_NAME("sendAttendanceUsers");
         getSupportActionBar().hide();
     }
 
@@ -78,6 +83,7 @@ public class UsersDownload extends Module {
         
         try {
             eventCode = this.getIntent().getIntExtra("attendanceEventCode", 0);
+            usersCodes = this.getIntent().getStringExtra("usersCodes");
             runConnection();
         } catch (Exception e) {
             String errorMsg = getString(R.string.errorServerResponseMsg);
@@ -91,50 +97,18 @@ public class UsersDownload extends Module {
         createRequest(SOAPClient.CLIENT_TYPE);
         addParam("wsKey", Login.getLoggedUser().getWsKey());
         addParam("attendanceEventCode", eventCode);
-        sendRequest(UserAttendance.class, false);
+        addParam("usersCodes", usersCodes);
+        sendRequest(Integer.class, true);
 
         if (result != null) {
-            // Stores users data returned by webservice response
-            ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
-            SoapObject soap = (SoapObject) res.get(1);
-            numUsers = soap.getPropertyCount();
+            SoapObject soap = (SoapObject) result;
 
-            if(numUsers > 0) {
-                if(Rollcall.usersMap == null) {
-                    Rollcall.usersMap = new SparseArray<List<UserAttendance>>();
-                }
-
-                if(usersList == null) {
-                    usersList = new ArrayList<UserAttendance>();
-                }
-            }
-            for (int i = 0; i < numUsers; i++) {
-                SoapObject pii = (SoapObject) soap.getProperty(i);
-
-                int userCode = Integer.parseInt(pii.getProperty("userCode").toString());
-                String userNickname = pii.getProperty("userNickname").toString();
-                String userID = pii.getProperty("userID").toString();
-                String userSurname1 = pii.getProperty("userSurname1").toString();
-                String userSurname2 = pii.getProperty("userSurname2").toString();
-                String userFirstName = pii.getProperty("userFirstname").toString();
-                String userPhoto = pii.getProperty("userPhoto").toString();
-                //If not 0 ⇒ this user has attended the event.
-                boolean userPresent = (Integer.parseInt(pii.getProperty("present").toString()) == 0);
-
-                if (userNickname.equalsIgnoreCase(Constants.NULL_VALUE)) userNickname = "";
-                if (userSurname1.equalsIgnoreCase(Constants.NULL_VALUE)) userSurname1 = "";
-                if (userSurname2.equalsIgnoreCase(Constants.NULL_VALUE)) userSurname2 = "";
-                if (userFirstName.equalsIgnoreCase(Constants.NULL_VALUE)) userFirstName = "";
-                if (userPhoto.equalsIgnoreCase(Constants.NULL_VALUE)) userPhoto = "";
-
-                usersList.add(new UserAttendance(userCode, userID, userNickname, userSurname1,
-                        userSurname2, userFirstName, userPhoto, userPresent));
-            }
-
-            Rollcall.usersMap.put(eventCode, usersList);
-
-            Log.i(TAG, "Retrieved " + numUsers + " users");
+            //Stores data returned by webservice response
+            success = Integer.parseInt(soap.getProperty("success").toString());
+            numUsers = Integer.parseInt(soap.getProperty("numUsers").toString());
         }    // end if (result != null)
+
+        Log.i(TAG, "Sended " + numUsers + " users");
 
         // Request finalized without errors
         setResult(RESULT_OK);
@@ -145,17 +119,23 @@ public class UsersDownload extends Module {
         String progressDescription = getString(R.string.usersDownloadProgressDescription);
         int progressTitle = R.string.usersDownloadProgressTitle;
 
+        //TODO Add progress screen like in LoginActivity
         startConnection(false, progressDescription, progressTitle);
     }
 
     @Override
     protected void postConnect() {
-        if (numUsers == 0) {
-            Toast.makeText(this, R.string.noUsersAvailableMsg, Toast.LENGTH_LONG).show();
+        if (!Utils.parseIntBool(success)) {
+            //TODO Add error message
+
+            setResult(RESULT_CANCELED);
         } else {
             String msg = String.valueOf(numUsers) + " " + getResources().getString(R.string.usersUpdated);
             Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+
+            setResult(RESULT_OK);
         }
+
         finish();
     }
 
