@@ -6,27 +6,8 @@
 
 package es.ugr.swad.swadroid.modules.messages;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
-import es.ugr.swad.swadroid.model.User;
-import es.ugr.swad.swadroid.modules.Courses;
-import es.ugr.swad.swadroid.modules.rollcall.EventsDownload;
 //import es.ugr.swad.swadroid.modules.rollcall.students.StudentItemModel;
 //import es.ugr.swad.swadroid.modules.rollcall.students.StudentsArrayAdapter;
 

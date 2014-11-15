@@ -23,18 +23,14 @@ package es.ugr.swad.swadroid.model;
 
 import org.ksoap2.serialization.PropertyInfo;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Hashtable;
-import java.util.Locale;
 
 /**
  * User attendance data.
  *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
-public class UserAttendance extends Model {
+public class UserAttendance extends Model implements Comparable<UserAttendance> {
     /**
      * User identifier.
      */
@@ -83,6 +79,10 @@ public class UserAttendance extends Model {
             PI_userPresent
     };
 
+    public UserAttendance(long id) {
+        super(id);
+    }
+
     /**
      * Constructor.
      *
@@ -105,6 +105,8 @@ public class UserAttendance extends Model {
         this.userFirstname = userFirstname;
         this.userPresent = userPresent;
     }
+
+
 
     public String getUserID() {
         return userID;
@@ -252,4 +254,14 @@ public class UserAttendance extends Model {
         }
     }
 
+    @Override
+    public int compareTo(UserAttendance another) {
+        int cmpUserNickname = this.getUserNickname().compareToIgnoreCase(another.getUserNickname());
+
+        if (cmpUserNickname == 0) {
+            return cmpUserNickname;
+        } else {
+            return this.getUserID().compareToIgnoreCase(another.getUserID());
+        }
+    }
 }

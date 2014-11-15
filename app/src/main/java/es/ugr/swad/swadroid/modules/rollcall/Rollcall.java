@@ -43,7 +43,6 @@ import es.ugr.swad.swadroid.modules.Courses;
 /**
  * Rollcall module.
  *
- * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class Rollcall extends MenuExpandableListActivity implements
@@ -53,7 +52,7 @@ public class Rollcall extends MenuExpandableListActivity implements
      */
     public static final String TAG = Constants.APP_TAG + " Rollcall";
     /**
-     * Course events
+     * List of events associated to the selected course
      */
     static List<Event> eventsList;
     /**
@@ -108,14 +107,14 @@ public class Rollcall extends MenuExpandableListActivity implements
                  * and show the empty events message
                  */
                 if ((eventsList == null) || (eventsList.size() == 0)) {
-                    Log.d(TAG, "[onCreate] Events list is empty");
+                    Log.d(TAG, "Events list is empty");
 
                     emptyEventsTextView.setText(R.string.eventsEmptyListMsg);
                     emptyEventsTextView.setVisibility(View.VISIBLE);
 
                     lvEvents.setVisibility(View.GONE);
                 } else {
-                    Log.d(TAG, "[onCreate] Events list is not empty");
+                    Log.d(TAG, "Events list is not empty");
 
                     lvEvents.setAdapter(new EventsArrayAdapter(this, eventsList));
 
@@ -159,8 +158,7 @@ public class Rollcall extends MenuExpandableListActivity implements
     public void onRefresh() {
         showSwipeProgress();
 
-        Intent activity = new Intent(this, EventsDownload.class);
-        startActivityForResult(activity, Constants.ROLLCALL_EVENTS_DOWNLOAD_REQUEST_CODE);
+        refreshEvents();
 
         hideSwipeProgress();
     }
@@ -171,13 +169,10 @@ public class Rollcall extends MenuExpandableListActivity implements
     private ListView.OnItemClickListener clickListener = new ListView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            TextView attendanceEventCode = (TextView) view.findViewById(R.id.eventCodeText);
-
-            //TODO Replace UsersDownload with UsersActivity
             Intent activity = new Intent(getApplicationContext(),
-                    UsersDownload.class);
+                    UsersActivity.class);
             activity.putExtra("attendanceEventCode",
-                    Integer.parseInt(attendanceEventCode.getText().toString()));
+                    view.getId());
             startActivity(activity);
         }
     };

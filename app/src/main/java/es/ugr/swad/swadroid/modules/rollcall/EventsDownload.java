@@ -26,6 +26,7 @@ import android.widget.Toast;
 import org.ksoap2.serialization.SoapObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Vector;
 
 import es.ugr.swad.swadroid.Constants;
@@ -149,6 +150,9 @@ public class EventsDownload extends Module {
         if (numEvents == 0) {
             Toast.makeText(this, R.string.noEventsAvailableMsg, Toast.LENGTH_LONG).show();
         } else {
+            // Arrange the list alphabetically
+            Collections.sort(Rollcall.eventsList);
+
             String msg = String.valueOf(numEvents) + " " + getResources().getString(R.string.eventsUpdated);
             Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
         }
