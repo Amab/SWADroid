@@ -727,19 +727,8 @@ public class SWADMain extends MenuExpandableListActivity {
                         Toast.makeText(ctx, R.string.noConnectionMsg, Toast.LENGTH_LONG).show();
                     }
                 } else if (keyword.equals(getString(R.string.generateQRModuleLabel))) {
-                    //If the user is not logged, launch login for get user nickname
-                    if (!Login.isLogged() || (Login.getLoggedUser() == null)) {
-                        activity = new Intent(ctx, Login.class);
-                        startActivity(activity);
-                    }
-
-                    //Launch QR module only if the user has a nickname
-                    if (Login.isLogged() && !Login.getLoggedUser().getUserNickname().equals(Constants.NULL_VALUE)) {
-                        activity = new Intent(ctx, GenerateQR.class);
-                        startActivityForResult(activity, Constants.GENERATE_QR_REQUEST_CODE);
-                    } else {
-                        Toast.makeText(ctx, R.string.errorNoUserNickname, Toast.LENGTH_LONG).show();
-                    }
+                    activity = new Intent(ctx, GenerateQR.class);
+                    startActivityForResult(activity, Constants.GENERATE_QR_REQUEST_CODE);
                 } else if (keyword.equals(getString(R.string.documentsDownloadModuleLabel))) {
                     activity = new Intent(ctx, DownloadsManager.class);
                     activity.putExtra("downloadsAreaCode", Constants.DOCUMENTS_AREA_CODE);
