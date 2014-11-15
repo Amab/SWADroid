@@ -247,8 +247,9 @@ public class UsersActivity extends MenuExpandableListActivity implements
                             UsersSend.class);
                     activity.putExtra("attendanceEventCode",
                             eventCode);
+                    //Set unmarked users as absent
                     activity.putExtra("setOthersAsAbsent",
-                            0);
+                            1);
                     activity.putExtra("usersCodes",
                             usersCodes);
                     startActivity(activity);
