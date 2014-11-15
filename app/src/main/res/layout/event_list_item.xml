@@ -14,12 +14,6 @@
         android:contentDescription="@string/rollcallEvent"
         android:src="@drawable/sessions" />
 
-    <TextView
-        android:id="@+id/eventCodeText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"/>
-
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

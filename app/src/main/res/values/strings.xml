@@ -289,5 +289,9 @@
     <string name="event">Event</string>
     <string name="usersUpdated">users updated</string>
     <string name="noUsersAvailableMsg">There are no users in this event</string>
+    <string name="noUsersCheckedMsg">You must check almost one user</string>
+    <string name="usersEmptyListMsg">Did not download any user.\n\nTo download most recent
+        users slide down this message.</string>
+    <string name="doubleBackToExitMsg">Please click BACK again to exit</string>
 
 </resources>

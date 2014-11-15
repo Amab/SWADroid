@@ -114,104 +114,100 @@ public class Constants {
      */
     public static final int GROUPS_REQUEST_CODE = 14;
     /**
-     * Request code for Rollcall Config Download module.
+     * Request code for Rollcall EventsDownload Download module.
      */
     public static final int ROLLCALL_EVENTS_DOWNLOAD_REQUEST_CODE = 15;
     /**
-     * Request code for Rollcall History module.
+     * Request code for Rollcall EventsSend Download module.
      */
-    public static final int ROLLCALL_HISTORY_REQUEST_CODE = 16;
+    public static final int ROLLCALL_EVENTS_SEND_REQUEST_CODE = 16;
     /**
-     * Request code for Students List module.
+     * Request code for Rollcall UsersDownload module.
      */
-    public static final int STUDENTS_LIST_REQUEST_CODE = 17;
+    public static final int ROLLCALL_USERS_DOWNLOAD_REQUEST_CODE = 17;
     /**
-     * Request code for Students History module.
+     * Request code for Rollcall UsersSend module.
      */
-    public static final int STUDENTS_HISTORY_REQUEST_CODE = 18;
-    /**
-     * Request code for Sessions List module.
-     */
-    public static final int SESSIONS_LIST_REQUEST_CODE = 19;
+    public static final int ROLLCALL_USERS_SEND_REQUEST_CODE = 18;
     /**
      * Request code for Downloads Manager
      */
-    public static final int DOWNLOADSMANAGER_REQUEST_CODE = 20;
+    public static final int DOWNLOADSMANAGER_REQUEST_CODE = 19;
     /**
      * Request code for Notify Download
      */
-    public static final int NOTIFYDOWNLOAD_REQUEST_CODE = 21;
+    public static final int NOTIFYDOWNLOAD_REQUEST_CODE = 20;
     /**
      * Request code for MyGroups Manager
      */
-    public static final int MYGROUPSMANAGER_REQUEST_CODE = 22;
+    public static final int MYGROUPSMANAGER_REQUEST_CODE = 21;
     /**
      * Request code for Group Types module
      */
-    public static final int GROUPTYPES_REQUEST_CODE = 23;
+    public static final int GROUPTYPES_REQUEST_CODE = 22;
     /**
      * Request code for SendMyGroups
      */
-    public static final int SENDMYGROUPS_REQUEST_CODE = 24;
+    public static final int SENDMYGROUPS_REQUEST_CODE = 23;
     /**
      * Request code for GetFile Manager
      */
-    public static final int GETFILE_REQUEST_CODE = 25;
+    public static final int GETFILE_REQUEST_CODE = 24;
     /**
      * Request code for Generate QR
      */
-    public static final int GENERATE_QR_REQUEST_CODE = 26;    
+    public static final int GENERATE_QR_REQUEST_CODE = 25;
     /**
      * Request code for Information
      */
-    public static final int INFORMATION_REQUEST_CODE = 27;
+    public static final int INFORMATION_REQUEST_CODE = 26;
     
     /**
      * Request code for Introduction
      */
-    public static final int INTRODUCTION_REQUEST_CODE = 28;
+    public static final int INTRODUCTION_REQUEST_CODE = 27;
     
     /**
      * Request code for FAQs
      */
-    public static final int FAQS_REQUEST_CODE = 29;
+    public static final int FAQS_REQUEST_CODE = 28;
     
     /**
      * Request code for Bibliography
      */
-    public static final int BIBLIOGRAPHY_REQUEST_CODE = 30;
+    public static final int BIBLIOGRAPHY_REQUEST_CODE = 29;
     
     /**
      * Request code for Practices Program
      */
-    public static final int SYLLABUSPRACTICALS_REQUEST_CODE = 31;
+    public static final int SYLLABUSPRACTICALS_REQUEST_CODE = 30;
     
     /**
      * Request code for Theory Program
      */
-    public static final int SYLLABUSLECTURES_REQUEST_CODE = 32;
+    public static final int SYLLABUSLECTURES_REQUEST_CODE = 31;
 
     /**
      * Request code for Links
      */
-    public static final int LINKS_REQUEST_CODE = 33;
+    public static final int LINKS_REQUEST_CODE = 32;
     
     /**
      * Request code for Teaching Guide
      */
-    public static final int TEACHINGGUIDE_REQUEST_CODE = 34; 
+    public static final int TEACHINGGUIDE_REQUEST_CODE = 33;
     /**
      * Request code for NotificationMarkAsRead module
      */
-    public static final int NOTIFMARKALLASREAD_REQUEST_CODE = 35; 
+    public static final int NOTIFMARKALLASREAD_REQUEST_CODE = 34;
     /**
      * Request code for Assessment
      */
-    public static final int ASSESSMENT_REQUEST_CODE = 36; 
+    public static final int ASSESSMENT_REQUEST_CODE = 35;
     /**
      * Request code for recover Password
      */
-    public static final int RECOVER_PASSWORD_REQUEST_CODE = 37;
+    public static final int RECOVER_PASSWORD_REQUEST_CODE = 36;
     /**
      * Prefix tag name for Logcat
      */

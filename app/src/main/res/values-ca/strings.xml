@@ -274,5 +274,9 @@
     <string name="event">Esdeveniment</string>
     <string name="usersUpdated">usuaris actualitzats</string>
     <string name="noUsersAvailableMsg">No hi ha usuaris en aquest esdeveniment</string>
+    <string name="noUsersCheckedMsg">Ha de marcar com a mínim un usuari</string>
+    <string name="usersEmptyListMsg">No s\'ha descarregat cap usuari.\n\nPer descarregar les
+         usuaris més recents llisqui aquest missatge cap avall.</string>
+    <string name="doubleBackToExitMsg">Si us plau, premeu ENRERE per a sortir-</string>
 
 </resources>

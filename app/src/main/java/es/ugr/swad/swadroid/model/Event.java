@@ -20,7 +20,6 @@
  */
 package es.ugr.swad.swadroid.model;
 
-import android.support.v4.text.TextUtilsCompat;
 import android.text.TextUtils;
 
 import org.ksoap2.serialization.PropertyInfo;
@@ -36,7 +35,7 @@ import java.util.List;
  *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
-public class Event extends Model {
+public class Event extends Model implements Comparable<Event> {
     private boolean hidden;
     private String userNickname;
     private String userSurname1;
@@ -448,5 +447,10 @@ public class Event extends Model {
                 ", text='" + text + '\'' +
                 ", groups='" + groups + '\'' +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Event another) {
+        return this.getTitle().compareToIgnoreCase(another.getTitle());
     }
 }

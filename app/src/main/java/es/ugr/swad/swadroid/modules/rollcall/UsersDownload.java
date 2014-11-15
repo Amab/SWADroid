@@ -29,6 +29,7 @@ import android.widget.Toast;
 import org.ksoap2.serialization.SoapObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
@@ -130,6 +131,9 @@ public class UsersDownload extends Module {
                 usersList.add(new UserAttendance(userCode, userID, userNickname, userSurname1,
                         userSurname2, userFirstName, userPhoto, userPresent));
             }
+
+            // Arrange the list alphabetically
+            Collections.sort(usersList);
 
             Rollcall.usersMap.put(eventCode, usersList);
 

@@ -280,5 +280,9 @@
     <string name="event">Evento</string>
     <string name="usersUpdated">usuarios actualizados</string>
     <string name="noUsersAvailableMsg">No hay usuarios en este evento</string>
+    <string name="noUsersCheckedMsg">Debe marcar al menos un usuario</string>
+    <string name="usersEmptyListMsg">No se ha descargado ningún usuario.\n\nPara descargar los
+        usuarios más recientes deslice este mensaje hacia abajo.</string>
+    <string name="doubleBackToExitMsg">Por favor, presione ATRÁS de nuevo para salir</string>
 
 </resources>

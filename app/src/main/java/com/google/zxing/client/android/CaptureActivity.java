@@ -20,7 +20,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -28,7 +27,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -47,16 +45,13 @@ import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.camera.CameraManager;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.database.DataBaseHelper;
-import es.ugr.swad.swadroid.model.User;
-import es.ugr.swad.swadroid.modules.Courses;
+import es.ugr.swad.swadroid.gui.ImageFactory;
+import es.ugr.swad.swadroid.model.UserAttendance;
+import es.ugr.swad.swadroid.modules.rollcall.UsersActivity;
 import es.ugr.swad.swadroid.utils.Utils;
 
 /**
@@ -67,6 +62,7 @@ import es.ugr.swad.swadroid.utils.Utils;
  * @author dswitkin@google.com (Daniel Switkin)
  * @author Sean Owen
  * @author Antonio Aguilera Malagon (aguilerin@gmail.com)
+ * @author Juan Miguel Boyero Corral (juanmi1982@gmail.com)
  */
 public class CaptureActivity extends Activity implements SurfaceHolder.Callback {
     /**
@@ -94,12 +90,6 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
     private InactivityTimer inactivityTimer;
     private BeepManager beepManager;
 
-    private HashSet<String> idList;
-    /**
-     * Database Helper.
-     */
-    private static DataBaseHelper dbHelper;
-
     ViewfinderView getViewfinderView() {
         return viewfinderView;
     }
@@ -122,16 +112,6 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 
         hasSurface = false;
         inactivityTimer = new InactivityTimer(this);
-
-        idList = new HashSet<String>();
-
-        // Initialize database
-        try {
-            dbHelper = new DataBaseHelper(getBaseContext());
-        } catch (Exception ex) {
-            Log.e(ex.getClass().getSimpleName(), ex.getMessage());
-            ex.printStackTrace();
-        }
     }
 
     @Override
@@ -218,7 +198,6 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
     @Override
     protected void onDestroy() {
         inactivityTimer.shutdown();
-        dbHelper.close();
         super.onDestroy();
     }
 
@@ -226,10 +205,7 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (source == IntentSource.NATIVE_APP_INTENT) {
-                Intent intent = getIntent();
-                ArrayList<String> ids = new ArrayList<String>(idList);
-                intent.putStringArrayListExtra("id_list", ids);
-                setResult(RESULT_OK, intent);
+                setResult(RESULT_OK);
                 finish();
                 return true;
             } else if ((source == IntentSource.NONE || source == IntentSource.ZXING_LINK) && lastResult != null) {
@@ -294,34 +270,27 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
         String messageResult;
         int iconResult;
         int soundResult;
-        User u = null;
-        Bitmap bMap;
-        Bitmap bMapScaled;
+        UserAttendance u = new UserAttendance(0);
         String qrContent = rawResult.toString();
-        Boolean validDni = Utils.isValidDni(qrContent);
         Boolean validNickname = Utils.isValidNickname(qrContent);
-        int widthScale, heightScale, bMapScaledWidth, bMapScaledHeight;
 
         inactivityTimer.onActivity();
         lastResult = rawResult;
 
-        if (validDni || validNickname) {
-            String fieldName = (validDni) ? "userID" : "userNickname";
-            u = (User) dbHelper.getRow(DataBaseHelper.DB_TABLE_USERS, fieldName, qrContent);
+        if (validNickname) {
+            u.setUserNickname(qrContent);
+            if (UsersActivity.usersList.contains(u)) {
+                u = UsersActivity.usersList.get(UsersActivity.usersList.indexOf(u));
+            }
 
             if (u != null) {
-                idList.add(u.getUserID());
+                //Mark student as present in the event
+                u.setUserPresent(true);
 
-                // Check if the specified user is enrolled in the selected course
-                if (dbHelper.isUserEnrolledCourse(u.getUserID(), Courses.getSelectedCourseCode())) {
-                    messageResult = getString(R.string.scan_valid_student);
-                    iconResult = R.drawable.ok;
-                    soundResult = sounds[0]; // Positive sound
-                } else {
-                    messageResult = getString(R.string.scan_not_valid_student);
-                    iconResult = R.drawable.not_ok;
-                    soundResult = sounds[1]; // Negative sound
-                }
+                messageResult = getString(R.string.scan_valid_student);
+                iconResult = R.drawable.ok;
+                soundResult = sounds[0]; // Positive sound
+
                 messageResult += "\n\n"
                         + getString(R.string.scan_id) + ": " + u.getUserID() + "\n"
                         + getString(R.string.scan_name) + ": " + u.getUserFirstname() + " "
@@ -351,25 +320,8 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
         ImageView image = (ImageView) layout.findViewById(R.id.image);
 
         if (u != null) {
-            String photoPath = getExternalFilesDir(null) + "/" + u.getPhotoFileName();
-            File photoFile = new File(photoPath);
-            if (photoFile.exists()) {
-                bMap = BitmapFactory.decodeFile(photoPath);
-            } else {
-                // If photoFile does not exist (has been deleted), show default photo
-                bMap = BitmapFactory.decodeStream(image.getResources().openRawResource(R.raw.usr_bl));
-            }
-
-            // Calculate the dimensions of the image to display as a function of the resolution of the screen
-            Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
-
-            widthScale = 1000;
-            heightScale = 600;
-            bMapScaledWidth = (bMap.getWidth() * display.getWidth()) / widthScale;
-            bMapScaledHeight = (bMap.getHeight() * display.getHeight()) / heightScale;
-
-            bMapScaled = Bitmap.createScaledBitmap(bMap, bMapScaledWidth, bMapScaledHeight, true);
-            image.setImageBitmap(bMapScaled);
+            ImageFactory.displayImage(getApplicationContext(), u.getUserPhoto(), image, true, true,
+                    R.raw.usr_bl, R.raw.usr_bl, R.raw.usr_bl);
         }
 
         // Show appropriate icon
