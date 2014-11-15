@@ -103,7 +103,7 @@ public class EventsDownload extends Module {
             for (int i = 0; i < numEvents; i++) {
                 SoapObject pii = (SoapObject) soap.getProperty(i);
 
-                long attendanceEventCode = Long.valueOf(pii.getProperty("attendanceEventCode").toString());
+                long attendanceEventCode = Long.parseLong(pii.getProperty("attendanceEventCode").toString());
                 boolean hidden = Utils.parseStringBool(pii.getProperty("hidden").toString());
                 String userNickname = pii.getProperty("userNickname").toString();
                 String userSurname1 = pii.getProperty("userSurname1").toString();
