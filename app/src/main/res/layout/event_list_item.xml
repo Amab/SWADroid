@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="6dip"
         android:contentDescription="@string/rollcallEvent"
-        android:src="@drawable/sessions" />
+        android:src="@drawable/roll_call" />
 
     <LinearLayout
         android:layout_width="wrap_content"
