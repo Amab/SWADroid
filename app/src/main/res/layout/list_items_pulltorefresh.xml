@@ -23,6 +23,8 @@
             android:background="@color/background"
             android:orientation="vertical" >
 
+            <include layout="@layout/birthday_layout"/>
+
             <include layout="@layout/list_item" />
 
             <ExpandableListView

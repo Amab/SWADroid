@@ -40,7 +40,7 @@ import es.ugr.swad.swadroid.model.TestTag;
 import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.Module;
-import es.ugr.swad.swadroid.utils.TimeUtils;
+import es.ugr.swad.swadroid.utils.DateTimeUtils;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
@@ -223,7 +223,7 @@ public class TestsQuestionsDownload extends Module {
             Log.i(TAG, "Retrieved " + listSizeQuestions + " questions");
             Log.i(TAG, "Retrieved " + listSizeAnswers + " answers");
             Log.i(TAG, "Retrieved " + listSizeQuestionTags + " relationships between questions and tags");
-            Log.i(TAG, "Time elapsed = " + TimeUtils.millisToLongDHMS(timeAfter - timeBefore));
+            Log.i(TAG, "Time elapsed = " + DateTimeUtils.millisToLongDHMS(timeAfter - timeBefore));
         }
 
         //Request finalized without errors
