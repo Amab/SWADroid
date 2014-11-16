@@ -40,8 +40,10 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.LinearLayout;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -69,6 +71,7 @@ import es.ugr.swad.swadroid.modules.tests.Tests;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
 import es.ugr.swad.swadroid.sync.AccountAuthenticator;
 import es.ugr.swad.swadroid.sync.SyncUtils;
+import es.ugr.swad.swadroid.utils.DateTimeUtils;
 import es.ugr.swad.swadroid.utils.Utils;
 
 /**
@@ -129,6 +132,8 @@ public class SWADMain extends MenuExpandableListActivity {
 
     private boolean dBCleaned = false;
 
+    private LinearLayout mBirthdayLayout;
+    private TextView mBirthdayTextView;
     private ExpandableListView mExpandableListView;
     private ImageExpandableListAdapter mExpandableListAdapter;
     private OnChildClickListener mExpandableClickListener;
@@ -237,7 +242,6 @@ public class SWADMain extends MenuExpandableListActivity {
         if (isUserOrPasswordEmpty() && (listCourses.size() == 0)) {
             startActivityForResult(new Intent(this, LoginActivity.class), Constants.LOGIN_REQUEST_CODE);
         } else {
-
             if (!Preferences.isPreferencesChanged() && !DataBaseHelper.isDbCleaned()) {
                 createSpinnerAdapter();
                 if (!firstRun) {
@@ -248,6 +252,16 @@ public class SWADMain extends MenuExpandableListActivity {
                 Preferences.setPreferencesChanged(false);
                 DataBaseHelper.setDbCleaned(false);
                 setMenuDbClean();
+            }
+
+            //If today is the user birthday, show birthday message
+            if((Login.getLoggedUser() != null)
+                    && DateTimeUtils.isBirthday(Login.getLoggedUser().getUserBirthday())) {
+                mBirthdayTextView.setText(getString(R.string.birthdayMsg).replace(
+                        Constants.USERNAME_TEMPLATE, Login.getLoggedUser().getUserFirstname()));
+                mBirthdayLayout.setVisibility(View.VISIBLE);
+            } else {
+                mBirthdayLayout.setVisibility(View.GONE);
             }
         }
 
@@ -695,6 +709,8 @@ public class SWADMain extends MenuExpandableListActivity {
     
 	private void initializeMainViews() {
         mExpandableListView = (ExpandableListView) findViewById(R.id.expandableList);
+        mBirthdayLayout = (LinearLayout) findViewById(R.id.birthday_layout);
+        mBirthdayTextView = (TextView) findViewById(R.id.birthdayTextView);
         
         mExpandableClickListener = new OnChildClickListener() {
             

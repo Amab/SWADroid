@@ -295,5 +295,6 @@
     <string name="Filters_All">Tot</string>
     <string name="Filters_Teachers">Professors</string>
     <string name="Filters_Students">Alumnes</string>
+    <string name="birthdayMsg">Per molts anys, {userName}!</string>
 
 </resources>

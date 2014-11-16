@@ -294,4 +294,9 @@ public class Constants {
     public static final String DIRECTORY_SWADROID = "SWADroid";
     public static final String DOWNLOADS_PATH =
             Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + DIRECTORY_SWADROID;
+
+    /**
+     * Username template for messages
+     */
+    public static final String USERNAME_TEMPLATE = "{userName}";
 }
