@@ -137,6 +137,10 @@ public class UsersActivity extends MenuExpandableListActivity implements
                     emptyUsersTextView.setVisibility(View.GONE);
                     lvUsers.setVisibility(View.VISIBLE);
                 }
+                break;
+            case Constants.SCAN_QR_REQUEST_CODE:
+                lvUsers.setAdapter(new UsersArrayAdapter(this, usersList));
+                break;
         }
     }
 
