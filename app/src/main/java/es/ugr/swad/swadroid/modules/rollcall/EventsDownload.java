@@ -96,6 +96,8 @@ public class EventsDownload extends Module {
 
             if(numEvents > 0) {
                 Rollcall.eventsList = new ArrayList<Event>();
+            } else {
+                Rollcall.eventsList = null;
             }
 
             for (int i = 0; i < numEvents; i++) {
