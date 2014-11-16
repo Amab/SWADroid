@@ -112,7 +112,7 @@ public class EventsDownload extends Module {
                 boolean commentsTeachersVisible = Utils.parseStringBool(pii.getProperty("commentsTeachersVisible").toString());
                 String title = pii.getProperty("title").toString();
                 String text = pii.getProperty("text").toString();
-                String groups = pii.getProperty("groups").toString();
+                String groups = (pii.hasProperty("groups")? pii.getProperty("groups").toString() : null);
 
                 if (userSurname1.equalsIgnoreCase(Constants.NULL_VALUE)) userSurname1 = "";
                 if (userSurname2.equalsIgnoreCase(Constants.NULL_VALUE)) userSurname2 = "";
@@ -121,7 +121,6 @@ public class EventsDownload extends Module {
 
                 if (title.equalsIgnoreCase(Constants.NULL_VALUE)) title = "";
                 if (text.equalsIgnoreCase(Constants.NULL_VALUE)) text = "";
-                if (groups.equalsIgnoreCase(Constants.NULL_VALUE)) groups = "";
 
                 Rollcall.eventsList.add(new Event(attendanceEventCode, hidden, userSurname1,
                         userSurname2, userFirstName, userPhoto, startTime, endTime,
