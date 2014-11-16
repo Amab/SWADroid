@@ -37,7 +37,6 @@ import java.util.List;
  */
 public class Event extends Model implements Comparable<Event> {
     private boolean hidden;
-    private String userNickname;
     private String userSurname1;
     private String userSurname2;
     private String userFirstName;
@@ -50,7 +49,6 @@ public class Event extends Model implements Comparable<Event> {
     private String groups;
     private static final PropertyInfo PI_id = new PropertyInfo();
     private static final PropertyInfo PI_hidden = new PropertyInfo();
-    private static final PropertyInfo PI_userNickname = new PropertyInfo();
     private static final PropertyInfo PI_userSurname1 = new PropertyInfo();
     private static final PropertyInfo PI_userSurname2 = new PropertyInfo();
     private static final PropertyInfo PI_userFirstName = new PropertyInfo();
@@ -64,7 +62,6 @@ public class Event extends Model implements Comparable<Event> {
             {
                     PI_id,
                     PI_hidden,
-                    PI_userNickname,
                     PI_userSurname1,
                     PI_userSurname2,
                     PI_userFirstName,
@@ -79,13 +76,11 @@ public class Event extends Model implements Comparable<Event> {
     /**
      * Constructor
      */
-    public Event(long attendanceEventCode, boolean hidden, String userNickname,
-                 String userSurname1, String userSurname2, String userFirstName, String userPhoto,
-                 int startTime, int endTime, boolean commentsTeachersVisible, String title, String text,
-                 String groups) {
+    public Event(long attendanceEventCode, boolean hidden, String userSurname1, String userSurname2,
+                 String userFirstName, String userPhoto, int startTime, int endTime,
+                 boolean commentsTeachersVisible, String title, String text, String groups) {
         super(attendanceEventCode);
         this.hidden = hidden;
-        this.userNickname = userNickname;
         this.userSurname1 = userSurname1;
         this.userSurname2 = userSurname2;
         this.userFirstName = userFirstName;
@@ -104,14 +99,6 @@ public class Event extends Model implements Comparable<Event> {
 
     public void setHidden(boolean hidden) {
         this.hidden = hidden;
-    }
-
-    public String getUserNickname() {
-        return userNickname;
-    }
-
-    public void setUserNickname(String userNickname) {
-        this.userNickname = userNickname;
     }
 
     public String getUserSurname1() {
@@ -227,36 +214,33 @@ public class Event extends Model implements Comparable<Event> {
                 object = hidden;
                 break;
             case 2:
-                object = userNickname;
-                break;
-            case 3:
                 object = userSurname1;
                 break;
-            case 4:
+            case 3:
                 object = userSurname2;
                 break;
-            case 5:
+            case 4:
                 object = userFirstName;
                 break;
-            case 6:
+            case 5:
                 object = userPhoto;
                 break;
-            case 7:
+            case 6:
                 object = startTime;
                 break;
-            case 8:
+            case 7:
                 object = endTime;
                 break;
-            case 9:
+            case 8:
                 object = commentsTeachersVisible;
                 break;
-            case 10:
+            case 9:
                 object = title;
                 break;
-            case 11:
+            case 10:
                 object = text;
                 break;
-            case 12:
+            case 11:
                 object = groups;
                 break;
         }
@@ -286,53 +270,44 @@ public class Event extends Model implements Comparable<Event> {
                 break;
             case 2:
                 propertyInfo.type = PropertyInfo.STRING_CLASS;
-                propertyInfo.name = "userNickname";
+                propertyInfo.name = "userSurname1";
                 break;
             case 3:
                 propertyInfo.type = PropertyInfo.STRING_CLASS;
-                propertyInfo.name = "userSurname1";
+                propertyInfo.name = "userSurname2";
                 break;
             case 4:
                 propertyInfo.type = PropertyInfo.STRING_CLASS;
-                propertyInfo.name = "userSurname2";
+                propertyInfo.name = "userFirstName";
                 break;
             case 5:
                 propertyInfo.type = PropertyInfo.STRING_CLASS;
-                propertyInfo.name = "userFirstName";
-                break;
-            case 6:
-                propertyInfo.type = PropertyInfo.STRING_CLASS;
                 propertyInfo.name = "userPhoto";
                 break;
-            case 7:
+            case 6:
                 propertyInfo.type = PropertyInfo.INTEGER_CLASS;
                 propertyInfo.name = "startTime";
                 break;
-            case 8:
+            case 7:
                 propertyInfo.type = PropertyInfo.INTEGER_CLASS;
                 propertyInfo.name = "endTime";
                 break;
-            case 9:
+            case 8:
                 propertyInfo.type = PropertyInfo.BOOLEAN_CLASS;
                 propertyInfo.name = "commentsTeachersVisible";
                 break;
-            case 10:
-                propertyInfo.type = PropertyInfo.STRING_CLASS;
-                propertyInfo.name = "commentsTeachersVisible";
-                break;
-            case 11:
+            case 9:
                 propertyInfo.type = PropertyInfo.STRING_CLASS;
                 propertyInfo.name = "title";
                 break;
-            case 12:
+            case 10:
                 propertyInfo.type = PropertyInfo.STRING_CLASS;
                 propertyInfo.name = "text";
                 break;
-            case 13:
+            case 11:
                 propertyInfo.type = PropertyInfo.STRING_CLASS;
                 propertyInfo.name = "groups";
                 break;
-
         }
     }
 
@@ -348,39 +323,35 @@ public class Event extends Model implements Comparable<Event> {
                 hidden = (Boolean) obj;
                 break;
             case 2:
-                userNickname = (String) obj;
-                break;
-            case 3:
                 userSurname1 = (String) obj;
                 break;
-            case 4:
+            case 3:
                 userSurname2 = (String) obj;
                 break;
-            case 5:
+            case 4:
                 userFirstName = (String) obj;
                 break;
-            case 6:
+            case 5:
                 userPhoto = (String) obj;
                 break;
-            case 7:
+            case 6:
                 startTime = (Integer) obj;
                 break;
-            case 8:
+            case 7:
                 endTime = (Integer) obj;
                 break;
-            case 9:
+            case 8:
                 commentsTeachersVisible = (Boolean) obj;
                 break;
-            case 10:
+            case 9:
                 title = (String) obj;
                 break;
-            case 11:
+            case 10:
                 text = (String) obj;
                 break;
-            case 12:
+            case 11:
                 groups = (String) obj;
                 break;
-
         }
     }
 
@@ -401,8 +372,6 @@ public class Event extends Model implements Comparable<Event> {
         if (title != null ? !title.equals(event.title) : event.title != null) return false;
         if (userFirstName != null ? !userFirstName.equals(event.userFirstName) : event.userFirstName != null)
             return false;
-        if (userNickname != null ? !userNickname.equals(event.userNickname) : event.userNickname != null)
-            return false;
         if (userPhoto != null ? !userPhoto.equals(event.userPhoto) : event.userPhoto != null)
             return false;
         if (userSurname1 != null ? !userSurname1.equals(event.userSurname1) : event.userSurname1 != null)
@@ -417,7 +386,6 @@ public class Event extends Model implements Comparable<Event> {
     public int hashCode() {
         int result = super.hashCode();
         result = 31 * result + (hidden ? 1 : 0);
-        result = 31 * result + (userNickname != null ? userNickname.hashCode() : 0);
         result = 31 * result + (userSurname1 != null ? userSurname1.hashCode() : 0);
         result = 31 * result + (userSurname2 != null ? userSurname2.hashCode() : 0);
         result = 31 * result + (userFirstName != null ? userFirstName.hashCode() : 0);
@@ -435,7 +403,6 @@ public class Event extends Model implements Comparable<Event> {
     public String toString() {
         return "Event{" +
                 "hidden=" + hidden +
-                ", userNickname='" + userNickname + '\'' +
                 ", userSurname1='" + userSurname1 + '\'' +
                 ", userSurname2='" + userSurname2 + '\'' +
                 ", userFirstName='" + userFirstName + '\'' +
