@@ -43,6 +43,7 @@ import java.util.List;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.SWADroidTracker;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.model.UserAttendance;
 import es.ugr.swad.swadroid.modules.Courses;
@@ -139,6 +140,15 @@ public class UsersActivity extends MenuExpandableListActivity implements
         hasRearCam = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
 
         refreshUsers();
+    }
+
+    /* (non-Javadoc)
+     * @see es.ugr.swad.swadroid.MenuExpandableListActivity#Override(android.os.Bundle)
+     */
+    @Override
+    protected void onStart() {
+        super.onStart();
+        SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
     }
 
     @Override
