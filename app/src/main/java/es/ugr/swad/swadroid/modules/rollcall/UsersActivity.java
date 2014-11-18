@@ -32,6 +32,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -70,6 +71,10 @@ public class UsersActivity extends MenuExpandableListActivity implements
      */
     private static ListView lvUsers;
     /**
+     * Adapter for ListView of users
+     */
+    UsersAdapter adapter;
+    /**
      * Layout with "Pull to refresh" function
      */
     private SwipeRefreshLayout refreshLayout;
@@ -98,8 +103,29 @@ public class UsersActivity extends MenuExpandableListActivity implements
         emptyUsersTextView = (TextView) findViewById(R.id.list_item_title);
         lvUsers = (ListView) findViewById(R.id.list_pulltorefresh);
 
+        lvUsers.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int firstVisibleItem,
+                                 int visibleItemCount, int totalItemCount) {
+
+                boolean enable = false;
+                if(lvUsers != null && lvUsers.getChildCount() > 0){
+                    // check if the first item of the list is visible
+                    boolean firstItemVisible = lvUsers.getFirstVisiblePosition() == 0;
+                    // check if the top of the first item is visible
+                    boolean topOfFirstItemVisible = lvUsers.getChildAt(0).getTop() == 0;
+                    // enabling or disabling the refresh layout
+                    enable = firstItemVisible && topOfFirstItemVisible;
+                }
+                refreshLayout.setEnabled(enable);
+            }
+        });
+
         refreshLayout.setOnRefreshListener(this);
-        refreshLayout.setEnabled(true);
         setAppearance();
 
         getSupportActionBar().setSubtitle(Courses.getSelectedCourseShortName());
@@ -134,20 +160,24 @@ public class UsersActivity extends MenuExpandableListActivity implements
                 } else {
                     Log.d(TAG, "Users lvUsers is not empty");
 
-                    lvUsers.setAdapter(new UsersAdapter(this, usersList));
+                    adapter = new UsersAdapter(this, usersList);
+                    lvUsers.setAdapter(adapter);
 
                     emptyUsersTextView.setVisibility(View.GONE);
                     lvUsers.setVisibility(View.VISIBLE);
                 }
                 break;
             case Constants.SCAN_QR_REQUEST_CODE:
-                lvUsers.setAdapter(new UsersAdapter(this, usersList));
+                adapter = new UsersAdapter(this, usersList);
+                lvUsers.setAdapter(adapter);
                 break;
         }
     }
 
     private void refreshUsers() {
         Intent activity = new Intent(this, UsersDownload.class);
+        activity.putExtra("attendanceEventCode",
+                eventCode);
         startActivityForResult(activity, Constants.ROLLCALL_USERS_DOWNLOAD_REQUEST_CODE);
     }
 
