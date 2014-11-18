@@ -27,6 +27,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -64,6 +65,10 @@ public class Rollcall extends MenuExpandableListActivity implements
      */
     private static ListView lvEvents;
     /**
+     * Adapter for ListView of events
+     */
+    private static EventsAdapter adapter;
+    /**
      * Layout with "Pull to refresh" function
      */
     private SwipeRefreshLayout refreshLayout;
@@ -85,9 +90,29 @@ public class Rollcall extends MenuExpandableListActivity implements
         lvEvents = (ListView) findViewById(R.id.list_pulltorefresh);
 
         lvEvents.setOnItemClickListener(clickListener);
+        lvEvents.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int firstVisibleItem,
+                                 int visibleItemCount, int totalItemCount) {
+
+                boolean enable = false;
+                if(lvEvents != null && lvEvents.getChildCount() > 0){
+                    // check if the first item of the list is visible
+                    boolean firstItemVisible = lvEvents.getFirstVisiblePosition() == 0;
+                    // check if the top of the first item is visible
+                    boolean topOfFirstItemVisible = lvEvents.getChildAt(0).getTop() == 0;
+                    // enabling or disabling the refresh layout
+                    enable = firstItemVisible && topOfFirstItemVisible;
+                }
+                refreshLayout.setEnabled(enable);
+            }
+        });
 
         refreshLayout.setOnRefreshListener(this);
-        refreshLayout.setEnabled(true);
         setAppearance();
 
         getSupportActionBar().setSubtitle(Courses.getSelectedCourseShortName());
@@ -118,7 +143,8 @@ public class Rollcall extends MenuExpandableListActivity implements
                 } else {
                     Log.d(TAG, "Events list is not empty");
 
-                    lvEvents.setAdapter(new EventsAdapter(this, eventsList));
+                    adapter = new EventsAdapter(this, eventsList);
+                    lvEvents.setAdapter(adapter);
 
                     emptyEventsTextView.setVisibility(View.GONE);
                     lvEvents.setVisibility(View.VISIBLE);
@@ -168,13 +194,13 @@ public class Rollcall extends MenuExpandableListActivity implements
     /**
      * ListView click listener
      */
-    private ListView.OnItemClickListener clickListener = new ListView.OnItemClickListener() {
+     private ListView.OnItemClickListener clickListener = new ListView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Intent activity = new Intent(getApplicationContext(),
                     UsersActivity.class);
             activity.putExtra("attendanceEventCode",
-                    view.getId());
+                    (int) adapter.getItemId(position));
             startActivity(activity);
         }
     };

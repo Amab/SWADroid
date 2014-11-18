@@ -80,7 +80,7 @@ public class UsersDownload extends Module {
         try {
             eventCode = this.getIntent().getIntExtra("attendanceEventCode", 0);
             if (isDebuggable) {
-                Log.d(TAG, "selectedEventCode = " + eventCode);
+                Log.d(TAG, "attendanceEventCode = " + eventCode);
             }
             runConnection();
         } catch (Exception e) {

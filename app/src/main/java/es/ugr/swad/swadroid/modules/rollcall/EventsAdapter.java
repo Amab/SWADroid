@@ -20,13 +20,13 @@
 package es.ugr.swad.swadroid.modules.rollcall;
 
 import android.app.Activity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.text.DateFormat;
 import java.util.List;
 
 import es.ugr.swad.swadroid.R;
@@ -40,10 +40,12 @@ import es.ugr.swad.swadroid.model.Event;
 public class EventsAdapter extends BaseAdapter {
     private final List<Event> list;
     private LayoutInflater inflator;
+    private DateFormat df;
 
     public EventsAdapter(Activity context, List<Event> list) {
         this.list = list;
         this.inflator = context.getLayoutInflater();
+        this.df = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT);
     }
 
     static class ViewHolder {
@@ -73,10 +75,8 @@ public class EventsAdapter extends BaseAdapter {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
         viewHolder.title.setText(event.getTitle());
-        viewHolder.startTime.setText(event.getStartTimeCalendar().getTime().toString());
-        viewHolder.endTime.setText(event.getEndTimeCalendar().getTime().toString());
-
-        Log.d("EventsArrayAdapter", "ViewHolder Title=" + viewHolder.title.getText().toString());
+        viewHolder.startTime.setText(df.format(event.getStartTimeCalendar().getTime()));
+        viewHolder.endTime.setText(df.format(event.getEndTimeCalendar().getTime()));
 
         return view;
     }
