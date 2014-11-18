@@ -728,6 +728,10 @@ public class TestsMake extends MenuActivity {
         getSupportActionBar().setSubtitle(Courses.getSelectedCourseShortName());
     	getSupportActionBar().setIcon(R.drawable.test);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         tagsAnswersTypeItemClickListener = new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position,
                                     long id) {

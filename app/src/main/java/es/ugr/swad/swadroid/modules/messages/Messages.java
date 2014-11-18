@@ -19,6 +19,7 @@
 package es.ugr.swad.swadroid.modules.messages;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -97,6 +98,10 @@ public class Messages extends Module {
         setContentView(R.layout.messages_screen);
         setTitle(R.string.messagesModuleLabel);
         getSupportActionBar().setIcon(R.drawable.msg);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 		
         rcvEditText = (EditText) findViewById(R.id.message_receivers_text);
         subjEditText = (EditText) findViewById(R.id.message_subject_text);

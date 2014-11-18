@@ -263,6 +263,10 @@ public class Notifications extends Module implements
 
 		getSupportActionBar().setIcon(R.drawable.notif);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
 		this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
 
 		refreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container_expandablelist);
