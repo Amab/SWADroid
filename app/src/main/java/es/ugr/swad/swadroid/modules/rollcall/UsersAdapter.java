@@ -25,7 +25,7 @@ import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -38,18 +38,19 @@ import es.ugr.swad.swadroid.gui.ImageFactory;
 import es.ugr.swad.swadroid.model.UserAttendance;
 
 /**
- * Users array adapter.
+ * Users adapter.
  *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
-public class UsersArrayAdapter extends ArrayAdapter<UserAttendance> {
+public class UsersAdapter extends BaseAdapter {
     private final List<UserAttendance> list;
     private final Activity context;
+    private LayoutInflater inflator;
 
-    public UsersArrayAdapter(Activity context, List<UserAttendance> list) {
-        super(context, R.layout.list_items_pulltorefresh, list);
+    public UsersAdapter(Activity context, List<UserAttendance> list) {
         this.context = context;
         this.list = list;
+        this.inflator = context.getLayoutInflater();
     }
 
     static class ViewHolder {
@@ -64,8 +65,7 @@ public class UsersArrayAdapter extends ArrayAdapter<UserAttendance> {
         final UserAttendance user = list.get(position);
 
         if (convertView == null) {
-            LayoutInflater inflator = context.getLayoutInflater();
-            view = inflator.inflate(R.layout.list_image_items, null);
+            view = inflator.inflate(R.layout.list_image_items, parent, false);
             final ViewHolder viewHolder = new ViewHolder();
 
             viewHolder.image = (ImageView) view.findViewById(R.id.imageView1);
@@ -94,6 +94,16 @@ public class UsersArrayAdapter extends ArrayAdapter<UserAttendance> {
         viewHolder.checkbox.setChecked(list.get(position).isUserPresent());
 
         return view;
+    }
+
+    @Override
+    public int getCount() {
+        return list.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return list.get(position);
     }
 
     @Override

@@ -20,10 +20,11 @@
 package es.ugr.swad.swadroid.modules.rollcall;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.List;
@@ -32,18 +33,17 @@ import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Event;
 
 /**
- * Events array adapter.
+ * Events adapter.
  *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
-public class EventsArrayAdapter extends ArrayAdapter<Event> {
+public class EventsAdapter extends BaseAdapter {
     private final List<Event> list;
-    private final Activity context;
+    private LayoutInflater inflator;
 
-    public EventsArrayAdapter(Activity context, List<Event> list) {
-        super(context, R.layout.list_items_pulltorefresh, list);
-        this.context = context;
+    public EventsAdapter(Activity context, List<Event> list) {
         this.list = list;
+        this.inflator = context.getLayoutInflater();
     }
 
     static class ViewHolder {
@@ -58,8 +58,7 @@ public class EventsArrayAdapter extends ArrayAdapter<Event> {
         Event event = list.get(position);
 
         if (convertView == null) {
-            LayoutInflater inflator = context.getLayoutInflater();
-            view = inflator.inflate(R.layout.event_list_item, null);
+            view = inflator.inflate(R.layout.event_list_item, parent, false);
 
             final ViewHolder viewHolder = new ViewHolder();
             viewHolder.title = (TextView) view.findViewById(R.id.toptext);
@@ -77,7 +76,19 @@ public class EventsArrayAdapter extends ArrayAdapter<Event> {
         viewHolder.startTime.setText(event.getStartTimeCalendar().getTime().toString());
         viewHolder.endTime.setText(event.getEndTimeCalendar().getTime().toString());
 
+        Log.d("EventsArrayAdapter", "ViewHolder Title=" + viewHolder.title.getText().toString());
+
         return view;
+    }
+
+    @Override
+    public int getCount() {
+        return list.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return list.get(position);
     }
 
     @Override

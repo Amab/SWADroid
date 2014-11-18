@@ -94,8 +94,6 @@ public class UsersActivity extends MenuExpandableListActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_items_pulltorefresh);
 
-    	getSupportActionBar().setIcon(R.drawable.roll_call);
-
         refreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container_list);
         emptyUsersTextView = (TextView) findViewById(R.id.list_item_title);
         lvUsers = (ListView) findViewById(R.id.list_pulltorefresh);
@@ -106,6 +104,10 @@ public class UsersActivity extends MenuExpandableListActivity implements
 
         getSupportActionBar().setSubtitle(Courses.getSelectedCourseShortName());
     	getSupportActionBar().setIcon(R.drawable.roll_call);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         eventCode = this.getIntent().getIntExtra("attendanceEventCode", 0);
         hasRearCam = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
@@ -132,14 +134,14 @@ public class UsersActivity extends MenuExpandableListActivity implements
                 } else {
                     Log.d(TAG, "Users lvUsers is not empty");
 
-                    lvUsers.setAdapter(new UsersArrayAdapter(this, usersList));
+                    lvUsers.setAdapter(new UsersAdapter(this, usersList));
 
                     emptyUsersTextView.setVisibility(View.GONE);
                     lvUsers.setVisibility(View.VISIBLE);
                 }
                 break;
             case Constants.SCAN_QR_REQUEST_CODE:
-                lvUsers.setAdapter(new UsersArrayAdapter(this, usersList));
+                lvUsers.setAdapter(new UsersAdapter(this, usersList));
                 break;
         }
     }

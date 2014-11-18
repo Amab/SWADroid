@@ -80,8 +80,6 @@ public class Rollcall extends MenuExpandableListActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_items_pulltorefresh);
 
-    	getSupportActionBar().setIcon(R.drawable.roll_call);
-
         refreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container_list);
         emptyEventsTextView = (TextView) findViewById(R.id.list_item_title);
         lvEvents = (ListView) findViewById(R.id.list_pulltorefresh);
@@ -94,6 +92,10 @@ public class Rollcall extends MenuExpandableListActivity implements
 
         getSupportActionBar().setSubtitle(Courses.getSelectedCourseShortName());
     	getSupportActionBar().setIcon(R.drawable.roll_call);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         refreshEvents();
     }
@@ -116,7 +118,7 @@ public class Rollcall extends MenuExpandableListActivity implements
                 } else {
                     Log.d(TAG, "Events list is not empty");
 
-                    lvEvents.setAdapter(new EventsArrayAdapter(this, eventsList));
+                    lvEvents.setAdapter(new EventsAdapter(this, eventsList));
 
                     emptyEventsTextView.setVisibility(View.GONE);
                     lvEvents.setVisibility(View.VISIBLE);

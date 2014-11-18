@@ -6,6 +6,7 @@
 
 package es.ugr.swad.swadroid.modules.information;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -59,6 +60,10 @@ public class Information extends Module {
 		int requestCode = this.getIntent().getIntExtra("requestCode", 0);
 
 		getSupportActionBar().setSubtitle(Courses.getSelectedCourseShortName());
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
 		switch (requestCode) {
 

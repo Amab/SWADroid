@@ -79,6 +79,9 @@ public class UsersDownload extends Module {
         
         try {
             eventCode = this.getIntent().getIntExtra("attendanceEventCode", 0);
+            if (isDebuggable) {
+                Log.d(TAG, "selectedEventCode = " + eventCode);
+            }
             runConnection();
         } catch (Exception e) {
             String errorMsg = getString(R.string.errorServerResponseMsg);
