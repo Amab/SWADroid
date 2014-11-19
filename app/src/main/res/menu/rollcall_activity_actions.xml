@@ -6,8 +6,7 @@
         android:id="@+id/action_scanQR"
         android:icon="@drawable/qr"
         android:title="@string/rollcallScanQR"
-        swadroid:showAsAction="ifRoom|withText"
-        android:visible="false"/>
+        swadroid:showAsAction="ifRoom|withText"/>
     <item
         android:id="@+id/action_sendMsg"
         android:icon="@drawable/ic_action_send_now"

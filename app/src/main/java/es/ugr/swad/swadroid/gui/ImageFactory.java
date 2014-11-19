@@ -32,26 +32,25 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class ImageFactory {
-	/**
-	 * Displays a cached image
-	 * @param ctx Application context
-	 * @param uri Image URI
-	 * @param imageView ImageView in which the image will be displayed
-	 * @param cacheMemory Indicates if the image should be cached in memory
-	 * @param cacheDisk Indicates if the image should be cached on disk
+    /**
+     * Initializes a cached image loader
+     * @param ctx Application context
+     * @param cacheMemory Indicates if the image should be cached in memory
+     * @param cacheDisk Indicates if the image should be cached on disk
      * @param imageEmpty Image resource showed on empty URL
      * @param imageFail Image resource showed on failed image loading
      * @param imageLoading Image resource showed on image loading
-	 */
-	public static void displayImage(Context ctx, String uri, ImageView imageView,
-			boolean cacheMemory, boolean cacheDisk, int imageEmpty, int imageFail, int imageLoading) {
+     * @return An initialized cached image loader
+     */
+    public static ImageLoader init(Context ctx, boolean cacheMemory, boolean cacheDisk,
+                                   int imageEmpty, int imageFail, int imageLoading) {
 
         ImageLoader loader = ImageLoader.getInstance();
-		Builder builder = new DisplayImageOptions.Builder();
-		DisplayImageOptions options;
+        Builder builder = new DisplayImageOptions.Builder();
+        DisplayImageOptions options;
 
-		builder.cacheInMemory(cacheMemory);
-		builder.cacheOnDisk(cacheDisk);
+        builder.cacheInMemory(cacheMemory);
+        builder.cacheOnDisk(cacheDisk);
 
         if(imageEmpty == -1) {
             builder.showImageForEmptyUri(imageLoading);
@@ -66,13 +65,41 @@ public class ImageFactory {
         }
 
         options = builder.build();
-    	
-		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(ctx)
-		            .defaultDisplayImageOptions(options)
-		            .build();
+
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(ctx)
+                .defaultDisplayImageOptions(options)
+                .build();
 
         loader.init(config);
 
+        return loader;
+    }
+
+	/**
+	 * Displays a cached image
+	 * @param ctx Application context
+	 * @param cacheMemory Indicates if the image should be cached in memory
+	 * @param cacheDisk Indicates if the image should be cached on disk
+     * @param imageEmpty Image resource showed on empty URL
+     * @param imageFail Image resource showed on failed image loading
+     * @param imageLoading Image resource showed on image loading
+	 */
+	public static void displayImage(Context ctx, String uri, ImageView imageView,
+			boolean cacheMemory, boolean cacheDisk, int imageEmpty, int imageFail, int imageLoading) {
+
+        ImageLoader loader = init(ctx, cacheMemory, cacheDisk, imageEmpty,
+                imageFail, imageLoading);
+
         loader.displayImage(uri, imageView);
 	}
+
+    /**
+     * Displays a cached image
+     * @param loader A cached image loader
+     * @param uri Image URI
+     * @param imageView ImageView in which the image will be displayed
+     */
+    public static void displayImage(ImageLoader loader, String uri, ImageView imageView) {
+        loader.displayImage(uri, imageView);
+    }
 }

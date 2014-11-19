@@ -272,15 +272,19 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
         int soundResult;
         UserAttendance u = new UserAttendance(0);
         String qrContent = rawResult.toString();
-        Boolean validNickname = Utils.isValidNickname(qrContent);
+        Boolean validContent = Utils.isValidNickname(qrContent) || Utils.isValidDni(qrContent);
 
         inactivityTimer.onActivity();
         lastResult = rawResult;
 
-        if (validNickname) {
+        if (validContent) {
+            u.setUserID(qrContent);
             u.setUserNickname(qrContent);
+
             if (UsersActivity.usersList.contains(u)) {
                 u = UsersActivity.usersList.get(UsersActivity.usersList.indexOf(u));
+            } else {
+                u = null;
             }
 
             if (u != null) {

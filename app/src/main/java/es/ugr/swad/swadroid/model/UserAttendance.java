@@ -21,6 +21,8 @@
 
 package es.ugr.swad.swadroid.model;
 
+import android.util.Log;
+
 import org.ksoap2.serialization.PropertyInfo;
 
 import java.util.Hashtable;
@@ -103,6 +105,7 @@ public class UserAttendance extends Model implements Comparable<UserAttendance> 
         this.userSurname1 = userSurname1;
         this.userSurname2 = userSurname2;
         this.userFirstname = userFirstname;
+        this.userPhoto = userPhoto;
         this.userPresent = userPresent;
     }
 
@@ -146,6 +149,11 @@ public class UserAttendance extends Model implements Comparable<UserAttendance> 
 
     public void setUserFirstname(String userFirstname) {
         this.userFirstname = userFirstname;
+    }
+
+    public String getFullName() {
+        return this.userSurname1 + " " + this.userSurname2 + ", "
+                + this.userFirstname;
     }
 
     public String getUserPhoto() {
@@ -256,12 +264,36 @@ public class UserAttendance extends Model implements Comparable<UserAttendance> 
 
     @Override
     public int compareTo(UserAttendance another) {
-        int cmpUserNickname = this.getUserNickname().compareToIgnoreCase(another.getUserNickname());
+        int cmpFullName = this.getFullName().compareToIgnoreCase(another.getFullName());
 
-        if (cmpUserNickname == 0) {
-            return cmpUserNickname;
+        if (cmpFullName == 0) {
+            return cmpFullName;
         } else {
             return this.getUserID().compareToIgnoreCase(another.getUserID());
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        UserAttendance another = (UserAttendance) o;
+        String thisNickName = this.getUserNickname();
+        String anotherNickName = "@" + another.getUserNickname();
+
+        return (thisNickName.equals(anotherNickName))
+                || (getUserID().equals(another.getUserID()));
+    }
+
+    @Override
+    public String toString() {
+        return "UserAttendance{" +
+                "userCode='" + super.getId() + '\'' +
+                "userID='" + userID + '\'' +
+                ", userNickname='" + userNickname + '\'' +
+                ", userSurname1='" + userSurname1 + '\'' +
+                ", userSurname2='" + userSurname2 + '\'' +
+                ", userFirstname='" + userFirstname + '\'' +
+                ", userPhoto='" + userPhoto + '\'' +
+                ", userPresent=" + userPresent +
+                '}';
     }
 }

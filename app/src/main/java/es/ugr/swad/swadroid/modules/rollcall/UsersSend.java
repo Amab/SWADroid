@@ -98,9 +98,9 @@ public class UsersSend extends Module {
         // Creates webservice request, adds required params and sends request to webservice
         createRequest(SOAPClient.CLIENT_TYPE);
         addParam("wsKey", Login.getLoggedUser().getWsKey());
-        addParam("attendanceEventCode", eventCode);
+        addParam("attendanceEventCode", String.valueOf(eventCode));
         addParam("users", usersCodes);
-        addParam("setOthersAsAbsent", setOthersAsAbsent);
+        addParam("setOthersAsAbsent", String.valueOf(setOthersAsAbsent));
         sendRequest(Integer.class, true);
 
         if (result != null) {
