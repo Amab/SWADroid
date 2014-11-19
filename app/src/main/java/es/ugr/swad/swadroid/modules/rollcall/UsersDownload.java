@@ -123,13 +123,13 @@ public class UsersDownload extends Module {
                 String userFirstName = pii.getProperty("userFirstname").toString();
                 String userPhoto = pii.getProperty("userPhoto").toString();
                 //If not 0 ⇒ this user has attended the event.
-                boolean userPresent = (Integer.parseInt(pii.getProperty("present").toString()) == 0);
+                boolean userPresent = !pii.getProperty("present").toString().equals("0");
 
                 if (userNickname.equalsIgnoreCase(Constants.NULL_VALUE)) userNickname = "";
                 if (userSurname1.equalsIgnoreCase(Constants.NULL_VALUE)) userSurname1 = "";
                 if (userSurname2.equalsIgnoreCase(Constants.NULL_VALUE)) userSurname2 = "";
                 if (userFirstName.equalsIgnoreCase(Constants.NULL_VALUE)) userFirstName = "";
-                if (userPhoto.equalsIgnoreCase(Constants.NULL_VALUE)) userPhoto = "";
+                if (userPhoto.equalsIgnoreCase(Constants.NULL_VALUE)) userPhoto = null;
 
                 usersList.add(new UserAttendance(userCode, userID, userNickname, userSurname1,
                         userSurname2, userFirstName, userPhoto, userPresent));

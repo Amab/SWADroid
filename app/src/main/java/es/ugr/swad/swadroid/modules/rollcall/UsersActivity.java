@@ -228,10 +228,10 @@ public class UsersActivity extends MenuExpandableListActivity implements
     private String getUsersCodes() {
         String usersCodes = "";
 
-        //Concatenate the user ID of all users checked as present and separate them with commas
+        //Concatenate the user code of all users checked as present and separate them with commas
         for(UserAttendance user : usersList) {
             if(user.isUserPresent()) {
-                usersCodes += user.getUserID() + ",";
+                usersCodes += user.getId() + ",";
             }
         }
 

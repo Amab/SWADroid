@@ -27,6 +27,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import es.ugr.swad.swadroid.R;
@@ -41,8 +42,10 @@ public class EventsAdapter extends BaseAdapter {
     private final List<Event> list;
     private LayoutInflater inflator;
     private DateFormat df;
+    private Activity context;
 
     public EventsAdapter(Activity context, List<Event> list) {
+        this.context = context;
         this.list = list;
         this.inflator = context.getLayoutInflater();
         this.df = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT);
@@ -58,6 +61,7 @@ public class EventsAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View view;
         Event event = list.get(position);
+        Calendar today = Calendar.getInstance();
 
         if (convertView == null) {
             view = inflator.inflate(R.layout.event_list_item, parent, false);
@@ -77,6 +81,14 @@ public class EventsAdapter extends BaseAdapter {
         viewHolder.title.setText(event.getTitle());
         viewHolder.startTime.setText(df.format(event.getStartTimeCalendar().getTime()));
         viewHolder.endTime.setText(df.format(event.getEndTimeCalendar().getTime()));
+
+        if(today.after(event.getEndTimeCalendar())) {
+            viewHolder.startTime.setTextColor(context.getResources().getColor(R.color.red));
+            viewHolder.endTime.setTextColor(context.getResources().getColor(R.color.red));
+        } else {
+            viewHolder.startTime.setTextColor(context.getResources().getColor(R.color.green));
+            viewHolder.endTime.setTextColor(context.getResources().getColor(R.color.green));
+        }
 
         return view;
     }

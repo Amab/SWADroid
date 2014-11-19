@@ -36,8 +36,7 @@
                 android:id="@+id/startTimeTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="3dip"
-                android:textColor="@color/green" />
+                android:layout_marginRight="3dip" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -49,8 +48,7 @@
             <TextView
                 android:id="@+id/endTimeTextView"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/green" />
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </LinearLayout>
 

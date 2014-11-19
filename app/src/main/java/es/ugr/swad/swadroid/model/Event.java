@@ -402,6 +402,7 @@ public class Event extends Model implements Comparable<Event> {
     @Override
     public String toString() {
         return "Event{" +
+                "eventCode='" + super.getId() + '\'' +
                 "hidden=" + hidden +
                 ", userSurname1='" + userSurname1 + '\'' +
                 ", userSurname2='" + userSurname2 + '\'' +

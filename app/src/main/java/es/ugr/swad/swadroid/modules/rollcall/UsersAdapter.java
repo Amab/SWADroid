@@ -31,6 +31,8 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+
 import java.util.List;
 
 import es.ugr.swad.swadroid.R;
@@ -44,18 +46,21 @@ import es.ugr.swad.swadroid.model.UserAttendance;
  */
 public class UsersAdapter extends BaseAdapter {
     private final List<UserAttendance> list;
-    private final Activity context;
     private LayoutInflater inflator;
+    private ImageLoader loader;
 
     public UsersAdapter(Activity context, List<UserAttendance> list) {
-        this.context = context;
         this.list = list;
         this.inflator = context.getLayoutInflater();
+
+        this.loader = ImageFactory.init(context, true, true, R.raw.usr_bl, R.raw.usr_bl,
+                R.raw.usr_bl);
     }
 
     static class ViewHolder {
         ImageView image;
-        TextView text;
+        TextView text1;
+        TextView text2;
         CheckBox checkbox;
     }
 
@@ -65,11 +70,12 @@ public class UsersAdapter extends BaseAdapter {
         final UserAttendance user = list.get(position);
 
         if (convertView == null) {
-            view = inflator.inflate(R.layout.list_image_items, parent, false);
+            view = inflator.inflate(R.layout.users_list_item, parent, false);
             final ViewHolder viewHolder = new ViewHolder();
 
             viewHolder.image = (ImageView) view.findViewById(R.id.imageView1);
-            viewHolder.text = (TextView) view.findViewById(R.id.TextView1);
+            viewHolder.text1 = (TextView) view.findViewById(R.id.TextView1);
+            viewHolder.text2 = (TextView) view.findViewById(R.id.TextView2);
             viewHolder.checkbox = (CheckBox) view.findViewById(R.id.check);
             viewHolder.checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -79,19 +85,21 @@ public class UsersAdapter extends BaseAdapter {
             });
 
             view.setTag(viewHolder);
-            viewHolder.checkbox.setTag(list.get(position));
+            viewHolder.checkbox.setTag(user);
         } else {
             view = convertView;
-            ((ViewHolder) view.getTag()).checkbox.setTag(list.get(position));
+            ((ViewHolder) view.getTag()).checkbox.setTag(user);
         }
 
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
-        ImageFactory.displayImage(context, user.getUserPhoto(), viewHolder.image, true, true,
-                R.raw.usr_bl, R.raw.usr_bl, R.raw.usr_bl);
+        if(user.getUserPhoto() != null) {
+            ImageFactory.displayImage(loader, user.getUserPhoto(), viewHolder.image);
+        }
 
-        viewHolder.text.setText(list.get(position).toString());
-        viewHolder.checkbox.setChecked(list.get(position).isUserPresent());
+        viewHolder.text1.setText(user.getFullName());
+        viewHolder.text2.setText(user.getUserID());
+        viewHolder.checkbox.setChecked(user.isUserPresent());
 
         return view;
     }

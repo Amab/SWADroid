@@ -68,9 +68,9 @@
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.rollcall.Rollcall"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:label="@string/rollcallModuleLabel"
-            android:parentActivityName="es.ugr.swad.swadroid.SWADMain"
-            android:screenOrientation="portrait" >
+            android:parentActivityName="es.ugr.swad.swadroid.SWADMain" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="es.ugr.swad.swadroid.SWADMain" />
@@ -82,6 +82,7 @@
         </activity>
         <activity
             android:name=".modules.rollcall.UsersActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:label="@string/rollcallModuleLabel"
             android:parentActivityName="es.ugr.swad.swadroid.SWADMain" >
             <meta-data
