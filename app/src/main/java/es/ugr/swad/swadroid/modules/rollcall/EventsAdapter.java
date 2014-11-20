@@ -82,7 +82,7 @@ public class EventsAdapter extends BaseAdapter {
         viewHolder.startTime.setText(df.format(event.getStartTimeCalendar().getTime()));
         viewHolder.endTime.setText(df.format(event.getEndTimeCalendar().getTime()));
 
-        if(today.after(event.getEndTimeCalendar())) {
+        if(today.before(event.getStartTimeCalendar()) || today.after(event.getEndTimeCalendar())) {
             viewHolder.startTime.setTextColor(context.getResources().getColor(R.color.red));
             viewHolder.endTime.setTextColor(context.getResources().getColor(R.color.red));
         } else {
