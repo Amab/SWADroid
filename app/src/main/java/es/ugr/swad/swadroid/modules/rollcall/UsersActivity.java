@@ -113,7 +113,7 @@ public class UsersActivity extends MenuExpandableListActivity implements
             public void onScroll(AbsListView absListView, int firstVisibleItem,
                                  int visibleItemCount, int totalItemCount) {
 
-                boolean enable = false;
+                boolean enable = true;
                 if(lvUsers != null && lvUsers.getChildCount() > 0){
                     // check if the first item of the list is visible
                     boolean firstItemVisible = lvUsers.getFirstVisiblePosition() == 0;
