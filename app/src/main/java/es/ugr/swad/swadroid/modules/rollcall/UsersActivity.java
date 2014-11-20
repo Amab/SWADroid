@@ -104,7 +104,7 @@ public class UsersActivity extends MenuExpandableListActivity implements
         emptyUsersTextView = (TextView) findViewById(R.id.list_item_title);
         lvUsers = (ListView) findViewById(R.id.list_pulltorefresh);
 
-        lvUsers.setOnScrollListener(new AbsListView.OnScrollListener() {
+        /*lvUsers.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView absListView, int scrollState) {
             }
@@ -124,7 +124,8 @@ public class UsersActivity extends MenuExpandableListActivity implements
                 }
                 refreshLayout.setEnabled(enable);
             }
-        });
+        });*/
+        refreshLayout.setEnabled(false);
 
         refreshLayout.setOnRefreshListener(this);
         setAppearance();
@@ -251,7 +252,7 @@ public class UsersActivity extends MenuExpandableListActivity implements
         }
 
         this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, R.string.doubleBackToExitMsg, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.doubleBackToExitMsg, Toast.LENGTH_SHORT).show();
 
         new Handler().postDelayed(new Runnable() {
 
