@@ -100,7 +100,7 @@ public class Rollcall extends MenuExpandableListActivity implements
             public void onScroll(AbsListView absListView, int firstVisibleItem,
                                  int visibleItemCount, int totalItemCount) {
 
-                boolean enable = false;
+                boolean enable = true;
                 if(lvEvents != null && lvEvents.getChildCount() > 0){
                     // check if the first item of the list is visible
                     boolean firstItemVisible = lvEvents.getFirstVisiblePosition() == 0;
