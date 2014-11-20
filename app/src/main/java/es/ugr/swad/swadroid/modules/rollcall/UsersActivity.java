@@ -238,7 +238,7 @@ public class UsersActivity extends MenuExpandableListActivity implements
 
         //Remove final comma
         if(!usersCodes.isEmpty()) {
-            usersCodes = usersCodes.substring(0, usersCodes.length()-2);
+            usersCodes = usersCodes.substring(0, usersCodes.length()-1);
         }
 
         return usersCodes;
