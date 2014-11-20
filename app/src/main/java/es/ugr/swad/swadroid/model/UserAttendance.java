@@ -21,8 +21,6 @@
 
 package es.ugr.swad.swadroid.model;
 
-import android.util.Log;
-
 import org.ksoap2.serialization.PropertyInfo;
 
 import java.util.Hashtable;
@@ -32,7 +30,7 @@ import java.util.Hashtable;
  *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
-public class UserAttendance extends Model implements Comparable<UserAttendance> {
+public class UserAttendance extends Model {
     /**
      * User identifier.
      */
@@ -260,27 +258,6 @@ public class UserAttendance extends Model implements Comparable<UserAttendance> 
                 userPresent = (Boolean) obj;
                 break;
         }
-    }
-
-    @Override
-    public int compareTo(UserAttendance another) {
-        int cmpFullName = this.getFullName().compareToIgnoreCase(another.getFullName());
-
-        if (cmpFullName == 0) {
-            return cmpFullName;
-        } else {
-            return this.getUserID().compareToIgnoreCase(another.getUserID());
-        }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        UserAttendance another = (UserAttendance) o;
-        String thisNickName = this.getUserNickname();
-        String anotherNickName = "@" + another.getUserNickname();
-
-        return (thisNickName.equals(anotherNickName))
-                || (getUserID().equals(another.getUserID()));
     }
 
     @Override

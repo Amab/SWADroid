@@ -149,9 +149,6 @@ public class EventsDownload extends Module {
         if (numEvents == 0) {
             Toast.makeText(this, R.string.noEventsAvailableMsg, Toast.LENGTH_LONG).show();
         } else {
-            // Arrange the list alphabetically
-            Collections.sort(Rollcall.eventsList);
-
             String msg = String.valueOf(numEvents) + " " + getResources().getString(R.string.eventsUpdated);
             Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
         }

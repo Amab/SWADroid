@@ -135,9 +135,6 @@ public class UsersDownload extends Module {
                         userSurname2, userFirstName, userPhoto, userPresent));
             }
 
-            // Arrange the list alphabetically
-            Collections.sort(usersList);
-
             Rollcall.usersMap.put(eventCode, usersList);
 
             Log.i(TAG, "Retrieved " + numUsers + " users");
