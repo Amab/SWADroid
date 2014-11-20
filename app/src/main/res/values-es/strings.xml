@@ -283,6 +283,7 @@
     <string name="noUsersCheckedMsg">Debe marcar al menos un usuario</string>
     <string name="usersEmptyListMsg">No se ha descargado ningún usuario.\n\nPara descargar los
         usuarios más recientes deslice este mensaje hacia abajo.</string>
+    <string name="errorSendingUsersMsg">Error al enviar las asistencias</string>
     <string name="doubleBackToExitMsg">Por favor, presione ATRÁS de nuevo para salir</string>
 
 </resources>
