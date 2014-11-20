@@ -119,14 +119,13 @@ public class UsersSend extends Module {
         String progressDescription = getString(R.string.usersDownloadProgressDescription);
         int progressTitle = R.string.usersDownloadProgressTitle;
 
-        //TODO Add progress screen like in LoginActivity
         startConnection(false, progressDescription, progressTitle);
     }
 
     @Override
     protected void postConnect() {
         if (!Utils.parseIntBool(success)) {
-            //TODO Add error message
+            Toast.makeText(this, R.string.errorSendingUsersMsg, Toast.LENGTH_LONG).show();
 
             setResult(RESULT_CANCELED);
         } else {

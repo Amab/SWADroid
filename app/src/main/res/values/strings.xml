@@ -293,5 +293,6 @@
     <string name="usersEmptyListMsg">Did not download any user.\n\nTo download most recent
         users slide down this message.</string>
     <string name="doubleBackToExitMsg">Please click BACK again to exit</string>
+    <string name="errorSendingUsersMsg">Error sending attendances</string>
 
 </resources>
