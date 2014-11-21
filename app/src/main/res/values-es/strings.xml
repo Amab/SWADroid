@@ -272,6 +272,7 @@
     <string name="Filters_Teachers">Profesores</string>
     <string name="Filters_Students">Alumnos</string>
     <string name="errorNoAppForIntent">No hay ninguna aplicación registrada para abrir el tipo de archivo seleccionado.</string>
+    <string name="birthdayMsg">¡Feliz cumpleaños, {userName}!</string>
     <string name="errorNoUserNickname">Debe definir un apodo en SWAD</string>
     <string name="eventsDownloadProgressTitle">Eventos</string>
     <string name="eventsUpdated">eventos actualizados</string>

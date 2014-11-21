@@ -261,6 +261,7 @@
     <string name="Filters_All">Tot</string>
     <string name="Filters_Teachers">Professors</string>
     <string name="Filters_Students">Alumnes</string>
+    <string name="birthdayMsg">Per molts anys, {userName}!</string>
     <string name="errorNoUserNickname"> Heu de definir un sobrenom a SWAD</string>
     <string name="errorNoAppForIntent">No hi ha cap aplicació registrada per obrir el tipus de fitxer seleccionat.</string>
     <string name="eventsDownloadProgressTitle"> Esdeveniments</string>

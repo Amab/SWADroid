@@ -296,7 +296,7 @@ public class Messages extends Module {
 	            
 	        case R.id.action_sendMsg:
 	            try {	
-	            	if(rcvEditText.getText().length() == 0) {
+	            	if((eventCode == 0) && (rcvEditText.getText().length() == 0)) {
 	            		Toast.makeText(this, R.string.noReceiversMsg, Toast.LENGTH_LONG).show();
 	            	} else if(subjEditText.getText().length() == 0) {
 	            		Toast.makeText(this, R.string.noSubjectMessageMsg, Toast.LENGTH_LONG).show();

@@ -32,7 +32,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -74,7 +73,7 @@ public class UsersActivity extends MenuExpandableListActivity implements
     /**
      * Adapter for ListView of users
      */
-    UsersAdapter adapter;
+    UsersListAdapter adapter;
     /**
      * Layout with "Pull to refresh" function
      */
@@ -171,7 +170,7 @@ public class UsersActivity extends MenuExpandableListActivity implements
                 } else {
                     Log.d(TAG, "Users lvUsers is not empty");
 
-                    adapter = new UsersAdapter(this, usersList);
+                    adapter = new UsersListAdapter(this, usersList);
                     lvUsers.setAdapter(adapter);
 
                     emptyUsersTextView.setVisibility(View.GONE);
@@ -179,7 +178,7 @@ public class UsersActivity extends MenuExpandableListActivity implements
                 }
                 break;
             case Constants.SCAN_QR_REQUEST_CODE:
-                adapter = new UsersAdapter(this, usersList);
+                adapter = new UsersListAdapter(this, usersList);
                 lvUsers.setAdapter(adapter);
                 break;
         }

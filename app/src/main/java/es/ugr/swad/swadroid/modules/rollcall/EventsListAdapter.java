@@ -38,13 +38,13 @@ import es.ugr.swad.swadroid.model.Event;
  *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
-public class EventsAdapter extends BaseAdapter {
+public class EventsListAdapter extends BaseAdapter {
     private final List<Event> list;
     private LayoutInflater inflator;
     private DateFormat df;
     private Activity context;
 
-    public EventsAdapter(Activity context, List<Event> list) {
+    public EventsListAdapter(Activity context, List<Event> list) {
         this.context = context;
         this.list = list;
         this.inflator = context.getLayoutInflater();
