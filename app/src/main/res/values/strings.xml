@@ -285,6 +285,7 @@
     <string name="Filters_Teachers">Teachers</string>
     <string name="Filters_Students">Students</string>
     <string name="errorNoAppForIntent">There are no registered applications to open the selected file type.</string>
+    <string name="birthdayMsg">Happy birthday, {userName}!</string>
     <string name="errorNoUserNickname">You must set a nickname in SWAD</string>
     <string name="event">Event</string>
     <string name="usersUpdated">users updated</string>

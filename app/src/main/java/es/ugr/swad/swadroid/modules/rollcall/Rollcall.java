@@ -68,7 +68,7 @@ public class Rollcall extends MenuExpandableListActivity implements
     /**
      * Adapter for ListView of events
      */
-    private static EventsAdapter adapter;
+    private static EventsListAdapter adapter;
     /**
      * Layout with "Pull to refresh" function
      */
@@ -151,7 +151,7 @@ public class Rollcall extends MenuExpandableListActivity implements
                 } else {
                     Log.d(TAG, "Events list is not empty");
 
-                    adapter = new EventsAdapter(this, eventsList);
+                    adapter = new EventsListAdapter(this, eventsList);
                     lvEvents.setAdapter(adapter);
 
                     emptyEventsTextView.setVisibility(View.GONE);

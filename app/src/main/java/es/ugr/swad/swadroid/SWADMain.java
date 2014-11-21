@@ -40,8 +40,10 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.LinearLayout;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.security.NoSuchAlgorithmException;
@@ -70,6 +72,7 @@ import es.ugr.swad.swadroid.modules.tests.Tests;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
 import es.ugr.swad.swadroid.sync.AccountAuthenticator;
 import es.ugr.swad.swadroid.sync.SyncUtils;
+import es.ugr.swad.swadroid.utils.DateTimeUtils;
 import es.ugr.swad.swadroid.utils.Utils;
 
 /**
@@ -126,6 +129,8 @@ public class SWADMain extends MenuExpandableListActivity {
 
     private boolean dBCleaned = false;
 
+    private LinearLayout mBirthdayLayout;
+    private TextView mBirthdayTextView;
     private ExpandableListView mExpandableListView;
     private ImageExpandableListAdapter mExpandableListAdapter;
     private final ArrayList<HashMap<String, Object>> mHeaderData = new ArrayList<HashMap<String, Object>>();
@@ -233,7 +238,6 @@ public class SWADMain extends MenuExpandableListActivity {
         if (isUserOrPasswordEmpty() && (listCourses.size() == 0)) {
             startActivityForResult(new Intent(this, LoginActivity.class), Constants.LOGIN_REQUEST_CODE);
         } else {
-
             if (!Preferences.isPreferencesChanged() && !DataBaseHelper.isDbCleaned()) {
                 createSpinnerAdapter();
                 if (!firstRun) {
@@ -244,6 +248,16 @@ public class SWADMain extends MenuExpandableListActivity {
                 Preferences.setPreferencesChanged(false);
                 DataBaseHelper.setDbCleaned(false);
                 setMenuDbClean();
+            }
+
+            //If today is the user birthday, show birthday message
+            if((Login.getLoggedUser() != null)
+                    && DateTimeUtils.isBirthday(Login.getLoggedUser().getUserBirthday())) {
+                mBirthdayTextView.setText(getString(R.string.birthdayMsg).replace(
+                        Constants.USERNAME_TEMPLATE, Login.getLoggedUser().getUserFirstname()));
+                mBirthdayLayout.setVisibility(View.VISIBLE);
+            } else {
+                mBirthdayLayout.setVisibility(View.GONE);
             }
         }
 
@@ -693,6 +707,8 @@ public class SWADMain extends MenuExpandableListActivity {
     
 	private void initializeMainViews() {
         mExpandableListView = (ExpandableListView) findViewById(R.id.expandableList);
+        mBirthdayLayout = (LinearLayout) findViewById(R.id.birthday_layout);
+        mBirthdayTextView = (TextView) findViewById(R.id.birthdayTextView);
 
         OnChildClickListener mExpandableClickListener = new OnChildClickListener() {
 
@@ -778,26 +794,26 @@ public class SWADMain extends MenuExpandableListActivity {
                 return true;
             }
         };
-        
+
         mExpandableListView.setOnChildClickListener(mExpandableClickListener);
 	}
- 
-	
+
+
     /**
      * Shows the progress UI and hides the login form.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
-    	
+
     	final View course_list = findViewById(R.id.courses_list_view);
         final View progressAnimation = findViewById(R.id.get_courses_status);
-        
+
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-            
+
             progressAnimation.setVisibility(View.VISIBLE);
             progressAnimation.animate()
                             .setDuration(shortAnimTime)
@@ -827,13 +843,13 @@ public class SWADMain extends MenuExpandableListActivity {
         	course_list.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
-	
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_activity_actions, menu);
         return super.onCreateOptionsMenu(menu);
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -844,7 +860,7 @@ public class SWADMain extends MenuExpandableListActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-        
+
     }
 
 }

@@ -44,12 +44,12 @@ import es.ugr.swad.swadroid.model.UserAttendance;
  *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
-public class UsersAdapter extends BaseAdapter {
+public class UsersListAdapter extends BaseAdapter {
     private final List<UserAttendance> list;
     private LayoutInflater inflator;
     private ImageLoader loader;
 
-    public UsersAdapter(Activity context, List<UserAttendance> list) {
+    public UsersListAdapter(Activity context, List<UserAttendance> list) {
         this.list = list;
         this.inflator = context.getLayoutInflater();
 
