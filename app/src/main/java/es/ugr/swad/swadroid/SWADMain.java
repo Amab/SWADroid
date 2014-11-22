@@ -332,7 +332,7 @@ public class SWADMain extends MenuExpandableListActivity {
         	            SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY,
         	            		Long.parseLong(Preferences.getSyncTime()), this);
         	        }
-        	        
+
         	        showProgress(false);
                     break;
                 case Constants.LOGIN_REQUEST_CODE:
@@ -344,7 +344,7 @@ public class SWADMain extends MenuExpandableListActivity {
                 //After get the list of courses, a dialog is launched to choice the course
                 case Constants.COURSES_REQUEST_CODE:
                     //User credentials are wrong. Remove periodic synchronization
-                    SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, this);  
+                    SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, this);
                     showProgress(false);
                     break;
                 case Constants.LOGIN_REQUEST_CODE:

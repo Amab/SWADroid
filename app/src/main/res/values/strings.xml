@@ -295,5 +295,6 @@
         users slide down this message.</string>
     <string name="doubleBackToExitMsg">Please click BACK again to exit</string>
     <string name="errorSendingUsersMsg">Error sending attendances</string>
+    <string name="progress_status">Loading...</string>
 
 </resources>

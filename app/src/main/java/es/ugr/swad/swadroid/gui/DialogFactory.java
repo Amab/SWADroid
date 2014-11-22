@@ -1,6 +1,9 @@
 package es.ugr.swad.swadroid.gui;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -274,5 +277,55 @@ public class DialogFactory {
         }
         
         return alertDialogBuilder.create();
+    }
+
+    /**
+     * Shows the progress UI and hides the login form.
+     *
+     * @param ctx Activity
+     * @param show true for show the progress animation
+     *             false otherwise
+     * @param view View for show the content after the progress animation
+     * @param progressView View for show the progress animation
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    public static void showProgress(Activity ctx, final boolean show, int view, int progressView) {
+        final View contentView = ctx.findViewById(view);
+        final View progressAnimation = ctx.findViewById(progressView);
+
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = ctx.getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            progressAnimation.setVisibility(View.VISIBLE);
+            progressAnimation.animate()
+                    .setDuration(shortAnimTime)
+                    .alpha(show ? 1 : 0)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            progressAnimation.setVisibility(show ? View.VISIBLE : View.GONE);
+                        }
+                    });
+
+            contentView.setVisibility(View.VISIBLE);
+            contentView.animate()
+                    .setDuration(shortAnimTime)
+                    .alpha(show ? 0 : 1)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            contentView.setVisibility(show ? View.GONE
+                                    : View.VISIBLE);
+                        }
+                    });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            progressAnimation.setVisibility(show ? View.VISIBLE : View.GONE);
+            contentView.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
     }
 }

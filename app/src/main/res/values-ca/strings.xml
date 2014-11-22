@@ -280,5 +280,6 @@
          usuaris més recents llisqui aquest missatge cap avall.</string>
     <string name="doubleBackToExitMsg">Si us plau, premeu ENRERE per a sortir-</string>
     <string name="errorSendingUsersMsg">Error en enviar les assistències</string>
+    <string name="progress_status">Carregant...</string>
 
 </resources>

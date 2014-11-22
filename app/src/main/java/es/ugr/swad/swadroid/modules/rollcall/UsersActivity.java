@@ -45,6 +45,7 @@ import java.util.List;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADroidTracker;
+import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.model.UserAttendance;
 import es.ugr.swad.swadroid.modules.Courses;
@@ -154,6 +155,7 @@ public class UsersActivity extends MenuExpandableListActivity implements
         switch (requestCode) {
             case Constants.ROLLCALL_USERS_DOWNLOAD_REQUEST_CODE:
                 refreshAdapter();
+                DialogFactory.showProgress(this, false, R.id.swipe_container_list, R.id.loading_status);
                 break;
             case Constants.SCAN_QR_REQUEST_CODE:
                 refreshAdapter();
@@ -198,6 +200,8 @@ public class UsersActivity extends MenuExpandableListActivity implements
     }
 
     private void refreshUsers() {
+        DialogFactory.showProgress(this, true, R.id.swipe_container_list, R.id.loading_status);
+
         Intent activity = new Intent(this, UsersDownload.class);
         activity.putExtra("attendanceEventCode",
                 eventCode);

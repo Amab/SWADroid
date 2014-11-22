@@ -5,6 +5,8 @@
     android:background="@color/background"
     android:orientation="vertical" >
 
+    <include layout="@layout/loading_status" />
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_container_list"
         android:layout_width="match_parent"
