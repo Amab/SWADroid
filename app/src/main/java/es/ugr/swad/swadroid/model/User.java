@@ -282,7 +282,6 @@ public class User extends Model {
      *
      * @param userRole User role.
      */
-    //TODO check userRole is 1,2,3
     public void setUserRole(int userRole) {
         this.userRole = userRole;
     }

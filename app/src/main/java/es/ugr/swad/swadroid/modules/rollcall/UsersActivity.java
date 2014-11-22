@@ -24,6 +24,7 @@ package es.ugr.swad.swadroid.modules.rollcall;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -32,6 +33,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,11 +63,7 @@ public class UsersActivity extends MenuExpandableListActivity implements
     /**
      * Code of event associated to the users list
      */
-    private int eventCode;
-    /**
-     * List of users associates to the selected event
-     */
-    public static List<UserAttendance> usersList;
+    private static int eventCode;
     /**
      * ListView of users
      */
@@ -73,7 +71,11 @@ public class UsersActivity extends MenuExpandableListActivity implements
     /**
      * Adapter for ListView of users
      */
-    UsersListAdapter adapter;
+    UsersCursorAdapter adapter;
+    /**
+     * Database cursor for Adapter of users
+     */
+    Cursor dbCursor;
     /**
      * Layout with "Pull to refresh" function
      */
@@ -86,10 +88,6 @@ public class UsersActivity extends MenuExpandableListActivity implements
      * Flag for indicate if device has a rear camera available
      */
     boolean hasRearCam;
-    /**
-     * Flag for exit module when back button is pressed twice
-     */
-    boolean doubleBackToExitPressedOnce;
 
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.MenuExpandableListActivity#onCreate(android.os.Bundle)
@@ -103,7 +101,7 @@ public class UsersActivity extends MenuExpandableListActivity implements
         emptyUsersTextView = (TextView) findViewById(R.id.list_item_title);
         lvUsers = (ListView) findViewById(R.id.list_pulltorefresh);
 
-        /*lvUsers.setOnScrollListener(new AbsListView.OnScrollListener() {
+        lvUsers.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView absListView, int scrollState) {
             }
@@ -113,7 +111,7 @@ public class UsersActivity extends MenuExpandableListActivity implements
                                  int visibleItemCount, int totalItemCount) {
 
                 boolean enable = true;
-                if(lvUsers != null && lvUsers.getChildCount() > 0){
+                if (lvUsers != null && lvUsers.getChildCount() > 0) {
                     // check if the first item of the list is visible
                     boolean firstItemVisible = lvUsers.getFirstVisiblePosition() == 0;
                     // check if the top of the first item is visible
@@ -123,8 +121,7 @@ public class UsersActivity extends MenuExpandableListActivity implements
                 }
                 refreshLayout.setEnabled(enable);
             }
-        });*/
-        refreshLayout.setEnabled(false);
+        });
 
         refreshLayout.setOnRefreshListener(this);
         setAppearance();
@@ -138,8 +135,6 @@ public class UsersActivity extends MenuExpandableListActivity implements
 
         eventCode = this.getIntent().getIntExtra("attendanceEventCode", 0);
         hasRearCam = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
-
-        refreshUsers();
     }
 
     /* (non-Javadoc)
@@ -149,18 +144,40 @@ public class UsersActivity extends MenuExpandableListActivity implements
     protected void onStart() {
         super.onStart();
         SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
+
+        //Refresh ListView of users
+        refreshAdapter();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         switch (requestCode) {
             case Constants.ROLLCALL_USERS_DOWNLOAD_REQUEST_CODE:
-                usersList = Rollcall.usersMap.get(eventCode);
+                refreshAdapter();
+                break;
+            case Constants.SCAN_QR_REQUEST_CODE:
+                refreshAdapter();
+                break;
+        }
+    }
+
+    private void refreshAdapter() {
+        /*
+         * Database query can be a time consuming task ..
+         * so its safe to call database query in another thread
+         * Handler, will handle this stuff for you
+         */
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                dbCursor = dbHelper.getUsersEventCursor(eventCode);
+                startManagingCursor(dbCursor);
+
                 /*
                  * If there aren't users to show, hide the users lvUsers
                  * and show the empty users message
                  */
-                if ((usersList == null) || (usersList.size() == 0)) {
+                if ((dbCursor == null) || (dbCursor.getCount() == 0)) {
                     Log.d(TAG, "Users lvUsers is empty");
 
                     emptyUsersTextView.setText(R.string.usersEmptyListMsg);
@@ -170,18 +187,14 @@ public class UsersActivity extends MenuExpandableListActivity implements
                 } else {
                     Log.d(TAG, "Users lvUsers is not empty");
 
-                    adapter = new UsersListAdapter(this, usersList);
-                    lvUsers.setAdapter(adapter);
-
                     emptyUsersTextView.setVisibility(View.GONE);
                     lvUsers.setVisibility(View.VISIBLE);
                 }
-                break;
-            case Constants.SCAN_QR_REQUEST_CODE:
-                adapter = new UsersListAdapter(this, usersList);
+
+                adapter = new UsersCursorAdapter(getApplicationContext(), dbCursor, dbHelper, eventCode);
                 lvUsers.setAdapter(adapter);
-                break;
-        }
+            }
+        });
     }
 
     private void refreshUsers() {
@@ -227,6 +240,7 @@ public class UsersActivity extends MenuExpandableListActivity implements
 
     private String getUsersCodes() {
         String usersCodes = "";
+        List<UserAttendance> usersList = dbHelper.getUsersEvent(eventCode);
 
         //Concatenate the user code of all users checked as present and separate them with commas
         for(UserAttendance user : usersList) {
@@ -241,25 +255,6 @@ public class UsersActivity extends MenuExpandableListActivity implements
         }
 
         return usersCodes;
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
-            super.onBackPressed();
-            return;
-        }
-
-        this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, R.string.doubleBackToExitMsg, Toast.LENGTH_SHORT).show();
-
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                doubleBackToExitPressedOnce=false;
-            }
-        }, 2000);
     }
 
     @Override
@@ -309,6 +304,9 @@ public class UsersActivity extends MenuExpandableListActivity implements
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
 
+    public static int getEventCode() {
+        return eventCode;
     }
 }

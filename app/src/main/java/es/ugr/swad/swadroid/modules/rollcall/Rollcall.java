@@ -25,7 +25,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -39,7 +38,6 @@ import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADroidTracker;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.model.Event;
-import es.ugr.swad.swadroid.model.UserAttendance;
 import es.ugr.swad.swadroid.modules.Courses;
 
 /**
@@ -57,10 +55,6 @@ public class Rollcall extends MenuExpandableListActivity implements
      * List of events associated to the selected course
      */
     static List<Event> eventsList;
-    /**
-     * Map of users hashed by eventCode
-     */
-    static SparseArray<List<UserAttendance>> usersMap;
     /**
      * ListView of events
      */
@@ -131,32 +125,39 @@ public class Rollcall extends MenuExpandableListActivity implements
     protected void onStart() {
         super.onStart();
         SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
+
+        refreshScreen();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         switch (requestCode) {
             case Constants.ROLLCALL_EVENTS_DOWNLOAD_REQUEST_CODE:
-                /*
-                 * If there aren't events to show, hide the events list
-                 * and show the empty events message
-                 */
-                if ((eventsList == null) || (eventsList.size() == 0)) {
-                    Log.d(TAG, "Events list is empty");
+                refreshScreen();
+                break;
+        }
+    }
 
-                    emptyEventsTextView.setText(R.string.eventsEmptyListMsg);
-                    emptyEventsTextView.setVisibility(View.VISIBLE);
+    private void refreshScreen() {
+        /*
+         * If there aren't events to show, hide the events list
+         * and show the empty events message
+         */
+        if ((eventsList == null) || (eventsList.size() == 0)) {
+            Log.d(TAG, "Events list is empty");
 
-                    lvEvents.setVisibility(View.GONE);
-                } else {
-                    Log.d(TAG, "Events list is not empty");
+            emptyEventsTextView.setText(R.string.eventsEmptyListMsg);
+            emptyEventsTextView.setVisibility(View.VISIBLE);
 
-                    adapter = new EventsListAdapter(this, eventsList);
-                    lvEvents.setAdapter(adapter);
+            lvEvents.setVisibility(View.GONE);
+        } else {
+            Log.d(TAG, "Events list is not empty");
 
-                    emptyEventsTextView.setVisibility(View.GONE);
-                    lvEvents.setVisibility(View.VISIBLE);
-                }
+            adapter = new EventsListAdapter(this, eventsList, dbHelper);
+            lvEvents.setAdapter(adapter);
+
+            emptyEventsTextView.setVisibility(View.GONE);
+            lvEvents.setVisibility(View.VISIBLE);
         }
     }
 
