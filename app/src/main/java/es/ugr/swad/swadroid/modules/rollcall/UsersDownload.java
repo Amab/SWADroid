@@ -23,18 +23,17 @@ package es.ugr.swad.swadroid.modules.rollcall;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.util.SparseArray;
 import android.widget.Toast;
 
 import org.ksoap2.serialization.SoapObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Vector;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.database.DataBaseHelper;
+import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.model.UserAttendance;
 import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.Module;
@@ -50,10 +49,6 @@ public class UsersDownload extends Module {
      * Number of users associated to the selected event
      */
     private int numUsers;
-    /**
-     * List of users associated to the selected event
-     */
-    List<UserAttendance> usersList;
     /**
      * Code of event associated to the users list
      */
@@ -104,13 +99,10 @@ public class UsersDownload extends Module {
             numUsers = soap.getPropertyCount();
 
             if(numUsers > 0) {
-                if(Rollcall.usersMap == null) {
-                    Rollcall.usersMap = new SparseArray<List<UserAttendance>>();
-                }
+                dbHelper.beginTransaction();
 
-                if(usersList == null) {
-                    usersList = new ArrayList<UserAttendance>();
-                }
+                //Removes old attendances from database
+                dbHelper.removeAllRows(DataBaseHelper.DB_TABLE_USERS_ATTENDANCES, "eventCode", eventCode);
             }
             for (int i = 0; i < numUsers; i++) {
                 SoapObject pii = (SoapObject) soap.getProperty(i);
@@ -120,7 +112,7 @@ public class UsersDownload extends Module {
                 String userID = pii.getProperty("userID").toString();
                 String userSurname1 = pii.getProperty("userSurname1").toString();
                 String userSurname2 = pii.getProperty("userSurname2").toString();
-                String userFirstName = pii.getProperty("userFirstname").toString();
+                String userFirstname = pii.getProperty("userFirstname").toString();
                 String userPhoto = pii.getProperty("userPhoto").toString();
                 //If not 0 ⇒ this user has attended the event.
                 boolean userPresent = !pii.getProperty("present").toString().equals("0");
@@ -128,14 +120,18 @@ public class UsersDownload extends Module {
                 if (userNickname.equalsIgnoreCase(Constants.NULL_VALUE)) userNickname = "";
                 if (userSurname1.equalsIgnoreCase(Constants.NULL_VALUE)) userSurname1 = "";
                 if (userSurname2.equalsIgnoreCase(Constants.NULL_VALUE)) userSurname2 = "";
-                if (userFirstName.equalsIgnoreCase(Constants.NULL_VALUE)) userFirstName = "";
+                if (userFirstname.equalsIgnoreCase(Constants.NULL_VALUE)) userFirstname = "";
                 if (userPhoto.equalsIgnoreCase(Constants.NULL_VALUE)) userPhoto = null;
 
-                usersList.add(new UserAttendance(userCode, userID, userNickname, userSurname1,
-                        userSurname2, userFirstName, userPhoto, userPresent));
+                //Inserts user data into database
+                dbHelper.insertUser(new User(userCode, null, userID, userNickname, userSurname1, userSurname2,
+                        userFirstname, userPhoto, null, 0));
+
+                //Inserts attendance data into database
+                dbHelper.insertAttendance(userCode, eventCode, userPresent);
             }
 
-            Rollcall.usersMap.put(eventCode, usersList);
+            dbHelper.endTransaction(true);
 
             Log.i(TAG, "Retrieved " + numUsers + " users");
         }    // end if (result != null)
@@ -165,7 +161,6 @@ public class UsersDownload extends Module {
 
     @Override
     protected void onError() {
-
     }
 
 }

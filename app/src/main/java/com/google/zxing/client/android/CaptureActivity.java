@@ -49,9 +49,11 @@ import java.io.IOException;
 import java.util.Collection;
 
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.ImageFactory;
-import es.ugr.swad.swadroid.model.UserAttendance;
+import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.rollcall.UsersActivity;
+import es.ugr.swad.swadroid.utils.Crypto;
 import es.ugr.swad.swadroid.utils.Utils;
 
 /**
@@ -89,6 +91,8 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
     private String characterSet;
     private InactivityTimer inactivityTimer;
     private BeepManager beepManager;
+    private static DataBaseHelper dbHelper;
+    private static Crypto crypto;
 
     ViewfinderView getViewfinderView() {
         return viewfinderView;
@@ -112,6 +116,14 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 
         hasSurface = false;
         inactivityTimer = new InactivityTimer(this);
+
+        try {
+            //Initialize database
+            dbHelper = new DataBaseHelper(this);
+            crypto = new Crypto(this, dbHelper.getDBKey());
+        } catch (Exception ex) {
+            Log.e(TAG, ex.getMessage(), ex);
+        }
     }
 
     @Override
@@ -270,26 +282,20 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
         String messageResult;
         int iconResult;
         int soundResult;
-        UserAttendance u = new UserAttendance(0);
         String qrContent = rawResult.toString();
-        Boolean validContent = Utils.isValidNickname(qrContent) || Utils.isValidDni(qrContent);
+        boolean validContent = Utils.isValidNickname(qrContent);
+        User u = dbHelper.getUser("userNickname", crypto.encrypt(qrContent.substring(1)));
 
         inactivityTimer.onActivity();
         lastResult = rawResult;
 
         if (validContent) {
-            u.setUserID(qrContent);
-            u.setUserNickname(qrContent);
-
-            if (UsersActivity.usersList.contains(u)) {
-                u = UsersActivity.usersList.get(UsersActivity.usersList.indexOf(u));
-            } else {
-                u = null;
-            }
-
-            if (u != null) {
+            if ((u != null) && dbHelper.isUserEnrolledEvent(UsersActivity.getEventCode(), "userCode",
+                    String.valueOf(u.getId()))) {
+                Log.d(TAG, "isUserEnrolledEvent=" + dbHelper.isUserEnrolledEvent(UsersActivity.getEventCode(), "userCode",
+                        crypto.encrypt(String.valueOf(u.getId()))));
                 //Mark student as present in the event
-                u.setUserPresent(true);
+                dbHelper.insertAttendance(u.getId(), UsersActivity.getEventCode(), true);
 
                 messageResult = getString(R.string.scan_valid_student);
                 iconResult = R.drawable.ok;
@@ -300,7 +306,7 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
                         + getString(R.string.scan_name) + ": " + u.getUserFirstname() + " "
                         + u.getUserSurname1() + " " + u.getUserSurname2();
             } else {
-                // There is no user with that ID or nickname
+                // There is no user with that nickname
                 messageResult = getString(R.string.scan_data_not_found);
                 iconResult = R.drawable.not_ok;
                 soundResult = sounds[1]; // Negative sound

@@ -34,27 +34,7 @@ public class UserAttendance extends Model {
     /**
      * User identifier.
      */
-    private String userID;
-    /**
-     * User nickname.
-     */
-    private String userNickname;
-    /**
-     * User first surname.
-     */
-    private String userSurname1;
-    /**
-     * User last surname.
-     */
-    private String userSurname2;
-    /**
-     * User name.
-     */
-    private String userFirstname;
-    /**
-     * Full path where user's picture is stored.
-     */
-    private String userPhoto;
+    private int eventCode;
     /**
      * Flag for indicate if the user is present in the attendance.
      */
@@ -87,79 +67,21 @@ public class UserAttendance extends Model {
      * Constructor.
      *
      * @param id            User code.
-     * @param userID        User identifier.
-     * @param userNickname  User nickname.
-     * @param userSurname1  User first surname.
-     * @param userSurname2  User last surname.
-     * @param userFirstname User name.
-     * @param userPhoto     Full path where user's picture is stored.
+     * @param eventCode     Event code.
      * @param userPresent   Flag for indicate if the user is present in the attendance.
      */
-    public UserAttendance(long id, String userID, String userNickname, String userSurname1,
-                          String userSurname2, String userFirstname, String userPhoto, boolean userPresent) {
+    public UserAttendance(long id, int eventCode, boolean userPresent) {
         super(id);
-        this.userID = userID;
-        this.userNickname = userNickname;
-        this.userSurname1 = userSurname1;
-        this.userSurname2 = userSurname2;
-        this.userFirstname = userFirstname;
-        this.userPhoto = userPhoto;
+        this.eventCode = eventCode;
         this.userPresent = userPresent;
     }
 
-
-
-    public String getUserID() {
-        return userID;
+    public int getEventCode() {
+        return eventCode;
     }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
-    }
-
-    public String getUserNickname() {
-        return userNickname;
-    }
-
-    public void setUserNickname(String userNickname) {
-        this.userNickname = userNickname;
-    }
-
-    public String getUserSurname1() {
-        return userSurname1;
-    }
-
-    public void setUserSurname1(String userSurname1) {
-        this.userSurname1 = userSurname1;
-    }
-
-    public String getUserSurname2() {
-        return userSurname2;
-    }
-
-    public void setUserSurname2(String userSurname2) {
-        this.userSurname2 = userSurname2;
-    }
-
-    public String getUserFirstname() {
-        return userFirstname;
-    }
-
-    public void setUserFirstname(String userFirstname) {
-        this.userFirstname = userFirstname;
-    }
-
-    public String getFullName() {
-        return this.userSurname1 + " " + this.userSurname2 + ", "
-                + this.userFirstname;
-    }
-
-    public String getUserPhoto() {
-        return userPhoto;
-    }
-
-    public void setUserPhoto(String userPhoto) {
-        this.userPhoto = userPhoto;
+    public void setEventCode(int eventCode) {
+        this.eventCode = eventCode;
     }
 
     public boolean isUserPresent() {
@@ -174,24 +96,9 @@ public class UserAttendance extends Model {
         Object object = null;
         switch (param) {
             case 0:
-                object = userID;
+                object = eventCode;
                 break;
             case 1:
-                object = userNickname;
-                break;
-            case 2:
-                object = userSurname1;
-                break;
-            case 3:
-                object = userSurname2;
-                break;
-            case 4:
-                object = userFirstname;
-                break;
-            case 5:
-                object = userPhoto;
-                break;
-            case 6:
                 object = userPresent;
                 break;
         }
@@ -237,24 +144,9 @@ public class UserAttendance extends Model {
     public void setProperty(int param, Object obj) {
         switch (param) {
             case 0:
-                userID = (String) obj;
+                eventCode = (Integer) obj;
                 break;
             case 1:
-                userNickname = (String) obj;
-                break;
-            case 2:
-                userSurname1 = (String) obj;
-                break;
-            case 3:
-                userSurname2 = (String) obj;
-                break;
-            case 4:
-                userFirstname = (String) obj;
-                break;
-            case 5:
-                userPhoto = (String) obj;
-                break;
-            case 6:
                 userPresent = (Boolean) obj;
                 break;
         }
@@ -263,13 +155,7 @@ public class UserAttendance extends Model {
     @Override
     public String toString() {
         return "UserAttendance{" +
-                "userCode='" + super.getId() + '\'' +
-                "userID='" + userID + '\'' +
-                ", userNickname='" + userNickname + '\'' +
-                ", userSurname1='" + userSurname1 + '\'' +
-                ", userSurname2='" + userSurname2 + '\'' +
-                ", userFirstname='" + userFirstname + '\'' +
-                ", userPhoto='" + userPhoto + '\'' +
+                "eventCode=" + eventCode +
                 ", userPresent=" + userPresent +
                 '}';
     }

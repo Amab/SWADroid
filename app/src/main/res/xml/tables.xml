@@ -292,6 +292,24 @@
             type="foreign-key" />
     </table>
     <table
+        name="users_attendances"
+        new-in-version="17"
+        to-string="%name%" >
+        <field
+            name="userCode"
+            foreign-table="users"
+            obligatory="true"
+            type="foreign-key" />
+        <field
+            name="eventCode"
+            obligatory="true"
+            type="integer" />
+        <field
+            name="present"
+            obligatory="true"
+            type="integer" />
+    </table>
+    <table
         name="groups"
         new-in-version="11"
         to-string="%name%" >

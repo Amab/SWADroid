@@ -23,7 +23,6 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
-import android.os.Environment;
 import android.util.Log;
 
 import com.android.dataframework.DataFramework;
@@ -31,7 +30,6 @@ import com.android.dataframework.Entity;
 
 import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -53,6 +51,7 @@ import es.ugr.swad.swadroid.model.TestAnswer;
 import es.ugr.swad.swadroid.model.TestQuestion;
 import es.ugr.swad.swadroid.model.TestTag;
 import es.ugr.swad.swadroid.model.User;
+import es.ugr.swad.swadroid.model.UserAttendance;
 import es.ugr.swad.swadroid.utils.Crypto;
 import es.ugr.swad.swadroid.utils.OldCrypto;
 import es.ugr.swad.swadroid.utils.Utils;
@@ -133,6 +132,10 @@ public class DataBaseHelper {
 	 * Table name for relationship between users and courses
 	 */
 	public static final String DB_TABLE_USERS_COURSES = "users_courses";
+    /**
+     * Table name for relationship between users and attendances
+     */
+    public static final String DB_TABLE_USERS_ATTENDANCES = "users_attendances";
 	/**
 	 * Table name for groups
 	 */
@@ -152,10 +155,12 @@ public class DataBaseHelper {
     /**
      * Table name for practice sessions
      */
+    @Deprecated
     public static final String DB_TABLE_PRACTICE_SESSIONS = "practice_sessions";
     /**
      * Table name for rollcall
      */
+    @Deprecated
     public static final String DB_TABLE_ROLLCALL = "rollcall";
 
     /**
@@ -207,6 +212,14 @@ public class DataBaseHelper {
      */
     public void setDb(DataFramework db) {
         this.db = db;
+    }
+
+    /**
+     * Gets the database encription key
+     * @return the database encription key
+     */
+    public String getDBKey() {
+        return DBKey;
     }
 
     /**
@@ -367,6 +380,10 @@ public class DataBaseHelper {
                 //Send exception details to Google Analytics
                 SWADroidTracker.sendException(mCtx, e, false);
             }
+        } else if (table.equals(DataBaseHelper.DB_TABLE_USERS_ATTENDANCES)) {
+            o = new UserAttendance(ent.getInt("userCode"),
+                    ent.getInt("eventCode"),
+                    Utils.parseIntBool(ent.getInt("present")));
         } else if (table.equals(DataBaseHelper.DB_TABLE_GROUPS)) {
             long groupTypeCode = getGroupTypeCodeFromGroup(ent.getLong("id"));
             o = new Group(ent.getLong("id"),
@@ -540,6 +557,84 @@ public class DataBaseHelper {
             }
         }
         return result;
+    }
+
+    /**
+     * Gets the id of users related to the selected event
+     *
+     * @param eventCode Event code to be referenced
+     * @return A list of User's id
+     */
+    public List<Long> getUserIdsEvent(int eventCode) {
+        List<Long> result = new ArrayList<Long>();
+
+        List<Entity> rows = db.getEntityList(DataBaseHelper.DB_TABLE_USERS_ATTENDANCES, "eventCode = '" + eventCode + "'");
+        if (rows != null) {
+            for (Entity ent : rows) {
+                result.add(ent.getLong("userCode"));
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Gets the list of users related to the selected event
+     *
+     * @param eventCode Event code to be referenced
+     * @return A list of @link{UserAttendance} related to the selected event
+     */
+    public List<UserAttendance> getUsersEvent(int eventCode) {
+        List<UserAttendance> result = new ArrayList<UserAttendance>();
+        List<Entity> rows = db.getEntityList(DataBaseHelper.DB_TABLE_USERS_ATTENDANCES, "eventCode = '" + eventCode + "'");
+
+        if (rows != null) {
+            for (Entity ent : rows) {
+                result.add( (UserAttendance) createObjectByTable(DataBaseHelper.DB_TABLE_USERS_ATTENDANCES, ent));
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks if the user is enrolled in the selected event
+     *
+     * @param eventCode Event code to be referenced
+     * @param fieldName  Field's name
+     * @param fieldValue Field's value
+     * @return true if the user is enrolled in the selected event
+     *         false if the user is not enrolled in the selected event
+     */
+    public boolean isUserEnrolledEvent(int eventCode, String fieldName, String fieldValue) {
+        return (getAllRowsCount(DB_TABLE_USERS_ATTENDANCES, "eventCode = '" + eventCode + "'" +
+                " AND " + fieldName + " = '" + fieldValue + "'") != 0);
+    }
+
+    /**
+     * Gets the list of users related to the selected event
+     *
+     * @param eventCode Event code to be referenced
+     * @return A Cursor with a list of users related to the selected event
+     */
+    public Cursor getUsersEventCursor(int eventCode) {
+        return db.rawQuery("SELECT * FROM " + DB_TABLE_USERS + " AS U"
+                + " INNER JOIN " + DB_TABLE_USERS_ATTENDANCES + " AS A"
+                + " ON U.userCode = A.userCode WHERE eventCode ='" + eventCode + "'"
+                + " ORDER BY U.userSurname1, U.userSurname2, U.userFirstname, U.userID", null);
+    }
+
+    /**
+     * Gets the number of users related to the selected event
+     *
+     * @param eventCode Event code to be referenced
+     * @return the number of users related to the selected event
+     */
+    public int getUsersEventCount(int eventCode) {
+        Cursor cursor =  db.rawQuery("SELECT COUNT(*) AS COUNT FROM " + DB_TABLE_USERS + " AS U"
+                + " INNER JOIN " + DB_TABLE_USERS_ATTENDANCES + " AS A"
+                + " ON U.userCode = A.userCode WHERE eventCode = '" + eventCode + "'", null);
+
+        return cursor.getInt(cursor.getColumnIndex("COUNT"));
     }
 
     /**
@@ -918,26 +1013,6 @@ public class DataBaseHelper {
 
         return returnValue;
     }
-    /**
-     * Inserts a relation in database
-     * @param p Relation to be inserted
-     */
-	/*	public void insertPairTable(String table)
-	{
-		Pair<Class, Class> pairClass = selectParamsClassPairTable(table);
-		class T1 = pairClass.getFirst();
-
-		Pair<String,String> pairParams = selectParamsPairTable(table);
-		PairTable<pairClass.getFirst(), pairClass.getSecond()> 
-		String table = p.getTable();
-		Pair<String, String> params = selectParamsPairTable(table);
-
-		Entity ent = new Entity(table);
-		ent.setValue(params.getFirst(), p.getFirst());
-		ent.setValue(params.getSecond(), p.getSecond());
-		ent.save();
-	}
-	 */
 
     /**
      * Inserts a user in database or updates it if already exists
@@ -951,14 +1026,6 @@ public class DataBaseHelper {
         if (rows.isEmpty()) {
             ent = new Entity(DataBaseHelper.DB_TABLE_USERS);
         } else {
-            // If user exists and has photo, delete the old photo file
-            if (u.getPhotoFileName() != null) {
-                File externalPath = Environment.getExternalStorageDirectory();
-                String packageName = db.getContext().getPackageName();
-                File file = new File(externalPath.getAbsolutePath() + "/Android/data/" + packageName + "/", u.getPhotoFileName());
-                //File file = new File(db.getContext().getExternalFilesDir(null), u.getPhotoFileName());
-                file.delete();
-            }
             ent = rows.get(0);
         }
         
@@ -968,7 +1035,13 @@ public class DataBaseHelper {
         ent.setValue("userSurname1", crypto.encrypt(u.getUserSurname1()));
         ent.setValue("userSurname2", crypto.encrypt(u.getUserSurname2()));
         ent.setValue("userFirstname", crypto.encrypt(u.getUserFirstname()));
-        ent.setValue("photoPath", crypto.encrypt(u.getUserPhoto()));
+
+        if(u.getUserPhoto() != null) {
+            ent.setValue("photoPath", crypto.encrypt(u.getUserPhoto()));
+        } else {
+            ent.setValue("photoPath", null);
+        }
+
         ent.setValue("userRole", u.getUserRole());
         ent.save();
     }
@@ -1120,6 +1193,30 @@ public class DataBaseHelper {
         ent.setValue("userCode", userID);
         ent.setValue("crsCod", courseCode);
         ent.setValue("grpCod", groupCode);
+        ent.save();
+    }
+
+    /**
+     * Inserts a new record in database indicating if the user has an
+     * attendance to the event specified, or updates it if already exists
+     *
+     * @param userCode     User code to be inserted
+     * @param eventCode Event code to be referenced
+     * @param present Flag for indicate if the user is present in the attendance
+     */
+    public void insertAttendance(long userCode, long eventCode, boolean present) {
+        Entity ent;
+        String where = "userCode = " + userCode + " AND eventCode = " + eventCode;
+        List<Entity> rows = db.getEntityList(DataBaseHelper.DB_TABLE_USERS_ATTENDANCES, where);
+
+        if (rows.isEmpty()) {
+            ent = new Entity(DataBaseHelper.DB_TABLE_USERS_ATTENDANCES);
+        } else {
+            ent = rows.get(0);
+        }
+        ent.setValue("userCode", userCode);
+        ent.setValue("eventCode", eventCode);
+        ent.setValue("present", Utils.parseBoolInt(present));
         ent.save();
     }
 
@@ -1462,18 +1559,12 @@ public class DataBaseHelper {
     }
 
     /**
-     * Removes a User from database and user photo from external storage
+     * Removes a User from database
      *
      * @param u User to be removed
      */
     public void removeUser(User u) {
         removeRow(DataBaseHelper.DB_TABLE_USERS, u.getId());
-
-        File externalPath = Environment.getExternalStorageDirectory();
-        String packageName = db.getContext().getPackageName();
-        File file = new File(externalPath.getAbsolutePath() + "/Android/data/" + packageName + "/", u.getPhotoFileName());
-        //File file = new File(db.getContext().getExternalFilesDir(null), u.getPhotoFileName());
-        file.delete();
     }
 
     /**
@@ -1834,21 +1925,6 @@ public class DataBaseHelper {
 
         db.emptyTables();
         compactDB();
-
-        // Removes users photos from external storage (Android 2.2 or higher only)
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.FROYO) {
-            File externalPath = Environment.getExternalStorageDirectory();
-            String packageName = db.getContext().getPackageName();
-            File dir = new File(externalPath.getAbsolutePath() + "/Android/data/" + packageName + "/");
-            //File dir = db.getContext().getExternalFilesDir(null);
-            String[] children = dir.list();
-            if (children != null) {
-                for (String aChildren : children) {
-                    File childrenFile = new File(dir, aChildren);
-                    if (childrenFile.exists()) childrenFile.delete();
-                }
-            }
-        }
 
         Log.i(TAG, "All tables emptied");
     }

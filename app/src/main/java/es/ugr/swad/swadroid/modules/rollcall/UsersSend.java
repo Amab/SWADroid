@@ -29,6 +29,7 @@ import org.ksoap2.serialization.SoapObject;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.utils.Utils;
@@ -131,6 +132,11 @@ public class UsersSend extends Module {
         } else {
             String msg = String.valueOf(numUsers) + " " + getResources().getString(R.string.usersUpdated);
             Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+
+            dbHelper.beginTransaction();
+            //Remove all event attendances from database after a successful sending
+            dbHelper.removeAllRows(DataBaseHelper.DB_TABLE_USERS_ATTENDANCES, "eventCode", eventCode);
+            dbHelper.endTransaction(true);
 
             setResult(RESULT_OK);
         }

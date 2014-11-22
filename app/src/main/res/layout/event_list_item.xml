@@ -11,6 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="6dip"
+        android:layout_marginEnd="6dip"
         android:contentDescription="@string/rollcallEvent"
         android:src="@drawable/roll_call" />
 
@@ -36,17 +37,36 @@
                 android:id="@+id/startTimeTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="3dip" />
+                android:layout_marginRight="3dip"
+                android:layout_marginEnd="3dip" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="3dip"
+                android:layout_marginEnd="3dip"
                 android:text=" - "
                 android:textColor="@color/foreground1" />
 
             <TextView
                 android:id="@+id/endTimeTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="3dip"
+                android:layout_marginEnd="3dip"
+                android:text="@string/sendingState"
+                android:textColor="@color/foreground1" />
+            <TextView
+                android:id="@+id/sendingStateTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
