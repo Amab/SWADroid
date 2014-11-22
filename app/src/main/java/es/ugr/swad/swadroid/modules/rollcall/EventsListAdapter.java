@@ -105,7 +105,7 @@ public class EventsListAdapter extends BaseAdapter {
                 * If there are no sendings pending, set the state as ok and show it in green,
                 * else set the state as pending and show it in red
                 */
-                if(dbHelper.getUsersEventCount((int) event.getId()) != 0) {
+                if(dbHelper.getUsersEventCount((int) event.getId(), "present", "1") != 0) {
                     viewHolder.sendingState.setText(R.string.sendingStatePending);
                     viewHolder.sendingState.setTextColor(context.getResources().getColor(R.color.red));
                     viewHolder.sendingState.setTypeface(null, Typeface.BOLD);

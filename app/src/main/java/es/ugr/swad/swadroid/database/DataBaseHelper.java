@@ -638,6 +638,23 @@ public class DataBaseHelper {
     }
 
     /**
+     * Gets the number of users related to the selected event
+     *
+     * @param eventCode Event code to be referenced
+     * @param fieldName  Field's name
+     * @param fieldValue Field's value
+     * @return the number of users related to the selected event
+     */
+    public int getUsersEventCount(int eventCode, String fieldName, String fieldValue) {
+        Cursor cursor =  db.rawQuery("SELECT COUNT(*) AS COUNT FROM " + DB_TABLE_USERS + " AS U"
+                + " INNER JOIN " + DB_TABLE_USERS_ATTENDANCES + " AS A"
+                + " ON U.userCode = A.userCode WHERE eventCode = '" + eventCode + "'" +
+                " AND " + fieldName + " = '" + fieldValue + "'", null);
+
+        return cursor.getInt(cursor.getColumnIndex("COUNT"));
+    }
+
+    /**
      * Gets the group which code is given
      *
      * @param groupId long that identifies uniquely the searched group
