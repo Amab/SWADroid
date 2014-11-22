@@ -2000,6 +2000,7 @@ public class DataBaseHelper {
      * Initializes the database structure for the first use
      */
     public void initializeDB() {
+        //Index for tests
         db.getDB().execSQL("CREATE UNIQUE INDEX IF NOT EXISTS " + DataBaseHelper.DB_TABLE_TEST_QUESTION_TAGS + "_unique on "
                 + DataBaseHelper.DB_TABLE_TEST_QUESTION_TAGS + "(qstCod, tagCod);");
     }
@@ -2036,6 +2037,7 @@ public class DataBaseHelper {
 
         /* version 16-17
 		 * removed old Rollcall tables
+		 * created indexes for user tables
 		 * */
         if (dbVersion == 17) {
             deleteTable(DB_TABLE_PRACTICE_SESSIONS);
