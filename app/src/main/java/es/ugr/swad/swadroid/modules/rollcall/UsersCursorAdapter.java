@@ -22,6 +22,7 @@ package es.ugr.swad.swadroid.modules.rollcall;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -107,7 +108,7 @@ public class UsersCursorAdapter extends CursorAdapter {
         checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                dbHelper.insertAttendance(userCode, eventCode, present);
+                dbHelper.insertAttendance(userCode, eventCode, isChecked);
             }
         });
 
