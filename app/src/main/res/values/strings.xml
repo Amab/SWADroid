@@ -9,7 +9,7 @@
     <string name="serverTitle_preferences">Server</string>
     <string name="loginModuleLabel">Login</string>
     <string name="notificationsModuleLabel">Notifications</string>
-    <string name="notificationsMarkAllAsReadModuleLabel">NotificationsMarkAsRead</string>
+    <string name="notificationsMarkAllAsReadModuleLabel" translatable="false">NotificationsMarkAsRead</string>
     <string name="coursesModuleLabel">Courses</string>
     <string name="testsModuleLabel">Tests</string>
     <string name="messagesModuleLabel">Send message</string>
@@ -119,13 +119,13 @@
     <string name="shareBodyMsg">I\'m using #SWADroid in my Android mobile for access to
         the e-learning platform SWAD.\nGet it for free here:
         https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid</string>
-    <string name="marketURL">market://details?id=es.ugr.swad.swadroid</string>
-    <string name="marketWebURL">http://goo.gl/Wgo1y</string>
-    <string name="twitterURL">https://twitter.com/#!/SWADroid</string>
-    <string name="facebookURL">https://www.facebook.com/SWADroid</string>
-    <string name="googlePlusURL">http://goo.gl/kuezQ</string>
-    <string name="blogURL">http://swadroid.wordpress.com</string>
-    <string name="twitterUser">\@SWADroid</string>
+    <string name="marketURL" translatable="false">market://details?id=es.ugr.swad.swadroid</string>
+    <string name="marketWebURL" translatable="false">http://goo.gl/Wgo1y</string>
+    <string name="twitterURL" translatable="false">https://twitter.com/#!/SWADroid</string>
+    <string name="facebookURL" translatable="false">https://www.facebook.com/SWADroid</string>
+    <string name="googlePlusURL" translatable="false">http://goo.gl/kuezQ</string>
+    <string name="blogURL" translatable="false">http://swadroid.wordpress.com</string>
+    <string name="twitterUser" translatable="false">\@SWADroid</string>
     <string name="twitterTitle">Twitter</string>
     <string name="facebookTitle">Facebook</string>
     <string name="googlePlusTitle">Google+</string>
@@ -134,15 +134,15 @@
     <string name="prefCatSyncTitle">Synchronization</string>
     <string name="prefSyncTimeTitle">Synchronization frecuency</string>
     <string name="prefSyncTimeSummary">Synchronization frecuency of notifications</string>
-    <string name="prefSyncTimeKey">prefSyncTime</string>
+    <string name="prefSyncTimeKey" translatable="false">prefSyncTime</string>
     <string name="prefSyncEnableTitle">Auto Sync</string>
     <string name="prefSyncEnableSummary">Enable auto sync</string>
-    <string name="prefSyncEnableKey">prefSyncEnable</string>
+    <string name="prefSyncEnableKey" translatable="false">prefSyncEnable</string>
     <string name="prefCatNotifTitle">Notifications</string>
     <string name="prefNotifLimitTitle">Notifications limit</string>
     <string name="prefNotifLimitDialogMessage">Select the max number of notifications to be stored:</string>
     <string name="prefNotifLimitSuffix">notifications</string>
-    <string name="prefNotifLimitKey">prefNotifLimit</string>
+    <string name="prefNotifLimitKey" translatable="false">prefNotifLimit</string>
     <string name="notificationsAlertMsg">new notifications</string>
     <string name="footMessageMsg">Sended from</string>
     <string name="marksMsg">Click on the notification to view the mark.</string>
@@ -163,8 +163,8 @@
     <string name="msg_camera_framework_bug">Sorry, the Android camera encountered a problem. You may need to restart the
         device.</string>
     <string name="button_ok">OK</string>
-    <string name="scan_valid_student">Student of this subject</string>
-    <string name="scan_not_valid_student">Student of another subject</string>
+    <string name="scan_valid_student">Student of this course</string>
+    <string name="scan_not_valid_student">Student of another course</string>
     <string name="scan_name">Name</string>
     <string name="scan_id">ID</string>
     <string name="scan_not_valid_code">QR code invalid</string>
@@ -182,66 +182,38 @@
     <string name="licenseType">License:</string>
     <string name="downloadFileTitle">Download</string>
     <string name="sdCardBusyTitle">SD card unavailable</string>
-    <string name="sdCardBusy">The SD casd is busy. To allow downloads, select “Turn off USB storage” in the
+    <string name="sdCardBusy">The SD card is busy. To allow downloads, select “Turn off USB storage” in the
         notification</string>
     <string name="vacants">Vacants</string>
     <string name="numStudent">No. of students</string>
     <string name="maxStudent">Max. students</string>
     <string name="myGroupsModuleLabel">Groups</string>
-    <string name="scan_no_photos">Failed to save the photos of students</string>
-    <string name="noStudentsAvailableMsg">There are no students in this subject</string>
-    <string name="studentsUpdated">students updated</string>
-    <string name="scan_no_students">No students found\n
-        Try “Update students”</string>
+    <string name="noEventsAvailableMsg">There are no events in this course</string>
+    <string name="eventsUpdated">events updated</string>
+    <string name="eventsEmptyListMsg">Did not download any event.\n\nTo download most recent
+        events slide down this message.</string>
     <string name="photoContentDescription">Photo of student</string>
     <string name="noCameraFound">The device has no camera</string>
     <string name="saveMsg">Save</string>
     <string name="groupsProgressDescription">Retrieving groups…\n\nPlease wait…</string>
     <string name="groupsProgressTitle">Groups</string>
-    <string name="noGroupsAvailableMsg">No groups for selected subject</string>
-    <string name="sessionCourseText">Course</string>
-    <string name="sessionGroupText">Group</string>
-    <string name="sessionEndText">End</string>
-    <string name="sessionButtonCreate">Create</string>
-    <string name="sessionSiteText">Site (optional)</string>
-    <string name="sessionButtonCancel">Cancel</string>
-    <string name="sessionStartText">Start</string>
-    <string name="sessionDescriptionText">Description (optional)</string>
-    <string name="sessionModuleLabel">New practice session</string>
+    <string name="noGroupsAvailableMsg">No groups for selected course</string>
     <string name="confirmExitMsg">Are you sure you want to exit without saving changes?</string>
     <string name="selectGroupTitle">Select group</string>
-    <string name="sessionNotCreated">Practice session already exists</string>
-    <string name="sessionCreated">Practice session created successfully</string>
-    <string name="sessionChoose">Choose the practice session</string>
     <string name="sendingState">Sending to SWAD:</string>
     <string name="sendingStatePending">Pending</string>
-    <string name="session">Session:</string>
-    <string name="noPracticeSessionsAvailableMsg">There are no practice sessions of selected group in the database</string>
-    <string name="sessionNoStudentsMsg">No student has attended this session</string>
-    <string name="studentsHistoryModuleLabel">History of students</string>
-    <string name="sessionsTitle">Practice sessions</string>
-    <string name="noSessionsAvailableMsg">There are no practice sessions in the database</string>
     <string name="rollcallModuleLabel">Rollcall</string>
-    <string name="studentsTitle">Students</string>
-    <string name="studentsDownloadProgressDescription">Synchronizing users.\n\nDepending on the number of
+    <string name="usersTitle">Users</string>
+    <string name="usersDownloadProgressDescription">Synchronizing users.\n\nDepending on the number of
         users to synchronize, the data processing can take several minutes.\n\nPlease wait…</string>
-    <string name="studentsList">Students list</string>
-    <string name="studentsDownloadProgressTitle">Students</string>
-    <string name="studentsPresent">Present students</string>
-    <string name="studentsUpdate">Update</string>
+    <string name="usersDownloadProgressTitle">Users</string>
+    <string name="eventsDownloadProgressDescription">Synchronizing events.\n\nDepending on the number of
+        events to synchronize, the data processing can take several minutes.\n\nPlease wait…</string>
+    <string name="eventsDownloadProgressTitle">Events</string>
+    <string name="usersUpdate">Update</string>
     <string name="newTitle">New</string>
     <string name="rollcallScanQR">Scan QR</string>
     <string name="rollcallManual">Manual mode</string>
-    <string name="sessionsSelect">Check sessions</string>
-    <string name="studentsSelect">Check students</string>
-    <string name="rollcallErrorNoConnection">No connection to the server.
-        Rollcall data saved in database.</string>
-    <string name="rollcallHistoryModuleLabel">History of sessions</string>
-    <string name="rollcallNoStudentsSelected">No students selected</string>
-    <string name="rollcallNoPracticeSessions">There are no practice sessions defined for the subject and selected group.
-        Select: Practice sessions - New</string>
-    <string name="rollcallSaved">Rollcall data stored properly</string>
-    <string name="rollcallWebServiceNotAvailable">The web service to send SWAD rollcall data is not available.</string>
     <string name="rollcallEvent">Rollcall event</string>
     <string name="groupTypesProgressDescription">Retrieving group types…\nPlease wait…</string>
     <string name="groupTypesProgressTitle">Group Types</string>
@@ -256,7 +228,7 @@
         in your wished groups</string>
     <string name="confirmEnrollments">Confirm requested enrollments</string>
     <string name="areYouSureGroups">Are you sure, that you want to enroll on the selected groups?</string>
-    <string name="ok">OK</string>
+    <string name="ok" translatable="false">OK</string>
     <string name="failedEnrollment">Sorry but the enrollment on the selected groups could not be performed</string>
     <string name="withoutLimit">unlimited</string>
     <string name="downloadProblemTitle">Download problem</string>
@@ -275,9 +247,9 @@
     <string name="contents_text">Plain text</string>
     <string name="lastSyncTimeLabel">Last synchronization</string>
     <string name="neverLabel">Never</string>
-    <string name="prefNotifSoundKey">prefNotifSoundEnable</string>
-    <string name="prefNotifVibrateKey">prefNotifVibrateEnable</string>
-    <string name="prefNotifLightsKey">prefNotifLightsEnable</string>
+    <string name="prefNotifSoundKey" translatable="false">prefNotifSoundEnable</string>
+    <string name="prefNotifVibrateKey" translatable="false">prefNotifVibrateEnable</string>
+    <string name="prefNotifLightsKey" translatable="false">prefNotifLightsEnable</string>
     <string name="prefNotifSoundTitle">Sound</string>
     <string name="prefNotifSoundSummary">Enable/disable sound alerts for new notifications</string>
     <string name="prefNotifVibrateTitle">Vibration</string>
@@ -313,5 +285,18 @@
     <string name="Filters_Teachers">Teachers</string>
     <string name="Filters_Students">Students</string>
     <string name="errorNoAppForIntent">There are no registered applications to open the selected file type.</string>
+    <string name="birthdayMsg">Happy birthday, {userName}!</string>
+    <string name="errorNoUserNickname">You must set a nickname in SWAD</string>
+    <string name="event">Event</string>
+    <string name="usersUpdated">users updated</string>
+    <string name="noUsersAvailableMsg">There are no users in this event</string>
+    <string name="noUsersCheckedMsg">You must check almost one user</string>
+    <string name="usersEmptyListMsg">Did not download any user.\n\nTo download most recent
+        users slide down this message.</string>
+    <string name="doubleBackToExitMsg">Please click BACK again to exit</string>
+    <string name="errorSendingUsersMsg">Error sending attendances</string>
+    <string name="progress_status">Loading...</string>
+    <string name="rollcallCleanUsers">Clean users</string><string name="cleanUsersDialogMsg">The list of users will be locally deleted.\n\n
+         Are you sure you want to locally delete the list of users?</string>
 
 </resources>

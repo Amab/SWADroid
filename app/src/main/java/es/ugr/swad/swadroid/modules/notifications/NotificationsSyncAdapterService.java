@@ -35,10 +35,10 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
-import org.apache.http.client.HttpResponseException;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.KvmSerializable;
 import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.transport.HttpResponseException;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.net.SocketTimeoutException;
@@ -145,16 +145,22 @@ public class NotificationsSyncAdapterService extends Service {
                 	sendException = false;
                 } else if (e instanceof HttpResponseException) {
                 	httpStatusCode = ((HttpResponseException) e).getStatusCode();
-                	
-                	if(httpStatusCode == 503) { // Service Unavailable
-                		errorMessage = mContext.getString(R.string.errorServiceUnavailableMsg);
-                		sendException = false;
-                	} else {
-                		errorMessage = e.getMessage();
-                    	if((errorMessage == null) || errorMessage.equals("")) {
-                    		errorMessage = mContext.getString(R.string.errorConnectionMsg);
-                    	}
-                	}
+
+                    Log.e(TAG, "httpStatusCode=" + httpStatusCode);
+
+                    switch(httpStatusCode) {
+                        case 500: errorMessage = mContext.getString(R.string.errorServerResponseMsg);
+                                  break;
+
+                        case 503: errorMessage = mContext.getString(R.string.errorServiceUnavailableMsg);
+                                  sendException = false;
+                                  break;
+
+                        default:  errorMessage = e.getMessage();
+                                  if ((errorMessage == null) || errorMessage.equals("")) {
+                                      errorMessage = mContext.getString(R.string.errorConnectionMsg);
+                                  }
+                    }
                 } else {
                 	errorMessage = e.getMessage();
                 	if((errorMessage == null) || errorMessage.equals("")) {

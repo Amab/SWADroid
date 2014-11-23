@@ -1,23 +1,22 @@
 package es.ugr.swad.swadroid.modules;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.zxing.WriterException;
 
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADroidTracker;
+import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.utils.QR;
 
-public class GenerateQR extends Module {
+public class GenerateQR extends MenuActivity {
     /**
      * Messages tag name for Logcat
      */
@@ -33,6 +32,10 @@ public class GenerateQR extends Module {
 
         setTitle(R.string.generateQRModuleLabel);
     	getSupportActionBar().setIcon(R.drawable.qr);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     /* (non-Javadoc)
@@ -41,36 +44,49 @@ public class GenerateQR extends Module {
     @Override
     protected void onStart() {
         super.onStart();
+
         SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
 
+        if (!Login.isLogged() || (Login.getLoggedUser() == null)) {
+            Intent activity = new Intent(getApplicationContext(), Login.class);
+            startActivityForResult(activity, Constants.LOGIN_REQUEST_CODE);
+        } else {
+            generateQR();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case Constants.LOGIN_REQUEST_CODE:
+                    if ((Login.getLoggedUser() != null) && !Login.getLoggedUser().getUserNickname().equals(Constants.NULL_VALUE)) {
+                        generateQR();
+                    } else {
+                        Login.setLogged(false);
+                        Toast.makeText(getApplicationContext(), R.string.errorNoUserNickname, Toast.LENGTH_LONG).show();
+
+                        finish();
+                    }
+                    break;
+            }
+        } else if (resultCode == Activity.RESULT_CANCELED) {
+            switch (requestCode) {
+                case Constants.LOGIN_REQUEST_CODE:
+                    finish();
+                    break;
+            }
+        }
+    }
+
+    private void generateQR() {
         try {
-            Bitmap qrCode = QR.encode(this, Preferences.getUserID());
             ImageView qr_image = (ImageView) findViewById(R.id.qr_code_image);
+            Bitmap qrCode = QR.encode(this, "@" + Login.getLoggedUser().getUserNickname());
             qr_image.setImageBitmap(qrCode);
         } catch (WriterException e) {
             error(TAG, e.getMessage(), e, true);
         }
     }
-
-    @Override
-    protected void requestService() throws NoSuchAlgorithmException,
-            IOException, XmlPullParserException {
-
-    }
-
-    @Override
-    protected void connect() {
-
-    }
-
-    @Override
-    protected void postConnect() {
-
-    }
-
-    @Override
-    protected void onError() {
-
-    }
-
 }

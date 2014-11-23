@@ -19,6 +19,7 @@
 package es.ugr.swad.swadroid.modules.messages;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -97,6 +98,10 @@ public class Messages extends Module {
         setContentView(R.layout.messages_screen);
         setTitle(R.string.messagesModuleLabel);
         getSupportActionBar().setIcon(R.drawable.msg);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 		
         rcvEditText = (EditText) findViewById(R.id.message_receivers_text);
         subjEditText = (EditText) findViewById(R.id.message_subject_text);
@@ -291,7 +296,7 @@ public class Messages extends Module {
 	            
 	        case R.id.action_sendMsg:
 	            try {	
-	            	if(rcvEditText.getText().length() == 0) {
+	            	if((eventCode == 0) && (rcvEditText.getText().length() == 0)) {
 	            		Toast.makeText(this, R.string.noReceiversMsg, Toast.LENGTH_LONG).show();
 	            	} else if(subjEditText.getText().length() == 0) {
 	            		Toast.makeText(this, R.string.noSubjectMessageMsg, Toast.LENGTH_LONG).show();
