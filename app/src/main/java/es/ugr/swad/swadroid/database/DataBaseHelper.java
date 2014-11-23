@@ -619,8 +619,7 @@ public class DataBaseHelper {
     public Cursor getUsersEventCursor(int eventCode) {
         return db.rawQuery("SELECT * FROM " + DB_TABLE_USERS + " AS U"
                 + " INNER JOIN " + DB_TABLE_USERS_ATTENDANCES + " AS A"
-                + " ON U.userCode = A.userCode WHERE eventCode ='" + eventCode + "'"
-                + " ORDER BY U.userSurname1, U.userSurname2, U.userFirstname, U.userID", null);
+                + " ON U.userCode = A.userCode WHERE eventCode ='" + eventCode + "'", null);
     }
 
     /**
