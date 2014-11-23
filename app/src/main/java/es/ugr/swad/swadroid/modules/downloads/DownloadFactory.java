@@ -27,6 +27,7 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.List;
@@ -67,10 +68,14 @@ public class DownloadFactory {
 	    //Create destination directory if not exists
 	    File downloadDirectory = new File(Constants.DOWNLOADS_PATH);
 	    if (!downloadDirectory.exists()){
-	    	downloadDirectory.mkdir();
-	        
-	        Log.i(TAG, "Created directory " + Constants.DOWNLOADS_PATH);
-	    }
+	    	if(downloadDirectory.mkdir()) {
+	            Log.i(TAG, "Created directory " + Constants.DOWNLOADS_PATH);
+            } else {
+                Log.e(TAG, "Error creating directory " + Constants.DOWNLOADS_PATH);
+                Toast.makeText(context, "Error creating directory " + Constants.DOWNLOADS_PATH, Toast.LENGTH_LONG).show();
+                return false;
+            }
+        }
 	    
 	    if((Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) && !Utils.isHTTPUrl(url)) {
 	    	//DownloadManager GINGERBREAD (HTTPS support)

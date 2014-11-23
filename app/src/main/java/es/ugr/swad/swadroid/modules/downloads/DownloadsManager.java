@@ -587,7 +587,7 @@ public class DownloadsManager extends MenuActivity {
     private void downloadFile(String directory, String url, long fileSize) {
         // Check if external storage is available
         int storageState = checkMediaAvailability(); 
-        if ( storageState == 2) {
+        if (storageState == 2) {
             new FileDownloaderAsyncTask(this, this.chosenNodeName, fileSize)
             .execute(directory, url);
         } else {
