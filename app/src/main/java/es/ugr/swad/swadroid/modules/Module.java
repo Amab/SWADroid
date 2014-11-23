@@ -31,10 +31,10 @@ import android.util.Log;
 import android.widget.Toast;
 
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpResponseException;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.ksoap2.SoapFault;
+import org.ksoap2.transport.HttpResponseException;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
@@ -440,14 +440,20 @@ public abstract class Module extends MenuActivity {
                 } else if (e instanceof HttpResponseException) {
                     httpStatusCode = ((HttpResponseException) e).getStatusCode();
 
-                    if (httpStatusCode == 503) { // Service Unavailable
-                        errorMsg = getString(R.string.errorServiceUnavailableMsg);
-                        sendException = false;
-                    } else {
-                        errorMsg = e.getMessage();
-                        if ((errorMsg == null) || errorMsg.equals("")) {
-                            errorMsg = getString(R.string.errorConnectionMsg);
-                        }
+                    Log.e(TAG, "httpStatusCode=" + httpStatusCode);
+
+                    switch(httpStatusCode) {
+                        case 500: errorMsg = getString(R.string.errorServerResponseMsg);
+                                  break;
+
+                        case 503: errorMsg = getString(R.string.errorServiceUnavailableMsg);
+                                  sendException = false;
+                                  break;
+
+                        default:  errorMsg = e.getMessage();
+                                  if ((errorMsg == null) || errorMsg.equals("")) {
+                                      errorMsg = getString(R.string.errorConnectionMsg);
+                                  }
                     }
                 } else {
                     errorMsg = e.getMessage();

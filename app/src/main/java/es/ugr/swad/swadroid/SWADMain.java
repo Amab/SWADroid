@@ -44,6 +44,7 @@ import android.widget.LinearLayout;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -108,10 +109,6 @@ public class SWADMain extends MenuExpandableListActivity {
      */
     private long courseCode;
     /**
-     * Cursor for database access
-     */
-    private Cursor dbCursor;
-    /**
      * User courses list
      */
     private List<Model> listCourses;
@@ -136,7 +133,6 @@ public class SWADMain extends MenuExpandableListActivity {
     private TextView mBirthdayTextView;
     private ExpandableListView mExpandableListView;
     private ImageExpandableListAdapter mExpandableListAdapter;
-    private OnChildClickListener mExpandableClickListener;
     private final ArrayList<HashMap<String, Object>> mHeaderData = new ArrayList<HashMap<String, Object>>();
     private final ArrayList<ArrayList<HashMap<String, Object>>> mChildData = new ArrayList<ArrayList<HashMap<String, Object>>>();
     private final ArrayList<HashMap<String, Object>> mMessagesData = new ArrayList<HashMap<String, Object>>();
@@ -200,8 +196,8 @@ public class SWADMain extends MenuExpandableListActivity {
             lastVersion = Preferences.getLastVersion();
             currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
             dbHelper.initializeDB();
-            //lastVersion = 57;
-            //currentVersion = 58;
+            //lastVersion = 64;
+            //currentVersion = 65;
 
             //If this is the first run, show configuration dialog
             if (lastVersion == 0) {
@@ -336,7 +332,7 @@ public class SWADMain extends MenuExpandableListActivity {
         	            SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY,
         	            		Long.parseLong(Preferences.getSyncTime()), this);
         	        }
-        	        
+
         	        showProgress(false);
                     break;
                 case Constants.LOGIN_REQUEST_CODE:
@@ -348,7 +344,7 @@ public class SWADMain extends MenuExpandableListActivity {
                 //After get the list of courses, a dialog is launched to choice the course
                 case Constants.COURSES_REQUEST_CODE:
                     //User credentials are wrong. Remove periodic synchronization
-                    SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, this);  
+                    SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, this);
                     showProgress(false);
                     break;
                 case Constants.LOGIN_REQUEST_CODE:
@@ -361,7 +357,10 @@ public class SWADMain extends MenuExpandableListActivity {
     private void createSpinnerAdapter() {
         Spinner spinner = (Spinner) this.findViewById(R.id.spinner);
         listCourses = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_COURSES, null, "fullName");
-        dbCursor = dbHelper.getDb().getCursor(DataBaseHelper.DB_TABLE_COURSES, null, "fullName");
+        /*
+      Cursor for database access
+     */
+        Cursor dbCursor = dbHelper.getDb().getCursor(DataBaseHelper.DB_TABLE_COURSES, null, "fullName");
         startManagingCursor(dbCursor);
         if (listCourses.size() != 0) {
             SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
@@ -437,8 +436,7 @@ public class SWADMain extends MenuExpandableListActivity {
     private void getCurrentCourses() {
     	showProgress(true);
     	
-        Intent activity;
-        activity = new Intent(this, Courses.class);
+        Intent activity = new Intent(this, Courses.class);
         startActivityForResult(activity, Constants.COURSES_REQUEST_CODE);
     }
 
@@ -634,7 +632,7 @@ public class SWADMain extends MenuExpandableListActivity {
             //Removes Publish Note from messages menu
         	mExpandableListAdapter.removeChild(Constants.MESSAGES_GROUP, Constants.PUBLISH_NOTE_CHILD);
             //Removes Rollcall from users menu
-        	//mExpandableListAdapter.removeChild(Constants.USERS_GROUP, Constants.ROLLCALL_CHILD);
+        	mExpandableListAdapter.removeChild(Constants.USERS_GROUP, Constants.ROLLCALL_CHILD);
         }
         
         currentRole = Constants.STUDENT_TYPE_CODE;
@@ -651,10 +649,10 @@ public class SWADMain extends MenuExpandableListActivity {
             
             mMessagesData.add(map);
 
-            /*map = new HashMap<String, Object>();
+            map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.rollcallModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.roll_call));
-            mUsersData.add(map);*/
+            mUsersData.add(map);
             
             mExpandableListAdapter = new ImageExpandableListAdapter(this, mHeaderData,
                     R.layout.image_list_item,
@@ -711,32 +709,19 @@ public class SWADMain extends MenuExpandableListActivity {
         mExpandableListView = (ExpandableListView) findViewById(R.id.expandableList);
         mBirthdayLayout = (LinearLayout) findViewById(R.id.birthday_layout);
         mBirthdayTextView = (TextView) findViewById(R.id.birthdayTextView);
-        
-        mExpandableClickListener = new OnChildClickListener() {
-            
+
+        OnChildClickListener mExpandableClickListener = new OnChildClickListener() {
+
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition,
-                    int childPosition, long id) {
+                                        int childPosition, long id) {
                 // Get the item that was clicked
                 Object o = parent.getExpandableListAdapter().getChild(groupPosition, childPosition);
                 @SuppressWarnings("unchecked")
                 String keyword = (String) ((Map<String, Object>) o).get(NAME);
-                // boolean rollCallAndroidVersionOK =
-                // (android.os.Build.VERSION.SDK_INT >=
-                // android.os.Build.VERSION_CODES.FROYO);
-                // PackageManager pm = getPackageManager();
-                // boolean rearCam;
-
-                // It would be safer to use the constant
-                // PackageManager.FEATURE_CAMERA_FRONT
-                // but since it is not defined for Android 2.2, I substituted
-                // the literal value
-                // frontCam =
-                // pm.hasSystemFeature("android.hardware.camera.front");
-                // rearCam = pm.hasSystemFeature(PackageManager.FEATURE_CAMERA);
-
                 Intent activity;
                 Context ctx = getApplicationContext();
+
                 if (keyword.equals(getString(R.string.notificationsModuleLabel))) {
                     activity = new Intent(ctx, Notifications.class);
                     startActivityForResult(activity, Constants.NOTIFICATIONS_REQUEST_CODE);
@@ -751,8 +736,12 @@ public class SWADMain extends MenuExpandableListActivity {
                     activity = new Intent(ctx, Notices.class);
                     startActivityForResult(activity, Constants.NOTICES_REQUEST_CODE);
                 } else if (keyword.equals(getString(R.string.rollcallModuleLabel))) {
-                    activity = new Intent(ctx, Rollcall.class);
-                    startActivityForResult(activity, Constants.ROLLCALL_REQUEST_CODE);
+                    if (Utils.connectionAvailable(ctx)) {
+                        activity = new Intent(ctx, Rollcall.class);
+                        startActivityForResult(activity, Constants.ROLLCALL_REQUEST_CODE);
+                    } else {
+                        Toast.makeText(ctx, R.string.noConnectionMsg, Toast.LENGTH_LONG).show();
+                    }
                 } else if (keyword.equals(getString(R.string.generateQRModuleLabel))) {
                     activity = new Intent(ctx, GenerateQR.class);
                     startActivityForResult(activity, Constants.GENERATE_QR_REQUEST_CODE);
@@ -800,32 +789,31 @@ public class SWADMain extends MenuExpandableListActivity {
                     activity = new Intent(ctx, Information.class);
                     activity.putExtra("requestCode", Constants.ASSESSMENT_REQUEST_CODE);
                     startActivityForResult(activity, Constants.ASSESSMENT_REQUEST_CODE);
-
                 }
 
                 return true;
             }
         };
-        
+
         mExpandableListView.setOnChildClickListener(mExpandableClickListener);
 	}
- 
-	
+
+
     /**
      * Shows the progress UI and hides the login form.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
-    	
+
     	final View course_list = findViewById(R.id.courses_list_view);
         final View progressAnimation = findViewById(R.id.get_courses_status);
-        
+
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-            
+
             progressAnimation.setVisibility(View.VISIBLE);
             progressAnimation.animate()
                             .setDuration(shortAnimTime)
@@ -855,13 +843,13 @@ public class SWADMain extends MenuExpandableListActivity {
         	course_list.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
-	
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_activity_actions, menu);
         return super.onCreateOptionsMenu(menu);
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -872,7 +860,7 @@ public class SWADMain extends MenuExpandableListActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-        
+
     }
 
 }
