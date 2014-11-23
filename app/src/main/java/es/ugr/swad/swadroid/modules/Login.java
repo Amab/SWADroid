@@ -39,15 +39,7 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  */
 public class Login extends Module {
-	/**
-	 * User returned by the webservice
-	 */
-    private User user;
     /**
-     * User ID.
-     */
-    private String userID;
-	/**
 	 * Time to force relogin
 	 */
 	public static final int RELOGIN_TIME = 86400000; //24h
@@ -119,7 +111,7 @@ public class Login extends Module {
 
         //If the application isn't logged, force login
         if (!Login.isLogged()) {
-            userID = Preferences.getUserID();
+            String userID = Preferences.getUserID();
 
             //If the user ID is a DNI
             if (Utils.isValidDni(userID)) {
@@ -144,7 +136,7 @@ public class Login extends Module {
                 SoapObject soap = (SoapObject) result;
 
                 //Stores user data returned by webservice response
-                user = new User(
+                User user = new User(
                         Long.parseLong(soap.getProperty("userCode").toString()),        // userCode
                         soap.getProperty("wsKey").toString(),                           // wsKey
                         soap.getProperty("userID").toString(),                          // userID
@@ -172,7 +164,7 @@ public class Login extends Module {
         			Log.d(TAG, "userSurname2=" + user.getUserSurname2());
         			Log.d(TAG, "userFirstName=" + user.getUserFirstname());
         			Log.d(TAG, "userPhoto=" + user.getUserPhoto());
-                    Log.d(TAG, "userBirthday=" + user.getUserBirthday().getTime());
+                    Log.d(TAG, "userBirthday=" + ((user.getUserBirthday() != null) ? user.getUserBirthday().getTime(): "null"));
         			Log.d(TAG, "userRole=" + user.getUserRole());
         			Log.d(TAG, "isLogged=" + Login.isLogged());
         			Log.d(TAG, "lastLoginTime=" + Login.getLastLoginTime());

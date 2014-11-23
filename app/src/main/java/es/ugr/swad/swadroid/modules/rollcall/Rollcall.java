@@ -19,87 +19,59 @@
 
 package es.ugr.swad.swadroid.modules.rollcall;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
+import android.annotation.TargetApi;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
-import android.view.ContextThemeWrapper;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.View;
-import android.widget.ExpandableListView;
-import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
-import android.widget.Spinner;
-import android.widget.Toast;
+import android.widget.TextView;
 
-import com.google.zxing.client.android.Intents;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.database.DataBaseHelper;
-import es.ugr.swad.swadroid.gui.ImageExpandableListAdapter;
+import es.ugr.swad.swadroid.SWADroidTracker;
+import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
-import es.ugr.swad.swadroid.model.Model;
-import es.ugr.swad.swadroid.model.PracticeSession;
-import es.ugr.swad.swadroid.model.User;
+import es.ugr.swad.swadroid.model.Event;
 import es.ugr.swad.swadroid.modules.Courses;
-import es.ugr.swad.swadroid.modules.GroupTypes;
-import es.ugr.swad.swadroid.modules.Groups;
-import es.ugr.swad.swadroid.modules.rollcall.sessions.NewPracticeSession;
-import es.ugr.swad.swadroid.modules.rollcall.sessions.SessionsHistory;
-import es.ugr.swad.swadroid.modules.rollcall.students.StudentItemModel;
-import es.ugr.swad.swadroid.modules.rollcall.students.StudentsArrayAdapter;
-import es.ugr.swad.swadroid.modules.rollcall.students.StudentsHistory;
-import es.ugr.swad.swadroid.utils.Utils;
 
 /**
  * Rollcall module.
  *
- * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
-public class Rollcall extends MenuExpandableListActivity {
-    /**
-     * Function name field
-     */
-    private final String NAME = "listText";
-    /**
-     * Function text field
-     */
-    private final String IMAGE = "listIcon";
+public class Rollcall extends MenuExpandableListActivity implements
+        SwipeRefreshLayout.OnRefreshListener {
     /**
      * Rollcall tag name for Logcat
      */
     public static final String TAG = Constants.APP_TAG + " Rollcall";
     /**
-     * Course code of current selected course
+     * List of events associated to the selected course
      */
-    private long courseCode = -1;
+    static List<Event> eventsList;
     /**
-     * Practice group spinner
+     * ListView of events
      */
-    private Spinner practiceGroup;
+    private static ListView lvEvents;
     /**
-     * Students list
+     * Adapter for ListView of events
      */
-    private List<StudentItemModel> studentsList;
-
-    private boolean groupTypesRequested = false;
-    private boolean refreshRequested = false;
-
-    private ExpandableListView mExpandableListView;
-    private OnChildClickListener mExpandableListListener;
+    private static EventsListAdapter adapter;
+    /**
+     * Layout with "Pull to refresh" function
+     */
+    private SwipeRefreshLayout refreshLayout;
+    /**
+     * TextView for the empty events message
+     */
+    TextView emptyEventsTextView;
 
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.MenuExpandableListActivity#onCreate(android.os.Bundle)
@@ -107,404 +79,141 @@ public class Rollcall extends MenuExpandableListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_rollcall);
+        setContentView(R.layout.list_items_pulltorefresh);
 
-    	getSupportActionBar().setIcon(R.drawable.roll_call);
+        refreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container_list);
+        emptyEventsTextView = (TextView) findViewById(R.id.list_item_title);
+        lvEvents = (ListView) findViewById(R.id.list_pulltorefresh);
 
-        courseCode = Courses.getSelectedCourseCode();
-
-        mExpandableListView = (ExpandableListView) findViewById(android.R.id.list);
-        mExpandableListListener = new OnChildClickListener() {
-            
+        lvEvents.setOnItemClickListener(clickListener);
+        lvEvents.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
-            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition,
-                    int childPosition, long id) {
-             // Get the item that was clicked
-                Object o = parent.getExpandableListAdapter().getChild(groupPosition, childPosition);
-                @SuppressWarnings("unchecked")
-                String keyword = (String) ((Map<String, Object>) o).get(NAME);
-                Intent activity;
-                Context context = getApplicationContext();
-                Cursor selectedGroup = (Cursor) practiceGroup.getSelectedItem();
-                String groupName = selectedGroup.getString(2) + getString(R.string.groupSeparator) + selectedGroup.getString(3);
-                PackageManager pm = getPackageManager();
-                //boolean rollCallAndroidVersionFROYO = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.FROYO);
-                boolean hasRearCam = pm.hasSystemFeature(PackageManager.FEATURE_CAMERA);
-
-                if (keyword.equals(getString(R.string.studentsUpdate))) {
-                    activity = new Intent(context, RollcallConfigDownload.class);
-                    activity.putExtra("groupCode", (long) 0);
-                    startActivity(activity);
-                } else if (keyword.equals(getString(R.string.studentsSelect))) {
-                    activity = new Intent(context, StudentsHistory.class);
-                    activity.putExtra("groupName", groupName);
-                    startActivityForResult(activity, Constants.STUDENTS_HISTORY_REQUEST_CODE);
-                } else if (keyword.equals(getString(R.string.newTitle))) {
-                    activity = new Intent(context, NewPracticeSession.class);
-                    activity.putExtra("groupCode", selectedGroup.getLong(1));
-                    activity.putExtra("groupName", groupName);
-                    startActivity(activity);
-                } else if (keyword.equals(getString(R.string.sessionsSelect))) {
-                    activity = new Intent(context, SessionsHistory.class);
-                    activity.putExtra("groupCode", selectedGroup.getLong(1));
-                    activity.putExtra("groupName", groupName);
-                    startActivityForResult(activity, Constants.ROLLCALL_HISTORY_REQUEST_CODE);
-                } else if (keyword.equals(getString(R.string.rollcallScanQR))) {
-                    //This module requires Android 2.2 or higher
-                    //if(rollCallAndroidVersionFROYO) {
-                    // Check if device has a rear camera
-                    if (hasRearCam) {
-                        activity = new Intent(Intents.Scan.ACTION);
-                        activity.putExtra("SCAN_MODE", "QR_CODE_MODE");
-                        activity.putExtra("SCAN_FORMATS", "QR_CODE");
-                        startActivityForResult(activity, Constants.SCAN_QR_REQUEST_CODE);
-                    } else {
-                        //If the device has no rear camera available show error message
-                        //error(getString(R.string.noRearCamera));
-                        error(TAG, getString(R.string.noCameraFound), null, false);
-                    }
-                    /*} else {
-                        //If Android version < 2.2 show error message
-                        error(getString(R.string.froyoFunctionMsg) + "\n(System: " + android.os.Build.VERSION.RELEASE + ")");
-                    }*/
-                } else if (keyword.equals(getString(R.string.rollcallManual))) {
-                    showStudentsList();
-                }
-
-                return true;
+            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
             }
-        };
 
-        mExpandableListView.setOnChildClickListener(mExpandableListListener);
+            @Override
+            public void onScroll(AbsListView absListView, int firstVisibleItem,
+                                 int visibleItemCount, int totalItemCount) {
+
+                boolean enable = true;
+                if((lvEvents != null) && (lvEvents.getChildCount() > 0)){
+                    // check if the first item of the list is visible
+                    boolean firstItemVisible = lvEvents.getFirstVisiblePosition() == 0;
+                    // check if the top of the first item is visible
+                    boolean topOfFirstItemVisible = lvEvents.getChildAt(0).getTop() == 0;
+                    // enabling or disabling the refresh layout
+                    enable = firstItemVisible && topOfFirstItemVisible;
+                }
+                refreshLayout.setEnabled(enable);
+            }
+        });
+
+        refreshLayout.setOnRefreshListener(this);
+        setAppearance();
 
         getSupportActionBar().setSubtitle(Courses.getSelectedCourseShortName());
     	getSupportActionBar().setIcon(R.drawable.roll_call);
-    }
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
+        refreshEvents();
+    }/* (non-Javadoc)
+     * @see es.ugr.swad.swadroid.MenuExpandableListActivity#Override(android.os.Bundle)
+     */
     @Override
     protected void onStart() {
         super.onStart();
-        
-        List<Model> groupTypes = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_GROUP_TYPES, "courseCode = " + courseCode, "groupTypeName");
-        Cursor c = dbHelper.getPracticeGroups(Courses.getSelectedCourseCode());
-        startManagingCursor(c);
+        SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
 
-        if (!groupTypes.isEmpty() && c.getCount() > 0) {
-            // Fill spinner with practice groups list from database
-            fillGroupsSpinner(c);
-        } else if (!groupTypes.isEmpty()) {
-            Intent activity = new Intent(this, Groups.class);
-            activity.putExtra("courseCode", courseCode);
-            startActivityForResult(activity, Constants.GROUPS_REQUEST_CODE);
-        } else if (!groupTypesRequested) {
-            Intent activity = new Intent(this, GroupTypes.class);
-            activity.putExtra("courseCode", courseCode);
-            startActivityForResult(activity, Constants.GROUPTYPES_REQUEST_CODE);
-        }
-    }
-
-    private void fillGroupsSpinner(Cursor c) {
-        practiceGroup = (Spinner) this.findViewById(R.id.spGroup);
-
-        startManagingCursor(c);
-        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
-                R.layout.group_item,
-                c,
-                new String[]{"groupTypeName", "groupName"},
-                new int[]{R.id.textView1, R.id.textView2}
-        );
-        adapter.setDropDownViewResource(R.layout.group_dropdown_item);
-        practiceGroup.setAdapter(adapter);
-        practiceGroup.setEnabled(true);
-
-        createBaseMenu();
-    }
-
-    private void showStudentsList() {
-        List<Long> idList = dbHelper.getUsersCourse(Courses.getSelectedCourseCode());
-        if (!idList.isEmpty()) {
-            studentsList = new ArrayList<StudentItemModel>();
-
-            for (Long userCode : idList) {
-                User u = dbHelper.getUser("userCode", String.valueOf(userCode));
-                studentsList.add(new StudentItemModel(u));
-            }
-            // Arrange the list alphabetically
-            Collections.sort(studentsList);
-
-            // Show a dialog with the list of students
-            ListView lv = new ListView(this);
-            lv.setAdapter(new StudentsArrayAdapter(this, studentsList, Constants.ROLLCALL_REQUEST_CODE));
-
-            AlertDialog.Builder mBuilder = createDialog();
-            mBuilder.setView(lv).show();
-        } else {
-            Toast.makeText(this, R.string.scan_no_students, Toast.LENGTH_LONG).show();
-        }
-    }
-
-    private AlertDialog.Builder createDialog() {
-        return new AlertDialog.Builder(new ContextThemeWrapper(this, android.R.style.Theme_Translucent_NoTitleBar))
-                .setTitle(getString(R.string.studentsList))
-                .setPositiveButton(getString(R.string.sendMsg), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Context ctx = getApplicationContext();
-
-                        storeRollcallData();
-                        if (!Utils.connectionAvailable(ctx)) {
-                            Toast.makeText(ctx, R.string.rollcallErrorNoConnection, Toast.LENGTH_LONG).show();
-                        } else {
-                            Toast.makeText(ctx, R.string.rollcallWebServiceNotAvailable, Toast.LENGTH_LONG).show();
-                            // TODO: send rollcall data to SWAD
-                        }
-                    }
-                })
-                .setNeutralButton(getString(R.string.saveMsg), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        storeRollcallData();
-                    }
-                })
-                .setNegativeButton(getString(R.string.cancelMsg), null);
-    }
-
-    private void storeRollcallData() {
-        long selectedCourse = Courses.getSelectedCourseCode();
-        Cursor selectedGroup = (Cursor) practiceGroup.getSelectedItem();
-        long groupId = selectedGroup.getLong(1);
-        PracticeSession ps;
-        int numSelected = 0;
-
-        // Check if no students are selected
-        for (StudentItemModel user : studentsList)
-            if (user.isSelected())
-                numSelected++;
-
-        if (numSelected > 0) {
-            // If there is an ongoing practice session for the subject and
-            // practice group selected (can be only one), store rollcall data
-            // for that session
-            ps = dbHelper.getPracticeSessionInProgress(selectedCourse, groupId);
-            if (ps != null) {
-                for (StudentItemModel user : studentsList)
-                    if (user.isSelected())
-                        dbHelper.insertRollcallData(user.getId(), ps.getId());
-                Toast.makeText(Rollcall.this, R.string.rollcallSaved, Toast.LENGTH_LONG).show();
-            } else {
-                // Show the list of practice sessions for that subject and group practices
-                final List<PracticeSession> sessions = dbHelper.getPracticeSessions(selectedCourse, groupId);
-                int numSessions = sessions.size();
-                if (numSessions > 0) {
-                    final CharSequence[] items = new CharSequence[numSessions];
-                    for (int i = 0; i < numSessions; i++) {
-                        items[i] = sessions.get(i).getSessionStart();
-                    }
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(Rollcall.this)
-                            .setTitle(R.string.sessionChoose)
-                            .setItems(items, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int item) {
-                                    for (StudentItemModel user : studentsList)
-                                        if (user.isSelected())
-                                            dbHelper.insertRollcallData(user.getId(), sessions.get(item).getId());
-                                    Toast.makeText(Rollcall.this, R.string.rollcallSaved, Toast.LENGTH_LONG).show();
-                                }
-                            });
-                    builder.show();
-                } else {
-                    error(TAG, getString(R.string.rollcallNoPracticeSessions), null, false);
-                }
-            }
-        } else {
-            Toast.makeText(Rollcall.this, R.string.rollcallNoStudentsSelected, Toast.LENGTH_LONG).show();
-        }
+        refreshScreen();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         switch (requestCode) {
-            case Constants.GROUPTYPES_REQUEST_CODE:
-                groupTypesRequested = true;
-                List<Model> groupTypes = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_GROUP_TYPES, "courseCode = " + courseCode, "groupTypeName");
-                if (!groupTypes.isEmpty()) {
-                    // If there are not group types, either groups. Therefore, there is no need to request groups
-                    Intent activity = new Intent(getApplicationContext(), Groups.class);
-                    activity.putExtra("courseCode", courseCode);
-                    startActivityForResult(activity, Constants.GROUPS_REQUEST_CODE);
-                } else {
-                    mExpandableListView.setVisibility(View.GONE);
-                }
-                break;
-            case Constants.GROUPS_REQUEST_CODE:
-                // Check if course has practice groups
-                Cursor c = dbHelper.getPracticeGroups(Courses.getSelectedCourseCode());
-                startManagingCursor(c);
-
-                if (c.getCount() > 0 || refreshRequested) {
-                    mExpandableListView.setVisibility(View.VISIBLE);
-
-                    refreshRequested = false;
-                    fillGroupsSpinner(c);
-                } else {
-                    mExpandableListView.setVisibility(View.GONE);
-                    practiceGroup = (Spinner) this.findViewById(R.id.spGroup);
-                    practiceGroup.setEnabled(false);
-
-                    error(TAG, getString(R.string.noGroupsAvailableMsg), null, false);
-                }
-                break;
-            case Constants.SCAN_QR_REQUEST_CODE:
-                if (resultCode == Activity.RESULT_OK) {
-                    ArrayList<String> idList = intent.getStringArrayListExtra("id_list");
-                    if (!idList.isEmpty()) {
-                        studentsList = new ArrayList<StudentItemModel>();
-                        ArrayList<Boolean> enrolledStudents = new ArrayList<Boolean>();
-
-                        for (String id : idList) {
-                            User u = dbHelper.getUser("userID", id);
-                            if (u != null) {
-                                studentsList.add(new StudentItemModel(u));
-                                // Check if the specified user is enrolled in the selected course
-                                enrolledStudents.add(dbHelper.isUserEnrolledCourse(id, Courses.getSelectedCourseCode()));
-                            }
-                        }
-                        // Mark as attending the students enrolled in selected course
-                        int listSize = studentsList.size();
-                        for (int i = 0; i < listSize; i++) {
-                            studentsList.get(i).setSelected(enrolledStudents.get(i));
-                        }
-
-                        // Arrange the list alphabetically
-                        Collections.sort(studentsList);
-                        ListView lv = new ListView(this);
-                        lv.setAdapter(new StudentsArrayAdapter(this, studentsList, Constants.ROLLCALL_REQUEST_CODE));
-
-                        // Show a dialog with the list of students
-                        AlertDialog.Builder mBuilder = createDialog();
-                        mBuilder.setView(lv).show();
-                    } else {
-                        Toast.makeText(this, R.string.scan_no_codes, Toast.LENGTH_LONG).show();
-                    }
-                }
+            case Constants.ROLLCALL_EVENTS_DOWNLOAD_REQUEST_CODE:
+                refreshScreen();
+                DialogFactory.showProgress(this, false, R.id.swipe_container_list, R.id.loading_status);
                 break;
         }
+    }
+
+    private void refreshScreen() {
+        /*
+         * If there aren't events to show, hide the events list
+         * and show the empty events message
+         */
+        if ((eventsList == null) || (eventsList.size() == 0)) {
+            Log.d(TAG, "Events list is empty");
+
+            emptyEventsTextView.setText(R.string.eventsEmptyListMsg);
+            emptyEventsTextView.setVisibility(View.VISIBLE);
+
+            lvEvents.setVisibility(View.GONE);
+        } else {
+            Log.d(TAG, "Events list is not empty");
+
+            adapter = new EventsListAdapter(this, eventsList, dbHelper);
+            lvEvents.setAdapter(adapter);
+
+            emptyEventsTextView.setVisibility(View.GONE);
+            lvEvents.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void refreshEvents() {
+        DialogFactory.showProgress(this, true, R.id.swipe_container_list, R.id.loading_status);
+        Intent activity = new Intent(this, EventsDownload.class);
+        startActivityForResult(activity, Constants.ROLLCALL_EVENTS_DOWNLOAD_REQUEST_CODE);
     }
 
     /**
-     * Creates base menu
+     * It shows the SwipeRefreshLayout progress
      */
-    private void createBaseMenu() {
-        final ArrayList<HashMap<String, Object>> headerData = new ArrayList<HashMap<String, Object>>();
-        final ArrayList<ArrayList<HashMap<String, Object>>> childData = new ArrayList<ArrayList<HashMap<String, Object>>>();
-
-        // Students category
-        final HashMap<String, Object> students = new HashMap<String, Object>();
-        students.put(NAME, getString(R.string.studentsTitle));
-        students.put(IMAGE, getResources().getDrawable(R.drawable.students));
-        headerData.add(students);
-
-        final ArrayList<HashMap<String, Object>> studentsData = new ArrayList<HashMap<String, Object>>();
-        childData.add(studentsData);
-
-        HashMap<String, Object> map = new HashMap<String, Object>();
-        map.put(NAME, getString(R.string.studentsUpdate));
-        map.put(IMAGE, getResources().getDrawable(R.drawable.students_update));
-        studentsData.add(map);
-
-        map = new HashMap<String, Object>();
-        map.put(NAME, getString(R.string.studentsSelect));
-        map.put(IMAGE, getResources().getDrawable(R.drawable.students_check));
-        studentsData.add(map);
-
-        // Practice sessions category
-        final HashMap<String, Object> sessions = new HashMap<String, Object>();
-        sessions.put(NAME, getString(R.string.sessionsTitle));
-        sessions.put(IMAGE, getResources().getDrawable(R.drawable.sessions));
-        headerData.add(sessions);
-
-        final ArrayList<HashMap<String, Object>> sessionsData = new ArrayList<HashMap<String, Object>>();
-        childData.add(sessionsData);
-
-        map = new HashMap<String, Object>();
-        map.put(NAME, getString(R.string.newTitle));
-        map.put(IMAGE, getResources().getDrawable(R.drawable.session_new));
-        sessionsData.add(map);
-
-        map = new HashMap<String, Object>();
-        map.put(NAME, getString(R.string.sessionsSelect));
-        map.put(IMAGE, getResources().getDrawable(R.drawable.session_check));
-        sessionsData.add(map);
-
-        // Rollcall category
-        final HashMap<String, Object> rollcall = new HashMap<String, Object>();
-        rollcall.put(NAME, getString(R.string.rollcallModuleLabel));
-        rollcall.put(IMAGE, getResources().getDrawable(R.drawable.roll_call));
-        headerData.add(rollcall);
-
-        final ArrayList<HashMap<String, Object>> rollcallData = new ArrayList<HashMap<String, Object>>();
-        childData.add(rollcallData);
-
-        map = new HashMap<String, Object>();
-        map.put(NAME, getString(R.string.rollcallScanQR));
-        map.put(IMAGE, getResources().getDrawable(R.drawable.qr));
-        rollcallData.add(map);
-
-        map = new HashMap<String, Object>();
-        map.put(NAME, getString(R.string.rollcallManual));
-        map.put(IMAGE, getResources().getDrawable(R.drawable.rollcall_manual));
-        rollcallData.add(map);
-
-        mExpandableListView.setAdapter(new ImageExpandableListAdapter(
-                                                                      this,
-                                                                      headerData,
-                                                                      R.layout.image_list_item,
-                                                                      new String[] {
-                                                                          NAME
-                                                                      }, // the
-                                                                         // name
-                                                                         // of
-                                                                         // the
-                                                                         // field
-                                                                         // data
-                                                                      new int[] {
-                                                                          R.id.listText
-                                                                      }, // the
-                                                                         // text
-                                                                         // field
-                                                                         // to
-                                                                         // populate
-                                                                         // with
-                                                                         // the
-                                                                         // field
-                                                                         // data
-                                                                      childData,
-                                                                      0,
-                                                                      null,
-                                                                      new int[] {}
-                           ));
-
-        //getExpandableListView().setOnChildClickListener(this);
+    public void showSwipeProgress() {
+        refreshLayout.setRefreshing(true);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_refresh:
-                Intent activity = new Intent(this, GroupTypes.class);
-                activity.putExtra("courseCode", courseCode);
-                startActivityForResult(activity, Constants.GROUPTYPES_REQUEST_CODE);
-                return true;
+    /**
+     * It shows the SwipeRefreshLayout progress
+     */
+    public void hideSwipeProgress() {
+        refreshLayout.setRefreshing(false);
+    }
 
-            default:
-                return super.onOptionsItemSelected(item);
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+     private void setAppearance() {
+        refreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+    }
+
+    /**
+     * It must be overriden by parent classes if manual swipe is enabled.
+     */
+    @Override
+    public void onRefresh() {
+        showSwipeProgress();
+
+        refreshEvents();
+
+        hideSwipeProgress();
+    }
+
+    /**
+     * ListView click listener
+     */
+     private ListView.OnItemClickListener clickListener = new ListView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Intent activity = new Intent(getApplicationContext(),
+                    UsersActivity.class);
+            activity.putExtra("attendanceEventCode",
+                    (int) adapter.getItemId(position));
+            startActivity(activity);
         }
-
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_activity_actions, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
+    };
 }

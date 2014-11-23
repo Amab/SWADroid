@@ -154,7 +154,7 @@ public class TestTag extends Model {
      * @see org.ksoap2.serialization.KvmSerializable#getPropertyCount()
      */
     public int getPropertyCount() {
-        return 3;
+        return PI_PROP_ARRAY.length;
     }
 
     /* (non-Javadoc)

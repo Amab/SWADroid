@@ -38,6 +38,7 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,6 +61,7 @@ import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.sync.SyncUtils;
+import es.ugr.swad.swadroid.utils.DateTimeUtils;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
@@ -116,6 +118,14 @@ public class Notifications extends Module implements
 	 * Layout with "Pull to refresh" function
 	 */
 	private SwipeRefreshLayout refreshLayout;
+    /**
+     * Layout containing birthday message
+     */
+    private LinearLayout mBirthdayLayout;
+    /**
+     * TextView containing birthday message
+     */
+    private TextView mBirthdayTextView;
 	/**
 	 * ListView container for notifications
 	 */
@@ -190,6 +200,16 @@ public class Notifications extends Module implements
 		// Refresh data on screen
 		setChildGroupData();
 		hideSwipeProgress();
+
+        //If today is the user birthday, show birthday message
+        if((Login.getLoggedUser() != null)
+                && DateTimeUtils.isBirthday(Login.getLoggedUser().getUserBirthday())) {
+            mBirthdayTextView.setText(getString(R.string.birthdayMsg).replace(
+                    Constants.USERNAME_TEMPLATE, Login.getLoggedUser().getUserFirstname()));
+            mBirthdayLayout.setVisibility(View.VISIBLE);
+        } else {
+            mBirthdayLayout.setVisibility(View.GONE);
+        }
 	}
 
 	/**
@@ -259,15 +279,21 @@ public class Notifications extends Module implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {		
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.list_items_pulltorefresh);
+		setContentView(R.layout.expandablelist_items_pulltorefresh);
 
 		getSupportActionBar().setIcon(R.drawable.notif);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
 		this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
 
-		refreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
-		list = (ExpandableListView) findViewById(R.id.list_pulltorefresh);
+		refreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container_expandablelist);
+		list = (ExpandableListView) findViewById(R.id.expandablelist_pulltorefresh);
 		emptyNotifTextView = (TextView) findViewById(R.id.list_item_title);
+        mBirthdayLayout = (LinearLayout) findViewById(R.id.birthday_layout);
+        mBirthdayTextView = (TextView) findViewById(R.id.birthdayTextView);
 		
 		groupItem = new ArrayList<String>();
 		childItem = new ArrayList<List<Model>>();

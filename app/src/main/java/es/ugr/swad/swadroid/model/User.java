@@ -282,7 +282,6 @@ public class User extends Model {
      *
      * @param userRole User role.
      */
-    //TODO check userRole is 1,2,3
     public void setUserRole(int userRole) {
         this.userRole = userRole;
     }
@@ -341,7 +340,7 @@ public class User extends Model {
     }
 
     public int getPropertyCount() {
-        return 9;
+        return PI_PROP_ARRAY.length;
     }
 
     public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo propertyInfo) {

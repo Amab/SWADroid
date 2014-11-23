@@ -259,6 +259,17 @@ public class DownloadsManager extends MenuActivity {
 
         setupActionBar();
     }
+
+    @Override
+    public void onBackPressed() {
+        if ((navigator != null) && (!navigator.isRootDirectory())) {
+            //If current directory is not the root, go to parent directory
+            updateView(navigator.goToParentDirectory());
+        } else {
+            //If current directory is the root, exit module
+            super.onBackPressed();
+        }
+    }
     
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)
@@ -576,7 +587,7 @@ public class DownloadsManager extends MenuActivity {
     private void downloadFile(String directory, String url, long fileSize) {
         // Check if external storage is available
         int storageState = checkMediaAvailability(); 
-        if ( storageState == 2) {
+        if (storageState == 2) {
             new FileDownloaderAsyncTask(this, this.chosenNodeName, fileSize)
             .execute(directory, url);
         } else {

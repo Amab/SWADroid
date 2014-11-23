@@ -175,59 +175,25 @@
     <string name="numStudent">Nombre d\'estudiants</string>
     <string name="maxStudent">Màx. estudiants</string>
     <string name="myGroupsModuleLabel">Grups</string>
-    <string name="scan_no_photos">No s\'han pogut desar les fotos dels estudiants</string>
-    <string name="noStudentsAvailableMsg">Aquesta assignatura no té alumnes</string>
-    <string name="studentsUpdated">alumnes actualitzats</string>
-    <string name="scan_no_students">Cap alumne trobat \n Proveu \“Actualitzar alumnes\”</string>
+    <string name="eventsEmptyListMsg">No s\'ha descarregat cap esdeveniment.\n\nPer descarregar les
+         esdeveniments més recents llisqui aquest missatge cap avall.</string>
     <string name="photoContentDescription">Foto del estudiant</string>
     <string name="noCameraFound">El dispositiu no disposa de càmera</string>
     <string name="saveMsg">Desar</string>
     <string name="noGroupsAvailableMsg">No hi ha grups per a l\'assignatura seleccionada</string>
-    <string name="sessionCourseText">Assignatura</string>
-    <string name="sessionGroupText">Grup</string>
-    <string name="sessionEndText">Fi</string>
-    <string name="sessionButtonCreate">Crear</string>
-    <string name="sessionSiteText">Lloc (opcional)</string>
-    <string name="sessionButtonCancel">Cancel·lar</string>
-    <string name="sessionStartText">Inici</string>
-    <string name="sessionDescriptionText">Descripció (opcional)</string>
-    <string name="sessionModuleLabel">Nova sessió de pràctiques</string>
     <string name="confirmExitMsg">Esteu segur que voleu sortir sense desar els canvis?</string>
     <string name="selectGroupTitle">Seleccioneu grup</string>
-    <string name="sessionCreated">Sessió de pràctiques creada correctament</string>
-    <string name="sessionNotCreated">Ja hi ha la sessió de pràctiques especificada</string>
-    <string name="sessionChoose">Trieu la sessió de pràctiques</string>
     <string name="sendingState">Enviament a SWAD: </string>
     <string name="sendingStatePending">Pendent</string>
-    <string name="session">Sessió: </string>
-    <string name="noPracticeSessionsAvailableMsg">No hi ha sessions de pràctiques del grup seleccionat a la base de
-        dades</string>
-    <string name="sessionNoStudentsMsg">Cap alumne ha assistit a aquesta sessió</string>
-    <string name="studentsHistoryModuleLabel">Historial d\'alumnes</string>
-    <string name="sessionsTitle">Sessions de pràctiques</string>
-    <string name="noSessionsAvailableMsg">No hi ha sessions de pràctiques a la base de dades</string>
     <string name="rollcallModuleLabel">Passar llista</string>
-    <string name="studentsTitle">Estudiants</string>
-    <string name="studentsDownloadProgressDescription">Sincronitzant estudiants.\n\nDependiendo del nombre d\'estudiants
+    <string name="usersTitle">Usuaris</string>
+    <string name="usersDownloadProgressDescription">Sincronitzant usuaris.\n\nDependiendo del nombre d\'usuaris
         a sincronitzar, el processament de les dades pot trigar uns minuts.\n\nSi us plau, esperi…</string>
-    <string name="studentsList">Llista d\'estudiants</string>
-    <string name="studentsDownloadProgressTitle">Estudiants</string>
-    <string name="studentsPresent">Estudiants presents</string>
-    <string name="studentsUpdate">Actualitzar</string>
+    <string name="usersDownloadProgressTitle">Usuaris</string>
+    <string name="usersUpdate">Actualitzar</string>
     <string name="newTitle">Nova</string>
     <string name="rollcallScanQR">Escanejar QR</string>
     <string name="rollcallManual">Mode manual</string>
-    <string name="sessionsSelect">Consultar sessions</string>
-    <string name="studentsSelect">Consultar estudiants</string>
-    <string name="rollcallErrorNoConnection">No hi ha connexió amb el servidor. S\'han guardat les dades d\'assistència a
-        la base de dades.</string>
-    <string name="rollcallHistoryModuleLabel">Historial de sessions</string>
-    <string name="rollcallNoStudentsSelected">No s\'ha seleccionat cap estudiant</string>
-    <string name="rollcallNoPracticeSessions">No hi ha sessions de pràctiques definides per l\'assignatura i grup
-        seleccionats. Seleccioni: Sessions de pràctiques - Nova</string>
-    <string name="rollcallSaved">Dades d\'assistència guardats correctament</string>
-    <string name="rollcallWebServiceNotAvailable">El servei web per enviar SWAD les dades d\'assistència no està
-        disponible.</string>
     <string name="rollcallEvent">Esdeveniment de passar llista</string>
     <string name="groupSeparator">: </string>
     <string name="groupTypesModuleLabel">Aconseguir tipus de grup</string>
@@ -295,5 +261,27 @@
     <string name="Filters_All">Tot</string>
     <string name="Filters_Teachers">Professors</string>
     <string name="Filters_Students">Alumnes</string>
+    <string name="birthdayMsg">Per molts anys, {userName}!</string>
+    <string name="errorNoUserNickname"> Heu de definir un sobrenom a SWAD</string>
+    <string name="errorNoAppForIntent">No hi ha cap aplicació registrada per obrir el tipus de fitxer seleccionat.</string>
+    <string name="eventsDownloadProgressTitle"> Esdeveniments</string>
+    <string name="eventsUpdated">esdeveniments actualitzats</string>
+    <string name="eventsDownloadProgressDescription">Sincronització d\'esdeveniments.\n\nDependiendo del nombre d\'esdeveniments a sincronitzar, el processament de les dades pot trigar diversos minuts.\n\nSi us plau, esperi...</string>
+    <string name="licenseType">Llicència:</string>
+    <string name="noEventsAvailableMsg">No hi ha esdeveniments en aquesta assignatura</string>
+    <string name="recoverPasswordProgressDescription">Connectant...</string>
+    <string name="recoverPasswordProgressTitle">Recuperació de contrasenya</string>
+    <string name="changelogTitle">Historial de canvis</string>
+    <string name="event">Esdeveniment</string>
+    <string name="usersUpdated">usuaris actualitzats</string>
+    <string name="noUsersAvailableMsg">No hi ha usuaris en aquest esdeveniment</string>
+    <string name="noUsersCheckedMsg">Ha de marcar com a mínim un usuari</string>
+    <string name="usersEmptyListMsg">No s\'ha descarregat cap usuari.\n\nPer descarregar les
+         usuaris més recents llisqui aquest missatge cap avall.</string>
+    <string name="doubleBackToExitMsg">Si us plau, premeu ENRERE per a sortir-</string>
+    <string name="errorSendingUsersMsg">Error en enviar les assistències</string>
+    <string name="progress_status">Carregant...</string>
+    <string name="rollcallCleanUsers"> Netejar usuaris</string><string name="cleanUsersDialogMsg">S\'eliminarà la llista d\'usuaris localment.\n\n
+          Esteu segur que voleu eliminar localment la llista d\'usuaris?</string>
 
 </resources>
