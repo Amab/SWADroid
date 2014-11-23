@@ -287,5 +287,7 @@
     <string name="errorSendingUsersMsg">Error al enviar las asistencias</string>
     <string name="doubleBackToExitMsg">Por favor, presione ATRÁS de nuevo para salir</string>
     <string name="progress_status">Cargando...</string>
+    <string name="rollcallCleanUsers">Limpiar usuarios</string><string name="cleanUsersDialogMsg">El listado de usuarios será eliminado localmente.\n\n
+         ¿Está seguro de que quiere eliminar localmente el listado de usuarios?</string>
 
 </resources>

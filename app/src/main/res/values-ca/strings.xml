@@ -281,5 +281,7 @@
     <string name="doubleBackToExitMsg">Si us plau, premeu ENRERE per a sortir-</string>
     <string name="errorSendingUsersMsg">Error en enviar les assistències</string>
     <string name="progress_status">Carregant...</string>
+    <string name="rollcallCleanUsers"> Netejar usuaris</string><string name="cleanUsersDialogMsg">S\'eliminarà la llista d\'usuaris localment.\n\n
+          Esteu segur que voleu eliminar localment la llista d\'usuaris?</string>
 
 </resources>
