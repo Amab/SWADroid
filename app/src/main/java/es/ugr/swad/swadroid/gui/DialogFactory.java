@@ -280,7 +280,7 @@ public class DialogFactory {
     }
 
     /**
-     * Shows the progress UI and hides the login form.
+     * Shows the progress UI and hides the content view.
      *
      * @param ctx Activity
      * @param show true for show the progress animation
