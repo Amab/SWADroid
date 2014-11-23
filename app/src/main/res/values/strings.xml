@@ -182,7 +182,7 @@
     <string name="licenseType">License:</string>
     <string name="downloadFileTitle">Download</string>
     <string name="sdCardBusyTitle">SD card unavailable</string>
-    <string name="sdCardBusy">The SD casd is busy. To allow downloads, select “Turn off USB storage” in the
+    <string name="sdCardBusy">The SD card is busy. To allow downloads, select “Turn off USB storage” in the
         notification</string>
     <string name="vacants">Vacants</string>
     <string name="numStudent">No. of students</string>

@@ -4,7 +4,7 @@
     <string name="title_activity_login">Identificar-se</string>
 
     <!-- Strings related to login -->
-    <string name="prompt_email">DNI, Sobrenom o Email</string>
+    <string name="prompt_email">DNI, @sobrenom o email</string>
     <string name="prompt_password">Contrasenya</string>
     <string name="prompt_server">Servidor (sense http://)</string>
     <string name="action_sign_in_register"><b>Identificar-se</b></string>
