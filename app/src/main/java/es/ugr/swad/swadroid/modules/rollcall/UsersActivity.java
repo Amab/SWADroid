@@ -111,15 +111,17 @@ public class UsersActivity extends MenuExpandableListActivity implements
             public void onScroll(AbsListView absListView, int firstVisibleItem,
                                  int visibleItemCount, int totalItemCount) {
 
-                boolean enable = true;
-                if (lvUsers != null && lvUsers.getChildCount() > 0) {
+                /*boolean enable = true;
+                if ((lvUsers != null) && (lvUsers.getChildCount() > 0)) {
+
                     // check if the first item of the list is visible
                     boolean firstItemVisible = lvUsers.getFirstVisiblePosition() == 0;
                     // check if the top of the first item is visible
                     boolean topOfFirstItemVisible = lvUsers.getChildAt(0).getTop() == 0;
                     // enabling or disabling the refresh layout
                     enable = firstItemVisible && topOfFirstItemVisible;
-                }
+                }*/
+                boolean enable = (lvUsers != null) && (lvUsers.getChildCount() == 0);
                 refreshLayout.setEnabled(enable);
             }
         });
