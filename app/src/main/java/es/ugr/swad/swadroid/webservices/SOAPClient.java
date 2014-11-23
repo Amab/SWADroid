@@ -280,8 +280,10 @@ public class SOAPClient implements IWebserviceClient {
 			} catch (Exception e) {
 				Log.e(TAG, connection.getHost() + " " + connection.getPath()
 						+ " " + connection.getPort());
-				Log.e(TAG, connection.requestDump.toString());
 
+                if (connection.requestDump != null) {
+                    Log.e(TAG, connection.requestDump.toString());
+                }
 				if (connection.responseDump != null) {
 					Log.e(TAG, connection.responseDump.toString());
 				}

@@ -279,14 +279,18 @@ public class Notifications extends Module implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {		
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.list_items_pulltorefresh);
+		setContentView(R.layout.expandablelist_items_pulltorefresh);
 
 		getSupportActionBar().setIcon(R.drawable.notif);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
 		this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
 
-		refreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
-		list = (ExpandableListView) findViewById(R.id.list_pulltorefresh);
+		refreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container_expandablelist);
+		list = (ExpandableListView) findViewById(R.id.expandablelist_pulltorefresh);
 		emptyNotifTextView = (TextView) findViewById(R.id.list_item_title);
         mBirthdayLayout = (LinearLayout) findViewById(R.id.birthday_layout);
         mBirthdayTextView = (TextView) findViewById(R.id.birthdayTextView);

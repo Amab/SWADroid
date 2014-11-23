@@ -6,34 +6,15 @@
 
 package es.ugr.swad.swadroid.modules.messages;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
-import es.ugr.swad.swadroid.model.User;
-import es.ugr.swad.swadroid.modules.Courses;
-import es.ugr.swad.swadroid.modules.rollcall.RollcallConfigDownload;
-import es.ugr.swad.swadroid.modules.rollcall.students.StudentItemModel;
-import es.ugr.swad.swadroid.modules.rollcall.students.StudentsArrayAdapter;
+//import es.ugr.swad.swadroid.modules.rollcall.students.StudentItemModel;
+//import es.ugr.swad.swadroid.modules.rollcall.students.StudentsArrayAdapter;
 
 public class UsersList extends MenuActivity {
 
 	public static final String TAG = Constants.APP_TAG + " Users List";
-    private List<StudentItemModel> studentsList;
+    /*private List<StudentItemModel> studentsList;
     private String rcvs = "";
     private String rcvs_Aux = "";
 	
@@ -82,43 +63,21 @@ public class UsersList extends MenuActivity {
     protected void onStart() {
         super.onStart();
 
-		/*La primera vez deber� cargar una lista vac�a y para obtener la primera lista, 
+		*//*La primera vez deber� cargar una lista vac�a y para obtener la primera lista,
 		 * habr� que pulsar en el bot�n actualizar de la actionbar. A partir de este momento,
 		 * tendremos una lista de usuarios en la memoria del tel�fono y cuando  entre aqu� la segunda
 		 * vez y sucesivas, ser� esa la lista que se cargue. Si queremos, podemos volver a pulsar el
-		 * bot�n actualizar por si hay nuevos usuarios.*/
+		 * bot�n actualizar por si hay nuevos usuarios.*//*
 
         	showStudentsList();
 	
-        /*try {
+        *//*try {
             runConnection();
         } catch (Exception e) {
             String errorMsg = getString(R.string.errorServerResponseMsg);
             error(TAG, errorMsg, e, true);
-        }*/
+        }*//*
     }
-
-	protected void connect() {
-		/*String progressDescription = getString(R.string.informationProgressDescription);
-		int progressTitle = R.string.informationProgressTitle;
-
-		startConnection(true, progressDescription, progressTitle);*/
-	}
-
-
-	protected void requestService() throws Exception {
-		
-	}
-
-
-	protected void postConnect() {
-		
-	}
-
-
-	protected void onError() {
-		
-	}
 	
 	 private void showStudentsList() {
 	        List<Long> idList = dbHelper.getUsersCourse(Courses.getSelectedCourseCode());
@@ -165,7 +124,7 @@ public class UsersList extends MenuActivity {
 				Intent refreshUsersList;
 				Context context = getApplicationContext();
 				
-				refreshUsersList = new Intent(context, RollcallConfigDownload.class);
+				refreshUsersList = new Intent(context, EventsDownload.class);
 				refreshUsersList.putExtra("groupCode", (long) 0);
 		        startActivity(refreshUsersList);
 				
@@ -175,5 +134,5 @@ public class UsersList extends MenuActivity {
 	            return super.onOptionsItemSelected(item);
 	    }
 		    
-	}
+	}*/
 }

@@ -259,6 +259,17 @@ public class DownloadsManager extends MenuActivity {
 
         setupActionBar();
     }
+
+    @Override
+    public void onBackPressed() {
+        if ((navigator != null) && (!navigator.isRootDirectory())) {
+            //If current directory is not the root, go to parent directory
+            updateView(navigator.goToParentDirectory());
+        } else {
+            //If current directory is the root, exit module
+            super.onBackPressed();
+        }
+    }
     
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)
