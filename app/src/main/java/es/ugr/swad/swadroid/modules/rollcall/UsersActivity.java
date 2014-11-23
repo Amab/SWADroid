@@ -193,7 +193,7 @@ public class UsersActivity extends MenuExpandableListActivity implements
                     lvUsers.setVisibility(View.VISIBLE);
                 }
 
-                adapter = new UsersCursorAdapter(getApplicationContext(), dbCursor, dbHelper, eventCode);
+                adapter = new UsersCursorAdapter(getBaseContext(), dbCursor, dbHelper, eventCode);
                 lvUsers.setAdapter(adapter);
             }
         });
