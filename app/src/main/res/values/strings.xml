@@ -296,5 +296,7 @@
     <string name="doubleBackToExitMsg">Please click BACK again to exit</string>
     <string name="errorSendingUsersMsg">Error sending attendances</string>
     <string name="progress_status">Loading...</string>
+    <string name="rollcallCleanUsers">Clean users</string><string name="cleanUsersDialogMsg">The list of users will be locally deleted.\n\n
+         Are you sure you want to locally delete the list of users?</string>
 
 </resources>

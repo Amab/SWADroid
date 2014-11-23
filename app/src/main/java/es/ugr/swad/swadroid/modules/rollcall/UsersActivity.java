@@ -22,6 +22,8 @@
 package es.ugr.swad.swadroid.modules.rollcall;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -43,8 +45,10 @@ import com.google.zxing.client.android.Intents;
 import java.util.List;
 
 import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADroidTracker;
+import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.model.UserAttendance;
@@ -188,6 +192,8 @@ public class UsersActivity extends MenuExpandableListActivity implements
                     emptyUsersTextView.setVisibility(View.VISIBLE);
 
                     lvUsers.setVisibility(View.GONE);
+
+                    refreshLayout.setEnabled(true);
                 } else {
                     Log.d(TAG, "Users lvUsers is not empty");
 
@@ -304,6 +310,36 @@ public class UsersActivity extends MenuExpandableListActivity implements
                     Toast.makeText(getApplicationContext(), R.string.noUsersCheckedMsg,
                             Toast.LENGTH_LONG).show();
                 }
+
+                return true;
+
+            case R.id.action_cleanUsers:
+                AlertDialog cleanDBDialog = DialogFactory.createWarningDialog(this,
+                        -1,
+                        R.string.areYouSure,
+                        R.string.cleanUsersDialogMsg,
+                        R.string.yesMsg,
+                        R.string.noMsg,
+                        true,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+
+                                dbHelper.beginTransaction();
+                                dbHelper.removeAllRows(DataBaseHelper.DB_TABLE_USERS_ATTENDANCES, "eventCode", eventCode);
+                                dbHelper.endTransaction(true);
+
+                                refreshAdapter();
+                            }
+                        },
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        },
+                        null);
+
+                cleanDBDialog.show();
 
                 return true;
 
