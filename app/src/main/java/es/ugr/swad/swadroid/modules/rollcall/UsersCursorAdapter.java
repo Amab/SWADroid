@@ -47,6 +47,7 @@ import es.ugr.swad.swadroid.utils.Utils;
  */
 public class UsersCursorAdapter extends CursorAdapter {
     private DataBaseHelper dbHelper;
+    private Cursor dbCursor;
     private Crypto crypto;
     private ImageLoader loader;
     private int eventCode;
@@ -109,6 +110,8 @@ public class UsersCursorAdapter extends CursorAdapter {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 dbHelper.insertAttendance(userCode, eventCode, isChecked);
+                dbCursor = dbHelper.getUsersEventCursor(eventCode);
+                changeCursor(dbCursor);
             }
         });
 
