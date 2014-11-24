@@ -289,5 +289,6 @@
     <string name="progress_status">Cargando...</string>
     <string name="rollcallCleanUsers">Limpiar usuarios</string><string name="cleanUsersDialogMsg">El listado de usuarios será eliminado localmente.\n\n
          ¿Está seguro de que quiere eliminar localmente el listado de usuarios?</string>
+    <string name="usersAbsent">Todos los usuarios marcados como ausentes</string>
 
 </resources>
