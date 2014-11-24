@@ -295,21 +295,16 @@ public class UsersActivity extends MenuExpandableListActivity implements
             case R.id.action_sendMsg:
                 String usersCodes = getUsersCodes();
 
-                if(!usersCodes.isEmpty()) {
-                    Intent activity = new Intent(getApplicationContext(),
-                            UsersSend.class);
-                    activity.putExtra("attendanceEventCode",
-                            eventCode);
-                    //Set unmarked users as absent
-                    activity.putExtra("setOthersAsAbsent",
-                            1);
-                    activity.putExtra("usersCodes",
-                            usersCodes);
-                    startActivity(activity);
-                } else {
-                    Toast.makeText(getApplicationContext(), R.string.noUsersCheckedMsg,
-                            Toast.LENGTH_LONG).show();
-                }
+                Intent activity = new Intent(getApplicationContext(),
+                        UsersSend.class);
+                activity.putExtra("attendanceEventCode",
+                        eventCode);
+                //Set unmarked users as absent
+                activity.putExtra("setOthersAsAbsent",
+                        1);
+                activity.putExtra("usersCodes",
+                        usersCodes);
+                startActivity(activity);
 
                 return true;
 

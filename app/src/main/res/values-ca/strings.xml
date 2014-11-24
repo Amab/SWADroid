@@ -283,5 +283,6 @@
     <string name="progress_status">Carregant...</string>
     <string name="rollcallCleanUsers"> Netejar usuaris</string><string name="cleanUsersDialogMsg">S\'eliminarà la llista d\'usuaris localment.\n\n
           Esteu segur que voleu eliminar localment la llista d\'usuaris?</string>
+    <string name="usersAbsent"> Tots els usuaris marcats com absents</string>
 
 </resources>
