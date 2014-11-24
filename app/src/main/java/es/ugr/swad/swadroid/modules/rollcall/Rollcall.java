@@ -21,8 +21,10 @@ package es.ugr.swad.swadroid.modules.rollcall;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.View;
@@ -31,14 +33,12 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.List;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADroidTracker;
+import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
-import es.ugr.swad.swadroid.model.Event;
 import es.ugr.swad.swadroid.modules.Courses;
 
 /**
@@ -53,17 +53,17 @@ public class Rollcall extends MenuExpandableListActivity implements
      */
     public static final String TAG = Constants.APP_TAG + " Rollcall";
     /**
-     * List of events associated to the selected course
-     */
-    static List<Event> eventsList;
-    /**
      * ListView of events
      */
     private static ListView lvEvents;
     /**
      * Adapter for ListView of events
      */
-    private static EventsListAdapter adapter;
+    private static EventsCursorAdapter adapter;
+    /**
+     * Database cursor for Adapter of events
+     */
+    Cursor dbCursor;
     /**
      * Layout with "Pull to refresh" function
      */
@@ -117,9 +117,9 @@ public class Rollcall extends MenuExpandableListActivity implements
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+    }
 
-        refreshEvents();
-    }/* (non-Javadoc)
+    /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.MenuExpandableListActivity#Override(android.os.Bundle)
      */
     @Override
@@ -127,40 +127,55 @@ public class Rollcall extends MenuExpandableListActivity implements
         super.onStart();
         SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
 
-        refreshScreen();
+        //Refresh ListView of events
+        refreshAdapter();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         switch (requestCode) {
             case Constants.ROLLCALL_EVENTS_DOWNLOAD_REQUEST_CODE:
-                refreshScreen();
+                refreshAdapter();
                 DialogFactory.showProgress(this, false, R.id.swipe_container_list, R.id.loading_status);
                 break;
         }
     }
 
-    private void refreshScreen() {
+    private void refreshAdapter() {
         /*
-         * If there aren't events to show, hide the events list
-         * and show the empty events message
+         * Database query can be a time consuming task ..
+         * so its safe to call database query in another thread
+         * Handler, will handle this stuff for you
          */
-        if ((eventsList == null) || (eventsList.size() == 0)) {
-            Log.d(TAG, "Events list is empty");
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                dbCursor = dbHelper.getCursor(DataBaseHelper.DB_TABLE_EVENTS_ATTENDANCES);
+                startManagingCursor(dbCursor);
 
-            emptyEventsTextView.setText(R.string.eventsEmptyListMsg);
-            emptyEventsTextView.setVisibility(View.VISIBLE);
 
-            lvEvents.setVisibility(View.GONE);
-        } else {
-            Log.d(TAG, "Events list is not empty");
+                /*
+                 * If there aren't events to show, hide the events lvEvents
+                 * and show the empty events message
+                 */
+                if ((dbCursor == null) || (dbCursor.getCount() == 0)) {
+                    Log.d(TAG, "Events list is empty");
 
-            adapter = new EventsListAdapter(this, eventsList, dbHelper);
-            lvEvents.setAdapter(adapter);
+                    emptyEventsTextView.setText(R.string.eventsEmptyListMsg);
+                    emptyEventsTextView.setVisibility(View.VISIBLE);
 
-            emptyEventsTextView.setVisibility(View.GONE);
-            lvEvents.setVisibility(View.VISIBLE);
-        }
+                    lvEvents.setVisibility(View.GONE);
+                } else {
+                    Log.d(TAG, "Events list is not empty");
+
+                    emptyEventsTextView.setVisibility(View.GONE);
+                    lvEvents.setVisibility(View.VISIBLE);
+                }
+
+                adapter = new EventsCursorAdapter(getBaseContext(), dbCursor, dbHelper);
+                lvEvents.setAdapter(adapter);
+            }
+        });
     }
 
     private void refreshEvents() {

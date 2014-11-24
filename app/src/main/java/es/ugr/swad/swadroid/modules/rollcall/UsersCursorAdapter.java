@@ -47,6 +47,7 @@ import es.ugr.swad.swadroid.utils.Utils;
  */
 public class UsersCursorAdapter extends CursorAdapter {
     private DataBaseHelper dbHelper;
+    private Cursor dbCursor;
     private Crypto crypto;
     private ImageLoader loader;
     private int eventCode;
@@ -98,17 +99,26 @@ public class UsersCursorAdapter extends CursorAdapter {
         String userID = crypto.decrypt(cursor.getString(cursor.getColumnIndex("userID")));
         final long userCode = cursor.getLong(cursor.getColumnIndex("userCode"));
         String userPhoto = cursor.getString(cursor.getColumnIndex("photoPath"));
-        final boolean present = Utils.parseIntBool(cursor.getInt(cursor.getColumnIndex("present")));
+        boolean present = Utils.parseIntBool(cursor.getInt(cursor.getColumnIndex("present")));
 
         ImageView image = (ImageView) view.findViewById(R.id.imageView1);
         TextView text1 = (TextView) view.findViewById(R.id.TextView1);
         TextView text2 = (TextView) view.findViewById(R.id.TextView2);
         CheckBox checkbox = (CheckBox) view.findViewById(R.id.check);
 
+        checkbox.setChecked(present);
         checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                //Inserts attendance into database
                 dbHelper.insertAttendance(userCode, eventCode, isChecked);
+
+                //Refresh ListView
+                dbCursor = dbHelper.getUsersEventCursor(eventCode);
+                changeCursor(dbCursor);
+
+                //Mark event status as "pending"
+                dbHelper.updateEventStatus(eventCode, "pending");
             }
         });
 
@@ -118,7 +128,6 @@ public class UsersCursorAdapter extends CursorAdapter {
 
         text1.setText(userSurname1 + " " + userSurname2 + ", " + userFirstname);
         text2.setText(userID);
-        checkbox.setChecked(present);
     }
 
     @Override

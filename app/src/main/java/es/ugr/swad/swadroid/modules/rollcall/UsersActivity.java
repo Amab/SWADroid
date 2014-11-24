@@ -38,14 +38,12 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.zxing.client.android.Intents;
 
 import java.util.List;
 
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADroidTracker;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
@@ -295,21 +293,16 @@ public class UsersActivity extends MenuExpandableListActivity implements
             case R.id.action_sendMsg:
                 String usersCodes = getUsersCodes();
 
-                if(!usersCodes.isEmpty()) {
-                    Intent activity = new Intent(getApplicationContext(),
-                            UsersSend.class);
-                    activity.putExtra("attendanceEventCode",
-                            eventCode);
-                    //Set unmarked users as absent
-                    activity.putExtra("setOthersAsAbsent",
-                            1);
-                    activity.putExtra("usersCodes",
-                            usersCodes);
-                    startActivity(activity);
-                } else {
-                    Toast.makeText(getApplicationContext(), R.string.noUsersCheckedMsg,
-                            Toast.LENGTH_LONG).show();
-                }
+                Intent activity = new Intent(getApplicationContext(),
+                        UsersSend.class);
+                activity.putExtra("attendanceEventCode",
+                        eventCode);
+                //Set unmarked users as absent
+                activity.putExtra("setOthersAsAbsent",
+                        1);
+                activity.putExtra("usersCodes",
+                        usersCodes);
+                startActivity(activity);
 
                 return true;
 
@@ -327,6 +320,7 @@ public class UsersActivity extends MenuExpandableListActivity implements
 
                                 dbHelper.beginTransaction();
                                 dbHelper.removeAllRows(DataBaseHelper.DB_TABLE_USERS_ATTENDANCES, "eventCode", eventCode);
+                                dbHelper.updateEventStatus(eventCode, "OK");
                                 dbHelper.endTransaction(true);
 
                                 refreshAdapter();

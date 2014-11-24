@@ -26,11 +26,12 @@ import android.widget.Toast;
 import org.ksoap2.serialization.SoapObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.List;
 import java.util.Vector;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.model.Event;
 import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.Login;
@@ -48,6 +49,10 @@ public class EventsDownload extends Module {
      * Number of events associated to the selected course
      */
     private int numEvents;
+    /**
+     * List of downloaded event codes
+     */
+    private List<Long> eventCodes;
     /**
      * Rollcall Events Download tag name for Logcat
      */
@@ -93,12 +98,7 @@ public class EventsDownload extends Module {
             ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
             SoapObject soap = (SoapObject) res.get(1);
             numEvents = soap.getPropertyCount();
-
-            if(numEvents > 0) {
-                Rollcall.eventsList = new ArrayList<Event>();
-            } else {
-                Rollcall.eventsList = null;
-            }
+            eventCodes = new ArrayList<Long>();
 
             for (int i = 0; i < numEvents; i++) {
                 SoapObject pii = (SoapObject) soap.getProperty(i);
@@ -114,7 +114,7 @@ public class EventsDownload extends Module {
                 boolean commentsTeachersVisible = Utils.parseStringBool(pii.getProperty("commentsTeachersVisible").toString());
                 String title = pii.getProperty("title").toString();
                 String text = pii.getProperty("text").toString();
-                String groups = (pii.hasProperty("groups")? pii.getProperty("groups").toString() : null);
+                String groups = (pii.hasProperty("groups")? pii.getProperty("groups").toString() : "");
 
                 if (userSurname1.equalsIgnoreCase(Constants.NULL_VALUE)) userSurname1 = "";
                 if (userSurname2.equalsIgnoreCase(Constants.NULL_VALUE)) userSurname2 = "";
@@ -124,10 +124,17 @@ public class EventsDownload extends Module {
                 if (title.equalsIgnoreCase(Constants.NULL_VALUE)) title = "";
                 if (text.equalsIgnoreCase(Constants.NULL_VALUE)) text = "";
 
-                Rollcall.eventsList.add(new Event(attendanceEventCode, hidden, userSurname1,
+                //Inserts or updates event into database
+                dbHelper.insertEvent(new Event(attendanceEventCode, hidden, userSurname1,
                         userSurname2, userFirstName, userPhoto, startTime, endTime,
                         commentsTeachersVisible, title, text, groups));
+
+                //Add eventCode to the new events list
+                eventCodes.add(attendanceEventCode);
             }
+
+            //Removes old events not listed in eventCodes
+            removeOldEvents();
 
             Log.i(TAG, "Retrieved " + numEvents + " events");
         }    // end if (result != null)
@@ -160,4 +167,17 @@ public class EventsDownload extends Module {
 
     }
 
+    private void removeOldEvents() {
+        List<Event> dbEvents = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_EVENTS_ATTENDANCES);
+        int nEventsRemoved = 0;
+
+        for(Event e : dbEvents) {
+            if(!eventCodes.contains(e.getId())) {
+                dbHelper.removeAllRows(DataBaseHelper.DB_TABLE_EVENTS_ATTENDANCES, "id", e.getId());
+                nEventsRemoved++;
+            }
+        }
+
+        Log.i(TAG, "Removed " + nEventsRemoved + " events");
+    }
 }
