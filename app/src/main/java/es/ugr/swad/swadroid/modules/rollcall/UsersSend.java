@@ -125,17 +125,27 @@ public class UsersSend extends Module {
 
     @Override
     protected void postConnect() {
+        String msg;
+
         if (!Utils.parseIntBool(success)) {
             Toast.makeText(this, R.string.errorSendingUsersMsg, Toast.LENGTH_LONG).show();
 
             setResult(RESULT_CANCELED);
         } else {
-            String msg = String.valueOf(numUsers) + " " + getResources().getString(R.string.usersUpdated);
+            if(numUsers > 0) {
+                msg = String.valueOf(numUsers) + " " + getResources().getString(R.string.usersUpdated);
+            } else {
+                msg = getResources().getString(R.string.usersAbsent);
+            }
+
             Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
 
             dbHelper.beginTransaction();
             //Remove all event attendances from database after a successful sending
             dbHelper.removeAllRows(DataBaseHelper.DB_TABLE_USERS_ATTENDANCES, "eventCode", eventCode);
+
+            //Mark the event as sended to SWAD
+            dbHelper.updateEventStatus(eventCode, "OK");
             dbHelper.endTransaction(true);
 
             setResult(RESULT_OK);
