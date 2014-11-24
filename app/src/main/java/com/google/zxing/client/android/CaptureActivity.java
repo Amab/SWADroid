@@ -297,6 +297,9 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
                 //Mark student as present in the event
                 dbHelper.insertAttendance(u.getId(), UsersActivity.getEventCode(), true);
 
+                //Mark event status as "pending"
+                dbHelper.updateEventStatus(UsersActivity.getEventCode(), "pending");
+
                 messageResult = getString(R.string.scan_valid_student);
                 iconResult = R.drawable.ok;
                 soundResult = sounds[0]; // Positive sound
