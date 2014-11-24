@@ -156,6 +156,9 @@ public class UsersDownload extends Module {
             String msg = String.valueOf(numUsers) + " " + getResources().getString(R.string.usersUpdated);
             Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
         }
+
+        dbHelper.updateEventStatus(eventCode, "OK");
+
         finish();
     }
 

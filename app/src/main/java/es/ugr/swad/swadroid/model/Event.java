@@ -47,6 +47,7 @@ public class Event extends Model {
     private String title;
     private String text;
     private String groups;
+    private String status;
     private static final PropertyInfo PI_id = new PropertyInfo();
     private static final PropertyInfo PI_hidden = new PropertyInfo();
     private static final PropertyInfo PI_userSurname1 = new PropertyInfo();
@@ -58,6 +59,7 @@ public class Event extends Model {
     private static final PropertyInfo PI_commentsTeachersVisible = new PropertyInfo();
     private static final PropertyInfo PI_title = new PropertyInfo();
     private static final PropertyInfo PI_groups = new PropertyInfo();
+    private static final PropertyInfo PI_status = new PropertyInfo();
     private static final PropertyInfo[] PI_PROP_ARRAY =
             {
                     PI_id,
@@ -70,11 +72,34 @@ public class Event extends Model {
                     PI_endTime,
                     PI_commentsTeachersVisible,
                     PI_title,
-                    PI_groups
+                    PI_groups,
+                    PI_status
             };
 
     /**
-     * Constructor
+     * Constructor with status
+     */
+    public Event(long attendanceEventCode, boolean hidden, String userSurname1, String userSurname2,
+                 String userFirstName, String userPhoto, int startTime, int endTime,
+                 boolean commentsTeachersVisible, String title, String text, String groups,
+                 String status) {
+        super(attendanceEventCode);
+        this.hidden = hidden;
+        this.userSurname1 = userSurname1;
+        this.userSurname2 = userSurname2;
+        this.userFirstName = userFirstName;
+        this.userPhoto = userPhoto;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.commentsTeachersVisible = commentsTeachersVisible;
+        this.title = title;
+        this.text = text;
+        this.groups = groups;
+        this.status = status;
+    }
+
+    /**
+     * Constructor without status
      */
     public Event(long attendanceEventCode, boolean hidden, String userSurname1, String userSurname2,
                  String userFirstName, String userPhoto, int startTime, int endTime,
@@ -91,6 +116,7 @@ public class Event extends Model {
         this.title = title;
         this.text = text;
         this.groups = groups;
+        this.status = "OK";
     }
 
     public boolean isHidden() {
@@ -201,9 +227,17 @@ public class Event extends Model {
         this.groups = TextUtils.join(",", groups);
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     /* (non-Javadoc)
-     * @see org.ksoap2.serialization.KvmSerializable#getProperty(int)
-     */
+         * @see org.ksoap2.serialization.KvmSerializable#getProperty(int)
+         */
     public Object getProperty(int param) {
         Object object = null;
         switch (param) {
@@ -242,6 +276,9 @@ public class Event extends Model {
                 break;
             case 11:
                 object = groups;
+                break;
+            case 12:
+                object = status;
                 break;
         }
 
@@ -308,6 +345,10 @@ public class Event extends Model {
                 propertyInfo.type = PropertyInfo.STRING_CLASS;
                 propertyInfo.name = "groups";
                 break;
+            case 12:
+                propertyInfo.type = PropertyInfo.STRING_CLASS;
+                propertyInfo.name = "status";
+                break;
         }
     }
 
@@ -352,14 +393,17 @@ public class Event extends Model {
             case 11:
                 groups = (String) obj;
                 break;
+            case 12:
+                status = (String) obj;
+                break;
         }
     }
 
     @Override
     public String toString() {
         return "Event{" +
-                "eventCode='" + super.getId() + '\'' +
-                "hidden=" + hidden +
+                "id=" + super.getId() +
+                ", hidden=" + hidden +
                 ", userSurname1='" + userSurname1 + '\'' +
                 ", userSurname2='" + userSurname2 + '\'' +
                 ", userFirstName='" + userFirstName + '\'' +
@@ -370,6 +414,7 @@ public class Event extends Model {
                 ", title='" + title + '\'' +
                 ", text='" + text + '\'' +
                 ", groups='" + groups + '\'' +
+                ", status='" + status + '\'' +
                 '}';
     }
 }
