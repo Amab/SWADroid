@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <database
     name="swadroid_db_crypt"
-    version="17" >
+    version="18" >
 
     <table
         name="courses"
@@ -308,6 +308,63 @@
             name="present"
             obligatory="true"
             type="integer" />
+    </table>
+    <table
+        name="events_attendances"
+        new-in-version="18"
+        to-string="%name%" >
+        <field
+            name="id"
+            obligatory="true"
+            type="long" />
+        <field
+            name="hidden"
+            obligatory="true"
+            type="integer" />
+        <field
+            name="userSurname1"
+            obligatory="true"
+            type="text" />
+        <field
+            name="userSurname2"
+            obligatory="true"
+            type="text" />
+        <field
+            name="userFirstName"
+            obligatory="true"
+            type="text" />
+        <field
+            name="userPhoto"
+            obligatory="true"
+            type="text" />
+        <field
+            name="startTime"
+            obligatory="true"
+            type="integer" />
+        <field
+            name="endTime"
+            obligatory="true"
+            type="integer" />
+        <field
+            name="commentsTeachersVisible"
+            obligatory="true"
+            type="integer" />
+        <field
+            name="title"
+            obligatory="true"
+            type="string" />
+        <field
+            name="text"
+            obligatory="true"
+            type="string" />
+        <field
+            name="groups"
+            obligatory="true"
+            type="string" />
+        <field
+            name="status"
+            obligatory="true"
+            type="string" />
     </table>
     <table
         name="groups"

@@ -143,6 +143,9 @@ public class UsersSend extends Module {
             dbHelper.beginTransaction();
             //Remove all event attendances from database after a successful sending
             dbHelper.removeAllRows(DataBaseHelper.DB_TABLE_USERS_ATTENDANCES, "eventCode", eventCode);
+
+            //Mark the event as sended to SWAD
+            dbHelper.updateEventStatus(eventCode, "OK");
             dbHelper.endTransaction(true);
 
             setResult(RESULT_OK);

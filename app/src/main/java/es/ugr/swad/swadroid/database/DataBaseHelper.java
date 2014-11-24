@@ -40,6 +40,7 @@ import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.SWADroidTracker;
 import es.ugr.swad.swadroid.model.Course;
+import es.ugr.swad.swadroid.model.Event;
 import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.model.GroupType;
 import es.ugr.swad.swadroid.model.Model;
@@ -136,6 +137,10 @@ public class DataBaseHelper {
      * Table name for relationship between users and attendances
      */
     public static final String DB_TABLE_USERS_ATTENDANCES = "users_attendances";
+    /**
+     * Table name for events
+     */
+    public static final String DB_TABLE_EVENTS_ATTENDANCES = "events_attendances";
 	/**
 	 * Table name for groups
 	 */
@@ -384,6 +389,20 @@ public class DataBaseHelper {
             o = new UserAttendance(ent.getInt("userCode"),
                     ent.getInt("eventCode"),
                     Utils.parseIntBool(ent.getInt("present")));
+        } else if (table.equals(DataBaseHelper.DB_TABLE_EVENTS_ATTENDANCES)) {
+            o = new Event(ent.getLong("id"),
+                    Utils.parseIntBool(ent.getInt("hidden")),
+                    crypto.decrypt(ent.getString("userSurname1")),
+                    crypto.decrypt(ent.getString("userSurname2")),
+                    crypto.decrypt(ent.getString("userFirstName")),
+                    crypto.decrypt(ent.getString("userPhoto")),
+                    ent.getInt("startTime"),
+                    ent.getInt("endTime"),
+                    Utils.parseIntBool(ent.getInt("commentsTeachersVisible")),
+                    crypto.decrypt(ent.getString("title")),
+                    crypto.decrypt(ent.getString("text")),
+                    crypto.decrypt(ent.getString("groups")),
+                    crypto.decrypt(ent.getString("status")));
         } else if (table.equals(DataBaseHelper.DB_TABLE_GROUPS)) {
             long groupTypeCode = getGroupTypeCodeFromGroup(ent.getLong("id"));
             o = new Group(ent.getLong("id"),
@@ -704,6 +723,10 @@ public class DataBaseHelper {
         }
 
         return groups;
+    }
+
+    public Cursor getCursor(String table) {
+        return db.getCursor(table);
     }
 
     public Cursor getCursor(String table, String where, String orderby) {
@@ -1237,6 +1260,38 @@ public class DataBaseHelper {
     }
 
     /**
+     * Inserts a new record in database for an attendance event,
+     * or updates it if already exists
+     *
+     * @param event Event to be inserted
+     */
+    public void insertEvent(Event event) {
+        Entity ent;
+        String where = "id = " + event.getId();
+        List<Entity> rows = db.getEntityList(DataBaseHelper.DB_TABLE_EVENTS_ATTENDANCES, where);
+
+        if (rows.isEmpty()) {
+            ent = new Entity(DataBaseHelper.DB_TABLE_EVENTS_ATTENDANCES);
+            ent.setValue("status", crypto.encrypt(event.getStatus()));
+        } else {
+            ent = rows.get(0);
+        }
+        ent.setValue("id", event.getId());
+        ent.setValue("hidden", Utils.parseBoolInt(event.isHidden()));
+        ent.setValue("userSurname1", crypto.encrypt(event.getUserSurname1()));
+        ent.setValue("userSurname2", crypto.encrypt(event.getUserSurname2()));
+        ent.setValue("userFirstName", crypto.encrypt(event.getUserFirstName()));
+        ent.setValue("userPhoto", crypto.encrypt(event.getUserPhoto()));
+        ent.setValue("startTime", event.getStartTime());
+        ent.setValue("endTime", event.getEndTime());
+        ent.setValue("commentsTeachersVisible", Utils.parseBoolInt(event.isCommentsTeachersVisible()));
+        ent.setValue("title", crypto.encrypt(event.getTitle()));
+        ent.setValue("text", crypto.encrypt(event.getText()));
+        ent.setValue("groups", crypto.encrypt(event.getGroups()));
+        ent.save();
+    }
+
+    /**
      * Updates a course in database
      *
      * @param prev   Course to be updated
@@ -1519,6 +1574,19 @@ public class DataBaseHelper {
         ent.setValue("userFirstname", actual.getUserFirstname());
         ent.setValue("userPhoto", actual.getUserPhoto());
         ent.setValue("userRole", actual.getUserRole());
+        ent.save();
+    }
+
+    /**
+     * Updates a user in database
+     *
+     * @param eventCode Code of event to be updated
+     * @param status    Event status to be updated
+     */
+    public void updateEventStatus(int eventCode, String status) {
+        Entity ent = db.getTopEntity(DataBaseHelper.DB_TABLE_EVENTS_ATTENDANCES,
+                "id = " + eventCode, "1");
+        ent.setValue("status", crypto.encrypt(status));
         ent.save();
     }
 
