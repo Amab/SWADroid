@@ -803,8 +803,9 @@ public class Notifications extends Module implements
 			list.setAdapter(adapter);
 			list.setOnChildClickListener(clickListener);
 			
-			//Expand the not seen notifications group
+			//Expand the groups
 			list.expandGroup(NOT_SEEN_GROUP_ID);
+            list.expandGroup(SEEN_GROUP_ID);
 		} else {
 			Log.d(TAG, "[setChildGroupData] Notifications table is empty");
 			
