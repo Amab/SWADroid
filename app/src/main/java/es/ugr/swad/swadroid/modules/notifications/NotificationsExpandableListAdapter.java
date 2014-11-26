@@ -75,16 +75,6 @@ public class NotificationsExpandableListAdapter extends
 	}
 
 	@Override
-	public Object getChild(int groupPosition, int childPosition) {
-		return childItem.get(groupPosition).get(childPosition);
-	}
-
-	@Override
-	public long getChildId(int groupPosition, int childPosition) {
-		return childItem.get(groupPosition).get(childPosition).getId();
-	}
-
-	@Override
 	public View getChildView(int groupPosition, final int childPosition,
 			boolean isLastChild, View convertView, ViewGroup parent) {
 		
@@ -276,6 +266,16 @@ public class NotificationsExpandableListAdapter extends
 		
 		return convertView;
 	}
+
+    @Override
+    public Object getChild(int groupPosition, int childPosition) {
+        return childItem.get(groupPosition).get(childPosition);
+    }
+
+    @Override
+    public long getChildId(int groupPosition, int childPosition) {
+        return childItem.get(groupPosition).get(childPosition).getId();
+    }
 
 	@Override
 	public boolean hasStableIds() {
