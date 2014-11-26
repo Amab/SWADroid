@@ -16,7 +16,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:scaleType="centerCrop"
-            android:src="@raw/usr_bl" />
+            android:src="@drawable/usr_bl" />
 
         <TextView
             android:id="@+id/senderNameText"
