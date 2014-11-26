@@ -1988,8 +1988,30 @@ public class DataBaseHelper {
      * @param table Table to be deleted
      */
     public void deleteTable(String table) {
-        db.deleteTable(table);
-        Log.d(TAG, "Deleted table " + table);
+        if(isTableExisting(table)) {
+            db.deleteTable(table);
+            Log.d(TAG, "Deleted table " + table);
+        } else {
+            Log.e(TAG, "Table " + table + " doesn't exists. Can't be deleted");
+        }
+    }
+
+    /**
+     * Checks if a table exists in database
+     * @param tableName Name of the table to be checked
+     * @return true is table exists
+     *         false otherwise
+     */
+    public boolean isTableExisting(String tableName) {
+        Cursor cursor = db.rawQuery("select DISTINCT tbl_name from sqlite_master where tbl_name = '"+tableName+"'", null);
+        if(cursor!=null) {
+            if(cursor.getCount()>0) {
+                cursor.close();
+                return true;
+            }
+            cursor.close();
+        }
+        return false;
     }
 
     /**
