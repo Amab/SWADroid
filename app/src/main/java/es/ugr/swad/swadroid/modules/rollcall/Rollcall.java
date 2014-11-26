@@ -150,7 +150,7 @@ public class Rollcall extends MenuExpandableListActivity implements
         new Handler().post(new Runnable() {
             @Override
             public void run() {
-                dbCursor = dbHelper.getCursor(DataBaseHelper.DB_TABLE_EVENTS_ATTENDANCES);
+                dbCursor = dbHelper.getEventsCourseCursor(Courses.getSelectedCourseCode());
                 startManagingCursor(dbCursor);
 
 

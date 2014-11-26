@@ -129,6 +129,8 @@ public class EventsDownload extends Module {
                         userSurname2, userFirstName, userPhoto, startTime, endTime,
                         commentsTeachersVisible, title, text, groups));
 
+                dbHelper.insertEventCourse(attendanceEventCode, courseCode);
+
                 //Add eventCode to the new events list
                 eventCodes.add(attendanceEventCode);
             }
@@ -168,13 +170,16 @@ public class EventsDownload extends Module {
     }
 
     private void removeOldEvents() {
-        List<Event> dbEvents = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_EVENTS_ATTENDANCES);
+        List<Event> dbEvents = dbHelper.getEventsCourse(Courses.getSelectedCourseCode());
         int nEventsRemoved = 0;
 
-        for(Event e : dbEvents) {
-            if(!eventCodes.contains(e.getId())) {
-                dbHelper.removeAllRows(DataBaseHelper.DB_TABLE_EVENTS_ATTENDANCES, "id", e.getId());
-                nEventsRemoved++;
+        if((dbEvents != null) && (dbEvents.size() > 0)) {
+            for (Event e : dbEvents) {
+                if (!eventCodes.contains(e.getId())) {
+                    dbHelper.removeAllRows(DataBaseHelper.DB_TABLE_EVENTS_COURSES, "eventCode", e.getId());
+                    dbHelper.removeAllRows(DataBaseHelper.DB_TABLE_EVENTS_ATTENDANCES, "id", e.getId());
+                    nEventsRemoved++;
+                }
             }
         }
 

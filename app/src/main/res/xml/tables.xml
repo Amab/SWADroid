@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <database
     name="swadroid_db_crypt"
-    version="18" >
+    version="19" >
 
     <table
         name="courses"
@@ -365,6 +365,21 @@
             name="status"
             obligatory="true"
             type="string" />
+    </table>
+    <table
+        name="events_courses"
+        new-in-version="19"
+        to-string="%name%" >
+    <field
+        name="eventCode"
+        foreign-table="events_attendances"
+        obligatory="true"
+        type="foreign-key" />
+    <field
+        name="crsCod"
+        foreign-table="courses"
+        obligatory="true"
+        type="foreign-key" />
     </table>
     <table
         name="groups"
