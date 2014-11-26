@@ -23,7 +23,6 @@ package es.ugr.swad.swadroid.modules.rollcall;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Typeface;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +45,14 @@ public class EventsCursorAdapter extends CursorAdapter {
     private Crypto crypto;
     private Cursor cursor;
     private DateFormat df;
+    private LayoutInflater inflater;
+
+    private static class ViewHolder {
+        TextView titleTextView;
+        TextView startTimeTextView;
+        TextView endTimeTextView;
+        TextView sendingStateTextView;
+    }
 
     /**
      * Constructor
@@ -60,6 +67,7 @@ public class EventsCursorAdapter extends CursorAdapter {
         this.cursor = c;
         this.crypto = new Crypto(context, dbHelper.getDBKey());
         this.df = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT);
+        this.inflater = LayoutInflater.from(context);
     }
 
     /**
@@ -77,10 +85,7 @@ public class EventsCursorAdapter extends CursorAdapter {
         this.cursor = c;
         this.crypto = new Crypto(context, dbHelper.getDBKey());
         this.df = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT);
-    }
-
-    static class ViewHolder {
-        TextView sendingStateTextView;
+        this.inflater = LayoutInflater.from(context);
     }
 
     @Override
@@ -92,53 +97,58 @@ public class EventsCursorAdapter extends CursorAdapter {
         Calendar today = Calendar.getInstance();
         Calendar startTimeCalendar = Calendar.getInstance();
         Calendar endTimeCalendar = Calendar.getInstance();
-        final ViewHolder viewHolder = new ViewHolder();
 
         startTimeCalendar.setTimeInMillis(startTime * 1000L);
         endTimeCalendar.setTimeInMillis(endTime * 1000L);
 
-        TextView titleTextView = (TextView) view.findViewById(R.id.toptext);
-        TextView startTimeTextView = (TextView) view.findViewById(R.id.startTimeTextView);
-        TextView endTimeTextView = (TextView) view.findViewById(R.id.endTimeTextView);
-        viewHolder.sendingStateTextView = (TextView) view.findViewById(R.id.sendingStateTextView);
+        ViewHolder holder = (ViewHolder) view.getTag();
+        view.setTag(holder);
 
-        titleTextView.setText(title);
-        startTimeTextView.setText(df.format(startTimeCalendar.getTime()));
-        endTimeTextView.setText(df.format(endTimeCalendar.getTime()));
+        holder.titleTextView = (TextView) view.findViewById(R.id.toptext);
+        holder.startTimeTextView = (TextView) view.findViewById(R.id.startTimeTextView);
+        holder.endTimeTextView = (TextView) view.findViewById(R.id.endTimeTextView);
+        holder.sendingStateTextView = (TextView) view.findViewById(R.id.sendingStateTextView);
+
+        holder.titleTextView.setText(title);
+        holder.startTimeTextView.setText(df.format(startTimeCalendar.getTime()));
+        holder.endTimeTextView.setText(df.format(endTimeCalendar.getTime()));
 
         //If the event is in time, show dates in green, else show in red
         if(today.before(startTimeCalendar) || today.after(endTimeCalendar)) {
-            startTimeTextView.setTextColor(context.getResources().getColor(R.color.red));
-            endTimeTextView.setTextColor(context.getResources().getColor(R.color.red));
+            holder.startTimeTextView.setTextColor(context.getResources().getColor(R.color.red));
+            holder.endTimeTextView.setTextColor(context.getResources().getColor(R.color.red));
         } else {
-            startTimeTextView.setTextColor(context.getResources().getColor(R.color.green));
-            endTimeTextView.setTextColor(context.getResources().getColor(R.color.green));
+            holder.startTimeTextView.setTextColor(context.getResources().getColor(R.color.green));
+            holder.endTimeTextView.setTextColor(context.getResources().getColor(R.color.green));
         }
 
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                /*
-                * If there are no sendings pending, set the state as ok and show it in green,
-                * else set the state as pending and show it in red
-                */
-                if(pending) {
-                    viewHolder.sendingStateTextView.setText(R.string.sendingStatePending);
-                    viewHolder.sendingStateTextView.setTextColor(context.getResources().getColor(R.color.red));
-                    viewHolder.sendingStateTextView.setTypeface(null, Typeface.BOLD);
+        /*
+        * If there are no sendings pending, set the state as ok and show it in green,
+        * else set the state as pending and show it in red
+        */
+        if(pending) {
+            holder.sendingStateTextView.setText(R.string.sendingStatePending);
+            holder.sendingStateTextView.setTextColor(context.getResources().getColor(R.color.red));
+            holder.sendingStateTextView.setTypeface(null, Typeface.BOLD);
 
-                } else {
-                    viewHolder.sendingStateTextView.setText(R.string.ok);
-                    viewHolder.sendingStateTextView.setTextColor(context.getResources().getColor(R.color.green));
-                }
-            }
-        });
+        } else {
+            holder.sendingStateTextView.setText(R.string.ok);
+            holder.sendingStateTextView.setTextColor(context.getResources().getColor(R.color.green));
+        }
     }
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        LayoutInflater vi = LayoutInflater.from(context);
-        return vi.inflate(R.layout.event_list_item, parent, false);
+        View view = inflater.inflate(R.layout.event_list_item, parent, false);
+        ViewHolder holder = new ViewHolder();
+
+        holder.titleTextView = (TextView) view.findViewById(R.id.toptext);
+        holder.startTimeTextView = (TextView) view.findViewById(R.id.startTimeTextView);
+        holder.endTimeTextView = (TextView) view.findViewById(R.id.endTimeTextView);
+        holder.sendingStateTextView = (TextView) view.findViewById(R.id.sendingStateTextView);
+        view.setTag(holder);
+
+        return view;
     }
 
     @Override
