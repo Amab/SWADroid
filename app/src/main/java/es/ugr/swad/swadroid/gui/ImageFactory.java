@@ -51,6 +51,7 @@ public class ImageFactory {
 
         builder.cacheInMemory(cacheMemory);
         builder.cacheOnDisk(cacheDisk);
+        builder.resetViewBeforeLoading(true);
 
         if(imageEmpty == -1) {
             builder.showImageForEmptyUri(imageLoading);

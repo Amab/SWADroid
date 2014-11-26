@@ -141,6 +141,10 @@ public class DataBaseHelper {
      * Table name for events
      */
     public static final String DB_TABLE_EVENTS_ATTENDANCES = "events_attendances";
+    /**
+     * Table name for relationship between events and courses
+     */
+    public static final String DB_TABLE_EVENTS_COURSES = "events_courses";
 	/**
 	 * Table name for groups
 	 */
@@ -252,6 +256,9 @@ public class DataBaseHelper {
         } else if (table.equals(DataBaseHelper.DB_TABLE_GROUPS_GROUPTYPES)) {
             firstParam = "grpTypCod";
             secondParam = "grpCod";
+        } else if (table.equals(DataBaseHelper.DB_TABLE_EVENTS_COURSES)) {
+            firstParam = "eventCode";
+            secondParam = "crsCod";
         } else {
             Log.e("selectParamsPairTable", "Table " + table + " not exists");
         }
@@ -292,7 +299,8 @@ public class DataBaseHelper {
                 table.equals(DataBaseHelper.DB_TABLE_TEST_QUESTION_ANSWERS) ||
                 table.equals(DataBaseHelper.DB_TABLE_USERS_COURSES) ||
                 table.equals(DataBaseHelper.DB_TABLE_GROUPS_COURSES) ||
-                table.equals(DataBaseHelper.DB_TABLE_GROUPS_GROUPTYPES)) {
+                table.equals(DataBaseHelper.DB_TABLE_GROUPS_GROUPTYPES) ||
+                table.equals(DataBaseHelper.DB_TABLE_EVENTS_COURSES)) {
 
             params = selectParamsPairTable(table);
 
@@ -639,6 +647,37 @@ public class DataBaseHelper {
         return db.rawQuery("SELECT * FROM " + DB_TABLE_USERS + " AS U"
                 + " INNER JOIN " + DB_TABLE_USERS_ATTENDANCES + " AS A"
                 + " ON U.userCode = A.userCode WHERE eventCode ='" + eventCode + "'", null);
+    }
+
+    /**
+     * Gets the list of events related to the selected course
+     *
+     * @param crsCod Course code to be referenced
+     * @return A list of Event
+     */
+    public List<Event> getEventsCourse(long crsCod) {
+        List<Event> result = new ArrayList<Event>();
+        List<Entity> rows = db.getEntityList(DataBaseHelper.DB_TABLE_EVENTS_COURSES, "crsCod = '" + crsCod + "'");
+
+        if (rows != null) {
+            for (Entity ent : rows) {
+                result.add((Event) getRow(DataBaseHelper.DB_TABLE_EVENTS_ATTENDANCES, "id", ent.getValue("eventCode")));
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Gets the list of users related to the selected event
+     *
+     * @param crsCod Course code to be referenced
+     * @return A Cursor with a list of events related to the selected course
+     */
+    public Cursor getEventsCourseCursor(long crsCod) {
+        return db.rawQuery("SELECT * FROM " + DB_TABLE_EVENTS_ATTENDANCES + " AS E"
+                + " INNER JOIN " + DB_TABLE_EVENTS_COURSES + " AS C"
+                + " ON E.id = C.eventCode WHERE C.crsCod ='" + crsCod + "'", null);
     }
 
     /**
@@ -1253,6 +1292,7 @@ public class DataBaseHelper {
         } else {
             ent = rows.get(0);
         }
+
         ent.setValue("userCode", userCode);
         ent.setValue("eventCode", eventCode);
         ent.setValue("present", Utils.parseBoolInt(present));
@@ -1276,6 +1316,7 @@ public class DataBaseHelper {
         } else {
             ent = rows.get(0);
         }
+
         ent.setValue("id", event.getId());
         ent.setValue("hidden", Utils.parseBoolInt(event.isHidden()));
         ent.setValue("userSurname1", crypto.encrypt(event.getUserSurname1()));
@@ -1288,6 +1329,29 @@ public class DataBaseHelper {
         ent.setValue("title", crypto.encrypt(event.getTitle()));
         ent.setValue("text", crypto.encrypt(event.getText()));
         ent.setValue("groups", crypto.encrypt(event.getGroups()));
+        ent.save();
+    }
+
+    /**
+     * Inserts a new record in database for the relationship between an attendance event and a course,
+     * or updates it if already exists
+     *
+     * @param eventCode Event code
+     * @param crsCod Course code
+     */
+    public void insertEventCourse(long eventCode, long crsCod) {
+        Entity ent;
+        String where = "eventCode = " + eventCode + " AND crsCod = " + crsCod;
+        List<Entity> rows = db.getEntityList(DataBaseHelper.DB_TABLE_EVENTS_COURSES, where);
+
+        if (rows.isEmpty()) {
+            ent = new Entity(DataBaseHelper.DB_TABLE_EVENTS_COURSES);
+        } else {
+            ent = rows.get(0);
+        }
+
+        ent.setValue("eventCode", eventCode);
+        ent.setValue("crsCod", crsCod);
         ent.save();
     }
 
@@ -1988,8 +2052,30 @@ public class DataBaseHelper {
      * @param table Table to be deleted
      */
     public void deleteTable(String table) {
-        db.deleteTable(table);
-        Log.d(TAG, "Deleted table " + table);
+        if(isTableExisting(table)) {
+            db.deleteTable(table);
+            Log.d(TAG, "Deleted table " + table);
+        } else {
+            Log.e(TAG, "Table " + table + " doesn't exists. Can't be deleted");
+        }
+    }
+
+    /**
+     * Checks if a table exists in database
+     * @param tableName Name of the table to be checked
+     * @return true is table exists
+     *         false otherwise
+     */
+    public boolean isTableExisting(String tableName) {
+        Cursor cursor = db.rawQuery("select DISTINCT tbl_name from sqlite_master where tbl_name = '"+tableName+"'", null);
+        if(cursor!=null) {
+            if(cursor.getCount()>0) {
+                cursor.close();
+                return true;
+            }
+            cursor.close();
+        }
+        return false;
     }
 
     /**
@@ -2109,6 +2195,13 @@ public class DataBaseHelper {
         if (dbVersion == 17) {
             deleteTable(DB_TABLE_PRACTICE_SESSIONS);
             deleteTable(DB_TABLE_ROLLCALL);
+        }
+
+        /* version 18-19
+		 * deleted old event data
+		 * */
+        if (dbVersion == 19) {
+            emptyTable(DB_TABLE_EVENTS_ATTENDANCES);
         }
 
         Log.i(TAG, "Database upgraded");

@@ -334,7 +334,7 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 
         if (u != null) {
             ImageFactory.displayImage(getApplicationContext(), u.getUserPhoto(), image, true, true,
-                    R.raw.usr_bl, R.raw.usr_bl, R.raw.usr_bl);
+                    R.drawable.usr_bl, R.drawable.usr_bl, R.drawable.usr_bl);
         }
 
         // Show appropriate icon

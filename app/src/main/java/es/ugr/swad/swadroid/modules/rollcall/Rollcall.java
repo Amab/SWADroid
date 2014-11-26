@@ -36,7 +36,6 @@ import android.widget.TextView;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADroidTracker;
-import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.modules.Courses;
@@ -136,7 +135,6 @@ public class Rollcall extends MenuExpandableListActivity implements
         switch (requestCode) {
             case Constants.ROLLCALL_EVENTS_DOWNLOAD_REQUEST_CODE:
                 refreshAdapter();
-                DialogFactory.showProgress(this, false, R.id.swipe_container_list, R.id.loading_status);
                 break;
         }
     }
@@ -150,7 +148,7 @@ public class Rollcall extends MenuExpandableListActivity implements
         new Handler().post(new Runnable() {
             @Override
             public void run() {
-                dbCursor = dbHelper.getCursor(DataBaseHelper.DB_TABLE_EVENTS_ATTENDANCES);
+                dbCursor = dbHelper.getEventsCourseCursor(Courses.getSelectedCourseCode());
                 startManagingCursor(dbCursor);
 
 
@@ -174,14 +172,20 @@ public class Rollcall extends MenuExpandableListActivity implements
 
                 adapter = new EventsCursorAdapter(getBaseContext(), dbCursor, dbHelper);
                 lvEvents.setAdapter(adapter);
+
+                showProgress(false);
             }
         });
     }
 
     private void refreshEvents() {
-        DialogFactory.showProgress(this, true, R.id.swipe_container_list, R.id.loading_status);
+        showProgress(true);
         Intent activity = new Intent(this, EventsDownload.class);
         startActivityForResult(activity, Constants.ROLLCALL_EVENTS_DOWNLOAD_REQUEST_CODE);
+    }
+
+    public void showProgress(boolean show) {
+        DialogFactory.showProgress(this, show, R.id.swipe_container_list, R.id.loading_status);
     }
 
     /**

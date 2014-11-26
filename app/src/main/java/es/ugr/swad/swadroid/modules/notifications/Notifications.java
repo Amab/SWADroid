@@ -611,6 +611,21 @@ public class Notifications extends Module implements
 		}
 	}
 
+    private void swipeItem(int position) {
+        int notSeenChildrenCount = adapter.getChildrenCount(NOT_SEEN_GROUP_ID);
+        long childId;
+
+        if(position <= notSeenChildrenCount) {
+            childId = adapter.getChildId(NOT_SEEN_GROUP_ID, position - 1);
+
+            //Set notification as seen locally
+            dbHelper.updateNotification(childId, "seenLocal", Utils.parseBoolString(true));
+            sendReadedNotifications();
+
+            refreshScreen();
+        }
+    }
+
 	/*
 	 * @Override public void setContentView(int layoutResID) { View v =
 	 * getLayoutInflater().inflate(layoutResID, refreshLayout, false);
@@ -627,7 +642,28 @@ public class Notifications extends Module implements
 		refreshLayout.setOnRefreshListener(this);
 		setAppearance();
 		// disableSwipe();
-		
+
+        list.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int firstVisibleItem,
+                                 int visibleItemCount, int totalItemCount) {
+
+                boolean enable = false;
+                if(list != null && list.getChildCount() > 0){
+                    // check if the first item of the list is visible
+                    boolean firstItemVisible = list.getFirstVisiblePosition() == 0;
+                    // check if the top of the first item is visible
+                    boolean topOfFirstItemVisible = list.getChildAt(0).getTop() == 0;
+                    // enabling or disabling the refresh layout
+                    enable = firstItemVisible && topOfFirstItemVisible;
+                }
+                refreshLayout.setEnabled(enable);
+            }
+        });
 		/*
 		 * Create a ListView-specific touch listener. ListViews are given special treatment because
 		 * by default they handle touches for their list items... i.e. they're in charge of drawing
@@ -635,41 +671,23 @@ public class Notifications extends Module implements
 		 * 
 		 * Requires Android 3.1 (HONEYCOMB_MR1) or newer
 		 */
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
+		/*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
 			SwipeListViewTouchListener touchListener =
 			    new SwipeListViewTouchListener(
 			    		list,
 			        new SwipeListViewTouchListener.OnSwipeCallback() {		    			
 			            @Override
 			            public void onSwipeLeft(ListView listView, int [] reverseSortedPositions) {
-			            	int notSeenChildrenCount = adapter.getChildrenCount(NOT_SEEN_GROUP_ID);
-			            	long childId;
-			            	
-			            	if(reverseSortedPositions[0] <= notSeenChildrenCount) {
-			            		childId = adapter.getChildId(NOT_SEEN_GROUP_ID, reverseSortedPositions[0]-1);
-			            		
-			            		//Set notification as seen locally
-			                    dbHelper.updateNotification(childId, "seenLocal", Utils.parseBoolString(true));
-			                    sendReadedNotifications();
-			                    
-			                    refreshScreen();
-			            	}
+                            if(reverseSortedPositions.length > 0) {
+                                swipeItem(reverseSortedPositions[0]);
+                            }
 			            }
 	
 			            @Override
 			            public void onSwipeRight(ListView listView, int [] reverseSortedPositions) {
-			            	int notSeenChildrenCount = adapter.getChildrenCount(NOT_SEEN_GROUP_ID);
-			            	long childId;
-			            	
-			            	if(reverseSortedPositions[0] <= notSeenChildrenCount) {
-			            		childId = adapter.getChildId(NOT_SEEN_GROUP_ID, reverseSortedPositions[0]-1);
-			            		
-			            		//Set notification as seen locally
-			                    dbHelper.updateNotification(childId, "seenLocal", Utils.parseBoolString(true));
-			                    sendReadedNotifications();
-			                    
-			                    refreshScreen();
-			            	}
+                            if(reverseSortedPositions.length > 0) {
+                                swipeItem(reverseSortedPositions[0]);
+                            }
 			            }
 	
 						@Override
@@ -712,7 +730,7 @@ public class Notifications extends Module implements
 			        refreshLayout.setEnabled(enable);
 	            }
 	        });	
-		}
+		}*/
 	}
 
 	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
@@ -803,8 +821,9 @@ public class Notifications extends Module implements
 			list.setAdapter(adapter);
 			list.setOnChildClickListener(clickListener);
 			
-			//Expand the not seen notifications group
+			//Expand the groups
 			list.expandGroup(NOT_SEEN_GROUP_ID);
+            list.expandGroup(SEEN_GROUP_ID);
 		} else {
 			Log.d(TAG, "[setChildGroupData] Notifications table is empty");
 			
