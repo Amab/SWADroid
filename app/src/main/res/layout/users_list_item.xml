@@ -9,7 +9,7 @@
 
     <ImageView
         android:id="@+id/imageView1"
-        android:src="@raw/usr_bl"
+        android:src="@drawable/usr_bl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dip"

@@ -159,7 +159,6 @@ public class UsersActivity extends MenuExpandableListActivity implements
         switch (requestCode) {
             case Constants.ROLLCALL_USERS_DOWNLOAD_REQUEST_CODE:
                 refreshAdapter();
-                DialogFactory.showProgress(this, false, R.id.swipe_container_list, R.id.loading_status);
                 break;
             case Constants.SCAN_QR_REQUEST_CODE:
                 refreshAdapter();
@@ -201,17 +200,23 @@ public class UsersActivity extends MenuExpandableListActivity implements
 
                 adapter = new UsersCursorAdapter(getBaseContext(), dbCursor, dbHelper, eventCode);
                 lvUsers.setAdapter(adapter);
+
+                showProgress(false);
             }
         });
     }
 
     private void refreshUsers() {
-        DialogFactory.showProgress(this, true, R.id.swipe_container_list, R.id.loading_status);
+        showProgress(true);
 
         Intent activity = new Intent(this, UsersDownload.class);
         activity.putExtra("attendanceEventCode",
                 eventCode);
         startActivityForResult(activity, Constants.ROLLCALL_USERS_DOWNLOAD_REQUEST_CODE);
+    }
+
+    public void showProgress(boolean show) {
+        DialogFactory.showProgress(this, show, R.id.swipe_container_list, R.id.loading_status);
     }
 
     /**
