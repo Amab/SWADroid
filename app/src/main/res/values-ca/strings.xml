@@ -90,6 +90,7 @@
     <string name="testNoResultsMsg">El professor no permet veure els resultats del test</string>
     <string name="errorBadLoginMsg">Usuari o contrasenya incorrectes</string>
     <string name="errorServerResponseMsg">Error en resposta del servidor</string>
+    <string name="errorInternalServerMsg">Error intern del servidor</string>
     <string name="errorBadAppKeyMsg">Clau d\'aplicació incorrecta. Si us plau, contacti amb el desenvolupador.</string>
     <string name="errorConnectionMsg">Error durant la connexió amb el servidor</string>
     <string name="errorTimeoutMsg">Temps d\'espera esgotat intentant connectar amb el servidor</string>

@@ -92,6 +92,7 @@
     <string name="testNoResultsMsg">The teacher does not allow to see the results</string>
     <string name="errorBadLoginMsg">Username or password incorrect</string>
     <string name="errorServerResponseMsg">Error in server response</string>
+    <string name="errorInternalServerResponseMsg">Internal server error</string>
     <string name="errorBadAppKeyMsg">Unknown application key. Please contact the developer</string>
     <string name="errorConnectionMsg">Error while connecting to server</string>
     <string name="errorTimeoutMsg">Timeout trying to connect to the server</string>

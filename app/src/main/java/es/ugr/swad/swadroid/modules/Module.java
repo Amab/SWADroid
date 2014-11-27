@@ -443,7 +443,7 @@ public abstract class Module extends MenuActivity {
                     Log.e(TAG, "httpStatusCode=" + httpStatusCode);
 
                     switch(httpStatusCode) {
-                        case 500: errorMsg = getString(R.string.errorServerResponseMsg);
+                        case 500: errorMsg = getString(R.string.errorInternalServerMsg);
                                   break;
 
                         case 503: errorMsg = getString(R.string.errorServiceUnavailableMsg);
