@@ -160,6 +160,9 @@ public class UsersActivity extends MenuExpandableListActivity implements
             case Constants.ROLLCALL_USERS_DOWNLOAD_REQUEST_CODE:
                 refreshAdapter();
                 break;
+            case Constants.ROLLCALL_USERS_SEND_REQUEST_CODE:
+                refreshAdapter();
+                break;
             case Constants.SCAN_QR_REQUEST_CODE:
                 refreshAdapter();
                 break;
@@ -307,7 +310,7 @@ public class UsersActivity extends MenuExpandableListActivity implements
                         1);
                 activity.putExtra("usersCodes",
                         usersCodes);
-                startActivity(activity);
+                startActivityForResult(activity, Constants.ROLLCALL_USERS_SEND_REQUEST_CODE);
 
                 return true;
 
