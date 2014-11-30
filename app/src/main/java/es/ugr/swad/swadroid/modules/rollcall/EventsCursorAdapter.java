@@ -91,8 +91,8 @@ public class EventsCursorAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, final Context context, Cursor cursor) {
         String title = crypto.decrypt(cursor.getString(cursor.getColumnIndex("title")));
-        long startTime = cursor.getInt(cursor.getColumnIndex("startTime"));
-        long endTime = cursor.getInt(cursor.getColumnIndex("endTime"));
+        long startTime = cursor.getLong(cursor.getColumnIndex("startTime"));
+        long endTime = cursor.getLong(cursor.getColumnIndex("endTime"));
         final boolean pending = crypto.decrypt(cursor.getString(cursor.getColumnIndex("status"))).equals("pending");
         Calendar today = Calendar.getInstance();
         Calendar startTimeCalendar = Calendar.getInstance();

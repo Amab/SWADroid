@@ -404,8 +404,8 @@ public class DataBaseHelper {
                     crypto.decrypt(ent.getString("userSurname2")),
                     crypto.decrypt(ent.getString("userFirstName")),
                     crypto.decrypt(ent.getString("userPhoto")),
-                    ent.getInt("startTime"),
-                    ent.getInt("endTime"),
+                    ent.getLong("startTime"),
+                    ent.getLong("endTime"),
                     Utils.parseIntBool(ent.getInt("commentsTeachersVisible")),
                     crypto.decrypt(ent.getString("title")),
                     crypto.decrypt(ent.getString("text")),
@@ -677,7 +677,8 @@ public class DataBaseHelper {
     public Cursor getEventsCourseCursor(long crsCod) {
         return db.rawQuery("SELECT * FROM " + DB_TABLE_EVENTS_ATTENDANCES + " AS E"
                 + " INNER JOIN " + DB_TABLE_EVENTS_COURSES + " AS C"
-                + " ON E.id = C.eventCode WHERE C.crsCod ='" + crsCod + "'", null);
+                + " ON E.id = C.eventCode WHERE C.crsCod ='" + crsCod + "' AND hidden=" + Utils.parseBoolInt(false)
+                + " ORDER BY E.startTime DESC,E.endTime DESC,E.title DESC", null);
     }
 
     /**

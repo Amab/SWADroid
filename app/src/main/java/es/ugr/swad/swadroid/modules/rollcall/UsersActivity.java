@@ -160,6 +160,9 @@ public class UsersActivity extends MenuExpandableListActivity implements
             case Constants.ROLLCALL_USERS_DOWNLOAD_REQUEST_CODE:
                 refreshAdapter();
                 break;
+            case Constants.ROLLCALL_USERS_SEND_REQUEST_CODE:
+                refreshAdapter();
+                break;
             case Constants.SCAN_QR_REQUEST_CODE:
                 refreshAdapter();
                 break;
@@ -285,8 +288,8 @@ public class UsersActivity extends MenuExpandableListActivity implements
                 // Check if device has a rear camera
                 if (hasRearCam) {
                     Intent activity = new Intent(Intents.Scan.ACTION);
-                    activity.putExtra("SCAN_MODE", "QR_CODE_MODE");
-                    activity.putExtra("SCAN_FORMATS", "QR_CODE");
+                    activity.putExtra("SCAN_MODE", "QR_CODE_MODE,ONE_D_MODE");
+                    activity.putExtra("SCAN_FORMATS", "QR_CODE,ONE_D_FORMATS");
                     startActivityForResult(activity, Constants.SCAN_QR_REQUEST_CODE);
                 } else {
                     //If the device has no rear camera available show error message
@@ -307,7 +310,7 @@ public class UsersActivity extends MenuExpandableListActivity implements
                         1);
                 activity.putExtra("usersCodes",
                         usersCodes);
-                startActivity(activity);
+                startActivityForResult(activity, Constants.ROLLCALL_USERS_SEND_REQUEST_CODE);
 
                 return true;
 
