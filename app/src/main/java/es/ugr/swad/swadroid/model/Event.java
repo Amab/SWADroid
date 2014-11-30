@@ -41,8 +41,8 @@ public class Event extends Model {
     private String userSurname2;
     private String userFirstName;
     private String userPhoto;
-    private int startTime;
-    private int endTime;
+    private long startTime;
+    private long endTime;
     private boolean commentsTeachersVisible;
     private String title;
     private String text;
@@ -80,7 +80,7 @@ public class Event extends Model {
      * Constructor with status
      */
     public Event(long attendanceEventCode, boolean hidden, String userSurname1, String userSurname2,
-                 String userFirstName, String userPhoto, int startTime, int endTime,
+                 String userFirstName, String userPhoto, long startTime, long endTime,
                  boolean commentsTeachersVisible, String title, String text, String groups,
                  String status) {
         super(attendanceEventCode);
@@ -102,7 +102,7 @@ public class Event extends Model {
      * Constructor without status
      */
     public Event(long attendanceEventCode, boolean hidden, String userSurname1, String userSurname2,
-                 String userFirstName, String userPhoto, int startTime, int endTime,
+                 String userFirstName, String userPhoto, long startTime, long endTime,
                  boolean commentsTeachersVisible, String title, String text, String groups) {
         super(attendanceEventCode);
         this.hidden = hidden;
@@ -159,7 +159,7 @@ public class Event extends Model {
         this.userPhoto = userPhoto;
     }
 
-    public int getStartTime() {
+    public long getStartTime() {
         return startTime;
     }
 
@@ -169,11 +169,11 @@ public class Event extends Model {
         return calendar;
     }
 
-    public void setStartTime(int startTime) {
+    public void setStartTime(long startTime) {
         this.startTime = startTime;
     }
 
-    public int getEndTime() {
+    public long getEndTime() {
         return endTime;
     }
 
@@ -183,7 +183,7 @@ public class Event extends Model {
         return calendar;
     }
 
-    public void setEndTime(int endTime) {
+    public void setEndTime(long endTime) {
         this.endTime = endTime;
     }
 
@@ -322,11 +322,11 @@ public class Event extends Model {
                 propertyInfo.name = "userPhoto";
                 break;
             case 6:
-                propertyInfo.type = PropertyInfo.INTEGER_CLASS;
+                propertyInfo.type = PropertyInfo.LONG_CLASS;
                 propertyInfo.name = "startTime";
                 break;
             case 7:
-                propertyInfo.type = PropertyInfo.INTEGER_CLASS;
+                propertyInfo.type = PropertyInfo.LONG_CLASS;
                 propertyInfo.name = "endTime";
                 break;
             case 8:
@@ -376,10 +376,10 @@ public class Event extends Model {
                 userPhoto = (String) obj;
                 break;
             case 6:
-                startTime = (Integer) obj;
+                startTime = (Long) obj;
                 break;
             case 7:
-                endTime = (Integer) obj;
+                endTime = (Long) obj;
                 break;
             case 8:
                 commentsTeachersVisible = (Boolean) obj;
