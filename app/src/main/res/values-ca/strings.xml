@@ -148,7 +148,7 @@
     <string name="msg_default_type">Tipus</string>
     <string name="msg_default_time">Temps</string>
     <string name="msg_default_meta">Metadata</string>
-    <string name="msg_default_status">Poseu un codi de barres a l\'interior del rectangle del visor per escanejar."</string>
+    <string name="msg_default_status">Poseu un codi QR a l\'interior del rectangle del visor per escanejar."</string>
     <string name="msg_camera_framework_bug">Ho sentim, la càmera d\'Android ha trobat un problema. Potser haureu
         reiniciar el dispositiu.</string>
     <string name="button_ok">OK</string>
