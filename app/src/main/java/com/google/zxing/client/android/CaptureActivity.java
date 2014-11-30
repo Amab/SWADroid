@@ -74,7 +74,7 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 
     private static final String TAG = CaptureActivity.class.getSimpleName();
 
-    private static final long BULK_MODE_SCAN_DELAY_MS = 3000L;
+    private static final long BULK_MODE_SCAN_DELAY_MS = 2000L;
 
     private static final int[] sounds = {R.raw.beep, R.raw.klaxon};
 

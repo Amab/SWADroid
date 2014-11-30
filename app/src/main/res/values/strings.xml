@@ -92,6 +92,7 @@
     <string name="testNoResultsMsg">The teacher does not allow to see the results</string>
     <string name="errorBadLoginMsg">Username or password incorrect</string>
     <string name="errorServerResponseMsg">Error in server response</string>
+    <string name="errorInternalServerMsg">Internal server error</string>
     <string name="errorBadAppKeyMsg">Unknown application key. Please contact the developer</string>
     <string name="errorConnectionMsg">Error while connecting to server</string>
     <string name="errorTimeoutMsg">Timeout trying to connect to the server</string>
@@ -159,7 +160,7 @@
     <string name="msg_default_type">Type</string>
     <string name="msg_default_time">Time</string>
     <string name="msg_default_meta">Metadata</string>
-    <string name="msg_default_status">Place a barcode inside the viewfinder rectangle to scan it.</string>
+    <string name="msg_default_status">Place a QR code or barcode inside the viewfinder rectangle to scan it.</string>
     <string name="msg_camera_framework_bug">Sorry, the Android camera encountered a problem. You may need to restart the
         device.</string>
     <string name="button_ok">OK</string>
@@ -167,7 +168,7 @@
     <string name="scan_not_valid_student">Student of another course</string>
     <string name="scan_name">Name</string>
     <string name="scan_id">ID</string>
-    <string name="scan_not_valid_code">QR code invalid</string>
+    <string name="scan_not_valid_code">Invalid code</string>
     <string name="scan_data_not_found">No data on this student</string>
     <string name="scan_no_codes">Not detect any valid QR code</string>
     <string name="NoNotificationsMsg">There are no new notifications</string>

@@ -149,7 +149,7 @@ public class NotificationsSyncAdapterService extends Service {
                     Log.e(TAG, "httpStatusCode=" + httpStatusCode);
 
                     switch(httpStatusCode) {
-                        case 500: errorMessage = mContext.getString(R.string.errorServerResponseMsg);
+                        case 500: errorMessage = mContext.getString(R.string.errorInternalServerMsg);
                                   break;
 
                         case 503: errorMessage = mContext.getString(R.string.errorServiceUnavailableMsg);

@@ -93,6 +93,7 @@
     <string name="testNoResultsMsg">El profesor no permite ver los resultados del test</string>
     <string name="errorBadLoginMsg">Usuario o contraseña incorrectos</string>
     <string name="errorServerResponseMsg">Error en respuesta del servidor</string>
+    <string name="errorInternalServerMsg">Error interno del servidor</string>
     <string name="errorBadAppKeyMsg">Clave de aplicación incorrecta. Por favor, contacte con el desarrollador.</string>
     <string name="errorConnectionMsg">Error durante la conexión con el servidor</string>
     <string name="errorTimeoutMsg">Tiempo de espera agotado intentando conectar con el
@@ -152,7 +153,7 @@
     <string name="msg_default_type">Tipo</string>
     <string name="msg_default_time">Tiempo</string>
     <string name="msg_default_meta">Metadata</string>
-    <string name="msg_default_status">Coloque un código de barras en el interior del rectángulo del visor para
+    <string name="msg_default_status">Coloque un código QR o un código de barras en el interior del rectángulo del visor para
         escanear.</string>
     <string name="msg_camera_framework_bug">Lo sentimos, la cámara de Android ha encontrado un problema. Es posible que
         necesite reiniciar el dispositivo.</string>
@@ -161,7 +162,7 @@
     <string name="scan_not_valid_student">Alumno de otra asignatura</string>
     <string name="scan_name">Nombre</string>
     <string name="scan_id">DNI</string>
-    <string name="scan_not_valid_code">Código QR no válido</string>
+    <string name="scan_not_valid_code">Código no válido</string>
     <string name="scan_data_not_found">No existen datos de este alumno</string>
     <string name="scan_no_codes">No se ha detectado ningún código QR válido</string>
     <string name="NoNotificationsMsg">No hay nuevas notificaciones</string>
