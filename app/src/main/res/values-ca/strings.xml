@@ -148,7 +148,7 @@
     <string name="msg_default_type">Tipus</string>
     <string name="msg_default_time">Temps</string>
     <string name="msg_default_meta">Metadata</string>
-    <string name="msg_default_status">Poseu un codi QR a l\'interior del rectangle del visor per escanejar."</string>
+    <string name="msg_default_status">Poseu un codi QR o codi de barres dins del rectangle visor per escanejar</string>
     <string name="msg_camera_framework_bug">Ho sentim, la càmera d\'Android ha trobat un problema. Potser haureu
         reiniciar el dispositiu.</string>
     <string name="button_ok">OK</string>
@@ -156,7 +156,7 @@
     <string name="scan_not_valid_student">Alumne d\'una altra assignatura</string>
     <string name="scan_name">Nom</string>
     <string name="scan_id">DNI</string>
-    <string name="scan_not_valid_code">Codi QR no vàlid</string>
+    <string name="scan_not_valid_code">Codi no vàlid</string>
     <string name="scan_data_not_found">No hi ha dades d\'aquest alumne</string>
     <string name="scan_no_codes">No s\'ha detectat cap codi QR vàlid</string>
     <string name="NoNotificationsMsg">No hi ha noves notificacions</string>
