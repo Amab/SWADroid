@@ -12,13 +12,6 @@ android {
         testApplicationId "es.ugr.swad.swadroid.test"
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
     }
-
-    buildTypes {
-        release {
-            runProguard false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
-        }
-    }
 }
 
 dependencies {
