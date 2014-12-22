@@ -33,6 +33,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.lang.ref.WeakReference;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADroidTracker;
@@ -46,193 +48,200 @@ import es.ugr.swad.swadroid.modules.Courses;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class Rollcall extends MenuExpandableListActivity implements
-        SwipeRefreshLayout.OnRefreshListener {
-    /**
-     * Rollcall tag name for Logcat
-     */
-    public static final String TAG = Constants.APP_TAG + " Rollcall";
-    /**
-     * ListView of events
-     */
-    private static ListView lvEvents;
-    /**
-     * Adapter for ListView of events
-     */
-    private static EventsCursorAdapter adapter;
-    /**
-     * Database cursor for Adapter of events
-     */
-    Cursor dbCursor;
-    /**
-     * Layout with "Pull to refresh" function
-     */
-    private SwipeRefreshLayout refreshLayout;
-    /**
-     * TextView for the empty events message
-     */
-    TextView emptyEventsTextView;
+                                                         SwipeRefreshLayout.OnRefreshListener {
 
-    /* (non-Javadoc)
-     * @see es.ugr.swad.swadroid.MenuExpandableListActivity#onCreate(android.os.Bundle)
-     */
+  /**
+   * Rollcall tag name for Logcat
+   */
+  public static final String TAG = Constants.APP_TAG + " Rollcall";
+  /**
+   * ListView of events
+   */
+  private static ListView lvEvents;
+  /**
+   * Adapter for ListView of events
+   */
+  private static EventsCursorAdapter adapter;
+  private final RefreshAdapterHandler mHandler = new RefreshAdapterHandler(this);
+  /**
+   * Database cursor for Adapter of events
+   */
+  Cursor dbCursor;
+  private final Runnable mRunnable = new Runnable() {
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.list_items_pulltorefresh);
-
-        refreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container_list);
-        emptyEventsTextView = (TextView) findViewById(R.id.list_item_title);
-        lvEvents = (ListView) findViewById(R.id.list_pulltorefresh);
-
-        lvEvents.setOnItemClickListener(clickListener);
-        lvEvents.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
-            }
-
-            @Override
-            public void onScroll(AbsListView absListView, int firstVisibleItem,
-                                 int visibleItemCount, int totalItemCount) {
-
-                boolean enable = true;
-                if((lvEvents != null) && (lvEvents.getChildCount() > 0)){
-                    // check if the first item of the list is visible
-                    boolean firstItemVisible = lvEvents.getFirstVisiblePosition() == 0;
-                    // check if the top of the first item is visible
-                    boolean topOfFirstItemVisible = lvEvents.getChildAt(0).getTop() == 0;
-                    // enabling or disabling the refresh layout
-                    enable = firstItemVisible && topOfFirstItemVisible;
-                }
-                refreshLayout.setEnabled(enable);
-            }
-        });
-
-        refreshLayout.setOnRefreshListener(this);
-        setAppearance();
-
-        getSupportActionBar().setSubtitle(Courses.getSelectedCourseShortName());
-    	getSupportActionBar().setIcon(R.drawable.roll_call);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-    }
-
-    /* (non-Javadoc)
-     * @see es.ugr.swad.swadroid.MenuExpandableListActivity#Override(android.os.Bundle)
-     */
-    @Override
-    protected void onStart() {
-        super.onStart();
-        SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
-
-        //Refresh ListView of events
-        refreshAdapter();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        switch (requestCode) {
-            case Constants.ROLLCALL_EVENTS_DOWNLOAD_REQUEST_CODE:
-                refreshAdapter();
-                break;
-        }
-    }
-
-    private void refreshAdapter() {
-        /*
-         * Database query can be a time consuming task ..
-         * so its safe to call database query in another thread
-         * Handler, will handle this stuff for you
-         */
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                dbCursor = dbHelper.getEventsCourseCursor(Courses.getSelectedCourseCode());
-                startManagingCursor(dbCursor);
+    public void run() {
+      dbCursor = dbHelper.getEventsCourseCursor(Courses.getSelectedCourseCode());
+      startManagingCursor(dbCursor);
 
 
                 /*
                  * If there aren't events to show, hide the events lvEvents
                  * and show the empty events message
                  */
-                if ((dbCursor == null) || (dbCursor.getCount() == 0)) {
-                    Log.d(TAG, "Events list is empty");
+      if ((dbCursor == null) || (dbCursor.getCount() == 0)) {
+        Log.d(TAG, "Events list is empty");
 
-                    emptyEventsTextView.setText(R.string.eventsEmptyListMsg);
-                    emptyEventsTextView.setVisibility(View.VISIBLE);
+        emptyEventsTextView.setText(R.string.eventsEmptyListMsg);
+        emptyEventsTextView.setVisibility(View.VISIBLE);
 
-                    lvEvents.setVisibility(View.GONE);
-                } else {
-                    Log.d(TAG, "Events list is not empty");
+        lvEvents.setVisibility(View.GONE);
+      } else {
+        Log.d(TAG, "Events list is not empty");
 
-                    emptyEventsTextView.setVisibility(View.GONE);
-                    lvEvents.setVisibility(View.VISIBLE);
-                }
+        emptyEventsTextView.setVisibility(View.GONE);
+        lvEvents.setVisibility(View.VISIBLE);
+      }
 
-                adapter = new EventsCursorAdapter(getBaseContext(), dbCursor, dbHelper);
-                lvEvents.setAdapter(adapter);
+      adapter = new EventsCursorAdapter(getBaseContext(), dbCursor, dbHelper);
+      lvEvents.setAdapter(adapter);
 
-                showProgress(false);
-            }
-        });
+      showProgress(false);
     }
-
-    private void refreshEvents() {
-        showProgress(true);
-        Intent activity = new Intent(this, EventsDownload.class);
-        startActivityForResult(activity, Constants.ROLLCALL_EVENTS_DOWNLOAD_REQUEST_CODE);
-    }
-
-    public void showProgress(boolean show) {
-        DialogFactory.showProgress(this, show, R.id.swipe_container_list, R.id.loading_status);
-    }
-
-    /**
-     * It shows the SwipeRefreshLayout progress
-     */
-    public void showSwipeProgress() {
-        refreshLayout.setRefreshing(true);
-    }
-
-    /**
-     * It shows the SwipeRefreshLayout progress
-     */
-    public void hideSwipeProgress() {
-        refreshLayout.setRefreshing(false);
-    }
-
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-     private void setAppearance() {
-        refreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
-    }
-
-    /**
-     * It must be overriden by parent classes if manual swipe is enabled.
-     */
+  };
+  /**
+   * TextView for the empty events message
+   */
+  TextView emptyEventsTextView;
+  /**
+   * Layout with "Pull to refresh" function
+   */
+  private SwipeRefreshLayout refreshLayout;
+  /**
+   * ListView click listener
+   */
+  private ListView.OnItemClickListener clickListener = new ListView.OnItemClickListener() {
     @Override
-    public void onRefresh() {
-        showSwipeProgress();
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+      Intent activity = new Intent(getApplicationContext(),
+                                   UsersActivity.class);
+      activity.putExtra("attendanceEventCode",
+                        (int) adapter.getItemId(position));
+      startActivity(activity);
+    }
+  };
 
-        refreshEvents();
+  /* (non-Javadoc)
+   * @see es.ugr.swad.swadroid.MenuExpandableListActivity#onCreate(android.os.Bundle)
+   */
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.list_items_pulltorefresh);
 
-        hideSwipeProgress();
+    refreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container_list);
+    emptyEventsTextView = (TextView) findViewById(R.id.list_item_title);
+    lvEvents = (ListView) findViewById(R.id.list_pulltorefresh);
+
+    lvEvents.setOnItemClickListener(clickListener);
+    lvEvents.setOnScrollListener(new AbsListView.OnScrollListener() {
+      @Override
+      public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+      }
+
+      @Override
+      public void onScroll(AbsListView absListView, int firstVisibleItem,
+                           int visibleItemCount, int totalItemCount) {
+
+        boolean enable = true;
+        if ((lvEvents != null) && (lvEvents.getChildCount() > 0)) {
+          // check if the first item of the list is visible
+          boolean firstItemVisible = lvEvents.getFirstVisiblePosition() == 0;
+          // check if the top of the first item is visible
+          boolean topOfFirstItemVisible = lvEvents.getChildAt(0).getTop() == 0;
+          // enabling or disabling the refresh layout
+          enable = firstItemVisible && topOfFirstItemVisible;
+        }
+        refreshLayout.setEnabled(enable);
+      }
+    });
+
+    refreshLayout.setOnRefreshListener(this);
+    setAppearance();
+
+    getSupportActionBar().setSubtitle(Courses.getSelectedCourseShortName());
+    getSupportActionBar().setIcon(R.drawable.roll_call);
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+      getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+  }
+
+  /* (non-Javadoc)
+   * @see es.ugr.swad.swadroid.MenuExpandableListActivity#Override(android.os.Bundle)
+   */
+  @Override
+  protected void onStart() {
+    super.onStart();
+    SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
+
+    //Refresh ListView of events
+    refreshAdapter();
+  }
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+    switch (requestCode) {
+      case Constants.ROLLCALL_EVENTS_DOWNLOAD_REQUEST_CODE:
+        refreshAdapter();
+        break;
+    }
+  }
+
+  private void refreshAdapter() {
+    mHandler.post(mRunnable);
+  }
+
+  private void refreshEvents() {
+    showProgress(true);
+    Intent activity = new Intent(this, EventsDownload.class);
+    startActivityForResult(activity, Constants.ROLLCALL_EVENTS_DOWNLOAD_REQUEST_CODE);
+  }
+
+  public void showProgress(boolean show) {
+    DialogFactory.showProgress(this, show, R.id.swipe_container_list, R.id.loading_status);
+  }
+
+  /**
+   * It shows the SwipeRefreshLayout progress
+   */
+  public void showSwipeProgress() {
+    refreshLayout.setRefreshing(true);
+  }
+
+  /**
+   * It shows the SwipeRefreshLayout progress
+   */
+  public void hideSwipeProgress() {
+    refreshLayout.setRefreshing(false);
+  }
+
+  @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+  private void setAppearance() {
+    refreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+                                          android.R.color.holo_green_light,
+                                          android.R.color.holo_orange_light,
+                                          android.R.color.holo_red_light);
+  }
+
+  /**
+   * It must be overriden by parent classes if manual swipe is enabled.
+   */
+  @Override
+  public void onRefresh() {
+    showSwipeProgress();
+
+    refreshEvents();
+
+    hideSwipeProgress();
+  }
+
+  private static class RefreshAdapterHandler extends Handler {
+
+    private final WeakReference<Rollcall> mActivity;
+
+    public RefreshAdapterHandler(Rollcall activity) {
+      mActivity = new WeakReference<Rollcall>(activity);
     }
 
-    /**
-     * ListView click listener
-     */
-     private ListView.OnItemClickListener clickListener = new ListView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Intent activity = new Intent(getApplicationContext(),
-                    UsersActivity.class);
-            activity.putExtra("attendanceEventCode",
-                    (int) adapter.getItemId(position));
-            startActivity(activity);
-        }
-    };
+  }
 }
