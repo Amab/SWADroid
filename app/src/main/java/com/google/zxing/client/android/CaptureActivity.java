@@ -74,7 +74,7 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 
     private static final String TAG = CaptureActivity.class.getSimpleName();
 
-    private static final long BULK_MODE_SCAN_DELAY_MS = 2000L;
+    private static final long BULK_MODE_SCAN_DELAY_MS = 1000L;
 
     private static final int[] sounds = {R.raw.beep, R.raw.klaxon};
 
@@ -347,11 +347,21 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
         toastText.setGravity(Gravity.CENTER_VERTICAL);
         toastText.setTextSize(SCAN_TEXT_SIZE);
 
-        Toast toast = new Toast(getApplicationContext());
+        final Toast toast = new Toast(getApplicationContext());
         toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
         toast.setDuration(Toast.LENGTH_SHORT);
         toast.setView(layout);
         toast.show();
+
+        // Hide message after delay
+        if(BULK_MODE_SCAN_DELAY_MS < 2000L) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    toast.cancel();
+                }
+            }, BULK_MODE_SCAN_DELAY_MS);
+        }
 
         // Wait a moment or else it will scan the same barcode continuously about 3 times
         restartPreviewAfterDelay(BULK_MODE_SCAN_DELAY_MS);
