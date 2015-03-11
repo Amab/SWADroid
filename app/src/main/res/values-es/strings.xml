@@ -291,5 +291,6 @@
     <string name="rollcallCleanUsers">Limpiar usuarios</string><string name="cleanUsersDialogMsg">El listado de usuarios será eliminado localmente.\n\n
          ¿Está seguro de que quiere eliminar localmente el listado de usuarios?</string>
     <string name="usersAbsent">Todos los usuarios marcados como ausentes</string>
+    <string name="functionHoneycombMsg">Esta función requiere Android 3.0 (Honeycomb) o superior</string>
 
 </resources>
