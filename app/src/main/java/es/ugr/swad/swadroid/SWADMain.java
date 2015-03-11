@@ -746,13 +746,21 @@ public class SWADMain extends MenuExpandableListActivity {
                     activity = new Intent(ctx, GenerateQR.class);
                     startActivityForResult(activity, Constants.GENERATE_QR_REQUEST_CODE);
                 } else if (keyword.equals(getString(R.string.documentsDownloadModuleLabel))) {
-                    activity = new Intent(ctx, DownloadsManager.class);
-                    activity.putExtra("downloadsAreaCode", Constants.DOCUMENTS_AREA_CODE);
-                    startActivityForResult(activity, Constants.DOWNLOADSMANAGER_REQUEST_CODE);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                        activity = new Intent(ctx, DownloadsManager.class);
+                        activity.putExtra("downloadsAreaCode", Constants.DOCUMENTS_AREA_CODE);
+                        startActivityForResult(activity, Constants.DOWNLOADSMANAGER_REQUEST_CODE);
+                    } else {
+                        Toast.makeText(ctx, R.string.functionHoneycombMsg, Toast.LENGTH_LONG).show();
+                    }
                 } else if (keyword.equals(getString(R.string.sharedsDownloadModuleLabel))) {
-                    activity = new Intent(ctx, DownloadsManager.class);
-                    activity.putExtra("downloadsAreaCode", Constants.SHARE_AREA_CODE);
-                    startActivityForResult(activity, Constants.DOWNLOADSMANAGER_REQUEST_CODE);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                        activity = new Intent(ctx, DownloadsManager.class);
+                        activity.putExtra("downloadsAreaCode", Constants.SHARE_AREA_CODE);
+                        startActivityForResult(activity, Constants.DOWNLOADSMANAGER_REQUEST_CODE);
+                    } else {
+                        Toast.makeText(ctx, R.string.functionHoneycombMsg, Toast.LENGTH_LONG).show();
+                    }
                 } else if (keyword.equals(getString(R.string.myGroupsModuleLabel))) {
                     activity = new Intent(ctx, MyGroupsManager.class);
                     activity.putExtra("courseCode", Courses.getSelectedCourseCode());
