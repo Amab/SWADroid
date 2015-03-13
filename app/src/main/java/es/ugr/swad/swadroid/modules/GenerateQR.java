@@ -7,9 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import com.google.zxing.WriterException;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADroidTracker;
@@ -31,10 +29,10 @@ public class GenerateQR extends MenuActivity {
         setContentView(R.layout.generate_qr_layout);
 
         setTitle(R.string.generateQRModuleLabel);
-    	getSupportActionBar().setIcon(R.drawable.qr);
+    	getActionBar().setIcon(R.drawable.qr);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getActionBar().setDisplayHomeAsUpEnabled(true);
         }
     }
 

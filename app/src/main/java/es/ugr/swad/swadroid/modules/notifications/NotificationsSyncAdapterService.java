@@ -23,33 +23,13 @@ import android.accounts.Account;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.AbstractThreadedSyncAdapter;
-import android.content.ContentProviderClient;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SyncResult;
+import android.content.*;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
-
-import org.ksoap2.SoapFault;
-import org.ksoap2.serialization.KvmSerializable;
-import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.transport.HttpResponseException;
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.net.SocketTimeoutException;
-import java.security.cert.CertificateException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
-import java.util.concurrent.TimeoutException;
-
-import javax.net.ssl.SSLException;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
@@ -65,6 +45,19 @@ import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.IWebserviceClient;
 import es.ugr.swad.swadroid.webservices.RESTClient;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
+import org.ksoap2.SoapFault;
+import org.ksoap2.serialization.KvmSerializable;
+import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.transport.HttpResponseException;
+import org.xmlpull.v1.XmlPullParserException;
+
+import javax.net.ssl.SSLException;
+import java.net.SocketTimeoutException;
+import java.security.cert.CertificateException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Service for notifications sync adapter.

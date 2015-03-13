@@ -20,14 +20,12 @@
 package es.ugr.swad.swadroid.modules;
 
 import android.os.Bundle;
-
-import org.ksoap2.serialization.SoapObject;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
+import org.ksoap2.serialization.SoapObject;
 
 /**
  * Recover password module in case user does not remember it
@@ -49,7 +47,7 @@ public class RecoverPassword extends Module {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setMETHOD_NAME("getNewPassword");
-        getSupportActionBar().hide();
+        getActionBar().hide();
     }
 
     @Override

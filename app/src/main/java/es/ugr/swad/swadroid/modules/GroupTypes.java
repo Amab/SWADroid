@@ -4,13 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-
-import org.ksoap2.serialization.SoapObject;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADroidTracker;
@@ -18,6 +11,11 @@ import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.model.GroupType;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
+import org.ksoap2.serialization.SoapObject;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
 
 /**
  * Group type module to get the group types of a given course
@@ -49,7 +47,7 @@ public class GroupTypes extends Module {
         super.onCreate(savedInstanceState);
         courseCode = getIntent().getLongExtra("courseCode", -1);
         setMETHOD_NAME("getGroupTypes");
-        getSupportActionBar().hide();
+        getActionBar().hide();
     }
 
     @Override

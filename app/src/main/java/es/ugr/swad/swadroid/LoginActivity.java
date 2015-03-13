@@ -25,7 +25,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.UnderlineSpan;
@@ -36,14 +35,13 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.security.NoSuchAlgorithmException;
-
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.RecoverPassword;
 import es.ugr.swad.swadroid.utils.Crypto;
 import es.ugr.swad.swadroid.utils.Utils;
+
+import java.security.NoSuchAlgorithmException;
 
 
 /**
@@ -51,7 +49,7 @@ import es.ugr.swad.swadroid.utils.Utils;
  * @author Alejandro Alcalde <algui91@gmail.com>
  *
  */
-public class LoginActivity extends ActionBarActivity implements OnClickListener {
+public class LoginActivity extends Activity implements OnClickListener {
 
     public static final String TAG = Constants.APP_TAG + " LoginActivity";
 

@@ -27,12 +27,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import org.ksoap2.serialization.SoapObject;
-
-import java.util.ArrayList;
-import java.util.Vector;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADroidTracker;
@@ -40,6 +34,10 @@ import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
+import org.ksoap2.serialization.SoapObject;
+
+import java.util.ArrayList;
+import java.util.Vector;
 
 /**
  * Module for send messages.
@@ -97,10 +95,10 @@ public class Messages extends Module {
         eventCode = getIntent().getLongExtra("eventCode", 0);
         setContentView(R.layout.messages_screen);
         setTitle(R.string.messagesModuleLabel);
-        getSupportActionBar().setIcon(R.drawable.msg);
+        getActionBar().setIcon(R.drawable.msg);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getActionBar().setDisplayHomeAsUpEnabled(true);
         }
 		
         rcvEditText = (EditText) findViewById(R.id.message_receivers_text);

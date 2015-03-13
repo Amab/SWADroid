@@ -23,13 +23,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-
-import org.ksoap2.serialization.SoapObject;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADroidTracker;
@@ -37,6 +30,11 @@ import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
+import org.ksoap2.serialization.SoapObject;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
 
 /**
  * Courses module for get user's courses
@@ -79,7 +77,7 @@ public class Courses extends Module {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setMETHOD_NAME("getCourses");
-        getSupportActionBar().hide();
+        getActionBar().hide();
     }
 
     /* (non-Javadoc)

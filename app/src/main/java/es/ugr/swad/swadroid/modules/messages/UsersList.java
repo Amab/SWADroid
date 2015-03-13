@@ -23,7 +23,7 @@ public class UsersList extends MenuActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.users_listview);
 		setTitle(R.string.selectRcvModuleLabel);
-		getSupportActionBar().setIcon(R.drawable.users);
+		getActionBar().setIcon(R.drawable.users);
 	        
 		Button cancelList = (Button) findViewById(R.id.cancelList);
 		cancelList.setOnClickListener(new View.OnClickListener() {

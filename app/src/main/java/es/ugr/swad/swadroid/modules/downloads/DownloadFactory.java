@@ -28,13 +28,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
+import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.utils.Utils;
 
 import java.io.File;
 import java.util.List;
 import java.util.Locale;
-
-import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.utils.Utils;
 
 /**
  * Class for manage file downloads

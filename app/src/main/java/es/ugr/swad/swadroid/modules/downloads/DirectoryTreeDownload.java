@@ -20,9 +20,6 @@ package es.ugr.swad.swadroid.modules.downloads;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import org.ksoap2.serialization.SoapObject;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
@@ -30,6 +27,7 @@ import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
+import org.ksoap2.serialization.SoapObject;
 
 /**
  * DirectoryTreeDownload  gets directory tree of files of general documents of a course/group
@@ -91,7 +89,7 @@ public class DirectoryTreeDownload extends Module {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setMETHOD_NAME("getDirectoryTree");
-        getSupportActionBar().hide();
+        getActionBar().hide();
     }
 
     @Override

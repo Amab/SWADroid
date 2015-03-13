@@ -34,21 +34,9 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.MimeTypeMap;
-import android.widget.AdapterView;
+import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
-import android.widget.GridView;
-import android.widget.ImageButton;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADroidTracker;
@@ -58,6 +46,11 @@ import es.ugr.swad.swadroid.model.GroupType;
 import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.GroupTypes;
 import es.ugr.swad.swadroid.modules.Groups;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Activity to navigate through the directory tree of documents and to manage
@@ -385,7 +378,7 @@ public class DownloadsManager extends MenuActivity {
 
         this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
 
-        getSupportActionBar().setSubtitle(Courses.getSelectedCourseShortName());
+        getActionBar().setSubtitle(Courses.getSelectedCourseShortName());
         
         this.saveState = true;
         this.previousConnection = false;
@@ -478,7 +471,7 @@ public class DownloadsManager extends MenuActivity {
         } else {
             this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
 
-            getSupportActionBar().setSubtitle(Courses.getSelectedCourseShortName());
+            getActionBar().setSubtitle(Courses.getSelectedCourseShortName());
         }
     }
 
@@ -695,15 +688,15 @@ public class DownloadsManager extends MenuActivity {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void setupActionBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getActionBar().setDisplayHomeAsUpEnabled(true);
         }
 		
         if(downloadsAreaCode == 1) {
 			setTitle(R.string.documentsDownloadModuleLabel);
-			getSupportActionBar().setIcon(R.drawable.folder);
+			getActionBar().setIcon(R.drawable.folder);
         } else {
 			setTitle(R.string.sharedsDownloadModuleLabel);
-			getSupportActionBar().setIcon(R.drawable.folder_users);
+			getActionBar().setIcon(R.drawable.folder_users);
 		}
     }
 }

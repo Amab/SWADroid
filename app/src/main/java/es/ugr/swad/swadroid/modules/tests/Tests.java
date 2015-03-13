@@ -25,10 +25,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADroidTracker;
@@ -36,6 +32,9 @@ import es.ugr.swad.swadroid.gui.ImageListAdapter;
 import es.ugr.swad.swadroid.gui.ImageListItem;
 import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.modules.Courses;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Tests module for download questions and evaluate user skills in a course
@@ -80,11 +79,11 @@ public class Tests extends MenuActivity implements OnItemClickListener {
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);
 
-        getSupportActionBar().setSubtitle(Courses.getSelectedCourseShortName());
-    	getSupportActionBar().setIcon(R.drawable.test);
+        getActionBar().setSubtitle(Courses.getSelectedCourseShortName());
+    	getActionBar().setIcon(R.drawable.test);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getActionBar().setDisplayHomeAsUpEnabled(true);
         }
     }
     

@@ -24,12 +24,6 @@ package es.ugr.swad.swadroid.modules.rollcall;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
-
-import org.ksoap2.serialization.SoapObject;
-
-import java.util.ArrayList;
-import java.util.Vector;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
@@ -38,6 +32,10 @@ import es.ugr.swad.swadroid.model.UserAttendance;
 import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
+import org.ksoap2.serialization.SoapObject;
+
+import java.util.ArrayList;
+import java.util.Vector;
 
 /**
  * Rollcall users download module.
@@ -65,7 +63,7 @@ public class UsersDownload extends Module {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setMETHOD_NAME("getAttendanceUsers");
-        getSupportActionBar().hide();
+        getActionBar().hide();
     }
 
     @Override

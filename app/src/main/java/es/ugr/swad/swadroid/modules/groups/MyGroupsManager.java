@@ -30,10 +30,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADroidTracker;
@@ -46,6 +42,9 @@ import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.GroupTypes;
 import es.ugr.swad.swadroid.modules.Groups;
 import es.ugr.swad.swadroid.modules.Login;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Activity to manage the enrollments into groups. It is responsible for maintain the UI and send the appropriate web services
@@ -120,11 +119,11 @@ public class MyGroupsManager extends MenuExpandableListActivity {
         
         mExpandableListView = (ExpandableListView) findViewById(android.R.id.list);
 
-        getSupportActionBar().setSubtitle(Courses.getSelectedCourseShortName());
-    	getSupportActionBar().setIcon(R.drawable.my_groups);
+        getActionBar().setSubtitle(Courses.getSelectedCourseShortName());
+    	getActionBar().setIcon(R.drawable.my_groups);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getActionBar().setDisplayHomeAsUpEnabled(true);
         }
     }
 

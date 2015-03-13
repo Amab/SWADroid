@@ -24,10 +24,15 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
-
 import com.android.dataframework.DataFramework;
 import com.android.dataframework.Entity;
-
+import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.Preferences;
+import es.ugr.swad.swadroid.SWADroidTracker;
+import es.ugr.swad.swadroid.model.*;
+import es.ugr.swad.swadroid.utils.Crypto;
+import es.ugr.swad.swadroid.utils.OldCrypto;
+import es.ugr.swad.swadroid.utils.Utils;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
@@ -35,27 +40,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.Preferences;
-import es.ugr.swad.swadroid.SWADroidTracker;
-import es.ugr.swad.swadroid.model.Course;
-import es.ugr.swad.swadroid.model.Event;
-import es.ugr.swad.swadroid.model.Group;
-import es.ugr.swad.swadroid.model.GroupType;
-import es.ugr.swad.swadroid.model.Model;
-import es.ugr.swad.swadroid.model.Pair;
-import es.ugr.swad.swadroid.model.PairTable;
-import es.ugr.swad.swadroid.model.SWADNotification;
-import es.ugr.swad.swadroid.model.Test;
-import es.ugr.swad.swadroid.model.TestAnswer;
-import es.ugr.swad.swadroid.model.TestQuestion;
-import es.ugr.swad.swadroid.model.TestTag;
-import es.ugr.swad.swadroid.model.User;
-import es.ugr.swad.swadroid.model.UserAttendance;
-import es.ugr.swad.swadroid.utils.Crypto;
-import es.ugr.swad.swadroid.utils.OldCrypto;
-import es.ugr.swad.swadroid.utils.Utils;
 
 /**
  * Helper for database operations

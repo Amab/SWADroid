@@ -8,10 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import es.ugr.swad.swadroid.R;
 
 import java.util.List;
-
-import es.ugr.swad.swadroid.R;
  
 public class ImageListAdapter extends ArrayAdapter<ImageListItem> {
  

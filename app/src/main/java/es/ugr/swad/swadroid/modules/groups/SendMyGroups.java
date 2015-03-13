@@ -21,14 +21,6 @@ package es.ugr.swad.swadroid.modules.groups;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-
-import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.serialization.SoapPrimitive;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Group;
@@ -36,6 +28,12 @@ import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
+import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapPrimitive;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
 
 /**
  * Module to enroll into groups.
@@ -74,7 +72,7 @@ public class SendMyGroups extends Module {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().hide();
+        getActionBar().hide();
         courseCode = getIntent().getLongExtra("courseCode", -1);
         myGroups = getIntent().getStringExtra("myGroups");
         if (courseCode == -1 || myGroups == null) {

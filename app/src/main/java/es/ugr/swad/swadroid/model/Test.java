@@ -18,15 +18,10 @@
  */
 package es.ugr.swad.swadroid.model;
 
+import es.ugr.swad.swadroid.utils.Utils;
 import org.ksoap2.serialization.PropertyInfo;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.StringTokenizer;
-
-import es.ugr.swad.swadroid.utils.Utils;
+import java.util.*;
 
 /**
  * Class for store a test

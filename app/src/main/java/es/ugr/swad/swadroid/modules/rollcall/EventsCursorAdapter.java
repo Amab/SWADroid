@@ -28,13 +28,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
-
-import java.text.DateFormat;
-import java.util.Calendar;
-
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.utils.Crypto;
+
+import java.text.DateFormat;
+import java.util.Calendar;
 
 /**
  * Custom CursorAdapter for display events

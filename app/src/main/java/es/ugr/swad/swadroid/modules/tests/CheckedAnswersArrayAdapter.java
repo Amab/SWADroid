@@ -29,14 +29,13 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckedTextView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import java.util.List;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.widget.CheckableLinearLayout;
 import es.ugr.swad.swadroid.model.Test;
 import es.ugr.swad.swadroid.model.TestAnswer;
+
+import java.util.List;
 
 public class CheckedAnswersArrayAdapter extends ArrayAdapter<TestAnswer> {
     private final Context context;

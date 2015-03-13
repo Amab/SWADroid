@@ -18,14 +18,13 @@
  */
 package es.ugr.swad.swadroid.model;
 
+import es.ugr.swad.swadroid.utils.Utils;
 import org.ksoap2.serialization.PropertyInfo;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
-
-import es.ugr.swad.swadroid.utils.Utils;
 
 /**
  * Clas for store a test question

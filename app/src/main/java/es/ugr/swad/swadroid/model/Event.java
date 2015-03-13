@@ -21,14 +21,9 @@
 package es.ugr.swad.swadroid.model;
 
 import android.text.TextUtils;
-
 import org.ksoap2.serialization.PropertyInfo;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Hashtable;
-import java.util.List;
+import java.util.*;
 
 /**
  * Class for store a rollcall event

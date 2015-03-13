@@ -19,6 +19,7 @@
 package es.ugr.swad.swadroid.gui;
 
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -26,12 +27,10 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.PreferencesActivity;
@@ -46,7 +45,7 @@ import es.ugr.swad.swadroid.database.DataBaseHelper;
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */
-public class MenuExpandableListActivity extends ActionBarActivity {
+public class MenuExpandableListActivity extends Activity {
 	/**
 	 * Application preferences
 	 */

@@ -20,17 +20,15 @@
 package es.ugr.swad.swadroid.utils;
 
 import android.content.Context;
-
-import java.security.MessageDigest;
-import java.security.SecureRandom;
+import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.SWADroidTracker;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-
-import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.SWADroidTracker;
+import java.security.MessageDigest;
+import java.security.SecureRandom;
 
 /**
  * Cryptographic class for encryption purposes.

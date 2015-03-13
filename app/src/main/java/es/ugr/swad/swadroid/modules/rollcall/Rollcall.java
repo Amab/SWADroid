@@ -32,15 +32,14 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import java.lang.ref.WeakReference;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADroidTracker;
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.modules.Courses;
+
+import java.lang.ref.WeakReference;
 
 /**
  * Rollcall module.
@@ -158,11 +157,11 @@ public class Rollcall extends MenuExpandableListActivity implements
     refreshLayout.setOnRefreshListener(this);
     setAppearance();
 
-    getSupportActionBar().setSubtitle(Courses.getSelectedCourseShortName());
-    getSupportActionBar().setIcon(R.drawable.roll_call);
+    getActionBar().setSubtitle(Courses.getSelectedCourseShortName());
+    getActionBar().setIcon(R.drawable.roll_call);
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-      getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+      getActionBar().setDisplayHomeAsUpEnabled(true);
     }
   }
 

@@ -29,23 +29,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
-
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.ksoap2.SoapFault;
-import org.ksoap2.transport.HttpResponseException;
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
-import java.lang.ref.WeakReference;
-import java.net.SocketTimeoutException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
-import java.util.concurrent.TimeoutException;
-
-import javax.net.ssl.SSLException;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
@@ -54,6 +37,20 @@ import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.IWebserviceClient;
 import es.ugr.swad.swadroid.webservices.RESTClient;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.ksoap2.SoapFault;
+import org.ksoap2.transport.HttpResponseException;
+import org.xmlpull.v1.XmlPullParserException;
+
+import javax.net.ssl.SSLException;
+import java.io.IOException;
+import java.lang.ref.WeakReference;
+import java.net.SocketTimeoutException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Superclass for encapsulate common behavior of all modules.

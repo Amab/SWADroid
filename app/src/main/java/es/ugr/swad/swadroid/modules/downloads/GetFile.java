@@ -21,12 +21,6 @@ package es.ugr.swad.swadroid.modules.downloads;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-
-import org.ksoap2.serialization.SoapPrimitive;
-
-import java.util.ArrayList;
-import java.util.Vector;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADroidTracker;
@@ -34,6 +28,10 @@ import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
+import org.ksoap2.serialization.SoapPrimitive;
+
+import java.util.ArrayList;
+import java.util.Vector;
 
 /**
  * Module to get information of a file located in SWAD
@@ -60,7 +58,7 @@ public class GetFile extends Module {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().hide();
+        getActionBar().hide();
         fileCode = getIntent().getLongExtra("fileCode", -1);
 
         if (fileCode == -1) {

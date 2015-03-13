@@ -19,9 +19,8 @@
 
 package es.ugr.swad.swadroid.ssl;
 
-import java.security.cert.X509Certificate;
-
 import javax.net.ssl.X509TrustManager;
+import java.security.cert.X509Certificate;
 
 /**
  * TrustManager that accepts untrusted certificates.

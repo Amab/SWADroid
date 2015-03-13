@@ -20,7 +20,6 @@ package es.ugr.swad.swadroid.gui;
 
 import android.content.Context;
 import android.widget.ImageView;
-
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.DisplayImageOptions.Builder;
 import com.nostra13.universalimageloader.core.ImageLoader;

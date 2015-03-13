@@ -22,6 +22,7 @@ package es.ugr.swad.swadroid.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import es.ugr.swad.swadroid.model.Model;
 
 import java.text.Normalizer;
 import java.util.Iterator;
@@ -29,8 +30,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import es.ugr.swad.swadroid.model.Model;
 
 /**
  * Utilities class.

@@ -25,10 +25,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import es.ugr.swad.swadroid.R;
 
 import java.util.ArrayList;
-
-import es.ugr.swad.swadroid.R;
 
 /**
  * Adapter to populate browser of files with the information received from SWAD

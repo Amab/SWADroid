@@ -21,13 +21,12 @@ package es.ugr.swad.swadroid.modules.downloads;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADroidTracker;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * Download the file located at the given URL, save it to a file.

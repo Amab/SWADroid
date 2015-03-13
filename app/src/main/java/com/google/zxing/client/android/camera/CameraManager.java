@@ -25,7 +25,6 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.SurfaceHolder;
-
 import com.google.zxing.client.android.PlanarYUVLuminanceSource;
 import com.google.zxing.client.android.PreferencesActivity;
 

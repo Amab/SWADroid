@@ -26,13 +26,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
+import es.ugr.swad.swadroid.BuildConfig;
+import es.ugr.swad.swadroid.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import es.ugr.swad.swadroid.BuildConfig;
-import es.ugr.swad.swadroid.R;
 
 /**
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>

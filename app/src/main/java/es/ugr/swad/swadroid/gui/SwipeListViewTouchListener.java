@@ -25,19 +25,14 @@ import android.annotation.TargetApi;
 import android.graphics.Rect;
 import android.os.Build;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.view.MotionEvent;
-import android.view.VelocityTracker;
-import android.view.View;
-import android.view.ViewConfiguration;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.AbsListView;
 import android.widget.ListView;
+import es.ugr.swad.swadroid.Constants;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import es.ugr.swad.swadroid.Constants;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
 public class SwipeListViewTouchListener implements View.OnTouchListener {

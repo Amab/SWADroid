@@ -30,16 +30,11 @@ import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.BaseColumns;
 import android.util.Pair;
+import es.ugr.swad.swadroid.Constants;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import es.ugr.swad.swadroid.Constants;
+import java.util.*;
 
 //import android.provider.Downloads;
 

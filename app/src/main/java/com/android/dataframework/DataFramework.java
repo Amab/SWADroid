@@ -30,10 +30,8 @@ package com.android.dataframework;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-
 import com.android.dataframework.core.DataFrameworkCore;
 import com.android.dataframework.core.Table;
-
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;

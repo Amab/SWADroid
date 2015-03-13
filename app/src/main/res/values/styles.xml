@@ -7,10 +7,11 @@
         <item name="android:padding">16dp</item>
     </style>
 
-    <style name="Theme.AppCompat.Translucent" parent="@style/Theme.AppCompat.Light">
-        <item name="android:windowBackground">@android:color/transparent</item>
+    <style name="Theme.White" parent="android:Theme">
+        <!--<item name="android:windowBackground">@android:color/white</item>-->
+        <item name="android:background">@android:color/white</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
-        <item name="android:windowIsTranslucent">true</item>
+        <!--<item name="android:windowIsTranslucent">true</item>-->
         <item name="android:windowAnimationStyle">@android:style/Animation</item>
     </style>
 

@@ -16,13 +16,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
-
+import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.SWADroidTracker;
 import org.apache.commons.io.IOUtils;
 
 import java.io.InputStream;
-
-import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.SWADroidTracker;
 
 /**
  * Class for create dialogs.

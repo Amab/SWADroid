@@ -22,9 +22,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
-
-import org.ksoap2.serialization.SoapObject;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
@@ -34,6 +31,7 @@ import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
+import org.ksoap2.serialization.SoapObject;
 
 /**
  * Tests module for download and update questions
@@ -62,7 +60,7 @@ public class TestsConfigDownload extends Module {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setMETHOD_NAME("getTestConfig");
-        getSupportActionBar().hide();
+        getActionBar().hide();
     }
 
     /* (non-Javadoc)

@@ -20,9 +20,6 @@ package es.ugr.swad.swadroid.modules.notifications;
 
 import android.os.Bundle;
 import android.util.Log;
-
-import org.ksoap2.serialization.SoapPrimitive;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADroidTracker;
@@ -30,6 +27,7 @@ import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
+import org.ksoap2.serialization.SoapPrimitive;
 
 /**
  * Notifications module for mark as read user's notifications
@@ -50,7 +48,7 @@ public class NotificationsMarkAllAsRead extends Module {
         super.onCreate(savedInstanceState);
 
         setMETHOD_NAME("markNotificationsAsRead");
-        getSupportActionBar().hide();
+        getActionBar().hide();
         runConnection();
     }
 

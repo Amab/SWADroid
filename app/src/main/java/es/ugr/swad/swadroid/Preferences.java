@@ -25,13 +25,12 @@ import android.content.SharedPreferences.Editor;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-
-import java.security.NoSuchAlgorithmException;
-
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.sync.SyncUtils;
 import es.ugr.swad.swadroid.utils.Crypto;
+
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Class for store the application preferences

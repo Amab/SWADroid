@@ -20,20 +20,14 @@ package es.ugr.swad.swadroid.ssl;
 
 import android.content.Context;
 import android.util.Log;
-
-import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
+import es.ugr.swad.swadroid.Constants;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
-
-import es.ugr.swad.swadroid.Constants;
+import java.io.IOException;
+import java.security.*;
+import java.security.cert.CertificateException;
 
 /**
  * Establishes a secure connection.

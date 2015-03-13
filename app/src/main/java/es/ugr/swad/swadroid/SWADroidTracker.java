@@ -23,12 +23,7 @@ package es.ugr.swad.swadroid;
 
 import android.content.Context;
 import android.util.Log;
-
-import com.google.android.gms.analytics.ExceptionReporter;
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.StandardExceptionParser;
-import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.analytics.*;
 
 import java.util.HashMap;
 

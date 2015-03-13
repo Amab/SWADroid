@@ -21,20 +21,18 @@
 package es.ugr.swad.swadroid.utils;
 
 import android.content.Context;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.AlgorithmParameterSpec;
-import java.security.spec.KeySpec;
+import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.SWADroidTracker;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
-
-import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.SWADroidTracker;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.AlgorithmParameterSpec;
+import java.security.spec.KeySpec;
 
 /**
  * Cryptographic class for encryption purposes.

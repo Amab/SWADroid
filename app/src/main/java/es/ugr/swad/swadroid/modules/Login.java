@@ -21,16 +21,14 @@ package es.ugr.swad.swadroid.modules;
 
 import android.os.Bundle;
 import android.util.Log;
-
-import org.ksoap2.SoapFault;
-import org.ksoap2.serialization.SoapObject;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
+import org.ksoap2.SoapFault;
+import org.ksoap2.serialization.SoapObject;
 
 /**
  * Login module for connect to SWAD.
@@ -71,7 +69,7 @@ public class Login extends Module {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setMETHOD_NAME("loginByUserPasswordKey");
-        getSupportActionBar().hide();
+        getActionBar().hide();
     }
 
     /* (non-Javadoc)
