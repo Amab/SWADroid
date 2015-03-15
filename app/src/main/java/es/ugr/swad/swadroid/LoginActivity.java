@@ -299,6 +299,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 
         final EditText user = new EditText(getApplicationContext());
         user.setTextColor(Color.BLACK);
+        user.setHintTextColor(Color.GRAY);
         user.setHint(getString(R.string.prompt_email));
 
         builder.setView(user)
