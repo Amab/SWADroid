@@ -16,6 +16,18 @@
 
 package com.google.zxing.client.android.encode;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.Result;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.android.Contents;
+import com.google.zxing.client.android.Intents;
+import com.google.zxing.client.result.AddressBookParsedResult;
+import com.google.zxing.client.result.ParsedResult;
+import com.google.zxing.client.result.ResultParser;
+import com.google.zxing.common.BitMatrix;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -24,19 +36,18 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.telephony.PhoneNumberUtils;
 import android.util.Log;
-import com.google.zxing.*;
-import com.google.zxing.client.android.Contents;
-import com.google.zxing.client.android.Intents;
-import com.google.zxing.client.result.AddressBookParsedResult;
-import com.google.zxing.client.result.ParsedResult;
-import com.google.zxing.client.result.ResultParser;
-import com.google.zxing.common.BitMatrix;
-import es.ugr.swad.swadroid.R;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.Map;
+
+import es.ugr.swad.swadroid.R;
 
 /**
  * This class does the work of decoding the user's request and extracting all the data
@@ -49,17 +60,25 @@ public final class QRCodeEncoder {
     private static final String TAG = QRCodeEncoder.class.getSimpleName();
 
     private static final int WHITE = 0xFFFFFFFF;
+
     private static final int BLACK = 0xFF000000;
 
     private final Activity activity;
-    private String contents;
-    private String displayContents;
-    private String title;
-    private BarcodeFormat format;
+
     private final int dimension;
+
     private final boolean useVCard;
 
-    public QRCodeEncoder(Activity activity, Intent intent, int dimension, boolean useVCard) throws WriterException {
+    private String contents;
+
+    private String displayContents;
+
+    private String title;
+
+    private BarcodeFormat format;
+
+    public QRCodeEncoder(Activity activity, Intent intent, int dimension, boolean useVCard)
+            throws WriterException {
         this.activity = activity;
         this.dimension = dimension;
         this.useVCard = useVCard;
@@ -69,6 +88,20 @@ public final class QRCodeEncoder {
         } else if (action.equals(Intent.ACTION_SEND)) {
             encodeContentsFromShareIntent(intent);
         }
+    }
+
+    private static Iterable<String> toIterable(String[] values) {
+        return values == null ? null : Arrays.asList(values);
+    }
+
+    private static String guessAppropriateEncoding(CharSequence contents) {
+        // Very crude at the moment
+        for (int i = 0; i < contents.length(); i++) {
+            if (contents.charAt(i) > 0xFF) {
+                return "UTF-8";
+            }
+        }
+        return null;
     }
 
     String getContents() {
@@ -132,7 +165,8 @@ public final class QRCodeEncoder {
         // Notice: Google Maps shares both URL and details in one text, bummer!
         String theContents = ContactEncoder.trim(intent.getStringExtra(Intent.EXTRA_TEXT));
         if (theContents == null) {
-            theContents = ContactEncoder.trim(intent.getStringExtra("android.intent.extra.HTML_TEXT"));
+            theContents = ContactEncoder
+                    .trim(intent.getStringExtra("android.intent.extra.HTML_TEXT"));
             // Intent.EXTRA_HTML_TEXT
             if (theContents == null) {
                 theContents = ContactEncoder.trim(intent.getStringExtra(Intent.EXTRA_SUBJECT));
@@ -251,7 +285,8 @@ public final class QRCodeEncoder {
                 String url = bundle.getString(Contents.URL_KEY);
                 String note = bundle.getString(Contents.NOTE_KEY);
 
-                ContactEncoder mecardEncoder = useVCard ? new VCardContactEncoder() : new MECARDContactEncoder();
+                ContactEncoder mecardEncoder = useVCard ? new VCardContactEncoder()
+                        : new MECARDContactEncoder();
                 String[] encoded = mecardEncoder.encode(Collections.singleton(name),
                         organization,
                         Collections.singleton(address),
@@ -300,10 +335,6 @@ public final class QRCodeEncoder {
         }
     }
 
-    private static Iterable<String> toIterable(String[] values) {
-        return values == null ? null : Arrays.asList(values);
-    }
-
     public Bitmap encodeAsBitmap() throws WriterException {
         String contentsToEncode = contents;
         if (contentsToEncode == null) {
@@ -336,16 +367,6 @@ public final class QRCodeEncoder {
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
         return bitmap;
-    }
-
-    private static String guessAppropriateEncoding(CharSequence contents) {
-        // Very crude at the moment
-        for (int i = 0; i < contents.length(); i++) {
-            if (contents.charAt(i) > 0xFF) {
-                return "UTF-8";
-            }
-        }
-        return null;
     }
 
 }

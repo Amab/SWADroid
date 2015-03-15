@@ -28,8 +28,10 @@ import android.util.AttributeSet;
 import android.widget.ProgressBar;
 
 public class TextProgressBar extends ProgressBar {
-    private String text;
+
     private final Paint textPaint;
+
+    private String text;
 
     public TextProgressBar(Context context) {
         super(context);

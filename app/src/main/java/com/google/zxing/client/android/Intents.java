@@ -23,10 +23,12 @@ package com.google.zxing.client.android;
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class Intents {
+
     private Intents() {
     }
 
     public static final class Scan {
+
         /**
          * Send this intent to open the Barcodes app in scanning mode, find a barcode, and return
          * the results.
@@ -38,7 +40,8 @@ public final class Intents {
          * may be useful to limit scanning to certain formats. Use
          * {@link android.content.Intent#putExtra(String, String)} with one of the values below.
          * <p/>
-         * Setting this is effectively shorthand for setting explicit formats with {@link #FORMATS}.
+         * Setting this is effectively shorthand for setting explicit formats with {@link
+         * #FORMATS}.
          * It is overridden by that setting.
          */
         public static final String MODE = "SCAN_MODE";
@@ -82,6 +85,7 @@ public final class Intents {
          * You should specify both or neither, and pass the size as an int.
          */
         public static final String WIDTH = "SCAN_WIDTH";
+
         public static final String HEIGHT = "SCAN_HEIGHT";
 
         /**
@@ -115,7 +119,8 @@ public final class Intents {
         public static final String RESULT_FORMAT = "SCAN_RESULT_FORMAT";
 
         /**
-         * Call {@link android.content.Intent#getStringExtra(String)} with {@link #RESULT_UPC_EAN_EXTENSION}
+         * Call {@link android.content.Intent#getStringExtra(String)} with {@link
+         * #RESULT_UPC_EAN_EXTENSION}
          * to return the content of any UPC extension barcode that was also found. Only applicable
          * to {@link com.google.zxing.BarcodeFormat#UPC_A} and {@link com.google.zxing.BarcodeFormat#EAN_13}
          * formats.
@@ -129,27 +134,35 @@ public final class Intents {
         public static final String RESULT_BYTES = "SCAN_RESULT_BYTES";
 
         /**
-         * Key for the value of {@link com.google.zxing.ResultMetadataType#ORIENTATION}, if available.
-         * Call {@link android.content.Intent#getIntArrayExtra(String)} with {@link #RESULT_ORIENTATION}.
+         * Key for the value of {@link com.google.zxing.ResultMetadataType#ORIENTATION}, if
+         * available.
+         * Call {@link android.content.Intent#getIntArrayExtra(String)} with {@link
+         * #RESULT_ORIENTATION}.
          */
         public static final String RESULT_ORIENTATION = "SCAN_RESULT_ORIENTATION";
 
         /**
-         * Key for the value of {@link com.google.zxing.ResultMetadataType#ERROR_CORRECTION_LEVEL}, if available.
-         * Call {@link android.content.Intent#getStringExtra(String)} with {@link #RESULT_ERROR_CORRECTION_LEVEL}.
+         * Key for the value of {@link com.google.zxing.ResultMetadataType#ERROR_CORRECTION_LEVEL},
+         * if available.
+         * Call {@link android.content.Intent#getStringExtra(String)} with {@link
+         * #RESULT_ERROR_CORRECTION_LEVEL}.
          */
-        public static final String RESULT_ERROR_CORRECTION_LEVEL = "SCAN_RESULT_ERROR_CORRECTION_LEVEL";
+        public static final String RESULT_ERROR_CORRECTION_LEVEL
+                = "SCAN_RESULT_ERROR_CORRECTION_LEVEL";
 
         /**
          * Prefix for keys that map to the values of {@link com.google.zxing.ResultMetadataType#BYTE_SEGMENTS},
-         * if available. The actual values will be set under a series of keys formed by adding 0, 1, 2, ...
-         * to this prefix. So the first byte segment is under key "SCAN_RESULT_BYTE_SEGMENTS_0" for example.
+         * if available. The actual values will be set under a series of keys formed by adding 0, 1,
+         * 2, ...
+         * to this prefix. So the first byte segment is under key "SCAN_RESULT_BYTE_SEGMENTS_0" for
+         * example.
          * Call {@link android.content.Intent#getByteArrayExtra(String)} with these keys.
          */
         public static final String RESULT_BYTE_SEGMENTS_PREFIX = "SCAN_RESULT_BYTE_SEGMENTS_";
 
         /**
-         * Setting this to false will not save scanned codes in the history. Specified as a {@code boolean}.
+         * Setting this to false will not save scanned codes in the history. Specified as a {@code
+         * boolean}.
          */
         public static final String SAVE_HISTORY = "SAVE_HISTORY";
 
@@ -158,7 +171,7 @@ public final class Intents {
     }
 
     @SuppressWarnings("unused")
-	private static final class History {
+    private static final class History {
 
         public static final String ITEM_NUMBER = "ITEM_NUMBER";
 
@@ -167,6 +180,7 @@ public final class Intents {
     }
 
     public static final class Encode {
+
         /**
          * Send this intent to encode a piece of data as a QR code and display it full screen, so
          * that another person can scan the barcode from your screen.
@@ -183,19 +197,22 @@ public final class Intents {
 
         /**
          * The type of data being supplied if the format is QR Code. Use
-         * {@link android.content.Intent#putExtra(String, String)} with one of {@link Contents.Type}.
+         * {@link android.content.Intent#putExtra(String, String)} with one of {@link
+         * Contents.Type}.
          */
         public static final String TYPE = "ENCODE_TYPE";
 
         /**
          * The barcode format to be displayed. If this isn't specified or is blank,
-         * it defaults to QR Code. Use {@link android.content.Intent#putExtra(String, String)}, where
+         * it defaults to QR Code. Use {@link android.content.Intent#putExtra(String, String)},
+         * where
          * format is one of {@link com.google.zxing.BarcodeFormat}.
          */
         public static final String FORMAT = "ENCODE_FORMAT";
 
         /**
-         * Normally the contents of the barcode are displayed to the user in a TextView. Setting this
+         * Normally the contents of the barcode are displayed to the user in a TextView. Setting
+         * this
          * boolean to false will hide that TextView, showing only the encode barcode.
          */
         public static final String SHOW_CONTENTS = "ENCODE_SHOW_CONTENTS";
@@ -205,7 +222,8 @@ public final class Intents {
     }
 
     @SuppressWarnings("unused")
-	private static final class SearchBookContents {
+    private static final class SearchBookContents {
+
         /**
          * Use Google Book Search to search the contents of the book provided.
          */
@@ -226,7 +244,8 @@ public final class Intents {
     }
 
     @SuppressWarnings("unused")
-	private static final class WifiConnect {
+    private static final class WifiConnect {
+
         /**
          * Internal intent used to trigger connection to a wi-fi network.
          */
@@ -252,7 +271,8 @@ public final class Intents {
     }
 
     @SuppressWarnings("unused")
-	private static final class Share {
+    private static final class Share {
+
         /**
          * Give the user a choice of items to encode as a barcode, then render it as a QR Code and
          * display onscreen for a friend to scan with their phone.

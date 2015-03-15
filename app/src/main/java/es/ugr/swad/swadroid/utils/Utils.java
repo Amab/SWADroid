@@ -22,7 +22,6 @@ package es.ugr.swad.swadroid.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import es.ugr.swad.swadroid.model.Model;
 
 import java.text.Normalizer;
 import java.util.Iterator;
@@ -30,6 +29,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import es.ugr.swad.swadroid.model.Model;
 
 /**
  * Utilities class.
@@ -39,15 +40,17 @@ import java.util.regex.Pattern;
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */
 public class Utils {
-	/**
-	 * Random generator
-	 */
-	public static final Random rnd = new Random();
-	/**
-	 * Base string to generate random alphanumeric strings
-	 */
-	public static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	
+
+    /**
+     * Random generator
+     */
+    public static final Random rnd = new Random();
+
+    /**
+     * Base string to generate random alphanumeric strings
+     */
+    public static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
     /**
      * Generates a random string of length len
      *
@@ -56,8 +59,9 @@ public class Utils {
      */
     public static String randomString(int len) {
         StringBuilder sb = new StringBuilder(len);
-        for (int i = 0; i < len; i++)
+        for (int i = 0; i < len; i++) {
             sb.append(Utils.AB.charAt(Utils.rnd.nextInt(Utils.AB.length())));
+        }
         return sb.toString();
     }
 
@@ -69,7 +73,8 @@ public class Utils {
      */
     public static boolean connectionAvailable(Context ctx) {
         //boolean connAvailable = false;
-        ConnectivityManager cm = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) ctx
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
 
         //Survey all networks (wifi, gprs...)
         /*NetworkInfo[] networks = cm.getAllNetworkInfo();
@@ -86,7 +91,7 @@ public class Utils {
         //If boolean remains false there is no connection available
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null &&
-                              activeNetwork.isConnectedOrConnecting();
+                activeNetwork.isConnectedOrConnecting();
         return isConnected;
     }
 
@@ -135,82 +140,84 @@ public class Utils {
     }
 
     public static boolean isInteger(String str) {
-	    try {
-	        Integer.parseInt(str);
-	        return true;
-	    } catch (NumberFormatException nfe) {
-	        nfe.printStackTrace();
-	    }
-	    return false;
-	}
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException nfe) {
+            nfe.printStackTrace();
+        }
+        return false;
+    }
 
-	public static boolean isLong(String str) {
-	    try {
-	    	Long.parseLong(str);
-	        return true;
-	    } catch (NumberFormatException nfe) {
-	    	// Do nothing
-	    }
-	    return false;
-	}
+    public static boolean isLong(String str) {
+        try {
+            Long.parseLong(str);
+            return true;
+        } catch (NumberFormatException nfe) {
+            // Do nothing
+        }
+        return false;
+    }
 
-	public static boolean isValidDni(String dni) {
-	    String dniPattern = "^[A-Z]?\\d{1,16}[A-Z]?$";    // (0 or 1 letter) + (1 to 16 digits) + (0 or 1 letter)
-	
-	    Pattern pattern = Pattern.compile(dniPattern, Pattern.CASE_INSENSITIVE);
-	    Matcher matcher = pattern.matcher(dni);
-	
-	    return matcher.matches();
-	    /*if (matcher.matches())
+    public static boolean isValidDni(String dni) {
+        String dniPattern
+                = "^[A-Z]?\\d{1,16}[A-Z]?$";    // (0 or 1 letter) + (1 to 16 digits) + (0 or 1 letter)
+
+        Pattern pattern = Pattern.compile(dniPattern, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(dni);
+
+        return matcher.matches();
+            /*if (matcher.matches())
 	        return checkDniLetter(dni);
 		return false;*/
-	}
+    }
 
-	public static boolean checkDniLetter(String n) {
-	    String number = n.substring(0, n.length() - 1);
-	    String letter = n.substring(n.length() - 1, n.length());
-	
-	    int code = (Integer.valueOf(number)) % 23;
-	    String[] abc = {"T", "R", "W", "A", "G", "M", "Y", "F", "P", "D", "X", "B", "N", "J", "Z", "S", "Q", "V", "H", "L", "C", "K", "E", "T"};
-	
-	    return abc[code].compareToIgnoreCase(letter) == 0;
-	}
+    public static boolean checkDniLetter(String n) {
+        String number = n.substring(0, n.length() - 1);
+        String letter = n.substring(n.length() - 1, n.length());
 
-	public static boolean isValidNickname(String nickname) {
-	    String patronNickname = "@[a-zA-Z_0-9]{1,17}";    // 1 to 17 letters, underscored or digits
-	
-	    Pattern pattern = Pattern.compile(patronNickname, Pattern.CASE_INSENSITIVE);
-	    Matcher matcher = pattern.matcher(nickname);
-	
-	    return matcher.matches();
-	}
+        int code = (Integer.valueOf(number)) % 23;
+        String[] abc = {"T", "R", "W", "A", "G", "M", "Y", "F", "P", "D", "X", "B", "N", "J", "Z",
+                "S", "Q", "V", "H", "L", "C", "K", "E", "T"};
+
+        return abc[code].compareToIgnoreCase(letter) == 0;
+    }
+
+    public static boolean isValidNickname(String nickname) {
+        String patronNickname = "@[a-zA-Z_0-9]{1,17}";    // 1 to 17 letters, underscored or digits
+
+        Pattern pattern = Pattern.compile(patronNickname, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(nickname);
+
+        return matcher.matches();
+    }
 
     public static String fixLinks(String body) {
         String regex = "(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
         body = body.replaceAll(regex, "<a href=\"$0\">$0</a>");
         return body;
     }
-    
+
     /**
      * Creates a string of notification codes separated by commas from a list of notifications
      */
     public static String getSeenNotificationCodes(List<Model> markedNotificationsList) {
-    	String seenNotifCodes = "";
-    	Model m;
-    	
-    	for(Iterator<Model> it = markedNotificationsList.iterator(); it.hasNext();) {
-    		m = it.next();
-    		seenNotifCodes += m.getId();
-    		
-    		if(it.hasNext()) {
-    			seenNotifCodes += ",";
-    		}
-    	}
-    	
-    	return seenNotifCodes;
+        String seenNotifCodes = "";
+        Model m;
+
+        for (Iterator<Model> it = markedNotificationsList.iterator(); it.hasNext(); ) {
+            m = it.next();
+            seenNotifCodes += m.getId();
+
+            if (it.hasNext()) {
+                seenNotifCodes += ",";
+            }
+        }
+
+        return seenNotifCodes;
     }
 
-	/**
+    /**
      * Generates the stars sequence to be showed on password field
      *
      * @param size Length of the stars sequence
@@ -225,7 +232,7 @@ public class Utils {
 
         return stars;
     }
-    
+
     public static String unAccent(String s) {
         String temp = Normalizer.normalize(s, Normalizer.Form.NFD);
         Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");

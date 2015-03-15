@@ -25,10 +25,14 @@ public class MainActivity extends MaterialNavigationDrawer {
     public void init(Bundle bundle) {
         this.disableLearningPattern();
 
-        MaterialSection section1 = newSection(getString(R.string.course), R.drawable.crs, new CourseFragment());
-        MaterialSection section2 = newSection(getString(R.string.evaluation), R.drawable.ass, new CourseFragment());
-        MaterialSection section3 = newSection(getString(R.string.users), R.drawable.users, new CourseFragment());
-        MaterialSection section4 = newSection(getString(R.string.messages), R.drawable.msg, new CourseFragment());
+        MaterialSection section1 = newSection(getString(R.string.course), R.drawable.crs,
+                new CourseFragment());
+        MaterialSection section2 = newSection(getString(R.string.evaluation), R.drawable.ass,
+                new CourseFragment());
+        MaterialSection section3 = newSection(getString(R.string.users), R.drawable.users,
+                new CourseFragment());
+        MaterialSection section4 = newSection(getString(R.string.messages), R.drawable.msg,
+                new CourseFragment());
 
         addSection(section1);
         addSection(section2);
@@ -39,13 +43,16 @@ public class MainActivity extends MaterialNavigationDrawer {
     public static class CourseFragment extends Fragment {
 
         private static final String TAG = "CourseFragment";
+
         private static final int DATASET_COUNT = 60;
 
-        private RecyclerView mRecyclerView;
-        private RecyclerView.Adapter mAdapter;
-        private RecyclerView.LayoutManager mLayoutManager;
-
         protected String[] mDataset;
+
+        private RecyclerView mRecyclerView;
+
+        private RecyclerView.Adapter mAdapter;
+
+        private RecyclerView.LayoutManager mLayoutManager;
 
         public CourseFragment() {
         }
@@ -58,7 +65,7 @@ public class MainActivity extends MaterialNavigationDrawer {
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
+                Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.courses_fragment, container, false);
             rootView.setTag(TAG);
 

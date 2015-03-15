@@ -1,88 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/groupsLayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:focusable="false"
-    android:orientation="horizontal" >
+              android:id="@+id/groupsLayout"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:focusable="false"
+              android:orientation="horizontal">
 
     <ImageView
-        android:id="@+id/padlockIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="false"
-        android:focusable="false"
-        android:paddingEnd="0dip"
-        android:paddingLeft="5dip"
-        android:paddingRight="0dip"
-        android:paddingStart="5dip"
-        android:paddingTop="5dip"
-        android:src="@drawable/padlock_red" />
+            android:id="@+id/padlockIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:focusable="false"
+            android:paddingEnd="0dip"
+            android:paddingLeft="5dip"
+            android:paddingRight="0dip"
+            android:paddingStart="5dip"
+            android:paddingTop="5dip"
+            android:src="@drawable/padlock_red"/>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:focusable="false"
-        android:orientation="vertical" >
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:orientation="vertical">
 
         <CheckBox
-            android:id="@+id/checkBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="false"
-            android:focusable="false"
-            android:textColor="@android:color/black"
-            android:visibility="gone" />
+                android:id="@+id/checkBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:focusable="false"
+                android:textColor="@android:color/black"
+                android:visibility="gone"/>
 
         <RadioButton
-            android:id="@+id/radioButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="false"
-            android:focusable="false"
-            android:textColor="@android:color/black" />
+                android:id="@+id/radioButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:focusable="false"
+                android:textColor="@android:color/black"/>
 
         <TextView
-            android:id="@+id/vacantsText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="false"
-            android:focusable="false"
-            android:gravity="center"
-            android:paddingEnd="0dip"
-            android:paddingLeft="7dip"
-            android:paddingRight="0dip"
-            android:paddingStart="7dip"
-            android:text="@string/vacants"
-            android:textColor="@color/sgilight_gray_32" />
+                android:id="@+id/vacantsText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:focusable="false"
+                android:gravity="center"
+                android:paddingEnd="0dip"
+                android:paddingLeft="7dip"
+                android:paddingRight="0dip"
+                android:paddingStart="7dip"
+                android:text="@string/vacants"
+                android:textColor="@color/sgilight_gray_32"/>
 
         <TextView
-            android:id="@+id/nStudentText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="false"
-            android:focusable="false"
-            android:gravity="center"
-            android:paddingEnd="0dip"
-            android:paddingLeft="7dip"
-            android:paddingRight="0dip"
-            android:paddingStart="7dip"
-            android:text="@string/numStudent"
-            android:textColor="@color/sgilight_gray_32" />
+                android:id="@+id/nStudentText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:focusable="false"
+                android:gravity="center"
+                android:paddingEnd="0dip"
+                android:paddingLeft="7dip"
+                android:paddingRight="0dip"
+                android:paddingStart="7dip"
+                android:text="@string/numStudent"
+                android:textColor="@color/sgilight_gray_32"/>
 
         <TextView
-            android:id="@+id/maxStudentText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="false"
-            android:focusable="false"
-            android:gravity="center"
-            android:paddingEnd="0dip"
-            android:paddingLeft="7dip"
-            android:paddingRight="0dip"
-            android:paddingStart="7dip"
-            android:text="@string/maxStudent"
-            android:textColor="@color/sgilight_gray_32" />
+                android:id="@+id/maxStudentText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:focusable="false"
+                android:gravity="center"
+                android:paddingEnd="0dip"
+                android:paddingLeft="7dip"
+                android:paddingRight="0dip"
+                android:paddingStart="7dip"
+                android:text="@string/maxStudent"
+                android:textColor="@color/sgilight_gray_32"/>
     </LinearLayout>
 
 </LinearLayout>

@@ -35,35 +35,43 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.security.NoSuchAlgorithmException;
+
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.RecoverPassword;
 import es.ugr.swad.swadroid.utils.Crypto;
 import es.ugr.swad.swadroid.utils.Utils;
 
-import java.security.NoSuchAlgorithmException;
-
 
 /**
- * 
  * @author Alejandro Alcalde <algui91@gmail.com>
- *
  */
 public class LoginActivity extends Activity implements OnClickListener {
 
     public static final String TAG = Constants.APP_TAG + " LoginActivity";
 
     private boolean mLoginError = false;
+
     // UI references for the login form.
     private EditText mDniView;
+
     private EditText mPasswordView;
+
     private EditText mServerView;
+
     private View mLoginFormView;
+
     private View mLoginStatusView;
+
     // private View mMainScreenView;
     private TextView mLoginStatusMessageView;
+
     private TextView mWhyPasswordText;
+
     private TextView mLostPasswordText;
+
     private boolean mFromPreferece = false;
 
     @Override
@@ -71,27 +79,28 @@ public class LoginActivity extends Activity implements OnClickListener {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.login_activity);
-        
+
         mFromPreferece = getIntent().getBooleanExtra("fromPreference", false);
         setupLoginForm();
     }
 
     private void setupLoginForm() {
-        
+
         mLoginFormView = findViewById(R.id.login_form);
         mLoginStatusView = findViewById(R.id.login_status);
         mWhyPasswordText = (TextView) findViewById(R.id.why_password);
         mLostPasswordText = (TextView) findViewById(R.id.lost_password);
-        
-        SpannableString lostPasswordUnderline = new SpannableString(getString(R.string.lost_password));
+
+        SpannableString lostPasswordUnderline = new SpannableString(
+                getString(R.string.lost_password));
         lostPasswordUnderline.setSpan(new UnderlineSpan(), 0, lostPasswordUnderline.length(), 0);
         mLostPasswordText.setText(lostPasswordUnderline);
-        
-        SpannableString whyPasswordUnderline = new SpannableString(getString(R.string.why_password));
+
+        SpannableString whyPasswordUnderline = new SpannableString(
+                getString(R.string.why_password));
         whyPasswordUnderline.setSpan(new UnderlineSpan(), 0, whyPasswordUnderline.length(), 0);
         mWhyPasswordText.setText(whyPasswordUnderline);
-        
-        
+
         mDniView = (EditText) findViewById(R.id.DNI);
         mDniView.setText(Preferences.getUserID());
 
@@ -110,7 +119,9 @@ public class LoginActivity extends Activity implements OnClickListener {
 
         mServerView = (EditText) findViewById(R.id.server);
         mServerView.setText(Preferences.getServer());
-        if (mServerView.getText().toString().equals(Constants.DEFAULT_SERVER)) mPasswordView.setError(getString(R.string.error_password_summaryUGR));
+        if (mServerView.getText().toString().equals(Constants.DEFAULT_SERVER)) {
+            mPasswordView.setError(getString(R.string.error_password_summaryUGR));
+        }
 
         mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
 
@@ -120,7 +131,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                 attemptLogin();
             }
         });
-        
+
         mWhyPasswordText.setOnClickListener(this);
         mLostPasswordText.setOnClickListener(this);
     }
@@ -148,7 +159,8 @@ public class LoginActivity extends Activity implements OnClickListener {
         passwordValue = mPasswordView.getText().toString();
         serverValue = mServerView.getText().toString();
         toastMsg =
-                mServerView.getText().toString().equals("swad.ugr.es") ? getString(R.string.error_password_summaryUGR)
+                mServerView.getText().toString().equals("swad.ugr.es") ? getString(
+                        R.string.error_password_summaryUGR)
                         : getString(R.string.error_invalid_password);
 
         boolean cancel = false;
@@ -164,13 +176,13 @@ public class LoginActivity extends Activity implements OnClickListener {
             focusView = mPasswordView;
             cancel = true;
             Toast.makeText(getApplicationContext(), toastMsg,
-                           Toast.LENGTH_LONG).show();
+                    Toast.LENGTH_LONG).show();
         } else if (Utils.isLong(passwordValue)) {
             mPasswordView.setError(getString(R.string.error_incorrect_password));
             focusView = mPasswordView;
             cancel = true;
             Toast.makeText(getApplicationContext(), toastMsg,
-                           Toast.LENGTH_LONG).show();
+                    Toast.LENGTH_LONG).show();
         }
 
         // Check for a valid DNI.
@@ -179,7 +191,7 @@ public class LoginActivity extends Activity implements OnClickListener {
             focusView = mDniView;
             cancel = true;
         }
-        
+
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
@@ -215,7 +227,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                     break;
                 case Constants.RECOVER_PASSWORD_REQUEST_CODE:
                     Toast.makeText(getApplicationContext(), R.string.lost_password_success,
-                                   Toast.LENGTH_LONG).show();
+                            Toast.LENGTH_LONG).show();
                     break;
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
@@ -230,7 +242,7 @@ public class LoginActivity extends Activity implements OnClickListener {
             }
         }
     }
-    
+
     /**
      * Shows the progress UI and hides the login form.
      */
@@ -244,26 +256,26 @@ public class LoginActivity extends Activity implements OnClickListener {
 
             mLoginStatusView.setVisibility(View.VISIBLE);
             mLoginStatusView.animate()
-                            .setDuration(shortAnimTime)
-                            .alpha(show ? 1 : 0)
-                            .setListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    mLoginStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
-                                }
-                            });
+                    .setDuration(shortAnimTime)
+                    .alpha(show ? 1 : 0)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            mLoginStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
+                        }
+                    });
 
             mLoginFormView.setVisibility(View.VISIBLE);
             mLoginFormView.animate()
-                          .setDuration(shortAnimTime)
-                          .alpha(show ? 0 : 1)
-                          .setListener(new AnimatorListenerAdapter() {
-                              @Override
-                              public void onAnimationEnd(Animator animation) {
-                                  mLoginFormView.setVisibility(mLoginError ? View.VISIBLE
-                                          : View.GONE);
-                              }
-                          });
+                    .setDuration(shortAnimTime)
+                    .alpha(show ? 0 : 1)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            mLoginFormView.setVisibility(mLoginError ? View.VISIBLE
+                                    : View.GONE);
+                        }
+                    });
         } else {
             // The ViewPropertyAnimator APIs are not available, so simply show
             // and hide the relevant UI components.
@@ -277,17 +289,17 @@ public class LoginActivity extends Activity implements OnClickListener {
 
         AlertDialog passwordNotWorkDialog =
                 DialogFactory.createNeutralDialog(this,
-                                                  R.layout.dialog_why_password,
-                                                  R.string.why_password_dialog_title,
-                                                  -1,
-                                                  R.string.ok,
-                                                  new DialogInterface.OnClickListener() {
-                                                      @Override
-                                                      public void onClick(DialogInterface dialog,
-                                                              int which) {
-                                                          dialog.dismiss();
-                                                      }
-                                                  });
+                        R.layout.dialog_why_password,
+                        R.string.why_password_dialog_title,
+                        -1,
+                        R.string.ok,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                    int which) {
+                                dialog.dismiss();
+                            }
+                        });
 
         passwordNotWorkDialog.show();
     }
@@ -303,28 +315,28 @@ public class LoginActivity extends Activity implements OnClickListener {
         user.setHint(getString(R.string.prompt_email));
 
         builder.setView(user)
-               .setTitle(R.string.lost_password_dialog_title)
-               .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                   @Override
-                   public void onClick(DialogInterface dialog, int which) {
-                       dialog.dismiss();
-                       Intent i = new Intent(getBaseContext(), RecoverPassword.class);
-                       i.putExtra(RecoverPassword.USER_TO_RECOVER, user.getText().toString());
-                       startActivityForResult(i, Constants.RECOVER_PASSWORD_REQUEST_CODE);
-                   }
-               })
-               .setNegativeButton(R.string.cancelMsg, new DialogInterface.OnClickListener() {
-                   @Override
-                   public void onClick(DialogInterface dialog, int which) {
-                       dialog.dismiss();
-                   }
-               })
-               .setCancelable(true);
+                .setTitle(R.string.lost_password_dialog_title)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        Intent i = new Intent(getBaseContext(), RecoverPassword.class);
+                        i.putExtra(RecoverPassword.USER_TO_RECOVER, user.getText().toString());
+                        startActivityForResult(i, Constants.RECOVER_PASSWORD_REQUEST_CODE);
+                    }
+                })
+                .setNegativeButton(R.string.cancelMsg, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setCancelable(true);
 
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-    
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -353,5 +365,5 @@ public class LoginActivity extends Activity implements OnClickListener {
         }
         super.onDestroy();
     }
-    
+
 }

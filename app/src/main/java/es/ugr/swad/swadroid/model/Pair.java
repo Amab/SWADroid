@@ -24,10 +24,12 @@ package es.ugr.swad.swadroid.model;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class Pair<FIRST, SECOND> {
+
     /**
      * First value
      */
     private FIRST first;
+
     /**
      * Second value
      */
@@ -54,20 +56,20 @@ public class Pair<FIRST, SECOND> {
     }
 
     /**
+     * Sets first value
+     * param first First value
+     */
+    public void setFirst(FIRST first) {
+        this.first = first;
+    }
+
+    /**
      * Gets second value
      *
      * @return Second value
      */
     public SECOND getSecond() {
         return second;
-    }
-
-    /**
-     * Sets first value
-     * param first First value
-     */
-    public void setFirst(FIRST first) {
-        this.first = first;
     }
 
     /**

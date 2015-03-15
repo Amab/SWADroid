@@ -29,6 +29,7 @@ import android.widget.LinearLayout;
  * This class is useful for using inside of ListView that needs to have checkable items.
  */
 public class CheckableLinearLayout extends LinearLayout implements Checkable {
+
     private CheckedTextView _checkbox;
 
     public CheckableLinearLayout(Context context, AttributeSet attrs) {

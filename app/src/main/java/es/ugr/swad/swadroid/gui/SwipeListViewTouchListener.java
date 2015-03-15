@@ -25,17 +25,23 @@ import android.annotation.TargetApi;
 import android.graphics.Rect;
 import android.os.Build;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.view.*;
+import android.view.MotionEvent;
+import android.view.VelocityTracker;
+import android.view.View;
+import android.view.ViewConfiguration;
+import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ListView;
-import es.ugr.swad.swadroid.Constants;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import es.ugr.swad.swadroid.Constants;
+
 @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
 public class SwipeListViewTouchListener implements View.OnTouchListener {
+
     /**
      * SwipeListViewTouchListener tag name for Logcat
      */
@@ -43,57 +49,40 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
 
     // Cached ViewConfiguration and system-wide constant values
     private int mSlop;
+
     private int mMinFlingVelocity;
+
     private int mMaxFlingVelocity;
+
     private long mAnimationTime;
 
     // Fixed properties
     private ListView mListView;
+
     private OnSwipeCallback mCallback;
+
     private int mViewWidth = 1; // 1 and not 0 to prevent dividing by zero
+
     private boolean dismissLeft = true;
+
     private boolean dismissRight = true;
 
     // Transient properties
-    private List < PendingSwipeData > mPendingSwipes = new ArrayList < PendingSwipeData > ();
-    private int mDismissAnimationRefCount = 0;
-    private float mDownX;
-    private boolean mSwiping;
-    private VelocityTracker mVelocityTracker;
-    private int mDownPosition;
-    private View mDownView;
-    private boolean mPaused;
+    private List<PendingSwipeData> mPendingSwipes = new ArrayList<PendingSwipeData>();
 
-    /**
-     * The callback interface used by {@link SwipeListViewTouchListener} to inform its client
-     * about a successful swipe of one or more list item positions.
-     */
-    public interface OnSwipeCallback {
-        /**
-         * Called when the user has swiped the list item to the left.
-         *
-         * @param listView               The originating {@link ListView}.
-         * @param reverseSortedPositions An array of positions to dismiss, sorted in descending
-         *                               order for convenience.
-         */
-        void onSwipeLeft(ListView listView, int[] reverseSortedPositions);
-        /**
-         * Called when the user has swiped the list item to the right.
-         *
-         * @param listView               The originating {@link ListView}.
-         * @param reverseSortedPositions An array of positions to dismiss, sorted in descending
-         *                               order for convenience.
-         */
-        void onSwipeRight(ListView listView, int[] reverseSortedPositions);
-        /**
-         * Called when the user begins to swipe the list item.
-         */
-        void onStartSwipe();
-        /**
-         * Called when the user stops to swipe the list item.
-         */
-        void onStopSwipe();
-    }
+    private int mDismissAnimationRefCount = 0;
+
+    private float mDownX;
+
+    private boolean mSwiping;
+
+    private VelocityTracker mVelocityTracker;
+
+    private int mDownPosition;
+
+    private View mDownView;
+
+    private boolean mPaused;
 
     /**
      * Constructs a new swipe-to-action touch listener for the given list view.
@@ -108,22 +97,24 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
         mMinFlingVelocity = vc.getScaledMinimumFlingVelocity();
         mMaxFlingVelocity = vc.getScaledMaximumFlingVelocity();
         mAnimationTime = listView.getContext().getResources().getInteger(
-            android.R.integer.config_shortAnimTime);
+                android.R.integer.config_shortAnimTime);
         mListView = listView;
         mCallback = callback;
     }
 
     /**
      * Constructs a new swipe-to-action touch listener for the given list view.
-     * 
-     * @param listView The list view whose items should be dismissable.
-     * @param callback The callback to trigger when the user has indicated that she would like to
-     *                 dismiss one or more list items.
-     * @param dismissLeft set if the dismiss animation is up when the user swipe to the left
+     *
+     * @param listView     The list view whose items should be dismissable.
+     * @param callback     The callback to trigger when the user has indicated that she would like
+     *                     to
+     *                     dismiss one or more list items.
+     * @param dismissLeft  set if the dismiss animation is up when the user swipe to the left
      * @param dismissRight set if the dismiss animation is up when the user swipe to the right
      * @see #SwipeListViewTouchListener(ListView, OnSwipeCallback, boolean, boolean)
      */
-    public SwipeListViewTouchListener(ListView listView, OnSwipeCallback callback, boolean dismissLeft, boolean dismissRight) {
+    public SwipeListViewTouchListener(ListView listView, OnSwipeCallback callback,
+            boolean dismissLeft, boolean dismissRight) {
         this(listView, callback);
         this.dismissLeft = dismissLeft;
         this.dismissRight = dismissRight;
@@ -145,7 +136,6 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
      * If a scroll listener is already assigned, the caller should still pass scroll changes
      * through to this listener. This will ensure that this
      * {@link SwipeListViewTouchListener} is paused during list view scrolling.</p>
-     * @param refreshLayout 
      *
      * @see {@link SwipeListViewTouchListener}
      */
@@ -159,17 +149,17 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
             @Override
             public void onScroll(AbsListView absListView, int firstVisibleItem,
                     int visibleItemCount, int totalItemCount) {
-            	
-            	boolean enable = false;
-		        if(mListView != null && mListView.getChildCount() > 0){
-		            // check if the first item of the list is visible
-		            boolean firstItemVisible = mListView.getFirstVisiblePosition() == 0;
-		            // check if the top of the first item is visible
-		            boolean topOfFirstItemVisible = mListView.getChildAt(0).getTop() == 0;
-		            // enabling or disabling the refresh layout
-		            enable = firstItemVisible && topOfFirstItemVisible;
-		        }
-		        refreshLayout.setEnabled(enable);
+
+                boolean enable = false;
+                if (mListView != null && mListView.getChildCount() > 0) {
+                    // check if the first item of the list is visible
+                    boolean firstItemVisible = mListView.getFirstVisiblePosition() == 0;
+                    // check if the top of the first item is visible
+                    boolean topOfFirstItemVisible = mListView.getChildAt(0).getTop() == 0;
+                    // enabling or disabling the refresh layout
+                    enable = firstItemVisible && topOfFirstItemVisible;
+                }
+                refreshLayout.setEnabled(enable);
 
                 //Log.d(TAG, "RefreshLayout Swipe enabled=" + enable);
             }
@@ -207,8 +197,7 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
         }
 
         switch (motionEvent.getActionMasked()) {
-        case MotionEvent.ACTION_DOWN:
-            {
+            case MotionEvent.ACTION_DOWN: {
                 if (mPaused) {
                     return false;
                 }
@@ -243,8 +232,7 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
                 return true;
             }
 
-        case MotionEvent.ACTION_UP:
-            {
+            case MotionEvent.ACTION_UP: {
                 if (mVelocityTracker == null) {
                     break;
                 }
@@ -260,7 +248,8 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
                 if (Math.abs(deltaX) > mViewWidth / 2) {
                     swipe = true;
                     swipeRight = deltaX > 0;
-                } else if (mMinFlingVelocity <= velocityX && velocityX <= mMaxFlingVelocity && velocityY < velocityX) {
+                } else if (mMinFlingVelocity <= velocityX && velocityX <= mMaxFlingVelocity
+                        && velocityY < velocityX) {
                     swipe = true;
                     swipeRight = mVelocityTracker.getXVelocity() > 0;
                 }
@@ -271,22 +260,24 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
                     final boolean toTheRight = swipeRight;
                     ++mDismissAnimationRefCount;
                     mDownView.animate()
-                        .translationX(swipeRight ? mViewWidth : -mViewWidth)
-                        .alpha(0)
-                        .setDuration(mAnimationTime)
-                        .setListener(new AnimatorListenerAdapter() {@
-                        Override
-                        public void onAnimationEnd(Animator animation) {
-                            performSwipeAction(downView, downPosition, toTheRight, toTheRight ? dismissRight : dismissLeft);
-                        }
-                    });
+                            .translationX(swipeRight ? mViewWidth : -mViewWidth)
+                            .alpha(0)
+                            .setDuration(mAnimationTime)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @
+                                        Override
+                                public void onAnimationEnd(Animator animation) {
+                                    performSwipeAction(downView, downPosition, toTheRight,
+                                            toTheRight ? dismissRight : dismissLeft);
+                                }
+                            });
                 } else {
                     // cancel
                     mDownView.animate()
-                        .translationX(0)
-                        .alpha(1)
-                        .setDuration(mAnimationTime)
-                        .setListener(null);
+                            .translationX(0)
+                            .alpha(1)
+                            .setDuration(mAnimationTime)
+                            .setListener(null);
                 }
                 mVelocityTracker = null;
                 mDownX = 0;
@@ -296,8 +287,7 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
                 break;
             }
 
-        case MotionEvent.ACTION_MOVE:
-            {
+            case MotionEvent.ACTION_MOVE: {
                 if (mVelocityTracker == null || mPaused) {
                     break;
                 }
@@ -311,7 +301,8 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
                     // Cancel ListView's touch (un-highlighting the item)
                     MotionEvent cancelEvent = MotionEvent.obtain(motionEvent);
                     cancelEvent.setAction(MotionEvent.ACTION_CANCEL |
-                        (motionEvent.getActionIndex() << MotionEvent.ACTION_POINTER_INDEX_SHIFT));
+                            (motionEvent.getActionIndex()
+                                    << MotionEvent.ACTION_POINTER_INDEX_SHIFT));
                     mListView.onTouchEvent(cancelEvent);
                 }
 
@@ -319,7 +310,7 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
                     mCallback.onStartSwipe();
                     mDownView.setTranslationX(deltaX);
                     mDownView.setAlpha(Math.max(0f, Math.min(1f,
-                        1f - 2f * Math.abs(deltaX) / mViewWidth)));
+                            1f - 2f * Math.abs(deltaX) / mViewWidth)));
                     return true;
                 }
                 break;
@@ -328,23 +319,8 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
         return false;
     }
 
-    class PendingSwipeData implements Comparable < PendingSwipeData > {
-        public int position;
-        public View view;
-
-        public PendingSwipeData(int position, View view) {
-            this.position = position;
-            this.view = view;
-        }
-
-        @Override
-        public int compareTo(PendingSwipeData other) {
-            // Sort by descending position
-            return other.position - position;
-        }
-    }
-
-    private void performSwipeAction(final View swipeView, final int swipePosition, boolean toTheRight, boolean dismiss) {
+    private void performSwipeAction(final View swipeView, final int swipePosition,
+            boolean toTheRight, boolean dismiss) {
         // Animate the dismissed list item to zero-height and fire the dismiss callback when
         // all dismissed list item animations have completed. This triggers layout on each animation
         // frame; in the future we may want to do something smarter and more performant.
@@ -354,14 +330,15 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
         final boolean swipeRight = toTheRight;
 
         ValueAnimator animator;
-        if (dismiss)
+        if (dismiss) {
             animator = ValueAnimator.ofInt(originalHeight, 1).setDuration(mAnimationTime);
-        else
-            animator = ValueAnimator.ofInt(originalHeight, originalHeight - 1).setDuration(mAnimationTime);
+        } else {
+            animator = ValueAnimator.ofInt(originalHeight, originalHeight - 1)
+                    .setDuration(mAnimationTime);
+        }
 
-
-        animator.addListener(new AnimatorListenerAdapter() { 
-			@Override
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
             public void onAnimationEnd(Animator animation) {
                 --mDismissAnimationRefCount;
                 if (mDismissAnimationRefCount == 0) {
@@ -373,13 +350,14 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
                     for (int i = mPendingSwipes.size() - 1; i >= 0; i--) {
                         swipePositions[i] = mPendingSwipes.get(i).position;
                     }
-                    if (swipeRight)
+                    if (swipeRight) {
                         mCallback.onSwipeRight(mListView, swipePositions);
-                    else
+                    } else {
                         mCallback.onSwipeLeft(mListView, swipePositions);
+                    }
 
                     ViewGroup.LayoutParams lp;
-                    for (PendingSwipeData pendingDismiss: mPendingSwipes) {
+                    for (PendingSwipeData pendingDismiss : mPendingSwipes) {
                         // Reset view presentation
                         pendingDismiss.view.setAlpha(1f);
                         pendingDismiss.view.setTranslationX(0);
@@ -393,8 +371,9 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
             }
         });
 
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {@
-            Override
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @
+                    Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 lp.height = (Integer) valueAnimator.getAnimatedValue();
                 swipeView.setLayoutParams(lp);
@@ -403,5 +382,58 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
 
         mPendingSwipes.add(new PendingSwipeData(swipePosition, swipeView));
         animator.start();
+    }
+
+    /**
+     * The callback interface used by {@link SwipeListViewTouchListener} to inform its client
+     * about a successful swipe of one or more list item positions.
+     */
+    public interface OnSwipeCallback {
+
+        /**
+         * Called when the user has swiped the list item to the left.
+         *
+         * @param listView               The originating {@link ListView}.
+         * @param reverseSortedPositions An array of positions to dismiss, sorted in descending
+         *                               order for convenience.
+         */
+        void onSwipeLeft(ListView listView, int[] reverseSortedPositions);
+
+        /**
+         * Called when the user has swiped the list item to the right.
+         *
+         * @param listView               The originating {@link ListView}.
+         * @param reverseSortedPositions An array of positions to dismiss, sorted in descending
+         *                               order for convenience.
+         */
+        void onSwipeRight(ListView listView, int[] reverseSortedPositions);
+
+        /**
+         * Called when the user begins to swipe the list item.
+         */
+        void onStartSwipe();
+
+        /**
+         * Called when the user stops to swipe the list item.
+         */
+        void onStopSwipe();
+    }
+
+    class PendingSwipeData implements Comparable<PendingSwipeData> {
+
+        public int position;
+
+        public View view;
+
+        public PendingSwipeData(int position, View view) {
+            this.position = position;
+            this.view = view;
+        }
+
+        @Override
+        public int compareTo(PendingSwipeData other) {
+            // Sort by descending position
+            return other.position - position;
+        }
     }
 }

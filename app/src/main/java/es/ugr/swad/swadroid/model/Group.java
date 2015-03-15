@@ -11,42 +11,21 @@ import java.util.Hashtable;
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  */
 public class Group extends Model {
-    /**
-     * Group name.
-     */
-    private final String groupName;
-    /**
-     * Group type code to which the group belongs
-     */
-    private long groupTypeCode = -1;
-    /**
-     * Maximum number of students allowed in this group
-     */
-    private int maxStudents = -1;
-    /**
-     * Current number of students that belong to this group
-     */
-    private int students = -1;
-    /**
-     * Indicates whether the enrollment to this group is allowed or not
-     */
-    private int open = 0;
-    /**
-     * Indicates whether the group has an area of documents related to or not
-     */
-    private int fileZones = 0;
-    /**
-     * Indicates if the logged user is a member of this group
-     */
-    private int member;
 
     private static final PropertyInfo PI_id = new PropertyInfo();
+
     private static final PropertyInfo PI_groupName = new PropertyInfo();
+
     private static final PropertyInfo PI_maxStudents = new PropertyInfo();
+
     private static final PropertyInfo PI_students = new PropertyInfo();
+
     private static final PropertyInfo PI_open = new PropertyInfo();
+
     private static final PropertyInfo PI_fileZones = new PropertyInfo();
+
     private static final PropertyInfo PI_member = new PropertyInfo();
+
     private static final PropertyInfo PI_groupTypeCode = new PropertyInfo();
 
     private static final PropertyInfo[] PI_PROP_ARRAY = {
@@ -61,6 +40,41 @@ public class Group extends Model {
     };
 
     /**
+     * Group name.
+     */
+    private final String groupName;
+
+    /**
+     * Group type code to which the group belongs
+     */
+    private long groupTypeCode = -1;
+
+    /**
+     * Maximum number of students allowed in this group
+     */
+    private int maxStudents = -1;
+
+    /**
+     * Current number of students that belong to this group
+     */
+    private int students = -1;
+
+    /**
+     * Indicates whether the enrollment to this group is allowed or not
+     */
+    private int open = 0;
+
+    /**
+     * Indicates whether the group has an area of documents related to or not
+     */
+    private int fileZones = 0;
+
+    /**
+     * Indicates if the logged user is a member of this group
+     */
+    private int member;
+
+    /**
      * Constructor.
      *
      * @param id          Group code.
@@ -71,7 +85,8 @@ public class Group extends Model {
      * @param fileZones   Indicates whether the group has an area of documents related to or not
      * @param member      Indicates if the logged user is a member of this group
      */
-    public Group(long id, String groupName, long groupTypeCode, int maxStudents, int open, int students, int fileZones, int member) {
+    public Group(long id, String groupName, long groupTypeCode, int maxStudents, int open,
+            int students, int fileZones, int member) {
         super(id);
         this.groupName = groupName;
         this.maxStudents = maxStudents;
@@ -122,7 +137,8 @@ public class Group extends Model {
     }
 
     @Override
-    public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo propertyInfo) {
+    public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1,
+            PropertyInfo propertyInfo) {
         switch (param) {
             case 0:
                 propertyInfo.type = PropertyInfo.LONG_CLASS;
@@ -192,8 +208,10 @@ public class Group extends Model {
 
     @Override
     public String toString() {
-        return "Group [name=" + groupName + ", getId()=" + getId() + ", getGroupTypeCode()=" + groupTypeCode + ", getMaxStudents()=" + maxStudents + ", getCurrentStudents()="
-                + students + ", getOpen()=" + open + ", getDocumentsArea()=" + fileZones + ", getMember()= " + member;
+        return "Group [name=" + groupName + ", getId()=" + getId() + ", getGroupTypeCode()="
+                + groupTypeCode + ", getMaxStudents()=" + maxStudents + ", getCurrentStudents()="
+                + students + ", getOpen()=" + open + ", getDocumentsArea()=" + fileZones
+                + ", getMember()= " + member;
     }
 
     /**
@@ -217,7 +235,8 @@ public class Group extends Model {
     /**
      * Gets maximum number of students allowed in this group
      *
-     * @return -1 if there is not a limit of students for this group, maximum number allowed otherwise
+     * @return -1 if there is not a limit of students for this group, maximum number allowed
+     * otherwise
      */
     public int getMaxStudents() {
         return maxStudents;
@@ -236,7 +255,8 @@ public class Group extends Model {
     /**
      * Gets current student number enrolled in this group
      *
-     * @return current number of students enrolled in this group over 0 and, in case there is a limit of students, maximum students allowed
+     * @return current number of students enrolled in this group over 0 and, in case there is a
+     * limit of students, maximum students allowed
      */
     public int getCurrentStudents() {
         return students;
@@ -246,19 +266,21 @@ public class Group extends Model {
      * Gets the number of available vacancies in this group
      *
      * @return -1 if there is not a limit of students for this group
-     *         number of available vacancies currently otherwise
+     * number of available vacancies currently otherwise
      */
     public int getVacancies() {
-        if (maxStudents == -1) return -1;
-        else
+        if (maxStudents == -1) {
+            return -1;
+        } else {
             return maxStudents - students;
+        }
     }
 
     /**
      * Indicates if the enrollment in this group is already allowed
      *
      * @return true if the enrollment is already allowed
-     *         false otherwise
+     * false otherwise
      */
     public boolean isOpen() {
         return open != 0;
@@ -268,7 +290,7 @@ public class Group extends Model {
      * Indicates if the enrollment in this group is already allowed
      *
      * @return not 0 if the enrollment is already allowed
-     *         0 otherwise
+     * 0 otherwise
      */
     public int getOpen() {
         return open;
@@ -282,7 +304,7 @@ public class Group extends Model {
      * Indicates if the group has an area of documents and of shared documents related to or not
      *
      * @return true if the area of documents exits
-     *         false otherwise
+     * false otherwise
      */
     public boolean exitsDocumentsArea() {
         return fileZones != 0;
@@ -292,7 +314,7 @@ public class Group extends Model {
      * Indicates if the group has an area of documents and of shared documents related to or not
      *
      * @return not 0 if the area of documents exits
-     *         false otherwise
+     * false otherwise
      */
     public int getDocumentsArea() {
         return fileZones;
@@ -302,7 +324,7 @@ public class Group extends Model {
      * Indicates if the logged user is a member of this group
      *
      * @return true if the logged user is a member of this group
-     *         false otherwise
+     * false otherwise
      */
     public boolean isMember() {
         return member != 0;
@@ -312,7 +334,7 @@ public class Group extends Model {
      * Indicates if the logged user is a member of this group
      *
      * @return not 0 if the logged user is a member of this group
-     *         0 otherwise
+     * 0 otherwise
      */
     public int getMember() {
         return member;
@@ -350,25 +372,34 @@ public class Group extends Model {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (!super.equals(obj))
+        }
+        if (!super.equals(obj)) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         Group other = (Group) obj;
-        if (getId() != other.getId())
+        if (getId() != other.getId()) {
             return false;
+        }
         if (groupName == null) {
-            if (other.groupName != null)
+            if (other.groupName != null) {
                 return false;
-        } else if (!groupName.equals(other.groupName))
+            }
+        } else if (!groupName.equals(other.groupName)) {
             return false;
-        if (groupTypeCode != other.groupTypeCode)
+        }
+        if (groupTypeCode != other.groupTypeCode) {
             return false;
-        if (maxStudents != other.maxStudents)
+        }
+        if (maxStudents != other.maxStudents) {
             return false;
-        return students == other.students && open == other.open && fileZones == other.fileZones && member == other.member;
+        }
+        return students == other.students && open == other.open && fileZones == other.fileZones
+                && member == other.member;
     }
 
 }

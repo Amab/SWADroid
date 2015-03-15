@@ -21,18 +21,20 @@
 package es.ugr.swad.swadroid.utils;
 
 import android.content.Context;
-import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.SWADroidTracker;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.AlgorithmParameterSpec;
+import java.security.spec.KeySpec;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.AlgorithmParameterSpec;
-import java.security.spec.KeySpec;
+
+import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.SWADroidTracker;
 
 /**
  * Cryptographic class for encryption purposes.
@@ -40,23 +42,28 @@ import java.security.spec.KeySpec;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class Crypto {
+
     /**
      * Crypto tag name for Logcat
      */
     public static final String TAG = Constants.APP_TAG + " Crypto";
 
-    private Cipher ecipher;
-    private Cipher dcipher;
+    private final static String HEX = "0123456789ABCDEF";
 
     // 8-byte Salt
     private final byte[] salt = {1, 2, 4, 5, 7, 8, 3, 6};
 
     // Iteration count
     private final int iterationCount = 1979;
+
     /**
      * Application context
      */
     public Context mContext;
+
+    private Cipher ecipher;
+
+    private Cipher dcipher;
 
     public Crypto(Context ctx, String passPhrase) {
         mContext = ctx;
@@ -81,6 +88,47 @@ public class Crypto {
             //Send exception details to Google Analytics
             SWADroidTracker.sendException(mContext, e, false);
         }
+    }
+
+    private static byte[] toByte(String hexString) {
+        int len = hexString.length() / 2;
+        byte[] result = new byte[len];
+        for (int i = 0; i < len; i++) {
+            result[i] = Integer.valueOf(hexString.substring(2 * i, 2 * i + 2),
+                    16).byteValue();
+        }
+        return result;
+    }
+
+    private static String toHex(byte[] buf) {
+        if (buf == null) {
+            return "";
+        }
+        StringBuffer result = new StringBuffer(2 * buf.length);
+        for (byte aBuf : buf) {
+            appendHex(result, aBuf);
+        }
+        return result.toString();
+    }
+
+    private static void appendHex(StringBuffer sb, byte b) {
+        sb.append(HEX.charAt((b >> 4) & 0x0f)).append(HEX.charAt(b & 0x0f));
+    }
+
+    /**
+     * Encrypts user password with SHA-512 and encodes it to Base64UrlSafe
+     *
+     * @param password Password to be encrypted
+     * @return Encrypted password
+     */
+    public static String encryptPassword(String password) throws NoSuchAlgorithmException {
+        String p;
+        MessageDigest md = MessageDigest.getInstance("SHA-512");
+        md.update(password.getBytes());
+        p = Base64.encodeBytes(md.digest());
+        p = p.replace('+', '-').replace('/', '_').replace('=', ' ').replaceAll("\\s+", "").trim();
+
+        return p;
     }
 
     public String encrypt(String str) {
@@ -121,47 +169,5 @@ public class Crypto {
             SWADroidTracker.sendException(mContext, e, false);
         }
         return rVal;
-    }
-
-    private static byte[] toByte(String hexString) {
-        int len = hexString.length() / 2;
-        byte[] result = new byte[len];
-        for (int i = 0; i < len; i++)
-            result[i] = Integer.valueOf(hexString.substring(2 * i, 2 * i + 2),
-                    16).byteValue();
-        return result;
-    }
-
-    private static String toHex(byte[] buf) {
-        if (buf == null)
-            return "";
-        StringBuffer result = new StringBuffer(2 * buf.length);
-        for (byte aBuf : buf) {
-            appendHex(result, aBuf);
-        }
-        return result.toString();
-    }
-
-    private final static String HEX = "0123456789ABCDEF";
-
-    private static void appendHex(StringBuffer sb, byte b) {
-        sb.append(HEX.charAt((b >> 4) & 0x0f)).append(HEX.charAt(b & 0x0f));
-    }
-
-    /**
-     * Encrypts user password with SHA-512 and encodes it to Base64UrlSafe
-     *
-     * @param password Password to be encrypted
-     * @return Encrypted password
-     * @throws NoSuchAlgorithmException
-     */
-    public static String encryptPassword(String password) throws NoSuchAlgorithmException {
-        String p;
-        MessageDigest md = MessageDigest.getInstance("SHA-512");
-        md.update(password.getBytes());
-        p = Base64.encodeBytes(md.digest());
-        p = p.replace('+', '-').replace('/', '_').replace('=', ' ').replaceAll("\\s+", "").trim();
-
-        return p;
     }
 }

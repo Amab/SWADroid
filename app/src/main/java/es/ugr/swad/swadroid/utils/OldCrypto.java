@@ -20,15 +20,17 @@
 package es.ugr.swad.swadroid.utils;
 
 import android.content.Context;
-import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.SWADroidTracker;
+
+import java.security.MessageDigest;
+import java.security.SecureRandom;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import java.security.MessageDigest;
-import java.security.SecureRandom;
+
+import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.SWADroidTracker;
 
 /**
  * Cryptographic class for encryption purposes.
@@ -36,6 +38,7 @@ import java.security.SecureRandom;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class OldCrypto {
+
     /**
      * OldCrypto tag name for Logcat
      */

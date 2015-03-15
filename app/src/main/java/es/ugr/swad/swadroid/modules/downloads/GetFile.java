@@ -18,9 +18,15 @@
  */
 package es.ugr.swad.swadroid.modules.downloads;
 
+import org.ksoap2.serialization.SoapPrimitive;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.Vector;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADroidTracker;
@@ -28,23 +34,19 @@ import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
-import org.ksoap2.serialization.SoapPrimitive;
-
-import java.util.ArrayList;
-import java.util.Vector;
 
 /**
  * Module to get information of a file located in SWAD
  * It makes use of the web service getFile (see {@linktourl http://swad.ugr.es/ws/#getFile})
- * 
- * @param fileCode It indicates the file which information is requested
- * @return link temporal URL to download the file
  *
+ * @param fileCode It indicates the file which information is requested
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
+ * @return link temporal URL to download the file
  */
 
 
 public class GetFile extends Module {
+
     /**
      * GetFile tag name for Logcat
      */
@@ -74,7 +76,7 @@ public class GetFile extends Module {
         super.onStart();
 
         SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
-        
+
         try {
             runConnection();
         } catch (Exception e) {
@@ -94,12 +96,12 @@ public class GetFile extends Module {
 
     @Override
     protected void requestService() throws Exception {
-    	
-    	createRequest(SOAPClient.CLIENT_TYPE);
+
+        createRequest(SOAPClient.CLIENT_TYPE);
         addParam("wsKey", Login.getLoggedUser().getWsKey());
         addParam("fileCode", (int) fileCode);
         sendRequest(Group.class, false);
-        
+
         if (result != null) {
             ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
             SoapPrimitive soapP = (SoapPrimitive) res.get(1);
@@ -121,8 +123,9 @@ public class GetFile extends Module {
 
     @Override
     protected void postConnect() {
-        if (isDebuggable)
+        if (isDebuggable) {
             Log.i(TAG, "File requested");
+        }
         finish();
 
     }

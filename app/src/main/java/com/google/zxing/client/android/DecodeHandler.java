@@ -16,23 +16,31 @@
 
 package com.google.zxing.client.android;
 
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.DecodeHintType;
+import com.google.zxing.MultiFormatReader;
+import com.google.zxing.ReaderException;
+import com.google.zxing.Result;
+import com.google.zxing.common.HybridBinarizer;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
-import com.google.zxing.*;
-import com.google.zxing.common.HybridBinarizer;
-import es.ugr.swad.swadroid.R;
 
 import java.util.Map;
+
+import es.ugr.swad.swadroid.R;
 
 final class DecodeHandler extends Handler {
 
     private static final String TAG = DecodeHandler.class.getSimpleName();
 
     private final CaptureActivity activity;
+
     private final MultiFormatReader multiFormatReader;
+
     private boolean running = true;
 
     DecodeHandler(CaptureActivity activity, Map<DecodeHintType, Object> hints) {
@@ -65,7 +73,8 @@ final class DecodeHandler extends Handler {
     private void decode(byte[] data, int width, int height) {
         long start = System.currentTimeMillis();
         Result rawResult = null;
-        PlanarYUVLuminanceSource source = activity.getCameraManager().buildLuminanceSource(data, width, height);
+        PlanarYUVLuminanceSource source = activity.getCameraManager()
+                .buildLuminanceSource(data, width, height);
         if (source != null) {
             BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
             try {
@@ -85,7 +94,8 @@ final class DecodeHandler extends Handler {
             if (handler != null) {
                 Message message = Message.obtain(handler, R.id.decode_succeeded, rawResult);
                 Bundle bundle = new Bundle();
-                bundle.putParcelable(DecodeThread.BARCODE_BITMAP, source.renderCroppedGreyscaleBitmap());
+                bundle.putParcelable(DecodeThread.BARCODE_BITMAP,
+                        source.renderCroppedGreyscaleBitmap());
                 message.setData(bundle);
                 message.sendToTarget();
             }

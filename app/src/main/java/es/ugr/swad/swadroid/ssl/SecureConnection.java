@@ -20,66 +20,63 @@ package es.ugr.swad.swadroid.ssl;
 
 import android.content.Context;
 import android.util.Log;
-import es.ugr.swad.swadroid.Constants;
+
+import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
-import java.io.IOException;
-import java.security.*;
-import java.security.cert.CertificateException;
+
+import es.ugr.swad.swadroid.Constants;
 
 /**
  * Establishes a secure connection.
- * 
+ *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class SecureConnection {
-	/**
-	 * Class tag name for Logcat
-	 */
-	private static final String TAG = Constants.APP_TAG + " SecureConnection";
 
-	/**
-	 * Bypasses certificate verification in application.
-	 * 
-	 * @throws NoSuchAlgorithmException
-	 * @throws KeyManagementException
-	 */
-	public static void initUntrustedSecureConnection()
-			throws NoSuchAlgorithmException, KeyManagementException {
-		
-		SSLContext sc = SSLContext.getInstance("TLS");
-		UntrustedHostnameVerifier untrustedHN = new UntrustedHostnameVerifier();
-		TrustManager[] untrustedTM = new TrustManager[] { new UntrustedTrustManager() };
-		
-		sc.init(null, untrustedTM, new SecureRandom());
-		
-		HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-		HttpsURLConnection.setDefaultHostnameVerifier(untrustedHN);
+    /**
+     * Class tag name for Logcat
+     */
+    private static final String TAG = Constants.APP_TAG + " SecureConnection";
 
-		Log.w(TAG, "Untrusted secure connection initialized");
-	}
+    /**
+     * Bypasses certificate verification in application.
+     */
+    public static void initUntrustedSecureConnection()
+            throws NoSuchAlgorithmException, KeyManagementException {
 
-	/**
-	 * Initialize certificate verification in application.
-	 * 
-	 * @param context
-	 *            Application context
-	 * @throws NoSuchAlgorithmException
-	 * @throws KeyManagementException
-	 * @throws IOException
-	 * @throws CertificateException
-	 * @throws KeyStoreException
-	 * @throws UnrecoverableKeyException
-	 */
-	public void initSecureConnection(Context context)
-			throws NoSuchAlgorithmException, KeyManagementException,
-			KeyStoreException, CertificateException, IOException,
-			UnrecoverableKeyException {
+        SSLContext sc = SSLContext.getInstance("TLS");
+        UntrustedHostnameVerifier untrustedHN = new UntrustedHostnameVerifier();
+        TrustManager[] untrustedTM = new TrustManager[]{new UntrustedTrustManager()};
 
-		HttpsURLConnection
-		.setDefaultSSLSocketFactory(new EasySSLSocketFactory());
-		Log.i(TAG, "Secure connection initialized");
-	}
+        sc.init(null, untrustedTM, new SecureRandom());
+
+        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+        HttpsURLConnection.setDefaultHostnameVerifier(untrustedHN);
+
+        Log.w(TAG, "Untrusted secure connection initialized");
+    }
+
+    /**
+     * Initialize certificate verification in application.
+     *
+     * @param context Application context
+     */
+    public void initSecureConnection(Context context)
+            throws NoSuchAlgorithmException, KeyManagementException,
+            KeyStoreException, CertificateException, IOException,
+            UnrecoverableKeyException {
+
+        HttpsURLConnection
+                .setDefaultSSLSocketFactory(new EasySSLSocketFactory());
+        Log.i(TAG, "Secure connection initialized");
+    }
 }

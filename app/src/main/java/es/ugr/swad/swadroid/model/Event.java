@@ -20,10 +20,15 @@
  */
 package es.ugr.swad.swadroid.model;
 
-import android.text.TextUtils;
 import org.ksoap2.serialization.PropertyInfo;
 
-import java.util.*;
+import android.text.TextUtils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Hashtable;
+import java.util.List;
 
 /**
  * Class for store a rollcall event
@@ -31,30 +36,31 @@ import java.util.*;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class Event extends Model {
-    private boolean hidden;
-    private String userSurname1;
-    private String userSurname2;
-    private String userFirstName;
-    private String userPhoto;
-    private long startTime;
-    private long endTime;
-    private boolean commentsTeachersVisible;
-    private String title;
-    private String text;
-    private String groups;
-    private String status;
+
     private static final PropertyInfo PI_id = new PropertyInfo();
+
     private static final PropertyInfo PI_hidden = new PropertyInfo();
+
     private static final PropertyInfo PI_userSurname1 = new PropertyInfo();
+
     private static final PropertyInfo PI_userSurname2 = new PropertyInfo();
+
     private static final PropertyInfo PI_userFirstName = new PropertyInfo();
+
     private static final PropertyInfo PI_userPhoto = new PropertyInfo();
+
     private static final PropertyInfo PI_startTime = new PropertyInfo();
+
     private static final PropertyInfo PI_endTime = new PropertyInfo();
+
     private static final PropertyInfo PI_commentsTeachersVisible = new PropertyInfo();
+
     private static final PropertyInfo PI_title = new PropertyInfo();
+
     private static final PropertyInfo PI_groups = new PropertyInfo();
+
     private static final PropertyInfo PI_status = new PropertyInfo();
+
     private static final PropertyInfo[] PI_PROP_ARRAY =
             {
                     PI_id,
@@ -71,13 +77,37 @@ public class Event extends Model {
                     PI_status
             };
 
+    private boolean hidden;
+
+    private String userSurname1;
+
+    private String userSurname2;
+
+    private String userFirstName;
+
+    private String userPhoto;
+
+    private long startTime;
+
+    private long endTime;
+
+    private boolean commentsTeachersVisible;
+
+    private String title;
+
+    private String text;
+
+    private String groups;
+
+    private String status;
+
     /**
      * Constructor with status
      */
     public Event(long attendanceEventCode, boolean hidden, String userSurname1, String userSurname2,
-                 String userFirstName, String userPhoto, long startTime, long endTime,
-                 boolean commentsTeachersVisible, String title, String text, String groups,
-                 String status) {
+            String userFirstName, String userPhoto, long startTime, long endTime,
+            boolean commentsTeachersVisible, String title, String text, String groups,
+            String status) {
         super(attendanceEventCode);
         this.hidden = hidden;
         this.userSurname1 = userSurname1;
@@ -97,8 +127,8 @@ public class Event extends Model {
      * Constructor without status
      */
     public Event(long attendanceEventCode, boolean hidden, String userSurname1, String userSurname2,
-                 String userFirstName, String userPhoto, long startTime, long endTime,
-                 boolean commentsTeachersVisible, String title, String text, String groups) {
+            String userFirstName, String userPhoto, long startTime, long endTime,
+            boolean commentsTeachersVisible, String title, String text, String groups) {
         super(attendanceEventCode);
         this.hidden = hidden;
         this.userSurname1 = userSurname1;
@@ -158,28 +188,28 @@ public class Event extends Model {
         return startTime;
     }
 
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
+    }
+
     public Calendar getStartTimeCalendar() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(startTime * 1000L);
         return calendar;
     }
 
-    public void setStartTime(long startTime) {
-        this.startTime = startTime;
-    }
-
     public long getEndTime() {
         return endTime;
+    }
+
+    public void setEndTime(long endTime) {
+        this.endTime = endTime;
     }
 
     public Calendar getEndTimeCalendar() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(endTime * 1000L);
         return calendar;
-    }
-
-    public void setEndTime(long endTime) {
-        this.endTime = endTime;
     }
 
     public boolean isCommentsTeachersVisible() {
@@ -290,7 +320,8 @@ public class Event extends Model {
     /* (non-Javadoc)
      * @see org.ksoap2.serialization.KvmSerializable#getPropertyInfo(int, java.util.Hashtable, org.ksoap2.serialization.PropertyInfo)
      */
-    public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo propertyInfo) {
+    public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1,
+            PropertyInfo propertyInfo) {
         switch (param) {
             case 0:
                 propertyInfo.type = PropertyInfo.LONG_CLASS;

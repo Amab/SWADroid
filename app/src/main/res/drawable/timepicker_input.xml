@@ -17,10 +17,15 @@
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:drawable="@drawable/timepicker_input_normal" android:state_enabled="true" android:state_focused="false" android:state_pressed="false"/>
-    <item android:drawable="@drawable/timepicker_input_pressed" android:state_enabled="true" android:state_pressed="true"/>
-    <item android:drawable="@drawable/timepicker_input_selected" android:state_enabled="true" android:state_focused="true" android:state_pressed="false"/>
-    <item android:drawable="@drawable/timepicker_input_disabled" android:state_enabled="false" android:state_focused="false" android:state_pressed="false"/>
-    <item android:drawable="@drawable/timepicker_input_normal" android:state_enabled="false" android:state_focused="true" android:state_pressed="false"/>
+    <item android:drawable="@drawable/timepicker_input_normal" android:state_enabled="true"
+          android:state_focused="false" android:state_pressed="false"/>
+    <item android:drawable="@drawable/timepicker_input_pressed" android:state_enabled="true"
+          android:state_pressed="true"/>
+    <item android:drawable="@drawable/timepicker_input_selected" android:state_enabled="true"
+          android:state_focused="true" android:state_pressed="false"/>
+    <item android:drawable="@drawable/timepicker_input_disabled" android:state_enabled="false"
+          android:state_focused="false" android:state_pressed="false"/>
+    <item android:drawable="@drawable/timepicker_input_normal" android:state_enabled="false"
+          android:state_focused="true" android:state_pressed="false"/>
 
 </selector>

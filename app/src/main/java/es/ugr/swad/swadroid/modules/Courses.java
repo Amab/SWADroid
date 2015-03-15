@@ -18,11 +18,18 @@
  */
 package es.ugr.swad.swadroid.modules;
 
+import org.ksoap2.serialization.SoapObject;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADroidTracker;
@@ -30,11 +37,6 @@ import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
-import org.ksoap2.serialization.SoapObject;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
 
 /**
  * Courses module for get user's courses
@@ -44,22 +46,62 @@ import java.util.Vector;
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */
 public class Courses extends Module {
+
     /**
      * Courses tag name for Logcat
      */
     private static final String TAG = Constants.APP_TAG + " Courses";
-	/**
-	 * Code of the chosen course. All next actions are referred to this course.
-	 */
-	private static long selectedCourseCode = -1;
-	/**
-	 * Short name of the chosen course.
-	 */
-	private static String selectedCourseShortName;
-	/**
-	 * Short name of the full course.
-	 */
-	private static String selectedCourseFullName;
+
+    /**
+     * Code of the chosen course. All next actions are referred to this course.
+     */
+    private static long selectedCourseCode = -1;
+
+    /**
+     * Short name of the chosen course.
+     */
+    private static String selectedCourseShortName;
+
+    /**
+     * Short name of the full course.
+     */
+    private static String selectedCourseFullName;
+
+    /**
+     * Gets code of current course
+     * return -1 if no course chosen; code of current course in other case
+     */
+    public static long getSelectedCourseCode() {
+        return selectedCourseCode;
+    }
+
+    /**
+     * Sets code of current course
+     */
+    public static void setSelectedCourseCode(long currentCourseCode) {
+        //if (currentCourseCode > 0) selectedCourseCode = currentCourseCode;
+        selectedCourseCode = currentCourseCode;
+    }
+
+    public static String getSelectedCourseShortName() {
+        return selectedCourseShortName;
+
+    }
+
+    public static void setSelectedCourseShortName(String currentCourseShortName) {
+        selectedCourseShortName = currentCourseShortName;
+
+    }
+
+    public static String getSelectedCourseFullName() {
+        return selectedCourseFullName;
+
+    }
+
+    public static void setSelectedCourseFullName(String currentCourseFullName) {
+        selectedCourseFullName = currentCourseFullName;
+
+    }
 
     @Override
     protected void runConnection() {
@@ -88,7 +130,7 @@ public class Courses extends Module {
         super.onStart();
 
         SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
-        
+
         runConnection();
     }
 
@@ -134,7 +176,7 @@ public class Courses extends Module {
             List<Model> newCourses = new ArrayList<Model>();
             List<Model> obsoleteCourses = new ArrayList<Model>();
             //List<Model> modifiedCourses = new ArrayList<Model>();
-			ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
+            ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
             SoapObject soap = (SoapObject) res.get(1);
             int csSize = soap.getPropertyCount();
             for (int i = 0; i < csSize; i++) {
@@ -233,40 +275,4 @@ public class Courses extends Module {
             }
         }
     }
-
-	/**
-	 * Gets code of current course
-	 * return -1 if no course chosen; code of current course in other case
-	 */
-	public static long getSelectedCourseCode() {
-	    return selectedCourseCode;
-	}
-
-	/**
-	 * Sets code of current course
-	 */
-	public static void setSelectedCourseCode(long currentCourseCode) {
-	    //if (currentCourseCode > 0) selectedCourseCode = currentCourseCode;
-	    selectedCourseCode = currentCourseCode;
-	}
-
-	public static void setSelectedCourseShortName(String currentCourseShortName) {
-	    selectedCourseShortName = currentCourseShortName;
-	
-	}
-
-	public static void setSelectedCourseFullName(String currentCourseFullName) {
-	    selectedCourseFullName = currentCourseFullName;
-	
-	}
-
-	public static String getSelectedCourseShortName() {
-	    return selectedCourseShortName;
-	
-	}
-
-	public static String getSelectedCourseFullName() {
-	    return selectedCourseFullName;
-	
-	}
 }

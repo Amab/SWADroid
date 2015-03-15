@@ -18,8 +18,11 @@
  */
 package es.ugr.swad.swadroid.modules.notifications;
 
+import org.ksoap2.serialization.SoapPrimitive;
+
 import android.os.Bundle;
 import android.util.Log;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADroidTracker;
@@ -27,7 +30,6 @@ import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
-import org.ksoap2.serialization.SoapPrimitive;
 
 /**
  * Notifications module for mark as read user's notifications
@@ -35,6 +37,7 @@ import org.ksoap2.serialization.SoapPrimitive;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class NotificationsMarkAllAsRead extends Module {
+
     /**
      * Notifications tag name for Logcat
      */
@@ -58,7 +61,7 @@ public class NotificationsMarkAllAsRead extends Module {
 
         SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
     }
-    
+
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#requestService()
      */
@@ -67,38 +70,40 @@ public class NotificationsMarkAllAsRead extends Module {
 
         int numMarkedNotifications = 0;
         String seenNotifCodes = this.getIntent().getStringExtra("seenNotifCodes");
-        int numMarkedNotificationsList = this.getIntent().getIntExtra("numMarkedNotificationsList", 0);
+        int numMarkedNotificationsList = this.getIntent()
+                .getIntExtra("numMarkedNotificationsList", 0);
 
         //Request finalized without errors        
-        if(isDebuggable) {
-        	Log.d(TAG, "seenNotifCodes=" + seenNotifCodes);
-        	Log.d(TAG, "numMarkedNotificationsList=" + numMarkedNotificationsList);
+        if (isDebuggable) {
+            Log.d(TAG, "seenNotifCodes=" + seenNotifCodes);
+            Log.d(TAG, "numMarkedNotificationsList=" + numMarkedNotificationsList);
         }
-        
+
         //Creates webservice request, adds required params and sends request to webservice
         createRequest(SOAPClient.CLIENT_TYPE);
         addParam("wsKey", Login.getLoggedUser().getWsKey());
         addParam("notifications", seenNotifCodes);
         sendRequest(Integer.class, false);
-        
+
         if (result != null) {
             SoapPrimitive soap = (SoapPrimitive) result;
 
             //Stores user data returned by webservice response
             numMarkedNotifications = Integer.parseInt(soap.toString());
         }
-        
+
         Log.i(TAG, "Marked " + numMarkedNotifications + " notifications as readed");
-    	dbHelper.updateAllNotifications("seenRemote", Utils.parseBoolString(true));
-        
-        if(numMarkedNotifications != numMarkedNotificationsList) {	            
-        	Log.e(TAG, "numMarkedNotifications (" + numMarkedNotifications + ") != numMarkedNotificationsList (" + numMarkedNotificationsList + ")");
-        	setResult(RESULT_CANCELED);   
+        dbHelper.updateAllNotifications("seenRemote", Utils.parseBoolString(true));
+
+        if (numMarkedNotifications != numMarkedNotificationsList) {
+            Log.e(TAG, "numMarkedNotifications (" + numMarkedNotifications
+                    + ") != numMarkedNotificationsList (" + numMarkedNotificationsList + ")");
+            setResult(RESULT_CANCELED);
         } else {
-        	setResult(RESULT_OK);   
+            setResult(RESULT_OK);
         }
     }
-    
+
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#connect()
      */
@@ -115,7 +120,7 @@ public class NotificationsMarkAllAsRead extends Module {
      */
     @Override
     protected void postConnect() {
-    	finish();
+        finish();
     }
 
     /* (non-Javadoc)
@@ -123,6 +128,6 @@ public class NotificationsMarkAllAsRead extends Module {
      */
     @Override
     protected void onError() {
-    	
+
     }
 }

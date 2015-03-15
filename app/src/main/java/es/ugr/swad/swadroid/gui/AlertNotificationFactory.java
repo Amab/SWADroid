@@ -25,6 +25,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
+
 import es.ugr.swad.swadroid.Preferences;
 
 /**
@@ -33,121 +34,132 @@ import es.ugr.swad.swadroid.Preferences;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class AlertNotificationFactory {
-	public static NotificationCompat.Builder createAlertNotificationBuilder(Context context, String contentTitle, String contentText,
-			String ticker, PendingIntent pendingIntent, int smallIcon, int largeIcon, boolean alertSignals,
-			boolean autocancel, boolean ongoing, boolean onlyAlertOnce) {
-		
-		int flags = 0;
 
-    	NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(context)
-            .setAutoCancel(autocancel)
-            .setSmallIcon(smallIcon)
-            .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), largeIcon))
-            .setContentTitle(contentTitle)
-            .setContentText(contentText)
-            .setTicker(ticker)
-            .setOngoing(ongoing)
-            .setOnlyAlertOnce(onlyAlertOnce)
-        	.setWhen(System.currentTimeMillis());
-            //.setLights(Color.GREEN, 500, 500);
+    public static NotificationCompat.Builder createAlertNotificationBuilder(Context context,
+            String contentTitle, String contentText,
+            String ticker, PendingIntent pendingIntent, int smallIcon, int largeIcon,
+            boolean alertSignals,
+            boolean autocancel, boolean ongoing, boolean onlyAlertOnce) {
+
+        int flags = 0;
+
+        NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(context)
+                .setAutoCancel(autocancel)
+                .setSmallIcon(smallIcon)
+                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), largeIcon))
+                .setContentTitle(contentTitle)
+                .setContentText(contentText)
+                .setTicker(ticker)
+                .setOngoing(ongoing)
+                .setOnlyAlertOnce(onlyAlertOnce)
+                .setWhen(System.currentTimeMillis());
+        //.setLights(Color.GREEN, 500, 500);
 
         //Launch activity on alert click
-    	if(pendingIntent != null) {
+        if (pendingIntent != null) {
             notifBuilder.setContentIntent(pendingIntent);
-    	}
-        
+        }
+
         //Add sound, vibration and lights
-    	if(alertSignals) {
-	        if(Preferences.isNotifSoundEnabled()) {
-	        	flags |= Notification.DEFAULT_SOUND;
-	        } else {
-	        	notifBuilder.setSound(null);
-	        }
-	        
-	        if(Preferences.isNotifVibrateEnabled()) {
-	        	flags |= Notification.DEFAULT_VIBRATE;
-	        }
-	        
-	        if(Preferences.isNotifLightsEnabled()) {
-	        	flags |= Notification.DEFAULT_LIGHTS;
-	        }
-    	}
-        
-    	notifBuilder.setDefaults(flags);
-    	
-		return notifBuilder;
-	}
-	
-	public static NotificationCompat.Builder createProgressNotificationBuilder(Context context, String contentTitle, String contentText,
-			String ticker, PendingIntent pendingIntent, int smallIcon, int largeIcon, boolean alertSignals,
-			boolean autocancel, boolean ongoing, boolean onlyAlertOnce, int maxProgress, int progress, boolean indeterminate) {
-		
-		NotificationCompat.Builder notifBuilder = createAlertNotificationBuilder(context, 
-    			contentTitle, 
-    			contentText,
-    			ticker, 
-    			pendingIntent, 
-    			smallIcon,
-    			largeIcon, 
-    			alertSignals,
-    			autocancel, 
-    			ongoing, 
-    			onlyAlertOnce);
-    	
-    	notifBuilder.setProgress(maxProgress, progress, indeterminate);
-		
-		return notifBuilder;
-	}
-	
-	public static Notification createAlertNotification(Context context, String contentTitle, String contentText,
-			String ticker, PendingIntent pendingIntent, int smallIcon, int largeIcon, boolean alertSignals,
-			boolean autocancel, boolean ongoing, boolean onlyAlertOnce) {
+        if (alertSignals) {
+            if (Preferences.isNotifSoundEnabled()) {
+                flags |= Notification.DEFAULT_SOUND;
+            } else {
+                notifBuilder.setSound(null);
+            }
 
-    	NotificationCompat.Builder notifBuilder = createAlertNotificationBuilder(context, 
-    			contentTitle, 
-    			contentText,
-    			ticker, 
-    			pendingIntent, 
-    			smallIcon,
-    			largeIcon, 
-    			alertSignals,
-    			autocancel,
-    			ongoing, 
-    			onlyAlertOnce);
-       
+            if (Preferences.isNotifVibrateEnabled()) {
+                flags |= Notification.DEFAULT_VIBRATE;
+            }
+
+            if (Preferences.isNotifLightsEnabled()) {
+                flags |= Notification.DEFAULT_LIGHTS;
+            }
+        }
+
+        notifBuilder.setDefaults(flags);
+
+        return notifBuilder;
+    }
+
+    public static NotificationCompat.Builder createProgressNotificationBuilder(Context context,
+            String contentTitle, String contentText,
+            String ticker, PendingIntent pendingIntent, int smallIcon, int largeIcon,
+            boolean alertSignals,
+            boolean autocancel, boolean ongoing, boolean onlyAlertOnce, int maxProgress,
+            int progress, boolean indeterminate) {
+
+        NotificationCompat.Builder notifBuilder = createAlertNotificationBuilder(context,
+                contentTitle,
+                contentText,
+                ticker,
+                pendingIntent,
+                smallIcon,
+                largeIcon,
+                alertSignals,
+                autocancel,
+                ongoing,
+                onlyAlertOnce);
+
+        notifBuilder.setProgress(maxProgress, progress, indeterminate);
+
+        return notifBuilder;
+    }
+
+    public static Notification createAlertNotification(Context context, String contentTitle,
+            String contentText,
+            String ticker, PendingIntent pendingIntent, int smallIcon, int largeIcon,
+            boolean alertSignals,
+            boolean autocancel, boolean ongoing, boolean onlyAlertOnce) {
+
+        NotificationCompat.Builder notifBuilder = createAlertNotificationBuilder(context,
+                contentTitle,
+                contentText,
+                ticker,
+                pendingIntent,
+                smallIcon,
+                largeIcon,
+                alertSignals,
+                autocancel,
+                ongoing,
+                onlyAlertOnce);
+
         //Create alert
         return notifBuilder.build();
     }
-	
-	public static Notification createProgressNotification(Context context, String contentTitle, String contentText,
-			String ticker, PendingIntent pendingIntent, int smallIcon, int largeIcon, boolean alertSignals,
-			boolean autocancel, boolean ongoing, boolean onlyAlertOnce, int maxProgress, int progress, boolean indeterminate) {
 
-    	NotificationCompat.Builder notifBuilder = createProgressNotificationBuilder(context, 
-    			contentTitle, 
-    			contentText,
-    			ticker, 
-    			pendingIntent, 
-    			smallIcon,
-    			largeIcon, 
-    			alertSignals,
-    			autocancel,
-    			ongoing, 
-    			onlyAlertOnce,
-    			maxProgress, 
-    			progress, 
-    			indeterminate);
-       
+    public static Notification createProgressNotification(Context context, String contentTitle,
+            String contentText,
+            String ticker, PendingIntent pendingIntent, int smallIcon, int largeIcon,
+            boolean alertSignals,
+            boolean autocancel, boolean ongoing, boolean onlyAlertOnce, int maxProgress,
+            int progress, boolean indeterminate) {
+
+        NotificationCompat.Builder notifBuilder = createProgressNotificationBuilder(context,
+                contentTitle,
+                contentText,
+                ticker,
+                pendingIntent,
+                smallIcon,
+                largeIcon,
+                alertSignals,
+                autocancel,
+                ongoing,
+                onlyAlertOnce,
+                maxProgress,
+                progress,
+                indeterminate);
+
         //Create alert
         return notifBuilder.build();
     }
-	
-	public static void showAlertNotification(Context context, Notification notif, int notifId) {		
-    	//Obtain a reference to the notification service
+
+    public static void showAlertNotification(Context context, Notification notif, int notifId) {
+        //Obtain a reference to the notification service
         NotificationManager notifManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         //Send alert
         notifManager.notify(notifId, notif);
-	}
+    }
 }

@@ -19,27 +19,29 @@
 
 package es.ugr.swad.swadroid.modules;
 
+import org.ksoap2.serialization.SoapObject;
+
 import android.os.Bundle;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
-import org.ksoap2.serialization.SoapObject;
 
 /**
  * Recover password module in case user does not remember it
- * 
+ *
  * @author Alejandro Alcalde <algui91@gmail.com>
  */
 public class RecoverPassword extends Module {
 
     public static final String TAG = Constants.APP_TAG + " RecoverPassword";
 
-	public static final String USER_TO_RECOVER =  "es.ugr.swad.swadroid.USER_TO_RECOVER";
-    
+    public static final String USER_TO_RECOVER = "es.ugr.swad.swadroid.USER_TO_RECOVER";
+
     /**
-     * Web service result 
+     * Web service result
      */
     private int success;
 
@@ -79,13 +81,13 @@ public class RecoverPassword extends Module {
 
     @Override
     protected void postConnect() {
-        
+
         if (!Utils.parseIntBool(success)) {
             setResult(RESULT_CANCELED);
         } else {
             setResult(RESULT_OK);
         }
-        
+
         finish();
     }
 

@@ -25,9 +25,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import es.ugr.swad.swadroid.R;
 
 import java.util.ArrayList;
+
+import es.ugr.swad.swadroid.R;
 
 /**
  * Adapter to populate browser of files with the information received from SWAD
@@ -37,17 +38,14 @@ import java.util.ArrayList;
  */
 
 public class NodeAdapter extends BaseAdapter {
-    private ArrayList<DirectoryItem> list;
+
     private final Activity mContext;
+
+    private ArrayList<DirectoryItem> list;
 
     public NodeAdapter(Activity c, ArrayList<DirectoryItem> list) {
         mContext = c;
         this.list = list;
-    }
-
-    static class ViewHolder {
-        TextView text;
-        ImageView image;
     }
 
     @Override
@@ -104,5 +102,12 @@ public class NodeAdapter extends BaseAdapter {
     public void change(ArrayList<DirectoryItem> newBrowser) {
         list = newBrowser;
         notifyDataSetInvalidated();
+    }
+
+    static class ViewHolder {
+
+        TextView text;
+
+        ImageView image;
     }
 }

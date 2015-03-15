@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
     <TextView
-        android:id="@+id/testAnswerTypesText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/courseNameLayout"
-        android:gravity="center"
-        android:padding="20dip"
-        android:text="@string/testAnswerTypesMsg"
-        android:textColor="@color/foreground1"
-        android:textSize="20sp" />
+            android:id="@+id/testAnswerTypesText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/courseNameLayout"
+            android:gravity="center"
+            android:padding="20dip"
+            android:text="@string/testAnswerTypesMsg"
+            android:textColor="@color/foreground1"
+            android:textSize="20sp"/>
 
     <ListView
-        android:id="@+id/testAnswerTypesList"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/testAnswerTypesText"
-        android:layout_centerInParent="true"
-        android:background="@android:color/transparent"
-        android:cacheColorHint="@color/background" >
+            android:id="@+id/testAnswerTypesList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/testAnswerTypesText"
+            android:layout_centerInParent="true"
+            android:background="@android:color/transparent"
+            android:cacheColorHint="@color/background">
     </ListView>
 
 </RelativeLayout>

@@ -25,6 +25,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADroidTracker;
@@ -33,9 +37,6 @@ import es.ugr.swad.swadroid.gui.ImageListItem;
 import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.modules.Courses;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Tests module for download questions and evaluate user skills in a course
  *
@@ -43,16 +44,20 @@ import java.util.List;
  * @author Helena Rodríguez Gijon <hrgijon@gmail.com>
  */
 public class Tests extends MenuActivity implements OnItemClickListener {
-    /**
-     * Array adapter for showing menu options
-     */
-    private ImageListAdapter adapter;
+
     /**
      * Tests tag name for Logcat
      */
     public static final String TAG = Constants.APP_TAG + " Tests";
-    public static final int RESULT_NO_QUESTIONS = 1; 
-    public static final int RESULT_NO_QUESTIONS_COURSE = 2; 
+
+    public static final int RESULT_NO_QUESTIONS = 1;
+
+    public static final int RESULT_NO_QUESTIONS_COURSE = 2;
+
+    /**
+     * Array adapter for showing menu options
+     */
+    private ImageListAdapter adapter;
 
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
@@ -80,18 +85,18 @@ public class Tests extends MenuActivity implements OnItemClickListener {
         listView.setOnItemClickListener(this);
 
         getActionBar().setSubtitle(Courses.getSelectedCourseShortName());
-    	getActionBar().setIcon(R.drawable.test);
+        getActionBar().setIcon(R.drawable.test);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             getActionBar().setDisplayHomeAsUpEnabled(true);
         }
     }
-    
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
             long id) {
-    	
-    	Intent activity;
+
+        Intent activity;
         switch (position) {
             case 0:
                 activity = new Intent(getApplicationContext(), TestsConfigDownload.class);

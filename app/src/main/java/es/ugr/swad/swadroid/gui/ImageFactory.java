@@ -18,12 +18,13 @@
  */
 package es.ugr.swad.swadroid.gui;
 
-import android.content.Context;
-import android.widget.ImageView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.DisplayImageOptions.Builder;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+
+import android.content.Context;
+import android.widget.ImageView;
 
 /**
  * Class for create images.
@@ -31,18 +32,20 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class ImageFactory {
+
     /**
      * Initializes a cached image loader
-     * @param ctx Application context
-     * @param cacheMemory Indicates if the image should be cached in memory
-     * @param cacheDisk Indicates if the image should be cached on disk
-     * @param imageEmpty Image resource showed on empty URL
-     * @param imageFail Image resource showed on failed image loading
+     *
+     * @param ctx          Application context
+     * @param cacheMemory  Indicates if the image should be cached in memory
+     * @param cacheDisk    Indicates if the image should be cached on disk
+     * @param imageEmpty   Image resource showed on empty URL
+     * @param imageFail    Image resource showed on failed image loading
      * @param imageLoading Image resource showed on image loading
      * @return An initialized cached image loader
      */
     public static ImageLoader init(Context ctx, boolean cacheMemory, boolean cacheDisk,
-                                   int imageEmpty, int imageFail, int imageLoading) {
+            int imageEmpty, int imageFail, int imageLoading) {
 
         ImageLoader loader = ImageLoader.getInstance();
         Builder builder = new DisplayImageOptions.Builder();
@@ -52,15 +55,15 @@ public class ImageFactory {
         builder.cacheOnDisk(cacheDisk);
         builder.resetViewBeforeLoading(true);
 
-        if(imageEmpty == -1) {
+        if (imageEmpty == -1) {
             builder.showImageForEmptyUri(imageLoading);
         }
 
-        if(imageFail == -1) {
+        if (imageFail == -1) {
             builder.showImageOnFail(imageLoading);
         }
 
-        if(imageLoading == -1) {
+        if (imageLoading == -1) {
             builder.showImageOnLoading(imageLoading);
         }
 
@@ -75,28 +78,31 @@ public class ImageFactory {
         return loader;
     }
 
-	/**
-	 * Displays a cached image
-	 * @param ctx Application context
-	 * @param cacheMemory Indicates if the image should be cached in memory
-	 * @param cacheDisk Indicates if the image should be cached on disk
-     * @param imageEmpty Image resource showed on empty URL
-     * @param imageFail Image resource showed on failed image loading
+    /**
+     * Displays a cached image
+     *
+     * @param ctx          Application context
+     * @param cacheMemory  Indicates if the image should be cached in memory
+     * @param cacheDisk    Indicates if the image should be cached on disk
+     * @param imageEmpty   Image resource showed on empty URL
+     * @param imageFail    Image resource showed on failed image loading
      * @param imageLoading Image resource showed on image loading
-	 */
-	public static void displayImage(Context ctx, String uri, ImageView imageView,
-			boolean cacheMemory, boolean cacheDisk, int imageEmpty, int imageFail, int imageLoading) {
+     */
+    public static void displayImage(Context ctx, String uri, ImageView imageView,
+            boolean cacheMemory, boolean cacheDisk, int imageEmpty, int imageFail,
+            int imageLoading) {
 
         ImageLoader loader = init(ctx, cacheMemory, cacheDisk, imageEmpty,
                 imageFail, imageLoading);
 
         loader.displayImage(uri, imageView);
-	}
+    }
 
     /**
      * Displays a cached image
-     * @param loader A cached image loader
-     * @param uri Image URI
+     *
+     * @param loader    A cached image loader
+     * @param uri       Image URI
      * @param imageView ImageView in which the image will be displayed
      */
     public static void displayImage(ImageLoader loader, String uri, ImageView imageView) {

@@ -16,13 +16,14 @@
 
 package com.google.zxing.client.android;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.DecodeHintType;
+import com.google.zxing.ResultPointCallback;
+
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.DecodeHintType;
-import com.google.zxing.ResultPointCallback;
 
 import java.util.Collection;
 import java.util.EnumMap;
@@ -40,14 +41,17 @@ final class DecodeThread extends Thread {
     public static final String BARCODE_BITMAP = "barcode_bitmap";
 
     private final CaptureActivity activity;
+
     private final Map<DecodeHintType, Object> hints;
-    private Handler handler;
+
     private final CountDownLatch handlerInitLatch;
 
+    private Handler handler;
+
     DecodeThread(CaptureActivity activity,
-                 Collection<BarcodeFormat> decodeFormats,
-                 String characterSet,
-                 ResultPointCallback resultPointCallback) {
+            Collection<BarcodeFormat> decodeFormats,
+            String characterSet,
+            ResultPointCallback resultPointCallback) {
 
         this.activity = activity;
         handlerInitLatch = new CountDownLatch(1);

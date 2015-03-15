@@ -29,16 +29,15 @@ import java.util.Hashtable;
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */
 public class Course extends Model {
-    /**
-     * Course name
-     */
-    private int userRole;
-    private String shortName;
-    private String fullName;
+
     private static final PropertyInfo PI_id = new PropertyInfo();
+
     private static final PropertyInfo PI_userRole = new PropertyInfo();
+
     private static final PropertyInfo PI_shortName = new PropertyInfo();
+
     private static final PropertyInfo PI_fullName = new PropertyInfo();
+
     private static final PropertyInfo[] PI_PROP_ARRAY =
             {
                     PI_id,
@@ -46,6 +45,15 @@ public class Course extends Model {
                     PI_shortName,
                     PI_fullName
             };
+
+    /**
+     * Course name
+     */
+    private int userRole;
+
+    private String shortName;
+
+    private String fullName;
 
     /**
      * Constructor
@@ -122,7 +130,8 @@ public class Course extends Model {
      */
     @Override
     public String toString() {
-        return "Course [getId()=" + getId() + " userRole=" + userRole + "getShortName=" + shortName + "getFullName=" + fullName + "]";
+        return "Course [getId()=" + getId() + " userRole=" + userRole + "getShortName=" + shortName
+                + "getFullName=" + fullName + "]";
     }
 
     /* (non-Javadoc)
@@ -158,7 +167,8 @@ public class Course extends Model {
     /* (non-Javadoc)
      * @see org.ksoap2.serialization.KvmSerializable#getPropertyInfo(int, java.util.Hashtable, org.ksoap2.serialization.PropertyInfo)
      */
-    public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo propertyInfo) {
+    public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1,
+            PropertyInfo propertyInfo) {
         switch (param) {
             case 0:
                 propertyInfo.type = PropertyInfo.LONG_CLASS;
@@ -203,9 +213,12 @@ public class Course extends Model {
 
     @Override
     public boolean equals(Object obj) {
-        if (!super.equals(obj)) return false;
+        if (!super.equals(obj)) {
+            return false;
+        }
         Course other = (Course) obj;
-        return userRole == other.userRole && shortName.compareTo(other.getShortName()) == 0 && fullName.compareTo(other.getFullName()) == 0;
+        return userRole == other.userRole && shortName.compareTo(other.getShortName()) == 0
+                && fullName.compareTo(other.getFullName()) == 0;
     }
 
 }

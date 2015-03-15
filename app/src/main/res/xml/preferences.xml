@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:custom="http://schemas.android.com/apk/res-auto" >
+                  xmlns:custom="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory android:title="@string/user_preferences" >
+    <PreferenceCategory android:title="@string/user_preferences">
 
         <!--
         <EditTextPreference
@@ -28,97 +28,97 @@
         -->
 
         <Preference
-            android:defaultValue=""
-            android:key="logOutPref"
-            android:summary="@string/logout_preferences"
-            android:title="@string/logout_title_preferences" />
+                android:defaultValue=""
+                android:key="logOutPref"
+                android:summary="@string/logout_preferences"
+                android:title="@string/logout_title_preferences"/>
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/prefCatSyncTitle" >
+    <PreferenceCategory android:title="@string/prefCatSyncTitle">
         <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="@string/prefSyncEnableKey"
-            android:summary="@string/prefSyncEnableSummary"
-            android:title="@string/prefSyncEnableTitle" />
+                android:defaultValue="true"
+                android:key="@string/prefSyncEnableKey"
+                android:summary="@string/prefSyncEnableSummary"
+                android:title="@string/prefSyncEnableTitle"/>
 
         <ListPreference
-            android:defaultValue="60"
-            android:dependency="@string/prefSyncEnableKey"
-            android:entries="@array/prefSyncTimeEntries"
-            android:entryValues="@array/prefSyncTimeValues"
-            android:key="@string/prefSyncTimeKey"
-            android:summary="@string/prefSyncTimeSummary"
-            android:title="@string/prefSyncTimeTitle" />
+                android:defaultValue="60"
+                android:dependency="@string/prefSyncEnableKey"
+                android:entries="@array/prefSyncTimeEntries"
+                android:entryValues="@array/prefSyncTimeValues"
+                android:key="@string/prefSyncTimeKey"
+                android:summary="@string/prefSyncTimeSummary"
+                android:title="@string/prefSyncTimeTitle"/>
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/prefCatNotifTitle" >
+    <PreferenceCategory android:title="@string/prefCatNotifTitle">
         <es.ugr.swad.swadroid.gui.widget.SeekBarDialogPreference
-            android:defaultValue="25"
-            android:dialogMessage="@string/prefNotifLimitDialogMessage"
-            android:key="@string/prefNotifLimitKey"
-            android:max="100"
-            android:title="@string/prefNotifLimitTitle"
-            custom:min="1"
-            custom:progressTextSuffix="@string/prefNotifLimitSuffix" />
+                android:defaultValue="25"
+                android:dialogMessage="@string/prefNotifLimitDialogMessage"
+                android:key="@string/prefNotifLimitKey"
+                android:max="100"
+                android:title="@string/prefNotifLimitTitle"
+                custom:min="1"
+                custom:progressTextSuffix="@string/prefNotifLimitSuffix"/>
 
         <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="@string/prefNotifSoundKey"
-            android:summary="@string/prefNotifSoundSummary"
-            android:title="@string/prefNotifSoundTitle" />
+                android:defaultValue="true"
+                android:key="@string/prefNotifSoundKey"
+                android:summary="@string/prefNotifSoundSummary"
+                android:title="@string/prefNotifSoundTitle"/>
         <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="@string/prefNotifVibrateKey"
-            android:summary="@string/prefNotifVibrateSummary"
-            android:title="@string/prefNotifVibrateTitle" />
+                android:defaultValue="true"
+                android:key="@string/prefNotifVibrateKey"
+                android:summary="@string/prefNotifVibrateSummary"
+                android:title="@string/prefNotifVibrateTitle"/>
         <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="@string/prefNotifLightsKey"
-            android:summary="@string/prefNotifLightsSummary"
-            android:title="@string/prefNotifLightsTitle" />
+                android:defaultValue="true"
+                android:key="@string/prefNotifLightsKey"
+                android:summary="@string/prefNotifLightsSummary"
+                android:title="@string/prefNotifLightsTitle"/>
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/about_preferences" >
+    <PreferenceCategory android:title="@string/about_preferences">
         <Preference
-            android:defaultValue=""
-            android:hint=""
-            android:key="currentVersionPref"
-            android:title="@string/versionTitle_preferences" />
+                android:defaultValue=""
+                android:hint=""
+                android:key="currentVersionPref"
+                android:title="@string/versionTitle_preferences"/>
         <Preference
-            android:defaultValue=""
-            android:key="changelogPref"
-            android:title="@string/changelogTitle" />
+                android:defaultValue=""
+                android:key="changelogPref"
+                android:title="@string/changelogTitle"/>
         <Preference
-            android:defaultValue=""
-            android:key="authorsPref"
-            android:title="@string/author_title_preferences" />
+                android:defaultValue=""
+                android:key="authorsPref"
+                android:title="@string/author_title_preferences"/>
         <Preference
-            android:defaultValue=""
-            android:key="ratePref"
-            android:summary="@string/marketTitle"
-            android:title="@string/rateTitle_menu" />
+                android:defaultValue=""
+                android:key="ratePref"
+                android:summary="@string/marketTitle"
+                android:title="@string/rateTitle_menu"/>
         <Preference
-            android:defaultValue=""
-            android:key="sharePref"
-            android:summary="@string/shareBodyMsg"
-            android:title="@string/shareTitle_menu" />
+                android:defaultValue=""
+                android:key="sharePref"
+                android:summary="@string/shareBodyMsg"
+                android:title="@string/shareTitle_menu"/>
         <Preference
-            android:defaultValue=""
-            android:key="blogPref"
-            android:summary="@string/blogURL"
-            android:title="@string/blogTitle" />
+                android:defaultValue=""
+                android:key="blogPref"
+                android:summary="@string/blogURL"
+                android:title="@string/blogTitle"/>
         <Preference
-            android:defaultValue=""
-            android:key="twitterPref"
-            android:summary="@string/twitterUser"
-            android:title="@string/twitterTitle" />
+                android:defaultValue=""
+                android:key="twitterPref"
+                android:summary="@string/twitterUser"
+                android:title="@string/twitterTitle"/>
         <Preference
-            android:defaultValue=""
-            android:key="facebookPref"
-            android:summary="@string/facebookURL"
-            android:title="@string/facebookTitle" />
+                android:defaultValue=""
+                android:key="facebookPref"
+                android:summary="@string/facebookURL"
+                android:title="@string/facebookTitle"/>
         <Preference
-            android:defaultValue=""
-            android:key="googlePlusPref"
-            android:summary="@string/googlePlusURL"
-            android:title="@string/googlePlusTitle" />
+                android:defaultValue=""
+                android:key="googlePlusPref"
+                android:summary="@string/googlePlusURL"
+                android:title="@string/googlePlusTitle"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

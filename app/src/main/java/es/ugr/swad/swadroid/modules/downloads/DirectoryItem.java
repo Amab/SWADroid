@@ -23,17 +23,20 @@ package es.ugr.swad.swadroid.modules.downloads;
  * Each DirectoryItem has:
  * - type: this field provides information about if the item represents
  * -a directory (with the string "dir")
- * -or a file, in wich case,  this field contains the extension of  the file name, in case it has one, or "unknown" in case it has not any extension
+ * -or a file, in wich case,  this field contains the extension of  the file name, in case it has
+ * one, or "unknown" in case it has not any extension
  * - name: this field provides item name
  * - url:
  * -In case the objects represents a directory, this fields is empty.
- * -In case the object represents a file, it contains the url (valid for the next two hours) to download the file from SWAD
+ * -In case the object represents a file, it contains the url (valid for the next two hours) to
+ * download the file from SWAD
  * - size:
  * -In case the objects represents a directory, this fields contains 0.
  * -In case the object represents a file, the field contains in bytes file size
  * - date:
  * -In case the objects represents a file, date in UNIX time when the file was loaded to SWAD
- * - fileCode: this field only has sense when the item represents a downloadable file. It is a unique code that identifies the file.
+ * - fileCode: this field only has sense when the item represents a downloadable file. It is a
+ * unique code that identifies the file.
  * It will be used, in case a download takes place, to notify SWAD this fact
  *
  * @author Sergio Ropero Oliver. <sro0000@gmail.com>
@@ -41,19 +44,25 @@ package es.ugr.swad.swadroid.modules.downloads;
  * @version 1.0
  */
 public class DirectoryItem implements Comparable<DirectoryItem> {
+
     private String name;
+
     private String type;
+
     private long fileCode = -1;
+
     private long size = -1; //In bytes
+
     private long time = -1;
+
     private String license;
+
     private String publisher = "";
+
     private String photo = "";
 
     /**
      * Constructor of a directory type.
-     *
-     * @param name
      */
     DirectoryItem(String name) {
         this.name = name;
@@ -69,17 +78,9 @@ public class DirectoryItem implements Comparable<DirectoryItem> {
 
     /**
      * Constructor of a File item.
-     *
-     * @param name
-     * @param type
-     * @param fileCode
-     * @param size
-     * @param time
-     * @param license
-     * @param publisher
-     * @param photo
      */
-    DirectoryItem(String name, String type, long fileCode, long size, long time, String license, String publisher, String photo) {
+    DirectoryItem(String name, String type, long fileCode, long size, long time, String license,
+            String publisher, String photo) {
         this.name = name;
         this.type = type;
         this.fileCode = fileCode;
@@ -99,83 +100,82 @@ public class DirectoryItem implements Comparable<DirectoryItem> {
         return type.equals("dir");
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setFileCode(long fileCode) {
-        this.fileCode = fileCode;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
-    }
-
-    public void setTime(long time) {
-        this.time = time;
-    }
-
-    public void setLicense(String license) {
-        this.license = license;
-    }
-
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
-    }
-
-
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getType() {
         return type;
     }
 
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public long getFileCode() {
         return fileCode;
+    }
+
+    public void setFileCode(long fileCode) {
+        this.fileCode = fileCode;
     }
 
     public long getSize() {
         return size;
     }
 
+    public void setSize(int size) {
+        this.size = size;
+    }
+
     public long getTime() {
         return time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
     }
 
     public String getLicense() {
         return license;
     }
 
+    public void setLicense(String license) {
+        this.license = license;
+    }
+
     public String getPublisher() {
         return publisher;
+    }
+
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
     }
 
     public String getPhoto() {
         return photo;
     }
 
-	@Override
-	public int compareTo(DirectoryItem another) {
-		int result;
-    	
-    	if (this.isFolder() && !another.isFolder()) {
-    		result = -1;
-    	} else if (!another.isFolder() && this.isFolder()) {
-    		result = 1;
-    	} else {
-    		result = this.name.compareToIgnoreCase(another.name);
-    	}
-    	
-    	return result;
-	}
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
+    @Override
+    public int compareTo(DirectoryItem another) {
+        int result;
+
+        if (this.isFolder() && !another.isFolder()) {
+            result = -1;
+        } else if (!another.isFolder() && this.isFolder()) {
+            result = 1;
+        } else {
+            result = this.name.compareToIgnoreCase(another.name);
+        }
+
+        return result;
+    }
 }

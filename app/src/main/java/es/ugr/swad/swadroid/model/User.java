@@ -34,51 +34,23 @@ import java.util.Locale;
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  */
 public class User extends Model {
-    /**
-     * Webservices session key.
-     */
-    private String wsKey;
-    /**
-     * User identifier.
-     */
-    private String userID;
-    /**
-     * User nickname.
-     */
-    private String userNickname;
-    /**
-     * User first surname.
-     */
-    private String userSurname1;
-    /**
-     * User last surname.
-     */
-    private String userSurname2;
-    /**
-     * User name.
-     */
-    private String userFirstname;
-    /**
-     * Full path where user's picture is stored.
-     */
-    private String userPhoto;
-    /**
-     * User birthday.
-     */
-    private Calendar userBirthday;
-    /**
-     * User role. 1:guest 2: student 3: teacher
-     */
-    private int userRole;
 
     private static final PropertyInfo PI_wsKey = new PropertyInfo();
+
     private static final PropertyInfo PI_userID = new PropertyInfo();
+
     private static final PropertyInfo PI_userNickname = new PropertyInfo();
+
     private static final PropertyInfo PI_userSurname1 = new PropertyInfo();
+
     private static final PropertyInfo PI_userSurname2 = new PropertyInfo();
+
     private static final PropertyInfo PI_userFirstname = new PropertyInfo();
+
     private static final PropertyInfo PI_userPhoto = new PropertyInfo();
+
     private static final PropertyInfo PI_userBirthday = new PropertyInfo();
+
     private static final PropertyInfo PI_userRole = new PropertyInfo();
 
     @SuppressWarnings("unused")
@@ -95,6 +67,51 @@ public class User extends Model {
     };
 
     /**
+     * Webservices session key.
+     */
+    private String wsKey;
+
+    /**
+     * User identifier.
+     */
+    private String userID;
+
+    /**
+     * User nickname.
+     */
+    private String userNickname;
+
+    /**
+     * User first surname.
+     */
+    private String userSurname1;
+
+    /**
+     * User last surname.
+     */
+    private String userSurname2;
+
+    /**
+     * User name.
+     */
+    private String userFirstname;
+
+    /**
+     * Full path where user's picture is stored.
+     */
+    private String userPhoto;
+
+    /**
+     * User birthday.
+     */
+    private Calendar userBirthday;
+
+    /**
+     * User role. 1:guest 2: student 3: teacher
+     */
+    private int userRole;
+
+    /**
      * Constructor.
      *
      * @param id            User code.
@@ -109,8 +126,8 @@ public class User extends Model {
      * @param userRole      User role.
      */
     public User(long id, String wsKey, String userID, String userNickname, String userSurname1,
-                String userSurname2, String userFirstname, String userPhoto, String userBirthday,
-                int userRole) throws ParseException {
+            String userSurname2, String userFirstname, String userPhoto, String userBirthday,
+            int userRole) throws ParseException {
         super(id);
         this.wsKey = wsKey;
         this.userID = userID;
@@ -223,15 +240,25 @@ public class User extends Model {
     }
 
     /**
+     * Sets Full path where user's picture is stored.
+     *
+     * @param userPhoto the userPhoto to set
+     */
+    public void setUserPhoto(String userPhoto) {
+        this.userPhoto = userPhoto;
+    }
+
+    /**
      * Gets File name where user's picture is stored.
      *
      * @return the userPhoto
      */
     public String getPhotoFileName() {
-        if (userPhoto == null || userPhoto.equals(""))
+        if (userPhoto == null || userPhoto.equals("")) {
             return null;
-        else
+        } else {
             return userPhoto.substring(userPhoto.lastIndexOf('/') + 1);
+        }
     }
 
     /**
@@ -249,7 +276,7 @@ public class User extends Model {
      * @param userBirthday User birthday.
      */
     public void setUserBirthday(String userBirthday) throws ParseException {
-        if((userBirthday != null) && !userBirthday.equals("00000000")) {
+        if ((userBirthday != null) && !userBirthday.equals("00000000")) {
             this.userBirthday = Calendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
 
@@ -257,15 +284,6 @@ public class User extends Model {
         } else {
             this.userBirthday = null;
         }
-    }
-
-    /**
-     * Sets Full path where user's picture is stored.
-     *
-     * @param userPhoto the userPhoto to set
-     */
-    public void setUserPhoto(String userPhoto) {
-        this.userPhoto = userPhoto;
     }
 
     /**
@@ -343,7 +361,8 @@ public class User extends Model {
         return PI_PROP_ARRAY.length;
     }
 
-    public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo propertyInfo) {
+    public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1,
+            PropertyInfo propertyInfo) {
         switch (param) {
             case 0:
                 propertyInfo.type = PropertyInfo.STRING_CLASS;

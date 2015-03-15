@@ -21,6 +21,8 @@
 
 package es.ugr.swad.swadroid.modules.rollcall;
 
+import com.google.zxing.client.android.Intents;
+
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -38,7 +40,9 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
-import com.google.zxing.client.android.Intents;
+
+import java.util.List;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADroidTracker;
@@ -48,8 +52,6 @@ import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.model.UserAttendance;
 import es.ugr.swad.swadroid.modules.Courses;
 
-import java.util.List;
-
 /**
  * UsersActivity module.
  *
@@ -57,38 +59,50 @@ import java.util.List;
  */
 public class UsersActivity extends MenuExpandableListActivity implements
         SwipeRefreshLayout.OnRefreshListener {
+
     /**
      * Rollcall tag name for Logcat
      */
     public static final String TAG = Constants.APP_TAG + " UsersActivity";
+
     /**
      * Code of event associated to the users list
      */
     private static int eventCode;
+
     /**
      * ListView of users
      */
     private static ListView lvUsers;
+
     /**
      * Adapter for ListView of users
      */
     UsersCursorAdapter adapter;
+
     /**
      * Database cursor for Adapter of users
      */
     Cursor dbCursor;
-    /**
-     * Layout with "Pull to refresh" function
-     */
-    private SwipeRefreshLayout refreshLayout;
+
     /**
      * TextView for the empty users message
      */
     TextView emptyUsersTextView;
+
     /**
      * Flag for indicate if device has a rear camera available
      */
     boolean hasRearCam;
+
+    /**
+     * Layout with "Pull to refresh" function
+     */
+    private SwipeRefreshLayout refreshLayout;
+
+    public static int getEventCode() {
+        return eventCode;
+    }
 
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.MenuExpandableListActivity#onCreate(android.os.Bundle)
@@ -109,7 +123,7 @@ public class UsersActivity extends MenuExpandableListActivity implements
 
             @Override
             public void onScroll(AbsListView absListView, int firstVisibleItem,
-                                 int visibleItemCount, int totalItemCount) {
+                    int visibleItemCount, int totalItemCount) {
 
                 /*boolean enable = true;
                 if ((lvUsers != null) && (lvUsers.getChildCount() > 0)) {
@@ -130,7 +144,7 @@ public class UsersActivity extends MenuExpandableListActivity implements
         setAppearance();
 
         getActionBar().setSubtitle(Courses.getSelectedCourseShortName());
-    	getActionBar().setIcon(R.drawable.roll_call);
+        getActionBar().setIcon(R.drawable.roll_call);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -235,7 +249,7 @@ public class UsersActivity extends MenuExpandableListActivity implements
     }
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-     private void setAppearance() {
+    private void setAppearance() {
         refreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
@@ -259,15 +273,15 @@ public class UsersActivity extends MenuExpandableListActivity implements
         List<UserAttendance> usersList = dbHelper.getUsersEvent(eventCode);
 
         //Concatenate the user code of all users checked as present and separate them with commas
-        for(UserAttendance user : usersList) {
-            if(user.isUserPresent()) {
+        for (UserAttendance user : usersList) {
+            if (user.isUserPresent()) {
                 usersCodes += user.getId() + ",";
             }
         }
 
         //Remove final comma
-        if(!usersCodes.isEmpty()) {
-            usersCodes = usersCodes.substring(0, usersCodes.length()-1);
+        if (!usersCodes.isEmpty()) {
+            usersCodes = usersCodes.substring(0, usersCodes.length() - 1);
         }
 
         return usersCodes;
@@ -325,7 +339,8 @@ public class UsersActivity extends MenuExpandableListActivity implements
                                 dialog.cancel();
 
                                 dbHelper.beginTransaction();
-                                dbHelper.removeAllRows(DataBaseHelper.DB_TABLE_USERS_ATTENDANCES, "eventCode", eventCode);
+                                dbHelper.removeAllRows(DataBaseHelper.DB_TABLE_USERS_ATTENDANCES,
+                                        "eventCode", eventCode);
                                 dbHelper.updateEventStatus(eventCode, "OK");
                                 dbHelper.endTransaction(true);
 
@@ -346,9 +361,5 @@ public class UsersActivity extends MenuExpandableListActivity implements
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    public static int getEventCode() {
-        return eventCode;
     }
 }

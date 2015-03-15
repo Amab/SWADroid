@@ -32,8 +32,22 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.*;
+import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.ScrollView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADroidTracker;
@@ -48,10 +62,6 @@ import es.ugr.swad.swadroid.model.TestTag;
 import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.utils.Utils;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Tests module for evaluate user skills in a course
  *
@@ -59,50 +69,56 @@ import java.util.List;
  * @author Helena Rodríguez Gijon <hrgijon@gmail.com>
  */
 public class TestsMake extends MenuActivity {
-    /**
-     * Test's number of questions
-     */
-    private int numQuestions;
-    /**
-     * Test data
-     */
-    private Test test;
-    /**
-     * Tags's list of the test
-     */
-    private List<TestTag> tagsList;
-    /**
-     * Answer types's list of the test
-     */
-    private List<String> answerTypesList;
-    /**
-     * Click listener for courses dialog cancel button
-     */
-    private OnItemClickListener tagsAnswersTypeItemClickListener;
-    /**
-     * Adapter for answer TF questions
-     */
-    private ArrayAdapter<String> tfAdapter;
-    /**
-     * Test question being showed
-     */
-    private int actualQuestion;
-    /**
-     * ActionBar menu
-     */
-    private Menu menu;
-    /**
-     * Possible values for screen steps
-     */
-    private enum ScreenStep {MENU, NUM_QUESTIONS, TAGS, ANSWER_TYPES, TEST}
-    /**
-     * Step of actual screen
-     */
-    private ScreenStep screenStep;
+
     /**
      * Tests tag name for Logcat
      */
     private static final String TAG = Constants.APP_TAG + " TestsMake";
+
+    /**
+     * Test's number of questions
+     */
+    private int numQuestions;
+
+    /**
+     * Test data
+     */
+    private Test test;
+
+    /**
+     * Tags's list of the test
+     */
+    private List<TestTag> tagsList;
+
+    /**
+     * Answer types's list of the test
+     */
+    private List<String> answerTypesList;
+
+    /**
+     * Click listener for courses dialog cancel button
+     */
+    private OnItemClickListener tagsAnswersTypeItemClickListener;
+
+    /**
+     * Adapter for answer TF questions
+     */
+    private ArrayAdapter<String> tfAdapter;
+
+    /**
+     * Test question being showed
+     */
+    private int actualQuestion;
+
+    /**
+     * ActionBar menu
+     */
+    private Menu menu;
+
+    /**
+     * Step of actual screen
+     */
+    private ScreenStep screenStep;
 
     /**
      * Sets layout maintaining tests action bar
@@ -112,20 +128,21 @@ public class TestsMake extends MenuActivity {
     private void setLayout(int layout) {
         setContentView(layout);
     }
-    
+
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	private void setNumQuestions() {
-    	if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
-            android.widget.NumberPicker numberPicker = 
-            		(android.widget.NumberPicker) findViewById(R.id.testNumQuestionsNumberPicker);
-            
-    		numQuestions = numberPicker.getValue();
-    	} else {
-        	es.ugr.swad.swadroid.gui.widget.NumberPicker numberPickerOld =
-            		(es.ugr.swad.swadroid.gui.widget.NumberPicker) findViewById(R.id.testNumQuestionsNumberPickerOld);
-        	
-    		numQuestions = numberPickerOld.getCurrent();
-    	}
+    private void setNumQuestions() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+            android.widget.NumberPicker numberPicker =
+                    (android.widget.NumberPicker) findViewById(R.id.testNumQuestionsNumberPicker);
+
+            numQuestions = numberPicker.getValue();
+        } else {
+            es.ugr.swad.swadroid.gui.widget.NumberPicker numberPickerOld =
+                    (es.ugr.swad.swadroid.gui.widget.NumberPicker) findViewById(
+                            R.id.testNumQuestionsNumberPickerOld);
+
+            numQuestions = numberPickerOld.getCurrent();
+        }
 
         if (isDebuggable) {
             Log.d(TAG, "numQuestions=" + numQuestions);
@@ -133,31 +150,32 @@ public class TestsMake extends MenuActivity {
 
         selectTags();
     }
-    
+
     /**
      * Screen to select the number of questions in the test
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	private void selectNumQuestions() {          
+    private void selectNumQuestions() {
         screenStep = ScreenStep.NUM_QUESTIONS;
 
         setLayout(R.layout.tests_num_questions);
 
-        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
-            android.widget.NumberPicker numberPicker = 
-            		(android.widget.NumberPicker) findViewById(R.id.testNumQuestionsNumberPicker);
-            
-	        numberPicker.setMaxValue(test.getMax());
-	        numberPicker.setMinValue(test.getMin());
-	        numberPicker.setValue(test.getDef());
-	        numberPicker.setVisibility(View.VISIBLE);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+            android.widget.NumberPicker numberPicker =
+                    (android.widget.NumberPicker) findViewById(R.id.testNumQuestionsNumberPicker);
+
+            numberPicker.setMaxValue(test.getMax());
+            numberPicker.setMinValue(test.getMin());
+            numberPicker.setValue(test.getDef());
+            numberPicker.setVisibility(View.VISIBLE);
         } else {
-        	es.ugr.swad.swadroid.gui.widget.NumberPicker numberPickerOld =
-        		(es.ugr.swad.swadroid.gui.widget.NumberPicker) findViewById(R.id.testNumQuestionsNumberPickerOld);
-    		
-        	numberPickerOld.setRange(test.getMin(), test.getMax());
-        	numberPickerOld.setCurrent(test.getDef()); 
-        	numberPickerOld.setVisibility(View.VISIBLE);
+            es.ugr.swad.swadroid.gui.widget.NumberPicker numberPickerOld =
+                    (es.ugr.swad.swadroid.gui.widget.NumberPicker) findViewById(
+                            R.id.testNumQuestionsNumberPickerOld);
+
+            numberPickerOld.setRange(test.getMin(), test.getMax());
+            numberPickerOld.setCurrent(test.getDef());
+            numberPickerOld.setVisibility(View.VISIBLE);
         }
 
         SWADroidTracker.sendScreenView(getApplicationContext(), TAG + " NumQuestions");
@@ -169,7 +187,7 @@ public class TestsMake extends MenuActivity {
     private void setTags() {
         ListView checkBoxesList = (ListView) findViewById(R.id.testTagsList);
         TagsArrayAdapter tagsAdapter = (TagsArrayAdapter) checkBoxesList.getAdapter();
-    	int childsCount = checkBoxesList.getCount();
+        int childsCount = checkBoxesList.getCount();
         SparseBooleanArray checkedItems = checkBoxesList.getCheckedItemPositions();
         tagsList = new ArrayList<TestTag>();
 
@@ -177,7 +195,7 @@ public class TestsMake extends MenuActivity {
         if (checkedItems.get(0, false)) {
             tagsList.add(new TestTag(0, null, "all", 0));
 
-        //If "All tags" item is not checked, add the selected items to the list of selected tags
+            //If "All tags" item is not checked, add the selected items to the list of selected tags
         } else {
             for (int i = 0; i < childsCount; i++) {
                 if (checkedItems.get(i, false)) {
@@ -192,7 +210,8 @@ public class TestsMake extends MenuActivity {
 
         //If no tags selected, show a message to notice user
         if (tagsList.isEmpty()) {
-            Toast.makeText(getApplicationContext(), R.string.testNoTagsSelectedMsg, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.testNoTagsSelectedMsg,
+                    Toast.LENGTH_LONG).show();
 
             //If any tag is selected, show the answer types selection screen
         } else {
@@ -207,7 +226,7 @@ public class TestsMake extends MenuActivity {
         ListView checkBoxesList;
         TagsArrayAdapter tagsAdapter;
         List<TestTag> allTagsList = dbHelper.getOrderedCourseTags(Courses.getSelectedCourseCode());
-        
+
         screenStep = ScreenStep.TAGS;
 
         //Add "All tags" item in list's top
@@ -230,8 +249,9 @@ public class TestsMake extends MenuActivity {
      */
     private void setAnswerTypes() {
         ListView checkBoxesList = (ListView) findViewById(R.id.testAnswerTypesList);
-        AnswerTypesArrayAdapter answerTypesAdapter = (AnswerTypesArrayAdapter) checkBoxesList.getAdapter();
-    	int childsCount = checkBoxesList.getCount();
+        AnswerTypesArrayAdapter answerTypesAdapter = (AnswerTypesArrayAdapter) checkBoxesList
+                .getAdapter();
+        int childsCount = checkBoxesList.getCount();
         SparseBooleanArray checkedItems = checkBoxesList.getCheckedItemPositions();
         answerTypesList = new ArrayList<String>();
 
@@ -255,7 +275,8 @@ public class TestsMake extends MenuActivity {
 
         //If no answer types selected, show a message to notice user
         if (answerTypesList.isEmpty()) {
-            Toast.makeText(getApplicationContext(), R.string.testNoAnswerTypesSelectedMsg, Toast.LENGTH_LONG)
+            Toast.makeText(getApplicationContext(), R.string.testNoAnswerTypesSelectedMsg,
+                    Toast.LENGTH_LONG)
                     .show();
 
             //If any answer type is selected, generate the test and show the first question screen
@@ -270,7 +291,7 @@ public class TestsMake extends MenuActivity {
     private void selectAnswerTypes() {
         ListView checkBoxesList;
         AnswerTypesArrayAdapter answerTypesAdapter;
-        
+
         screenStep = ScreenStep.ANSWER_TYPES;
 
         setLayout(R.layout.tests_answer_types);
@@ -304,7 +325,7 @@ public class TestsMake extends MenuActivity {
         TextView textCorrectAnswer = (TextView) findViewById(R.id.testMakeCorrectAnswer);
         EditText textAnswer = (EditText) findViewById(R.id.testMakeEditText);
         ImageView img = (ImageView) findViewById(R.id.testMakeCorrectAnswerImage);
-    	MenuItem actionScoreItem = menu.findItem(R.id.action_score);
+        MenuItem actionScoreItem = menu.findItem(R.id.action_score);
         CheckedAnswersArrayAdapter checkedAnswersAdapter;
         String answerType = question.getAnswerType();
         String feedback = test.getFeedback();
@@ -319,7 +340,8 @@ public class TestsMake extends MenuActivity {
 
         scrollContent.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
-                findViewById(R.id.testMakeList).getParent().requestDisallowInterceptTouchEvent(false);
+                findViewById(R.id.testMakeList).getParent()
+                        .requestDisallowInterceptTouchEvent(false);
                 return false;
             }
         });
@@ -341,13 +363,15 @@ public class TestsMake extends MenuActivity {
         testMakeList.removeAllViews();
         stem.setText(Html.fromHtml(question.getStem()));
 
-        if ((questionFeedbackText != null) && (!questionFeedbackText.equals(Constants.NULL_VALUE))) {
+        if ((questionFeedbackText != null) && (!questionFeedbackText
+                .equals(Constants.NULL_VALUE))) {
             questionFeedback.setText(Html.fromHtml(questionFeedbackText));
         }
 
         feedbackLevel = Test.FEEDBACK_VALUES.indexOf(feedback);
 
-        if (test.isEvaluated() && (feedbackLevel == maxFeedbackLevel) && !question.getFeedback().equals(Constants.NULL_VALUE)) {
+        if (test.isEvaluated() && (feedbackLevel == maxFeedbackLevel) && !question.getFeedback()
+                .equals(Constants.NULL_VALUE)) {
             questionFeedback.setVisibility(View.VISIBLE);
         } else {
             questionFeedback.setVisibility(View.GONE);
@@ -380,7 +404,8 @@ public class TestsMake extends MenuActivity {
                 if (answerType.equals(TestAnswer.TYPE_FLOAT)) {
                     correctAnswer = "[" + a.getAnswer() + ";" + answers.get(1).getAnswer() + "]";
 
-                    if ((feedbackLevel == maxFeedbackLevel) && !a.getFeedback().equals(Constants.NULL_VALUE)) {
+                    if ((feedbackLevel == maxFeedbackLevel) && !a.getFeedback()
+                            .equals(Constants.NULL_VALUE)) {
                         answerFeedback.setVisibility(View.VISIBLE);
                     } else {
                         answerFeedback.setVisibility(View.GONE);
@@ -389,7 +414,8 @@ public class TestsMake extends MenuActivity {
                     for (int i = 0; i < numAnswers; i++) {
                         a = answers.get(i);
 
-                        if ((feedbackLevel == maxFeedbackLevel) && !a.getFeedback().equals(Constants.NULL_VALUE)) {
+                        if ((feedbackLevel == maxFeedbackLevel) && !a.getFeedback()
+                                .equals(Constants.NULL_VALUE)) {
                             correctAnswer += "<strong>" + a.getAnswer() + "</strong><br/>";
                             correctAnswer += "<i>" + a.getFeedback() + "</i><br/><br/>";
                         } else {
@@ -402,12 +428,14 @@ public class TestsMake extends MenuActivity {
                 textCorrectAnswer.setVisibility(View.VISIBLE);
             }
         } else if (answerType.equals(TestAnswer.TYPE_MULTIPLE_CHOICE)) {
-            checkedAnswersAdapter = new CheckedAnswersArrayAdapter(this, R.layout.list_item_multiple_choice,
+            checkedAnswersAdapter = new CheckedAnswersArrayAdapter(this,
+                    R.layout.list_item_multiple_choice,
                     answers, test.isEvaluated(), test.getFeedback(), answerType);
 
             for (int i = 0; i < numAnswers; i++) {
                 a = answers.get(i);
-                CheckableLinearLayout item = (CheckableLinearLayout) checkedAnswersAdapter.getView(i, null, null);
+                CheckableLinearLayout item = (CheckableLinearLayout) checkedAnswersAdapter
+                        .getView(i, null, null);
                 item.setChecked(Utils.parseStringBool(a.getUserAnswer()));
                 testMakeList.addView(item);
             }
@@ -416,20 +444,24 @@ public class TestsMake extends MenuActivity {
         } else {
             if (answerType.equals(TestAnswer.TYPE_TRUE_FALSE) && (numAnswers < 2)) {
                 if (answers.get(0).getAnswer().equals(TestAnswer.VALUE_TRUE)) {
-                    answers.add(1, new TestAnswer(0, 1, 0, false, TestAnswer.VALUE_FALSE, answers.get(0).getFeedback()));
+                    answers.add(1, new TestAnswer(0, 1, 0, false, TestAnswer.VALUE_FALSE,
+                            answers.get(0).getFeedback()));
                 } else {
-                    answers.add(0, new TestAnswer(0, 0, 0, false, TestAnswer.VALUE_TRUE, answers.get(0).getFeedback()));
+                    answers.add(0, new TestAnswer(0, 0, 0, false, TestAnswer.VALUE_TRUE,
+                            answers.get(0).getFeedback()));
                 }
 
                 numAnswers = 2;
             }
 
-            checkedAnswersAdapter = new CheckedAnswersArrayAdapter(this, R.layout.list_item_single_choice,
+            checkedAnswersAdapter = new CheckedAnswersArrayAdapter(this,
+                    R.layout.list_item_single_choice,
                     answers, test.isEvaluated(), test.getFeedback(), answerType);
 
             for (int i = 0; i < numAnswers; i++) {
                 a = answers.get(i);
-                CheckableLinearLayout item = (CheckableLinearLayout) checkedAnswersAdapter.getView(i, null, null);
+                CheckableLinearLayout item = (CheckableLinearLayout) checkedAnswersAdapter
+                        .getView(i, null, null);
                 item.setChecked(a.getAnswer().equals(answers.get(0).getUserAnswer()));
                 testMakeList.addView(item);
             }
@@ -443,7 +475,8 @@ public class TestsMake extends MenuActivity {
 
             if (feedback.equals(Test.FEEDBACK_HIGH)) {
                 img.setImageResource(R.drawable.btn_check_buttonless_on);
-                if (!answerType.equals(TestAnswer.TYPE_TRUE_FALSE) && !answerType.equals(TestAnswer.TYPE_MULTIPLE_CHOICE)
+                if (!answerType.equals(TestAnswer.TYPE_TRUE_FALSE) && !answerType
+                        .equals(TestAnswer.TYPE_MULTIPLE_CHOICE)
                         && !answerType.equals(TestAnswer.TYPE_UNIQUE_CHOICE)) {
 
                     if (!answers.get(0).isCorrectAnswered()) {
@@ -462,7 +495,7 @@ public class TestsMake extends MenuActivity {
             } else {
                 score.setTextColor(Color.BLACK);
             }
-            
+
             score.setText(df.format(questionScore));
 
             MenuItemCompat.setActionView(actionScoreItem, score);
@@ -556,11 +589,11 @@ public class TestsMake extends MenuActivity {
         bar.setText(1 + "/" + size);
         bar.setTextColor(Color.BLUE);
         bar.setTextSize(20);
-        
-        if(!test.isEvaluated()) {
-        	//Show evaluate button only
-        	menu.findItem(R.id.action_evaluate).setVisible(true);
-			menu.findItem(R.id.action_accept).setVisible(false);
+
+        if (!test.isEvaluated()) {
+            //Show evaluate button only
+            menu.findItem(R.id.action_evaluate).setVisible(true);
+            menu.findItem(R.id.action_accept).setVisible(false);
         }
 
         actualQuestion = 0;
@@ -617,8 +650,10 @@ public class TestsMake extends MenuActivity {
         List<TestQuestion> questions;
 
         //Generates the test
-        questions = dbHelper.getRandomCourseQuestionsByTagAndAnswerType(Courses.getSelectedCourseCode(), tagsList, answerTypesList,
-                numQuestions);
+        questions = dbHelper
+                .getRandomCourseQuestionsByTagAndAnswerType(Courses.getSelectedCourseCode(),
+                        tagsList, answerTypesList,
+                        numQuestions);
         if (!questions.isEmpty()) {
             test.setQuestions(questions);
 
@@ -634,13 +669,14 @@ public class TestsMake extends MenuActivity {
         } else {
             SWADroidTracker.sendScreenView(getApplicationContext(), TAG + " No questions criteria");
 
-            Toast.makeText(this, R.string.testNoQuestionsMeetsSpecifiedCriteriaMsg, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.testNoQuestionsMeetsSpecifiedCriteriaMsg,
+                    Toast.LENGTH_LONG).show();
             finish();
         }
     }
-    
+
     private void evaluateTest() {
-    	TextView textView;
+        TextView textView;
         Float score, scoreDec;
         DecimalFormat df = new DecimalFormat("0.00");
         String feedback = test.getFeedback();
@@ -651,9 +687,9 @@ public class TestsMake extends MenuActivity {
         if (!feedback.equals(Test.FEEDBACK_NONE)) {
             if (!test.isEvaluated()) {
                 test.evaluate();
-                
-            	//Hide evaluate button
-            	menu.findItem(R.id.action_evaluate).setVisible(false);
+
+                //Hide evaluate button
+                menu.findItem(R.id.action_evaluate).setVisible(false);
             }
 
             score = test.getTotalScore();
@@ -666,17 +702,18 @@ public class TestsMake extends MenuActivity {
             if (scoreDec < 5) {
                 textView.setTextColor(getResources().getColor(R.color.red));
             }
-            
+
             textView.setVisibility(View.VISIBLE);
-            
-        	//Show details button only
-        	menu.findItem(R.id.action_show_details).setVisible(true);
-        	menu.findItem(R.id.action_show_totals).setVisible(false);
+
+            //Show details button only
+            menu.findItem(R.id.action_show_details).setVisible(true);
+            menu.findItem(R.id.action_show_totals).setVisible(false);
         } else {
             textView = (TextView) findViewById(R.id.testResultsText);
             textView.setText(R.string.testNoResultsMsg);
 
-            SWADroidTracker.sendScreenView(getApplicationContext(), TAG + " Feedback " + Test.FEEDBACK_NONE);
+            SWADroidTracker.sendScreenView(getApplicationContext(),
+                    TAG + " Feedback " + Test.FEEDBACK_NONE);
         }
     }
 
@@ -686,7 +723,7 @@ public class TestsMake extends MenuActivity {
      * @param v Actual view
      */
     public void onEvaluateClick(View v) {
-    	evaluateTest();
+        evaluateTest();
     }
 
     /**
@@ -712,11 +749,11 @@ public class TestsMake extends MenuActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         screenStep = ScreenStep.MENU;
 
         getActionBar().setSubtitle(Courses.getSelectedCourseShortName());
-    	getActionBar().setIcon(R.drawable.test);
+        getActionBar().setIcon(R.drawable.test);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -724,7 +761,7 @@ public class TestsMake extends MenuActivity {
 
         tagsAnswersTypeItemClickListener = new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position,
-                                    long id) {
+                    long id) {
 
                 ListView lv = (ListView) parent;
                 int childCount = lv.getCount();
@@ -756,12 +793,14 @@ public class TestsMake extends MenuActivity {
         tfAdapter.add(getString(R.string.falseMsg));
 
         String selection = "id=" + Long.toString(Courses.getSelectedCourseCode());
-        Cursor dbCursor = dbHelper.getDb().getCursor(DataBaseHelper.DB_TABLE_TEST_CONFIG, selection, null);
+        Cursor dbCursor = dbHelper.getDb()
+                .getCursor(DataBaseHelper.DB_TABLE_TEST_CONFIG, selection, null);
         startManagingCursor(dbCursor);
-        
+
         if (dbCursor.getCount() > 0) {
             if (isDebuggable) {
-                Log.d(TAG, "selectedCourseCode = " + Long.toString(Courses.getSelectedCourseCode()));
+                Log.d(TAG,
+                        "selectedCourseCode = " + Long.toString(Courses.getSelectedCourseCode()));
             }
 
             test = (Test) dbHelper.getRow(DataBaseHelper.DB_TABLE_TEST_CONFIG, "id",
@@ -782,60 +821,68 @@ public class TestsMake extends MenuActivity {
 
         setResult(RESULT_OK);
     }
-    
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.tests_activity_actions, menu);
         this.menu = menu;
-        
+
         return super.onCreateOptionsMenu(menu);
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        	case R.id.action_accept:
-        	switch (screenStep) {
-        		case NUM_QUESTIONS:
-        			setNumQuestions();
-        			
-        			break;
-        		case TAGS:        			
-        			setTags();
-        			
-        			break;
-        		case ANSWER_TYPES:
-        			setAnswerTypes();
-        			
-        			break;
-        		default:
-        			menu.findItem(R.id.action_accept).setVisible(false);
-        	}
-        		
-        		return true;
-            case R.id.action_evaluate: 
+            case R.id.action_accept:
+                switch (screenStep) {
+                    case NUM_QUESTIONS:
+                        setNumQuestions();
+
+                        break;
+                    case TAGS:
+                        setTags();
+
+                        break;
+                    case ANSWER_TYPES:
+                        setAnswerTypes();
+
+                        break;
+                    default:
+                        menu.findItem(R.id.action_accept).setVisible(false);
+                }
+
+                return true;
+            case R.id.action_evaluate:
             case R.id.action_show_totals:
-            	menu.findItem(R.id.action_score).setVisible(false);
-            	evaluateTest();
-            	
+                menu.findItem(R.id.action_score).setVisible(false);
+                evaluateTest();
+
                 return true;
             case R.id.action_show_details:
-            	if (test.getFeedback().equals(Test.FEEDBACK_MIN)) {
-                    SWADroidTracker.sendScreenView(getApplicationContext(), TAG + " Feedback " + Test.FEEDBACK_MIN);
+                if (test.getFeedback().equals(Test.FEEDBACK_MIN)) {
+                    SWADroidTracker.sendScreenView(getApplicationContext(),
+                            TAG + " Feedback " + Test.FEEDBACK_MIN);
                     Toast.makeText(this, R.string.testNoDetailsMsg, Toast.LENGTH_LONG).show();
-                } else {            	
-	            	//Show totals button only
-	            	menu.findItem(R.id.action_evaluate).setVisible(false);
-	            	menu.findItem(R.id.action_show_details).setVisible(false);
-	            	menu.findItem(R.id.action_show_totals).setVisible(true);
-	            	
-	            	showTest();
+                } else {
+                    //Show totals button only
+                    menu.findItem(R.id.action_evaluate).setVisible(false);
+                    menu.findItem(R.id.action_show_details).setVisible(false);
+                    menu.findItem(R.id.action_show_totals).setVisible(true);
+
+                    showTest();
                 }
-            	            	
+
                 return true;
 
             default:
                 return super.onOptionsItemSelected(item);
-        }        
+        }
+    }
+
+    /**
+     * Possible values for screen steps
+     */
+    private enum ScreenStep {
+        MENU, NUM_QUESTIONS, TAGS, ANSWER_TYPES, TEST
     }
 }

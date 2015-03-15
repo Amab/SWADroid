@@ -21,6 +21,7 @@ import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.widget.ImageButton;
+
 import es.ugr.swad.swadroid.R;
 
 /**
@@ -31,7 +32,7 @@ public class NumberPickerButton extends ImageButton {
     private NumberPicker mNumberPicker;
 
     public NumberPickerButton(Context context, AttributeSet attrs,
-                              int defStyle) {
+            int defStyle) {
         super(context, attrs, defStyle);
     }
 

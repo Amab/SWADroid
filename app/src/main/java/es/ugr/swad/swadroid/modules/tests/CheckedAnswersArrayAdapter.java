@@ -29,24 +29,31 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckedTextView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.util.List;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.widget.CheckableLinearLayout;
 import es.ugr.swad.swadroid.model.Test;
 import es.ugr.swad.swadroid.model.TestAnswer;
 
-import java.util.List;
-
 public class CheckedAnswersArrayAdapter extends ArrayAdapter<TestAnswer> {
+
     private final Context context;
+
     private final int textViewResourceId;
+
     private final List<TestAnswer> items;
+
     private final boolean evaluated;
+
     private final String feedback;
+
     private final String answerType;
 
     public CheckedAnswersArrayAdapter(Context context, int textViewResourceId,
-                                      List<TestAnswer> objects, boolean eval, String feedb, String anstype) {
+            List<TestAnswer> objects, boolean eval, String feedb, String anstype) {
 
         super(context, textViewResourceId, objects);
         this.context = context;
@@ -86,7 +93,8 @@ public class CheckedAnswersArrayAdapter extends ArrayAdapter<TestAnswer> {
             tt.setText(Html.fromHtml(a.getAnswer()));
         }
 
-        if (answerType.equals(TestAnswer.TYPE_UNIQUE_CHOICE) || answerType.equals(TestAnswer.TYPE_TRUE_FALSE)) {
+        if (answerType.equals(TestAnswer.TYPE_UNIQUE_CHOICE) || answerType
+                .equals(TestAnswer.TYPE_TRUE_FALSE)) {
             tt.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
                     CheckedTextView rb = (CheckedTextView) v;
@@ -118,13 +126,15 @@ public class CheckedAnswersArrayAdapter extends ArrayAdapter<TestAnswer> {
             answerFeedback.setText(Html.fromHtml(a.getFeedback()));
 
             feedbackLevel = Test.FEEDBACK_VALUES.indexOf(feedback);
-            if ((feedbackLevel > Test.FEEDBACK_VALUES.indexOf(Test.FEEDBACK_MEDIUM)) && a.getCorrect()) {
+            if ((feedbackLevel > Test.FEEDBACK_VALUES.indexOf(Test.FEEDBACK_MEDIUM)) && a
+                    .getCorrect()) {
                 tt.setTextColor(context.getResources().getColor(R.color.green));
             } else {
                 tt.setTextColor(Color.BLACK);
             }
 
-            if (feedback.equals(Test.FEEDBACK_MAX) && !a.getFeedback().equals(Constants.NULL_VALUE)) {
+            if (feedback.equals(Test.FEEDBACK_MAX) && !a.getFeedback()
+                    .equals(Constants.NULL_VALUE)) {
                 answerFeedback.setVisibility(View.VISIBLE);
             } else {
                 answerFeedback.setVisibility(View.GONE);

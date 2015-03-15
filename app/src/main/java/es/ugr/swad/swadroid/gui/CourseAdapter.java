@@ -17,30 +17,6 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
     private String[] mDataset;
 
     /**
-     * Provide a reference to the type of views that you are using (custom ViewHolder)
-     */
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView textView;
-
-        public ViewHolder(View v) {
-            super(v);
-            // Define click listener for the ViewHolder's View.
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d("CUSTOMADAPTER", "Element " + getPosition() + " clicked.");
-                }
-            });
-            textView = (TextView) v.findViewById(android.R.id.text1);
-            textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.crs, 0, 0, 0);
-        }
-
-        public TextView getTextView() {
-            return textView;
-        }
-    }
-
-    /**
      * Initialize the dataset of the Adapter.
      *
      * @param dataSet String[] containing the data to populate views to be used by RecyclerView.
@@ -73,5 +49,30 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
     @Override
     public int getItemCount() {
         return mDataset.length;
+    }
+
+    /**
+     * Provide a reference to the type of views that you are using (custom ViewHolder)
+     */
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+
+        private final TextView textView;
+
+        public ViewHolder(View v) {
+            super(v);
+            // Define click listener for the ViewHolder's View.
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("CUSTOMADAPTER", "Element " + getPosition() + " clicked.");
+                }
+            });
+            textView = (TextView) v.findViewById(android.R.id.text1);
+            textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.crs, 0, 0, 0);
+        }
+
+        public TextView getTextView() {
+            return textView;
+        }
     }
 }

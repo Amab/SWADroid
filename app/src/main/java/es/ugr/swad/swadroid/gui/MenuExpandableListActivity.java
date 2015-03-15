@@ -31,6 +31,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.PreferencesActivity;
@@ -46,47 +47,55 @@ import es.ugr.swad.swadroid.database.DataBaseHelper;
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */
 public class MenuExpandableListActivity extends Activity {
-	/**
-	 * Application preferences
-	 */
-	Preferences prefs;
-    /**
-     * Database Helper.
-     */
-    protected static DataBaseHelper dbHelper;
-    /**
-     * Application debuggable flag
-     */
-    protected static boolean isDebuggable;
+
     /**
      * Class Module's tag name for Logcat
      */
     private static final String TAG = Constants.APP_TAG + " MenuExpandableListActivity";
+
+    /**
+     * Database Helper.
+     */
+    protected static DataBaseHelper dbHelper;
+
+    /**
+     * Application debuggable flag
+     */
+    protected static boolean isDebuggable;
+
+    /**
+     * Application preferences
+     */
+    Preferences prefs;
+
     /**
      * Flag for indicate if this activity is SWADMain
      */
     private boolean isSWADMain;
+
+    /**
+     * Listener for clean database dialog
+     */
+    OnClickListener positiveClickListener = new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int id) {
+            dbHelper.cleanTables();
+            Preferences.setLastCourseSelected(0);
+            DataBaseHelper.setDbCleaned(true);
+            Toast.makeText(getApplicationContext(), R.string.cleanDatabaseMsg, Toast.LENGTH_LONG)
+                    .show();
+            if (isSWADMain) {
+                setMenuDbClean();
+            }
+            Log.i(Constants.APP_TAG, getString(R.string.cleanDatabaseMsg));
+        }
+    };
+
     /**
      * Listener for dialog cancellation
      */
     private OnClickListener cancelClickListener = new DialogInterface.OnClickListener() {
         public void onClick(DialogInterface dialog, int id) {
             dialog.cancel();
-        }
-    };
-    /**
-     * Listener for clean database dialog
-     */
-    OnClickListener positiveClickListener = new DialogInterface.OnClickListener() {
-        public void onClick(DialogInterface dialog, int id) {            
-            dbHelper.cleanTables();
-            Preferences.setLastCourseSelected(0);
-            DataBaseHelper.setDbCleaned(true);
-            Toast.makeText(getApplicationContext(), R.string.cleanDatabaseMsg, Toast.LENGTH_LONG).show();
-            if (isSWADMain) {
-                setMenuDbClean();
-            }
-            Log.i(Constants.APP_TAG, getString(R.string.cleanDatabaseMsg));
         }
     };
 
@@ -125,18 +134,18 @@ public class MenuExpandableListActivity extends Activity {
      */
     void cleanDatabase() {
 
-    	AlertDialog cleanDBDialog = DialogFactory.createWarningDialog(this,
-    			-1,
-    			R.string.areYouSure,
-    			R.string.cleanDatabaseDialogMsg,
-    			R.string.yesMsg,
-    			R.string.noMsg,
-    			true,
-    			positiveClickListener,
-    			cancelClickListener,
-    			null); 
-    	
-    	cleanDBDialog.show();
+        AlertDialog cleanDBDialog = DialogFactory.createWarningDialog(this,
+                -1,
+                R.string.areYouSure,
+                R.string.cleanDatabaseDialogMsg,
+                R.string.yesMsg,
+                R.string.noMsg,
+                true,
+                positiveClickListener,
+                cancelClickListener,
+                null);
+
+        cleanDBDialog.show();
     }
 
     /**
@@ -145,24 +154,26 @@ public class MenuExpandableListActivity extends Activity {
      * @param message Error message to show.
      */
     protected void error(String tag, String message, Exception ex, boolean sendException) {
-    	DialogInterface.OnClickListener onClickListener = new DialogInterface.OnClickListener() {
+        DialogInterface.OnClickListener onClickListener = new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 finish();
             }
         };
-        
-    	AlertDialog errorDialog = DialogFactory.createErrorDialog(this, TAG, message, ex, sendException,
-    			isDebuggable, onClickListener);    	
-    	
-    	errorDialog.show();
+
+        AlertDialog errorDialog = DialogFactory
+                .createErrorDialog(this, TAG, message, ex, sendException,
+                        isDebuggable, onClickListener);
+
+        errorDialog.show();
     }
 
     /**
      * Shows a dialog.
      */
     public void showDialog(int title, int message) {
-       AlertDialog dialog = DialogFactory.createNeutralDialog(this, -1, title, message, R.string.close_dialog, null);
-       dialog.show();
+        AlertDialog dialog = DialogFactory
+                .createNeutralDialog(this, -1, title, message, R.string.close_dialog, null);
+        dialog.show();
     }
 
     /* (non-Javadoc)
@@ -172,11 +183,11 @@ public class MenuExpandableListActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
-	    if (isSWADMain) {
+        if (isSWADMain) {
             menu.findItem(R.id.clean_database_menu).setVisible(true);
             menu.findItem(R.id.share_menu).setVisible(true);
             menu.findItem(R.id.rate_menu).setVisible(true);
-	    }
+        }
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -212,15 +223,15 @@ public class MenuExpandableListActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         try {
-        	//Initialize preferences
-        	prefs = new Preferences(this);
-        	
+            //Initialize preferences
+            prefs = new Preferences(this);
+
             //Initialize database
             dbHelper = new DataBaseHelper(this);
             getPackageManager().getApplicationInfo(
                     getPackageName(), 0);
-			isDebuggable = (ApplicationInfo.FLAG_DEBUGGABLE != 0);			
-			isSWADMain = this instanceof SWADMain;
+            isDebuggable = (ApplicationInfo.FLAG_DEBUGGABLE != 0);
+            isSWADMain = this instanceof SWADMain;
         } catch (Exception ex) {
             error(TAG, ex.getMessage(), ex, true);
         }

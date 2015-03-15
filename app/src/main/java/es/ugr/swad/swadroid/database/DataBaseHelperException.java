@@ -19,41 +19,46 @@
 package es.ugr.swad.swadroid.database;
 
 /**
-* Exception handler for DataBaseHelper class
-*
-* @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
-*/
+ * Exception handler for DataBaseHelper class
+ *
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ */
 public class DataBaseHelperException extends Exception {
-	private static final long serialVersionUID = 2517884856120859095L;
 
-	/**
-	 * Parameterless Constructor
-	 */
-	public DataBaseHelperException() {}
+    private static final long serialVersionUID = 2517884856120859095L;
 
-	/**
-	 * Constructor that accepts a message
-	 * @param detailMessage message to be displayed
-	 */
-	public DataBaseHelperException(String detailMessage) {
-		super(detailMessage);
-	}
+    /**
+     * Parameterless Constructor
+     */
+    public DataBaseHelperException() {
+    }
 
-	/**
-	 * Constructor that accepts an Exception
-	 * @param throwable Exception to be thrown
-	 */
-	public DataBaseHelperException(Throwable throwable) {
-		super(throwable);
-	}
+    /**
+     * Constructor that accepts a message
+     *
+     * @param detailMessage message to be displayed
+     */
+    public DataBaseHelperException(String detailMessage) {
+        super(detailMessage);
+    }
 
-	/**
-	 * Constructor that accepts a message and an Exception
-	 * @param detailMessage message to be displayed
-	 * @param throwable Exception to be thrown
-	 */
-	public DataBaseHelperException(String detailMessage, Throwable throwable) {
-		super(detailMessage, throwable);
-	}
+    /**
+     * Constructor that accepts an Exception
+     *
+     * @param throwable Exception to be thrown
+     */
+    public DataBaseHelperException(Throwable throwable) {
+        super(throwable);
+    }
+
+    /**
+     * Constructor that accepts a message and an Exception
+     *
+     * @param detailMessage message to be displayed
+     * @param throwable     Exception to be thrown
+     */
+    public DataBaseHelperException(String detailMessage, Throwable throwable) {
+        super(detailMessage, throwable);
+    }
 
 }

@@ -16,9 +16,10 @@
 
 package com.google.zxing.client.android;
 
+import com.google.zxing.BarcodeFormat;
+
 import android.content.Intent;
 import android.net.Uri;
-import com.google.zxing.BarcodeFormat;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -28,12 +29,12 @@ import java.util.regex.Pattern;
 
 final class DecodeFormatManager {
 
-    private static final Pattern COMMA_PATTERN = Pattern.compile(",");
-
-    private static final Collection<BarcodeFormat> PRODUCT_FORMATS;
     static final Collection<BarcodeFormat> ONE_D_FORMATS;
+
     static final Collection<BarcodeFormat> QR_CODE_FORMATS = EnumSet.of(BarcodeFormat.QR_CODE);
-    static final Collection<BarcodeFormat> DATA_MATRIX_FORMATS = EnumSet.of(BarcodeFormat.DATA_MATRIX);
+
+    static final Collection<BarcodeFormat> DATA_MATRIX_FORMATS = EnumSet
+            .of(BarcodeFormat.DATA_MATRIX);
 
     static {
         PRODUCT_FORMATS = EnumSet.of(BarcodeFormat.UPC_A,
@@ -47,6 +48,10 @@ final class DecodeFormatManager {
                 BarcodeFormat.ITF);
         ONE_D_FORMATS.addAll(PRODUCT_FORMATS);
     }
+
+    private static final Pattern COMMA_PATTERN = Pattern.compile(",");
+
+    private static final Collection<BarcodeFormat> PRODUCT_FORMATS;
 
     private DecodeFormatManager() {
     }
@@ -69,7 +74,7 @@ final class DecodeFormatManager {
     }
 
     private static Collection<BarcodeFormat> parseDecodeFormats(Iterable<String> scanFormats,
-                                                                String decodeMode) {
+            String decodeMode) {
         if (scanFormats != null) {
             Collection<BarcodeFormat> formats = EnumSet.noneOf(BarcodeFormat.class);
             try {

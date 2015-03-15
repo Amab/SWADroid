@@ -18,8 +18,11 @@
  */
 package es.ugr.swad.swadroid.modules.downloads;
 
+import org.ksoap2.serialization.SoapObject;
+
 import android.content.Intent;
 import android.os.Bundle;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
@@ -27,7 +30,6 @@ import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
-import org.ksoap2.serialization.SoapObject;
 
 /**
  * DirectoryTreeDownload  gets directory tree of files of general documents of a course/group
@@ -37,18 +39,14 @@ import org.ksoap2.serialization.SoapObject;
  */
 
 public class DirectoryTreeDownload extends Module {
-    private int treeCode; //documents of course or common zone of course
-    private int group = 0; // documents of the course
 
-    //TODO esta clase tiene q cambiar
-    @SuppressWarnings("unused")
-	private class DirectoryTree {
-        String tree;
-    }
+    private int treeCode; //documents of course or common zone of course
+
+    private int group = 0; // documents of the course
 
     @Override
     protected void requestService() throws Exception {
-    	createRequest(SOAPClient.CLIENT_TYPE);
+        createRequest(SOAPClient.CLIENT_TYPE);
         addParam("wsKey", Login.getLoggedUser().getWsKey());
         addParam("courseCode", (int) Courses.getSelectedCourseCode());
         addParam("groupCode", group);
@@ -95,7 +93,7 @@ public class DirectoryTreeDownload extends Module {
     @Override
     protected void onStart() {
         super.onStart();
-        
+
         treeCode = getIntent().getIntExtra("treeCode", Constants.DOCUMENTS_AREA_CODE);
         group = getIntent().getIntExtra("groupCode", 0);
         runConnection();
@@ -103,6 +101,13 @@ public class DirectoryTreeDownload extends Module {
             setResult(RESULT_CANCELED);
             finish();
         }
+    }
+
+    //TODO esta clase tiene q cambiar
+    @SuppressWarnings("unused")
+    private class DirectoryTree {
+
+        String tree;
     }
 
 }

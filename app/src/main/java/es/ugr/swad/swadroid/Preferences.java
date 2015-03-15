@@ -25,12 +25,13 @@ import android.content.SharedPreferences.Editor;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+
+import java.security.NoSuchAlgorithmException;
+
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.sync.SyncUtils;
 import es.ugr.swad.swadroid.utils.Crypto;
-
-import java.security.NoSuchAlgorithmException;
 
 /**
  * Class for store the application preferences
@@ -38,163 +39,194 @@ import java.security.NoSuchAlgorithmException;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class Preferences {
+
     /**
      * Login tag name for Logcat
      */
     public static final String TAG = Constants.APP_TAG + " Preferences";
+
     /**
      * Preferences name
      */
     public static final String PREFS_NAME = "es.ugr.swad.swadroid_preferences";
-    /**
-     * Application preferences
-     */
-    private static SharedPreferences prefs = null;
-    /**
-     * Preferences editor
-     */
-    private static Editor editor;
+
     /**
      * User identifier preference name
      */
     public static final String USERIDPREF = "userIDPref";
+
     /**
      * User password preference name
      */
     public static final String USERPASSWORDPREF = "userPasswordPref";
+
     /**
      * Last application version preference name
      */
     public static final String LASTVERSIONPREF = "lastVersionPref";
+
     /**
      * Current application version preference name
      */
     public static final String CURRENTVERSIONPREF = "currentVersionPref";
+
     /**
      * Last course selected preference name
      */
     public static final String LASTCOURSESELECTEDPREF = "lastCourseSelectedPref";
+
     /**
      * Rate preference name
      */
     public static final String RATEPREF = "ratePref";
+
     /**
      * Twitter preference name
      */
     public static final String TWITTERPREF = "twitterPref";
+
     /**
      * Facebook preference name
      */
     public static final String FACEBOOKPREF = "facebookPref";
+
     /**
      * Google Plus preference name
      */
     public static final String GOOGLEPLUSPREF = "googlePlusPref";
+
     /**
      * Blog preference name
      */
     public static final String BLOGPREF = "blogPref";
+
     /**
      * Share preference name
      */
     public static final String SHAREPREF = "sharePref";
+
     /**
      * Server preference name
      */
     public static final String SERVERPREF = "serverPref";
+
     /**
      * Logout prefecence name
      */
     public static final String LOGOUTPREF = "logOutPref";
+
     /**
      * Database passphrase preference name
      */
     public static final String DBKEYPREF = "DBKeyPref";
+
     /**
      * Synchronization time preference name
      */
     public static final String SYNCTIMEPREF = "prefSyncTime";
+
     /**
      * Synchronization enable preference name
      */
     public static final String SYNCENABLEPREF = "prefSyncEnable";
+
     /**
      * Notifications limit preference name
      */
     public static final String NOTIFLIMITPREF = "prefNotifLimit";
+
     /**
      * Last synchronization time preference name
      */
     public static final String LASTSYNCTIMEPREF = "lastSyncTimeLimit";
+
     /**
      * Notifications sound enable preference name
      */
     public static final String NOTIFSOUNDENABLEPREF = "prefNotifSoundEnable";
+
     /**
      * Notifications vibrate enable preference name
      */
     public static final String NOTIFVIBRATEENABLEPREF = "prefNotifVibrateEnable";
+
     /**
      * Notifications lights enable preference name
      */
     public static final String NOTIFLIGHTSENABLEPREF = "prefNotifLightsEnable";
+
     /**
      * Changelog preference name
      */
     public static final String CHANGELOGPREF = "changelogPref";
+
     /**
      * Authors preference name
      */
     public static final String AUTHORSPREF = "authorsPref";
+
+    /**
+     * Application preferences
+     */
+    private static SharedPreferences prefs = null;
+
+    /**
+     * Preferences editor
+     */
+    private static Editor editor;
+
     /**
      * Database Helper.
      */
     private static DataBaseHelper dbHelper;
+
     /**
      * Indicates if there are changes on preferences
      */
     private static boolean preferencesChanged = false;
+
     /**
      * Application context
      */
     private static Context mContext;
-    
+
     /**
      * Constructor
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	public Preferences(Context ctx) {
+    public Preferences(Context ctx) {
         mContext = ctx;
 
-    	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-    		/*
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                    /*
     		 *  If Android API >= 11 (HONEYCOMB) enable access to SharedPreferences from all processes
     		 *  of the application 
     		 */
-    		prefs = ctx.getSharedPreferences(PREFS_NAME, Context.MODE_MULTI_PROCESS);
-    		Log.i(TAG, "Android API >= 11 (HONEYCOMB). Enabling MODE_MULTI_PROCESS explicitly");
-		} else {
+            prefs = ctx.getSharedPreferences(PREFS_NAME, Context.MODE_MULTI_PROCESS);
+            Log.i(TAG, "Android API >= 11 (HONEYCOMB). Enabling MODE_MULTI_PROCESS explicitly");
+        } else {
 			/* 
 			 * If Android API < 11 (HONEYCOMB) access is enabled by default
 			 * MODE_MULTI_PROCESS is not defined
 			 */
-			prefs = ctx.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-    		Log.i(TAG, "Android API < 11 (HONEYCOMB). MODE_MULTI_PROCESS is not defined and enabled by default");
-		}
+            prefs = ctx.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+            Log.i(TAG,
+                    "Android API < 11 (HONEYCOMB). MODE_MULTI_PROCESS is not defined and enabled by default");
+        }
 
-    	editor = prefs.edit();
-    	
-    	if(dbHelper == null) {
-	    	try {
-	            dbHelper = new DataBaseHelper(ctx);
-	        } catch (Exception e) {
-	            Log.e(TAG, e.getMessage());
+        editor = prefs.edit();
+
+        if (dbHelper == null) {
+            try {
+                dbHelper = new DataBaseHelper(ctx);
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage());
                 SWADroidTracker.sendException(mContext, e, false);
-	        }
-    	}
-	}
+            }
+        }
+    }
 
-	/**
+    /**
      * Gets user identifier
      *
      * @return User identifier
@@ -234,12 +266,12 @@ public class Preferences {
      * @return Server URL
      */
     public static String getServer() {
-    	String server = prefs.getString(SERVERPREF, Constants.DEFAULT_SERVER);
-    	
-    	if(server.equals("")) {
-    		server = Constants.DEFAULT_SERVER;
-    	}
-    	
+        String server = prefs.getString(SERVERPREF, Constants.DEFAULT_SERVER);
+
+        if (server.equals("")) {
+            server = Constants.DEFAULT_SERVER;
+        }
+
         return server;
     }
 
@@ -249,7 +281,7 @@ public class Preferences {
      * @param server Server URL
      */
     public static void setServer(String server) {
-    	editor = editor.putString(SERVERPREF, server);
+        editor = editor.putString(SERVERPREF, server);
         editor.commit();
     }
 
@@ -294,6 +326,16 @@ public class Preferences {
      */
     public static String getDBKey() {
         return prefs.getString(DBKEYPREF, "");
+    }
+
+    /**
+     * Sets the database passphrase
+     *
+     * @param key The database passphrase
+     */
+    public static void setDBKey(String key) {
+        editor = editor.putString(DBKEYPREF, key);
+        editor.commit();
     }
 
     /**
@@ -354,145 +396,126 @@ public class Preferences {
     }
 
     /**
-	 *Checks if automatic synchronization is enabled
-     * 
-	 * @return true if automatic synchronization is enabled
-	 * 		   false otherwise
-	 */
-	public static boolean isSyncEnabled() {
-		return prefs.getBoolean(SYNCENABLEPREF, true);
-	}
+     * Checks if automatic synchronization is enabled
+     *
+     * @return true if automatic synchronization is enabled
+     * false otherwise
+     */
+    public static boolean isSyncEnabled() {
+        return prefs.getBoolean(SYNCENABLEPREF, true);
+    }
 
-	/**
+    /**
      * Sets the sync enabled flag
      *
      * @param syncEnabled true if automatic synchronization is enabled
-	 * 		              false otherwise
+     *                    false otherwise
      */
     public static void setSyncEnabled(boolean syncEnabled) {
         editor = editor.putBoolean(SYNCENABLEPREF, syncEnabled);
         editor.commit();
     }
 
-	/**
-     * Sets the database passphrase
+    /**
+     * Checks if the sound is enabled for notification alerts
      *
-     * @param key The database passphrase
+     * @return true if the sound is enabled for notification alerts
+     * false otherwise
      */
-    public static void setDBKey(String key) {
-        editor = editor.putString(DBKEYPREF, key);
+    public static boolean isNotifSoundEnabled() {
+        return prefs.getBoolean(NOTIFSOUNDENABLEPREF, true);
+    }
+
+    /**
+     * Enables or disables the sound for notification alerts
+     *
+     * @param notifSoundEnabled true if the sound is enabled for notification alerts
+     *                          false otherwise
+     */
+    public static void setNotifSoundEnabled(boolean notifSoundEnabled) {
+        editor = editor.putBoolean(NOTIFSOUNDENABLEPREF, notifSoundEnabled);
         editor.commit();
     }
 
     /**
-     * Checks if the sound is enabled for notification alerts
-     * 
-	 * @return true if the sound is enabled for notification alerts
-	 * 		   false otherwise
-	 */
-	public static boolean isNotifSoundEnabled() {
-		return prefs.getBoolean(NOTIFSOUNDENABLEPREF, true);
-	}
+     * Checks if the vibration is enabled for notification alerts
+     *
+     * @return true if the vibration is enabled for notification alerts
+     * false otherwise
+     */
+    public static boolean isNotifVibrateEnabled() {
+        return prefs.getBoolean(NOTIFVIBRATEENABLEPREF, true);
+    }
 
-	/**
-	 * Enables or disables the sound for notification alerts
-	 * 
-	 * @param notifSoundEnabled true if the sound is enabled for notification alerts
-	 * 		   				    false otherwise
-	 */
-	public static void setNotifSoundEnabled(boolean notifSoundEnabled) {
-		editor = editor.putBoolean(NOTIFSOUNDENABLEPREF, notifSoundEnabled);
-	    editor.commit();
-	}
+    /**
+     * Enables or disables the vibration for notification alerts
+     *
+     * @param notifVibrateEnabled the notifVibrateEnabled to set
+     */
+    public static void setNotifVibrateEnabled(boolean notifVibrateEnabled) {
+        editor = editor.putBoolean(NOTIFVIBRATEENABLEPREF, notifVibrateEnabled);
+        editor.commit();
+    }
 
-	/**
-	 * Checks if the vibration is enabled for notification alerts
-	 * 
-	 * @return true if the vibration is enabled for notification alerts
-	 * 		   false otherwise
-	 */
-	public static boolean isNotifVibrateEnabled() {
-		return prefs.getBoolean(NOTIFVIBRATEENABLEPREF, true);
-	}
+    /**
+     * Checks if the lights are enabled for notification alerts
+     *
+     * @return true if the lights are enabled for notification alerts
+     * false otherwise
+     */
+    public static boolean isNotifLightsEnabled() {
+        return prefs.getBoolean(NOTIFLIGHTSENABLEPREF, true);
+    }
 
-	/**
-	 * Enables or disables the vibration for notification alerts
-	 * 
-	 * @param notifVibrateEnabled the notifVibrateEnabled to set
-	 */
-	public static void setNotifVibrateEnabled(boolean notifVibrateEnabled) {
-		editor = editor.putBoolean(NOTIFVIBRATEENABLEPREF, notifVibrateEnabled);
-	    editor.commit();
-	}
-
-	/**
-	 * Checks if the lights are enabled for notification alerts
-	 * 
-	 * @return true if the lights are enabled for notification alerts
-	 * 		   false otherwise
-	 */
-	public static boolean isNotifLightsEnabled() {
-		return prefs.getBoolean(NOTIFLIGHTSENABLEPREF, true);
-	}
-
-	/**
-	 * Enables or disables the lights for notification alerts
-	 * 
-	 * @param notifLightsEnabled true if the lights are enabled for notification alerts
-	 * 		   				     false otherwise
-	 */
-	public static void setNotifLightsEnabled(boolean notifLightsEnabled) {
-		editor = editor.putBoolean(NOTIFLIGHTSENABLEPREF, notifLightsEnabled);
-	    editor.commit();
-	}
+    /**
+     * Enables or disables the lights for notification alerts
+     *
+     * @param notifLightsEnabled true if the lights are enabled for notification alerts
+     *                           false otherwise
+     */
+    public static void setNotifLightsEnabled(boolean notifLightsEnabled) {
+        editor = editor.putBoolean(NOTIFLIGHTSENABLEPREF, notifLightsEnabled);
+        editor.commit();
+    }
 
     /**
      * Upgrade password encryption
-     *
-     * @throws NoSuchAlgorithmException
      */
     public static void upgradeCredentials() throws NoSuchAlgorithmException {
         String userPassword = getUserPassword();
         setUserPassword(Crypto.encryptPassword(userPassword));
     }
-    
+
     /**
      * Clean data of all tables from database. Removes users photos from external storage
      */
     private static void cleanDatabase() {
         dbHelper.cleanTables();
-        
+
         Preferences.setLastCourseSelected(0);
         DataBaseHelper.setDbCleaned(true);
-        
+
         Log.i(TAG, "Database has been cleaned");
     }
-    
+
     public static void logoutClean(Context context, String key) {
         Login.setLogged(false);
         Log.i(TAG, "Forced logout due to " + key + " change in preferences");
-        
+
         cleanDatabase();
         setPreferencesChanged();
-        
-        if(isSyncEnabled()) {
-        	SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, context);
+
+        if (isSyncEnabled()) {
+            SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, context);
         }
     }
 
     public static void clearOldNotifications(int size) {
         dbHelper.clearOldNotifications(size);
     }
-    
+
     public static boolean isPreferencesChanged() {
         return preferencesChanged;
-    }
-
-    /**
-     * Set the fact that the preferences has changed
-     */
-    public static void setPreferencesChanged() {
-        preferencesChanged = true;
     }
 
     /**
@@ -503,5 +526,12 @@ public class Preferences {
      */
     public static void setPreferencesChanged(boolean newState) {
         preferencesChanged = newState;
+    }
+
+    /**
+     * Set the fact that the preferences has changed
+     */
+    public static void setPreferencesChanged() {
+        preferencesChanged = true;
     }
 }

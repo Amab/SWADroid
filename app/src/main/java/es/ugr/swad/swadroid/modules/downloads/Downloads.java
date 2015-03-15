@@ -27,19 +27,17 @@ import android.provider.BaseColumns;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public final class Downloads {
-    /**
-     * @hide
-     */
-    private Downloads() {}
 
     /**
      * The permission to access the download manager
+     *
      * @hide
      */
     public static final String PERMISSION_ACCESS = "android.permission.ACCESS_DOWNLOAD_MANAGER";
 
     /**
      * The permission to access the download manager's advanced functions
+     *
      * @hide
      */
     public static final String PERMISSION_ACCESS_ADVANCED =
@@ -47,12 +45,14 @@ public final class Downloads {
 
     /**
      * The permission to directly access the download manager's cache directory
+     *
      * @hide
      */
     public static final String PERMISSION_CACHE = "android.permission.ACCESS_CACHE_FILESYSTEM";
 
     /**
      * The permission to send broadcasts on download completion
+     *
      * @hide
      */
     public static final String PERMISSION_SEND_INTENTS =
@@ -60,15 +60,17 @@ public final class Downloads {
 
     /**
      * The content:// URI for the data table in the provider
+     *
      * @hide
      */
     public static final Uri CONTENT_URI =
-        Uri.parse("content://downloads/my_downloads");
+            Uri.parse("content://downloads/my_downloads");
 
     /**
      * Broadcast Action: this is sent by the download manager to the app
      * that had initiated a download when that download completes. The
      * download's content: uri is specified in the intent's data.
+     *
      * @hide
      */
     public static final String ACTION_DOWNLOAD_COMPLETED =
@@ -83,6 +85,7 @@ public final class Downloads {
      * multiple downloads.
      * Note: this is not currently sent for downloads that have completed
      * successfully.
+     *
      * @hide
      */
     public static final String ACTION_NOTIFICATION_CLICKED =
@@ -92,6 +95,7 @@ public final class Downloads {
      * The name of the column containing the URI of the data being downloaded.
      * <P>Type: TEXT</P>
      * <P>Owner can Init/Read</P>
+     *
      * @hide
      */
     public static final String COLUMN_URI = "uri";
@@ -100,6 +104,7 @@ public final class Downloads {
      * The name of the column containing application-specific data.
      * <P>Type: TEXT</P>
      * <P>Owner can Init/Read/Write</P>
+     *
      * @hide
      */
     public static final String COLUMN_APP_DATA = "entity";
@@ -114,6 +119,7 @@ public final class Downloads {
      * whether a download fully completed).
      * <P>Type: BOOLEAN</P>
      * <P>Owner can Init</P>
+     *
      * @hide
      */
     public static final String COLUMN_NO_INTEGRITY = "no_integrity";
@@ -124,6 +130,7 @@ public final class Downloads {
      * to use this filename, or a variation, as the actual name for the file.
      * <P>Type: TEXT</P>
      * <P>Owner can Init</P>
+     *
      * @hide
      */
     public static final String COLUMN_FILE_NAME_HINT = "hint";
@@ -133,6 +140,7 @@ public final class Downloads {
      * was actually stored.
      * <P>Type: TEXT</P>
      * <P>Owner can Read</P>
+     *
      * @hide
      */
     public static final String _DATA = "_data";
@@ -141,6 +149,7 @@ public final class Downloads {
      * The name of the column containing the MIME type of the downloaded data.
      * <P>Type: TEXT</P>
      * <P>Owner can Init/Read</P>
+     *
      * @hide
      */
     public static final String COLUMN_MIME_TYPE = "mimetype";
@@ -150,6 +159,7 @@ public final class Downloads {
      * of the download. See the DESTINATION_* constants for a list of legal values.
      * <P>Type: INTEGER</P>
      * <P>Owner can Init</P>
+     *
      * @hide
      */
     public static final String COLUMN_DESTINATION = "destination";
@@ -160,6 +170,7 @@ public final class Downloads {
      * a list of legal values.
      * <P>Type: INTEGER</P>
      * <P>Owner can Init/Read/Write</P>
+     *
      * @hide
      */
     public static final String COLUMN_VISIBILITY = "visibility";
@@ -170,6 +181,7 @@ public final class Downloads {
      * the CONTROL_* constants for a list of legal values.
      * <P>Type: INTEGER</P>
      * <P>Owner can Read</P>
+     *
      * @hide
      */
     public static final String COLUMN_CONTROL = "control";
@@ -180,6 +192,7 @@ public final class Downloads {
      * the STATUS_* constants for a list of legal values.
      * <P>Type: INTEGER</P>
      * <P>Owner can Read</P>
+     *
      * @hide
      */
     public static final String COLUMN_STATUS = "status";
@@ -190,6 +203,7 @@ public final class Downloads {
      * value.
      * <P>Type: BIGINT</P>
      * <P>Owner can Read</P>
+     *
      * @hide
      */
     public static final String COLUMN_LAST_MODIFICATION = "lastmod";
@@ -200,6 +214,7 @@ public final class Downloads {
      * notifications to a component in this package when the download completes.
      * <P>Type: TEXT</P>
      * <P>Owner can Init/Read</P>
+     *
      * @hide
      */
     public static final String COLUMN_NOTIFICATION_PACKAGE = "notificationpackage";
@@ -211,6 +226,7 @@ public final class Downloads {
      * Intent.setClassName(String,String).
      * <P>Type: TEXT</P>
      * <P>Owner can Init/Read</P>
+     *
      * @hide
      */
     public static final String COLUMN_NOTIFICATION_CLASS = "notificationclass";
@@ -220,6 +236,7 @@ public final class Downloads {
      * is sent to the specified class and package when a download has finished.
      * <P>Type: TEXT</P>
      * <P>Owner can Init</P>
+     *
      * @hide
      */
     public static final String COLUMN_NOTIFICATION_EXTRAS = "notificationextras";
@@ -230,6 +247,7 @@ public final class Downloads {
      * header that gets sent with the request.
      * <P>Type: TEXT</P>
      * <P>Owner can Init</P>
+     *
      * @hide
      */
     public static final String COLUMN_COOKIE_DATA = "cookiedata";
@@ -239,6 +257,7 @@ public final class Downloads {
      * application wants the download manager to use for this download.
      * <P>Type: TEXT</P>
      * <P>Owner can Init</P>
+     *
      * @hide
      */
     public static final String COLUMN_USER_AGENT = "useragent";
@@ -248,6 +267,7 @@ public final class Downloads {
      * application wants the download manager to use for this download.
      * <P>Type: TEXT</P>
      * <P>Owner can Init</P>
+     *
      * @hide
      */
     public static final String COLUMN_REFERER = "referer";
@@ -257,6 +277,7 @@ public final class Downloads {
      * downloaded.
      * <P>Type: INTEGER</P>
      * <P>Owner can Read</P>
+     *
      * @hide
      */
     public static final String COLUMN_TOTAL_BYTES = "total_bytes";
@@ -266,6 +287,7 @@ public final class Downloads {
      * has been downloaded so far.
      * <P>Type: INTEGER</P>
      * <P>Owner can Read</P>
+     *
      * @hide
      */
     public static final String COLUMN_CURRENT_BYTES = "current_bytes";
@@ -279,6 +301,7 @@ public final class Downloads {
      * android.permission.ACCESS_DOWNLOAD_MANAGER_ADVANCED.
      * <P>Type: INTEGER</P>
      * <P>Owner can Init</P>
+     *
      * @hide
      */
     public static final String COLUMN_OTHER_UID = "otheruid";
@@ -289,6 +312,7 @@ public final class Downloads {
      * list of downloads.
      * <P>Type: TEXT</P>
      * <P>Owner can Init/Read/Write</P>
+     *
      * @hide
      */
     public static final String COLUMN_TITLE = "title";
@@ -299,6 +323,7 @@ public final class Downloads {
      * user in the list of downloads.
      * <P>Type: TEXT</P>
      * <P>Owner can Init/Read/Write</P>
+     *
      * @hide
      */
     public static final String COLUMN_DESCRIPTION = "description";
@@ -308,13 +333,10 @@ public final class Downloads {
      * when MediaProvider database also deletes the metadata asociated with this downloaded file.
      * <P>Type: BOOLEAN</P>
      * <P>Owner can Read</P>
+     *
      * @hide
      */
     public static final String COLUMN_DELETED = "deleted";
-
-    /*
-     * Lists the destinations that an application can specify for a download.
-     */
 
     /**
      * This download will be saved to the external storage. This is the
@@ -324,9 +346,14 @@ public final class Downloads {
      * Downloads to the external destination only write files for which
      * there is a registered handler. The resulting files are accessible
      * by filename to all applications.
+     *
      * @hide
      */
     public static final int DESTINATION_EXTERNAL = 0;
+
+    /*
+     * Lists the destinations that an application can specify for a download.
+     */
 
     /**
      * This download will be saved to the download manager's private
@@ -336,6 +363,7 @@ public final class Downloads {
      * application can access the file (indirectly through a content
      * provider). This requires the
      * android.permission.ACCESS_DOWNLOAD_MANAGER_ADVANCED permission.
+     *
      * @hide
      */
     public static final int DESTINATION_CACHE_PARTITION = 1;
@@ -346,6 +374,7 @@ public final class Downloads {
      * for private files (similar to CACHE_PARTITION) that aren't deleted
      * immediately after they are used, and are kept around by the download
      * manager as long as space is available.
+     *
      * @hide
      */
     public static final int DESTINATION_CACHE_PARTITION_PURGEABLE = 2;
@@ -354,21 +383,31 @@ public final class Downloads {
      * This download will be saved to the download manager's private
      * partition, as with DESTINATION_CACHE_PARTITION, but the download
      * will not proceed if the user is on a roaming data connection.
+     *
      * @hide
      */
     public static final int DESTINATION_CACHE_PARTITION_NOROAMING = 3;
 
     /**
      * This download is allowed to run.
+     *
      * @hide
      */
     public static final int CONTROL_RUN = 0;
 
     /**
      * This download must pause at the first opportunity.
+     *
      * @hide
      */
     public static final int CONTROL_PAUSED = 1;
+
+    /**
+     * This download hasn't stated yet
+     *
+     * @hide
+     */
+    public static final int STATUS_PENDING = 190;
 
     /*
      * Lists the states that the download manager can set on a download
@@ -382,62 +421,8 @@ public final class Downloads {
      */
 
     /**
-     * Returns whether the status is informational (i.e. 1xx).
-     * @hide
-     */
-    public static boolean isStatusInformational(int status) {
-        return (status >= 100 && status < 200);
-    }
-
-    /**
-     * Returns whether the status is a success (i.e. 2xx).
-     * @hide
-     */
-    public static boolean isStatusSuccess(int status) {
-        return (status >= 200 && status < 300);
-    }
-
-    /**
-     * Returns whether the status is an error (i.e. 4xx or 5xx).
-     * @hide
-     */
-    public static boolean isStatusError(int status) {
-        return (status >= 400 && status < 600);
-    }
-
-    /**
-     * Returns whether the status is a client error (i.e. 4xx).
-     * @hide
-     */
-    public static boolean isStatusClientError(int status) {
-        return (status >= 400 && status < 500);
-    }
-
-    /**
-     * Returns whether the status is a server error (i.e. 5xx).
-     * @hide
-     */
-    public static boolean isStatusServerError(int status) {
-        return (status >= 500 && status < 600);
-    }
-
-    /**
-     * Returns whether the download has completed (either with success or
-     * error).
-     * @hide
-     */
-    public static boolean isStatusCompleted(int status) {
-        return (status >= 200 && status < 300) || (status >= 400 && status < 600);
-    }
-
-    /**
-     * This download hasn't stated yet
-     * @hide
-     */
-    public static final int STATUS_PENDING = 190;
-
-    /**
      * This download has started
+     *
      * @hide
      */
     public static final int STATUS_RUNNING = 192;
@@ -447,6 +432,7 @@ public final class Downloads {
      * Warning: there might be other status values that indicate success
      * in the future.
      * Use isSucccess() to capture the entire category.
+     *
      * @hide
      */
     public static final int STATUS_SUCCESS = 200;
@@ -454,6 +440,7 @@ public final class Downloads {
     /**
      * This request couldn't be parsed. This is also used when processing
      * requests with unknown/unsupported URI schemes.
+     *
      * @hide
      */
     public static final int STATUS_BAD_REQUEST = 400;
@@ -461,6 +448,7 @@ public final class Downloads {
     /**
      * This download can't be performed because the content type cannot be
      * handled.
+     *
      * @hide
      */
     public static final int STATUS_NOT_ACCEPTABLE = 406;
@@ -473,6 +461,7 @@ public final class Downloads {
      * client when a response is received whose length cannot be determined
      * accurately (therefore making it impossible to know when a download
      * completes).
+     *
      * @hide
      */
     public static final int STATUS_LENGTH_REQUIRED = 411;
@@ -481,12 +470,14 @@ public final class Downloads {
      * This download was interrupted and cannot be resumed.
      * This is the code for the HTTP error "Precondition Failed", and it is
      * also used in situations where the client doesn't have an ETag at all.
+     *
      * @hide
      */
     public static final int STATUS_PRECONDITION_FAILED = 412;
 
     /**
      * This download was canceled
+     *
      * @hide
      */
     public static final int STATUS_CANCELED = 490;
@@ -495,6 +486,7 @@ public final class Downloads {
      * This download has completed with an error.
      * Warning: there will be other status values that indicate errors in
      * the future. Use isStatusError() to capture the entire category.
+     *
      * @hide
      */
     public static final int STATUS_UNKNOWN_ERROR = 491;
@@ -504,6 +496,7 @@ public final class Downloads {
      * Typically, that's because the filesystem is missing or full.
      * Use the more specific {@link #STATUS_INSUFFICIENT_SPACE_ERROR}
      * and {@link #STATUS_DEVICE_NOT_FOUND_ERROR} when appropriate.
+     *
      * @hide
      */
     public static final int STATUS_FILE_ERROR = 492;
@@ -512,6 +505,7 @@ public final class Downloads {
      * This download couldn't be completed because of an HTTP
      * redirect response that the download manager couldn't
      * handle.
+     *
      * @hide
      */
     public static final int STATUS_UNHANDLED_REDIRECT = 493;
@@ -519,6 +513,7 @@ public final class Downloads {
     /**
      * This download couldn't be completed because of an
      * unspecified unhandled HTTP code.
+     *
      * @hide
      */
     public static final int STATUS_UNHANDLED_HTTP_CODE = 494;
@@ -526,6 +521,7 @@ public final class Downloads {
     /**
      * This download couldn't be completed because of an
      * error receiving or processing data at the HTTP level.
+     *
      * @hide
      */
     public static final int STATUS_HTTP_DATA_ERROR = 495;
@@ -533,6 +529,7 @@ public final class Downloads {
     /**
      * This download couldn't be completed because of an
      * HttpException while setting up the request.
+     *
      * @hide
      */
     public static final int STATUS_HTTP_EXCEPTION = 496;
@@ -540,6 +537,7 @@ public final class Downloads {
     /**
      * This download couldn't be completed because there were
      * too many redirects.
+     *
      * @hide
      */
     public static final int STATUS_TOO_MANY_REDIRECTS = 497;
@@ -547,6 +545,7 @@ public final class Downloads {
     /**
      * This download couldn't be completed due to insufficient storage
      * space.  Typically, this is because the SD card is full.
+     *
      * @hide
      */
     public static final int STATUS_INSUFFICIENT_SPACE_ERROR = 498;
@@ -555,6 +554,7 @@ public final class Downloads {
      * This download couldn't be completed because no external storage
      * device was found.  Typically, this is because the SD card is not
      * mounted.
+     *
      * @hide
      */
     public static final int STATUS_DEVICE_NOT_FOUND_ERROR = 499;
@@ -562,6 +562,7 @@ public final class Downloads {
     /**
      * This download is visible but only shows in the notifications
      * while it's in progress.
+     *
      * @hide
      */
     public static final int VISIBILITY_VISIBLE = 0;
@@ -569,15 +570,78 @@ public final class Downloads {
     /**
      * This download is visible and shows in the notifications while
      * in progress and after completion.
+     *
      * @hide
      */
     public static final int VISIBILITY_VISIBLE_NOTIFY_COMPLETED = 1;
 
     /**
      * This download doesn't show in the UI or in the notifications.
+     *
      * @hide
      */
     public static final int VISIBILITY_HIDDEN = 2;
+
+    /**
+     * @hide
+     */
+    private Downloads() {
+    }
+
+    /**
+     * Returns whether the status is informational (i.e. 1xx).
+     *
+     * @hide
+     */
+    public static boolean isStatusInformational(int status) {
+        return (status >= 100 && status < 200);
+    }
+
+    /**
+     * Returns whether the status is a success (i.e. 2xx).
+     *
+     * @hide
+     */
+    public static boolean isStatusSuccess(int status) {
+        return (status >= 200 && status < 300);
+    }
+
+    /**
+     * Returns whether the status is an error (i.e. 4xx or 5xx).
+     *
+     * @hide
+     */
+    public static boolean isStatusError(int status) {
+        return (status >= 400 && status < 600);
+    }
+
+    /**
+     * Returns whether the status is a client error (i.e. 4xx).
+     *
+     * @hide
+     */
+    public static boolean isStatusClientError(int status) {
+        return (status >= 400 && status < 500);
+    }
+
+    /**
+     * Returns whether the status is a server error (i.e. 5xx).
+     *
+     * @hide
+     */
+    public static boolean isStatusServerError(int status) {
+        return (status >= 500 && status < 600);
+    }
+
+    /**
+     * Returns whether the download has completed (either with success or
+     * error).
+     *
+     * @hide
+     */
+    public static boolean isStatusCompleted(int status) {
+        return (status >= 200 && status < 300) || (status >= 400 && status < 600);
+    }
 
     /**
      * Implementation details
@@ -589,7 +653,6 @@ public final class Downloads {
      * @hide
      */
     public static final class Impl implements BaseColumns {
-        private Impl() {}
 
         /**
          * The permission to access the download manager
@@ -782,7 +845,8 @@ public final class Downloads {
         public static final String COLUMN_NOTIFICATION_CLASS = "notificationclass";
 
         /**
-         * If extras are specified when requesting a download they will be provided in the intent that
+         * If extras are specified when requesting a download they will be provided in the intent
+         * that
          * is sent to the specified class and package when a download has finished.
          * <P>Type: TEXT</P>
          * <P>Owner can Init</P>
@@ -877,7 +941,8 @@ public final class Downloads {
         public static final String COLUMN_ALLOW_ROAMING = "allow_roaming";
 
         /**
-         * The name of the column holding a bitmask of allowed network types.  This is only used for
+         * The name of the column holding a bitmask of allowed network types.  This is only used
+         * for
          * public API downloads.
          * <P>Type: INTEGER</P>
          * <P>Owner can Init/Read</P>
@@ -898,11 +963,12 @@ public final class Downloads {
          * <P>Type: BOOLEAN</P>
          */
         public static final String COLUMN_BYPASS_RECOMMENDED_SIZE_LIMIT =
-            "bypass_recommended_size_limit";
+                "bypass_recommended_size_limit";
 
         /**
          * Set to true if this download is deleted. It is completely removed from the database
-         * when MediaProvider database also deletes the metadata asociated with this downloaded file.
+         * when MediaProvider database also deletes the metadata asociated with this downloaded
+         * file.
          * <P>Type: BOOLEAN</P>
          * <P>Owner can Read</P>
          */
@@ -917,10 +983,6 @@ public final class Downloads {
          */
         public static final String COLUMN_MEDIAPROVIDER_URI = "mediaprovider_uri";
 
-        /*
-         * Lists the destinations that an application can specify for a download.
-         */
-
         /**
          * This download will be saved to the external storage. This is the
          * default behavior, and should be used for any file that the user
@@ -931,6 +993,10 @@ public final class Downloads {
          * by filename to all applications.
          */
         public static final int DESTINATION_EXTERNAL = 0;
+
+        /*
+         * Lists the destinations that an application can specify for a download.
+         */
 
         /**
          * This download will be saved to the download manager's private
@@ -975,6 +1041,11 @@ public final class Downloads {
          */
         public static final int CONTROL_PAUSED = 1;
 
+        /**
+         * This download hasn't stated yet
+         */
+        public static final int STATUS_PENDING = 190;
+
         /*
          * Lists the states that the download manager can set on a download
          * to notify applications of the download progress.
@@ -985,54 +1056,6 @@ public final class Downloads {
          * 4xx: client errors<br>
          * 5xx: server errors
          */
-
-        /**
-         * Returns whether the status is informational (i.e. 1xx).
-         */
-        public static boolean isStatusInformational(int status) {
-            return (status >= 100 && status < 200);
-        }
-
-        /**
-         * Returns whether the status is a success (i.e. 2xx).
-         */
-        public static boolean isStatusSuccess(int status) {
-            return (status >= 200 && status < 300);
-        }
-
-        /**
-         * Returns whether the status is an error (i.e. 4xx or 5xx).
-         */
-        public static boolean isStatusError(int status) {
-            return (status >= 400 && status < 600);
-        }
-
-        /**
-         * Returns whether the status is a client error (i.e. 4xx).
-         */
-        public static boolean isStatusClientError(int status) {
-            return (status >= 400 && status < 500);
-        }
-
-        /**
-         * Returns whether the status is a server error (i.e. 5xx).
-         */
-        public static boolean isStatusServerError(int status) {
-            return (status >= 500 && status < 600);
-        }
-
-        /**
-         * Returns whether the download has completed (either with success or
-         * error).
-         */
-        public static boolean isStatusCompleted(int status) {
-            return (status >= 200 && status < 300) || (status >= 400 && status < 600);
-        }
-
-        /**
-         * This download hasn't stated yet
-         */
-        public static final int STATUS_PENDING = 190;
 
         /**
          * This download has started
@@ -1194,13 +1217,63 @@ public final class Downloads {
          */
         public static final int VISIBILITY_HIDDEN = 2;
 
+        private Impl() {
+        }
+
+        /**
+         * Returns whether the status is informational (i.e. 1xx).
+         */
+        public static boolean isStatusInformational(int status) {
+            return (status >= 100 && status < 200);
+        }
+
+        /**
+         * Returns whether the status is a success (i.e. 2xx).
+         */
+        public static boolean isStatusSuccess(int status) {
+            return (status >= 200 && status < 300);
+        }
+
+        /**
+         * Returns whether the status is an error (i.e. 4xx or 5xx).
+         */
+        public static boolean isStatusError(int status) {
+            return (status >= 400 && status < 600);
+        }
+
+        /**
+         * Returns whether the status is a client error (i.e. 4xx).
+         */
+        public static boolean isStatusClientError(int status) {
+            return (status >= 400 && status < 500);
+        }
+
+        /**
+         * Returns whether the status is a server error (i.e. 5xx).
+         */
+        public static boolean isStatusServerError(int status) {
+            return (status >= 500 && status < 600);
+        }
+
+        /**
+         * Returns whether the download has completed (either with success or
+         * error).
+         */
+        public static boolean isStatusCompleted(int status) {
+            return (status >= 200 && status < 300) || (status >= 400 && status < 600);
+        }
+
         /**
          * Constants related to HTTP request headers associated with each download.
          */
         public static class RequestHeaders {
+
             public static final String HEADERS_DB_TABLE = "request_headers";
+
             public static final String COLUMN_DOWNLOAD_ID = "download_id";
+
             public static final String COLUMN_HEADER = "header";
+
             public static final String COLUMN_VALUE = "value";
 
             /**

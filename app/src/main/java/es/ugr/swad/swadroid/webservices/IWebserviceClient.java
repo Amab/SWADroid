@@ -20,16 +20,16 @@ package es.ugr.swad.swadroid.webservices;
 
 /**
  * Interface for webservices clients
- * 
+ *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
- * 
  */
 public interface IWebserviceClient {
-	public void createRequest();
 
-	public void addParam(String param, Object value);
+    public void createRequest();
 
-	public void setMETHOD_NAME(String METHOD_NAME);
+    public void addParam(String param, Object value);
 
-	public Object getResult();
+    public void setMETHOD_NAME(String METHOD_NAME);
+
+    public Object getResult();
 }

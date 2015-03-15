@@ -30,21 +30,13 @@ import java.util.List;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class TestTag extends Model {
-    /**
-     * Question codes;
-     */
-    private List<Integer> qstCodList;
-    /**
-     * Tag text
-     */
-    private String tagTxt;
-    /**
-     * Tag index
-     */
-    private int tagInd;
+
     private static final PropertyInfo PI_id = new PropertyInfo();
+
     private static final PropertyInfo PI_tagText = new PropertyInfo();
+
     private static final PropertyInfo PI_tagInd = new PropertyInfo();
+
     @SuppressWarnings("unused")
     private static PropertyInfo[] PI_PROP_ARRAY =
             {
@@ -52,6 +44,21 @@ public class TestTag extends Model {
                     PI_tagText,
                     PI_tagInd
             };
+
+    /**
+     * Question codes;
+     */
+    private List<Integer> qstCodList;
+
+    /**
+     * Tag text
+     */
+    private String tagTxt;
+
+    /**
+     * Tag index
+     */
+    private int tagInd;
 
     /**
      * Constructor
@@ -160,7 +167,8 @@ public class TestTag extends Model {
     /* (non-Javadoc)
      * @see org.ksoap2.serialization.KvmSerializable#getPropertyInfo(int, java.util.Hashtable, org.ksoap2.serialization.PropertyInfo)
      */
-    public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo propertyInfo) {
+    public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1,
+            PropertyInfo propertyInfo) {
         switch (param) {
             case 0:
                 propertyInfo.type = PropertyInfo.LONG_CLASS;

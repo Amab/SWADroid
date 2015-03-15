@@ -16,6 +16,9 @@
 
 package com.google.zxing.client.android.camera;
 
+import com.google.zxing.client.android.PlanarYUVLuminanceSource;
+import com.google.zxing.client.android.PreferencesActivity;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Point;
@@ -25,8 +28,6 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.SurfaceHolder;
-import com.google.zxing.client.android.PlanarYUVLuminanceSource;
-import com.google.zxing.client.android.PreferencesActivity;
 
 import java.io.IOException;
 
@@ -42,29 +43,43 @@ public final class CameraManager {
     private static final String TAG = CameraManager.class.getSimpleName();
 
     private static final int MIN_FRAME_WIDTH = 240;
+
     private static final int MIN_FRAME_HEIGHT = 240;
+
     private static final int MAX_FRAME_WIDTH = 600;
+
     private static final int MAX_FRAME_HEIGHT = 400;
 
     private final Context context;
+
     private final CameraConfigurationManager configManager;
-    private Camera camera;
-    private Rect framingRect;
-    private Rect framingRectInPreview;
-    private boolean initialized;
-    private boolean previewing;
-    private boolean reverseImage;
-    private int requestedFramingRectWidth;
-    private int requestedFramingRectHeight;
+
     /**
      * Preview frames are delivered here, which we pass on to the registered handler. Make sure to
      * clear the handler so it will only receive one message.
      */
     private final PreviewCallback previewCallback;
+
     /**
      * Autofocus callbacks arrive here, and are dispatched to the Handler which requested them.
      */
     private final AutoFocusCallback autoFocusCallback;
+
+    private Camera camera;
+
+    private Rect framingRect;
+
+    private Rect framingRectInPreview;
+
+    private boolean initialized;
+
+    private boolean previewing;
+
+    private boolean reverseImage;
+
+    private int requestedFramingRectWidth;
+
+    private int requestedFramingRectHeight;
 
     public CameraManager(Context context) {
         this.context = context;
@@ -143,7 +158,8 @@ public final class CameraManager {
     }
 
     /**
-     * A single preview frame will be returned to the handler supplied. The data will arrive as byte[]
+     * A single preview frame will be returned to the handler supplied. The data will arrive as
+     * byte[]
      * in the message.obj field, with width and height encoded as message.arg1 and message.arg2,
      * respectively.
      *

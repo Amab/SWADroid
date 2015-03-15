@@ -16,6 +16,11 @@
 
 package com.google.zxing.client.android;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.Result;
+import com.google.zxing.ResultPoint;
+import com.google.zxing.client.android.camera.CameraManager;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -27,14 +32,22 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.view.*;
+import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.Result;
-import com.google.zxing.ResultPoint;
-import com.google.zxing.client.android.camera.CameraManager;
+
+import java.io.IOException;
+import java.util.Collection;
+
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.ImageFactory;
@@ -42,9 +55,6 @@ import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.rollcall.UsersActivity;
 import es.ugr.swad.swadroid.utils.Crypto;
 import es.ugr.swad.swadroid.utils.Utils;
-
-import java.io.IOException;
-import java.util.Collection;
 
 /**
  * This activity opens the camera and does the actual scanning on a background thread. It draws a
@@ -57,6 +67,7 @@ import java.util.Collection;
  * @author Juan Miguel Boyero Corral (juanmi1982@gmail.com)
  */
 public class CaptureActivity extends Activity implements SurfaceHolder.Callback {
+
     /**
      * Text size in scan window
      */
@@ -68,21 +79,39 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 
     private static final int[] sounds = {R.raw.beep, R.raw.klaxon};
 
-    private CameraManager cameraManager;
-    private CaptureActivityHandler handler;
-    private Result savedResultToShow;
-    private ViewfinderView viewfinderView;
-    private TextView statusView;
-    private View resultView;
-    private Result lastResult;
-    private boolean hasSurface;
-    private IntentSource source;
-    private Collection<BarcodeFormat> decodeFormats;
-    private String characterSet;
-    private InactivityTimer inactivityTimer;
-    private BeepManager beepManager;
     private static DataBaseHelper dbHelper;
+
     private static Crypto crypto;
+
+    private CameraManager cameraManager;
+
+    private CaptureActivityHandler handler;
+
+    private Result savedResultToShow;
+
+    private ViewfinderView viewfinderView;
+
+    private TextView statusView;
+
+    private View resultView;
+
+    private Result lastResult;
+
+    private boolean hasSurface;
+
+    private IntentSource source;
+
+    private Collection<BarcodeFormat> decodeFormats;
+
+    private String characterSet;
+
+    private InactivityTimer inactivityTimer;
+
+    private BeepManager beepManager;
+
+    private static void drawLine(Canvas canvas, Paint paint, ResultPoint a, ResultPoint b) {
+        canvas.drawLine(a.getX(), a.getY(), b.getX(), b.getY(), paint);
+    }
 
     ViewfinderView getViewfinderView() {
         return viewfinderView;
@@ -210,7 +239,8 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
                 setResult(RESULT_OK);
                 finish();
                 return true;
-            } else if ((source == IntentSource.NONE || source == IntentSource.ZXING_LINK) && lastResult != null) {
+            } else if ((source == IntentSource.NONE || source == IntentSource.ZXING_LINK)
+                    && lastResult != null) {
                 restartPreviewAfterDelay(0L);
                 return true;
             }
@@ -280,10 +310,12 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
         lastResult = rawResult;
 
         if (validContent) {
-            if ((u != null) && dbHelper.isUserEnrolledEvent(UsersActivity.getEventCode(), "userCode",
-                    String.valueOf(u.getId()))) {
-                Log.d(TAG, "isUserEnrolledEvent=" + dbHelper.isUserEnrolledEvent(UsersActivity.getEventCode(), "userCode",
-                        crypto.encrypt(String.valueOf(u.getId()))));
+            if ((u != null) && dbHelper
+                    .isUserEnrolledEvent(UsersActivity.getEventCode(), "userCode",
+                            String.valueOf(u.getId()))) {
+                Log.d(TAG, "isUserEnrolledEvent=" + dbHelper
+                        .isUserEnrolledEvent(UsersActivity.getEventCode(), "userCode",
+                                crypto.encrypt(String.valueOf(u.getId()))));
                 //Mark student as present in the event
                 dbHelper.insertAttendance(u.getId(), UsersActivity.getEventCode(), true);
 
@@ -319,7 +351,8 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 
         // Show photo of student
         LayoutInflater inflater = getLayoutInflater();
-        View layout = inflater.inflate(R.layout.toast_layout, (ViewGroup) findViewById(R.id.toast_layout_root));
+        View layout = inflater
+                .inflate(R.layout.toast_layout, (ViewGroup) findViewById(R.id.toast_layout_root));
         ImageView image = (ImageView) layout.findViewById(R.id.image);
 
         if (u != null) {
@@ -344,7 +377,7 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
         toast.show();
 
         // Hide message after delay
-        if(BULK_MODE_SCAN_DELAY_MS < 2000L) {
+        if (BULK_MODE_SCAN_DELAY_MS < 2000L) {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -393,16 +426,13 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
         }
     }
 
-    private static void drawLine(Canvas canvas, Paint paint, ResultPoint a, ResultPoint b) {
-        canvas.drawLine(a.getX(), a.getY(), b.getX(), b.getY(), paint);
-    }
-
     private void initCamera(SurfaceHolder surfaceHolder) {
         try {
             cameraManager.openDriver(surfaceHolder);
             // Creating the handler starts the preview, which can also throw a RuntimeException.
             if (handler == null) {
-                handler = new CaptureActivityHandler(this, decodeFormats, characterSet, cameraManager);
+                handler = new CaptureActivityHandler(this, decodeFormats, characterSet,
+                        cameraManager);
             }
             decodeOrStoreSavedBitmap(null, null);
         } catch (IOException ioe) {

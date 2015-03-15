@@ -21,9 +21,12 @@
 
 package es.ugr.swad.swadroid.modules.rollcall;
 
+import org.ksoap2.serialization.SoapObject;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
@@ -31,7 +34,6 @@ import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
-import org.ksoap2.serialization.SoapObject;
 
 /**
  * Rollcall users send module.
@@ -39,33 +41,40 @@ import org.ksoap2.serialization.SoapObject;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class UsersSend extends Module {
-    /**
-     * Number of users marked as present in the event
-     */
-    private int numUsers = 0;
-    /**
-     * Result of webservice call. 1 on success, 0 on error (for example, if the event does not exist)
-     */
-    private int success = 0;
-    /**
-     * Code of event associated to the users list
-     */
-    private int eventCode;
-    /**
-     * 0 ⇒ users from list users will be added to list of presents and other users formerly marked
-     *     as present will not be affected
-     * 1 ⇒ users from list users will be marked as present and other users formerly marked as
-     *     present will be marked as absent
-     */
-    private int setOthersAsAbsent;
-    /**
-     * List of user codes separated with commas
-     */
-    private String usersCodes;
+
     /**
      * Rollcall Users Download tag name for Logcat
      */
     private static final String TAG = Constants.APP_TAG + " UsersSend";
+
+    /**
+     * Number of users marked as present in the event
+     */
+    private int numUsers = 0;
+
+    /**
+     * Result of webservice call. 1 on success, 0 on error (for example, if the event does not
+     * exist)
+     */
+    private int success = 0;
+
+    /**
+     * Code of event associated to the users list
+     */
+    private int eventCode;
+
+    /**
+     * 0 ⇒ users from list users will be added to list of presents and other users formerly marked
+     * as present will not be affected
+     * 1 ⇒ users from list users will be marked as present and other users formerly marked as
+     * present will be marked as absent
+     */
+    private int setOthersAsAbsent;
+
+    /**
+     * List of user codes separated with commas
+     */
+    private String usersCodes;
 
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
@@ -80,7 +89,7 @@ public class UsersSend extends Module {
     @Override
     protected void onStart() {
         super.onStart();
-        
+
         try {
             eventCode = this.getIntent().getIntExtra("attendanceEventCode", 0);
             setOthersAsAbsent = this.getIntent().getIntExtra("setOthersAsAbsent", 0);
@@ -130,8 +139,9 @@ public class UsersSend extends Module {
 
             setResult(RESULT_CANCELED);
         } else {
-            if(numUsers > 0) {
-                msg = String.valueOf(numUsers) + " " + getResources().getString(R.string.usersUpdated);
+            if (numUsers > 0) {
+                msg = String.valueOf(numUsers) + " " + getResources()
+                        .getString(R.string.usersUpdated);
             } else {
                 msg = getResources().getString(R.string.usersAbsent);
             }
@@ -140,7 +150,8 @@ public class UsersSend extends Module {
 
             dbHelper.beginTransaction();
             //Remove all event attendances from database after a successful sending
-            dbHelper.removeAllRows(DataBaseHelper.DB_TABLE_USERS_ATTENDANCES, "eventCode", eventCode);
+            dbHelper.removeAllRows(DataBaseHelper.DB_TABLE_USERS_ATTENDANCES, "eventCode",
+                    eventCode);
 
             //Mark the event as sended to SWAD
             dbHelper.updateEventStatus(eventCode, "OK");

@@ -18,25 +18,31 @@
  */
 package es.ugr.swad.swadroid.modules.tests;
 
+import org.ksoap2.serialization.SoapObject;
+
 import android.database.SQLException;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
-import es.ugr.swad.swadroid.model.*;
+import es.ugr.swad.swadroid.model.Model;
+import es.ugr.swad.swadroid.model.Test;
+import es.ugr.swad.swadroid.model.TestAnswer;
+import es.ugr.swad.swadroid.model.TestQuestion;
+import es.ugr.swad.swadroid.model.TestTag;
 import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.utils.DateTimeUtils;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
-import org.ksoap2.serialization.SoapObject;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
 
 /**
  * Tests module for download and update questions
@@ -45,14 +51,16 @@ import java.util.Vector;
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  */
 public class TestsQuestionsDownload extends Module {
-    /**
-     * Next timestamp to be requested
-     */
-    private Long timestamp;
+
     /**
      * Tests tag name for Logcat
      */
     private static final String TAG = Constants.APP_TAG + " TestsQuestionsDownload";
+
+    /**
+     * Next timestamp to be requested
+     */
+    private Long timestamp;
 
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
@@ -79,11 +87,11 @@ public class TestsQuestionsDownload extends Module {
      */
     @Override
     protected void requestService() throws Exception {
-    	long timeBefore = System.currentTimeMillis();
-    	long timeAfter;
+        long timeBefore = System.currentTimeMillis();
+        long timeAfter;
 
         //Creates webservice request, adds required params and sends request to webservice
-    	createRequest(SOAPClient.CLIENT_TYPE);
+        createRequest(SOAPClient.CLIENT_TYPE);
         addParam("wsKey", Login.getLoggedUser().getWsKey());
         addParam("courseCode", (int) Courses.getSelectedCourseCode());
         addParam("beginTime", timestamp);
@@ -99,7 +107,8 @@ public class TestsQuestionsDownload extends Module {
             SoapObject questionTagsListObject = (SoapObject) res.get(3);
             List<TestTag> tagsList = new ArrayList<TestTag>();
             List<Model> tagsListDB = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_TEST_TAGS);
-            List<Model> questionsListDB = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_TEST_QUESTIONS);
+            List<Model> questionsListDB = dbHelper
+                    .getAllRows(DataBaseHelper.DB_TABLE_TEST_QUESTIONS);
             List<Model> answersListDB = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_TEST_ANSWERS);
 
             int listSizeTags = tagsListObject.getPropertyCount();
@@ -115,8 +124,9 @@ public class TestsQuestionsDownload extends Module {
                 TestTag tag = new TestTag(tagCod, null, tagTxt, 0);
                 tagsList.add(tag);
 
-                if (isDebuggable)
+                if (isDebuggable) {
                     Log.d(TAG, tag.toString());
+                }
             }
 
             //Read questions info from webservice response
@@ -129,22 +139,26 @@ public class TestsQuestionsDownload extends Module {
                 Integer shuffle = Integer.valueOf(pii.getProperty("shuffle").toString());
                 String stem = pii.getProperty("stem").toString();
                 String questionFeedback = pii.getProperty("feedback").toString();
-                TestQuestion q = new TestQuestion(qstCod, stem, anstype, Utils.parseIntBool(shuffle), questionFeedback);
+                TestQuestion q = new TestQuestion(qstCod, stem, anstype,
+                        Utils.parseIntBool(shuffle), questionFeedback);
 
                 //If it's a new question, insert in database
                 try {
                     dbHelper.insertTestQuestion(q, Courses.getSelectedCourseCode());
 
-                    if (isDebuggable)
+                    if (isDebuggable) {
                         Log.d(TAG, "INSERTED: " + q.toString());
+                    }
 
                     //If it's an updated question, update it's row in database
                 } catch (SQLException e) {
-                    TestQuestion old = (TestQuestion) questionsListDB.get(questionsListDB.indexOf(q));
+                    TestQuestion old = (TestQuestion) questionsListDB
+                            .get(questionsListDB.indexOf(q));
                     dbHelper.updateTestQuestion(old, q, Courses.getSelectedCourseCode());
 
-                    if (isDebuggable)
+                    if (isDebuggable) {
                         Log.d(TAG, "UPDATED: " + q.toString());
+                    }
                 }
             }
 
@@ -156,22 +170,25 @@ public class TestsQuestionsDownload extends Module {
                 Integer correct = Integer.valueOf(pii.getProperty("correct").toString());
                 String answer = pii.getProperty("answerText").toString();
                 String answerFeeback = pii.getProperty("answerFeedback").toString();
-                TestAnswer a = new TestAnswer(0, ansIndex, qstCod, Utils.parseIntBool(correct), answer, answerFeeback);
+                TestAnswer a = new TestAnswer(0, ansIndex, qstCod, Utils.parseIntBool(correct),
+                        answer, answerFeeback);
 
                 //If it's a new answer, insert in database
                 try {
                     dbHelper.insertTestAnswer(a, qstCod);
 
-                    if (isDebuggable)
+                    if (isDebuggable) {
                         Log.d(TAG, "INSERTED: " + a.toString());
+                    }
 
                     //If it's an updated answer, update it's row in database
                 } catch (SQLException e) {
                     TestAnswer old = (TestAnswer) answersListDB.get(answersListDB.indexOf(a));
                     dbHelper.updateTestAnswer(old, a, qstCod);
 
-                    if (isDebuggable)
+                    if (isDebuggable) {
                         Log.d(TAG, "UPDATED: " + a.toString());
+                    }
                 }
             }
 
@@ -190,8 +207,9 @@ public class TestsQuestionsDownload extends Module {
                     dbHelper.insertTestTag(tag);
                     tagsListDB.add(tag);
 
-                    if (isDebuggable)
+                    if (isDebuggable) {
                         Log.d(TAG, "INSERTED: " + tag.toString());
+                    }
 
                     //If it's an updated tag, update it's rows in database
                 } catch (SQLException e) {
@@ -200,8 +218,9 @@ public class TestsQuestionsDownload extends Module {
                     tag.addQstCod(qstCod);
                     dbHelper.updateTestTag(old, tag);
 
-                    if (isDebuggable)
+                    if (isDebuggable) {
                         Log.d(TAG, "UPDATED: " + tag.toString());
+                    }
                 }
             }
 
@@ -210,13 +229,14 @@ public class TestsQuestionsDownload extends Module {
             //testConfig.setEditTime(System.currentTimeMillis() / 1000L);
             //dbHelper.updateTestConfig(testConfig.getId(), testConfig);
             dbHelper.endTransaction(true);
-            
+
             timeAfter = System.currentTimeMillis();
 
             Log.i(TAG, "Retrieved " + listSizeTags + " tags");
             Log.i(TAG, "Retrieved " + listSizeQuestions + " questions");
             Log.i(TAG, "Retrieved " + listSizeAnswers + " answers");
-            Log.i(TAG, "Retrieved " + listSizeQuestionTags + " relationships between questions and tags");
+            Log.i(TAG, "Retrieved " + listSizeQuestionTags
+                    + " relationships between questions and tags");
             Log.i(TAG, "Time elapsed = " + DateTimeUtils.millisToLongDHMS(timeAfter - timeBefore));
         }
 

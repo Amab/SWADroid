@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/action_save"
-        android:icon="@drawable/ic_action_save"
-        android:title="@string/actionBarSave"
-        android:showAsAction="ifRoom|withText"/>
+            android:id="@+id/action_save"
+            android:icon="@drawable/ic_action_save"
+            android:title="@string/actionBarSave"
+            android:showAsAction="ifRoom|withText"/>
     <item
-        android:id="@+id/action_refresh"
-        android:icon="@drawable/ic_action_refresh"
-        android:title="@string/actionBarRefresh"
-        android:showAsAction="ifRoom|withText"/>
+            android:id="@+id/action_refresh"
+            android:icon="@drawable/ic_action_refresh"
+            android:title="@string/actionBarRefresh"
+            android:showAsAction="ifRoom|withText"/>
 
 </menu>

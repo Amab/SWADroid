@@ -25,15 +25,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.CheckBox;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.Date;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.model.GroupType;
 import es.ugr.swad.swadroid.model.Model;
-
-import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Adapter to populate with data  an expandable list.
@@ -45,33 +51,36 @@ import java.util.Date;
 
 public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 
-    private LongSparseArray<ArrayList<Group>> children = null;
-    private ArrayList<Model> groups = null;
     private final LongSparseArray<boolean[]> realMembership = new LongSparseArray<boolean[]>();
 
-    private int role = -1;
-    private int layoutGroup = 0;
-    private int layoutChild = 0;
-
-    private static class GroupHolder {
-        TextView textViewGroupTypeName;
-        TextView openTimeText;
-    }
-
-    private static class ChildHolder {
-        LinearLayout linearLayout;
-        ImageView imagePadlock;
-        CheckBox checkBox;
-        RadioButton radioButton;
-        TextView vacantsText;
-        TextView nStudentText;
-        TextView maxStudentText;
-    }
-
     private final LayoutInflater mInflater;
+
     private final Context context;
 
-    public EnrollmentExpandableListAdapter(Context context, ArrayList<Model> groups, LongSparseArray<ArrayList<Group>> children, int layoutGroup, int layoutChild, int currentRole) {
+    private LongSparseArray<ArrayList<Group>> children = null;
+
+    private ArrayList<Model> groups = null;
+
+    private int role = -1;
+
+    private int layoutGroup = 0;
+
+    private int layoutChild = 0;
+
+    private OnClickListener checkListener = new OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+
+            Group d = (Group) v.getTag();
+            ((CheckBox) v).setChecked(!d.isMember());
+            d.setMember(d.isMember() ? 0 : 1);
+        }
+    };
+
+    public EnrollmentExpandableListAdapter(Context context, ArrayList<Model> groups,
+            LongSparseArray<ArrayList<Group>> children, int layoutGroup, int layoutChild,
+            int currentRole) {
         super();
         this.context = context;
         this.groups = groups;
@@ -86,7 +95,7 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
             ArrayList<Group> groupsChildren = children.get(groupTypeCode);
             realMembership.put(groupTypeCode, new boolean[groupsChildren.size()]);
         }
-        
+
         setRealInscription();
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -105,7 +114,7 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int groupPosition, int childPosition,
-                             boolean isLastChild, View convertView, ViewGroup parent) {
+            boolean isLastChild, View convertView, ViewGroup parent) {
         ChildHolder holder;
         if (convertView == null) {
             convertView = mInflater.inflate(layoutChild, parent, false);
@@ -129,14 +138,14 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
         ArrayList<Group> children = this.children.get(groupTypeCode);
         Group group = children.get(childPosition);
 
-
         boolean isCurrentMember = realMembership.get(groupTypeCode)[childPosition];
         if (isCurrentMember) {
-            holder.linearLayout.setBackgroundColor(context.getResources().getColor(R.color.lightskyblue));
+            holder.linearLayout
+                    .setBackgroundColor(context.getResources().getColor(R.color.lightskyblue));
         } else {
-            holder.linearLayout.setBackgroundColor(context.getResources().getColor(android.R.color.white));
+            holder.linearLayout
+                    .setBackgroundColor(context.getResources().getColor(android.R.color.white));
         }
-
 
         //Data from Group
         String groupName = group.getGroupName();
@@ -148,11 +157,12 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
         // Para porde hacer click en el checkbox
         Group g = (Group) getChild(groupPosition, childPosition);
         holder.checkBox.setTag(g);
-        
+
         boolean freeSpot = false;
         if (maxStudents != -1) {
-            if (group.getCurrentStudents() < maxStudents)
+            if (group.getCurrentStudents() < maxStudents) {
                 freeSpot = true;
+            }
         } else { //if maxStudent == -1, there is not limit of students in this groups
             freeSpot = true;
         }
@@ -163,27 +173,33 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
             holder.imagePadlock.setImageResource(R.drawable.padlock_red);
         }
 
-        if ((open != 0 && freeSpot) || role == Constants.TEACHER_TYPE_CODE) { //Teachers can enroll even on closed groups
+        if ((open != 0 && freeSpot) || role
+                == Constants.TEACHER_TYPE_CODE) { //Teachers can enroll even on closed groups
             holder.checkBox.setEnabled(true);
             holder.checkBox.setTextColor(context.getResources().getColor(android.R.color.black));
             holder.imagePadlock.setEnabled(true);
             holder.nStudentText.setEnabled(true);
-            holder.nStudentText.setTextColor(context.getResources().getColor(R.color.sgilight_gray_32));
+            holder.nStudentText
+                    .setTextColor(context.getResources().getColor(R.color.sgilight_gray_32));
             holder.maxStudentText.setEnabled(true);
-            holder.maxStudentText.setTextColor(context.getResources().getColor(R.color.sgilight_gray_32));
+            holder.maxStudentText
+                    .setTextColor(context.getResources().getColor(R.color.sgilight_gray_32));
             holder.radioButton.setEnabled(true);
             holder.radioButton.setTextColor(context.getResources().getColor(android.R.color.black));
             holder.linearLayout.setEnabled(true);
             holder.vacantsText.setEnabled(true);
-            holder.vacantsText.setTextColor(context.getResources().getColor(R.color.sgilight_gray_32));
+            holder.vacantsText
+                    .setTextColor(context.getResources().getColor(R.color.sgilight_gray_32));
         } else {
             holder.checkBox.setEnabled(false);
             holder.checkBox.setTextColor(context.getResources().getColor(R.color.sgilight_gray));
             holder.imagePadlock.setEnabled(false);
             holder.nStudentText.setEnabled(false);
-            holder.nStudentText.setTextColor(context.getResources().getColor(R.color.sgilight_gray));
+            holder.nStudentText
+                    .setTextColor(context.getResources().getColor(R.color.sgilight_gray));
             holder.maxStudentText.setEnabled(false);
-            holder.maxStudentText.setTextColor(context.getResources().getColor(R.color.sgilight_gray));
+            holder.maxStudentText
+                    .setTextColor(context.getResources().getColor(R.color.sgilight_gray));
             holder.radioButton.setEnabled(false);
             holder.radioButton.setTextColor(context.getResources().getColor(R.color.sgilight_gray));
             holder.linearLayout.setEnabled(false);
@@ -216,21 +232,27 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
             }
         }
 
-        holder.nStudentText.setText(context.getString(R.string.numStudent) + ": " + String.valueOf(students));
+        holder.nStudentText
+                .setText(context.getString(R.string.numStudent) + ": " + String.valueOf(students));
 
         if (maxStudents != -1) {
             int vacants = maxStudents - students;
-            holder.maxStudentText.setText(context.getString(R.string.maxStudent) + ": " + String.valueOf(maxStudents));
-            holder.vacantsText.setText(context.getString(R.string.vacants) + ": " + String.valueOf(vacants));
+            holder.maxStudentText.setText(
+                    context.getString(R.string.maxStudent) + ": " + String.valueOf(maxStudents));
+            holder.vacantsText
+                    .setText(context.getString(R.string.vacants) + ": " + String.valueOf(vacants));
             if (vacants == 0) {
-                holder.vacantsText.setTextColor(context.getResources().getColor(R.color.sgi_salmon));
+                holder.vacantsText
+                        .setTextColor(context.getResources().getColor(R.color.sgi_salmon));
                 holder.vacantsText.setTypeface(null, Typeface.BOLD);
-            } else
+            } else {
                 holder.vacantsText.setTypeface(null, Typeface.NORMAL);
+            }
 
         } else {
             holder.maxStudentText.setVisibility(View.GONE);
-            holder.vacantsText.setText(context.getString(R.string.vacants) + ": " + context.getString(R.string.withoutLimit));
+            holder.vacantsText.setText(context.getString(R.string.vacants) + ": " + context
+                    .getString(R.string.withoutLimit));
             holder.vacantsText.setTypeface(null, Typeface.NORMAL);
         }
 
@@ -261,7 +283,7 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded,
-                             View convertView, ViewGroup parent) {
+            View convertView, ViewGroup parent) {
         GroupHolder holder;
 
         if (convertView == null) {
@@ -281,9 +303,12 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
         if (unixTime != 0) {
             holder.openTimeText.setVisibility(View.VISIBLE);
             Date d = new Date(unixTime * 1000);
-            java.text.DateFormat dateShortFormat = android.text.format.DateFormat.getDateFormat(context);
+            java.text.DateFormat dateShortFormat = android.text.format.DateFormat
+                    .getDateFormat(context);
             java.text.DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(context);
-            holder.openTimeText.setText(context.getString(R.string.openingTime) + " " + dateShortFormat.format(d) + "  " + (timeFormat.format(d)));
+            holder.openTimeText.setText(
+                    context.getString(R.string.openingTime) + " " + dateShortFormat.format(d) + "  "
+                            + (timeFormat.format(d)));
         } else {
             holder.openTimeText.setVisibility(View.GONE);
         }
@@ -304,19 +329,23 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
         int maxStudent = group.getMaxStudents();
         boolean freeSpot = false;
         if (maxStudent != -1) {
-            if (group.getCurrentStudents() < maxStudent)
+            if (group.getCurrentStudents() < maxStudent) {
                 freeSpot = true;
+            }
         } else { //if maxStudent == -1, there is not limit of students in this groups
             freeSpot = true;
         }
 
         boolean realMember = realMembership.get(groupTypeCode)[childPosition];
-        return (group.getOpen() != 0 && (freeSpot || realMember)) || role == Constants.TEACHER_TYPE_CODE;
+        return (group.getOpen() != 0 && (freeSpot || realMember))
+                || role == Constants.TEACHER_TYPE_CODE;
     }
 
     /**
-     * The implementation of expandable list recycle the view. Therefore the selected items should be stored.
-     * This method stores that information and maintains mutual exclusion between the radio buttons.
+     * The implementation of expandable list recycle the view. Therefore the selected items should
+     * be stored.
+     * This method stores that information and maintains mutual exclusion between the radio
+     * buttons.
      * NOTE: It is necessary to call to notifyDataSetChanged to update the views.
      */
     public boolean checkItem(int groupPosition, int childPosition) {
@@ -329,13 +358,16 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
             int previousCheckState = group.getMember();
             group.setMember((group.getMember() + 1) % 2);
 
-            if (multiple == 0 && previousCheckState == 0 && role != Constants.TEACHER_TYPE_CODE) {//unique enrollment. Only an option is checked.
+            if (multiple == 0 && previousCheckState == 0 && role
+                    != Constants.TEACHER_TYPE_CODE) {//unique enrollment. Only an option is checked.
                 //If the group does not allow multiple enrollment and previously it was not checked, the rest of the groups should be unchecked.
                 Long groupTypeCode = groupType.getId();
                 ArrayList<Group> children = this.children.get(groupTypeCode);
                 for (int i = 0; i < children.size(); ++i) {
                     Group g = children.get(i);
-                    if (i != childPosition) g.setMember(0);
+                    if (i != childPosition) {
+                        g.setMember(0);
+                    }
                 }
             }
 
@@ -362,9 +394,12 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
                 g = aChildren;
                 if (g.getMember() == 1) {
                     long code = g.getId();
-                    if (groupCodes.compareTo("") != 0) groupCodes =
-                            groupCodes.concat("," + String.valueOf(code));
-                    else groupCodes = groupCodes.concat(String.valueOf(code));
+                    if (groupCodes.compareTo("") != 0) {
+                        groupCodes =
+                                groupCodes.concat("," + String.valueOf(code));
+                    } else {
+                        groupCodes = groupCodes.concat(String.valueOf(code));
+                    }
                 }
             }
         }
@@ -389,7 +424,7 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
     }
 
     private void setRealInscription() {
-        
+
         for (int i = 0; i < children.size(); i++) {
             Long groupTypeCode = children.keyAt(i);
             ArrayList<Group> childs = children.get(groupTypeCode);
@@ -401,17 +436,28 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
         }
     }
 
-    private OnClickListener checkListener = new OnClickListener()
-    {
+    private static class GroupHolder {
 
-        @Override
-        public void onClick(View v)
-        {
+        TextView textViewGroupTypeName;
 
-            Group d = (Group) v.getTag();
-           ((CheckBox) v).setChecked(!d.isMember());
-           d.setMember(d.isMember() ? 0:1);
-        }
-    };
-    
+        TextView openTimeText;
+    }
+
+    private static class ChildHolder {
+
+        LinearLayout linearLayout;
+
+        ImageView imagePadlock;
+
+        CheckBox checkBox;
+
+        RadioButton radioButton;
+
+        TextView vacantsText;
+
+        TextView nStudentText;
+
+        TextView maxStudentText;
+    }
+
 }

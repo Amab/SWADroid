@@ -18,9 +18,17 @@
  */
 package es.ugr.swad.swadroid.modules.groups;
 
+import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapPrimitive;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Group;
@@ -28,12 +36,6 @@ import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
-import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.serialization.SoapPrimitive;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
 
 /**
  * Module to enroll into groups.
@@ -42,32 +44,38 @@ import java.util.Vector;
  * - (long) courseCode course code . It indicates the course to which the groups belong
  * - (string) myGroups: String that contains group codes separated with comma
  * It returns as extra data:
- * - (int) success :0 - it was impossible to satisfy all enrollment. Therefore it was not made any changes. The enrollment remains like before the request.
- * other than 0 -if all the requested changes were possible and are made. It that case the groups in database will be also updated * 					!= 0 -
+ * - (int) success :0 - it was impossible to satisfy all enrollment. Therefore it was not made any
+ * changes. The enrollment remains like before the request.
+ * other than 0 -if all the requested changes were possible and are made. It that case the groups in
+ * database will be also updated * 					!= 0 -
  *
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */
 
 
 public class SendMyGroups extends Module {
+
+    /**
+     * Groups tag name for Logcat
+     */
+    private static final String TAG = Constants.APP_TAG + "Send My Groups";
+
     /**
      * Course code
      */
     private long courseCode = -1;
+
     /**
      * String that contains group codes separated with comma
      */
     private String myGroups = null;
+
     /**
      * Indicates if the enrollments are done or not
      * 0 - if the enrollments are not done
      * other than 0 - if they are correctly done
      */
     private int success = 0;
-    /**
-     * Groups tag name for Logcat
-     */
-    private static final String TAG = Constants.APP_TAG + "Send My Groups";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +94,7 @@ public class SendMyGroups extends Module {
     @Override
     protected void onStart() {
         super.onStart();
-        
+
         try {
             runConnection();
         } catch (Exception e) {
@@ -106,13 +114,13 @@ public class SendMyGroups extends Module {
 
     @Override
     protected void requestService() throws Exception {
-    	
-    	createRequest(SOAPClient.CLIENT_TYPE);
+
+        createRequest(SOAPClient.CLIENT_TYPE);
         addParam("wsKey", Login.getLoggedUser().getWsKey());
         addParam("courseCode", (int) courseCode);
         addParam("myGroups", myGroups);
         sendRequest(Group.class, false);
-        
+
         if (result != null) {
             ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
             SoapPrimitive soapP = (SoapPrimitive) res.get(0);
@@ -128,14 +136,16 @@ public class SendMyGroups extends Module {
                     SoapObject pii = (SoapObject) soapO.getProperty(i);
                     long id = Long.parseLong(pii.getProperty("groupCode").toString());
                     String groupName = pii.getProperty("groupName").toString();
-                    long groupTypeCode = Integer.parseInt(pii.getProperty("groupTypeCode").toString());
+                    long groupTypeCode = Integer
+                            .parseInt(pii.getProperty("groupTypeCode").toString());
                     int maxStudents = Integer.parseInt(pii.getProperty("maxStudents").toString());
                     int open = Integer.parseInt(pii.getProperty("open").toString());
                     int numStudents = Integer.parseInt(pii.getProperty("numStudents").toString());
                     int fileZones = Integer.parseInt(pii.getProperty("fileZones").toString());
                     int member = Integer.parseInt(pii.getProperty("member").toString());
 
-                    Group g = new Group(id, groupName, groupTypeCode, maxStudents, open, numStudents, fileZones, member);
+                    Group g = new Group(id, groupName, groupTypeCode, maxStudents, open,
+                            numStudents, fileZones, member);
                     groupsSWAD.add(g);
 
                     if (isDebuggable) {

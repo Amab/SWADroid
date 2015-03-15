@@ -1,5 +1,7 @@
 package es.ugr.swad.swadroid.modules;
 
+import com.google.zxing.WriterException;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -7,7 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.Toast;
-import com.google.zxing.WriterException;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADroidTracker;
@@ -15,6 +17,7 @@ import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.utils.QR;
 
 public class GenerateQR extends MenuActivity {
+
     /**
      * Messages tag name for Logcat
      */
@@ -29,7 +32,7 @@ public class GenerateQR extends MenuActivity {
         setContentView(R.layout.generate_qr_layout);
 
         setTitle(R.string.generateQRModuleLabel);
-    	getActionBar().setIcon(R.drawable.qr);
+        getActionBar().setIcon(R.drawable.qr);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -59,11 +62,13 @@ public class GenerateQR extends MenuActivity {
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case Constants.LOGIN_REQUEST_CODE:
-                    if ((Login.getLoggedUser() != null) && !Login.getLoggedUser().getUserNickname().equals(Constants.NULL_VALUE)) {
+                    if ((Login.getLoggedUser() != null) && !Login.getLoggedUser().getUserNickname()
+                            .equals(Constants.NULL_VALUE)) {
                         generateQR();
                     } else {
                         Login.setLogged(false);
-                        Toast.makeText(getApplicationContext(), R.string.errorNoUserNickname, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), R.string.errorNoUserNickname,
+                                Toast.LENGTH_LONG).show();
 
                         finish();
                     }

@@ -21,9 +21,15 @@
 
 package es.ugr.swad.swadroid.modules.rollcall;
 
+import org.ksoap2.serialization.SoapObject;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.Vector;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
@@ -32,10 +38,6 @@ import es.ugr.swad.swadroid.model.UserAttendance;
 import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
-import org.ksoap2.serialization.SoapObject;
-
-import java.util.ArrayList;
-import java.util.Vector;
 
 /**
  * Rollcall users download module.
@@ -43,18 +45,21 @@ import java.util.Vector;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class UsersDownload extends Module {
-    /**
-     * Number of users associated to the selected event
-     */
-    private int numUsers;
-    /**
-     * Code of event associated to the users list
-     */
-    private int eventCode;
+
     /**
      * Rollcall Users Download tag name for Logcat
      */
     private static final String TAG = Constants.APP_TAG + " UsersDownload";
+
+    /**
+     * Number of users associated to the selected event
+     */
+    private int numUsers;
+
+    /**
+     * Code of event associated to the users list
+     */
+    private int eventCode;
 
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
@@ -69,7 +74,7 @@ public class UsersDownload extends Module {
     @Override
     protected void onStart() {
         super.onStart();
-        
+
         try {
             eventCode = this.getIntent().getIntExtra("attendanceEventCode", 0);
             if (isDebuggable) {
@@ -96,11 +101,12 @@ public class UsersDownload extends Module {
             SoapObject soap = (SoapObject) res.get(1);
             numUsers = soap.getPropertyCount();
 
-            if(numUsers > 0) {
+            if (numUsers > 0) {
                 dbHelper.beginTransaction();
 
                 //Removes old attendances from database
-                dbHelper.removeAllRows(DataBaseHelper.DB_TABLE_USERS_ATTENDANCES, "eventCode", eventCode);
+                dbHelper.removeAllRows(DataBaseHelper.DB_TABLE_USERS_ATTENDANCES, "eventCode",
+                        eventCode);
             }
             for (int i = 0; i < numUsers; i++) {
                 SoapObject pii = (SoapObject) soap.getProperty(i);
@@ -115,15 +121,26 @@ public class UsersDownload extends Module {
                 //If not 0 ⇒ this user has attended the event.
                 boolean userPresent = !pii.getProperty("present").toString().equals("0");
 
-                if (userNickname.equalsIgnoreCase(Constants.NULL_VALUE)) userNickname = "";
-                if (userSurname1.equalsIgnoreCase(Constants.NULL_VALUE)) userSurname1 = "";
-                if (userSurname2.equalsIgnoreCase(Constants.NULL_VALUE)) userSurname2 = "";
-                if (userFirstname.equalsIgnoreCase(Constants.NULL_VALUE)) userFirstname = "";
-                if (userPhoto.equalsIgnoreCase(Constants.NULL_VALUE)) userPhoto = null;
+                if (userNickname.equalsIgnoreCase(Constants.NULL_VALUE)) {
+                    userNickname = "";
+                }
+                if (userSurname1.equalsIgnoreCase(Constants.NULL_VALUE)) {
+                    userSurname1 = "";
+                }
+                if (userSurname2.equalsIgnoreCase(Constants.NULL_VALUE)) {
+                    userSurname2 = "";
+                }
+                if (userFirstname.equalsIgnoreCase(Constants.NULL_VALUE)) {
+                    userFirstname = "";
+                }
+                if (userPhoto.equalsIgnoreCase(Constants.NULL_VALUE)) {
+                    userPhoto = null;
+                }
 
                 //Inserts user data into database
-                dbHelper.insertUser(new User(userCode, null, userID, userNickname, userSurname1, userSurname2,
-                        userFirstname, userPhoto, null, 0));
+                dbHelper.insertUser(
+                        new User(userCode, null, userID, userNickname, userSurname1, userSurname2,
+                                userFirstname, userPhoto, null, 0));
 
                 //Inserts attendance data into database
                 dbHelper.insertAttendance(userCode, eventCode, userPresent);
@@ -151,7 +168,8 @@ public class UsersDownload extends Module {
         if (numUsers == 0) {
             Toast.makeText(this, R.string.noUsersAvailableMsg, Toast.LENGTH_LONG).show();
         } else {
-            String msg = String.valueOf(numUsers) + " " + getResources().getString(R.string.usersUpdated);
+            String msg = String.valueOf(numUsers) + " " + getResources()
+                    .getString(R.string.usersUpdated);
             Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
         }
 

@@ -24,17 +24,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckedTextView;
-import es.ugr.swad.swadroid.model.TestTag;
 
 import java.util.List;
 
+import es.ugr.swad.swadroid.model.TestTag;
+
 public class TagsArrayAdapter extends ArrayAdapter<TestTag> {
+
     private final Context context;
+
     private final int textViewResourceId;
+
     private final List<TestTag> items;
 
     public TagsArrayAdapter(Context context, int textViewResourceId,
-                            List<TestTag> objects) {
+            List<TestTag> objects) {
 
         super(context, textViewResourceId, objects);
         this.context = context;

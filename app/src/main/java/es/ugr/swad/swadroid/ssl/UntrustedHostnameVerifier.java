@@ -28,6 +28,7 @@ import javax.net.ssl.SSLSession;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class UntrustedHostnameVerifier implements HostnameVerifier {
+
     /**
      * Accepts untrusted certificates.
      *

@@ -30,11 +30,16 @@ import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.BaseColumns;
 import android.util.Pair;
-import es.ugr.swad.swadroid.Constants;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import es.ugr.swad.swadroid.Constants;
 
 //import android.provider.Downloads;
 
@@ -55,7 +60,6 @@ import java.util.*;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class DownloadManager {
-    private static final String TAG = Constants.APP_TAG + " DownloadManager";
 
     /**
      * An identifier for a particular download, unique across the system.  Clients use this ID to
@@ -64,7 +68,8 @@ public class DownloadManager {
     public final static String COLUMN_ID = BaseColumns._ID;
 
     /**
-     * The client-supplied title for this download.  This will be displayed in system notifications.
+     * The client-supplied title for this download.  This will be displayed in system
+     * notifications.
      * Defaults to the empty string.
      */
     public final static String COLUMN_TITLE = "title";
@@ -81,7 +86,8 @@ public class DownloadManager {
     public final static String COLUMN_URI = "uri";
 
     /**
-     * Internet Media Type of the downloaded file.  If no value is provided upon creation, this will
+     * Internet Media Type of the downloaded file.  If no value is provided upon creation, this
+     * will
      * initially be null and will be filled in based on the server's response once the download has
      * started.
      *
@@ -137,12 +143,32 @@ public class DownloadManager {
      */
     public final static String COLUMN_LAST_MODIFIED_TIMESTAMP = "last_modified_timestamp";
 
+    private static final Set<String> LONG_COLUMNS = new HashSet<String>(
+            Arrays.asList(COLUMN_ID, COLUMN_TOTAL_SIZE_BYTES, COLUMN_STATUS, COLUMN_REASON,
+                    COLUMN_BYTES_DOWNLOADED_SO_FAR, COLUMN_LAST_MODIFIED_TIMESTAMP));
+
     /**
      * The URI to the corresponding entry in MediaProvider for this downloaded entry. It is
      * used to delete the entries from MediaProvider database when it is deleted from the
      * downloaded list.
      */
     public static final String COLUMN_MEDIAPROVIDER_URI = "mediaprovider_uri";
+
+    // this array must contain all public columns
+    private static final String[] COLUMNS = new String[]{
+            COLUMN_ID,
+            COLUMN_MEDIAPROVIDER_URI,
+            COLUMN_TITLE,
+            COLUMN_DESCRIPTION,
+            COLUMN_URI,
+            COLUMN_MEDIA_TYPE,
+            COLUMN_TOTAL_SIZE_BYTES,
+            COLUMN_LOCAL_URI,
+            COLUMN_STATUS,
+            COLUMN_REASON,
+            COLUMN_BYTES_DOWNLOADED_SO_FAR,
+            COLUMN_LAST_MODIFIED_TIMESTAMP
+    };
 
     /**
      * Value of {@link #COLUMN_STATUS} when the download is waiting to start.
@@ -168,7 +194,6 @@ public class DownloadManager {
      * Value of {@link #COLUMN_STATUS} when the download has failed (and will not be retried).
      */
     public final static int STATUS_FAILED = 1 << 4;
-
 
     /**
      * Value of COLUMN_ERROR_CODE when the download has completed with an error that doesn't fit
@@ -265,457 +290,35 @@ public class DownloadManager {
     public final static String ACTION_VIEW_DOWNLOADS = "android.intent.action.VIEW_DOWNLOADS";
 
     /**
-     * Intent extra included with {@link #ACTION_DOWNLOAD_COMPLETE} intents, indicating the ID (as a
+     * Intent extra included with {@link #ACTION_DOWNLOAD_COMPLETE} intents, indicating the ID (as
+     * a
      * long) of the download that just completed.
      */
     public static final String EXTRA_DOWNLOAD_ID = "extra_download_id";
 
-    // this array must contain all public columns
-    private static final String[] COLUMNS = new String[] {
-        COLUMN_ID,
-        COLUMN_MEDIAPROVIDER_URI,
-        COLUMN_TITLE,
-        COLUMN_DESCRIPTION,
-        COLUMN_URI,
-        COLUMN_MEDIA_TYPE,
-        COLUMN_TOTAL_SIZE_BYTES,
-        COLUMN_LOCAL_URI,
-        COLUMN_STATUS,
-        COLUMN_REASON,
-        COLUMN_BYTES_DOWNLOADED_SO_FAR,
-        COLUMN_LAST_MODIFIED_TIMESTAMP
-    };
+    private static final String TAG = Constants.APP_TAG + " DownloadManager";
 
     // columns to request from DownloadProvider
-    private static final String[] UNDERLYING_COLUMNS = new String[] {
-        Downloads.Impl._ID,
-        Downloads.Impl.COLUMN_MEDIAPROVIDER_URI,
-        Downloads.COLUMN_TITLE,
-        Downloads.COLUMN_DESCRIPTION,
-        Downloads.COLUMN_URI,
-        Downloads.COLUMN_MIME_TYPE,
-        Downloads.COLUMN_TOTAL_BYTES,
-        Downloads.COLUMN_STATUS,
-        Downloads.COLUMN_CURRENT_BYTES,
-        Downloads.COLUMN_LAST_MODIFICATION,
-        Downloads.COLUMN_DESTINATION,
-        Downloads.Impl.COLUMN_FILE_NAME_HINT,
-        Downloads.Impl._DATA,
+    private static final String[] UNDERLYING_COLUMNS = new String[]{
+            Downloads.Impl._ID,
+            Downloads.Impl.COLUMN_MEDIAPROVIDER_URI,
+            Downloads.COLUMN_TITLE,
+            Downloads.COLUMN_DESCRIPTION,
+            Downloads.COLUMN_URI,
+            Downloads.COLUMN_MIME_TYPE,
+            Downloads.COLUMN_TOTAL_BYTES,
+            Downloads.COLUMN_STATUS,
+            Downloads.COLUMN_CURRENT_BYTES,
+            Downloads.COLUMN_LAST_MODIFICATION,
+            Downloads.COLUMN_DESTINATION,
+            Downloads.Impl.COLUMN_FILE_NAME_HINT,
+            Downloads.Impl._DATA,
     };
 
-    private static final Set<String> LONG_COLUMNS = new HashSet<String>(
-            Arrays.asList(COLUMN_ID, COLUMN_TOTAL_SIZE_BYTES, COLUMN_STATUS, COLUMN_REASON,
-                          COLUMN_BYTES_DOWNLOADED_SO_FAR, COLUMN_LAST_MODIFIED_TIMESTAMP));
-
-    /**
-     * This class contains all the information necessary to request a new download. The URI is the
-     * only required parameter.
-     *
-     * Note that the default download destination is a shared volume where the system might delete
-     * your file if it needs to reclaim space for system use. If this is a problem, use a location
-     * on external storage (see {@link #setDestinationUri(Uri)}.
-     */
-    public static class Request {
-        /**
-         * Bit flag for {@link #setAllowedNetworkTypes} corresponding to
-         * {@link ConnectivityManager#TYPE_MOBILE}.
-         */
-        public static final int NETWORK_MOBILE = 1 << 0;
-
-        /**
-         * Bit flag for {@link #setAllowedNetworkTypes} corresponding to
-         * {@link ConnectivityManager#TYPE_WIFI}.
-         */
-        public static final int NETWORK_WIFI = 1 << 1;
-
-        private Uri mUri;
-        private Uri mDestinationUri;
-        private List<Pair<String, String>> mRequestHeaders = new ArrayList<Pair<String, String>>();
-        private CharSequence mTitle;
-        private CharSequence mDescription;
-        private boolean mShowNotification = true;
-        private String mMimeType;
-        private boolean mRoamingAllowed = true;
-        private int mAllowedNetworkTypes = ~0; // default to all network types allowed
-        private boolean mIsVisibleInDownloadsUi = true;
-
-        /**
-         * @param uri the HTTP URI to download.
-         */
-        public Request(Uri uri) {
-            if (uri == null) {
-                throw new NullPointerException();
-            }
-            String scheme = uri.getScheme();
-            if (scheme == null || !(scheme.equals("http") ||scheme.equals("https"))) {
-                throw new IllegalArgumentException("Can only download HTTP URIs: " + uri);
-            }
-            mUri = uri;
-        }
-
-        /**
-         * Set the local destination for the downloaded file. Must be a file URI to a path on
-         * external storage, and the calling application must have the WRITE_EXTERNAL_STORAGE
-         * permission.
-         *
-         * By default, downloads are saved to a generated filename in the shared download cache and
-         * may be deleted by the system at any time to reclaim space.
-         *
-         * @return this object
-         */
-        public Request setDestinationUri(Uri uri) {
-            mDestinationUri = uri;
-            return this;
-        }
-
-        /**
-         * Set the local destination for the downloaded file to a path within the application's
-         * external files directory (as returned by {@link Context#getExternalFilesDir(String)}.
-         *
-         * @param context the {@link Context} to use in determining the external files directory
-         * @param dirType the directory type to pass to {@link Context#getExternalFilesDir(String)}
-         * @param subPath the path within the external directory, including the destination filename
-         * @return this object
-         */
-        public Request setDestinationInExternalFilesDir(Context context, String dirType,
-                String subPath) {
-            setDestinationFromBase(context.getExternalFilesDir(dirType), subPath);
-            return this;
-        }
-
-        /**
-         * Set the local destination for the downloaded file to a path within the public external
-         * storage directory (as returned by
-         * {@link Environment#getExternalStoragePublicDirectory(String)}.
-         *
-         * @param dirType the directory type to pass to
-         *        {@link Environment#getExternalStoragePublicDirectory(String)}
-         * @param subPath the path within the external directory, including the destination filename
-         * @return this object
-         */
-        public Request setDestinationInExternalPublicDir(String dirType, String subPath) {
-            setDestinationFromBase(Environment.getExternalStoragePublicDirectory(dirType), subPath);
-            return this;
-        }
-
-        private void setDestinationFromBase(File base, String subPath) {
-            if (subPath == null) {
-                throw new NullPointerException("subPath cannot be null");
-            }
-            mDestinationUri = Uri.withAppendedPath(Uri.fromFile(base), subPath);
-        }
-
-        /**
-         * Add an HTTP header to be included with the download request.  The header will be added to
-         * the end of the list.
-         * @param header HTTP header name
-         * @param value header value
-         * @return this object
-         * @see <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2">HTTP/1.1
-         *      Message Headers</a>
-         */
-        public Request addRequestHeader(String header, String value) {
-            if (header == null) {
-                throw new NullPointerException("header cannot be null");
-            }
-            if (header.contains(":")) {
-                throw new IllegalArgumentException("header may not contain ':'");
-            }
-            if (value == null) {
-                value = "";
-            }
-            mRequestHeaders.add(Pair.create(header, value));
-            return this;
-        }
-
-        /**
-         * Set the title of this download, to be displayed in notifications (if enabled).  If no
-         * title is given, a default one will be assigned based on the download filename, once the
-         * download starts.
-         * @return this object
-         */
-        public Request setTitle(CharSequence title) {
-            mTitle = title;
-            return this;
-        }
-
-        /**
-         * Set a description of this download, to be displayed in notifications (if enabled)
-         * @return this object
-         */
-        public Request setDescription(CharSequence description) {
-            mDescription = description;
-            return this;
-        }
-
-        /**
-         * Set the MIME content type of this download.  This will override the content type declared
-         * in the server's response.
-         * @see <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.7">HTTP/1.1
-         *      Media Types</a>
-         * @return this object
-         */
-        public Request setMimeType(String mimeType) {
-            mMimeType = mimeType;
-            return this;
-        }
-
-        /**
-         * Control whether a system notification is posted by the download manager while this
-         * download is running. If enabled, the download manager posts notifications about downloads
-         * through the system {@link android.app.NotificationManager}. By default, a notification is
-         * shown.
-         *
-         * If set to false, this requires the permission
-         * android.permission.DOWNLOAD_WITHOUT_NOTIFICATION.
-         *
-         * @param show whether the download manager should show a notification for this download.
-         * @return this object
-         */
-        public Request setShowRunningNotification(boolean show) {
-            mShowNotification = show;
-            return this;
-        }
-
-        /**
-         * Restrict the types of networks over which this download may proceed.  By default, all
-         * network types are allowed.
-         * @param flags any combination of the NETWORK_* bit flags.
-         * @return this object
-         */
-        public Request setAllowedNetworkTypes(int flags) {
-            mAllowedNetworkTypes = flags;
-            return this;
-        }
-
-        /**
-         * Set whether this download may proceed over a roaming connection.  By default, roaming is
-         * allowed.
-         * @param allowed whether to allow a roaming connection to be used
-         * @return this object
-         */
-        public Request setAllowedOverRoaming(boolean allowed) {
-            mRoamingAllowed = allowed;
-            return this;
-        }
-
-        /**
-         * Set whether this download should be displayed in the system's Downloads UI. True by
-         * default.
-         * @param isVisible whether to display this download in the Downloads UI
-         * @return this object
-         */
-        public Request setVisibleInDownloadsUi(boolean isVisible) {
-            mIsVisibleInDownloadsUi = isVisible;
-            return this;
-        }
-
-        /**
-         * @return ContentValues to be passed to DownloadProvider.insert()
-         */
-        ContentValues toContentValues(String packageName) {
-            ContentValues values = new ContentValues();
-            assert mUri != null;
-            values.put(Downloads.COLUMN_URI, mUri.toString());
-            values.put(Downloads.Impl.COLUMN_IS_PUBLIC_API, true);
-            values.put(Downloads.COLUMN_NOTIFICATION_PACKAGE, packageName);
-
-            if (mDestinationUri != null) {
-                values.put(Downloads.COLUMN_DESTINATION, Downloads.Impl.DESTINATION_FILE_URI);
-                values.put(Downloads.COLUMN_FILE_NAME_HINT, mDestinationUri.toString());
-            } else {
-                values.put(Downloads.COLUMN_DESTINATION,
-                           Downloads.DESTINATION_CACHE_PARTITION_PURGEABLE);
-            }
-
-            if (!mRequestHeaders.isEmpty()) {
-                encodeHttpHeaders(values);
-            }
-
-            putIfNonNull(values, Downloads.COLUMN_TITLE, mTitle);
-            putIfNonNull(values, Downloads.COLUMN_DESCRIPTION, mDescription);
-            putIfNonNull(values, Downloads.COLUMN_MIME_TYPE, mMimeType);
-
-            values.put(Downloads.COLUMN_VISIBILITY,
-                    mShowNotification ? Downloads.VISIBILITY_VISIBLE
-                            : Downloads.VISIBILITY_HIDDEN);
-
-            values.put(Downloads.Impl.COLUMN_ALLOWED_NETWORK_TYPES, mAllowedNetworkTypes);
-            values.put(Downloads.Impl.COLUMN_ALLOW_ROAMING, mRoamingAllowed);
-            values.put(Downloads.Impl.COLUMN_IS_VISIBLE_IN_DOWNLOADS_UI, mIsVisibleInDownloadsUi);
-
-            return values;
-        }
-
-        private void encodeHttpHeaders(ContentValues values) {
-            int index = 0;
-            for (Pair<String, String> header : mRequestHeaders) {
-                String headerString = header.first + ": " + header.second;
-                values.put(Downloads.Impl.RequestHeaders.INSERT_KEY_PREFIX + index, headerString);
-                index++;
-            }
-        }
-
-        private void putIfNonNull(ContentValues contentValues, String key, Object value) {
-            if (value != null) {
-                contentValues.put(key, value.toString());
-            }
-        }
-    }
-
-    /**
-     * This class may be used to filter download manager queries.
-     */
-    public static class Query {
-        /**
-         * Constant for use with {@link #orderBy}
-         * @hide
-         */
-        public static final int ORDER_ASCENDING = 1;
-
-        /**
-         * Constant for use with {@link #orderBy}
-         * @hide
-         */
-        public static final int ORDER_DESCENDING = 2;
-
-        private long[] mIds = null;
-        private Integer mStatusFlags = null;
-        private String mOrderByColumn = Downloads.COLUMN_LAST_MODIFICATION;
-        private int mOrderDirection = ORDER_DESCENDING;
-        private boolean mOnlyIncludeVisibleInDownloadsUi = false;
-
-        /**
-         * Include only the downloads with the given IDs.
-         * @return this object
-         */
-        public Query setFilterById(long... ids) {
-            mIds = ids;
-            return this;
-        }
-
-        /**
-         * Include only downloads with status matching any the given status flags.
-         * @param flags any combination of the STATUS_* bit flags
-         * @return this object
-         */
-        public Query setFilterByStatus(int flags) {
-            mStatusFlags = flags;
-            return this;
-        }
-
-        /**
-         * Controls whether this query includes downloads not visible in the system's Downloads UI.
-         * @param value if true, this query will only include downloads that should be displayed in
-         *            the system's Downloads UI; if false (the default), this query will include
-         *            both visible and invisible downloads.
-         * @return this object
-         * @hide
-         */
-        public Query setOnlyIncludeVisibleInDownloadsUi(boolean value) {
-            mOnlyIncludeVisibleInDownloadsUi = value;
-            return this;
-        }
-
-        /**
-         * Change the sort order of the returned Cursor.
-         *
-         * @param column one of the COLUMN_* constants; currently, only
-         *         {@link #COLUMN_LAST_MODIFIED_TIMESTAMP} and {@link #COLUMN_TOTAL_SIZE_BYTES} are
-         *         supported.
-         * @param direction either {@link #ORDER_ASCENDING} or {@link #ORDER_DESCENDING}
-         * @return this object
-         * @hide
-         */
-        public Query orderBy(String column, int direction) {
-            if (direction != ORDER_ASCENDING && direction != ORDER_DESCENDING) {
-                throw new IllegalArgumentException("Invalid direction: " + direction);
-            }
-
-            if (column.equals(COLUMN_LAST_MODIFIED_TIMESTAMP)) {
-                mOrderByColumn = Downloads.COLUMN_LAST_MODIFICATION;
-            } else if (column.equals(COLUMN_TOTAL_SIZE_BYTES)) {
-                mOrderByColumn = Downloads.COLUMN_TOTAL_BYTES;
-            } else {
-                throw new IllegalArgumentException("Cannot order by " + column);
-            }
-            mOrderDirection = direction;
-            return this;
-        }
-
-        /**
-         * Run this query using the given ContentResolver.
-         * @param projection the projection to pass to ContentResolver.query()
-         * @return the Cursor returned by ContentResolver.query()
-         */
-        Cursor runQuery(ContentResolver resolver, String[] projection, Uri baseUri) {
-            Uri uri = baseUri;
-            List<String> selectionParts = new ArrayList<String>();
-            String[] selectionArgs = null;
-
-            if (mIds != null) {
-                selectionParts.add(getWhereClauseForIds(mIds));
-                selectionArgs = getWhereArgsForIds(mIds);
-            }
-
-            if (mStatusFlags != null) {
-                List<String> parts = new ArrayList<String>();
-                if ((mStatusFlags & STATUS_PENDING) != 0) {
-                    parts.add(statusClause("=", Downloads.STATUS_PENDING));
-                }
-                if ((mStatusFlags & STATUS_RUNNING) != 0) {
-                    parts.add(statusClause("=", Downloads.STATUS_RUNNING));
-                }
-                if ((mStatusFlags & STATUS_PAUSED) != 0) {
-                    parts.add(statusClause("=", Downloads.Impl.STATUS_PAUSED_BY_APP));
-                    parts.add(statusClause("=", Downloads.Impl.STATUS_WAITING_TO_RETRY));
-                    parts.add(statusClause("=", Downloads.Impl.STATUS_WAITING_FOR_NETWORK));
-                    parts.add(statusClause("=", Downloads.Impl.STATUS_QUEUED_FOR_WIFI));
-                }
-                if ((mStatusFlags & STATUS_SUCCESSFUL) != 0) {
-                    parts.add(statusClause("=", Downloads.STATUS_SUCCESS));
-                }
-                if ((mStatusFlags & STATUS_FAILED) != 0) {
-                    parts.add("(" + statusClause(">=", 400)
-                              + " AND " + statusClause("<", 600) + ")");
-                }
-                selectionParts.add(joinStrings(" OR ", parts));
-            }
-
-            if (mOnlyIncludeVisibleInDownloadsUi) {
-                selectionParts.add(Downloads.Impl.COLUMN_IS_VISIBLE_IN_DOWNLOADS_UI + " != '0'");
-            }
-
-            // only return rows which are not marked 'deleted = 1'
-            selectionParts.add(Downloads.Impl.COLUMN_DELETED + " != '1'");
-
-            String selection = joinStrings(" AND ", selectionParts);
-            String orderDirection = (mOrderDirection == ORDER_ASCENDING ? "ASC" : "DESC");
-            String orderBy = mOrderByColumn + " " + orderDirection;
-
-            return resolver.query(uri, projection, selection, selectionArgs, orderBy);
-        }
-
-        private String joinStrings(String joiner, Iterable<String> parts) {
-            StringBuilder builder = new StringBuilder();
-            boolean first = true;
-            for (String part : parts) {
-                if (!first) {
-                    builder.append(joiner);
-                }
-                builder.append(part);
-                first = false;
-            }
-            return builder.toString();
-        }
-
-        private String statusClause(String operator, int value) {
-            return Downloads.COLUMN_STATUS + operator + "'" + value + "'";
-        }
-    }
-
     private ContentResolver mResolver;
+
     private String mPackageName;
+
     private Uri mBaseUri = Downloads.Impl.CONTENT_URI;
 
     /**
@@ -727,8 +330,37 @@ public class DownloadManager {
     }
 
     /**
+     * Get a parameterized SQL WHERE clause to select a bunch of IDs.
+     */
+    static String getWhereClauseForIds(long[] ids) {
+        StringBuilder whereClause = new StringBuilder();
+        whereClause.append("(");
+        for (int i = 0; i < ids.length; i++) {
+            if (i > 0) {
+                whereClause.append("OR ");
+            }
+            whereClause.append(Downloads.Impl._ID);
+            whereClause.append(" = ? ");
+        }
+        whereClause.append(")");
+        return whereClause.toString();
+    }
+
+    /**
+     * Get the selection args for a clause returned by {@link #getWhereClauseForIds(long[])}.
+     */
+    static String[] getWhereArgsForIds(long[] ids) {
+        String[] whereArgs = new String[ids.length];
+        for (int i = 0; i < ids.length; i++) {
+            whereArgs[i] = Long.toString(ids[i]);
+        }
+        return whereArgs;
+    }
+
+    /**
      * Makes this object access the download provider through /all_downloads URIs rather than
      * /my_downloads URIs, for clients that have permission to do so.
+     *
      * @hide
      */
     public void setAccessAllDownloads(boolean accessAllDownloads) {
@@ -775,7 +407,8 @@ public class DownloadManager {
     }
 
     /**
-     * Cancel downloads and remove them from the download manager.  Each download will be stopped if
+     * Cancel downloads and remove them from the download manager.  Each download will be stopped
+     * if
      * it was running, and it will no longer be accessible through the download manager.  If a file
      * was already downloaded to external storage, it will not be deleted.
      *
@@ -792,6 +425,7 @@ public class DownloadManager {
 
     /**
      * Query the download manager about downloads that have been requested.
+     *
      * @param query parameters specifying filters for this query
      * @return a Cursor over the result set of downloads, with columns consisting of all the
      * COLUMN_* constants.
@@ -806,6 +440,7 @@ public class DownloadManager {
 
     /**
      * Open a downloaded file for reading.  The download must have completed.
+     *
      * @param id the ID of the download
      * @return a read-only {@link ParcelFileDescriptor}
      * @throws FileNotFoundException if the destination file does not already exist
@@ -817,6 +452,7 @@ public class DownloadManager {
     /**
      * Restart the given downloads, which must have already completed (successfully or not).  This
      * method will only work when called from within the download manager's process.
+     *
      * @param ids the IDs of the downloads
      * @hide
      */
@@ -850,40 +486,456 @@ public class DownloadManager {
     }
 
     /**
-     * Get a parameterized SQL WHERE clause to select a bunch of IDs.
+     * This class contains all the information necessary to request a new download. The URI is the
+     * only required parameter.
+     *
+     * Note that the default download destination is a shared volume where the system might delete
+     * your file if it needs to reclaim space for system use. If this is a problem, use a location
+     * on external storage (see {@link #setDestinationUri(Uri)}.
      */
-    static String getWhereClauseForIds(long[] ids) {
-        StringBuilder whereClause = new StringBuilder();
-        whereClause.append("(");
-        for (int i = 0; i < ids.length; i++) {
-            if (i > 0) {
-                whereClause.append("OR ");
+    public static class Request {
+
+        /**
+         * Bit flag for {@link #setAllowedNetworkTypes} corresponding to
+         * {@link ConnectivityManager#TYPE_MOBILE}.
+         */
+        public static final int NETWORK_MOBILE = 1 << 0;
+
+        /**
+         * Bit flag for {@link #setAllowedNetworkTypes} corresponding to
+         * {@link ConnectivityManager#TYPE_WIFI}.
+         */
+        public static final int NETWORK_WIFI = 1 << 1;
+
+        private Uri mUri;
+
+        private Uri mDestinationUri;
+
+        private List<Pair<String, String>> mRequestHeaders = new ArrayList<Pair<String, String>>();
+
+        private CharSequence mTitle;
+
+        private CharSequence mDescription;
+
+        private boolean mShowNotification = true;
+
+        private String mMimeType;
+
+        private boolean mRoamingAllowed = true;
+
+        private int mAllowedNetworkTypes = ~0; // default to all network types allowed
+
+        private boolean mIsVisibleInDownloadsUi = true;
+
+        /**
+         * @param uri the HTTP URI to download.
+         */
+        public Request(Uri uri) {
+            if (uri == null) {
+                throw new NullPointerException();
             }
-            whereClause.append(Downloads.Impl._ID);
-            whereClause.append(" = ? ");
+            String scheme = uri.getScheme();
+            if (scheme == null || !(scheme.equals("http") || scheme.equals("https"))) {
+                throw new IllegalArgumentException("Can only download HTTP URIs: " + uri);
+            }
+            mUri = uri;
         }
-        whereClause.append(")");
-        return whereClause.toString();
+
+        /**
+         * Set the local destination for the downloaded file. Must be a file URI to a path on
+         * external storage, and the calling application must have the WRITE_EXTERNAL_STORAGE
+         * permission.
+         *
+         * By default, downloads are saved to a generated filename in the shared download cache and
+         * may be deleted by the system at any time to reclaim space.
+         *
+         * @return this object
+         */
+        public Request setDestinationUri(Uri uri) {
+            mDestinationUri = uri;
+            return this;
+        }
+
+        /**
+         * Set the local destination for the downloaded file to a path within the application's
+         * external files directory (as returned by {@link Context#getExternalFilesDir(String)}.
+         *
+         * @param context the {@link Context} to use in determining the external files directory
+         * @param dirType the directory type to pass to {@link Context#getExternalFilesDir(String)}
+         * @param subPath the path within the external directory, including the destination
+         *                filename
+         * @return this object
+         */
+        public Request setDestinationInExternalFilesDir(Context context, String dirType,
+                String subPath) {
+            setDestinationFromBase(context.getExternalFilesDir(dirType), subPath);
+            return this;
+        }
+
+        /**
+         * Set the local destination for the downloaded file to a path within the public external
+         * storage directory (as returned by
+         * {@link Environment#getExternalStoragePublicDirectory(String)}.
+         *
+         * @param dirType the directory type to pass to
+         *                {@link Environment#getExternalStoragePublicDirectory(String)}
+         * @param subPath the path within the external directory, including the destination
+         *                filename
+         * @return this object
+         */
+        public Request setDestinationInExternalPublicDir(String dirType, String subPath) {
+            setDestinationFromBase(Environment.getExternalStoragePublicDirectory(dirType), subPath);
+            return this;
+        }
+
+        private void setDestinationFromBase(File base, String subPath) {
+            if (subPath == null) {
+                throw new NullPointerException("subPath cannot be null");
+            }
+            mDestinationUri = Uri.withAppendedPath(Uri.fromFile(base), subPath);
+        }
+
+        /**
+         * Add an HTTP header to be included with the download request.  The header will be added
+         * to
+         * the end of the list.
+         *
+         * @param header HTTP header name
+         * @param value  header value
+         * @return this object
+         * @see <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2">HTTP/1.1
+         * Message Headers</a>
+         */
+        public Request addRequestHeader(String header, String value) {
+            if (header == null) {
+                throw new NullPointerException("header cannot be null");
+            }
+            if (header.contains(":")) {
+                throw new IllegalArgumentException("header may not contain ':'");
+            }
+            if (value == null) {
+                value = "";
+            }
+            mRequestHeaders.add(Pair.create(header, value));
+            return this;
+        }
+
+        /**
+         * Set the title of this download, to be displayed in notifications (if enabled).  If no
+         * title is given, a default one will be assigned based on the download filename, once the
+         * download starts.
+         *
+         * @return this object
+         */
+        public Request setTitle(CharSequence title) {
+            mTitle = title;
+            return this;
+        }
+
+        /**
+         * Set a description of this download, to be displayed in notifications (if enabled)
+         *
+         * @return this object
+         */
+        public Request setDescription(CharSequence description) {
+            mDescription = description;
+            return this;
+        }
+
+        /**
+         * Set the MIME content type of this download.  This will override the content type
+         * declared
+         * in the server's response.
+         *
+         * @return this object
+         * @see <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.7">HTTP/1.1
+         * Media Types</a>
+         */
+        public Request setMimeType(String mimeType) {
+            mMimeType = mimeType;
+            return this;
+        }
+
+        /**
+         * Control whether a system notification is posted by the download manager while this
+         * download is running. If enabled, the download manager posts notifications about
+         * downloads
+         * through the system {@link android.app.NotificationManager}. By default, a notification
+         * is
+         * shown.
+         *
+         * If set to false, this requires the permission
+         * android.permission.DOWNLOAD_WITHOUT_NOTIFICATION.
+         *
+         * @param show whether the download manager should show a notification for this download.
+         * @return this object
+         */
+        public Request setShowRunningNotification(boolean show) {
+            mShowNotification = show;
+            return this;
+        }
+
+        /**
+         * Restrict the types of networks over which this download may proceed.  By default, all
+         * network types are allowed.
+         *
+         * @param flags any combination of the NETWORK_* bit flags.
+         * @return this object
+         */
+        public Request setAllowedNetworkTypes(int flags) {
+            mAllowedNetworkTypes = flags;
+            return this;
+        }
+
+        /**
+         * Set whether this download may proceed over a roaming connection.  By default, roaming is
+         * allowed.
+         *
+         * @param allowed whether to allow a roaming connection to be used
+         * @return this object
+         */
+        public Request setAllowedOverRoaming(boolean allowed) {
+            mRoamingAllowed = allowed;
+            return this;
+        }
+
+        /**
+         * Set whether this download should be displayed in the system's Downloads UI. True by
+         * default.
+         *
+         * @param isVisible whether to display this download in the Downloads UI
+         * @return this object
+         */
+        public Request setVisibleInDownloadsUi(boolean isVisible) {
+            mIsVisibleInDownloadsUi = isVisible;
+            return this;
+        }
+
+        /**
+         * @return ContentValues to be passed to DownloadProvider.insert()
+         */
+        ContentValues toContentValues(String packageName) {
+            ContentValues values = new ContentValues();
+            assert mUri != null;
+            values.put(Downloads.COLUMN_URI, mUri.toString());
+            values.put(Downloads.Impl.COLUMN_IS_PUBLIC_API, true);
+            values.put(Downloads.COLUMN_NOTIFICATION_PACKAGE, packageName);
+
+            if (mDestinationUri != null) {
+                values.put(Downloads.COLUMN_DESTINATION, Downloads.Impl.DESTINATION_FILE_URI);
+                values.put(Downloads.COLUMN_FILE_NAME_HINT, mDestinationUri.toString());
+            } else {
+                values.put(Downloads.COLUMN_DESTINATION,
+                        Downloads.DESTINATION_CACHE_PARTITION_PURGEABLE);
+            }
+
+            if (!mRequestHeaders.isEmpty()) {
+                encodeHttpHeaders(values);
+            }
+
+            putIfNonNull(values, Downloads.COLUMN_TITLE, mTitle);
+            putIfNonNull(values, Downloads.COLUMN_DESCRIPTION, mDescription);
+            putIfNonNull(values, Downloads.COLUMN_MIME_TYPE, mMimeType);
+
+            values.put(Downloads.COLUMN_VISIBILITY,
+                    mShowNotification ? Downloads.VISIBILITY_VISIBLE
+                            : Downloads.VISIBILITY_HIDDEN);
+
+            values.put(Downloads.Impl.COLUMN_ALLOWED_NETWORK_TYPES, mAllowedNetworkTypes);
+            values.put(Downloads.Impl.COLUMN_ALLOW_ROAMING, mRoamingAllowed);
+            values.put(Downloads.Impl.COLUMN_IS_VISIBLE_IN_DOWNLOADS_UI, mIsVisibleInDownloadsUi);
+
+            return values;
+        }
+
+        private void encodeHttpHeaders(ContentValues values) {
+            int index = 0;
+            for (Pair<String, String> header : mRequestHeaders) {
+                String headerString = header.first + ": " + header.second;
+                values.put(Downloads.Impl.RequestHeaders.INSERT_KEY_PREFIX + index, headerString);
+                index++;
+            }
+        }
+
+        private void putIfNonNull(ContentValues contentValues, String key, Object value) {
+            if (value != null) {
+                contentValues.put(key, value.toString());
+            }
+        }
     }
 
     /**
-     * Get the selection args for a clause returned by {@link #getWhereClauseForIds(long[])}.
+     * This class may be used to filter download manager queries.
      */
-    static String[] getWhereArgsForIds(long[] ids) {
-        String[] whereArgs = new String[ids.length];
-        for (int i = 0; i < ids.length; i++) {
-            whereArgs[i] = Long.toString(ids[i]);
+    public static class Query {
+
+        /**
+         * Constant for use with {@link #orderBy}
+         *
+         * @hide
+         */
+        public static final int ORDER_ASCENDING = 1;
+
+        /**
+         * Constant for use with {@link #orderBy}
+         *
+         * @hide
+         */
+        public static final int ORDER_DESCENDING = 2;
+
+        private long[] mIds = null;
+
+        private Integer mStatusFlags = null;
+
+        private String mOrderByColumn = Downloads.COLUMN_LAST_MODIFICATION;
+
+        private int mOrderDirection = ORDER_DESCENDING;
+
+        private boolean mOnlyIncludeVisibleInDownloadsUi = false;
+
+        /**
+         * Include only the downloads with the given IDs.
+         *
+         * @return this object
+         */
+        public Query setFilterById(long... ids) {
+            mIds = ids;
+            return this;
         }
-        return whereArgs;
+
+        /**
+         * Include only downloads with status matching any the given status flags.
+         *
+         * @param flags any combination of the STATUS_* bit flags
+         * @return this object
+         */
+        public Query setFilterByStatus(int flags) {
+            mStatusFlags = flags;
+            return this;
+        }
+
+        /**
+         * Controls whether this query includes downloads not visible in the system's Downloads UI.
+         *
+         * @param value if true, this query will only include downloads that should be displayed in
+         *              the system's Downloads UI; if false (the default), this query will include
+         *              both visible and invisible downloads.
+         * @return this object
+         * @hide
+         */
+        public Query setOnlyIncludeVisibleInDownloadsUi(boolean value) {
+            mOnlyIncludeVisibleInDownloadsUi = value;
+            return this;
+        }
+
+        /**
+         * Change the sort order of the returned Cursor.
+         *
+         * @param column    one of the COLUMN_* constants; currently, only
+         *                  {@link #COLUMN_LAST_MODIFIED_TIMESTAMP} and {@link
+         *                  #COLUMN_TOTAL_SIZE_BYTES} are
+         *                  supported.
+         * @param direction either {@link #ORDER_ASCENDING} or {@link #ORDER_DESCENDING}
+         * @return this object
+         * @hide
+         */
+        public Query orderBy(String column, int direction) {
+            if (direction != ORDER_ASCENDING && direction != ORDER_DESCENDING) {
+                throw new IllegalArgumentException("Invalid direction: " + direction);
+            }
+
+            if (column.equals(COLUMN_LAST_MODIFIED_TIMESTAMP)) {
+                mOrderByColumn = Downloads.COLUMN_LAST_MODIFICATION;
+            } else if (column.equals(COLUMN_TOTAL_SIZE_BYTES)) {
+                mOrderByColumn = Downloads.COLUMN_TOTAL_BYTES;
+            } else {
+                throw new IllegalArgumentException("Cannot order by " + column);
+            }
+            mOrderDirection = direction;
+            return this;
+        }
+
+        /**
+         * Run this query using the given ContentResolver.
+         *
+         * @param projection the projection to pass to ContentResolver.query()
+         * @return the Cursor returned by ContentResolver.query()
+         */
+        Cursor runQuery(ContentResolver resolver, String[] projection, Uri baseUri) {
+            Uri uri = baseUri;
+            List<String> selectionParts = new ArrayList<String>();
+            String[] selectionArgs = null;
+
+            if (mIds != null) {
+                selectionParts.add(getWhereClauseForIds(mIds));
+                selectionArgs = getWhereArgsForIds(mIds);
+            }
+
+            if (mStatusFlags != null) {
+                List<String> parts = new ArrayList<String>();
+                if ((mStatusFlags & STATUS_PENDING) != 0) {
+                    parts.add(statusClause("=", Downloads.STATUS_PENDING));
+                }
+                if ((mStatusFlags & STATUS_RUNNING) != 0) {
+                    parts.add(statusClause("=", Downloads.STATUS_RUNNING));
+                }
+                if ((mStatusFlags & STATUS_PAUSED) != 0) {
+                    parts.add(statusClause("=", Downloads.Impl.STATUS_PAUSED_BY_APP));
+                    parts.add(statusClause("=", Downloads.Impl.STATUS_WAITING_TO_RETRY));
+                    parts.add(statusClause("=", Downloads.Impl.STATUS_WAITING_FOR_NETWORK));
+                    parts.add(statusClause("=", Downloads.Impl.STATUS_QUEUED_FOR_WIFI));
+                }
+                if ((mStatusFlags & STATUS_SUCCESSFUL) != 0) {
+                    parts.add(statusClause("=", Downloads.STATUS_SUCCESS));
+                }
+                if ((mStatusFlags & STATUS_FAILED) != 0) {
+                    parts.add("(" + statusClause(">=", 400)
+                            + " AND " + statusClause("<", 600) + ")");
+                }
+                selectionParts.add(joinStrings(" OR ", parts));
+            }
+
+            if (mOnlyIncludeVisibleInDownloadsUi) {
+                selectionParts.add(Downloads.Impl.COLUMN_IS_VISIBLE_IN_DOWNLOADS_UI + " != '0'");
+            }
+
+            // only return rows which are not marked 'deleted = 1'
+            selectionParts.add(Downloads.Impl.COLUMN_DELETED + " != '1'");
+
+            String selection = joinStrings(" AND ", selectionParts);
+            String orderDirection = (mOrderDirection == ORDER_ASCENDING ? "ASC" : "DESC");
+            String orderBy = mOrderByColumn + " " + orderDirection;
+
+            return resolver.query(uri, projection, selection, selectionArgs, orderBy);
+        }
+
+        private String joinStrings(String joiner, Iterable<String> parts) {
+            StringBuilder builder = new StringBuilder();
+            boolean first = true;
+            for (String part : parts) {
+                if (!first) {
+                    builder.append(joiner);
+                }
+                builder.append(part);
+                first = false;
+            }
+            return builder.toString();
+        }
+
+        private String statusClause(String operator, int value) {
+            return Downloads.COLUMN_STATUS + operator + "'" + value + "'";
+        }
     }
 
     /**
      * This class wraps a cursor returned by DownloadProvider -- the "underlying cursor" -- and
-     * presents a different set of columns, those defined in the DownloadManager.COLUMN_* constants.
+     * presents a different set of columns, those defined in the DownloadManager.COLUMN_*
+     * constants.
      * Some columns correspond directly to underlying values while others are computed from
      * underlying data.
      */
     private static class CursorTranslator extends CursorWrapper {
+
         private Uri mBaseUri;
 
         public CursorTranslator(Cursor cursor, Uri baseUri) {
@@ -910,7 +962,7 @@ public class DownloadManager {
             int numColumns = COLUMNS.length;
             if (columnIndex < 0 || columnIndex >= numColumns) {
                 throw new IllegalArgumentException("Invalid column index " + columnIndex + ", "
-                                                   + numColumns + " columns exist");
+                        + numColumns + " columns exist");
             }
             return COLUMNS[columnIndex];
         }

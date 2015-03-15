@@ -26,12 +26,15 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckedTextView;
 
 public class AnswerTypesArrayAdapter extends ArrayAdapter<CharSequence> {
+
     private final Context context;
+
     private final int textViewResourceId;
+
     private final String[] itemsNames;
 
     public AnswerTypesArrayAdapter(Context context, int resource, int resourceNames,
-                                   int textViewResourceId) {
+            int textViewResourceId) {
 
         super(context, textViewResourceId, context.getResources().getStringArray(resource));
         this.context = context;

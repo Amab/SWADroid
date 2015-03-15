@@ -18,10 +18,17 @@
  */
 package es.ugr.swad.swadroid.modules;
 
+import org.ksoap2.serialization.SoapObject;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADroidTracker;
@@ -29,11 +36,6 @@ import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
-import org.ksoap2.serialization.SoapObject;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
 
 /**
  * Groups module gets user's groups inside the current course
@@ -45,18 +47,21 @@ import java.util.Vector;
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  */
 public class Groups extends Module {
-    /**
-     * Groups counter
-     */
-    private int numGroups;
-    /**
-     * Course code
-     */
-    private long courseCode;
+
     /**
      * Groups tag name for Logcat
      */
     private static final String TAG = Constants.APP_TAG + " Groups";
+
+    /**
+     * Groups counter
+     */
+    private int numGroups;
+
+    /**
+     * Course code
+     */
+    private long courseCode;
 
     @Override
     protected void runConnection() {
@@ -80,7 +85,7 @@ public class Groups extends Module {
         super.onStart();
 
         SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
-        
+
         try {
             runConnection();
         } catch (Exception e) {
@@ -112,7 +117,7 @@ public class Groups extends Module {
 
     @Override
     protected void requestService() throws Exception {
-    	createRequest(SOAPClient.CLIENT_TYPE);
+        createRequest(SOAPClient.CLIENT_TYPE);
         addParam("wsKey", Login.getLoggedUser().getWsKey());
         addParam("courseCode", (int) courseCode);
         sendRequest(Group.class, false);
@@ -135,7 +140,8 @@ public class Groups extends Module {
                 int numStudents = Integer.parseInt(pii.getProperty("numStudents").toString());
                 int fileZones = Integer.parseInt(pii.getProperty("fileZones").toString());
                 int member = Integer.parseInt(pii.getProperty("member").toString());
-                Group g = new Group(id, groupName, groupTypeCode, maxStudents, open, numStudents, fileZones, member);
+                Group g = new Group(id, groupName, groupTypeCode, maxStudents, open, numStudents,
+                        fileZones, member);
 
                 groupsSWAD.add(g);
 

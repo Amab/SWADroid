@@ -19,9 +19,16 @@
 
 package es.ugr.swad.swadroid.modules.rollcall;
 
+import org.ksoap2.serialization.SoapObject;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
@@ -31,11 +38,6 @@ import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
-import org.ksoap2.serialization.SoapObject;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
 
 /**
  * Rollcall events download module.
@@ -43,18 +45,21 @@ import java.util.Vector;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class EventsDownload extends Module {
-    /**
-     * Number of events associated to the selected course
-     */
-    private int numEvents;
-    /**
-     * List of downloaded event codes
-     */
-    private List<Long> eventCodes;
+
     /**
      * Rollcall Events Download tag name for Logcat
      */
     private static final String TAG = Constants.APP_TAG + " EventsDownload";
+
+    /**
+     * Number of events associated to the selected course
+     */
+    private int numEvents;
+
+    /**
+     * List of downloaded event codes
+     */
+    private List<Long> eventCodes;
 
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
@@ -69,10 +74,11 @@ public class EventsDownload extends Module {
     @Override
     protected void onStart() {
         super.onStart();
-        
+
         try {
             if (isDebuggable) {
-                Log.d(TAG, "selectedCourseCode = " + Long.toString(Courses.getSelectedCourseCode()));
+                Log.d(TAG,
+                        "selectedCourseCode = " + Long.toString(Courses.getSelectedCourseCode()));
             }
             runConnection();
         } catch (Exception e) {
@@ -101,7 +107,8 @@ public class EventsDownload extends Module {
             for (int i = 0; i < numEvents; i++) {
                 SoapObject pii = (SoapObject) soap.getProperty(i);
 
-                long attendanceEventCode = Long.parseLong(pii.getProperty("attendanceEventCode").toString());
+                long attendanceEventCode = Long
+                        .parseLong(pii.getProperty("attendanceEventCode").toString());
                 boolean hidden = Utils.parseStringBool(pii.getProperty("hidden").toString());
                 String userSurname1 = pii.getProperty("userSurname1").toString();
                 String userSurname2 = pii.getProperty("userSurname2").toString();
@@ -109,18 +116,32 @@ public class EventsDownload extends Module {
                 String userPhoto = pii.getProperty("userPhoto").toString();
                 int startTime = Integer.parseInt(pii.getProperty("startTime").toString());
                 int endTime = Integer.parseInt(pii.getProperty("endTime").toString());
-                boolean commentsTeachersVisible = Utils.parseStringBool(pii.getProperty("commentsTeachersVisible").toString());
+                boolean commentsTeachersVisible = Utils
+                        .parseStringBool(pii.getProperty("commentsTeachersVisible").toString());
                 String title = pii.getProperty("title").toString();
                 String text = pii.getProperty("text").toString();
-                String groups = (pii.hasProperty("groups")? pii.getProperty("groups").toString() : "");
+                String groups = (pii.hasProperty("groups") ? pii.getProperty("groups").toString()
+                        : "");
 
-                if (userSurname1.equalsIgnoreCase(Constants.NULL_VALUE)) userSurname1 = "";
-                if (userSurname2.equalsIgnoreCase(Constants.NULL_VALUE)) userSurname2 = "";
-                if (userFirstName.equalsIgnoreCase(Constants.NULL_VALUE)) userFirstName = "";
-                if (userPhoto.equalsIgnoreCase(Constants.NULL_VALUE)) userPhoto = "";
+                if (userSurname1.equalsIgnoreCase(Constants.NULL_VALUE)) {
+                    userSurname1 = "";
+                }
+                if (userSurname2.equalsIgnoreCase(Constants.NULL_VALUE)) {
+                    userSurname2 = "";
+                }
+                if (userFirstName.equalsIgnoreCase(Constants.NULL_VALUE)) {
+                    userFirstName = "";
+                }
+                if (userPhoto.equalsIgnoreCase(Constants.NULL_VALUE)) {
+                    userPhoto = "";
+                }
 
-                if (title.equalsIgnoreCase(Constants.NULL_VALUE)) title = "";
-                if (text.equalsIgnoreCase(Constants.NULL_VALUE)) text = "";
+                if (title.equalsIgnoreCase(Constants.NULL_VALUE)) {
+                    title = "";
+                }
+                if (text.equalsIgnoreCase(Constants.NULL_VALUE)) {
+                    text = "";
+                }
 
                 //Inserts or updates event into database
                 dbHelper.insertEvent(new Event(attendanceEventCode, hidden, userSurname1,
@@ -156,7 +177,8 @@ public class EventsDownload extends Module {
         if (numEvents == 0) {
             Toast.makeText(this, R.string.noEventsAvailableMsg, Toast.LENGTH_LONG).show();
         } else {
-            String msg = String.valueOf(numEvents) + " " + getResources().getString(R.string.eventsUpdated);
+            String msg = String.valueOf(numEvents) + " " + getResources()
+                    .getString(R.string.eventsUpdated);
             Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
         }
         finish();
@@ -171,11 +193,13 @@ public class EventsDownload extends Module {
         List<Event> dbEvents = dbHelper.getEventsCourse(Courses.getSelectedCourseCode());
         int nEventsRemoved = 0;
 
-        if((dbEvents != null) && (dbEvents.size() > 0)) {
+        if ((dbEvents != null) && (dbEvents.size() > 0)) {
             for (Event e : dbEvents) {
                 if (!eventCodes.contains(e.getId())) {
-                    dbHelper.removeAllRows(DataBaseHelper.DB_TABLE_EVENTS_COURSES, "eventCode", e.getId());
-                    dbHelper.removeAllRows(DataBaseHelper.DB_TABLE_EVENTS_ATTENDANCES, "id", e.getId());
+                    dbHelper.removeAllRows(DataBaseHelper.DB_TABLE_EVENTS_COURSES, "eventCode",
+                            e.getId());
+                    dbHelper.removeAllRows(DataBaseHelper.DB_TABLE_EVENTS_ATTENDANCES, "id",
+                            e.getId());
                     nEventsRemoved++;
                 }
             }

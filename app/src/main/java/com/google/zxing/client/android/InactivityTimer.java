@@ -22,7 +22,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
-import java.util.concurrent.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Finishes an activity after a period of inactivity if the device is on battery power.
@@ -33,9 +38,12 @@ final class InactivityTimer {
 
     private final ScheduledExecutorService inactivityTimer =
             Executors.newSingleThreadScheduledExecutor(new DaemonThreadFactory());
+
     private final Activity activity;
-    private ScheduledFuture<?> inactivityFuture = null;
+
     private final BroadcastReceiver powerStatusReceiver = new PowerStatusReceiver();
+
+    private ScheduledFuture<?> inactivityFuture = null;
 
     InactivityTimer(Activity activity) {
         this.activity = activity;
@@ -62,7 +70,8 @@ final class InactivityTimer {
     }
 
     public void onResume() {
-        activity.registerReceiver(powerStatusReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        activity.registerReceiver(powerStatusReceiver,
+                new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
         onActivity();
     }
 
@@ -80,6 +89,7 @@ final class InactivityTimer {
     }
 
     private static final class DaemonThreadFactory implements ThreadFactory {
+
         @Override
         public Thread newThread(Runnable runnable) {
             Thread thread = new Thread(runnable);
@@ -89,6 +99,7 @@ final class InactivityTimer {
     }
 
     private final class PowerStatusReceiver extends BroadcastReceiver {
+
         @Override
         public void onReceive(Context context, Intent intent) {
             if (Intent.ACTION_BATTERY_CHANGED.equals(intent.getAction())) {

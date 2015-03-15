@@ -21,16 +21,18 @@ package es.ugr.swad.swadroid.modules.downloads;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.SWADroidTracker;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.SWADroidTracker;
+
 /**
  * Download the file located at the given URL, save it to a file.
- * It also launches the notification on bar status and erases it when the download is completed or failed.
+ * It also launches the notification on bar status and erases it when the download is completed or
+ * failed.
  * Note that we are responsible for the deletion of the file when it is no longer needed.
  *
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
@@ -40,15 +42,19 @@ import java.net.URL;
 
 
 public class FileDownloaderAsyncTask extends AsyncTask<String, Integer, Boolean> {
-    private final Context mContext;
-    private URL url;
-    private String fileName = "";
-    private boolean downloadSuccess = true;
 
     /**
      * Downloads tag name for Logcat
      */
     private static final String TAG = Constants.APP_TAG + " Downloads";
+
+    private final Context mContext;
+
+    private URL url;
+
+    private String fileName = "";
+
+    private boolean downloadSuccess = true;
 
 
     public FileDownloaderAsyncTask(Context context, String fileName, long fileSize) {
@@ -74,9 +80,12 @@ public class FileDownloaderAsyncTask extends AsyncTask<String, Integer, Boolean>
             return false;
         }
 
-        String titleNotification = mContext.getString(R.string.notificationDownloadTitle); //Initial text that appears in the status bar
+        String titleNotification = mContext.getString(
+                R.string.notificationDownloadTitle); //Initial text that appears in the status bar
         String descriptionNotification = fileName;
-        downloadSuccess = DownloadFactory.downloadFile(mContext, url.toString(), fileName, titleNotification, descriptionNotification);
+        downloadSuccess = DownloadFactory
+                .downloadFile(mContext, url.toString(), fileName, titleNotification,
+                        descriptionNotification);
 
         return downloadSuccess;
     }

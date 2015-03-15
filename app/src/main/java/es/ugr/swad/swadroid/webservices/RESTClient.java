@@ -18,141 +18,150 @@
  */
 package es.ugr.swad.swadroid.webservices;
 
-import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.Preferences;
+
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import javax.net.ssl.SSLException;
+import android.util.Log;
+
 import java.io.IOException;
 import java.security.cert.CertificateException;
 
+import javax.net.ssl.SSLException;
+
+import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.Preferences;
+
 /**
  * REST client for SWAD webservices
- * 
+ *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
- * 
  */
 public class RESTClient implements IWebserviceClient {
-	/**
-	 * Class Module's tag name for Logcat
-	 */
-	private static final String TAG = Constants.APP_TAG + " RESTClient";
-	/**
-	 * Client type for webservices
-	 */
-	public static final String CLIENT_TYPE = "REST";
-	/**
-	 * SERVER param for webservice request.
-	 */
-	private String SERVER;
-	/**
-	 * METHOD_NAME param for webservice request.
-	 */
-	@SuppressWarnings("unused")
+
+    /**
+     * Client type for webservices
+     */
+    public static final String CLIENT_TYPE = "REST";
+
+    /**
+     * Class Module's tag name for Logcat
+     */
+    private static final String TAG = Constants.APP_TAG + " RESTClient";
+
+    /**
+     * SERVER param for webservice request.
+     */
+    private String SERVER;
+
+    /**
+     * METHOD_NAME param for webservice request.
+     */
+    @SuppressWarnings("unused")
     private String METHOD_NAME;
-	/**
-	 * Complete URL for webservice request.
-	 */
-	private String URL;
-	/**
-	 * Webservice result.
-	 */
-	private Object result;
 
-	/**
-	 * Supported request types
-	 */
-	public enum REQUEST_TYPE {
-		GET, POST, PUT, DELETE
-	};
+    /**
+     * Complete URL for webservice request.
+     */
+    private String URL;
 
-	/**
-	 * Default constructor
-	 */
-	public RESTClient() {
-		SERVER = Preferences.getServer(); // = "swad.ugr.es";
-		METHOD_NAME = "";
-		URL = "";
-	}
+    /**
+     * Webservice result.
+     */
+    private Object result;
 
-	/**
-	 * Field constructor
-	 * 
-	 * @param SERVER
-	 *            SERVER param for webservice request
-	 * @param METHOD_NAME
-	 *            METHOD_NAME param for webservice request
-	 */
-	public RESTClient(String SERVER, String METHOD_NAME) {
-		this.SERVER = SERVER;
-		this.METHOD_NAME = METHOD_NAME;
-		this.URL = SERVER + METHOD_NAME;
-	}
+    /**
+     * Default constructor
+     */
+    public RESTClient() {
+        SERVER = Preferences.getServer(); // = "swad.ugr.es";
+        METHOD_NAME = "";
+        URL = "";
+    }
 
-	@Override
-	public void createRequest() {
-		// TODO Auto-generated method stub
+    ;
 
-	}
+    /**
+     * Field constructor
+     *
+     * @param SERVER      SERVER param for webservice request
+     * @param METHOD_NAME METHOD_NAME param for webservice request
+     */
+    public RESTClient(String SERVER, String METHOD_NAME) {
+        this.SERVER = SERVER;
+        this.METHOD_NAME = METHOD_NAME;
+        this.URL = SERVER + METHOD_NAME;
+    }
 
-	@Override
-	public void addParam(String param, Object value) {
-		// TODO Auto-generated method stub
+    @Override
+    public void createRequest() {
+        // TODO Auto-generated method stub
 
-	}
+    }
 
-	@Override
-	public void setMETHOD_NAME(String METHOD_NAME) {
-		this.METHOD_NAME = METHOD_NAME;
-		this.URL = SERVER + METHOD_NAME;
-	}
+    @Override
+    public void addParam(String param, Object value) {
+        // TODO Auto-generated method stub
 
-	/**
-	 * Gets the result returned by the webservice
-	 * 
-	 * @return The result returned by the webservice
-	 */
-	@Override
-	public Object getResult() {
-		return result;
-	}
+    }
 
-	public void sendRequest(Class<?> cl, boolean simple, REQUEST_TYPE type,
-			JSONObject json) throws ClientProtocolException,
-			SSLException, CertificateException, IOException, JSONException {
+    @Override
+    public void setMETHOD_NAME(String METHOD_NAME) {
+        this.METHOD_NAME = METHOD_NAME;
+        this.URL = SERVER + METHOD_NAME;
+    }
 
-		Log.i(TAG, "Sending REST request (" + type + ") to " + SERVER
-				+ " and URL " + URL);
+    /**
+     * Gets the result returned by the webservice
+     *
+     * @return The result returned by the webservice
+     */
+    @Override
+    public Object getResult() {
+        return result;
+    }
 
-		switch (type) {
-		case GET:
-			result = RestEasy.doGet(URL);
-			break;
-		case POST:
-			result = RestEasy.doPost(URL, json);
-			break;
-		case PUT:
-			result = RestEasy.doPut(URL, json);
-			break;
-		case DELETE:
-			result = false;
-			RestEasy.doDelete(URL);
-			result = true;
-			break;
-		default:
-			throw new ClientProtocolException(type + " method not supported");
-		}
+    public void sendRequest(Class<?> cl, boolean simple, REQUEST_TYPE type,
+            JSONObject json) throws ClientProtocolException,
+            SSLException, CertificateException, IOException, JSONException {
 
-		if (!simple) {
-			GsonBuilder gsonBuilder = new GsonBuilder();
-			// gsonBuilder.setDateFormat("M/d/yy hh:mm a");
-			Gson gson = gsonBuilder.create();
-			result = gson.fromJson(((JSONObject) result).toString(), cl);
-		}
-	}
+        Log.i(TAG, "Sending REST request (" + type + ") to " + SERVER
+                + " and URL " + URL);
+
+        switch (type) {
+            case GET:
+                result = RestEasy.doGet(URL);
+                break;
+            case POST:
+                result = RestEasy.doPost(URL, json);
+                break;
+            case PUT:
+                result = RestEasy.doPut(URL, json);
+                break;
+            case DELETE:
+                result = false;
+                RestEasy.doDelete(URL);
+                result = true;
+                break;
+            default:
+                throw new ClientProtocolException(type + " method not supported");
+        }
+
+        if (!simple) {
+            GsonBuilder gsonBuilder = new GsonBuilder();
+            // gsonBuilder.setDateFormat("M/d/yy hh:mm a");
+            Gson gson = gsonBuilder.create();
+            result = gson.fromJson(((JSONObject) result).toString(), cl);
+        }
+    }
+
+    /**
+     * Supported request types
+     */
+    public enum REQUEST_TYPE {
+        GET, POST, PUT, DELETE
+    }
 }

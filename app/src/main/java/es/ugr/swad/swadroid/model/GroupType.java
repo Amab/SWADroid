@@ -11,33 +11,16 @@ import java.util.Hashtable;
 
 public class GroupType extends Model {
 
-    /**
-     * Group type name
-     */
-    private String groupTypeName;
-    /**
-     * course code to which the request is related
-     */
-    private long courseCode = -1;
-    /**
-     * Indicates if the enrollment in this group is mandatory or not
-     */
-    private int mandatory;
-    /**
-     * Indicates if a multiple enrollment is allowed
-     */
-    private int multiple;
-    /**
-     * Indicates if exists a date when the groups of this type will be automatically opened.
-     * if it is 0, it means, the date does not exit
-     */
-    private long openTime;
-
     private static final PropertyInfo PI_id = new PropertyInfo();
+
     private static final PropertyInfo PI_groupTypeName = new PropertyInfo();
+
     private static final PropertyInfo PI_courseCode = new PropertyInfo();
+
     private static final PropertyInfo PI_mandatory = new PropertyInfo();
+
     private static final PropertyInfo PI_multiple = new PropertyInfo();
+
     private static final PropertyInfo PI_openTime = new PropertyInfo();
 
     private static final PropertyInfo[] PI_PROP_ARRAY = {
@@ -50,6 +33,32 @@ public class GroupType extends Model {
     };
 
     /**
+     * Group type name
+     */
+    private String groupTypeName;
+
+    /**
+     * course code to which the request is related
+     */
+    private long courseCode = -1;
+
+    /**
+     * Indicates if the enrollment in this group is mandatory or not
+     */
+    private int mandatory;
+
+    /**
+     * Indicates if a multiple enrollment is allowed
+     */
+    private int multiple;
+
+    /**
+     * Indicates if exists a date when the groups of this type will be automatically opened.
+     * if it is 0, it means, the date does not exit
+     */
+    private long openTime;
+
+    /**
      * Constructor.
      *
      * @param id            Group code.
@@ -57,7 +66,8 @@ public class GroupType extends Model {
      * @param mandatory     Indicates if the enrollment in this group is mandatory or not
      * @param multiple      Indicates if a multiple enrollment is allowed
      */
-    public GroupType(long id, String groupTypeName, long courseCode, int mandatory, int multiple, long openTime) {
+    public GroupType(long id, String groupTypeName, long courseCode, int mandatory, int multiple,
+            long openTime) {
         super(id);
         this.groupTypeName = groupTypeName;
         this.courseCode = courseCode;
@@ -99,7 +109,8 @@ public class GroupType extends Model {
     }
 
     @Override
-    public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo propertyInfo) {
+    public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1,
+            PropertyInfo propertyInfo) {
         switch (param) {
             case 0:
                 propertyInfo.type = PropertyInfo.LONG_CLASS;
@@ -155,7 +166,8 @@ public class GroupType extends Model {
 
     @Override
     public String toString() {
-        return "GroupType [name=" + groupTypeName + ", getId()=" + getId() + ", getCourseCode()= " + courseCode + ", getMandatory()=" + mandatory +
+        return "GroupType [name=" + groupTypeName + ", getId()=" + getId() + ", getCourseCode()= "
+                + courseCode + ", getMandatory()=" + mandatory +
                 ", getMultiple()=" + multiple + ", getOpenTime()= " + openTime;
     }
 
@@ -190,7 +202,7 @@ public class GroupType extends Model {
      * Gets course code to which the group type is related to
      *
      * @return courseCode
-     *         -1 in case the group type is not related to any course
+     * -1 in case the group type is not related to any course
      */
     public long getCourseCode() {
         return courseCode;
@@ -200,7 +212,7 @@ public class GroupType extends Model {
      * Indicates if the enrollment is mandatory
      *
      * @return 0 - if the inscription is not mandatory
-     *         not 0 otherwise
+     * not 0 otherwise
      */
     public int getMandatory() {
         return mandatory;
@@ -210,7 +222,7 @@ public class GroupType extends Model {
      * Indicates if a multiple enrollment is allowed
      *
      * @return 0 - if the inscription is not multiple
-     *         not 0 otherwise
+     * not 0 otherwise
      */
     public int getMultiple() {
         return multiple;
@@ -220,7 +232,7 @@ public class GroupType extends Model {
      * Gets the date when the groups of this kind will be automatically opened, in case, it exits
      *
      * @return 0 if there is not a date when the groups of this kind will be automatically opened
-     *         otherwise date in unix format (see http://en.wikipedia.org/wiki/Unix_time)
+     * otherwise date in unix format (see http://en.wikipedia.org/wiki/Unix_time)
      */
     public long getOpenTime() {
         return openTime;

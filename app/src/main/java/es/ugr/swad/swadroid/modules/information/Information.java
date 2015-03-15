@@ -6,10 +6,13 @@
 
 package es.ugr.swad.swadroid.modules.information;
 
+import org.ksoap2.serialization.SoapObject;
+
 import android.os.Build;
 import android.os.Bundle;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADroidTracker;
@@ -18,130 +21,127 @@ import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
-import org.ksoap2.serialization.SoapObject;
 
 public class Information extends Module {
 
-	public static final String TAG = Constants.APP_TAG + " Information";
+    public static final String TAG = Constants.APP_TAG + " Information";
 
-	/**
-	 * Information Type. String with the type of information (none, HTML, plain
-	 * text...)
-	 */
-	private String infoSrc;
+    /**
+     * Webview to show course's information
+     */
+    WebView webview;
 
-	/**
-	 * Information Content. String with the content of information.
-	 */
-	private String infoTxt;
+    /**
+     * Information Type. String with the type of information (none, HTML, plain
+     * text...)
+     */
+    private String infoSrc;
 
-	/**
-	 * Request code to get course's information
-	 */
-	private String infoTypeToAdd;
+    /**
+     * Information Content. String with the content of information.
+     */
+    private String infoTxt;
 
-	/**
-	 * Webview to show course's information
-	 */
-	WebView webview;
+    /**
+     * Request code to get course's information
+     */
+    private String infoTypeToAdd;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.webview_information_screen_layout);
-		
-		webview = (WebView) this.findViewById(R.id.info_webview_dialog);
-		
-		WebSettings settings = webview.getSettings();
-		settings.setDefaultTextEncodingName("utf-8");
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.webview_information_screen_layout);
 
-		int requestCode = this.getIntent().getIntExtra("requestCode", 0);
+        webview = (WebView) this.findViewById(R.id.info_webview_dialog);
 
-		getActionBar().setSubtitle(Courses.getSelectedCourseShortName());
+        WebSettings settings = webview.getSettings();
+        settings.setDefaultTextEncodingName("utf-8");
+
+        int requestCode = this.getIntent().getIntExtra("requestCode", 0);
+
+        getActionBar().setSubtitle(Courses.getSelectedCourseShortName());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             getActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-		switch (requestCode) {
+        switch (requestCode) {
 
-		case Constants.INTRODUCTION_REQUEST_CODE:
+            case Constants.INTRODUCTION_REQUEST_CODE:
 
-			infoTypeToAdd = "introduction";
-			
-			setTitle(R.string.introductionModuleLabel);
-			getActionBar().setIcon(R.drawable.info);
+                infoTypeToAdd = "introduction";
 
-			break;
-			
-		case Constants.TEACHINGGUIDE_REQUEST_CODE:
+                setTitle(R.string.introductionModuleLabel);
+                getActionBar().setIcon(R.drawable.info);
 
-			infoTypeToAdd = "guide";
-			
-			setTitle(R.string.teachingguideModuleLabel);
-			getActionBar().setIcon(R.drawable.file);
+                break;
 
-			break;
-			
-		case Constants.SYLLABUSLECTURES_REQUEST_CODE:
+            case Constants.TEACHINGGUIDE_REQUEST_CODE:
 
-			infoTypeToAdd = "lectures";
-			
-			setTitle(R.string.syllabusLecturesModuleLabel);
-			getActionBar().setIcon(R.drawable.syllabus);
+                infoTypeToAdd = "guide";
 
-			break;
-			
-		case Constants.SYLLABUSPRACTICALS_REQUEST_CODE:
+                setTitle(R.string.teachingguideModuleLabel);
+                getActionBar().setIcon(R.drawable.file);
 
-			infoTypeToAdd = "practicals";
-			
-			setTitle(R.string.syllabusPracticalsModuleLabel);
-			getActionBar().setIcon(R.drawable.lab);
+                break;
 
-			break;
-			
-		case Constants.BIBLIOGRAPHY_REQUEST_CODE:
+            case Constants.SYLLABUSLECTURES_REQUEST_CODE:
 
-			infoTypeToAdd = "bibliography";
-			
-			setTitle(R.string.bibliographyModuleLabel);
-			getActionBar().setIcon(R.drawable.book);
+                infoTypeToAdd = "lectures";
 
-			break;
+                setTitle(R.string.syllabusLecturesModuleLabel);
+                getActionBar().setIcon(R.drawable.syllabus);
 
-		case Constants.FAQS_REQUEST_CODE:
+                break;
 
-			infoTypeToAdd = "FAQ";
-			
-			setTitle(R.string.faqsModuleLabel);
-			getActionBar().setIcon(R.drawable.faq);
+            case Constants.SYLLABUSPRACTICALS_REQUEST_CODE:
 
-			break;
+                infoTypeToAdd = "practicals";
 
+                setTitle(R.string.syllabusPracticalsModuleLabel);
+                getActionBar().setIcon(R.drawable.lab);
 
-		case Constants.LINKS_REQUEST_CODE:
+                break;
 
-			infoTypeToAdd = "links";
-			
-			setTitle(R.string.linksModuleLabel);
-			getActionBar().setIcon(R.drawable.link);
+            case Constants.BIBLIOGRAPHY_REQUEST_CODE:
 
-			break;
+                infoTypeToAdd = "bibliography";
 
-			
-		case Constants.ASSESSMENT_REQUEST_CODE:
+                setTitle(R.string.bibliographyModuleLabel);
+                getActionBar().setIcon(R.drawable.book);
 
-			infoTypeToAdd = "assessment";
-			
-			setTitle(R.string.assessmentModuleLabel);
-			getActionBar().setIcon(R.drawable.info);
+                break;
 
-			break;
-		}		
-		
-		setMETHOD_NAME("getCourseInfo");
-	}
+            case Constants.FAQS_REQUEST_CODE:
+
+                infoTypeToAdd = "FAQ";
+
+                setTitle(R.string.faqsModuleLabel);
+                getActionBar().setIcon(R.drawable.faq);
+
+                break;
+
+            case Constants.LINKS_REQUEST_CODE:
+
+                infoTypeToAdd = "links";
+
+                setTitle(R.string.linksModuleLabel);
+                getActionBar().setIcon(R.drawable.link);
+
+                break;
+
+            case Constants.ASSESSMENT_REQUEST_CODE:
+
+                infoTypeToAdd = "assessment";
+
+                setTitle(R.string.assessmentModuleLabel);
+                getActionBar().setIcon(R.drawable.info);
+
+                break;
+        }
+
+        setMETHOD_NAME("getCourseInfo");
+    }
 
     @Override
     protected void onStart() {
@@ -156,47 +156,49 @@ public class Information extends Module {
         }
     }
 
-	@Override
-	protected void connect() {
-		String progressDescription = getString(R.string.informationProgressDescription);
-		int progressTitle = R.string.informationProgressTitle;
+    @Override
+    protected void connect() {
+        String progressDescription = getString(R.string.informationProgressDescription);
+        int progressTitle = R.string.informationProgressTitle;
 
-		startConnection(true, progressDescription, progressTitle);
-	}
+        startConnection(true, progressDescription, progressTitle);
+    }
 
-	@Override
-	protected void requestService() throws Exception {
-		createRequest(SOAPClient.CLIENT_TYPE);
-		addParam("wsKey", Login.getLoggedUser().getWsKey());
-		addParam("courseCode", Courses.getSelectedCourseCode());
-		addParam("infoType", infoTypeToAdd);
-		sendRequest(User.class, true);
+    @Override
+    protected void requestService() throws Exception {
+        createRequest(SOAPClient.CLIENT_TYPE);
+        addParam("wsKey", Login.getLoggedUser().getWsKey());
+        addParam("courseCode", Courses.getSelectedCourseCode());
+        addParam("infoType", infoTypeToAdd);
+        sendRequest(User.class, true);
 
-		if (result != null) {
-			SoapObject soap = (SoapObject) result;
-			infoSrc = soap.getProperty("infoSrc").toString();
-			infoTxt = soap.getPrimitiveProperty("infoTxt").toString();
+        if (result != null) {
+            SoapObject soap = (SoapObject) result;
+            infoSrc = soap.getProperty("infoSrc").toString();
+            infoTxt = soap.getPrimitiveProperty("infoTxt").toString();
 
-			// Request finalized without errors
-			setResult(RESULT_OK);
-		} else {
-			infoTxt = getString(R.string.connectionRequired);
-		}
-	}
+            // Request finalized without errors
+            setResult(RESULT_OK);
+        } else {
+            infoTxt = getString(R.string.connectionRequired);
+        }
+    }
 
-	@Override
-	protected void postConnect() {
-		if (infoSrc.equals("none") || infoTxt.equals("") || infoTxt.equals(Constants.NULL_VALUE)) {
-			webview.loadDataWithBaseURL(null,(getString(R.string.emptyInformation)), "text/html", "utf-8", null);
-		} else if (infoSrc.equals("URL")) {
-			webview.loadUrl(infoTxt);
-		} else {
-			webview.loadDataWithBaseURL(null, infoTxt, "text/html", "utf-8", null);
-		}
-	}
+    @Override
+    protected void postConnect() {
+        if (infoSrc.equals("none") || infoTxt.equals("") || infoTxt.equals(Constants.NULL_VALUE)) {
+            webview.loadDataWithBaseURL(null, (getString(R.string.emptyInformation)), "text/html",
+                    "utf-8", null);
+        } else if (infoSrc.equals("URL")) {
+            webview.loadUrl(infoTxt);
+        } else {
+            webview.loadDataWithBaseURL(null, infoTxt, "text/html", "utf-8", null);
+        }
+    }
 
-	@Override
-	protected void onError() {
-		webview.loadDataWithBaseURL(null, getString(R.string.emptyInformation), "text/html", "utf-8", null);
-	}
+    @Override
+    protected void onError() {
+        webview.loadDataWithBaseURL(null, getString(R.string.emptyInformation), "text/html",
+                "utf-8", null);
+    }
 }

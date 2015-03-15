@@ -28,10 +28,12 @@ import java.util.Hashtable;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class PairTable<FIRST, SECOND> extends Model {
+
     /**
      * Pair of values
      */
     private final Pair<FIRST, SECOND> values;
+
     /**
      * Table who owns the pair of values
      */
@@ -69,20 +71,20 @@ public class PairTable<FIRST, SECOND> extends Model {
     }
 
     /**
+     * Sets first value
+     * param first First value
+     */
+    public void setFirst(FIRST first) {
+        this.values.setFirst(first);
+    }
+
+    /**
      * Gets second value
      *
      * @return Second value
      */
     public SECOND getSecond() {
         return this.values.getSecond();
-    }
-
-    /**
-     * Sets first value
-     * param first First value
-     */
-    public void setFirst(FIRST first) {
-        this.values.setFirst(first);
     }
 
     /**
@@ -140,7 +142,8 @@ public class PairTable<FIRST, SECOND> extends Model {
         return 0;
     }
 
-    public void getPropertyInfo(int arg0, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo arg2) {
+    public void getPropertyInfo(int arg0, @SuppressWarnings("rawtypes") Hashtable arg1,
+            PropertyInfo arg2) {
         // TODO Auto-generated method stub
 
     }

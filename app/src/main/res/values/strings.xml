@@ -9,7 +9,9 @@
     <string name="serverTitle_preferences">Server</string>
     <string name="loginModuleLabel">Login</string>
     <string name="notificationsModuleLabel">Notifications</string>
-    <string name="notificationsMarkAllAsReadModuleLabel" translatable="false">NotificationsMarkAsRead</string>
+    <string name="notificationsMarkAllAsReadModuleLabel" translatable="false">
+        NotificationsMarkAsRead
+    </string>
     <string name="coursesModuleLabel">Courses</string>
     <string name="testsModuleLabel">Tests</string>
     <string name="messagesModuleLabel">Send message</string>
@@ -38,13 +40,18 @@
     <string name="coursesProgressDescription">Retrieving courses…</string>
     <string name="notificationsProgressTitle">Notifications</string>
     <string name="notificationsProgressDescription">Retrieving new notifications…</string>
-    <string name="notificationsEmptyListMsg">Did not download any notification.\n\nTo download most recent
-        notifications slide down this message.</string>
+    <string name="notificationsEmptyListMsg">Did not download any notification.\n\nTo download most
+        recent
+        notifications slide down this message.
+    </string>
     <string name="testsDownloadProgressTitle">Tests</string>
-    <string name="testsDownloadProgressDescription">Synchronizing test questions.\n\nDepending on the number of
-        questions to synchronize, the data processing can take several minutes.\n\nPlease wait…</string>
+    <string name="testsDownloadProgressDescription">Synchronizing test questions.\n\nDepending on
+        the number of
+        questions to synchronize, the data processing can take several minutes.\n\nPlease wait…
+    </string>
     <string name="errorMsgLaunchingActivity">An error occurred during the execution of the
-        operation</string>
+        operation
+    </string>
     <string name="errorMsgNoConnection">No connection found</string>
     <string name="examAnnouncement">Exam announcement</string>
     <string name="marksFile">Marks file</string>
@@ -71,18 +78,28 @@
     <string name="cancelMsg">Cancel</string>
     <string name="allMsg">All</string>
     <string name="selectCourseTitle">Select course</string>
-    <string name="noQuestionsAvailableTestsDownloadMsg">There are no questions available for this course</string>
-    <string name="noQuestionsPluggableTestsDownloadMsg">The teacher does not allows the questions download</string>
+    <string name="noQuestionsAvailableTestsDownloadMsg">There are no questions available for this
+        course
+    </string>
+    <string name="noQuestionsPluggableTestsDownloadMsg">The teacher does not allows the questions
+        download
+    </string>
     <string name="questionsTestsDownloadSuccesfulMsg">Questions downloaded successfully</string>
-    <string name="testNoQuestionsCourseMsg">Not downloaded any test question for this course</string>
-    <string name="testNoQuestionsMsg">Before performing a test you should download the test questions for at least
-        one course</string>
-    <string name="testNoQuestionsMeetsSpecifiedCriteriaMsg">There is no question that meets the specified
-        criteria</string>
+    <string name="testNoQuestionsCourseMsg">Not downloaded any test question for this course
+    </string>
+    <string name="testNoQuestionsMsg">Before performing a test you should download the test
+        questions for at least
+        one course
+    </string>
+    <string name="testNoQuestionsMeetsSpecifiedCriteriaMsg">There is no question that meets the
+        specified
+        criteria
+    </string>
     <string name="testNumQuestionsMsg">Indicate the number of test questions</string>
     <string name="testTagsMsg">Select the tags that will be included in the test</string>
     <string name="testNoTagsSelectedMsg">You must select at least one tag</string>
-    <string name="testAnswerTypesMsg">Select the answer types that will be included in the test</string>
+    <string name="testAnswerTypesMsg">Select the answer types that will be included in the test
+    </string>
     <string name="testNoAnswerTypesSelectedMsg">You must select at least one answer type</string>
     <string name="testEvaluateMsg">Evaluate</string>
     <string name="testResultsTextMsg">Score</string>
@@ -96,7 +113,9 @@
     <string name="errorBadAppKeyMsg">Unknown application key. Please contact the developer</string>
     <string name="errorConnectionMsg">Error while connecting to server</string>
     <string name="errorTimeoutMsg">Timeout trying to connect to the server</string>
-    <string name="errorServiceUnavailableMsg">SWAD is under maintenance right now. Please try again later</string>
+    <string name="errorServiceUnavailableMsg">SWAD is under maintenance right now. Please try again
+        later
+    </string>
     <string name="sendingMessageMsg">Sending message…</string>
     <string name="messageSendedMsg">Message sended successfully</string>
     <string name="noReceiversMsg">You must specify at least one recipient</string>
@@ -115,11 +134,13 @@
     <string name="cancelFilters">Cancel</string>
     <string name="cleanDatabaseMsg">The database has been cleaned</string>
     <string name="cleanDatabaseDialogMsg">All data in the database will be deleted.\n\n
-         Notifications, tests, group information and lists of users will be deleted.\n\n
-         Are you sure you want to delete all data in the database?</string>
+        Notifications, tests, group information and lists of users will be deleted.\n\n
+        Are you sure you want to delete all data in the database?
+    </string>
     <string name="shareBodyMsg">I\'m using #SWADroid in my Android mobile for access to
         the e-learning platform SWAD.\nGet it for free here:
-        https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid</string>
+        https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid
+    </string>
     <string name="marketURL" translatable="false">market://details?id=es.ugr.swad.swadroid</string>
     <string name="marketWebURL" translatable="false">http://goo.gl/Wgo1y</string>
     <string name="twitterURL" translatable="false">https://twitter.com/#!/SWADroid</string>
@@ -141,7 +162,9 @@
     <string name="prefSyncEnableKey" translatable="false">prefSyncEnable</string>
     <string name="prefCatNotifTitle">Notifications</string>
     <string name="prefNotifLimitTitle">Notifications limit</string>
-    <string name="prefNotifLimitDialogMessage">Select the max number of notifications to be stored:</string>
+    <string name="prefNotifLimitDialogMessage">Select the max number of notifications to be
+        stored:
+    </string>
     <string name="prefNotifLimitSuffix">notifications</string>
     <string name="prefNotifLimitKey" translatable="false">prefNotifLimit</string>
     <string name="notificationsAlertMsg">new notifications</string>
@@ -150,19 +173,26 @@
     <string name="clickToGetCourses">Click here to get your courses</string>
     <string name="users">Users</string>
     <string name="documentsDownloadModuleLabel">Documents</string>
-    <string name="documentsDownloadProgressDescription">Getting files. \n\nDepending on the directory size, this could
-        take several minutes.\n\nPlease wait…</string>
+    <string name="documentsDownloadProgressDescription">Getting files. \n\nDepending on the
+        directory size, this could
+        take several minutes.\n\nPlease wait…
+    </string>
     <string name="clickToOpenFile">Click here to open the file</string>
     <string name="sharedsDownloadModuleLabel">Shared files</string>
-    <string name="connectionRequired">Internet connection is required for this functionality</string>
+    <string name="connectionRequired">Internet connection is required for this functionality
+    </string>
     <string name="course">Course</string>
     <string name="msg_default_format">Format</string>
     <string name="msg_default_type">Type</string>
     <string name="msg_default_time">Time</string>
     <string name="msg_default_meta">Metadata</string>
-    <string name="msg_default_status">Place a QR code or barcode inside the viewfinder rectangle to scan it.</string>
-    <string name="msg_camera_framework_bug">Sorry, the Android camera encountered a problem. You may need to restart the
-        device.</string>
+    <string name="msg_default_status">Place a QR code or barcode inside the viewfinder rectangle to
+        scan it.
+    </string>
+    <string name="msg_camera_framework_bug">Sorry, the Android camera encountered a problem. You may
+        need to restart the
+        device.
+    </string>
     <string name="button_ok">OK</string>
     <string name="scan_valid_student">Student of this course</string>
     <string name="scan_not_valid_student">Student of another course</string>
@@ -183,8 +213,10 @@
     <string name="licenseType">License:</string>
     <string name="downloadFileTitle">Download</string>
     <string name="sdCardBusyTitle">SD card unavailable</string>
-    <string name="sdCardBusy">The SD card is busy. To allow downloads, select “Turn off USB storage” in the
-        notification</string>
+    <string name="sdCardBusy">The SD card is busy. To allow downloads, select “Turn off USB storage”
+        in the
+        notification
+    </string>
     <string name="vacants">Vacants</string>
     <string name="numStudent">No. of students</string>
     <string name="maxStudent">Max. students</string>
@@ -192,7 +224,8 @@
     <string name="noEventsAvailableMsg">There are no events in this course</string>
     <string name="eventsUpdated">events updated</string>
     <string name="eventsEmptyListMsg">Did not download any event.\n\nTo download most recent
-        events slide down this message.</string>
+        events slide down this message.
+    </string>
     <string name="photoContentDescription">Photo of student</string>
     <string name="noCameraFound">The device has no camera</string>
     <string name="saveMsg">Save</string>
@@ -205,11 +238,15 @@
     <string name="sendingStatePending">Pending</string>
     <string name="rollcallModuleLabel">Rollcall</string>
     <string name="usersTitle">Users</string>
-    <string name="usersDownloadProgressDescription">Synchronizing users.\n\nDepending on the number of
-        users to synchronize, the data processing can take several minutes.\n\nPlease wait…</string>
+    <string name="usersDownloadProgressDescription">Synchronizing users.\n\nDepending on the number
+        of
+        users to synchronize, the data processing can take several minutes.\n\nPlease wait…
+    </string>
     <string name="usersDownloadProgressTitle">Users</string>
-    <string name="eventsDownloadProgressDescription">Synchronizing events.\n\nDepending on the number of
-        events to synchronize, the data processing can take several minutes.\n\nPlease wait…</string>
+    <string name="eventsDownloadProgressDescription">Synchronizing events.\n\nDepending on the
+        number of
+        events to synchronize, the data processing can take several minutes.\n\nPlease wait…
+    </string>
     <string name="eventsDownloadProgressTitle">Events</string>
     <string name="usersUpdate">Update</string>
     <string name="newTitle">New</string>
@@ -220,20 +257,27 @@
     <string name="groupTypesProgressTitle">Group Types</string>
     <string name="groupSeparator">:</string>
     <string name="groupTypesModuleLabel">Group Types</string>
-    <string name="sendMyGroupsProgressDescription">Sending enrollment into groups…\nPlease wait…</string>
+    <string name="sendMyGroupsProgressDescription">Sending enrollment into groups…\nPlease wait…
+    </string>
     <string name="sendMyGroupsProgressTitle">Enrolment into groups</string>
     <string name="openingTime">Opening:</string>
     <string name="noGroupsText">No groups have been created in the course</string>
     <string name="resultEnrollment">Result on the enrollment</string>
-    <string name="successfullEnrollment">All the enrollments were made successfully. Please check that you are enrolled
-        in your wished groups</string>
+    <string name="successfullEnrollment">All the enrollments were made successfully. Please check
+        that you are enrolled
+        in your wished groups
+    </string>
     <string name="confirmEnrollments">Confirm requested enrollments</string>
-    <string name="areYouSureGroups">Are you sure, that you want to enroll on the selected groups?</string>
+    <string name="areYouSureGroups">Are you sure, that you want to enroll on the selected groups?
+    </string>
     <string name="ok" translatable="false">OK</string>
-    <string name="failedEnrollment">Sorry but the enrollment on the selected groups could not be performed</string>
+    <string name="failedEnrollment">Sorry but the enrollment on the selected groups could not be
+        performed
+    </string>
     <string name="withoutLimit">unlimited</string>
     <string name="downloadProblemTitle">Download problem</string>
-    <string name="downloadProblemMsg">Sorry. The download of file was interrupted. Try again</string>
+    <string name="downloadProblemMsg">Sorry. The download of file was interrupted. Try again
+    </string>
     <string name="downloadCompletedTitle">Download completed</string>
     <string name="unknown">Unknown</string>
     <string name="selectZoneTitle">Select zone</string>
@@ -254,7 +298,8 @@
     <string name="prefNotifSoundTitle">Sound</string>
     <string name="prefNotifSoundSummary">Enable/disable sound alerts for new notifications</string>
     <string name="prefNotifVibrateTitle">Vibration</string>
-    <string name="prefNotifVibrateSummary">Enable/disable vibration alerts for new notifications</string>
+    <string name="prefNotifVibrateSummary">Enable/disable vibration alerts for new notifications
+    </string>
     <string name="prefNotifLightsTitle">Led</string>
     <string name="prefNotifLightsSummary">Enable/disable led alerts for new notifications</string>
     <string name="changelogTitle">Changelog</string>
@@ -270,10 +315,16 @@
     <string name="informationProgressDescription">Getting information…\nWait, please…</string>
     <string name="informationProgressTitle">Information</string>
     <string name="emptyInformation">Information unavailable</string>
-    <string name="pradoLoginToast">SWAD\'s password is at least 8 alphanumeric characters long</string>
-    <string name="error_password_summaryUGR">Remember you must enter SWAD\'s password, not e-Administration (PRADO)</string>
-    <string name="passwordDialogTip">SWAD\'s password is at least 8 alphanumeric characters long</string>
-    <string name="errorServerCertificateMsg">The server certificate is invalid. Please contact SWAD admininstrator</string>
+    <string name="pradoLoginToast">SWAD\'s password is at least 8 alphanumeric characters long
+    </string>
+    <string name="error_password_summaryUGR">Remember you must enter SWAD\'s password, not
+        e-Administration (PRADO)
+    </string>
+    <string name="passwordDialogTip">SWAD\'s password is at least 8 alphanumeric characters long
+    </string>
+    <string name="errorServerCertificateMsg">The server certificate is invalid. Please contact SWAD
+        admininstrator
+    </string>
     <string name="notificationMarkAllRead">Mark all as read</string>
     <string name="notificationReply">Reply</string>
     <string name="seenLabel">Seen</string>
@@ -285,7 +336,9 @@
     <string name="Filters_All">All</string>
     <string name="Filters_Teachers">Teachers</string>
     <string name="Filters_Students">Students</string>
-    <string name="errorNoAppForIntent">There are no registered applications to open the selected file type.</string>
+    <string name="errorNoAppForIntent">There are no registered applications to open the selected
+        file type.
+    </string>
     <string name="birthdayMsg">Happy birthday, {userName}!</string>
     <string name="errorNoUserNickname">You must set a nickname in SWAD</string>
     <string name="event">Event</string>
@@ -293,13 +346,17 @@
     <string name="noUsersAvailableMsg">There are no users in this event</string>
     <string name="noUsersCheckedMsg">You must check almost one user</string>
     <string name="usersEmptyListMsg">Did not download any user.\n\nTo download most recent
-        users slide down this message.</string>
+        users slide down this message.
+    </string>
     <string name="doubleBackToExitMsg">Please click BACK again to exit</string>
     <string name="errorSendingUsersMsg">Error sending attendances</string>
     <string name="progress_status">Loading...</string>
-    <string name="rollcallCleanUsers">Clean users</string><string name="cleanUsersDialogMsg">The list of users will be locally deleted.\n\n
-         Are you sure you want to locally delete the list of users?</string>
+    <string name="rollcallCleanUsers">Clean users</string>
+    <string name="cleanUsersDialogMsg">The list of users will be locally deleted.\n\n
+        Are you sure you want to locally delete the list of users?
+    </string>
     <string name="usersAbsent">All users marked as absent</string>
-    <string name="functionHoneycombMsg">This function requires Android 3.0 (Honeycomb) or higher</string>
+    <string name="functionHoneycombMsg">This function requires Android 3.0 (Honeycomb) or higher
+    </string>
 
 </resources>

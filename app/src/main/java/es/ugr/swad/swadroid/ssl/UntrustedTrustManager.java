@@ -19,8 +19,9 @@
 
 package es.ugr.swad.swadroid.ssl;
 
-import javax.net.ssl.X509TrustManager;
 import java.security.cert.X509Certificate;
+
+import javax.net.ssl.X509TrustManager;
 
 /**
  * TrustManager that accepts untrusted certificates.
@@ -28,6 +29,7 @@ import java.security.cert.X509Certificate;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class UntrustedTrustManager implements X509TrustManager {
+
     /**
      * Given the partial or complete certificate chain provided by the peer,
      * build a certificate path to a trusted root and return if it can be

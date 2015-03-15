@@ -24,6 +24,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+
 import es.ugr.swad.swadroid.Constants;
 
 /**
@@ -39,7 +40,8 @@ public final class PeriodicSyncReceiver extends BroadcastReceiver {
         return intent;
     }
 
-    public static PendingIntent createPendingIntent(Context context, String authority, Bundle extras) {
+    public static PendingIntent createPendingIntent(Context context, String authority,
+            Bundle extras) {
         int requestCode = 0;
         Intent intent = createIntent(context, authority, extras);
         int flags = 0;

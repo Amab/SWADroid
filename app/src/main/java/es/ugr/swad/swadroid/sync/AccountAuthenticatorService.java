@@ -1,6 +1,10 @@
 package es.ugr.swad.swadroid.sync;
 
-import android.accounts.*;
+import android.accounts.AbstractAccountAuthenticator;
+import android.accounts.Account;
+import android.accounts.AccountAuthenticatorResponse;
+import android.accounts.AccountManager;
+import android.accounts.NetworkErrorException;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +15,7 @@ import android.os.IBinder;
  * Authenticator service that returns a subclass of AbstractAccountAuthenticator in onBind()
  */
 public class AccountAuthenticatorService extends Service {
+
     private static AccountAuthenticatorImpl sAccountAuthenticator = null;
 
     public AccountAuthenticatorService() {
@@ -19,18 +24,22 @@ public class AccountAuthenticatorService extends Service {
 
     public IBinder onBind(Intent intent) {
         IBinder ret = null;
-        if (intent.getAction().equals(android.accounts.AccountManager.ACTION_AUTHENTICATOR_INTENT))
+        if (intent.getAction()
+                .equals(android.accounts.AccountManager.ACTION_AUTHENTICATOR_INTENT)) {
             ret = getAuthenticator().getIBinder();
+        }
         return ret;
     }
 
     private AccountAuthenticatorImpl getAuthenticator() {
-        if (sAccountAuthenticator == null)
+        if (sAccountAuthenticator == null) {
             sAccountAuthenticator = new AccountAuthenticatorImpl(this);
+        }
         return sAccountAuthenticator;
     }
 
     private static class AccountAuthenticatorImpl extends AbstractAccountAuthenticator {
+
         private final Context mContext;
 
         public AccountAuthenticatorImpl(Context context) {
@@ -43,7 +52,8 @@ public class AccountAuthenticatorService extends Service {
          *  otherwise our activity will just pass the user's credentials on to the account manager.
          */
         @Override
-        public Bundle addAccount(AccountAuthenticatorResponse response, String accountType, String authTokenType, String[] requiredFeatures, Bundle options)
+        public Bundle addAccount(AccountAuthenticatorResponse response, String accountType,
+                String authTokenType, String[] requiredFeatures, Bundle options)
                 throws NetworkErrorException {
             final Intent intent = new Intent(mContext, AccountAuthenticator.class);
             intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
@@ -53,7 +63,8 @@ public class AccountAuthenticatorService extends Service {
         }
 
         @Override
-        public Bundle confirmCredentials(AccountAuthenticatorResponse response, Account account, Bundle options) {
+        public Bundle confirmCredentials(AccountAuthenticatorResponse response, Account account,
+                Bundle options) {
             return null;
         }
 
@@ -63,7 +74,8 @@ public class AccountAuthenticatorService extends Service {
         }
 
         @Override
-        public Bundle getAuthToken(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle options) throws NetworkErrorException {
+        public Bundle getAuthToken(AccountAuthenticatorResponse response, Account account,
+                String authTokenType, Bundle options) throws NetworkErrorException {
             return null;
         }
 
@@ -73,12 +85,14 @@ public class AccountAuthenticatorService extends Service {
         }
 
         @Override
-        public Bundle hasFeatures(AccountAuthenticatorResponse response, Account account, String[] features) throws NetworkErrorException {
+        public Bundle hasFeatures(AccountAuthenticatorResponse response, Account account,
+                String[] features) throws NetworkErrorException {
             return null;
         }
 
         @Override
-        public Bundle updateCredentials(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle options) {
+        public Bundle updateCredentials(AccountAuthenticatorResponse response, Account account,
+                String authTokenType, Bundle options) {
             return null;
         }
     }

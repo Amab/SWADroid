@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal" >
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal">
 
     <TextView
-        android:id="@+id/listText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/gray_goose"
-        android:drawablePadding="10dp"
-        android:gravity="center_vertical"
-        android:paddingBottom="5dip"
-        android:paddingEnd="0dip"
-        android:paddingLeft="30dip"
-        android:paddingRight="0dip"
-        android:paddingStart="30dip"
-        android:paddingTop="5dip"
-        android:textColor="@color/foreground1"
-        android:textSize="20sp"
-        android:textStyle="bold" >
+            android:id="@+id/listText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/gray_goose"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:paddingBottom="5dip"
+            android:paddingEnd="0dip"
+            android:paddingLeft="30dip"
+            android:paddingRight="0dip"
+            android:paddingStart="30dip"
+            android:paddingTop="5dip"
+            android:textColor="@color/foreground1"
+            android:textSize="20sp"
+            android:textStyle="bold">
     </TextView>
 
 </LinearLayout>

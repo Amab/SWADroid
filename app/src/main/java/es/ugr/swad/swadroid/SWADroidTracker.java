@@ -21,9 +21,14 @@
 
 package es.ugr.swad.swadroid;
 
+import com.google.android.gms.analytics.ExceptionReporter;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.StandardExceptionParser;
+import com.google.android.gms.analytics.Tracker;
+
 import android.content.Context;
 import android.util.Log;
-import com.google.android.gms.analytics.*;
 
 import java.util.HashMap;
 
@@ -33,24 +38,19 @@ import java.util.HashMap;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class SWADroidTracker {
+
     /**
      * SWADroidTracker tag name for Logcat
      */
     public static final String TAG = Constants.APP_TAG + " SWADroidTracker";
-    /**
-     * Enum used to identify the tracker that needs to be used for tracking.
-     *
-     * A single tracker is usually enough for most purposes. In case you do need multiple trackers,
-     * storing them all in Application object helps ensure that they are created only once per
-     * application instance.
-     */
-    public static enum TrackerName {
-        APP_TRACKER, // Tracker used only in this app.
-        GLOBAL_TRACKER, // Tracker used by all the apps from a company. eg: roll-up tracking.
-        ECOMMERCE_TRACKER, // Tracker used by all ecommerce transactions from a company.
-    }
 
     private static HashMap<TrackerName, Tracker> mTrackers = new HashMap<TrackerName, Tracker>();
+
+    private static boolean isTrackerEnabled(Context context) {
+        /*return (!Config.ANALYTICS_API_KEY.isEmpty()
+                && (GooglePlayServicesUtil.isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS));*/
+        return (!Config.ANALYTICS_API_KEY.isEmpty());
+    }
 
     /*static synchronized Tracker getTracker(Context context, TrackerName trackerId) {
         if (!mTrackers.containsKey(trackerId)) {
@@ -64,12 +64,6 @@ public class SWADroidTracker {
         }
         return mTrackers.get(trackerId);
     }*/
-
-    private static boolean isTrackerEnabled(Context context) {
-        /*return (!Config.ANALYTICS_API_KEY.isEmpty()
-                && (GooglePlayServicesUtil.isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS));*/
-        return (!Config.ANALYTICS_API_KEY.isEmpty());
-    }
 
     private static synchronized Tracker getTracker(Context context) {
         if (!mTrackers.containsKey(TrackerName.APP_TRACKER)) {
@@ -86,7 +80,7 @@ public class SWADroidTracker {
 
     public static void initTracker(Context context) {
         // Initialize a tracker using a Google Analytics property ID.
-        if(isTrackerEnabled(context)) {
+        if (isTrackerEnabled(context)) {
             GoogleAnalytics.getInstance(context).newTracker(Config.ANALYTICS_API_KEY);
 
             /*Thread.UncaughtExceptionHandler exceptionHandler = new ExceptionReporter(
@@ -123,7 +117,7 @@ public class SWADroidTracker {
     }
 
     public static void sendScreenView(Context context, String path) {
-        if(isTrackerEnabled(context)) {
+        if (isTrackerEnabled(context)) {
             // Get tracker.
             Tracker t = getTracker(context);
 
@@ -138,8 +132,9 @@ public class SWADroidTracker {
         }
     }
 
-    public static void sendScreenView(Context context, String path, String category, String action, String label) {
-        if(isTrackerEnabled(context)) {
+    public static void sendScreenView(Context context, String path, String category, String action,
+            String label) {
+        if (isTrackerEnabled(context)) {
             // Get tracker.
             Tracker t = getTracker(context);
 
@@ -166,7 +161,7 @@ public class SWADroidTracker {
     }
 
     public static void sendException(Context context, Exception e, boolean fatal) {
-        if(isTrackerEnabled(context)) {
+        if (isTrackerEnabled(context)) {
             // Get tracker.
             Tracker t = getTracker(context);
 
@@ -185,12 +180,26 @@ public class SWADroidTracker {
                     };
 
             t.send(new HitBuilders.ExceptionBuilder()
-                            .setDescription(exceptionParser.getDescription(Thread.currentThread().getName(), e))
+                            .setDescription(exceptionParser
+                                    .getDescription(Thread.currentThread().getName(), e))
                             .setFatal(fatal)
                             .build()
             );
 
             Log.e(TAG, e.getMessage(), e);
         }
+    }
+
+    /**
+     * Enum used to identify the tracker that needs to be used for tracking.
+     *
+     * A single tracker is usually enough for most purposes. In case you do need multiple trackers,
+     * storing them all in Application object helps ensure that they are created only once per
+     * application instance.
+     */
+    public static enum TrackerName {
+        APP_TRACKER, // Tracker used only in this app.
+        GLOBAL_TRACKER, // Tracker used by all the apps from a company. eg: roll-up tracking.
+        ECOMMERCE_TRACKER, // Tracker used by all ecommerce transactions from a company.
     }
 }

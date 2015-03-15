@@ -16,8 +16,9 @@
 
 package com.google.zxing.client.android;
 
-import android.graphics.Bitmap;
 import com.google.zxing.LuminanceSource;
+
+import android.graphics.Bitmap;
 
 /**
  * This object extends LuminanceSource around an array of YUV data returned from the camera driver,
@@ -32,13 +33,18 @@ import com.google.zxing.LuminanceSource;
 public final class PlanarYUVLuminanceSource extends LuminanceSource {
 
     private final byte[] yuvData;
+
     private final int dataWidth;
+
     private final int dataHeight;
+
     private final int left;
+
     private final int top;
 
-    public PlanarYUVLuminanceSource(byte[] yuvData, int dataWidth, int dataHeight, int left, int top,
-                                    int width, int height, boolean reverseHorizontal) {
+    public PlanarYUVLuminanceSource(byte[] yuvData, int dataWidth, int dataHeight, int left,
+            int top,
+            int width, int height, boolean reverseHorizontal) {
         super(width, height);
 
         if (left + width > dataWidth || top + height > dataHeight) {

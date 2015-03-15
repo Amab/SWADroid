@@ -16,6 +16,9 @@
 
 package com.google.zxing.client.android;
 
+import com.google.zxing.ResultPoint;
+import com.google.zxing.client.android.camera.CameraManager;
+
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -24,12 +27,11 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
-import com.google.zxing.ResultPoint;
-import com.google.zxing.client.android.camera.CameraManager;
-import es.ugr.swad.swadroid.R;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import es.ugr.swad.swadroid.R;
 
 /**
  * This view is overlaid on top of the camera preview. It adds the viewfinder rectangle and partial
@@ -40,21 +42,35 @@ import java.util.List;
 public final class ViewfinderView extends View {
 
     private static final int[] SCANNER_ALPHA = {0, 64, 128, 192, 255, 192, 128, 64};
+
     private static final long ANIMATION_DELAY = 80L;
+
     private static final int CURRENT_POINT_OPACITY = 0xA0;
+
     private static final int MAX_RESULT_POINTS = 20;
+
     private static final int POINT_SIZE = 6;
 
-    private CameraManager cameraManager;
     private final Paint paint;
-    private Bitmap resultBitmap;
+
     private final int maskColor;
+
     private final int resultColor;
+
     private final int frameColor;
+
     private final int laserColor;
+
     private final int resultPointColor;
+
+    private CameraManager cameraManager;
+
+    private Bitmap resultBitmap;
+
     private int scannerAlpha;
+
     private List<ResultPoint> possibleResultPoints;
+
     private List<ResultPoint> lastPossibleResultPoints;
 
     // This constructor is used when the class is built from an XML resource.

@@ -29,15 +29,18 @@ import java.util.Locale;
 public class DateTimeUtils {
 
     public final static long ONE_SECOND = 1000;
-    public final static long SECONDS = 60;
 
     public final static long ONE_MINUTE = ONE_SECOND * 60;
-    public final static long MINUTES = 60;
 
     public final static long ONE_HOUR = ONE_MINUTE * 60;
-    public final static long HOURS = 24;
 
     public final static long ONE_DAY = ONE_HOUR * 24;
+
+    public final static long SECONDS = 60;
+
+    public final static long MINUTES = 60;
+
+    public final static long HOURS = 24;
 
     private DateTimeUtils() {
     }
@@ -100,7 +103,8 @@ public class DateTimeUtils {
         if (days == 0) {
             res = String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds);
         } else {
-            res = String.format(Locale.getDefault(), "%dd%02d:%02d:%02d", days, hours, minutes, seconds);
+            res = String.format(Locale.getDefault(), "%dd%02d:%02d:%02d", days, hours, minutes,
+                    seconds);
         }
         return res;
     }
@@ -108,7 +112,8 @@ public class DateTimeUtils {
     public static boolean isBirthday(Calendar cal) {
         Calendar sysdate = Calendar.getInstance();
 
-        return ((cal != null) && (sysdate.get(Calendar.DAY_OF_MONTH) == cal.get(Calendar.DAY_OF_MONTH))
+        return ((cal != null) && (sysdate.get(Calendar.DAY_OF_MONTH) == cal
+                .get(Calendar.DAY_OF_MONTH))
                 && (sysdate.get(Calendar.MONTH) == cal.get(Calendar.MONTH)));
     }
 }

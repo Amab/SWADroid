@@ -18,20 +18,23 @@
  */
 package es.ugr.swad.swadroid.modules.downloads;
 
-import android.content.Context;
-import es.ugr.swad.swadroid.SWADroidTracker;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
+import android.content.Context;
+
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import es.ugr.swad.swadroid.SWADroidTracker;
 
 
 /**
@@ -47,15 +50,16 @@ import java.util.List;
 //TODO look for a more efficient navigation
 public class DirectoryNavigator {
 
-    private String XMLinfo;
-
     private final ArrayList<String> path;
 
-    private ArrayList<DirectoryItem> currentItems;
     /**
      * Application context
      */
     public Context mContext;
+
+    private String XMLinfo;
+
+    private ArrayList<DirectoryItem> currentItems;
 
     /**
      * Constructor.
@@ -75,7 +79,8 @@ public class DirectoryNavigator {
      * @return Return a list of items that are inside the subdirectory.
      * @throws InvalidPathException When the directory don't exist.
      */
-    public ArrayList<DirectoryItem> goToSubDirectory(String subDirectory) throws InvalidPathException {
+    public ArrayList<DirectoryItem> goToSubDirectory(String subDirectory)
+            throws InvalidPathException {
         //We increase the path.
         path.add(subDirectory);
 
@@ -98,7 +103,8 @@ public class DirectoryNavigator {
      * @return Return a list of items that are inside the subdirectory.
      * @throws InvalidPathException When the directory don't exist.
      */
-    public ArrayList<DirectoryItem> goToSubDirectory(int directoryPosition) throws InvalidPathException {
+    public ArrayList<DirectoryItem> goToSubDirectory(int directoryPosition)
+            throws InvalidPathException {
         String subDirectory = currentItems.get(directoryPosition).getName();
 
         //We increase the path.
@@ -131,7 +137,8 @@ public class DirectoryNavigator {
     }
 
     /**
-     * Refresh the XML file and refresh the directory data. We throw an exception if the directory was erased.
+     * Refresh the XML file and refresh the directory data. We throw an exception if the directory
+     * was erased.
      *
      * @return Return a list of items in the current directory.
      * @throws InvalidPathException When the directory don't exist.
@@ -219,14 +226,15 @@ public class DirectoryNavigator {
                         }
                     }
 
-                    item = new DirectoryItem(name, type, fileCode, size, time, license, publisher, photo);
+                    item = new DirectoryItem(name, type, fileCode, size, time, license, publisher,
+                            photo);
                     items.add(item);
                 }
             }
         }
 
         Collections.sort(items);
-        
+
         return items;
     }
 
@@ -262,7 +270,8 @@ public class DirectoryNavigator {
                 NodeList childs = currentNode.getChildNodes();
                 for (int j = 0; j < childs.getLength(); j++) {
                     Node currentChild = childs.item(j);
-                    if (currentChild.getNodeName().equals("dir") || currentChild.getNodeName().equals("file")) {
+                    if (currentChild.getNodeName().equals("dir") || currentChild.getNodeName()
+                            .equals("file")) {
                         NamedNodeMap attributes = currentChild.getAttributes();
                         if (aPath.equals(attributes.getNamedItem("name").getNodeValue())) {
                             currentNode = currentChild;
@@ -346,7 +355,8 @@ public class DirectoryNavigator {
 
 
     /**
-     * Identifies the node with name @a name and gets its file code in case the node is a file. In case the node is a directory returns -1
+     * Identifies the node with name @a name and gets its file code in case the node is a file. In
+     * case the node is a directory returns -1
      *
      * @param name Name of the node located on the current directory.
      * @return -1 in case the node is a directory or it does not exists any node with the given name
@@ -370,9 +380,9 @@ public class DirectoryNavigator {
         return node.getName();
 
     }
-    
+
     public boolean isRootDirectory() {
-    	return (path.size() == 0);
+        return (path.size() == 0);
     }
 }
 
@@ -384,5 +394,6 @@ public class DirectoryNavigator {
  * @version 1.0
  */
 class InvalidPathException extends IllegalArgumentException {
+
     private static final long serialVersionUID = 1L;
 }

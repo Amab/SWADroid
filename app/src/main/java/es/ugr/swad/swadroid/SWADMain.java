@@ -35,9 +35,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.*;
+import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.LinearLayout;
+import android.widget.SimpleCursorAdapter;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.gui.ImageExpandableListAdapter;
@@ -61,12 +75,6 @@ import es.ugr.swad.swadroid.sync.SyncUtils;
 import es.ugr.swad.swadroid.utils.DateTimeUtils;
 import es.ugr.swad.swadroid.utils.Utils;
 
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 /**
  * Main class of the application.
  *
@@ -76,39 +84,78 @@ import java.util.Map;
  * @author Jose Antonio Guerrero Aviles <cany20@gmail.com>
  */
 public class SWADMain extends MenuExpandableListActivity {
-	/**
-	 * Application preferences
-	 */
-	Preferences prefs;
-	/**
-	 * SSL connection
-	 */
-	SecureConnection conn;
-    /**
-     * Array of strings for main ListView
-     */
-    protected String[] functions;
-    /**
-     * Function name field
-     */
-    private final String NAME = "listText";
-    /**
-     * Function text field
-     */
-    private final String IMAGE = "listIcon";
-    /**
-     * Code of selected course
-     */
-    private long courseCode;
-    /**
-     * User courses list
-     */
-    private List<Model> listCourses;
+
     /**
      * SWADMain tag name for Logcat
      */
     public static final String TAG = Constants.APP_TAG;
-    
+
+    /**
+     * Function name field
+     */
+    private final String NAME = "listText";
+
+    /**
+     * Function text field
+     */
+    private final String IMAGE = "listIcon";
+
+    private final ArrayList<HashMap<String, Object>> mHeaderData
+            = new ArrayList<HashMap<String, Object>>();
+
+    private final ArrayList<ArrayList<HashMap<String, Object>>> mChildData
+            = new ArrayList<ArrayList<HashMap<String, Object>>>();
+
+    private final ArrayList<HashMap<String, Object>> mMessagesData
+            = new ArrayList<HashMap<String, Object>>();
+
+    private final ArrayList<HashMap<String, Object>> mUsersData
+            = new ArrayList<HashMap<String, Object>>();
+
+    private final View.OnTouchListener Spinner_OnTouch = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+
+                if (dbHelper.getAllRows(DataBaseHelper.DB_TABLE_COURSES).size() == 0) {
+                    if (Utils.connectionAvailable(getApplicationContext())) {
+                        getCurrentCourses();
+                    }
+                    //else
+
+                } else {
+                    v.performClick();
+                }
+            }
+            return true;
+        }
+    };
+
+    /**
+     * Array of strings for main ListView
+     */
+    protected String[] functions;
+
+    /**
+     * Application preferences
+     */
+    Preferences prefs;
+
+    /**
+     * SSL connection
+     */
+    SecureConnection conn;
+
+    /**
+     * Code of selected course
+     */
+    private long courseCode;
+
+    /**
+     * User courses list
+     */
+    private List<Model> listCourses;
+
     /**
      * Indicates if it is the first run
      */
@@ -122,13 +169,13 @@ public class SWADMain extends MenuExpandableListActivity {
     private boolean dBCleaned = false;
 
     private LinearLayout mBirthdayLayout;
+
     private TextView mBirthdayTextView;
+
     private ExpandableListView mExpandableListView;
+
     private ImageExpandableListAdapter mExpandableListAdapter;
-    private final ArrayList<HashMap<String, Object>> mHeaderData = new ArrayList<HashMap<String, Object>>();
-    private final ArrayList<ArrayList<HashMap<String, Object>>> mChildData = new ArrayList<ArrayList<HashMap<String, Object>>>();
-    private final ArrayList<HashMap<String, Object>> mMessagesData = new ArrayList<HashMap<String, Object>>();
-    private final ArrayList<HashMap<String, Object>> mUsersData = new ArrayList<HashMap<String, Object>>();
+
     /**
      * Gets the database helper
      *
@@ -141,10 +188,10 @@ public class SWADMain extends MenuExpandableListActivity {
     /**
      * Shows initial dialog after application upgrade.
      */
-    public void showUpgradeDialog(Context context) {        
+    public void showUpgradeDialog(Context context) {
         AlertDialog alertDialog = DialogFactory.createWebViewDialog(context,
-        		R.string.changelogTitle,
-        		R.raw.changes);
+                R.string.changelogTitle,
+                R.raw.changes);
 
         alertDialog.show();
     }
@@ -157,32 +204,31 @@ public class SWADMain extends MenuExpandableListActivity {
         int lastVersion, currentVersion;
 
         SWADroidTracker.initTracker(getApplicationContext());
-        
+
         //Initialize screen
         super.onCreate(icicle);
 
         setContentView(R.layout.main);
         initializeMainViews();
-        
-        
+
         //Initialize preferences
         prefs = new Preferences(this);
-        
+
         try {
-        	
+
             //Initialize HTTPS connections
-        	/*
+                /*
         	 * SSL root certificates for SWAD are not included by default on Gingerbread and older
         	 * If Android API < 11 (HONEYCOMB) add SSL certificates manually
         	 */
-        	if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-        		conn = new SecureConnection();
-        		conn.initSecureConnection(this); 
-        		//conn.initUntrustedSecureConnection();
-        		Log.i(TAG, "Android API < 11 (HONEYCOMB). Adding SSL certificates manually");
-        	} else {
-        		Log.i(TAG, "Android API >= 11 (HONEYCOMB). Using SSL built-in certificates");
-        	}
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+                conn = new SecureConnection();
+                conn.initSecureConnection(this);
+                //conn.initUntrustedSecureConnection();
+                Log.i(TAG, "Android API < 11 (HONEYCOMB). Adding SSL certificates manually");
+            } else {
+                Log.i(TAG, "Android API >= 11 (HONEYCOMB). Using SSL built-in certificates");
+            }
 
             //Check if this is the first run after an install or upgrade
             lastVersion = Preferences.getLastVersion();
@@ -193,11 +239,11 @@ public class SWADMain extends MenuExpandableListActivity {
 
             //If this is the first run, show configuration dialog
             if (lastVersion == 0) {
-            	firstRun(currentVersion);
+                firstRun(currentVersion);
 
-            //If this is an upgrade, show upgrade dialog
+                //If this is an upgrade, show upgrade dialog
             } else if (lastVersion < currentVersion) {
-            	upgradeApp(lastVersion, currentVersion);
+                upgradeApp(lastVersion, currentVersion);
             }
 
             listCourses = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_COURSES, "", "shortName");
@@ -206,7 +252,7 @@ public class SWADMain extends MenuExpandableListActivity {
                 Courses.setSelectedCourseCode(c.getId());
                 Courses.setSelectedCourseShortName(c.getShortName());
                 Courses.setSelectedCourseFullName(c.getFullName());
-                Login.setCurrentUserRole(c.getUserRole()); 
+                Login.setCurrentUserRole(c.getUserRole());
             } else {
                 Courses.setSelectedCourseCode(-1);
                 Courses.setSelectedCourseShortName("");
@@ -228,7 +274,8 @@ public class SWADMain extends MenuExpandableListActivity {
         super.onResume();
 
         if (isUserOrPasswordEmpty() && (listCourses.size() == 0)) {
-            startActivityForResult(new Intent(this, LoginActivity.class), Constants.LOGIN_REQUEST_CODE);
+            startActivityForResult(new Intent(this, LoginActivity.class),
+                    Constants.LOGIN_REQUEST_CODE);
         } else {
             if (!Preferences.isPreferencesChanged() && !DataBaseHelper.isDbCleaned()) {
                 createSpinnerAdapter();
@@ -243,7 +290,7 @@ public class SWADMain extends MenuExpandableListActivity {
             }
 
             //If today is the user birthday, show birthday message
-            if((Login.getLoggedUser() != null)
+            if ((Login.getLoggedUser() != null)
                     && DateTimeUtils.isBirthday(Login.getLoggedUser().getUserBirthday())) {
                 mBirthdayTextView.setText(getString(R.string.birthdayMsg).replace(
                         Constants.USERNAME_TEMPLATE, Login.getLoggedUser().getUserFirstname()));
@@ -255,15 +302,16 @@ public class SWADMain extends MenuExpandableListActivity {
 
         SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
     }
-	
-	/**
-	 * Initializes application on first run
-	 * @param currentVersion Current version of application
-	 */
-	private void firstRun(int currentVersion) {
+
+    /**
+     * Initializes application on first run
+     *
+     * @param currentVersion Current version of application
+     */
+    private void firstRun(int currentVersion) {
         Intent activity = new Intent(this, AccountAuthenticator.class);
-        
-		 //Configure automatic synchronization
+
+        //Configure automatic synchronization
         Preferences.setSyncTime(String.valueOf(Constants.DEFAULT_SYNC_TIME));
         startActivity(activity);
 
@@ -275,38 +323,39 @@ public class SWADMain extends MenuExpandableListActivity {
         Courses.setSelectedCourseFullName("");
 
         Login.setCurrentUserRole(-1);
-	}
-	
-	/**
-	 * Makes appropriate changes on application upgrade
-	 * @param lastVersion Version from which the application is updated
-	 * @param currentVersion Version to which the application is updated
-	 */
-	private void upgradeApp(int lastVersion, int currentVersion) throws NoSuchAlgorithmException {
-		showUpgradeDialog(this);
+    }
+
+    /**
+     * Makes appropriate changes on application upgrade
+     *
+     * @param lastVersion    Version from which the application is updated
+     * @param currentVersion Version to which the application is updated
+     */
+    private void upgradeApp(int lastVersion, int currentVersion) throws NoSuchAlgorithmException {
+        showUpgradeDialog(this);
         dbHelper.upgradeDB(this);
-        
-        if(lastVersion < 52) {
-        	//Encrypts users table
-        	dbHelper.encryptUsers();
-        	
-        	//If the app is updating from an unencrypted user password version, encrypt user password
-        	Preferences.upgradeCredentials();
-        	
-        	Preferences.setSyncTime(String.valueOf(Constants.DEFAULT_SYNC_TIME));
-        } else if(lastVersion < 57) {
-        	//Reconfigure automatic synchronization
-        	SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, this);                	
-        	if(!Preferences.getSyncTime().equals("0") && Preferences.isSyncEnabled()) {
-        		SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY,
-        				Long.valueOf(Preferences.getSyncTime()), this);
-        	}
+
+        if (lastVersion < 52) {
+            //Encrypts users table
+            dbHelper.encryptUsers();
+
+            //If the app is updating from an unencrypted user password version, encrypt user password
+            Preferences.upgradeCredentials();
+
+            Preferences.setSyncTime(String.valueOf(Constants.DEFAULT_SYNC_TIME));
+        } else if (lastVersion < 57) {
+            //Reconfigure automatic synchronization
+            SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, this);
+            if (!Preferences.getSyncTime().equals("0") && Preferences.isSyncEnabled()) {
+                SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY,
+                        Long.valueOf(Preferences.getSyncTime()), this);
+            }
         }
 
         Preferences.setLastVersion(currentVersion);
-	}
+    }
 
-	@Override
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
@@ -319,13 +368,13 @@ public class SWADMain extends MenuExpandableListActivity {
                     createMenu();
 
                     //User credentials are correct. Set periodic synchronization if enabled
-        	        if (!Preferences.getSyncTime().equals("0")
-        	        		&& Preferences.isSyncEnabled() && SyncUtils.isPeriodicSynced(this)) {
-        	            SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY,
-        	            		Long.parseLong(Preferences.getSyncTime()), this);
-        	        }
+                    if (!Preferences.getSyncTime().equals("0")
+                            && Preferences.isSyncEnabled() && SyncUtils.isPeriodicSynced(this)) {
+                        SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY,
+                                Long.parseLong(Preferences.getSyncTime()), this);
+                    }
 
-        	        showProgress(false);
+                    showProgress(false);
                     break;
                 case Constants.LOGIN_REQUEST_CODE:
                     getCurrentCourses();
@@ -352,7 +401,8 @@ public class SWADMain extends MenuExpandableListActivity {
         /*
       Cursor for database access
      */
-        Cursor dbCursor = dbHelper.getDb().getCursor(DataBaseHelper.DB_TABLE_COURSES, null, "fullName");
+        Cursor dbCursor = dbHelper.getDb()
+                .getCursor(DataBaseHelper.DB_TABLE_COURSES, null, "fullName");
         startManagingCursor(dbCursor);
         if (listCourses.size() != 0) {
             SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
@@ -364,11 +414,12 @@ public class SWADMain extends MenuExpandableListActivity {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner.setAdapter(adapter);
             spinner.setOnItemSelectedListener(new onItemSelectedListener());
-            if (Preferences.getLastCourseSelected() < listCourses.size())
+            if (Preferences.getLastCourseSelected() < listCourses.size()) {
                 spinner.setSelection(Preferences.getLastCourseSelected());
-            else
+            } else {
                 spinner.setSelection(0);
-            	spinner.setOnTouchListener(Spinner_OnTouch);
+            }
+            spinner.setOnTouchListener(Spinner_OnTouch);
         } else {
             cleanSpinner();
         }
@@ -380,54 +431,16 @@ public class SWADMain extends MenuExpandableListActivity {
      */
     private void cleanSpinner() {
         Spinner spinner = (Spinner) this.findViewById(R.id.spinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, new String[]{getString(R.string.clickToGetCourses)});
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item,
+                new String[]{getString(R.string.clickToGetCourses)});
         spinner.setAdapter(adapter);
         spinner.setOnTouchListener(Spinner_OnTouch);
     }
 
-    private class onItemSelectedListener implements OnItemSelectedListener {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position,
-                                   long id) {
-            if (!listCourses.isEmpty()) {
-            	Preferences.setLastCourseSelected(position);
-                Course courseSelected = (Course) listCourses.get(position);
-                courseCode = courseSelected.getId();
-                Courses.setSelectedCourseCode(courseCode);
-                Courses.setSelectedCourseShortName(courseSelected.getShortName());
-                Courses.setSelectedCourseFullName(courseSelected.getFullName());
-                Login.setCurrentUserRole(courseSelected.getUserRole());
-                createMenu();
-            }
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> arg0) {
-
-        }
-    }
-
-    private final View.OnTouchListener Spinner_OnTouch = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            if (event.getAction() == MotionEvent.ACTION_UP) {
-
-                if (dbHelper.getAllRows(DataBaseHelper.DB_TABLE_COURSES).size() == 0) {
-                    if (Utils.connectionAvailable(getApplicationContext()))
-                        getCurrentCourses();
-                    //else
-
-                } else {
-                    v.performClick();
-                }
-            }
-            return true;
-        }
-    };
-
     private void getCurrentCourses() {
-    	showProgress(true);
-    	
+        showProgress(true);
+
         Intent activity = new Intent(this, Courses.class);
         startActivityForResult(activity, Constants.COURSES_REQUEST_CODE);
     }
@@ -436,7 +449,8 @@ public class SWADMain extends MenuExpandableListActivity {
         if (listCourses.size() != 0) {
             Course courseSelected;
             if (Courses.getSelectedCourseCode() != -1) {
-                courseSelected = (Course) dbHelper.getRow(DataBaseHelper.DB_TABLE_COURSES, "id", String.valueOf(Courses.getSelectedCourseCode()));
+                courseSelected = (Course) dbHelper.getRow(DataBaseHelper.DB_TABLE_COURSES, "id",
+                        String.valueOf(Courses.getSelectedCourseCode()));
             } else {
                 int lastSelected = Preferences.getLastCourseSelected();
                 if (lastSelected != -1 && lastSelected < listCourses.size()) {
@@ -461,10 +475,14 @@ public class SWADMain extends MenuExpandableListActivity {
                     createBaseMenu();
                 }
                 int userRole = courseSelected.getUserRole();
-                if ((userRole == Constants.TEACHER_TYPE_CODE) && (currentRole != Constants.TEACHER_TYPE_CODE))
+                if ((userRole == Constants.TEACHER_TYPE_CODE) && (currentRole
+                        != Constants.TEACHER_TYPE_CODE)) {
                     changeToTeacherMenu();
-                if ((userRole == Constants.STUDENT_TYPE_CODE) && (currentRole != Constants.STUDENT_TYPE_CODE))
+                }
+                if ((userRole == Constants.STUDENT_TYPE_CODE) && (currentRole
+                        != Constants.STUDENT_TYPE_CODE)) {
                     changeToStudentMenu();
+                }
                 dBCleaned = false;
             }
         }
@@ -506,17 +524,19 @@ public class SWADMain extends MenuExpandableListActivity {
             messages.put(IMAGE, getResources().getDrawable(R.drawable.msg));
             mHeaderData.add(messages);
 
-            final ArrayList<HashMap<String, Object>> courseData = new ArrayList<HashMap<String, Object>>();
+            final ArrayList<HashMap<String, Object>> courseData
+                    = new ArrayList<HashMap<String, Object>>();
             mChildData.add(courseData);
-            
-            final ArrayList<HashMap<String, Object>> evaluationData = new ArrayList<HashMap<String, Object>>();
+
+            final ArrayList<HashMap<String, Object>> evaluationData
+                    = new ArrayList<HashMap<String, Object>>();
             mChildData.add(evaluationData);
 
             mChildData.add(mUsersData);
             mChildData.add(mMessagesData);
 
             HashMap<String, Object> map;
-            
+
             //Course category
             //Introduction
             map = new HashMap<String, Object>();
@@ -541,9 +561,9 @@ public class SWADMain extends MenuExpandableListActivity {
             //Documents
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.documentsDownloadModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.folder));            
+            map.put(IMAGE, getResources().getDrawable(R.drawable.folder));
             courseData.add(map);
-            //Shared area 
+            //Shared area
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.sharedsDownloadModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.folder_users));
@@ -563,7 +583,7 @@ public class SWADMain extends MenuExpandableListActivity {
             map.put(NAME, getString(R.string.linksModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.link));
             courseData.add(map);
-            
+
             //Evaluation category
             //Assessment system
             map = new HashMap<String, Object>();
@@ -587,7 +607,7 @@ public class SWADMain extends MenuExpandableListActivity {
             map.put(NAME, getString(R.string.generateQRModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.qr));
             mUsersData.add(map);
-            
+
             //Messages category
             //Notifications
             map = new HashMap<String, Object>();
@@ -599,7 +619,7 @@ public class SWADMain extends MenuExpandableListActivity {
             map.put(NAME, getString(R.string.messagesModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.msg_write));
             mMessagesData.add(map);
-            
+
             mExpandableListAdapter = new ImageExpandableListAdapter(
                     this,
                     mHeaderData,
@@ -611,55 +631,58 @@ public class SWADMain extends MenuExpandableListActivity {
                     null,
                     new int[]{}
             );
-            
+
             mExpandableListView.setAdapter(mExpandableListAdapter);
         }
     }
 
     /**
-     * Adapts the current menu to students view. Removes options unique to teachers and adds options unique to students
+     * Adapts the current menu to students view. Removes options unique to teachers and adds options
+     * unique to students
      */
     private void changeToStudentMenu() {
         if (currentRole == Constants.TEACHER_TYPE_CODE) {
             //Removes Publish Note from messages menu
-        	mExpandableListAdapter.removeChild(Constants.MESSAGES_GROUP, Constants.PUBLISH_NOTE_CHILD);
+            mExpandableListAdapter
+                    .removeChild(Constants.MESSAGES_GROUP, Constants.PUBLISH_NOTE_CHILD);
             //Removes Rollcall from users menu
-        	mExpandableListAdapter.removeChild(Constants.USERS_GROUP, Constants.ROLLCALL_CHILD);
+            mExpandableListAdapter.removeChild(Constants.USERS_GROUP, Constants.ROLLCALL_CHILD);
         }
-        
+
         currentRole = Constants.STUDENT_TYPE_CODE;
     }
 
     /**
-     * Adapts the current menu to teachers view. Removes options unique to students and adds options unique to teachers
+     * Adapts the current menu to teachers view. Removes options unique to students and adds options
+     * unique to teachers
      */
     private void changeToTeacherMenu() {
         if (currentRole == Constants.STUDENT_TYPE_CODE) {
             HashMap<String, Object> map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.noticesModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.note));
-            
+
             mMessagesData.add(map);
 
             map = new HashMap<String, Object>();
             map.put(NAME, getString(R.string.rollcallModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.roll_call));
             mUsersData.add(map);
-            
+
             mExpandableListAdapter = new ImageExpandableListAdapter(this, mHeaderData,
                     R.layout.image_list_item,
-                    new String[] {
-                        NAME
-                    }, new int[] {
-                        R.id.listText
-                    },
+                    new String[]{
+                            NAME
+                    }, new int[]{
+                    R.id.listText
+            },
                     mChildData, 0,
-                    null, new int[] {}
+                    null, new int[]{}
             );
 
             mExpandableListView.setAdapter(mExpandableListAdapter);
         }
-        
+
         currentRole = Constants.TEACHER_TYPE_CODE;
     }
 
@@ -676,7 +699,7 @@ public class SWADMain extends MenuExpandableListActivity {
         dBCleaned = true;
         listCourses.clear();
         cleanSpinner();
-        
+
         mExpandableListView.setVisibility(View.GONE);
     }
 
@@ -688,16 +711,16 @@ public class SWADMain extends MenuExpandableListActivity {
     public void onRefreshClick(View v) {
         getCurrentCourses();
     }
-    
+
     /**
      * @return true if user or password preference is empty
      */
-	private boolean isUserOrPasswordEmpty() {
-		return TextUtils.isEmpty(Preferences.getUserID())
-				|| TextUtils.isEmpty(Preferences.getUserPassword());
-	}
-    
-	private void initializeMainViews() {
+    private boolean isUserOrPasswordEmpty() {
+        return TextUtils.isEmpty(Preferences.getUserID())
+                || TextUtils.isEmpty(Preferences.getUserPassword());
+    }
+
+    private void initializeMainViews() {
         mExpandableListView = (ExpandableListView) findViewById(R.id.expandableList);
         mBirthdayLayout = (LinearLayout) findViewById(R.id.birthday_layout);
         mBirthdayTextView = (TextView) findViewById(R.id.birthdayTextView);
@@ -706,7 +729,7 @@ public class SWADMain extends MenuExpandableListActivity {
 
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition,
-                                        int childPosition, long id) {
+                    int childPosition, long id) {
                 // Get the item that was clicked
                 Object o = parent.getExpandableListAdapter().getChild(groupPosition, childPosition);
                 @SuppressWarnings("unchecked")
@@ -743,7 +766,8 @@ public class SWADMain extends MenuExpandableListActivity {
                         activity.putExtra("downloadsAreaCode", Constants.DOCUMENTS_AREA_CODE);
                         startActivityForResult(activity, Constants.DOWNLOADSMANAGER_REQUEST_CODE);
                     } else {
-                        Toast.makeText(ctx, R.string.functionHoneycombMsg, Toast.LENGTH_LONG).show();
+                        Toast.makeText(ctx, R.string.functionHoneycombMsg, Toast.LENGTH_LONG)
+                                .show();
                     }
                 } else if (keyword.equals(getString(R.string.sharedsDownloadModuleLabel))) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -751,7 +775,8 @@ public class SWADMain extends MenuExpandableListActivity {
                         activity.putExtra("downloadsAreaCode", Constants.SHARE_AREA_CODE);
                         startActivityForResult(activity, Constants.DOWNLOADSMANAGER_REQUEST_CODE);
                     } else {
-                        Toast.makeText(ctx, R.string.functionHoneycombMsg, Toast.LENGTH_LONG).show();
+                        Toast.makeText(ctx, R.string.functionHoneycombMsg, Toast.LENGTH_LONG)
+                                .show();
                     }
                 } else if (keyword.equals(getString(R.string.myGroupsModuleLabel))) {
                     activity = new Intent(ctx, MyGroupsManager.class);
@@ -796,8 +821,7 @@ public class SWADMain extends MenuExpandableListActivity {
         };
 
         mExpandableListView.setOnChildClickListener(mExpandableClickListener);
-	}
-
+    }
 
     /**
      * Shows the progress UI and hides the login form.
@@ -805,7 +829,7 @@ public class SWADMain extends MenuExpandableListActivity {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
 
-    	final View course_list = findViewById(R.id.courses_list_view);
+        final View course_list = findViewById(R.id.courses_list_view);
         final View progressAnimation = findViewById(R.id.get_courses_status);
 
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
@@ -816,31 +840,31 @@ public class SWADMain extends MenuExpandableListActivity {
 
             progressAnimation.setVisibility(View.VISIBLE);
             progressAnimation.animate()
-                            .setDuration(shortAnimTime)
-                            .alpha(show ? 1 : 0)
-                            .setListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    progressAnimation.setVisibility(show ? View.VISIBLE : View.GONE);
-                                }
-                            });
+                    .setDuration(shortAnimTime)
+                    .alpha(show ? 1 : 0)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            progressAnimation.setVisibility(show ? View.VISIBLE : View.GONE);
+                        }
+                    });
 
             course_list.setVisibility(View.VISIBLE);
             course_list.animate()
-                          .setDuration(shortAnimTime)
-                          .alpha(show ? 0 : 1)
-                          .setListener(new AnimatorListenerAdapter() {
-                              @Override
-                              public void onAnimationEnd(Animator animation) {
-                            	  course_list.setVisibility(show ? View.GONE
-                                          : View.VISIBLE);
-                              }
-                          });
+                    .setDuration(shortAnimTime)
+                    .alpha(show ? 0 : 1)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            course_list.setVisibility(show ? View.GONE
+                                    : View.VISIBLE);
+                        }
+                    });
         } else {
             // The ViewPropertyAnimator APIs are not available, so simply show
             // and hide the relevant UI components.
-        	progressAnimation.setVisibility(show ? View.VISIBLE : View.GONE);
-        	course_list.setVisibility(show ? View.GONE : View.VISIBLE);
+            progressAnimation.setVisibility(show ? View.VISIBLE : View.GONE);
+            course_list.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
 
@@ -861,6 +885,29 @@ public class SWADMain extends MenuExpandableListActivity {
                 return super.onOptionsItemSelected(item);
         }
 
+    }
+
+    private class onItemSelectedListener implements OnItemSelectedListener {
+
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position,
+                long id) {
+            if (!listCourses.isEmpty()) {
+                Preferences.setLastCourseSelected(position);
+                Course courseSelected = (Course) listCourses.get(position);
+                courseCode = courseSelected.getId();
+                Courses.setSelectedCourseCode(courseCode);
+                Courses.setSelectedCourseShortName(courseSelected.getShortName());
+                Courses.setSelectedCourseFullName(courseSelected.getFullName());
+                Login.setCurrentUserRole(courseSelected.getUserRole());
+                createMenu();
+            }
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> arg0) {
+
+        }
     }
 
 }

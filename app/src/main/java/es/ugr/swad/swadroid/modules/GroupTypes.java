@@ -1,9 +1,16 @@
 package es.ugr.swad.swadroid.modules;
 
+import org.ksoap2.serialization.SoapObject;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADroidTracker;
@@ -11,11 +18,6 @@ import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.model.GroupType;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
-import org.ksoap2.serialization.SoapObject;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
 
 /**
  * Group type module to get the group types of a given course
@@ -24,10 +26,12 @@ import java.util.Vector;
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */
 public class GroupTypes extends Module {
+
     /**
      * Group types name for Logcat
      */
     private static final String TAG = Constants.APP_TAG + " Group Types";
+
     /**
      * Course code to which the request is related
      */
@@ -55,7 +59,7 @@ public class GroupTypes extends Module {
         super.onStart();
 
         SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
-        
+
         try {
             runConnection();
         } catch (Exception e) {
@@ -75,7 +79,7 @@ public class GroupTypes extends Module {
 
     @Override
     protected void requestService() throws Exception {
-    	createRequest(SOAPClient.CLIENT_TYPE);
+        createRequest(SOAPClient.CLIENT_TYPE);
         addParam("wsKey", Login.getLoggedUser().getWsKey());
         addParam("courseCode", (int) Courses.getSelectedCourseCode());
         sendRequest(GroupTypes.class, false);
@@ -95,7 +99,8 @@ public class GroupTypes extends Module {
                 int mandatory = Integer.parseInt(pii.getProperty("mandatory").toString());
                 int multiple = Integer.parseInt(pii.getProperty("multiple").toString());
                 long openTime = Long.parseLong(pii.getProperty("openTime").toString());
-                GroupType g = new GroupType(id, groupTypeName, courseCode, mandatory, multiple, openTime);
+                GroupType g = new GroupType(id, groupTypeName, courseCode, mandatory, multiple,
+                        openTime);
 
                 groupsSWAD.add(g);
 

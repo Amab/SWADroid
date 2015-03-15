@@ -28,72 +28,59 @@ import java.util.Hashtable;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class TestAnswer extends Model {
-    /**
-     * Question code;
-     */
-    private int qstCod;
-    /**
-     * Answer index;
-     */
-    private int ansInd;
-    /**
-     * Flag to know if this is the correct answer of the question
-     */
-    private boolean correct;
-    /**
-     * Flag to know if the user has answered correctly
-     */
-    private boolean correctAnswered;
-    /**
-     * Answer's text
-     */
-    private String answer;
-    /**
-     * Answer's feedback
-     */
-    private String feedback;
+
     /**
      * Type integer
      */
     public static final String TYPE_INT = "int";
+
     /**
      * Type float
      */
     public static final String TYPE_FLOAT = "float";
+
     /**
      * Type true/false
      */
     public static final String TYPE_TRUE_FALSE = "TF";
+
     /**
      * Type unique choice
      */
     public static final String TYPE_UNIQUE_CHOICE = "uniqueChoice";
+
     /**
      * Type multiple choice
      */
     public static final String TYPE_MULTIPLE_CHOICE = "multipleChoice";
+
     /**
      * Type text
      */
     public static final String TYPE_TEXT = "text";
+
     /**
      * True value
      */
     public static final String VALUE_TRUE = "T";
+
     /**
      * False value
      */
     public static final String VALUE_FALSE = "F";
-    /**
-     * User answer
-     */
-    private String userAnswer;
+
     private static final PropertyInfo PI_id = new PropertyInfo();
+
     private static final PropertyInfo PI_correct = new PropertyInfo();
+
     private static final PropertyInfo PI_correctAnswered = new PropertyInfo();
+
     private static final PropertyInfo PI_answer = new PropertyInfo();
+
     private static final PropertyInfo PI_ansInd = new PropertyInfo();
+
     private static final PropertyInfo PI_feedback = new PropertyInfo();
+
     @SuppressWarnings("unused")
     private static PropertyInfo[] PI_PROP_ARRAY =
             {
@@ -106,6 +93,41 @@ public class TestAnswer extends Model {
             };
 
     /**
+     * Question code;
+     */
+    private int qstCod;
+
+    /**
+     * Answer index;
+     */
+    private int ansInd;
+
+    /**
+     * Flag to know if this is the correct answer of the question
+     */
+    private boolean correct;
+
+    /**
+     * Flag to know if the user has answered correctly
+     */
+    private boolean correctAnswered;
+
+    /**
+     * Answer's text
+     */
+    private String answer;
+
+    /**
+     * Answer's feedback
+     */
+    private String feedback;
+
+    /**
+     * User answer
+     */
+    private String userAnswer;
+
+    /**
      * Constructor
      *
      * @param id       Answer id
@@ -115,7 +137,8 @@ public class TestAnswer extends Model {
      * @param answer   Answer's text
      * @param feedback Text of the answer's feedback
      */
-    public TestAnswer(long id, int ansInd, int qstCod, boolean correct, String answer, String feedback) {
+    public TestAnswer(long id, int ansInd, int qstCod, boolean correct, String answer,
+            String feedback) {
         super(id);
         this.ansInd = ansInd;
         this.qstCod = qstCod;
@@ -200,7 +223,7 @@ public class TestAnswer extends Model {
      * Checks if the user has answered correctly
      *
      * @return true if the user has answered correctly
-     *         false otherwise
+     * false otherwise
      */
     public boolean isCorrectAnswered() {
         return correctAnswered;
@@ -329,7 +352,8 @@ public class TestAnswer extends Model {
     /* (non-Javadoc)
      * @see org.ksoap2.serialization.KvmSerializable#getPropertyInfo(int, java.util.Hashtable, org.ksoap2.serialization.PropertyInfo)
      */
-    public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo propertyInfo) {
+    public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1,
+            PropertyInfo propertyInfo) {
         switch (param) {
             case 0:
                 propertyInfo.type = PropertyInfo.LONG_CLASS;

@@ -19,6 +19,13 @@
 
 package es.ugr.swad.swadroid.modules;
 
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.ksoap2.SoapFault;
+import org.ksoap2.transport.HttpResponseException;
+import org.xmlpull.v1.XmlPullParserException;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -29,6 +36,15 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
+
+import java.io.IOException;
+import java.lang.ref.WeakReference;
+import java.net.SocketTimeoutException;
+import java.security.cert.CertificateException;
+import java.util.concurrent.TimeoutException;
+
+import javax.net.ssl.SSLException;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
@@ -37,59 +53,54 @@ import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.IWebserviceClient;
 import es.ugr.swad.swadroid.webservices.RESTClient;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.ksoap2.SoapFault;
-import org.ksoap2.transport.HttpResponseException;
-import org.xmlpull.v1.XmlPullParserException;
-
-import javax.net.ssl.SSLException;
-import java.io.IOException;
-import java.lang.ref.WeakReference;
-import java.net.SocketTimeoutException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
-import java.util.concurrent.TimeoutException;
 
 /**
  * Superclass for encapsulate common behavior of all modules.
- * 
+ *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public abstract class Module extends MenuActivity {
+
     /**
      * Class Module's tag name for Logcat
      */
     private static final String TAG = Constants.APP_TAG + " Module";
-    /**
-     * Async Task for background jobs
-     */
-    private Connect connect;
-    /**
-     * Client for SWAD webservices
-     */
-    private IWebserviceClient webserviceClient;
-    /**
-     * Webservice result.
-     */
-    protected Object result;
-    /**
-     * Shows error messages.
-     */
-    private AlertDialog errorDialog = null;
-    /**
-     * Progress dialog
-     */
-    private ProgressDialog progressDialog = null;
-    /**
-     * Flag for show the progress dialog
-     */
-    private final boolean showDialog = false;
+
     /**
      * Connection available flag
      */
     protected static boolean isConnected;
+
+    /**
+     * Flag for show the progress dialog
+     */
+    private final boolean showDialog = false;
+
+    /**
+     * Webservice result.
+     */
+    protected Object result;
+
+    /**
+     * Async Task for background jobs
+     */
+    private Connect connect;
+
+    /**
+     * Client for SWAD webservices
+     */
+    private IWebserviceClient webserviceClient;
+
+    /**
+     * Shows error messages.
+     */
+    private AlertDialog errorDialog = null;
+
+    /**
+     * Progress dialog
+     */
+    private ProgressDialog progressDialog = null;
+
     /**
      * METHOD_NAME param for webservice request.
      */
@@ -97,11 +108,6 @@ public abstract class Module extends MenuActivity {
 
     /**
      * Connects to SWAD and gets user data.
-     * 
-     * @throws NoSuchAlgorithmException
-     * @throws IOException
-     * @throws XmlPullParserException
-     * @throws Exception
      */
     protected abstract void requestService() throws Exception;
 
@@ -128,13 +134,13 @@ public abstract class Module extends MenuActivity {
         isConnected = Utils.connectionAvailable(this);
         if (!isConnected) {
             Toast.makeText(this, R.string.errorMsgNoConnection,
-                           Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_SHORT).show();
         } else {
             // If this is not the Login module, launch login check
             if (!(this instanceof Login)) {
                 Intent loginActivity = new Intent(this, Login.class);
                 startActivityForResult(loginActivity,
-                                       Constants.LOGIN_REQUEST_CODE);
+                        Constants.LOGIN_REQUEST_CODE);
             }
         }
     }
@@ -170,7 +176,7 @@ public abstract class Module extends MenuActivity {
      * @Override public Object onRetainNonConfigurationInstance() { return
      * connect; }
      */
-    
+
     /*
      * (non-Javadoc)
      * @see android.app.Activity#onPause()
@@ -244,7 +250,7 @@ public abstract class Module extends MenuActivity {
 
     /**
      * Sets METHOD_NAME parameter.
-     * 
+     *
      * @param METHOD_NAME METHOD_NAME parameter.
      */
     protected void setMETHOD_NAME(String METHOD_NAME) {
@@ -270,7 +276,7 @@ public abstract class Module extends MenuActivity {
 
     /**
      * Adds a parameter to webservice request.
-     * 
+     *
      * @param param Parameter name.
      * @param value Parameter value.
      */
@@ -281,10 +287,9 @@ public abstract class Module extends MenuActivity {
     /**
      * Sends a SOAP request to the specified webservice in METHOD_NAME class
      * constant of the webservice client.
-     * 
-     * @param cl Class to be mapped
+     *
+     * @param cl     Class to be mapped
      * @param simple Flag for select simple or complex response
-     * @throws Exception
      */
     protected void sendRequest(Class<?> cl, boolean simple) throws Exception {
         ((SOAPClient) webserviceClient).sendRequest(cl, simple);
@@ -294,14 +299,11 @@ public abstract class Module extends MenuActivity {
     /**
      * Sends a REST request to the specified webservice in METHOD_NAME class
      * constant of the webservice client.
-     * 
-     * @param cl Class to be mapped
+     *
+     * @param cl     Class to be mapped
      * @param simple Flag for select simple or complex response
-     * @param type Request type
-     * @param json JSON object to be sended
-     * @throws ClientProtocolException
-     * @throws IOException
-     * @throws JSONException
+     * @param type   Request type
+     * @param json   JSON object to be sended
      */
     protected void sendRequest(Class<?> cl, boolean simple, RESTClient.REQUEST_TYPE type,
             JSONObject json) throws ClientProtocolException, CertificateException, IOException,
@@ -321,25 +323,30 @@ public abstract class Module extends MenuActivity {
      * Shows progress dialog when connecting to SWAD
      */
     class Connect extends AsyncTask<String, Void, Void> {
+
+        final String progressDescription;
+
+        final int progressTitle;
+
+        final boolean showDialog;
+
         /**
          * Activity that launched the task
          */
         WeakReference<Module> activity;
+
         /**
          * Exception pointer
          */
         Exception e;
-        final String progressDescription;
-        final int progressTitle;
-        final boolean showDialog;
 
         /**
          * Shows progress dialog and connects to SWAD in background
-         * 
-         * @param activity Reference to Module activity
-         * @param show Flag for show a progress dialog
+         *
+         * @param activity            Reference to Module activity
+         * @param show                Flag for show a progress dialog
          * @param progressDescription Description to be showed in dialog
-         * @param progressTitle Title to be showed in dialog
+         * @param progressTitle       Title to be showed in dialog
          */
         public Connect(Module activity, boolean show,
                 String progressDescription, int progressTitle) {
@@ -372,7 +379,9 @@ public abstract class Module extends MenuActivity {
          */
         @Override
         protected Void doInBackground(String... urls) {
-            if (isDebuggable) Log.d(TAG, "doInBackground()");
+            if (isDebuggable) {
+                Log.d(TAG, "doInBackground()");
+            }
 
             try {
                 // Sends webservice request
@@ -431,7 +440,8 @@ public abstract class Module extends MenuActivity {
                     errorMsg = getString(R.string.errorServerCertificateMsg);
                 } else if (e instanceof XmlPullParserException) {
                     errorMsg = getString(R.string.errorServerResponseMsg);
-                } else if ((e instanceof TimeoutException) || (e instanceof SocketTimeoutException)) {
+                } else if ((e instanceof TimeoutException)
+                        || (e instanceof SocketTimeoutException)) {
                     errorMsg = getString(R.string.errorTimeoutMsg);
                     sendException = false;
                 } else if (e instanceof HttpResponseException) {
@@ -439,18 +449,21 @@ public abstract class Module extends MenuActivity {
 
                     Log.e(TAG, "httpStatusCode=" + httpStatusCode);
 
-                    switch(httpStatusCode) {
-                        case 500: errorMsg = getString(R.string.errorInternalServerMsg);
-                                  break;
+                    switch (httpStatusCode) {
+                        case 500:
+                            errorMsg = getString(R.string.errorInternalServerMsg);
+                            break;
 
-                        case 503: errorMsg = getString(R.string.errorServiceUnavailableMsg);
-                                  sendException = false;
-                                  break;
+                        case 503:
+                            errorMsg = getString(R.string.errorServiceUnavailableMsg);
+                            sendException = false;
+                            break;
 
-                        default:  errorMsg = e.getMessage();
-                                  if ((errorMsg == null) || errorMsg.equals("")) {
-                                      errorMsg = getString(R.string.errorConnectionMsg);
-                                  }
+                        default:
+                            errorMsg = e.getMessage();
+                            if ((errorMsg == null) || errorMsg.equals("")) {
+                                errorMsg = getString(R.string.errorConnectionMsg);
+                            }
                     }
                 } else {
                     errorMsg = e.getMessage();

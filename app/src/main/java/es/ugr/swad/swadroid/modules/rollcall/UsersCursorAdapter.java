@@ -20,6 +20,8 @@
  */
 package es.ugr.swad.swadroid.modules.rollcall;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.view.LayoutInflater;
@@ -29,7 +31,7 @@ import android.widget.CheckBox;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.nostra13.universalimageloader.core.ImageLoader;
+
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.ImageFactory;
@@ -42,20 +44,18 @@ import es.ugr.swad.swadroid.utils.Utils;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class UsersCursorAdapter extends CursorAdapter {
+
     private DataBaseHelper dbHelper;
+
     private Cursor dbCursor;
+
     private Crypto crypto;
+
     private ImageLoader loader;
+
     private int eventCode;
+
     private LayoutInflater inflater;
-
-    private static class ViewHolder {
-        ImageView image;
-        TextView text1;
-        TextView text2;
-        CheckBox checkbox;
-
-    }
 
     /**
      * Constructor
@@ -63,7 +63,7 @@ public class UsersCursorAdapter extends CursorAdapter {
      * @param context   Application context
      * @param c         Database cursor
      * @param dbHelper  Database helper
-     * @param eventCode  Code of related event
+     * @param eventCode Code of related event
      */
     public UsersCursorAdapter(Context context, Cursor c, DataBaseHelper dbHelper, int eventCode) {
 
@@ -84,10 +84,10 @@ public class UsersCursorAdapter extends CursorAdapter {
      * @param c           Database cursor
      * @param autoRequery Flag to set autoRequery function
      * @param dbHelper    Database helper
-     * @param eventCode  Code of related event
+     * @param eventCode   Code of related event
      */
     public UsersCursorAdapter(Context context, Cursor c,
-                              boolean autoRequery, DataBaseHelper dbHelper, int eventCode) {
+            boolean autoRequery, DataBaseHelper dbHelper, int eventCode) {
 
         super(context, c, autoRequery);
 
@@ -100,9 +100,12 @@ public class UsersCursorAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        String userSurname1 = crypto.decrypt(cursor.getString(cursor.getColumnIndex("userSurname1")));
-        String userSurname2 = crypto.decrypt(cursor.getString(cursor.getColumnIndex("userSurname2")));
-        String userFirstname = crypto.decrypt(cursor.getString(cursor.getColumnIndex("userFirstname")));
+        String userSurname1 = crypto
+                .decrypt(cursor.getString(cursor.getColumnIndex("userSurname1")));
+        String userSurname2 = crypto
+                .decrypt(cursor.getString(cursor.getColumnIndex("userSurname2")));
+        String userFirstname = crypto
+                .decrypt(cursor.getString(cursor.getColumnIndex("userFirstname")));
         String userID = crypto.decrypt(cursor.getString(cursor.getColumnIndex("userID")));
         final long userCode = cursor.getLong(cursor.getColumnIndex("userCode"));
         String userPhoto = cursor.getString(cursor.getColumnIndex("photoPath"));
@@ -163,7 +166,7 @@ public class UsersCursorAdapter extends CursorAdapter {
         });*/
 
         holder.image.setImageResource(R.drawable.usr_bl);
-        if(userPhoto != null) {
+        if (userPhoto != null) {
             ImageFactory.displayImage(loader, crypto.decrypt(userPhoto), holder.image);
         }
 
@@ -183,5 +186,17 @@ public class UsersCursorAdapter extends CursorAdapter {
         view.setTag(holder);
 
         return view;
+    }
+
+    private static class ViewHolder {
+
+        ImageView image;
+
+        TextView text1;
+
+        TextView text2;
+
+        CheckBox checkbox;
+
     }
 }

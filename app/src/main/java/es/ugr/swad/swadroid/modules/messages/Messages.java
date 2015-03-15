@@ -18,6 +18,8 @@
  */
 package es.ugr.swad.swadroid.modules.messages;
 
+import org.ksoap2.serialization.SoapObject;
+
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,6 +29,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.Vector;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADroidTracker;
@@ -34,10 +40,6 @@ import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
-import org.ksoap2.serialization.SoapObject;
-
-import java.util.ArrayList;
-import java.util.Vector;
 
 /**
  * Module for send messages.
@@ -47,51 +49,59 @@ import java.util.Vector;
  * @author Jose Antonio Guerrero Aviles <cany20@gmail.com>
  */
 public class Messages extends Module {
-	/**
+
+    /**
      * Messages tag name for Logcat
      */
     private static final String TAG = Constants.APP_TAG + " Messages";
-    /**
-     * Message code
-     */
-    private Long eventCode;
-    /**
-     * Message's receivers
-     */
-    private String receivers;
-    /**
-     * Names of receivers
-     */
-    private String receiversNames;
-    /**
-     * Message's subject
-     */
-    private String subject;
-    /**
-     * Message's body
-     */
-    private String body;
+
     /**
      * Receivers EditText
      */
     EditText rcvEditText;
+
     /**
      * Subject EditText
      */
     EditText subjEditText;
+
     /**
      * Body EditText
      */
     EditText bodyEditText;
 
- 
+    /**
+     * Message code
+     */
+    private Long eventCode;
+
+    /**
+     * Message's receivers
+     */
+    private String receivers;
+
+    /**
+     * Names of receivers
+     */
+    private String receiversNames;
+
+    /**
+     * Message's subject
+     */
+    private String subject;
+
+    /**
+     * Message's body
+     */
+    private String body;
+
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         eventCode = getIntent().getLongExtra("eventCode", 0);
         setContentView(R.layout.messages_screen);
         setTitle(R.string.messagesModuleLabel);
@@ -100,36 +110,37 @@ public class Messages extends Module {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             getActionBar().setDisplayHomeAsUpEnabled(true);
         }
-		
+
         rcvEditText = (EditText) findViewById(R.id.message_receivers_text);
         subjEditText = (EditText) findViewById(R.id.message_subject_text);
-        bodyEditText = (EditText) findViewById(R.id.message_body_text);       
-       
-        if (savedInstanceState != null) 
-            writeData();
+        bodyEditText = (EditText) findViewById(R.id.message_body_text);
 
-        setMETHOD_NAME("sendMessage");        
+        if (savedInstanceState != null) {
+            writeData();
+        }
+
+        setMETHOD_NAME("sendMessage");
     }
-    
+
     @Override
-	protected void onStart() {
-		super.onStart();
+    protected void onStart() {
+        super.onStart();
         SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
-        
+
         if (eventCode != 0) {
-        	
+
             subjEditText.setText("Re: " + getIntent().getStringExtra("summary"));
             rcvEditText.setVisibility(View.GONE);
         }
-	}
+    }
 
-	/**
+    /**
      * Reads user input
      */
     private void readData() {
         receivers = rcvEditText.getText().toString();
         subject = subjEditText.getText().toString();
-        body = bodyEditText.getText().toString();        
+        body = bodyEditText.getText().toString();
     }
 
     /**
@@ -146,7 +157,8 @@ public class Messages extends Module {
      */
     private void addFootBody() {
         body = body.replaceAll("\n", "<br />");
-        body = body + "<br /><br />" + getString(R.string.footMessageMsg) + " " + getString(R.string.app_name) +
+        body = body + "<br /><br />" + getString(R.string.footMessageMsg) + " " + getString(
+                R.string.app_name) +
                 "<br />" + getString(R.string.marketWebURL);
         //body = body + "<br /><br />"+ getString(R.string.footMessageMsg) + " <a href=\"" +
         //		getString(R.string.marketWebURL) + "\">" + getString(R.string.app_name) + "</a>";
@@ -184,7 +196,8 @@ public class Messages extends Module {
                 receiversNames += "\n";
                 receiversNames += firstname + " " + surname1 + " " + surname2;
 
-                if (!nickname.equalsIgnoreCase(Constants.NULL_VALUE) && !nickname.equalsIgnoreCase("")) {
+                if (!nickname.equalsIgnoreCase(Constants.NULL_VALUE) && !nickname
+                        .equalsIgnoreCase("")) {
                     receiversNames += " (" + nickname + ")";
                 }
             }
@@ -227,20 +240,20 @@ public class Messages extends Module {
     protected void onError() {
 
     }
-    
-    @Override
-	protected void onRestart() {
 
-		super.onRestart();
-	}
-    
+    @Override
+    protected void onRestart() {
+
+        super.onRestart();
+    }
+
 
     /* (non-Javadoc)
      * @see android.app.Activity#onRestoreInstanceState(android.os.Bundle)
      */
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
-    	eventCode = savedInstanceState.getLong("eventCode");
+        eventCode = savedInstanceState.getLong("eventCode");
         receivers = savedInstanceState.getString("receivers");
         receiversNames = savedInstanceState.getString("receiversNames");
         subject = savedInstanceState.getString("subject");
@@ -268,50 +281,51 @@ public class Messages extends Module {
     }
 
     @Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-    	
-    	if (data != null) {
-    		receivers = data.getStringExtra("ListaRcvs");
-    		writeData();
-        }
-		super.onActivityResult(requestCode, resultCode, data);
-	}
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-	    getMenuInflater().inflate(R.menu.messages_main_activity_actions, menu);
-	    return super.onCreateOptionsMenu(menu);
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-	    switch (item.getItemId()) {
-	        case R.id.action_addUser:	        	
-	        	Intent callUsersList = new Intent (getBaseContext(), UsersList.class);
-				startActivityForResult(callUsersList, 0);
-	            
-	            return true;
-	            
-	        case R.id.action_sendMsg:
-	            try {	
-	            	if((eventCode == 0) && (rcvEditText.getText().length() == 0)) {
-	            		Toast.makeText(this, R.string.noReceiversMsg, Toast.LENGTH_LONG).show();
-	            	} else if(subjEditText.getText().length() == 0) {
-	            		Toast.makeText(this, R.string.noSubjectMessageMsg, Toast.LENGTH_LONG).show();
-	            	} else {
-	                    runConnection();            		
-	            	}
-	            } catch (Exception e) {
-	                String errorMsg = getString(R.string.errorServerResponseMsg);
-	                error(TAG, errorMsg, e, true);
-	            }
-            
-	            return true;
-            
-	        default:
-	            return super.onOptionsItemSelected(item);
-	    }
-	    
-	}
+        if (data != null) {
+            receivers = data.getStringExtra("ListaRcvs");
+            writeData();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.messages_main_activity_actions, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_addUser:
+                Intent callUsersList = new Intent(getBaseContext(), UsersList.class);
+                startActivityForResult(callUsersList, 0);
+
+                return true;
+
+            case R.id.action_sendMsg:
+                try {
+                    if ((eventCode == 0) && (rcvEditText.getText().length() == 0)) {
+                        Toast.makeText(this, R.string.noReceiversMsg, Toast.LENGTH_LONG).show();
+                    } else if (subjEditText.getText().length() == 0) {
+                        Toast.makeText(this, R.string.noSubjectMessageMsg, Toast.LENGTH_LONG)
+                                .show();
+                    } else {
+                        runConnection();
+                    }
+                } catch (Exception e) {
+                    String errorMsg = getString(R.string.errorServerResponseMsg);
+                    error(TAG, errorMsg, e, true);
+                }
+
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
 
 }

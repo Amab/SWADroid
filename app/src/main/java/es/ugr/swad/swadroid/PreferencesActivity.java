@@ -35,6 +35,12 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
 import android.util.Log;
 import android.widget.Toast;
+
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.gui.widget.SeekBarDialogPreference;
 import es.ugr.swad.swadroid.modules.Login;
@@ -42,53 +48,58 @@ import es.ugr.swad.swadroid.sync.SyncUtils;
 import es.ugr.swad.swadroid.utils.Crypto;
 import es.ugr.swad.swadroid.utils.Utils;
 
-import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
 /**
  * Preferences window of application.
  *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class PreferencesActivity extends PreferenceActivity implements OnPreferenceChangeListener {
+
     /**
      * PreferencesActivity tag name for Logcat
      */
     public static final String TAG = Constants.APP_TAG + " PreferencesActivity";
+
     /**
-     * Application context
+     * Application debuggable flag
      */
-    public Context ctx;
+    protected static boolean isDebuggable;
+
     /**
      * Log out Preference
      */
     private static Preference logOutPref;
+
     /**
      * Current application version preference
      */
     private static Preference currentVersionPref;
+
     /**
      * Rate preference
      */
     private static Preference ratePref;
+
     /**
      * Twitter preference
      */
     private static Preference twitterPref;
+
     /**
      * Facebook preference
      */
     private static Preference facebookPref;
+
     /**
      * Google Plus preference
      */
     private static Preference googlePlusPref;
+
     /**
      * Blog preference
      */
     private static Preference blogPref;
+
     /**
      * Share preference
      */
@@ -97,34 +108,42 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
      * Server preference
      */
     //private static Preference serverPref;
+
     /**
      * Synchronization time preference
      */
     private static Preference syncTimePref;
+
     /**
      * Synchronization enable preference
      */
     private static CheckBoxPreference syncEnablePref;
+
     /**
      * Notifications limit preference
      */
     private static SeekBarDialogPreference notifLimitPref;
+
     /**
      * Notifications sound enable preference
      */
     private static CheckBoxPreference notifSoundEnablePref;
+
     /**
      * Notifications vibrate enable preference
      */
     private static CheckBoxPreference notifVibrateEnablePref;
+
     /**
      * Notifications lights enable preference
      */
     private static CheckBoxPreference notifLightsEnablePref;
+
     /**
-     * Application debuggable flag
+     * Application context
      */
-    protected static boolean isDebuggable;
+    public Context ctx;
+
     /**
      * User password
      */
@@ -139,28 +158,29 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
      * SWAD server to use
      */
     //private String mServer;
-    
+
     /**
      * User password preference changed flag
      */
     private boolean userPasswordPrefChanged = false;
-    
+
     /**
      * Shows an error message.
      *
      * @param message Error message to show.
      */
     protected void error(String tag, String message, Exception ex, boolean sendException) {
-    	DialogInterface.OnClickListener onClickListener = new DialogInterface.OnClickListener() {
+        DialogInterface.OnClickListener onClickListener = new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 finish();
             }
         };
-        
-    	AlertDialog errorDialog = DialogFactory.createErrorDialog(this, TAG, message, ex, sendException,
-    			isDebuggable, onClickListener); 
-    	
-    	errorDialog.show();
+
+        AlertDialog errorDialog = DialogFactory
+                .createErrorDialog(this, TAG, message, ex, sendException,
+                        isDebuggable, onClickListener);
+
+        errorDialog.show();
     }
 
     /* (non-Javadoc)
@@ -169,20 +189,20 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         //Restore preferences        
         getPreferenceManager().setSharedPreferencesName(Preferences.PREFS_NAME);
         addPreferencesFromResource(R.xml.preferences);
-        
-        ctx = getApplicationContext();         
+
+        ctx = getApplicationContext();
 
         //Initialize database
-        try {    		
+        try {
             getPackageManager().getApplicationInfo(
                     getPackageName(), 0);
-    		isDebuggable = (ApplicationInfo.FLAG_DEBUGGABLE != 0);
+            isDebuggable = (ApplicationInfo.FLAG_DEBUGGABLE != 0);
         } catch (Exception ex) {
-        	error(TAG, ex.getMessage(), ex, true);
+            error(TAG, ex.getMessage(), ex, true);
         }
 
         logOutPref = findPreference(Preferences.LOGOUTPREF);
@@ -197,9 +217,12 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         syncTimePref = findPreference(Preferences.SYNCTIMEPREF);
         syncEnablePref = (CheckBoxPreference) findPreference(Preferences.SYNCENABLEPREF);
         notifLimitPref = (SeekBarDialogPreference) findPreference(Preferences.NOTIFLIMITPREF);
-        notifSoundEnablePref = (CheckBoxPreference) findPreference(Preferences.NOTIFSOUNDENABLEPREF);
-        notifVibrateEnablePref = (CheckBoxPreference) findPreference(Preferences.NOTIFVIBRATEENABLEPREF);
-        notifLightsEnablePref = (CheckBoxPreference) findPreference(Preferences.NOTIFLIGHTSENABLEPREF);
+        notifSoundEnablePref = (CheckBoxPreference) findPreference(
+                Preferences.NOTIFSOUNDENABLEPREF);
+        notifVibrateEnablePref = (CheckBoxPreference) findPreference(
+                Preferences.NOTIFVIBRATEENABLEPREF);
+        notifLightsEnablePref = (CheckBoxPreference) findPreference(
+                Preferences.NOTIFLIGHTSENABLEPREF);
 
         ratePref.setOnPreferenceChangeListener(this);
         twitterPref.setOnPreferenceChangeListener(this);
@@ -214,26 +237,28 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         notifSoundEnablePref.setOnPreferenceChangeListener(this);
         notifVibrateEnablePref.setOnPreferenceChangeListener(this);
         notifLightsEnablePref.setOnPreferenceChangeListener(this);
-        
+
         notifLimitPref.setProgress(Preferences.getNotifLimit());
-        
+
         logOutPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-            
+
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 Preferences.logoutClean(ctx, Preferences.LOGOUTPREF);
                 Preferences.setUserID("");
                 Preferences.setUserPassword("");
                 Login.setLogged(false);
-                
-                startActivity(new Intent(getBaseContext(), LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-                        | Intent.FLAG_ACTIVITY_SINGLE_TOP).putExtra("fromPreference", true));
+
+                startActivity(new Intent(getBaseContext(), LoginActivity.class)
+                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                | Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                        .putExtra("fromPreference", true));
 
                 finish();
                 return true;
             }
         });
-        
+
         ratePref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             /**
              * Called when a preference is selected.
@@ -302,17 +327,21 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
             public boolean onPreferenceClick(Preference preference) {
                 Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                 sharingIntent.setType("text/plain");
-                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.app_name));
-                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, getString(R.string.shareBodyMsg));
-                startActivity(Intent.createChooser(sharingIntent, getString(R.string.shareTitle_menu)));
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
+                        getString(R.string.app_name));
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT,
+                        getString(R.string.shareBodyMsg));
+                startActivity(
+                        Intent.createChooser(sharingIntent, getString(R.string.shareTitle_menu)));
                 return true;
             }
         });
 
         //mServer = Preferences.getServer();
-        
+
         try {
-            currentVersionPref.setSummary(getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
+            currentVersionPref.setSummary(
+                    getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
         } catch (NameNotFoundException e) {
             SWADroidTracker.sendException(getApplicationContext(), e, false);
         }
@@ -324,20 +353,20 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         // By default we store the value in the preferences
         boolean returnValue = true;
-        
+
         String key = preference.getKey();
-        
+
         if (Preferences.USERIDPREF.equals(key)) {
-        	Preferences.setUserID((String) newValue);
-        	preference.setSummary((CharSequence) newValue);
-        	
-        	//Reset user password on userid change
-        	Preferences.setUserPassword("");
-        	Log.i(TAG, "Resetted user password due to userid change"); 
-        	
-        	//If preferences have changed, logout
-        	Preferences.logoutClean(ctx, key);
-        	syncPrefsChanged = true;
+            Preferences.setUserID((String) newValue);
+            preference.setSummary((CharSequence) newValue);
+
+            //Reset user password on userid change
+            Preferences.setUserPassword("");
+            Log.i(TAG, "Resetted user password due to userid change");
+
+            //If preferences have changed, logout
+            Preferences.logoutClean(ctx, key);
+            syncPrefsChanged = true;
         } else if (Preferences.USERPASSWORDPREF.equals(key)) {
             try {
                 String password = (String) newValue;
@@ -345,7 +374,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
                 // Try to guest if user is using PRADO password
                 if ((password.length() >= 8) && !Utils.isLong(password)) {
                     userPassword = Crypto.encryptPassword(password);
-                    
+
                     // If preferences have changed, logout
                     Log.i(TAG, "Forced logout due to " + key + " change in preferences");
                     userPasswordPrefChanged = true;
@@ -356,12 +385,12 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
                     Toast.makeText(getApplicationContext(), R.string.pradoLoginToast,
                             Toast.LENGTH_LONG).show();
                     // Do not save the password to the preferences.
-                    returnValue = false; 
+                    returnValue = false;
                 }
-                
-			} catch (NoSuchAlgorithmException ex) {
-				error(TAG, ex.getMessage(), ex, true);
-			}
+
+            } catch (NoSuchAlgorithmException ex) {
+                error(TAG, ex.getMessage(), ex, true);
+            }
         /*} else if (Preferences.SERVERPREF.equals(key)) {
             mServer = newValue.toString();
             Preferences.setServer(mServer);
@@ -369,114 +398,120 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
             //If preferences have changed, logout
         	Preferences.logoutClean(ctx, key);
         	syncPrefsChanged = true;*/
-        } else if(Preferences.SYNCENABLEPREF.equals(key)) {
-        	boolean syncEnabled = (Boolean) newValue;
+        } else if (Preferences.SYNCENABLEPREF.equals(key)) {
+            boolean syncEnabled = (Boolean) newValue;
             Preferences.setSyncEnabled(syncEnabled);
             syncEnablePref.setChecked(syncEnabled);
             syncPrefsChanged = true;
-        } else if(Preferences.SYNCTIMEPREF.equals(key)) { 
-        	String syncTime = (String) newValue;
-        	long lastSyncTime = Preferences.getLastSyncTime();
-        	
-        	Preferences.setSyncTime(syncTime);
-        	
-            List<String> prefSyncTimeValues = Arrays.asList(getResources().getStringArray(R.array.prefSyncTimeValues));
-            List<String> prefSyncTimeEntries = Arrays.asList(getResources().getStringArray(R.array.prefSyncTimeEntries));
+        } else if (Preferences.SYNCTIMEPREF.equals(key)) {
+            String syncTime = (String) newValue;
+            long lastSyncTime = Preferences.getLastSyncTime();
+
+            Preferences.setSyncTime(syncTime);
+
+            List<String> prefSyncTimeValues = Arrays
+                    .asList(getResources().getStringArray(R.array.prefSyncTimeValues));
+            List<String> prefSyncTimeEntries = Arrays
+                    .asList(getResources().getStringArray(R.array.prefSyncTimeEntries));
             int prefSyncTimeIndex = prefSyncTimeValues.indexOf(syncTime);
             String prefSyncTimeEntry = prefSyncTimeEntries.get(prefSyncTimeIndex);
-            
-            if(lastSyncTime == 0) {
-            	syncEnablePref.setSummary(getString(R.string.lastSyncTimeLabel) + ": " 
-            			+ getString(R.string.neverLabel));
+
+            if (lastSyncTime == 0) {
+                syncEnablePref.setSummary(getString(R.string.lastSyncTimeLabel) + ": "
+                        + getString(R.string.neverLabel));
             } else {
-                java.text.DateFormat dateShortFormat = android.text.format.DateFormat.getDateFormat(this);
-                java.text.DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(this);
-            	Date lastSyncDate = new Date(lastSyncTime);
-            	
-            	syncEnablePref.setSummary(getString(R.string.lastSyncTimeLabel) + ": "
-            			+ dateShortFormat.format(lastSyncDate) + " " 
-            			+ timeFormat.format(lastSyncDate));
+                java.text.DateFormat dateShortFormat = android.text.format.DateFormat
+                        .getDateFormat(this);
+                java.text.DateFormat timeFormat = android.text.format.DateFormat
+                        .getTimeFormat(this);
+                Date lastSyncDate = new Date(lastSyncTime);
+
+                syncEnablePref.setSummary(getString(R.string.lastSyncTimeLabel) + ": "
+                        + dateShortFormat.format(lastSyncDate) + " "
+                        + timeFormat.format(lastSyncDate));
             }
-            
+
             syncTimePref.setSummary(prefSyncTimeEntry);
             syncPrefsChanged = true;
-        } else if(Preferences.NOTIFLIMITPREF.equals(key)) {
-        	 int notifLimit = (Integer) newValue;
-        	 Preferences.setNotifLimit(notifLimit);
-        	 Preferences.clearOldNotifications(notifLimit);
-        } else if(Preferences.NOTIFSOUNDENABLEPREF.equals(key)) {
+        } else if (Preferences.NOTIFLIMITPREF.equals(key)) {
+            int notifLimit = (Integer) newValue;
+            Preferences.setNotifLimit(notifLimit);
+            Preferences.clearOldNotifications(notifLimit);
+        } else if (Preferences.NOTIFSOUNDENABLEPREF.equals(key)) {
             boolean notifSoundEnabled = (Boolean) newValue;
             Preferences.setNotifSoundEnabled(notifSoundEnabled);
             notifSoundEnablePref.setChecked(notifSoundEnabled);
-        } else if(Preferences.NOTIFVIBRATEENABLEPREF.equals(key)) {
-        	boolean notifVibrateEnabled = (Boolean) newValue;
-        	Preferences.setNotifVibrateEnabled(notifVibrateEnabled);
+        } else if (Preferences.NOTIFVIBRATEENABLEPREF.equals(key)) {
+            boolean notifVibrateEnabled = (Boolean) newValue;
+            Preferences.setNotifVibrateEnabled(notifVibrateEnabled);
             notifVibrateEnablePref.setChecked(notifVibrateEnabled);
-        } else if(Preferences.NOTIFLIGHTSENABLEPREF.equals(key)) {
-        	boolean notifLightsEnabled = (Boolean) newValue;
-        	Preferences.setNotifLightsEnabled(notifLightsEnabled);
+        } else if (Preferences.NOTIFLIGHTSENABLEPREF.equals(key)) {
+            boolean notifLightsEnabled = (Boolean) newValue;
+            Preferences.setNotifLightsEnabled(notifLightsEnabled);
             notifLightsEnablePref.setChecked(notifLightsEnabled);
         }
-        
+
         return returnValue;
     }
-    
+
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen,
             final Preference preference) {
 
-    	String key = preference.getKey();
-    	
-		if(key.equals(Preferences.CHANGELOGPREF)) {
-			 AlertDialog alertDialog = DialogFactory.createWebViewDialog(this,
-		     		R.string.changelogTitle,
-		     		R.raw.changes);
-		
-		     alertDialog.show();
-		} else if(key.equals(Preferences.AUTHORSPREF)) {
-			 AlertDialog alertDialog = DialogFactory.createWebViewDialog(this,
-			     		R.string.author_title_preferences,
-			     		R.raw.authors);
-			
-			     alertDialog.show();
-			}
-		
-		return true;
-  }
+        String key = preference.getKey();
+
+        if (key.equals(Preferences.CHANGELOGPREF)) {
+            AlertDialog alertDialog = DialogFactory.createWebViewDialog(this,
+                    R.string.changelogTitle,
+                    R.raw.changes);
+
+            alertDialog.show();
+        } else if (key.equals(Preferences.AUTHORSPREF)) {
+            AlertDialog alertDialog = DialogFactory.createWebViewDialog(this,
+                    R.string.author_title_preferences,
+                    R.raw.authors);
+
+            alertDialog.show();
+        }
+
+        return true;
+    }
 
     /* (non-Javadoc)
-	 * @see android.app.Activity#onPause()
+         * @see android.app.Activity#onPause()
 	 */
-	@Override
-	protected void onPause() {
-		super.onPause();
-		
-		//Set final password
-		if(userPasswordPrefChanged) {
-	    	Preferences.setUserPassword(userPassword);
-		}
-			
-        //Reconfigure automatic synchronization
-        if(syncPrefsChanged) {
-	        SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, ctx);
-	        if (!Preferences.getSyncTime().equals("0") && Preferences.isSyncEnabled()) {
-	            SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY,
-	            		Long.parseLong(Preferences.getSyncTime()), ctx);
-	        }
-        }
-	}
+    @Override
+    protected void onPause() {
+        super.onPause();
 
-	/* (non-Javadoc)
-     * @see android.app.Activity#onResume()
-     */
+        //Set final password
+        if (userPasswordPrefChanged) {
+            Preferences.setUserPassword(userPassword);
+        }
+
+        //Reconfigure automatic synchronization
+        if (syncPrefsChanged) {
+            SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, ctx);
+            if (!Preferences.getSyncTime().equals("0") && Preferences.isSyncEnabled()) {
+                SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY,
+                        Long.parseLong(Preferences.getSyncTime()), ctx);
+            }
+        }
+    }
+
+    /* (non-Javadoc)
+ * @see android.app.Activity#onResume()
+ */
     @Override
     protected void onResume() {
         super.onResume();
         java.text.DateFormat dateShortFormat = android.text.format.DateFormat.getDateFormat(this);
         java.text.DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(this);
         long lastSyncTime = Preferences.getLastSyncTime();
-    	Date lastSyncDate = new Date(lastSyncTime);
-        List<String> prefSyncTimeValues = Arrays.asList(getResources().getStringArray(R.array.prefSyncTimeValues));
-        List<String> prefSyncTimeEntries = Arrays.asList(getResources().getStringArray(R.array.prefSyncTimeEntries));
+        Date lastSyncDate = new Date(lastSyncTime);
+        List<String> prefSyncTimeValues = Arrays
+                .asList(getResources().getStringArray(R.array.prefSyncTimeValues));
+        List<String> prefSyncTimeEntries = Arrays
+                .asList(getResources().getStringArray(R.array.prefSyncTimeEntries));
         int prefSyncTimeIndex = prefSyncTimeValues.indexOf(Preferences.getSyncTime());
         String prefSyncTimeEntry = prefSyncTimeEntries.get(prefSyncTimeIndex);
         /*mServer = Preferences.getServer();
@@ -486,16 +521,16 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         } else {
             serverPref.setSummary(Constants.DEFAULT_SERVER);
         }*/
-        
-        if(lastSyncTime == 0) {
-        	syncEnablePref.setSummary(getString(R.string.lastSyncTimeLabel) + ": " 
-        			+ getString(R.string.neverLabel));
-        } else {        	
-        	syncEnablePref.setSummary(getString(R.string.lastSyncTimeLabel) + ": "
-        			+ dateShortFormat.format(lastSyncDate) + " " 
-        			+ timeFormat.format(lastSyncDate));
+
+        if (lastSyncTime == 0) {
+            syncEnablePref.setSummary(getString(R.string.lastSyncTimeLabel) + ": "
+                    + getString(R.string.neverLabel));
+        } else {
+            syncEnablePref.setSummary(getString(R.string.lastSyncTimeLabel) + ": "
+                    + dateShortFormat.format(lastSyncDate) + " "
+                    + timeFormat.format(lastSyncDate));
         }
-        
+
         syncTimePref.setSummary(prefSyncTimeEntry);
     }
 }

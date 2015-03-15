@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/action_scanQR"
-        android:icon="@drawable/qr"
-        android:title="@string/rollcallScanQR"
-        android:showAsAction="ifRoom|withText"/>
+            android:id="@+id/action_scanQR"
+            android:icon="@drawable/qr"
+            android:title="@string/rollcallScanQR"
+            android:showAsAction="ifRoom|withText"/>
     <item
-        android:id="@+id/action_sendMsg"
-        android:icon="@drawable/ic_action_send_now"
-        android:title="@string/sendMsg"
-        android:showAsAction="ifRoom|withText"/>
+            android:id="@+id/action_sendMsg"
+            android:icon="@drawable/ic_action_send_now"
+            android:title="@string/sendMsg"
+            android:showAsAction="ifRoom|withText"/>
     <item
-        android:id="@+id/action_cleanUsers"
-        android:icon="@android:drawable/ic_menu_delete"
-        android:title="@string/rollcallCleanUsers"
-        android:showAsAction="ifRoom|withText"/>
+            android:id="@+id/action_cleanUsers"
+            android:icon="@android:drawable/ic_menu_delete"
+            android:title="@string/rollcallCleanUsers"
+            android:showAsAction="ifRoom|withText"/>
 
 </menu>

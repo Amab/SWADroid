@@ -16,6 +16,8 @@
 
 package com.google.zxing.client.android.camera;
 
+import com.google.zxing.client.android.PreferencesActivity;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Point;
@@ -24,7 +26,6 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
-import com.google.zxing.client.android.PreferencesActivity;
 
 import java.util.Collection;
 
@@ -35,15 +36,87 @@ import java.util.Collection;
 final class CameraConfigurationManager {
 
     private static final String TAG = "CameraConfiguration";
+
     private static final int MIN_PREVIEW_PIXELS = 320 * 240; // small screen
+
     private static final int MAX_PREVIEW_PIXELS = 800 * 480; // large/HD screen
 
     private final Context context;
+
     private Point screenResolution;
+
     private Point cameraResolution;
 
     CameraConfigurationManager(Context context) {
         this.context = context;
+    }
+
+    private static void initializeTorch(Camera.Parameters parameters, SharedPreferences prefs) {
+        boolean currentSetting = prefs.getBoolean(PreferencesActivity.KEY_FRONT_LIGHT, false);
+        doSetTorch(parameters, currentSetting);
+    }
+
+    private static void doSetTorch(Camera.Parameters parameters, boolean newSetting) {
+        String flashMode;
+        if (newSetting) {
+            flashMode = findSettableValue(parameters.getSupportedFlashModes(),
+                    Camera.Parameters.FLASH_MODE_TORCH,
+                    Camera.Parameters.FLASH_MODE_ON);
+        } else {
+            flashMode = findSettableValue(parameters.getSupportedFlashModes(),
+                    Camera.Parameters.FLASH_MODE_OFF);
+        }
+        if (flashMode != null) {
+            parameters.setFlashMode(flashMode);
+        }
+    }
+
+    private static Point findBestPreviewSizeValue(Camera.Parameters parameters,
+            Point screenResolution,
+            boolean portrait) {
+        Point bestSize = null;
+        int diff = Integer.MAX_VALUE;
+        for (Camera.Size supportedPreviewSize : parameters.getSupportedPreviewSizes()) {
+            int pixels = supportedPreviewSize.height * supportedPreviewSize.width;
+            if (pixels < MIN_PREVIEW_PIXELS || pixels > MAX_PREVIEW_PIXELS) {
+                continue;
+            }
+            int supportedWidth = portrait ? supportedPreviewSize.height
+                    : supportedPreviewSize.width;
+            int supportedHeight = portrait ? supportedPreviewSize.width
+                    : supportedPreviewSize.height;
+            int newDiff = Math.abs(screenResolution.x * supportedHeight
+                    - supportedWidth * screenResolution.y);
+            if (newDiff == 0) {
+                bestSize = new Point(supportedWidth, supportedHeight);
+                break;
+            }
+            if (newDiff < diff) {
+                bestSize = new Point(supportedWidth, supportedHeight);
+                diff = newDiff;
+            }
+        }
+        if (bestSize == null) {
+            Camera.Size defaultSize = parameters.getPreviewSize();
+            bestSize = new Point(defaultSize.width, defaultSize.height);
+        }
+        return bestSize;
+    }
+
+    private static String findSettableValue(Collection<String> supportedValues,
+            String... desiredValues) {
+        Log.i(TAG, "Supported values: " + supportedValues);
+        String result = null;
+        if (supportedValues != null) {
+            for (String desiredValue : desiredValues) {
+                if (supportedValues.contains(desiredValue)) {
+                    result = desiredValue;
+                    break;
+                }
+            }
+        }
+        Log.i(TAG, "Settable value: " + result);
+        return result;
     }
 
     /**
@@ -73,7 +146,8 @@ final class CameraConfigurationManager {
         Camera.Parameters parameters = camera.getParameters();
 
         if (parameters == null) {
-            Log.w(TAG, "Device error: no camera parameters are available. Proceeding without configuration.");
+            Log.w(TAG,
+                    "Device error: no camera parameters are available. Proceeding without configuration.");
             return;
         }
 
@@ -110,71 +184,6 @@ final class CameraConfigurationManager {
             editor.putBoolean(PreferencesActivity.KEY_FRONT_LIGHT, newSetting);
             editor.commit();
         }
-    }
-
-    private static void initializeTorch(Camera.Parameters parameters, SharedPreferences prefs) {
-        boolean currentSetting = prefs.getBoolean(PreferencesActivity.KEY_FRONT_LIGHT, false);
-        doSetTorch(parameters, currentSetting);
-    }
-
-    private static void doSetTorch(Camera.Parameters parameters, boolean newSetting) {
-        String flashMode;
-        if (newSetting) {
-            flashMode = findSettableValue(parameters.getSupportedFlashModes(),
-                    Camera.Parameters.FLASH_MODE_TORCH,
-                    Camera.Parameters.FLASH_MODE_ON);
-        } else {
-            flashMode = findSettableValue(parameters.getSupportedFlashModes(),
-                    Camera.Parameters.FLASH_MODE_OFF);
-        }
-        if (flashMode != null) {
-            parameters.setFlashMode(flashMode);
-        }
-    }
-
-    private static Point findBestPreviewSizeValue(Camera.Parameters parameters,
-                                                  Point screenResolution,
-                                                  boolean portrait) {
-        Point bestSize = null;
-        int diff = Integer.MAX_VALUE;
-        for (Camera.Size supportedPreviewSize : parameters.getSupportedPreviewSizes()) {
-            int pixels = supportedPreviewSize.height * supportedPreviewSize.width;
-            if (pixels < MIN_PREVIEW_PIXELS || pixels > MAX_PREVIEW_PIXELS) {
-                continue;
-            }
-            int supportedWidth = portrait ? supportedPreviewSize.height : supportedPreviewSize.width;
-            int supportedHeight = portrait ? supportedPreviewSize.width : supportedPreviewSize.height;
-            int newDiff = Math.abs(screenResolution.x * supportedHeight - supportedWidth * screenResolution.y);
-            if (newDiff == 0) {
-                bestSize = new Point(supportedWidth, supportedHeight);
-                break;
-            }
-            if (newDiff < diff) {
-                bestSize = new Point(supportedWidth, supportedHeight);
-                diff = newDiff;
-            }
-        }
-        if (bestSize == null) {
-            Camera.Size defaultSize = parameters.getPreviewSize();
-            bestSize = new Point(defaultSize.width, defaultSize.height);
-        }
-        return bestSize;
-    }
-
-    private static String findSettableValue(Collection<String> supportedValues,
-                                            String... desiredValues) {
-        Log.i(TAG, "Supported values: " + supportedValues);
-        String result = null;
-        if (supportedValues != null) {
-            for (String desiredValue : desiredValues) {
-                if (supportedValues.contains(desiredValue)) {
-                    result = desiredValue;
-                    break;
-                }
-            }
-        }
-        Log.i(TAG, "Settable value: " + result);
-        return result;
     }
 
 }

@@ -26,39 +26,42 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
-import es.ugr.swad.swadroid.BuildConfig;
-import es.ugr.swad.swadroid.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import es.ugr.swad.swadroid.BuildConfig;
+import es.ugr.swad.swadroid.R;
 
 /**
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */
 public class ImageExpandableListAdapter extends SimpleExpandableListAdapter {
-    private final String NAME = "listText";
-    private final String IMAGE = "listIcon";
-    private final LayoutInflater layoutInflater;
-    private final ArrayList<HashMap<String, Object>> groupData;
-    private final ArrayList<ArrayList<HashMap<String, Object>>> childData;
-    Context context;
-    
+
     private static final String TAG = "ImageExpandableListAdapter";
+
     private static int convertViewCounter = 0;
-    
-    static class ViewHolder{
-        TextView tvListText;
-    }
-    
+
+    private final String NAME = "listText";
+
+    private final String IMAGE = "listIcon";
+
+    private final LayoutInflater layoutInflater;
+
+    private final ArrayList<HashMap<String, Object>> groupData;
+
+    private final ArrayList<ArrayList<HashMap<String, Object>>> childData;
+
+    Context context;
 
     public ImageExpandableListAdapter(Context context,
-                                      ArrayList<HashMap<String, Object>> groupData, int expandedGroupLayout,
-                                      String[] groupFrom, int[] groupTo,
-                                      ArrayList<ArrayList<HashMap<String, Object>>> childData,
-                                      int childLayout, String[] childFrom,
-                                      int[] childTo) {
+            ArrayList<HashMap<String, Object>> groupData, int expandedGroupLayout,
+            String[] groupFrom, int[] groupTo,
+            ArrayList<ArrayList<HashMap<String, Object>>> childData,
+            int childLayout, String[] childFrom,
+            int[] childTo) {
 
         super(context, groupData, expandedGroupLayout, groupFrom,
                 groupTo, childData, childLayout, childFrom, childTo);
@@ -66,49 +69,49 @@ public class ImageExpandableListAdapter extends SimpleExpandableListAdapter {
         this.childData = childData;
         layoutInflater = LayoutInflater.from(context);
     }
-    
+
     /* (non-Javadoc)
      * @see android.widget.SimpleExpandableListAdapter#getGroupView(int, boolean, android.view.View, android.view.ViewGroup)
      */
     @SuppressWarnings("unchecked")
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded,
-                             View convertView, ViewGroup parent) {
+            View convertView, ViewGroup parent) {
 
         ViewHolder holder;
-        
+
         if (BuildConfig.DEBUG) {
             Log.v(TAG, "in getView for position " + groupPosition
                     + ", convertView is "
                     + ((convertView == null) ? "null" : "being recycled"));
         }
-        
+
         if (convertView == null) {
-            
+
             convertView = layoutInflater.inflate(R.layout.image_list_item_group, parent, false);
-            
+
             convertViewCounter++;
-            
+
             if (BuildConfig.DEBUG) {
                 Log.v(TAG, convertViewCounter + " convertViews have been created");
             }
-            
+
             holder = new ViewHolder();
-            
+
             holder.tvListText = (TextView) convertView.findViewById(R.id.listText);
             convertView.setTag(holder);
-            
+
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        
+
         // Populate your custom view here
-        holder.tvListText.setText((String) ((Map<String, Object>) getGroup(groupPosition)).get(NAME));
+        holder.tvListText
+                .setText((String) ((Map<String, Object>) getGroup(groupPosition)).get(NAME));
         Drawable d = (Drawable) ((Map<String, Object>) getGroup(groupPosition)).get(IMAGE);
         holder.tvListText.setCompoundDrawablesWithIntrinsicBounds(d, null, null, null);
         holder.tvListText.setTextSize(20);
-        
-        
+
         return convertView;
     }
 
@@ -125,15 +128,15 @@ public class ImageExpandableListAdapter extends SimpleExpandableListAdapter {
                     + ((convertView == null) ? "null" : "being recycled"));
         }
         if (convertView == null) {
-            
+
             convertView = layoutInflater.inflate(R.layout.image_list_item, parent, false);
-            
+
             convertViewCounter++;
-            
+
             if (BuildConfig.DEBUG) {
                 Log.v(TAG, convertViewCounter + " convertViews for child have been created");
             }
-            
+
             holder = new ViewHolder();
 
             holder.tvListText = (TextView) convertView.findViewById(R.id.listText);
@@ -144,8 +147,10 @@ public class ImageExpandableListAdapter extends SimpleExpandableListAdapter {
         }
 
         // Populate your custom view here
-        holder.tvListText.setText((String) ((Map<String, Object>) getChild(groupPosition, childPosition)).get(NAME));
-        Drawable d = (Drawable) ((Map<String, Object>) getChild(groupPosition, childPosition)).get(IMAGE);
+        holder.tvListText.setText(
+                (String) ((Map<String, Object>) getChild(groupPosition, childPosition)).get(NAME));
+        Drawable d = (Drawable) ((Map<String, Object>) getChild(groupPosition, childPosition))
+                .get(IMAGE);
         holder.tvListText.setCompoundDrawablesWithIntrinsicBounds(d, null, null, null);
         holder.tvListText.setTextSize(18);
 
@@ -169,38 +174,40 @@ public class ImageExpandableListAdapter extends SimpleExpandableListAdapter {
      * Removes the child which located at childPosition under the group located at groupPosition.
      * If it is removed, it will not be shown.
      *
-     * @param groupPosition
-     * @param childPosition
      * @return true if the child was removed;
      */
     public boolean removeChild(int groupPosition, int childPosition) {
 
-        if (groupPosition >= getGroupCount() || childPosition >= getChildrenCount(groupPosition))
+        if (groupPosition >= getGroupCount() || childPosition >= getChildrenCount(groupPosition)) {
             return false;
+        }
         childData.get(groupPosition).remove(childPosition);
         super.notifyDataSetChanged();
 
         return true;
     }
 
-
     public boolean addChild(int groupPosition, int childPosition, HashMap<String, Object> child) {
-        if (groupPosition >= getGroupCount())
+        if (groupPosition >= getGroupCount()) {
             return false;
+        }
         childData.get(groupPosition).add(child);
         super.notifyDataSetChanged();
         return true;
     }
 
-    public boolean addGroup(int groupPosition, HashMap<String, Object> group, ArrayList<HashMap<String, Object>> childs) {
+    public boolean addGroup(int groupPosition, HashMap<String, Object> group,
+            ArrayList<HashMap<String, Object>> childs) {
         if (groupPosition >= getGroupCount()) {
             groupData.add(groupPosition, group);
-            final ArrayList<HashMap<String, Object>> groupData = new ArrayList<HashMap<String, Object>>();
+            final ArrayList<HashMap<String, Object>> groupData
+                    = new ArrayList<HashMap<String, Object>>();
             childData.add(groupPosition, groupData);
             childData.get(groupPosition).addAll(childs);
         } else {
             groupData.add(getGroupCount(), group);
-            final ArrayList<HashMap<String, Object>> groupData = new ArrayList<HashMap<String, Object>>();
+            final ArrayList<HashMap<String, Object>> groupData
+                    = new ArrayList<HashMap<String, Object>>();
             childData.add(getGroupCount() - 1, groupData);
             childData.get(getGroupCount() - 1).addAll(childs);
         }
@@ -209,16 +216,22 @@ public class ImageExpandableListAdapter extends SimpleExpandableListAdapter {
     }
 
     public boolean removeGroup(int groupPosition) {
-        if (groupPosition >= getGroupCount())
+        if (groupPosition >= getGroupCount()) {
             return false;
-        else {
+        } else {
             int childSize = childData.get(groupPosition).size();
-            for (int i = 0; i < childSize; ++i)
+            for (int i = 0; i < childSize; ++i) {
                 removeChild(groupPosition, i);
+            }
             groupData.remove(groupPosition);
             super.notifyDataSetChanged();
             return true;
         }
 
+    }
+
+    static class ViewHolder {
+
+        TextView tvListText;
     }
 }

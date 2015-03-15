@@ -18,10 +18,15 @@
  */
 package es.ugr.swad.swadroid.model;
 
-import es.ugr.swad.swadroid.utils.Utils;
 import org.ksoap2.serialization.PropertyInfo;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.StringTokenizer;
+
+import es.ugr.swad.swadroid.utils.Utils;
 
 /**
  * Class for store a test
@@ -29,74 +34,46 @@ import java.util.*;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class Test extends Model {
-    /**
-     * Correct answer score
-     */
-    private final float CORRECT_ANSWER_SCORE = 1;
+
     /**
      * None feedback
      */
     public static final String FEEDBACK_NONE = "nothing";
+
     /**
      * Minimum feedback
      */
     public static final String FEEDBACK_MIN = "totalResult";
+
     /**
      * Medium feedback
      */
     public static final String FEEDBACK_MEDIUM = "eachResult";
+
     /**
      * High feedback
      */
     public static final String FEEDBACK_HIGH = "eachGoodBad";
+
     /**
      * Maximum feedback
      */
     public static final String FEEDBACK_MAX = "fullFeedback";
+
     /**
      * Feedback values
      */
-    public static final List<String> FEEDBACK_VALUES = Arrays.asList(FEEDBACK_NONE, FEEDBACK_MIN, FEEDBACK_MEDIUM, FEEDBACK_HIGH, FEEDBACK_MAX);
-    /**
-     * List of questions and related answers
-     */
-    private List<TestQuestion> questions;
-    /**
-     * Minimum questions in test
-     */
-    private int min;
-    /**
-     * Default questions in test
-     */
-    private int def;
-    /**
-     * Maximum questions in test
-     */
-    private int max;
-    /**
-     * Feedback to be showed to the student
-     */
-    private String feedback;
-    /**
-     * Last time test was updated
-     */
-    private Long editTime;
-    /**
-     * Total test's score
-     */
-    private float totalScore;
-    /**
-     * Individual answers's score
-     */
-    private List<Float> questionsScore;
-    /**
-     * Flag for check if the test has been evaluated
-     */
-    private boolean evaluated;
+    public static final List<String> FEEDBACK_VALUES = Arrays
+            .asList(FEEDBACK_NONE, FEEDBACK_MIN, FEEDBACK_MEDIUM, FEEDBACK_HIGH, FEEDBACK_MAX);
+
     private static final PropertyInfo PI_min = new PropertyInfo();
+
     private static final PropertyInfo PI_def = new PropertyInfo();
+
     private static final PropertyInfo PI_max = new PropertyInfo();
+
     private static final PropertyInfo PI_feedback = new PropertyInfo();
+
     @SuppressWarnings("unused")
     private static PropertyInfo[] PI_PROP_ARRAY =
             {
@@ -105,6 +82,56 @@ public class Test extends Model {
                     PI_max,
                     PI_feedback
             };
+
+    /**
+     * Correct answer score
+     */
+    private final float CORRECT_ANSWER_SCORE = 1;
+
+    /**
+     * List of questions and related answers
+     */
+    private List<TestQuestion> questions;
+
+    /**
+     * Minimum questions in test
+     */
+    private int min;
+
+    /**
+     * Default questions in test
+     */
+    private int def;
+
+    /**
+     * Maximum questions in test
+     */
+    private int max;
+
+    /**
+     * Feedback to be showed to the student
+     */
+    private String feedback;
+
+    /**
+     * Last time test was updated
+     */
+    private Long editTime;
+
+    /**
+     * Total test's score
+     */
+    private float totalScore;
+
+    /**
+     * Individual answers's score
+     */
+    private List<Float> questionsScore;
+
+    /**
+     * Flag for check if the test has been evaluated
+     */
+    private boolean evaluated;
 
     /**
      * Constructor from fields
@@ -318,7 +345,7 @@ public class Test extends Model {
      * Checks if the test has been evaluated
      *
      * @return true if the test has been evaluated
-     *         false if the test hasn't been evaluated
+     * false if the test hasn't been evaluated
      */
     public boolean isEvaluated() {
         return evaluated;
@@ -342,7 +369,7 @@ public class Test extends Model {
         totalScore = 0;
         questionsScore.clear();
 
-        for (int i=0; i<this.questions.size(); i++) {
+        for (int i = 0; i < this.questions.size(); i++) {
             this.questionsScore.add((float) 0);
         }
     }
@@ -357,11 +384,11 @@ public class Test extends Model {
         //Remove spaces
         StringTokenizer tokens = new StringTokenizer(s);
         StringBuilder buff = new StringBuilder();
-        
+
         while (tokens.hasMoreTokens()) {
             buff.append(" ").append(tokens.nextToken());
         }
-        
+
         s = buff.toString().trim();
 
         //Remove accents
@@ -407,7 +434,8 @@ public class Test extends Model {
                     userFloatAnswer = Float.valueOf(userAnswerText);
                     minFloatRange = Float.valueOf(a.getAnswer());
                     maxFloatRange = Float.valueOf(la.get(1).getAnswer());
-                    a.setCorrectAnswered((userFloatAnswer >= minFloatRange) && (userFloatAnswer <= maxFloatRange));
+                    a.setCorrectAnswered((userFloatAnswer >= minFloatRange) && (userFloatAnswer
+                            <= maxFloatRange));
                 }
 
                 if (a.isCorrectAnswered()) {
@@ -533,7 +561,8 @@ public class Test extends Model {
                     if (falseAnswers == 0) {
                         score = correctUserAnswers / (float) totalAnswers;
                     } else {
-                        score = (correctUserAnswers / (float) trueAnswers) - (errors / (float) falseAnswers);
+                        score = (correctUserAnswers / (float) trueAnswers) - (errors
+                                / (float) falseAnswers);
                     }
                 }
             }
@@ -591,7 +620,8 @@ public class Test extends Model {
     /* (non-Javadoc)
      * @see org.ksoap2.serialization.KvmSerializable#getPropertyInfo(int, java.util.Hashtable, org.ksoap2.serialization.PropertyInfo)
      */
-    public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo propertyInfo) {
+    public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1,
+            PropertyInfo propertyInfo) {
         switch (param) {
             case 0:
                 propertyInfo.type = PropertyInfo.INTEGER_CLASS;

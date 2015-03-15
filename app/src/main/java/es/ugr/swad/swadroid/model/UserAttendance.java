@@ -31,21 +31,19 @@ import java.util.Hashtable;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class UserAttendance extends Model {
-    /**
-     * User identifier.
-     */
-    private int eventCode;
-    /**
-     * Flag for indicate if the user is present in the attendance.
-     */
-    private boolean userPresent;
 
     private static final PropertyInfo PI_userID = new PropertyInfo();
+
     private static final PropertyInfo PI_userNickname = new PropertyInfo();
+
     private static final PropertyInfo PI_userSurname1 = new PropertyInfo();
+
     private static final PropertyInfo PI_userSurname2 = new PropertyInfo();
+
     private static final PropertyInfo PI_userFirstname = new PropertyInfo();
+
     private static final PropertyInfo PI_userPhoto = new PropertyInfo();
+
     private static final PropertyInfo PI_userPresent = new PropertyInfo();
 
     @SuppressWarnings("unused")
@@ -59,6 +57,16 @@ public class UserAttendance extends Model {
             PI_userPresent
     };
 
+    /**
+     * User identifier.
+     */
+    private int eventCode;
+
+    /**
+     * Flag for indicate if the user is present in the attendance.
+     */
+    private boolean userPresent;
+
     public UserAttendance(long id) {
         super(id);
     }
@@ -66,9 +74,9 @@ public class UserAttendance extends Model {
     /**
      * Constructor.
      *
-     * @param id            User code.
-     * @param eventCode     Event code.
-     * @param userPresent   Flag for indicate if the user is present in the attendance.
+     * @param id          User code.
+     * @param eventCode   Event code.
+     * @param userPresent Flag for indicate if the user is present in the attendance.
      */
     public UserAttendance(long id, int eventCode, boolean userPresent) {
         super(id);
@@ -106,9 +114,12 @@ public class UserAttendance extends Model {
         return object;
     }
 
-    public int getPropertyCount() { return PI_PROP_ARRAY.length; }
+    public int getPropertyCount() {
+        return PI_PROP_ARRAY.length;
+    }
 
-    public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo propertyInfo) {
+    public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1,
+            PropertyInfo propertyInfo) {
         switch (param) {
             case 0:
                 propertyInfo.type = PropertyInfo.STRING_CLASS;

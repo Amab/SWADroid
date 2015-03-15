@@ -28,23 +28,33 @@ import android.view.View;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
+
 import es.ugr.swad.swadroid.R;
 
 /**
- * A {@link DialogPreference} that provides a user with the means to select an integer from a {@link SeekBar}, and persist it.
+ * A {@link DialogPreference} that provides a user with the means to select an integer from a {@link
+ * SeekBar}, and persist it.
  *
  * @author lukehorvat
  */
 public class SeekBarDialogPreference extends DialogPreference {
+
     private static final int DEFAULT_MIN_PROGRESS = 0;
+
     private static final int DEFAULT_MAX_PROGRESS = 100;
+
     private static final int DEFAULT_PROGRESS = 0;
 
     private int mMinProgress;
+
     private int mMaxProgress;
+
     private int mProgress;
+
     private CharSequence mProgressTextSuffix;
+
     private TextView mProgressText;
+
     private SeekBar mSeekBar;
 
     public SeekBarDialogPreference(Context context) {
@@ -55,11 +65,15 @@ public class SeekBarDialogPreference extends DialogPreference {
         super(context, attrs);
 
         // get attributes specified in XML
-        TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.SeekBarDialogPreference, 0, 0);
+        TypedArray a = context.getTheme()
+                .obtainStyledAttributes(attrs, R.styleable.SeekBarDialogPreference, 0, 0);
         try {
-            setMinProgress(a.getInteger(R.styleable.SeekBarDialogPreference_min, DEFAULT_MIN_PROGRESS));
-            setMaxProgress(a.getInteger(R.styleable.SeekBarDialogPreference_android_max, DEFAULT_MAX_PROGRESS));
-            setProgressTextSuffix(a.getString(R.styleable.SeekBarDialogPreference_progressTextSuffix));
+            setMinProgress(
+                    a.getInteger(R.styleable.SeekBarDialogPreference_min, DEFAULT_MIN_PROGRESS));
+            setMaxProgress(a.getInteger(R.styleable.SeekBarDialogPreference_android_max,
+                    DEFAULT_MAX_PROGRESS));
+            setProgressTextSuffix(
+                    a.getString(R.styleable.SeekBarDialogPreference_progressTextSuffix));
         } finally {
             a.recycle();
         }
@@ -105,7 +119,8 @@ public class SeekBarDialogPreference extends DialogPreference {
                 // update text that displays the current SeekBar progress value
                 // note: this does not persist the progress value. that is only ever done in setProgress()
                 String progressStr = String.valueOf(progress + mMinProgress) + " ";
-                mProgressText.setText(mProgressTextSuffix == null ? progressStr : progressStr.concat(mProgressTextSuffix.toString()));
+                mProgressText.setText(mProgressTextSuffix == null ? progressStr
+                        : progressStr.concat(mProgressTextSuffix.toString()));
             }
         });
         mSeekBar.setMax(mMaxProgress - mMinProgress);
@@ -198,8 +213,25 @@ public class SeekBarDialogPreference extends DialogPreference {
     }
 
     private static class SavedState extends BaseSavedState {
+
+        @SuppressWarnings("unused")
+        public static final Parcelable.Creator<SavedState> CREATOR
+                = new Parcelable.Creator<SavedState>() {
+            @Override
+            public SavedState createFromParcel(Parcel in) {
+                return new SavedState(in);
+            }
+
+            @Override
+            public SavedState[] newArray(int size) {
+                return new SavedState[size];
+            }
+        };
+
         int minProgress;
+
         int maxProgress;
+
         int progress;
 
         public SavedState(Parcelable superState) {
@@ -222,18 +254,5 @@ public class SeekBarDialogPreference extends DialogPreference {
             dest.writeInt(maxProgress);
             dest.writeInt(progress);
         }
-
-        @SuppressWarnings("unused")
-        public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.Creator<SavedState>() {
-            @Override
-            public SavedState createFromParcel(Parcel in) {
-                return new SavedState(in);
-            }
-
-            @Override
-            public SavedState[] newArray(int size) {
-                return new SavedState[size];
-            }
-        };
     }
 }

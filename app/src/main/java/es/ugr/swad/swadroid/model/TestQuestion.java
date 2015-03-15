@@ -18,7 +18,6 @@
  */
 package es.ugr.swad.swadroid.model;
 
-import es.ugr.swad.swadroid.utils.Utils;
 import org.ksoap2.serialization.PropertyInfo;
 
 import java.util.ArrayList;
@@ -26,43 +25,27 @@ import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
 
+import es.ugr.swad.swadroid.utils.Utils;
+
 /**
  * Clas for store a test question
  *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class TestQuestion extends Model {
-    /**
-     * Course code
-     */
-    private long crsCod;
-    /**
-     * Question's text
-     */
-    private String stem;
-    /**
-     * Answer type
-     */
-    private String answerType;
-    /**
-     * Flag to shuffle answers in test
-     */
-    private boolean shuffle;
-    /**
-     * Question's feedback
-     */
-    private String feedback;
 
-    /**
-     * Question's answers
-     */
-    private List<TestAnswer> answers;
     private static final PropertyInfo PI_id = new PropertyInfo();
+
     private static final PropertyInfo PI_stem = new PropertyInfo();
+
     private static final PropertyInfo PI_editTime = new PropertyInfo();
+
     private static final PropertyInfo PI_ansType = new PropertyInfo();
+
     private static final PropertyInfo PI_shuffle = new PropertyInfo();
+
     private static final PropertyInfo PI_feedback = new PropertyInfo();
+
     @SuppressWarnings("unused")
     private static PropertyInfo[] PI_PROP_ARRAY =
             {
@@ -73,6 +56,36 @@ public class TestQuestion extends Model {
                     PI_shuffle,
                     PI_feedback
             };
+
+    /**
+     * Course code
+     */
+    private long crsCod;
+
+    /**
+     * Question's text
+     */
+    private String stem;
+
+    /**
+     * Answer type
+     */
+    private String answerType;
+
+    /**
+     * Flag to shuffle answers in test
+     */
+    private boolean shuffle;
+
+    /**
+     * Question's feedback
+     */
+    private String feedback;
+
+    /**
+     * Question's answers
+     */
+    private List<TestAnswer> answers;
 
     /**
      * @param id       Test identifier
@@ -98,7 +111,8 @@ public class TestQuestion extends Model {
      * @param shuffle            Flag to shuffle answers in test
      * @param feedback           Text of the question's feedback
      */
-    public TestQuestion(long id, long selectedCourseCode, String stem, String anstype, boolean shuffle, String feedback) {
+    public TestQuestion(long id, long selectedCourseCode, String stem, String anstype,
+            boolean shuffle, String feedback) {
         super(id);
         this.crsCod = selectedCourseCode;
         this.stem = stem;
@@ -318,7 +332,8 @@ public class TestQuestion extends Model {
     /* (non-Javadoc)
      * @see org.ksoap2.serialization.KvmSerializable#getPropertyInfo(int, java.util.Hashtable, org.ksoap2.serialization.PropertyInfo)
      */
-    public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo propertyInfo) {
+    public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1,
+            PropertyInfo propertyInfo) {
         switch (param) {
             case 0:
                 propertyInfo.type = PropertyInfo.LONG_CLASS;

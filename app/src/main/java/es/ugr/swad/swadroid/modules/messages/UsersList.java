@@ -13,7 +13,7 @@ import es.ugr.swad.swadroid.gui.MenuActivity;
 
 public class UsersList extends MenuActivity {
 
-	public static final String TAG = Constants.APP_TAG + " Users List";
+    public static final String TAG = Constants.APP_TAG + " Users List";
     /*private List<StudentItemModel> studentsList;
     private String rcvs = "";
     private String rcvs_Aux = "";
@@ -64,7 +64,7 @@ public class UsersList extends MenuActivity {
         super.onStart();
 
 		*//*La primera vez deber� cargar una lista vac�a y para obtener la primera lista,
-		 * habr� que pulsar en el bot�n actualizar de la actionbar. A partir de este momento,
+                 * habr� que pulsar en el bot�n actualizar de la actionbar. A partir de este momento,
 		 * tendremos una lista de usuarios en la memoria del tel�fono y cuando  entre aqu� la segunda
 		 * vez y sucesivas, ser� esa la lista que se cargue. Si queremos, podemos volver a pulsar el
 		 * bot�n actualizar por si hay nuevos usuarios.*//*

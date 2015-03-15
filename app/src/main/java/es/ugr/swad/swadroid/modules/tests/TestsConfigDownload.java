@@ -18,10 +18,13 @@
  */
 package es.ugr.swad.swadroid.modules.tests;
 
+import org.ksoap2.serialization.SoapObject;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
@@ -31,7 +34,6 @@ import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
-import org.ksoap2.serialization.SoapObject;
 
 /**
  * Tests module for download and update questions
@@ -40,18 +42,21 @@ import org.ksoap2.serialization.SoapObject;
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  */
 public class TestsConfigDownload extends Module {
-    /**
-     * Flag for detect if the teacher allows questions download
-     */
-    private boolean isPluggable;
-    /**
-     * Number of available questions
-     */
-    private int numQuestions;
+
     /**
      * Tests tag name for Logcat
      */
     private static final String TAG = Constants.APP_TAG + " TestsConfigDownload";
+
+    /**
+     * Flag for detect if the teacher allows questions download
+     */
+    private boolean isPluggable;
+
+    /**
+     * Number of available questions
+     */
+    private int numQuestions;
 
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
@@ -72,7 +77,8 @@ public class TestsConfigDownload extends Module {
         try {
 
             if (isDebuggable) {
-                Log.d(TAG, "selectedCourseCode = " + Long.toString(Courses.getSelectedCourseCode()));
+                Log.d(TAG,
+                        "selectedCourseCode = " + Long.toString(Courses.getSelectedCourseCode()));
             }
 
             runConnection();
@@ -90,7 +96,8 @@ public class TestsConfigDownload extends Module {
     protected void requestService() throws Exception {
 
         //Calculates next timestamp to be requested
-        Long timestamp = Long.valueOf(dbHelper.getTimeOfLastTestUpdate(Courses.getSelectedCourseCode()));
+        Long timestamp = Long
+                .valueOf(dbHelper.getTimeOfLastTestUpdate(Courses.getSelectedCourseCode()));
         timestamp++;
 
         //Creates webservice request, adds required params and sends request to webservice
@@ -101,7 +108,7 @@ public class TestsConfigDownload extends Module {
 
         if (result != null) {
             //Stores tests data returned by webservice response
-			SoapObject soap = (SoapObject) result;
+            SoapObject soap = (SoapObject) result;
 
             Integer pluggable = Integer.valueOf(soap.getProperty("pluggable").toString());
             isPluggable = Utils.parseIntBool(pluggable);
@@ -126,11 +133,14 @@ public class TestsConfigDownload extends Module {
 
                 //If exists a test configuration for this course, remove from database
                 if (tDB != null) {
-                	dbHelper.removeRow(DataBaseHelper.DB_TABLE_TEST_CONFIG, Courses.getSelectedCourseCode());
-                	Log.i(TAG, "Removed old test configuration for course " + Courses.getSelectedCourseFullName());
+                    dbHelper.removeRow(DataBaseHelper.DB_TABLE_TEST_CONFIG,
+                            Courses.getSelectedCourseCode());
+                    Log.i(TAG, "Removed old test configuration for course " + Courses
+                            .getSelectedCourseFullName());
                 }
-                
-                Test t = new Test(Courses.getSelectedCourseCode(), minQuestions, defQuestions, maxQuestions, feedback, System.currentTimeMillis() / 1000L);
+
+                Test t = new Test(Courses.getSelectedCourseCode(), minQuestions, defQuestions,
+                        maxQuestions, feedback, System.currentTimeMillis() / 1000L);
                 dbHelper.insertTestConfig(t);
 
                 if (isDebuggable) {
@@ -167,9 +177,11 @@ public class TestsConfigDownload extends Module {
     @Override
     protected void postConnect() {
         if (isPluggable && (numQuestions == 0)) {
-            Toast.makeText(this, R.string.noQuestionsAvailableTestsDownloadMsg, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.noQuestionsAvailableTestsDownloadMsg, Toast.LENGTH_LONG)
+                    .show();
         } else if (!isPluggable) {
-            Toast.makeText(this, R.string.noQuestionsPluggableTestsDownloadMsg, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.noQuestionsPluggableTestsDownloadMsg, Toast.LENGTH_LONG)
+                    .show();
         }
 
         finish();

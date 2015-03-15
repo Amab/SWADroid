@@ -26,6 +26,7 @@ import org.ksoap2.serialization.KvmSerializable;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public abstract class Model implements KvmSerializable {
+
     /**
      * Model identifier
      */
@@ -70,12 +71,15 @@ public abstract class Model implements KvmSerializable {
      */
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         Model other = (Model) obj;
         return id == other.id;
     }

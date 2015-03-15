@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/action_filter_users"
-        android:icon="@drawable/ic_action_search"
-        android:title="@string/actionBarFilterUsers"
-        android:showAsAction="ifRoom|withText"/>
+            android:id="@+id/action_filter_users"
+            android:icon="@drawable/ic_action_search"
+            android:title="@string/actionBarFilterUsers"
+            android:showAsAction="ifRoom|withText"/>
     <item
-        android:id="@+id/action_refresh_users"
-        android:icon="@drawable/ic_action_refresh"
-        android:title="@string/actionBarRefresh"
-        android:showAsAction="ifRoom|withText"/>
+            android:id="@+id/action_refresh_users"
+            android:icon="@drawable/ic_action_refresh"
+            android:title="@string/actionBarRefresh"
+            android:showAsAction="ifRoom|withText"/>
 
 </menu>
