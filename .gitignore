@@ -6,7 +6,4 @@ gradlew
 gradlew.bat
 import-summary.txt
 local.properties
-settings.gradle
-SWADroid.iml
 app/lint.xml
-app/app.iml
