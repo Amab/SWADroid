@@ -512,7 +512,7 @@ public class Notifications extends Module implements
 						+ getString(R.string.notificationsAlertMsg),
 						getString(R.string.app_name),
 						pendingIntent,
-						R.drawable.ic_launcher_swadroid,
+						R.drawable.ic_launcher_swadroid_notif,
 						R.drawable.ic_launcher_swadroid,
 						true,
 						true,
