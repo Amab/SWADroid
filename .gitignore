@@ -1,9 +1,6 @@
-.idea
 .gradle
-gradle
-build
-gradlew
-gradlew.bat
-import-summary.txt
-local.properties
-app/lint.xml
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build

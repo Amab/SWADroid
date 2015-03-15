@@ -40,11 +40,11 @@
             android:allowBackup="true"
             android:icon="@drawable/ic_launcher_swadroid"
             android:label="@string/app_name"
-            android:theme="@style/Theme.White">
+            android:theme="@style/MyNavigationDrawerTheme">
         <meta-data android:name="com.google.android.gms.version"
                    android:value="@integer/google_play_services_version"/>
         <activity
-                android:name="es.ugr.swad.swadroid.SWADMain"
+                android:name="es.ugr.swad.swadroid.MainActivity"
                 android:icon="@drawable/ic_launcher_swadroid"
                 android:label="@string/app_name">
             <intent-filter>
