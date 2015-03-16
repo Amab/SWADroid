@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
 import es.ugr.swad.swadroid.gui.CourseAdapter;
 import it.neokree.materialnavigationdrawer.MaterialNavigationDrawer;
 import it.neokree.materialnavigationdrawer.elements.MaterialSection;
@@ -46,7 +48,7 @@ public class MainActivity extends MaterialNavigationDrawer {
 
         private static final int DATASET_COUNT = 60;
 
-        protected String[] mDataset;
+        protected ArrayList<String> mDataset;
 
         private RecyclerView mRecyclerView;
 
@@ -86,9 +88,9 @@ public class MainActivity extends MaterialNavigationDrawer {
          * from a local content provider or remote server.
          */
         private void initDataset() {
-            mDataset = new String[DATASET_COUNT];
+            mDataset = new ArrayList<>();
             for (int i = 0; i < DATASET_COUNT; i++) {
-                mDataset[i] = "This is element #" + i;
+                mDataset.add("This is element #" + i);
             }
         }
     }

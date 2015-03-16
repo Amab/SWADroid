@@ -46,7 +46,7 @@ final class DecodeFormatManager {
                 BarcodeFormat.CODE_93,
                 BarcodeFormat.CODE_128,
                 BarcodeFormat.ITF);
-        ONE_D_FORMATS.addAll(PRODUCT_FORMATS);
+//        ONE_D_FORMATS.addAll(PRODUCT_FORMATS);
     }
 
     private static final Pattern COMMA_PATTERN = Pattern.compile(",");

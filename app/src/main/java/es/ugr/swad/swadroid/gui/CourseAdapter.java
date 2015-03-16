@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import es.ugr.swad.swadroid.R;
 
 /**
@@ -14,14 +16,14 @@ import es.ugr.swad.swadroid.R;
  */
 public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder> {
 
-    private String[] mDataset;
+    private ArrayList<String> mDataset;
 
     /**
      * Initialize the dataset of the Adapter.
      *
      * @param dataSet String[] containing the data to populate views to be used by RecyclerView.
      */
-    public CourseAdapter(String[] dataSet) {
+    public CourseAdapter(ArrayList<String> dataSet) {
         mDataset = dataSet;
     }
 
@@ -42,19 +44,19 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
 
         // Get element from your dataset at this position and replace the contents of the view
         // with that element
-        viewHolder.getTextView().setText(mDataset[position]);
+        viewHolder.getTextView().setText(mDataset.get(position));
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mDataset.length;
+        return mDataset.size();
     }
 
     /**
      * Provide a reference to the type of views that you are using (custom ViewHolder)
      */
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView textView;
 
@@ -65,6 +67,9 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
                 @Override
                 public void onClick(View v) {
                     Log.d("CUSTOMADAPTER", "Element " + getPosition() + " clicked.");
+                    mDataset.remove(getPosition());
+                    notifyItemRemoved(getPosition());
+                    notifyItemRangeChanged(getPosition(), mDataset.size());
                 }
             });
             textView = (TextView) v.findViewById(android.R.id.text1);
