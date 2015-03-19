@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 import es.ugr.swad.swadroid.gui.CourseAdapter;
 import it.neokree.materialnavigationdrawer.MaterialNavigationDrawer;
+import it.neokree.materialnavigationdrawer.elements.MaterialAccount;
 import it.neokree.materialnavigationdrawer.elements.MaterialSection;
 
 /**
@@ -26,6 +27,32 @@ public class MainActivity extends MaterialNavigationDrawer {
     @Override
     public void init(Bundle bundle) {
         this.disableLearningPattern();
+
+
+        MaterialAccount account1 = new MaterialAccount(
+                this.getResources(),
+                "LMD",
+                "Dep. Álgebra",
+                R.drawable.crs,
+                0x0000ff);
+        MaterialAccount account2 = new MaterialAccount(
+                this.getResources(),
+                "CRIP",
+                "Dep. Álgebra",
+                R.drawable.ass,
+                0xff0000);
+        MaterialAccount account3 = new MaterialAccount(
+                this.getResources(),
+                "MH",
+                "Decsai",
+                R.drawable.msg,
+                0x00ff00);
+
+        setDrawerBackgroundColor(getResources().getColor(android.R.color.darker_gray));
+
+        this.addAccount(account1);
+        addAccount(account2);
+        addAccount(account3);
 
         MaterialSection section1 = newSection(getString(R.string.course), R.drawable.crs,
                 new CourseFragment());
@@ -67,7 +94,7 @@ public class MainActivity extends MaterialNavigationDrawer {
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
+                                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.courses_fragment, container, false);
             rootView.setTag(TAG);
 

@@ -7,18 +7,23 @@
         <item name="android:padding">16dp</item>
     </style>
 
-    <style name="Theme.White" parent="android:Theme">
-        <!--<item name="android:windowBackground">@android:color/white</item>-->
-        <item name="android:background">@android:color/white</item>
-        <item name="android:colorBackgroundCacheHint">@null</item>
-        <!--<item name="android:windowIsTranslucent">true</item>-->
-        <item name="android:windowAnimationStyle">@android:style/Animation</item>
+    <!--<style name="MyNavigationDrawerTheme" parent="MaterialNavigationDrawerTheme.Light">-->
+        <!--<item name="colorPrimary">#8bc34a</item>-->
+        <!--<item name="colorPrimaryDark">#558b2f</item>-->
+        <!--<item name="colorAccent">#FFFFFF</item>-->
+    <!--</style>-->
+
+
+    <style name="MyMaterialAccountTheme">
+        <item name="titleColor">#000</item>
+        <item name="subtitleColor">#000</item>
     </style>
 
-    <style name="MyNavigationDrawerTheme" parent="MaterialNavigationDrawerTheme.Light">
+    <style name="MyNavigationDrawerTheme" parent="MaterialNavigationDrawerTheme.Light" >
+        <!-- Other customization -->
         <item name="colorPrimary">#8bc34a</item>
         <item name="colorPrimaryDark">#558b2f</item>
-        <item name="colorAccent">#FFFFFF</item>
+        <item name="accountStyle">@style/MyMaterialAccountTheme</item>
     </style>
 
 </resources>
