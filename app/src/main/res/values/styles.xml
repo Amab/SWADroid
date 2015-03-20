@@ -14,16 +14,25 @@
     <!--</style>-->
 
 
-    <style name="MyMaterialAccountTheme">
-        <item name="titleColor">#000</item>
-        <item name="subtitleColor">#000</item>
-    </style>
+    <!--<style name="MyMaterialAccountTheme">-->
+        <!--<item name="titleColor">#000</item>-->
+        <!--<item name="subtitleColor">#000</item>-->
+    <!--</style>-->
 
-    <style name="MyNavigationDrawerTheme" parent="MaterialNavigationDrawerTheme.Light" >
-        <!-- Other customization -->
+    <!--<style name="MyNavigationDrawerTheme" parent="MaterialNavigationDrawerTheme.Light" >-->
+        <!--&lt;!&ndash; Other customization &ndash;&gt;-->
+        <!--<item name="colorPrimary">#8bc34a</item>-->
+        <!--<item name="colorPrimaryDark">#558b2f</item>-->
+        <!--<item name="accountStyle">@style/MyMaterialAccountTheme</item>-->
+    <!--</style>-->
+
+    <!-- Light Themes-->
+    <!-- Mocked Account -->
+    <style name="MockedAccountLight" parent="MaterialNavigationDrawerTheme.Light.DarkActionBar">
         <item name="colorPrimary">#8bc34a</item>
         <item name="colorPrimaryDark">#558b2f</item>
-        <item name="accountStyle">@style/MyMaterialAccountTheme</item>
+        <item name="colorAccent">#FFFFFF</item>
+        <item name="drawerType">@integer/DRAWERTYPE_ACCOUNTS</item>
     </style>
 
 </resources>

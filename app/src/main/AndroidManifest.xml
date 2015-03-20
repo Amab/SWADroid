@@ -40,7 +40,7 @@
             android:allowBackup="true"
             android:icon="@drawable/ic_launcher_swadroid"
             android:label="@string/app_name"
-            android:theme="@style/MyNavigationDrawerTheme">
+            android:theme="@style/MockedAccountLight">
         <meta-data android:name="com.google.android.gms.version"
                    android:value="@integer/google_play_services_version"/>
         <activity
