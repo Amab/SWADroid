@@ -19,9 +19,9 @@
 
 package es.ugr.swad.swadroid.modules;
 
-import org.ksoap2.serialization.SoapObject;
-
 import android.os.Bundle;
+
+import org.ksoap2.serialization.SoapObject;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
@@ -49,7 +49,6 @@ public class RecoverPassword extends Module {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setMETHOD_NAME("getNewPassword");
-        getActionBar().hide();
     }
 
     @Override

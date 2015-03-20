@@ -18,13 +18,13 @@
  */
 package es.ugr.swad.swadroid.modules;
 
-import org.ksoap2.serialization.SoapObject;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+
+import org.ksoap2.serialization.SoapObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,7 +119,6 @@ public class Courses extends Module {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setMETHOD_NAME("getCourses");
-        getActionBar().hide();
     }
 
     /* (non-Javadoc)

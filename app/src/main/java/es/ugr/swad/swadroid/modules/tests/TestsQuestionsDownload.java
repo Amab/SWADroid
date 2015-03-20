@@ -69,7 +69,7 @@ public class TestsQuestionsDownload extends Module {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setMETHOD_NAME("getTests");
-        getActionBar().hide();
+
     }
 
     /* (non-Javadoc)

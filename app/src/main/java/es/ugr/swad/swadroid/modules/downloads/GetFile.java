@@ -60,7 +60,7 @@ public class GetFile extends Module {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActionBar().hide();
+
         fileCode = getIntent().getLongExtra("fileCode", -1);
 
         if (fileCode == -1) {

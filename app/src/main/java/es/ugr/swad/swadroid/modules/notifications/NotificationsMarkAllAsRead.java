@@ -51,7 +51,7 @@ public class NotificationsMarkAllAsRead extends Module {
         super.onCreate(savedInstanceState);
 
         setMETHOD_NAME("markNotificationsAsRead");
-        getActionBar().hide();
+
         runConnection();
     }
 

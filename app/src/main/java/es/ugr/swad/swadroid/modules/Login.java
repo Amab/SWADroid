@@ -19,10 +19,10 @@
 
 package es.ugr.swad.swadroid.modules;
 
-import org.ksoap2.serialization.SoapObject;
-
 import android.os.Bundle;
 import android.util.Log;
+
+import org.ksoap2.serialization.SoapObject;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
@@ -153,7 +153,6 @@ public class Login extends Module {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setMETHOD_NAME("loginByUserPasswordKey");
-        getActionBar().hide();
     }
 
     /* (non-Javadoc)

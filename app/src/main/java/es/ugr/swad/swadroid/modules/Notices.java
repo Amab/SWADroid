@@ -180,7 +180,6 @@ public class Notices extends Module {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setMETHOD_NAME("sendNotice");
-        getActionBar().hide();
     }
 
     @Override

@@ -68,7 +68,7 @@ public class EventsDownload extends Module {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setMETHOD_NAME("getAttendanceEvents");
-        getActionBar().hide();
+
     }
 
     @Override

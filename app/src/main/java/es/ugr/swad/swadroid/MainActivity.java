@@ -4,13 +4,19 @@ package es.ugr.swad.swadroid;
  * @author Alejandro Alcalde (elbauldelprogramador.com) on 15/03/15.
  */
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.CourseFragment;
+import es.ugr.swad.swadroid.modules.Courses;
+import es.ugr.swad.swadroid.utils.Utils;
 import it.neokree.materialnavigationdrawer.MaterialNavigationDrawer;
 import it.neokree.materialnavigationdrawer.elements.MaterialAccount;
 import it.neokree.materialnavigationdrawer.elements.MaterialSection;
@@ -52,7 +58,7 @@ public class MainActivity extends MaterialNavigationDrawer implements MaterialAc
     }
 
     private void initDrawer() {
-        
+
         this.disableLearningPattern();
 
         MaterialAccount account1 = new MaterialAccount(
@@ -106,7 +112,64 @@ public class MainActivity extends MaterialNavigationDrawer implements MaterialAc
     @Override
     public void onChangeAccount(MaterialAccount materialAccount) {
         Log.w(Constants.APP_TAG, "OnChangeAccount");
+        if (dbHelper.getAllRows(DataBaseHelper.DB_TABLE_COURSES).size() == 0) {
+            if (Utils.connectionAvailable(getApplicationContext())) {
+                getCurrentCourses();
+            }
+        }
     }
+
+    private void getCurrentCourses() {
+//        showProgress(true);
+
+        Intent activity = new Intent(this, Courses.class);
+        startActivityForResult(activity, Constants.COURSES_REQUEST_CODE);
+    }
+
+    /**
+     * Shows the progress UI and hides the login form.
+     */
+    private void showProgress(final boolean show) {
+
+        final View course_list = findViewById(R.id.courses_list_view);
+        final View progressAnimation = findViewById(R.id.get_courses_status);
+
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            progressAnimation.setVisibility(View.VISIBLE);
+            progressAnimation.animate()
+                    .setDuration(shortAnimTime)
+                    .alpha(show ? 1 : 0)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            progressAnimation.setVisibility(show ? View.VISIBLE : View.GONE);
+                        }
+                    });
+
+            course_list.setVisibility(View.VISIBLE);
+            course_list.animate()
+                    .setDuration(shortAnimTime)
+                    .alpha(show ? 0 : 1)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            course_list.setVisibility(show ? View.GONE
+                                    : View.VISIBLE);
+                        }
+                    });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            progressAnimation.setVisibility(show ? View.VISIBLE : View.GONE);
+            course_list.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
+    }
+
 
     @Override
     protected void onPause() {

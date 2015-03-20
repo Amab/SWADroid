@@ -18,10 +18,10 @@
  */
 package es.ugr.swad.swadroid.modules.downloads;
 
-import org.ksoap2.serialization.SoapObject;
-
 import android.content.Intent;
 import android.os.Bundle;
+
+import org.ksoap2.serialization.SoapObject;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
@@ -87,7 +87,7 @@ public class DirectoryTreeDownload extends Module {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setMETHOD_NAME("getDirectoryTree");
-        getActionBar().hide();
+
     }
 
     @Override

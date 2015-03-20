@@ -1,11 +1,11 @@
 package es.ugr.swad.swadroid.modules;
 
-import org.ksoap2.serialization.SoapObject;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+
+import org.ksoap2.serialization.SoapObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +51,6 @@ public class GroupTypes extends Module {
         super.onCreate(savedInstanceState);
         courseCode = getIntent().getLongExtra("courseCode", -1);
         setMETHOD_NAME("getGroupTypes");
-        getActionBar().hide();
     }
 
     @Override
