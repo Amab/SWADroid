@@ -21,7 +21,7 @@ public class CourseFragment extends Fragment {
 
     private static final int DATASET_COUNT = 60;
 
-    protected ArrayList<gString> mDataset;
+    protected ArrayList<String> mDataset;
 
     private RecyclerView mRecyclerView;
 

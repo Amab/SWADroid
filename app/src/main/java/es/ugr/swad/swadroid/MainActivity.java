@@ -33,6 +33,26 @@ public class MainActivity extends MaterialNavigationDrawer implements MaterialAc
 
     @Override
     public void init(Bundle bundle) {
+
+        initDrawer();
+
+        try {
+            //Initialize preferences
+            prefs = new Preferences(this);
+
+            //Initialize database
+            dbHelper = new DataBaseHelper(this);
+            getPackageManager().getApplicationInfo(
+                    getPackageName(), 0);
+//            isDebuggable = (ApplicationInfo.FLAG_DEBUGGABLE != 0);
+//            isSWADMain = this instanceof SWADMain;
+        } catch (Exception ex) {
+            Log.e(Constants.APP_TAG, ex.getMessage());
+        }
+    }
+
+    private void initDrawer() {
+        
         this.disableLearningPattern();
 
         MaterialAccount account1 = new MaterialAccount(
@@ -76,19 +96,6 @@ public class MainActivity extends MaterialNavigationDrawer implements MaterialAc
         setAccountListener(this);
         addBottomSection(newSection("Bottom Section", R.mipmap.ic_settings_black_24dp, new Intent(this, PreferencesActivity.class)));
 
-        try {
-            //Initialize preferences
-            prefs = new Preferences(this);
-
-            //Initialize database
-            dbHelper = new DataBaseHelper(this);
-            getPackageManager().getApplicationInfo(
-                    getPackageName(), 0);
-//            isDebuggable = (ApplicationInfo.FLAG_DEBUGGABLE != 0);
-//            isSWADMain = this instanceof SWADMain;
-        } catch (Exception ex) {
-            Log.e(Constants.APP_TAG, ex.getMessage());
-        }
     }
 
     @Override
