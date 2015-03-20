@@ -66,7 +66,7 @@ public class MainActivity extends MaterialNavigationDrawer implements MaterialAc
         addAccount(account2);
         addAccount(account3);
 
-        MaterialSection section1 = newSection(getString(R.string.course),
+        MaterialSection section1 = newSection(getString(R.string.course), R.drawable.crs,
                 new CourseFragment());
         MaterialSection section2 = newSection(getString(R.string.evaluation), R.drawable.ass,
                 new CourseFragment());
