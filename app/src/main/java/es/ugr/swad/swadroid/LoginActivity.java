@@ -15,6 +15,8 @@
 
 package es.ugr.swad.swadroid;
 
+import org.xmlpull.v1.XmlPullParserException;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -28,6 +30,7 @@ import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.UnderlineSpan;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -36,8 +39,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
+import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.RecoverPassword;
@@ -78,10 +83,22 @@ public class LoginActivity extends Activity implements OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.login_activity);
+        //Initialize preferences
+        Constants.prefs = new Preferences(this);
+        try {
+            Constants.dbHelper = new DataBaseHelper(this);
+        } catch (XmlPullParserException | IOException e) {
+            Log.e(Constants.APP_TAG, e.getMessage());
+        }
 
-        mFromPreferece = getIntent().getBooleanExtra("fromPreference", false);
-        setupLoginForm();
+        if (isUserOrPasswordEmpty()) {
+            setContentView(R.layout.login_activity);
+
+            mFromPreferece = getIntent().getBooleanExtra("fromPreference", false);
+            setupLoginForm();
+        } else {
+            startActivity(new Intent(this, MainActivity.class));
+        }
     }
 
     private void setupLoginForm() {
@@ -223,6 +240,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                     setResult(RESULT_OK);
                     mFromPreferece = false;
                     mLoginError = false;
+                    startActivity(new Intent(this, MainActivity.class));
                     finish();
                     break;
                 case Constants.RECOVER_PASSWORD_REQUEST_CODE:
@@ -364,6 +382,14 @@ public class LoginActivity extends Activity implements OnClickListener {
             finish();
         }
         super.onDestroy();
+    }
+
+    /**
+     * @return true if user or password preference is empty
+     */
+    private boolean isUserOrPasswordEmpty() {
+        return TextUtils.isEmpty(Preferences.getUserID())
+                || TextUtils.isEmpty(Preferences.getUserPassword());
     }
 
 }

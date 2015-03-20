@@ -27,27 +27,12 @@ import it.neokree.materialnavigationdrawer.elements.listeners.MaterialAccountLis
  */
 public class MainActivity extends MaterialNavigationDrawer implements MaterialAccountListener {
 
-    /**
-     * Database Helper.
-     */
-    protected static DataBaseHelper dbHelper;
-
-    /**
-     * Application preferences
-     */
-    Preferences prefs;
-
     @Override
     public void init(Bundle bundle) {
 
         initDrawer();
 
         try {
-            //Initialize preferences
-            prefs = new Preferences(this);
-
-            //Initialize database
-            dbHelper = new DataBaseHelper(this);
             getPackageManager().getApplicationInfo(
                     getPackageName(), 0);
 //            isDebuggable = (ApplicationInfo.FLAG_DEBUGGABLE != 0);
@@ -112,7 +97,7 @@ public class MainActivity extends MaterialNavigationDrawer implements MaterialAc
     @Override
     public void onChangeAccount(MaterialAccount materialAccount) {
         Log.w(Constants.APP_TAG, "OnChangeAccount");
-        if (dbHelper.getAllRows(DataBaseHelper.DB_TABLE_COURSES).size() == 0) {
+        if (Constants.dbHelper.getAllRows(DataBaseHelper.DB_TABLE_COURSES).size() == 0) {
             if (Utils.connectionAvailable(getApplicationContext())) {
                 getCurrentCourses();
             }
@@ -173,7 +158,7 @@ public class MainActivity extends MaterialNavigationDrawer implements MaterialAc
 
     @Override
     protected void onPause() {
-        dbHelper.close();
+        Constants.dbHelper.close();
         super.onPause();
     }
 
@@ -182,7 +167,7 @@ public class MainActivity extends MaterialNavigationDrawer implements MaterialAc
         super.onResumeFragments();
         //Initialize database
         try {
-            dbHelper = new DataBaseHelper(this);
+            Constants.dbHelper = new DataBaseHelper(this);
         } catch (Exception ex) {
             Log.e(Constants.APP_TAG, ex.getMessage());
         }

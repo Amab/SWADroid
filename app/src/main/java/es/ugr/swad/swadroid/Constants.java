@@ -23,6 +23,8 @@ import android.os.Environment;
 
 import java.io.File;
 
+import es.ugr.swad.swadroid.database.DataBaseHelper;
+
 /**
  * Constants of application.
  *
@@ -353,4 +355,14 @@ public class Constants {
      * Username template for messages
      */
     public static final String USERNAME_TEMPLATE = "{userName}";
+
+    /**
+     * App preferences
+     */
+    public static Preferences prefs;
+
+    /**
+     * Database for the app
+     */
+    public static DataBaseHelper dbHelper;
 }
