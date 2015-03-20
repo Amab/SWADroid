@@ -237,18 +237,12 @@ public class MenuExpandableListActivity extends Activity {
         }
     }
 
-    /* (non-Javadoc)
-     * @see android.app.Activity#onPause()
-     */
     @Override
     protected void onPause() {
         dbHelper.close();
         super.onPause();
     }
 
-    /* (non-Javadoc)
-     * @see android.app.Activity#onResume()
-     */
     @Override
     protected void onResume() {
         super.onResume();

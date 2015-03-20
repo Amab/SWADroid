@@ -5,6 +5,7 @@ package es.ugr.swad.swadroid;
  */
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.CourseAdapter;
 import it.neokree.materialnavigationdrawer.MaterialNavigationDrawer;
 import it.neokree.materialnavigationdrawer.elements.MaterialAccount;
@@ -26,6 +28,16 @@ import it.neokree.materialnavigationdrawer.elements.listeners.MaterialAccountLis
  * @author Alejandro Alcalde (elbauldelprogramador.com)
  */
 public class MainActivity extends MaterialNavigationDrawer implements MaterialAccountListener {
+
+    /**
+     * Database Helper.
+     */
+    protected static DataBaseHelper dbHelper;
+
+    /**
+     * Application preferences
+     */
+    Preferences prefs;
 
     @Override
     public void init(Bundle bundle) {
@@ -70,6 +82,23 @@ public class MainActivity extends MaterialNavigationDrawer implements MaterialAc
 
         setDrawerHeaderImage(R.drawable.mat3);
         setAccountListener(this);
+        addBottomSection(newSection("Bottom Section",R.mipmap.ic_settings_black_24dp,new Intent(this,PreferencesActivity.class)));
+
+
+
+        try {
+            //Initialize preferences
+            prefs = new Preferences(this);
+
+            //Initialize database
+            dbHelper = new DataBaseHelper(this);
+            getPackageManager().getApplicationInfo(
+                    getPackageName(), 0);
+//            isDebuggable = (ApplicationInfo.FLAG_DEBUGGABLE != 0);
+//            isSWADMain = this instanceof SWADMain;
+        } catch (Exception ex) {
+            Log.e(Constants.APP_TAG, ex.getMessage());
+        }
     }
 
     @Override
@@ -80,6 +109,23 @@ public class MainActivity extends MaterialNavigationDrawer implements MaterialAc
     @Override
     public void onChangeAccount(MaterialAccount materialAccount) {
         Log.w(Constants.APP_TAG, "OnChangeAccount");
+    }
+
+    @Override
+    protected void onPause() {
+        dbHelper.close();
+        super.onPause();
+    }
+
+    @Override
+    protected void onResumeFragments() {
+        super.onResumeFragments();
+        //Initialize database
+        try {
+            dbHelper = new DataBaseHelper(this);
+        } catch (Exception ex) {
+            Log.e(Constants.APP_TAG, ex.getMessage());
+        }
     }
 
     public static class CourseFragment extends Fragment {
