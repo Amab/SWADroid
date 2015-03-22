@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 22
-    buildToolsVersion "22.0.0"
+    buildToolsVersion "22.0.1"
 
     defaultConfig {
         applicationId "es.ugr.swad.swadroid"
@@ -24,7 +24,7 @@ android {
 
 dependencies {
     compile 'com.android.support:support-v4:22.0.0'
-    compile 'com.android.support:appcompat-v7:22.0.0'
+    compile 'com.android.support:appcompat-v7:latest.release'
     compile 'com.android.support:recyclerview-v7:latest.release'
     compile 'com.google.android.gms:play-services:latest.release'
     compile 'com.google.zxing:core:2.1'
