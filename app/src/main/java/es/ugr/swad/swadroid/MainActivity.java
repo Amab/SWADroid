@@ -119,6 +119,46 @@ public class MainActivity extends MaterialNavigationDrawer implements MaterialAc
         startActivityForResult(activity, Constants.COURSES_REQUEST_CODE);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                //After get the list of courses, a dialog is launched to choice the course
+                case Constants.COURSES_REQUEST_CODE:
+
+//                    setMenuDbClean();
+//                    createSpinnerAdapter();
+//                    createMenu();
+
+                    //User credentials are correct. Set periodic synchronization if enabled
+                    if (!Preferences.getSyncTime().equals("0")
+                            && Preferences.isSyncEnabled() && SyncUtils.isPeriodicSynced(this)) {
+                        SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY,
+                                Long.parseLong(Preferences.getSyncTime()), this);
+                    }
+
+                    showProgress(false);
+                    break;
+                case Constants.LOGIN_REQUEST_CODE:
+                    getCurrentCourses();
+                    break;
+            }
+        } else if (resultCode == Activity.RESULT_CANCELED) {
+            switch (requestCode) {
+                //After get the list of courses, a dialog is launched to choice the course
+                case Constants.COURSES_REQUEST_CODE:
+                    //User credentials are wrong. Remove periodic synchronization
+                    SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, this);
+                    showProgress(false);
+                    break;
+                case Constants.LOGIN_REQUEST_CODE:
+                    finish();
+                    break;
+            }
+        }
+    }
+
     /**
      * Shows the progress UI and hides the login form.
      */

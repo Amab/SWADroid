@@ -19,7 +19,7 @@ public class CourseFragment extends Fragment {
 
     private static final String TAG = "CourseFragment";
 
-    private static final int DATASET_COUNT = 60;
+    private static final int DATASET_COUNT = 9;
 
     protected ArrayList<String> mDataset;
 
@@ -61,9 +61,22 @@ public class CourseFragment extends Fragment {
      * from a local content provider or remote server.
      */
     private void initDataset() {
+
+        int[] text = new int[] {
+                R.string.introductionModuleLabel,
+                R.string.teachingguideModuleLabel,
+                R.string.syllabusLecturesModuleLabel,
+                R.string.syllabusPracticalsModuleLabel,
+                R.string.documentsDownloadModuleLabel,
+                R.string.sharedsDownloadModuleLabel,
+                R.string.bibliographyModuleLabel,
+                R.string.faqsModuleLabel,
+                R.string.linksModuleLabel
+        };
+
         mDataset = new ArrayList<>();
         for (int i = 0; i < DATASET_COUNT; i++) {
-            mDataset.add("This is element #" + i);
+            mDataset.add(getString(text[i]));
         }
     }
 }

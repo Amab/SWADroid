@@ -18,6 +18,18 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
 
     private ArrayList<String> mDataset;
 
+    private int[] mIcon = new int[]{
+            R.drawable.info,
+            R.drawable.file,
+            R.drawable.syllabus,
+            R.drawable.lab,
+            R.drawable.folder,
+            R.drawable.folder_users,
+            R.drawable.book,
+            R.drawable.faq,
+            R.drawable.link
+    };
+
     /**
      * Initialize the dataset of the Adapter.
      *
@@ -44,7 +56,9 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
 
         // Get element from your dataset at this position and replace the contents of the view
         // with that element
-        viewHolder.getTextView().setText(mDataset.get(position));
+        TextView tv = viewHolder.getTextView();
+        tv.setText(mDataset.get(position));
+        tv.setCompoundDrawablesWithIntrinsicBounds(mIcon[position], 0, 0, 0);
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -66,14 +80,12 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d("CUSTOMADAPTER", "Element " + getPosition() + " clicked.");
-                    mDataset.remove(getPosition());
-                    notifyItemRemoved(getPosition());
-                    notifyItemRangeChanged(getPosition(), mDataset.size());
+                    mDataset.remove(getLayoutPosition());
+                    notifyItemRemoved(getLayoutPosition());
+                    notifyItemRangeChanged(getLayoutPosition(), mDataset.size());
                 }
             });
             textView = (TextView) v.findViewById(android.R.id.text1);
-            textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.crs, 0, 0, 0);
         }
 
         public TextView getTextView() {
