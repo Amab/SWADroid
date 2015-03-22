@@ -6,16 +6,22 @@ package es.ugr.swad.swadroid;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import java.util.List;
+
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.CourseFragment;
+import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.modules.Courses;
+import es.ugr.swad.swadroid.sync.SyncUtils;
 import es.ugr.swad.swadroid.utils.Utils;
 import it.neokree.materialnavigationdrawer.MaterialNavigationDrawer;
 import it.neokree.materialnavigationdrawer.elements.MaterialAccount;
@@ -33,8 +39,6 @@ public class MainActivity extends MaterialNavigationDrawer implements MaterialAc
         initDrawer();
 
         try {
-            getPackageManager().getApplicationInfo(
-                    getPackageName(), 0);
 //            isDebuggable = (ApplicationInfo.FLAG_DEBUGGABLE != 0);
 //            isSWADMain = this instanceof SWADMain;
         } catch (Exception ex) {
@@ -46,28 +50,31 @@ public class MainActivity extends MaterialNavigationDrawer implements MaterialAc
 
         this.disableLearningPattern();
 
-        MaterialAccount account1 = new MaterialAccount(
-                this.getResources(),
-                "LMD",
-                "Dep. Álgebra",
-                R.drawable.photo,
-                R.drawable.bamboo);
-        MaterialAccount account2 = new MaterialAccount(
-                this.getResources(),
-                "CRIP",
-                "Dep. Álgebra",
-                R.drawable.photo2,
-                R.drawable.mat2);
-        MaterialAccount account3 = new MaterialAccount(
-                this.getResources(),
-                "MH",
-                "Decsai",
-                R.drawable.photo,
-                R.drawable.mat3);
+        List<Model> listCourses;
+        listCourses = Constants.dbHelper
+                .getAllRows(DataBaseHelper.DB_TABLE_COURSES, null, "fullName");
+        /*
+          Cursor for database access
+        */
+        Cursor dbCursor = Constants.dbHelper.getDb()
+                .getCursor(DataBaseHelper.DB_TABLE_COURSES, null, "fullName");
+        // TODO Is deprecated, replace with Loader and CursorLoader
+        startManagingCursor(dbCursor);
 
-        addAccount(account1);
-        addAccount(account2);
-        addAccount(account3);
+        if (listCourses.size() != 0) {
+            MaterialAccount account;
+            Model course;
+            for (int i = 0; i < listCourses.size(); i++) {
+                course = listCourses.get(i);
+                account = new MaterialAccount(
+                        getResources(),
+                        course.getProperty(2).toString(),
+                        course.getProperty(3).toString(),
+                        R.drawable.photo2,
+                        R.drawable.bamboo);
+                addAccount(account);
+            }
+        }
 
         MaterialSection section1 = newSection(getString(R.string.course), R.drawable.crs,
                 new CourseFragment());
@@ -85,7 +92,8 @@ public class MainActivity extends MaterialNavigationDrawer implements MaterialAc
 
         setDrawerHeaderImage(R.drawable.mat3);
         setAccountListener(this);
-        addBottomSection(newSection("Bottom Section", R.mipmap.ic_settings_black_24dp, new Intent(this, PreferencesActivity.class)));
+        addBottomSection(newSection("Bottom Section", R.mipmap.ic_settings_black_24dp,
+                new Intent(this, PreferencesActivity.class)));
 
     }
 
