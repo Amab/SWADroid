@@ -47,6 +47,7 @@
                 android:name="es.ugr.swad.swadroid.LoginActivity"
                 android:icon="@drawable/ic_launcher_swadroid"
                 android:label="@string/app_name"
+                android:theme="@android:style/Theme.Holo.Light"
                 android:windowSoftInputMode="adjustResize|stateVisible">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
