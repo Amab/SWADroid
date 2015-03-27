@@ -18,8 +18,7 @@ import android.view.View;
 import java.util.List;
 
 import es.ugr.swad.swadroid.database.DataBaseHelper;
-import es.ugr.swad.swadroid.gui.CourseFragment;
-import es.ugr.swad.swadroid.gui.EvaluationFragment;
+import es.ugr.swad.swadroid.gui.SwadListFragment;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.sync.SyncUtils;
@@ -78,13 +77,13 @@ public class MainActivity extends MaterialNavigationDrawer implements MaterialAc
         }
 
         MaterialSection section1 = newSection(getString(R.string.course), R.drawable.crs,
-                new CourseFragment());
+                SwadListFragment.newInstance(Constants.courseDrw, Constants.courseText));
         MaterialSection section2 = newSection(getString(R.string.evaluation), R.drawable.ass,
-                new EvaluationFragment());
+                SwadListFragment.newInstance(Constants.courseDrw, Constants.courseText));
         MaterialSection section3 = newSection(getString(R.string.users), R.drawable.users,
-                new CourseFragment());
+                SwadListFragment.newInstance(Constants.courseDrw, Constants.courseText));
         MaterialSection section4 = newSection(getString(R.string.messages), R.drawable.msg,
-                new CourseFragment()).setSectionColor(Color.parseColor("#ff0000"));
+                SwadListFragment.newInstance(Constants.courseDrw, Constants.courseText)).setSectionColor(Color.parseColor("#ff0000"));
 
         addSection(section1);
         addSection(section2);

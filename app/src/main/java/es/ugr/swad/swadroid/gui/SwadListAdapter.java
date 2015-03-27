@@ -7,24 +7,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 /**
  * @author Alejandro Alcalde (elbauldelprogramador.com)
  */
 public class SwadListAdapter extends RecyclerView.Adapter<SwadListAdapter.ViewHolder> {
 
-    private ArrayList<String> mDataset;
     private int[] mIcon;
+    private int[] mText;
 
-    /**
-     * Initialize the dataset of the Adapter.
+    /***
+     * Initialize the dataset of the Adapter
      *
-     * @param dataSet String[] containing the data to populate views to be used by RecyclerView.
+     * @param icons Icons ids
+     * @param text Text ids
      */
-    public SwadListAdapter(ArrayList<String> dataSet, int[] icons) {
-        mDataset = dataSet;
+    public SwadListAdapter(int[] icons, int[] text) {
         mIcon = icons;
+        mText = text;
     }
 
     // Create new views (invoked by the layout manager)
@@ -45,14 +44,14 @@ public class SwadListAdapter extends RecyclerView.Adapter<SwadListAdapter.ViewHo
         // Get element from your dataset at this position and replace the contents of the view
         // with that element
         TextView tv = viewHolder.getTextView();
-        tv.setText(mDataset.get(position));
+        tv.setText(mText[position]);
         tv.setCompoundDrawablesWithIntrinsicBounds(mIcon[position], 0, 0, 0);
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mDataset.size();
+        return mText.length;
     }
 
     /**
@@ -64,15 +63,15 @@ public class SwadListAdapter extends RecyclerView.Adapter<SwadListAdapter.ViewHo
 
         public ViewHolder(View v) {
             super(v);
-            // Define click listener for the ViewHolder's View.
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mDataset.remove(getLayoutPosition());
-                    notifyItemRemoved(getLayoutPosition());
-                    notifyItemRangeChanged(getLayoutPosition(), mDataset.size());
-                }
-            });
+//            // Define click listener for the ViewHolder's View.
+//            v.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    mDataset.remove(getLayoutPosition());
+//                    notifyItemRemoved(getLayoutPosition());
+//                    notifyItemRangeChanged(getLayoutPosition(), mDataset.size());
+//                }
+//            });
             textView = (TextView) v.findViewById(android.R.id.text1);
         }
 

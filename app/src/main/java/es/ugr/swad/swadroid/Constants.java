@@ -365,4 +365,34 @@ public class Constants {
      * Database for the app
      */
     public static DataBaseHelper dbHelper;
+
+    /**
+     * Drawables for course list
+     */
+    public static int[] courseDrw = {
+            R.drawable.info,
+            R.drawable.file,
+            R.drawable.syllabus,
+            R.drawable.lab,
+            R.drawable.folder,
+            R.drawable.folder_users,
+            R.drawable.book,
+            R.drawable.faq,
+            R.drawable.link
+    };
+
+    /**
+     * Text for course list
+     */
+    public static int[] courseText = new int[]{
+            R.string.introductionModuleLabel,
+            R.string.teachingguideModuleLabel,
+            R.string.syllabusLecturesModuleLabel,
+            R.string.syllabusPracticalsModuleLabel,
+            R.string.documentsDownloadModuleLabel,
+            R.string.sharedsDownloadModuleLabel,
+            R.string.bibliographyModuleLabel,
+            R.string.faqsModuleLabel,
+            R.string.linksModuleLabel
+    };
 }
