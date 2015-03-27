@@ -93,7 +93,7 @@ public class MainActivity extends MaterialNavigationDrawer implements MaterialAc
         setDrawerHeaderImage(R.drawable.mat3);
         setDefaultSectionLoaded(3);
         setAccountListener(this);
-        addBottomSection(newSection("Bottom Section", R.mipmap.ic_settings_black_24dp,
+        addBottomSection(newSection(getString(R.string.preferencesTitle_menu), R.mipmap.ic_settings_black_24dp,
                 new Intent(this, PreferencesActivity.class)));
 
     }
