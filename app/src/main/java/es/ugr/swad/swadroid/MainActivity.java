@@ -19,6 +19,7 @@ import java.util.List;
 
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.CourseFragment;
+import es.ugr.swad.swadroid.gui.EvaluationFragment;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.sync.SyncUtils;
@@ -79,7 +80,7 @@ public class MainActivity extends MaterialNavigationDrawer implements MaterialAc
         MaterialSection section1 = newSection(getString(R.string.course), R.drawable.crs,
                 new CourseFragment());
         MaterialSection section2 = newSection(getString(R.string.evaluation), R.drawable.ass,
-                new CourseFragment());
+                new EvaluationFragment());
         MaterialSection section3 = newSection(getString(R.string.users), R.drawable.users,
                 new CourseFragment());
         MaterialSection section4 = newSection(getString(R.string.messages), R.drawable.msg,

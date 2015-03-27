@@ -58,7 +58,7 @@ public class CourseFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new CourseAdapter(mDataset, mIcons);
+        mAdapter = new SwadListAdapter(mDataset, mIcons);
         // Set CustomAdapter as the adapter for RecyclerView.
         mRecyclerView.setAdapter(mAdapter);
 

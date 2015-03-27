@@ -12,7 +12,7 @@ import java.util.ArrayList;
 /**
  * @author Alejandro Alcalde (elbauldelprogramador.com)
  */
-public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder> {
+public class SwadListAdapter extends RecyclerView.Adapter<SwadListAdapter.ViewHolder> {
 
     private ArrayList<String> mDataset;
     private int[] mIcon;
@@ -22,14 +22,14 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
      *
      * @param dataSet String[] containing the data to populate views to be used by RecyclerView.
      */
-    public CourseAdapter(ArrayList<String> dataSet, int[] icons) {
+    public SwadListAdapter(ArrayList<String> dataSet, int[] icons) {
         mDataset = dataSet;
         mIcon = icons;
     }
 
     // Create new views (invoked by the layout manager)
     @Override
-    public CourseAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public SwadListAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         // Create a new view.
         View v = LayoutInflater.from(viewGroup.getContext())
                 .inflate(android.R.layout.simple_dropdown_item_1line, viewGroup, false);
@@ -39,7 +39,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(CourseAdapter.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(SwadListAdapter.ViewHolder viewHolder, int position) {
         Log.d("CUSTOM", "Element " + position + " set.");
 
         // Get element from your dataset at this position and replace the contents of the view
