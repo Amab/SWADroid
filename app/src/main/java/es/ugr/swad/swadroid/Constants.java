@@ -32,6 +32,7 @@ import es.ugr.swad.swadroid.database.DataBaseHelper;
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  * @author Jose Antonio Guerrero Aviles <cany20@gmail.com>
+ * @author Alejandro Alcalde Barros <algui91@gmail.com>
  */
 public class Constants {
 
@@ -369,7 +370,7 @@ public class Constants {
     /**
      * Drawables for course list
      */
-    public static int[] courseDrw = {
+    public static final int[] COURSE_DRW = {
             R.drawable.info,
             R.drawable.file,
             R.drawable.syllabus,
@@ -384,7 +385,7 @@ public class Constants {
     /**
      * Text for course list
      */
-    public static int[] courseText = new int[]{
+    public static final int[] COURSE_TEXT = new int[]{
             R.string.introductionModuleLabel,
             R.string.teachingguideModuleLabel,
             R.string.syllabusLecturesModuleLabel,
@@ -394,5 +395,41 @@ public class Constants {
             R.string.bibliographyModuleLabel,
             R.string.faqsModuleLabel,
             R.string.linksModuleLabel
+    };
+
+    /**
+     * Identifiers for Evaluation
+     */
+    public static final int[] EVALUATION_TEXT = new int[]{
+            R.string.assessmentModuleLabel,
+            R.string.testsModuleLabel
+    };
+    public static final int[] EVALUATION_DRW = new int[]{
+            R.drawable.info,
+            R.drawable.test
+    };
+
+    /**
+     * Identifiers for Users
+     */
+    public static final int[] USERS_TEXT = new int[]{
+            R.string.myGroupsModuleLabel,
+            R.string.generateQRModuleLabel
+    };
+    public static final int[] USERS_DRW = new int[]{
+            R.drawable.my_groups,
+            R.drawable.qr
+    };
+
+    /**
+     * Identifiers for Messages
+     */
+    public static final int[] MESSAGES_TEXT = new int[]{
+            R.string.notificationsModuleLabel,
+            R.string.messagesModuleLabel
+    };
+    public static final int[] MESSAGES_DRW = new int[]{
+            R.drawable.notif,
+            R.drawable.msg_write
     };
 }

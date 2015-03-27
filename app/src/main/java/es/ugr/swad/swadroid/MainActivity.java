@@ -77,13 +77,13 @@ public class MainActivity extends MaterialNavigationDrawer implements MaterialAc
         }
 
         MaterialSection section1 = newSection(getString(R.string.course), R.drawable.crs,
-                SwadListFragment.newInstance(Constants.courseDrw, Constants.courseText));
+                SwadListFragment.newInstance(Constants.COURSE_DRW, Constants.COURSE_TEXT));
         MaterialSection section2 = newSection(getString(R.string.evaluation), R.drawable.ass,
-                SwadListFragment.newInstance(Constants.courseDrw, Constants.courseText));
+                SwadListFragment.newInstance(Constants.EVALUATION_DRW, Constants.EVALUATION_TEXT));
         MaterialSection section3 = newSection(getString(R.string.users), R.drawable.users,
-                SwadListFragment.newInstance(Constants.courseDrw, Constants.courseText));
+                SwadListFragment.newInstance(Constants.USERS_DRW, Constants.USERS_TEXT));
         MaterialSection section4 = newSection(getString(R.string.messages), R.drawable.msg,
-                SwadListFragment.newInstance(Constants.courseDrw, Constants.courseText)).setSectionColor(Color.parseColor("#ff0000"));
+                SwadListFragment.newInstance(Constants.MESSAGES_DRW, Constants.MESSAGES_TEXT)).setSectionColor(Color.parseColor("#ff0000"));
 
         addSection(section1);
         addSection(section2);
