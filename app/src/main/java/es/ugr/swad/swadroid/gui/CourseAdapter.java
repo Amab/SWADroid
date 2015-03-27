@@ -9,34 +9,22 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import es.ugr.swad.swadroid.R;
-
 /**
  * @author Alejandro Alcalde (elbauldelprogramador.com)
  */
 public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder> {
 
     private ArrayList<String> mDataset;
-
-    private int[] mIcon = new int[]{
-            R.drawable.info,
-            R.drawable.file,
-            R.drawable.syllabus,
-            R.drawable.lab,
-            R.drawable.folder,
-            R.drawable.folder_users,
-            R.drawable.book,
-            R.drawable.faq,
-            R.drawable.link
-    };
+    private int[] mIcon;
 
     /**
      * Initialize the dataset of the Adapter.
      *
      * @param dataSet String[] containing the data to populate views to be used by RecyclerView.
      */
-    public CourseAdapter(ArrayList<String> dataSet) {
+    public CourseAdapter(ArrayList<String> dataSet, int[] icons) {
         mDataset = dataSet;
+        mIcon = icons;
     }
 
     // Create new views (invoked by the layout manager)

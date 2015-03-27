@@ -24,10 +24,19 @@ public class CourseFragment extends Fragment {
     protected ArrayList<String> mDataset;
 
     private RecyclerView mRecyclerView;
-
     private RecyclerView.Adapter mAdapter;
-
     private RecyclerView.LayoutManager mLayoutManager;
+    private static int[] mIcons = {
+            R.drawable.info,
+            R.drawable.file,
+            R.drawable.syllabus,
+            R.drawable.lab,
+            R.drawable.folder,
+            R.drawable.folder_users,
+            R.drawable.book,
+            R.drawable.faq,
+            R.drawable.link
+    };
 
     public CourseFragment() {
     }
@@ -49,7 +58,7 @@ public class CourseFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new CourseAdapter(mDataset);
+        mAdapter = new CourseAdapter(mDataset, mIcons);
         // Set CustomAdapter as the adapter for RecyclerView.
         mRecyclerView.setAdapter(mAdapter);
 
