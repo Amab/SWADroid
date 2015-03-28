@@ -368,6 +368,12 @@ public class Constants {
     public static DataBaseHelper dbHelper;
 
     /**
+     * Fragment bundle args
+     */
+    public static final String TEXT_ARG = "TEXT";
+    public static final String DRW_ARG= Constants.DRW_ARG;
+
+    /**
      * Drawables for course list
      */
     public static final int[] COURSE_DRW = {

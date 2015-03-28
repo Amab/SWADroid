@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 
 /**
@@ -24,9 +25,6 @@ public class SwadListFragment extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
-    private static int[] mIcons;
-    private static int[] mText;
-
     public SwadListFragment() {
     }
 
@@ -36,8 +34,8 @@ public class SwadListFragment extends Fragment {
 
         Bundle args = new Bundle();
 
-        args.putIntArray("str", text);
-        args.putIntArray("drw", icons);
+        args.putIntArray(Constants.TEXT_ARG, text);
+        args.putIntArray(Constants.DRW_ARG, icons);
         fragment.setArguments(args);
 
         return fragment;
@@ -59,7 +57,7 @@ public class SwadListFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new SwadListAdapter(getArguments().getIntArray("drw"), getArguments().getIntArray("str"));
+        mAdapter = new SwadListAdapter(getArguments().getIntArray(Constants.DRW_ARG), getArguments().getIntArray(Constants.TEXT_ARG));
         // Set CustomAdapter as the adapter for RecyclerView.
         mRecyclerView.setAdapter(mAdapter);
 
