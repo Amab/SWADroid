@@ -36,9 +36,11 @@ public class MainActivity extends MaterialNavigationDrawer implements MaterialAc
     @Override
     public void init(Bundle bundle) {
 
+        getCurrentCourses();
         initDrawer();
 
         try {
+            Constants.dbHelper.initializeDB();
 //            isDebuggable = (ApplicationInfo.FLAG_DEBUGGABLE != 0);
 //            isSWADMain = this instanceof SWADMain;
         } catch (Exception ex) {
@@ -52,7 +54,7 @@ public class MainActivity extends MaterialNavigationDrawer implements MaterialAc
 
         List<Model> listCourses;
         listCourses = Constants.dbHelper
-                .getAllRows(DataBaseHelper.DB_TABLE_COURSES, null, "fullName");
+                .getAllRows(DataBaseHelper.DB_TABLE_COURSES, "", "shortName");
         /*
           Cursor for database access
         */
@@ -115,7 +117,6 @@ public class MainActivity extends MaterialNavigationDrawer implements MaterialAc
 
     private void getCurrentCourses() {
 //        showProgress(true);
-
         Intent activity = new Intent(this, Courses.class);
         startActivityForResult(activity, Constants.COURSES_REQUEST_CODE);
     }
@@ -139,7 +140,7 @@ public class MainActivity extends MaterialNavigationDrawer implements MaterialAc
                                 Long.parseLong(Preferences.getSyncTime()), this);
                     }
 
-                    showProgress(false);
+//                    showProgress(false);
                     break;
                 case Constants.LOGIN_REQUEST_CODE:
                     getCurrentCourses();
@@ -151,7 +152,7 @@ public class MainActivity extends MaterialNavigationDrawer implements MaterialAc
                 case Constants.COURSES_REQUEST_CODE:
                     //User credentials are wrong. Remove periodic synchronization
                     SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, this);
-                    showProgress(false);
+//                    showProgress(false);
                     break;
                 case Constants.LOGIN_REQUEST_CODE:
                     finish();
