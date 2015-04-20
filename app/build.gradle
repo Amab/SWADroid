@@ -8,8 +8,8 @@ android {
         applicationId "es.ugr.swad.swadroid"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        versionCode 70
+        versionName "2.0"
 
         testApplicationId "es.ugr.swad.swadroid.test"
         testInstrumentationRunner "android.test.InstrumentationTestRunner"

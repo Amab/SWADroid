@@ -4,7 +4,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.0.0'
+        classpath 'com.android.tools.build:gradle:1.1.0'
     }
 }
 
@@ -12,6 +12,5 @@ allprojects {
     repositories {
         jcenter()
         maven { url 'http://ksoap2-android.googlecode.com/svn/m2-repo' }
-        maven { url 'https://mint.splunk.com/gradle/' }
     }
 }
