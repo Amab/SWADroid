@@ -36,6 +36,7 @@ import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADroidTracker;
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.model.User;
+import es.ugr.swad.swadroid.modules.Login.OldLogin;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
@@ -137,7 +138,7 @@ public class Notices extends Module {
 
         createRequest(SOAPClient.CLIENT_TYPE);
 
-        addParam("wsKey", Login.getLoggedUser().getWsKey());
+        addParam("wsKey", OldLogin.getLoggedUser().getWsKey());
         addParam("courseCode", (int) selectedCourseCode);
         addParam("body", body);
 

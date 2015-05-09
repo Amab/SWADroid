@@ -33,4 +33,5 @@ dependencies {
     compile 'commons-io:commons-io:latest.release'
     compile 'com.nostra13.universalimageloader:universal-image-loader:latest.release'
     compile 'it.neokree:MaterialNavigationDrawer:latest.release'
+    compile 'de.greenrobot:eventbus:latest.release'
 }

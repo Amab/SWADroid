@@ -19,13 +19,6 @@
 
 package es.ugr.swad.swadroid.modules;
 
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.ksoap2.SoapFault;
-import org.ksoap2.transport.HttpResponseException;
-import org.xmlpull.v1.XmlPullParserException;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -36,6 +29,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.ksoap2.SoapFault;
+import org.ksoap2.transport.HttpResponseException;
+import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -49,6 +49,7 @@ import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
+import es.ugr.swad.swadroid.modules.Login.OldLogin;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.IWebserviceClient;
 import es.ugr.swad.swadroid.webservices.RESTClient;
@@ -137,8 +138,8 @@ public abstract class Module extends MenuActivity {
                     Toast.LENGTH_SHORT).show();
         } else {
             // If this is not the Login module, launch login check
-            if (!(this instanceof Login)) {
-                Intent loginActivity = new Intent(this, Login.class);
+            if (!(this instanceof OldLogin)) {
+                Intent loginActivity = new Intent(this, OldLogin.class);
                 startActivityForResult(loginActivity,
                         Constants.LOGIN_REQUEST_CODE);
             }
@@ -236,7 +237,7 @@ public abstract class Module extends MenuActivity {
                      * getString(R.string.loginSuccessfulMsg));
                      */
 
-                    if (!(this instanceof Login)) {
+                    if (!(this instanceof OldLogin)) {
                         connect();
                     }
 
@@ -429,7 +430,7 @@ public abstract class Module extends MenuActivity {
 
                         // Force logout and reset password (this will show again
                         // the login screen)
-                        Login.setLogged(false);
+                        OldLogin.setLogged(false);
                         Preferences.setUserPassword("");
                     } else if (es.faultstring.equals("Unknown application key")) {
                         errorMsg = getString(R.string.errorBadAppKeyMsg);

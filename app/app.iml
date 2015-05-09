@@ -137,6 +137,7 @@
     <orderEntry type="library" exported="" name="kxml-2.2.4" level="project" />
     <orderEntry type="library" exported="" name="play-services-appinvite-7.3.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-gcm-7.3.0" level="project" />
+    <orderEntry type="library" exported="" name="eventbus-2.4.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-nearby-7.3.0" level="project" />
     <orderEntry type="library" exported="" name="ksoap2-j2se-3.4.0" level="project" />
     <orderEntry type="library" exported="" name="support-v4-22.1.1" level="project" />

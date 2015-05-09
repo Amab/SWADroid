@@ -59,7 +59,7 @@ import es.ugr.swad.swadroid.gui.AlertNotificationFactory;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.model.User;
-import es.ugr.swad.swadroid.modules.Login;
+import es.ugr.swad.swadroid.modules.Login.OldLogin;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.IWebserviceClient;
@@ -182,11 +182,11 @@ public class NotificationsSyncAdapterService extends Service {
                     Integer.parseInt(soap.getProperty("userRole").toString())       // userRole
             );
 
-            Login.setLoggedUser(loggedUser);
-            Login.setLogged(true);
+            OldLogin.setLoggedUser(loggedUser);
+            OldLogin.setLogged(true);
 
             //Update application last login time
-            Login.setLastLoginTime(System.currentTimeMillis());
+            OldLogin.setLastLoginTime(System.currentTimeMillis());
         }
     }
 
@@ -201,7 +201,7 @@ public class NotificationsSyncAdapterService extends Service {
         METHOD_NAME = "getNotifications";
 
         createRequest(SOAPClient.CLIENT_TYPE);
-        addParam("wsKey", Login.getLoggedUser().getWsKey());
+        addParam("wsKey", OldLogin.getLoggedUser().getWsKey());
         addParam("beginTime", timestamp);
         sendRequest(SWADNotification.class, false);
 
@@ -317,17 +317,17 @@ public class NotificationsSyncAdapterService extends Service {
         }
 
         //If last login time > Global.RELOGIN_TIME, force login
-        if (Login.isLogged() &&
-                ((System.currentTimeMillis() - Login.getLastLoginTime()) > Login.RELOGIN_TIME)) {
+        if (OldLogin.isLogged() &&
+                ((System.currentTimeMillis() - OldLogin.getLastLoginTime()) > OldLogin.RELOGIN_TIME)) {
 
-            Login.setLogged(false);
+            OldLogin.setLogged(false);
         }
 
-        if (!Login.isLogged()) {
+        if (!OldLogin.isLogged()) {
             logUser();
         }
 
-        if (Login.isLogged()) {
+        if (OldLogin.isLogged()) {
             getNotifications();
 
             if (notifCount > 0) {
@@ -460,7 +460,7 @@ public class NotificationsSyncAdapterService extends Service {
                         sendException = false;
 
                         //Force logout and reset password (this will show again the login screen)
-                        Login.setLogged(false);
+                        OldLogin.setLogged(false);
                         Preferences.setUserPassword("");
                     } else if (es.faultstring.equals("Unknown application key")) {
                         errorMessage = mContext.getString(R.string.errorBadAppKeyMsg);

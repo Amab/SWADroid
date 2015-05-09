@@ -35,7 +35,7 @@ import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.model.UserAttendance;
-import es.ugr.swad.swadroid.modules.Login;
+import es.ugr.swad.swadroid.modules.Login.OldLogin;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
@@ -91,7 +91,7 @@ public class UsersDownload extends Module {
     protected void requestService() throws Exception {
         // Creates webservice request, adds required params and sends request to webservice
         createRequest(SOAPClient.CLIENT_TYPE);
-        addParam("wsKey", Login.getLoggedUser().getWsKey());
+        addParam("wsKey", OldLogin.getLoggedUser().getWsKey());
         addParam("attendanceEventCode", eventCode);
         sendRequest(UserAttendance.class, false);
 

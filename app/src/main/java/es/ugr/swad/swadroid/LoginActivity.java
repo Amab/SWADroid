@@ -15,8 +15,6 @@
 
 package es.ugr.swad.swadroid;
 
-import org.xmlpull.v1.XmlPullParserException;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -39,12 +37,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.xmlpull.v1.XmlPullParserException;
+
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
+import de.greenrobot.event.EventBus;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.DialogFactory;
-import es.ugr.swad.swadroid.modules.Login;
+import es.ugr.swad.swadroid.model.Login;
+import es.ugr.swad.swadroid.modules.Login.LoginEvent;
+import es.ugr.swad.swadroid.modules.Login.LoginService;
+import es.ugr.swad.swadroid.modules.Login.OldLogin;
 import es.ugr.swad.swadroid.modules.RecoverPassword;
 import es.ugr.swad.swadroid.utils.Crypto;
 import es.ugr.swad.swadroid.utils.Utils;
@@ -98,6 +102,46 @@ public class LoginActivity extends Activity implements OnClickListener {
             setupLoginForm();
         } else {
             startActivity(new Intent(this, MainActivity.class));
+        }
+    }
+
+    @Override
+     public void onStart() {
+        super.onStart();
+
+        //Register to start receiving responses from Login Service
+        EventBus.getDefault().register(this);
+        Log.i(TAG, "Registered EventBus for LoginService");
+    }
+
+    @Override
+    public void onStop() {
+        //Unregister to stop receiving responses from Login Service
+        EventBus.getDefault().unregister(this);
+        Log.i(TAG, "Unregistered EventBus for LoginService");
+
+        super.onStop();
+    }
+
+    // This method will be called when a response form Login Service is received
+    public void onEvent(LoginEvent event){
+        Log.i(TAG, "Received response from LoginService: " + event.toString());
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                showProgress(false);
+            }
+        });
+
+        if(event.isLogged()) {
+            Login.setLogged(true);
+            mFromPreferece = false;
+            mLoginError = false;
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        } else {
+            mLoginError = true;
         }
     }
 
@@ -226,7 +270,10 @@ public class LoginActivity extends Activity implements OnClickListener {
                 //error(TAG, e.getMessage(), e, true);
             }
             showProgress(true);
-            startActivityForResult(new Intent(this, Login.class), Constants.LOGIN_REQUEST_CODE);
+            //startActivityForResult(new Intent(this, OldLogin.class), Constants.LOGIN_REQUEST_CODE);
+
+            //Call Login Service
+            startService(new Intent(this, LoginService.class));
         }
     }
 
@@ -236,7 +283,7 @@ public class LoginActivity extends Activity implements OnClickListener {
             switch (requestCode) {
                 case Constants.LOGIN_REQUEST_CODE:
                     showProgress(false);
-                    Login.setLogged(true);
+                    OldLogin.setLogged(true);
                     setResult(RESULT_OK);
                     mFromPreferece = false;
                     mLoginError = false;

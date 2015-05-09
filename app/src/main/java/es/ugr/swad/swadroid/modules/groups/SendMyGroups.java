@@ -33,7 +33,7 @@ import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.model.Model;
-import es.ugr.swad.swadroid.modules.Login;
+import es.ugr.swad.swadroid.modules.Login.OldLogin;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
@@ -116,7 +116,7 @@ public class SendMyGroups extends Module {
     protected void requestService() throws Exception {
 
         createRequest(SOAPClient.CLIENT_TYPE);
-        addParam("wsKey", Login.getLoggedUser().getWsKey());
+        addParam("wsKey", OldLogin.getLoggedUser().getWsKey());
         addParam("courseCode", (int) courseCode);
         addParam("myGroups", myGroups);
         sendRequest(Group.class, false);

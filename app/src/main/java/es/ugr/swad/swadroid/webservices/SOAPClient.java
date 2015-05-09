@@ -18,17 +18,28 @@
  */
 package es.ugr.swad.swadroid.webservices;
 
+import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.util.Log;
+
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
+import org.ksoap2.transport.HttpResponseException;
 import org.ksoap2.transport.KeepAliveHttpsTransportSE;
+import org.xmlpull.v1.XmlPullParserException;
 
-import android.content.pm.ApplicationInfo;
-import android.util.Log;
+import java.net.SocketTimeoutException;
+import java.security.cert.CertificateException;
+import java.util.concurrent.TimeoutException;
+
+import javax.net.ssl.SSLException;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
+import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.utils.Utils;
 
 /**
  * SOAP client for SWAD webservices
@@ -88,6 +99,11 @@ public class SOAPClient implements IWebserviceClient {
     private Object result;
 
     /**
+     * Context of caller
+     */
+    private Context context;
+
+    /**
      * Default constructor
      */
     public SOAPClient() {
@@ -103,13 +119,15 @@ public class SOAPClient implements IWebserviceClient {
      * @param SOAP_ACTION SOAP_ACTION param for webservice request
      * @param METHOD_NAME METHOD_NAME param for webservice request
      * @param NAMESPACE   NAMESPACE param for webservice request
+     * @param context     Context of caller
      */
     public SOAPClient(String SERVER, String SOAP_ACTION, String METHOD_NAME,
-            String NAMESPACE) {
+            String NAMESPACE, Context context) {
         this.SERVER = SERVER;
         this.SOAP_ACTION = SOAP_ACTION;
         this.METHOD_NAME = METHOD_NAME;
         this.NAMESPACE = NAMESPACE;
+        this.context = context;
         isDebuggable = (ApplicationInfo.FLAG_DEBUGGABLE != 0);
     }
 
@@ -195,12 +213,30 @@ public class SOAPClient implements IWebserviceClient {
     public Object getResult() {
         return result;
     }
+    /**
+     * Gets the context of caller
+     *
+     * @return the context of caller
+     */
+    public Context getContext() {
+        return context;
+    }
+
+    /**
+     * Sets the context of caller
+     *
+     * @param context the context of caller
+     */
+    public void setContext(Context context) {
+        this.context = context;
+    }
 
     /**
      * Creates webservice request.
      */
     @Override
     public void createRequest() {
+        Log.i(TAG, "Creating SOAP request...");
         request = new SoapObject(NAMESPACE, METHOD_NAME);
         result = null;
     }
@@ -213,6 +249,9 @@ public class SOAPClient implements IWebserviceClient {
      */
     @Override
     public void addParam(String param, Object value) {
+        if(isDebuggable)
+            Log.d(TAG, "Adding SOAP param " + param + "=" + value);
+
         request.addProperty(param, value);
     }
 
@@ -284,6 +323,7 @@ public class SOAPClient implements IWebserviceClient {
                     Log.e(TAG, connection.responseDump.toString());
                 }
 
+                onError(e);
                 throw e;
             }
         } else {
@@ -295,6 +335,69 @@ public class SOAPClient implements IWebserviceClient {
         } else {
             result = envelope.getResponse();
         }
+    }
+
+    protected void onError(Exception e) {
+        String errorMsg;
+        int httpStatusCode;
+        boolean sendException = true;
+
+        /**
+         * If an exception has occurred, shows error message according
+         * to exception type.
+         */
+        if (e instanceof SoapFault) {
+            SoapFault es = (SoapFault) e;
+
+            if (es.faultstring.equals("Bad log in")) {
+                errorMsg = context.getString(R.string.errorBadLoginMsg);
+                sendException = false;
+            } else if (es.faultstring.equals("Bad web service key")) {
+                errorMsg = context.getString(R.string.errorBadLoginMsg);
+                sendException = false;
+            } else if (es.faultstring.equals("Unknown application key")) {
+                errorMsg = context.getString(R.string.errorBadAppKeyMsg);
+            } else {
+                errorMsg = "Server error: " + es.getMessage();
+            }
+        } else if ((e instanceof CertificateException) || (e instanceof SSLException)) {
+            errorMsg = context.getString(R.string.errorServerCertificateMsg);
+        } else if (e instanceof XmlPullParserException) {
+            errorMsg = context.getString(R.string.errorServerResponseMsg);
+        } else if ((e instanceof TimeoutException)
+                || (e instanceof SocketTimeoutException)) {
+            errorMsg = context.getString(R.string.errorTimeoutMsg);
+            sendException = false;
+        } else if (e instanceof HttpResponseException) {
+            httpStatusCode = ((HttpResponseException) e).getStatusCode();
+
+            Log.e(TAG, "httpStatusCode=" + httpStatusCode);
+
+            switch (httpStatusCode) {
+                case 500:
+                    errorMsg = context.getString(R.string.errorInternalServerMsg);
+                    break;
+
+                case 503:
+                    errorMsg = context.getString(R.string.errorServiceUnavailableMsg);
+                    sendException = false;
+                    break;
+
+                default:
+                    errorMsg = e.getMessage();
+                    if ((errorMsg == null) || errorMsg.equals("")) {
+                        errorMsg = context.getString(R.string.errorConnectionMsg);
+                    }
+            }
+        } else {
+            errorMsg = e.getMessage();
+            if ((errorMsg == null) || errorMsg.equals("")) {
+                errorMsg = context.getString(R.string.errorConnectionMsg);
+            }
+        }
+
+        // Request finalized with errors
+        Utils.error(context, TAG, errorMsg, e, sendException, isDebuggable);
     }
 
 }

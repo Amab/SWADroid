@@ -31,7 +31,7 @@ import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADroidTracker;
 import es.ugr.swad.swadroid.model.Group;
-import es.ugr.swad.swadroid.modules.Login;
+import es.ugr.swad.swadroid.modules.Login.OldLogin;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
@@ -98,7 +98,7 @@ public class GetFile extends Module {
     protected void requestService() throws Exception {
 
         createRequest(SOAPClient.CLIENT_TYPE);
-        addParam("wsKey", Login.getLoggedUser().getWsKey());
+        addParam("wsKey", OldLogin.getLoggedUser().getWsKey());
         addParam("fileCode", (int) fileCode);
         sendRequest(Group.class, false);
 

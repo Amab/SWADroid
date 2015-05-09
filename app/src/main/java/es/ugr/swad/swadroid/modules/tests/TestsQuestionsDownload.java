@@ -38,7 +38,7 @@ import es.ugr.swad.swadroid.model.TestAnswer;
 import es.ugr.swad.swadroid.model.TestQuestion;
 import es.ugr.swad.swadroid.model.TestTag;
 import es.ugr.swad.swadroid.modules.Courses;
-import es.ugr.swad.swadroid.modules.Login;
+import es.ugr.swad.swadroid.modules.Login.OldLogin;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.utils.DateTimeUtils;
 import es.ugr.swad.swadroid.utils.Utils;
@@ -92,7 +92,7 @@ public class TestsQuestionsDownload extends Module {
 
         //Creates webservice request, adds required params and sends request to webservice
         createRequest(SOAPClient.CLIENT_TYPE);
-        addParam("wsKey", Login.getLoggedUser().getWsKey());
+        addParam("wsKey", OldLogin.getLoggedUser().getWsKey());
         addParam("courseCode", (int) Courses.getSelectedCourseCode());
         addParam("beginTime", timestamp);
         sendRequest(Test.class, false);

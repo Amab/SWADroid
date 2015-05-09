@@ -30,7 +30,7 @@ import android.widget.Toast;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
-import es.ugr.swad.swadroid.modules.Login;
+import es.ugr.swad.swadroid.modules.Login.OldLogin;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
@@ -105,7 +105,7 @@ public class UsersSend extends Module {
     protected void requestService() throws Exception {
         // Creates webservice request, adds required params and sends request to webservice
         createRequest(SOAPClient.CLIENT_TYPE);
-        addParam("wsKey", Login.getLoggedUser().getWsKey());
+        addParam("wsKey", OldLogin.getLoggedUser().getWsKey());
         addParam("attendanceEventCode", String.valueOf(eventCode));
         addParam("users", usersCodes);
         addParam("setOthersAsAbsent", String.valueOf(setOthersAsAbsent));

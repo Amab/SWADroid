@@ -29,7 +29,7 @@ import android.util.Log;
 import java.security.NoSuchAlgorithmException;
 
 import es.ugr.swad.swadroid.database.DataBaseHelper;
-import es.ugr.swad.swadroid.modules.Login;
+import es.ugr.swad.swadroid.modules.Login.OldLogin;
 import es.ugr.swad.swadroid.sync.SyncUtils;
 import es.ugr.swad.swadroid.utils.Crypto;
 
@@ -499,7 +499,7 @@ public class Preferences {
     }
 
     public static void logoutClean(Context context, String key) {
-        Login.setLogged(false);
+        OldLogin.setLogged(false);
         Log.i(TAG, "Forced logout due to " + key + " change in preferences");
 
         cleanDatabase();

@@ -45,7 +45,7 @@ import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.GroupTypes;
 import es.ugr.swad.swadroid.modules.Groups;
-import es.ugr.swad.swadroid.modules.Login;
+import es.ugr.swad.swadroid.modules.Login.OldLogin;
 
 /**
  * Activity to manage the enrollments into groups. It is responsible for maintain the UI and send
@@ -262,7 +262,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
         groupTypes = (ArrayList<Model>) dbHelper.getAllRows(DataBaseHelper.DB_TABLE_GROUP_TYPES,
                 "courseCode =" + String.valueOf(courseCode), "groupTypeName");
         LongSparseArray<ArrayList<Group>> children = getHashMapGroups(groupTypes);
-        int currentRole = Login.getCurrentUserRole();
+        int currentRole = OldLogin.getCurrentUserRole();
         EnrollmentExpandableListAdapter adapter = new EnrollmentExpandableListAdapter(this,
                 groupTypes, children, R.layout.group_type_list_item, R.layout.group_list_item,
                 currentRole);

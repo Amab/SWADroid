@@ -22,6 +22,7 @@ package es.ugr.swad.swadroid.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
 import java.text.Normalizer;
 import java.util.Iterator;
@@ -30,6 +31,7 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import es.ugr.swad.swadroid.SWADroidTracker;
 import es.ugr.swad.swadroid.model.Model;
 
 /**
@@ -237,6 +239,16 @@ public class Utils {
         String temp = Normalizer.normalize(s, Normalizer.Form.NFD);
         Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
         return pattern.matcher(temp).replaceAll("");
+    }
+
+    public static void error(Context context, String tag, String errorMsg, Exception ex,
+                             boolean sendException, boolean isDebuggable) {
+        Log.e(tag, ex.getMessage(), ex);
+
+        // Send exception details to Google Analytics
+        if (!isDebuggable && sendException) {
+            SWADroidTracker.sendException(context, ex, false);
+        }
     }
 
 }

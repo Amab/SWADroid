@@ -36,6 +36,7 @@ import es.ugr.swad.swadroid.SWADroidTracker;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.Model;
+import es.ugr.swad.swadroid.modules.Login.OldLogin;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
@@ -165,7 +166,7 @@ public class Courses extends Module {
 
         //Creates webservice request, adds required params and sends request to webservice
         createRequest(SOAPClient.CLIENT_TYPE);
-        addParam("wsKey", Login.getLoggedUser().getWsKey());
+        addParam("wsKey", OldLogin.getLoggedUser().getWsKey());
         sendRequest(Course.class, false);
 
         if (result != null) {

@@ -14,6 +14,7 @@ import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADroidTracker;
 import es.ugr.swad.swadroid.gui.MenuActivity;
+import es.ugr.swad.swadroid.modules.Login.OldLogin;
 import es.ugr.swad.swadroid.utils.QR;
 
 public class GenerateQR extends MenuActivity {
@@ -48,8 +49,8 @@ public class GenerateQR extends MenuActivity {
 
         SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
 
-        if (!Login.isLogged() || (Login.getLoggedUser() == null)) {
-            Intent activity = new Intent(getApplicationContext(), Login.class);
+        if (!OldLogin.isLogged() || (OldLogin.getLoggedUser() == null)) {
+            Intent activity = new Intent(getApplicationContext(), OldLogin.class);
             startActivityForResult(activity, Constants.LOGIN_REQUEST_CODE);
         } else {
             generateQR();
@@ -62,11 +63,11 @@ public class GenerateQR extends MenuActivity {
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case Constants.LOGIN_REQUEST_CODE:
-                    if ((Login.getLoggedUser() != null) && !Login.getLoggedUser().getUserNickname()
+                    if ((OldLogin.getLoggedUser() != null) && !OldLogin.getLoggedUser().getUserNickname()
                             .equals(Constants.NULL_VALUE)) {
                         generateQR();
                     } else {
-                        Login.setLogged(false);
+                        OldLogin.setLogged(false);
                         Toast.makeText(getApplicationContext(), R.string.errorNoUserNickname,
                                 Toast.LENGTH_LONG).show();
 
@@ -86,7 +87,7 @@ public class GenerateQR extends MenuActivity {
     private void generateQR() {
         try {
             ImageView qr_image = (ImageView) findViewById(R.id.qr_code_image);
-            Bitmap qrCode = QR.encode(this, "@" + Login.getLoggedUser().getUserNickname());
+            Bitmap qrCode = QR.encode(this, "@" + OldLogin.getLoggedUser().getUserNickname());
             qr_image.setImageBitmap(qrCode);
         } catch (WriterException e) {
             error(TAG, e.getMessage(), e, true);

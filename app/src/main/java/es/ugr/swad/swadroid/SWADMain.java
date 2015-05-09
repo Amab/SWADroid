@@ -60,7 +60,7 @@ import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.GenerateQR;
-import es.ugr.swad.swadroid.modules.Login;
+import es.ugr.swad.swadroid.modules.Login.OldLogin;
 import es.ugr.swad.swadroid.modules.Notices;
 import es.ugr.swad.swadroid.modules.downloads.DownloadsManager;
 import es.ugr.swad.swadroid.modules.groups.MyGroupsManager;
@@ -252,12 +252,12 @@ public class SWADMain extends MenuExpandableListActivity {
                 Courses.setSelectedCourseCode(c.getId());
                 Courses.setSelectedCourseShortName(c.getShortName());
                 Courses.setSelectedCourseFullName(c.getFullName());
-                Login.setCurrentUserRole(c.getUserRole());
+                OldLogin.setCurrentUserRole(c.getUserRole());
             } else {
                 Courses.setSelectedCourseCode(-1);
                 Courses.setSelectedCourseShortName("");
                 Courses.setSelectedCourseFullName("");
-                Login.setCurrentUserRole(-1);
+                OldLogin.setCurrentUserRole(-1);
             }
             currentRole = -1;
         } catch (Exception ex) {
@@ -290,10 +290,10 @@ public class SWADMain extends MenuExpandableListActivity {
             }
 
             //If today is the user birthday, show birthday message
-            if ((Login.getLoggedUser() != null)
-                    && DateTimeUtils.isBirthday(Login.getLoggedUser().getUserBirthday())) {
+            if ((OldLogin.getLoggedUser() != null)
+                    && DateTimeUtils.isBirthday(OldLogin.getLoggedUser().getUserBirthday())) {
                 mBirthdayTextView.setText(getString(R.string.birthdayMsg).replace(
-                        Constants.USERNAME_TEMPLATE, Login.getLoggedUser().getUserFirstname()));
+                        Constants.USERNAME_TEMPLATE, OldLogin.getLoggedUser().getUserFirstname()));
                 mBirthdayLayout.setVisibility(View.VISIBLE);
             } else {
                 mBirthdayLayout.setVisibility(View.GONE);
@@ -322,7 +322,7 @@ public class SWADMain extends MenuExpandableListActivity {
         Courses.setSelectedCourseShortName("");
         Courses.setSelectedCourseFullName("");
 
-        Login.setCurrentUserRole(-1);
+        OldLogin.setCurrentUserRole(-1);
     }
 
     /**
@@ -458,14 +458,14 @@ public class SWADMain extends MenuExpandableListActivity {
                     Courses.setSelectedCourseCode(courseSelected.getId());
                     Courses.setSelectedCourseShortName(courseSelected.getShortName());
                     Courses.setSelectedCourseFullName(courseSelected.getFullName());
-                    Login.setCurrentUserRole(courseSelected.getUserRole());
+                    OldLogin.setCurrentUserRole(courseSelected.getUserRole());
                     Preferences.setLastCourseSelected(lastSelected);
                 } else {
                     courseSelected = (Course) listCourses.get(0);
                     Courses.setSelectedCourseCode(courseSelected.getId());
                     Courses.setSelectedCourseShortName(courseSelected.getShortName());
                     Courses.setSelectedCourseFullName(courseSelected.getFullName());
-                    Login.setCurrentUserRole(courseSelected.getUserRole());
+                    OldLogin.setCurrentUserRole(courseSelected.getUserRole());
                     Preferences.setLastCourseSelected(0);
                 }
             }
@@ -694,7 +694,7 @@ public class SWADMain extends MenuExpandableListActivity {
         Courses.setSelectedCourseCode(-1);
         Courses.setSelectedCourseShortName("");
         Courses.setSelectedCourseFullName("");
-        Login.setCurrentUserRole(-1);
+        OldLogin.setCurrentUserRole(-1);
         Preferences.setLastCourseSelected(-1);
         dBCleaned = true;
         listCourses.clear();
@@ -899,7 +899,7 @@ public class SWADMain extends MenuExpandableListActivity {
                 Courses.setSelectedCourseCode(courseCode);
                 Courses.setSelectedCourseShortName(courseSelected.getShortName());
                 Courses.setSelectedCourseFullName(courseSelected.getFullName());
-                Login.setCurrentUserRole(courseSelected.getUserRole());
+                OldLogin.setCurrentUserRole(courseSelected.getUserRole());
                 createMenu();
             }
         }

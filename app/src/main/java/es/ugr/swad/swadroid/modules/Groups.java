@@ -35,6 +35,7 @@ import es.ugr.swad.swadroid.SWADroidTracker;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.model.Model;
+import es.ugr.swad.swadroid.modules.Login.OldLogin;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
@@ -117,7 +118,7 @@ public class Groups extends Module {
     @Override
     protected void requestService() throws Exception {
         createRequest(SOAPClient.CLIENT_TYPE);
-        addParam("wsKey", Login.getLoggedUser().getWsKey());
+        addParam("wsKey", OldLogin.getLoggedUser().getWsKey());
         addParam("courseCode", (int) courseCode);
         sendRequest(Group.class, false);
 

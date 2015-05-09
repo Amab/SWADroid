@@ -17,7 +17,7 @@
  *  along with SWADroid.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package es.ugr.swad.swadroid.modules;
+package es.ugr.swad.swadroid.modules.Login;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -28,6 +28,7 @@ import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
+import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
@@ -37,7 +38,7 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  */
-public class Login extends Module {
+public class OldLogin extends Module {
 
     /**
      * Time to force relogin
@@ -84,7 +85,7 @@ public class Login extends Module {
      * @param logged User logged flag
      */
     public static void setLogged(boolean logged) {
-        Login.logged = logged;
+        OldLogin.logged = logged;
     }
 
     /**
@@ -98,7 +99,7 @@ public class Login extends Module {
      * Sets the user logged on SWAD
      */
     public static void setLoggedUser(User loggedUser) {
-        Login.loggedUser = loggedUser;
+        OldLogin.loggedUser = loggedUser;
     }
 
     /**
@@ -116,7 +117,7 @@ public class Login extends Module {
      * @param l Start time of application
      */
     public static void setLastLoginTime(long l) {
-        Login.lastLoginTime = l;
+        OldLogin.lastLoginTime = l;
     }
 
     /**
@@ -183,12 +184,12 @@ public class Login extends Module {
             throws Exception {
 
         //If last login time > Global.RELOGIN_TIME, force login
-        if (System.currentTimeMillis() - Login.getLastLoginTime() > Login.RELOGIN_TIME) {
-            Login.setLogged(false);
+        if (System.currentTimeMillis() - OldLogin.getLastLoginTime() > OldLogin.RELOGIN_TIME) {
+            OldLogin.setLogged(false);
         }
 
         //If the application isn't logged, force login
-        if (!Login.isLogged()) {
+        if (!OldLogin.isLogged()) {
             String userID = Preferences.getUserID();
 
             //If the user ID is a DNI
@@ -233,11 +234,11 @@ public class Login extends Module {
                         Integer.parseInt(soap.getProperty("userRole").toString())       // userRole
                 );
 
-                Login.setLogged(true);
-                Login.setLoggedUser(user);
+                OldLogin.setLogged(true);
+                OldLogin.setLoggedUser(user);
 
                 //Update application last login time
-                Login.setLastLoginTime(System.currentTimeMillis());
+                OldLogin.setLastLoginTime(System.currentTimeMillis());
 
                 if (isDebuggable) {
                     Log.d(TAG, "id=" + user.getId());
@@ -251,8 +252,8 @@ public class Login extends Module {
                     Log.d(TAG, "userBirthday=" + ((user.getUserBirthday() != null) ? user
                             .getUserBirthday().getTime() : "null"));
                     Log.d(TAG, "userRole=" + user.getUserRole());
-                    Log.d(TAG, "isLogged=" + Login.isLogged());
-                    Log.d(TAG, "lastLoginTime=" + Login.getLastLoginTime());
+                    Log.d(TAG, "isLogged=" + OldLogin.isLogged());
+                    Log.d(TAG, "lastLoginTime=" + OldLogin.getLastLoginTime());
                 }
             }
         }

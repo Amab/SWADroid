@@ -25,11 +25,11 @@ package es.ugr.swad.swadroid.webservices;
  */
 public interface IWebserviceClient {
 
-    public void createRequest();
+    void createRequest();
 
-    public void addParam(String param, Object value);
+    void addParam(String param, Object value);
 
-    public void setMETHOD_NAME(String METHOD_NAME);
+    void setMETHOD_NAME(String METHOD_NAME);
 
-    public Object getResult();
+    Object getResult();
 }

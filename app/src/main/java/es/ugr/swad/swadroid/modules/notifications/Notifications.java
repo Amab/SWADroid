@@ -56,7 +56,7 @@ import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.AlertNotificationFactory;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.model.SWADNotification;
-import es.ugr.swad.swadroid.modules.Login;
+import es.ugr.swad.swadroid.modules.Login.OldLogin;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.sync.SyncUtils;
 import es.ugr.swad.swadroid.utils.DateTimeUtils;
@@ -221,10 +221,10 @@ public class Notifications extends Module implements
         hideSwipeProgress();
 
         //If today is the user birthday, show birthday message
-        if ((Login.getLoggedUser() != null)
-                && DateTimeUtils.isBirthday(Login.getLoggedUser().getUserBirthday())) {
+        if ((OldLogin.getLoggedUser() != null)
+                && DateTimeUtils.isBirthday(OldLogin.getLoggedUser().getUserBirthday())) {
             mBirthdayTextView.setText(getString(R.string.birthdayMsg).replace(
-                    Constants.USERNAME_TEMPLATE, Login.getLoggedUser().getUserFirstname()));
+                    Constants.USERNAME_TEMPLATE, OldLogin.getLoggedUser().getUserFirstname()));
             mBirthdayLayout.setVisibility(View.VISIBLE);
         } else {
             mBirthdayLayout.setVisibility(View.GONE);
@@ -427,7 +427,7 @@ public class Notifications extends Module implements
             // Creates webservice request, adds required params and sends
             // request to webservice
             createRequest(SOAPClient.CLIENT_TYPE);
-            addParam("wsKey", Login.getLoggedUser().getWsKey());
+            addParam("wsKey", OldLogin.getLoggedUser().getWsKey());
             addParam("beginTime", timestamp);
             sendRequest(SWADNotification.class, false);
 
