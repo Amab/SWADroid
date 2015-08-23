@@ -292,5 +292,6 @@
          ¿Está seguro de que quiere eliminar localmente el listado de usuarios?</string>
     <string name="usersAbsent">Todos los usuarios marcados como ausentes</string>
     <string name="functionHoneycombMsg">Esta función requiere Android 3.0 (Honeycomb) o superior</string>
+    <string name="updatePendingEventsMsg">Hay eventos con cambios pendientes de enviar al servidor. Si actualiza el listado de eventos puede perder los cambios que no haya enviado.\n\n¿Está seguro de que quiere actualizar el listado de eventos?</string>
 
 </resources>
