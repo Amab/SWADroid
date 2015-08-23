@@ -256,6 +256,12 @@ public class EntityCursor implements Cursor, Iterable<Entity> {
 	}
 
 	/* (non-Javadoc)
+	 * @see android.database.Cursor#setExtras()
+	 */
+	@Override
+	public void setExtras(Bundle extras) { mCursor.setExtras(extras); }
+
+	/* (non-Javadoc)
 	 * @see android.database.Cursor#isAfterLast()
 	 */
 	@Override

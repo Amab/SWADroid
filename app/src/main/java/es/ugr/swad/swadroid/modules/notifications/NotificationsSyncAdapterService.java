@@ -63,7 +63,6 @@ import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.IWebserviceClient;
-import es.ugr.swad.swadroid.webservices.RESTClient;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
@@ -258,8 +257,6 @@ public class NotificationsSyncAdapterService extends Service {
     	if(webserviceClient == null) {
 	    	if(clientType.equals(SOAPClient.CLIENT_TYPE)) {
 	    		webserviceClient = new SOAPClient();
-	    	} else if(clientType.equals(RESTClient.CLIENT_TYPE)) {
-	    		webserviceClient = new RESTClient();    		
 	    	}
 	
     	}
