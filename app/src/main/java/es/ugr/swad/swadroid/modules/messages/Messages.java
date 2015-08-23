@@ -214,10 +214,10 @@ public class Messages extends Module {
      */
     @Override
     protected void postConnect() {
-        String messageSended = getString(R.string.messageSendedMsg) + ":" + receiversNames;
+        String messageSent = getString(R.string.messageSentMsg) + ":" + receiversNames;
 
-        Toast.makeText(this, messageSended, Toast.LENGTH_LONG).show();
-        Log.i(TAG, messageSended);
+        Toast.makeText(this, messageSent, Toast.LENGTH_LONG).show();
+        Log.i(TAG, messageSent);
 
         finish();
     }

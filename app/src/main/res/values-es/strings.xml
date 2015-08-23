@@ -101,7 +101,6 @@
     <string name="errorServiceUnavailableMsg">SWAD se encuentra en mantenimiento en estos momentos.
         Por favor, inténtelo más tarde</string>
     <string name="sendingMessageMsg">Enviando mensaje…</string>
-    <string name="messageSendedMsg">Mensaje enviado</string>
     <string name="noReceiversMsg">Debe indicar al menos un destinatario</string>
     <string name="noSubjectMessageMsg">Debe introducir el asunto del mensaje</string>
     <string name="message_receivers_title">Destinatarios (separados por comas)</string>
@@ -293,5 +292,7 @@
     <string name="usersAbsent">Todos los usuarios marcados como ausentes</string>
     <string name="functionHoneycombMsg">Esta función requiere Android 3.0 (Honeycomb) o superior</string>
     <string name="updatePendingEventsMsg">Hay eventos con cambios pendientes de enviar al servidor. Si actualiza el listado de eventos puede perder los cambios que no haya enviado.\n\n¿Está seguro de que quiere actualizar el listado de eventos?</string>
+    <string name="follower">Nuevo seguidor</string>
+    <string name="messageSentMsg">Mensaje enviado</string>
 
 </resources>
