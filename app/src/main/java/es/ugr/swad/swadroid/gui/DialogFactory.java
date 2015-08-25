@@ -245,7 +245,7 @@ public class DialogFactory {
      * @param tag Module tag
      * @param message Error message string
      * @param ex Exception thrown
-     * @param sendException true if the error report has to be sended
+     * @param sendException true if the error report has to be sent
      * 						false otherwise
      * @param isDebuggable	true if the application is debuggable (develop mode). Activates Logcat messages
      * 						false otherwise

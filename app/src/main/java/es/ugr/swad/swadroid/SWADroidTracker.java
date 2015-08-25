@@ -139,7 +139,7 @@ public class SWADroidTracker {
             // Send a screen view.
             t.send(new HitBuilders.AppViewBuilder().build());
 
-            Log.i(TAG, "ScreenView sended for screen " + path);
+            Log.i(TAG, "ScreenView sent for screen " + path);
         }
     }
 
@@ -166,7 +166,7 @@ public class SWADroidTracker {
             // Clear the screen name field when we're done.
             t.setScreenName(null);
 
-            Log.i(TAG, "ScreenView sended for screen " + path);
+            Log.i(TAG, "ScreenView sent for screen " + path);
         }
     }
 

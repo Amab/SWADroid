@@ -63,7 +63,6 @@ import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.IWebserviceClient;
-import es.ugr.swad.swadroid.webservices.RESTClient;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
@@ -117,56 +116,57 @@ public class NotificationsSyncAdapterService extends Service {
                 
                 //If synchronization was successful, update last synchronization time in preferences
                 Preferences.setLastSyncTime(System.currentTimeMillis());
-            } catch (Exception e) {                
-                if (e instanceof SoapFault) {
+            } catch (Exception e) {
+                if (e.getClass() == SoapFault.class) {
                     SoapFault es = (SoapFault) e;
 
                     if (es.faultstring.equals("Bad log in")) {
-                    	errorMessage = mContext.getString(R.string.errorBadLoginMsg);
-                    	sendException = false;
-                	} else if (es.faultstring.equals("Bad web service key")) {
-                		errorMessage = mContext.getString(R.string.errorBadLoginMsg);
-                		sendException = false;
-                		
-                		//Force logout and reset password (this will show again the login screen)
-                		Login.setLogged(false);
-                		Preferences.setUserPassword("");
+                        errorMessage = mContext.getString(R.string.errorBadLoginMsg);
+                        sendException = false;
+                    } else if (es.faultstring.equals("Bad web service key")) {
+                        errorMessage = mContext.getString(R.string.errorBadLoginMsg);
+                        sendException = false;
+
+                        // Force logout and reset password (this will show again
+                        // the login screen)
+                        Login.setLogged(false);
+                        Preferences.setUserPassword("");
                     } else if (es.faultstring.equals("Unknown application key")) {
-                    	errorMessage = mContext.getString(R.string.errorBadAppKeyMsg);
+                        errorMessage = mContext.getString(R.string.errorBadAppKeyMsg);
                     } else {
-                    	errorMessage = "Server error: " + es.getMessage();
+                        errorMessage = "Server error: " + es.getMessage();
                     }
-                } else if ((e instanceof CertificateException) || (e instanceof SSLException)) {
-                	errorMessage = mContext.getString(R.string.errorServerCertificateMsg);
-                } else if (e instanceof XmlPullParserException) {
-                	errorMessage = mContext.getString(R.string.errorServerResponseMsg);
-                } else if ((e instanceof TimeoutException) || (e instanceof SocketTimeoutException)) {
-                	errorMessage = mContext.getString(R.string.errorTimeoutMsg);
-                	sendException = false;
-                } else if (e instanceof HttpResponseException) {
-                	httpStatusCode = ((HttpResponseException) e).getStatusCode();
+                } else if ((e.getClass() == TimeoutException.class) || (e.getClass() == SocketTimeoutException.class)) {
+                    errorMessage = mContext.getString(R.string.errorTimeoutMsg);
+                    sendException = false;
+                } else if ((e.getClass() == CertificateException.class) || (e .getClass() == SSLException.class)) {
+                    errorMessage = mContext.getString(R.string.errorServerCertificateMsg);
+                } else if (e.getClass() == HttpResponseException.class) {
+                    httpStatusCode = ((HttpResponseException) e).getStatusCode();
 
                     Log.e(TAG, "httpStatusCode=" + httpStatusCode);
 
                     switch(httpStatusCode) {
                         case 500: errorMessage = mContext.getString(R.string.errorInternalServerMsg);
-                                  break;
+                            break;
 
                         case 503: errorMessage = mContext.getString(R.string.errorServiceUnavailableMsg);
-                                  sendException = false;
-                                  break;
+                            sendException = false;
+                            break;
 
                         default:  errorMessage = e.getMessage();
-                                  if ((errorMessage == null) || errorMessage.equals("")) {
-                                      errorMessage = mContext.getString(R.string.errorConnectionMsg);
-                                  }
+                            if ((errorMessage == null) || errorMessage.equals("")) {
+                                errorMessage = mContext.getString(R.string.errorConnectionMsg);
+                            }
                     }
+                } else if (e.getClass() == XmlPullParserException.class) {
+                    errorMessage = mContext.getString(R.string.errorServerResponseMsg);
                 } else {
-                	errorMessage = e.getMessage();
-                	if((errorMessage == null) || errorMessage.equals("")) {
-                		errorMessage = mContext.getString(R.string.errorConnectionMsg);
-                	}  
-                }           
+                    errorMessage = e.getMessage();
+                    if ((errorMessage == null) || errorMessage.equals("")) {
+                        errorMessage = mContext.getString(R.string.errorConnectionMsg);
+                    }
+                }
                 
                 // Launch database rollback
                 if(dbHelper.isDbInTransaction()) {
@@ -258,8 +258,6 @@ public class NotificationsSyncAdapterService extends Service {
     	if(webserviceClient == null) {
 	    	if(clientType.equals(SOAPClient.CLIENT_TYPE)) {
 	    		webserviceClient = new SOAPClient();
-	    	} else if(clientType.equals(RESTClient.CLIENT_TYPE)) {
-	    		webserviceClient = new RESTClient();    		
 	    	}
 	
     	}

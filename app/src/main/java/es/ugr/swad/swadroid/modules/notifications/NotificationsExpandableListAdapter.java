@@ -160,6 +160,9 @@ public class NotificationsExpandableListAdapter extends
             } else if (type.equals("documentFile")) {
                 type = activity.getString(R.string.survey);
                 notificationIcon.setImageResource(R.drawable.survey);
+            } else if (type.equals("follower")) {
+                type = activity.getString(R.string.follower);
+                notificationIcon.setImageResource(R.drawable.follow);
             } else {
                 type = activity.getString(R.string.unknownNotification);
                 notificationIcon.setImageResource(R.drawable.ic_launcher_swadroid);

@@ -112,7 +112,7 @@ public class UsersSend extends Module {
             numUsers = Integer.parseInt(soap.getProperty("numUsers").toString());
         }    // end if (result != null)
 
-        Log.i(TAG, "Sended " + numUsers + " users");
+        Log.i(TAG, "Sent " + numUsers + " users");
     }
 
     @Override
@@ -144,7 +144,7 @@ public class UsersSend extends Module {
             //Remove all event attendances from database after a successful sending
             dbHelper.removeAllRows(DataBaseHelper.DB_TABLE_USERS_ATTENDANCES, "eventCode", eventCode);
 
-            //Mark the event as sended to SWAD
+            //Mark the event as sent to SWAD
             dbHelper.updateEventStatus(eventCode, "OK");
             dbHelper.endTransaction(true);
 

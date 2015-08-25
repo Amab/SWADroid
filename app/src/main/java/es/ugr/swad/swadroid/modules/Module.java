@@ -30,9 +30,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.ksoap2.SoapFault;
 import org.ksoap2.transport.HttpResponseException;
 import org.xmlpull.v1.XmlPullParserException;
@@ -52,7 +49,6 @@ import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.IWebserviceClient;
-import es.ugr.swad.swadroid.webservices.RESTClient;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
@@ -261,8 +257,6 @@ public abstract class Module extends MenuActivity {
         if (webserviceClient == null) {
             if (clientType.equals(SOAPClient.CLIENT_TYPE)) {
                 webserviceClient = new SOAPClient();
-            } else if (clientType.equals(RESTClient.CLIENT_TYPE)) {
-                webserviceClient = new RESTClient();
             }
 
             webserviceClient.setMETHOD_NAME(METHOD_NAME);
@@ -291,25 +285,6 @@ public abstract class Module extends MenuActivity {
      */
     protected void sendRequest(Class<?> cl, boolean simple) throws Exception {
         ((SOAPClient) webserviceClient).sendRequest(cl, simple);
-        result = webserviceClient.getResult();
-    }
-
-    /**
-     * Sends a REST request to the specified webservice in METHOD_NAME class
-     * constant of the webservice client.
-     * 
-     * @param cl Class to be mapped
-     * @param simple Flag for select simple or complex response
-     * @param type Request type
-     * @param json JSON object to be sended
-     * @throws ClientProtocolException
-     * @throws IOException
-     * @throws JSONException
-     */
-    protected void sendRequest(Class<?> cl, boolean simple, RESTClient.REQUEST_TYPE type,
-            JSONObject json) throws ClientProtocolException, CertificateException, IOException,
-            JSONException {
-        ((RESTClient) webserviceClient).sendRequest(cl, simple, RESTClient.REQUEST_TYPE.GET, json);
         result = webserviceClient.getResult();
     }
 
@@ -411,7 +386,7 @@ public abstract class Module extends MenuActivity {
                  * If an exception has occurred, shows error message according
                  * to exception type.
                  */
-                if (e instanceof SoapFault) {
+                if (e.getClass() == SoapFault.class) {
                     SoapFault es = (SoapFault) e;
 
                     if (es.faultstring.equals("Bad log in")) {
@@ -430,14 +405,12 @@ public abstract class Module extends MenuActivity {
                     } else {
                         errorMsg = "Server error: " + es.getMessage();
                     }
-                } else if ((e instanceof CertificateException) || (e instanceof SSLException)) {
-                    errorMsg = getString(R.string.errorServerCertificateMsg);
-                } else if (e instanceof XmlPullParserException) {
-                    errorMsg = getString(R.string.errorServerResponseMsg);
-                } else if ((e instanceof TimeoutException) || (e instanceof SocketTimeoutException)) {
+                } else if ((e.getClass() == TimeoutException.class) || (e.getClass() == SocketTimeoutException.class)) {
                     errorMsg = getString(R.string.errorTimeoutMsg);
                     sendException = false;
-                } else if (e instanceof HttpResponseException) {
+                } else if ((e.getClass() == CertificateException.class) || (e .getClass() == SSLException.class)) {
+                    errorMsg = getString(R.string.errorServerCertificateMsg);
+                } else if (e.getClass() == HttpResponseException.class) {
                     httpStatusCode = ((HttpResponseException) e).getStatusCode();
 
                     Log.e(TAG, "httpStatusCode=" + httpStatusCode);
@@ -455,6 +428,8 @@ public abstract class Module extends MenuActivity {
                                       errorMsg = getString(R.string.errorConnectionMsg);
                                   }
                     }
+                } else if (e.getClass() == XmlPullParserException.class) {
+                    errorMsg = getString(R.string.errorServerResponseMsg);
                 } else {
                     errorMsg = e.getMessage();
                     if ((errorMsg == null) || errorMsg.equals("")) {

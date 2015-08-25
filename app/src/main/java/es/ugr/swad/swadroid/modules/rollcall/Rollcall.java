@@ -20,6 +20,8 @@
 package es.ugr.swad.swadroid.modules.rollcall;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
@@ -218,21 +220,68 @@ public class Rollcall extends MenuExpandableListActivity implements
   @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
   private void setAppearance() {
     refreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
-                                          android.R.color.holo_green_light,
-                                          android.R.color.holo_orange_light,
-                                          android.R.color.holo_red_light);
+            android.R.color.holo_green_light,
+            android.R.color.holo_orange_light,
+            android.R.color.holo_red_light);
   }
+
+  private boolean hasPendingEvents() {
+    boolean hasPendingEvents = false;
+    TextView sendingStateTextView;
+      int i = 0;
+
+    if ((lvEvents != null) && (lvEvents.getChildCount() > 0)) {
+       while(!hasPendingEvents && (i<lvEvents.getChildCount())) {
+          sendingStateTextView = (TextView) lvEvents.getChildAt(i).findViewById(R.id.sendingStateTextView);
+          hasPendingEvents = sendingStateTextView.getText().equals(getString(R.string.sendingStatePending));
+          i++;
+        }
+    }
+
+    return hasPendingEvents;
+  }
+
+    private void updateEvents() {
+        showSwipeProgress();
+
+        refreshEvents();
+
+        hideSwipeProgress();
+    }
 
   /**
    * It must be overriden by parent classes if manual swipe is enabled.
    */
   @Override
   public void onRefresh() {
-    showSwipeProgress();
+    if(!hasPendingEvents()) {
+        updateEvents();
+    } else {
+        AlertDialog cleanEventsDialog = DialogFactory.createWarningDialog(this,
+                -1,
+                R.string.areYouSure,
+                R.string.updatePendingEventsMsg,
+                R.string.yesMsg,
+                R.string.noMsg,
+                true,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
 
-    refreshEvents();
+                        updateEvents();
+                    }
+                },
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                },
+                null);
 
-    hideSwipeProgress();
+        cleanEventsDialog.show();
+    }
+
+      hideSwipeProgress();
   }
 
   private static class RefreshAdapterHandler extends Handler {

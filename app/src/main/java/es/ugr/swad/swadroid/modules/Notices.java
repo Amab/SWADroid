@@ -157,9 +157,9 @@ public class Notices extends Module {
 
     @Override
     protected void postConnect() {
-        String noticeSended = getString(R.string.noticePublished);
-        Toast.makeText(this, noticeSended, Toast.LENGTH_LONG).show();
-        Log.i(TAG, noticeSended);
+        String noticeSent = getString(R.string.noticePublished);
+        Toast.makeText(this, noticeSent, Toast.LENGTH_LONG).show();
+        Log.i(TAG, noticeSent);
         noticeDialog.dismiss();
         finish();
     }
