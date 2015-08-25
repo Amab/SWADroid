@@ -16,6 +16,7 @@ import org.ksoap2.serialization.SoapObject;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADroidTracker;
+import es.ugr.swad.swadroid.gui.WebViewFactory;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.Login;
@@ -53,9 +54,9 @@ public class Information extends Module {
 		setContentView(R.layout.webview_information_screen_layout);
 		
 		webview = (WebView) this.findViewById(R.id.info_webview_dialog);
-		
-		WebSettings settings = webview.getSettings();
-		settings.setDefaultTextEncodingName("utf-8");
+
+        WebSettings settings = webview.getSettings();
+        settings.setDefaultTextEncodingName("utf-8");
 
 		int requestCode = this.getIntent().getIntExtra("requestCode", 0);
 
@@ -189,11 +190,12 @@ public class Information extends Module {
 	@Override
 	protected void postConnect() {
 		if (infoSrc.equals("none") || infoTxt.equals("") || infoTxt.equals(Constants.NULL_VALUE)) {
-			webview.loadDataWithBaseURL(null,(getString(R.string.emptyInformation)), "text/html", "utf-8", null);
+			webview.loadDataWithBaseURL(null, (getString(R.string.emptyInformation)), "text/html", "utf-8", null);
 		} else if (infoSrc.equals("URL")) {
 			webview.loadUrl(infoTxt);
 		} else {
-			webview.loadDataWithBaseURL(null, infoTxt, "text/html", "utf-8", null);
+            webview = WebViewFactory.getMathJaxWebView(webview);
+            webview.setWebViewClient(WebViewFactory.getMathJaxExpression(infoTxt));
 		}
 	}
 
