@@ -29,8 +29,10 @@ public class WebViewFactory {
                 + "    }"
                 + "});</script>"
                 + "<script type='text/javascript' "
-                //+ "src='file:///android_asset/MathJax/MathJax.js'"                              //Local MathJax
-                + "src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML'"   //Remote CDN MathJax
+                //Local MathJax
+                + "src='file:///android_asset/MathJax/MathJax.js'"
+                //Remote CDN MathJax
+                //+ "src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML'"
                 + "></script>"
                 + "<script type='text/javascript'>getLiteralMML = function() {"
                 + "math=MathJax.Hub.getAllJax('math')[0];"
