@@ -122,7 +122,7 @@ public class Course extends Model {
      */
     @Override
     public String toString() {
-        return "Course [getId()=" + getId() + " userRole=" + userRole + "getShortName=" + shortName + "getFullName=" + fullName + "]";
+        return "Course [id=" + getId() + " userRole=" + userRole + "getShortName=" + shortName + "getFullName=" + fullName + "]";
     }
 
     /* (non-Javadoc)

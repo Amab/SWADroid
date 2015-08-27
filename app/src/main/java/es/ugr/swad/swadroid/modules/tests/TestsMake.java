@@ -24,7 +24,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
-import android.text.Html;
 import android.text.InputType;
 import android.util.Log;
 import android.util.SparseBooleanArray;
@@ -32,6 +31,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -53,6 +53,7 @@ import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADroidTracker;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.MenuActivity;
+import es.ugr.swad.swadroid.gui.WebViewFactory;
 import es.ugr.swad.swadroid.gui.widget.CheckableLinearLayout;
 import es.ugr.swad.swadroid.gui.widget.TextProgressBar;
 import es.ugr.swad.swadroid.model.Test;
@@ -297,6 +298,32 @@ public class TestsMake extends MenuActivity {
     }
 
     /**
+     * Gets the answer type for integer, float or text answers
+     * @param type Answer type as string
+     * @return Answer type as integer
+     */
+    private int getSimpleAnswerType(String type) {
+        int answerType;
+
+        switch (type) {
+            case TestAnswer.TYPE_INT:
+                answerType = InputType.TYPE_CLASS_NUMBER
+                                | InputType.TYPE_NUMBER_FLAG_SIGNED;
+                break;
+            case TestAnswer.TYPE_FLOAT:
+                answerType = InputType.TYPE_CLASS_NUMBER
+                                | InputType.TYPE_NUMBER_FLAG_DECIMAL
+                                | InputType.TYPE_NUMBER_FLAG_SIGNED;
+                break;
+            default:
+                answerType = InputType.TYPE_CLASS_TEXT;
+                break;
+        }
+
+        return answerType;
+    }
+
+    /**
      * Shows a test question on screen
      *
      * @param pos Question's position in questions's list of the test
@@ -307,11 +334,11 @@ public class TestsMake extends MenuActivity {
         TestAnswer a;
         ScrollView scrollContent = (ScrollView) findViewById(R.id.testMakeScroll);
         LinearLayout testMakeList = (LinearLayout) findViewById(R.id.testMakeList);
-        TextView stem = (TextView) findViewById(R.id.testMakeQuestionStem);
-        TextView questionFeedback = (TextView) findViewById(R.id.testMakeQuestionFeedback);
-        TextView answerFeedback = (TextView) findViewById(R.id.testMakeAnswerFeedback);
+        WebView stem = (WebView) findViewById(R.id.testMakeQuestionStem);
+        WebView questionFeedback = (WebView) findViewById(R.id.testMakeQuestionFeedback);
+        WebView answerFeedback = (WebView) findViewById(R.id.testMakeAnswerFeedback);
         TextView score = (TextView) findViewById(R.id.testMakeQuestionScore);
-        TextView textCorrectAnswer = (TextView) findViewById(R.id.testMakeCorrectAnswer);
+        WebView textCorrectAnswer = (WebView) findViewById(R.id.testMakeCorrectAnswer);
         EditText textAnswer = (EditText) findViewById(R.id.testMakeEditText);
         ImageView img = (ImageView) findViewById(R.id.testMakeCorrectAnswerImage);
     	MenuItem actionScoreItem = menu.findItem(R.id.action_score);
@@ -320,10 +347,11 @@ public class TestsMake extends MenuActivity {
         String feedback = test.getFeedback();
         String questionFeedbackText = question.getFeedback();
         String correctAnswer = "";
+        int feedbackColor = getResources().getColor(R.color.gray_goose);
         int numAnswers = answers.size();
         Float questionScore;
         DecimalFormat df = new DecimalFormat("0.00");
-        int feedbackLevel;
+        int feedbackLevel = Test.FEEDBACK_VALUES.indexOf(feedback);
         int mediumFeedbackLevel = Test.FEEDBACK_VALUES.indexOf(Test.FEEDBACK_MEDIUM);
         int maxFeedbackLevel = Test.FEEDBACK_VALUES.indexOf(Test.FEEDBACK_MAX);
 
@@ -348,103 +376,101 @@ public class TestsMake extends MenuActivity {
         testMakeList.setVisibility(View.GONE);
         img.setVisibility(View.GONE);
 
+        stem = WebViewFactory.getMathJaxWebView(stem);
+        questionFeedback = WebViewFactory.getMathJaxWebView(questionFeedback);
+        answerFeedback = WebViewFactory.getMathJaxWebView(answerFeedback);
+        textCorrectAnswer = WebViewFactory.getMathJaxWebView(textCorrectAnswer);
+
+        questionFeedback.setBackgroundColor(feedbackColor);
+        answerFeedback.setBackgroundColor(feedbackColor);
+        textCorrectAnswer.setBackgroundColor(feedbackColor);
+
         testMakeList.removeAllViews();
-        stem.setText(Html.fromHtml(question.getStem()));
+        stem.setWebViewClient(WebViewFactory.getMathJaxExpression(question.getStem()));
 
-        if ((questionFeedbackText != null) && (!questionFeedbackText.equals(Constants.NULL_VALUE))) {
-            questionFeedback.setText(Html.fromHtml(questionFeedbackText));
-        }
+        if (test.isEvaluated() && (feedbackLevel == maxFeedbackLevel)
+                && (questionFeedbackText != null) && !question.getFeedback().equals(Constants.NULL_VALUE)) {
 
-        feedbackLevel = Test.FEEDBACK_VALUES.indexOf(feedback);
-
-        if (test.isEvaluated() && (feedbackLevel == maxFeedbackLevel) && !question.getFeedback().equals(Constants.NULL_VALUE)) {
+            questionFeedback.setWebViewClient(WebViewFactory.getMathJaxExpression(questionFeedbackText));
             questionFeedback.setVisibility(View.VISIBLE);
         } else {
             questionFeedback.setVisibility(View.GONE);
         }
 
-        if (answerType.equals(TestAnswer.TYPE_TEXT)
-                || answerType.equals(TestAnswer.TYPE_INT)
-                || answerType.equals(TestAnswer.TYPE_FLOAT)) {
+        switch (answerType) {
+            case TestAnswer.TYPE_TEXT:
+            case TestAnswer.TYPE_INT:
+            case TestAnswer.TYPE_FLOAT:
 
-            if (answerType.equals(TestAnswer.TYPE_INT)) {
-                textAnswer.setInputType(
-                        InputType.TYPE_CLASS_NUMBER
-                                | InputType.TYPE_NUMBER_FLAG_SIGNED);
-            } else if (answerType.equals(TestAnswer.TYPE_FLOAT)) {
-                textAnswer.setInputType(
-                        InputType.TYPE_CLASS_NUMBER
-                                | InputType.TYPE_NUMBER_FLAG_DECIMAL
-                                | InputType.TYPE_NUMBER_FLAG_SIGNED);
-            } else {
-                textAnswer.setInputType(InputType.TYPE_CLASS_TEXT);
-            }
+                textAnswer.setInputType(getSimpleAnswerType(answerType));
 
-            a = answers.get(0);
-            textAnswer.setText(a.getUserAnswer());
-            textAnswer.setVisibility(View.VISIBLE);
+                a = answers.get(0);
+                textAnswer.setText(a.getUserAnswer());
+                textAnswer.setVisibility(View.VISIBLE);
 
-            answerFeedback.setText(Html.fromHtml(a.getFeedback()));
-
-            if (test.isEvaluated() && (feedbackLevel > mediumFeedbackLevel)) {
-                if (answerType.equals(TestAnswer.TYPE_FLOAT)) {
-                    correctAnswer = "[" + a.getAnswer() + ";" + answers.get(1).getAnswer() + "]";
-
-                    if ((feedbackLevel == maxFeedbackLevel) && !a.getFeedback().equals(Constants.NULL_VALUE)) {
-                        answerFeedback.setVisibility(View.VISIBLE);
-                    } else {
-                        answerFeedback.setVisibility(View.GONE);
-                    }
-                } else {
-                    for (int i = 0; i < numAnswers; i++) {
-                        a = answers.get(i);
+                if (test.isEvaluated() && (feedbackLevel > mediumFeedbackLevel)) {
+                    if (answerType.equals(TestAnswer.TYPE_FLOAT)) {
+                        correctAnswer = "[" + a.getAnswer() + ";" + answers.get(1).getAnswer() + "]";
 
                         if ((feedbackLevel == maxFeedbackLevel) && !a.getFeedback().equals(Constants.NULL_VALUE)) {
-                            correctAnswer += "<strong>" + a.getAnswer() + "</strong><br/>";
-                            correctAnswer += "<i>" + a.getFeedback() + "</i><br/><br/>";
+                            answerFeedback.setWebViewClient(WebViewFactory.getMathJaxExpression(a.getFeedback()));
+                            answerFeedback.setVisibility(View.VISIBLE);
                         } else {
-                            correctAnswer += a.getAnswer() + "<br/>";
+                            answerFeedback.setVisibility(View.GONE);
+                        }
+                    } else {
+                        for (int i = 0; i < numAnswers; i++) {
+                            a = answers.get(i);
+
+                            if ((feedbackLevel == maxFeedbackLevel) && !a.getFeedback().equals(Constants.NULL_VALUE)) {
+                                correctAnswer += "<strong>" + a.getAnswer() + "</strong><br/>";
+                                correctAnswer += "<i>" + a.getFeedback() + "</i><br/><br/>";
+                            } else {
+                                correctAnswer += a.getAnswer() + "<br/>";
+                            }
                         }
                     }
+
+                    textCorrectAnswer.setWebViewClient(WebViewFactory.getMathJaxExpression(correctAnswer));
+                    textCorrectAnswer.setVisibility(View.VISIBLE);
+                }
+                break;
+            case TestAnswer.TYPE_MULTIPLE_CHOICE:
+                checkedAnswersAdapter = new CheckedAnswersArrayAdapter(this, R.layout.list_item_multiple_choice,
+                        answers, test.isEvaluated(), test.getFeedback(), answerType);
+
+                for (int i = 0; i < numAnswers; i++) {
+                    a = answers.get(i);
+                    CheckableLinearLayout item = (CheckableLinearLayout) checkedAnswersAdapter.getView(i, null, null);
+                    item.setChecked(Utils.parseStringBool(a.getUserAnswer()));
+                    testMakeList.addView(item);
                 }
 
-                textCorrectAnswer.setText(Html.fromHtml(correctAnswer));
-                textCorrectAnswer.setVisibility(View.VISIBLE);
-            }
-        } else if (answerType.equals(TestAnswer.TYPE_MULTIPLE_CHOICE)) {
-            checkedAnswersAdapter = new CheckedAnswersArrayAdapter(this, R.layout.list_item_multiple_choice,
-                    answers, test.isEvaluated(), test.getFeedback(), answerType);
+                testMakeList.setVisibility(View.VISIBLE);
+                break;
+            default:
+                if (answerType.equals(TestAnswer.TYPE_TRUE_FALSE) && (numAnswers < 2)) {
+                    if (answers.get(0).getAnswer().equals(TestAnswer.VALUE_TRUE)) {
+                        answers.add(1, new TestAnswer(0, 1, 0, false, TestAnswer.VALUE_FALSE, answers.get(0).getFeedback()));
+                    } else {
+                        answers.add(0, new TestAnswer(0, 0, 0, false, TestAnswer.VALUE_TRUE, answers.get(0).getFeedback()));
+                    }
 
-            for (int i = 0; i < numAnswers; i++) {
-                a = answers.get(i);
-                CheckableLinearLayout item = (CheckableLinearLayout) checkedAnswersAdapter.getView(i, null, null);
-                item.setChecked(Utils.parseStringBool(a.getUserAnswer()));
-                testMakeList.addView(item);
-            }
-
-            testMakeList.setVisibility(View.VISIBLE);
-        } else {
-            if (answerType.equals(TestAnswer.TYPE_TRUE_FALSE) && (numAnswers < 2)) {
-                if (answers.get(0).getAnswer().equals(TestAnswer.VALUE_TRUE)) {
-                    answers.add(1, new TestAnswer(0, 1, 0, false, TestAnswer.VALUE_FALSE, answers.get(0).getFeedback()));
-                } else {
-                    answers.add(0, new TestAnswer(0, 0, 0, false, TestAnswer.VALUE_TRUE, answers.get(0).getFeedback()));
+                    numAnswers = 2;
                 }
 
-                numAnswers = 2;
-            }
+                checkedAnswersAdapter = new CheckedAnswersArrayAdapter(this, R.layout.list_item_single_choice,
+                        answers, test.isEvaluated(), test.getFeedback(), answerType);
 
-            checkedAnswersAdapter = new CheckedAnswersArrayAdapter(this, R.layout.list_item_single_choice,
-                    answers, test.isEvaluated(), test.getFeedback(), answerType);
+                for (int i = 0; i < numAnswers; i++) {
+                    a = answers.get(i);
+                    CheckableLinearLayout item = (CheckableLinearLayout) checkedAnswersAdapter.getView(i, null, null);
+                    item.setChecked(a.getAnswer().equals(answers.get(0).getUserAnswer()));
+                    testMakeList.addView(item);
+                }
 
-            for (int i = 0; i < numAnswers; i++) {
-                a = answers.get(i);
-                CheckableLinearLayout item = (CheckableLinearLayout) checkedAnswersAdapter.getView(i, null, null);
-                item.setChecked(a.getAnswer().equals(answers.get(0).getUserAnswer()));
-                testMakeList.addView(item);
-            }
-
-            testMakeList.setVisibility(View.VISIBLE);
+                testMakeList.setVisibility(View.VISIBLE);
+                break;
         }
 
         if (test.isEvaluated() && (feedbackLevel > mediumFeedbackLevel)) {
@@ -525,26 +551,30 @@ public class TestsMake extends MenuActivity {
         SparseBooleanArray checkedItems;
 
         answerType = q.getAnswerType();
-        if (answerType.equals(TestAnswer.TYPE_TEXT)
-                || answerType.equals(TestAnswer.TYPE_INT)
-                || answerType.equals(TestAnswer.TYPE_FLOAT)) {
+        switch (answerType) {
+            case TestAnswer.TYPE_TEXT:
+            case TestAnswer.TYPE_INT:
+            case TestAnswer.TYPE_FLOAT:
 
-            la.get(0).setUserAnswer(String.valueOf(textAnswer.getText()));
-        } else if (answerType.equals(TestAnswer.TYPE_MULTIPLE_CHOICE)) {
-            checkedItems = getCheckedItemPositions(testMakeList);
-            checkedListCount = checkedItems.size();
-            for (int i = 0; i < checkedListCount; i++) {
-                la.get(i).setUserAnswer(Utils.parseBoolString(checkedItems.get(i, false)));
-            }
-        } else {
-            selectedPos = getCheckedItemPosition(testMakeList);
-            if (selectedPos == -1) {
-                userAnswer = "";
-            } else {
-                userAnswer = la.get(selectedPos).getAnswer();
-            }
+                la.get(0).setUserAnswer(String.valueOf(textAnswer.getText()));
+                break;
+            case TestAnswer.TYPE_MULTIPLE_CHOICE:
+                checkedItems = getCheckedItemPositions(testMakeList);
+                checkedListCount = checkedItems.size();
+                for (int i = 0; i < checkedListCount; i++) {
+                    la.get(i).setUserAnswer(Utils.parseBoolString(checkedItems.get(i, false)));
+                }
+                break;
+            default:
+                selectedPos = getCheckedItemPosition(testMakeList);
+                if (selectedPos == -1) {
+                    userAnswer = "";
+                } else {
+                    userAnswer = la.get(selectedPos).getAnswer();
+                }
 
-            la.get(0).setUserAnswer(userAnswer);
+                la.get(0).setUserAnswer(userAnswer);
+                break;
         }
     }
 
@@ -564,8 +594,12 @@ public class TestsMake extends MenuActivity {
         bar.setMax(size);
         bar.setProgress(1);
         bar.setText(1 + "/" + size);
-        bar.setTextColor(Color.BLUE);
         bar.setTextSize(20);
+        //Text color
+        //bar.setTextColor(Color.BLUE);
+        //Bar foreground color
+        //bar.getIndeterminateDrawable().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_IN);
+        //bar.getProgressDrawable().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_IN);
         
         if(!test.isEvaluated()) {
         	//Show evaluate button only
@@ -774,7 +808,7 @@ public class TestsMake extends MenuActivity {
                 Log.d(TAG, "selectedCourseCode = " + Long.toString(Courses.getSelectedCourseCode()));
             }
 
-            test = (Test) dbHelper.getRow(DataBaseHelper.DB_TABLE_TEST_CONFIG, "id",
+            test = dbHelper.getRow(DataBaseHelper.DB_TABLE_TEST_CONFIG, "id",
                     Long.toString(Courses.getSelectedCourseCode()));
 
             if (test != null) {
