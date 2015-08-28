@@ -303,5 +303,9 @@
     <string name="functionHoneycombMsg">This function requires Android 3.0 (Honeycomb) or higher</string>
     <string name="updatePendingEventsMsg">There are pending changes waiting to be sent to the server. If you update the list of events can lose the changes.\n\nAre you sure you want to update the list of events?</string>
     <string name="follower">New follower</string>
+    <string name="marksModuleLabel">Marks</string>
+    <string name="marksProgressTitle">Marks</string>
+    <string name="marksProgressDescription">Getting marks…\nWait, please…</string>
+    <string name="errorBadFileCodeMsg">You can not get marks from this file</string>
 
 </resources>

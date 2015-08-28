@@ -8,7 +8,6 @@ package es.ugr.swad.swadroid.modules.information;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import org.ksoap2.serialization.SoapObject;
@@ -54,9 +53,6 @@ public class Information extends Module {
 		setContentView(R.layout.webview_information_screen_layout);
 		
 		webview = (WebView) this.findViewById(R.id.info_webview_dialog);
-
-        WebSettings settings = webview.getSettings();
-        settings.setDefaultTextEncodingName("utf-8");
 
 		int requestCode = this.getIntent().getIntExtra("requestCode", 0);
 

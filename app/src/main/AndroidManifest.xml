@@ -260,6 +260,21 @@
                 android:value="es.ugr.swad.swadroid.SWADMain" />
         </activity>
         <activity
+            android:name="es.ugr.swad.swadroid.modules.marks.Marks"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:label="@string/marksModuleLabel"
+            android:parentActivityName="es.ugr.swad.swadroid.SWADMain" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.ugr.swad.swadroid.SWADMain" />
+        </activity>
+        <activity
+            android:name="es.ugr.swad.swadroid.modules.marks.GetMarks"
+            android:label="@string/marksModuleLabel"
+            android:theme="@style/Theme.AppCompat.Translucent" >
+        </activity>
+        <activity
             android:name="es.ugr.swad.swadroid.modules.notifications.NotificationsMarkAllAsRead"
             android:label="@string/notificationsMarkAllAsReadModuleLabel"
             android:theme="@style/Theme.AppCompat.Translucent" >

@@ -58,6 +58,10 @@ import es.ugr.swad.swadroid.model.GroupType;
 import es.ugr.swad.swadroid.modules.Courses;
 import es.ugr.swad.swadroid.modules.GroupTypes;
 import es.ugr.swad.swadroid.modules.Groups;
+import es.ugr.swad.swadroid.modules.Login;
+import es.ugr.swad.swadroid.modules.marks.GetMarks;
+import es.ugr.swad.swadroid.modules.marks.Marks;
+import es.ugr.swad.swadroid.utils.Utils;
 
 /**
  * Activity to navigate through the directory tree of documents and to manage
@@ -75,7 +79,8 @@ public class DownloadsManager extends MenuActivity {
 
     /**
      * Specifies whether to display the documents or the shared area of the
-     * subject 1 specifies documents area 2 specifies shared area
+     * subject 1 specifies documents area, 2 specifies shared area,
+     * 3 specifies marks area
      */
     private int downloadsAreaCode = 0;
     /**
@@ -165,6 +170,8 @@ public class DownloadsManager extends MenuActivity {
         } else {
             myGroups = getFilteredGroups();
             this.loadGroupsSpinner(myGroups);
+            this.previousConnection = Utils.connectionAvailable(getApplicationContext());
+
             if (previousConnection) {
                 setMainView();
             } else {
@@ -221,11 +228,19 @@ public class DownloadsManager extends MenuActivity {
                     chosenNodeName = node.getName();
                     fileSize = node.getSize();
                     File f = new File(Constants.DOWNLOADS_PATH + File.separator + chosenNodeName);
-                    if (isDownloaded(f)) {
-                        viewFile(f);
-                    } else {
-                        AlertDialog fileInfoDialog = createFileInfoDialog(node.getName(), node.getSize(), node.getTime(), node.getPublisher(), node.getFileCode(), node.getLicense());
-                        fileInfoDialog.show();
+
+                    //If a student is requesting the marks, gets the marks and call the Marks module
+                    if((downloadsAreaCode == Constants.MARKS_AREA_CODE)
+                            && (Login.getLoggedUser().getUserRole() == Constants.STUDENT_TYPE_CODE)) {
+
+                        requestGetMarks(node.getFileCode());
+                    } else { //Otherwise treat as a regular file
+                        if (isDownloaded(f)) {
+                            viewFile(f);
+                        } else {
+                            AlertDialog fileInfoDialog = createFileInfoDialog(node.getName(), node.getSize(), node.getTime(), node.getPublisher(), node.getFileCode(), node.getLicense());
+                            fileInfoDialog.show();
+                        }
                     }
                 }
             }
@@ -312,6 +327,8 @@ public class DownloadsManager extends MenuActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
+            Intent activity;
+
             switch (requestCode) {
                 // After get the list of courses, a dialog is launched to choice the
                 // course
@@ -351,6 +368,11 @@ public class DownloadsManager extends MenuActivity {
                         dialog.show();
                     }
                     break;
+                case Constants.GETMARKS_REQUEST_CODE:
+                    activity = new Intent(this, Marks.class);
+                    activity.putExtra("content", GetMarks.getMarks());
+                    startActivityForResult(activity, Constants.MARKS_REQUEST_CODE);
+                    break;
                 case Constants.GROUPS_REQUEST_CODE:
                     groupsRequested = true;
                     myGroups = getFilteredGroups(); //only groups where the user is enrolled.
@@ -359,14 +381,13 @@ public class DownloadsManager extends MenuActivity {
                         requestDirectoryTree();
                     break;
                 case Constants.GROUPTYPES_REQUEST_CODE:
-                    Intent activity = new Intent(this, Groups.class);
+                    activity = new Intent(this, Groups.class);
                     activity.putExtra("courseCode", Courses.getSelectedCourseCode());
                     startActivityForResult(activity, Constants.GROUPS_REQUEST_CODE);
                     break;
             }
 
         } else {
-            setNoConnectionView();
             if (refresh) {
                 refresh = false;
             }
@@ -604,8 +625,19 @@ public class DownloadsManager extends MenuActivity {
         Intent activity;
         activity = new Intent(this, GetFile.class);
         activity.putExtra("fileCode", fileCode);
-        //activity.putExtra("path", navigator.getPath() + fileName);
         startActivityForResult(activity, Constants.GETFILE_REQUEST_CODE);
+    }
+
+    /**
+     * Method to request info file identified with @a fileCode to SWAD thought the web services GETMARKS
+     *
+     * @param fileCode file code
+     */
+    private void requestGetMarks(long fileCode) {
+        Intent activity;
+        activity = new Intent(this, GetMarks.class);
+        activity.putExtra("fileCode", fileCode);
+        startActivityForResult(activity, Constants.GETMARKS_REQUEST_CODE);
     }
 
     /**
@@ -697,13 +729,20 @@ public class DownloadsManager extends MenuActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-		
-        if(downloadsAreaCode == 1) {
-			setTitle(R.string.documentsDownloadModuleLabel);
-			getSupportActionBar().setIcon(R.drawable.folder);
-        } else {
-			setTitle(R.string.sharedsDownloadModuleLabel);
-			getSupportActionBar().setIcon(R.drawable.folder_users);
-		}
+
+        switch (downloadsAreaCode) {
+            case 1:
+                setTitle(R.string.documentsDownloadModuleLabel);
+                getSupportActionBar().setIcon(R.drawable.folder);
+                break;
+            case 2:
+                setTitle(R.string.sharedsDownloadModuleLabel);
+                getSupportActionBar().setIcon(R.drawable.folder_users);
+                break;
+            case 3:
+                setTitle(R.string.marksModuleLabel);
+                getSupportActionBar().setIcon(R.drawable.grades);
+                break;
+        }
     }
 }

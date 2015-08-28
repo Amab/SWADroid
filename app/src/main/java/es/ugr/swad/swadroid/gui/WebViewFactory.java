@@ -31,6 +31,7 @@ import android.webkit.WebViewClient;
 public class WebViewFactory {
     public static WebView getMathJaxWebView(WebView view) {
         WebSettings settings = view.getSettings();
+        settings.setDefaultTextEncodingName("utf-8");
         settings.setJavaScriptEnabled(true);
         settings.setBuiltInZoomControls(true);
 

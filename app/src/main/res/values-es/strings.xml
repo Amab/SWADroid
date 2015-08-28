@@ -294,5 +294,9 @@
     <string name="updatePendingEventsMsg">Hay eventos con cambios pendientes de enviar al servidor. Si actualiza el listado de eventos puede perder los cambios que no haya enviado.\n\n¿Está seguro de que quiere actualizar el listado de eventos?</string>
     <string name="follower">Nuevo seguidor</string>
     <string name="messageSentMsg">Mensaje enviado</string>
+    <string name="marksModuleLabel">Calificaciones</string>
+    <string name="marksProgressTitle">Calificaciones</string>
+    <string name="marksProgressDescription">Obteniendo calificaciones…\nPor favor, espere…</string>
+    <string name="errorBadFileCodeMsg">Usted no puede consultar calificaciones en este fichero</string>
 
 </resources>
