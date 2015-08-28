@@ -19,6 +19,7 @@
 package es.ugr.swad.swadroid.modules.tests;
 
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,7 +59,7 @@ public class TagsArrayAdapter extends ArrayAdapter<TestTag> {
         if (t != null) {
             CheckedTextView tt = (CheckedTextView) convertView.findViewById(android.R.id.text1);
             if (tt != null) {
-                tt.setText(t.getTagTxt());
+                tt.setText(Html.fromHtml(t.getTagTxt()));
             }
         }
 
