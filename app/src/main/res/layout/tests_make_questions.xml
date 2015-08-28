@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     android:orientation="vertical" >
 
     <TextView
@@ -37,7 +38,7 @@
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.1"
-                android:background="@drawable/back" />
+                android:background="@drawable/ic_arrow_back_black" />
 
             <es.ugr.swad.swadroid.gui.widget.TextProgressBar
                 android:id="@+id/test_questions_bar"
@@ -51,7 +52,7 @@
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.1"
-                android:background="@drawable/forward" />
+                android:background="@drawable/ic_arrow_forward_black" />
         </LinearLayout>
     </RelativeLayout>
 
@@ -60,7 +61,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/testMakeBottom"
-        android:layout_below="@+id/courseNameLayout"
+        android:layout_below="@id/courseNameLayout"
         android:background="@android:color/transparent"
         android:focusableInTouchMode="false"
         android:padding="2dip"
@@ -82,17 +83,15 @@
                 android:orientation="vertical"
                 android:padding="2dip" >
 
-                <TextView
+                <WebView
                     android:id="@+id/testMakeQuestionStem"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/foreground1" />
+                    android:layout_height="wrap_content" />
 
-                <TextView
+                <WebView
                     android:id="@+id/testMakeQuestionFeedback"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/foreground2"
                     android:visibility="gone" />
             </LinearLayout>
 
@@ -126,22 +125,20 @@
                         android:visibility="gone" />
                 </LinearLayout>
 
-                <TextView
+                <WebView
                     android:id="@+id/testMakeCorrectAnswer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/testMakeAnswer"
+                    android:layout_below="@id/testMakeAnswer"
                     android:gravity="center"
-                    android:textColor="@color/foreground1"
                     android:visibility="gone" />
 
-                <TextView
+                <WebView
                     android:id="@+id/testMakeAnswerFeedback"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/testMakeCorrectAnswer"
+                    android:layout_below="@id/testMakeCorrectAnswer"
                     android:gravity="center"
-                    android:textColor="@color/foreground2"
                     android:visibility="gone" />
 
                 <LinearLayout

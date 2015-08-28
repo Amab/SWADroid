@@ -155,7 +155,7 @@ public class GroupType extends Model {
 
     @Override
     public String toString() {
-        return "GroupType [name=" + groupTypeName + ", getId()=" + getId() + ", getCourseCode()= " + courseCode + ", getMandatory()=" + mandatory +
+        return "GroupType [id=" + getId() + ", name=" + groupTypeName + ", getId()=" + getId() + ", getCourseCode()= " + courseCode + ", getMandatory()=" + mandatory +
                 ", getMultiple()=" + multiple + ", getOpenTime()= " + openTime;
     }
 

@@ -1530,6 +1530,30 @@ public class DataBaseHelper {
     }
 
     /**
+     * Updates a test question in database
+     *
+     * @param actual             Updated test question
+     * @param selectedCourseCode Course code to be referenced
+     */
+    public void updateTestQuestion(TestQuestion actual, long selectedCourseCode) {
+        List<Entity> rows = db.getEntityList(DataBaseHelper.DB_TABLE_TEST_QUESTIONS, "id = " + actual.getId());
+        Entity ent = rows.get(0);
+
+        ent.setValue("ansType", actual.getAnswerType());
+        ent.setValue("stem", actual.getStem());
+        ent.setValue("shuffle", Utils.parseBoolString(actual.getShuffle()));
+        ent.setValue("feedback", actual.getFeedback());
+        ent.save();
+
+        rows = db.getEntityList(DataBaseHelper.DB_TABLE_TEST_QUESTIONS_COURSE, "qstCod = " + actual.getId());
+        for (Entity row : rows) {
+            ent = row;
+            ent.setValue("crsCod", selectedCourseCode);
+            ent.save();
+        }
+    }
+
+    /**
      * Updates a test answer in database
      *
      * @param prev   Test answer to be updated
@@ -1538,6 +1562,29 @@ public class DataBaseHelper {
      */
     public void updateTestAnswer(TestAnswer prev, TestAnswer actual, int qstCod) {
         List<Entity> rows = db.getEntityList(DataBaseHelper.DB_TABLE_TEST_ANSWERS, "_id = " + prev.getId());
+        Entity ent = rows.get(0);
+
+        ent.setValue("ansInd", actual.getAnsInd());
+        ent.setValue("answer", actual.getAnswer());
+        ent.setValue("correct", actual.getCorrect());
+        ent.setValue("answerFeedback", actual.getFeedback());
+        ent.save();
+
+        rows = db.getEntityList(DataBaseHelper.DB_TABLE_TEST_QUESTION_ANSWERS, "ansCod = " + actual.getId());
+        for (Entity row : rows) {
+            ent = row;
+            ent.setValue("qstCod", qstCod);
+            ent.save();
+        }
+    }
+    /**
+     * Updates a test answer in database
+     *
+     * @param actual Updated test answer
+     * @param qstCod Test question code to be referenced
+     */
+    public void updateTestAnswer(TestAnswer actual, int qstCod) {
+        List<Entity> rows = db.getEntityList(DataBaseHelper.DB_TABLE_TEST_ANSWERS, "_id = " + actual.getId());
         Entity ent = rows.get(0);
 
         ent.setValue("ansInd", actual.getAnsInd());
@@ -1562,6 +1609,30 @@ public class DataBaseHelper {
      */
     public void updateTestTag(TestTag prev, TestTag actual) {
         List<Entity> rows = db.getEntityList(DataBaseHelper.DB_TABLE_TEST_TAGS, "id = " + prev.getId());
+        Entity ent = rows.get(0);
+        List<Integer> qstCodList = actual.getQstCodList();
+        SQLiteStatement st = db.getDB().compileStatement("INSERT OR REPLACE INTO " +
+                DataBaseHelper.DB_TABLE_TEST_QUESTION_TAGS + " VALUES (NULL, ?, ?, ?);");
+
+        ent.setValue("id", actual.getId());
+        ent.setValue("tagTxt", actual.getTagTxt());
+        ent.save();
+
+        for (Integer i : qstCodList) {
+            st.bindLong(1, i);
+            st.bindLong(2, actual.getId());
+            st.bindLong(3, actual.getTagInd());
+            st.executeInsert();
+        }
+    }
+
+    /**
+     * Updates a test tag in database
+     *
+     * @param actual Updated test tag
+     */
+    public void updateTestTag(TestTag actual) {
+        List<Entity> rows = db.getEntityList(DataBaseHelper.DB_TABLE_TEST_TAGS, "id = " + actual.getId());
         Entity ent = rows.get(0);
         List<Integer> qstCodList = actual.getQstCodList();
         SQLiteStatement st = db.getDB().compileStatement("INSERT OR REPLACE INTO " +

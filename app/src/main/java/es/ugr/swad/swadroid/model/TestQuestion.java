@@ -278,7 +278,7 @@ public class TestQuestion extends Model {
      */
     @Override
     public String toString() {
-        return "TestQuestion [crsCod=" + crsCod + ", stem=" + stem
+        return "TestQuestion [id=" + getId() + ", crsCod=" + crsCod + ", stem=" + stem
                 + ", answerType=" + answerType + ", shuffle=" + shuffle
                 + ", feedback=" + feedback + ", answers=" + answers + "]";
     }
