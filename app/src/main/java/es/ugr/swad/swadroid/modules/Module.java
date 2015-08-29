@@ -402,11 +402,6 @@ public abstract class Module extends MenuActivity {
                         Preferences.setUserPassword("");
                     } else if (es.faultstring.equals("Unknown application key")) {
                         errorMsg = getString(R.string.errorBadAppKeyMsg);
-
-                    //For Marks module
-                    } else if (es.faultstring.equals("Bad file code") && METHOD_NAME.equals("getMarks")) {
-                        errorMsg = getString(R.string.errorBadFileCodeMsg);
-                        sendException = false;
                     } else {
                         errorMsg = "Server error: " + es.getMessage();
                     }

@@ -19,15 +19,19 @@
 package es.ugr.swad.swadroid.modules.marks;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADroidTracker;
+import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.Module;
@@ -46,6 +50,7 @@ public class GetMarks extends Module {
 
     private static String marks;
     private long fileCode;
+    private boolean hasError;
 
     @Override
     protected void runConnection() {
@@ -75,7 +80,10 @@ public class GetMarks extends Module {
 
         SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
 
-        fileCode = this.getIntent().getLongExtra("fileCode", 0);
+        //fileCode = this.getIntent().getLongExtra("fileCode", 0);
+        fileCode = 0;
+        hasError = false;
+
         runConnection();
     }
 
@@ -109,24 +117,30 @@ public class GetMarks extends Module {
     protected void requestService()
             throws Exception {
 
-        //Creates webservice request, adds required params and sends request to webservice
-        createRequest(SOAPClient.CLIENT_TYPE);
-        addParam("wsKey", Login.getLoggedUser().getWsKey());
-        addParam("fileCode", fileCode);
-        sendRequest(User.class, true);
+        try {
+            //Creates webservice request, adds required params and sends request to webservice
+            createRequest(SOAPClient.CLIENT_TYPE);
+            addParam("wsKey", Login.getLoggedUser().getWsKey());
+            addParam("fileCode", fileCode);
+            sendRequest(User.class, true);
 
-        if (result != null) {
-            //Stores courses data returned by webservice response
-            SoapObject soap = (SoapObject) result;
-            marks = soap.getProperty("content").toString();
+            if (result != null) {
+                //Stores courses data returned by webservice response
+                SoapObject soap = (SoapObject) result;
+                marks = soap.getProperty("content").toString();
 
-            Log.i(TAG, "Retrieved marks [user=" + Login.getLoggedUser().getUserNickname()
-                    + ", fileCode=" + fileCode + "]");
+                Log.i(TAG, "Retrieved marks [user=" + Login.getLoggedUser().getUserNickname()
+                        + ", fileCode=" + fileCode + "]");
 
-            //Request finalized without errors
-            setResult(RESULT_OK);
-        } else {
-            setResult(RESULT_CANCELED);
+                //Request finalized without errors
+                setResult(RESULT_OK);
+            } else {
+                setResult(RESULT_CANCELED);
+            }
+        } catch(SoapFault e) {
+            if (e.faultstring.equals("Bad file code")) {
+                hasError = true;
+            }
         }
     }
 
@@ -135,7 +149,21 @@ public class GetMarks extends Module {
      */
     @Override
     protected void postConnect() {
-        finish();
+        AlertDialog errorDialog;
+        String errorMsg = getString(R.string.errorBadFileCodeMsg);;
+        if(hasError) {
+            errorDialog = DialogFactory.createErrorDialog(this, TAG,
+                    errorMsg, null, false, false, new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    });
+            errorDialog.show();
+        } else {
+            finish();
+        }
     }
 
     /* (non-Javadoc)
