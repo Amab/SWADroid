@@ -404,7 +404,7 @@ public abstract class Module extends MenuActivity {
                         errorMsg = getString(R.string.errorBadAppKeyMsg);
 
                     //For Marks module
-                    } else if (es.faultstring.equals("Bad file code")) {
+                    } else if (es.faultstring.equals("Bad file code") && METHOD_NAME.equals("getMarks")) {
                         errorMsg = getString(R.string.errorBadFileCodeMsg);
                         sendException = false;
                     } else {
