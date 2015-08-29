@@ -19,20 +19,18 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
-import android.text.SpannableString;
+import android.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.text.style.UnderlineSpan;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,6 +40,7 @@ import java.security.NoSuchAlgorithmException;
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.modules.Login;
 import es.ugr.swad.swadroid.modules.RecoverPassword;
+import es.ugr.swad.swadroid.modules.account.CreateAccountActivity;
 import es.ugr.swad.swadroid.utils.Crypto;
 import es.ugr.swad.swadroid.utils.Utils;
 
@@ -49,9 +48,10 @@ import es.ugr.swad.swadroid.utils.Utils;
 /**
  * 
  * @author Alejandro Alcalde <algui91@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  *
  */
-public class LoginActivity extends ActionBarActivity implements OnClickListener {
+public class LoginActivity extends AppCompatActivity {
 
     public static final String TAG = Constants.APP_TAG + " LoginActivity";
 
@@ -64,9 +64,10 @@ public class LoginActivity extends ActionBarActivity implements OnClickListener 
     private View mLoginStatusView;
     // private View mMainScreenView;
     private TextView mLoginStatusMessageView;
-    private TextView mWhyPasswordText;
-    private TextView mLostPasswordText;
-    private boolean mFromPreferece = false;
+    private Button mSignInButton;
+    private Button mLostPasswordButton;
+    private Button mCreateAccountButton;
+    private boolean mFromPreference = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +75,7 @@ public class LoginActivity extends ActionBarActivity implements OnClickListener 
 
         setContentView(R.layout.login_activity);
         
-        mFromPreferece = getIntent().getBooleanExtra("fromPreference", false);
+        mFromPreference = getIntent().getBooleanExtra("fromPreference", false);
         setupLoginForm();
     }
 
@@ -82,17 +83,9 @@ public class LoginActivity extends ActionBarActivity implements OnClickListener 
         
         mLoginFormView = findViewById(R.id.login_form);
         mLoginStatusView = findViewById(R.id.login_status);
-        mWhyPasswordText = (TextView) findViewById(R.id.why_password);
-        mLostPasswordText = (TextView) findViewById(R.id.lost_password);
-        
-        SpannableString lostPasswordUnderline = new SpannableString(getString(R.string.lost_password));
-        lostPasswordUnderline.setSpan(new UnderlineSpan(), 0, lostPasswordUnderline.length(), 0);
-        mLostPasswordText.setText(lostPasswordUnderline);
-        
-        SpannableString whyPasswordUnderline = new SpannableString(getString(R.string.why_password));
-        whyPasswordUnderline.setSpan(new UnderlineSpan(), 0, whyPasswordUnderline.length(), 0);
-        mWhyPasswordText.setText(whyPasswordUnderline);
-        
+        mSignInButton = (Button) findViewById(R.id.sign_in_button);
+        mLostPasswordButton = (Button) findViewById(R.id.lost_password);
+        mCreateAccountButton = (Button) findViewById(R.id.create_account);
         
         mDniView = (EditText) findViewById(R.id.DNI);
         mDniView.setText(Preferences.getUserID());
@@ -116,15 +109,24 @@ public class LoginActivity extends ActionBarActivity implements OnClickListener 
 
         mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
 
-        findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
+        mSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
             }
         });
-        
-        mWhyPasswordText.setOnClickListener(this);
-        mLostPasswordText.setOnClickListener(this);
+        mLostPasswordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                recoverPasswordDialog();
+            }
+        });
+        mCreateAccountButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createAccount();
+            }
+        });
     }
 
     /**
@@ -161,12 +163,16 @@ public class LoginActivity extends ActionBarActivity implements OnClickListener 
             mPasswordView.setError(getString(R.string.error_field_required));
             focusView = mPasswordView;
             cancel = true;
-        } else if ((passwordValue.length() < 6)) {
+        } else if (passwordValue.length() < 6) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
-            Toast.makeText(getApplicationContext(), toastMsg,
-                           Toast.LENGTH_LONG).show();
+            if(passwordValue.length() == 4) {
+                whyMyPasswordNotWorkDialog();
+            } else {
+                Toast.makeText(getApplicationContext(), toastMsg,
+                        Toast.LENGTH_LONG).show();
+            }
         } else if (Utils.isLong(passwordValue)) {
             mPasswordView.setError(getString(R.string.error_incorrect_password));
             focusView = mPasswordView;
@@ -203,6 +209,13 @@ public class LoginActivity extends ActionBarActivity implements OnClickListener 
         }
     }
 
+    /**
+     * Creates a new account
+     */
+    public void createAccount() {
+        startActivityForResult(new Intent(this, CreateAccountActivity.class), Constants.CREATE_ACCOUNT_REQUEST_CODE);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
@@ -211,13 +224,17 @@ public class LoginActivity extends ActionBarActivity implements OnClickListener 
                     showProgress(false);
                     Login.setLogged(true);
                     setResult(RESULT_OK);
-                    mFromPreferece = false;
+                    mFromPreference = false;
                     mLoginError = false;
                     finish();
                     break;
                 case Constants.RECOVER_PASSWORD_REQUEST_CODE:
                     Toast.makeText(getApplicationContext(), R.string.lost_password_success,
                                    Toast.LENGTH_LONG).show();
+                    break;
+                case Constants.CREATE_ACCOUNT_REQUEST_CODE:
+                    Toast.makeText(getApplicationContext(), R.string.create_account_success,
+                            Toast.LENGTH_LONG).show();
                     break;
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
@@ -279,17 +296,17 @@ public class LoginActivity extends ActionBarActivity implements OnClickListener 
 
         AlertDialog passwordNotWorkDialog =
                 DialogFactory.createNeutralDialog(this,
-                                                  R.layout.dialog_why_password,
-                                                  R.string.why_password_dialog_title,
-                                                  -1,
-                                                  R.string.ok,
-                                                  new DialogInterface.OnClickListener() {
-                                                      @Override
-                                                      public void onClick(DialogInterface dialog,
-                                                              int which) {
-                                                          dialog.dismiss();
-                                                      }
-                                                  });
+                        R.layout.dialog_why_password,
+                        R.string.why_password_dialog_title,
+                        -1,
+                        R.string.ok,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int which) {
+                                dialog.dismiss();
+                            }
+                        });
 
         passwordNotWorkDialog.show();
     }
@@ -326,27 +343,10 @@ public class LoginActivity extends ActionBarActivity implements OnClickListener 
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-    
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.why_password:
-                whyMyPasswordNotWorkDialog();
-                break;
-            case R.id.sign_in_button:
-                attemptLogin();
-                break;
-            case R.id.lost_password:
-                recoverPasswordDialog();
-                break;
-            default:
-                break;
-        }
-    }
 
     @Override
     protected void onDestroy() {
-        if (mFromPreferece) {
+        if (mFromPreference) {
             Intent i = new Intent();
             i.setAction(Intent.ACTION_MAIN);
             i.addCategory(Intent.CATEGORY_HOME);

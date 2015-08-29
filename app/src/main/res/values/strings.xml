@@ -307,5 +307,15 @@
     <string name="marksProgressTitle">Marks</string>
     <string name="marksProgressDescription">Getting marks…\nWait, please…</string>
     <string name="errorBadFileCodeMsg">You can not get marks from this file</string>
+    <string name="createAccountModuleLabel">Create account</string>
+    <string name="nickName">Nickname</string>
+    <string name="email">Email</string>
+    <string name="create_account_success">Account created successfully</string>
+    <string name="createAccountProgressDescription">Creating account...</string>
+    <string name="errorNicknameNotValid">Nickname not valid</string>
+    <string name="errorNicknameRegistered">Nickname registered by another user</string>
+    <string name="errorEmailNotValid">Email not valid</string>
+    <string name="errorEmailRegistered">Email registered by another user</string>
+    <string name="errorPasswordNotValid">Password not valid. Must be at least 6 alphanumeric characters</string>
 
 </resources>

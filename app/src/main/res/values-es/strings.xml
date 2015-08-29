@@ -298,5 +298,15 @@
     <string name="marksProgressTitle">Calificaciones</string>
     <string name="marksProgressDescription">Obteniendo calificaciones…\nPor favor, espere…</string>
     <string name="errorBadFileCodeMsg">Usted no puede consultar calificaciones en este fichero</string>
+    <string name="createAccountModuleLabel">Crear cuenta</string>
+    <string name="nickName">Apodo</string>
+    <string name="email">Correo electrónico</string>
+    <string name="create_account_success">Cuenta creada correctamente</string>
+    <string name="createAccountProgressDescription">Creando cuenta...</string>
+    <string name="errorNicknameNotValid">Apodo no válido</string>
+    <string name="errorNicknameRegistered">El apodo ya está siendo utilizado por otro usuario</string>
+    <string name="errorEmailNotValid">Correo electrónico no válido</string>
+    <string name="errorEmailRegistered">El correo electrónico ya está siendo utilizado por otro usuario</string>
+    <string name="errorPasswordNotValid">Contraseña no válida. Debe contener al menos 6 caracteres alfanuméricos</string>
 
 </resources>

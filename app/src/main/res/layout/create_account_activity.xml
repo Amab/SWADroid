@@ -42,10 +42,20 @@
             android:orientation="vertical" >
 
             <EditText
-                android:id="@+id/DNI"
+                android:id="@+id/nickname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/prompt_email"
+                android:hint="@string/nickName"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/nickname"
+                android:hint="@string/email"
+                android:inputType="textEmailAddress"
                 android:maxLines="1"
                 android:singleLine="true" />
 
@@ -53,7 +63,7 @@
                 android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/DNI"
+                android:layout_below="@id/email"
                 android:hint="@string/prompt_password"
                 android:imeActionId="@+id/login"
                 android:imeActionLabel="@string/action_sign_in_short"
@@ -73,8 +83,8 @@
                 android:singleLine="true" />
 
             <Button
-                android:id="@+id/sign_in_button"
-                android:layout_width="wrap_content"
+                android:id="@+id/create_account_button"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
@@ -82,32 +92,9 @@
                 android:layout_marginTop="16dip"
                 android:paddingLeft="32dip"
                 android:paddingRight="32dip"
-                android:text="@string/action_sign_in_register"
+                android:text="@string/createAccountModuleLabel"
                 android:background="@color/green" />
 
-            <Button
-                android:id="@+id/create_account"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/server"
-                android:layout_alignStart="@id/server"
-                android:layout_toLeftOf="@id/sign_in_button"
-                android:layout_toStartOf="@id/sign_in_button"
-                android:text="@string/createAccountModuleLabel"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignTop="@+id/sign_in_button" />
-
-            <Button
-                android:id="@+id/lost_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/lost_password"
-                android:layout_below="@id/create_account"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:paddingRight="32dip"
-                android:layout_marginTop="8dip" />
         </RelativeLayout>
     </ScrollView>
 
