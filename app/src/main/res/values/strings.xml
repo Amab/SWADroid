@@ -296,7 +296,7 @@
         users slide down this message.</string>
     <string name="doubleBackToExitMsg">Please click BACK again to exit</string>
     <string name="errorSendingUsersMsg">Error sending attendances</string>
-    <string name="progress_status">Loading...</string>
+    <string name="progress_status">Loading…</string>
     <string name="rollcallCleanUsers">Clean users</string><string name="cleanUsersDialogMsg">The list of users will be locally deleted.\n\n
          Are you sure you want to locally delete the list of users?</string>
     <string name="usersAbsent">All users marked as absent</string>
@@ -311,11 +311,12 @@
     <string name="nickName">Nickname</string>
     <string name="email">Email</string>
     <string name="create_account_success">Account created successfully</string>
-    <string name="createAccountProgressDescription">Creating account...</string>
-    <string name="errorNicknameNotValid">Nickname not valid</string>
+    <string name="createAccountProgressDescription">Creating account…</string>
+    <string name="errorNicknameNotValid">Nickname not valid./nThe nickname must have the syntax \@nickname</string>
     <string name="errorNicknameRegistered">Nickname registered by another user</string>
     <string name="errorEmailNotValid">Email not valid</string>
     <string name="errorEmailRegistered">Email registered by another user</string>
     <string name="errorPasswordNotValid">Password not valid. Must be at least 6 alphanumeric characters</string>
+    <string name="error_nickname_syntax">The nickname must have the syntax \@nickname</string>
 
 </resources>

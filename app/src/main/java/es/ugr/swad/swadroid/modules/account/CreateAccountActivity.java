@@ -149,19 +149,19 @@ public class CreateAccountActivity extends AppCompatActivity {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
-            Toast.makeText(getApplicationContext(), toastMsg,
-                    Toast.LENGTH_LONG).show();
         } else if (Utils.isLong(passwordValue)) {
             mPasswordView.setError(getString(R.string.error_incorrect_password));
             focusView = mPasswordView;
             cancel = true;
-            Toast.makeText(getApplicationContext(), toastMsg,
-                           Toast.LENGTH_LONG).show();
         }
 
         // Check for a valid nickname.
         if (TextUtils.isEmpty(nicknameValue)) {
             mNicknameView.setError(getString(R.string.error_field_required));
+            focusView = mNicknameView;
+            cancel = true;
+        } else if(!nicknameValue.startsWith("@")) {
+            mNicknameView.setError(getString(R.string.error_nickname_syntax));
             focusView = mNicknameView;
             cancel = true;
         }

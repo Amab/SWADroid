@@ -276,7 +276,7 @@
     <string name="errorNoUserNickname">Debe definir un apodo en SWAD</string>
     <string name="eventsDownloadProgressTitle">Eventos</string>
     <string name="eventsUpdated">eventos actualizados</string>
-    <string name="eventsDownloadProgressDescription">Sincronización de eventos.\n\nDependiendo del número de eventos a sincronizar, el procesamiento de los datos puede tardar varios minutos.\n\nPor favor, espere...</string>
+    <string name="eventsDownloadProgressDescription">Sincronización de eventos.\n\nDependiendo del número de eventos a sincronizar, el procesamiento de los datos puede tardar varios minutos.\n\nPor favor, espere…</string>
     <string name="noEventsAvailableMsg">No hay eventos en esta asignatura</string>
     <string name="event">Evento</string>
     <string name="usersUpdated">usuarios actualizados</string>
@@ -286,7 +286,7 @@
         usuarios más recientes deslice este mensaje hacia abajo.</string>
     <string name="errorSendingUsersMsg">Error al enviar las asistencias</string>
     <string name="doubleBackToExitMsg">Por favor, presione ATRÁS de nuevo para salir</string>
-    <string name="progress_status">Cargando...</string>
+    <string name="progress_status">Cargando…</string>
     <string name="rollcallCleanUsers">Limpiar usuarios</string><string name="cleanUsersDialogMsg">El listado de usuarios será eliminado localmente.\n\n
          ¿Está seguro de que quiere eliminar localmente el listado de usuarios?</string>
     <string name="usersAbsent">Todos los usuarios marcados como ausentes</string>
@@ -302,11 +302,12 @@
     <string name="nickName">Apodo</string>
     <string name="email">Correo electrónico</string>
     <string name="create_account_success">Cuenta creada correctamente</string>
-    <string name="createAccountProgressDescription">Creando cuenta...</string>
-    <string name="errorNicknameNotValid">Apodo no válido</string>
+    <string name="createAccountProgressDescription">Creando cuenta…</string>
+    <string name="errorNicknameNotValid">Apodo no válido./nEl apodo debe tener la sintaxis \@apodo</string>
     <string name="errorNicknameRegistered">El apodo ya está siendo utilizado por otro usuario</string>
     <string name="errorEmailNotValid">Correo electrónico no válido</string>
     <string name="errorEmailRegistered">El correo electrónico ya está siendo utilizado por otro usuario</string>
     <string name="errorPasswordNotValid">Contraseña no válida. Debe contener al menos 6 caracteres alfanuméricos</string>
+    <string name="error_nickname_syntax">El apodo debe tener la sintaxis \@apodo</string>
 
 </resources>
