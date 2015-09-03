@@ -209,6 +209,18 @@ public class Constants {
      */
     public static final int RECOVER_PASSWORD_REQUEST_CODE = 36;
     /**
+     * Request code for get marks
+     */
+    public static final int GETMARKS_REQUEST_CODE = 37;
+    /**
+     * Request code for show marks
+     */
+    public static final int MARKS_REQUEST_CODE = 38;
+    /**
+     * Request code for create a new account
+     */
+    public static final int CREATE_ACCOUNT_REQUEST_CODE = 39;
+    /**
      * Prefix tag name for Logcat
      */
     public static final String APP_TAG = "SWADroid";
@@ -228,6 +240,10 @@ public class Constants {
      * Code to access to the documents in share area
      */
     public static final int SHARE_AREA_CODE = 2;
+    /**
+     * Code to access to the marks area
+     */
+    public static final int MARKS_AREA_CODE = 3;
     /**
      * Group position inside the main menu for Course group
      */

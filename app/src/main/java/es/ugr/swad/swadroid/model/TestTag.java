@@ -118,21 +118,13 @@ public class TestTag extends Model {
 
     @Override
     public String toString() {
-        return "TestTag [qstCodList=" + qstCodList + ", tagTxt=" + tagTxt
+        return "TestTag [id=" + getId() + ", qstCodList=" + qstCodList + ", tagTxt=" + tagTxt
                 + ", tagInd=" + tagInd + "]";
     }
 
     /* (non-Javadoc)
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    @Override
-    public boolean equals(Object obj) {
-        return this == obj || super.equals(obj) && getClass() == obj.getClass();
-    }
-
-    /* (non-Javadoc)
-     * @see org.ksoap2.serialization.KvmSerializable#getProperty(int)
-     */
+             * @see org.ksoap2.serialization.KvmSerializable#getProperty(int)
+             */
     public Object getProperty(int param) {
         Object object = null;
         switch (param) {

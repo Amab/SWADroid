@@ -583,6 +583,11 @@ public class SWADMain extends MenuExpandableListActivity {
             map.put(NAME, getString(R.string.testsModuleLabel));
             map.put(IMAGE, getResources().getDrawable(R.drawable.test));
             evaluationData.add(map);
+            //Marks
+            map = new HashMap<String, Object>();
+            map.put(NAME, getString(R.string.marksModuleLabel));
+            map.put(IMAGE, getResources().getDrawable(R.drawable.grades));
+            evaluationData.add(map);
 
             //Users category
             //Groups
@@ -757,6 +762,14 @@ public class SWADMain extends MenuExpandableListActivity {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
                         activity = new Intent(ctx, DownloadsManager.class);
                         activity.putExtra("downloadsAreaCode", Constants.SHARE_AREA_CODE);
+                        startActivityForResult(activity, Constants.DOWNLOADSMANAGER_REQUEST_CODE);
+                    } else {
+                        Toast.makeText(ctx, R.string.functionHoneycombMsg, Toast.LENGTH_LONG).show();
+                    }
+                } else if (keyword.equals(getString(R.string.marksModuleLabel))) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                        activity = new Intent(ctx, DownloadsManager.class);
+                        activity.putExtra("downloadsAreaCode", Constants.MARKS_AREA_CODE);
                         startActivityForResult(activity, Constants.DOWNLOADSMANAGER_REQUEST_CODE);
                     } else {
                         Toast.makeText(ctx, R.string.functionHoneycombMsg, Toast.LENGTH_LONG).show();

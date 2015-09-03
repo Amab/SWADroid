@@ -104,9 +104,6 @@ public class TestsQuestionsDownload extends Module {
             SoapObject answersListObject = (SoapObject) res.get(2);
             SoapObject questionTagsListObject = (SoapObject) res.get(3);
             List<TestTag> tagsList = new ArrayList<TestTag>();
-            List<Model> tagsListDB = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_TEST_TAGS);
-            List<Model> questionsListDB = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_TEST_QUESTIONS);
-            List<Model> answersListDB = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_TEST_ANSWERS);
 
             int listSizeTags = tagsListObject.getPropertyCount();
             int listSizeQuestions = questionsListObject.getPropertyCount();
@@ -146,8 +143,7 @@ public class TestsQuestionsDownload extends Module {
 
                     //If it's an updated question, update it's row in database
                 } catch (SQLException e) {
-                    TestQuestion old = (TestQuestion) questionsListDB.get(questionsListDB.indexOf(q));
-                    dbHelper.updateTestQuestion(old, q, Courses.getSelectedCourseCode());
+                    dbHelper.updateTestQuestion(q, Courses.getSelectedCourseCode());
 
                     if (isDebuggable)
                         Log.d(TAG, "UPDATED: " + q.toString());
@@ -173,8 +169,7 @@ public class TestsQuestionsDownload extends Module {
 
                     //If it's an updated answer, update it's row in database
                 } catch (SQLException e) {
-                    TestAnswer old = (TestAnswer) answersListDB.get(answersListDB.indexOf(a));
-                    dbHelper.updateTestAnswer(old, a, qstCod);
+                    dbHelper.updateTestAnswer(a, qstCod);
 
                     if (isDebuggable)
                         Log.d(TAG, "UPDATED: " + a.toString());
@@ -194,17 +189,13 @@ public class TestsQuestionsDownload extends Module {
                 //If it's a new tag, insert in database
                 try {
                     dbHelper.insertTestTag(tag);
-                    tagsListDB.add(tag);
 
                     if (isDebuggable)
                         Log.d(TAG, "INSERTED: " + tag.toString());
 
                     //If it's an updated tag, update it's rows in database
                 } catch (SQLException e) {
-                    TestTag old = (TestTag) tagsListDB.get(tagsListDB.indexOf(tag));
-                    tag.setQstCodList(old.getQstCodList());
-                    tag.addQstCod(qstCod);
-                    dbHelper.updateTestTag(old, tag);
+                    dbHelper.updateTestTag(tag);
 
                     if (isDebuggable)
                         Log.d(TAG, "UPDATED: " + tag.toString());

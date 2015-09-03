@@ -77,33 +77,37 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_below="@id/server"
-                android:layout_gravity="right"
-                android:layout_marginTop="16dp"
-                android:paddingLeft="32dp"
-                android:paddingRight="32dp"
-                android:text="@string/action_sign_in_register" />
+                android:layout_marginTop="16dip"
+                android:paddingLeft="32dip"
+                android:paddingRight="32dip"
+                android:text="@string/action_sign_in_register"
+                android:background="@color/green" />
 
-            <TextView
-                android:id="@+id/why_password"
+            <Button
+                android:id="@+id/create_account"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/sign_in_button"
-                android:gravity="center_horizontal"
-                android:text="@string/why_password"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/blue" />
-
-            <TextView
-                android:id="@+id/lost_password"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/server"
-                android:layout_alignTop="@+id/sign_in_button"
+                android:layout_alignLeft="@id/server"
+                android:layout_alignStart="@id/server"
                 android:layout_toLeftOf="@id/sign_in_button"
+                android:layout_toStartOf="@id/sign_in_button"
+                android:text="@string/createAccountModuleLabel"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignTop="@+id/sign_in_button" />
+
+            <Button
+                android:id="@+id/lost_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:text="@string/lost_password"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/blue" />
+                android:layout_below="@id/create_account"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:paddingRight="32dip"
+                android:layout_marginTop="8dip" />
         </RelativeLayout>
     </ScrollView>
 

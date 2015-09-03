@@ -24,7 +24,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,6 +33,7 @@ import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADroidTracker;
 import es.ugr.swad.swadroid.gui.ImageFactory;
 import es.ugr.swad.swadroid.gui.MenuActivity;
+import es.ugr.swad.swadroid.gui.WebViewFactory;
 import es.ugr.swad.swadroid.modules.messages.Messages;
 import es.ugr.swad.swadroid.utils.Utils;
 
@@ -102,8 +102,6 @@ public class NotificationItem extends MenuActivity {
         if (Utils.connectionAvailable(this)
                 && (userPhoto != null) && !userPhoto.equals("")
                 && !userPhoto.equals(Constants.NULL_VALUE)) {
-            //userPhotoView.setImageURI(Uri.parse(userPhoto));
-            //new DownloadImageTask(userPhotoView).execute(userPhoto);			
 			ImageFactory.displayImage(getApplicationContext(), userPhoto, userPhotoView, true, true,
                     R.drawable.usr_bl, R.drawable.usr_bl, R.drawable.usr_bl);
         } else {
@@ -115,8 +113,8 @@ public class NotificationItem extends MenuActivity {
             content = content.substring(9, content.length() - 3);
         }
 
-        webview.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-        webview.loadDataWithBaseURL("", content, "text/html", "utf-8", "");
+        webview = WebViewFactory.getMathJaxWebView(webview);
+        webview.setWebViewClient(WebViewFactory.getMathJaxExpression(content));
         
         //Set notification as seen locally
         dbHelper.updateNotification(notifCode, "seenLocal", Utils.parseBoolString(true));
