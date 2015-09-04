@@ -83,6 +83,7 @@
                 android:paddingLeft="32dip"
                 android:paddingRight="32dip"
                 android:text="@string/action_sign_in_register"
+                android:textColor="@color/white"
                 android:background="@color/green" />
 
             <Button
