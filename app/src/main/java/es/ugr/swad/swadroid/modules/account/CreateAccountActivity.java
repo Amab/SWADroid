@@ -353,9 +353,13 @@ public class CreateAccountActivity extends AppCompatActivity implements AdapterV
                 bodyEditText.setError(getString(R.string.noServer));
             } else if(bodyValue.startsWith("http://")) {
                 Preferences.setServer(bodyValue.substring(7));
-                serverDialog.dismiss();
+            } else if(bodyValue.startsWith("https://")) {
+                Preferences.setServer(bodyValue.substring(8));
             } else {
-                Preferences.setServer(bodyValue.toString());
+                Preferences.setServer(bodyValue);
+            }
+
+            if(!bodyValue.isEmpty()) {
                 serverDialog.dismiss();
             }
 

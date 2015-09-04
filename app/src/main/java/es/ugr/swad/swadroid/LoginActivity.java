@@ -415,9 +415,13 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
                 bodyEditText.setError(getString(R.string.noServer));
             } else if(bodyValue.startsWith("http://")) {
                 Preferences.setServer(bodyValue.substring(7));
-                serverDialog.dismiss();
+            } else if(bodyValue.startsWith("https://")) {
+                Preferences.setServer(bodyValue.substring(8));
             } else {
-                Preferences.setServer(bodyValue.toString());
+                Preferences.setServer(bodyValue);
+            }
+
+            if(!bodyValue.isEmpty()) {
                 serverDialog.dismiss();
             }
 
