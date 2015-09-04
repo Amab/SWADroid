@@ -3,7 +3,7 @@
 
     <string name="app_name">SWADroid</string>
     <string name="serverName_preferences">Server</string>
-    <string name="logout_preferences">Log Out of SWADroid</string>
+    <string name="logout_preferences">Log Out of</string>
     <string name="logout_title_preferences">Log Out</string>
     <string name="serverSummary_preferences">Server (without http://)</string>
     <string name="serverTitle_preferences">Server</string>
@@ -308,7 +308,7 @@
     <string name="marksProgressDescription">Getting marks…\nWait, please…</string>
     <string name="errorBadFileCodeMsg">You can not get marks from this file</string>
     <string name="createAccountModuleLabel">Create account</string>
-    <string name="nickName">Nickname</string>
+    <string name="nickName">\@nickname</string>
     <string name="email">Email</string>
     <string name="create_account_success">Account created successfully</string>
     <string name="createAccountProgressDescription">Creating account…</string>
@@ -318,5 +318,7 @@
     <string name="errorEmailRegistered">Email registered by another user</string>
     <string name="errorPasswordNotValid">Password not valid. Must be at least 6 alphanumeric characters</string>
     <string name="error_nickname_syntax">The nickname must have the syntax \@nickname</string>
+    <string name="otherMsg">Other</string>
+    <string name="noServer">You must enter the server</string>
 
 </resources>

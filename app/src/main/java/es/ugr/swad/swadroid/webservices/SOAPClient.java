@@ -46,10 +46,6 @@ public class SOAPClient implements IWebserviceClient {
 	 */
 	public static final String CLIENT_TYPE = "SOAP";
 	/**
-	 * SERVER param for webservice request.
-	 */
-	private String SERVER;
-	/**
 	 * SOAP_ACTION param for webservice request.
 	 */
 	private String SOAP_ACTION = "";
@@ -61,11 +57,7 @@ public class SOAPClient implements IWebserviceClient {
 	 * NAMESPACE param for webservice request.
 	 */
 	private String NAMESPACE;
-	/**
-	 * SOAP connection
-	 */
-	private KeepAliveHttpsTransportSE connection;
-	/**
+    /**
 	 * Webservice request.
 	 */
 	private SoapObject request;
@@ -82,16 +74,13 @@ public class SOAPClient implements IWebserviceClient {
 	 * Default constructor
 	 */
 	public SOAPClient() {
-		SERVER = Preferences.getServer(); // = "swad.ugr.es";
 		NAMESPACE = "urn:swad";
 		isDebuggable = (ApplicationInfo.FLAG_DEBUGGABLE != 0);
 	}
 
 	/**
 	 * Field constructor
-	 * 
-	 * @param SERVER
-	 *            SERVER param for webservice request
+	 *
 	 * @param SOAP_ACTION
 	 *            SOAP_ACTION param for webservice request
 	 * @param METHOD_NAME
@@ -99,22 +88,12 @@ public class SOAPClient implements IWebserviceClient {
 	 * @param NAMESPACE
 	 *            NAMESPACE param for webservice request
 	 */
-	public SOAPClient(String SERVER, String SOAP_ACTION, String METHOD_NAME,
+	public SOAPClient(String SOAP_ACTION, String METHOD_NAME,
 			String NAMESPACE) {
-		this.SERVER = SERVER;
 		this.SOAP_ACTION = SOAP_ACTION;
 		this.METHOD_NAME = METHOD_NAME;
 		this.NAMESPACE = NAMESPACE;
 		isDebuggable = (ApplicationInfo.FLAG_DEBUGGABLE != 0);
-	}
-
-	/**
-	 * Gets METHOD_NAME parameter.
-	 * 
-	 * @return METHOD_NAME parameter.
-	 */
-	public String getMETHOD_NAME() {
-		return METHOD_NAME;
 	}
 
 	/**
@@ -126,63 +105,6 @@ public class SOAPClient implements IWebserviceClient {
 	@Override
 	public void setMETHOD_NAME(String METHOD_NAME) {
 		this.METHOD_NAME = METHOD_NAME;
-	}
-
-	/**
-	 * Gets NAMESPACE parameter.
-	 * 
-	 * @return NAMESPACE parameter.
-	 */
-	public String getNAMESPACE() {
-		return NAMESPACE;
-	}
-
-	/**
-	 * Sets NAMESPACE parameter.
-	 * 
-	 * @param NAMESPACE
-	 *            NAMESPACE parameter.
-	 */
-	public void setNAMESPACE(String NAMESPACE) {
-		this.NAMESPACE = NAMESPACE;
-	}
-
-	/**
-	 * Gets SOAP_ACTION parameter.
-	 * 
-	 * @return SOAP_ACTION parameter.
-	 */
-	public String getSOAP_ACTION() {
-		return SOAP_ACTION;
-	}
-
-	/**
-	 * Sets SOAP_ACTION parameter.
-	 * 
-	 * @param SOAP_ACTION
-	 *            SOAP_ACTION parameter.
-	 */
-	public void setSOAP_ACTION(String SOAP_ACTION) {
-		this.SOAP_ACTION = SOAP_ACTION;
-	}
-
-	/**
-	 * Gets the SERVER parameter
-	 * 
-	 * @return The SERVER parameter
-	 */
-	public String getSERVER() {
-		return SERVER;
-	}
-
-	/**
-	 * Sets the SERVER parameter
-	 * 
-	 * @param SERVER
-	 *            the SERVER parameter
-	 */
-	public void setSERVER(String SERVER) {
-		this.SERVER = SERVER;
 	}
 
 	/**
@@ -230,7 +152,9 @@ public class SOAPClient implements IWebserviceClient {
 	public void sendRequest(Class<?> cl, boolean simple)
 			throws Exception {
 
-		Log.i(TAG, "Sending SOAP request to " + SERVER + " and method "
+		String server = Preferences.getServer();
+
+		Log.i(TAG, "Sending SOAP request to " + server + " and method "
 				+ METHOD_NAME);
 
 		// Variables for URL splitting
@@ -240,7 +164,7 @@ public class SOAPClient implements IWebserviceClient {
 		String URL;
 
 		// Split URL
-		URLArray = SERVER.split(delimiter, 2);
+		URLArray = server.split(delimiter, 2);
 		URL = URLArray[0];
 		if (URLArray.length == 2) {
 			PATH = delimiter + URLArray[1];
@@ -253,9 +177,11 @@ public class SOAPClient implements IWebserviceClient {
 		 * Android ssl libraries having trouble with certificates and
 		 * certificate authorities somehow messing up connecting/needing
 		 * reconnects.
-		 */
-		connection = new KeepAliveHttpsTransportSE(URL, 443, PATH,
-				Constants.CONNECTION_TIMEOUT);
+         *
+         * SOAP connection
+         */
+        KeepAliveHttpsTransportSE connection = new KeepAliveHttpsTransportSE(URL, 443, PATH,
+                Constants.CONNECTION_TIMEOUT);
 		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
 				SoapEnvelope.VER11);
 		System.setProperty("http.keepAlive", "false");

@@ -19,19 +19,23 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,7 +55,7 @@ import es.ugr.swad.swadroid.utils.Utils;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  *
  */
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     public static final String TAG = Constants.APP_TAG + " LoginActivity";
 
@@ -59,15 +63,12 @@ public class LoginActivity extends AppCompatActivity {
     // UI references for the login form.
     private EditText mDniView;
     private EditText mPasswordView;
-    private EditText mServerView;
     private View mLoginFormView;
     private View mLoginStatusView;
-    // private View mMainScreenView;
     private TextView mLoginStatusMessageView;
-    private Button mSignInButton;
-    private Button mLostPasswordButton;
-    private Button mCreateAccountButton;
     private boolean mFromPreference = false;
+    private ArrayAdapter<CharSequence> serverAdapter;
+    private AlertDialog serverDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,9 +84,9 @@ public class LoginActivity extends AppCompatActivity {
         
         mLoginFormView = findViewById(R.id.login_form);
         mLoginStatusView = findViewById(R.id.login_status);
-        mSignInButton = (Button) findViewById(R.id.sign_in_button);
-        mLostPasswordButton = (Button) findViewById(R.id.lost_password);
-        mCreateAccountButton = (Button) findViewById(R.id.create_account);
+        Button mSignInButton = (Button) findViewById(R.id.sign_in_button);
+        Button mLostPasswordButton = (Button) findViewById(R.id.lost_password);
+        Button mCreateAccountButton = (Button) findViewById(R.id.create_account);
         
         mDniView = (EditText) findViewById(R.id.DNI);
         mDniView.setText(Preferences.getUserID());
@@ -103,9 +104,17 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        mServerView = (EditText) findViewById(R.id.server);
-        mServerView.setText(Preferences.getServer());
-        if (mServerView.getText().toString().equals(Constants.DEFAULT_SERVER)) mPasswordView.setError(getString(R.string.error_password_summaryUGR));
+        Spinner mServerView = (Spinner) findViewById(R.id.serverSpinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        serverAdapter = ArrayAdapter.createFromResource(this,
+                R.array.servers_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        serverAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        mServerView.setAdapter(serverAdapter);
+        mServerView.setOnItemSelectedListener(this);
+
+        if (serverAdapter.getItem(0).equals(Constants.DEFAULT_SERVER)) mPasswordView.setError(getString(R.string.error_password_summaryUGR));
 
         mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
 
@@ -150,9 +159,9 @@ public class LoginActivity extends AppCompatActivity {
         // Store values at the time of the login attempt.
         DniValue = mDniView.getText().toString();
         passwordValue = mPasswordView.getText().toString();
-        serverValue = mServerView.getText().toString();
+        serverValue = serverAdapter.getItem(0).toString();
         toastMsg =
-                mServerView.getText().toString().equals("swad.ugr.es") ? getString(R.string.error_password_summaryUGR)
+                serverValue.equals("swad.ugr.es") ? getString(R.string.error_password_summaryUGR)
                         : getString(R.string.error_invalid_password);
 
         boolean cancel = false;
@@ -199,11 +208,11 @@ public class LoginActivity extends AppCompatActivity {
             try {
                 Preferences.setUserID(DniValue);
                 Preferences.setUserPassword(Crypto.encryptPassword(passwordValue));
-                Preferences.setServer(serverValue);
             } catch (NoSuchAlgorithmException e) {
                 // TODO, solucionar
                 //error(TAG, e.getMessage(), e, true);
             }
+
             showProgress(true);
             startActivityForResult(new Intent(this, Login.class), Constants.LOGIN_REQUEST_CODE);
         }
@@ -355,5 +364,64 @@ public class LoginActivity extends AppCompatActivity {
         }
         super.onDestroy();
     }
-    
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String serverValue = serverAdapter.getItem(position).toString();
+
+        if(serverValue.contains(getString(R.string.otherMsg))) {
+            serverDialog = DialogFactory.createPositiveNegativeDialog(this,
+                    R.drawable.ic_launcher_swadroid ,
+                    R.layout.dialog_server,
+                    R.string.serverTitle_preferences ,
+                    -1,
+                    R.string.saveMsg,
+                    R.string.cancelMsg,
+                    false,
+                    null,
+                    null,
+                    null);
+
+            serverDialog.setOnShowListener(showListener);
+            serverDialog.show();
+        } else {
+            Preferences.setServer(serverValue);
+
+            Log.i(TAG, "Server setted to " + Preferences.getServer());
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        //Do nothing
+    }
+
+    private final DialogInterface.OnShowListener showListener = new DialogInterface.OnShowListener() {
+        @Override
+        public void onShow(DialogInterface dialog) {
+            Button b = serverDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            b.setOnClickListener(positiveClickListener);
+        }
+    };
+
+    private final View.OnClickListener positiveClickListener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            EditText bodyEditText = (EditText) serverDialog.findViewById(R.id.server_body_text);
+            String bodyValue = bodyEditText.getText().toString();
+
+            if(bodyValue.isEmpty()) {
+                bodyEditText.setError(getString(R.string.noServer));
+            } else if(bodyValue.startsWith("http://")) {
+                Preferences.setServer(bodyValue.substring(7));
+                serverDialog.dismiss();
+            } else {
+                Preferences.setServer(bodyValue.toString());
+                serverDialog.dismiss();
+            }
+
+            Log.i(TAG, "Server setted to " + Preferences.getServer());
+        }
+    };
 }

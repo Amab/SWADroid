@@ -3,7 +3,7 @@
 
     <string name="app_name">SWADroid</string>
     <string name="serverName_preferences">Servidor</string>
-    <string name="logout_preferences">Cerrar sesión en SWADroid</string>
+    <string name="logout_preferences">Cerrar sesión en</string>
     <string name="logout_title_preferences">Cerrar Sesión</string>
     <string name="serverSummary_preferences">Servidor (sin http://)</string>
     <string name="serverTitle_preferences">Servidor</string>
@@ -299,7 +299,7 @@
     <string name="marksProgressDescription">Obteniendo calificaciones…\nPor favor, espere…</string>
     <string name="errorBadFileCodeMsg">Usted no puede consultar calificaciones en este fichero</string>
     <string name="createAccountModuleLabel">Crear cuenta</string>
-    <string name="nickName">Apodo</string>
+    <string name="nickName">\@apodo</string>
     <string name="email">Correo electrónico</string>
     <string name="create_account_success">Cuenta creada correctamente</string>
     <string name="createAccountProgressDescription">Creando cuenta…</string>
@@ -309,5 +309,7 @@
     <string name="errorEmailRegistered">El correo electrónico ya está siendo utilizado por otro usuario</string>
     <string name="errorPasswordNotValid">Contraseña no válida. Debe contener al menos 6 caracteres alfanuméricos</string>
     <string name="error_nickname_syntax">El apodo debe tener la sintaxis \@apodo</string>
+    <string name="otherMsg">Otro</string>
+    <string name="noServer">Debe introducir el servidor</string>
 
 </resources>

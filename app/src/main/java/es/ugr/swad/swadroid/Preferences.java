@@ -159,6 +159,29 @@ public class Preferences {
      * Application context
      */
     private static Context mContext;
+
+    /**
+     * Gets application preferences
+     * @param ctx Application context
+     * @return Application preferences
+     */
+    private static void getPreferences(Context ctx) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+    		/*
+    		 *  If Android API >= 11 (HONEYCOMB) enable access to SharedPreferences from all processes
+    		 *  of the application
+    		 */
+            prefs = ctx.getSharedPreferences(PREFS_NAME, Context.MODE_MULTI_PROCESS);
+            Log.i(TAG, "Android API >= 11 (HONEYCOMB). Enabling MODE_MULTI_PROCESS explicitly");
+        } else {
+			/*
+			 * If Android API < 11 (HONEYCOMB) access is enabled by default
+			 * MODE_MULTI_PROCESS is not defined
+			 */
+            prefs = ctx.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+            Log.i(TAG, "Android API < 11 (HONEYCOMB). MODE_MULTI_PROCESS is not defined and enabled by default");
+        }
+    }
     
     /**
      * Constructor
@@ -167,21 +190,7 @@ public class Preferences {
 	public Preferences(Context ctx) {
         mContext = ctx;
 
-    	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-    		/*
-    		 *  If Android API >= 11 (HONEYCOMB) enable access to SharedPreferences from all processes
-    		 *  of the application 
-    		 */
-    		prefs = ctx.getSharedPreferences(PREFS_NAME, Context.MODE_MULTI_PROCESS);
-    		Log.i(TAG, "Android API >= 11 (HONEYCOMB). Enabling MODE_MULTI_PROCESS explicitly");
-		} else {
-			/* 
-			 * If Android API < 11 (HONEYCOMB) access is enabled by default
-			 * MODE_MULTI_PROCESS is not defined
-			 */
-			prefs = ctx.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-    		Log.i(TAG, "Android API < 11 (HONEYCOMB). MODE_MULTI_PROCESS is not defined and enabled by default");
-		}
+        getPreferences(ctx);
 
     	editor = prefs.edit();
     	
@@ -236,11 +245,11 @@ public class Preferences {
      */
     public static String getServer() {
     	String server = prefs.getString(SERVERPREF, Constants.DEFAULT_SERVER);
-    	
+
     	if(server.equals("")) {
     		server = Constants.DEFAULT_SERVER;
     	}
-    	
+
         return server;
     }
 

@@ -19,18 +19,22 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,7 +52,7 @@ import es.ugr.swad.swadroid.utils.Utils;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  *
  */
-public class CreateAccountActivity extends AppCompatActivity {
+public class CreateAccountActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     public static final String TAG = Constants.APP_TAG + " CreateAccountActivity";
 
@@ -61,8 +65,8 @@ public class CreateAccountActivity extends AppCompatActivity {
     private EditText mNicknameView;
     private EditText mEmailView;
     private EditText mPasswordView;
-    private EditText mServerView;
-    private Button mCreateAccountButton;
+    private ArrayAdapter<CharSequence> serverAdapter;
+    private AlertDialog serverDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +81,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         mLoginFormView = findViewById(R.id.login_form);
         mLoginStatusView = findViewById(R.id.login_status);
-        mCreateAccountButton = (Button) findViewById(R.id.create_account_button);
+        Button mCreateAccountButton = (Button) findViewById(R.id.create_account_button);
         
         mNicknameView = (EditText) findViewById(R.id.nickname);
         mNicknameView.setText(Preferences.getUserID());
@@ -97,9 +101,17 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         mEmailView = (EditText) findViewById(R.id.email);
 
-        mServerView = (EditText) findViewById(R.id.server);
-        mServerView.setText(Preferences.getServer());
-        if (mServerView.getText().toString().equals(Constants.DEFAULT_SERVER)) mPasswordView.setError(getString(R.string.error_password_summaryUGR));
+        Spinner mServerView = (Spinner) findViewById(R.id.serverSpinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        serverAdapter = ArrayAdapter.createFromResource(this,
+                R.array.servers_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        serverAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        mServerView.setAdapter(serverAdapter);
+        mServerView.setOnItemSelectedListener(this);
+
+        if (serverAdapter.getItem(0).equals(Constants.DEFAULT_SERVER)) mPasswordView.setError(getString(R.string.error_password_summaryUGR));
 
         mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
 
@@ -123,19 +135,16 @@ public class CreateAccountActivity extends AppCompatActivity {
         String nicknameValue;
         String emailValue;
         String passwordValue;
-        String serverValue;
-        String toastMsg;
 
         // Reset errors.
         mNicknameView.setError(null);
+        mEmailView.setError(null);
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
         nicknameValue = mNicknameView.getText().toString();
         passwordValue = mPasswordView.getText().toString();
         emailValue = mEmailView.getText().toString();
-        serverValue = mServerView.getText().toString();
-        toastMsg = getString(R.string.error_invalid_password);
 
         boolean cancel = false;
         View focusView = null;
@@ -171,11 +180,6 @@ public class CreateAccountActivity extends AppCompatActivity {
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
-        }
-
-        // Check for a valid server.
-        if (!TextUtils.isEmpty(serverValue)) {
-            Preferences.setServer(serverValue);
         }
         
         if (cancel) {
@@ -237,26 +241,6 @@ public class CreateAccountActivity extends AppCompatActivity {
         }
     }
 
-    private void whyMyPasswordNotWorkDialog() {
-        SWADroidTracker.sendScreenView(getApplicationContext(), "SWADroid WhyMyPasswordNotWork");
-
-        AlertDialog passwordNotWorkDialog =
-                DialogFactory.createNeutralDialog(this,
-                        R.layout.dialog_why_password,
-                        R.string.why_password_dialog_title,
-                        -1,
-                        R.string.ok,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog,
-                                                int which) {
-                                dialog.dismiss();
-                            }
-                        });
-
-        passwordNotWorkDialog.show();
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         String errorMsg = "";
@@ -314,5 +298,69 @@ public class CreateAccountActivity extends AppCompatActivity {
             }
         }
     }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String serverValue = serverAdapter.getItem(position).toString();
+
+        //Reset password error
+        mPasswordView.setError(null);
+        if (serverValue.equals(Constants.DEFAULT_SERVER)) mPasswordView.setError(getString(R.string.error_password_summaryUGR));
+
+        if(serverValue.contains(getString(R.string.otherMsg))) {
+            serverDialog = DialogFactory.createPositiveNegativeDialog(this,
+                    R.drawable.ic_launcher_swadroid ,
+                    R.layout.dialog_server,
+                    R.string.serverTitle_preferences ,
+                    -1,
+                    R.string.saveMsg,
+                    R.string.cancelMsg,
+                    false,
+                    null,
+                    null,
+                    null);
+
+            serverDialog.setOnShowListener(showListener);
+            serverDialog.show();
+        } else {
+            Preferences.setServer(serverValue);
+
+            Log.i(TAG, "Server setted to " + Preferences.getServer());
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        //Do nothing
+    }
+
+    private final DialogInterface.OnShowListener showListener = new DialogInterface.OnShowListener() {
+        @Override
+        public void onShow(DialogInterface dialog) {
+            Button b = serverDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            b.setOnClickListener(positiveClickListener);
+        }
+    };
+
+    private final View.OnClickListener positiveClickListener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            EditText bodyEditText = (EditText) serverDialog.findViewById(R.id.server_body_text);
+            String bodyValue = bodyEditText.getText().toString();
+
+            if(bodyValue.isEmpty()) {
+                bodyEditText.setError(getString(R.string.noServer));
+            } else if(bodyValue.startsWith("http://")) {
+                Preferences.setServer(bodyValue.substring(7));
+                serverDialog.dismiss();
+            } else {
+                Preferences.setServer(bodyValue.toString());
+                serverDialog.dismiss();
+            }
+
+            Log.i(TAG, "Server setted to " + Preferences.getServer());
+        }
+    };
     
 }

@@ -35,7 +35,7 @@
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent">
 
         <RelativeLayout
             style="@style/LoginFormContainer"
@@ -62,15 +62,26 @@
                 android:maxLines="1"
                 android:singleLine="true" />
 
-            <EditText
-                android:id="@+id/server"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/serverTextView"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/password"
-                android:hint="@string/prompt_server"
-                android:inputType="text"
-                android:maxLines="1"
-                android:singleLine="true" />
+                android:text="@string/serverTitle_preferences"
+                android:textColor="@color/sgilight_gray_32"
+                android:textSize="16sp"
+                android:layout_marginTop="8dip"
+                android:paddingTop="1dip"
+                android:layout_marginLeft="5dip" />
+
+            <Spinner
+                android:id="@+id/serverSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/serverTextView"
+                android:layout_toEndOf="@id/serverTextView"
+                android:layout_below="@id/password"
+                android:layout_alignTop="@+id/serverTextView" />
 
             <Button
                 android:id="@+id/sign_in_button"
@@ -78,7 +89,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                android:layout_below="@id/server"
+                android:layout_below="@id/serverTextView"
                 android:layout_marginTop="16dip"
                 android:paddingLeft="32dip"
                 android:paddingRight="32dip"
@@ -90,8 +101,8 @@
                 android:id="@+id/create_account"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/server"
-                android:layout_alignStart="@id/server"
+                android:layout_alignLeft="@id/serverTextView"
+                android:layout_alignStart="@id/serverTextView"
                 android:layout_toLeftOf="@id/sign_in_button"
                 android:layout_toStartOf="@id/sign_in_button"
                 android:text="@string/createAccountModuleLabel"
