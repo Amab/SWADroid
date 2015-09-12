@@ -43,5 +43,7 @@
     <color name="sgi_salmon">#C67171</color>
     <color name="white">#ffffff</color>
     <color name="blue">#0000ff</color>
+    <color name="button_background_blue">#50A3E1</color>
+    <color name="button_background_green">#55B637</color>
 
 </resources>

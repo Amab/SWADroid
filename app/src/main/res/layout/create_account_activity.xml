@@ -105,7 +105,7 @@
                 android:paddingRight="32dip"
                 android:text="@string/createAccountModuleLabel"
                 android:textColor="@color/white"
-                android:background="@color/green" />
+                android:background="@color/button_background_blue" />" />
 
         </RelativeLayout>
     </ScrollView>

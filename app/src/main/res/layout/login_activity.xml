@@ -95,7 +95,7 @@
                 android:paddingRight="32dip"
                 android:text="@string/action_sign_in_register"
                 android:textColor="@color/white"
-                android:background="@color/green" />
+                android:background="@color/button_background_blue" />
 
             <Button
                 android:id="@+id/create_account"
