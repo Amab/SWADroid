@@ -38,6 +38,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Arrays;
+import java.util.List;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.Preferences;
 import es.ugr.swad.swadroid.R;
@@ -56,7 +59,10 @@ public class CreateAccountActivity extends AppCompatActivity implements AdapterV
 
     public static final String TAG = Constants.APP_TAG + " CreateAccountActivity";
 
+    private static List<String> serversList;
+
     private boolean mLoginError = false;
+    private boolean showServerDialog = true;
 
     // UI references for the create account form.
     private View mLoginFormView;
@@ -65,6 +71,7 @@ public class CreateAccountActivity extends AppCompatActivity implements AdapterV
     private EditText mNicknameView;
     private EditText mEmailView;
     private EditText mPasswordView;
+    private Spinner mServerView;
     private ArrayAdapter<CharSequence> serverAdapter;
     private AlertDialog serverDialog;
 
@@ -74,7 +81,18 @@ public class CreateAccountActivity extends AppCompatActivity implements AdapterV
 
         setContentView(R.layout.create_account_activity);
 
+        serversList = Arrays.asList(getResources().getStringArray(R.array.servers_array));
+
         setupCreateAccountForm();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(!mServerView.getSelectedItem().equals(Preferences.getServer())) {
+            setSelectedServer(Preferences.getServer());
+        }
     }
 
     private void setupCreateAccountForm() {
@@ -101,7 +119,7 @@ public class CreateAccountActivity extends AppCompatActivity implements AdapterV
 
         mEmailView = (EditText) findViewById(R.id.email);
 
-        Spinner mServerView = (Spinner) findViewById(R.id.serverSpinner);
+        mServerView = (Spinner) findViewById(R.id.serverSpinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
         serverAdapter = ArrayAdapter.createFromResource(this,
                 R.array.servers_array, android.R.layout.simple_spinner_item);
@@ -111,7 +129,8 @@ public class CreateAccountActivity extends AppCompatActivity implements AdapterV
         mServerView.setAdapter(serverAdapter);
         mServerView.setOnItemSelectedListener(this);
 
-        if (serverAdapter.getItem(0).equals(Constants.DEFAULT_SERVER)) mPasswordView.setError(getString(R.string.error_password_summaryUGR));
+        if (serverAdapter.getItem(0).equals("swad.ugr.es"))
+            mPasswordView.setError(getString(R.string.error_password_summaryUGR));
 
         mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
 
@@ -301,13 +320,23 @@ public class CreateAccountActivity extends AppCompatActivity implements AdapterV
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        setServer(position);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        //Do nothing
+    }
+
+    private void setServer(int position) {
         String serverValue = serverAdapter.getItem(position).toString();
 
         //Reset password error
         mPasswordView.setError(null);
-        if (serverValue.equals(Constants.DEFAULT_SERVER)) mPasswordView.setError(getString(R.string.error_password_summaryUGR));
+        if ("swad.ugr.es".equals(serverValue))
+            mPasswordView.setError(getString(R.string.error_password_summaryUGR));
 
-        if(serverValue.contains(getString(R.string.otherMsg))) {
+        if(serverValue.contains(getString(R.string.otherMsg)) && showServerDialog) {
             serverDialog = DialogFactory.createPositiveNegativeDialog(this,
                     R.drawable.ic_launcher_swadroid ,
                     R.layout.dialog_server,
@@ -315,7 +344,7 @@ public class CreateAccountActivity extends AppCompatActivity implements AdapterV
                     -1,
                     R.string.saveMsg,
                     R.string.cancelMsg,
-                    false,
+                    true,
                     null,
                     null,
                     null);
@@ -324,21 +353,21 @@ public class CreateAccountActivity extends AppCompatActivity implements AdapterV
             serverDialog.show();
         } else {
             Preferences.setServer(serverValue);
-
-            Log.i(TAG, "Server setted to " + Preferences.getServer());
         }
-    }
 
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-        //Do nothing
+        showServerDialog = true;
+
+        Log.i(TAG, "Server setted to " + Preferences.getServer());
     }
 
     private final DialogInterface.OnShowListener showListener = new DialogInterface.OnShowListener() {
         @Override
         public void onShow(DialogInterface dialog) {
+            EditText bodyEditText = (EditText) serverDialog.findViewById(R.id.server_body_text);
             Button b = serverDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+
             b.setOnClickListener(positiveClickListener);
+            bodyEditText.setText(Preferences.getServer());
         }
     };
 
@@ -351,20 +380,37 @@ public class CreateAccountActivity extends AppCompatActivity implements AdapterV
 
             if(bodyValue.isEmpty()) {
                 bodyEditText.setError(getString(R.string.noServer));
-            } else if(bodyValue.startsWith("http://")) {
-                Preferences.setServer(bodyValue.substring(7));
-            } else if(bodyValue.startsWith("https://")) {
-                Preferences.setServer(bodyValue.substring(8));
             } else {
+                if(bodyValue.startsWith("http://")) {
+                    bodyValue = bodyValue.substring(7);
+                } else if(bodyValue.startsWith("https://")) {
+                    bodyValue = bodyValue.substring(8);
+                }
+
+                setSelectedServer(bodyValue);
                 Preferences.setServer(bodyValue);
-            }
 
-            if(!bodyValue.isEmpty()) {
                 serverDialog.dismiss();
-            }
 
-            Log.i(TAG, "Server setted to " + Preferences.getServer());
+                Log.i(TAG, "Server setted to " + Preferences.getServer());
+            }
         }
     };
+
+    private void setSelectedServer(String server) {
+        int serverPosition;
+
+        showServerDialog = false;
+
+        if(serversList.contains(server)) {
+            serverPosition = serverAdapter.getPosition(server);
+        } else {
+            serverPosition = serversList.size() - 1;
+        }
+
+        mServerView.setSelection(serverPosition);
+
+        showServerDialog = true;
+    }
     
 }
