@@ -424,10 +424,17 @@ public class NotificationsSyncAdapterService extends Service {
             throws Exception {
 
 		Notification notif;
-		PendingIntent pendingIntent = PendingIntent.getActivity(context,
-				0, 
-				new Intent(context, Notifications.class), 
-				Intent.FLAG_ACTIVITY_NEW_TASK);
+        Intent notificationIntent = new Intent(context, Notifications.class);
+        PendingIntent pendingIntent;
+
+        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        //single top to avoid creating many activity stacks queue
+        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+        pendingIntent = PendingIntent.getActivity(context,
+                0,
+                notificationIntent,
+                PendingIntent.FLAG_CANCEL_CURRENT);
         
         //Notify synchronization start
         Intent startIntent = new Intent();

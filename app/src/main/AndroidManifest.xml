@@ -126,7 +126,8 @@
         <activity
             android:name="es.ugr.swad.swadroid.modules.notifications.Notifications"
             android:label="@string/notificationsModuleLabel"
-            android:parentActivityName="es.ugr.swad.swadroid.SWADMain" >
+            android:parentActivityName="es.ugr.swad.swadroid.SWADMain"
+            android:exported="true">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="es.ugr.swad.swadroid.SWADMain" />

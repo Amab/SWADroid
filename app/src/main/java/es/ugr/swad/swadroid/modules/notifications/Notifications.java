@@ -39,7 +39,6 @@ import android.widget.AbsListView;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,7 +54,6 @@ import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADroidTracker;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.AlertNotificationFactory;
-import es.ugr.swad.swadroid.gui.SwipeListViewTouchListener;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.modules.Login;
@@ -493,10 +491,17 @@ public class Notifications extends Module implements
 	@Override
 	protected void postConnect() {
 		Notification notif;
-		PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(),
-				0, 
-				new Intent(this, Notifications.class), 
-				Intent.FLAG_ACTIVITY_NEW_TASK);
+		Intent notificationIntent = new Intent(this, Notifications.class);
+		PendingIntent pendingIntent;
+
+        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        //single top to avoid creating many activity stacks queue
+        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+        pendingIntent = PendingIntent.getActivity(getApplicationContext(),
+                0,
+                notificationIntent,
+                PendingIntent.FLAG_CANCEL_CURRENT);
 
 		if (!SyncUtils.isSyncAutomatically(getApplicationContext())) {
 			if (notifCount > 0) {
