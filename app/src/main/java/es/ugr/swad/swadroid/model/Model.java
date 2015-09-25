@@ -87,14 +87,4 @@ public abstract class Model implements KvmSerializable {
     public String toString() {
         return "Model [id=" + id + "]";
     }
-
-    @Override
-    public String getInnerText() {
-        return null;
-    }
-
-    @Override
-    public void setInnerText(String s) {
-
-    }
 }

@@ -11,6 +11,6 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
-        maven { url 'http://ksoap2-android.googlecode.com/svn/m2-repo' }
+        maven { url 'https://oss.sonatype.org/content/repositories/ksoap2-android-releases' }
     }
 }
