@@ -9,7 +9,9 @@
         android:id="@+id/notice_body_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
         android:hint="@string/notice_body_title" >
     </EditText>
+
 
 </LinearLayout>
