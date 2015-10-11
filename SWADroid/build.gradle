@@ -1,0 +1,62 @@
+apply plugin: 'com.android.application'
+
+ext {
+    git = org.ajoberstar.grgit.Grgit.open()
+    gitVersionCode = git.tag.list().size()
+    gitVersionName = "${git.describe()}"
+}
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.1"
+    defaultConfig {
+        applicationId "es.ugr.swad.swadroid"
+        versionCode gitVersionCode
+        versionName gitVersionName
+
+        minSdkVersion 9
+        targetSdkVersion 23
+
+        android.applicationVariants.all { variant ->
+            def appName
+            //Check if an applicationName property is supplied; if not use the name of the parent project.
+            if (project.hasProperty("applicationName")) {
+                appName = applicationName
+            } else {
+                appName = parent.name
+            }
+
+            variant.outputs.each { output ->
+                def newApkName
+                //If there's no ZipAlign task it means that our artifact will be unaligned and we need to mark it as such.
+                if (output.zipAlign) {
+                    newApkName = "${appName}-${output.baseName}-${variant.versionName}.apk"
+                } else {
+                    newApkName = "${appName}-${output.baseName}-${variant.versionName}-unaligned.apk"
+                }
+                output.outputFile = new File(output.outputFile.parent, newApkName)
+            }
+        }
+
+        testApplicationId "es.ugr.swad.swadroid.test"
+        testInstrumentationRunner "android.test.InstrumentationTestRunner"
+
+
+    }
+    buildTypes {
+        debug {
+            versionNameSuffix '-DEBUG'
+        }
+    }
+}
+
+dependencies {
+    compile 'com.android.support:support-v4:latest.release'
+    compile 'com.android.support:appcompat-v7:latest.release'
+    compile 'com.google.android.gms:play-services:latest.release'
+    compile 'com.google.code.gson:gson:latest.release'
+    compile 'com.google.code.ksoap2-android:ksoap2-android:latest.release'
+    compile 'commons-io:commons-io:latest.release'
+    compile 'com.nostra13.universalimageloader:universal-image-loader:latest.release'
+    compile 'com.google.zxing:core:2.1'
+}
