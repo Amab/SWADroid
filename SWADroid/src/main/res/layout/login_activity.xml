@@ -83,13 +83,25 @@
                 android:layout_below="@id/password"
                 android:layout_alignTop="@+id/serverTextView" />
 
+            <EditText
+                android:id="@+id/serverEditText"
+                android:hint="@string/prompt_server"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/serverSpinner"
+                android:layout_alignBottom="@+id/serverSpinner"
+                android:layout_alignLeft="@+id/serverSpinner"
+                android:layout_alignStart="@+id/serverSpinner"
+                android:visibility="gone"
+                android:inputType="textUri" />
+
             <Button
                 android:id="@+id/sign_in_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                android:layout_below="@id/serverTextView"
+                android:layout_below="@id/serverEditText"
                 android:layout_marginTop="16dip"
                 android:paddingLeft="32dip"
                 android:paddingRight="32dip"
@@ -101,8 +113,8 @@
                 android:id="@+id/create_account"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/serverTextView"
-                android:layout_alignStart="@id/serverTextView"
+                android:layout_alignLeft="@id/serverEditText"
+                android:layout_alignStart="@id/serverEditText"
                 android:layout_toLeftOf="@id/sign_in_button"
                 android:layout_toStartOf="@id/sign_in_button"
                 android:text="@string/createAccountModuleLabel"
