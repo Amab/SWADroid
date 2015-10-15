@@ -501,7 +501,7 @@ public class Notifications extends Module implements
         pendingIntent = PendingIntent.getActivity(getApplicationContext(),
                 0,
                 notificationIntent,
-                PendingIntent.FLAG_CANCEL_CURRENT);
+				PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
 
 		if (!SyncUtils.isSyncAutomatically(getApplicationContext())) {
 			if (notifCount > 0) {
