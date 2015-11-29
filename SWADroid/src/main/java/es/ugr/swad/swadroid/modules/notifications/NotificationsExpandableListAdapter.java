@@ -151,12 +151,12 @@ public class NotificationsExpandableListAdapter extends
             } else if (type.equals("sharedFile")) {
                 type = activity.getString(R.string.sharedFile);
                 notificationIcon.setImageResource(R.drawable.file);
-            } else if (type.equals("enrollment")) {
-                type = activity.getString(R.string.enrollment);
-                notificationIcon.setImageResource(R.drawable.enrollment);
             } else if (type.equals("enrollmentRequest")) {
                 type = activity.getString(R.string.enrollmentRequest);
                 notificationIcon.setImageResource(R.drawable.enrollment_request);
+            } else if (type.startsWith("enrollment")) {
+                type = activity.getString(R.string.enrollment);
+                notificationIcon.setImageResource(R.drawable.enrollment);
             } else if (type.equals("documentFile")) {
                 type = activity.getString(R.string.survey);
                 notificationIcon.setImageResource(R.drawable.survey);
