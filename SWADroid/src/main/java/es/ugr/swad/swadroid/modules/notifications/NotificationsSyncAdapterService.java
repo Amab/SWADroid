@@ -365,16 +365,20 @@ public class NotificationsSyncAdapterService extends Service {
                 Integer status = Integer.valueOf(pii.getProperty("status").toString());
                 String content = pii.getProperty("content").toString();
                 boolean notifReadSWAD = (status >= 4);
-                
-                SWADNotification n = new SWADNotification(notifCode, eventCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, userPhoto, location, summary, status, content, notifReadSWAD, notifReadSWAD);
-                dbHelper.insertNotification(n);
-                
-                //Count unread notifications only
-                if(!notifReadSWAD) {
-                	notifCount++;
-                }
+                boolean notifCancelled = (status == 8);
 
-                //Log.d(TAG, n.toString());
+                // Add not cancelled notifications only
+                if(!notifCancelled) {
+                    SWADNotification n = new SWADNotification(notifCode, eventCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, userPhoto, location, summary, status, content, notifReadSWAD, notifReadSWAD);
+                    dbHelper.insertNotification(n);
+
+                    //Count unread notifications only
+                    if (!notifReadSWAD) {
+                        notifCount++;
+                    }
+
+                    //Log.d(TAG, n.toString());
+                }
             }
 
             //Request finalized without errors
