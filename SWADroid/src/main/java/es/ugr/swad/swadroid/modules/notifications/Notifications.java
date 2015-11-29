@@ -440,21 +440,25 @@ public class Notifications extends Module implements
 							.toString());
 					String content = pii.getProperty("content").toString();
 					boolean notifReadSWAD = (status >= 4);
+					boolean notifCancelled = (status == 8);
 
-					SWADNotification n = new SWADNotification(notifCode,
-							eventCode, eventType, eventTime, userSurname1,
-							userSurname2, userFirstName, userPhoto, location,
-							summary, status, content, notifReadSWAD,
-							notifReadSWAD);
-					dbHelper.insertNotification(n);
+					// Add not cancelled notifications only
+					if(!notifCancelled) {
+						SWADNotification n = new SWADNotification(notifCode,
+								eventCode, eventType, eventTime, userSurname1,
+								userSurname2, userFirstName, userPhoto, location,
+								summary, status, content, notifReadSWAD,
+								notifReadSWAD);
+						dbHelper.insertNotification(n);
 
-					// Count unread notifications only
-					if (!notifReadSWAD) {
-						notifCount++;
+						// Count unread notifications only
+						if (!notifReadSWAD) {
+							notifCount++;
+						}
+
+						if (isDebuggable)
+							Log.d(TAG, n.toString());
 					}
-
-					if (isDebuggable)
-						Log.d(TAG, n.toString());
 				}
 
 				// Request finalized without errors
@@ -615,21 +619,6 @@ public class Notifications extends Module implements
 			return super.onOptionsItemSelected(item);
 		}
 	}
-
-    private void swipeItem(int position) {
-        int notSeenChildrenCount = adapter.getChildrenCount(NOT_SEEN_GROUP_ID);
-        long childId;
-
-        if(position <= notSeenChildrenCount) {
-            childId = adapter.getChildId(NOT_SEEN_GROUP_ID, position - 1);
-
-            //Set notification as seen locally
-            dbHelper.updateNotification(childId, "seenLocal", Utils.parseBoolString(true));
-            sendReadedNotifications();
-
-            refreshScreen();
-        }
-    }
 
 	/*
 	 * @Override public void setContentView(int layoutResID) { View v =
