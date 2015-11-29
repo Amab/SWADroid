@@ -72,18 +72,6 @@ public class Utils {
         //boolean connAvailable = false;
         ConnectivityManager cm = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        //Survey all networks (wifi, gprs...)
-        /*NetworkInfo[] networks = cm.getAllNetworkInfo();
-
-        for (NetworkInfo network : networks) {
-            //If any of them has a connection available, put boolean to true
-            if (network.isConnected()) {
-                connAvailable = true;
-            }
-        }
-        
-        return connAvailable;*/
-
         //If boolean remains false there is no connection available
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null &&
@@ -162,19 +150,6 @@ public class Utils {
 	    Matcher matcher = pattern.matcher(dni);
 	
 	    return matcher.matches();
-	    /*if (matcher.matches())
-	        return checkDniLetter(dni);
-		return false;*/
-	}
-
-	public static boolean checkDniLetter(String n) {
-	    String number = n.substring(0, n.length() - 1);
-	    String letter = n.substring(n.length() - 1, n.length());
-	
-	    int code = (Integer.valueOf(number)) % 23;
-	    String[] abc = {"T", "R", "W", "A", "G", "M", "Y", "F", "P", "D", "X", "B", "N", "J", "Z", "S", "Q", "V", "H", "L", "C", "K", "E", "T"};
-	
-	    return abc[code].compareToIgnoreCase(letter) == 0;
 	}
 
 	public static boolean isValidNickname(String nickname) {
@@ -209,22 +184,6 @@ public class Utils {
     	}
     	
     	return seenNotifCodes;
-    }
-
-	/**
-     * Generates the stars sequence to be showed on password field
-     *
-     * @param size Length of the stars sequence
-     * @return Stars as a string concatenation of the specified length
-     */
-    public static String getStarsSequence(int size) {
-        String stars = "";
-
-        for (int i = 0; i < size; i++) {
-            stars += "*";
-        }
-
-        return stars;
     }
     
     public static String unAccent(String s) {

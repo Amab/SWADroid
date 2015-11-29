@@ -47,7 +47,8 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/nickName"
                 android:maxLines="1"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:inputType="textEmailAddress" />
 
             <EditText
                 android:id="@+id/email"
@@ -93,19 +94,30 @@
                 android:layout_below="@id/password"
                 android:layout_alignTop="@+id/serverTextView" />
 
+            <EditText
+                android:id="@+id/serverEditText"
+                android:hint="@string/prompt_server"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/serverSpinner"
+                android:layout_alignLeft="@+id/serverSpinner"
+                android:layout_alignStart="@+id/serverSpinner"
+                android:visibility="gone"
+                android:inputType="textUri" />
+
             <Button
                 android:id="@+id/create_account_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                android:layout_below="@id/serverTextView"
-                android:layout_marginTop="16dip"
+                android:layout_below="@id/serverEditText"
                 android:paddingLeft="32dip"
                 android:paddingRight="32dip"
                 android:text="@string/createAccountModuleLabel"
                 android:textColor="@color/white"
-                android:background="@color/button_background_blue" />" />
+                android:background="@color/button_background_blue"
+                android:layout_marginTop="8dip" />
 
         </RelativeLayout>
     </ScrollView>

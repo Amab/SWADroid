@@ -26,6 +26,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -64,17 +65,16 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
     private static List<String> serversList;
 
     private boolean mLoginError = false;
-    private boolean showServerDialog = true;
     // UI references for the login form.
     private EditText mDniView;
     private EditText mPasswordView;
+    private EditText mServerTextView;
     private Spinner mServerView;
     private View mLoginFormView;
     private View mLoginStatusView;
     private TextView mLoginStatusMessageView;
     private boolean mFromPreference = false;
     private ArrayAdapter<CharSequence> serverAdapter;
-    private AlertDialog serverDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +118,33 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
                     return true;
                 }
                 return false;
+            }
+        });
+
+        mServerTextView = (EditText) findViewById(R.id.serverEditText);
+        mServerTextView.setText(Preferences.getServer());
+        mServerTextView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            public void onFocusChange(View v, boolean hasFocus) {
+                String value = mServerTextView.getText().toString();
+
+                if (!hasFocus) {
+                    if(value.isEmpty()) {
+                        mServerTextView.setError(getString(R.string.noServer));
+                    } else {
+                        mServerTextView.setError(null);
+
+                        if(value.startsWith("http://")) {
+                            value = value.substring(7);
+                        } else if(value.startsWith("https://")) {
+                            value = value.substring(8);
+                        }
+
+                        setSelectedServer(value);
+                        Preferences.setServer(value);
+
+                        Log.i(TAG, "Server setted to " + Preferences.getServer());
+                    }
+                }
             }
         });
 
@@ -173,17 +200,23 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         // Reset errors.
         mDniView.setError(null);
         mPasswordView.setError(null);
+        mServerTextView.setError(null);
+
+        boolean cancel = false;
+        View focusView = null;
 
         // Store values at the time of the login attempt.
         DniValue = mDniView.getText().toString();
         passwordValue = mPasswordView.getText().toString();
-        serverValue = serverAdapter.getItem(0).toString();
+        serverValue = mServerView.getSelectedItem().toString();
+
+        if(getString(R.string.otherMsg).equals(serverValue)) {
+            serverValue = mServerTextView.getText().toString().replaceFirst("^(http://|https://)","");
+        }
+
         toastMsg =
                 serverValue.equals("swad.ugr.es") ? getString(R.string.error_password_summaryUGR)
                         : getString(R.string.error_invalid_password);
-
-        boolean cancel = false;
-        View focusView = null;
 
         // Check for a valid password.
         if (TextUtils.isEmpty(passwordValue)) {
@@ -212,6 +245,13 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         if (TextUtils.isEmpty(DniValue)) {
             mDniView.setError(getString(R.string.error_field_required));
             focusView = mDniView;
+            cancel = true;
+        }
+
+        // Check for a valid server.
+        if (TextUtils.isEmpty(serverValue)) {
+            mServerTextView.setError(getString(R.string.error_field_required));
+            focusView = mServerTextView;
             cancel = true;
         }
         
@@ -260,7 +300,6 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
                                    Toast.LENGTH_LONG).show();
                     break;
                 case Constants.CREATE_ACCOUNT_REQUEST_CODE:
-                    showServerDialog = false;
                     Toast.makeText(getApplicationContext(), R.string.create_account_success,
                             Toast.LENGTH_LONG).show();
                     break;
@@ -275,7 +314,6 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
                     Toast.makeText(this, R.string.lost_password_failure, Toast.LENGTH_LONG).show();
                     break;
                 case Constants.CREATE_ACCOUNT_REQUEST_CODE:
-                    showServerDialog = false;
                     break;
             }
         }
@@ -351,6 +389,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         user.setTextColor(Color.BLACK);
         user.setHintTextColor(Color.GRAY);
         user.setHint(getString(R.string.prompt_email));
+        user.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
 
         builder.setView(user)
                .setTitle(R.string.lost_password_dialog_title)
@@ -405,71 +444,19 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         if ("swad.ugr.es".equals(serverValue))
             mPasswordView.setError(getString(R.string.error_password_summaryUGR));
 
-        if(serverValue.contains(getString(R.string.otherMsg)) && showServerDialog) {
-            serverDialog = DialogFactory.createPositiveNegativeDialog(this,
-                    R.drawable.ic_launcher_swadroid ,
-                    R.layout.dialog_server,
-                    R.string.serverTitle_preferences ,
-                    -1,
-                    R.string.saveMsg,
-                    R.string.cancelMsg,
-                    true,
-                    null,
-                    null,
-                    null);
-
-            serverDialog.setOnShowListener(showListener);
-            serverDialog.show();
+        if(serverValue.contains(getString(R.string.otherMsg))) {
+            mServerTextView.setText(Preferences.getServer());
+            mServerTextView.setVisibility(View.VISIBLE);
         } else {
+            mServerTextView.setVisibility(View.GONE);
             Preferences.setServer(serverValue);
         }
-
-        showServerDialog = true;
 
         Log.i(TAG, "Server setted to " + Preferences.getServer());
     }
 
-    private final DialogInterface.OnShowListener showListener = new DialogInterface.OnShowListener() {
-        @Override
-        public void onShow(DialogInterface dialog) {
-            EditText bodyEditText = (EditText) serverDialog.findViewById(R.id.server_body_text);
-            Button b = serverDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-
-            b.setOnClickListener(positiveClickListener);
-            bodyEditText.setText(Preferences.getServer());
-        }
-    };
-
-    private final View.OnClickListener positiveClickListener = new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-            EditText bodyEditText = (EditText) serverDialog.findViewById(R.id.server_body_text);
-            String bodyValue = bodyEditText.getText().toString();
-
-            if(bodyValue.isEmpty()) {
-                bodyEditText.setError(getString(R.string.noServer));
-            } else {
-                if(bodyValue.startsWith("http://")) {
-                    bodyValue = bodyValue.substring(7);
-                } else if(bodyValue.startsWith("https://")) {
-                    bodyValue = bodyValue.substring(8);
-                }
-
-                setSelectedServer(bodyValue);
-                Preferences.setServer(bodyValue);
-
-                serverDialog.dismiss();
-
-                Log.i(TAG, "Server setted to " + Preferences.getServer());
-            }
-        }
-    };
-
     private void setSelectedServer(String server) {
         int serverPosition;
-
-        showServerDialog = false;
 
         if(serversList.contains(server)) {
             serverPosition = serverAdapter.getPosition(server);
@@ -478,7 +465,5 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         }
 
         mServerView.setSelection(serverPosition);
-
-        showServerDialog = true;
     }
 }
