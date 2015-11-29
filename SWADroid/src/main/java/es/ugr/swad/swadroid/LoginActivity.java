@@ -26,6 +26,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -201,21 +202,21 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         mPasswordView.setError(null);
         mServerTextView.setError(null);
 
+        boolean cancel = false;
+        View focusView = null;
+
         // Store values at the time of the login attempt.
         DniValue = mDniView.getText().toString();
         passwordValue = mPasswordView.getText().toString();
         serverValue = mServerView.getSelectedItem().toString();
 
         if(getString(R.string.otherMsg).equals(serverValue)) {
-            serverValue = mServerTextView.getText().toString();
+            serverValue = mServerTextView.getText().toString().replaceFirst("^(http://|https://)","");
         }
 
         toastMsg =
                 serverValue.equals("swad.ugr.es") ? getString(R.string.error_password_summaryUGR)
                         : getString(R.string.error_invalid_password);
-
-        boolean cancel = false;
-        View focusView = null;
 
         // Check for a valid password.
         if (TextUtils.isEmpty(passwordValue)) {
@@ -388,6 +389,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         user.setTextColor(Color.BLACK);
         user.setHintTextColor(Color.GRAY);
         user.setHint(getString(R.string.prompt_email));
+        user.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
 
         builder.setView(user)
                .setTitle(R.string.lost_password_dialog_title)
@@ -443,6 +445,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
             mPasswordView.setError(getString(R.string.error_password_summaryUGR));
 
         if(serverValue.contains(getString(R.string.otherMsg))) {
+            mServerTextView.setText(Preferences.getServer());
             mServerTextView.setVisibility(View.VISIBLE);
         } else {
             mServerTextView.setVisibility(View.GONE);

@@ -195,7 +195,7 @@ public class CreateAccountActivity extends AppCompatActivity implements AdapterV
         serverValue = mServerView.getSelectedItem().toString();
 
         if(getString(R.string.otherMsg).equals(serverValue)) {
-            serverValue = mServerTextView.getText().toString();
+            serverValue = mServerTextView.getText().toString().replaceFirst("^(http://|https://)","");
         }
 
         boolean cancel = false;

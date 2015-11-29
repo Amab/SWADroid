@@ -47,7 +47,8 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/prompt_email"
                 android:maxLines="1"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:inputType="textEmailAddress" />
 
             <EditText
                 android:id="@+id/password"
@@ -72,7 +73,14 @@
                 android:textSize="16sp"
                 android:layout_marginTop="8dip"
                 android:paddingTop="1dip"
-                android:layout_marginLeft="5dip" />
+                android:layout_marginLeft="5dip"
+                android:layout_alignParentStart="false"
+                android:layout_alignParentEnd="false"
+                android:layout_alignParentLeft="false"
+                android:layout_alignParentTop="false"
+                android:layout_alignParentBottom="false"
+                android:layout_alignParentRight="false"
+                android:layout_alignWithParentIfMissing="false" />
 
             <Spinner
                 android:id="@+id/serverSpinner"
@@ -89,9 +97,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/serverSpinner"
-                android:layout_alignBottom="@+id/serverSpinner"
                 android:layout_alignLeft="@+id/serverSpinner"
-                android:layout_alignStart="@+id/serverSpinner"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:visibility="gone"
                 android:inputType="textUri" />
 
@@ -102,12 +110,12 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:layout_below="@id/serverEditText"
-                android:layout_marginTop="16dip"
                 android:paddingLeft="32dip"
                 android:paddingRight="32dip"
                 android:text="@string/action_sign_in_register"
                 android:textColor="@color/white"
-                android:background="@color/button_background_blue" />
+                android:background="@color/button_background_blue"
+                android:layout_marginTop="8dip" />
 
             <Button
                 android:id="@+id/create_account"
@@ -120,7 +128,9 @@
                 android:text="@string/createAccountModuleLabel"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_alignTop="@+id/sign_in_button" />
+                android:layout_alignTop="@+id/sign_in_button"
+                android:background="@color/gray_goose"
+                android:layout_marginRight="8dip" />
 
             <Button
                 android:id="@+id/lost_password"
@@ -130,8 +140,10 @@
                 android:layout_below="@id/create_account"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
+                android:paddingLeft="32dip"
                 android:paddingRight="32dip"
-                android:layout_marginTop="8dip" />
+                android:layout_marginTop="8dip"
+                android:background="@color/gray_goose" />
         </RelativeLayout>
     </ScrollView>
 
