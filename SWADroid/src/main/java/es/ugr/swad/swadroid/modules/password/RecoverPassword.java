@@ -17,7 +17,7 @@
  *  along with SWADroid.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package es.ugr.swad.swadroid.modules;
+package es.ugr.swad.swadroid.modules.password;
 
 import android.os.Bundle;
 
@@ -26,11 +26,13 @@ import org.ksoap2.serialization.SoapObject;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
+import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
  * Recover password module in case user does not remember it
+ * It makes use of the web service getNewPassword (see {@linktourl https://openswad.org/ws/#getNewPassword})
  * 
  * @author Alejandro Alcalde <algui91@gmail.com>
  */

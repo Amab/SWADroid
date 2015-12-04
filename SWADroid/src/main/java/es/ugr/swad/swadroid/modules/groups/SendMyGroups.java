@@ -33,13 +33,13 @@ import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.model.Model;
-import es.ugr.swad.swadroid.modules.Login;
+import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
  * Module to enroll into groups.
- * It makes use of the web service sendGroups (see http://swad.ugr.es/ws/#sendMessage)
+ * It makes use of the web service sendMyGroups (see https://openswad.org/ws/#sendMyGroups)
  * It needs as extra data:
  * - (long) courseCode course code . It indicates the course to which the groups belong
  * - (string) myGroups: String that contains group codes separated with comma

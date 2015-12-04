@@ -44,9 +44,10 @@ import java.util.concurrent.TimeoutException;
 import javax.net.ssl.SSLException;
 
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.Preferences;
+import es.ugr.swad.swadroid.preferences.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
+import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.IWebserviceClient;
 import es.ugr.swad.swadroid.webservices.SOAPClient;

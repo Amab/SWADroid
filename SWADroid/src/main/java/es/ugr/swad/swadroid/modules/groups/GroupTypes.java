@@ -1,4 +1,4 @@
-package es.ugr.swad.swadroid.modules;
+package es.ugr.swad.swadroid.modules.groups;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -13,15 +13,19 @@ import java.util.Vector;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.SWADroidTracker;
+import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.model.GroupType;
 import es.ugr.swad.swadroid.model.Model;
+import es.ugr.swad.swadroid.modules.courses.Courses;
+import es.ugr.swad.swadroid.modules.Module;
+import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
  * Group type module to get the group types of a given course
  * and stores them in the database
+ * It makes use of the web service getGroupTypes (see {@linktourl https://openswad.org/ws/#getGroupTypes})
  *
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */

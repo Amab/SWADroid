@@ -1,4 +1,4 @@
-package es.ugr.swad.swadroid.modules;
+package es.ugr.swad.swadroid.modules.qr;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,8 +12,9 @@ import com.google.zxing.WriterException;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.SWADroidTracker;
+import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.gui.MenuActivity;
+import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.utils.QR;
 
 public class GenerateQR extends MenuActivity {

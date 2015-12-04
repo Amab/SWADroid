@@ -28,7 +28,7 @@ import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.KeepAliveHttpsTransportSE;
 
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.Preferences;
+import es.ugr.swad.swadroid.preferences.Preferences;
 
 /**
  * SOAP client for SWAD webservices

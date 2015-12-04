@@ -1,5 +1,5 @@
 
-package es.ugr.swad.swadroid;
+package es.ugr.swad.swadroid.modules.password;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -7,6 +7,8 @@ import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.EditText;
+
+import es.ugr.swad.swadroid.R;
 
 public class PasswordDialogPreference extends DialogPreference {
 

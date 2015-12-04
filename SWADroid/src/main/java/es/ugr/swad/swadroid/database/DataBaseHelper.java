@@ -37,8 +37,8 @@ import java.util.Collection;
 import java.util.List;
 
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.Preferences;
-import es.ugr.swad.swadroid.SWADroidTracker;
+import es.ugr.swad.swadroid.preferences.Preferences;
+import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.Event;
 import es.ugr.swad.swadroid.model.Group;

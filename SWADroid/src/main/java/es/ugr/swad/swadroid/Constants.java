@@ -38,9 +38,17 @@ public class Constants {
 	 */
 	public static final String SWAD_APP_KEY = Config.SWAD_APP_KEY;
     /**
+     * URL of SWAD UGR Server
+     */
+    public static final String SWAD_UGR_SERVER = "swad.ugr.es";
+    /**
+     * URL of OpenSWAD Server
+     */
+    public static final String OPENSWAD_SERVER = "openswad.org";
+    /**
      * Server URL
      */
-    public static final String DEFAULT_SERVER = "swad.ugr.es";
+    public static final String DEFAULT_SERVER = SWAD_UGR_SERVER;
     /**
      * Account type
      */

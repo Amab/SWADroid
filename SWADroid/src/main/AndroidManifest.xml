@@ -53,15 +53,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="es.ugr.swad.swadroid.PreferencesActivity"
+            android:name=".preferences.PreferencesActivity"
             android:label="@string/set_preferences" >
         </activity>
         <activity
-            android:name="es.ugr.swad.swadroid.modules.RecoverPassword"
+            android:name=".modules.password.RecoverPassword"
             android:theme="@style/Theme.AppCompat.Translucent" >
         </activity>
         <activity
-            android:name="es.ugr.swad.swadroid.modules.Login"
+            android:name=".modules.login.Login"
             android:label="@string/loginModuleLabel"
             android:theme="@style/Theme.AppCompat.Translucent" >
         </activity>
@@ -101,7 +101,7 @@
             android:theme="@style/Theme.AppCompat.Translucent" >
         </activity>
         <activity
-            android:name="es.ugr.swad.swadroid.modules.Groups"
+            android:name=".modules.groups.Groups"
             android:label="@string/rollcallModuleLabel"
             android:theme="@style/Theme.AppCompat.Translucent" >
         </activity>
@@ -117,7 +117,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="es.ugr.swad.swadroid.modules.Courses"
+            android:name=".modules.courses.Courses"
             android:label="@string/coursesModuleLabel"
             android:theme="@style/Theme.AppCompat.Translucent" >
         </activity>
@@ -191,7 +191,7 @@
             android:label="@string/messagesModuleLabel">
         </activity>
         <activity
-            android:name="es.ugr.swad.swadroid.modules.Notices"
+            android:name=".modules.notices.Notices"
             android:label="@string/noticesModuleLabel"
             android:theme="@style/Theme.AppCompat.Translucent"
             android:parentActivityName="es.ugr.swad.swadroid.SWADMain" >
@@ -231,7 +231,7 @@
                 android:value="es.ugr.swad.swadroid.SWADMain" />
         </activity>
         <activity
-            android:name="es.ugr.swad.swadroid.modules.GroupTypes"
+            android:name=".modules.groups.GroupTypes"
             android:label="@string/groupTypesModuleLabel"
             android:theme="@style/Theme.AppCompat.Translucent" >
         </activity>
@@ -241,7 +241,7 @@
             android:theme="@style/Theme.AppCompat.Translucent" >
         </activity>
         <activity
-            android:name="es.ugr.swad.swadroid.modules.GenerateQR"
+            android:name=".modules.qr.GenerateQR"
             android:theme="@style/Theme.AppCompat.Light"
             android:parentActivityName="es.ugr.swad.swadroid.SWADMain" >
             <meta-data
@@ -278,7 +278,7 @@
             android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.AppCompat.Light"
             android:label="@string/createAccountModuleLabel"
-            android:parentActivityName="es.ugr.swad.swadroid.LoginActivity" >
+            android:parentActivityName=".modules.login.LoginActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="es.ugr.swad.swadroid.SWADMain" />
@@ -294,7 +294,7 @@
             android:theme="@style/Theme.AppCompat.Translucent" >
         </activity>
         <activity
-            android:name="es.ugr.swad.swadroid.LoginActivity"
+            android:name=".modules.login.LoginActivity"
             android:theme="@style/Theme.AppCompat.Light"
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize|stateVisible" >

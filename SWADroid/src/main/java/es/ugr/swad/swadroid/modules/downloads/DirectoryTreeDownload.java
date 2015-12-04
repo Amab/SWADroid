@@ -26,14 +26,15 @@ import org.ksoap2.serialization.SoapObject;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
-import es.ugr.swad.swadroid.modules.Courses;
-import es.ugr.swad.swadroid.modules.Login;
+import es.ugr.swad.swadroid.modules.courses.Courses;
+import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
  * DirectoryTreeDownload  gets directory tree of files of general documents of a course/group
  * or documents from shared area of a course/group
+ * It makes use of the web service getDirectoryTree (see {@linktourl https://openswad.org/ws/#getDirectoryTree})
  *
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */
@@ -41,12 +42,6 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
 public class DirectoryTreeDownload extends Module {
     private int treeCode; //documents of course or common zone of course
     private int group = 0; // documents of the course
-
-    //TODO esta clase tiene q cambiar
-    @SuppressWarnings("unused")
-	private class DirectoryTree {
-        String tree;
-    }
 
     @Override
     protected void requestService() throws Exception {

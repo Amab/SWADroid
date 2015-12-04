@@ -17,7 +17,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package es.ugr.swad.swadroid;
+package es.ugr.swad.swadroid.preferences;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -41,9 +41,13 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.gui.widget.SeekBarDialogPreference;
-import es.ugr.swad.swadroid.modules.Login;
+import es.ugr.swad.swadroid.modules.login.Login;
+import es.ugr.swad.swadroid.modules.login.LoginActivity;
 import es.ugr.swad.swadroid.sync.SyncUtils;
 import es.ugr.swad.swadroid.utils.Crypto;
 import es.ugr.swad.swadroid.utils.Utils;

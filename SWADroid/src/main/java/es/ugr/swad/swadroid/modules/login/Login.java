@@ -17,7 +17,7 @@
  *  along with SWADroid.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package es.ugr.swad.swadroid.modules;
+package es.ugr.swad.swadroid.modules.login;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -26,14 +26,16 @@ import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.Preferences;
+import es.ugr.swad.swadroid.preferences.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
+import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
  * Login module for connect to SWAD.
+ * It makes use of the web service loginByUserPasswordKey (see {@linktourl https://openswad.org/ws/#loginByUserPasswordKey})
  *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>

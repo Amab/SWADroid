@@ -19,7 +19,7 @@
  *
  */
 
-package es.ugr.swad.swadroid;
+package es.ugr.swad.swadroid.analytics;
 
 import android.content.Context;
 import android.util.Log;
@@ -31,6 +31,9 @@ import com.google.android.gms.analytics.StandardExceptionParser;
 import com.google.android.gms.analytics.Tracker;
 
 import java.util.HashMap;
+
+import es.ugr.swad.swadroid.Config;
+import es.ugr.swad.swadroid.Constants;
 
 /**
  * Tracker for Google Play

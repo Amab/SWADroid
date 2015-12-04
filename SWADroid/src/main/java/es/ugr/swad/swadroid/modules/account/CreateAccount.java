@@ -32,6 +32,7 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
  * Module for create a new account
+ * It makes use of the web service createAccount (see {@linktourl https://openswad.org/ws/#createAccount})
  *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */

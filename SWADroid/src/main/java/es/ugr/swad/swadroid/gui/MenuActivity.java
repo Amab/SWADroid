@@ -33,8 +33,8 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.Preferences;
-import es.ugr.swad.swadroid.PreferencesActivity;
+import es.ugr.swad.swadroid.preferences.Preferences;
+import es.ugr.swad.swadroid.preferences.PreferencesActivity;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 

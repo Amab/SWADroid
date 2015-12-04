@@ -51,15 +51,15 @@ import java.util.concurrent.TimeoutException;
 import javax.net.ssl.SSLException;
 
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.Preferences;
+import es.ugr.swad.swadroid.preferences.Preferences;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.SWADroidTracker;
+import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.AlertNotificationFactory;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.model.User;
-import es.ugr.swad.swadroid.modules.Login;
+import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.IWebserviceClient;
@@ -67,6 +67,7 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
  * Service for notifications sync adapter.
+ * It makes use of the web service getNotifications (see {@linktourl https://openswad.org/ws/#getNotifications})
  *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */

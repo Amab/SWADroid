@@ -29,15 +29,15 @@ import java.util.Vector;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.SWADroidTracker;
+import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.model.Group;
-import es.ugr.swad.swadroid.modules.Login;
+import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
  * Module to get information of a file located in SWAD
- * It makes use of the web service getFile (see {@linktourl http://swad.ugr.es/ws/#getFile})
+ * It makes use of the web service getFile (see {@linktourl https://openswad.org/ws/#getFile})
  * 
  * @param fileCode It indicates the file which information is requested
  * @return link temporal URL to download the file

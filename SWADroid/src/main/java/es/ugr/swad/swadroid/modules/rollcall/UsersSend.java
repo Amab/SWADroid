@@ -30,13 +30,14 @@ import org.ksoap2.serialization.SoapObject;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
-import es.ugr.swad.swadroid.modules.Login;
+import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
  * Rollcall users send module.
+ * It makes use of the web service sendAttendanceUsers (see {@linktourl https://openswad.org/ws/#sendAttendanceUsers})
  *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */

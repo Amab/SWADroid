@@ -25,14 +25,15 @@ import org.ksoap2.serialization.SoapPrimitive;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.SWADroidTracker;
-import es.ugr.swad.swadroid.modules.Login;
+import es.ugr.swad.swadroid.analytics.SWADroidTracker;
+import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
  * Notifications module for mark as read user's notifications
+ * It makes use of the web service markNotificationsAsRead (see {@linktourl https://openswad.org/ws/#markNotificationsAsRead})
  *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */

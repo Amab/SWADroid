@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with SWADroid.  If not, see <http://www.gnu.org/licenses/>.
  */
-package es.ugr.swad.swadroid.modules;
+package es.ugr.swad.swadroid.modules.groups;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -31,15 +31,18 @@ import java.util.Vector;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.SWADroidTracker;
+import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.model.Model;
+import es.ugr.swad.swadroid.modules.Module;
+import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
  * Groups module gets user's groups inside the current course
  * and stores them in the database.
+ * It makes use of the web service getGroups (see {@linktourl https://openswad.org/ws/#getGroups})
  * It needs as extra data:
  * - (long) courseCode course code . It indicates the course to which the groups belong
  *

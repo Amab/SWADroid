@@ -10,9 +10,9 @@
             android:title="Account Settings"
             android:summary="Sync frequency, notifications, etc.">
             <intent
-                android:action="es.ugr.swad.swadroid.Preferences.ACCOUNT_SETUP"
+                android:action="es.ugr.swad.swadroid.preferences.Preferences.ACCOUNT_SETUP"
                 android:targetPackage="es.ugr.swad.swadroid"
-                android:targetClass="es.ugr.swad.swadroid.Preferences" />
+                android:targetClass="es.ugr.swad.swadroid.preferences.Preferences" />
         </PreferenceScreen>
     -->
 

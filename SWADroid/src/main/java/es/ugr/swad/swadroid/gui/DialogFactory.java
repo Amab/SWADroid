@@ -22,7 +22,7 @@ import org.apache.commons.io.IOUtils;
 import java.io.InputStream;
 
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.SWADroidTracker;
+import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 
 /**
  * Class for create dialogs.

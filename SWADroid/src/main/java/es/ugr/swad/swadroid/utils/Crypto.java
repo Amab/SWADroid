@@ -34,7 +34,7 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
 
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.SWADroidTracker;
+import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 
 /**
  * Cryptographic class for encryption purposes.

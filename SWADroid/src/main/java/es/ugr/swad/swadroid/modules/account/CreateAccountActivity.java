@@ -42,9 +42,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.Preferences;
+import es.ugr.swad.swadroid.preferences.Preferences;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.SWADroidTracker;
+import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.utils.Utils;
 
@@ -79,6 +79,10 @@ public class CreateAccountActivity extends AppCompatActivity implements AdapterV
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.create_account_activity);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         serversList = Arrays.asList(getResources().getStringArray(R.array.servers_array));
 
@@ -128,7 +132,7 @@ public class CreateAccountActivity extends AppCompatActivity implements AdapterV
         mServerView.setAdapter(serverAdapter);
         mServerView.setOnItemSelectedListener(this);
 
-        if (serverAdapter.getItem(0).equals("swad.ugr.es"))
+        if (serverAdapter.getItem(0).equals(Constants.SWAD_UGR_SERVER))
             mPasswordView.setError(getString(R.string.error_password_summaryUGR));
 
         mServerTextView = (EditText) findViewById(R.id.serverEditText);
@@ -373,7 +377,7 @@ public class CreateAccountActivity extends AppCompatActivity implements AdapterV
 
         //Reset password error
         mPasswordView.setError(null);
-        if ("swad.ugr.es".equals(serverValue))
+        if (Constants.SWAD_UGR_SERVER.equals(serverValue))
             mPasswordView.setError(getString(R.string.error_password_summaryUGR));
 
         if(serverValue.contains(getString(R.string.otherMsg))) {

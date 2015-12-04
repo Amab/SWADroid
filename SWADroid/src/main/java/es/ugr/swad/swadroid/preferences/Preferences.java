@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with SWADroid.  If not, see <http://www.gnu.org/licenses/>.
  */
-package es.ugr.swad.swadroid;
+package es.ugr.swad.swadroid.preferences;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -28,8 +28,10 @@ import android.util.Log;
 
 import java.security.NoSuchAlgorithmException;
 
+import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
-import es.ugr.swad.swadroid.modules.Login;
+import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.sync.SyncUtils;
 import es.ugr.swad.swadroid.utils.Crypto;
 

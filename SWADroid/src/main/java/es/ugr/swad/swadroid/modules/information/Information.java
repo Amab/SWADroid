@@ -14,14 +14,18 @@ import org.ksoap2.serialization.SoapObject;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.SWADroidTracker;
+import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.gui.WebViewFactory;
 import es.ugr.swad.swadroid.model.User;
-import es.ugr.swad.swadroid.modules.Courses;
-import es.ugr.swad.swadroid.modules.Login;
+import es.ugr.swad.swadroid.modules.courses.Courses;
+import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
-
+/**
+ * Module for create a new account
+ * It makes use of the web service createAccount (see {@linktourl https://openswad.org/ws/#createAccount})
+ *
+ */
 public class Information extends Module {
 
 	public static final String TAG = Constants.APP_TAG + " Information";

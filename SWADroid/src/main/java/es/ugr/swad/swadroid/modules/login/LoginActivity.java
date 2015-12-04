@@ -13,7 +13,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package es.ugr.swad.swadroid;
+package es.ugr.swad.swadroid.modules.login;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -44,9 +44,12 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.List;
 
+import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.preferences.Preferences;
+import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.gui.DialogFactory;
-import es.ugr.swad.swadroid.modules.Login;
-import es.ugr.swad.swadroid.modules.RecoverPassword;
+import es.ugr.swad.swadroid.modules.password.RecoverPassword;
 import es.ugr.swad.swadroid.modules.account.CreateAccountActivity;
 import es.ugr.swad.swadroid.utils.Crypto;
 import es.ugr.swad.swadroid.utils.Utils;
@@ -158,7 +161,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         mServerView.setAdapter(serverAdapter);
         mServerView.setOnItemSelectedListener(this);
 
-        if (serverAdapter.getItem(0).equals("swad.ugr.es"))
+        if (serverAdapter.getItem(0).equals(Constants.SWAD_UGR_SERVER))
             mPasswordView.setError(getString(R.string.error_password_summaryUGR));
 
         mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
@@ -215,7 +218,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         }
 
         toastMsg =
-                serverValue.equals("swad.ugr.es") ? getString(R.string.error_password_summaryUGR)
+                serverValue.equals(Constants.SWAD_UGR_SERVER) ? getString(R.string.error_password_summaryUGR)
                         : getString(R.string.error_invalid_password);
 
         // Check for a valid password.
@@ -441,7 +444,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
 
         //Reset password error
         mPasswordView.setError(null);
-        if ("swad.ugr.es".equals(serverValue))
+        if (Constants.SWAD_UGR_SERVER.equals(serverValue))
             mPasswordView.setError(getString(R.string.error_password_summaryUGR));
 
         if(serverValue.contains(getString(R.string.otherMsg))) {
