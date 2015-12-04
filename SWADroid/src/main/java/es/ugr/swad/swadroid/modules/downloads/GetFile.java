@@ -37,7 +37,7 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
  * Module to get information of a file located in SWAD
- * It makes use of the web service getFile (see {@linktourl https://openswad.org/ws/#getFile})
+ * @see <a href="https://openswad.org/ws/#getFile">getFile</a>
  * 
  * @param fileCode It indicates the file which information is requested
  * @return link temporal URL to download the file

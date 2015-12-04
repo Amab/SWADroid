@@ -33,7 +33,7 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
  * Notifications module for mark as read user's notifications
- * It makes use of the web service markNotificationsAsRead (see {@linktourl https://openswad.org/ws/#markNotificationsAsRead})
+ * @see <a href="https://openswad.org/ws/#markNotificationsAsRead">markNotificationsAsRead</a>
  *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */

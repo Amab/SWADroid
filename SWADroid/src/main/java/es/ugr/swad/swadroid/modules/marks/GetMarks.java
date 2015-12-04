@@ -39,7 +39,7 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
  * Marks module for get user's marks
- * It makes use of the web service getMarks (see {@linktourl https://openswad.org/ws/#getMarks})
+ * @see <a href="https://openswad.org/ws/#getMarks">getMarks</a>
  *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */

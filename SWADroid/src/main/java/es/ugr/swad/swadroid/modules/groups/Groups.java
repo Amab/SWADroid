@@ -42,7 +42,7 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
 /**
  * Groups module gets user's groups inside the current course
  * and stores them in the database.
- * It makes use of the web service getGroups (see {@linktourl https://openswad.org/ws/#getGroups})
+ * @see <a href="https://openswad.org/ws/#getGroups">getGroups</a>
  * It needs as extra data:
  * - (long) courseCode course code . It indicates the course to which the groups belong
  *

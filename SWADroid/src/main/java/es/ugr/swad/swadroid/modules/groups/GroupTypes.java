@@ -25,7 +25,7 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
 /**
  * Group type module to get the group types of a given course
  * and stores them in the database
- * It makes use of the web service getGroupTypes (see {@linktourl https://openswad.org/ws/#getGroupTypes})
+ * @see <a href="https://openswad.org/ws/#getGroupTypes">getGroupTypes</a>
  *
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */

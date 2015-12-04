@@ -41,7 +41,7 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
  * Rollcall users download module.
- * It makes use of the web service getAttendanceUsers (see {@linktourl https://openswad.org/ws/#getAttendanceUsers})
+ * @see <a href="https://openswad.org/ws/#getAttendanceUsers">getAttendanceUsers</a>
  *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */

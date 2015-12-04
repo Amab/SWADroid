@@ -42,7 +42,7 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
  * Courses module for get user's courses
- * It makes use of the web service getCourses (see {@linktourl https://openswad.org/ws/#getCourses})
+ * @see <a href="https://openswad.org/ws/#getCourses">getCourses</a>
  *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>

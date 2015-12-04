@@ -34,7 +34,7 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
 /**
  * DirectoryTreeDownload  gets directory tree of files of general documents of a course/group
  * or documents from shared area of a course/group
- * It makes use of the web service getDirectoryTree (see {@linktourl https://openswad.org/ws/#getDirectoryTree})
+ * @see <a href="https://openswad.org/ws/#getDirectoryTree">getDirectoryTree</a>
  *
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */

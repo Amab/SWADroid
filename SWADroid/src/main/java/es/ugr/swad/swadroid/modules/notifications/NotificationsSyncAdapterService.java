@@ -67,7 +67,7 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
  * Service for notifications sync adapter.
- * It makes use of the web service getNotifications (see {@linktourl https://openswad.org/ws/#getNotifications})
+ * @see <a href="https://openswad.org/ws/#getNotifications">getNotifications</a>
  *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */

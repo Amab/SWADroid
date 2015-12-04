@@ -43,7 +43,7 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
  * Module for send messages.
- * It makes use of the web service sendNotice (see {@linktourl https://openswad.org/ws/#sendNotice})
+ * @see <a href="https://openswad.org/ws/#sendNotice">sendNotice</a>
  *
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>

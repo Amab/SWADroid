@@ -44,7 +44,7 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
  * Tests module for download and update questions
- * It makes use of the web service getTests (see {@linktourl https://openswad.org/ws/#getTests})
+ * @see <a href="https://openswad.org/ws/#getTests">getTests</a>
  *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>

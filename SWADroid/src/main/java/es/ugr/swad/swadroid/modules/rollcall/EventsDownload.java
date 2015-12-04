@@ -41,7 +41,7 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
  * Rollcall events download module.
- * It makes use of the web service getAttendanceEvents (see {@linktourl https://openswad.org/ws/#getAttendanceEvents})
+ * @see <a href="https://openswad.org/ws/#getAttendanceEvents">getAttendanceEvents</a>
  *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */

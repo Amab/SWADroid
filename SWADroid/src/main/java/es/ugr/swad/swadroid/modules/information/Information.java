@@ -22,8 +22,8 @@ import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 /**
- * Module for create a new account
- * It makes use of the web service createAccount (see {@linktourl https://openswad.org/ws/#createAccount})
+ * Module for get course info
+ * @see <a href="https://openswad.org/ws/#getCourseInfo">getCourseInfo</a>
  *
  */
 public class Information extends Module {

@@ -37,7 +37,7 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
  * Rollcall users send module.
- * It makes use of the web service sendAttendanceUsers (see {@linktourl https://openswad.org/ws/#sendAttendanceUsers})
+ * @see <a href="https://openswad.org/ws/#sendAttendanceUsers">sendAttendanceUsers</a>
  *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */

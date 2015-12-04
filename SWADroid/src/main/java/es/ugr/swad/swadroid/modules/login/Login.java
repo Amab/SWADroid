@@ -35,7 +35,7 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
  * Login module for connect to SWAD.
- * It makes use of the web service loginByUserPasswordKey (see {@linktourl https://openswad.org/ws/#loginByUserPasswordKey})
+ * @see <a href="https://openswad.org/ws/#loginByUserPasswordKey">loginByUserPasswordKey</a>
  *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>

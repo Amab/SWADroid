@@ -43,7 +43,7 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
  * Module for send messages.
- * It makes use of the web service sendMessage (see {@linktourl https://openswad.org/ws/#sendMessage})
+ * @see <a href="https://openswad.org/ws/#sendMessage">sendMessage</a>
  *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
