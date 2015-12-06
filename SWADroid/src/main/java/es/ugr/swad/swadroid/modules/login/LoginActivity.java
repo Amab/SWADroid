@@ -392,7 +392,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         user.setTextColor(Color.BLACK);
         user.setHintTextColor(Color.GRAY);
         user.setHint(getString(R.string.prompt_email));
-        user.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+        user.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
 
         builder.setView(user)
                .setTitle(R.string.lost_password_dialog_title)
