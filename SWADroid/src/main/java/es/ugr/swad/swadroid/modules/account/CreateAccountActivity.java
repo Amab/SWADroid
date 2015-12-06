@@ -198,7 +198,7 @@ public class CreateAccountActivity extends AppCompatActivity implements AdapterV
         emailValue = mEmailView.getText().toString();
         serverValue = mServerView.getSelectedItem().toString();
 
-        if(getString(R.string.otherMsg).equals(serverValue)) {
+        if(serverValue.contains(getString(R.string.otherMsg))) {
             serverValue = mServerTextView.getText().toString().replaceFirst("^(http://|https://)","");
         }
 
@@ -381,6 +381,7 @@ public class CreateAccountActivity extends AppCompatActivity implements AdapterV
             mPasswordView.setError(getString(R.string.error_password_summaryUGR));
 
         if(serverValue.contains(getString(R.string.otherMsg))) {
+            mServerTextView.setText(Preferences.getServer());
             mServerTextView.setVisibility(View.VISIBLE);
         } else {
             mServerTextView.setVisibility(View.GONE);

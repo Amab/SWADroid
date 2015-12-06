@@ -69,7 +69,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
 
     private boolean mLoginError = false;
     // UI references for the login form.
-    private EditText mDniView;
+    private EditText mIDView;
     private EditText mPasswordView;
     private EditText mServerTextView;
     private Spinner mServerView;
@@ -108,8 +108,8 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         Button mLostPasswordButton = (Button) findViewById(R.id.lost_password);
         Button mCreateAccountButton = (Button) findViewById(R.id.create_account);
         
-        mDniView = (EditText) findViewById(R.id.DNI);
-        mDniView.setText(Preferences.getUserID());
+        mIDView = (EditText) findViewById(R.id.ID);
+        mIDView.setText(Preferences.getUserID());
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setText("");
@@ -194,14 +194,14 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
     public void attemptLogin() {
         SWADroidTracker.sendScreenView(getApplicationContext(), "SWADroid Login");
 
-        // Values for DNI and password at the time of the login attempt.
-        String DniValue;
+        // Values for ID and password at the time of the login attempt.
+        String idValue;
         String passwordValue;
         String serverValue;
         String toastMsg;
 
         // Reset errors.
-        mDniView.setError(null);
+        mIDView.setError(null);
         mPasswordView.setError(null);
         mServerTextView.setError(null);
 
@@ -209,11 +209,11 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         View focusView = null;
 
         // Store values at the time of the login attempt.
-        DniValue = mDniView.getText().toString();
+        idValue = mIDView.getText().toString();
         passwordValue = mPasswordView.getText().toString();
         serverValue = mServerView.getSelectedItem().toString();
 
-        if(getString(R.string.otherMsg).equals(serverValue)) {
+        if(serverValue.contains(getString(R.string.otherMsg))) {
             serverValue = mServerTextView.getText().toString().replaceFirst("^(http://|https://)","");
         }
 
@@ -244,10 +244,10 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
                            Toast.LENGTH_LONG).show();
         }
 
-        // Check for a valid DNI.
-        if (TextUtils.isEmpty(DniValue)) {
-            mDniView.setError(getString(R.string.error_field_required));
-            focusView = mDniView;
+        // Check for a valid ID.
+        if (TextUtils.isEmpty(idValue)) {
+            mIDView.setError(getString(R.string.error_field_required));
+            focusView = mIDView;
             cancel = true;
         }
 
@@ -267,7 +267,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
             // perform the user login attempt.
             mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
             try {
-                Preferences.setUserID(DniValue);
+                Preferences.setUserID(idValue);
                 Preferences.setUserPassword(Crypto.encryptPassword(passwordValue));
             } catch (NoSuchAlgorithmException e) {
                 // TODO, solucionar
