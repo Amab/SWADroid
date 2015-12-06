@@ -366,7 +366,7 @@ public class NotificationsSyncAdapterService extends Service {
                 Integer status = Integer.valueOf(pii.getProperty("status").toString());
                 String content = pii.getProperty("content").toString();
                 boolean notifReadSWAD = (status >= 4);
-                boolean notifCancelled = (status == 8);
+                boolean notifCancelled = (status >= 8);
 
                 // Add not cancelled notifications only
                 if(!notifCancelled) {
