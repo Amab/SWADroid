@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="es.ugr.swad.swadroid"
+    android:installLocation="auto" >
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
+
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:resizeable="true"
+        android:smallScreens="true"
+        android:xlargeScreens="true" >
+    </supports-screens>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher_swadroid"
+        android:label="@string/app_name"
+        android:theme="@style/Theme.AppCompat.Light"
+        android:hardwareAccelerated="true">
+        <meta-data android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <activity
+            android:name="es.ugr.swad.swadroid.SWADMain"
+            android:icon="@drawable/ic_launcher_swadroid"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".preferences.PreferencesActivity"
+            android:label="@string/set_preferences" >
+        </activity>
+        <activity
+            android:name=".modules.password.RecoverPassword"
+            android:theme="@style/Theme.AppCompat.Translucent" >
+        </activity>
+        <activity
+            android:name=".modules.login.Login"
+            android:label="@string/loginModuleLabel"
+            android:theme="@style/Theme.AppCompat.Translucent" >
+        </activity>
+        <activity
+            android:name="es.ugr.swad.swadroid.modules.rollcall.Rollcall"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:label="@string/rollcallModuleLabel"
+            android:parentActivityName="es.ugr.swad.swadroid.SWADMain" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.ugr.swad.swadroid.SWADMain" />
+        </activity>
+        <activity
+            android:name=".modules.rollcall.EventsDownload"
+            android:label="@string/rollcallModuleLabel"
+            android:theme="@style/Theme.AppCompat.Translucent" >
+        </activity>
+        <activity
+            android:name=".modules.rollcall.UsersActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:label="@string/rollcallModuleLabel"
+            android:parentActivityName="es.ugr.swad.swadroid.modules.rollcall.Rollcall" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.ugr.swad.swadroid.modules.rollcall.Rollcall" />
+        </activity>
+        <activity
+            android:name=".modules.rollcall.UsersDownload"
+            android:label="@string/rollcallModuleLabel"
+            android:theme="@style/Theme.AppCompat.Translucent" >
+        </activity>
+        <activity
+            android:name=".modules.rollcall.UsersSend"
+            android:label="@string/rollcallModuleLabel"
+            android:theme="@style/Theme.AppCompat.Translucent" >
+        </activity>
+        <activity
+            android:name=".modules.groups.Groups"
+            android:label="@string/rollcallModuleLabel"
+            android:theme="@style/Theme.AppCompat.Translucent" >
+        </activity>
+        <activity
+            android:name="com.google.zxing.client.android.CaptureActivity"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="stateAlwaysHidden" >
+            <intent-filter>
+                <action android:name="es.ugr.swad.swadroid.android.SCAN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".modules.courses.Courses"
+            android:label="@string/coursesModuleLabel"
+            android:theme="@style/Theme.AppCompat.Translucent" >
+        </activity>
+        <activity
+            android:name="es.ugr.swad.swadroid.modules.notifications.Notifications"
+            android:label="@string/notificationsModuleLabel"
+            android:parentActivityName="es.ugr.swad.swadroid.SWADMain"
+            android:exported="true">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.ugr.swad.swadroid.SWADMain" />
+        </activity>
+        <activity
+            android:name="es.ugr.swad.swadroid.modules.notifications.NotificationItem"
+            android:label="@string/notificationsModuleLabel"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:parentActivityName="es.ugr.swad.swadroid.modules.notifications.Notifications" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.ugr.swad.swadroid.modules.notifications.Notifications" />
+        </activity>
+        <activity
+            android:name="es.ugr.swad.swadroid.modules.tests.Tests"
+            android:label="@string/testsModuleLabel"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:parentActivityName="es.ugr.swad.swadroid.SWADMain" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.ugr.swad.swadroid.SWADMain" />
+        </activity>
+        <activity
+            android:name="es.ugr.swad.swadroid.modules.tests.TestsQuestionsDownload"
+            android:label="@string/testsModuleLabel"
+            android:theme="@style/Theme.AppCompat.Translucent" >
+        </activity>
+        <activity
+            android:name="es.ugr.swad.swadroid.modules.tests.TestsConfigDownload"
+            android:label="@string/testsModuleLabel"
+            android:theme="@style/Theme.AppCompat.Translucent" >
+        </activity>
+        <activity
+            android:name="es.ugr.swad.swadroid.modules.tests.TestsMake"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:label="@string/testsModuleLabel"
+            android:parentActivityName="es.ugr.swad.swadroid.modules.tests.Tests">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.ugr.swad.swadroid.modules.tests.Tests" />
+        </activity>
+        <activity
+            android:name="es.ugr.swad.swadroid.modules.messages.Messages"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:label="@string/messagesModuleLabel"
+            android:parentActivityName="es.ugr.swad.swadroid.SWADMain" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.ugr.swad.swadroid.SWADMain" />
+        </activity>
+        <activity
+            android:name="es.ugr.swad.swadroid.modules.messages.FilterUsersList"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:label="@string/filterUsersListModuleLabel">
+        </activity>
+        <activity
+            android:name="es.ugr.swad.swadroid.modules.messages.UsersList"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:label="@string/messagesModuleLabel">
+        </activity>
+        <activity
+            android:name=".modules.notices.Notices"
+            android:label="@string/noticesModuleLabel"
+            android:theme="@style/Theme.AppCompat.Translucent"
+            android:parentActivityName="es.ugr.swad.swadroid.SWADMain" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.ugr.swad.swadroid.SWADMain" />
+        </activity>
+        <activity android:name="es.ugr.swad.swadroid.sync.AccountAuthenticator" >
+        </activity>
+        <activity
+            android:name="es.ugr.swad.swadroid.modules.downloads.DirectoryTreeDownload"
+            android:label="@string/documentsDownloadModuleLabel"
+            android:theme="@style/Theme.AppCompat.Translucent" >
+        </activity>
+        <activity
+            android:name="es.ugr.swad.swadroid.modules.downloads.GetFile"
+            android:label="@string/documentsDownloadModuleLabel"
+            android:theme="@style/Theme.AppCompat.Translucent" >
+        </activity>
+        <activity
+            android:name="es.ugr.swad.swadroid.modules.downloads.DownloadsManager"
+            android:label="@string/documentsDownloadModuleLabel"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:parentActivityName="es.ugr.swad.swadroid.SWADMain"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.ugr.swad.swadroid.SWADMain" />
+        </activity>
+        <activity
+            android:name="es.ugr.swad.swadroid.modules.groups.MyGroupsManager"
+            android:label="@string/myGroupsModuleLabel"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:parentActivityName="es.ugr.swad.swadroid.SWADMain" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.ugr.swad.swadroid.SWADMain" />
+        </activity>
+        <activity
+            android:name=".modules.groups.GroupTypes"
+            android:label="@string/groupTypesModuleLabel"
+            android:theme="@style/Theme.AppCompat.Translucent" >
+        </activity>
+        <activity
+            android:name="es.ugr.swad.swadroid.modules.groups.SendMyGroups"
+            android:label="@string/sendMyGroupsProgressTitle"
+            android:theme="@style/Theme.AppCompat.Translucent" >
+        </activity>
+        <activity
+            android:name=".modules.qr.GenerateQR"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:parentActivityName="es.ugr.swad.swadroid.SWADMain" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.ugr.swad.swadroid.SWADMain" />
+        </activity>
+        <activity
+            android:name="es.ugr.swad.swadroid.modules.information.Information"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:label="@string/informationModuleLabel"
+            android:parentActivityName="es.ugr.swad.swadroid.SWADMain" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.ugr.swad.swadroid.SWADMain" />
+        </activity>
+        <activity
+            android:name="es.ugr.swad.swadroid.modules.marks.Marks"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:label="@string/marksModuleLabel"
+            android:parentActivityName="es.ugr.swad.swadroid.SWADMain" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.ugr.swad.swadroid.SWADMain" />
+        </activity>
+        <activity
+            android:name="es.ugr.swad.swadroid.modules.marks.GetMarks"
+            android:label="@string/marksModuleLabel"
+            android:theme="@style/Theme.AppCompat.Translucent" >
+        </activity>
+        <activity
+            android:name="es.ugr.swad.swadroid.modules.account.CreateAccountActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:label="@string/createAccountModuleLabel"
+            android:parentActivityName=".modules.login.LoginActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.ugr.swad.swadroid.SWADMain" />
+        </activity>
+        <activity
+            android:name="es.ugr.swad.swadroid.modules.account.CreateAccount"
+            android:label="@string/createAccountModuleLabel"
+            android:theme="@style/Theme.AppCompat.Translucent" >
+        </activity>
+        <activity
+            android:name="es.ugr.swad.swadroid.modules.notifications.NotificationsMarkAllAsRead"
+            android:label="@string/notificationsMarkAllAsReadModuleLabel"
+            android:theme="@style/Theme.AppCompat.Translucent" >
+        </activity>
+        <activity
+            android:name=".modules.login.LoginActivity"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:label="@string/title_activity_login"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+        </activity>
+
+        <provider
+            android:name="es.ugr.swad.swadroid.sync.DummyProvider"
+            android:authorities="es.ugr.swad.swadroid.content"
+            android:label="SWADroid"
+            android:syncable="true" />
+
+        <service
+            android:name="es.ugr.swad.swadroid.sync.AccountAuthenticatorService"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
+        </service>
+        <service
+            android:name="es.ugr.swad.swadroid.modules.notifications.NotificationsSyncAdapterService"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/sync_notifications" />
+        </service>
+    </application>
+
+</manifest>
