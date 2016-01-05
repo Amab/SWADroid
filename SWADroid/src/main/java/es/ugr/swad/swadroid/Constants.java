@@ -229,6 +229,10 @@ public class Constants {
      */
     public static final int CREATE_ACCOUNT_REQUEST_CODE = 39;
     /**
+     * Request code for create a new account
+     */
+    public static final int PERMISSIONS_REQUEST_CAMERA = 100;
+    /**
      * Prefix tag name for Logcat
      */
     public static final String APP_TAG = "SWADroid";
