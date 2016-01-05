@@ -229,9 +229,13 @@ public class Constants {
      */
     public static final int CREATE_ACCOUNT_REQUEST_CODE = 39;
     /**
-     * Request code for create a new account
+     * Request code for CAMERA permission
      */
     public static final int PERMISSIONS_REQUEST_CAMERA = 100;
+    /**
+     * Request code for WRITE_EXTERNAL_STORAGE permission
+     */
+    public static final int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 101;
     /**
      * Prefix tag name for Logcat
      */

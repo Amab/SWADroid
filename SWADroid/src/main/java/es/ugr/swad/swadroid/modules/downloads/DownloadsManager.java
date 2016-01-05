@@ -18,17 +18,22 @@
  */
 package es.ugr.swad.swadroid.modules.downloads;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -145,11 +150,7 @@ public class DownloadsManager extends MenuActivity {
      */
     private boolean previousConnection = false;
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
-
+    private void init() {
         List<Group> allGroups = dbHelper.getGroups(Courses.getSelectedCourseCode());
         int nGroups = allGroups.size();
 
@@ -177,6 +178,22 @@ public class DownloadsManager extends MenuActivity {
             } else {
                 setNoConnectionView();
             }
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
+
+        // check Android 6 permission
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    Constants.PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+        } else {
+            init();
         }
     }
 
@@ -743,6 +760,22 @@ public class DownloadsManager extends MenuActivity {
                 setTitle(R.string.marksModuleLabel);
                 getSupportActionBar().setIcon(R.drawable.grades);
                 break;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case Constants.PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    init();
+                } else {
+                    setResult(Activity.RESULT_CANCELED);
+                    finish();
+                }
+            }
         }
     }
 }
