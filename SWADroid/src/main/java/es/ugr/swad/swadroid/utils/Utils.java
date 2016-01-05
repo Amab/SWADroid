@@ -20,8 +20,10 @@
 package es.ugr.swad.swadroid.utils;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.TypedValue;
 
 import java.text.Normalizer;
 import java.util.Iterator;
@@ -190,6 +192,14 @@ public class Utils {
         String temp = Normalizer.normalize(s, Normalizer.Form.NFD);
         Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
         return pattern.matcher(temp).replaceAll("");
+    }
+
+    public static float getPixelsFromSp(float sp) {
+        return TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_SP,
+                sp,
+                Resources.getSystem().getDisplayMetrics()
+        );
     }
 
 }
