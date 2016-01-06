@@ -40,9 +40,8 @@ android {
 
         testApplicationId "es.ugr.swad.swadroid.test"
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
-
-
     }
+
     buildTypes {
         debug {
             versionNameSuffix '-DEBUG'
@@ -53,7 +52,7 @@ android {
 dependencies {
     compile 'com.android.support:support-v4:latest.release'
     compile 'com.android.support:appcompat-v7:latest.release'
-    compile 'com.google.android.gms:play-services:latest.release'
+    compile 'com.google.android.gms:play-services-analytics:latest.release'
     compile 'com.google.code.gson:gson:latest.release'
     compile 'com.google.code.ksoap2-android:ksoap2-android:latest.release'
     compile 'commons-io:commons-io:latest.release'

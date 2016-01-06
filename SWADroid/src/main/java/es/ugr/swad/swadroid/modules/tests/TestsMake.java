@@ -594,7 +594,7 @@ public class TestsMake extends MenuActivity {
         bar.setMax(size);
         bar.setProgress(1);
         bar.setText(1 + "/" + size);
-        bar.setTextSize(20);
+        bar.setTextSize(Utils.getPixelsFromSp(20));
         //Text color
         //bar.setTextColor(Color.BLUE);
         //Bar foreground color

@@ -21,6 +21,7 @@
 
 package es.ugr.swad.swadroid.modules.rollcall;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -30,6 +31,9 @@ import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.Menu;
@@ -275,6 +279,13 @@ public class UsersActivity extends MenuExpandableListActivity implements
         return usersCodes;
     }
 
+    private void scanQRCode() {
+        Intent activity = new Intent(Intents.Scan.ACTION);
+        activity.putExtra("SCAN_MODE", "QR_CODE_MODE,ONE_D_MODE");
+        activity.putExtra("SCAN_FORMATS", "QR_CODE,ONE_D_FORMATS");
+        startActivityForResult(activity, Constants.SCAN_QR_REQUEST_CODE);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.rollcall_activity_actions, menu);
@@ -287,10 +298,15 @@ public class UsersActivity extends MenuExpandableListActivity implements
             case R.id.action_scanQR:
                 // Check if device has a rear camera
                 if (hasRearCam) {
-                    Intent activity = new Intent(Intents.Scan.ACTION);
-                    activity.putExtra("SCAN_MODE", "QR_CODE_MODE,ONE_D_MODE");
-                    activity.putExtra("SCAN_FORMATS", "QR_CODE,ONE_D_FORMATS");
-                    startActivityForResult(activity, Constants.SCAN_QR_REQUEST_CODE);
+                    // check Android 6 permission
+                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(this,
+                                new String[]{Manifest.permission.CAMERA},
+                                Constants.PERMISSIONS_REQUEST_CAMERA);
+                    } else {
+                        scanQRCode();
+                    }
                 } else {
                     //If the device has no rear camera available show error message
                     error(TAG, getString(R.string.noCameraFound), null, false);
@@ -352,5 +368,18 @@ public class UsersActivity extends MenuExpandableListActivity implements
 
     public static int getEventCode() {
         return eventCode;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case Constants.PERMISSIONS_REQUEST_CAMERA: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    scanQRCode();
+                }
+            }
+        }
     }
 }
