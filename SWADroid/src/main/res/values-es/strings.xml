@@ -311,5 +311,9 @@
     <string name="error_nickname_syntax">El apodo debe tener la sintaxis \@apodo</string>
     <string name="otherMsg">Otro</string>
     <string name="noServer">Debe introducir el servidor</string>
+    <string name="timelineComment">Nuevo comentario a mis mensajes sociales</string>
+    <string name="timelineFav">Nuevo favorito a mis mensajes sociales</string>
+    <string name="timelineShare">Nueva compartición de mis mensajes sociales</string>
+    <string name="timelineMention">Nueva mención</string>
 
 </resources>

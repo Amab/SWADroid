@@ -320,5 +320,9 @@
     <string name="error_nickname_syntax">The nickname must have the syntax \@nickname</string>
     <string name="otherMsg">Other</string>
     <string name="noServer">You must enter the server</string>
+    <string name="timelineComment">Comment to one of my social publishings</string>
+    <string name="timelineFav">Fav to one of my social publishings</string>
+    <string name="timelineShare">Sharing of one of my social posts</string>
+    <string name="timelineMention">Mention to me in a social publishing</string>
 
 </resources>
