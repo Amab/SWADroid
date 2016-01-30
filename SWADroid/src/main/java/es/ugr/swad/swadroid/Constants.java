@@ -66,6 +66,10 @@ public class Constants {
      */
     public static final int CONNECTION_TIMEOUT = 60000;
     /**
+     * Threshold for clean old notifications (in seconds)
+     */
+    public static final int CLEAN_NOTIFICATIONS_THRESHOLD = 2592000; // 30 days
+    /**
      * Null value returned by webservices when a field is empty
      */
     public static final String NULL_VALUE = "anyType{}";

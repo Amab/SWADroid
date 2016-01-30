@@ -49,15 +49,14 @@ import java.util.List;
 import java.util.Vector;
 
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.preferences.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.AlertNotificationFactory;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.model.SWADNotification;
-import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.modules.Module;
+import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.sync.SyncUtils;
 import es.ugr.swad.swadroid.utils.DateTimeUtils;
 import es.ugr.swad.swadroid.utils.Utils;
@@ -74,9 +73,9 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
 public class Notifications extends Module implements
 		SwipeRefreshLayout.OnRefreshListener {
 	/**
-	 * Max size to store notifications
+	 * Unique identifier for notification alerts
 	 */
-	private int SIZE_LIMIT;
+	public static final int NOTIF_ALERT_ID = 1982;
 	/**
 	 * Cursor orderby parameter
 	 */
@@ -89,10 +88,6 @@ public class Notifications extends Module implements
 	 * Error message returned by the synchronization service
 	 */
 	private String errorMessage;
-	/**
-	 * Unique identifier for notification alerts
-	 */
-	private final int NOTIF_ALERT_ID = 1982;
 	/**
 	 * Notifications tag name for Logcat
 	 */
@@ -326,7 +321,6 @@ public class Notifications extends Module implements
 		setMETHOD_NAME("getNotifications");
 		receiver = new SyncReceiver(this);
 		account = new Account(getString(R.string.app_name), accountType);
-		SIZE_LIMIT = Preferences.getNotifLimit();
 	}
 
 	/**
@@ -385,8 +379,7 @@ public class Notifications extends Module implements
 	 */
 	@Override
 	protected void requestService() throws Exception {
-		// Download new notifications from the server
-		SIZE_LIMIT = Preferences.getNotifLimit();
+		int numDeletedNotif = 0;
 
 		if (SyncUtils.isSyncAutomatically(getApplicationContext())) {
 			Log.i(TAG,
@@ -467,8 +460,9 @@ public class Notifications extends Module implements
 				Log.i(TAG, "Retrieved " + numNotif + " notifications ("
 						+ notifCount + " unread)");
 
-				// Clear old notifications to control database size
-				dbHelper.clearOldNotifications(SIZE_LIMIT);
+				// Clean old notifications to control database size
+                numDeletedNotif = dbHelper.cleanOldNotificationsByAge(Constants.CLEAN_NOTIFICATIONS_THRESHOLD);
+                Log.i(TAG, "Deleted " + numDeletedNotif + " notifications from database");
 
 				dbHelper.endTransaction(true);
 			}
@@ -510,12 +504,6 @@ public class Notifications extends Module implements
 
 		if (!SyncUtils.isSyncAutomatically(getApplicationContext())) {
 			if (notifCount > 0) {
-				// If the notifications counter exceeds the limit, set it to the
-				// max allowed
-				if (notifCount > SIZE_LIMIT) {
-					notifCount = SIZE_LIMIT;
-				}
-
 				notif = AlertNotificationFactory.createAlertNotification(getApplicationContext(),
 						getString(R.string.app_name),
 						notifCount + " "
