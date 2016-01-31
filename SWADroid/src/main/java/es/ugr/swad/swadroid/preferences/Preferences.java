@@ -122,10 +122,6 @@ public class Preferences {
      */
     public static final String SYNCENABLEPREF = "prefSyncEnable";
     /**
-     * Notifications limit preference name
-     */
-    public static final String NOTIFLIMITPREF = "prefNotifLimit";
-    /**
      * Last synchronization time preference name
      */
     public static final String LASTSYNCTIMEPREF = "lastSyncTimeLimit";
@@ -309,25 +305,6 @@ public class Preferences {
     }
 
     /**
-     * Gets the max number of notifications to be stored
-     *
-     * @return The max number of notifications to be stored
-     */
-    public static int getNotifLimit() {
-        return prefs.getInt(NOTIFLIMITPREF, 25);
-    }
-
-    /**
-     * Sets the max number of notifications to be stored
-     *
-     * @param notifLimit The max number of notifications to be stored
-     */
-    public static void setNotifLimit(int notifLimit) {
-        editor = editor.putInt(NOTIFLIMITPREF, notifLimit);
-        editor.commit();
-    }
-
-    /**
      * Gets the synchronization time
      *
      * @return The synchronization time
@@ -490,10 +467,6 @@ public class Preferences {
         if(isSyncEnabled()) {
         	SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, context);
         }
-    }
-
-    public static void clearOldNotifications(int size) {
-        dbHelper.clearOldNotifications(size);
     }
     
     public static boolean isPreferencesChanged() {

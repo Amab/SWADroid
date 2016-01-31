@@ -77,8 +77,6 @@ public class NotificationsSyncAdapterService extends Service {
 	private static SecureConnection conn;
     private static SyncAdapterImpl sSyncAdapter = null;
     private static int notifCount;
-    private static final int NOTIF_ALERT_ID = 1982;
-    private static int SIZE_LIMIT;
     private static DataBaseHelper dbHelper;
     private static IWebserviceClient webserviceClient;
     private static String METHOD_NAME = "";
@@ -112,7 +110,6 @@ public class NotificationsSyncAdapterService extends Service {
             int httpStatusCode;
         	
         	try {
-                SIZE_LIMIT = Preferences.getNotifLimit();
                 NotificationsSyncAdapterService.performSync(mContext, account, extras, authority, provider, syncResult);
                 
                 //If synchronization was successful, update last synchronization time in preferences
@@ -328,6 +325,8 @@ public class NotificationsSyncAdapterService extends Service {
     }
     
     private static void getNotifications() throws Exception {
+        int numDeletedNotif = 0;
+
     	Log.d(TAG, "Logged");
 
         //Calculates next timestamp to be requested
@@ -385,8 +384,9 @@ public class NotificationsSyncAdapterService extends Service {
             //Request finalized without errors
             Log.i(TAG, "Retrieved " + numNotif + " notifications (" + notifCount + " unread)");
 
-            //Clear old notifications to control database size
-            dbHelper.clearOldNotifications(SIZE_LIMIT);
+            //Clean old notifications to control database size
+            numDeletedNotif = dbHelper.cleanOldNotificationsByAge(Constants.CLEAN_NOTIFICATIONS_THRESHOLD);
+            Log.i(TAG, "Deleted " + numDeletedNotif + " notifications from database");
 
             dbHelper.endTransaction(true);
         }
@@ -474,11 +474,6 @@ public class NotificationsSyncAdapterService extends Service {
         	getNotifications();
         	
         	if (notifCount > 0) {
-	            //If the notifications counter exceeds the limit, set it to the max allowed
-	            if (notifCount > SIZE_LIMIT) {
-	                notifCount = SIZE_LIMIT;
-	            }
-
 				notif = AlertNotificationFactory.createAlertNotification(context,
 						context.getString(R.string.app_name),
 						notifCount + " "
@@ -492,7 +487,7 @@ public class NotificationsSyncAdapterService extends Service {
 						false,
 						false);
 				
-				AlertNotificationFactory.showAlertNotification(context, notif, NOTIF_ALERT_ID);
+				AlertNotificationFactory.showAlertNotification(context, notif, Notifications.NOTIF_ALERT_ID);
         	}
         	
         	sendReadedNotifications(context);

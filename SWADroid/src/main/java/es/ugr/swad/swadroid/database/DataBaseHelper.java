@@ -33,11 +33,11 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.preferences.Preferences;
 import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.Event;
@@ -53,6 +53,7 @@ import es.ugr.swad.swadroid.model.TestQuestion;
 import es.ugr.swad.swadroid.model.TestTag;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.model.UserAttendance;
+import es.ugr.swad.swadroid.preferences.Preferences;
 import es.ugr.swad.swadroid.utils.Crypto;
 import es.ugr.swad.swadroid.utils.OldCrypto;
 import es.ugr.swad.swadroid.utils.Utils;
@@ -1829,6 +1830,20 @@ public class DataBaseHelper {
         for (Entity ent : rows) {
             ent.delete();
         }
+    }/**
+     * Removes all rows from a database table matching the given condition
+     *
+     * @param where condition to remove a row
+     * @return numRowsDeleted Number of deleted rows
+     */
+    public int removeAllRows(String table, String where) {
+        List<Entity> rows = db.getEntityList(table, where);
+
+        for (Entity ent : rows) {
+            ent.delete();
+        }
+
+        return rows.size();
     }
 
     /**
@@ -2026,13 +2041,13 @@ public class DataBaseHelper {
     }
 
     /**
-     * Clear old notifications
+     * Clean old notifications by size
      *
      * @param size Max table size
      */
-    public void clearOldNotifications(int size) {
+    public void cleanOldNotificationsBySize(int size) {
         String where = null;
-        String orderby = "eventTime ASC";
+        String orderby = "CAST(eventTime as INTEGER) ASC";
         List<Entity> rows = db.getEntityList(DataBaseHelper.DB_TABLE_NOTIFICATIONS, where, orderby);
         int numRows = rows.size();
         int numDeletions = numRows - size;
@@ -2041,6 +2056,21 @@ public class DataBaseHelper {
             for (int i = 0; i < numDeletions; i++)
                 rows.get(i).delete();
         }
+    }
+
+    /**
+     * Clean old notifications by age
+     *
+     * @param age Max age in seconds
+     * @return numRowsDeleted Number of deleted notifications
+     */
+    public int cleanOldNotificationsByAge(int age) {
+        long now = Calendar.getInstance().getTime().getTime() / 1000; // in seconds
+
+        // Remove notifications older than 'age' seconds
+        String where = "CAST(eventTime as INTEGER) < " + String.valueOf(now - age);
+
+        return removeAllRows(DataBaseHelper.DB_TABLE_NOTIFICATIONS, where);
     }
 
     /**

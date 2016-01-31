@@ -163,6 +163,18 @@ public class NotificationsExpandableListAdapter extends
             } else if (type.equals("follower")) {
                 type = activity.getString(R.string.follower);
                 notificationIcon.setImageResource(R.drawable.follow);
+            } else if (type.equals("timelineComment")) {
+                type = activity.getString(R.string.timelineComment);
+                notificationIcon.setImageResource(R.drawable.social_comment);
+            } else if (type.equals("timelineFav")) {
+                type = activity.getString(R.string.timelineFav);
+                notificationIcon.setImageResource(R.drawable.social_fav);
+            } else if (type.equals("timelineShare")) {
+                type = activity.getString(R.string.timelineShare);
+                notificationIcon.setImageResource(R.drawable.social_share);
+            } else if (type.equals("timelineMention")) {
+                type = activity.getString(R.string.timelineMention);
+                notificationIcon.setImageResource(R.drawable.social_mention);
             } else {
                 type = activity.getString(R.string.unknownNotification);
                 notificationIcon.setImageResource(R.drawable.ic_launcher_swadroid);

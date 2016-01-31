@@ -26,15 +26,6 @@
             android:title="@string/prefSyncTimeTitle" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/prefCatNotifTitle" >
-        <es.ugr.swad.swadroid.gui.widget.SeekBarDialogPreference
-            android:defaultValue="25"
-            android:dialogMessage="@string/prefNotifLimitDialogMessage"
-            android:key="@string/prefNotifLimitKey"
-            android:max="100"
-            android:title="@string/prefNotifLimitTitle"
-            custom:min="1"
-            custom:progressTextSuffix="@string/prefNotifLimitSuffix" />
-
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="@string/prefNotifSoundKey"

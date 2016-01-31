@@ -107,10 +107,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
      */
     private static CheckBoxPreference syncEnablePref;
     /**
-     * Notifications limit preference
-     */
-    private static SeekBarDialogPreference notifLimitPref;
-    /**
      * Notifications sound enable preference
      */
     private static CheckBoxPreference notifSoundEnablePref;
@@ -196,7 +192,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         sharePref = findPreference(Preferences.SHAREPREF);
         syncTimePref = findPreference(Preferences.SYNCTIMEPREF);
         syncEnablePref = (CheckBoxPreference) findPreference(Preferences.SYNCENABLEPREF);
-        notifLimitPref = (SeekBarDialogPreference) findPreference(Preferences.NOTIFLIMITPREF);
         notifSoundEnablePref = (CheckBoxPreference) findPreference(Preferences.NOTIFSOUNDENABLEPREF);
         notifVibrateEnablePref = (CheckBoxPreference) findPreference(Preferences.NOTIFVIBRATEENABLEPREF);
         notifLightsEnablePref = (CheckBoxPreference) findPreference(Preferences.NOTIFLIGHTSENABLEPREF);
@@ -207,15 +202,11 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         googlePlusPref.setOnPreferenceChangeListener(this);
         blogPref.setOnPreferenceChangeListener(this);
         sharePref.setOnPreferenceChangeListener(this);
-        //serverPref.setOnPreferenceChangeListener(this);
-        notifLimitPref.setOnPreferenceChangeListener(this);
         syncEnablePref.setOnPreferenceChangeListener(this);
         syncTimePref.setOnPreferenceChangeListener(this);
         notifSoundEnablePref.setOnPreferenceChangeListener(this);
         notifVibrateEnablePref.setOnPreferenceChangeListener(this);
         notifLightsEnablePref.setOnPreferenceChangeListener(this);
-        
-        notifLimitPref.setProgress(Preferences.getNotifLimit());
         
         logOutPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             
@@ -391,10 +382,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
             
             syncTimePref.setSummary(prefSyncTimeEntry);
             syncPrefsChanged = true;
-        } else if(Preferences.NOTIFLIMITPREF.equals(key)) {
-        	 int notifLimit = (Integer) newValue;
-        	 Preferences.setNotifLimit(notifLimit);
-        	 Preferences.clearOldNotifications(notifLimit);
         } else if(Preferences.NOTIFSOUNDENABLEPREF.equals(key)) {
             boolean notifSoundEnabled = (Boolean) newValue;
             Preferences.setNotifSoundEnabled(notifSoundEnabled);
