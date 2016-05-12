@@ -9,6 +9,12 @@ ext {
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
+
+    dexOptions {
+        maxProcessCount=2
+        javaMaxHeapSize "2g"
+    }
+
     defaultConfig {
         applicationId "es.ugr.swad.swadroid"
         versionCode gitVersionCode
