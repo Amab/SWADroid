@@ -26,18 +26,18 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.preferences.Preferences;
-import es.ugr.swad.swadroid.preferences.PreferencesActivity;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADMain;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
+import es.ugr.swad.swadroid.preferences.Preferences;
+import es.ugr.swad.swadroid.preferences.PreferencesActivity;
 
 /**
  * Superclass for add the options menu to all children classes of ExpandableListActivity
@@ -46,7 +46,7 @@ import es.ugr.swad.swadroid.database.DataBaseHelper;
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */
-public class MenuExpandableListActivity extends ActionBarActivity {
+public class MenuExpandableListActivity extends AppCompatActivity {
 	/**
 	 * Application preferences
 	 */

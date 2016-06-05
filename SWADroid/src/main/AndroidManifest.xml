@@ -101,20 +101,14 @@
             android:theme="@style/Theme.AppCompat.Translucent" >
         </activity>
         <activity
-            android:name=".modules.groups.Groups"
+            android:name=".modules.rollcall.ContinuousCaptureActivity"
             android:label="@string/rollcallModuleLabel"
-            android:theme="@style/Theme.AppCompat.Translucent" >
+            android:theme="@style/Theme.AppCompat.Translucent">
         </activity>
         <activity
-            android:name="com.google.zxing.client.android.CaptureActivity"
-            android:screenOrientation="landscape"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-            android:windowSoftInputMode="stateAlwaysHidden" >
-            <intent-filter>
-                <action android:name="es.ugr.swad.swadroid.android.SCAN" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
+            android:name=".modules.groups.Groups"
+            android:label="@string/myGroupsModuleLabel"
+            android:theme="@style/Theme.AppCompat.Translucent" >
         </activity>
         <activity
             android:name=".modules.courses.Courses"
@@ -328,6 +322,27 @@
                 android:name="android.content.SyncAdapter"
                 android:resource="@xml/sync_notifications" />
         </service>
+        <!-- Optionally, register AnalyticsReceiver and AnalyticsService to support background
+      dispatching on non-Google Play devices -->
+        <receiver android:name="com.google.android.gms.analytics.AnalyticsReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
+            </intent-filter>
+        </receiver>
+        <service android:name="com.google.android.gms.analytics.AnalyticsService"
+            android:enabled="true"
+            android:exported="false"/>
+
+        <!-- Optionally, register CampaignTrackingReceiver and CampaignTrackingService to enable
+             installation campaign reporting -->
+        <receiver android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+        <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
     </application>
 
 </manifest>
