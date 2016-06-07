@@ -142,28 +142,6 @@ public class UsersCursorAdapter extends CursorAdapter {
                 notifyDataSetChanged();
             }
         });
-        /*holder.checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Cursor oldCursor;
-
-                //Inserts attendance into database
-                dbHelper.insertAttendance(userCode, eventCode, isChecked);
-
-                //Mark event status as "pending"
-                dbHelper.updateEventStatus(eventCode, "pending");
-
-                //Refresh ListView
-                dbCursor = dbHelper.getUsersEventCursor(eventCode);
-                if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.GINGERBREAD) {
-                    oldCursor = swapCursor(dbCursor);
-                    oldCursor.close();
-                } else {
-                    changeCursor(dbCursor);
-                }
-                notifyDataSetChanged();
-            }
-        });*/
 
         holder.image.setImageResource(R.drawable.usr_bl);
         if(userPhoto != null) {

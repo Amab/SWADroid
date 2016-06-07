@@ -21,7 +21,6 @@
 
 package es.ugr.swad.swadroid.modules.rollcall;
 
-import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -31,9 +30,6 @@ import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.Menu;
@@ -43,7 +39,7 @@ import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.zxing.client.android.Intents;
+import com.google.zxing.integration.android.IntentIntegrator;
 
 import java.util.List;
 
@@ -78,11 +74,11 @@ public class UsersActivity extends MenuExpandableListActivity implements
     /**
      * Adapter for ListView of users
      */
-    UsersCursorAdapter adapter;
+    private UsersCursorAdapter adapter;
     /**
      * Database cursor for Adapter of users
      */
-    Cursor dbCursor;
+    private Cursor dbCursor;
     /**
      * Layout with "Pull to refresh" function
      */
@@ -90,11 +86,16 @@ public class UsersActivity extends MenuExpandableListActivity implements
     /**
      * TextView for the empty users message
      */
-    TextView emptyUsersTextView;
+    private TextView emptyUsersTextView;
     /**
      * Flag for indicate if device has a rear camera available
      */
-    boolean hasRearCam;
+    private boolean hasRearCam;
+
+    /**
+     * Barcode scanner
+     */
+    private IntentIntegrator integrator;
 
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.MenuExpandableListActivity#onCreate(android.os.Bundle)
@@ -117,16 +118,6 @@ public class UsersActivity extends MenuExpandableListActivity implements
             public void onScroll(AbsListView absListView, int firstVisibleItem,
                                  int visibleItemCount, int totalItemCount) {
 
-                /*boolean enable = true;
-                if ((lvUsers != null) && (lvUsers.getChildCount() > 0)) {
-
-                    // check if the first item of the list is visible
-                    boolean firstItemVisible = lvUsers.getFirstVisiblePosition() == 0;
-                    // check if the top of the first item is visible
-                    boolean topOfFirstItemVisible = lvUsers.getChildAt(0).getTop() == 0;
-                    // enabling or disabling the refresh layout
-                    enable = firstItemVisible && topOfFirstItemVisible;
-                }*/
                 boolean enable = (lvUsers != null) && (lvUsers.getChildCount() == 0);
                 refreshLayout.setEnabled(enable);
             }
@@ -144,6 +135,10 @@ public class UsersActivity extends MenuExpandableListActivity implements
 
         eventCode = this.getIntent().getIntExtra("attendanceEventCode", 0);
         hasRearCam = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
+
+        integrator = new IntentIntegrator(this);
+        integrator.setCaptureActivity(ContinuousCaptureActivity.class);
+        integrator.setBeepEnabled(false);
     }
 
     /* (non-Javadoc)
@@ -160,17 +155,7 @@ public class UsersActivity extends MenuExpandableListActivity implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        switch (requestCode) {
-            case Constants.ROLLCALL_USERS_DOWNLOAD_REQUEST_CODE:
-                refreshAdapter();
-                break;
-            case Constants.ROLLCALL_USERS_SEND_REQUEST_CODE:
-                refreshAdapter();
-                break;
-            case Constants.SCAN_QR_REQUEST_CODE:
-                refreshAdapter();
-                break;
-        }
+        refreshAdapter();
     }
 
     private void refreshAdapter() {
@@ -280,10 +265,7 @@ public class UsersActivity extends MenuExpandableListActivity implements
     }
 
     private void scanQRCode() {
-        Intent activity = new Intent(Intents.Scan.ACTION);
-        activity.putExtra("SCAN_MODE", "QR_CODE_MODE,ONE_D_MODE");
-        activity.putExtra("SCAN_FORMATS", "QR_CODE,ONE_D_FORMATS");
-        startActivityForResult(activity, Constants.SCAN_QR_REQUEST_CODE);
+        integrator.initiateScan();
     }
 
     @Override
@@ -298,15 +280,7 @@ public class UsersActivity extends MenuExpandableListActivity implements
             case R.id.action_scanQR:
                 // Check if device has a rear camera
                 if (hasRearCam) {
-                    // check Android 6 permission
-                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                            != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(this,
-                                new String[]{Manifest.permission.CAMERA},
-                                Constants.PERMISSIONS_REQUEST_CAMERA);
-                    } else {
-                        scanQRCode();
-                    }
+                    scanQRCode();
                 } else {
                     //If the device has no rear camera available show error message
                     error(TAG, getString(R.string.noCameraFound), null, false);
@@ -370,16 +344,4 @@ public class UsersActivity extends MenuExpandableListActivity implements
         return eventCode;
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
-                                           @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case Constants.PERMISSIONS_REQUEST_CAMERA: {
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    scanQRCode();
-                }
-            }
-        }
-    }
 }

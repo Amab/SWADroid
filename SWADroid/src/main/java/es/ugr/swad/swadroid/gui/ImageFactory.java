@@ -32,6 +32,8 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class ImageFactory {
+    private static ImageLoader loader = ImageLoader.getInstance();
+
     /**
      * Initializes a cached image loader
      * @param ctx Application context
@@ -45,7 +47,6 @@ public class ImageFactory {
     public static ImageLoader init(Context ctx, boolean cacheMemory, boolean cacheDisk,
                                    int imageEmpty, int imageFail, int imageLoading) {
 
-        ImageLoader loader = ImageLoader.getInstance();
         Builder builder = new DisplayImageOptions.Builder();
         DisplayImageOptions options;
 
@@ -71,6 +72,10 @@ public class ImageFactory {
                 .defaultDisplayImageOptions(options)
                 .build();
 
+        if(loader.isInited()) {
+            loader.destroy();
+        }
+
         loader.init(config);
 
         return loader;
@@ -88,7 +93,7 @@ public class ImageFactory {
 	public static void displayImage(Context ctx, String uri, ImageView imageView,
 			boolean cacheMemory, boolean cacheDisk, int imageEmpty, int imageFail, int imageLoading) {
 
-        ImageLoader loader = init(ctx, cacheMemory, cacheDisk, imageEmpty,
+        init(ctx, cacheMemory, cacheDisk, imageEmpty,
                 imageFail, imageLoading);
 
         loader.displayImage(uri, imageView);

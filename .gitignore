@@ -8,3 +8,4 @@ local.properties
 /SWADroid/SWADroid-SWADroid.iml
 /SWADroid.iml
 app/lint.xml
+/SWADroid/google-services.json

@@ -60,22 +60,7 @@ public class SWADroidTracker {
 
     private static HashMap<TrackerName, Tracker> mTrackers = new HashMap<TrackerName, Tracker>();
 
-    /*static synchronized Tracker getTracker(Context context, TrackerName trackerId) {
-        if (!mTrackers.containsKey(trackerId)) {
-
-            GoogleAnalytics analytics = GoogleAnalytics.getInstance(context);
-            Tracker t = (trackerId == TrackerName.APP_TRACKER) ? analytics.newTracker(Config.ANALYTICS_API_KEY)
-                    : (trackerId == TrackerName.GLOBAL_TRACKER) ? analytics.newTracker(R.xml.global_tracker)
-                    : analytics.newTracker(R.xml.ecommerce_tracker);
-            mTrackers.put(trackerId, t);
-
-        }
-        return mTrackers.get(trackerId);
-    }*/
-
     private static boolean isTrackerEnabled(Context context) {
-        /*return (!Config.ANALYTICS_API_KEY.isEmpty()
-                && (GooglePlayServicesUtil.isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS));*/
         return (!Config.ANALYTICS_API_KEY.isEmpty());
     }
 
@@ -96,14 +81,6 @@ public class SWADroidTracker {
         // Initialize a tracker using a Google Analytics property ID.
         if(isTrackerEnabled(context)) {
             GoogleAnalytics.getInstance(context).newTracker(Config.ANALYTICS_API_KEY);
-
-            /*Thread.UncaughtExceptionHandler exceptionHandler = new ExceptionReporter(
-                    getTracker(context),                              // Currently used Tracker.
-                    Thread.getDefaultUncaughtExceptionHandler(),      // Current default uncaught exception handler.
-                    context);                                         // Context of the application.
-
-            // Make exceptionHandler the new default uncaught exception handler.
-            Thread.setDefaultUncaughtExceptionHandler(exceptionHandler);*/
 
             ExceptionReporter exceptionHandler =
                     new ExceptionReporter(
@@ -140,7 +117,7 @@ public class SWADroidTracker {
             t.setScreenName(path);
 
             // Send a screen view.
-            t.send(new HitBuilders.AppViewBuilder().build());
+            t.send(new HitBuilders.ScreenViewBuilder().build());
 
             Log.i(TAG, "ScreenView sent for screen " + path);
         }
@@ -156,7 +133,7 @@ public class SWADroidTracker {
             t.setScreenName(path);
 
             // Send a screen view.
-            t.send(new HitBuilders.AppViewBuilder().build());
+            t.send(new HitBuilders.ScreenViewBuilder().build());
 
             // This event will also be sent with &cd=Home%20Screen.
             // Build and send an Event.
@@ -177,12 +154,6 @@ public class SWADroidTracker {
         if(isTrackerEnabled(context)) {
             // Get tracker.
             Tracker t = getTracker(context);
-
-            // Build and send exception.
-            /*t.send(new HitBuilders.ExceptionBuilder()
-                    .setDescription(e.getCause().toString())
-                    .setFatal(fatal)
-                    .build());*/
 
             StandardExceptionParser exceptionParser =
                     new StandardExceptionParser(context, null) {
