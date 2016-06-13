@@ -242,13 +242,7 @@ public class Preferences {
      * @return Server URL
      */
     public static String getServer() {
-    	String server = prefs.getString(SERVERPREF, Constants.DEFAULT_SERVER);
-
-    	if(server.equals("")) {
-    		server = Constants.DEFAULT_SERVER;
-    	}
-
-        return server;
+        return prefs.getString(SERVERPREF, null);
     }
 
     /**

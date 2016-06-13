@@ -89,7 +89,7 @@
                 android:layout_toRightOf="@+id/serverTextView"
                 android:layout_toEndOf="@id/serverTextView"
                 android:layout_below="@id/password"
-                android:layout_alignTop="@+id/serverTextView" />
+                android:layout_alignTop="@+id/serverTextView"/>
 
             <EditText
                 android:id="@+id/serverEditText"

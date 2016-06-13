@@ -31,6 +31,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -45,12 +46,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.preferences.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.gui.DialogFactory;
-import es.ugr.swad.swadroid.modules.password.RecoverPassword;
 import es.ugr.swad.swadroid.modules.account.CreateAccountActivity;
+import es.ugr.swad.swadroid.modules.password.RecoverPassword;
+import es.ugr.swad.swadroid.preferences.Preferences;
 import es.ugr.swad.swadroid.utils.Crypto;
 import es.ugr.swad.swadroid.utils.Utils;
 
@@ -77,7 +78,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
     private View mLoginStatusView;
     private TextView mLoginStatusMessageView;
     private boolean mFromPreference = false;
-    private ArrayAdapter<CharSequence> serverAdapter;
+    private ArrayAdapter<String> serverAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,8 +96,12 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
     protected void onResume() {
         super.onResume();
 
-        if(!mServerView.getSelectedItem().equals(Preferences.getServer())) {
-            setSelectedServer(Preferences.getServer());
+        String server = Preferences.getServer();
+
+        if((server != null) && (!server.isEmpty()) &&
+                !mServerView.getSelectedItem().equals(server)) {
+
+            setSelectedServer(server);
         }
     }
 
@@ -112,7 +117,9 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         mIDView.setText(Preferences.getUserID());
 
         mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setText("");
+        if (mPasswordView != null) {
+            mPasswordView.setText("");
+        }
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -153,37 +160,65 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
 
         mServerView = (Spinner) findViewById(R.id.serverSpinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
-        serverAdapter = ArrayAdapter.createFromResource(this,
-                R.array.servers_array, android.R.layout.simple_spinner_item);
+        serverAdapter = new ArrayAdapter<String>(
+                this, android.R.layout.simple_spinner_item, serversList) {
+
+            @Override
+            public boolean isEnabled(int position){
+                return position != 0;
+            }
+
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        ViewGroup parent) {
+
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+
+                if(position == 0) {
+                    // Set the disable item text color
+                    tv.setTextColor(Color.GRAY);
+                }
+                else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+        };
         // Specify the layout to use when the list of choices appears
         serverAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         mServerView.setAdapter(serverAdapter);
         mServerView.setOnItemSelectedListener(this);
 
-        if (serverAdapter.getItem(0).equals(Constants.SWAD_UGR_SERVER))
-            mPasswordView.setError(getString(R.string.error_password_summaryUGR));
-
         mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
 
-        mSignInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });
-        mLostPasswordButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                recoverPasswordDialog();
-            }
-        });
-        mCreateAccountButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                createAccount();
-            }
-        });
+        if (mSignInButton != null) {
+            mSignInButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    attemptLogin();
+                }
+            });
+        }
+
+        if (mLostPasswordButton != null) {
+            mLostPasswordButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    recoverPasswordDialog();
+                }
+            });
+        }
+
+        if (mCreateAccountButton != null) {
+            mCreateAccountButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    createAccount();
+                }
+            });
+        }
     }
 
     /**
@@ -204,6 +239,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         mIDView.setError(null);
         mPasswordView.setError(null);
         mServerTextView.setError(null);
+        spinnerSetError(null);
 
         boolean cancel = false;
         View focusView = null;
@@ -213,7 +249,10 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         passwordValue = mPasswordView.getText().toString();
         serverValue = mServerView.getSelectedItem().toString();
 
-        if(serverValue.contains(getString(R.string.otherMsg))) {
+        if(serverValue.equals(serversList.get(0))) {
+            spinnerSetError(getString(R.string.noServer));
+            serverValue = "";
+        } else if(serverValue.contains(getString(R.string.otherMsg))) {
             serverValue = mServerTextView.getText().toString().replaceFirst("^(http://|https://)","");
         }
 
@@ -440,14 +479,17 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
     }
 
     private void setServer(int position) {
-        String serverValue = serverAdapter.getItem(position).toString();
+        String serverValue = serverAdapter.getItem(position);
 
         //Reset password error
         mPasswordView.setError(null);
-        if (Constants.SWAD_UGR_SERVER.equals(serverValue))
-            mPasswordView.setError(getString(R.string.error_password_summaryUGR));
 
-        if(serverValue.contains(getString(R.string.otherMsg))) {
+        if (serverValue.isEmpty() || serverValue.equals(serversList.get(0))) {
+            spinnerSetError(getString(R.string.noServer));
+        } else if (Constants.SWAD_UGR_SERVER.equals(serverValue)) {
+            mPasswordView.setError(getString(R.string.error_password_summaryUGR));
+            Preferences.setServer(serverValue);
+        } else if(serverValue.contains(getString(R.string.otherMsg))) {
             mServerTextView.setText(Preferences.getServer());
             mServerTextView.setVisibility(View.VISIBLE);
         } else {
@@ -468,5 +510,19 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         }
 
         mServerView.setSelection(serverPosition);
+    }
+
+    private void spinnerSetError(String error) {
+        View selectedView = mServerView.getSelectedView();
+
+        if ((selectedView != null) && (selectedView instanceof TextView)) {
+            TextView selectedTextView = (TextView) selectedView;
+
+            if ((error == null) || (error.isEmpty())) {
+                selectedTextView.setError(null);
+            } else {
+                selectedTextView.setError(error);
+            }
+        }
     }
 }

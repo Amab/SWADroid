@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="servers_array">
+        <item>[Elegir uno]</item>
         <item>swad.ugr.es</item>
         <item>openswad.org</item>
         <item>Otro…</item>
