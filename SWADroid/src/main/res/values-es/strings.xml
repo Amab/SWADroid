@@ -315,5 +315,6 @@
     <string name="timelineFav">Nuevo favorito a mis mensajes sociales</string>
     <string name="timelineShare">Nueva compartición de mis mensajes sociales</string>
     <string name="timelineMention">Nueva mención</string>
+    <string name="noMarksMsg">No hay calificaciones disponibles o el DNI del estudiante no ha sido verificado por el profesor</string>
 
 </resources>

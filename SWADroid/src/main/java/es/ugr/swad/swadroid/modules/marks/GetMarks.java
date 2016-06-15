@@ -151,7 +151,7 @@ public class GetMarks extends Module {
     @Override
     protected void postConnect() {
         AlertDialog errorDialog;
-        String errorMsg = getString(R.string.errorBadFileCodeMsg);;
+        String errorMsg = getString(R.string.errorBadFileCodeMsg);
         if(hasError) {
             errorDialog = DialogFactory.createErrorDialog(this, TAG,
                     errorMsg, null, false, false, new DialogInterface.OnClickListener() {

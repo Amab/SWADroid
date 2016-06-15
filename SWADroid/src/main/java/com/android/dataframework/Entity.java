@@ -588,7 +588,7 @@ public class Entity {
 			
 			Iterator<Entry<String, Object>> it = mMultilanguagesAttributes.entrySet().iterator();
 			while (it.hasNext()) {
-				Entry<String, Object> e = (Entry<String, Object>)it.next();
+				Entry<String, Object> e = it.next();
 				args.put(e.getKey().toString(), e.getValue().toString());
 			}
 			
@@ -659,7 +659,7 @@ public class Entity {
     	try {    		
     		
 			XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-			XmlPullParser x = (XmlPullParser)factory.newPullParser();			
+			XmlPullParser x = factory.newPullParser();
 			x.setInput(new StringReader(xml));
 			
 	    	int eventType = x.getEventType();

@@ -118,7 +118,7 @@ public class DownloadsManager extends MenuActivity {
      */
     private boolean refresh = false;
 
-    private TextView noConnectionText;
+    private TextView messageText;
     private GridView grid;
 
     private TextView currentPathText;
@@ -139,7 +139,7 @@ public class DownloadsManager extends MenuActivity {
     /**
      * Indicates if the menu no connection is visible
      */
-    private boolean noConnectionView = false;
+    private boolean messageView = false;
     /**
      * Indicates that the current state should be saved in case the activity is brought to background
      */
@@ -212,7 +212,7 @@ public class DownloadsManager extends MenuActivity {
                     this.tree = savedInstanceState.getString("tree");
                     String path = savedInstanceState.getString("path");
                     this.navigator = new DirectoryNavigator(getApplicationContext(), this.tree);
-                    if (path.equals("/")) {
+                    if ("/".equals(path)) {
                         int firstBar = path.indexOf('/', 0);
                         int nextBar = path.indexOf('/', firstBar + 1);
                         while (nextBar != -1) {
@@ -231,7 +231,7 @@ public class DownloadsManager extends MenuActivity {
         downloadsAreaCode = getIntent().getIntExtra("downloadsAreaCode",
                 Constants.DOCUMENTS_AREA_CODE);
 
-        noConnectionText = (TextView) this.findViewById(R.id.noConnectionText);
+        messageText = (TextView) this.findViewById(R.id.messageText);
 
         grid = (GridView) this.findViewById(R.id.gridview);
         grid.setOnItemClickListener((new OnItemClickListener() {
@@ -355,7 +355,7 @@ public class DownloadsManager extends MenuActivity {
                         setMainView();
                     } else {
                         refresh = false;
-                        if (!noConnectionView)
+                        if (!messageView)
                             refresh();
                         else
                             setMainView();
@@ -411,14 +411,16 @@ public class DownloadsManager extends MenuActivity {
         }
     }
 
-
     /**
      * Having connection is mandatory for the Download Module.
      * Therefore when there is not connection, the grid of nodes is disabled and instead it is showed an info messages
      */
     private void setNoConnectionView() {
-        noConnectionView = true;
-        noConnectionText.setVisibility(View.VISIBLE);
+        messageView = true;
+
+        messageText.setText(R.string.noConnectionMsg);
+        messageText.setVisibility(View.VISIBLE);
+
         grid.setVisibility(View.GONE);
 
         this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
@@ -427,18 +429,36 @@ public class DownloadsManager extends MenuActivity {
         
         this.saveState = true;
         this.previousConnection = false;
+    }
 
+    /**
+     * Having connection is mandatory for the Download Module.
+     * Therefore when there is not connection, the grid of nodes is disabled and instead it is showed an info messages
+     */
+    private void setNoMarksView() {
+        messageView = true;
+
+        messageText.setText(R.string.noMarksMsg);
+        messageText.setVisibility(View.VISIBLE);
+
+        grid.setVisibility(View.GONE);
+
+        this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
+
+        getSupportActionBar().setSubtitle(Courses.getSelectedCourseShortName());
+
+        this.saveState = true;
+        this.previousConnection = true;
     }
 
     /**
      * This method set the grid of nodes visible and paints the directory tree in its root node
      */
     private void setMainView() {
-
-        noConnectionText.setVisibility(View.GONE);
+        messageText.setVisibility(View.GONE);
         grid.setVisibility(View.VISIBLE);
 
-        noConnectionView = false;
+        messageView = false;
 
         currentPathText = (TextView) this.findViewById(R.id.path);
 
@@ -447,6 +467,13 @@ public class DownloadsManager extends MenuActivity {
             navigator = new DirectoryNavigator(getApplicationContext(), tree);
             items = navigator
                     .goToRoot();
+
+            /* Show a message if there are no marks currently available
+             * or the student ID has not been verified by the teacher
+             */
+            if(items.isEmpty()) {
+                setNoMarksView();
+            }
         } else {
             items = navigator.goToCurrentDirectory();
         }
@@ -588,11 +615,7 @@ public class DownloadsManager extends MenuActivity {
      * @return False if not downloaded, True otherwise.
      */
     private boolean isDownloaded(File f) {
-        if (f.exists() && f.length() == fileSize) {
-            return true;
-        } else {
-            return false;
-        }
+        return f.exists() && f.length() == fileSize;
     }
     
     /**
