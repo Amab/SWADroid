@@ -432,13 +432,31 @@ public class DownloadsManager extends MenuActivity {
     }
 
     /**
-     * Having connection is mandatory for the Download Module.
-     * Therefore when there is not connection, the grid of nodes is disabled and instead it is showed an info messages
+     *  Documents:
+     *
+     *  Show a warning on Documents screen if there are no documents currently available.
+     *
+     *  Marks:
+     *
+     *  Show a warning on Marks screen if student ID has not yet been verified by the teacher or
+     *  there are no marks currently available.
      */
-    private void setNoMarksView() {
+    private void setNoDocumentsView() {
+        int resNoDocuments;
+
+        if(downloadsAreaCode == Constants.MARKS_AREA_CODE) {
+            if (Login.getCurrentUserRole() == Constants.STUDENT_TYPE_CODE)
+                resNoDocuments = R.string.noMarksStudentMsg;
+            else {
+                resNoDocuments = R.string.noMarksTeacherMsg;
+            }
+        } else {
+            resNoDocuments = R.string.noDocumentsMsg;
+        }
+
         messageView = true;
 
-        messageText.setText(R.string.noMarksMsg);
+        messageText.setText(resNoDocuments);
         messageText.setVisibility(View.VISIBLE);
 
         grid.setVisibility(View.GONE);
@@ -468,11 +486,8 @@ public class DownloadsManager extends MenuActivity {
             items = navigator
                     .goToRoot();
 
-            /* Show a message if there are no marks currently available
-             * or the student ID has not been verified by the teacher
-             */
             if(items.isEmpty()) {
-                setNoMarksView();
+                setNoDocumentsView();
             }
         } else {
             items = navigator.goToCurrentDirectory();
@@ -771,15 +786,15 @@ public class DownloadsManager extends MenuActivity {
         }
 
         switch (downloadsAreaCode) {
-            case 1:
+            case Constants.DOCUMENTS_AREA_CODE:
                 setTitle(R.string.documentsDownloadModuleLabel);
                 getSupportActionBar().setIcon(R.drawable.folder);
                 break;
-            case 2:
+            case Constants.SHARE_AREA_CODE:
                 setTitle(R.string.sharedsDownloadModuleLabel);
                 getSupportActionBar().setIcon(R.drawable.folder_users);
                 break;
-            case 3:
+            case Constants.MARKS_AREA_CODE:
                 setTitle(R.string.marksModuleLabel);
                 getSupportActionBar().setIcon(R.drawable.grades);
                 break;

@@ -324,6 +324,8 @@
     <string name="timelineFav">Fav to one of my social publishings</string>
     <string name="timelineShare">Sharing of one of my social posts</string>
     <string name="timelineMention">Mention to me in a social publishing</string>
-    <string name="noMarksMsg">No marks currently available or the student ID has not been verified by the teacher</string>
+    <string name="noMarksStudentMsg">No marks currently available or the student ID has not been verified by the teacher</string>
+    <string name="noMarksTeacherMsg">No marks currently available</string>
+    <string name="noDocumentsMsg">No documents currently available</string>
 
 </resources>
