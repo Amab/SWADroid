@@ -456,11 +456,7 @@ public class EntityCursor implements Cursor, Iterable<Entity> {
 		@Override
 		public boolean hasNext() 
 		{
-			if (mCursor.isLast() || mCursor.isAfterLast()){
-				return false;
-			}else{
-				return true;
-			}			
+			return !(mCursor.isLast() || mCursor.isAfterLast());
 		}
 
 		@Override

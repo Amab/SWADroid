@@ -124,7 +124,7 @@ public class TestsConfigDownload extends Module {
                 Integer defQuestions = Integer.valueOf(soap.getProperty("defQuestions").toString());
                 Integer maxQuestions = Integer.valueOf(soap.getProperty("maxQuestions").toString());
                 String feedback = soap.getProperty("feedback").toString();
-                Test tDB = (Test) dbHelper.getRow(DataBaseHelper.DB_TABLE_TEST_CONFIG, "id",
+                Test tDB = dbHelper.getRow(DataBaseHelper.DB_TABLE_TEST_CONFIG, "id",
                         Long.toString(Courses.getSelectedCourseCode()));
 
                 //If exists a test configuration for this course, remove from database

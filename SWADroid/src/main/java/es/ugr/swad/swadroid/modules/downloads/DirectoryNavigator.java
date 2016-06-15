@@ -206,18 +206,19 @@ public class DirectoryNavigator {
                         String tag = data.getNodeName();
                         Node firstChild = data.getFirstChild();
                         if (firstChild != null) {
-                            if (tag.equals("code")) {
-                                fileCode = Long.valueOf(firstChild.getNodeValue());
-                            } else if (tag.equals("size")) {
-                                size = Integer.parseInt(firstChild.getNodeValue());
-                            } else if (tag.equals("time")) {
-                                time = Long.valueOf(firstChild.getNodeValue());
-                            } else if (tag.equals("license")) {
-                                license = firstChild.getNodeValue();
-                            } else if (tag.equals("publisher")) {
-                                publisher = firstChild.getNodeValue();
-                            } else if (tag.equals("photo")) {
-                                photo = firstChild.getNodeValue();
+                            switch (tag) {
+                                case "code":
+                                case "time":
+                                    time = Long.valueOf(firstChild.getNodeValue());
+                                    break;
+                                case "license":
+                                case "publisher":
+                                case "photo":
+                                    photo = firstChild.getNodeValue();
+                                    break;
+                                case "size":
+                                    size = Integer.parseInt(firstChild.getNodeValue());
+                                    break;
                             }
                         }
                     }

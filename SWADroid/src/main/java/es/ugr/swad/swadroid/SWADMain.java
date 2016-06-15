@@ -447,7 +447,7 @@ public class SWADMain extends MenuExpandableListActivity {
         if (listCourses.size() != 0) {
             Course courseSelected;
             if (Courses.getSelectedCourseCode() != -1) {
-                courseSelected = (Course) dbHelper.getRow(DataBaseHelper.DB_TABLE_COURSES, "id", String.valueOf(Courses.getSelectedCourseCode()));
+                courseSelected = dbHelper.getRow(DataBaseHelper.DB_TABLE_COURSES, "id", String.valueOf(Courses.getSelectedCourseCode()));
             } else {
                 int lastSelected = Preferences.getLastCourseSelected();
                 if (lastSelected != -1 && lastSelected < listCourses.size()) {

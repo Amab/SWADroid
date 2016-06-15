@@ -77,8 +77,7 @@ public class EasySSLSocketFactory extends SSLSocketFactory implements SocketFact
                                     int localPort,
                                     HttpParams params) 
 
-                throws IOException, UnknownHostException, ConnectTimeoutException 
-    {  
+                throws IOException {
       int connTimeout = HttpConnectionParams.getConnectionTimeout(params);  
       int soTimeout = HttpConnectionParams.getSoTimeout(params);  
       InetSocketAddress remoteAddress = new InetSocketAddress(host, port);  
@@ -121,9 +120,7 @@ public class EasySSLSocketFactory extends SSLSocketFactory implements SocketFact
     public Socket createSocket(Socket socket,
                                    String host, 
                                    int port,
-                                   boolean autoClose) throws IOException,  
-                                                             UnknownHostException 
-    {  
+                                   boolean autoClose) throws IOException {
       return getSSLContext().getSocketFactory().createSocket(socket, host, port, autoClose);  
     }  
 
@@ -154,15 +151,14 @@ public class EasySSLSocketFactory extends SSLSocketFactory implements SocketFact
 	}
 
 	@Override
-	public Socket createSocket(String host, int port) throws IOException,
-			UnknownHostException {
+	public Socket createSocket(String host, int port) throws IOException {
 		
 		return getSSLContext().getSocketFactory().createSocket(host, port);
 	}
 
 	@Override
 	public Socket createSocket(String host, int port, InetAddress localHost,
-			int localPort) throws IOException, UnknownHostException {
+			int localPort) throws IOException {
 		
 		return getSSLContext().getSocketFactory().createSocket(host, port, localHost, localPort);
 	}

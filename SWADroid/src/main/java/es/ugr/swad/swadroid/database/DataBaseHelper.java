@@ -325,7 +325,7 @@ public class DataBaseHelper {
                     Utils.parseStringBool(ent.getString("seenRemote")));
         } else if (table.equals(DataBaseHelper.DB_TABLE_TEST_QUESTIONS)) {
             id = ent.getInt("id");
-            PairTable<?, ?> q = (PairTable<?, ?>) getRow(DataBaseHelper.DB_TABLE_TEST_QUESTIONS_COURSE, "qstCod", Long.toString(id));
+            PairTable<?, ?> q = getRow(DataBaseHelper.DB_TABLE_TEST_QUESTIONS_COURSE, "qstCod", Long.toString(id));
 
             if (q != null) {
                 o = new TestQuestion(id,
@@ -340,7 +340,7 @@ public class DataBaseHelper {
         } else if (table.equals(DataBaseHelper.DB_TABLE_TEST_ANSWERS)) {
             id = ent.getId();
             int ansInd = ent.getInt("ansInd");
-            PairTable<?, ?> a = (PairTable<?, ?>) getRow(DataBaseHelper.DB_TABLE_TEST_QUESTION_ANSWERS, "ansCod", Long.toString(id));
+            PairTable<?, ?> a = getRow(DataBaseHelper.DB_TABLE_TEST_QUESTION_ANSWERS, "ansCod", Long.toString(id));
 
             if (a != null) {
                 o = new TestAnswer(id,
@@ -354,7 +354,7 @@ public class DataBaseHelper {
             }
         } else if (table.equals(DataBaseHelper.DB_TABLE_TEST_TAGS)) {
             id = ent.getInt("tagCod");
-            TestTag t = (TestTag) getRow(DataBaseHelper.DB_TABLE_TEST_QUESTION_TAGS, "tagCod", Long.toString(id));
+            TestTag t = getRow(DataBaseHelper.DB_TABLE_TEST_QUESTION_TAGS, "tagCod", Long.toString(id));
 
             if (t != null) {
                 o = new TestTag(id,
@@ -725,7 +725,7 @@ public class DataBaseHelper {
         List<Entity> rows = db.getEntityList(table, "id = " + groupId);
         Group g = null;
         if (rows != null)
-            g = (Group) createObjectByTable(table, rows.get(0));
+            g = createObjectByTable(table, rows.get(0));
         return g;
     }
 
@@ -828,7 +828,7 @@ public class DataBaseHelper {
         List<Group> groups = new ArrayList<Group>();
         if (!groupCodes.isEmpty()) {
             for (Long groupCode : groupCodes) {
-                Group g = (Group) getRow(DataBaseHelper.DB_TABLE_GROUPS, "id", String.valueOf(groupCode));
+                Group g = getRow(DataBaseHelper.DB_TABLE_GROUPS, "id", String.valueOf(groupCode));
                 if (g.isMember()) groups.add(g);
             }
         }
@@ -862,7 +862,7 @@ public class DataBaseHelper {
      */
     public boolean isUserEnrolledCourse(String userID, long selectedCourseCode) {
         boolean enrolled = false;
-        User u = (User) getRow(DataBaseHelper.DB_TABLE_USERS, "userID", userID);
+        User u = getRow(DataBaseHelper.DB_TABLE_USERS, "userID", userID);
 
         if (u != null) {
             String sentencia = "SELECT userCode AS _id, crsCod" +
@@ -898,7 +898,7 @@ public class DataBaseHelper {
         List<Group> groups = new ArrayList<Group>(groupCodes.getCount());
 
         while (groupCodes.moveToNext()) {
-            Group group = (Group) this.getRow(DataBaseHelper.DB_TABLE_GROUPS, "id", String.valueOf(groupCodes.getInt(0)));
+            Group group = this.getRow(DataBaseHelper.DB_TABLE_GROUPS, "id", String.valueOf(groupCodes.getInt(0)));
             groups.add(group);
         }
         return groups;
@@ -1146,7 +1146,7 @@ public class DataBaseHelper {
         //update all the relationship
         long groupCode = g.getId();
         rows = db.getEntityList(DataBaseHelper.DB_TABLE_GROUPS_COURSES, "grpCod =" + groupCode);
-        Course course = (Course) getRow(DataBaseHelper.DB_TABLE_COURSES, "id", String.valueOf(courseCode));
+        Course course = getRow(DataBaseHelper.DB_TABLE_COURSES, "id", String.valueOf(courseCode));
 
         //course code is a foreign key. Therefore, to avoid a database error,
         //it should not insert/modify rows in the relationship table if the course does not exists
@@ -1187,7 +1187,7 @@ public class DataBaseHelper {
      */
     public boolean insertGroupType(GroupType gt) {
         boolean returnValue = true;
-        GroupType row = (GroupType) getRow(DataBaseHelper.DB_TABLE_GROUP_TYPES, "id", String.valueOf(gt.getId()));
+        GroupType row = getRow(DataBaseHelper.DB_TABLE_GROUP_TYPES, "id", String.valueOf(gt.getId()));
         if (row == null) {
             insertEntity(DataBaseHelper.DB_TABLE_GROUP_TYPES, gt);
         } else {
@@ -1742,7 +1742,7 @@ public class DataBaseHelper {
             insertEntity(DataBaseHelper.DB_TABLE_GROUPS, currentGroup, ent);
 
             rows = db.getEntityList(DataBaseHelper.DB_TABLE_GROUPS_COURSES, "grpCod =" + groupCode);
-            Course course = (Course) getRow(DataBaseHelper.DB_TABLE_COURSES, "id", String.valueOf(courseCode));
+            Course course = getRow(DataBaseHelper.DB_TABLE_COURSES, "id", String.valueOf(courseCode));
             //course code is a foreign key. Therefore, to avoid a database error,
             //it should not insert/modify rows in the relationship table if the course does not exists
             if (course != null) {
@@ -1758,7 +1758,7 @@ public class DataBaseHelper {
             } else returnValue = false;
 
             if (groupTypeCode.length > 0) {
-                GroupType groupType = (GroupType) getRow(DataBaseHelper.DB_TABLE_GROUP_TYPES, "id", String.valueOf(groupTypeCode[0]));
+                GroupType groupType = getRow(DataBaseHelper.DB_TABLE_GROUP_TYPES, "id", String.valueOf(groupTypeCode[0]));
                 //group type code is a foreign key. Therefore, to avoid a database error,
                 //it should not insert/modify rows in the relationship table if the group type does not exists
                 if (groupType != null) {

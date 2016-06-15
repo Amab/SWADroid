@@ -139,10 +139,7 @@ public class DataFrameworkCore {
         }
         
         private boolean add(int version, int oldVersion, int newVersion) {
-        	if (version>oldVersion && version<=newVersion)
-        		return true;
-        	else 
-        		return false;
+			return version > oldVersion && version <= newVersion;
         }
     }
     
@@ -361,7 +358,7 @@ public class DataFrameworkCore {
     public void restore(String file) throws XmlPullParserException, IOException {
 		try {
 			XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-			XmlPullParser x = (XmlPullParser)factory.newPullParser();
+			XmlPullParser x = factory.newPullParser();
 			x.setInput(new FileReader(file));
 			insertXML(x);
 		} catch (IOException e) {
