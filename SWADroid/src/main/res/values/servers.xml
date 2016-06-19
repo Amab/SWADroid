@@ -2,8 +2,8 @@
 <resources>
     <string-array name="servers_array">
         <item>[Select one]</item>
-        <item>swad.ugr.es</item>
         <item>openswad.org</item>
+        <item>swad.ugr.es</item>
         <item>Other…</item>
     </string-array>
 </resources>
