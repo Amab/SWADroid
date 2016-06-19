@@ -44,18 +44,46 @@ public class ContinuousCaptureActivity extends AppCompatActivity {
     */
     private static final int SCAN_TEXT_SIZE = 18;
 
+    /**
+     * Scan delay
+     */
     private static final long BULK_MODE_SCAN_DELAY_MS = 1000L;
 
+    /**
+     * Database helper
+     */
     private static DataBaseHelper dbHelper;
+
+    /**
+     * Cryptographic helper
+     */
     private static Crypto crypto;
 
+    /**
+     * Code view
+     */
     private CompoundBarcodeView barcodeView;
-    private MediaPlayer mediaPlayer;
 
+    /**
+     * Callback function called when a code is scanned
+     */
     private BarcodeCallback callback = new BarcodeCallback() {
+        private long lastTimestamp = 0;
+
         @Override
         public void barcodeResult(BarcodeResult result) {
-            handleDecode(result);
+            long currentTime = System.currentTimeMillis();
+            long diffLastTimestamp = currentTime - lastTimestamp;
+
+            if (result.getText() != null) {
+                if(diffLastTimestamp < BULK_MODE_SCAN_DELAY_MS) {
+                    Log.d(TAG, "Too soon after the last barcode - ignore: " + diffLastTimestamp + " ms");
+                    return;
+                }
+
+                handleDecode(result);
+                lastTimestamp = currentTime;
+            }
         }
 
         @Override
@@ -112,6 +140,7 @@ public class ContinuousCaptureActivity extends AppCompatActivity {
         boolean validContent = Utils.isValidNickname(qrContent);
         User u = null;
 
+        MediaPlayer mediaPlayer;
         if (validContent) {
             u = dbHelper.getUser("userNickname", crypto.encrypt(qrContent.substring(1)));
 
