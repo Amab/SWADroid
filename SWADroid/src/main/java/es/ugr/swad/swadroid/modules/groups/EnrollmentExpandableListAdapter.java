@@ -48,13 +48,14 @@ import es.ugr.swad.swadroid.model.Model;
  * There are two kind of layout: one for the groups and one for the children
  *
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 
 public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 
     private LongSparseArray<ArrayList<Group>> children = null;
     private ArrayList<Model> groups = null;
-    private final LongSparseArray<boolean[]> realMembership = new LongSparseArray<boolean[]>();
+    private final LongSparseArray<boolean[]> realMembership = new LongSparseArray<>();
 
     private int role = -1;
     private int layoutGroup = 0;
@@ -148,14 +149,9 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
         // To click the checkbox
         Group g = (Group) getChild(groupPosition, childPosition);
         holder.checkBox.setTag(g);
-        
-        boolean freeSpot = false;
-        if (maxStudents != -1) {
-            if (group.getCurrentStudents() < maxStudents)
-                freeSpot = true;
-        } else { //if maxStudent == -1, there is not limit of students in this groups
-            freeSpot = true;
-        }
+
+        //if maxStudent == -1, there is not limit of students in this groups
+        boolean freeSpot = ((maxStudents == -1) || (group.getCurrentStudents() < maxStudents));
 
         if (open != 0) {
             holder.imagePadlock.setImageResource(R.drawable.padlock_green);
@@ -163,33 +159,29 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
             holder.imagePadlock.setImageResource(R.drawable.padlock_red);
         }
 
-        if ((open != 0 && freeSpot) || role == Constants.TEACHER_TYPE_CODE) { //Teachers can enroll even on closed groups
-            holder.checkBox.setEnabled(true);
+        boolean canEnroll = ((open != 0 && freeSpot) || role == Constants.TEACHER_TYPE_CODE);
+        if(canEnroll) {
             holder.checkBox.setTextColor(ContextCompat.getColor(context, android.R.color.black));
-            holder.imagePadlock.setEnabled(true);
-            holder.nStudentText.setEnabled(true);
             holder.nStudentText.setTextColor(ContextCompat.getColor(context, R.color.sgilight_gray_32));
-            holder.maxStudentText.setEnabled(true);
             holder.maxStudentText.setTextColor(ContextCompat.getColor(context, R.color.sgilight_gray_32));
-            holder.radioButton.setEnabled(true);
             holder.radioButton.setTextColor(ContextCompat.getColor(context, android.R.color.black));
-            holder.linearLayout.setEnabled(true);
-            holder.vacantsText.setEnabled(true);
             holder.vacantsText.setTextColor(ContextCompat.getColor(context, R.color.sgilight_gray_32));
         } else {
-            holder.checkBox.setEnabled(false);
             holder.checkBox.setTextColor(ContextCompat.getColor(context, R.color.sgilight_gray));
-            holder.imagePadlock.setEnabled(false);
-            holder.nStudentText.setEnabled(false);
             holder.nStudentText.setTextColor(ContextCompat.getColor(context, R.color.sgilight_gray));
-            holder.maxStudentText.setEnabled(false);
             holder.maxStudentText.setTextColor(ContextCompat.getColor(context, R.color.sgilight_gray));
-            holder.radioButton.setEnabled(false);
             holder.radioButton.setTextColor(ContextCompat.getColor(context, R.color.sgilight_gray));
-            holder.linearLayout.setEnabled(false);
-            holder.vacantsText.setEnabled(false);
             holder.vacantsText.setTextColor(ContextCompat.getColor(context, R.color.sgilight_gray));
         }
+
+        holder.checkBox.setEnabled(canEnroll);
+        holder.imagePadlock.setEnabled(canEnroll);
+        holder.nStudentText.setEnabled(canEnroll);
+        holder.maxStudentText.setEnabled(canEnroll);
+        holder.radioButton.setEnabled(canEnroll);
+        holder.linearLayout.setEnabled(canEnroll);
+        holder.vacantsText.setEnabled(canEnroll);
+
         //for multiple inscriptions the groups should be checkboxes to allow multiple choice
         //otherwise the groups should be radio button to allow just a single choice
         //Teachers can enroll in multiple groups even if the enrollment type for the group type is single
@@ -197,24 +189,14 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
             holder.checkBox.setVisibility(View.GONE);
             holder.radioButton.setVisibility(View.VISIBLE);
 
-            holder.radioButton.setText(groupName);
-            if (member != 0) {
-                holder.radioButton.setChecked(true);
-            } else {
-                holder.radioButton.setChecked(false);
-            }
         } else { //multiple inscriptions :
 
             holder.checkBox.setVisibility(View.VISIBLE);
             holder.radioButton.setVisibility(View.GONE);
-
-            holder.checkBox.setText(groupName);
-            if (member != 0) {
-                holder.checkBox.setChecked(true);
-            } else {
-                holder.checkBox.setChecked(false);
-            }
         }
+
+        holder.checkBox.setText(groupName);
+        holder.checkBox.setChecked(member != 0);
 
         holder.nStudentText.setText(context.getString(R.string.numStudent) + ": " + String.valueOf(students));
 
@@ -372,7 +354,7 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
     }
 
     public ArrayList<Long> getChosenGroupCodes() {
-        ArrayList<Long> groupCodes = new ArrayList<Long>();
+        ArrayList<Long> groupCodes = new ArrayList<>();
         Long key;
         for (int i = 0; i < children.size(); i++) {
             key = children.keyAt(i);

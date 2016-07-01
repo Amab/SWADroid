@@ -263,7 +263,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
     }
 
     private LongSparseArray<ArrayList<Group>> getHashMapGroups(ArrayList<Model> groupTypes) {
-        LongSparseArray<ArrayList<Group>> children = new LongSparseArray<ArrayList<Group>>();
+        LongSparseArray<ArrayList<Group>> children = new LongSparseArray<>();
         for (Model groupType : groupTypes) {
             long groupTypeCode = groupType.getId();
             ArrayList<Group> groups = (ArrayList<Group>) dbHelper.getGroupsOfType(groupTypeCode);
