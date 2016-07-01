@@ -543,14 +543,14 @@ public class DownloadsManager extends MenuActivity {
             Spinner groupsSpinner = (Spinner) this.findViewById(R.id.groupSpinner);
             groupsSpinner.setVisibility(View.VISIBLE);
 
-            ArrayList<String> spinnerNames = new ArrayList<String>(currentGroups.size() + 1);
+            ArrayList<String> spinnerNames = new ArrayList<>(currentGroups.size() + 1);
             spinnerNames.add(getString(R.string.course) + "-" + Courses.getSelectedCourseShortName());
             for (Group g : currentGroups) {
                 GroupType gType = dbHelper.getGroupTypeFromGroup(g.getId());
                 spinnerNames.add(getString(R.string.group) + "-" + gType.getGroupTypeName() + " " + g.getGroupName());
             }
 
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerNames);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, spinnerNames);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             groupsSpinner.setAdapter(adapter);
             groupsSpinner.setOnItemSelectedListener(new onGroupSelectedListener());
@@ -664,7 +664,7 @@ public class DownloadsManager extends MenuActivity {
         // Check if external storage is available
         int storageState = checkMediaAvailability(); 
         if (storageState == 2) {
-            new FileDownloaderAsyncTask(this, this.chosenNodeName, fileSize)
+            new FileDownloaderAsyncTask(this, this.chosenNodeName)
             .execute(directory, url);
         } else {
             Toast.makeText(this, R.string.sdCardBusyTitle, Toast.LENGTH_LONG).show();

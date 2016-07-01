@@ -47,7 +47,7 @@ public class DataFramework {
 	
 	private int mOpenInstances = 0;
 
-    private ArrayList<Table> mTables = new ArrayList<Table>();
+    private ArrayList<Table> mTables = new ArrayList<>();
     
     private DataFrameworkCore mCore;
     
@@ -210,7 +210,7 @@ public class DataFramework {
     	String[] fields = getTable(table).getFieldsToArray();
     	Cursor c = getCursor(table, fields, where, null, null, null, orderby, limit);
     	
-    	ArrayList<Entity> aux = new ArrayList<Entity>();
+    	ArrayList<Entity> aux = new ArrayList<>();
 
     	c.moveToFirst();
     	while (!c.isAfterLast()) {

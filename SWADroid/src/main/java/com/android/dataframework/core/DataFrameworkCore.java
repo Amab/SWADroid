@@ -59,7 +59,7 @@ public class DataFrameworkCore {
 	
 	private String mPackage = "";
 	
-	private ArrayList<String> mLanguages = new ArrayList<String>();
+	private ArrayList<String> mLanguages = new ArrayList<>();
 	private String mCurrentLanguage;
 
 	private SQLiteDatabase mDb;
@@ -322,13 +322,13 @@ public class DataFrameworkCore {
 	    		int fieldCount = fields.size();
 	    		
 	    		while (!c.isAfterLast()) {
-	        		osw.append("<row table=\"" + tableName + "\" id=\"" + c.getString(c.getColumnIndex(DataFramework.KEY_ID)) + "\">\n");
+	        		osw.append("<row table=\"").append(tableName).append("\" id=\"").append(c.getString(c.getColumnIndex(DataFramework.KEY_ID))).append("\">\n");
 	        		
 	        		for (int j = 0; j < fieldCount; j++) 
 	        		{
 	        			Field field = fields.get(j);
 	        			if (c.getString(c.getColumnIndex(field.getName()))!=null)
-	        				osw.append("<field name=\"" + field.getName() + "\" value=\"" + c.getString(c.getColumnIndex(field.getName())).replace("\"", "&quot;") + "\" />\n");
+	        				osw.append("<field name=\"").append(field.getName()).append("\" value=\"").append(c.getString(c.getColumnIndex(field.getName())).replace("\"", "&quot;")).append("\" />\n");
 	        		}
 	        		
 	        		osw.append("</row>\n");

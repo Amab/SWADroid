@@ -44,7 +44,7 @@ public class SWADroidTracker {
     /**
      * SWADroidTracker tag name for Logcat
      */
-    public static final String TAG = Constants.APP_TAG + " SWADroidTracker";
+    private static final String TAG = Constants.APP_TAG + " SWADroidTracker";
     /**
      * Enum used to identify the tracker that needs to be used for tracking.
      *
@@ -58,9 +58,9 @@ public class SWADroidTracker {
         ECOMMERCE_TRACKER, // Tracker used by all ecommerce transactions from a company.
     }
 
-    private static HashMap<TrackerName, Tracker> mTrackers = new HashMap<TrackerName, Tracker>();
+    private static HashMap<TrackerName, Tracker> mTrackers = new HashMap<>();
 
-    private static boolean isTrackerEnabled(Context context) {
+    private static boolean isTrackerEnabled() {
         return (!Config.ANALYTICS_API_KEY.isEmpty());
     }
 
@@ -79,7 +79,7 @@ public class SWADroidTracker {
 
     public static void initTracker(Context context) {
         // Initialize a tracker using a Google Analytics property ID.
-        if(isTrackerEnabled(context)) {
+        if(isTrackerEnabled()) {
             GoogleAnalytics.getInstance(context).newTracker(Config.ANALYTICS_API_KEY);
 
             ExceptionReporter exceptionHandler =
@@ -108,7 +108,7 @@ public class SWADroidTracker {
     }
 
     public static void sendScreenView(Context context, String path) {
-        if(isTrackerEnabled(context)) {
+        if(isTrackerEnabled()) {
             // Get tracker.
             Tracker t = getTracker(context);
 
@@ -124,7 +124,7 @@ public class SWADroidTracker {
     }
 
     public static void sendScreenView(Context context, String path, String category, String action, String label) {
-        if(isTrackerEnabled(context)) {
+        if(isTrackerEnabled()) {
             // Get tracker.
             Tracker t = getTracker(context);
 
@@ -151,7 +151,7 @@ public class SWADroidTracker {
     }
 
     public static void sendException(Context context, Exception e, boolean fatal) {
-        if(isTrackerEnabled(context)) {
+        if(isTrackerEnabled()) {
             // Get tracker.
             Tracker t = getTracker(context);
 

@@ -122,7 +122,7 @@ public abstract class EntityEditActivity extends Activity
 	
 	protected Map<String, View> getAttributeViews()
 	{
-		Map<String, View> views = new HashMap<String, View>();
+		Map<String, View> views = new HashMap<>();
 		View mainView = findViewById(getMainViewId());
 		Table table = new Table(getTableName());
 		

@@ -308,9 +308,9 @@ public class DownloadManager {
         Downloads.Impl._DATA,
     };
 
-    private static final Set<String> LONG_COLUMNS = new HashSet<String>(
+    private static final Set<String> LONG_COLUMNS = new HashSet<>(
             Arrays.asList(COLUMN_ID, COLUMN_TOTAL_SIZE_BYTES, COLUMN_STATUS, COLUMN_REASON,
-                          COLUMN_BYTES_DOWNLOADED_SO_FAR, COLUMN_LAST_MODIFIED_TIMESTAMP));
+                    COLUMN_BYTES_DOWNLOADED_SO_FAR, COLUMN_LAST_MODIFIED_TIMESTAMP));
 
     /**
      * This class contains all the information necessary to request a new download. The URI is the
@@ -335,7 +335,7 @@ public class DownloadManager {
 
         private Uri mUri;
         private Uri mDestinationUri;
-        private List<Pair<String, String>> mRequestHeaders = new ArrayList<Pair<String, String>>();
+        private List<Pair<String, String>> mRequestHeaders = new ArrayList<>();
         private CharSequence mTitle;
         private CharSequence mDescription;
         private boolean mShowNotification = true;
@@ -637,12 +637,15 @@ public class DownloadManager {
                 throw new IllegalArgumentException("Invalid direction: " + direction);
             }
 
-            if (column.equals(COLUMN_LAST_MODIFIED_TIMESTAMP)) {
-                mOrderByColumn = Downloads.COLUMN_LAST_MODIFICATION;
-            } else if (column.equals(COLUMN_TOTAL_SIZE_BYTES)) {
-                mOrderByColumn = Downloads.COLUMN_TOTAL_BYTES;
-            } else {
-                throw new IllegalArgumentException("Cannot order by " + column);
+            switch (column) {
+                case COLUMN_LAST_MODIFIED_TIMESTAMP:
+                    mOrderByColumn = Downloads.COLUMN_LAST_MODIFICATION;
+                    break;
+                case COLUMN_TOTAL_SIZE_BYTES:
+                    mOrderByColumn = Downloads.COLUMN_TOTAL_BYTES;
+                    break;
+                default:
+                    throw new IllegalArgumentException("Cannot order by " + column);
             }
             mOrderDirection = direction;
             return this;
@@ -654,8 +657,7 @@ public class DownloadManager {
          * @return the Cursor returned by ContentResolver.query()
          */
         Cursor runQuery(ContentResolver resolver, String[] projection, Uri baseUri) {
-            Uri uri = baseUri;
-            List<String> selectionParts = new ArrayList<String>();
+            List<String> selectionParts = new ArrayList<>();
             String[] selectionArgs = null;
 
             if (mIds != null) {
@@ -664,7 +666,7 @@ public class DownloadManager {
             }
 
             if (mStatusFlags != null) {
-                List<String> parts = new ArrayList<String>();
+                List<String> parts = new ArrayList<>();
                 if ((mStatusFlags & STATUS_PENDING) != 0) {
                     parts.add(statusClause("=", Downloads.STATUS_PENDING));
                 }
@@ -698,7 +700,7 @@ public class DownloadManager {
             String orderDirection = (mOrderDirection == ORDER_ASCENDING ? "ASC" : "DESC");
             String orderBy = mOrderByColumn + " " + orderDirection;
 
-            return resolver.query(uri, projection, selection, selectionArgs, orderBy);
+            return resolver.query(baseUri, projection, selection, selectionArgs, orderBy);
         }
 
         private String joinStrings(String joiner, Iterable<String> parts) {
@@ -755,8 +757,7 @@ public class DownloadManager {
     public long enqueue(Request request) {
         ContentValues values = request.toContentValues(mPackageName);
         Uri downloadUri = mResolver.insert(Downloads.CONTENT_URI, values);
-        long id = Long.parseLong(downloadUri.getLastPathSegment());
-        return id;
+        return Long.parseLong(downloadUri.getLastPathSegment());
     }
 
     /**
@@ -826,8 +827,7 @@ public class DownloadManager {
      * @hide
      */
     public void restartDownload(long... ids) {
-        Cursor cursor = query(new Query().setFilterById(ids));
-        try {
+        try (Cursor cursor = query(new Query().setFilterById(ids))) {
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                 int status = cursor.getInt(cursor.getColumnIndex(COLUMN_STATUS));
                 if (status != STATUS_SUCCESSFUL && status != STATUS_FAILED) {
@@ -835,8 +835,6 @@ public class DownloadManager {
                             + cursor.getLong(cursor.getColumnIndex(COLUMN_ID)));
                 }
             }
-        } finally {
-            cursor.close();
         }
 
         ContentValues values = new ContentValues();

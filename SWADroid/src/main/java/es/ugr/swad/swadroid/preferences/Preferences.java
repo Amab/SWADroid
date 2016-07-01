@@ -153,10 +153,6 @@ public class Preferences {
      * Indicates if there are changes on preferences
      */
     private static boolean preferencesChanged = false;
-    /**
-     * Application context
-     */
-    private static Context mContext;
 
     /**
      * Gets application preferences
@@ -186,8 +182,6 @@ public class Preferences {
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	public Preferences(Context ctx) {
-        mContext = ctx;
-
         getPreferences(ctx);
 
     	editor = prefs.edit();
@@ -197,7 +191,7 @@ public class Preferences {
 	            dbHelper = new DataBaseHelper(ctx);
 	        } catch (Exception e) {
 	            Log.e(TAG, e.getMessage());
-                SWADroidTracker.sendException(mContext, e, false);
+                SWADroidTracker.sendException(ctx, e, false);
 	        }
     	}
 	}

@@ -20,7 +20,7 @@ package es.ugr.swad.swadroid.modules.tests;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.text.Html;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -37,6 +37,7 @@ import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.widget.CheckableLinearLayout;
 import es.ugr.swad.swadroid.model.Test;
 import es.ugr.swad.swadroid.model.TestAnswer;
+import es.ugr.swad.swadroid.utils.Utils;
 
 public class CheckedAnswersArrayAdapter extends ArrayAdapter<TestAnswer> {
     private final Context context;
@@ -84,7 +85,7 @@ public class CheckedAnswersArrayAdapter extends ArrayAdapter<TestAnswer> {
                 tt.setText(R.string.falseMsg);
             }
         } else {
-            tt.setText(Html.fromHtml(a.getAnswer()));
+            tt.setText(Utils.fromHtml(a.getAnswer()));
         }
 
         if (answerType.equals(TestAnswer.TYPE_UNIQUE_CHOICE) || answerType.equals(TestAnswer.TYPE_TRUE_FALSE)) {
@@ -116,11 +117,11 @@ public class CheckedAnswersArrayAdapter extends ArrayAdapter<TestAnswer> {
         if (evaluated) {
             tt.setOnClickListener(null);
             answerFeedback = (TextView) convertView.findViewById(android.R.id.text2);
-            answerFeedback.setText(Html.fromHtml(a.getFeedback()));
+            answerFeedback.setText(Utils.fromHtml(a.getFeedback()));
 
             feedbackLevel = Test.FEEDBACK_VALUES.indexOf(feedback);
             if ((feedbackLevel > Test.FEEDBACK_VALUES.indexOf(Test.FEEDBACK_MEDIUM)) && a.getCorrect()) {
-                tt.setTextColor(context.getResources().getColor(R.color.green));
+                tt.setTextColor(ContextCompat.getColor(context, R.color.green));
             } else {
                 tt.setTextColor(Color.BLACK);
             }

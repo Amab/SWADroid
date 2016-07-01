@@ -28,7 +28,7 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
  */
 public class Information extends Module {
 
-	public static final String TAG = Constants.APP_TAG + " Information";
+	private static final String TAG = Constants.APP_TAG + " Information";
 
 	/**
 	 * Information Type. String with the type of information (none, HTML, plain
@@ -49,7 +49,7 @@ public class Information extends Module {
 	/**
 	 * Webview to show course's information
 	 */
-	WebView webview;
+	private WebView webview;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -155,7 +155,7 @@ public class Information extends Module {
             runConnection();
         } catch (Exception e) {
             String errorMsg = getString(R.string.errorServerResponseMsg);
-            error(TAG, errorMsg, e, true);
+            error(errorMsg, e, true);
         }
     }
 

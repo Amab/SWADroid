@@ -26,7 +26,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@+id/acceptList"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="96dp"
             android:text="@string/cancelMsg" />
 
         <Button
@@ -34,8 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="96dp"
+            android:layout_toRightOf="@+id/cancelList"
             android:text="@string/acceptMsg" />
     </RelativeLayout>
 

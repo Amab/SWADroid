@@ -162,7 +162,7 @@ public abstract class Module extends MenuActivity {
         // Recover the launched async task if the activity is re-created
         connect = (Connect) getLastNonConfigurationInstance();
         if (connect != null) {
-            connect.activity = new WeakReference<Module>(this);
+            connect.activity = new WeakReference<>(this);
         }
     }
 
@@ -327,7 +327,7 @@ public abstract class Module extends MenuActivity {
             this.progressDescription = progressDescription;
             this.progressTitle = progressTitle;
             showDialog = show;
-            this.activity = new WeakReference<Module>(activity);
+            this.activity = new WeakReference<>(activity);
             this.e = null;
             progressDialog = new ProgressDialog(Module.this);
         }
@@ -390,21 +390,26 @@ public abstract class Module extends MenuActivity {
                 if (e.getClass() == SoapFault.class) {
                     SoapFault es = (SoapFault) e;
 
-                    if (es.faultstring.equals("Bad log in")) {
-                        errorMsg = getString(R.string.errorBadLoginMsg);
-                        sendException = false;
-                    } else if (es.faultstring.equals("Bad web service key")) {
-                        errorMsg = getString(R.string.errorBadLoginMsg);
-                        sendException = false;
+                    switch (es.faultstring) {
+                        case "Bad log in":
+                            errorMsg = getString(R.string.errorBadLoginMsg);
+                            sendException = false;
+                            break;
+                        case "Bad web service key":
+                            errorMsg = getString(R.string.errorBadLoginMsg);
+                            sendException = false;
 
-                        // Force logout and reset password (this will show again
-                        // the login screen)
-                        Login.setLogged(false);
-                        Preferences.setUserPassword("");
-                    } else if (es.faultstring.equals("Unknown application key")) {
-                        errorMsg = getString(R.string.errorBadAppKeyMsg);
-                    } else {
-                        errorMsg = "Server error: " + es.getMessage();
+                            // Force logout and reset password (this will show again
+                            // the login screen)
+                            Login.setLogged(false);
+                            Preferences.setUserPassword("");
+                            break;
+                        case "Unknown application key":
+                            errorMsg = getString(R.string.errorBadAppKeyMsg);
+                            break;
+                        default:
+                            errorMsg = "Server error: " + es.getMessage();
+                            break;
                     }
                 } else if ((e.getClass() == TimeoutException.class) || (e.getClass() == SocketTimeoutException.class)) {
                     errorMsg = getString(R.string.errorTimeoutMsg);
@@ -439,7 +444,7 @@ public abstract class Module extends MenuActivity {
                 }
 
                 // Request finalized with errors
-                error(TAG, errorMsg, e, sendException);
+                error(errorMsg, e, sendException);
                 setResult(RESULT_CANCELED);
 
                 // Launch database rollback

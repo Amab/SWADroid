@@ -70,7 +70,7 @@ public class EasyX509TrustManager implements X509TrustManager
         // Theoretically, we shouldn't have to do this, but various web servers
         // in practice are mis-configured to have out-of-order certificates or
         // expired self-issued root certificate.
-        int chainLength = certificates.length;
+        int chainLength;
         if (certificates.length > 1) 
         {
           // 1. we clean the received certificates chain.

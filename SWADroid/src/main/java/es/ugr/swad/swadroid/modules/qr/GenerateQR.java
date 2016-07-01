@@ -109,7 +109,7 @@ public class GenerateQR extends MenuActivity {
             String qrContents = "@" + Login.getLoggedUser().getUserNickname();
             ImageView qr_image = (ImageView) findViewById(R.id.qr_code_image);
             Bitmap qrCode;
-            Map<EncodeHintType, Object> hintMap = new EnumMap<EncodeHintType, Object>(EncodeHintType.class);
+            Map<EncodeHintType, Object> hintMap = new EnumMap<>(EncodeHintType.class);
 
             hintMap.put(EncodeHintType.CHARACTER_SET, "UTF-8");
 
@@ -120,7 +120,7 @@ public class GenerateQR extends MenuActivity {
             qrCode = barcodeEncoder.encodeBitmap(qrContents, BarcodeFormat.QR_CODE, CODE_WIDTH, CODE_HEIGHT, hintMap);
             qr_image.setImageBitmap(qrCode);
         } catch (WriterException e) {
-            error(TAG, e.getMessage(), e, true);
+            error(e.getMessage(), e, true);
         }
     }
 }

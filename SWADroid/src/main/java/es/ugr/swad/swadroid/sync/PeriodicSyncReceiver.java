@@ -34,7 +34,7 @@ import es.ugr.swad.swadroid.Constants;
  */
 public final class PeriodicSyncReceiver extends BroadcastReceiver {
 
-    private static Intent createIntent(Context context, String authority, Bundle extras) {
+    private static Intent createIntent(Context context, String authority) {
         Intent intent = new Intent(context, PeriodicSyncReceiver.class);
         intent.putExtra(Constants.AUTHORITY, authority);
         return intent;
@@ -42,7 +42,7 @@ public final class PeriodicSyncReceiver extends BroadcastReceiver {
 
     public static PendingIntent createPendingIntent(Context context, String authority, Bundle extras) {
         int requestCode = 0;
-        Intent intent = createIntent(context, authority, extras);
+        Intent intent = createIntent(context, authority);
         int flags = 0;
         return PendingIntent.getBroadcast(context, requestCode, intent, flags);
     }

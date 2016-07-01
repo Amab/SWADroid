@@ -42,9 +42,7 @@ import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 
 public class FileDownloaderAsyncTask extends AsyncTask<String, Integer, Boolean> {
     private final Context mContext;
-    private URL url;
     private String fileName = "";
-    private boolean downloadSuccess = true;
 
     /**
      * Downloads tag name for Logcat
@@ -52,7 +50,7 @@ public class FileDownloaderAsyncTask extends AsyncTask<String, Integer, Boolean>
     private static final String TAG = Constants.APP_TAG + " Downloads";
 
 
-    public FileDownloaderAsyncTask(Context context, String fileName, long fileSize) {
+    public FileDownloaderAsyncTask(Context context, String fileName) {
         this.fileName = fileName;
         this.mContext = context;
     }
@@ -63,8 +61,14 @@ public class FileDownloaderAsyncTask extends AsyncTask<String, Integer, Boolean>
      * params[1] - url of file to download
      * */
     protected Boolean doInBackground(String... params) {
+        URL url;
+        boolean downloadSuccess;
         try {
             url = new URL(params[1]);
+
+            String titleNotification = mContext.getString(R.string.notificationDownloadTitle); //Initial text that appears in the status bar
+            String descriptionNotification = fileName;
+            downloadSuccess = DownloadFactory.downloadFile(mContext, url.toString(), fileName, titleNotification, descriptionNotification);
         } catch (MalformedURLException e) {
             Log.e(TAG, "Incorrect URL", e);
 
@@ -72,12 +76,7 @@ public class FileDownloaderAsyncTask extends AsyncTask<String, Integer, Boolean>
             SWADroidTracker.sendException(mContext, e, false);
 
             downloadSuccess = false;
-            return false;
         }
-
-        String titleNotification = mContext.getString(R.string.notificationDownloadTitle); //Initial text that appears in the status bar
-        String descriptionNotification = fileName;
-        downloadSuccess = DownloadFactory.downloadFile(mContext, url.toString(), fileName, titleNotification, descriptionNotification);
 
         return downloadSuccess;
     }

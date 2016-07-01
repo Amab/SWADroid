@@ -87,7 +87,7 @@ public class TestQuestion extends Model {
         this.stem = stem;
         this.answerType = anstype;
         this.shuffle = shuffle;
-        this.answers = new ArrayList<TestAnswer>();
+        this.answers = new ArrayList<>();
         this.feedback = feedback;
     }
 
@@ -105,7 +105,7 @@ public class TestQuestion extends Model {
         this.stem = stem;
         this.answerType = anstype;
         this.shuffle = shuffle;
-        this.answers = new ArrayList<TestAnswer>();
+        this.answers = new ArrayList<>();
         this.feedback = feedback;
     }
 
@@ -223,7 +223,7 @@ public class TestQuestion extends Model {
      * @return Correct test's answer
      */
     public List<TestAnswer> getCorrectAnswers() {
-        List<TestAnswer> corrects = new ArrayList<TestAnswer>();
+        List<TestAnswer> corrects = new ArrayList<>();
         TestAnswer current;
 
         for (TestAnswer answer : this.answers) {

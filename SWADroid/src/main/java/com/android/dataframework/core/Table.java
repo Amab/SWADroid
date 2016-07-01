@@ -36,7 +36,7 @@ public class Table {
 	
 	private String mName;
 	private String mToString;
-	private ArrayList<Field> mFields = new ArrayList<Field>();
+	private ArrayList<Field> mFields = new ArrayList<>();
 	private int mNewInVersion;
 	private boolean mBackup;
 
@@ -128,8 +128,7 @@ public class Table {
 	
 	
 	public String getSQLDeleteTable () {
-		String out = "DROP TABLE IF EXISTS " + mName;
-		return out;
+		return "DROP TABLE IF EXISTS " + mName;
 	}
 	
     /**
@@ -154,7 +153,7 @@ public class Table {
 		ArrayList<Field> fields = mFields;
 		int fieldCount = fields.size();
 
-		ArrayList<String> aux = new ArrayList<String>();
+		ArrayList<String> aux = new ArrayList<>();
 		
 		aux.add(DataFramework.KEY_ID);
 		for (int i = 0; i < fieldCount; i++) {

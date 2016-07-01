@@ -60,7 +60,7 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
     private boolean dismissRight = true;
 
     // Transient properties
-    private List < PendingSwipeData > mPendingSwipes = new ArrayList < PendingSwipeData > ();
+    private List < PendingSwipeData > mPendingSwipes = new ArrayList<>();
     private int mDismissAnimationRefCount = 0;
     private float mDownX;
     private boolean mSwiping;
@@ -107,7 +107,7 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
      * @param callback The callback to trigger when the user has indicated that she would like to
      *                 dismiss one or more list items.
      */
-    public SwipeListViewTouchListener(ListView listView, OnSwipeCallback callback) {
+    private SwipeListViewTouchListener(ListView listView, OnSwipeCallback callback) {
         ViewConfiguration vc = ViewConfiguration.get(listView.getContext());
         mSlop = vc.getScaledTouchSlop();
         mMinFlingVelocity = vc.getScaledMinimumFlingVelocity();
@@ -139,7 +139,7 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
      *
      * @param enabled Whether or not to watch for gestures.
      */
-    public void setEnabled(boolean enabled) {
+    private void setEnabled(boolean enabled) {
         mPaused = !enabled;
     }
 

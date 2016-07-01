@@ -102,7 +102,7 @@ public class TestsQuestionsDownload extends Module {
             SoapObject questionsListObject = (SoapObject) res.get(1);
             SoapObject answersListObject = (SoapObject) res.get(2);
             SoapObject questionTagsListObject = (SoapObject) res.get(3);
-            List<TestTag> tagsList = new ArrayList<TestTag>();
+            List<TestTag> tagsList = new ArrayList<>();
 
             int listSizeTags = tagsListObject.getPropertyCount();
             int listSizeQuestions = questionsListObject.getPropertyCount();

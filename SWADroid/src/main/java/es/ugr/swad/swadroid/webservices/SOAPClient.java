@@ -68,7 +68,7 @@ public class SOAPClient implements IWebserviceClient {
 	/**
 	 * Application debuggable flag
 	 */
-	protected static boolean isDebuggable;
+	private static boolean isDebuggable;
 
 	/**
 	 * Default constructor

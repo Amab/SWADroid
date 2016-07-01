@@ -50,7 +50,7 @@ public class MenuExpandableListActivity extends AppCompatActivity {
 	/**
 	 * Application preferences
 	 */
-	Preferences prefs;
+    private Preferences prefs;
     /**
      * Database Helper.
      */
@@ -58,7 +58,7 @@ public class MenuExpandableListActivity extends AppCompatActivity {
     /**
      * Application debuggable flag
      */
-    protected static boolean isDebuggable;
+    private static boolean isDebuggable;
     /**
      * Class Module's tag name for Logcat
      */
@@ -78,7 +78,7 @@ public class MenuExpandableListActivity extends AppCompatActivity {
     /**
      * Listener for clean database dialog
      */
-    OnClickListener positiveClickListener = new DialogInterface.OnClickListener() {
+    private OnClickListener positiveClickListener = new DialogInterface.OnClickListener() {
         public void onClick(DialogInterface dialog, int id) {            
             dbHelper.cleanTables();
             Preferences.setLastCourseSelected(0);
@@ -94,7 +94,7 @@ public class MenuExpandableListActivity extends AppCompatActivity {
     /**
      * Shows Preferences screen
      */
-    protected void viewPreferences() {
+    private void viewPreferences() {
         Intent settingsActivity = new Intent(this, PreferencesActivity.class);
         startActivity(settingsActivity);
     }
@@ -102,7 +102,7 @@ public class MenuExpandableListActivity extends AppCompatActivity {
     /**
      * Shares the application through the Android sharing options
      */
-    void shareApplication() {
+    private void shareApplication() {
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "SWADroid");
@@ -114,7 +114,7 @@ public class MenuExpandableListActivity extends AppCompatActivity {
     /**
      * Rates the application in Android Market
      */
-    void rateApplication() {
+    private void rateApplication() {
         Intent rateIntent = new Intent(Intent.ACTION_VIEW);
         rateIntent.setData(Uri.parse(getString(R.string.marketURL)));
         startActivity(rateIntent);
@@ -124,7 +124,7 @@ public class MenuExpandableListActivity extends AppCompatActivity {
     /**
      * Deletes all data from database
      */
-    void cleanDatabase() {
+    private void cleanDatabase() {
 
     	AlertDialog cleanDBDialog = DialogFactory.createWarningDialog(this,
     			-1,
@@ -145,7 +145,7 @@ public class MenuExpandableListActivity extends AppCompatActivity {
      *
      * @param message Error message to show.
      */
-    protected void error(String tag, String message, Exception ex, boolean sendException) {
+    protected void error(String message, Exception ex, boolean sendException) {
     	DialogInterface.OnClickListener onClickListener = new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 finish();
@@ -223,7 +223,7 @@ public class MenuExpandableListActivity extends AppCompatActivity {
 			isDebuggable = (ApplicationInfo.FLAG_DEBUGGABLE != 0);			
 			isSWADMain = this instanceof SWADMain;
         } catch (Exception ex) {
-            error(TAG, ex.getMessage(), ex, true);
+            error(ex.getMessage(), ex, true);
         }
     }
 
@@ -247,7 +247,7 @@ public class MenuExpandableListActivity extends AppCompatActivity {
         try {
             dbHelper = new DataBaseHelper(this);
         } catch (Exception ex) {
-            error(TAG, ex.getMessage(), ex, true);
+            error(ex.getMessage(), ex, true);
         }
     }
 

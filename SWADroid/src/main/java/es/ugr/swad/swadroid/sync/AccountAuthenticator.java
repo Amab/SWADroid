@@ -15,7 +15,7 @@ public class AccountAuthenticator extends AccountAuthenticatorActivity {
     /**
      * Login tag name for Logcat
      */
-    public static final String TAG = Constants.APP_TAG + " AccountAuthenticator";
+    private static final String TAG = Constants.APP_TAG + " AccountAuthenticator";
     
     @Override
     protected void onCreate(Bundle icicle) {

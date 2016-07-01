@@ -23,6 +23,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.text.InputType;
 import android.util.Log;
@@ -91,10 +92,6 @@ public class TestsMake extends MenuActivity {
      */
     private OnItemClickListener tagsAnswersTypeItemClickListener;
     /**
-     * Adapter for answer TF questions
-     */
-    private ArrayAdapter<String> tfAdapter;
-    /**
      * Test question being showed
      */
     private int actualQuestion;
@@ -102,6 +99,7 @@ public class TestsMake extends MenuActivity {
      * ActionBar menu
      */
     private Menu menu;
+
     /**
      * Possible values for screen steps
      */
@@ -182,7 +180,7 @@ public class TestsMake extends MenuActivity {
         TagsArrayAdapter tagsAdapter = (TagsArrayAdapter) checkBoxesList.getAdapter();
     	int childsCount = checkBoxesList.getCount();
         SparseBooleanArray checkedItems = checkBoxesList.getCheckedItemPositions();
-        tagsList = new ArrayList<TestTag>();
+        tagsList = new ArrayList<>();
 
         //If "All tags" item checked, add the whole list to the list of selected tags
         if (checkedItems.get(0, false)) {
@@ -244,7 +242,7 @@ public class TestsMake extends MenuActivity {
         AnswerTypesArrayAdapter answerTypesAdapter = (AnswerTypesArrayAdapter) checkBoxesList.getAdapter();
     	int childsCount = checkBoxesList.getCount();
         SparseBooleanArray checkedItems = checkBoxesList.getCheckedItemPositions();
-        answerTypesList = new ArrayList<String>();
+        answerTypesList = new ArrayList<>();
 
 		/*
          * If "All tags" item checked, add the whole list to the list of selected answer types,
@@ -347,7 +345,7 @@ public class TestsMake extends MenuActivity {
         String feedback = test.getFeedback();
         String questionFeedbackText = question.getFeedback();
         String correctAnswer = "";
-        int feedbackColor = getResources().getColor(R.color.gray_goose);
+        int feedbackColor = ContextCompat.getColor(getApplicationContext(), R.color.gray_goose);
         int numAnswers = answers.size();
         Float questionScore;
         DecimalFormat df = new DecimalFormat("0.00");
@@ -492,9 +490,9 @@ public class TestsMake extends MenuActivity {
 
             questionScore = test.getQuestionScore(pos);
             if (questionScore > 0) {
-                score.setTextColor(getResources().getColor(R.color.green));
+                score.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.green));
             } else if (questionScore < 0) {
-                score.setTextColor(getResources().getColor(R.color.red));
+                score.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.red));
             } else {
                 score.setTextColor(Color.BLACK);
             }
@@ -708,7 +706,7 @@ public class TestsMake extends MenuActivity {
                     + df.format(scoreDec) + "/10");
 
             if (scoreDec < 5) {
-                textView.setTextColor(getResources().getColor(R.color.red));
+                textView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.red));
             }
             
             textView.setVisibility(View.VISIBLE);
@@ -727,18 +725,16 @@ public class TestsMake extends MenuActivity {
     /**
      * Launches an action when evaluate button is pushed
      *
-     * @param v Actual view
      */
-    public void onEvaluateClick(View v) {
+    public void onEvaluateClick(View view) {
     	evaluateTest();
     }
 
     /**
      * Launches an action when show results details button is pushed
      *
-     * @param v Actual view
      */
-    public void onShowResultsDetailsClick(View v) {
+    public void onShowResultsDetailsClick() {
         Button evalBt, resBt;
 
         showTest();
@@ -795,7 +791,10 @@ public class TestsMake extends MenuActivity {
             }
         };
 
-        tfAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
+        /*
+      Adapter for answer TF questions
+     */
+        ArrayAdapter<String> tfAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
         tfAdapter.add(getString(R.string.trueMsg));
         tfAdapter.add(getString(R.string.falseMsg));
 

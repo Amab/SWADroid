@@ -18,7 +18,6 @@
  */
 package es.ugr.swad.swadroid.ssl;
 
-import android.content.Context;
 import android.util.Log;
 
 import java.io.IOException;
@@ -70,8 +69,6 @@ public class SecureConnection {
 	/**
 	 * Initialize certificate verification in application.
 	 * 
-	 * @param context
-	 *            Application context
 	 * @throws NoSuchAlgorithmException
 	 * @throws KeyManagementException
 	 * @throws IOException
@@ -79,7 +76,7 @@ public class SecureConnection {
 	 * @throws KeyStoreException
 	 * @throws UnrecoverableKeyException
 	 */
-	public void initSecureConnection(Context context)
+	public void initSecureConnection()
 			throws NoSuchAlgorithmException, KeyManagementException,
 			KeyStoreException, CertificateException, IOException,
 			UnrecoverableKeyException {

@@ -224,7 +224,7 @@ public class NumberPicker extends LinearLayout implements OnClickListener,
                 : String.valueOf(value);
     }
 
-    void changeCurrent(int current) {
+    private void changeCurrent(int current) {
 
         // Wrap around the values if we go past the start or end
         if (current > mEnd) {
@@ -239,13 +239,13 @@ public class NumberPicker extends LinearLayout implements OnClickListener,
         updateView();
     }
 
-    void notifyChange() {
+    private void notifyChange() {
         if (mListener != null) {
             mListener.onChanged(this, mPrevious, mCurrent);
         }
     }
 
-    void updateView() {
+    private void updateView() {
 
         /* If we don't have displayed values then use the
          * current number else find the correct value in the

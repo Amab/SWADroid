@@ -45,13 +45,9 @@ import es.ugr.swad.swadroid.modules.courses.Courses;
  */
 public class Tests extends MenuActivity implements OnItemClickListener {
     /**
-     * Array adapter for showing menu options
-     */
-    private ImageListAdapter adapter;
-    /**
      * Tests tag name for Logcat
      */
-    public static final String TAG = Constants.APP_TAG + " Tests";
+    private static final String TAG = Constants.APP_TAG + " Tests";
     public static final int RESULT_NO_QUESTIONS = 1; 
     public static final int RESULT_NO_QUESTIONS_COURSE = 2; 
 
@@ -63,7 +59,7 @@ public class Tests extends MenuActivity implements OnItemClickListener {
         ListView listView;
         String[] titles = getResources().getStringArray(R.array.testMenuItems);
         Integer[] images = {R.drawable.refresh, R.drawable.test};
-        List<ImageListItem> imageListItems = new ArrayList<ImageListItem>();
+        List<ImageListItem> imageListItems = new ArrayList<>();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_items);
@@ -75,7 +71,10 @@ public class Tests extends MenuActivity implements OnItemClickListener {
             imageListItems.add(item);
         }
 
-        adapter = new ImageListAdapter(this, R.layout.list_image_items, imageListItems);
+        /*
+      Array adapter for showing menu options
+     */
+        ImageListAdapter adapter = new ImageListAdapter(this, R.layout.list_image_items, imageListItems);
         listView = (ListView) this.findViewById(R.id.listItems);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);

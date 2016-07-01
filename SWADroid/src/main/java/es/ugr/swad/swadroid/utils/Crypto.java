@@ -58,7 +58,7 @@ public class Crypto {
     /**
      * Application context
      */
-    public Context mContext;
+    private Context mContext;
 
     public Crypto(Context ctx, String passPhrase) {
         mContext = ctx;

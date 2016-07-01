@@ -36,7 +36,6 @@ import android.os.IBinder;
 import android.util.Log;
 
 import org.ksoap2.SoapFault;
-import org.ksoap2.serialization.KvmSerializable;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.transport.HttpResponseException;
 import org.xmlpull.v1.XmlPullParserException;
@@ -51,7 +50,6 @@ import java.util.concurrent.TimeoutException;
 import javax.net.ssl.SSLException;
 
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.preferences.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
@@ -60,6 +58,7 @@ import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.login.Login;
+import es.ugr.swad.swadroid.preferences.Preferences;
 import es.ugr.swad.swadroid.ssl.SecureConnection;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.IWebserviceClient;
@@ -82,14 +81,14 @@ public class NotificationsSyncAdapterService extends Service {
     private static String METHOD_NAME = "";
     private static Object result;
     private static String errorMessage = "";
+    private static boolean isConnected;
+    private static boolean isDebuggable;
     public static final String START_SYNC = "es.ugr.swad.swadroid.sync.start";
     public static final String STOP_SYNC = "es.ugr.swad.swadroid.sync.stop";
-    public static boolean isConnected;
-    public static boolean isDebuggable;
     /**
      * Application context
      */
-    public static Context mCtx;
+    private static Context mCtx;
 
     public NotificationsSyncAdapterService() {
         super();
@@ -110,7 +109,7 @@ public class NotificationsSyncAdapterService extends Service {
             int httpStatusCode;
         	
         	try {
-                NotificationsSyncAdapterService.performSync(mContext, account, extras, authority, provider, syncResult);
+                NotificationsSyncAdapterService.performSync(mContext);
                 
                 //If synchronization was successful, update last synchronization time in preferences
                 Preferences.setLastSyncTime(System.currentTimeMillis());
@@ -118,21 +117,26 @@ public class NotificationsSyncAdapterService extends Service {
                 if (e.getClass() == SoapFault.class) {
                     SoapFault es = (SoapFault) e;
 
-                    if (es.faultstring.equals("Bad log in")) {
-                        errorMessage = mContext.getString(R.string.errorBadLoginMsg);
-                        sendException = false;
-                    } else if (es.faultstring.equals("Bad web service key")) {
-                        errorMessage = mContext.getString(R.string.errorBadLoginMsg);
-                        sendException = false;
+                    switch (es.faultstring) {
+                        case "Bad log in":
+                            errorMessage = mContext.getString(R.string.errorBadLoginMsg);
+                            sendException = false;
+                            break;
+                        case "Bad web service key":
+                            errorMessage = mContext.getString(R.string.errorBadLoginMsg);
+                            sendException = false;
 
-                        // Force logout and reset password (this will show again
-                        // the login screen)
-                        Login.setLogged(false);
-                        Preferences.setUserPassword("");
-                    } else if (es.faultstring.equals("Unknown application key")) {
-                        errorMessage = mContext.getString(R.string.errorBadAppKeyMsg);
-                    } else {
-                        errorMessage = "Server error: " + es.getMessage();
+                            // Force logout and reset password (this will show again
+                            // the login screen)
+                            Login.setLogged(false);
+                            Preferences.setUserPassword("");
+                            break;
+                        case "Unknown application key":
+                            errorMessage = mContext.getString(R.string.errorBadAppKeyMsg);
+                            break;
+                        default:
+                            errorMessage = "Server error: " + es.getMessage();
+                            break;
                     }
                 } else if ((e.getClass() == TimeoutException.class) || (e.getClass() == SocketTimeoutException.class)) {
                     errorMessage = mContext.getString(R.string.errorTimeoutMsg);
@@ -252,7 +256,7 @@ public class NotificationsSyncAdapterService extends Service {
     /**
      * Creates webservice request.
      */
-    protected static void createRequest(String clientType) {
+    private static void createRequest(String clientType) {
     	if(webserviceClient == null) {
 	    	if(clientType.equals(SOAPClient.CLIENT_TYPE)) {
 	    		webserviceClient = new SOAPClient();
@@ -270,7 +274,7 @@ public class NotificationsSyncAdapterService extends Service {
      * @param param Parameter name.
      * @param value Parameter value.
      */
-    protected static void addParam(String param, Object value) {
+    private static void addParam(String param, Object value) {
     	webserviceClient.addParam(param, value);
     }
 
@@ -282,7 +286,7 @@ public class NotificationsSyncAdapterService extends Service {
      * @param simple Flag for select simple or complex response
      * @throws Exception 
      */
-    protected static void sendRequest(Class<?> cl, boolean simple) throws Exception {
+    private static void sendRequest(Class<?> cl, boolean simple) throws Exception {
     	((SOAPClient) webserviceClient).sendRequest(cl, simple);
     	result = webserviceClient.getResult();
     }
@@ -299,7 +303,6 @@ public class NotificationsSyncAdapterService extends Service {
         sendRequest(User.class, true);
 
         if (result != null) {
-            KvmSerializable ks = (KvmSerializable) result;
             SoapObject soap = (SoapObject) result;
 
             //Stores user data returned by webservice response
@@ -325,7 +328,7 @@ public class NotificationsSyncAdapterService extends Service {
     }
     
     private static void getNotifications() throws Exception {
-        int numDeletedNotif = 0;
+        int numDeletedNotif;
 
     	Log.d(TAG, "Logged");
 
@@ -425,7 +428,7 @@ public class NotificationsSyncAdapterService extends Service {
         }
     }
 
-    private static void performSync(Context context, Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
+    private static void performSync(Context context)
             throws Exception {
 
 		Notification notif;
@@ -453,7 +456,7 @@ public class NotificationsSyncAdapterService extends Service {
     	 */
     	if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
     		conn = new SecureConnection();
-    		conn.initSecureConnection(context);        		
+    		conn.initSecureConnection();
     		Log.i(TAG, "Android API < 11 (HONEYCOMB). Adding Terena certificate manually");
     	} else {
     		Log.i(TAG, "Android API >= 11 (HONEYCOMB). Using Terena built-in certificate");

@@ -29,6 +29,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -60,15 +61,15 @@ import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.modules.courses.Courses;
-import es.ugr.swad.swadroid.modules.qr.GenerateQR;
-import es.ugr.swad.swadroid.modules.login.Login;
-import es.ugr.swad.swadroid.modules.notices.Notices;
 import es.ugr.swad.swadroid.modules.downloads.DownloadsManager;
 import es.ugr.swad.swadroid.modules.groups.MyGroupsManager;
 import es.ugr.swad.swadroid.modules.information.Information;
+import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.modules.login.LoginActivity;
 import es.ugr.swad.swadroid.modules.messages.Messages;
+import es.ugr.swad.swadroid.modules.notices.Notices;
 import es.ugr.swad.swadroid.modules.notifications.Notifications;
+import es.ugr.swad.swadroid.modules.qr.GenerateQR;
 import es.ugr.swad.swadroid.modules.rollcall.Rollcall;
 import es.ugr.swad.swadroid.modules.tests.Tests;
 import es.ugr.swad.swadroid.preferences.Preferences;
@@ -87,14 +88,6 @@ import es.ugr.swad.swadroid.utils.Utils;
  * @author Jose Antonio Guerrero Aviles <cany20@gmail.com>
  */
 public class SWADMain extends MenuExpandableListActivity {
-	/**
-	 * Application preferences
-	 */
-	Preferences prefs;
-	/**
-	 * SSL connection
-	 */
-	SecureConnection conn;
     /**
      * Array of strings for main ListView
      */
@@ -118,7 +111,7 @@ public class SWADMain extends MenuExpandableListActivity {
     /**
      * SWADMain tag name for Logcat
      */
-    public static final String TAG = Constants.APP_TAG;
+    private static final String TAG = Constants.APP_TAG;
     
     /**
      * Indicates if it is the first run
@@ -136,10 +129,10 @@ public class SWADMain extends MenuExpandableListActivity {
     private TextView mBirthdayTextView;
     private ExpandableListView mExpandableListView;
     private ImageExpandableListAdapter mExpandableListAdapter;
-    private final ArrayList<HashMap<String, Object>> mHeaderData = new ArrayList<HashMap<String, Object>>();
-    private final ArrayList<ArrayList<HashMap<String, Object>>> mChildData = new ArrayList<ArrayList<HashMap<String, Object>>>();
-    private final ArrayList<HashMap<String, Object>> mMessagesData = new ArrayList<HashMap<String, Object>>();
-    private final ArrayList<HashMap<String, Object>> mUsersData = new ArrayList<HashMap<String, Object>>();
+    private final ArrayList<HashMap<String, Object>> mHeaderData = new ArrayList<>();
+    private final ArrayList<ArrayList<HashMap<String, Object>>> mChildData = new ArrayList<>();
+    private final ArrayList<HashMap<String, Object>> mMessagesData = new ArrayList<>();
+    private final ArrayList<HashMap<String, Object>> mUsersData = new ArrayList<>();
     /**
      * Gets the database helper
      *
@@ -152,7 +145,7 @@ public class SWADMain extends MenuExpandableListActivity {
     /**
      * Shows initial dialog after application upgrade.
      */
-    public void showUpgradeDialog(Context context) {        
+    private void showUpgradeDialog(Context context) {
         AlertDialog alertDialog = DialogFactory.createWebViewDialog(context,
         		R.string.changelogTitle,
         		R.raw.changes);
@@ -177,7 +170,10 @@ public class SWADMain extends MenuExpandableListActivity {
         
         
         //Initialize preferences
-        prefs = new Preferences(this);
+        /*
+	  Application preferences
+	 */
+        Preferences prefs = new Preferences(this);
         
         try {
         	
@@ -187,8 +183,11 @@ public class SWADMain extends MenuExpandableListActivity {
         	 * If Android API < 11 (HONEYCOMB) add SSL certificates manually
         	 */
         	if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-        		conn = new SecureConnection();
-        		conn.initSecureConnection(this); 
+        		/*
+	  SSL connection
+	 */
+                SecureConnection conn = new SecureConnection();
+        		conn.initSecureConnection();
         		//conn.initUntrustedSecureConnection();
         		Log.i(TAG, "Android API < 11 (HONEYCOMB). Adding SSL certificates manually");
         	} else {
@@ -226,7 +225,7 @@ public class SWADMain extends MenuExpandableListActivity {
             }
             currentRole = -1;
         } catch (Exception ex) {
-            error(TAG, ex.getMessage(), ex, true);
+            error(ex.getMessage(), ex, true);
         }
     }
 
@@ -295,7 +294,7 @@ public class SWADMain extends MenuExpandableListActivity {
 	 */
 	private void upgradeApp(int lastVersion, int currentVersion) throws NoSuchAlgorithmException {
 		showUpgradeDialog(this);
-        dbHelper.upgradeDB(this);
+        dbHelper.upgradeDB();
         
         if(lastVersion < 52) {
         	//Encrypts users table
@@ -391,7 +390,7 @@ public class SWADMain extends MenuExpandableListActivity {
      */
     private void cleanSpinner() {
         Spinner spinner = (Spinner) this.findViewById(R.id.spinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, new String[]{getString(R.string.clickToGetCourses)});
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, new String[]{getString(R.string.clickToGetCourses)});
         spinner.setAdapter(adapter);
         spinner.setOnTouchListener(Spinner_OnTouch);
     }
@@ -497,30 +496,30 @@ public class SWADMain extends MenuExpandableListActivity {
             // 3- Messages
             // 4- Enrollment
             // 5- Users
-            final HashMap<String, Object> courses = new HashMap<String, Object>();
+            final HashMap<String, Object> courses = new HashMap<>();
             courses.put(NAME, getString(R.string.course));
-            courses.put(IMAGE, getResources().getDrawable(R.drawable.crs));
+            courses.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.crs));
             mHeaderData.add(courses);
 
-            final HashMap<String, Object> evaluation = new HashMap<String, Object>();
+            final HashMap<String, Object> evaluation = new HashMap<>();
             evaluation.put(NAME, getString(R.string.evaluation));
-            evaluation.put(IMAGE, getResources().getDrawable(R.drawable.ass));
+            evaluation.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.ass));
             mHeaderData.add(evaluation);
 
-            final HashMap<String, Object> users = new HashMap<String, Object>();
+            final HashMap<String, Object> users = new HashMap<>();
             users.put(NAME, getString(R.string.users));
-            users.put(IMAGE, getResources().getDrawable(R.drawable.users));
+            users.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.users));
             mHeaderData.add(users);
 
-            final HashMap<String, Object> messages = new HashMap<String, Object>();
+            final HashMap<String, Object> messages = new HashMap<>();
             messages.put(NAME, getString(R.string.messages));
-            messages.put(IMAGE, getResources().getDrawable(R.drawable.msg));
+            messages.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.msg));
             mHeaderData.add(messages);
 
-            final ArrayList<HashMap<String, Object>> courseData = new ArrayList<HashMap<String, Object>>();
+            final ArrayList<HashMap<String, Object>> courseData = new ArrayList<>();
             mChildData.add(courseData);
             
-            final ArrayList<HashMap<String, Object>> evaluationData = new ArrayList<HashMap<String, Object>>();
+            final ArrayList<HashMap<String, Object>> evaluationData = new ArrayList<>();
             mChildData.add(evaluationData);
 
             mChildData.add(mUsersData);
@@ -530,90 +529,90 @@ public class SWADMain extends MenuExpandableListActivity {
             
             //Course category
             //Introduction
-            map = new HashMap<String, Object>();
+            map = new HashMap<>();
             map.put(NAME, getString(R.string.introductionModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.info));
+            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.info));
             courseData.add(map);
             //Teaching Guide
-            map = new HashMap<String, Object>();
+            map = new HashMap<>();
             map.put(NAME, getString(R.string.teachingguideModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.file));
+            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.file));
             courseData.add(map);
             //Syllabus (lectures)
-            map = new HashMap<String, Object>();
+            map = new HashMap<>();
             map.put(NAME, getString(R.string.syllabusLecturesModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.syllabus));
+            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.syllabus));
             courseData.add(map);
             //Syllabus (practicals)
-            map = new HashMap<String, Object>();
+            map = new HashMap<>();
             map.put(NAME, getString(R.string.syllabusPracticalsModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.lab));
+            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.lab));
             courseData.add(map);
             //Documents
-            map = new HashMap<String, Object>();
+            map = new HashMap<>();
             map.put(NAME, getString(R.string.documentsDownloadModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.folder));            
+            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.folder));            
             courseData.add(map);
             //Shared area 
-            map = new HashMap<String, Object>();
+            map = new HashMap<>();
             map.put(NAME, getString(R.string.sharedsDownloadModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.folder_users));
+            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.folder_users));
             courseData.add(map);
             //Bibliography
-            map = new HashMap<String, Object>();
+            map = new HashMap<>();
             map.put(NAME, getString(R.string.bibliographyModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.book));
+            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.book));
             courseData.add(map);
             //FAQs
-            map = new HashMap<String, Object>();
+            map = new HashMap<>();
             map.put(NAME, getString(R.string.faqsModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.faq));
+            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.faq));
             courseData.add(map);
             //Links
-            map = new HashMap<String, Object>();
+            map = new HashMap<>();
             map.put(NAME, getString(R.string.linksModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.link));
+            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.link));
             courseData.add(map);
             
             //Evaluation category
             //Assessment system
-            map = new HashMap<String, Object>();
+            map = new HashMap<>();
             map.put(NAME, getString(R.string.assessmentModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.info));
+            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.info));
             evaluationData.add(map);
             //Test
-            map = new HashMap<String, Object>();
+            map = new HashMap<>();
             map.put(NAME, getString(R.string.testsModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.test));
+            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.test));
             evaluationData.add(map);
             //Marks
-            map = new HashMap<String, Object>();
+            map = new HashMap<>();
             map.put(NAME, getString(R.string.marksModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.grades));
+            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.grades));
             evaluationData.add(map);
 
             //Users category
             //Groups
-            map = new HashMap<String, Object>();
+            map = new HashMap<>();
             map.put(NAME, getString(R.string.myGroupsModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.my_groups));
+            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.my_groups));
             mUsersData.add(map);
             //Generate QR code
-            map = new HashMap<String, Object>();
+            map = new HashMap<>();
             map.put(NAME, getString(R.string.generateQRModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.qr));
+            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.qr));
             mUsersData.add(map);
             
             //Messages category
             //Notifications
-            map = new HashMap<String, Object>();
+            map = new HashMap<>();
             map.put(NAME, getString(R.string.notificationsModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
+            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.notif));
             mMessagesData.add(map);
             //Messages
-            map = new HashMap<String, Object>();
+            map = new HashMap<>();
             map.put(NAME, getString(R.string.messagesModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.msg_write));
+            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.msg_write));
             mMessagesData.add(map);
             
             mExpandableListAdapter = new ImageExpandableListAdapter(
@@ -651,15 +650,15 @@ public class SWADMain extends MenuExpandableListActivity {
      */
     private void changeToTeacherMenu() {
         if (currentRole == Constants.STUDENT_TYPE_CODE) {
-            HashMap<String, Object> map = new HashMap<String, Object>();
+            HashMap<String, Object> map = new HashMap<>();
             map.put(NAME, getString(R.string.noticesModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.note));
+            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.note));
             
             mMessagesData.add(map);
 
-            map = new HashMap<String, Object>();
+            map = new HashMap<>();
             map.put(NAME, getString(R.string.rollcallModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.roll_call));
+            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.roll_call));
             mUsersData.add(map);
             
             mExpandableListAdapter = new ImageExpandableListAdapter(this, mHeaderData,

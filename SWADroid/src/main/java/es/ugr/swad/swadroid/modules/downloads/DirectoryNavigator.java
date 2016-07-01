@@ -58,7 +58,7 @@ public class DirectoryNavigator {
     /**
      * Application context
      */
-    public Context mContext;
+    private Context mContext;
 
     /**
      * Constructor.
@@ -67,7 +67,7 @@ public class DirectoryNavigator {
      */
     public DirectoryNavigator(Context ctx, String fileXML) {
         this.XMLinfo = fileXML;
-        this.path = new ArrayList<String>();
+        this.path = new ArrayList<>();
         this.mContext = ctx;
     }
 
@@ -84,7 +84,7 @@ public class DirectoryNavigator {
 
         Node node = goToDirectory();
 
-        currentItems = new ArrayList<DirectoryItem>(getItems(node));
+        currentItems = new ArrayList<>(getItems(node));
 
         return currentItems;
     }
@@ -109,7 +109,7 @@ public class DirectoryNavigator {
 
         Node node = goToDirectory();
 
-        currentItems = new ArrayList<DirectoryItem>(getItems(node));
+        currentItems = new ArrayList<>(getItems(node));
 
         return currentItems;
     }
@@ -127,7 +127,7 @@ public class DirectoryNavigator {
             path.remove(path.size() - 1);
             Node node = goToDirectory();
 
-            currentItems = new ArrayList<DirectoryItem>(getItems(node));
+            currentItems = new ArrayList<>(getItems(node));
         }
 
         return currentItems;
@@ -144,7 +144,7 @@ public class DirectoryNavigator {
 
         Node node = goToDirectory();
 
-        currentItems = new ArrayList<DirectoryItem>(getItems(node));
+        currentItems = new ArrayList<>(getItems(node));
         return currentItems;
     }
 
@@ -159,7 +159,7 @@ public class DirectoryNavigator {
 
         Node node = goToDirectory();
 
-        currentItems = new ArrayList<DirectoryItem>(getItems(node));
+        currentItems = new ArrayList<>(getItems(node));
         return currentItems;
     }
 
@@ -170,7 +170,7 @@ public class DirectoryNavigator {
      * @return Return a list of items of the directory passed as parameter.
      */
     private List<DirectoryItem> getItems(Node node) {
-        List<DirectoryItem> items = new ArrayList<DirectoryItem>();
+        List<DirectoryItem> items = new ArrayList<>();
 
         NodeList childs = node.getChildNodes();
 
@@ -316,7 +316,7 @@ public class DirectoryNavigator {
      * @param name Name of the node located on the current directory.
      * @return null in case it does not exists any node with the given name
      */
-    DirectoryItem getDirectoryItem(String name) {
+    private DirectoryItem getDirectoryItem(String name) {
         DirectoryItem node = null;
 
         boolean found = false;

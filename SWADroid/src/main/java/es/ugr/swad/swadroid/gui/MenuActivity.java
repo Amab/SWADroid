@@ -49,7 +49,7 @@ public class MenuActivity extends AppCompatActivity {
 	/**
 	 * Application preferences
 	 */
-	Preferences prefs;
+    private Preferences prefs;
     /**
      * Database Helper.
      */
@@ -73,7 +73,7 @@ public class MenuActivity extends AppCompatActivity {
     /**
      * Listener for clean database dialog
      */
-    OnClickListener positiveClickListener = new DialogInterface.OnClickListener() {
+    private OnClickListener positiveClickListener = new DialogInterface.OnClickListener() {
         public void onClick(DialogInterface dialog, int id) {
             dialog.cancel();
             
@@ -88,7 +88,7 @@ public class MenuActivity extends AppCompatActivity {
     /**
      * Shows Preferences screen
      */
-    void viewPreferences() {
+    private void viewPreferences() {
         Intent settingsActivity = new Intent(this, PreferencesActivity.class);
         startActivity(settingsActivity);
     }
@@ -96,7 +96,7 @@ public class MenuActivity extends AppCompatActivity {
     /**
      * Shares the application through the Android sharing options
      */
-    void shareApplication() {
+    private void shareApplication() {
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "SWADroid");
@@ -108,7 +108,7 @@ public class MenuActivity extends AppCompatActivity {
     /**
      * Rates the application in Android Market
      */
-    void rateApplication() {
+    private void rateApplication() {
         Intent rateIntent = new Intent(Intent.ACTION_VIEW);
         rateIntent.setData(Uri.parse(getString(R.string.marketURL)));
         startActivity(rateIntent);
@@ -118,7 +118,7 @@ public class MenuActivity extends AppCompatActivity {
     /**
      * Deletes all data from database
      */
-    void cleanDatabase() {
+    private void cleanDatabase() {
     	AlertDialog cleanDBDialog = DialogFactory.createWarningDialog(this,
     			-1,
     			R.string.areYouSure,
@@ -138,7 +138,7 @@ public class MenuActivity extends AppCompatActivity {
      *
      * @param message Error message to show.
      */
-    protected void error(String tag, String message, Exception ex, boolean sendException) {
+    protected void error(String message, Exception ex, boolean sendException) {
     	DialogInterface.OnClickListener onClickListener = new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 finish();
@@ -154,7 +154,7 @@ public class MenuActivity extends AppCompatActivity {
     /**
      * Shows a dialog.
      */
-    public void showDialog(int title, int message) {
+    protected void showDialog(int title, int message) {
         AlertDialog dialog = DialogFactory.createNeutralDialog(this, -1, title, message, R.string.close_dialog, null);
         dialog.show();
      }
@@ -208,7 +208,7 @@ public class MenuActivity extends AppCompatActivity {
                     getPackageName(), 0);
 			isDebuggable = (ApplicationInfo.FLAG_DEBUGGABLE != 0);	
         } catch (Exception ex) {
-            error(TAG, ex.getMessage(), ex, true);
+            error(ex.getMessage(), ex, true);
         }
     }
     
@@ -232,7 +232,7 @@ public class MenuActivity extends AppCompatActivity {
         try {
             dbHelper = new DataBaseHelper(this);
         } catch (Exception ex) {
-            error(TAG, ex.getMessage(), ex, true);
+            error(ex.getMessage(), ex, true);
         }
     }
 }

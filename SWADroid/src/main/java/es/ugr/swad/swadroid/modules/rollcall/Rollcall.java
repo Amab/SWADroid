@@ -55,7 +55,7 @@ public class Rollcall extends MenuExpandableListActivity implements
   /**
    * Rollcall tag name for Logcat
    */
-  public static final String TAG = Constants.APP_TAG + " Rollcall";
+  private static final String TAG = Constants.APP_TAG + " Rollcall";
   /**
    * ListView of events
    */
@@ -65,14 +65,13 @@ public class Rollcall extends MenuExpandableListActivity implements
    */
   private static EventsCursorAdapter adapter;
   private final RefreshAdapterHandler mHandler = new RefreshAdapterHandler(this);
-  /**
-   * Database cursor for Adapter of events
-   */
-  Cursor dbCursor;
   private final Runnable mRunnable = new Runnable() {
     @Override
     public void run() {
-      dbCursor = dbHelper.getEventsCourseCursor(Courses.getSelectedCourseCode());
+      /*
+    Database cursor for Adapter of events
+   */
+      Cursor dbCursor = dbHelper.getEventsCourseCursor(Courses.getSelectedCourseCode());
       startManagingCursor(dbCursor);
 
 
@@ -103,7 +102,7 @@ public class Rollcall extends MenuExpandableListActivity implements
   /**
    * TextView for the empty events message
    */
-  TextView emptyEventsTextView;
+  private TextView emptyEventsTextView;
   /**
    * Layout with "Pull to refresh" function
    */
@@ -199,21 +198,21 @@ public class Rollcall extends MenuExpandableListActivity implements
     startActivityForResult(activity, Constants.ROLLCALL_EVENTS_DOWNLOAD_REQUEST_CODE);
   }
 
-  public void showProgress(boolean show) {
+  private void showProgress(boolean show) {
     DialogFactory.showProgress(this, show, R.id.swipe_container_list, R.id.loading_status);
   }
 
   /**
    * It shows the SwipeRefreshLayout progress
    */
-  public void showSwipeProgress() {
+  private void showSwipeProgress() {
     refreshLayout.setRefreshing(true);
   }
 
   /**
    * It shows the SwipeRefreshLayout progress
    */
-  public void hideSwipeProgress() {
+  private void hideSwipeProgress() {
     refreshLayout.setRefreshing(false);
   }
 
@@ -289,7 +288,7 @@ public class Rollcall extends MenuExpandableListActivity implements
     private final WeakReference<Rollcall> mActivity;
 
     public RefreshAdapterHandler(Rollcall activity) {
-      mActivity = new WeakReference<Rollcall>(activity);
+      mActivity = new WeakReference<>(activity);
     }
 
   }

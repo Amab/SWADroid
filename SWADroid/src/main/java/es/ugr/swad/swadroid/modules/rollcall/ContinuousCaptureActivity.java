@@ -133,7 +133,7 @@ public class ContinuousCaptureActivity extends AppCompatActivity {
      *
      * @param result The contents of the barcode.
      */
-    public void handleDecode(BarcodeResult result) {
+    private void handleDecode(BarcodeResult result) {
         String messageResult;
         int iconResult;
         String qrContent = result.getText();

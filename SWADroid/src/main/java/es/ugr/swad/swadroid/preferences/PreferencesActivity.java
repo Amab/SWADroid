@@ -45,7 +45,6 @@ import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.gui.DialogFactory;
-import es.ugr.swad.swadroid.gui.widget.SeekBarDialogPreference;
 import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.modules.login.LoginActivity;
 import es.ugr.swad.swadroid.sync.SyncUtils;
@@ -61,11 +60,11 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     /**
      * PreferencesActivity tag name for Logcat
      */
-    public static final String TAG = Constants.APP_TAG + " PreferencesActivity";
+    private static final String TAG = Constants.APP_TAG + " PreferencesActivity";
     /**
      * Application context
      */
-    public Context ctx;
+    private Context ctx;
     /**
      * Log out Preference
      */
@@ -121,7 +120,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
     /**
      * Application debuggable flag
      */
-    protected static boolean isDebuggable;
+    private static boolean isDebuggable;
     /**
      * User password
      */
@@ -147,7 +146,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
      *
      * @param message Error message to show.
      */
-    protected void error(String tag, String message, Exception ex, boolean sendException) {
+    private void error(String message, Exception ex, boolean sendException) {
     	DialogInterface.OnClickListener onClickListener = new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 finish();
@@ -179,7 +178,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
                     getPackageName(), 0);
     		isDebuggable = (ApplicationInfo.FLAG_DEBUGGABLE != 0);
         } catch (Exception ex) {
-        	error(TAG, ex.getMessage(), ex, true);
+        	error(ex.getMessage(), ex, true);
         }
 
         logOutPref = findPreference(Preferences.LOGOUTPREF);
@@ -349,7 +348,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
                 }
                 
 			} catch (NoSuchAlgorithmException ex) {
-				error(TAG, ex.getMessage(), ex, true);
+				error(ex.getMessage(), ex, true);
 			}
         } else if(Preferences.SYNCENABLEPREF.equals(key)) {
         	boolean syncEnabled = (Boolean) newValue;

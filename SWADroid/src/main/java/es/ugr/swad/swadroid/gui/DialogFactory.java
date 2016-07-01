@@ -80,7 +80,7 @@ public class DialogFactory {
 	        in_s.read(b);
 	        String content = new String(b, "UTF-8");*/
 	        
-	        String content = IOUtils.toString(in_s);
+	        String content = IOUtils.toString(in_s, "UTF-8");
 	        IOUtils.closeQuietly(in_s);
 
 	        WebView webview = (WebView) promptsView.findViewById(R.id.webview_dialog);

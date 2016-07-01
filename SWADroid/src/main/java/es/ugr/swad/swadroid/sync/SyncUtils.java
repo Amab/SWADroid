@@ -39,7 +39,7 @@ public class SyncUtils {
     /**
      * Login tag name for Logcat
      */
-    public static final String TAG = Constants.APP_TAG + " SyncUtils";
+    private static final String TAG = Constants.APP_TAG + " SyncUtils";
 
     public static void addPeriodicSync(String authority, Bundle extras, long frequency, Context context) {
         long pollFrequencyMsec = frequency * 60000;

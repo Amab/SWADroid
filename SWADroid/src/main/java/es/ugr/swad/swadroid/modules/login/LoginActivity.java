@@ -64,7 +64,7 @@ import es.ugr.swad.swadroid.utils.Utils;
  */
 public class LoginActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    public static final String TAG = Constants.APP_TAG + " LoginActivity";
+    private static final String TAG = Constants.APP_TAG + " LoginActivity";
 
     private static List<String> serversList;
 
@@ -226,7 +226,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
      * If there are form errors (invalid DNI, missing fields, etc.), the errors
      * are presented and no actual login attempt is made.
      */
-    public void attemptLogin() {
+    private void attemptLogin() {
         SWADroidTracker.sendScreenView(getApplicationContext(), "SWADroid Login");
 
         // Values for ID and password at the time of the login attempt.
@@ -321,7 +321,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
     /**
      * Creates a new account
      */
-    public void createAccount() {
+    private void createAccount() {
         startActivityForResult(new Intent(this, CreateAccountActivity.class), Constants.CREATE_ACCOUNT_REQUEST_CODE);
     }
 

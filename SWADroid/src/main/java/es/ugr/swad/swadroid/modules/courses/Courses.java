@@ -135,9 +135,9 @@ public class Courses extends Module {
         if (result != null) {
             //Stores courses data returned by webservice response
             List<Model> coursesDB = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_COURSES);
-            List<Model> coursesSWAD = new ArrayList<Model>();
-            List<Model> newCourses = new ArrayList<Model>();
-            List<Model> obsoleteCourses = new ArrayList<Model>();
+            List<Model> coursesSWAD = new ArrayList<>();
+            List<Model> newCourses = new ArrayList<>();
+            List<Model> obsoleteCourses = new ArrayList<>();
             //List<Model> modifiedCourses = new ArrayList<Model>();
 			ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
             SoapObject soap = (SoapObject) res.get(1);

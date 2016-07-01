@@ -64,7 +64,7 @@ public class Login extends Module {
     /**
      * Login tag name for Logcat
      */
-    public static final String TAG = Constants.APP_TAG + " Login";
+    private static final String TAG = Constants.APP_TAG + " Login";
 
     /* (non-Javadoc)
      * @see android.app.Activity#onCreate()

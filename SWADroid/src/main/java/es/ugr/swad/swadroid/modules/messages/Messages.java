@@ -77,15 +77,15 @@ public class Messages extends Module {
     /**
      * Receivers EditText
      */
-    EditText rcvEditText;
+    private EditText rcvEditText;
     /**
      * Subject EditText
      */
-    EditText subjEditText;
+    private EditText subjEditText;
     /**
      * Body EditText
      */
-    EditText bodyEditText;
+    private EditText bodyEditText;
 
  
     /* (non-Javadoc)
@@ -306,7 +306,7 @@ public class Messages extends Module {
 	            	}
 	            } catch (Exception e) {
 	                String errorMsg = getString(R.string.errorServerResponseMsg);
-	                error(TAG, errorMsg, e, true);
+	                error(errorMsg, e, true);
 	            }
             
 	            return true;

@@ -39,8 +39,7 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
  * Module to get information of a file located in SWAD
  * @see <a href="https://openswad.org/ws/#getFile">getFile</a>
  * 
- * @param fileCode It indicates the file which information is requested
- * @return link temporal URL to download the file
+ * Return link temporal URL to download the file
  *
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */
@@ -81,7 +80,7 @@ public class GetFile extends Module {
             runConnection();
         } catch (Exception e) {
             String errorMsg = getString(R.string.errorServerResponseMsg);
-            error(TAG, errorMsg, e, true);
+            error(errorMsg, e, true);
         }
     }
 

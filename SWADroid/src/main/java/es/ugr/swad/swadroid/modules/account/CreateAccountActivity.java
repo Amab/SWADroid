@@ -59,7 +59,7 @@ import es.ugr.swad.swadroid.utils.Utils;
  */
 public class CreateAccountActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    public static final String TAG = Constants.APP_TAG + " CreateAccountActivity";
+    private static final String TAG = Constants.APP_TAG + " CreateAccountActivity";
 
     private static List<String> serversList;
 
@@ -205,7 +205,7 @@ public class CreateAccountActivity extends AppCompatActivity implements AdapterV
     /**
      * Creates a new account
      */
-    public void createAccount() {
+    private void createAccount() {
         SWADroidTracker.sendScreenView(getApplicationContext(), "SWADroid CreateAccount");
 
         Intent intent;

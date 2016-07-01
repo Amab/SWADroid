@@ -10,7 +10,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/acceptFilters"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="90dp"
         android:text="@string/cancelFilters" />
 
     <Button
@@ -20,6 +21,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="90dp"
+        android:layout_toRightOf="@+id/cancelFilters"
         android:text="@string/acceptFilters" />
 
     <LinearLayout

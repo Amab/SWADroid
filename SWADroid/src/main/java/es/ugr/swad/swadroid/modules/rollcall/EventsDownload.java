@@ -80,7 +80,7 @@ public class EventsDownload extends Module {
             runConnection();
         } catch (Exception e) {
             String errorMsg = getString(R.string.errorServerResponseMsg);
-            error(TAG, errorMsg, e, true);
+            error(errorMsg, e, true);
         }
     }
 
@@ -99,7 +99,7 @@ public class EventsDownload extends Module {
             ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
             SoapObject soap = (SoapObject) res.get(1);
             numEvents = soap.getPropertyCount();
-            eventCodes = new ArrayList<Long>();
+            eventCodes = new ArrayList<>();
 
             for (int i = 0; i < numEvents; i++) {
                 SoapObject pii = (SoapObject) soap.getProperty(i);

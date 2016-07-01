@@ -58,7 +58,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
     /**
      * Tests tag name for Logcat
      */
-    public static final String TAG = Constants.APP_TAG + " Groups Manager";
+    private static final String TAG = Constants.APP_TAG + " Groups Manager";
     /**
      * Course code of current selected course
      */
@@ -181,7 +181,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
     /**
      * Shows informative dialog on successful enrollment
      */
-    void showSuccessfulEnrollmentDialog() {        
+    private void showSuccessfulEnrollmentDialog() {
     	AlertDialog dialog = DialogFactory.createNeutralDialog(this,
     			-1,
     			R.string.resultEnrollment,
@@ -195,7 +195,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
     /**
      * Shows informative dialog on failed enrollment
      */
-    void showFailedEnrollmentDialog() {
+    private void showFailedEnrollmentDialog() {
     	AlertDialog dialog = DialogFactory.createNeutralDialog(this,
     			-1,
     			R.string.resultEnrollment,

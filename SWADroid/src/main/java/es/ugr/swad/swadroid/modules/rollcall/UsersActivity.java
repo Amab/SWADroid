@@ -66,7 +66,7 @@ public class UsersActivity extends MenuExpandableListActivity implements
     /**
      * Rollcall tag name for Logcat
      */
-    public static final String TAG = Constants.APP_TAG + " UsersActivity";
+    private static final String TAG = Constants.APP_TAG + " UsersActivity";
     /**
      * Code of event associated to the users list
      */
@@ -211,21 +211,21 @@ public class UsersActivity extends MenuExpandableListActivity implements
         startActivityForResult(activity, Constants.ROLLCALL_USERS_DOWNLOAD_REQUEST_CODE);
     }
 
-    public void showProgress(boolean show) {
+    private void showProgress(boolean show) {
         DialogFactory.showProgress(this, show, R.id.swipe_container_list, R.id.loading_status);
     }
 
     /**
      * It shows the SwipeRefreshLayout progress
      */
-    public void showSwipeProgress() {
+    private void showSwipeProgress() {
         refreshLayout.setRefreshing(true);
     }
 
     /**
      * It shows the SwipeRefreshLayout progress
      */
-    public void hideSwipeProgress() {
+    private void hideSwipeProgress() {
         refreshLayout.setRefreshing(false);
     }
 
@@ -295,7 +295,7 @@ public class UsersActivity extends MenuExpandableListActivity implements
                     }
                 } else {
                     //If the device has no rear camera available show error message
-                    error(TAG, getString(R.string.noCameraFound), null, false);
+                    error(getString(R.string.noCameraFound), null, false);
                 }
 
                 return true;
