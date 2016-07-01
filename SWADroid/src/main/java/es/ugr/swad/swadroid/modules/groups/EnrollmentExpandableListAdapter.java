@@ -20,6 +20,7 @@ package es.ugr.swad.swadroid.modules.groups;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.util.LongSparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -138,9 +139,9 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 
         boolean isCurrentMember = realMembership.get(groupTypeCode)[childPosition];
         if (isCurrentMember) {
-            holder.linearLayout.setBackgroundColor(context.getResources().getColor(R.color.lightskyblue));
+            holder.linearLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.lightskyblue));
         } else {
-            holder.linearLayout.setBackgroundColor(context.getResources().getColor(android.R.color.white));
+            holder.linearLayout.setBackgroundColor(ContextCompat.getColor(context, android.R.color.white));
         }
 
 
@@ -171,30 +172,30 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 
         if ((open != 0 && freeSpot) || role == Constants.TEACHER_TYPE_CODE) { //Teachers can enroll even on closed groups
             holder.checkBox.setEnabled(true);
-            holder.checkBox.setTextColor(context.getResources().getColor(android.R.color.black));
+            holder.checkBox.setTextColor(ContextCompat.getColor(context, android.R.color.black));
             holder.imagePadlock.setEnabled(true);
             holder.nStudentText.setEnabled(true);
-            holder.nStudentText.setTextColor(context.getResources().getColor(R.color.sgilight_gray_32));
+            holder.nStudentText.setTextColor(ContextCompat.getColor(context, R.color.sgilight_gray_32));
             holder.maxStudentText.setEnabled(true);
-            holder.maxStudentText.setTextColor(context.getResources().getColor(R.color.sgilight_gray_32));
+            holder.maxStudentText.setTextColor(ContextCompat.getColor(context, R.color.sgilight_gray_32));
             holder.radioButton.setEnabled(true);
-            holder.radioButton.setTextColor(context.getResources().getColor(android.R.color.black));
+            holder.radioButton.setTextColor(ContextCompat.getColor(context, android.R.color.black));
             holder.linearLayout.setEnabled(true);
             holder.vacantsText.setEnabled(true);
-            holder.vacantsText.setTextColor(context.getResources().getColor(R.color.sgilight_gray_32));
+            holder.vacantsText.setTextColor(ContextCompat.getColor(context, R.color.sgilight_gray_32));
         } else {
             holder.checkBox.setEnabled(false);
-            holder.checkBox.setTextColor(context.getResources().getColor(R.color.sgilight_gray));
+            holder.checkBox.setTextColor(ContextCompat.getColor(context, R.color.sgilight_gray));
             holder.imagePadlock.setEnabled(false);
             holder.nStudentText.setEnabled(false);
-            holder.nStudentText.setTextColor(context.getResources().getColor(R.color.sgilight_gray));
+            holder.nStudentText.setTextColor(ContextCompat.getColor(context, R.color.sgilight_gray));
             holder.maxStudentText.setEnabled(false);
-            holder.maxStudentText.setTextColor(context.getResources().getColor(R.color.sgilight_gray));
+            holder.maxStudentText.setTextColor(ContextCompat.getColor(context, R.color.sgilight_gray));
             holder.radioButton.setEnabled(false);
-            holder.radioButton.setTextColor(context.getResources().getColor(R.color.sgilight_gray));
+            holder.radioButton.setTextColor(ContextCompat.getColor(context, R.color.sgilight_gray));
             holder.linearLayout.setEnabled(false);
             holder.vacantsText.setEnabled(false);
-            holder.vacantsText.setTextColor(context.getResources().getColor(R.color.sgilight_gray));
+            holder.vacantsText.setTextColor(ContextCompat.getColor(context, R.color.sgilight_gray));
         }
         //for multiple inscriptions the groups should be checkboxes to allow multiple choice
         //otherwise the groups should be radio button to allow just a single choice
@@ -229,7 +230,7 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
             holder.maxStudentText.setText(context.getString(R.string.maxStudent) + ": " + String.valueOf(maxStudents));
             holder.vacantsText.setText(context.getString(R.string.vacants) + ": " + String.valueOf(vacants));
             if (vacants == 0) {
-                holder.vacantsText.setTextColor(context.getResources().getColor(R.color.sgi_salmon));
+                holder.vacantsText.setTextColor(ContextCompat.getColor(context, R.color.sgi_salmon));
                 holder.vacantsText.setTypeface(null, Typeface.BOLD);
             } else
                 holder.vacantsText.setTypeface(null, Typeface.NORMAL);
