@@ -136,14 +136,7 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
         ArrayList<Group> children = this.children.get(groupTypeCode);
         Group group = children.get(childPosition);
 
-
-        boolean isCurrentMember = realMembership.get(groupTypeCode)[childPosition];
-        if (isCurrentMember) {
-            holder.linearLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.lightskyblue));
-        } else {
-            holder.linearLayout.setBackgroundColor(ContextCompat.getColor(context, android.R.color.white));
-        }
-
+        holder.linearLayout.setBackgroundColor(ContextCompat.getColor(context, android.R.color.white));
 
         //Data from Group
         String groupName = group.getGroupName();
@@ -152,7 +145,7 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
         int open = group.getOpen();
         int member = group.getMember();
 
-        // Para porde hacer click en el checkbox
+        // To click the checkbox
         Group g = (Group) getChild(groupPosition, childPosition);
         holder.checkBox.setTag(g);
         
