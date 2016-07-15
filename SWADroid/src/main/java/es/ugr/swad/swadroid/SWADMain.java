@@ -19,9 +19,6 @@
 
 package es.ugr.swad.swadroid;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -58,6 +55,7 @@ import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.gui.ImageExpandableListAdapter;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
+import es.ugr.swad.swadroid.gui.ProgressScreen;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.modules.courses.Courses;
@@ -88,10 +86,6 @@ import es.ugr.swad.swadroid.utils.Utils;
  * @author Jose Antonio Guerrero Aviles <cany20@gmail.com>
  */
 public class SWADMain extends MenuExpandableListActivity {
-    /**
-     * Array of strings for main ListView
-     */
-    protected String[] functions;
     /**
      * Function name field
      */
@@ -133,6 +127,9 @@ public class SWADMain extends MenuExpandableListActivity {
     private final ArrayList<ArrayList<HashMap<String, Object>>> mChildData = new ArrayList<>();
     private final ArrayList<HashMap<String, Object>> mMessagesData = new ArrayList<>();
     private final ArrayList<HashMap<String, Object>> mUsersData = new ArrayList<>();
+
+    private ProgressScreen mProgressScreen;
+
     /**
      * Gets the database helper
      *
@@ -167,13 +164,6 @@ public class SWADMain extends MenuExpandableListActivity {
 
         setContentView(R.layout.main);
         initializeMainViews();
-        
-        
-        //Initialize preferences
-        /*
-	  Application preferences
-	 */
-        Preferences prefs = new Preferences(this);
         
         try {
         	
@@ -335,7 +325,7 @@ public class SWADMain extends MenuExpandableListActivity {
         	            		Long.parseLong(Preferences.getSyncTime()), this);
         	        }
 
-        	        showProgress(false);
+                    mProgressScreen.hide();
                     break;
                 case Constants.LOGIN_REQUEST_CODE:
                     getCurrentCourses();
@@ -347,7 +337,7 @@ public class SWADMain extends MenuExpandableListActivity {
                 case Constants.COURSES_REQUEST_CODE:
                     //User credentials are wrong. Remove periodic synchronization
                     SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, this);
-                    showProgress(false);
+                    mProgressScreen.hide();
                     break;
                 case Constants.LOGIN_REQUEST_CODE:
                     finish();
@@ -436,7 +426,7 @@ public class SWADMain extends MenuExpandableListActivity {
     };
 
     private void getCurrentCourses() {
-    	showProgress(true);
+        mProgressScreen.show();
     	
         Intent activity = new Intent(this, Courses.class);
         startActivityForResult(activity, Constants.COURSES_REQUEST_CODE);
@@ -716,6 +706,10 @@ public class SWADMain extends MenuExpandableListActivity {
         mExpandableListView = (ExpandableListView) findViewById(R.id.expandableList);
         mBirthdayLayout = (LinearLayout) findViewById(R.id.birthday_layout);
         mBirthdayTextView = (TextView) findViewById(R.id.birthdayTextView);
+        View mProgressScreenView = findViewById(R.id.progress_screen);
+        View mCoursesList = findViewById(R.id.courses_list_view);
+        mProgressScreen = new ProgressScreen(mProgressScreenView, mCoursesList,
+                getString(R.string.coursesProgressDescription), this);
 
         OnChildClickListener mExpandableClickListener = new OnChildClickListener() {
 
@@ -820,52 +814,6 @@ public class SWADMain extends MenuExpandableListActivity {
 
         mExpandableListView.setOnChildClickListener(mExpandableClickListener);
 	}
-
-
-    /**
-     * Shows the progress UI and hides the login form.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
-
-    	final View course_list = findViewById(R.id.courses_list_view);
-        final View progressAnimation = findViewById(R.id.get_courses_status);
-
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-            progressAnimation.setVisibility(View.VISIBLE);
-            progressAnimation.animate()
-                            .setDuration(shortAnimTime)
-                            .alpha(show ? 1 : 0)
-                            .setListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    progressAnimation.setVisibility(show ? View.VISIBLE : View.GONE);
-                                }
-                            });
-
-            course_list.setVisibility(View.VISIBLE);
-            course_list.animate()
-                          .setDuration(shortAnimTime)
-                          .alpha(show ? 0 : 1)
-                          .setListener(new AnimatorListenerAdapter() {
-                              @Override
-                              public void onAnimationEnd(Animator animation) {
-                            	  course_list.setVisibility(show ? View.GONE
-                                          : View.VISIBLE);
-                              }
-                          });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-        	progressAnimation.setVisibility(show ? View.VISIBLE : View.GONE);
-        	course_list.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
