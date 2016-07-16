@@ -5,30 +5,7 @@
     android:layout_gravity="center"
     android:orientation="vertical" >
 
-    <LinearLayout
-        android:id="@+id/get_courses_status"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:gravity="center_horizontal|center_vertical"
-        android:orientation="vertical"
-        android:visibility="gone" >
-
-        <ProgressBar
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp" />
-
-        <TextView
-            android:id="@+id/get_courses_status_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="@string/coursesProgressDescription"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/foreground1" />
-    </LinearLayout>
+    <include layout="@layout/progress_screen" />
 
     <LinearLayout
         android:id="@+id/courses_list_view"

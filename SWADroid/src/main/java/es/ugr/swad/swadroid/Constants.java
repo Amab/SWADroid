@@ -32,11 +32,6 @@ import java.io.File;
  * @author Jose Antonio Guerrero Aviles <cany20@gmail.com>
  */
 public class Constants {
-	/**
-	 * SWAD application key
-	 * @deprecated Use {@link Config#SWAD_APP_KEY} instead
-	 */
-	public static final String SWAD_APP_KEY = Config.SWAD_APP_KEY;
     /**
      * URL of SWAD UGR Server
      */

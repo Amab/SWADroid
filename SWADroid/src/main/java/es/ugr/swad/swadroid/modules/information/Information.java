@@ -8,6 +8,7 @@ package es.ugr.swad.swadroid.modules.information;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.webkit.WebView;
 
 import org.ksoap2.serialization.SoapObject;
@@ -15,6 +16,7 @@ import org.ksoap2.serialization.SoapObject;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.analytics.SWADroidTracker;
+import es.ugr.swad.swadroid.gui.ProgressScreen;
 import es.ugr.swad.swadroid.gui.WebViewFactory;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.courses.Courses;
@@ -50,6 +52,10 @@ public class Information extends Module {
 	 * Webview to show course's information
 	 */
 	private WebView webview;
+	/**
+	 * Progress screen
+	 */
+	private ProgressScreen mProgressScreen;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +63,10 @@ public class Information extends Module {
 		setContentView(R.layout.webview_information_screen_layout);
 		
 		webview = (WebView) this.findViewById(R.id.info_webview_dialog);
+
+        View mProgressScreenView = findViewById(R.id.progress_screen);
+        mProgressScreen = new ProgressScreen(mProgressScreenView, webview,
+                getString(R.string.informationProgressDescription), this);
 
 		int requestCode = this.getIntent().getIntExtra("requestCode", 0);
 
@@ -161,10 +171,9 @@ public class Information extends Module {
 
 	@Override
 	protected void connect() {
-		String progressDescription = getString(R.string.informationProgressDescription);
-		int progressTitle = R.string.informationProgressTitle;
+        mProgressScreen.show();
 
-		startConnection(true, progressDescription, progressTitle);
+		startConnection();
 	}
 
 	@Override
@@ -197,10 +206,14 @@ public class Information extends Module {
             webview = WebViewFactory.getMathJaxWebView(webview);
             webview.setWebViewClient(WebViewFactory.getMathJaxExpression(infoTxt));
 		}
+
+        mProgressScreen.hide();
 	}
 
 	@Override
 	protected void onError() {
 		webview.loadDataWithBaseURL(null, getString(R.string.emptyInformation), "text/html", "utf-8", null);
+
+        mProgressScreen.hide();
 	}
 }

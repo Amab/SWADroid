@@ -15,15 +15,11 @@
 
 package es.ugr.swad.swadroid.modules.login;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
@@ -49,6 +45,7 @@ import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.gui.DialogFactory;
+import es.ugr.swad.swadroid.gui.ProgressScreen;
 import es.ugr.swad.swadroid.modules.account.CreateAccountActivity;
 import es.ugr.swad.swadroid.modules.password.RecoverPassword;
 import es.ugr.swad.swadroid.preferences.Preferences;
@@ -68,17 +65,14 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
 
     private static List<String> serversList;
 
-    private boolean mLoginError = false;
     // UI references for the login form.
     private EditText mIDView;
     private EditText mPasswordView;
     private EditText mServerTextView;
     private Spinner mServerView;
-    private View mLoginFormView;
-    private View mLoginStatusView;
-    private TextView mLoginStatusMessageView;
     private boolean mFromPreference = false;
     private ArrayAdapter<String> serverAdapter;
+    private ProgressScreen mProgressScreen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,9 +100,12 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
     }
 
     private void setupLoginForm() {
-        
-        mLoginFormView = findViewById(R.id.login_form);
-        mLoginStatusView = findViewById(R.id.login_status);
+        View mLoginFormView = findViewById(R.id.create_account_form);
+        View mProgressScreenView = findViewById(R.id.progress_screen);
+
+        mProgressScreen = new ProgressScreen(mProgressScreenView, mLoginFormView,
+                getString(R.string.login_progress_signing_in), this);
+
         Button mSignInButton = (Button) findViewById(R.id.sign_in_button);
         Button mLostPasswordButton = (Button) findViewById(R.id.lost_password);
         Button mCreateAccountButton = (Button) findViewById(R.id.create_account);
@@ -190,8 +187,6 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         // Apply the adapter to the spinner
         mServerView.setAdapter(serverAdapter);
         mServerView.setOnItemSelectedListener(this);
-
-        mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
 
         if (mSignInButton != null) {
             mSignInButton.setOnClickListener(new View.OnClickListener() {
@@ -304,16 +299,14 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
             try {
                 Preferences.setUserID(idValue);
                 Preferences.setUserPassword(Crypto.encryptPassword(passwordValue));
             } catch (NoSuchAlgorithmException e) {
-                // TODO, solucionar
                 //error(TAG, e.getMessage(), e, true);
             }
 
-            showProgress(true);
+            mProgressScreen.show();
             startActivityForResult(new Intent(this, Login.class), Constants.LOGIN_REQUEST_CODE);
         }
     }
@@ -330,11 +323,10 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case Constants.LOGIN_REQUEST_CODE:
-                    showProgress(false);
+                    mProgressScreen.hide();
                     Login.setLogged(true);
                     setResult(RESULT_OK);
                     mFromPreference = false;
-                    mLoginError = false;
                     finish();
                     break;
                 case Constants.RECOVER_PASSWORD_REQUEST_CODE:
@@ -349,8 +341,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         } else if (resultCode == Activity.RESULT_CANCELED) {
             switch (requestCode) {
                 case Constants.LOGIN_REQUEST_CODE:
-                    mLoginError = true;
-                    showProgress(false);
+                    mProgressScreen.hide();
                     break;
                 case Constants.RECOVER_PASSWORD_REQUEST_CODE:
                     Toast.makeText(this, R.string.lost_password_failure, Toast.LENGTH_LONG).show();
@@ -358,47 +349,6 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
                 case Constants.CREATE_ACCOUNT_REQUEST_CODE:
                     break;
             }
-        }
-    }
-    
-    /**
-     * Shows the progress UI and hides the login form.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-            mLoginStatusView.setVisibility(View.VISIBLE);
-            mLoginStatusView.animate()
-                            .setDuration(shortAnimTime)
-                            .alpha(show ? 1 : 0)
-                            .setListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    mLoginStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
-                                }
-                            });
-
-            mLoginFormView.setVisibility(View.VISIBLE);
-            mLoginFormView.animate()
-                          .setDuration(shortAnimTime)
-                          .alpha(show ? 0 : 1)
-                          .setListener(new AnimatorListenerAdapter() {
-                              @Override
-                              public void onAnimationEnd(Animator animation) {
-                                  mLoginFormView.setVisibility(mLoginError ? View.VISIBLE
-                                          : View.GONE);
-                              }
-                          });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mLoginStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
 

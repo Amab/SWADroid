@@ -60,6 +60,7 @@ public class SendMyGroups extends Module {
      * String that contains group codes separated with comma
      */
     private String myGroups = null;
+
     /**
      * Groups tag name for Logcat
      */
@@ -162,15 +163,11 @@ public class SendMyGroups extends Module {
 
     @Override
     protected void connect() {
-        String progressDescription = getString(R.string.sendMyGroupsProgressDescription);
-        int progressTitle = R.string.sendMyGroupsProgressTitle;
-
-        startConnection(true, progressDescription, progressTitle);
+        startConnection();
     }
 
     @Override
     protected void postConnect() {
-        Log.i(TAG, "Enrollment requested");
         finish();
     }
 

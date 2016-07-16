@@ -144,8 +144,9 @@ public class TestsConfigDownload extends Module {
                 }
 
                 Intent activity = new Intent(this, TestsQuestionsDownload.class);
+                activity.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
                 activity.putExtra("timestamp", timestamp);
-                startActivityForResult(activity, Constants.TESTS_QUESTIONS_DOWNLOAD_REQUEST_CODE);
+                startActivity(activity);
             }
         }
 
@@ -158,10 +159,7 @@ public class TestsConfigDownload extends Module {
      */
     @Override
     protected void connect() {
-        String progressDescription = getString(R.string.testsDownloadProgressDescription);
-        int progressTitle = R.string.testsDownloadProgressTitle;
-
-        startConnection(false, progressDescription, progressTitle);
+        startConnection();
     }
 
     /* (non-Javadoc)

@@ -19,7 +19,7 @@
             android:hint="@string/message_receivers_title"
             android:textColor="@color/foreground1"
             android:visibility="invisible"
-            android:textSize="10dp" />
+            android:textSize="8sp" />
 
         <TextView android:id="@+id/message_receivers_label"
             android:layout_width="match_parent"
@@ -27,7 +27,8 @@
             android:hint="@string/message_receivers_title"
             android:textColor="@color/foreground1"
             android:visibility="gone"
-            android:textSize="19dp" />
+            android:textSize="19sp"
+            android:layout_marginLeft="5dp"/>
 
         <EditText
             android:id="@+id/message_receivers_text"
@@ -42,7 +43,8 @@
             android:layout_height="wrap_content"
             android:hint="@string/message_subject_title"
             android:textColor="@color/foreground1"
-            android:textSize="19dp" />
+            android:textSize="19sp"
+            android:layout_marginLeft="5dp"/>
 
         <EditText
             android:id="@+id/message_subject_text"
@@ -55,7 +57,8 @@
             android:layout_height="wrap_content"
             android:hint="@string/message_body_title"
             android:textColor="@color/foreground1"
-            android:textSize="19dp" />
+            android:textSize="19sp"
+            android:layout_marginLeft="5dp" />
 
         <EditText
             android:id="@+id/message_body_text"

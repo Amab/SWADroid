@@ -119,9 +119,8 @@ public class UsersSend extends Module {
     @Override
     protected void connect() {
         String progressDescription = getString(R.string.usersDownloadProgressDescription);
-        int progressTitle = R.string.usersDownloadProgressTitle;
 
-        startConnection(false, progressDescription, progressTitle);
+        startConnection();
     }
 
     @Override

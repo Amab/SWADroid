@@ -5,7 +5,7 @@
     android:background="@color/background"
     android:orientation="vertical" >
 
-    <include layout="@layout/loading_status" />
+    <include layout="@layout/progress_screen" />
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_container_list"
