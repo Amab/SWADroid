@@ -35,6 +35,7 @@ import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.gui.ImageListAdapter;
 import es.ugr.swad.swadroid.gui.ImageListItem;
 import es.ugr.swad.swadroid.gui.MenuActivity;
+import es.ugr.swad.swadroid.gui.ProgressScreen;
 import es.ugr.swad.swadroid.modules.courses.Courses;
 
 /**
@@ -48,8 +49,10 @@ public class Tests extends MenuActivity implements OnItemClickListener {
      * Tests tag name for Logcat
      */
     private static final String TAG = Constants.APP_TAG + " Tests";
-    public static final int RESULT_NO_QUESTIONS = 1; 
-    public static final int RESULT_NO_QUESTIONS_COURSE = 2; 
+    /**
+     * Progress screen
+     */
+    private ProgressScreen mProgressScreen;
 
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
@@ -63,6 +66,11 @@ public class Tests extends MenuActivity implements OnItemClickListener {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_items);
+
+        View mProgressScreenView = findViewById(R.id.progress_screen);
+        View mTestsMenuLayoutView = findViewById(R.id.testsMenuLayout);
+        mProgressScreen = new ProgressScreen(mProgressScreenView, mTestsMenuLayoutView,
+                getString(R.string.syncronizingMsg), this);
 
         SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
 
@@ -94,13 +102,26 @@ public class Tests extends MenuActivity implements OnItemClickListener {
     	Intent activity;
         switch (position) {
             case 0:
+                mProgressScreen.show();
+
                 activity = new Intent(getApplicationContext(), TestsConfigDownload.class);
                 startActivityForResult(activity, Constants.TESTS_CONFIG_DOWNLOAD_REQUEST_CODE);
-                break;
 
+                break;
             case 1:
                 activity = new Intent(getApplicationContext(), TestsMake.class);
                 startActivityForResult(activity, Constants.TESTS_MAKE_REQUEST_CODE);
+                break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case Constants.TESTS_CONFIG_DOWNLOAD_REQUEST_CODE:
+                mProgressScreen.hide();
                 break;
         }
     }

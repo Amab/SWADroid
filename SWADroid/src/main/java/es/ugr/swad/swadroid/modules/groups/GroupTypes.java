@@ -119,10 +119,7 @@ public class GroupTypes extends Module {
 
     @Override
     protected void connect() {
-        String progressDescription = getString(R.string.groupTypesProgressDescription);
-        int progressTitle = R.string.groupTypesProgressTitle;
-
-        startConnection(true, progressDescription, progressTitle);
+        startConnection();
     }
 
     @Override

@@ -149,9 +149,8 @@ public class EventsDownload extends Module {
     @Override
     protected void connect() {
         String progressDescription = getString(R.string.eventsDownloadProgressDescription);
-        int progressTitle = R.string.eventsDownloadProgressTitle;
 
-        startConnection(false, progressDescription, progressTitle);
+        startConnection();
     }
 
     @Override

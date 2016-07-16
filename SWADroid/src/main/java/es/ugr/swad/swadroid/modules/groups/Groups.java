@@ -104,10 +104,7 @@ public class Groups extends Module {
 
     @Override
     protected void connect() {
-        String progressDescription = getString(R.string.groupsProgressDescription);
-        int progressTitle = R.string.groupsProgressTitle;
-
-        startConnection(true, progressDescription, progressTitle);
+        startConnection();
     }
 
 

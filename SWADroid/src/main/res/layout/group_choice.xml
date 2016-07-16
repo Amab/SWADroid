@@ -4,35 +4,43 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/listText"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:padding="20dip"
-        android:text="@string/myGroupsModuleLabel"
-        android:textColor="@color/foreground1"
-        android:textSize="24sp"
-        android:visibility="gone" >
-    </TextView>
+    <include layout="@layout/progress_screen" />
 
-    <ExpandableListView
-        android:id="@+id/android:list"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/background"
-        android:cacheColorHint="@color/background" >
-    </ExpandableListView>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/groupChoiceLayout" >
 
-    <TextView
-        android:id="@+id/noGroupsText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/background"
-        android:gravity="center"
-        android:padding="20dip"
-        android:text="@string/noGroupsText"
-        android:textColor="@color/foreground1"
-        android:textSize="24sp"
-        android:visibility="gone" />
+        <TextView
+            android:id="@+id/listText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dip"
+            android:text="@string/myGroupsModuleLabel"
+            android:textColor="@color/foreground1"
+            android:textSize="24sp"
+            android:visibility="gone" >
+        </TextView>
 
+        <ExpandableListView
+            android:id="@+id/android:list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/background"
+            android:cacheColorHint="@color/background" >
+        </ExpandableListView>
+
+        <TextView
+            android:id="@+id/noGroupsText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/background"
+            android:gravity="center"
+            android:padding="20dip"
+            android:text="@string/noGroupsText"
+            android:textColor="@color/foreground1"
+            android:textSize="24sp"
+            android:visibility="gone" />
+    </LinearLayout>
 </LinearLayout>

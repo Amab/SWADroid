@@ -4,32 +4,38 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <!-- <include layout="@layout/action_bar" /> -->
+    <include layout="@layout/progress_screen" />
 
-    <include layout="@layout/course_or_group_name" />
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/directoryNavigator"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
 
-    <include layout="@layout/navigation_bar" />
+        <include layout="@layout/course_or_group_name" />
 
-    <TextView
-        android:id="@+id/messageText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        android:padding="20dp"
-        android:textColor="@color/foreground1"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:visibility="gone" />
+        <include layout="@layout/navigation_bar" />
 
-    <GridView
-        android:id="@+id/gridview"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:columnWidth="90dp"
-        android:gravity="center"
-        android:horizontalSpacing="10dp"
-        android:numColumns="auto_fit"
-        android:stretchMode="columnWidth"
-        android:verticalSpacing="10dp" />
+        <TextView
+            android:id="@+id/messageText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:padding="20dp"
+            android:textColor="@color/foreground1"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
 
+        <GridView
+            android:id="@+id/gridview"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:columnWidth="90dp"
+            android:gravity="center"
+            android:horizontalSpacing="10dp"
+            android:numColumns="auto_fit"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="10dp" />
+    </LinearLayout>
 </LinearLayout>

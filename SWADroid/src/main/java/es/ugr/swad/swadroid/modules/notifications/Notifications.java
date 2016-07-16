@@ -474,10 +474,9 @@ public class Notifications extends Module implements
 	 */
 	@Override
 	protected void connect() {
-		String progressDescription = getString(R.string.notificationsProgressDescription);
-		int progressTitle = R.string.notificationsProgressTitle;
+		Toast.makeText(this, R.string.notificationsProgressDescription, Toast.LENGTH_SHORT).show();
 
-		startConnection(false, progressDescription, progressTitle);
+		startConnection();
 	}
 
 	/*

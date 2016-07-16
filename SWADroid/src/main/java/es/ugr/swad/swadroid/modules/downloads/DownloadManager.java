@@ -18,6 +18,7 @@
  */
 package es.ugr.swad.swadroid.modules.downloads;
 
+import android.annotation.TargetApi;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -26,6 +27,7 @@ import android.database.Cursor;
 import android.database.CursorWrapper;
 import android.net.ConnectivityManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.BaseColumns;
@@ -824,8 +826,8 @@ public class DownloadManager {
      * Restart the given downloads, which must have already completed (successfully or not).  This
      * method will only work when called from within the download manager's process.
      * @param ids the IDs of the downloads
-     * @hide
      */
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     public void restartDownload(long... ids) {
         try (Cursor cursor = query(new Query().setFilterById(ids))) {
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {

@@ -42,6 +42,7 @@ import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
+import es.ugr.swad.swadroid.gui.ProgressScreen;
 import es.ugr.swad.swadroid.modules.courses.Courses;
 
 /**
@@ -96,7 +97,7 @@ public class Rollcall extends MenuExpandableListActivity implements
       adapter = new EventsCursorAdapter(getBaseContext(), dbCursor, dbHelper);
       lvEvents.setAdapter(adapter);
 
-      showProgress(false);
+      mProgressScreen.hide();
     }
   };
   /**
@@ -107,6 +108,10 @@ public class Rollcall extends MenuExpandableListActivity implements
    * Layout with "Pull to refresh" function
    */
   private SwipeRefreshLayout refreshLayout;
+  /**
+   * Progress screen
+   */
+  private ProgressScreen mProgressScreen;
   /**
    * ListView click listener
    */
@@ -131,6 +136,11 @@ public class Rollcall extends MenuExpandableListActivity implements
 
     refreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container_list);
     emptyEventsTextView = (TextView) findViewById(R.id.list_item_title);
+
+    View mProgressScreenView = findViewById(R.id.progress_screen);
+    mProgressScreen = new ProgressScreen(mProgressScreenView, refreshLayout,
+            getString(R.string.loadingMsg), this);
+
     lvEvents = (ListView) findViewById(R.id.list_pulltorefresh);
 
     lvEvents.setOnItemClickListener(clickListener);
@@ -193,13 +203,9 @@ public class Rollcall extends MenuExpandableListActivity implements
   }
 
   private void refreshEvents() {
-    showProgress(true);
+    mProgressScreen.show();
     Intent activity = new Intent(this, EventsDownload.class);
     startActivityForResult(activity, Constants.ROLLCALL_EVENTS_DOWNLOAD_REQUEST_CODE);
-  }
-
-  private void showProgress(boolean show) {
-    DialogFactory.showProgress(this, show, R.id.swipe_container_list, R.id.loading_status);
   }
 
   /**

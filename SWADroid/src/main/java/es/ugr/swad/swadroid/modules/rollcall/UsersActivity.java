@@ -53,6 +53,7 @@ import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
+import es.ugr.swad.swadroid.gui.ProgressScreen;
 import es.ugr.swad.swadroid.model.UserAttendance;
 import es.ugr.swad.swadroid.modules.courses.Courses;
 
@@ -92,6 +93,10 @@ public class UsersActivity extends MenuExpandableListActivity implements
      */
     private TextView emptyUsersTextView;
     /**
+     * Progress screen
+     */
+    private ProgressScreen mProgressScreen;
+    /**
      * Flag for indicate if device has a rear camera available
      */
     private boolean hasRearCam;
@@ -111,6 +116,11 @@ public class UsersActivity extends MenuExpandableListActivity implements
 
         refreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container_list);
         emptyUsersTextView = (TextView) findViewById(R.id.list_item_title);
+
+        View mProgressScreenView = findViewById(R.id.progress_screen);
+        mProgressScreen = new ProgressScreen(mProgressScreenView, refreshLayout,
+                getString(R.string.loadingMsg), this);
+
         lvUsers = (ListView) findViewById(R.id.list_pulltorefresh);
 
         lvUsers.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -197,22 +207,18 @@ public class UsersActivity extends MenuExpandableListActivity implements
                 adapter = new UsersCursorAdapter(getBaseContext(), dbCursor, dbHelper, eventCode);
                 lvUsers.setAdapter(adapter);
 
-                showProgress(false);
+                mProgressScreen.hide();
             }
         });
     }
 
     private void refreshUsers() {
-        showProgress(true);
+        mProgressScreen.show();
 
         Intent activity = new Intent(this, UsersDownload.class);
         activity.putExtra("attendanceEventCode",
                 eventCode);
         startActivityForResult(activity, Constants.ROLLCALL_USERS_DOWNLOAD_REQUEST_CODE);
-    }
-
-    private void showProgress(boolean show) {
-        DialogFactory.showProgress(this, show, R.id.swipe_container_list, R.id.loading_status);
     }
 
     /**
