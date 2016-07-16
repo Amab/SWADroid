@@ -21,6 +21,14 @@ public class ProgressScreen {
     TextView messageTextView;
     Context context;
 
+    /**
+     * Constructor
+     *
+     * @param progressView View for progress screen
+     * @param activityView View for calling activity
+     * @param message Message to be showed on progress screen
+     * @param context Activity context
+     */
     public ProgressScreen(View progressView, View activityView, String message, Context context) {
         this.progressView = progressView;
         this.activityView = activityView;
@@ -109,34 +117,66 @@ public class ProgressScreen {
         }
     }
 
+    /**
+     * Gets view for progress screen
+     * @return View for progress screen
+     */
     public View getProgressView() {
         return progressView;
     }
 
+    /**
+     * Sets view for progress screen
+     * @param progressView View for progress screen
+     */
     public void setProgressView(View progressView) {
         this.progressView = progressView;
     }
 
+    /**
+     * Gets view for calling activity
+     * @return View for calling activity
+     */
     public View getActivityView() {
         return activityView;
     }
 
+    /**
+     * Sets view for calling activity
+     * @param activityView View for calling activity
+     */
     public void setActivityView(View activityView) {
         this.activityView = activityView;
     }
 
+    /**
+     * Gets message to be showed on progress screen
+     * @return Message to be showed on progress screen
+     */
     public CharSequence getMessage() {
         return messageTextView.getText();
     }
 
+    /**
+     * Sets message to be showed on progress screen
+     * @param message Message to be showed on progress screen
+     */
     public void setMessage(CharSequence message) {
         this.messageTextView.setText(message);
     }
 
+    /**
+     * Gets activity context
+     * @return Activity context
+     */
     public Context getContext() {
         return context;
     }
 
+    /**
+     * Sets activity context
+     * @param context Activity context
+     */
     public void setContext(Context context) {
         this.context = context;
     }
