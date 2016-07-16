@@ -139,7 +139,7 @@ public class Rollcall extends MenuExpandableListActivity implements
 
     View mProgressScreenView = findViewById(R.id.progress_screen);
     mProgressScreen = new ProgressScreen(mProgressScreenView, refreshLayout,
-            getString(R.string.progress_status), this);
+            getString(R.string.loadingMsg), this);
 
     lvEvents = (ListView) findViewById(R.id.list_pulltorefresh);
 

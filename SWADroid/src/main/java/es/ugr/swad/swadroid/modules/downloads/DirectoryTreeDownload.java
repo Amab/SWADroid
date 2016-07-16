@@ -24,11 +24,10 @@ import android.os.Bundle;
 import org.ksoap2.serialization.SoapObject;
 
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
+import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.modules.courses.Courses;
 import es.ugr.swad.swadroid.modules.login.Login;
-import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
@@ -40,8 +39,14 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
  */
 
 public class DirectoryTreeDownload extends Module {
-    private int treeCode; //documents of course or common zone of course
-    private int group = 0; // documents of the course
+    /**
+     * Documents of course or common zone of course
+     */
+    private int treeCode;
+    /**
+     * Documents of the course
+     */
+    private int group = 0;
 
     @Override
     protected void requestService() throws Exception {
@@ -65,16 +70,12 @@ public class DirectoryTreeDownload extends Module {
 
     @Override
     protected void connect() {
-        String progressDescription = getString(R.string.documentsDownloadProgressDescription);
-        int progressTitle = R.string.documentsDownloadModuleLabel;
-
-        startConnection(true, progressDescription, progressTitle);
+        startConnection();
     }
 
     @Override
     protected void postConnect() {
         finish();
-
     }
 
     @Override

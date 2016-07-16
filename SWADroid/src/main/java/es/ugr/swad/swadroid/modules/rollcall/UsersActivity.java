@@ -119,7 +119,7 @@ public class UsersActivity extends MenuExpandableListActivity implements
 
         View mProgressScreenView = findViewById(R.id.progress_screen);
         mProgressScreen = new ProgressScreen(mProgressScreenView, refreshLayout,
-                getString(R.string.progress_status), this);
+                getString(R.string.loadingMsg), this);
 
         lvUsers = (ListView) findViewById(R.id.list_pulltorefresh);
 

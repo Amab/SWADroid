@@ -707,8 +707,8 @@ public class SWADMain extends MenuExpandableListActivity {
         mBirthdayLayout = (LinearLayout) findViewById(R.id.birthday_layout);
         mBirthdayTextView = (TextView) findViewById(R.id.birthdayTextView);
         View mProgressScreenView = findViewById(R.id.progress_screen);
-        View mCoursesList = findViewById(R.id.courses_list_view);
-        mProgressScreen = new ProgressScreen(mProgressScreenView, mCoursesList,
+        View mCoursesListView = findViewById(R.id.courses_list_view);
+        mProgressScreen = new ProgressScreen(mProgressScreenView, mCoursesListView,
                 getString(R.string.coursesProgressDescription), this);
 
         OnChildClickListener mExpandableClickListener = new OnChildClickListener() {

@@ -20,6 +20,7 @@ package es.ugr.swad.swadroid.modules.notifications;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.ksoap2.serialization.SoapPrimitive;
 
@@ -107,10 +108,9 @@ public class NotificationsMarkAllAsRead extends Module {
      */
     @Override
     protected void connect() {
-        String progressDescription = getString(R.string.notificationsProgressDescription);
-        int progressTitle = R.string.notificationsProgressTitle;
+        Toast.makeText(this, R.string.notificationsMarkingAllAsReadMsg , Toast.LENGTH_SHORT).show();
 
-        startConnection(false, progressDescription, progressTitle);
+        startConnection();
     }
 
     /* (non-Javadoc)

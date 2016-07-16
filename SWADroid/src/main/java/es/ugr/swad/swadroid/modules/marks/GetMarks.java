@@ -106,9 +106,8 @@ public class GetMarks extends Module {
     @Override
     protected void connect() {
         String progressDescription = getString(R.string.marksProgressDescription);
-        int progressTitle = R.string.marksProgressTitle;
 
-        startConnection(true, progressDescription, progressTitle);
+        startConnection();
     }
 
     /* (non-Javadoc)

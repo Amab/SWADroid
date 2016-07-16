@@ -171,21 +171,21 @@ public class DirectoryNavigator {
      */
     private List<DirectoryItem> getItems(Node node) {
         List<DirectoryItem> items = new ArrayList<>();
-
         NodeList childs = node.getChildNodes();
-
         DirectoryItem item;
+
         for (int i = 0; i < childs.getLength(); i++) {
             Node currentChild = childs.item(i);
-            if (currentChild.getNodeName().equals("dir")) {
-                NamedNodeMap attributes = currentChild.getAttributes();
-                String name = attributes.getNamedItem("name").getNodeValue();
-                item = new DirectoryItem(name);
-                items.add(item);
-            } else {
-                if (childs.item(i).getNodeName().equals("file")) {
+            NamedNodeMap attributes = currentChild.getAttributes();
+            String name;
 
-                    String name;
+            switch(currentChild.getNodeName()) {
+                case "dir":
+                    name = attributes.getNamedItem("name").getNodeValue();
+                    item = new DirectoryItem(name);
+                    items.add(item);
+                    break;
+                case "file":
                     String type = "";
                     long fileCode = -1;
                     long size = -1; //In bytes
@@ -194,25 +194,28 @@ public class DirectoryNavigator {
                     String publisher = "";
                     String photo = "";
 
-                    //PARSE THE NAME SEPARING NAME AND EXTENSION
-                    NamedNodeMap attributes = currentChild.getAttributes();
                     name = attributes.getNamedItem("name").getNodeValue();
 
                     //WE GET THE REST OF THE INFO
                     NodeList fileData = currentChild.getChildNodes();
                     for (int j = 0; j < fileData.getLength(); j++) {
-                        //System.out.println(j);
                         Node data = fileData.item(j);
                         String tag = data.getNodeName();
                         Node firstChild = data.getFirstChild();
                         if (firstChild != null) {
                             switch (tag) {
                                 case "code":
+                                    fileCode = Long.valueOf(firstChild.getNodeValue());
+                                    break;
                                 case "time":
                                     time = Long.valueOf(firstChild.getNodeValue());
                                     break;
                                 case "license":
+                                    license = firstChild.getNodeValue();
+                                    break;
                                 case "publisher":
+                                    publisher = firstChild.getNodeValue();
+                                    break;
                                 case "photo":
                                     photo = firstChild.getNodeValue();
                                     break;
@@ -225,7 +228,7 @@ public class DirectoryNavigator {
 
                     item = new DirectoryItem(name, type, fileCode, size, time, license, publisher, photo);
                     items.add(item);
-                }
+                    break;
             }
         }
 
@@ -306,9 +309,6 @@ public class DirectoryNavigator {
     public void addToPath(String directory) {
         path.add(directory);
     }
-
-    //TODO List<DirectoryItem> getcurrent
-    //public List<DirectoryItem> getcurrent(){}
 
     /**
      * Searches for a node in the current directory with the given name

@@ -16,10 +16,11 @@ import es.ugr.swad.swadroid.R;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class ProgressScreen {
-    View progressView;
-    View activityView;
-    TextView messageTextView;
-    Context context;
+    private View progressView;
+    private View activityView;
+    private TextView messageTextView;
+    private Context context;
+    private boolean showing;
 
     /**
      * Constructor
@@ -35,6 +36,7 @@ public class ProgressScreen {
         this.context = context;
         this.messageTextView = (TextView) this.progressView.findViewById(R.id.progress_screen_message);
         this.messageTextView.setText(message);
+        this.showing = false;
     }
 
     /**
@@ -75,6 +77,8 @@ public class ProgressScreen {
             progressView.setVisibility(View.VISIBLE);
             activityView.setVisibility(View.GONE);
         }
+
+        this.showing = true;
     }
 
     /**
@@ -115,6 +119,8 @@ public class ProgressScreen {
             progressView.setVisibility(View.GONE);
             activityView.setVisibility(View.VISIBLE);
         }
+
+        this.showing = false;
     }
 
     /**
@@ -179,5 +185,13 @@ public class ProgressScreen {
      */
     public void setContext(Context context) {
         this.context = context;
+    }
+
+    /**
+     * Gets isShowing flag
+     * @return true iif the progress screen is showing, false otherwise
+     */
+    public boolean isShowing() {
+        return showing;
     }
 }

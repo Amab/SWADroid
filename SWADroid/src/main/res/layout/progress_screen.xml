@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:fontFamily="sans-serif-light"
-        android:text="@string/progress_status"
+        android:text="@string/loadingMsg"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/foreground1" />
 </LinearLayout>

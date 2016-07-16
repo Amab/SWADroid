@@ -52,7 +52,7 @@ public class GetFile extends Module {
     private static final String TAG = Constants.APP_TAG + " GetFile";
 
     /**
-     * Unique identificator of file
+     * Unique identifier of file
      */
     private long fileCode = -1;
 
@@ -63,7 +63,7 @@ public class GetFile extends Module {
         fileCode = getIntent().getLongExtra("fileCode", -1);
 
         if (fileCode == -1) {
-            Log.i(TAG, "Missing arguments");
+            Log.e(TAG, "Missing arguments");
             finish();
         }
 
@@ -117,15 +117,12 @@ public class GetFile extends Module {
 
     @Override
     protected void connect() {
-        startConnection(false, "", 0);
+        startConnection();
     }
 
     @Override
     protected void postConnect() {
-        if (isDebuggable)
-            Log.i(TAG, "File requested");
         finish();
-
     }
 
     @Override

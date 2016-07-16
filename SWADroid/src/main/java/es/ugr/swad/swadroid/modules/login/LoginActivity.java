@@ -72,7 +72,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
     private Spinner mServerView;
     private boolean mFromPreference = false;
     private ArrayAdapter<String> serverAdapter;
-    ProgressScreen mProgressScreen;
+    private ProgressScreen mProgressScreen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

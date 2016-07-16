@@ -225,10 +225,7 @@ public class TestsQuestionsDownload extends Module {
      */
     @Override
     protected void connect() {
-        String progressDescription = getString(R.string.testsDownloadProgressDescription);
-        int progressTitle = R.string.testsDownloadProgressTitle;
-
-        startConnection(true, progressDescription, progressTitle);
+        startConnection();
     }
 
     /* (non-Javadoc)

@@ -49,6 +49,7 @@ import java.util.concurrent.TimeoutException;
 
 import javax.net.ssl.SSLException;
 
+import es.ugr.swad.swadroid.Config;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.analytics.SWADroidTracker;
@@ -299,7 +300,7 @@ public class NotificationsSyncAdapterService extends Service {
         createRequest(SOAPClient.CLIENT_TYPE);
         addParam("userID", Preferences.getUserID());
         addParam("userPassword", Preferences.getUserPassword());
-        addParam("appKey", Constants.SWAD_APP_KEY);
+        addParam("appKey", Config.SWAD_APP_KEY);
         sendRequest(User.class, true);
 
         if (result != null) {
