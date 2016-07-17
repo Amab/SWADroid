@@ -263,7 +263,7 @@
     <string name="notSeenLabel">No leídas</string>
     <string name="actionBarRefresh">Actualizar</string>
     <string name="actionBarSave">Guardar</string>
-    <string name="actionBarAddUser">Agregar usuarios</string>
+    <string name="actionBarAddUser">Añadir usuarios</string>
     <string name="actionBarFilterUsers">Filtrar usuarios</string>
     <string name="Filters_All">Todo</string>
     <string name="Filters_Teachers">Profesores</string>

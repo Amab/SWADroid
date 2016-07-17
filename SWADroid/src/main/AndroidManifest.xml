@@ -173,6 +173,16 @@
                 android:value="es.ugr.swad.swadroid.SWADMain" />
         </activity>
         <activity
+            android:name="es.ugr.swad.swadroid.modules.messages.SearchUsers"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:label="@string/messagesModuleLabel"
+            android:parentActivityName="es.ugr.swad.swadroid.modules.messages.Messages" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.ugr.swad.swadroid.modules.messages.Messages" />
+        </activity>
+        <activity
             android:name="es.ugr.swad.swadroid.modules.messages.FilterUsersList"
             android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.AppCompat.Light"
