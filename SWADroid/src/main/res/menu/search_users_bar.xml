@@ -3,14 +3,9 @@
     xmlns:swadroid="http://schemas.android.com/apk/res-auto" >
 
     <item
-        android:id="@+id/action_addUser"
-        android:icon="@drawable/ic_action_add_receiver"
-        android:title="@string/actionBarAddUser"
-        swadroid:showAsAction="ifRoom|withText"/>
-    <item
-        android:id="@+id/action_sendMsg"
-        android:icon="@drawable/ic_action_send_now"
-        android:title="@string/sendMsg"
-        swadroid:showAsAction="ifRoom|withText"/>
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_search_user"
+        android:title="@string/search"
+        swadroid:showAsAction="always"/>
 
 </menu>

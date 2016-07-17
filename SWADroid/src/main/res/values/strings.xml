@@ -327,5 +327,6 @@
     <string name="noDocumentsMsg">No documents currently available</string>
     <string name="notificationsMarkingAllAsReadMsg">Marking all notifications as read…</string>
     <string name="syncronizingMsg">Syncronizing…</string>
+    <string name="search">Search</string>
 
 </resources>

@@ -50,13 +50,8 @@ public class SearchUsers extends Module {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_addUser:
-                //metodoAdd()
-                info.setText("Se presionó Añadir");
-                return true;
-            case R.id.action_sendMsg:
+            case R.id.action_search:
                 //metodoSearch()
-                info.setText("Se presionó Enviar");
                 return true;
 
             default:
