@@ -58,7 +58,7 @@ public class DirectoryNavigator {
     /**
      * Application context
      */
-    public Context mContext;
+    private Context mContext;
 
     /**
      * Constructor.
@@ -67,7 +67,7 @@ public class DirectoryNavigator {
      */
     public DirectoryNavigator(Context ctx, String fileXML) {
         this.XMLinfo = fileXML;
-        this.path = new ArrayList<String>();
+        this.path = new ArrayList<>();
         this.mContext = ctx;
     }
 
@@ -84,7 +84,7 @@ public class DirectoryNavigator {
 
         Node node = goToDirectory();
 
-        currentItems = new ArrayList<DirectoryItem>(getItems(node));
+        currentItems = new ArrayList<>(getItems(node));
 
         return currentItems;
     }
@@ -109,7 +109,7 @@ public class DirectoryNavigator {
 
         Node node = goToDirectory();
 
-        currentItems = new ArrayList<DirectoryItem>(getItems(node));
+        currentItems = new ArrayList<>(getItems(node));
 
         return currentItems;
     }
@@ -127,7 +127,7 @@ public class DirectoryNavigator {
             path.remove(path.size() - 1);
             Node node = goToDirectory();
 
-            currentItems = new ArrayList<DirectoryItem>(getItems(node));
+            currentItems = new ArrayList<>(getItems(node));
         }
 
         return currentItems;
@@ -144,7 +144,7 @@ public class DirectoryNavigator {
 
         Node node = goToDirectory();
 
-        currentItems = new ArrayList<DirectoryItem>(getItems(node));
+        currentItems = new ArrayList<>(getItems(node));
         return currentItems;
     }
 
@@ -159,7 +159,7 @@ public class DirectoryNavigator {
 
         Node node = goToDirectory();
 
-        currentItems = new ArrayList<DirectoryItem>(getItems(node));
+        currentItems = new ArrayList<>(getItems(node));
         return currentItems;
     }
 
@@ -170,22 +170,22 @@ public class DirectoryNavigator {
      * @return Return a list of items of the directory passed as parameter.
      */
     private List<DirectoryItem> getItems(Node node) {
-        List<DirectoryItem> items = new ArrayList<DirectoryItem>();
-
+        List<DirectoryItem> items = new ArrayList<>();
         NodeList childs = node.getChildNodes();
-
         DirectoryItem item;
+
         for (int i = 0; i < childs.getLength(); i++) {
             Node currentChild = childs.item(i);
-            if (currentChild.getNodeName().equals("dir")) {
-                NamedNodeMap attributes = currentChild.getAttributes();
-                String name = attributes.getNamedItem("name").getNodeValue();
-                item = new DirectoryItem(name);
-                items.add(item);
-            } else {
-                if (childs.item(i).getNodeName().equals("file")) {
+            NamedNodeMap attributes = currentChild.getAttributes();
+            String name;
 
-                    String name;
+            switch(currentChild.getNodeName()) {
+                case "dir":
+                    name = attributes.getNamedItem("name").getNodeValue();
+                    item = new DirectoryItem(name);
+                    items.add(item);
+                    break;
+                case "file":
                     String type = "";
                     long fileCode = -1;
                     long size = -1; //In bytes
@@ -194,37 +194,41 @@ public class DirectoryNavigator {
                     String publisher = "";
                     String photo = "";
 
-                    //PARSE THE NAME SEPARING NAME AND EXTENSION
-                    NamedNodeMap attributes = currentChild.getAttributes();
                     name = attributes.getNamedItem("name").getNodeValue();
 
                     //WE GET THE REST OF THE INFO
                     NodeList fileData = currentChild.getChildNodes();
                     for (int j = 0; j < fileData.getLength(); j++) {
-                        //System.out.println(j);
                         Node data = fileData.item(j);
                         String tag = data.getNodeName();
                         Node firstChild = data.getFirstChild();
                         if (firstChild != null) {
-                            if (tag.equals("code")) {
-                                fileCode = Long.valueOf(firstChild.getNodeValue());
-                            } else if (tag.equals("size")) {
-                                size = Integer.parseInt(firstChild.getNodeValue());
-                            } else if (tag.equals("time")) {
-                                time = Long.valueOf(firstChild.getNodeValue());
-                            } else if (tag.equals("license")) {
-                                license = firstChild.getNodeValue();
-                            } else if (tag.equals("publisher")) {
-                                publisher = firstChild.getNodeValue();
-                            } else if (tag.equals("photo")) {
-                                photo = firstChild.getNodeValue();
+                            switch (tag) {
+                                case "code":
+                                    fileCode = Long.valueOf(firstChild.getNodeValue());
+                                    break;
+                                case "time":
+                                    time = Long.valueOf(firstChild.getNodeValue());
+                                    break;
+                                case "license":
+                                    license = firstChild.getNodeValue();
+                                    break;
+                                case "publisher":
+                                    publisher = firstChild.getNodeValue();
+                                    break;
+                                case "photo":
+                                    photo = firstChild.getNodeValue();
+                                    break;
+                                case "size":
+                                    size = Integer.parseInt(firstChild.getNodeValue());
+                                    break;
                             }
                         }
                     }
 
                     item = new DirectoryItem(name, type, fileCode, size, time, license, publisher, photo);
                     items.add(item);
-                }
+                    break;
             }
         }
 
@@ -306,16 +310,13 @@ public class DirectoryNavigator {
         path.add(directory);
     }
 
-    //TODO List<DirectoryItem> getcurrent
-    //public List<DirectoryItem> getcurrent(){}
-
     /**
      * Searches for a node in the current directory with the given name
      *
      * @param name Name of the node located on the current directory.
      * @return null in case it does not exists any node with the given name
      */
-    DirectoryItem getDirectoryItem(String name) {
+    private DirectoryItem getDirectoryItem(String name) {
         DirectoryItem node = null;
 
         boolean found = false;

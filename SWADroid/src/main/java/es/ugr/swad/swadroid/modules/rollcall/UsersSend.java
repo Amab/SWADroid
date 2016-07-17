@@ -91,7 +91,7 @@ public class UsersSend extends Module {
             runConnection();
         } catch (Exception e) {
             String errorMsg = getString(R.string.errorServerResponseMsg);
-            error(TAG, errorMsg, e, true);
+            error(errorMsg, e, true);
         }
     }
 
@@ -119,9 +119,8 @@ public class UsersSend extends Module {
     @Override
     protected void connect() {
         String progressDescription = getString(R.string.usersDownloadProgressDescription);
-        int progressTitle = R.string.usersDownloadProgressTitle;
 
-        startConnection(false, progressDescription, progressTitle);
+        startConnection();
     }
 
     @Override

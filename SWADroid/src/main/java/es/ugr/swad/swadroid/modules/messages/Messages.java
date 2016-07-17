@@ -21,7 +21,6 @@ package es.ugr.swad.swadroid.modules.messages;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,8 +36,8 @@ import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.model.User;
-import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.modules.Module;
+import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
@@ -77,15 +76,15 @@ public class Messages extends Module {
     /**
      * Receivers EditText
      */
-    EditText rcvEditText;
+    private EditText rcvEditText;
     /**
      * Subject EditText
      */
-    EditText subjEditText;
+    private EditText subjEditText;
     /**
      * Body EditText
      */
-    EditText bodyEditText;
+    private EditText bodyEditText;
 
  
     /* (non-Javadoc)
@@ -201,13 +200,9 @@ public class Messages extends Module {
      */
     @Override
     protected void connect() {
-        String progressDescription = getString(R.string.sendingMessageMsg);
-        int progressTitle = R.string.messagesModuleLabel;
-
-        startConnection(false, progressDescription, progressTitle);
+        startConnection();
 
         Toast.makeText(this, R.string.sendingMessageMsg, Toast.LENGTH_SHORT).show();
-        Log.i(TAG, getString(R.string.sendingMessageMsg));
     }
 
     /* (non-Javadoc)
@@ -218,7 +213,6 @@ public class Messages extends Module {
         String messageSent = getString(R.string.messageSentMsg) + ":" + receiversNames;
 
         Toast.makeText(this, messageSent, Toast.LENGTH_LONG).show();
-        Log.i(TAG, messageSent);
 
         finish();
     }
@@ -306,7 +300,7 @@ public class Messages extends Module {
 	            	}
 	            } catch (Exception e) {
 	                String errorMsg = getString(R.string.errorServerResponseMsg);
-	                error(TAG, errorMsg, e, true);
+	                error(errorMsg, e, true);
 	            }
             
 	            return true;

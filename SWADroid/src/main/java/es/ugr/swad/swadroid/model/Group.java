@@ -366,9 +366,7 @@ public class Group extends Model {
             return false;
         if (groupTypeCode != other.groupTypeCode)
             return false;
-        if (maxStudents != other.maxStudents)
-            return false;
-        return students == other.students && open == other.open && fileZones == other.fileZones && member == other.member;
+        return maxStudents == other.maxStudents && students == other.students && open == other.open && fileZones == other.fileZones && member == other.member;
     }
 
 }

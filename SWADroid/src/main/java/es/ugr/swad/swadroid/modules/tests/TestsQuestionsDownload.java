@@ -102,7 +102,7 @@ public class TestsQuestionsDownload extends Module {
             SoapObject questionsListObject = (SoapObject) res.get(1);
             SoapObject answersListObject = (SoapObject) res.get(2);
             SoapObject questionTagsListObject = (SoapObject) res.get(3);
-            List<TestTag> tagsList = new ArrayList<TestTag>();
+            List<TestTag> tagsList = new ArrayList<>();
 
             int listSizeTags = tagsListObject.getPropertyCount();
             int listSizeQuestions = questionsListObject.getPropertyCount();
@@ -225,10 +225,7 @@ public class TestsQuestionsDownload extends Module {
      */
     @Override
     protected void connect() {
-        String progressDescription = getString(R.string.testsDownloadProgressDescription);
-        int progressTitle = R.string.testsDownloadProgressTitle;
-
-        startConnection(true, progressDescription, progressTitle);
+        startConnection();
     }
 
     /* (non-Javadoc)

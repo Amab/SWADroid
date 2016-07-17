@@ -106,9 +106,8 @@ public class GetMarks extends Module {
     @Override
     protected void connect() {
         String progressDescription = getString(R.string.marksProgressDescription);
-        int progressTitle = R.string.marksProgressTitle;
 
-        startConnection(true, progressDescription, progressTitle);
+        startConnection();
     }
 
     /* (non-Javadoc)
@@ -151,7 +150,7 @@ public class GetMarks extends Module {
     @Override
     protected void postConnect() {
         AlertDialog errorDialog;
-        String errorMsg = getString(R.string.errorBadFileCodeMsg);;
+        String errorMsg = getString(R.string.errorBadFileCodeMsg);
         if(hasError) {
             errorDialog = DialogFactory.createErrorDialog(this, TAG,
                     errorMsg, null, false, false, new DialogInterface.OnClickListener() {

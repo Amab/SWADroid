@@ -43,7 +43,7 @@
     <string name="testsDownloadProgressTitle">Tests</string>
     <string name="testsDownloadProgressDescription">Synchronizing test questions.\n\nDepending on the number of
         questions to synchronize, the data processing can take several minutes.\n\nPlease wait…</string>
-    <string name="errorMsgLaunchingActivity">An error occurred during the execution of the
+    <string name="errorMsgExecutionOperation">An error occurred during the execution of the
         operation</string>
     <string name="errorMsgNoConnection">No connection found</string>
     <string name="examAnnouncement">Exam announcement</string>
@@ -150,8 +150,6 @@
     <string name="clickToGetCourses">Click here to get your courses</string>
     <string name="users">Users</string>
     <string name="documentsDownloadModuleLabel">Documents</string>
-    <string name="documentsDownloadProgressDescription">Getting files. \n\nDepending on the directory size, this could
-        take several minutes.\n\nPlease wait…</string>
     <string name="clickToOpenFile">Click here to open the file</string>
     <string name="sharedsDownloadModuleLabel">Shared files</string>
     <string name="connectionRequired">Internet connection is required for this functionality</string>
@@ -220,7 +218,7 @@
     <string name="groupTypesProgressTitle">Group Types</string>
     <string name="groupSeparator">:</string>
     <string name="groupTypesModuleLabel">Group Types</string>
-    <string name="sendMyGroupsProgressDescription">Sending enrollment into groups…\nPlease wait…</string>
+    <string name="sendMyGroupsProgressDescription">Sending enrollment into groups…</string>
     <string name="sendMyGroupsProgressTitle">Enrolment into groups</string>
     <string name="openingTime">Opening:</string>
     <string name="noGroupsText">No groups have been created in the course</string>
@@ -296,7 +294,7 @@
         users slide down this message.</string>
     <string name="doubleBackToExitMsg">Please click BACK again to exit</string>
     <string name="errorSendingUsersMsg">Error sending attendances</string>
-    <string name="progress_status">Loading…</string>
+    <string name="loadingMsg">Loading…</string>
     <string name="rollcallCleanUsers">Clean users</string><string name="cleanUsersDialogMsg">The list of users will be locally deleted.\n\n
          Are you sure you want to locally delete the list of users?</string>
     <string name="usersAbsent">All users marked as absent</string>
@@ -324,5 +322,10 @@
     <string name="timelineFav">Fav to one of my social publishings</string>
     <string name="timelineShare">Sharing of one of my social posts</string>
     <string name="timelineMention">Mention to me in a social publishing</string>
+    <string name="noMarksStudentMsg">No marks currently available or the student ID has not been verified by the teacher</string>
+    <string name="noMarksTeacherMsg">No marks currently available</string>
+    <string name="noDocumentsMsg">No documents currently available</string>
+    <string name="notificationsMarkingAllAsReadMsg">Marking all notifications as read…</string>
+    <string name="syncronizingMsg">Syncronizing…</string>
 
 </resources>

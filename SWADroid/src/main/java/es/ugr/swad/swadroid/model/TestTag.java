@@ -221,7 +221,7 @@ public class TestTag extends Model {
      */
     public void addQstCod(Integer qstCod) {
         if (this.qstCodList == null) {
-            this.qstCodList = new ArrayList<Integer>();
+            this.qstCodList = new ArrayList<>();
         }
 
         this.qstCodList.add(qstCod);

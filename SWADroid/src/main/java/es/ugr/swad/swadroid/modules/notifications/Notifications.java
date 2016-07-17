@@ -123,31 +123,31 @@ public class Notifications extends Module implements
 	/**
 	 * ListView container for notifications
 	 */
-	ExpandableListView list;
+	private ExpandableListView list;
 	/**
 	 * Adapter container for notifications
 	 */
-	NotificationsExpandableListAdapter adapter;
+	private NotificationsExpandableListAdapter adapter;
 	/**
 	 * TextView for the empty notifications message
 	 */
-	TextView emptyNotifTextView;
+	private TextView emptyNotifTextView;
 	/**
 	 * List of groups for ExpandableListView
 	 */
-	ArrayList<String> groupItem;
+	private ArrayList<String> groupItem;
 	/**
 	 * List of childs for ExpandableListView
 	 */
-	ArrayList<List<Model>> childItem;
+	private ArrayList<List<Model>> childItem;
 	/**
 	 * Id for the not seen notifications group
 	 */
-	int NOT_SEEN_GROUP_ID = 0;
+	private int NOT_SEEN_GROUP_ID = 0;
 	/**
 	 * Id for the seen notifications group
 	 */
-	int SEEN_GROUP_ID = 1;
+	private int SEEN_GROUP_ID = 1;
 	/**
 	 * ListView click listener
 	 */
@@ -289,8 +289,8 @@ public class Notifications extends Module implements
         mBirthdayLayout = (LinearLayout) findViewById(R.id.birthday_layout);
         mBirthdayTextView = (TextView) findViewById(R.id.birthdayTextView);
 		
-		groupItem = new ArrayList<String>();
-		childItem = new ArrayList<List<Model>>();
+		groupItem = new ArrayList<>();
+		childItem = new ArrayList<>();
 
 		//Init ExpandableListView
 		initSwipeOptions();
@@ -326,10 +326,8 @@ public class Notifications extends Module implements
 	/**
 	 * Launches an action when markAllRead button is pushed
 	 *
-	 * @param v
-	 *            Actual view
 	 */
-	public void onMarkAllReadClick(View v) {
+	public void onMarkAllReadClick() {
 		dbHelper.updateAllNotifications("seenLocal",
 				Utils.parseBoolString(true));
 
@@ -379,7 +377,7 @@ public class Notifications extends Module implements
 	 */
 	@Override
 	protected void requestService() throws Exception {
-		int numDeletedNotif = 0;
+		int numDeletedNotif;
 
 		if (SyncUtils.isSyncAutomatically(getApplicationContext())) {
 			Log.i(TAG,
@@ -476,10 +474,9 @@ public class Notifications extends Module implements
 	 */
 	@Override
 	protected void connect() {
-		String progressDescription = getString(R.string.notificationsProgressDescription);
-		int progressTitle = R.string.notificationsProgressTitle;
+		Toast.makeText(this, R.string.notificationsProgressDescription, Toast.LENGTH_SHORT).show();
 
-		startConnection(false, progressDescription, progressTitle);
+		startConnection();
 	}
 
 	/*
@@ -543,14 +540,12 @@ public class Notifications extends Module implements
 	/**
 	 * Removes all notifications from database
 	 *
-	 * @param context
-	 *            Database context
 	 */
-	public void clearNotifications(Context context) {
+	public void clearNotifications() {
 		try {
 			dbHelper.emptyTable(DataBaseHelper.DB_TABLE_NOTIFICATIONS);
 		} catch (Exception e) {
-			error(TAG, e.getMessage(), e, true);
+			error(e.getMessage(), e, true);
 		}
 	}
 
@@ -577,7 +572,7 @@ public class Notifications extends Module implements
 				notifCount = intent.getIntExtra("notifCount", 0);
 				errorMessage = intent.getStringExtra("errorMessage");
 				if ((errorMessage != null) && !errorMessage.equals("")) {
-					error(TAG, errorMessage, null, true);
+					error(errorMessage, null, true);
 				} else if (notifCount == 0) {
 					Toast.makeText(context, R.string.NoNotificationsMsg,
 							Toast.LENGTH_LONG).show();
@@ -727,21 +722,21 @@ public class Notifications extends Module implements
 	/**
 	 * It shows the SwipeRefreshLayout progress
 	 */
-	public void showSwipeProgress() {
+	private void showSwipeProgress() {
 		refreshLayout.setRefreshing(true);
 	}
 
 	/**
 	 * It shows the SwipeRefreshLayout progress
 	 */
-	public void hideSwipeProgress() {
+	private void hideSwipeProgress() {
 		refreshLayout.setRefreshing(false);
 	}
 
 	/**
 	 * Enables swipe gesture
 	 */
-	public void enableSwipe() {
+	private void enableSwipe() {
 		refreshLayout.setEnabled(true);
         //Log.d(TAG, "RefreshLayout Swipe ENABLED");
 	}
@@ -768,12 +763,12 @@ public class Notifications extends Module implements
 		}
 	}
 
-	public void setGroupData() {
+	private void setGroupData() {
 		groupItem.add(getString(R.string.notSeenLabel));
 		groupItem.add(getString(R.string.seenLabel));
 	}
 
-	public void setChildGroupData() {	
+	private void setChildGroupData() {
 		List<Model> child;
 		
 		//Clear data

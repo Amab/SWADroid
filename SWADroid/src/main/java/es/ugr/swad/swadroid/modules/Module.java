@@ -21,7 +21,6 @@ package es.ugr.swad.swadroid.modules;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -44,10 +43,10 @@ import java.util.concurrent.TimeoutException;
 import javax.net.ssl.SSLException;
 
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.preferences.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.modules.login.Login;
+import es.ugr.swad.swadroid.preferences.Preferences;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.IWebserviceClient;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
@@ -78,14 +77,6 @@ public abstract class Module extends MenuActivity {
      * Shows error messages.
      */
     private AlertDialog errorDialog = null;
-    /**
-     * Progress dialog
-     */
-    private ProgressDialog progressDialog = null;
-    /**
-     * Flag for show the progress dialog
-     */
-    private final boolean showDialog = false;
     /**
      * Connection available flag
      */
@@ -162,7 +153,7 @@ public abstract class Module extends MenuActivity {
         // Recover the launched async task if the activity is re-created
         connect = (Connect) getLastNonConfigurationInstance();
         if (connect != null) {
-            connect.activity = new WeakReference<Module>(this);
+            connect.activity = new WeakReference<>(this);
         }
     }
 
@@ -182,10 +173,6 @@ public abstract class Module extends MenuActivity {
         if (errorDialog != null) {
             errorDialog.dismiss();
         }
-
-        if (progressDialog != null) {
-            progressDialog.dismiss();
-        }
     }
 
     /*
@@ -195,12 +182,6 @@ public abstract class Module extends MenuActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-        if (showDialog) {
-            if (progressDialog != null) {
-                progressDialog.show();
-            }
-        }
     }
 
     /*
@@ -289,10 +270,8 @@ public abstract class Module extends MenuActivity {
         result = webserviceClient.getResult();
     }
 
-    protected void startConnection(boolean showDialog,
-            String progressDescription, int progressTitle) {
-
-        connect = new Connect(this, showDialog, progressDescription, progressTitle);
+    protected void startConnection() {
+        connect = new Connect(this);
         connect.execute();
     }
 
@@ -308,41 +287,16 @@ public abstract class Module extends MenuActivity {
          * Exception pointer
          */
         Exception e;
-        final String progressDescription;
-        final int progressTitle;
-        final boolean showDialog;
 
         /**
          * Shows progress dialog and connects to SWAD in background
          * 
          * @param activity Reference to Module activity
-         * @param show Flag for show a progress dialog
-         * @param progressDescription Description to be showed in dialog
-         * @param progressTitle Title to be showed in dialog
          */
-        public Connect(Module activity, boolean show,
-                String progressDescription, int progressTitle) {
-
+        public Connect(Module activity) {
             super();
-            this.progressDescription = progressDescription;
-            this.progressTitle = progressTitle;
-            showDialog = show;
-            this.activity = new WeakReference<Module>(activity);
+            this.activity = new WeakReference<>(activity);
             this.e = null;
-            progressDialog = new ProgressDialog(Module.this);
-        }
-
-        /*
-         * (non-Javadoc)
-         * @see android.app.Activity#onPreExecute()
-         */
-        @Override
-        protected void onPreExecute() {
-            if (showDialog && (progressDialog != null)) {
-                progressDialog.setMessage(progressDescription);
-                progressDialog.setTitle(progressTitle);
-                progressDialog.show();
-            }
         }
 
         /*
@@ -378,10 +332,6 @@ public abstract class Module extends MenuActivity {
             int httpStatusCode;
             boolean sendException = true;
 
-            if ((progressDialog != null) && progressDialog.isShowing()) {
-                progressDialog.dismiss();
-            }
-
             if (e != null) {
                 /**
                  * If an exception has occurred, shows error message according
@@ -390,21 +340,26 @@ public abstract class Module extends MenuActivity {
                 if (e.getClass() == SoapFault.class) {
                     SoapFault es = (SoapFault) e;
 
-                    if (es.faultstring.equals("Bad log in")) {
-                        errorMsg = getString(R.string.errorBadLoginMsg);
-                        sendException = false;
-                    } else if (es.faultstring.equals("Bad web service key")) {
-                        errorMsg = getString(R.string.errorBadLoginMsg);
-                        sendException = false;
+                    switch (es.faultstring) {
+                        case "Bad log in":
+                            errorMsg = getString(R.string.errorBadLoginMsg);
+                            sendException = false;
+                            break;
+                        case "Bad web service key":
+                            errorMsg = getString(R.string.errorBadLoginMsg);
+                            sendException = false;
 
-                        // Force logout and reset password (this will show again
-                        // the login screen)
-                        Login.setLogged(false);
-                        Preferences.setUserPassword("");
-                    } else if (es.faultstring.equals("Unknown application key")) {
-                        errorMsg = getString(R.string.errorBadAppKeyMsg);
-                    } else {
-                        errorMsg = "Server error: " + es.getMessage();
+                            // Force logout and reset password (this will show again
+                            // the login screen)
+                            Login.setLogged(false);
+                            Preferences.setUserPassword("");
+                            break;
+                        case "Unknown application key":
+                            errorMsg = getString(R.string.errorBadAppKeyMsg);
+                            break;
+                        default:
+                            errorMsg = "Server error: " + es.getMessage();
+                            break;
                     }
                 } else if ((e.getClass() == TimeoutException.class) || (e.getClass() == SocketTimeoutException.class)) {
                     errorMsg = getString(R.string.errorTimeoutMsg);
@@ -439,7 +394,7 @@ public abstract class Module extends MenuActivity {
                 }
 
                 // Request finalized with errors
-                error(TAG, errorMsg, e, sendException);
+                error(errorMsg, e, sendException);
                 setResult(RESULT_CANCELED);
 
                 // Launch database rollback

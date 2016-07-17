@@ -43,7 +43,7 @@ import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.zxing.client.android.Intents;
+import com.google.zxing.integration.android.IntentIntegrator;
 
 import java.util.List;
 
@@ -53,6 +53,7 @@ import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
+import es.ugr.swad.swadroid.gui.ProgressScreen;
 import es.ugr.swad.swadroid.model.UserAttendance;
 import es.ugr.swad.swadroid.modules.courses.Courses;
 
@@ -66,7 +67,7 @@ public class UsersActivity extends MenuExpandableListActivity implements
     /**
      * Rollcall tag name for Logcat
      */
-    public static final String TAG = Constants.APP_TAG + " UsersActivity";
+    private static final String TAG = Constants.APP_TAG + " UsersActivity";
     /**
      * Code of event associated to the users list
      */
@@ -78,11 +79,11 @@ public class UsersActivity extends MenuExpandableListActivity implements
     /**
      * Adapter for ListView of users
      */
-    UsersCursorAdapter adapter;
+    private UsersCursorAdapter adapter;
     /**
      * Database cursor for Adapter of users
      */
-    Cursor dbCursor;
+    private Cursor dbCursor;
     /**
      * Layout with "Pull to refresh" function
      */
@@ -90,11 +91,20 @@ public class UsersActivity extends MenuExpandableListActivity implements
     /**
      * TextView for the empty users message
      */
-    TextView emptyUsersTextView;
+    private TextView emptyUsersTextView;
+    /**
+     * Progress screen
+     */
+    private ProgressScreen mProgressScreen;
     /**
      * Flag for indicate if device has a rear camera available
      */
-    boolean hasRearCam;
+    private boolean hasRearCam;
+
+    /**
+     * Barcode scanner
+     */
+    private IntentIntegrator integrator;
 
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.MenuExpandableListActivity#onCreate(android.os.Bundle)
@@ -106,6 +116,11 @@ public class UsersActivity extends MenuExpandableListActivity implements
 
         refreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container_list);
         emptyUsersTextView = (TextView) findViewById(R.id.list_item_title);
+
+        View mProgressScreenView = findViewById(R.id.progress_screen);
+        mProgressScreen = new ProgressScreen(mProgressScreenView, refreshLayout,
+                getString(R.string.loadingMsg), this);
+
         lvUsers = (ListView) findViewById(R.id.list_pulltorefresh);
 
         lvUsers.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -117,16 +132,6 @@ public class UsersActivity extends MenuExpandableListActivity implements
             public void onScroll(AbsListView absListView, int firstVisibleItem,
                                  int visibleItemCount, int totalItemCount) {
 
-                /*boolean enable = true;
-                if ((lvUsers != null) && (lvUsers.getChildCount() > 0)) {
-
-                    // check if the first item of the list is visible
-                    boolean firstItemVisible = lvUsers.getFirstVisiblePosition() == 0;
-                    // check if the top of the first item is visible
-                    boolean topOfFirstItemVisible = lvUsers.getChildAt(0).getTop() == 0;
-                    // enabling or disabling the refresh layout
-                    enable = firstItemVisible && topOfFirstItemVisible;
-                }*/
                 boolean enable = (lvUsers != null) && (lvUsers.getChildCount() == 0);
                 refreshLayout.setEnabled(enable);
             }
@@ -144,6 +149,10 @@ public class UsersActivity extends MenuExpandableListActivity implements
 
         eventCode = this.getIntent().getIntExtra("attendanceEventCode", 0);
         hasRearCam = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
+
+        integrator = new IntentIntegrator(this);
+        integrator.setCaptureActivity(ContinuousCaptureActivity.class);
+        integrator.setBeepEnabled(false);
     }
 
     /* (non-Javadoc)
@@ -160,17 +169,7 @@ public class UsersActivity extends MenuExpandableListActivity implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        switch (requestCode) {
-            case Constants.ROLLCALL_USERS_DOWNLOAD_REQUEST_CODE:
-                refreshAdapter();
-                break;
-            case Constants.ROLLCALL_USERS_SEND_REQUEST_CODE:
-                refreshAdapter();
-                break;
-            case Constants.SCAN_QR_REQUEST_CODE:
-                refreshAdapter();
-                break;
-        }
+        refreshAdapter();
     }
 
     private void refreshAdapter() {
@@ -208,13 +207,13 @@ public class UsersActivity extends MenuExpandableListActivity implements
                 adapter = new UsersCursorAdapter(getBaseContext(), dbCursor, dbHelper, eventCode);
                 lvUsers.setAdapter(adapter);
 
-                showProgress(false);
+                mProgressScreen.hide();
             }
         });
     }
 
     private void refreshUsers() {
-        showProgress(true);
+        mProgressScreen.show();
 
         Intent activity = new Intent(this, UsersDownload.class);
         activity.putExtra("attendanceEventCode",
@@ -222,21 +221,17 @@ public class UsersActivity extends MenuExpandableListActivity implements
         startActivityForResult(activity, Constants.ROLLCALL_USERS_DOWNLOAD_REQUEST_CODE);
     }
 
-    public void showProgress(boolean show) {
-        DialogFactory.showProgress(this, show, R.id.swipe_container_list, R.id.loading_status);
-    }
-
     /**
      * It shows the SwipeRefreshLayout progress
      */
-    public void showSwipeProgress() {
+    private void showSwipeProgress() {
         refreshLayout.setRefreshing(true);
     }
 
     /**
      * It shows the SwipeRefreshLayout progress
      */
-    public void hideSwipeProgress() {
+    private void hideSwipeProgress() {
         refreshLayout.setRefreshing(false);
     }
 
@@ -280,10 +275,7 @@ public class UsersActivity extends MenuExpandableListActivity implements
     }
 
     private void scanQRCode() {
-        Intent activity = new Intent(Intents.Scan.ACTION);
-        activity.putExtra("SCAN_MODE", "QR_CODE_MODE,ONE_D_MODE");
-        activity.putExtra("SCAN_FORMATS", "QR_CODE,ONE_D_FORMATS");
-        startActivityForResult(activity, Constants.SCAN_QR_REQUEST_CODE);
+        integrator.initiateScan();
     }
 
     @Override
@@ -309,7 +301,7 @@ public class UsersActivity extends MenuExpandableListActivity implements
                     }
                 } else {
                     //If the device has no rear camera available show error message
-                    error(TAG, getString(R.string.noCameraFound), null, false);
+                    error(getString(R.string.noCameraFound), null, false);
                 }
 
                 return true;
@@ -382,4 +374,5 @@ public class UsersActivity extends MenuExpandableListActivity implements
             }
         }
     }
+
 }

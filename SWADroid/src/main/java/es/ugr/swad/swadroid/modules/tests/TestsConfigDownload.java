@@ -81,7 +81,7 @@ public class TestsConfigDownload extends Module {
             runConnection();
         } catch (Exception e) {
             String errorMsg = getString(R.string.errorServerResponseMsg);
-            error(TAG, errorMsg, e, true);
+            error(errorMsg, e, true);
         }
     }
 
@@ -124,7 +124,7 @@ public class TestsConfigDownload extends Module {
                 Integer defQuestions = Integer.valueOf(soap.getProperty("defQuestions").toString());
                 Integer maxQuestions = Integer.valueOf(soap.getProperty("maxQuestions").toString());
                 String feedback = soap.getProperty("feedback").toString();
-                Test tDB = (Test) dbHelper.getRow(DataBaseHelper.DB_TABLE_TEST_CONFIG, "id",
+                Test tDB = dbHelper.getRow(DataBaseHelper.DB_TABLE_TEST_CONFIG, "id",
                         Long.toString(Courses.getSelectedCourseCode()));
 
                 //If exists a test configuration for this course, remove from database
@@ -144,8 +144,9 @@ public class TestsConfigDownload extends Module {
                 }
 
                 Intent activity = new Intent(this, TestsQuestionsDownload.class);
+                activity.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
                 activity.putExtra("timestamp", timestamp);
-                startActivityForResult(activity, Constants.TESTS_QUESTIONS_DOWNLOAD_REQUEST_CODE);
+                startActivity(activity);
             }
         }
 
@@ -158,10 +159,7 @@ public class TestsConfigDownload extends Module {
      */
     @Override
     protected void connect() {
-        String progressDescription = getString(R.string.testsDownloadProgressDescription);
-        int progressTitle = R.string.testsDownloadProgressTitle;
-
-        startConnection(false, progressDescription, progressTitle);
+        startConnection();
     }
 
     /* (non-Javadoc)

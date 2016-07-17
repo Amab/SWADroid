@@ -46,7 +46,7 @@ public class PairTable<FIRST, SECOND> extends Model {
      */
     public PairTable(String table, FIRST first, SECOND second) {
         super(0);
-        this.values = new Pair<FIRST, SECOND>(first, second);
+        this.values = new Pair<>(first, second);
         this.table = table;
     }
 

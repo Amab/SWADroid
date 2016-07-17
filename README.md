@@ -19,9 +19,9 @@ Copyright (C) 2010, Juan Miguel Boyero Corral
 
 [![Copyright and License](https://img.shields.io/badge/license-LGPLv3-green.svg?style=flat)](http://www.gnu.org/licenses/lgpl.html) SWADroid uses [Android DataFrameWork](http://code.google.com/p/androiddataframework/) library developed by [Javier Pérez Pacheco](http://www.javielinux.com/quiensoy.php) and licensed under [LGPLv3](http://www.gnu.org/licenses/lgpl.html).
 
-[![Copyright and License](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](http://www.opensource.org/licenses/mit-license.php) SWADroid uses [ksoap2-android](http://code.google.com/p/ksoap2-android) library developed by [Manfred Moser](https://github.com/mosabua) and licensed under [MIT](http://www.opensource.org/licenses/mit-license.php).
+[![Copyright and License](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](http://www.opensource.org/licenses/mit-license.php) SWADroid uses [ksoap2-android](https://github.com/simpligility/ksoap2-android) library developed by [Manfred Moser](https://github.com/mosabua) and licensed under [MIT](http://www.opensource.org/licenses/mit-license.php).
 
-[![Copyright and License](https://img.shields.io/badge/license-Apache%202-green.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0) SWADroid uses [ZXing](http://code.google.com/p/zxing/) library developed by [Sean Owen](https://github.com/srowen) and licensed under [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0).
+[![Copyright and License](https://img.shields.io/badge/license-Apache%202-green.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0) SWADroid uses [ZXing Android Embedded](https://github.com/journeyapps/zxing-android-embedded) library developed by [journeyapps](https://github.com/journeyapps) and licensed under [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0).
 
 [![Copyright and License](https://img.shields.io/badge/license-Apache%202-green.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0) SWADroid uses [Universal Image Loader](https://github.com/nostra13/Android-Universal-Image-Loader) library developed by [Sergey Tarasevich](https://github.com/nostra13) and licensed under [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0).
 

@@ -43,7 +43,7 @@
     <string name="testsDownloadProgressDescription">Sincronizando preguntas de test.\n\nDependiendo del número de
         preguntas a sincronizar, el procesamiento de los datos puede tardar unos minutos.\n\nPor favor,
         espere…</string>
-    <string name="errorMsgLaunchingActivity">Ha ocurrido un error durante la ejecución de la
+    <string name="errorMsgExecutionOperation">Ha ocurrido un error durante la ejecución de la
         operación</string>
     <string name="errorMsgNoConnection">No hay conexión</string>
     <string name="examAnnouncement">Convocatoria de examen</string>
@@ -142,8 +142,6 @@
     <string name="clickToGetCourses">Pulse aquí para conseguir sus asignaturas</string>
     <string name="users">Usuarios</string>
     <string name="documentsDownloadModuleLabel">Documentos</string>
-    <string name="documentsDownloadProgressDescription">Obteniendo archivos.\n\nDependiendo del tamaño del directorio,
-        podría necesitar varios minutos.\n\nPor favor, espere…</string>
     <string name="clickToOpenFile">Pulse aquí para abrir el archivo</string>
     <string name="sharedsDownloadModuleLabel">Archivos compartidos</string>
     <string name="connectionRequired">Para esta funcionalidad se necesita conexión a Internet</string>
@@ -217,8 +215,7 @@
     <string name="groupsProgressDescription">Obteniendo grupos…\nPor favor, espere…</string>
     <string name="groupTypesProgressTitle">Tipos de grupos</string>
     <string name="groupsProgressTitle">Grupos</string>
-    <string name="sendMyGroupsProgressDescription">Enviando inscripción a grupos…\nPor favor,
-        espere…</string>
+    <string name="sendMyGroupsProgressDescription">Enviando inscripción a grupos…</string>
     <string name="sendMyGroupsProgressTitle">Inscripción a grupos</string>
     <string name="withoutLimit">sin límite</string>
     <string name="downloadProblemTitle">Problema en descarga</string>
@@ -286,7 +283,7 @@
         usuarios más recientes deslice este mensaje hacia abajo.</string>
     <string name="errorSendingUsersMsg">Error al enviar las asistencias</string>
     <string name="doubleBackToExitMsg">Por favor, presione ATRÁS de nuevo para salir</string>
-    <string name="progress_status">Cargando…</string>
+    <string name="loadingMsg">Cargando…</string>
     <string name="rollcallCleanUsers">Limpiar usuarios</string><string name="cleanUsersDialogMsg">El listado de usuarios será eliminado localmente.\n\n
          ¿Está seguro de que quiere eliminar localmente el listado de usuarios?</string>
     <string name="usersAbsent">Todos los usuarios marcados como ausentes</string>
@@ -315,5 +312,10 @@
     <string name="timelineFav">Nuevo favorito a mis mensajes sociales</string>
     <string name="timelineShare">Nueva compartición de mis mensajes sociales</string>
     <string name="timelineMention">Nueva mención</string>
+    <string name="noMarksStudentMsg">No hay calificaciones disponibles o el DNI del estudiante no ha sido verificado por el profesor</string>
+    <string name="noMarksTeacherMsg">No hay calificaciones disponibles</string>
+    <string name="noDocumentsMsg">No hay documentos disponibles</string>
+    <string name="notificationsMarkingAllAsReadMsg">Marcando todas las notificaciones como leídas…</string>
+    <string name="syncronizingMsg">Sincronizando…</string>
 
 </resources>

@@ -127,7 +127,7 @@ public class Test extends Model {
         this.max = max;
         this.feedback = feedback;
         this.totalScore = 0;
-        this.questionsScore = new ArrayList<Float>();
+        this.questionsScore = new ArrayList<>();
     }
 
     /**
@@ -342,7 +342,7 @@ public class Test extends Model {
     /**
      * Initializes questions's score and total score
      */
-    void prepareEvaluation() {
+    private void prepareEvaluation() {
         evaluated = false;
         totalScore = 0;
         questionsScore.clear();
@@ -404,143 +404,150 @@ public class Test extends Model {
             correctUserAnswers = 0;
             errors = 0;
 
-            if (answerType.equals("float")) {
-                a = la.get(0);
+            switch (answerType) {
+                case "float":
+                    a = la.get(0);
 
-                userAnswerText = a.getUserAnswer();
-                if (!userAnswerText.equals("")) {
-                    userFloatAnswer = Float.valueOf(userAnswerText);
-                    minFloatRange = Float.valueOf(a.getAnswer());
-                    maxFloatRange = Float.valueOf(la.get(1).getAnswer());
-                    a.setCorrectAnswered((userFloatAnswer >= minFloatRange) && (userFloatAnswer <= maxFloatRange));
-                }
-
-                if (a.isCorrectAnswered()) {
-                    correctUserAnswers++;
-                } else {
-                    errors++;
-                }
-
-                if (userAnswerText.equals("")) {
-                    score = (float) 0;
-                } else {
-                    score = correctUserAnswers / (float) totalAnswers;
-                }
-            } else if (answerType.equals("TF")) {
-                a = la.get(0);
-
-                userAnswerText = a.getUserAnswer();
-                if (a.getCorrect()) {
-                    a.setCorrectAnswered(a.getAnswer().equals(a.getUserAnswer()));
-                } else {
-                    a.setCorrectAnswered(!a.getAnswer().equals(a.getUserAnswer()));
-                }
-
-                if (a.isCorrectAnswered()) {
-                    correctUserAnswers++;
-                } else {
-                    errors++;
-                }
-
-                if (userAnswerText.equals("")) {
-                    score = (float) 0;
-                } else {
-                    score = (float) (correctUserAnswers - errors);
-                }
-            } else if (answerType.equals("int")) {
-                a = la.get(0);
-                userAnswerText = a.getUserAnswer();
-                a.setCorrectAnswered(a.getAnswer().equals(a.getUserAnswer()));
-
-                if (a.isCorrectAnswered()) {
-                    correctUserAnswers++;
-                } else {
-                    errors++;
-                }
-
-                if (userAnswerText.equals("")) {
-                    score = (float) 0;
-                } else {
-                    score = correctUserAnswers / (float) totalAnswers;
-                }
-            } else if (answerType.equals("text")) {
-                a = la.get(0);
-                userAnswerText = prepareString(a.getUserAnswer());
-                a.setCorrectAnswered(false);
-
-                for (TestAnswer ans : la) {
-                    answerText = prepareString(ans.getAnswer());
-
-                    if (userAnswerText.equalsIgnoreCase(answerText)) {
-                        a.setCorrectAnswered(true);
-                        break;
+                    userAnswerText = a.getUserAnswer();
+                    if (!userAnswerText.equals("")) {
+                        userFloatAnswer = Float.valueOf(userAnswerText);
+                        minFloatRange = Float.valueOf(a.getAnswer());
+                        maxFloatRange = Float.valueOf(la.get(1).getAnswer());
+                        a.setCorrectAnswered((userFloatAnswer >= minFloatRange) && (userFloatAnswer <= maxFloatRange));
                     }
-                }
 
-                if (a.isCorrectAnswered()) {
-                    correctUserAnswers++;
-                } else {
-                    errors++;
-                }
-
-                if (userAnswerText.equals("")) {
-                    score = (float) 0;
-                } else {
-                    score = correctUserAnswers / (float) totalAnswers;
-                }
-            } else if (answerType.equals("uniqueChoice")) {
-                totalAnswers = la.size();
-                a = la.get(0);
-                a.setCorrectAnswered(false);
-
-                for (TestAnswer ans : la) {
-                    if (ans.getCorrect() && ans.getAnswer().equals(a.getUserAnswer())) {
-                        a.setCorrectAnswered(true);
-                        break;
-                    }
-                }
-
-                if (a.isCorrectAnswered()) {
-                    correctUserAnswers++;
-                } else {
-                    errors++;
-                }
-
-                if (a.getUserAnswer().equals("")) {
-                    score = (float) 0;
-                } else {
-                    score = correctUserAnswers - (errors / ((float) totalAnswers - 1));
-                }
-            } else {
-                noneSelected = true;
-                totalAnswers = la.size();
-                for (TestAnswer ans : la) {
-                    if (ans.getCorrect()) {
-                        trueAnswers++;
-                        if (ans.getUserAnswer().equals("Y")) {
-                            correctUserAnswers++;
-                            noneSelected = false;
-                        }/* else {
-                            errors++;
-						}*/
+                    if (a.isCorrectAnswered()) {
+                        correctUserAnswers++;
                     } else {
-                        falseAnswers++;
-                        if (ans.getUserAnswer().equals("Y")) {
-                            errors++;
-                            noneSelected = false;
+                        errors++;
+                    }
+
+                    if (userAnswerText.equals("")) {
+                        score = (float) 0;
+                    } else {
+                        score = correctUserAnswers / (float) totalAnswers;
+                    }
+                    break;
+                case "TF":
+                    a = la.get(0);
+
+                    userAnswerText = a.getUserAnswer();
+                    if (a.getCorrect()) {
+                        a.setCorrectAnswered(a.getAnswer().equals(a.getUserAnswer()));
+                    } else {
+                        a.setCorrectAnswered(!a.getAnswer().equals(a.getUserAnswer()));
+                    }
+
+                    if (a.isCorrectAnswered()) {
+                        correctUserAnswers++;
+                    } else {
+                        errors++;
+                    }
+
+                    if (userAnswerText.equals("")) {
+                        score = (float) 0;
+                    } else {
+                        score = (float) (correctUserAnswers - errors);
+                    }
+                    break;
+                case "int":
+                    a = la.get(0);
+                    userAnswerText = a.getUserAnswer();
+                    a.setCorrectAnswered(a.getAnswer().equals(a.getUserAnswer()));
+
+                    if (a.isCorrectAnswered()) {
+                        correctUserAnswers++;
+                    } else {
+                        errors++;
+                    }
+
+                    if (userAnswerText.equals("")) {
+                        score = (float) 0;
+                    } else {
+                        score = correctUserAnswers / (float) totalAnswers;
+                    }
+                    break;
+                case "text":
+                    a = la.get(0);
+                    userAnswerText = prepareString(a.getUserAnswer());
+                    a.setCorrectAnswered(false);
+
+                    for (TestAnswer ans : la) {
+                        answerText = prepareString(ans.getAnswer());
+
+                        if (userAnswerText.equalsIgnoreCase(answerText)) {
+                            a.setCorrectAnswered(true);
+                            break;
                         }
                     }
-                }
 
-                if (noneSelected) {
-                    score = (float) 0;
-                } else {
-                    if (falseAnswers == 0) {
-                        score = correctUserAnswers / (float) totalAnswers;
+                    if (a.isCorrectAnswered()) {
+                        correctUserAnswers++;
                     } else {
-                        score = (correctUserAnswers / (float) trueAnswers) - (errors / (float) falseAnswers);
+                        errors++;
                     }
-                }
+
+                    if (userAnswerText.equals("")) {
+                        score = (float) 0;
+                    } else {
+                        score = correctUserAnswers / (float) totalAnswers;
+                    }
+                    break;
+                case "uniqueChoice":
+                    totalAnswers = la.size();
+                    a = la.get(0);
+                    a.setCorrectAnswered(false);
+
+                    for (TestAnswer ans : la) {
+                        if (ans.getCorrect() && ans.getAnswer().equals(a.getUserAnswer())) {
+                            a.setCorrectAnswered(true);
+                            break;
+                        }
+                    }
+
+                    if (a.isCorrectAnswered()) {
+                        correctUserAnswers++;
+                    } else {
+                        errors++;
+                    }
+
+                    if (a.getUserAnswer().equals("")) {
+                        score = (float) 0;
+                    } else {
+                        score = correctUserAnswers - (errors / ((float) totalAnswers - 1));
+                    }
+                    break;
+                default:
+                    noneSelected = true;
+                    totalAnswers = la.size();
+                    for (TestAnswer ans : la) {
+                        if (ans.getCorrect()) {
+                            trueAnswers++;
+                            if (ans.getUserAnswer().equals("Y")) {
+                                correctUserAnswers++;
+                                noneSelected = false;
+                            }/* else {
+                            errors++;
+						}*/
+                        } else {
+                            falseAnswers++;
+                            if (ans.getUserAnswer().equals("Y")) {
+                                errors++;
+                                noneSelected = false;
+                            }
+                        }
+                    }
+
+                    if (noneSelected) {
+                        score = (float) 0;
+                    } else {
+                        if (falseAnswers == 0) {
+                            score = correctUserAnswers / (float) totalAnswers;
+                        } else {
+                            score = (correctUserAnswers / (float) trueAnswers) - (errors / (float) falseAnswers);
+                        }
+                    }
+                    break;
             }
 
             questionsScore.set(i, score * CORRECT_ANSWER_SCORE);

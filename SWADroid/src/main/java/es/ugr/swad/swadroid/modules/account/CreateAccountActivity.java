@@ -15,13 +15,11 @@
 
 package es.ugr.swad.swadroid.modules.account;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +27,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -42,6 +41,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.gui.ProgressScreen;
 import es.ugr.swad.swadroid.preferences.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.analytics.SWADroidTracker;
@@ -57,22 +57,17 @@ import es.ugr.swad.swadroid.utils.Utils;
  */
 public class CreateAccountActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    public static final String TAG = Constants.APP_TAG + " CreateAccountActivity";
+    private static final String TAG = Constants.APP_TAG + " CreateAccountActivity";
 
     private static List<String> serversList;
 
-    private boolean mLoginError = false;
-
-    // UI references for the create account form.
-    private View mLoginFormView;
-    private View mLoginStatusView;
-    private TextView mLoginStatusMessageView;
     private EditText mNicknameView;
     private EditText mEmailView;
     private EditText mPasswordView;
     private EditText mServerTextView;
     private Spinner mServerView;
-    private ArrayAdapter<CharSequence> serverAdapter;
+    private ArrayAdapter<String> serverAdapter;
+    private ProgressScreen mProgressScreen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,22 +88,29 @@ public class CreateAccountActivity extends AppCompatActivity implements AdapterV
     protected void onResume() {
         super.onResume();
 
-        if(!mServerView.getSelectedItem().equals(Preferences.getServer())) {
-            setSelectedServer(Preferences.getServer());
+        String server = Preferences.getServer();
+
+        if((server != null) && (!server.isEmpty()) &&
+                !mServerView.getSelectedItem().equals(server)) {
+
+            setSelectedServer(server);
         }
     }
 
     private void setupCreateAccountForm() {
-
-        mLoginFormView = findViewById(R.id.login_form);
-        mLoginStatusView = findViewById(R.id.login_status);
+        View mLoginFormView = findViewById(R.id.create_account_form);
+        View mProgressScreenView = findViewById(R.id.progress_screen);
+        mProgressScreen = new ProgressScreen(mProgressScreenView, mLoginFormView,
+                getString(R.string.createAccountProgressDescription), this);
         Button mCreateAccountButton = (Button) findViewById(R.id.create_account_button);
         
         mNicknameView = (EditText) findViewById(R.id.nickname);
         mNicknameView.setText(Preferences.getUserID());
 
         mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setText("");
+        if (mPasswordView != null) {
+            mPasswordView.setText("");
+        }
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -124,16 +126,36 @@ public class CreateAccountActivity extends AppCompatActivity implements AdapterV
 
         mServerView = (Spinner) findViewById(R.id.serverSpinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
-        serverAdapter = ArrayAdapter.createFromResource(this,
-                R.array.servers_array, android.R.layout.simple_spinner_item);
+        serverAdapter = new ArrayAdapter<String>(
+                this, android.R.layout.simple_spinner_item, serversList) {
+
+            @Override
+            public boolean isEnabled(int position){
+                return position != 0;
+            }
+
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        ViewGroup parent) {
+
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+
+                if(position == 0) {
+                    // Set the disable item text color
+                    tv.setTextColor(Color.GRAY);
+                }
+                else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+        };
         // Specify the layout to use when the list of choices appears
         serverAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         mServerView.setAdapter(serverAdapter);
         mServerView.setOnItemSelectedListener(this);
-
-        if (serverAdapter.getItem(0).equals(Constants.SWAD_UGR_SERVER))
-            mPasswordView.setError(getString(R.string.error_password_summaryUGR));
 
         mServerTextView = (EditText) findViewById(R.id.serverEditText);
         mServerTextView.setText(Preferences.getServer());
@@ -162,20 +184,20 @@ public class CreateAccountActivity extends AppCompatActivity implements AdapterV
             }
         });
 
-        mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
-
-        mCreateAccountButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                createAccount();
-            }
-        });
+        if (mCreateAccountButton != null) {
+            mCreateAccountButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    createAccount();
+                }
+            });
+        }
     }
 
     /**
      * Creates a new account
      */
-    public void createAccount() {
+    private void createAccount() {
         SWADroidTracker.sendScreenView(getApplicationContext(), "SWADroid CreateAccount");
 
         Intent intent;
@@ -197,8 +219,10 @@ public class CreateAccountActivity extends AppCompatActivity implements AdapterV
         passwordValue = mPasswordView.getText().toString();
         emailValue = mEmailView.getText().toString();
         serverValue = mServerView.getSelectedItem().toString();
-
-        if(serverValue.contains(getString(R.string.otherMsg))) {
+        if(serverValue.equals(serversList.get(0))) {
+            spinnerSetError(getString(R.string.noServer));
+            serverValue = "";
+        } else if(serverValue.contains(getString(R.string.otherMsg))) {
             serverValue = mServerTextView.getText().toString().replaceFirst("^(http://|https://)","");
         }
 
@@ -250,57 +274,12 @@ public class CreateAccountActivity extends AppCompatActivity implements AdapterV
             // form field with an error.
             focusView.requestFocus();
         } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the create account attempt.
-            mLoginStatusMessageView.setText(R.string.createAccountProgressDescription);
-
-            showProgress(true);
+            mProgressScreen.show();
             intent = new Intent(this, CreateAccount.class);
             intent.putExtra("userNickname", nicknameValue);
             intent.putExtra("userEmail", emailValue);
             intent.putExtra("userPassword", passwordValue);
             startActivityForResult(intent, Constants.CREATE_ACCOUNT_REQUEST_CODE);
-        }
-    }
-
-    /**
-     * Shows the progress UI and hides the login form.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-            mLoginStatusView.setVisibility(View.VISIBLE);
-            mLoginStatusView.animate()
-                    .setDuration(shortAnimTime)
-                    .alpha(show ? 1 : 0)
-                    .setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            mLoginStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
-                        }
-                    });
-
-            mLoginFormView.setVisibility(View.VISIBLE);
-            mLoginFormView.animate()
-                    .setDuration(shortAnimTime)
-                    .alpha(show ? 0 : 1)
-                    .setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            mLoginFormView.setVisibility(mLoginError ? View.VISIBLE
-                                    : View.GONE);
-                        }
-                    });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mLoginStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
 
@@ -312,11 +291,9 @@ public class CreateAccountActivity extends AppCompatActivity implements AdapterV
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case Constants.CREATE_ACCOUNT_REQUEST_CODE:
-                    showProgress(false);
+                    mProgressScreen.hide();
                     //Finished successfully
                     if (CreateAccount.getUserCode() > 0) {
-
-                        mLoginError = false;
                         Toast.makeText(getApplicationContext(), R.string.create_account_success,
                                 Toast.LENGTH_LONG).show();
                         finish();
@@ -355,8 +332,7 @@ public class CreateAccountActivity extends AppCompatActivity implements AdapterV
             }
             switch (requestCode) {
                 case Constants.CREATE_ACCOUNT_REQUEST_CODE:
-                    mLoginError = true;
-                    showProgress(false);
+                    mProgressScreen.hide();
                     break;
             }
         }
@@ -373,14 +349,17 @@ public class CreateAccountActivity extends AppCompatActivity implements AdapterV
     }
 
     private void setServer(int position) {
-        String serverValue = serverAdapter.getItem(position).toString();
+        String serverValue = serverAdapter.getItem(position);
 
         //Reset password error
         mPasswordView.setError(null);
-        if (Constants.SWAD_UGR_SERVER.equals(serverValue))
-            mPasswordView.setError(getString(R.string.error_password_summaryUGR));
 
-        if(serverValue.contains(getString(R.string.otherMsg))) {
+        if (serverValue.isEmpty() || serverValue.equals(serversList.get(0))) {
+            spinnerSetError(getString(R.string.noServer));
+        } else if (Constants.SWAD_UGR_SERVER.equals(serverValue)) {
+            mPasswordView.setError(getString(R.string.error_password_summaryUGR));
+            Preferences.setServer(serverValue);
+        } else if(serverValue.contains(getString(R.string.otherMsg))) {
             mServerTextView.setText(Preferences.getServer());
             mServerTextView.setVisibility(View.VISIBLE);
         } else {
@@ -401,6 +380,20 @@ public class CreateAccountActivity extends AppCompatActivity implements AdapterV
         }
 
         mServerView.setSelection(serverPosition);
+    }
+
+    private void spinnerSetError(String error) {
+        View selectedView = mServerView.getSelectedView();
+
+        if ((selectedView != null) && (selectedView instanceof TextView)) {
+            TextView selectedTextView = (TextView) selectedView;
+
+            if ((error == null) || (error.isEmpty())) {
+                selectedTextView.setError(null);
+            } else {
+                selectedTextView.setError(error);
+            }
+        }
     }
     
 }

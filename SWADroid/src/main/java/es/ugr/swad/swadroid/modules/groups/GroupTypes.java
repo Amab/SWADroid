@@ -66,7 +66,7 @@ public class GroupTypes extends Module {
             runConnection();
         } catch (Exception e) {
             String errorMsg = getString(R.string.errorServerResponseMsg);
-            error(TAG, errorMsg, e, true);
+            error(errorMsg, e, true);
         }
     }
 
@@ -88,7 +88,7 @@ public class GroupTypes extends Module {
 
         if (result != null) {
             //Stores groups data returned by webservice response
-            List<Model> groupsSWAD = new ArrayList<Model>();
+            List<Model> groupsSWAD = new ArrayList<>();
 
             ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
             SoapObject soap = (SoapObject) res.get(1);
@@ -119,10 +119,7 @@ public class GroupTypes extends Module {
 
     @Override
     protected void connect() {
-        String progressDescription = getString(R.string.groupTypesProgressDescription);
-        int progressTitle = R.string.groupTypesProgressTitle;
-
-        startConnection(true, progressDescription, progressTitle);
+        startConnection();
     }
 
     @Override

@@ -19,7 +19,7 @@
 package es.ugr.swad.swadroid.modules.notifications;
 
 import android.app.Activity;
-import android.text.Html;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -97,9 +97,9 @@ public class NotificationsExpandableListAdapter extends
 		}
         
         if(!seenLocal) {
-        	convertView.setBackgroundColor(activity.getResources().getColor(R.color.notifications_background_highlighted));
+        	convertView.setBackgroundColor(ContextCompat.getColor(activity, R.color.notifications_background_highlighted));
         } else {
-        	convertView.setBackgroundColor(activity.getResources().getColor(R.color.background));
+        	convertView.setBackgroundColor(ContextCompat.getColor(activity, R.color.background));
         }
 
         convertView.setScrollContainer(false);
@@ -205,7 +205,7 @@ public class NotificationsExpandableListAdapter extends
             eventSender.setText(sender);
         }
         if (location != null) {
-            location.setText(Html.fromHtml(notif.getLocation()));
+            location.setText(Utils.fromHtml(notif.getLocation()));
         }
         if (summary != null) {
             summaryText = notif.getSummary();
@@ -214,7 +214,7 @@ public class NotificationsExpandableListAdapter extends
             if (summaryText.equals(Constants.NULL_VALUE))
                 summaryText = activity.getString(R.string.noSubjectMsg);
 
-            summary.setText(Html.fromHtml(summaryText));
+            summary.setText(Utils.fromHtml(summaryText));
         }
         if ((content != null)) {
         	contentText = notif.getContent();

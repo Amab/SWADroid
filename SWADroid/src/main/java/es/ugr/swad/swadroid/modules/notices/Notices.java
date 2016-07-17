@@ -84,7 +84,7 @@ public class Notices extends Module {
             	}
             } catch (Exception e) {
                 String errorMsg = getString(R.string.errorServerResponseMsg);
-                error(TAG, errorMsg, e, true);
+                error(errorMsg, e, true);
             }
         }
     };
@@ -149,10 +149,7 @@ public class Notices extends Module {
 
     @Override
     protected void connect() {
-        String progressDescription = getString(R.string.noticesModuleLabel);
-        int progressTitle = R.string.noticesModuleLabel;
-
-        startConnection(false, progressDescription, progressTitle);
+        startConnection();
 
         Toast.makeText(this, R.string.publishingNotice, Toast.LENGTH_SHORT).show();
         Log.i(TAG, getString(R.string.publishingNotice));

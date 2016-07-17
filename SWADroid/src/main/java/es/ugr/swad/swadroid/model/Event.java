@@ -25,8 +25,8 @@ import android.text.TextUtils;
 import org.ksoap2.serialization.PropertyInfo;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -220,7 +220,7 @@ public class Event extends Model {
     }
 
     public List<String> getGroupsList() {
-        return new ArrayList(Arrays.asList(groups));
+        return new ArrayList(Collections.singletonList(groups));
     }
 
     public void setGroupsList(List<String> groups) {

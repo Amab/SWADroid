@@ -248,7 +248,7 @@ public class User extends Model {
      *
      * @param userBirthday User birthday.
      */
-    public void setUserBirthday(String userBirthday) throws ParseException {
+    private void setUserBirthday(String userBirthday) throws ParseException {
         if((userBirthday != null) && !userBirthday.equals("00000000")) {
             this.userBirthday = Calendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());

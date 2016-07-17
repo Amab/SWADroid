@@ -39,8 +39,7 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
  * Module to get information of a file located in SWAD
  * @see <a href="https://openswad.org/ws/#getFile">getFile</a>
  * 
- * @param fileCode It indicates the file which information is requested
- * @return link temporal URL to download the file
+ * Return link temporal URL to download the file
  *
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */
@@ -53,7 +52,7 @@ public class GetFile extends Module {
     private static final String TAG = Constants.APP_TAG + " GetFile";
 
     /**
-     * Unique identificator of file
+     * Unique identifier of file
      */
     private long fileCode = -1;
 
@@ -64,7 +63,7 @@ public class GetFile extends Module {
         fileCode = getIntent().getLongExtra("fileCode", -1);
 
         if (fileCode == -1) {
-            Log.i(TAG, "Missing arguments");
+            Log.e(TAG, "Missing arguments");
             finish();
         }
 
@@ -81,7 +80,7 @@ public class GetFile extends Module {
             runConnection();
         } catch (Exception e) {
             String errorMsg = getString(R.string.errorServerResponseMsg);
-            error(TAG, errorMsg, e, true);
+            error(errorMsg, e, true);
         }
     }
 
@@ -118,15 +117,12 @@ public class GetFile extends Module {
 
     @Override
     protected void connect() {
-        startConnection(false, "", 0);
+        startConnection();
     }
 
     @Override
     protected void postConnect() {
-        if (isDebuggable)
-            Log.i(TAG, "File requested");
         finish();
-
     }
 
     @Override

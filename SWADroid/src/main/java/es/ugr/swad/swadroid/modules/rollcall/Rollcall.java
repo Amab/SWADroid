@@ -42,6 +42,7 @@ import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
+import es.ugr.swad.swadroid.gui.ProgressScreen;
 import es.ugr.swad.swadroid.modules.courses.Courses;
 
 /**
@@ -55,7 +56,7 @@ public class Rollcall extends MenuExpandableListActivity implements
   /**
    * Rollcall tag name for Logcat
    */
-  public static final String TAG = Constants.APP_TAG + " Rollcall";
+  private static final String TAG = Constants.APP_TAG + " Rollcall";
   /**
    * ListView of events
    */
@@ -65,14 +66,13 @@ public class Rollcall extends MenuExpandableListActivity implements
    */
   private static EventsCursorAdapter adapter;
   private final RefreshAdapterHandler mHandler = new RefreshAdapterHandler(this);
-  /**
-   * Database cursor for Adapter of events
-   */
-  Cursor dbCursor;
   private final Runnable mRunnable = new Runnable() {
     @Override
     public void run() {
-      dbCursor = dbHelper.getEventsCourseCursor(Courses.getSelectedCourseCode());
+      /*
+    Database cursor for Adapter of events
+   */
+      Cursor dbCursor = dbHelper.getEventsCourseCursor(Courses.getSelectedCourseCode());
       startManagingCursor(dbCursor);
 
 
@@ -97,17 +97,21 @@ public class Rollcall extends MenuExpandableListActivity implements
       adapter = new EventsCursorAdapter(getBaseContext(), dbCursor, dbHelper);
       lvEvents.setAdapter(adapter);
 
-      showProgress(false);
+      mProgressScreen.hide();
     }
   };
   /**
    * TextView for the empty events message
    */
-  TextView emptyEventsTextView;
+  private TextView emptyEventsTextView;
   /**
    * Layout with "Pull to refresh" function
    */
   private SwipeRefreshLayout refreshLayout;
+  /**
+   * Progress screen
+   */
+  private ProgressScreen mProgressScreen;
   /**
    * ListView click listener
    */
@@ -132,6 +136,11 @@ public class Rollcall extends MenuExpandableListActivity implements
 
     refreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container_list);
     emptyEventsTextView = (TextView) findViewById(R.id.list_item_title);
+
+    View mProgressScreenView = findViewById(R.id.progress_screen);
+    mProgressScreen = new ProgressScreen(mProgressScreenView, refreshLayout,
+            getString(R.string.loadingMsg), this);
+
     lvEvents = (ListView) findViewById(R.id.list_pulltorefresh);
 
     lvEvents.setOnItemClickListener(clickListener);
@@ -194,26 +203,22 @@ public class Rollcall extends MenuExpandableListActivity implements
   }
 
   private void refreshEvents() {
-    showProgress(true);
+    mProgressScreen.show();
     Intent activity = new Intent(this, EventsDownload.class);
     startActivityForResult(activity, Constants.ROLLCALL_EVENTS_DOWNLOAD_REQUEST_CODE);
-  }
-
-  public void showProgress(boolean show) {
-    DialogFactory.showProgress(this, show, R.id.swipe_container_list, R.id.loading_status);
   }
 
   /**
    * It shows the SwipeRefreshLayout progress
    */
-  public void showSwipeProgress() {
+  private void showSwipeProgress() {
     refreshLayout.setRefreshing(true);
   }
 
   /**
    * It shows the SwipeRefreshLayout progress
    */
-  public void hideSwipeProgress() {
+  private void hideSwipeProgress() {
     refreshLayout.setRefreshing(false);
   }
 
@@ -289,7 +294,7 @@ public class Rollcall extends MenuExpandableListActivity implements
     private final WeakReference<Rollcall> mActivity;
 
     public RefreshAdapterHandler(Rollcall activity) {
-      mActivity = new WeakReference<Rollcall>(activity);
+      mActivity = new WeakReference<>(activity);
     }
 
   }

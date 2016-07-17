@@ -40,6 +40,7 @@ import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
+import es.ugr.swad.swadroid.gui.ProgressScreen;
 import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.modules.courses.Courses;
@@ -58,7 +59,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
     /**
      * Tests tag name for Logcat
      */
-    public static final String TAG = Constants.APP_TAG + " Groups Manager";
+    private static final String TAG = Constants.APP_TAG + " Groups Manager";
     /**
      * Course code of current selected course
      */
@@ -82,10 +83,16 @@ public class MyGroupsManager extends MenuExpandableListActivity {
     };
 
     private ExpandableListView mExpandableListView;
+    /**
+     * Progress screen
+     */
+    private ProgressScreen mProgressScreen;
     
     @Override
     protected void onStart() {
         super.onStart();
+
+        showProgressLoading();
 
         SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
 
@@ -118,6 +125,11 @@ public class MyGroupsManager extends MenuExpandableListActivity {
         
         mExpandableListView = (ExpandableListView) findViewById(android.R.id.list);
 
+        View mProgressScreenView = findViewById(R.id.progress_screen);
+        View mGroupChoiceLayoutView = findViewById(R.id.groupChoiceLayout);
+        mProgressScreen = new ProgressScreen(mProgressScreenView, mGroupChoiceLayoutView,
+                getString(R.string.loadingMsg), this);
+
         getSupportActionBar().setSubtitle(Courses.getSelectedCourseShortName());
     	getSupportActionBar().setIcon(R.drawable.my_groups);
 
@@ -138,8 +150,10 @@ public class MyGroupsManager extends MenuExpandableListActivity {
                         Intent activity = new Intent(getApplicationContext(), Groups.class);
                         activity.putExtra("courseCode", courseCode);
                         startActivityForResult(activity, Constants.GROUPS_REQUEST_CODE);
-                    } else
+                    } else {
                         setEmptyMenu();
+                    }
+
                     break;
                 case Constants.GROUPS_REQUEST_CODE:
                     if (dbHelper.getGroups(courseCode).size() > 0 || refreshRequested) {
@@ -150,38 +164,41 @@ public class MyGroupsManager extends MenuExpandableListActivity {
                         refreshRequested = false;
 
                         setMenu();
-                    } else
+                    } else {
                         setEmptyMenu();
+                    }
 
                     break;
                 case Constants.SENDMYGROUPS_REQUEST_CODE:
                     int success = data.getIntExtra("success", 0);
+
+                    LongSparseArray<ArrayList<Group>> currentGroups = getHashMapGroups(groupTypes);
+                    ((EnrollmentExpandableListAdapter) mExpandableListView.getExpandableListAdapter()).resetChildren(currentGroups);
+                    ((EnrollmentExpandableListAdapter) mExpandableListView.getExpandableListAdapter()).notifyDataSetChanged();
+
                     if (success == 0) { //no enrollment was made
-                        LongSparseArray<ArrayList<Group>> currentGroups = getHashMapGroups(groupTypes);
-                        ((EnrollmentExpandableListAdapter) mExpandableListView.getExpandableListAdapter()).resetChildren(currentGroups);
-                        ((EnrollmentExpandableListAdapter) mExpandableListView.getExpandableListAdapter()).notifyDataSetChanged();
                         showFailedEnrollmentDialog();
                     } else {
-                        LongSparseArray<ArrayList<Group>> currentGroups = getHashMapGroups(groupTypes);
-                        ((EnrollmentExpandableListAdapter) mExpandableListView.getExpandableListAdapter()).resetChildren(currentGroups);
-                        ((EnrollmentExpandableListAdapter) mExpandableListView.getExpandableListAdapter()).notifyDataSetChanged();
                         showSuccessfulEnrollmentDialog();
                     }
+
+                    mProgressScreen.hide();
                     break;
             }
 
         } else {
             if (refreshRequested) {
-
                 refreshRequested = false;
             }
+
+            mProgressScreen.hide();
         }
     }
 
     /**
      * Shows informative dialog on successful enrollment
      */
-    void showSuccessfulEnrollmentDialog() {        
+    private void showSuccessfulEnrollmentDialog() {
     	AlertDialog dialog = DialogFactory.createNeutralDialog(this,
     			-1,
     			R.string.resultEnrollment,
@@ -195,7 +212,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
     /**
      * Shows informative dialog on failed enrollment
      */
-    void showFailedEnrollmentDialog() {
+    private void showFailedEnrollmentDialog() {
     	AlertDialog dialog = DialogFactory.createNeutralDialog(this,
     			-1,
     			R.string.resultEnrollment,
@@ -218,6 +235,8 @@ public class MyGroupsManager extends MenuExpandableListActivity {
                 activity.putExtra("courseCode", courseCode);
                 activity.putExtra("myGroups", myGroups);
                 startActivityForResult(activity, Constants.SENDMYGROUPS_REQUEST_CODE);
+
+                showProgressSending();
             }
         };
         
@@ -236,6 +255,8 @@ public class MyGroupsManager extends MenuExpandableListActivity {
     }
 
     private void setEmptyMenu() {
+        mProgressScreen.hide();
+
         mExpandableListView.setVisibility(View.GONE);
         menu.getItem(0).setVisible(false);
         this.findViewById(R.id.noGroupsText).setVisibility(View.VISIBLE);
@@ -249,8 +270,11 @@ public class MyGroupsManager extends MenuExpandableListActivity {
         mExpandableListView.setAdapter(adapter);
 
         int collapsedGroups = mExpandableListView.getExpandableListAdapter().getGroupCount();
-        for (int i = 0; i < collapsedGroups; ++i)
+        for (int i = 0; i < collapsedGroups; ++i) {
             mExpandableListView.expandGroup(i);
+        }
+
+        mProgressScreen.hide();
     }
 
     @Override
@@ -263,7 +287,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
     }
 
     private LongSparseArray<ArrayList<Group>> getHashMapGroups(ArrayList<Model> groupTypes) {
-        LongSparseArray<ArrayList<Group>> children = new LongSparseArray<ArrayList<Group>>();
+        LongSparseArray<ArrayList<Group>> children = new LongSparseArray<>();
         for (Model groupType : groupTypes) {
             long groupTypeCode = groupType.getId();
             ArrayList<Group> groups = (ArrayList<Group>) dbHelper.getGroupsOfType(groupTypeCode);
@@ -276,9 +300,12 @@ public class MyGroupsManager extends MenuExpandableListActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_refresh:
+                showProgressLoading();
+
                 Intent activity = new Intent(this, GroupTypes.class);
                 activity.putExtra("courseCode", courseCode);
                 startActivityForResult(activity, Constants.GROUPTYPES_REQUEST_CODE);
+
                 return true;
                 
             case R.id.action_save:
@@ -297,5 +324,15 @@ public class MyGroupsManager extends MenuExpandableListActivity {
         this.menu = menu;
         
         return super.onCreateOptionsMenu(menu);
+    }
+
+    private void showProgressLoading() {
+        mProgressScreen.setMessage(getString(R.string.loadingMsg));
+        mProgressScreen.show();
+    }
+
+    private void showProgressSending() {
+        mProgressScreen.setMessage(getString(R.string.sendMyGroupsProgressDescription));
+        mProgressScreen.show();
     }
 }

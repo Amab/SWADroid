@@ -27,18 +27,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -50,6 +49,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -58,6 +58,7 @@ import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.gui.MenuActivity;
+import es.ugr.swad.swadroid.gui.ProgressScreen;
 import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.model.GroupType;
 import es.ugr.swad.swadroid.modules.courses.Courses;
@@ -118,10 +119,10 @@ public class DownloadsManager extends MenuActivity {
      */
     private boolean refresh = false;
 
-    private TextView noConnectionText;
+    private TextView messageText;
     private GridView grid;
-
     private TextView currentPathText;
+    private ProgressScreen mProgressScreen;
 
     private String chosenNodeName = null;
 
@@ -139,7 +140,7 @@ public class DownloadsManager extends MenuActivity {
     /**
      * Indicates if the menu no connection is visible
      */
-    private boolean noConnectionView = false;
+    private boolean messageView = false;
     /**
      * Indicates that the current state should be saved in case the activity is brought to background
      */
@@ -151,6 +152,8 @@ public class DownloadsManager extends MenuActivity {
     private boolean previousConnection = false;
 
     private void init() {
+        mProgressScreen.show();
+
         List<Group> allGroups = dbHelper.getGroups(Courses.getSelectedCourseCode());
         int nGroups = allGroups.size();
 
@@ -212,7 +215,7 @@ public class DownloadsManager extends MenuActivity {
                     this.tree = savedInstanceState.getString("tree");
                     String path = savedInstanceState.getString("path");
                     this.navigator = new DirectoryNavigator(getApplicationContext(), this.tree);
-                    if (path.equals("/")) {
+                    if ("/".equals(path)) {
                         int firstBar = path.indexOf('/', 0);
                         int nextBar = path.indexOf('/', firstBar + 1);
                         while (nextBar != -1) {
@@ -226,12 +229,13 @@ public class DownloadsManager extends MenuActivity {
             }
 
         }
+
         setContentView(R.layout.navigation);
 
         downloadsAreaCode = getIntent().getIntExtra("downloadsAreaCode",
                 Constants.DOCUMENTS_AREA_CODE);
 
-        noConnectionText = (TextView) this.findViewById(R.id.noConnectionText);
+        messageText = (TextView) this.findViewById(R.id.messageText);
 
         grid = (GridView) this.findViewById(R.id.gridview);
         grid.setOnItemClickListener((new OnItemClickListener() {
@@ -288,6 +292,12 @@ public class DownloadsManager extends MenuActivity {
             }
 
         }));
+
+        View mDirectoryNavigatorView = findViewById(R.id.directoryNavigator);
+        View mProgressScreenView = findViewById(R.id.progress_screen);
+
+        mProgressScreen = new ProgressScreen(mProgressScreenView, mDirectoryNavigatorView,
+                getString(R.string.loadingMsg), this);
 
         setupActionBar();
     }
@@ -351,24 +361,20 @@ public class DownloadsManager extends MenuActivity {
                 // course
                 case Constants.DIRECTORY_TREE_REQUEST_CODE:
                     tree = data.getStringExtra("tree");
-                    if (!refresh) {
-                        setMainView();
-                    } else {
+
+                    if(refresh && !messageView) {
+                        refresh();
                         refresh = false;
-                        if (!noConnectionView)
-                            refresh();
-                        else
-                            setMainView();
                     }
+
+                    setMainView();
                     break;
                 case Constants.GETFILE_REQUEST_CODE:
-                    Log.d(TAG, "Correct get file");
                     //if the sd card is not busy, the file can be downloaded
                     if (this.checkMediaAvailability() == 2) {
                         Log.i(TAG, "External storage is available");
                         String url = data.getExtras().getString("link");
                         downloadFile(Constants.DIRECTORY_SWADROID, url, fileSize);
-                        //Toast.makeText(this, chosenNodeName +" "+ this.getResources().getString(R.string.notificationDownloadTitle) , Toast.LENGTH_LONG).show();
                     } else { //if the sd card is busy, it shows a alert dialog
                         Log.i(TAG, "External storage is NOT available");
                         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -394,8 +400,11 @@ public class DownloadsManager extends MenuActivity {
                     groupsRequested = true;
                     myGroups = getFilteredGroups(); //only groups where the user is enrolled.
                     this.loadGroupsSpinner(myGroups);
-                    if (myGroups.size() == 0)
+                    if (myGroups.size() == 0) {
                         requestDirectoryTree();
+                    } else {
+                        mProgressScreen.hide();
+                    }
                     break;
                 case Constants.GROUPTYPES_REQUEST_CODE:
                     activity = new Intent(this, Groups.class);
@@ -408,38 +417,77 @@ public class DownloadsManager extends MenuActivity {
             if (refresh) {
                 refresh = false;
             }
+
+            mProgressScreen.hide();
         }
     }
-
 
     /**
      * Having connection is mandatory for the Download Module.
      * Therefore when there is not connection, the grid of nodes is disabled and instead it is showed an info messages
      */
     private void setNoConnectionView() {
-        noConnectionView = true;
-        noConnectionText.setVisibility(View.VISIBLE);
+        getSupportActionBar().setSubtitle(Courses.getSelectedCourseShortName());
+
+        this.saveState = true;
+        this.previousConnection = false;
+
+        mProgressScreen.hide();
+
+        messageView = true;
+
+        messageText.setText(R.string.noConnectionMsg);
+        messageText.setVisibility(View.VISIBLE);
+
         grid.setVisibility(View.GONE);
+
+        this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
+    }
+
+    /**
+     *  Documents:
+     *
+     *  Show a warning on Documents screen if there are no documents currently available.
+     *
+     *  Marks:
+     *
+     *  Show a warning on Marks screen if student ID has not yet been verified by the teacher or
+     *  there are no marks currently available.
+     */
+    private void setNoDocumentsView() {
+        int resNoDocuments;
+
+        if(downloadsAreaCode == Constants.MARKS_AREA_CODE) {
+            if (Login.getCurrentUserRole() == Constants.STUDENT_TYPE_CODE)
+                resNoDocuments = R.string.noMarksStudentMsg;
+            else {
+                resNoDocuments = R.string.noMarksTeacherMsg;
+            }
+        } else {
+            resNoDocuments = R.string.noDocumentsMsg;
+        }
 
         this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
 
         getSupportActionBar().setSubtitle(Courses.getSelectedCourseShortName());
-        
-        this.saveState = true;
-        this.previousConnection = false;
 
+        this.saveState = true;
+        this.previousConnection = true;
+
+        grid.setVisibility(View.GONE);
+
+        mProgressScreen.hide();
+
+        messageText.setText(resNoDocuments);
+        messageText.setVisibility(View.VISIBLE);
+
+        messageView = true;
     }
 
     /**
      * This method set the grid of nodes visible and paints the directory tree in its root node
      */
     private void setMainView() {
-
-        noConnectionText.setVisibility(View.GONE);
-        grid.setVisibility(View.VISIBLE);
-
-        noConnectionView = false;
-
         currentPathText = (TextView) this.findViewById(R.id.path);
 
         ArrayList<DirectoryItem> items;
@@ -451,8 +499,19 @@ public class DownloadsManager extends MenuActivity {
             items = navigator.goToCurrentDirectory();
         }
 
-        currentPathText.setText(navigator.getPath());
-        grid.setAdapter(new NodeAdapter(this, items));
+        if(items.isEmpty()) {
+            setNoDocumentsView();
+        } else {
+            messageView = false;
+            messageText.setVisibility(View.GONE);
+
+            mProgressScreen.hide();
+
+            currentPathText.setText(navigator.getPath());
+            grid.setAdapter(new NodeAdapter(this, items));
+            grid.setVisibility(View.VISIBLE);
+        }
+
         //this is used for the activity restart in case it was taken background
         this.saveState = true;
         this.previousConnection = true;
@@ -471,9 +530,10 @@ public class DownloadsManager extends MenuActivity {
      * When the user moves into a new directory, this method updates the set of new directories and files and paints it
      */
     private void updateView(ArrayList<DirectoryItem> items) {
-        currentPathText.setText(navigator.getPath());
-        ((NodeAdapter) grid.getAdapter()).change(items);
-
+        if(!items.isEmpty()) {
+            currentPathText.setText(navigator.getPath());
+            ((NodeAdapter) grid.getAdapter()).change(items);
+        }
     }
 
     /**
@@ -501,14 +561,14 @@ public class DownloadsManager extends MenuActivity {
             Spinner groupsSpinner = (Spinner) this.findViewById(R.id.groupSpinner);
             groupsSpinner.setVisibility(View.VISIBLE);
 
-            ArrayList<String> spinnerNames = new ArrayList<String>(currentGroups.size() + 1);
+            ArrayList<String> spinnerNames = new ArrayList<>(currentGroups.size() + 1);
             spinnerNames.add(getString(R.string.course) + "-" + Courses.getSelectedCourseShortName());
             for (Group g : currentGroups) {
                 GroupType gType = dbHelper.getGroupTypeFromGroup(g.getId());
                 spinnerNames.add(getString(R.string.group) + "-" + gType.getGroupTypeName() + " " + g.getGroupName());
             }
 
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerNames);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, spinnerNames);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             groupsSpinner.setAdapter(adapter);
             groupsSpinner.setOnItemSelectedListener(new onGroupSelectedListener());
@@ -588,11 +648,7 @@ public class DownloadsManager extends MenuActivity {
      * @return False if not downloaded, True otherwise.
      */
     private boolean isDownloaded(File f) {
-        if (f.exists() && f.length() == fileSize) {
-            return true;
-        } else {
-            return false;
-        }
+        return f.exists() && f.length() == fileSize;
     }
     
     /**
@@ -600,18 +656,17 @@ public class DownloadsManager extends MenuActivity {
      * @param f The file to view.
      */
     private void viewFile(File f) {
-        String filenameArray[] = this.chosenNodeName.split("\\.");
-        String ext = filenameArray[filenameArray.length - 1];
-        String mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(ext);
-
+        String mime = URLConnection.guessContentTypeFromName(f.getAbsolutePath());
+        String authority = "es.ugr.swad.swadroid.fileprovider";
         Intent viewFileIntent = new Intent();
-        viewFileIntent.setAction(Intent.ACTION_VIEW);
-        viewFileIntent.setDataAndType(Uri.fromFile(f), mime);
 
         try {
+            viewFileIntent.setAction(Intent.ACTION_VIEW);
+            viewFileIntent.setDataAndType(FileProvider.getUriForFile(this, authority, f), mime);
+            viewFileIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             startActivity(viewFileIntent);
         } catch (ActivityNotFoundException e) {
-            showDialog(R.string.errorMsgLaunchingActivity, R.string.errorNoAppForIntent);
+            showDialog(R.string.errorMsgExecutionOperation, R.string.errorNoAppForIntent);
         }
     }
     
@@ -626,7 +681,7 @@ public class DownloadsManager extends MenuActivity {
         // Check if external storage is available
         int storageState = checkMediaAvailability(); 
         if (storageState == 2) {
-            new FileDownloaderAsyncTask(this, this.chosenNodeName, fileSize)
+            new FileDownloaderAsyncTask(this, this.chosenNodeName)
             .execute(directory, url);
         } else {
             Toast.makeText(this, R.string.sdCardBusyTitle, Toast.LENGTH_LONG).show();
@@ -729,13 +784,11 @@ public class DownloadsManager extends MenuActivity {
      * @param v Actual view
      */
     public void onRefreshClick(View v) {
-
         refresh = true;
 
         Intent activity = new Intent(this, GroupTypes.class);
         activity.putExtra("courseCode", Courses.getSelectedCourseCode());
         startActivityForResult(activity, Constants.GROUPTYPES_REQUEST_CODE);
-
     }
 
     /**
@@ -748,15 +801,15 @@ public class DownloadsManager extends MenuActivity {
         }
 
         switch (downloadsAreaCode) {
-            case 1:
+            case Constants.DOCUMENTS_AREA_CODE:
                 setTitle(R.string.documentsDownloadModuleLabel);
                 getSupportActionBar().setIcon(R.drawable.folder);
                 break;
-            case 2:
+            case Constants.SHARE_AREA_CODE:
                 setTitle(R.string.sharedsDownloadModuleLabel);
                 getSupportActionBar().setIcon(R.drawable.folder_users);
                 break;
-            case 3:
+            case Constants.MARKS_AREA_CODE:
                 setTitle(R.string.marksModuleLabel);
                 getSupportActionBar().setIcon(R.drawable.grades);
                 break;

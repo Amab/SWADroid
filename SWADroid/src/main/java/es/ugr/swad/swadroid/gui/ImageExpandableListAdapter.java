@@ -196,12 +196,12 @@ public class ImageExpandableListAdapter extends SimpleExpandableListAdapter {
     public boolean addGroup(int groupPosition, HashMap<String, Object> group, ArrayList<HashMap<String, Object>> childs) {
         if (groupPosition >= getGroupCount()) {
             groupData.add(groupPosition, group);
-            final ArrayList<HashMap<String, Object>> groupData = new ArrayList<HashMap<String, Object>>();
+            final ArrayList<HashMap<String, Object>> groupData = new ArrayList<>();
             childData.add(groupPosition, groupData);
             childData.get(groupPosition).addAll(childs);
         } else {
             groupData.add(getGroupCount(), group);
-            final ArrayList<HashMap<String, Object>> groupData = new ArrayList<HashMap<String, Object>>();
+            final ArrayList<HashMap<String, Object>> groupData = new ArrayList<>();
             childData.add(getGroupCount() - 1, groupData);
             childData.get(getGroupCount() - 1).addAll(childs);
         }

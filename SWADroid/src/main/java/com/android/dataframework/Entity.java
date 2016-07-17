@@ -46,7 +46,6 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map.Entry;
 
 public class Entity {
@@ -54,8 +53,8 @@ public class Entity {
 	private String mTable;
 	private long mId = -1;
 	private long mForceId = -1;
-	protected HashMap<String, Object> mAttributes = new HashMap<String, Object>();
-	protected HashMap<String, Object> mMultilanguagesAttributes = new HashMap<String, Object>();
+	protected HashMap<String, Object> mAttributes = new HashMap<>();
+	protected HashMap<String, Object> mMultilanguagesAttributes = new HashMap<>();
 
     /**
      * Devuelve el siguiente _id
@@ -104,7 +103,7 @@ public class Entity {
      * @return true si es una actualizacion
      */	
 	public boolean isUpdate() {
-		return (mId < 0)?false:true;
+		return mId >= 0;
 	}
 	
 	/**
@@ -113,7 +112,7 @@ public class Entity {
      * @return true si es una nuevo registro
      */	
 	public boolean isInsert() {
-		return (mId < 0)?true:false;
+		return (mId < 0);
 	}
 	
 	/**
@@ -162,8 +161,7 @@ public class Entity {
      */	
 	public int getDrawableIdentifier(String name) 
 	{
-		int id = DataFramework.getInstance().getContext().getResources().getIdentifier(DataFramework.getInstance().getPackage() + ":drawable/"+getValue(name).toString(), null, null);
-		return id;
+		return DataFramework.getInstance().getContext().getResources().getIdentifier(DataFramework.getInstance().getPackage() + ":drawable/"+getValue(name).toString(), null, null);
 	}
 	
 	/**
@@ -190,8 +188,7 @@ public class Entity {
 	{
 		int id = DataFramework.getInstance().getContext().getResources().getIdentifier(DataFramework.getInstance().getPackage() + ":drawable/"+getValue(name).toString(), null, null);
 		java.io.InputStream is = DataFramework.getInstance().getContext().getResources().openRawResource(id);
-    	BitmapDrawable bmd = new BitmapDrawable(BitmapFactory.decodeStream(is));
-		return bmd;
+		return new BitmapDrawable(BitmapFactory.decodeStream(is));
 	}
 	
 	/**
@@ -276,19 +273,18 @@ public class Entity {
 	{
 		String[] arString = DataFramework.getInstance().getTable(mTable).getToString().split("%");
 		String out = "";
-		for (int i=0; i<arString.length; i++) {
-			if (isAttribute(arString[i])) 
-			{
-				Field f = getTableObject().getField(arString[i]);
-				if (f.getType().equals("foreign-key")){
-					out += getEntity(arString[i]).toString();
-				}else{
-					out += getString(arString[i]);
+		for (String anArString : arString) {
+			if (isAttribute(anArString)) {
+				Field f = getTableObject().getField(anArString);
+				if (f.getType().equals("foreign-key")) {
+					out += getEntity(anArString).toString();
+				} else {
+					out += getString(anArString);
 				}
-			} else if (arString[i].equals(DataFramework.KEY_ID)) {
+			} else if (anArString.equals(DataFramework.KEY_ID)) {
 				out += mId;
 			} else {
-				out += arString[i];
+				out += anArString;
 			}
 		}
 		return out;
@@ -384,30 +380,38 @@ public class Entity {
 			HashMap<String, Object> attribs = mAttributes; // Para reducir el acceso al heap.
 			Object[] attributeNames = attribs.keySet().toArray();
 			int attributeCount = attributeNames.length;
-			
-			for (int i = 0; i < attributeCount; i++)			
-			{				
-				String attributeName = attributeNames[i].toString();				
+
+			for (Object attributeName1 : attributeNames) {
+				String attributeName = attributeName1.toString();
 
 				Field f = getTableObject().getField(attributeName);
-				
-		        int indexField;
-		        if (f.getType().equals("multilanguage")) {
-		        	indexField = c.getColumnIndexOrThrow(attributeName + "_" + DataFramework.getInstance().getCurrentLanguage());
-		        } else {
-		        	indexField = c.getColumnIndexOrThrow(attributeName);
-		        }
-		        
-		        if (f.getType().equals("text") || f.getType().equals("multilanguage") || f.getType().equals("string-identifier") || f.getType().equals("drawable-identifier")){
-					attribs.put(attributeName, c.getString(indexField));
-				}else if (f.getType().equals("int")){
-					attribs.put(attributeName, c.getLong(indexField));
-				}else if (f.getType().equals("foreign-key")){
-					attribs.put(attributeName, c.getLong(indexField));
-				}else if (f.getType().equals("real")){
-					attribs.put(attributeName, c.getDouble(indexField));
-				}else{
-					attribs.put(attributeName, c.getString(indexField));
+
+				int indexField;
+				if (f.getType().equals("multilanguage")) {
+					indexField = c.getColumnIndexOrThrow(attributeName + "_" + DataFramework.getInstance().getCurrentLanguage());
+				} else {
+					indexField = c.getColumnIndexOrThrow(attributeName);
+				}
+
+				switch (f.getType()) {
+					case "text":
+					case "multilanguage":
+					case "string-identifier":
+					case "drawable-identifier":
+						attribs.put(attributeName, c.getString(indexField));
+						break;
+					case "int":
+						attribs.put(attributeName, c.getLong(indexField));
+						break;
+					case "foreign-key":
+						attribs.put(attributeName, c.getLong(indexField));
+						break;
+					case "real":
+						attribs.put(attributeName, c.getDouble(indexField));
+						break;
+					default:
+						attribs.put(attributeName, c.getString(indexField));
+						break;
 				}
 			}
 		}
@@ -585,11 +589,9 @@ public class Entity {
 					}
 				}
 			}
-			
-			Iterator<Entry<String, Object>> it = mMultilanguagesAttributes.entrySet().iterator();
-			while (it.hasNext()) {
-				Entry<String, Object> e = (Entry<String, Object>)it.next();
-				args.put(e.getKey().toString(), e.getValue().toString());
+
+			for (Entry<String, Object> e : mMultilanguagesAttributes.entrySet()) {
+				args.put(e.getKey(), e.getValue().toString());
 			}
 			
 			if (isInsert()) {
@@ -636,15 +638,13 @@ public class Entity {
 		
     	String result = "<entity>\n";
 		result += "<attribute name=\"_id\" value=\"" + mId + "\"/>\n";
-    	
-    	for (int i = 0; i < attributeCount; i++)
-    	{
-    		if (!isNull(attributeNames[i].toString()))
-    		{
-	    		result += "<attribute name=\"" + attributeNames[i].toString() + "\"" +
-	    			" value=\"" + getValue(attributeNames[i].toString()).toString() + "\"/>\n";
-    		}
-    	}
+
+		for (Object attributeName : attributeNames) {
+			if (!isNull(attributeName.toString())) {
+				result += "<attribute name=\"" + attributeName.toString() + "\"" +
+						" value=\"" + getValue(attributeName.toString()).toString() + "\"/>\n";
+			}
+		}
     	
     	result += "</entity>\n";
     	return result;
@@ -659,7 +659,7 @@ public class Entity {
     	try {    		
     		
 			XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-			XmlPullParser x = (XmlPullParser)factory.newPullParser();			
+			XmlPullParser x = factory.newPullParser();
 			x.setInput(new StringReader(xml));
 			
 	    	int eventType = x.getEventType();
@@ -682,14 +682,11 @@ public class Entity {
 	    		
 	    		eventType = x.next();
 	    	}
-		} catch (XmlPullParserException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (XmlPullParserException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    }
+	}
  
 }
 

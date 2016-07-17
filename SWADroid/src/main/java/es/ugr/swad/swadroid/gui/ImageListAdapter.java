@@ -15,7 +15,7 @@ import es.ugr.swad.swadroid.R;
  
 public class ImageListAdapter extends ArrayAdapter<ImageListItem> {
  
-    Context context;
+    private Context context;
  
     public ImageListAdapter(Context context, int resourceId,
             List<ImageListItem> items) {
@@ -30,7 +30,7 @@ public class ImageListAdapter extends ArrayAdapter<ImageListItem> {
     }
  
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder = null;
+        ViewHolder holder;
         ImageListItem imageListItem = getItem(position);
  
         LayoutInflater mInflater = (LayoutInflater) context

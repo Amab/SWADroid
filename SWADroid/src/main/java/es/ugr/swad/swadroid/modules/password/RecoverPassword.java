@@ -23,8 +23,8 @@ import android.os.Bundle;
 
 import org.ksoap2.serialization.SoapObject;
 
+import es.ugr.swad.swadroid.Config;
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.utils.Utils;
@@ -64,7 +64,7 @@ public class RecoverPassword extends Module {
     protected void requestService() throws Exception {
         createRequest(SOAPClient.CLIENT_TYPE);
         addParam("userID", getIntent().getStringExtra(USER_TO_RECOVER));
-        addParam("appKey", Constants.SWAD_APP_KEY);
+        addParam("appKey", Config.SWAD_APP_KEY);
         sendRequest(User.class, true);
 
         if (result != null) {
@@ -75,10 +75,7 @@ public class RecoverPassword extends Module {
 
     @Override
     protected void connect() {
-        String progressDescription = getString(R.string.recoverPasswordProgressDescription);
-        int progressTitle = R.string.recoverPasswordProgressTitle;
-
-        startConnection(false, progressDescription, progressTitle);
+        startConnection();
     }
 
     @Override

@@ -19,9 +19,6 @@
 
 package es.ugr.swad.swadroid;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -29,6 +26,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -57,18 +55,19 @@ import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.gui.ImageExpandableListAdapter;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
+import es.ugr.swad.swadroid.gui.ProgressScreen;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.modules.courses.Courses;
-import es.ugr.swad.swadroid.modules.qr.GenerateQR;
-import es.ugr.swad.swadroid.modules.login.Login;
-import es.ugr.swad.swadroid.modules.notices.Notices;
 import es.ugr.swad.swadroid.modules.downloads.DownloadsManager;
 import es.ugr.swad.swadroid.modules.groups.MyGroupsManager;
 import es.ugr.swad.swadroid.modules.information.Information;
+import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.modules.login.LoginActivity;
 import es.ugr.swad.swadroid.modules.messages.Messages;
+import es.ugr.swad.swadroid.modules.notices.Notices;
 import es.ugr.swad.swadroid.modules.notifications.Notifications;
+import es.ugr.swad.swadroid.modules.qr.GenerateQR;
 import es.ugr.swad.swadroid.modules.rollcall.Rollcall;
 import es.ugr.swad.swadroid.modules.tests.Tests;
 import es.ugr.swad.swadroid.preferences.Preferences;
@@ -87,18 +86,6 @@ import es.ugr.swad.swadroid.utils.Utils;
  * @author Jose Antonio Guerrero Aviles <cany20@gmail.com>
  */
 public class SWADMain extends MenuExpandableListActivity {
-	/**
-	 * Application preferences
-	 */
-	Preferences prefs;
-	/**
-	 * SSL connection
-	 */
-	SecureConnection conn;
-    /**
-     * Array of strings for main ListView
-     */
-    protected String[] functions;
     /**
      * Function name field
      */
@@ -118,7 +105,7 @@ public class SWADMain extends MenuExpandableListActivity {
     /**
      * SWADMain tag name for Logcat
      */
-    public static final String TAG = Constants.APP_TAG;
+    private static final String TAG = Constants.APP_TAG;
     
     /**
      * Indicates if it is the first run
@@ -136,10 +123,13 @@ public class SWADMain extends MenuExpandableListActivity {
     private TextView mBirthdayTextView;
     private ExpandableListView mExpandableListView;
     private ImageExpandableListAdapter mExpandableListAdapter;
-    private final ArrayList<HashMap<String, Object>> mHeaderData = new ArrayList<HashMap<String, Object>>();
-    private final ArrayList<ArrayList<HashMap<String, Object>>> mChildData = new ArrayList<ArrayList<HashMap<String, Object>>>();
-    private final ArrayList<HashMap<String, Object>> mMessagesData = new ArrayList<HashMap<String, Object>>();
-    private final ArrayList<HashMap<String, Object>> mUsersData = new ArrayList<HashMap<String, Object>>();
+    private final ArrayList<HashMap<String, Object>> mHeaderData = new ArrayList<>();
+    private final ArrayList<ArrayList<HashMap<String, Object>>> mChildData = new ArrayList<>();
+    private final ArrayList<HashMap<String, Object>> mMessagesData = new ArrayList<>();
+    private final ArrayList<HashMap<String, Object>> mUsersData = new ArrayList<>();
+
+    private ProgressScreen mProgressScreen;
+
     /**
      * Gets the database helper
      *
@@ -152,7 +142,7 @@ public class SWADMain extends MenuExpandableListActivity {
     /**
      * Shows initial dialog after application upgrade.
      */
-    public void showUpgradeDialog(Context context) {        
+    private void showUpgradeDialog(Context context) {
         AlertDialog alertDialog = DialogFactory.createWebViewDialog(context,
         		R.string.changelogTitle,
         		R.raw.changes);
@@ -175,10 +165,6 @@ public class SWADMain extends MenuExpandableListActivity {
         setContentView(R.layout.main);
         initializeMainViews();
         
-        
-        //Initialize preferences
-        prefs = new Preferences(this);
-        
         try {
         	
             //Initialize HTTPS connections
@@ -187,8 +173,11 @@ public class SWADMain extends MenuExpandableListActivity {
         	 * If Android API < 11 (HONEYCOMB) add SSL certificates manually
         	 */
         	if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-        		conn = new SecureConnection();
-        		conn.initSecureConnection(this); 
+        		/*
+	  SSL connection
+	 */
+                SecureConnection conn = new SecureConnection();
+        		conn.initSecureConnection();
         		//conn.initUntrustedSecureConnection();
         		Log.i(TAG, "Android API < 11 (HONEYCOMB). Adding SSL certificates manually");
         	} else {
@@ -226,7 +215,7 @@ public class SWADMain extends MenuExpandableListActivity {
             }
             currentRole = -1;
         } catch (Exception ex) {
-            error(TAG, ex.getMessage(), ex, true);
+            error(ex.getMessage(), ex, true);
         }
     }
 
@@ -295,7 +284,7 @@ public class SWADMain extends MenuExpandableListActivity {
 	 */
 	private void upgradeApp(int lastVersion, int currentVersion) throws NoSuchAlgorithmException {
 		showUpgradeDialog(this);
-        dbHelper.upgradeDB(this);
+        dbHelper.upgradeDB();
         
         if(lastVersion < 52) {
         	//Encrypts users table
@@ -336,7 +325,7 @@ public class SWADMain extends MenuExpandableListActivity {
         	            		Long.parseLong(Preferences.getSyncTime()), this);
         	        }
 
-        	        showProgress(false);
+                    mProgressScreen.hide();
                     break;
                 case Constants.LOGIN_REQUEST_CODE:
                     getCurrentCourses();
@@ -348,7 +337,7 @@ public class SWADMain extends MenuExpandableListActivity {
                 case Constants.COURSES_REQUEST_CODE:
                     //User credentials are wrong. Remove periodic synchronization
                     SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, this);
-                    showProgress(false);
+                    mProgressScreen.hide();
                     break;
                 case Constants.LOGIN_REQUEST_CODE:
                     finish();
@@ -391,7 +380,7 @@ public class SWADMain extends MenuExpandableListActivity {
      */
     private void cleanSpinner() {
         Spinner spinner = (Spinner) this.findViewById(R.id.spinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, new String[]{getString(R.string.clickToGetCourses)});
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, new String[]{getString(R.string.clickToGetCourses)});
         spinner.setAdapter(adapter);
         spinner.setOnTouchListener(Spinner_OnTouch);
     }
@@ -437,7 +426,7 @@ public class SWADMain extends MenuExpandableListActivity {
     };
 
     private void getCurrentCourses() {
-    	showProgress(true);
+        mProgressScreen.show();
     	
         Intent activity = new Intent(this, Courses.class);
         startActivityForResult(activity, Constants.COURSES_REQUEST_CODE);
@@ -447,7 +436,7 @@ public class SWADMain extends MenuExpandableListActivity {
         if (listCourses.size() != 0) {
             Course courseSelected;
             if (Courses.getSelectedCourseCode() != -1) {
-                courseSelected = (Course) dbHelper.getRow(DataBaseHelper.DB_TABLE_COURSES, "id", String.valueOf(Courses.getSelectedCourseCode()));
+                courseSelected = dbHelper.getRow(DataBaseHelper.DB_TABLE_COURSES, "id", String.valueOf(Courses.getSelectedCourseCode()));
             } else {
                 int lastSelected = Preferences.getLastCourseSelected();
                 if (lastSelected != -1 && lastSelected < listCourses.size()) {
@@ -497,30 +486,30 @@ public class SWADMain extends MenuExpandableListActivity {
             // 3- Messages
             // 4- Enrollment
             // 5- Users
-            final HashMap<String, Object> courses = new HashMap<String, Object>();
+            final HashMap<String, Object> courses = new HashMap<>();
             courses.put(NAME, getString(R.string.course));
-            courses.put(IMAGE, getResources().getDrawable(R.drawable.crs));
+            courses.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.crs));
             mHeaderData.add(courses);
 
-            final HashMap<String, Object> evaluation = new HashMap<String, Object>();
+            final HashMap<String, Object> evaluation = new HashMap<>();
             evaluation.put(NAME, getString(R.string.evaluation));
-            evaluation.put(IMAGE, getResources().getDrawable(R.drawable.ass));
+            evaluation.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.ass));
             mHeaderData.add(evaluation);
 
-            final HashMap<String, Object> users = new HashMap<String, Object>();
+            final HashMap<String, Object> users = new HashMap<>();
             users.put(NAME, getString(R.string.users));
-            users.put(IMAGE, getResources().getDrawable(R.drawable.users));
+            users.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.users));
             mHeaderData.add(users);
 
-            final HashMap<String, Object> messages = new HashMap<String, Object>();
+            final HashMap<String, Object> messages = new HashMap<>();
             messages.put(NAME, getString(R.string.messages));
-            messages.put(IMAGE, getResources().getDrawable(R.drawable.msg));
+            messages.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.msg));
             mHeaderData.add(messages);
 
-            final ArrayList<HashMap<String, Object>> courseData = new ArrayList<HashMap<String, Object>>();
+            final ArrayList<HashMap<String, Object>> courseData = new ArrayList<>();
             mChildData.add(courseData);
             
-            final ArrayList<HashMap<String, Object>> evaluationData = new ArrayList<HashMap<String, Object>>();
+            final ArrayList<HashMap<String, Object>> evaluationData = new ArrayList<>();
             mChildData.add(evaluationData);
 
             mChildData.add(mUsersData);
@@ -530,90 +519,90 @@ public class SWADMain extends MenuExpandableListActivity {
             
             //Course category
             //Introduction
-            map = new HashMap<String, Object>();
+            map = new HashMap<>();
             map.put(NAME, getString(R.string.introductionModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.info));
+            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.info));
             courseData.add(map);
             //Teaching Guide
-            map = new HashMap<String, Object>();
+            map = new HashMap<>();
             map.put(NAME, getString(R.string.teachingguideModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.file));
+            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.file));
             courseData.add(map);
             //Syllabus (lectures)
-            map = new HashMap<String, Object>();
+            map = new HashMap<>();
             map.put(NAME, getString(R.string.syllabusLecturesModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.syllabus));
+            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.syllabus));
             courseData.add(map);
             //Syllabus (practicals)
-            map = new HashMap<String, Object>();
+            map = new HashMap<>();
             map.put(NAME, getString(R.string.syllabusPracticalsModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.lab));
+            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.lab));
             courseData.add(map);
             //Documents
-            map = new HashMap<String, Object>();
+            map = new HashMap<>();
             map.put(NAME, getString(R.string.documentsDownloadModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.folder));            
+            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.folder));            
             courseData.add(map);
             //Shared area 
-            map = new HashMap<String, Object>();
+            map = new HashMap<>();
             map.put(NAME, getString(R.string.sharedsDownloadModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.folder_users));
+            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.folder_users));
             courseData.add(map);
             //Bibliography
-            map = new HashMap<String, Object>();
+            map = new HashMap<>();
             map.put(NAME, getString(R.string.bibliographyModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.book));
+            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.book));
             courseData.add(map);
             //FAQs
-            map = new HashMap<String, Object>();
+            map = new HashMap<>();
             map.put(NAME, getString(R.string.faqsModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.faq));
+            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.faq));
             courseData.add(map);
             //Links
-            map = new HashMap<String, Object>();
+            map = new HashMap<>();
             map.put(NAME, getString(R.string.linksModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.link));
+            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.link));
             courseData.add(map);
             
             //Evaluation category
             //Assessment system
-            map = new HashMap<String, Object>();
+            map = new HashMap<>();
             map.put(NAME, getString(R.string.assessmentModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.info));
+            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.info));
             evaluationData.add(map);
             //Test
-            map = new HashMap<String, Object>();
+            map = new HashMap<>();
             map.put(NAME, getString(R.string.testsModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.test));
+            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.test));
             evaluationData.add(map);
             //Marks
-            map = new HashMap<String, Object>();
+            map = new HashMap<>();
             map.put(NAME, getString(R.string.marksModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.grades));
+            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.grades));
             evaluationData.add(map);
 
             //Users category
             //Groups
-            map = new HashMap<String, Object>();
+            map = new HashMap<>();
             map.put(NAME, getString(R.string.myGroupsModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.my_groups));
+            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.my_groups));
             mUsersData.add(map);
             //Generate QR code
-            map = new HashMap<String, Object>();
+            map = new HashMap<>();
             map.put(NAME, getString(R.string.generateQRModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.qr));
+            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.qr));
             mUsersData.add(map);
             
             //Messages category
             //Notifications
-            map = new HashMap<String, Object>();
+            map = new HashMap<>();
             map.put(NAME, getString(R.string.notificationsModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.notif));
+            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.notif));
             mMessagesData.add(map);
             //Messages
-            map = new HashMap<String, Object>();
+            map = new HashMap<>();
             map.put(NAME, getString(R.string.messagesModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.msg_write));
+            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.msg_write));
             mMessagesData.add(map);
             
             mExpandableListAdapter = new ImageExpandableListAdapter(
@@ -651,15 +640,15 @@ public class SWADMain extends MenuExpandableListActivity {
      */
     private void changeToTeacherMenu() {
         if (currentRole == Constants.STUDENT_TYPE_CODE) {
-            HashMap<String, Object> map = new HashMap<String, Object>();
+            HashMap<String, Object> map = new HashMap<>();
             map.put(NAME, getString(R.string.noticesModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.note));
+            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.note));
             
             mMessagesData.add(map);
 
-            map = new HashMap<String, Object>();
+            map = new HashMap<>();
             map.put(NAME, getString(R.string.rollcallModuleLabel));
-            map.put(IMAGE, getResources().getDrawable(R.drawable.roll_call));
+            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.roll_call));
             mUsersData.add(map);
             
             mExpandableListAdapter = new ImageExpandableListAdapter(this, mHeaderData,
@@ -717,6 +706,10 @@ public class SWADMain extends MenuExpandableListActivity {
         mExpandableListView = (ExpandableListView) findViewById(R.id.expandableList);
         mBirthdayLayout = (LinearLayout) findViewById(R.id.birthday_layout);
         mBirthdayTextView = (TextView) findViewById(R.id.birthdayTextView);
+        View mProgressScreenView = findViewById(R.id.progress_screen);
+        View mCoursesListView = findViewById(R.id.courses_list_view);
+        mProgressScreen = new ProgressScreen(mProgressScreenView, mCoursesListView,
+                getString(R.string.coursesProgressDescription), this);
 
         OnChildClickListener mExpandableClickListener = new OnChildClickListener() {
 
@@ -821,52 +814,6 @@ public class SWADMain extends MenuExpandableListActivity {
 
         mExpandableListView.setOnChildClickListener(mExpandableClickListener);
 	}
-
-
-    /**
-     * Shows the progress UI and hides the login form.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
-
-    	final View course_list = findViewById(R.id.courses_list_view);
-        final View progressAnimation = findViewById(R.id.get_courses_status);
-
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-            progressAnimation.setVisibility(View.VISIBLE);
-            progressAnimation.animate()
-                            .setDuration(shortAnimTime)
-                            .alpha(show ? 1 : 0)
-                            .setListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    progressAnimation.setVisibility(show ? View.VISIBLE : View.GONE);
-                                }
-                            });
-
-            course_list.setVisibility(View.VISIBLE);
-            course_list.animate()
-                          .setDuration(shortAnimTime)
-                          .alpha(show ? 0 : 1)
-                          .setListener(new AnimatorListenerAdapter() {
-                              @Override
-                              public void onAnimationEnd(Animator animation) {
-                            	  course_list.setVisibility(show ? View.GONE
-                                          : View.VISIBLE);
-                              }
-                          });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-        	progressAnimation.setVisibility(show ? View.VISIBLE : View.GONE);
-        	course_list.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

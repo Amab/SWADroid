@@ -60,12 +60,7 @@ public class SendMyGroups extends Module {
      * String that contains group codes separated with comma
      */
     private String myGroups = null;
-    /**
-     * Indicates if the enrollments are done or not
-     * 0 - if the enrollments are not done
-     * other than 0 - if they are correctly done
-     */
-    private int success = 0;
+
     /**
      * Groups tag name for Logcat
      */
@@ -93,7 +88,7 @@ public class SendMyGroups extends Module {
             runConnection();
         } catch (Exception e) {
             String errorMsg = getString(R.string.errorServerResponseMsg);
-            error(TAG, errorMsg, e, true);
+            error(errorMsg, e, true);
         }
     }
 
@@ -119,9 +114,14 @@ public class SendMyGroups extends Module {
             ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
             SoapPrimitive soapP = (SoapPrimitive) res.get(0);
 
-            success = Integer.parseInt(soapP.toString());
+            /*
+              Indicates if the enrollments are done or not
+              0 - if the enrollments are not done
+              other than 0 - if they are correctly done
+             */
+            int success = Integer.parseInt(soapP.toString());
             if (success != 0) {
-                List<Model> groupsSWAD = new ArrayList<Model>();
+                List<Model> groupsSWAD = new ArrayList<>();
 
                 SoapObject soapO = (SoapObject) res.get(2);
                 int propertyCount = soapO.getPropertyCount();
@@ -163,15 +163,11 @@ public class SendMyGroups extends Module {
 
     @Override
     protected void connect() {
-        String progressDescription = getString(R.string.sendMyGroupsProgressDescription);
-        int progressTitle = R.string.sendMyGroupsProgressTitle;
-
-        startConnection(true, progressDescription, progressTitle);
+        startConnection();
     }
 
     @Override
     protected void postConnect() {
-        Log.i(TAG, "Enrollment requested");
         finish();
     }
 

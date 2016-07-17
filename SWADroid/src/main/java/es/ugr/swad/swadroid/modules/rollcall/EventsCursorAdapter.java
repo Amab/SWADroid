@@ -23,6 +23,7 @@ package es.ugr.swad.swadroid.modules.rollcall;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Typeface;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -115,11 +116,11 @@ public class EventsCursorAdapter extends CursorAdapter {
 
         //If the event is in time, show dates in green, else show in red
         if(today.before(startTimeCalendar) || today.after(endTimeCalendar)) {
-            holder.startTimeTextView.setTextColor(context.getResources().getColor(R.color.red));
-            holder.endTimeTextView.setTextColor(context.getResources().getColor(R.color.red));
+            holder.startTimeTextView.setTextColor(ContextCompat.getColor(context, R.color.red));
+            holder.endTimeTextView.setTextColor(ContextCompat.getColor(context, R.color.red));
         } else {
-            holder.startTimeTextView.setTextColor(context.getResources().getColor(R.color.green));
-            holder.endTimeTextView.setTextColor(context.getResources().getColor(R.color.green));
+            holder.startTimeTextView.setTextColor(ContextCompat.getColor(context, R.color.green));
+            holder.endTimeTextView.setTextColor(ContextCompat.getColor(context, R.color.green));
         }
 
         /*
@@ -128,12 +129,12 @@ public class EventsCursorAdapter extends CursorAdapter {
         */
         if(pending) {
             holder.sendingStateTextView.setText(R.string.sendingStatePending);
-            holder.sendingStateTextView.setTextColor(context.getResources().getColor(R.color.red));
+            holder.sendingStateTextView.setTextColor(ContextCompat.getColor(context, R.color.red));
             holder.sendingStateTextView.setTypeface(null, Typeface.BOLD);
 
         } else {
             holder.sendingStateTextView.setText(R.string.ok);
-            holder.sendingStateTextView.setTextColor(context.getResources().getColor(R.color.green));
+            holder.sendingStateTextView.setTextColor(ContextCompat.getColor(context, R.color.green));
         }
     }
 

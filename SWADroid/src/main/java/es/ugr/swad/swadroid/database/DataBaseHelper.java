@@ -89,7 +89,7 @@ public class DataBaseHelper {
 	/**
 	 * Indicates if there are changes on db
 	 */
-	public static boolean dbCleaned = false;
+	private static boolean dbCleaned = false;
 	/**
 	 * Table name for courses
 	 */
@@ -242,29 +242,37 @@ public class DataBaseHelper {
         String firstParam = null;
         String secondParam = null;
 
-        if (table.equals(DataBaseHelper.DB_TABLE_TEST_QUESTIONS_COURSE)) {
-            firstParam = "qstCod";
-            secondParam = "crsCod";
-        } else if (table.equals(DataBaseHelper.DB_TABLE_TEST_QUESTION_ANSWERS)) {
-            firstParam = "qstCod";
-            secondParam = "ansCod";
-        } else if (table.equals(DataBaseHelper.DB_TABLE_USERS_COURSES)) {
-            firstParam = "userCode";
-            secondParam = "crsCod";
-        } else if (table.equals(DataBaseHelper.DB_TABLE_GROUPS_COURSES)) {
-            firstParam = "grpCod";
-            secondParam = "crsCod";
-        } else if (table.equals(DataBaseHelper.DB_TABLE_GROUPS_GROUPTYPES)) {
-            firstParam = "grpTypCod";
-            secondParam = "grpCod";
-        } else if (table.equals(DataBaseHelper.DB_TABLE_EVENTS_COURSES)) {
-            firstParam = "eventCode";
-            secondParam = "crsCod";
-        } else {
-            Log.e("selectParamsPairTable", "Table " + table + " not exists");
+        switch (table) {
+            case DataBaseHelper.DB_TABLE_TEST_QUESTIONS_COURSE:
+                firstParam = "qstCod";
+                secondParam = "crsCod";
+                break;
+            case DataBaseHelper.DB_TABLE_TEST_QUESTION_ANSWERS:
+                firstParam = "qstCod";
+                secondParam = "ansCod";
+                break;
+            case DataBaseHelper.DB_TABLE_USERS_COURSES:
+                firstParam = "userCode";
+                secondParam = "crsCod";
+                break;
+            case DataBaseHelper.DB_TABLE_GROUPS_COURSES:
+                firstParam = "grpCod";
+                secondParam = "crsCod";
+                break;
+            case DataBaseHelper.DB_TABLE_GROUPS_GROUPTYPES:
+                firstParam = "grpTypCod";
+                secondParam = "grpCod";
+                break;
+            case DataBaseHelper.DB_TABLE_EVENTS_COURSES:
+                firstParam = "eventCode";
+                secondParam = "crsCod";
+                break;
+            default:
+                Log.e("selectParamsPairTable", "Table " + table + " not exists");
+                break;
         }
 
-        return new Pair<String, String>(firstParam, secondParam);
+        return new Pair<>(firstParam, secondParam);
     }
     
     /**
@@ -291,144 +299,158 @@ public class DataBaseHelper {
         Pair<String, String> params;
         long id;
 
-        if (table.equals(DataBaseHelper.DB_TABLE_COURSES)) {
-            o = new Course(ent.getInt("id"),
-                    ent.getInt("userRole"),
-                    ent.getString("shortName"),
-                    ent.getString("fullName"));
-        } else if (table.equals(DataBaseHelper.DB_TABLE_TEST_QUESTIONS_COURSE) ||
-                table.equals(DataBaseHelper.DB_TABLE_TEST_QUESTION_ANSWERS) ||
-                table.equals(DataBaseHelper.DB_TABLE_USERS_COURSES) ||
-                table.equals(DataBaseHelper.DB_TABLE_GROUPS_COURSES) ||
-                table.equals(DataBaseHelper.DB_TABLE_GROUPS_GROUPTYPES) ||
-                table.equals(DataBaseHelper.DB_TABLE_EVENTS_COURSES)) {
+        switch (table) {
+            case DataBaseHelper.DB_TABLE_COURSES:
+                o = new Course(ent.getInt("id"),
+                        ent.getInt("userRole"),
+                        ent.getString("shortName"),
+                        ent.getString("fullName"));
+                break;
+            case DataBaseHelper.DB_TABLE_TEST_QUESTIONS_COURSE:
+            case DataBaseHelper.DB_TABLE_TEST_QUESTION_ANSWERS:
+            case DataBaseHelper.DB_TABLE_USERS_COURSES:
+            case DataBaseHelper.DB_TABLE_GROUPS_COURSES:
+            case DataBaseHelper.DB_TABLE_GROUPS_GROUPTYPES:
+            case DataBaseHelper.DB_TABLE_EVENTS_COURSES:
 
-            params = selectParamsPairTable(table);
+                params = selectParamsPairTable(table);
 
-            o = new PairTable<Integer, Integer>(table,
-                    ent.getInt(params.getFirst()),
-                    ent.getInt(params.getSecond()));
-        } else if (table.equals(DataBaseHelper.DB_TABLE_NOTIFICATIONS)) {
-            o = new SWADNotification(ent.getInt("notifCode"),
-            		ent.getInt("eventCode"),
-                    crypto.decrypt(ent.getString("eventType")),
-                    ent.getLong("eventTime"),
-                    crypto.decrypt(ent.getString("userSurname1")),
-                    crypto.decrypt(ent.getString("userSurname2")),
-                    crypto.decrypt(ent.getString("userFirstname")),
-                    crypto.decrypt(ent.getString("userPhoto")),
-                    crypto.decrypt(ent.getString("location")),
-                    crypto.decrypt(ent.getString("summary")),
-                    ent.getInt("status"),
-                    crypto.decrypt(ent.getString("content")),
-                    Utils.parseStringBool(ent.getString("seenLocal")),
-                    Utils.parseStringBool(ent.getString("seenRemote")));
-        } else if (table.equals(DataBaseHelper.DB_TABLE_TEST_QUESTIONS)) {
-            id = ent.getInt("id");
-            PairTable<?, ?> q = (PairTable<?, ?>) getRow(DataBaseHelper.DB_TABLE_TEST_QUESTIONS_COURSE, "qstCod", Long.toString(id));
+                o = new PairTable<>(table,
+                        ent.getInt(params.getFirst()),
+                        ent.getInt(params.getSecond()));
+                break;
+            case DataBaseHelper.DB_TABLE_NOTIFICATIONS:
+                o = new SWADNotification(ent.getInt("notifCode"),
+                        ent.getInt("eventCode"),
+                        crypto.decrypt(ent.getString("eventType")),
+                        ent.getLong("eventTime"),
+                        crypto.decrypt(ent.getString("userSurname1")),
+                        crypto.decrypt(ent.getString("userSurname2")),
+                        crypto.decrypt(ent.getString("userFirstname")),
+                        crypto.decrypt(ent.getString("userPhoto")),
+                        crypto.decrypt(ent.getString("location")),
+                        crypto.decrypt(ent.getString("summary")),
+                        ent.getInt("status"),
+                        crypto.decrypt(ent.getString("content")),
+                        Utils.parseStringBool(ent.getString("seenLocal")),
+                        Utils.parseStringBool(ent.getString("seenRemote")));
+                break;
+            case DataBaseHelper.DB_TABLE_TEST_QUESTIONS:
+                id = ent.getInt("id");
+                PairTable<?, ?> q = getRow(DataBaseHelper.DB_TABLE_TEST_QUESTIONS_COURSE, "qstCod", Long.toString(id));
 
-            if (q != null) {
-                o = new TestQuestion(id,
-                        (Integer) q.getFirst(),
-                        ent.getString("stem"),
-                        ent.getString("ansType"),
-                        Utils.parseStringBool(ent.getString("shuffle")),
-                        ent.getString("feedback"));
-            } else {
-                o = null;
-            }
-        } else if (table.equals(DataBaseHelper.DB_TABLE_TEST_ANSWERS)) {
-            id = ent.getId();
-            int ansInd = ent.getInt("ansInd");
-            PairTable<?, ?> a = (PairTable<?, ?>) getRow(DataBaseHelper.DB_TABLE_TEST_QUESTION_ANSWERS, "ansCod", Long.toString(id));
+                if (q != null) {
+                    o = new TestQuestion(id,
+                            (Integer) q.getFirst(),
+                            ent.getString("stem"),
+                            ent.getString("ansType"),
+                            Utils.parseStringBool(ent.getString("shuffle")),
+                            ent.getString("feedback"));
+                } else {
+                    o = null;
+                }
+                break;
+            case DataBaseHelper.DB_TABLE_TEST_ANSWERS:
+                id = ent.getId();
+                int ansInd = ent.getInt("ansInd");
+                PairTable<?, ?> a = getRow(DataBaseHelper.DB_TABLE_TEST_QUESTION_ANSWERS, "ansCod", Long.toString(id));
 
-            if (a != null) {
-                o = new TestAnswer(id,
-                        ansInd,
-                        (Integer) a.getFirst(),
-                        Utils.parseStringBool(ent.getString("correct")),
-                        ent.getString("answer"),
-                        ent.getString("answerFeedback"));
-            } else {
-                o = null;
-            }
-        } else if (table.equals(DataBaseHelper.DB_TABLE_TEST_TAGS)) {
-            id = ent.getInt("tagCod");
-            TestTag t = (TestTag) getRow(DataBaseHelper.DB_TABLE_TEST_QUESTION_TAGS, "tagCod", Long.toString(id));
+                if (a != null) {
+                    o = new TestAnswer(id,
+                            ansInd,
+                            (Integer) a.getFirst(),
+                            Utils.parseStringBool(ent.getString("correct")),
+                            ent.getString("answer"),
+                            ent.getString("answerFeedback"));
+                } else {
+                    o = null;
+                }
+                break;
+            case DataBaseHelper.DB_TABLE_TEST_TAGS:
+                id = ent.getInt("tagCod");
+                TestTag t = getRow(DataBaseHelper.DB_TABLE_TEST_QUESTION_TAGS, "tagCod", Long.toString(id));
 
-            if (t != null) {
-                o = new TestTag(id,
-                        t.getQstCodList(),
-                        ent.getString("tagTxt"),
+                if (t != null) {
+                    o = new TestTag(id,
+                            t.getQstCodList(),
+                            ent.getString("tagTxt"),
+                            ent.getInt("tagInd"));
+                } else {
+                    o = null;
+                }
+                break;
+            case DataBaseHelper.DB_TABLE_TEST_CONFIG:
+                o = new Test(ent.getInt("id"),
+                        ent.getInt("min"),
+                        ent.getInt("def"),
+                        ent.getInt("max"),
+                        ent.getString("feedback"),
+                        ent.getLong("editTime"));
+                break;
+            case DataBaseHelper.DB_TABLE_TEST_QUESTION_TAGS:
+                ArrayList<Integer> l = new ArrayList<>();
+                l.add(ent.getInt("qstCod"));
+                o = new TestTag(ent.getInt("tagCod"),
+                        l,
+                        null,
                         ent.getInt("tagInd"));
-            } else {
-                o = null;
-            }
-        } else if (table.equals(DataBaseHelper.DB_TABLE_TEST_CONFIG)) {
-            o = new Test(ent.getInt("id"),
-                    ent.getInt("min"),
-                    ent.getInt("def"),
-                    ent.getInt("max"),
-                    ent.getString("feedback"),
-                    ent.getLong("editTime"));
-        } else if (table.equals(DataBaseHelper.DB_TABLE_TEST_QUESTION_TAGS)) {
-            ArrayList<Integer> l = new ArrayList<Integer>();
-            l.add(ent.getInt("qstCod"));
-            o = new TestTag(ent.getInt("tagCod"),
-                    l,
-                    null,
-                    ent.getInt("tagInd"));
-        } else if (table.equals(DataBaseHelper.DB_TABLE_USERS)) {
-            try {
-                o = new User(ent.getInt("userCode"),
-                        null,                                // wsKey
-                        ent.getString("userID"),
-                        ent.getString("userNickname"),
-                        ent.getString("userSurname1"),
-                        ent.getString("userSurname2"),
-                        ent.getString("userFirstname"),
-                        ent.getString("photoPath"),
-                        null,                               //userBirthday
-                        ent.getInt("userRole"));
-            } catch (ParseException e) {
-                //Send exception details to Google Analytics
-                SWADroidTracker.sendException(mCtx, e, false);
-            }
-        } else if (table.equals(DataBaseHelper.DB_TABLE_USERS_ATTENDANCES)) {
-            o = new UserAttendance(ent.getInt("userCode"),
-                    ent.getInt("eventCode"),
-                    Utils.parseIntBool(ent.getInt("present")));
-        } else if (table.equals(DataBaseHelper.DB_TABLE_EVENTS_ATTENDANCES)) {
-            o = new Event(ent.getLong("id"),
-                    Utils.parseIntBool(ent.getInt("hidden")),
-                    crypto.decrypt(ent.getString("userSurname1")),
-                    crypto.decrypt(ent.getString("userSurname2")),
-                    crypto.decrypt(ent.getString("userFirstName")),
-                    crypto.decrypt(ent.getString("userPhoto")),
-                    ent.getLong("startTime"),
-                    ent.getLong("endTime"),
-                    Utils.parseIntBool(ent.getInt("commentsTeachersVisible")),
-                    crypto.decrypt(ent.getString("title")),
-                    crypto.decrypt(ent.getString("text")),
-                    crypto.decrypt(ent.getString("groups")),
-                    crypto.decrypt(ent.getString("status")));
-        } else if (table.equals(DataBaseHelper.DB_TABLE_GROUPS)) {
-            long groupTypeCode = getGroupTypeCodeFromGroup(ent.getLong("id"));
-            o = new Group(ent.getLong("id"),
-                    ent.getString("groupName"),
-                    groupTypeCode,
-                    ent.getInt("maxStudents"),
-                    ent.getInt("open"),
-                    ent.getInt("students"),
-                    ent.getInt("fileZones"),
-                    ent.getInt("member"));
-        } else if (table.equals(DataBaseHelper.DB_TABLE_GROUP_TYPES)) {
-            o = new GroupType(ent.getLong("id"),
-                    ent.getString("groupTypeName"),
-                    ent.getLong("courseCode"),
-                    ent.getInt("mandatory"),
-                    ent.getInt("multiple"),
-                    ent.getLong("openTime"));
+                break;
+            case DataBaseHelper.DB_TABLE_USERS:
+                try {
+                    o = new User(ent.getInt("userCode"),
+                            null,                                // wsKey
+                            ent.getString("userID"),
+                            ent.getString("userNickname"),
+                            ent.getString("userSurname1"),
+                            ent.getString("userSurname2"),
+                            ent.getString("userFirstname"),
+                            ent.getString("photoPath"),
+                            null,                               //userBirthday
+                            ent.getInt("userRole"));
+                } catch (ParseException e) {
+                    //Send exception details to Google Analytics
+                    SWADroidTracker.sendException(mCtx, e, false);
+                }
+                break;
+            case DataBaseHelper.DB_TABLE_USERS_ATTENDANCES:
+                o = new UserAttendance(ent.getInt("userCode"),
+                        ent.getInt("eventCode"),
+                        Utils.parseIntBool(ent.getInt("present")));
+                break;
+            case DataBaseHelper.DB_TABLE_EVENTS_ATTENDANCES:
+                o = new Event(ent.getLong("id"),
+                        Utils.parseIntBool(ent.getInt("hidden")),
+                        crypto.decrypt(ent.getString("userSurname1")),
+                        crypto.decrypt(ent.getString("userSurname2")),
+                        crypto.decrypt(ent.getString("userFirstName")),
+                        crypto.decrypt(ent.getString("userPhoto")),
+                        ent.getLong("startTime"),
+                        ent.getLong("endTime"),
+                        Utils.parseIntBool(ent.getInt("commentsTeachersVisible")),
+                        crypto.decrypt(ent.getString("title")),
+                        crypto.decrypt(ent.getString("text")),
+                        crypto.decrypt(ent.getString("groups")),
+                        crypto.decrypt(ent.getString("status")));
+                break;
+            case DataBaseHelper.DB_TABLE_GROUPS:
+                long groupTypeCode = getGroupTypeCodeFromGroup(ent.getLong("id"));
+                o = new Group(ent.getLong("id"),
+                        ent.getString("groupName"),
+                        groupTypeCode,
+                        ent.getInt("maxStudents"),
+                        ent.getInt("open"),
+                        ent.getInt("students"),
+                        ent.getInt("fileZones"),
+                        ent.getInt("member"));
+                break;
+            case DataBaseHelper.DB_TABLE_GROUP_TYPES:
+                o = new GroupType(ent.getLong("id"),
+                        ent.getString("groupTypeName"),
+                        ent.getLong("courseCode"),
+                        ent.getInt("mandatory"),
+                        ent.getInt("multiple"),
+                        ent.getLong("openTime"));
+                break;
         }
 
         return (T) o;
@@ -441,7 +463,7 @@ public class DataBaseHelper {
      * @return A list of Model's subclass objects
      */
     public <T extends Model> List<T>  getAllRows(String table) {
-        List<T> result = new ArrayList<T>();
+        List<T> result = new ArrayList<>();
         List<Entity> rows = db.getEntityList(table);
         T row;
 
@@ -463,7 +485,7 @@ public class DataBaseHelper {
      * @return A list of Model's subclass objects
      */
     public <T extends Model> List<T> getAllRows(String table, String where, String orderby) {
-        List<T> result = new ArrayList<T>();
+        List<T> result = new ArrayList<>();
         List<Entity> rows = db.getEntityList(table, where, orderby);
         T row;
 
@@ -576,7 +598,7 @@ public class DataBaseHelper {
      * @return A list of User's id
      */
     public List<Long> getUsersCourse(long courseCode) {
-        List<Long> result = new ArrayList<Long>();
+        List<Long> result = new ArrayList<>();
 
         List<Entity> rows = db.getEntityList(DataBaseHelper.DB_TABLE_USERS_COURSES, "crsCod = '" + courseCode + "'");
         if (rows != null) {
@@ -594,7 +616,7 @@ public class DataBaseHelper {
      * @return A list of User's id
      */
     public List<Long> getUserIdsEvent(int eventCode) {
-        List<Long> result = new ArrayList<Long>();
+        List<Long> result = new ArrayList<>();
 
         List<Entity> rows = db.getEntityList(DataBaseHelper.DB_TABLE_USERS_ATTENDANCES, "eventCode = '" + eventCode + "'");
         if (rows != null) {
@@ -612,7 +634,7 @@ public class DataBaseHelper {
      * @return A list of @link{UserAttendance} related to the selected event
      */
     public List<UserAttendance> getUsersEvent(int eventCode) {
-        List<UserAttendance> result = new ArrayList<UserAttendance>();
+        List<UserAttendance> result = new ArrayList<>();
         List<Entity> rows = db.getEntityList(DataBaseHelper.DB_TABLE_USERS_ATTENDANCES, "eventCode = '" + eventCode + "'");
 
         if (rows != null) {
@@ -657,7 +679,7 @@ public class DataBaseHelper {
      * @return A list of Event
      */
     public List<Event> getEventsCourse(long crsCod) {
-        List<Event> result = new ArrayList<Event>();
+        List<Event> result = new ArrayList<>();
         List<Entity> rows = db.getEntityList(DataBaseHelper.DB_TABLE_EVENTS_COURSES, "crsCod = '" + crsCod + "'");
 
         if (rows != null) {
@@ -725,7 +747,7 @@ public class DataBaseHelper {
         List<Entity> rows = db.getEntityList(table, "id = " + groupId);
         Group g = null;
         if (rows != null)
-            g = (Group) createObjectByTable(table, rows.get(0));
+            g = createObjectByTable(table, rows.get(0));
         return g;
     }
 
@@ -736,7 +758,7 @@ public class DataBaseHelper {
      * @return A list of group codes belonging to the selected course
      */
     public List<Long> getGroupCodesCourse(long courseCode) {
-        List<Long> result = new ArrayList<Long>();
+        List<Long> result = new ArrayList<>();
 
         List<Entity> rows = db.getEntityList(DataBaseHelper.DB_TABLE_GROUPS_COURSES, "crsCod = '" + courseCode + "'");
         if (rows != null) {
@@ -755,7 +777,7 @@ public class DataBaseHelper {
      * @return List of Groups
      */
     public List<Group> getGroupsOfType(long groupTypeCode) {
-        List<Group> groups = new ArrayList<Group>();
+        List<Group> groups = new ArrayList<>();
         List<Long> groupCodes = getGroupsCodesOfType(groupTypeCode);
         if (!groupCodes.isEmpty()) {
             for (Long groupCode : groupCodes) {
@@ -807,7 +829,7 @@ public class DataBaseHelper {
      * @return List of group codes
      */
     private List<Long> getGroupsCodesOfType(long groupTypeCode) {
-        List<Long> groupCodes = new ArrayList<Long>();
+        List<Long> groupCodes = new ArrayList<>();
         List<Entity> rows = db.getEntityList(DataBaseHelper.DB_TABLE_GROUPS_GROUPTYPES, "grpTypCod = '" + groupTypeCode + "'");
         if (rows != null) {
             for (Entity row : rows) {
@@ -825,10 +847,10 @@ public class DataBaseHelper {
      */
     public List<Group> getUserLoggedGroups(long courseCode) {
         List<Long> groupCodes = getGroupCodesCourse(courseCode);
-        List<Group> groups = new ArrayList<Group>();
+        List<Group> groups = new ArrayList<>();
         if (!groupCodes.isEmpty()) {
             for (Long groupCode : groupCodes) {
-                Group g = (Group) getRow(DataBaseHelper.DB_TABLE_GROUPS, "id", String.valueOf(groupCode));
+                Group g = getRow(DataBaseHelper.DB_TABLE_GROUPS, "id", String.valueOf(groupCode));
                 if (g.isMember()) groups.add(g);
             }
         }
@@ -862,7 +884,7 @@ public class DataBaseHelper {
      */
     public boolean isUserEnrolledCourse(String userID, long selectedCourseCode) {
         boolean enrolled = false;
-        User u = (User) getRow(DataBaseHelper.DB_TABLE_USERS, "userID", userID);
+        User u = getRow(DataBaseHelper.DB_TABLE_USERS, "userID", userID);
 
         if (u != null) {
             String sentencia = "SELECT userCode AS _id, crsCod" +
@@ -891,16 +913,19 @@ public class DataBaseHelper {
      * @param courseCode Course code to be referenced
      * @return Cursor access to the groups
      */
-    public List<Group> getGroups(long courseCode, String... filter) {
+    public List<Group> getGroups(long courseCode) {
         String select = "SELECT grpCod FROM " + DataBaseHelper.DB_TABLE_GROUPS_COURSES + " WHERE crsCod = " + courseCode + ";";
         Cursor groupCodes = db.getDB().rawQuery(select, null);
 
-        List<Group> groups = new ArrayList<Group>(groupCodes.getCount());
+        List<Group> groups = new ArrayList<>(groupCodes.getCount());
 
         while (groupCodes.moveToNext()) {
-            Group group = (Group) this.getRow(DataBaseHelper.DB_TABLE_GROUPS, "id", String.valueOf(groupCodes.getInt(0)));
+            Group group = this.getRow(DataBaseHelper.DB_TABLE_GROUPS, "id", String.valueOf(groupCodes.getInt(0)));
             groups.add(group);
         }
+
+        groupCodes.close();
+
         return groups;
     }
 
@@ -1146,13 +1171,13 @@ public class DataBaseHelper {
         //update all the relationship
         long groupCode = g.getId();
         rows = db.getEntityList(DataBaseHelper.DB_TABLE_GROUPS_COURSES, "grpCod =" + groupCode);
-        Course course = (Course) getRow(DataBaseHelper.DB_TABLE_COURSES, "id", String.valueOf(courseCode));
+        Course course = getRow(DataBaseHelper.DB_TABLE_COURSES, "id", String.valueOf(courseCode));
 
         //course code is a foreign key. Therefore, to avoid a database error,
         //it should not insert/modify rows in the relationship table if the course does not exists
         if (course != null) {
             if (rows.isEmpty()) {
-                PairTable<Long, Long> pair = new PairTable<Long, Long>(DataBaseHelper.DB_TABLE_GROUPS_COURSES, g.getId(), courseCode);
+                PairTable<Long, Long> pair = new PairTable<>(DataBaseHelper.DB_TABLE_GROUPS_COURSES, g.getId(), courseCode);
                 insertPairTable(pair);
             } else {
                 rows.get(0).setValue("crsCod", courseCode);
@@ -1169,9 +1194,9 @@ public class DataBaseHelper {
         //if(groupType != null){
         rows = db.getEntityList(DataBaseHelper.DB_TABLE_GROUPS_GROUPTYPES, "grpCod=" + groupCode);
         if (rows.isEmpty()) {
-            insertPairTable(new PairTable<Long, Long>(DataBaseHelper.DB_TABLE_GROUPS_GROUPTYPES, groupTypeCode, groupCode));
+            insertPairTable(new PairTable<>(DataBaseHelper.DB_TABLE_GROUPS_GROUPTYPES, groupTypeCode, groupCode));
         } else {
-			PairTable<Object, Object> prev = new PairTable<Object, Object>(DataBaseHelper.DB_TABLE_GROUPS_GROUPTYPES, rows.get(0).getValue("grpTypCod"), rows.get(0).getValue("grpCod"));
+			PairTable<Object, Object> prev = new PairTable<>(DataBaseHelper.DB_TABLE_GROUPS_GROUPTYPES, rows.get(0).getValue("grpTypCod"), rows.get(0).getValue("grpCod"));
 			PairTable<Object, Object> current = new PairTable<Object, Object>(DataBaseHelper.DB_TABLE_GROUPS_GROUPTYPES, groupTypeCode, groupCode);
             updatePairTable(prev, current);
         }
@@ -1187,7 +1212,7 @@ public class DataBaseHelper {
      */
     public boolean insertGroupType(GroupType gt) {
         boolean returnValue = true;
-        GroupType row = (GroupType) getRow(DataBaseHelper.DB_TABLE_GROUP_TYPES, "id", String.valueOf(gt.getId()));
+        GroupType row = getRow(DataBaseHelper.DB_TABLE_GROUP_TYPES, "id", String.valueOf(gt.getId()));
         if (row == null) {
             insertEntity(DataBaseHelper.DB_TABLE_GROUP_TYPES, gt);
         } else {
@@ -1199,9 +1224,9 @@ public class DataBaseHelper {
     public boolean insertCollection(String table, List<Model> currentModels, long... courseCode) {
         boolean result = true;
         Collection<? extends Model> modelsDB = getAllRows(table);
-        List<Model> newModels = new ArrayList<Model>();
-        List<Model> obsoleteModel = new ArrayList<Model>();
-        List<Model> modifiedModel = new ArrayList<Model>();
+        List<Model> newModels = new ArrayList<>();
+        List<Model> obsoleteModel = new ArrayList<>();
+        List<Model> modifiedModel = new ArrayList<>();
         
         beginTransaction();
 
@@ -1742,7 +1767,7 @@ public class DataBaseHelper {
             insertEntity(DataBaseHelper.DB_TABLE_GROUPS, currentGroup, ent);
 
             rows = db.getEntityList(DataBaseHelper.DB_TABLE_GROUPS_COURSES, "grpCod =" + groupCode);
-            Course course = (Course) getRow(DataBaseHelper.DB_TABLE_COURSES, "id", String.valueOf(courseCode));
+            Course course = getRow(DataBaseHelper.DB_TABLE_COURSES, "id", String.valueOf(courseCode));
             //course code is a foreign key. Therefore, to avoid a database error,
             //it should not insert/modify rows in the relationship table if the course does not exists
             if (course != null) {
@@ -1758,16 +1783,16 @@ public class DataBaseHelper {
             } else returnValue = false;
 
             if (groupTypeCode.length > 0) {
-                GroupType groupType = (GroupType) getRow(DataBaseHelper.DB_TABLE_GROUP_TYPES, "id", String.valueOf(groupTypeCode[0]));
+                GroupType groupType = getRow(DataBaseHelper.DB_TABLE_GROUP_TYPES, "id", String.valueOf(groupTypeCode[0]));
                 //group type code is a foreign key. Therefore, to avoid a database error,
                 //it should not insert/modify rows in the relationship table if the group type does not exists
                 if (groupType != null) {
                     rows = db.getEntityList(DataBaseHelper.DB_TABLE_GROUPS_GROUPTYPES, "grpCod=" + groupCode);
                     if (!rows.isEmpty()) {
-                        insertPairTable(new PairTable<Long, Long>(DataBaseHelper.DB_TABLE_GROUPS_GROUPTYPES, groupTypeCode[0], groupCode));
+                        insertPairTable(new PairTable<>(DataBaseHelper.DB_TABLE_GROUPS_GROUPTYPES, groupTypeCode[0], groupCode));
 
                     } else {
-						PairTable<Object, Object> prev = new PairTable<Object, Object>(DataBaseHelper.DB_TABLE_GROUPS_GROUPTYPES, rows.get(0).getValue("grpTypCod"), rows.get(0).getValue("grpCod"));
+						PairTable<Object, Object> prev = new PairTable<>(DataBaseHelper.DB_TABLE_GROUPS_GROUPTYPES, rows.get(0).getValue("grpTypCod"), rows.get(0).getValue("grpCod"));
 						PairTable<Object, Object> current = new PairTable<Object, Object>(DataBaseHelper.DB_TABLE_GROUPS_GROUPTYPES, groupTypeCode[0], groupCode);
                         updatePairTable(prev, current);
 
@@ -1925,7 +1950,7 @@ public class DataBaseHelper {
         String orderBy = "T.tagTxt ASC";
         String groupBy = "T.id";
         Cursor dbCursor = db.getDB().query(tables, columns, where, null, groupBy, null, orderBy);
-        List<TestTag> result = new ArrayList<TestTag>();
+        List<TestTag> result = new ArrayList<>();
         List<Integer> qstCodList;
         int idOld = -1;
         TestTag t = null;
@@ -1934,7 +1959,7 @@ public class DataBaseHelper {
             int id = dbCursor.getInt(0);
 
             if (id != idOld) {
-                qstCodList = new ArrayList<Integer>();
+                qstCodList = new ArrayList<>();
 
                 String tagTxt = dbCursor.getString(1);
                 qstCodList.add(dbCursor.getInt(2));
@@ -1948,6 +1973,8 @@ public class DataBaseHelper {
                 t.addQstCod(dbCursor.getInt(2));
             }
         }
+
+        dbCursor.close();
 
         return result;
     }
@@ -1969,7 +1996,7 @@ public class DataBaseHelper {
         String orderby = " ORDER BY RANDOM()";
         String limit = " LIMIT " + maxQuestions;
         Cursor dbCursorQuestions, dbCursorAnswers;
-        List<TestQuestion> result = new ArrayList<TestQuestion>();
+        List<TestQuestion> result = new ArrayList<>();
         List<TestAnswer> answers;
         int tagsListSize = tagsList.size();
         int answerTypesListSize = answerTypesList.size();
@@ -2022,7 +2049,7 @@ public class DataBaseHelper {
 
             where = " WHERE Q.qstCod=" + qstCod + " AND Q.ansCod=A._id";
             dbCursorAnswers = db.getDB().rawQuery(select + tables + where + orderby, null);
-            answers = new ArrayList<TestAnswer>();
+            answers = new ArrayList<>();
             while (dbCursorAnswers.moveToNext()) {
                 long ansCod = dbCursorAnswers.getLong(0);
                 int ansInd = dbCursorAnswers.getInt(1);
@@ -2035,7 +2062,11 @@ public class DataBaseHelper {
 
             q.setAnswers(answers);
             result.add(q);
+
+            dbCursorAnswers.close();
         }
+
+        dbCursorQuestions.close();
 
         return result;
     }
@@ -2263,7 +2294,7 @@ public class DataBaseHelper {
     /**
      * Upgrades the database structure
      */
-    public void upgradeDB(Context context) {
+    public void upgradeDB() {
         int dbVersion = db.getDB().getVersion();
 		/* 
 		 * Modify database keeping data:

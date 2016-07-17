@@ -23,6 +23,8 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.TypedValue;
 
 import java.text.Normalizer;
@@ -45,11 +47,11 @@ public class Utils {
 	/**
 	 * Random generator
 	 */
-	public static final Random rnd = new Random();
+	private static final Random rnd = new Random();
 	/**
 	 * Base string to generate random alphanumeric strings
 	 */
-	public static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	private static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	
     /**
      * Generates a random string of length len
@@ -76,9 +78,8 @@ public class Utils {
 
         //If boolean remains false there is no connection available
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null &&
+        return activeNetwork != null &&
                               activeNetwork.isConnectedOrConnecting();
-        return isConnected;
     }
 
     /**
@@ -200,6 +201,18 @@ public class Utils {
                 sp,
                 Resources.getSystem().getDisplayMetrics()
         );
+    }
+
+    public static Spanned fromHtml(String text) {
+        Spanned result;
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            result = Html.fromHtml(text,Html.FROM_HTML_MODE_LEGACY);
+        } else {
+            result = Html.fromHtml(text);
+        }
+
+        return result;
     }
 
 }

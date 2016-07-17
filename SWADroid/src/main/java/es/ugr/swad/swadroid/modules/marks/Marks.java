@@ -25,12 +25,12 @@ import es.ugr.swad.swadroid.utils.Utils;
  */
 public class Marks extends MenuActivity {
 
-	public static final String TAG = Constants.APP_TAG + " Marks";
+	private static final String TAG = Constants.APP_TAG + " Marks";
 
 	/**
 	 * Webview to show marks
 	 */
-	WebView webview;
+    private WebView webview;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

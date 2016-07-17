@@ -28,16 +28,16 @@ import java.util.Locale;
  */
 public class DateTimeUtils {
 
-    public final static long ONE_SECOND = 1000;
-    public final static long SECONDS = 60;
+    private final static long ONE_SECOND = 1000;
+    private final static long SECONDS = 60;
 
-    public final static long ONE_MINUTE = ONE_SECOND * 60;
-    public final static long MINUTES = 60;
+    private final static long ONE_MINUTE = ONE_SECOND * 60;
+    private final static long MINUTES = 60;
 
-    public final static long ONE_HOUR = ONE_MINUTE * 60;
-    public final static long HOURS = 24;
+    private final static long ONE_HOUR = ONE_MINUTE * 60;
+    private final static long HOURS = 24;
 
-    public final static long ONE_DAY = ONE_HOUR * 24;
+    private final static long ONE_DAY = ONE_HOUR * 24;
 
     private DateTimeUtils() {
     }
@@ -47,8 +47,8 @@ public class DateTimeUtils {
      * "<w> days, <x> hours, <y> minutes and (z) seconds"
      */
     public static String millisToLongDHMS(long duration) {
-        StringBuffer res = new StringBuffer();
-        long temp = 0;
+        StringBuilder res = new StringBuilder();
+        long temp;
         if (duration >= ONE_SECOND) {
             temp = duration / ONE_DAY;
             if (temp > 0) {
@@ -89,7 +89,7 @@ public class DateTimeUtils {
      * "<dd:>hh:mm:ss"
      */
     public static String millisToShortDHMS(long duration) {
-        String res = "";
+        String res;
         duration /= ONE_SECOND;
         int seconds = (int) (duration % SECONDS);
         duration /= SECONDS;

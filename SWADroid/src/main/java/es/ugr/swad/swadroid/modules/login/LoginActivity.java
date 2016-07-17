@@ -15,15 +15,11 @@
 
 package es.ugr.swad.swadroid.modules.login;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
@@ -31,6 +27,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -45,12 +42,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.preferences.Preferences;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.gui.DialogFactory;
-import es.ugr.swad.swadroid.modules.password.RecoverPassword;
+import es.ugr.swad.swadroid.gui.ProgressScreen;
 import es.ugr.swad.swadroid.modules.account.CreateAccountActivity;
+import es.ugr.swad.swadroid.modules.password.RecoverPassword;
+import es.ugr.swad.swadroid.preferences.Preferences;
 import es.ugr.swad.swadroid.utils.Crypto;
 import es.ugr.swad.swadroid.utils.Utils;
 
@@ -63,21 +61,18 @@ import es.ugr.swad.swadroid.utils.Utils;
  */
 public class LoginActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    public static final String TAG = Constants.APP_TAG + " LoginActivity";
+    private static final String TAG = Constants.APP_TAG + " LoginActivity";
 
     private static List<String> serversList;
 
-    private boolean mLoginError = false;
     // UI references for the login form.
     private EditText mIDView;
     private EditText mPasswordView;
     private EditText mServerTextView;
     private Spinner mServerView;
-    private View mLoginFormView;
-    private View mLoginStatusView;
-    private TextView mLoginStatusMessageView;
     private boolean mFromPreference = false;
-    private ArrayAdapter<CharSequence> serverAdapter;
+    private ArrayAdapter<String> serverAdapter;
+    private ProgressScreen mProgressScreen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,15 +90,22 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
     protected void onResume() {
         super.onResume();
 
-        if(!mServerView.getSelectedItem().equals(Preferences.getServer())) {
-            setSelectedServer(Preferences.getServer());
+        String server = Preferences.getServer();
+
+        if((server != null) && (!server.isEmpty()) &&
+                !mServerView.getSelectedItem().equals(server)) {
+
+            setSelectedServer(server);
         }
     }
 
     private void setupLoginForm() {
-        
-        mLoginFormView = findViewById(R.id.login_form);
-        mLoginStatusView = findViewById(R.id.login_status);
+        View mLoginFormView = findViewById(R.id.create_account_form);
+        View mProgressScreenView = findViewById(R.id.progress_screen);
+
+        mProgressScreen = new ProgressScreen(mProgressScreenView, mLoginFormView,
+                getString(R.string.login_progress_signing_in), this);
+
         Button mSignInButton = (Button) findViewById(R.id.sign_in_button);
         Button mLostPasswordButton = (Button) findViewById(R.id.lost_password);
         Button mCreateAccountButton = (Button) findViewById(R.id.create_account);
@@ -112,7 +114,9 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         mIDView.setText(Preferences.getUserID());
 
         mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setText("");
+        if (mPasswordView != null) {
+            mPasswordView.setText("");
+        }
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -153,37 +157,63 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
 
         mServerView = (Spinner) findViewById(R.id.serverSpinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
-        serverAdapter = ArrayAdapter.createFromResource(this,
-                R.array.servers_array, android.R.layout.simple_spinner_item);
+        serverAdapter = new ArrayAdapter<String>(
+                this, android.R.layout.simple_spinner_item, serversList) {
+
+            @Override
+            public boolean isEnabled(int position){
+                return position != 0;
+            }
+
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        ViewGroup parent) {
+
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+
+                if(position == 0) {
+                    // Set the disable item text color
+                    tv.setTextColor(Color.GRAY);
+                }
+                else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+        };
         // Specify the layout to use when the list of choices appears
         serverAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         mServerView.setAdapter(serverAdapter);
         mServerView.setOnItemSelectedListener(this);
 
-        if (serverAdapter.getItem(0).equals(Constants.SWAD_UGR_SERVER))
-            mPasswordView.setError(getString(R.string.error_password_summaryUGR));
+        if (mSignInButton != null) {
+            mSignInButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    attemptLogin();
+                }
+            });
+        }
 
-        mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
+        if (mLostPasswordButton != null) {
+            mLostPasswordButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    recoverPasswordDialog();
+                }
+            });
+        }
 
-        mSignInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });
-        mLostPasswordButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                recoverPasswordDialog();
-            }
-        });
-        mCreateAccountButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                createAccount();
-            }
-        });
+        if (mCreateAccountButton != null) {
+            mCreateAccountButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    createAccount();
+                }
+            });
+        }
     }
 
     /**
@@ -191,7 +221,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
      * If there are form errors (invalid DNI, missing fields, etc.), the errors
      * are presented and no actual login attempt is made.
      */
-    public void attemptLogin() {
+    private void attemptLogin() {
         SWADroidTracker.sendScreenView(getApplicationContext(), "SWADroid Login");
 
         // Values for ID and password at the time of the login attempt.
@@ -204,6 +234,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         mIDView.setError(null);
         mPasswordView.setError(null);
         mServerTextView.setError(null);
+        spinnerSetError(null);
 
         boolean cancel = false;
         View focusView = null;
@@ -213,7 +244,10 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         passwordValue = mPasswordView.getText().toString();
         serverValue = mServerView.getSelectedItem().toString();
 
-        if(serverValue.contains(getString(R.string.otherMsg))) {
+        if(serverValue.equals(serversList.get(0))) {
+            spinnerSetError(getString(R.string.noServer));
+            serverValue = "";
+        } else if(serverValue.contains(getString(R.string.otherMsg))) {
             serverValue = mServerTextView.getText().toString().replaceFirst("^(http://|https://)","");
         }
 
@@ -265,16 +299,14 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
             try {
                 Preferences.setUserID(idValue);
                 Preferences.setUserPassword(Crypto.encryptPassword(passwordValue));
             } catch (NoSuchAlgorithmException e) {
-                // TODO, solucionar
                 //error(TAG, e.getMessage(), e, true);
             }
 
-            showProgress(true);
+            mProgressScreen.show();
             startActivityForResult(new Intent(this, Login.class), Constants.LOGIN_REQUEST_CODE);
         }
     }
@@ -282,7 +314,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
     /**
      * Creates a new account
      */
-    public void createAccount() {
+    private void createAccount() {
         startActivityForResult(new Intent(this, CreateAccountActivity.class), Constants.CREATE_ACCOUNT_REQUEST_CODE);
     }
 
@@ -291,11 +323,10 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case Constants.LOGIN_REQUEST_CODE:
-                    showProgress(false);
+                    mProgressScreen.hide();
                     Login.setLogged(true);
                     setResult(RESULT_OK);
                     mFromPreference = false;
-                    mLoginError = false;
                     finish();
                     break;
                 case Constants.RECOVER_PASSWORD_REQUEST_CODE:
@@ -310,8 +341,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         } else if (resultCode == Activity.RESULT_CANCELED) {
             switch (requestCode) {
                 case Constants.LOGIN_REQUEST_CODE:
-                    mLoginError = true;
-                    showProgress(false);
+                    mProgressScreen.hide();
                     break;
                 case Constants.RECOVER_PASSWORD_REQUEST_CODE:
                     Toast.makeText(this, R.string.lost_password_failure, Toast.LENGTH_LONG).show();
@@ -319,47 +349,6 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
                 case Constants.CREATE_ACCOUNT_REQUEST_CODE:
                     break;
             }
-        }
-    }
-    
-    /**
-     * Shows the progress UI and hides the login form.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-            mLoginStatusView.setVisibility(View.VISIBLE);
-            mLoginStatusView.animate()
-                            .setDuration(shortAnimTime)
-                            .alpha(show ? 1 : 0)
-                            .setListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    mLoginStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
-                                }
-                            });
-
-            mLoginFormView.setVisibility(View.VISIBLE);
-            mLoginFormView.animate()
-                          .setDuration(shortAnimTime)
-                          .alpha(show ? 0 : 1)
-                          .setListener(new AnimatorListenerAdapter() {
-                              @Override
-                              public void onAnimationEnd(Animator animation) {
-                                  mLoginFormView.setVisibility(mLoginError ? View.VISIBLE
-                                          : View.GONE);
-                              }
-                          });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mLoginStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
 
@@ -440,14 +429,17 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
     }
 
     private void setServer(int position) {
-        String serverValue = serverAdapter.getItem(position).toString();
+        String serverValue = serverAdapter.getItem(position);
 
         //Reset password error
         mPasswordView.setError(null);
-        if (Constants.SWAD_UGR_SERVER.equals(serverValue))
-            mPasswordView.setError(getString(R.string.error_password_summaryUGR));
 
-        if(serverValue.contains(getString(R.string.otherMsg))) {
+        if (serverValue.isEmpty() || serverValue.equals(serversList.get(0))) {
+            spinnerSetError(getString(R.string.noServer));
+        } else if (Constants.SWAD_UGR_SERVER.equals(serverValue)) {
+            mPasswordView.setError(getString(R.string.error_password_summaryUGR));
+            Preferences.setServer(serverValue);
+        } else if(serverValue.contains(getString(R.string.otherMsg))) {
             mServerTextView.setText(Preferences.getServer());
             mServerTextView.setVisibility(View.VISIBLE);
         } else {
@@ -468,5 +460,19 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         }
 
         mServerView.setSelection(serverPosition);
+    }
+
+    private void spinnerSetError(String error) {
+        View selectedView = mServerView.getSelectedView();
+
+        if ((selectedView != null) && (selectedView instanceof TextView)) {
+            TextView selectedTextView = (TextView) selectedView;
+
+            if ((error == null) || (error.isEmpty())) {
+                selectedTextView.setError(null);
+            } else {
+                selectedTextView.setError(error);
+            }
+        }
     }
 }

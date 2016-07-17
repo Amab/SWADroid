@@ -51,10 +51,6 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
  */
 public class Groups extends Module {
     /**
-     * Groups counter
-     */
-    private int numGroups;
-    /**
      * Course code
      */
     private long courseCode;
@@ -90,7 +86,7 @@ public class Groups extends Module {
             runConnection();
         } catch (Exception e) {
             String errorMsg = getString(R.string.errorServerResponseMsg);
-            error(TAG, errorMsg, e, true);
+            error(errorMsg, e, true);
         }
     }
 
@@ -108,10 +104,7 @@ public class Groups extends Module {
 
     @Override
     protected void connect() {
-        String progressDescription = getString(R.string.groupsProgressDescription);
-        int progressTitle = R.string.groupsProgressTitle;
-
-        startConnection(true, progressDescription, progressTitle);
+        startConnection();
     }
 
 
@@ -124,11 +117,11 @@ public class Groups extends Module {
 
         if (result != null) {
             //Stores groups data returned by webservice response
-            List<Model> groupsSWAD = new ArrayList<Model>();
+            List<Model> groupsSWAD = new ArrayList<>();
 
             ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
             SoapObject soap = (SoapObject) res.get(1);
-            numGroups = soap.getPropertyCount();
+            int numGroups = soap.getPropertyCount();
 
             for (int i = 0; i < numGroups; i++) {
                 SoapObject pii = (SoapObject) soap.getProperty(i);

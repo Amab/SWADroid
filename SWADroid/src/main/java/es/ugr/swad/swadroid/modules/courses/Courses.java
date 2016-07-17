@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.Vector;
 
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.model.Course;
@@ -114,10 +113,7 @@ public class Courses extends Module {
      */
     @Override
     protected void connect() {
-        String progressDescription = getString(R.string.coursesProgressDescription);
-        int progressTitle = R.string.coursesProgressTitle;
-
-        startConnection(false, progressDescription, progressTitle);
+        startConnection();
     }
 
     /* (non-Javadoc)
@@ -135,17 +131,16 @@ public class Courses extends Module {
         if (result != null) {
             //Stores courses data returned by webservice response
             List<Model> coursesDB = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_COURSES);
-            List<Model> coursesSWAD = new ArrayList<Model>();
-            List<Model> newCourses = new ArrayList<Model>();
-            List<Model> obsoleteCourses = new ArrayList<Model>();
-            //List<Model> modifiedCourses = new ArrayList<Model>();
+            List<Model> coursesSWAD = new ArrayList<>();
+            List<Model> newCourses = new ArrayList<>();
+            List<Model> obsoleteCourses = new ArrayList<>();
+
 			ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
             SoapObject soap = (SoapObject) res.get(1);
             int csSize = soap.getPropertyCount();
             for (int i = 0; i < csSize; i++) {
                 SoapObject pii = (SoapObject) soap.getProperty(i);
                 long id = Long.parseLong(pii.getProperty("courseCode").toString());
-                //String name = pii.getProperty("courseName").toString(); this field is obsolete, and will be erased in the future
                 int userRole = Integer.parseInt(pii.getProperty("userRole").toString());
                 String shortName = pii.getProperty("courseShortName").toString();
                 String fullName = pii.getProperty("courseFullName").toString();
@@ -165,14 +160,7 @@ public class Courses extends Module {
             //Obtain new registered courses
             newCourses.addAll(coursesSWAD);
             newCourses.removeAll(coursesDB);
-            //modifiedCourses.addAll(newCourses);
             newCourses.removeAll(obsoleteCourses);
-
-            //modified courses
-            // modifiedCourses.removeAll(newCourses);
-
-            //Only old unregistered courses
-            //obsoleteCourses.removeAll(modifiedCourses);
 
             //Delete old unregistered courses stuff
             csSize = obsoleteCourses.size();
@@ -191,14 +179,6 @@ public class Courses extends Module {
             }
 
             Log.i(TAG, "Added " + csSize + " new courses");
-
-            //update modified courses
-            /*   csSize = modifiedCourses.size();
-            for(int i=0; i < csSize; ++i){
-            	Course c = (Course) newCourses.get(i);
-            	dbHelper.updateCourse(c.getId(), c);
-            }
-            Log.i(TAG, "Updated " + csSize + " courses");*/
 
             //Request finalized without errors
             setResult(RESULT_OK);
@@ -241,7 +221,7 @@ public class Courses extends Module {
 
 	/**
 	 * Gets code of current course
-	 * return -1 if no course chosen; code of current course in other case
+	 * @return -1 if no course chosen; code of current course in other case
 	 */
 	public static long getSelectedCourseCode() {
 	    return selectedCourseCode;
@@ -251,7 +231,6 @@ public class Courses extends Module {
 	 * Sets code of current course
 	 */
 	public static void setSelectedCourseCode(long currentCourseCode) {
-	    //if (currentCourseCode > 0) selectedCourseCode = currentCourseCode;
 	    selectedCourseCode = currentCourseCode;
 	}
 
