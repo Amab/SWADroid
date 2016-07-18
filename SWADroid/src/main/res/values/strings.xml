@@ -109,7 +109,7 @@
     <string name="noticePublished">Notice published</string>
     <string name="noContentNoticeMsg">You must enter the contents of the notice</string>
     <string name="sendMsg">Send</string>
-    <string name="selectRcvModuleLabel">Select Receivers</string>
+    <string name="selectRcvModuleLabel">Select receivers</string>
     <string name="filterUsersListModuleLabel">Filter Receivers</string>
     <string name="acceptFilters">Filter</string>
     <string name="cancelFilters">Cancel</string>
@@ -328,5 +328,6 @@
     <string name="notificationsMarkingAllAsReadMsg">Marking all notifications as read…</string>
     <string name="syncronizingMsg">Syncronizing…</string>
     <string name="search">Search</string>
+    <string name="search_user">Search user</string>
 
 </resources>

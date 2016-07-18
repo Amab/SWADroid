@@ -111,7 +111,7 @@
     <string name="noticePublished">Aviso publicado</string>
     <string name="noContentNoticeMsg">Debe introducir el contenido del aviso</string>
     <string name="sendMsg">Enviar</string>
-    <string name="selectRcvModuleLabel">Seleccionar Destinatarios</string>
+    <string name="selectRcvModuleLabel">Seleccionar destinatarios</string>
     <string name="filterUsersListModuleLabel">Filtrar Destinatarios</string>
     <string name="acceptFilters">Filtrar</string>
     <string name="cancelFilters">Cancel</string>
@@ -318,5 +318,6 @@
     <string name="notificationsMarkingAllAsReadMsg">Marcando todas las notificaciones como leídas…</string>
     <string name="syncronizingMsg">Sincronizando…</string>
     <string name="search">Buscar</string>
+    <string name="search_user">Buscar usuario</string>
 
 </resources>
