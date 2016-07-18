@@ -3,44 +3,25 @@ package es.ugr.swad.swadroid.modules.messages;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.modules.Module;
 
 /**
  * Created by Romilgildo on 17/07/2016.
  */
-public class SearchUsers extends Module implements SearchView.OnQueryTextListener {
+public class SearchUsers extends MenuExpandableListActivity implements SearchView.OnQueryTextListener, SwipeRefreshLayout.OnRefreshListener {
     private TextView info;
-
-    @Override
-    protected void requestService() throws Exception {
-
-    }
-
-    @Override
-    protected void connect() {
-
-    }
-
-    @Override
-    protected void postConnect() {
-
-    }
-
-    @Override
-    protected void onError() {
-
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.search_users);
+        setContentView(R.layout.list_items_pulltorefresh);
         setTitle(R.string.selectRcvModuleLabel);
     }
 
@@ -79,5 +60,10 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
     @Override
     public boolean onQueryTextChange(String newText) {
         return false;
+    }
+
+    @Override
+    public void onRefresh() {
+
     }
 }
