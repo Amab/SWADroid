@@ -5,12 +5,12 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.TextView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
@@ -18,17 +18,20 @@ import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
 /**
  * Created by Romilgildo on 17/07/2016.
  */
-public class SearchUsers extends MenuExpandableListActivity implements SearchView.OnQueryTextListener, SwipeRefreshLayout.OnRefreshListener {
-    private TextView info;
+public class SearchUsers extends MenuExpandableListActivity implements SearchView.OnQueryTextListener {
     private SearchView searchView;
     private MenuItem searchItem;
+    private static ListView lvUsers;
+    private String[] receivers = {};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.search_users); //list_items_pulltorefresh
+        setContentView(R.layout.list_items);
         setTitle(R.string.actionBarAddUser);
-        info = (TextView) findViewById(R.id.text_user);
+
+        lvUsers = (ListView) findViewById(R.id.listItems);
+
     }
 
     @Override
@@ -41,6 +44,9 @@ public class SearchUsers extends MenuExpandableListActivity implements SearchVie
         searchView.setQueryHint(getText(R.string.search_user));
         // LISTENER PARA EL EDIT TEXT
         searchView.setOnQueryTextListener(this);
+
+        // para que aparezca el buscador al comienzo
+        //searchItem.expandActionView();
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -61,13 +67,18 @@ public class SearchUsers extends MenuExpandableListActivity implements SearchVie
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
     public boolean onQueryTextSubmit(String query) {
-        info.setText(query);
+
+        //lista de usuarios
+        receivers = new String[]{query};
+
+        //mensaje sobre los usuarios encontrados
         Toast.makeText(SearchUsers.this, R.string.users_found, Toast.LENGTH_SHORT).show();
 
         //quitamos el teclado virtual
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
 
+        //cierra el searchview
         searchItem.collapseActionView();
 
         return true;
@@ -76,10 +87,5 @@ public class SearchUsers extends MenuExpandableListActivity implements SearchVie
     @Override
     public boolean onQueryTextChange(String newText) {
         return true;
-    }
-
-    @Override
-    public void onRefresh() {
-
     }
 }
