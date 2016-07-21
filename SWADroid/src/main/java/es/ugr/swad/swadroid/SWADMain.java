@@ -35,7 +35,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.LinearLayout;
@@ -123,6 +122,8 @@ public class SWADMain extends MenuExpandableListActivity {
     private TextView mBirthdayTextView;
     private ExpandableListView mExpandableListView;
     private ImageExpandableListAdapter mExpandableListAdapter;
+    private Spinner mCoursesSpinner;
+
     private final ArrayList<HashMap<String, Object>> mHeaderData = new ArrayList<>();
     private final ArrayList<ArrayList<HashMap<String, Object>>> mChildData = new ArrayList<>();
     private final ArrayList<HashMap<String, Object>> mMessagesData = new ArrayList<>();
@@ -174,8 +175,8 @@ public class SWADMain extends MenuExpandableListActivity {
         	 */
         	if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
         		/*
-	  SSL connection
-	 */
+                  SSL connection
+                 */
                 SecureConnection conn = new SecureConnection();
         		conn.initSecureConnection();
         		//conn.initUntrustedSecureConnection();
@@ -347,11 +348,10 @@ public class SWADMain extends MenuExpandableListActivity {
     }
 
     private void createSpinnerAdapter() {
-        Spinner spinner = (Spinner) this.findViewById(R.id.spinner);
         listCourses = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_COURSES, null, "fullName");
         /*
-      Cursor for database access
-     */
+          Cursor for database access
+         */
         Cursor dbCursor = dbHelper.getDb().getCursor(DataBaseHelper.DB_TABLE_COURSES, null, "fullName");
         startManagingCursor(dbCursor);
         if (listCourses.size() != 0) {
@@ -362,13 +362,16 @@ public class SWADMain extends MenuExpandableListActivity {
                     new int[]{android.R.id.text1});
 
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner.setAdapter(adapter);
-            spinner.setOnItemSelectedListener(new onItemSelectedListener());
+            mCoursesSpinner.setAdapter(adapter);
+            mCoursesSpinner.setOnItemSelectedListener(new onItemSelectedListener());
+
             if (Preferences.getLastCourseSelected() < listCourses.size())
-                spinner.setSelection(Preferences.getLastCourseSelected());
+                mCoursesSpinner.setSelection(Preferences.getLastCourseSelected());
             else
-                spinner.setSelection(0);
-            	spinner.setOnTouchListener(Spinner_OnTouch);
+                mCoursesSpinner.setSelection(0);
+
+            mCoursesSpinner.setOnTouchListener(Spinner_OnTouch);
+            mCoursesSpinner.setVisibility(View.VISIBLE);
         } else {
             cleanSpinner();
         }
@@ -379,10 +382,10 @@ public class SWADMain extends MenuExpandableListActivity {
      * Create an empty spinner. It is called when the database is cleaned.
      */
     private void cleanSpinner() {
-        Spinner spinner = (Spinner) this.findViewById(R.id.spinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, new String[]{getString(R.string.clickToGetCourses)});
-        spinner.setAdapter(adapter);
-        spinner.setOnTouchListener(Spinner_OnTouch);
+        /*ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, new String[]{getString(R.string.clickToGetCourses)});
+        mCoursesSpinner.setAdapter(adapter);
+        mCoursesSpinner.setOnTouchListener(Spinner_OnTouch);*/
+        mCoursesSpinner.setVisibility(View.GONE);
     }
 
     private class onItemSelectedListener implements OnItemSelectedListener {
@@ -435,10 +438,12 @@ public class SWADMain extends MenuExpandableListActivity {
     private void createMenu() {
         if (listCourses.size() != 0) {
             Course courseSelected;
+
             if (Courses.getSelectedCourseCode() != -1) {
                 courseSelected = dbHelper.getRow(DataBaseHelper.DB_TABLE_COURSES, "id", String.valueOf(Courses.getSelectedCourseCode()));
             } else {
                 int lastSelected = Preferences.getLastCourseSelected();
+
                 if (lastSelected != -1 && lastSelected < listCourses.size()) {
                     courseSelected = (Course) listCourses.get(lastSelected);
                     Courses.setSelectedCourseCode(courseSelected.getId());
@@ -460,13 +465,58 @@ public class SWADMain extends MenuExpandableListActivity {
                 if ((mExpandableListView.getAdapter() == null) || dBCleaned) {
                     createBaseMenu();
                 }
+
                 int userRole = courseSelected.getUserRole();
-                if ((userRole == Constants.TEACHER_TYPE_CODE) && (currentRole != Constants.TEACHER_TYPE_CODE))
-                    changeToTeacherMenu();
-                if ((userRole == Constants.STUDENT_TYPE_CODE) && (currentRole != Constants.STUDENT_TYPE_CODE))
-                    changeToStudentMenu();
+
+                switch(userRole) {
+                    case Constants.STUDENT_TYPE_CODE:
+                                                        changeToStudentMenu();
+                                                        break;
+                    case Constants.TEACHER_TYPE_CODE:
+                                                        changeToTeacherMenu();
+                                                        break;
+
+                }
+
                 dBCleaned = false;
             }
+        } else {
+            Courses.setSelectedCourseCode(-1);
+            currentRole = -1;
+
+            createNoCourseMenu();
+        }
+
+        refreshMainMenu();
+    }
+
+    /**
+     * Creates menu when there are no courses available. This menu is common for students and teachers.
+     */
+    private void createNoCourseMenu() {
+        if (currentRole == -1) {
+            clearMenu();
+
+            //Order:
+            // 1- Messages
+            // 2- Users
+            mHeaderData.add(getMenuItem(R.string.users, R.drawable.users));
+            mHeaderData.add(getMenuItem(R.string.messages, R.drawable.msg));
+
+            mChildData.add(mUsersData);
+            mChildData.add(mMessagesData);
+
+            //Users category
+            //Generate QR code
+            mUsersData.add(getMenuItem(R.string.generateQRModuleLabel, R.drawable.qr));
+
+            //Messages category
+            //Notifications
+            mMessagesData.add(getMenuItem(R.string.notificationsModuleLabel, R.drawable.notif));
+            //Messages
+            mMessagesData.add(getMenuItem(R.string.messagesModuleLabel, R.drawable.msg_write));
+
+            Log.i(TAG, "Created No Course Menu");
         }
     }
 
@@ -475,8 +525,9 @@ public class SWADMain extends MenuExpandableListActivity {
      * Sets currentRole to student role
      */
     private void createBaseMenu() {
-        mExpandableListView.setVisibility(View.VISIBLE);
         if (mExpandableListView.getAdapter() == null || currentRole == -1) {
+            clearMenu();
+
             //the menu base is equal to students menu.
             currentRole = Constants.STUDENT_TYPE_CODE;
 
@@ -486,138 +537,61 @@ public class SWADMain extends MenuExpandableListActivity {
             // 3- Messages
             // 4- Enrollment
             // 5- Users
-            final HashMap<String, Object> courses = new HashMap<>();
-            courses.put(NAME, getString(R.string.course));
-            courses.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.crs));
-            mHeaderData.add(courses);
-
-            final HashMap<String, Object> evaluation = new HashMap<>();
-            evaluation.put(NAME, getString(R.string.evaluation));
-            evaluation.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.ass));
-            mHeaderData.add(evaluation);
-
-            final HashMap<String, Object> users = new HashMap<>();
-            users.put(NAME, getString(R.string.users));
-            users.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.users));
-            mHeaderData.add(users);
-
-            final HashMap<String, Object> messages = new HashMap<>();
-            messages.put(NAME, getString(R.string.messages));
-            messages.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.msg));
-            mHeaderData.add(messages);
+            mHeaderData.add(getMenuItem(R.string.course, R.drawable.crs));
+            mHeaderData.add(getMenuItem(R.string.evaluation, R.drawable.ass));
+            mHeaderData.add(getMenuItem(R.string.users, R.drawable.users));
+            mHeaderData.add(getMenuItem(R.string.messages, R.drawable.msg));
 
             final ArrayList<HashMap<String, Object>> courseData = new ArrayList<>();
             mChildData.add(courseData);
-            
+
             final ArrayList<HashMap<String, Object>> evaluationData = new ArrayList<>();
             mChildData.add(evaluationData);
 
             mChildData.add(mUsersData);
             mChildData.add(mMessagesData);
 
-            HashMap<String, Object> map;
-            
             //Course category
             //Introduction
-            map = new HashMap<>();
-            map.put(NAME, getString(R.string.introductionModuleLabel));
-            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.info));
-            courseData.add(map);
+            courseData.add(getMenuItem(R.string.introductionModuleLabel, R.drawable.info));
             //Teaching Guide
-            map = new HashMap<>();
-            map.put(NAME, getString(R.string.teachingguideModuleLabel));
-            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.file));
-            courseData.add(map);
+            courseData.add(getMenuItem(R.string.teachingguideModuleLabel, R.drawable.file));
             //Syllabus (lectures)
-            map = new HashMap<>();
-            map.put(NAME, getString(R.string.syllabusLecturesModuleLabel));
-            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.syllabus));
-            courseData.add(map);
+            courseData.add(getMenuItem(R.string.syllabusLecturesModuleLabel, R.drawable.syllabus));
             //Syllabus (practicals)
-            map = new HashMap<>();
-            map.put(NAME, getString(R.string.syllabusPracticalsModuleLabel));
-            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.lab));
-            courseData.add(map);
+            courseData.add(getMenuItem(R.string.syllabusPracticalsModuleLabel, R.drawable.lab));
             //Documents
-            map = new HashMap<>();
-            map.put(NAME, getString(R.string.documentsDownloadModuleLabel));
-            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.folder));            
-            courseData.add(map);
-            //Shared area 
-            map = new HashMap<>();
-            map.put(NAME, getString(R.string.sharedsDownloadModuleLabel));
-            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.folder_users));
-            courseData.add(map);
+            courseData.add(getMenuItem(R.string.documentsDownloadModuleLabel, R.drawable.folder));
+            //Shared area
+            courseData.add(getMenuItem(R.string.sharedsDownloadModuleLabel, R.drawable.folder_users));
             //Bibliography
-            map = new HashMap<>();
-            map.put(NAME, getString(R.string.bibliographyModuleLabel));
-            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.book));
-            courseData.add(map);
+            courseData.add(getMenuItem(R.string.bibliographyModuleLabel, R.drawable.book));
             //FAQs
-            map = new HashMap<>();
-            map.put(NAME, getString(R.string.faqsModuleLabel));
-            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.faq));
-            courseData.add(map);
+            courseData.add(getMenuItem(R.string.faqsModuleLabel, R.drawable.faq));
             //Links
-            map = new HashMap<>();
-            map.put(NAME, getString(R.string.linksModuleLabel));
-            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.link));
-            courseData.add(map);
-            
+            courseData.add(getMenuItem(R.string.linksModuleLabel, R.drawable.link));
+
             //Evaluation category
             //Assessment system
-            map = new HashMap<>();
-            map.put(NAME, getString(R.string.assessmentModuleLabel));
-            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.info));
-            evaluationData.add(map);
+            evaluationData.add(getMenuItem(R.string.assessmentModuleLabel, R.drawable.info));
             //Test
-            map = new HashMap<>();
-            map.put(NAME, getString(R.string.testsModuleLabel));
-            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.test));
-            evaluationData.add(map);
+            evaluationData.add(getMenuItem(R.string.testsModuleLabel, R.drawable.test));
             //Marks
-            map = new HashMap<>();
-            map.put(NAME, getString(R.string.marksModuleLabel));
-            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.grades));
-            evaluationData.add(map);
+            evaluationData.add(getMenuItem(R.string.marksModuleLabel, R.drawable.grades));
 
             //Users category
             //Groups
-            map = new HashMap<>();
-            map.put(NAME, getString(R.string.myGroupsModuleLabel));
-            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.my_groups));
-            mUsersData.add(map);
+            mUsersData.add(getMenuItem(R.string.myGroupsModuleLabel, R.drawable.my_groups));
             //Generate QR code
-            map = new HashMap<>();
-            map.put(NAME, getString(R.string.generateQRModuleLabel));
-            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.qr));
-            mUsersData.add(map);
-            
+            mUsersData.add(getMenuItem(R.string.generateQRModuleLabel, R.drawable.qr));
+
             //Messages category
             //Notifications
-            map = new HashMap<>();
-            map.put(NAME, getString(R.string.notificationsModuleLabel));
-            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.notif));
-            mMessagesData.add(map);
+            mMessagesData.add(getMenuItem(R.string.notificationsModuleLabel, R.drawable.notif));
             //Messages
-            map = new HashMap<>();
-            map.put(NAME, getString(R.string.messagesModuleLabel));
-            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.msg_write));
-            mMessagesData.add(map);
-            
-            mExpandableListAdapter = new ImageExpandableListAdapter(
-                    this,
-                    mHeaderData,
-                    R.layout.image_list_item,
-                    new String[]{NAME},       // the name of the field data
-                    new int[]{R.id.listText}, // the text field to populate with the field data
-                    mChildData,
-                    0,
-                    null,
-                    new int[]{}
-            );
-            
-            mExpandableListView.setAdapter(mExpandableListAdapter);
+            mMessagesData.add(getMenuItem(R.string.messagesModuleLabel, R.drawable.msg_write));
+
+            Log.i(TAG, "Created Base Menu");
         }
     }
 
@@ -625,51 +599,36 @@ public class SWADMain extends MenuExpandableListActivity {
      * Adapts the current menu to students view. Removes options unique to teachers and adds options unique to students
      */
     private void changeToStudentMenu() {
-        if (currentRole == Constants.TEACHER_TYPE_CODE) {
+        if (currentRole != Constants.STUDENT_TYPE_CODE) {
             //Removes Publish Note from messages menu
-        	mExpandableListAdapter.removeChild(Constants.MESSAGES_GROUP, Constants.PUBLISH_NOTE_CHILD);
+            mExpandableListAdapter.removeChild(Constants.MESSAGES_GROUP, Constants.PUBLISH_NOTE_CHILD);
             //Removes Rollcall from users menu
-        	mExpandableListAdapter.removeChild(Constants.USERS_GROUP, Constants.ROLLCALL_CHILD);
+            mExpandableListAdapter.removeChild(Constants.USERS_GROUP, Constants.ROLLCALL_CHILD);
+
+            currentRole = Constants.STUDENT_TYPE_CODE;
+
+            Log.i(TAG, "Changed to Student Menu");
         }
-        
-        currentRole = Constants.STUDENT_TYPE_CODE;
     }
 
     /**
      * Adapts the current menu to teachers view. Removes options unique to students and adds options unique to teachers
      */
     private void changeToTeacherMenu() {
-        if (currentRole == Constants.STUDENT_TYPE_CODE) {
-            HashMap<String, Object> map = new HashMap<>();
-            map.put(NAME, getString(R.string.noticesModuleLabel));
-            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.note));
-            
-            mMessagesData.add(map);
+        if (currentRole != Constants.TEACHER_TYPE_CODE) {
+            //Adds Publish Note to messages menu
+            mMessagesData.add(getMenuItem(R.string.noticesModuleLabel, R.drawable.note));
+            //Adds Rollcall to users menu
+            mUsersData.add(getMenuItem(R.string.rollcallModuleLabel, R.drawable.roll_call));
 
-            map = new HashMap<>();
-            map.put(NAME, getString(R.string.rollcallModuleLabel));
-            map.put(IMAGE, ContextCompat.getDrawable(this, R.drawable.roll_call));
-            mUsersData.add(map);
-            
-            mExpandableListAdapter = new ImageExpandableListAdapter(this, mHeaderData,
-                    R.layout.image_list_item,
-                    new String[] {
-                        NAME
-                    }, new int[] {
-                        R.id.listText
-                    },
-                    mChildData, 0,
-                    null, new int[] {}
-            );
+            currentRole = Constants.TEACHER_TYPE_CODE;
 
-            mExpandableListView.setAdapter(mExpandableListAdapter);
+            Log.i(TAG, "Changed to Teacher Menu");
         }
-        
-        currentRole = Constants.TEACHER_TYPE_CODE;
     }
 
     /**
-     * Creates an empty Menu and spinner when the data base is empty
+     * Creates an empty Menu and mCoursesSpinner when the data base is empty
      */
     protected void setMenuDbClean() {
         DataBaseHelper.setDbCleaned(false);
@@ -681,8 +640,9 @@ public class SWADMain extends MenuExpandableListActivity {
         dBCleaned = true;
         listCourses.clear();
         cleanSpinner();
-        
-        mExpandableListView.setVisibility(View.GONE);
+
+        createNoCourseMenu();
+        refreshMainMenu();
     }
 
     /**
@@ -708,6 +668,7 @@ public class SWADMain extends MenuExpandableListActivity {
         mBirthdayTextView = (TextView) findViewById(R.id.birthdayTextView);
         View mProgressScreenView = findViewById(R.id.progress_screen);
         View mCoursesListView = findViewById(R.id.courses_list_view);
+        mCoursesSpinner = (Spinner) this.findViewById(R.id.spinner);
         mProgressScreen = new ProgressScreen(mProgressScreenView, mCoursesListView,
                 getString(R.string.coursesProgressDescription), this);
 
@@ -814,6 +775,42 @@ public class SWADMain extends MenuExpandableListActivity {
 
         mExpandableListView.setOnChildClickListener(mExpandableClickListener);
 	}
+
+    private void refreshMainMenu() {
+        mExpandableListAdapter = new ImageExpandableListAdapter(this, mHeaderData,
+                R.layout.image_list_item,
+                new String[] {
+                        NAME
+                }, new int[] {
+                R.id.listText
+        },
+                mChildData, 0,
+                null, new int[] {}
+        );
+
+        mExpandableListView.setAdapter(mExpandableListAdapter);
+        mExpandableListView.setVisibility(View.VISIBLE);
+
+        Log.i(TAG, "Refreshed Main Menu");
+    }
+
+    private HashMap<String, Object> getMenuItem(int resName, int resImage) {
+        final HashMap<String, Object> menuItem = new HashMap<>();
+
+        menuItem.put(NAME, getString(resName));
+        menuItem.put(IMAGE, ContextCompat.getDrawable(this, resImage));
+
+        return menuItem;
+    }
+
+    private void clearMenu() {
+        mHeaderData.clear();
+        mChildData.clear();
+        mUsersData.clear();
+        mMessagesData.clear();
+
+        Log.i(TAG, "Cleared Main Menu");
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
