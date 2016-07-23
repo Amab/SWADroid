@@ -42,15 +42,30 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
     private static ListView lvUsers;
     private String[] receivers = {};
     private String search;
+    private ArrayAdapter<String> adapter;
+    String[] frequentUsers = {
+            "Alexander Pierrot",
+            "Carlos Lopez",
+            "Sara Bonz",
+            "Liliana Clarence",
+            "Benito Peralta",
+            "Juan Jaramillo",
+            "Christian Steps",
+            "Alexa Giraldo",
+            "Linda Murillo",
+            "Lizeth Astrada"
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.search_users); //list_items
+        setContentView(R.layout.list_items); //search_users, list_items_pulltorefresh
         setTitle(R.string.actionBarAddUser);
 
+        //users list
         lvUsers = (ListView) findViewById(R.id.listItems);
-
+        adapter = new ArrayAdapter<String>(this, R.layout.search_users, frequentUsers);
+        lvUsers.setAdapter(adapter);
     }
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
@@ -89,6 +104,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_search:
+                if(!search.equals(""))
                 onQueryTextSubmit(search);
                 return true;
 
@@ -101,9 +117,12 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
     public boolean onQueryTextSubmit(String query) {
-        int where_to_search;
-
-        where_to_search = showDialogSearch();
+        if (Courses.getSelectedCourseCode() != -1){
+            showDialogSearch();
+        }
+        else{
+            findUsers(-1);
+        }
 
         //remove virtual keyboard
         //InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -138,12 +157,13 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
 
     }
 
-    private int showDialogSearch(){
-        int selected = -1; // does not select anything
+    private void showDialogSearch(){
+        int selected = 0; // does not select anything
         final String[] choiceList = {getString(R.string.in_subject) + " " + Courses.getSelectedCourseShortName(), getString(R.string.inAllPlatform)};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(SearchUsers.this);
         builder.setTitle(R.string.where_to_search);
+        builder.setCancelable(false);
 
         builder.setSingleChoiceItems(choiceList, selected, new DialogInterface.OnClickListener() {
             @Override
@@ -159,22 +179,22 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
 
         builder.setPositiveButton(getString(R.string.acceptMsg), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                TextView txt = (TextView)findViewById(R.id.text_user);
-                txt.setText(search);
-
-                //users list
-                receivers = new String[]{search};
-
-                //message about found users
-                Toast.makeText(SearchUsers.this, R.string.users_found, Toast.LENGTH_SHORT).show();
-
-                searchView.clearFocus();
+                findUsers(Courses.getSelectedCourseCode());
             }
         });
 
         AlertDialog alert = builder.create();
         alert.show();
+    }
 
-        return selected;
+    private void findUsers(long codeSubject){
+        String[] foundUsers = {search};
+        adapter = new ArrayAdapter<String>(this, R.layout.search_users, foundUsers);
+        lvUsers.setAdapter(adapter);
+
+        //message about found users
+        Toast.makeText(SearchUsers.this, R.string.users_found, Toast.LENGTH_SHORT).show();
+
+        searchView.clearFocus();
     }
 }
