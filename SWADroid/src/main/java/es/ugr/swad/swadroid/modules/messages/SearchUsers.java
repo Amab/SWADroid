@@ -58,6 +58,7 @@ public class SearchUsers extends MenuExpandableListActivity implements SearchVie
                 return true; // OR FALSE IF YOU DIDN'T WANT IT TO CLOSE!
             }
         });
+
         searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
 
         searchView.setQueryHint(getText(R.string.search_user));
@@ -73,8 +74,8 @@ public class SearchUsers extends MenuExpandableListActivity implements SearchVie
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_search_field:
-                //metodoSearch()
+            case R.id.action_search:
+                onQueryTextSubmit(search);
                 return true;
 
             default:
@@ -86,6 +87,8 @@ public class SearchUsers extends MenuExpandableListActivity implements SearchVie
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
     public boolean onQueryTextSubmit(String query) {
+
+
 
         TextView txtCambiado = (TextView)findViewById(R.id.text_user);
         txtCambiado.setText(query);
