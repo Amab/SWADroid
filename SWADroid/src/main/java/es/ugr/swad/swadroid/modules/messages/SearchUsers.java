@@ -3,11 +3,13 @@ package es.ugr.swad.swadroid.modules.messages;
 import android.annotation.TargetApi;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,13 +18,25 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.ksoap2.serialization.SoapObject;
+
+import java.util.ArrayList;
+import java.util.Vector;
+
+import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
+import es.ugr.swad.swadroid.model.User;
+import es.ugr.swad.swadroid.modules.Module;
+import es.ugr.swad.swadroid.modules.courses.Courses;
+import es.ugr.swad.swadroid.modules.login.Login;
+import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
  * Created by Romilgildo on 17/07/2016.
  */
-public class SearchUsers extends MenuExpandableListActivity implements SearchView.OnQueryTextListener {
+public class SearchUsers extends Module implements SearchView.OnQueryTextListener {
     private SearchView searchView;
     private MenuItem searchItem;
     private static ListView lvUsers;
@@ -62,10 +76,10 @@ public class SearchUsers extends MenuExpandableListActivity implements SearchVie
         searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
 
         searchView.setQueryHint(getText(R.string.search_user));
-        // LISTENER PARA EL EDIT TEXT
+        // listener to searchview
         searchView.setOnQueryTextListener(this);
 
-        // para que aparezca el buscador al comienzo
+        // searview expanded
         searchItem.expandActionView();
 
         return super.onCreateOptionsMenu(menu);
@@ -87,21 +101,13 @@ public class SearchUsers extends MenuExpandableListActivity implements SearchVie
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
     public boolean onQueryTextSubmit(String query) {
+        int where_to_search;
 
+        where_to_search = showDialogSearch();
 
-
-        TextView txtCambiado = (TextView)findViewById(R.id.text_user);
-        txtCambiado.setText(query);
-
-        //lista de usuarios
-        receivers = new String[]{query};
-
-        //mensaje sobre los usuarios encontrados
-        Toast.makeText(SearchUsers.this, R.string.users_found, Toast.LENGTH_SHORT).show();
-
-        //quitamos el teclado virtual
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
+        //remove virtual keyboard
+        //InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        //imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
 
         return true;
     }
@@ -113,5 +119,62 @@ public class SearchUsers extends MenuExpandableListActivity implements SearchVie
         return true;
     }
 
+    @Override
+    protected void requestService() throws Exception {
+    }
 
+    @Override
+    protected void connect() {
+
+    }
+
+    @Override
+    protected void postConnect() {
+
+    }
+
+    @Override
+    protected void onError() {
+
+    }
+
+    private int showDialogSearch(){
+        int selected = -1; // does not select anything
+        final String[] choiceList = {getString(R.string.in_subject) + " " + Courses.getSelectedCourseShortName(), getString(R.string.inAllPlatform)};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(SearchUsers.this);
+        builder.setTitle(R.string.where_to_search);
+
+        builder.setSingleChoiceItems(choiceList, selected, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+            }
+        });
+
+        builder.setNegativeButton(getString(R.string.cancelMsg), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // no need to write anything here just implement this interface into this button
+            }
+        });
+
+        builder.setPositiveButton(getString(R.string.acceptMsg), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                TextView txt = (TextView)findViewById(R.id.text_user);
+                txt.setText(search);
+
+                //users list
+                receivers = new String[]{search};
+
+                //message about found users
+                Toast.makeText(SearchUsers.this, R.string.users_found, Toast.LENGTH_SHORT).show();
+
+                searchView.clearFocus();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
+
+        return selected;
+    }
 }
