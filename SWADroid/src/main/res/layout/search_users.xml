@@ -15,13 +15,12 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dip"
+            android:layout_height="50dip"
             android:layout_marginLeft="5dip"
             android:layout_marginStart="5dip"
             android:contentDescription="@string/photoContentDescription"
             android:adjustViewBounds="true"
-            android:maxHeight="50dip"
             android:scaleType="centerCrop"/>
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
