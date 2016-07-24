@@ -13,7 +13,7 @@ import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.UserFilter;
 
 /**
- * Repositorio ficticio de users
+ * Users list provisional
  */
 public class UsersRepository {
     private static UsersRepository repository = new UsersRepository();
