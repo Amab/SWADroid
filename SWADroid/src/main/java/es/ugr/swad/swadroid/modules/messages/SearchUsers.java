@@ -1,11 +1,7 @@
 package es.ugr.swad.swadroid.modules.messages;
 
 import android.annotation.TargetApi;
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.database.Cursor;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -14,26 +10,11 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import org.ksoap2.serialization.SoapObject;
-
-import java.util.ArrayList;
-import java.util.Vector;
-
-import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
-import es.ugr.swad.swadroid.model.User;
-import es.ugr.swad.swadroid.model.UserFilter;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.modules.courses.Courses;
-import es.ugr.swad.swadroid.modules.login.Login;
-import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
  * Created by Romilgildo on 17/07/2016.
@@ -49,7 +30,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.list_items); //search_users, list_items_pulltorefresh
+        setContentView(R.layout.list_items);
         setTitle(R.string.actionBarAddUser);
 
         //users list
