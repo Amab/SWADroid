@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.model.User;
+import es.ugr.swad.swadroid.model.UserFilter;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.modules.courses.Courses;
 import es.ugr.swad.swadroid.modules.login.Login;
@@ -42,19 +44,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
     private static ListView lvUsers;
     private String[] receivers = {};
     private String search;
-    private ArrayAdapter<String> adapter;
-    String[] frequentUsers = {
-            "Alexander Pierrot",
-            "Carlos Lopez",
-            "Sara Bonz",
-            "Liliana Clarence",
-            "Benito Peralta",
-            "Juan Jaramillo",
-            "Christian Steps",
-            "Alexa Giraldo",
-            "Linda Murillo",
-            "Lizeth Astrada"
-    };
+    private UsersAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +54,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
 
         //users list
         lvUsers = (ListView) findViewById(R.id.listItems);
-        adapter = new ArrayAdapter<String>(this, R.layout.search_users, frequentUsers);
+        adapter = new UsersAdapter(getBaseContext(), UsersRepository.getInstance().getUsers());
         lvUsers.setAdapter(adapter);
     }
 
@@ -189,7 +179,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
 
     private void findUsers(long codeSubject){
         String[] foundUsers = {search};
-        adapter = new ArrayAdapter<String>(this, R.layout.search_users, foundUsers);
+        adapter = new UsersAdapter(getBaseContext(), UsersRepository.getInstance().getUsers());
         lvUsers.setAdapter(adapter);
 
         //message about found users

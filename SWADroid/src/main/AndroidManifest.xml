@@ -183,18 +183,6 @@
                 android:value="es.ugr.swad.swadroid.modules.messages.Messages" />
         </activity>
         <activity
-            android:name="es.ugr.swad.swadroid.modules.messages.FilterUsersList"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/Theme.AppCompat.Light"
-            android:label="@string/filterUsersListModuleLabel">
-        </activity>
-        <activity
-            android:name="es.ugr.swad.swadroid.modules.messages.UsersList"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/Theme.AppCompat.Light"
-            android:label="@string/messagesModuleLabel">
-        </activity>
-        <activity
             android:name=".modules.notices.Notices"
             android:label="@string/noticesModuleLabel"
             android:theme="@style/Theme.AppCompat.Translucent"

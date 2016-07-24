@@ -36,6 +36,9 @@ public abstract class Model implements KvmSerializable {
         this.id = id;
     }
 
+    protected Model() {
+    }
+
     /**
      * Gets model identifier
      *
