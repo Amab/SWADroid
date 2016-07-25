@@ -37,7 +37,7 @@ public class UserFilter {
     /**
      * User identifier.
      */
-    private String userID;
+    private String userNickname;
     /**
      * User first surname.
      */
@@ -53,19 +53,19 @@ public class UserFilter {
     /**
      * Full path where user's picture is stored.
      */
-    private int userPhoto;
+    private String userPhoto;
 
     /**
      * Constructor.
      *
-     * @param userID        User identifier.
+     * @param userNickname        User identifier.
      * @param userSurname1  User first surname.
      * @param userSurname2  User last surname.
      * @param userFirstname User name.
      * @param userPhoto     Full path where user's picture is stored.
      */
-    public UserFilter(String userID, String userSurname1, String userSurname2, String userFirstname, int userPhoto) throws ParseException {
-        this.userID = userID;
+    public UserFilter(String userNickname, String userSurname1, String userSurname2, String userFirstname, String userPhoto) throws ParseException {
+        this.userNickname = userNickname;
         this.userSurname1 = userSurname1;
         this.userSurname2 = userSurname2;
         this.userFirstname = userFirstname;
@@ -95,17 +95,17 @@ public class UserFilter {
      *
      * @return User identifier.
      */
-    public String getUserID() {
-        return userID;
+    public String getuserNickname() {
+        return userNickname;
     }
 
     /**
      * Sets user identifier.
      *
-     * @param userID User identifier.
+     * @param userNickname User identifier.
      */
-    public void setUserID(String userID) {
-        this.userID = userID;
+    public void setuserNickname(String userNickname) {
+        this.userNickname = userNickname;
     }
 
     /**
@@ -149,7 +149,7 @@ public class UserFilter {
      *
      * @return the userPhoto
      */
-    public int getUserPhoto() {
+    public String getUserPhoto() {
         return userPhoto;
     }
 
@@ -158,7 +158,7 @@ public class UserFilter {
      *
      * @param userPhoto the userPhoto to set
      */
-    public void setUserPhoto(int userPhoto) {
+    public void setUserPhoto(String userPhoto) {
         this.userPhoto = userPhoto;
     }
 

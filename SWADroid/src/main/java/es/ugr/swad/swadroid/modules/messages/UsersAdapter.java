@@ -76,7 +76,7 @@ public class UsersAdapter extends ArrayAdapter<UserFilter> {
         UserFilter user = getItem(position);
 
         // Setup.
-        avatar.setImageResource(user.getUserPhoto());
+        avatar.setImageResource(R.drawable.usr_bl);
         name.setText(user.getUserSurname1() + " " + user.getUserSurname2() + ", " + user.getUserFirstname());
 
         return convertView;

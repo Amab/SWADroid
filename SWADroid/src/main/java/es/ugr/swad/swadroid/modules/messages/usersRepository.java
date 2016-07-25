@@ -23,18 +23,8 @@ public class UsersRepository {
         return repository;
     }
 
-    private UsersRepository() {
-        try {
-            saveUser(new UserFilter("1", "Boyero", "Corral", "Juan Miguel", R.drawable.user_photo_1));
-            saveUser(new UserFilter("2", "Cañas", "Vargas", "Antonio", R.drawable.user_photo_2));
-            saveUser(new UserFilter("208", "Martín", "Hidalgo", "Rubén", R.drawable.usr_bl));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void saveUser(UserFilter user) {
-        users.put(user.getUserID(), user);
+    public void saveUser(UserFilter user) {
+        users.put(user.getuserNickname(), user);
     }
 
     public List<UserFilter> getUsers() {
