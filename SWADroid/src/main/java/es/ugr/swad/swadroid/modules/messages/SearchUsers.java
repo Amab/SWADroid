@@ -2,6 +2,7 @@ package es.ugr.swad.swadroid.modules.messages;
 
 import android.annotation.TargetApi;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -10,6 +11,10 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Toast;
 import es.ugr.swad.swadroid.R;
@@ -26,6 +31,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
     private String[] receivers = {};
     private String search;
     private UsersAdapter adapter;
+    private CheckBox checkbox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +43,20 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         lvUsers = (ListView) findViewById(R.id.listItems);
         adapter = new UsersAdapter(getBaseContext(), UsersRepository.getInstance().getUsers());
         lvUsers.setAdapter(adapter);
+        lvUsers.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
+
+        //checkbox is checked when the row of an user is clicked
+        lvUsers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                checkbox = (CheckBox) view.findViewById(R.id.check);
+                if (checkbox.isChecked())
+                    checkbox.setChecked(false);
+                else
+                    checkbox.setChecked(true);
+                String idUser = UsersRepository.getInstance().getUsers().get(position).getUserID();
+            }
+        });
     }
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
@@ -168,4 +188,10 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
 
         searchView.clearFocus();
     }
+
+    /*
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+    }*/
 }
