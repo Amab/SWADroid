@@ -294,7 +294,6 @@
     <string name="marksModuleLabel">Calificaciones</string>
     <string name="marksProgressTitle">Calificaciones</string>
     <string name="marksProgressDescription">Obteniendo calificaciones…\nPor favor, espere…</string>
-    <string name="errorBadFileCodeMsg">Usted no puede consultar calificaciones en este fichero</string>
     <string name="createAccountModuleLabel">Crear cuenta</string>
     <string name="nickName">\@apodo</string>
     <string name="email">Correo electrónico</string>
