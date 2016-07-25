@@ -164,7 +164,6 @@
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.messages.Messages"
-            android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.AppCompat.Light"
             android:label="@string/messagesModuleLabel"
             android:parentActivityName="es.ugr.swad.swadroid.SWADMain" >
@@ -174,7 +173,6 @@
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.messages.SearchUsers"
-            android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.AppCompat.Light"
             android:label="@string/messagesModuleLabel"
             android:parentActivityName="es.ugr.swad.swadroid.modules.messages.Messages" >
