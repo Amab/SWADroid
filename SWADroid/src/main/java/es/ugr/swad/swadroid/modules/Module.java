@@ -31,6 +31,8 @@ import android.widget.Toast;
 
 import org.ksoap2.SoapFault;
 import org.ksoap2.transport.HttpResponseException;
+import org.kxml2.kdom.Element;
+import org.kxml2.kdom.Node;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
@@ -358,7 +360,7 @@ public abstract class Module extends MenuActivity {
                             errorMsg = getString(R.string.errorBadAppKeyMsg);
                             break;
                         default:
-                            errorMsg = "Server error: " + es.getMessage();
+                            errorMsg = getSoapErrorMessage(es);
                             break;
                     }
                 } else if ((e.getClass() == TimeoutException.class) || (e.getClass() == SocketTimeoutException.class)) {
@@ -407,5 +409,28 @@ public abstract class Module extends MenuActivity {
                 postConnect();
             }
         }
+    }
+
+
+
+    /**
+     * Method to retrieve the errorMessage from the given SoapFault.
+     * @param soapFault
+     * @return String representing the errorMessage found in the given SoapFault.
+     */
+    private static String getSoapErrorMessage(SoapFault soapFault) {
+        String errorMessage;
+
+        try {
+            Node detailNode = soapFault.detail;
+            Element faultDetailElement = (Element)detailNode.getElement(0);
+            errorMessage =  faultDetailElement.getText(0);
+        }
+        catch (Exception e) {
+            errorMessage = "Could not determine soap error.";
+            Log.e(TAG, errorMessage, e);
+        }
+
+        return errorMessage;
     }
 }

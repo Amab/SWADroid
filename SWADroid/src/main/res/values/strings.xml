@@ -304,7 +304,6 @@
     <string name="marksModuleLabel">Marks</string>
     <string name="marksProgressTitle">Marks</string>
     <string name="marksProgressDescription">Getting marks…\nWait, please…</string>
-    <string name="errorBadFileCodeMsg">You can not get marks from this file</string>
     <string name="createAccountModuleLabel">Create account</string>
     <string name="nickName">\@nickname</string>
     <string name="email">Email</string>
