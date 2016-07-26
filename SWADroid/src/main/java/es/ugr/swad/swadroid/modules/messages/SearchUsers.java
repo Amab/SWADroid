@@ -2,7 +2,6 @@ package es.ugr.swad.swadroid.modules.messages;
 
 import android.annotation.TargetApi;
 import android.content.DialogInterface;
-import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -16,12 +15,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 import org.ksoap2.serialization.SoapObject;
 import java.util.ArrayList;
 import java.util.Vector;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.User;
@@ -45,7 +46,8 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
     private String search;
     private UsersAdapter adapter;
     private CheckBox checkbox;
-    private UsersRepository userFilters = new UsersRepository();
+    private UsersList userFilters = new UsersList();
+    private LinearLayout progressLayout;
 
     private long courseCode;
     private int numUsers;
@@ -70,9 +72,14 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                     checkbox.setChecked(false);
                 else
                     checkbox.setChecked(true);
-                String idUser = userFilters.getUsers().get(position).getuserNickname();
+
+                //String idUser = userFilters.getUsers().get(position).getUserNickname();
             }
         });
+
+        progressLayout = (LinearLayout) findViewById(R.id.progressbar_view);
+        TextView text = (TextView) findViewById(R.id.text_progress);
+        text.setText(R.string.loadingMsg);
 
         setMETHOD_NAME("findUsers");
     }
@@ -161,23 +168,21 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
             SoapObject soap = (SoapObject) res.get(1);
             int csSize = soap.getPropertyCount();
             numUsers = csSize;
+            userFilters = new UsersList();
 
             for (int i = 0; i < csSize; i++) {
                 SoapObject pii = (SoapObject) soap.getProperty(i);
-                String idUser = pii.getProperty("userNickname").toString();
+                String nickname = pii.getProperty("userNickname").toString();
                 String surname1 = pii.getProperty("userSurname1").toString();
                 String surname2 = pii.getProperty("userSurname2").toString();
                 String firstname = pii.getProperty("userFirstname").toString();
                 String userPhoto = pii.getProperty("userPhoto").toString();
-                Log.d(TAG, idUser + " " + surname1 + " " + surname2 + " " + firstname + " " + userPhoto);
+                Log.d(TAG, nickname + " " + surname1 + " " + surname2 + " " + firstname + " " + userPhoto);
 
-                userFilters.saveUser(new UserFilter(idUser, surname1, surname2, firstname, userPhoto));
+                userFilters.saveUser(new UserFilter(nickname, surname1, surname2, firstname, userPhoto));
             }
-            if (userFilters.getUsers().size() == numUsers){
-                Log.d(TAG, "son iguales");
-            }
-            else
-                Log.d(TAG, "no son iguales");
+
+            Log.d(TAG, "numUsers = " + String.valueOf(numUsers) + ", usersList = " + userFilters.getUsers().size());
         }
 
         setResult(RESULT_OK);
@@ -186,17 +191,19 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
     @Override
     protected void connect() {
         startConnection();
+        searchView.clearFocus();
+
+        progressLayout.setVisibility(View.VISIBLE);
     }
 
     @Override
     protected void postConnect() {
+        progressLayout.setVisibility(View.GONE);
         adapter = new UsersAdapter(getBaseContext(), userFilters.getUsers());
         lvUsers.setAdapter(adapter);
 
         //message about found users
-        Toast.makeText(SearchUsers.this, String.valueOf(numUsers), Toast.LENGTH_LONG).show();
-
-        searchView.clearFocus();
+        Toast.makeText(SearchUsers.this, String.valueOf(numUsers) + " " + getResources().getString(R.string.users_found), Toast.LENGTH_SHORT).show();
     }
 
     @Override

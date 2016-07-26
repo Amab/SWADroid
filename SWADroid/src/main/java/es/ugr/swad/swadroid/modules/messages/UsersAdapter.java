@@ -20,29 +20,19 @@
  */
 package es.ugr.swad.swadroid.modules.messages;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.database.Cursor;
-import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.database.DataBaseHelper;
-import es.ugr.swad.swadroid.gui.ImageFactory;
 import es.ugr.swad.swadroid.model.UserFilter;
-import es.ugr.swad.swadroid.utils.Crypto;
-import es.ugr.swad.swadroid.utils.Utils;
 
 /**
  * Custom CursorAdapter for display users
@@ -64,7 +54,7 @@ public class UsersAdapter extends ArrayAdapter<UserFilter> {
 
         // ¿Existe el view actual?
         if (null == convertView) {
-            convertView = inflater.inflate(R.layout.search_users, parent, false);
+            convertView = inflater.inflate(R.layout.row_user, parent, false);
         }
 
         // Referencias UI.
@@ -72,7 +62,7 @@ public class UsersAdapter extends ArrayAdapter<UserFilter> {
         TextView name = (TextView) convertView.findViewById(R.id.text_user);
         CheckBox check = (CheckBox) convertView.findViewById(R.id.check);
 
-        // Lead actual.
+        // User actual.
         UserFilter user = getItem(position);
 
         // Setup.

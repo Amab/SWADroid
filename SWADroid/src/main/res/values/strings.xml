@@ -328,7 +328,7 @@
     <string name="syncronizingMsg">Syncronizing…</string>
     <string name="search">Search</string>
     <string name="search_user">Search user</string>
-    <string name="users_found">Users found</string>
+    <string name="users_found">users found</string>
     <string name="where_to_search">Where do you want to search?</string>
     <string name="in_subject">In</string>
     <string name="inAllPlatform">In all the platform</string>

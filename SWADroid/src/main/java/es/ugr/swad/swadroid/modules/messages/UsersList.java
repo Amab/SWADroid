@@ -4,30 +4,31 @@ package es.ugr.swad.swadroid.modules.messages;
  * Created by Romilgildo on 24/07/2016.
  */
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.UserFilter;
 
 /**
- * Users list provisional
+ * Users list
  */
-public class UsersRepository {
-    private static UsersRepository repository = new UsersRepository();
+public class UsersList {
+    private static UsersList list = new UsersList();
     private HashMap<String, UserFilter> users = new HashMap<>();
 
-    public static UsersRepository getInstance() {
-        return repository;
+    public static UsersList getInstance() {
+
+        return list;
     }
 
     public void saveUser(UserFilter user) {
-        users.put(user.getuserNickname(), user);
+
+        users.put(user.getUserNickname() + user.getUserFirstname() + user.getUserSurname1() + user.getUserSurname2(), user);
     }
 
     public List<UserFilter> getUsers() {
+
         return new ArrayList<>(users.values());
     }
 }

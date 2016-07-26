@@ -19,14 +19,7 @@
 
 package es.ugr.swad.swadroid.model;
 
-import org.ksoap2.serialization.PropertyInfo;
-
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Hashtable;
-import java.util.Locale;
-import java.util.UUID;
 
 /**
  * User data.
@@ -95,7 +88,7 @@ public class UserFilter {
      *
      * @return User identifier.
      */
-    public String getuserNickname() {
+    public String getUserNickname() {
         return userNickname;
     }
 
@@ -104,7 +97,7 @@ public class UserFilter {
      *
      * @param userNickname User identifier.
      */
-    public void setuserNickname(String userNickname) {
+    public void setUserNickname(String userNickname) {
         this.userNickname = userNickname;
     }
 
