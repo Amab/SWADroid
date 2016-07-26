@@ -29,9 +29,12 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+
 import java.util.List;
 
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.gui.ImageFactory;
 import es.ugr.swad.swadroid.model.UserFilter;
 
 /**
@@ -41,33 +44,50 @@ import es.ugr.swad.swadroid.model.UserFilter;
  */
 public class UsersAdapter extends ArrayAdapter<UserFilter> {
     private LayoutInflater inflater;
+    private ImageLoader loader;
+
+    private static class ViewHolder {
+        ImageView image;
+        TextView name;
+        CheckBox checkbox;
+
+    }
 
     public UsersAdapter(Context context, List<UserFilter> objects) {
         super(context, 0, objects);
+        this.loader = ImageFactory.init(context, true, true, R.drawable.usr_bl, R.drawable.usr_bl,
+                R.drawable.usr_bl);
 
         this.inflater = LayoutInflater.from(context);
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        // Obtener inflater.
+        // Get inflater
         this.inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        // ¿Existe el view actual?
-        if (null == convertView) {
+        // Does the current view exist?
+        if (convertView == null) {
             convertView = inflater.inflate(R.layout.row_user, parent, false);
         }
 
-        // Referencias UI.
-        ImageView avatar = (ImageView) convertView.findViewById(R.id.imageView);
-        TextView name = (TextView) convertView.findViewById(R.id.text_user);
-        CheckBox check = (CheckBox) convertView.findViewById(R.id.check);
+        ViewHolder holder = new ViewHolder();
 
-        // User actual.
+        // UI references
+        holder.image = (ImageView) convertView.findViewById(R.id.imageView);
+        holder.name = (TextView) convertView.findViewById(R.id.text_user);
+        holder.checkbox = (CheckBox) convertView.findViewById(R.id.check);
+
+        // Current user
         UserFilter user = getItem(position);
 
-        // Setup.
-        avatar.setImageResource(R.drawable.usr_bl);
-        name.setText(user.getUserSurname1() + " " + user.getUserSurname2() + ", " + user.getUserFirstname());
+        // Setup row
+        if(user.getUserPhoto().contains("https")) { //when the user don't have photo, the string isn't empty or null
+            ImageFactory.displayImage(loader, user.getUserPhoto(), holder.image);
+        }
+        else
+            holder.image.setImageResource(R.drawable.usr_bl);
+
+        holder.name.setText(user.getUserSurname1() + " " + user.getUserSurname2() + ", " + user.getUserFirstname());
 
         return convertView;
     }
