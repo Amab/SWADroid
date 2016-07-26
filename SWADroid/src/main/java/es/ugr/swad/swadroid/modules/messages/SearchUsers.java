@@ -137,6 +137,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
             showDialogSearch();
         }
         else{
+            courseCode = -1;
             runConnection();
         }
 
@@ -158,7 +159,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
     protected void requestService() throws Exception {
         createRequest(SOAPClient.CLIENT_TYPE);
         addParam("wsKey", Login.getLoggedUser().getWsKey());
-        addParam("courseCode", -1);
+        addParam("courseCode", courseCode);
         addParam("filter", search);
         addParam("userRole", 0);
         sendRequest(User.class, false);
@@ -212,14 +213,13 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
     }
 
     private void showDialogSearch(){
-        int selected = 0; // does not select anything
         final String[] choiceList = {getString(R.string.in_subject) + " " + Courses.getSelectedCourseShortName(), getString(R.string.inAllPlatform)};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(SearchUsers.this);
         builder.setTitle(R.string.where_to_search);
         builder.setCancelable(false);
 
-        builder.setSingleChoiceItems(choiceList, selected, new DialogInterface.OnClickListener() {
+        builder.setSingleChoiceItems(choiceList, 0, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
             }
@@ -233,7 +233,11 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
 
         builder.setPositiveButton(getString(R.string.acceptMsg), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                courseCode = Courses.getSelectedCourseCode();
+                int selectedPosition = ((AlertDialog)dialog).getListView().getCheckedItemPosition();
+                if (selectedPosition == 0)
+                    courseCode = Courses.getSelectedCourseCode();
+                else
+                    courseCode = -1;
                 runConnection();
             }
         });
