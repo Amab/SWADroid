@@ -20,7 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import org.ksoap2.serialization.SoapObject;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Vector;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
@@ -199,7 +198,6 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                 userFilters.saveUser(new UserFilter(nickname, surname1, surname2, firstname, userPhoto));
             }
 
-            //Collections.sort(userFilters.getUsers(), new UsersComparator());
             Log.d(TAG, "numUsers = " + String.valueOf(numUsers) + ", usersList = " + userFilters.getUsers().size());
         }
 

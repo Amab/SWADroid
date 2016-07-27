@@ -14,21 +14,14 @@ import es.ugr.swad.swadroid.model.UserFilter;
  * Users list
  */
 public class UsersList {
-    private static UsersList list = new UsersList();
-    private HashMap<String, UserFilter> users = new HashMap<>();
-
-    public static UsersList getInstance() {
-
-        return list;
-    }
+    private List<UserFilter> users = new ArrayList();
 
     public void saveUser(UserFilter user) {
-
-        users.put(user.getUserNickname() + user.getUserFirstname() + user.getUserSurname1() + user.getUserSurname2(), user);
+        users.add(user);
     }
 
     public List<UserFilter> getUsers() {
 
-        return new ArrayList<>(users.values());
+        return users;
     }
 }

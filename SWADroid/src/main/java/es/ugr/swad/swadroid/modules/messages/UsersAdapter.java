@@ -90,7 +90,6 @@ public class UsersAdapter extends ArrayAdapter<UserFilter> {
             holder.checkbox.setChecked(false);
         }
 
-
         // Setup row
         if(user.getUserPhoto().contains("https")) { //when the user don't have photo, the string isn't empty or null
             ImageFactory.displayImage(loader, user.getUserPhoto(), holder.image);
