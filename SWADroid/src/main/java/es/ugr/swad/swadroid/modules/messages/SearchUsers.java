@@ -142,12 +142,17 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
     public boolean onQueryTextSubmit(String query) {
-        if (Courses.getSelectedCourseCode() != -1){ //guest user
-            showDialogSearch();
+        String searchWithoutSpaces = search.replace(" ","");
+        if (searchWithoutSpaces.length() < 7){
+            Toast.makeText(SearchUsers.this, R.string.introduceLongerText, Toast.LENGTH_SHORT).show();
         }
-        else{
-            courseCode = -1;
-            runConnection();
+        else {
+            if (Courses.getSelectedCourseCode() != -1) { //guest user
+                showDialogSearch();
+            } else {
+                courseCode = -1;
+                runConnection();
+            }
         }
 
         //remove virtual keyboard
@@ -212,8 +217,13 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         adapter = new UsersAdapter(getBaseContext(), userFilters.getUsers());
         lvUsers.setAdapter(adapter);
 
-        //message about found users
-        Toast.makeText(SearchUsers.this, String.valueOf(numUsers) + " " + getResources().getString(R.string.users_found), Toast.LENGTH_SHORT).show();
+        //messages about found users
+        if (numUsers == 0){
+            Toast.makeText(SearchUsers.this, R.string.users_NOTfound, Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(SearchUsers.this, String.valueOf(numUsers) + " " + getResources().getString(R.string.users_found), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

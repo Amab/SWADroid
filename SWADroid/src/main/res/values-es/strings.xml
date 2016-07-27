@@ -319,8 +319,10 @@
     <string name="search">Buscar</string>
     <string name="search_user">Buscar usuario</string>
     <string name="users_found">usuarios encontrados</string>
+    <string name="users_NOTfound">No se encontraron usuarios</string>
     <string name="where_to_search">¿Dónde desea buscar?</string>
     <string name="in_subject">En</string>
     <string name="inAllPlatform">En toda la plataforma</string>
+    <string name="introduceLongerText">Introduzca un texto más largo</string>
 
 </resources>
