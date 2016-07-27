@@ -183,22 +183,23 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
             ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
             SoapObject soap = (SoapObject) res.get(1);
             int csSize = soap.getPropertyCount();
-            numUsers = csSize;
             userFilters = new UsersList();
 
             for (int i = 0; i < csSize; i++) {
                 SoapObject pii = (SoapObject) soap.getProperty(i);
-                String nickname = pii.getProperty("userNickname").toString();
-                String surname1 = pii.getProperty("userSurname1").toString();
-                String surname2 = pii.getProperty("userSurname2").toString();
-                String firstname = pii.getProperty("userFirstname").toString();
-                String userPhoto = pii.getProperty("userPhoto").toString();
-                Log.d(TAG, nickname + " " + surname1 + " " + surname2 + " " + firstname + " " + userPhoto);
+                String nickname = pii.getPrimitiveProperty("userNickname").toString(); //getPrimitive to get empty instead anytype{}
+                if (!nickname.isEmpty()) {
+                    String surname1 = pii.getPrimitiveProperty("userSurname1").toString();
+                    String surname2 = pii.getPrimitiveProperty("userSurname2").toString();
+                    String firstname = pii.getPrimitiveProperty("userFirstname").toString();
+                    String userPhoto = pii.getPrimitiveProperty("userPhoto").toString();
+                    Log.d(TAG, nickname + " " + surname1 + " " + surname2 + " " + firstname + " " + userPhoto);
 
-                userFilters.saveUser(new UserFilter(nickname, surname1, surname2, firstname, userPhoto));
+                    userFilters.saveUser(new UserFilter(nickname, surname1, surname2, firstname, userPhoto));
+                }
             }
-
-            Log.d(TAG, "numUsers = " + String.valueOf(numUsers) + ", usersList = " + userFilters.getUsers().size());
+            numUsers = userFilters.getUsers().size();
+            Log.d(TAG, "numUsersSWAD = " + String.valueOf(csSize) + ", numUsersSWADroid = " + numUsers);
         }
 
         setResult(RESULT_OK);

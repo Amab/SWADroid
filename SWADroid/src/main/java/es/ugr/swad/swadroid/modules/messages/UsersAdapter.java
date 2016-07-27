@@ -91,11 +91,11 @@ public class UsersAdapter extends ArrayAdapter<UserFilter> {
         }
 
         // Setup row
-        if(user.getUserPhoto().contains("https")) { //when the user don't have photo, the string isn't empty or null
-            ImageFactory.displayImage(loader, user.getUserPhoto(), holder.image);
-        }
-        else
+        if(user.getUserPhoto().isEmpty())  //when the user don't have photo, the string is empty
             holder.image.setImageResource(R.drawable.usr_bl);
+
+        else
+            ImageFactory.displayImage(loader, user.getUserPhoto(), holder.image);
 
         holder.name.setText(user.getUserSurname1() + " " + user.getUserSurname2() + ", " + user.getUserFirstname());
 
