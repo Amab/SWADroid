@@ -6,14 +6,15 @@
     android:orientation="horizontal"
     android:padding="6dip" >
 
-    <ImageView
+    <TextView
         android:id="@+id/icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="6dip"
-        android:layout_marginEnd="6dip"
-        android:contentDescription="@string/rollcallEvent"
-        android:src="@drawable/roll_call" />
+        android:layout_width="30dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:textColor="@color/foreground1"
+        android:textSize="28sp" >
+    </TextView>
 
     <LinearLayout
         android:layout_width="wrap_content"

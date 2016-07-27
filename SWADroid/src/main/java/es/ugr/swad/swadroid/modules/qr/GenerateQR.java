@@ -53,7 +53,6 @@ public class GenerateQR extends MenuActivity {
         setContentView(R.layout.generate_qr_layout);
 
         setTitle(R.string.generateQRModuleLabel);
-    	getSupportActionBar().setIcon(R.drawable.qr);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

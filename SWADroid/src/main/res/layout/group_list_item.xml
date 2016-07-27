@@ -6,18 +6,14 @@
     android:focusable="false"
     android:orientation="horizontal" >
 
-    <ImageView
+    <TextView
         android:id="@+id/padlockIcon"
-        android:layout_width="wrap_content"
+        android:layout_width="30dp"
         android:layout_height="wrap_content"
         android:clickable="false"
         android:focusable="false"
-        android:paddingEnd="0dip"
-        android:paddingLeft="5dip"
-        android:paddingRight="0dip"
-        android:paddingStart="5dip"
-        android:paddingTop="5dip"
-        android:src="@drawable/padlock_red" />
+        android:layout_margin="5dp"
+        android:textSize="28sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
