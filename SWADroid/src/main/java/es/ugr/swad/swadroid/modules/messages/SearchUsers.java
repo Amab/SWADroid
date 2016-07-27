@@ -49,6 +49,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
     private CheckBox checkbox;
     private UsersList userFilters = new UsersList();
     private LinearLayout progressLayout;
+    private boolean hideMenu = false;
 
     private long courseCode;
     private int numUsers;
@@ -94,16 +95,16 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener(){
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
-                // Do whatever you need
-                return true; // KEEP IT TO TRUE OR IT DOESN'T OPEN !!
+                return true;
             }
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
-                invalidateOptionsMenu();
+                hideMenu = true;
+                invalidateOptionsMenu(); // to manage the actionbar when searchview is closed
                 setResult(RESULT_OK);
-                finish();
-                return true; // OR FALSE IF YOU DIDN'T WANT IT TO CLOSE!
+                finish(); // go to parent activity
+                return true;
             }
         });
 
@@ -116,6 +117,11 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         // searview expanded
         searchItem.expandActionView();
 
+        // to manage the actionbar when searchview is closed
+        if(hideMenu){
+            searchView.setVisibility(View.GONE);
+        }
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -124,7 +130,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         switch (item.getItemId()) {
             case R.id.action_search:
                 if(!search.equals(""))
-                onQueryTextSubmit(search);
+                    onQueryTextSubmit(search); //find users with string search
                 return true;
 
             default:
@@ -136,7 +142,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
     public boolean onQueryTextSubmit(String query) {
-        if (Courses.getSelectedCourseCode() != -1){
+        if (Courses.getSelectedCourseCode() != -1){ //guest user
             showDialogSearch();
         }
         else{
