@@ -284,8 +284,8 @@ public class Messages extends Module {
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
 	        case R.id.action_addUser:	        	
-	        	Intent intent = new Intent (getBaseContext(), SearchUsers.class);
-				startActivityForResult(intent, 0);
+	        	Intent intent = new Intent (this, SearchUsers.class);
+				startActivityForResult(intent, Constants.SEARCH_USERS_REQUEST_CODE);
 	            
 	            return true;
 	            

@@ -1,6 +1,7 @@
 package es.ugr.swad.swadroid.modules.messages;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
@@ -78,8 +79,8 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         });
 
         progressLayout = (LinearLayout) findViewById(R.id.progressbar_view);
-        TextView text = (TextView) findViewById(R.id.text_progress);
-        text.setText(R.string.loadingMsg);
+        TextView textLoading = (TextView) findViewById(R.id.text_progress);
+        textLoading.setText(R.string.loadingMsg);
 
         setMETHOD_NAME("findUsers");
     }
@@ -99,7 +100,9 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
-                NavUtils.navigateUpFromSameTask(SearchUsers.this);
+                invalidateOptionsMenu();
+                setResult(RESULT_OK);
+                finish();
                 return true; // OR FALSE IF YOU DIDN'T WANT IT TO CLOSE!
             }
         });
