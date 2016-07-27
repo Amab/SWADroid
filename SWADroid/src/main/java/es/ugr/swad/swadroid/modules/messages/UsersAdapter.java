@@ -28,10 +28,14 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.ImageFactory;
@@ -45,12 +49,12 @@ import es.ugr.swad.swadroid.model.UserFilter;
 public class UsersAdapter extends ArrayAdapter<UserFilter> {
     private LayoutInflater inflater;
     private ImageLoader loader;
+    public ArrayList checkboxSelected;
 
     private static class ViewHolder {
         ImageView image;
         TextView name;
         CheckBox checkbox;
-
     }
 
     public UsersAdapter(Context context, List<UserFilter> objects) {
@@ -59,11 +63,12 @@ public class UsersAdapter extends ArrayAdapter<UserFilter> {
                 R.drawable.usr_bl);
 
         this.inflater = LayoutInflater.from(context);
+        checkboxSelected = new ArrayList();
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get inflater
-        this.inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        //this.inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         // Does the current view exist?
         if (convertView == null) {
@@ -79,6 +84,12 @@ public class UsersAdapter extends ArrayAdapter<UserFilter> {
 
         // Current user
         UserFilter user = getItem(position);
+        if (checkboxSelected.get(position) != null){
+            holder.checkbox.setChecked(((Boolean) checkboxSelected.get(position)).booleanValue());
+        }else{
+            holder.checkbox.setChecked(false);
+        }
+
 
         // Setup row
         if(user.getUserPhoto().contains("https")) { //when the user don't have photo, the string isn't empty or null

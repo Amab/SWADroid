@@ -1,11 +1,9 @@
 package es.ugr.swad.swadroid.modules.messages;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
@@ -18,11 +16,11 @@ import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import org.ksoap2.serialization.SoapObject;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Vector;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
@@ -70,10 +68,14 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 checkbox = (CheckBox) view.findViewById(R.id.check);
-                if (checkbox.isChecked())
+                if (checkbox.isChecked()){
                     checkbox.setChecked(false);
-                else
+                    adapter.checkboxSelected.set(position, false);
+                }
+                else{
                     checkbox.setChecked(true);
+                    adapter.checkboxSelected.set(position, true);
+                }
 
                 //String idUser = userFilters.getUsers().get(position).getUserNickname();
             }
@@ -197,6 +199,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                 userFilters.saveUser(new UserFilter(nickname, surname1, surname2, firstname, userPhoto));
             }
 
+            //Collections.sort(userFilters.getUsers(), new UsersComparator());
             Log.d(TAG, "numUsers = " + String.valueOf(numUsers) + ", usersList = " + userFilters.getUsers().size());
         }
 
@@ -223,6 +226,9 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         }
         else{
             Toast.makeText(SearchUsers.this, String.valueOf(numUsers) + " " + getResources().getString(R.string.users_found), Toast.LENGTH_SHORT).show();
+            for (int i=0; i<numUsers; i++){
+                adapter.checkboxSelected.add(false);
+            }
         }
     }
 
