@@ -27,6 +27,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -43,7 +44,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
-import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,6 +57,7 @@ import java.util.List;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.analytics.SWADroidTracker;
+import es.ugr.swad.swadroid.gui.FontManager;
 import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.gui.ProgressScreen;
 import es.ugr.swad.swadroid.model.Group;
@@ -123,6 +124,8 @@ public class DownloadsManager extends MenuActivity {
     private GridView grid;
     private TextView currentPathText;
     private ProgressScreen mProgressScreen;
+
+    private static Typeface iconFont;
 
     private String chosenNodeName = null;
 
@@ -232,6 +235,39 @@ public class DownloadsManager extends MenuActivity {
 
         setContentView(R.layout.navigation);
 
+        //Get Font Awesome typeface
+        iconFont = FontManager.getTypeface(this, FontManager.FONTAWESOME);
+
+        TextView homeButton = (TextView) this
+                .findViewById(R.id.home_button);
+        homeButton.setOnClickListener((new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (navigator != null) {
+                    updateView(navigator.goToRoot());
+                }
+            }
+
+        }));
+
+        TextView parentButton = (TextView) this
+                .findViewById(R.id.parent_button);
+        parentButton.setOnClickListener((new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (navigator != null) {
+                    updateView(navigator.goToParentDirectory());
+                }
+            }
+
+        }));
+
+        //Set Font Awesome typeface
+        homeButton.setTypeface(iconFont);
+        parentButton.setTypeface(iconFont);
+
         downloadsAreaCode = getIntent().getIntExtra("downloadsAreaCode",
                 Constants.DOCUMENTS_AREA_CODE);
 
@@ -265,32 +301,6 @@ public class DownloadsManager extends MenuActivity {
                     }
                 }
             }
-        }));
-
-        ImageButton homeButton = (ImageButton) this
-                .findViewById(R.id.home_button);
-        homeButton.setOnClickListener((new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                if (navigator != null) {
-                    updateView(navigator.goToRoot());
-                }
-            }
-
-        }));
-
-        ImageButton parentButton = (ImageButton) this
-                .findViewById(R.id.parent_button);
-        parentButton.setOnClickListener((new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                if (navigator != null) {
-                    updateView(navigator.goToParentDirectory());
-                }
-            }
-
         }));
 
         View mDirectoryNavigatorView = findViewById(R.id.directoryNavigator);
@@ -803,15 +813,12 @@ public class DownloadsManager extends MenuActivity {
         switch (downloadsAreaCode) {
             case Constants.DOCUMENTS_AREA_CODE:
                 setTitle(R.string.documentsDownloadModuleLabel);
-                getSupportActionBar().setIcon(R.drawable.folder);
                 break;
             case Constants.SHARE_AREA_CODE:
                 setTitle(R.string.sharedsDownloadModuleLabel);
-                getSupportActionBar().setIcon(R.drawable.folder_users);
                 break;
             case Constants.MARKS_AREA_CODE:
                 setTitle(R.string.marksModuleLabel);
-                getSupportActionBar().setIcon(R.drawable.grades);
                 break;
         }
     }

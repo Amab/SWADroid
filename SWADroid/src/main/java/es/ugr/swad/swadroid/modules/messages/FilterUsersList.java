@@ -25,7 +25,6 @@ public class FilterUsersList extends MenuActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.dialog_filter_list);
 		setTitle(R.string.filterUsersListModuleLabel);
-		getSupportActionBar().setIcon(R.drawable.users);	
 
         
 		Button cancelFIlters = (Button) findViewById(R.id.cancelFilters);

@@ -32,10 +32,10 @@ import java.util.List;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.analytics.SWADroidTracker;
-import es.ugr.swad.swadroid.gui.ImageListAdapter;
 import es.ugr.swad.swadroid.gui.ImageListItem;
 import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.gui.ProgressScreen;
+import es.ugr.swad.swadroid.gui.TextListAdapter;
 import es.ugr.swad.swadroid.modules.courses.Courses;
 
 /**
@@ -61,7 +61,7 @@ public class Tests extends MenuActivity implements OnItemClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         ListView listView;
         String[] titles = getResources().getStringArray(R.array.testMenuItems);
-        Integer[] images = {R.drawable.refresh, R.drawable.test};
+        Integer[] images = {R.string.fa_refresh, R.string.fa_check_square_o};
         List<ImageListItem> imageListItems = new ArrayList<>();
 
         super.onCreate(savedInstanceState);
@@ -80,15 +80,14 @@ public class Tests extends MenuActivity implements OnItemClickListener {
         }
 
         /*
-      Array adapter for showing menu options
-     */
-        ImageListAdapter adapter = new ImageListAdapter(this, R.layout.list_image_items, imageListItems);
+          Array adapter for showing menu options
+         */
+        TextListAdapter adapter = new TextListAdapter(this, R.layout.list_text_items, imageListItems);
         listView = (ListView) this.findViewById(R.id.listItems);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);
 
         getSupportActionBar().setSubtitle(Courses.getSelectedCourseShortName());
-    	getSupportActionBar().setIcon(R.drawable.test);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

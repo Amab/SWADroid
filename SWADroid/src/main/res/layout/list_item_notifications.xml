@@ -13,12 +13,16 @@
         android:gravity="center_horizontal"
         android:orientation="vertical" >
 
-        <ImageView
+        <TextView
             android:id="@+id/notificationIcon"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal" >
-        </ImageView>
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:gravity="center"
+            android:textColor="@color/foreground1"
+            android:textSize="28sp" >
+        </TextView>
 
         <TextView
             android:id="@+id/eventSender"

@@ -756,7 +756,6 @@ public class TestsMake extends MenuActivity {
         screenStep = ScreenStep.MENU;
 
         getSupportActionBar().setSubtitle(Courses.getSelectedCourseShortName());
-    	getSupportActionBar().setIcon(R.drawable.test);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

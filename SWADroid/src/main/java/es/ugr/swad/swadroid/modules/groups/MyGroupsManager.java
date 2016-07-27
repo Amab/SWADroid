@@ -131,7 +131,6 @@ public class MyGroupsManager extends MenuExpandableListActivity {
                 getString(R.string.loadingMsg), this);
 
         getSupportActionBar().setSubtitle(Courses.getSelectedCourseShortName());
-    	getSupportActionBar().setIcon(R.drawable.my_groups);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

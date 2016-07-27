@@ -26,7 +26,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -52,9 +51,9 @@ import java.util.Map;
 import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.DialogFactory;
-import es.ugr.swad.swadroid.gui.ImageExpandableListAdapter;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.gui.ProgressScreen;
+import es.ugr.swad.swadroid.gui.TextExpandableListAdapter;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.modules.courses.Courses;
@@ -121,7 +120,7 @@ public class SWADMain extends MenuExpandableListActivity {
     private LinearLayout mBirthdayLayout;
     private TextView mBirthdayTextView;
     private ExpandableListView mExpandableListView;
-    private ImageExpandableListAdapter mExpandableListAdapter;
+    private TextExpandableListAdapter mExpandableListAdapter;
     private Spinner mCoursesSpinner;
 
     private final ArrayList<HashMap<String, Object>> mHeaderData = new ArrayList<>();
@@ -500,21 +499,21 @@ public class SWADMain extends MenuExpandableListActivity {
             //Order:
             // 1- Messages
             // 2- Users
-            mHeaderData.add(getMenuItem(R.string.users, R.drawable.users));
-            mHeaderData.add(getMenuItem(R.string.messages, R.drawable.msg));
+            mHeaderData.add(getMenuItem(R.string.users, R.string.fa_users));
+            mHeaderData.add(getMenuItem(R.string.messages, R.string.fa_envelope));
 
             mChildData.add(mUsersData);
             mChildData.add(mMessagesData);
 
             //Users category
             //Generate QR code
-            mUsersData.add(getMenuItem(R.string.generateQRModuleLabel, R.drawable.qr));
+            mUsersData.add(getMenuItem(R.string.generateQRModuleLabel, R.string.fa_qrcode));
 
             //Messages category
             //Notifications
-            mMessagesData.add(getMenuItem(R.string.notificationsModuleLabel, R.drawable.notif));
+            mMessagesData.add(getMenuItem(R.string.notificationsModuleLabel, R.string.fa_bell));
             //Messages
-            mMessagesData.add(getMenuItem(R.string.messagesModuleLabel, R.drawable.msg_write));
+            mMessagesData.add(getMenuItem(R.string.messagesModuleLabel, R.string.fa_pencil_square_o));
 
             Log.i(TAG, "Created No Course Menu");
         }
@@ -537,10 +536,10 @@ public class SWADMain extends MenuExpandableListActivity {
             // 3- Messages
             // 4- Enrollment
             // 5- Users
-            mHeaderData.add(getMenuItem(R.string.course, R.drawable.crs));
-            mHeaderData.add(getMenuItem(R.string.evaluation, R.drawable.ass));
-            mHeaderData.add(getMenuItem(R.string.users, R.drawable.users));
-            mHeaderData.add(getMenuItem(R.string.messages, R.drawable.msg));
+            mHeaderData.add(getMenuItem(R.string.course, R.string.fa_folder_open));
+            mHeaderData.add(getMenuItem(R.string.evaluation, R.string.fa_check_square_o));
+            mHeaderData.add(getMenuItem(R.string.users, R.string.fa_users));
+            mHeaderData.add(getMenuItem(R.string.messages, R.string.fa_envelope));
 
             final ArrayList<HashMap<String, Object>> courseData = new ArrayList<>();
             mChildData.add(courseData);
@@ -553,43 +552,43 @@ public class SWADMain extends MenuExpandableListActivity {
 
             //Course category
             //Introduction
-            courseData.add(getMenuItem(R.string.introductionModuleLabel, R.drawable.info));
+            courseData.add(getMenuItem(R.string.introductionModuleLabel, R.string.fa_info));
             //Teaching Guide
-            courseData.add(getMenuItem(R.string.teachingguideModuleLabel, R.drawable.file));
+            courseData.add(getMenuItem(R.string.teachingguideModuleLabel, R.string.fa_file_text));
             //Syllabus (lectures)
-            courseData.add(getMenuItem(R.string.syllabusLecturesModuleLabel, R.drawable.syllabus));
+            courseData.add(getMenuItem(R.string.syllabusLecturesModuleLabel, R.string.fa_list_ol));
             //Syllabus (practicals)
-            courseData.add(getMenuItem(R.string.syllabusPracticalsModuleLabel, R.drawable.lab));
+            courseData.add(getMenuItem(R.string.syllabusPracticalsModuleLabel, R.string.fa_flask));
             //Documents
-            courseData.add(getMenuItem(R.string.documentsDownloadModuleLabel, R.drawable.folder));
+            courseData.add(getMenuItem(R.string.documentsDownloadModuleLabel, R.string.fa_folder_open));
             //Shared area
-            courseData.add(getMenuItem(R.string.sharedsDownloadModuleLabel, R.drawable.folder_users));
+            courseData.add(getMenuItem(R.string.sharedsDownloadModuleLabel, R.string.fa_folder_open));
             //Bibliography
-            courseData.add(getMenuItem(R.string.bibliographyModuleLabel, R.drawable.book));
+            courseData.add(getMenuItem(R.string.bibliographyModuleLabel, R.string.fa_folder_open));
             //FAQs
-            courseData.add(getMenuItem(R.string.faqsModuleLabel, R.drawable.faq));
+            courseData.add(getMenuItem(R.string.faqsModuleLabel, R.string.fa_question));
             //Links
-            courseData.add(getMenuItem(R.string.linksModuleLabel, R.drawable.link));
+            courseData.add(getMenuItem(R.string.linksModuleLabel, R.string.fa_link));
 
             //Evaluation category
             //Assessment system
-            evaluationData.add(getMenuItem(R.string.assessmentModuleLabel, R.drawable.info));
+            evaluationData.add(getMenuItem(R.string.assessmentModuleLabel, R.string.fa_info));
             //Test
-            evaluationData.add(getMenuItem(R.string.testsModuleLabel, R.drawable.test));
+            evaluationData.add(getMenuItem(R.string.testsModuleLabel, R.string.fa_check_square_o));
             //Marks
-            evaluationData.add(getMenuItem(R.string.marksModuleLabel, R.drawable.grades));
+            evaluationData.add(getMenuItem(R.string.marksModuleLabel, R.string.fa_list_alt));
 
             //Users category
             //Groups
-            mUsersData.add(getMenuItem(R.string.myGroupsModuleLabel, R.drawable.my_groups));
+            mUsersData.add(getMenuItem(R.string.myGroupsModuleLabel, R.string.fa_sitemap));
             //Generate QR code
-            mUsersData.add(getMenuItem(R.string.generateQRModuleLabel, R.drawable.qr));
+            mUsersData.add(getMenuItem(R.string.generateQRModuleLabel, R.string.fa_qrcode));
 
             //Messages category
             //Notifications
-            mMessagesData.add(getMenuItem(R.string.notificationsModuleLabel, R.drawable.notif));
+            mMessagesData.add(getMenuItem(R.string.notificationsModuleLabel, R.string.fa_bell));
             //Messages
-            mMessagesData.add(getMenuItem(R.string.messagesModuleLabel, R.drawable.msg_write));
+            mMessagesData.add(getMenuItem(R.string.messagesModuleLabel, R.string.fa_pencil_square_o));
 
             Log.i(TAG, "Created Base Menu");
         }
@@ -617,9 +616,9 @@ public class SWADMain extends MenuExpandableListActivity {
     private void changeToTeacherMenu() {
         if (currentRole != Constants.TEACHER_TYPE_CODE) {
             //Adds Publish Note to messages menu
-            mMessagesData.add(getMenuItem(R.string.noticesModuleLabel, R.drawable.note));
+            mMessagesData.add(getMenuItem(R.string.noticesModuleLabel, R.string.fa_bullhorn));
             //Adds Rollcall to users menu
-            mUsersData.add(getMenuItem(R.string.rollcallModuleLabel, R.drawable.roll_call));
+            mUsersData.add(getMenuItem(R.string.rollcallModuleLabel, R.string.fa_check_square_o));
 
             currentRole = Constants.TEACHER_TYPE_CODE;
 
@@ -777,7 +776,7 @@ public class SWADMain extends MenuExpandableListActivity {
 	}
 
     private void refreshMainMenu() {
-        mExpandableListAdapter = new ImageExpandableListAdapter(this, mHeaderData,
+        mExpandableListAdapter = new TextExpandableListAdapter(this, mHeaderData,
                 R.layout.image_list_item,
                 new String[] {
                         NAME
@@ -798,7 +797,7 @@ public class SWADMain extends MenuExpandableListActivity {
         final HashMap<String, Object> menuItem = new HashMap<>();
 
         menuItem.put(NAME, getString(resName));
-        menuItem.put(IMAGE, ContextCompat.getDrawable(this, resImage));
+        menuItem.put(IMAGE, getString(resImage));
 
         return menuItem;
     }

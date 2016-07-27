@@ -209,7 +209,7 @@ public class Notifications extends Module implements
 	/**
 	 * Sends to SWAD the "seen notifications" info
 	 */
-	private void sendReadedNotifications() {
+	private void sendReadNotifications() {
 		List<Model> markedNotificationsList;
 		String seenNotifCodes;
 		Intent activity;
@@ -275,8 +275,6 @@ public class Notifications extends Module implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.expandablelist_items_pulltorefresh);
 
-		getSupportActionBar().setIcon(R.drawable.notif);
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
@@ -332,7 +330,7 @@ public class Notifications extends Module implements
 				Utils.parseBoolString(true));
 
 		// Sends to SWAD the "seen notifications" info
-		sendReadedNotifications();
+		sendReadNotifications();
 
 		refreshScreen();
 	}
@@ -521,7 +519,7 @@ public class Notifications extends Module implements
 			}
 
 			// Sends to SWAD the "seen notifications" info
-			sendReadedNotifications();
+			sendReadNotifications();
 
 			refreshScreen();
 		}
@@ -595,7 +593,7 @@ public class Notifications extends Module implements
 		case R.id.action_markAllRead:
 			dbHelper.updateAllNotifications("seenLocal",
 					Utils.parseBoolString(true));
-			sendReadedNotifications();
+			sendReadNotifications();
 			refreshScreen();
 			return true;
 

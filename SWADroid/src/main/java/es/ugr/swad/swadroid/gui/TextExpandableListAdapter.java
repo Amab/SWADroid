@@ -19,7 +19,7 @@
 package es.ugr.swad.swadroid.gui;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,35 +36,39 @@ import es.ugr.swad.swadroid.R;
 
 /**
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
- * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */
-public class ImageExpandableListAdapter extends SimpleExpandableListAdapter {
+public class TextExpandableListAdapter extends SimpleExpandableListAdapter {
     private final String NAME = "listText";
     private final String IMAGE = "listIcon";
     private final LayoutInflater layoutInflater;
     private final ArrayList<HashMap<String, Object>> groupData;
     private final ArrayList<ArrayList<HashMap<String, Object>>> childData;
-    
+
     private static final String TAG = "ImageExpandableListAdapter";
+
+    private static Typeface iconFont;
     private static int convertViewCounter = 0;
-    
+
     static class ViewHolder{
+        TextView tvListImage;
         TextView tvListText;
     }
-    
 
-    public ImageExpandableListAdapter(Context context,
-                                      ArrayList<HashMap<String, Object>> groupData, int expandedGroupLayout,
-                                      String[] groupFrom, int[] groupTo,
-                                      ArrayList<ArrayList<HashMap<String, Object>>> childData,
-                                      int childLayout, String[] childFrom,
-                                      int[] childTo) {
+    public TextExpandableListAdapter(Context context,
+                                     ArrayList<HashMap<String, Object>> groupData, int expandedGroupLayout,
+                                     String[] groupFrom, int[] groupTo,
+                                     ArrayList<ArrayList<HashMap<String, Object>>> childData,
+                                     int childLayout, String[] childFrom,
+                                     int[] childTo) {
 
         super(context, groupData, expandedGroupLayout, groupFrom,
                 groupTo, childData, childLayout, childFrom, childTo);
         this.groupData = groupData;
         this.childData = childData;
         layoutInflater = LayoutInflater.from(context);
+
+        //Get Font Awesome typeface
+        iconFont = FontManager.getTypeface(context, FontManager.FONTAWESOME);
     }
     
     /* (non-Javadoc)
@@ -95,6 +99,7 @@ public class ImageExpandableListAdapter extends SimpleExpandableListAdapter {
             
             holder = new ViewHolder();
             
+            holder.tvListImage = (TextView) convertView.findViewById(R.id.listImage);
             holder.tvListText = (TextView) convertView.findViewById(R.id.listText);
             convertView.setTag(holder);
             
@@ -104,10 +109,10 @@ public class ImageExpandableListAdapter extends SimpleExpandableListAdapter {
         
         // Populate your custom view here
         holder.tvListText.setText((String) ((Map<String, Object>) getGroup(groupPosition)).get(NAME));
-        Drawable d = (Drawable) ((Map<String, Object>) getGroup(groupPosition)).get(IMAGE);
-        holder.tvListText.setCompoundDrawablesWithIntrinsicBounds(d, null, null, null);
-        holder.tvListText.setTextSize(20);
-        
+        holder.tvListImage.setText((String) ((Map<String, Object>) getGroup(groupPosition)).get(IMAGE));
+
+        //Set Font Awesome typeface
+        holder.tvListImage.setTypeface(iconFont);
         
         return convertView;
     }
@@ -136,6 +141,7 @@ public class ImageExpandableListAdapter extends SimpleExpandableListAdapter {
             
             holder = new ViewHolder();
 
+            holder.tvListImage = (TextView) convertView.findViewById(R.id.listImage);
             holder.tvListText = (TextView) convertView.findViewById(R.id.listText);
             convertView.setTag(holder);
 
@@ -145,9 +151,10 @@ public class ImageExpandableListAdapter extends SimpleExpandableListAdapter {
 
         // Populate your custom view here
         holder.tvListText.setText((String) ((Map<String, Object>) getChild(groupPosition, childPosition)).get(NAME));
-        Drawable d = (Drawable) ((Map<String, Object>) getChild(groupPosition, childPosition)).get(IMAGE);
-        holder.tvListText.setCompoundDrawablesWithIntrinsicBounds(d, null, null, null);
-        holder.tvListText.setTextSize(18);
+        holder.tvListImage.setText((String) ((Map<String, Object>) getChild(groupPosition, childPosition)).get(IMAGE));
+
+        //Set Font Awesome typeface
+        holder.tvListImage.setTypeface(iconFont);
 
         return convertView;
     }
@@ -182,7 +189,6 @@ public class ImageExpandableListAdapter extends SimpleExpandableListAdapter {
 
         return true;
     }
-
 
     public boolean addChild(int groupPosition, int childPosition, HashMap<String, Object> child) {
         if (groupPosition >= getGroupCount())

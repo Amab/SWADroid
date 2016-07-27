@@ -19,12 +19,12 @@
 package es.ugr.swad.swadroid.modules.notifications;
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -33,6 +33,7 @@ import java.util.List;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.gui.FontManager;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.utils.Utils;
@@ -47,8 +48,9 @@ public class NotificationsExpandableListAdapter extends
 
 	private ArrayList<String> groupItem;
 	private ArrayList<List<Model>> childItem;
-	private LayoutInflater minflater;
+	private LayoutInflater mInflater;
 	private Activity activity;
+    private static Typeface iconFont;
 
 	public NotificationsExpandableListAdapter(ArrayList<String> grList,
 			ArrayList<List<Model>> childItem2) {
@@ -60,18 +62,21 @@ public class NotificationsExpandableListAdapter extends
 			ArrayList<List<Model>> childItem2) {
 		groupItem = grList;
 		activity = act;
-		minflater = LayoutInflater.from(activity);
+		mInflater = LayoutInflater.from(activity);
         this.childItem = childItem2;
+
+        //Get Font Awesome typeface
+        iconFont = FontManager.getTypeface(act, FontManager.FONTAWESOME);
 	}
 
 	public void setInflater(LayoutInflater mInflater, Activity act) {
-		this.minflater = mInflater;
+		this.mInflater = mInflater;
 		activity = act;
 	}
 
 	public void setActivity(Activity act) {
 		activity = act;
-		minflater = LayoutInflater.from(activity);
+		mInflater = LayoutInflater.from(activity);
 	}
 
 	@Override
@@ -93,7 +98,7 @@ public class NotificationsExpandableListAdapter extends
         String seenLocalString = Utils.parseBoolString(seenLocal);
 		
 		if(convertView == null) {
-			convertView = minflater.inflate(R.layout.list_item_notifications, parent, false);
+			convertView = mInflater.inflate(R.layout.list_item_notifications, parent, false);
 		}
         
         if(!seenLocal) {
@@ -115,7 +120,10 @@ public class NotificationsExpandableListAdapter extends
         final TextView summary = (TextView) convertView.findViewById(R.id.eventSummary);
         TextView content = (TextView) convertView.findViewById(R.id.eventText);
         TextView contentMsg = (TextView) convertView.findViewById(R.id.eventMsg);
-        ImageView notificationIcon = (ImageView) convertView.findViewById(R.id.notificationIcon);
+        TextView notificationIcon = (TextView) convertView.findViewById(R.id.notificationIcon);
+
+        //Set Font Awesome typeface
+        notificationIcon.setTypeface(iconFont);
 
         if (eventType != null) {
             notifCodeHided.setText(notifCode.toString());
@@ -126,58 +134,57 @@ public class NotificationsExpandableListAdapter extends
 
             if (type.equals("examAnnouncement")) {
                 type = activity.getString(R.string.examAnnouncement);
-                notificationIcon.setImageResource(R.drawable.announce);
+                notificationIcon.setText(R.string.fa_bullhorn);
             } else if (type.equals("marksFile")) {
                 type = activity.getString(R.string.marksFile);
-                notificationIcon.setImageResource(R.drawable.grades);
+                notificationIcon.setText(R.string.fa_list_alt);
             } else if (type.equals("notice")) {
                 type = activity.getString(R.string.notice);
-                notificationIcon.setImageResource(R.drawable.note);
+                notificationIcon.setText(R.string.fa_bullhorn);
             } else if (type.equals("message")) {
                 type = activity.getString(R.string.message);
-                notificationIcon.setImageResource(R.drawable.msg_received);
+                notificationIcon.setText(R.string.fa_inbox);
             } else if (type.equals("forumPostCourse")) {
                 type = activity.getString(R.string.forumPostCourse);
-                notificationIcon.setImageResource(R.drawable.forum);
+                notificationIcon.setText(R.string.fa_comment);
             } else if (type.equals("forumReply")) {
                 type = activity.getString(R.string.forumReply);
-                notificationIcon.setImageResource(R.drawable.forum);
+                notificationIcon.setText(R.string.fa_comment);
             } else if (type.equals("assignment")) {
                 type = activity.getString(R.string.assignment);
-                notificationIcon.setImageResource(R.drawable.desk);
+                notificationIcon.setText(R.string.fa_wrench);
             } else if (type.equals("documentFile")) {
                 type = activity.getString(R.string.documentFile);
-                notificationIcon.setImageResource(R.drawable.file);
+                notificationIcon.setText(R.string.fa_file_text);
             } else if (type.equals("sharedFile")) {
                 type = activity.getString(R.string.sharedFile);
-                notificationIcon.setImageResource(R.drawable.file);
+                notificationIcon.setText(R.string.fa_file_text);
             } else if (type.equals("enrollmentRequest")) {
                 type = activity.getString(R.string.enrollmentRequest);
-                notificationIcon.setImageResource(R.drawable.enrollment_request);
+                notificationIcon.setText(R.string.fa_hand_o_up);
             } else if (type.startsWith("enrollment")) {
                 type = activity.getString(R.string.enrollment);
-                notificationIcon.setImageResource(R.drawable.enrollment);
+                notificationIcon.setText(R.string.fa_check);
             } else if (type.equals("documentFile")) {
                 type = activity.getString(R.string.survey);
-                notificationIcon.setImageResource(R.drawable.survey);
+                notificationIcon.setText(R.string.fa_check_square_o);
             } else if (type.equals("follower")) {
                 type = activity.getString(R.string.follower);
-                notificationIcon.setImageResource(R.drawable.follow);
+                notificationIcon.setText(R.string.fa_user_plus);
             } else if (type.equals("timelineComment")) {
                 type = activity.getString(R.string.timelineComment);
-                notificationIcon.setImageResource(R.drawable.social_comment);
+                notificationIcon.setText(R.string.fa_commenting);
             } else if (type.equals("timelineFav")) {
                 type = activity.getString(R.string.timelineFav);
-                notificationIcon.setImageResource(R.drawable.social_fav);
+                notificationIcon.setText(R.string.fa_star);
             } else if (type.equals("timelineShare")) {
                 type = activity.getString(R.string.timelineShare);
-                notificationIcon.setImageResource(R.drawable.social_share);
+                notificationIcon.setText(R.string.fa_share_alt);
             } else if (type.equals("timelineMention")) {
                 type = activity.getString(R.string.timelineMention);
-                notificationIcon.setImageResource(R.drawable.social_mention);
+                notificationIcon.setText(R.string.fa_at);
             } else {
                 type = activity.getString(R.string.unknownNotification);
-                notificationIcon.setImageResource(R.drawable.ic_launcher_swadroid);
             }
 
             eventType.setText(type);
@@ -273,7 +280,7 @@ public class NotificationsExpandableListAdapter extends
 		TextView groupTitle;
 		
 		if (convertView == null) {
-			convertView = minflater.inflate(R.layout.group_type_list_item, parent, false);
+			convertView = mInflater.inflate(R.layout.group_type_list_item, parent, false);
 		}
 		
 		groupTitle = (TextView) convertView.findViewById(R.id.groupTypeText);		

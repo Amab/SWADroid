@@ -97,7 +97,6 @@ public class Messages extends Module {
         eventCode = getIntent().getLongExtra("eventCode", 0);
         setContentView(R.layout.messages_screen);
         setTitle(R.string.messagesModuleLabel);
-        getSupportActionBar().setIcon(R.drawable.msg);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

@@ -170,7 +170,6 @@ public class Rollcall extends MenuExpandableListActivity implements
     setAppearance();
 
     getSupportActionBar().setSubtitle(Courses.getSelectedCourseShortName());
-    getSupportActionBar().setIcon(R.drawable.roll_call);
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
       getSupportActionBar().setDisplayHomeAsUpEnabled(true);

@@ -35,6 +35,7 @@ import java.util.Calendar;
 
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
+import es.ugr.swad.swadroid.gui.FontManager;
 import es.ugr.swad.swadroid.utils.Crypto;
 
 /**
@@ -48,7 +49,10 @@ public class EventsCursorAdapter extends CursorAdapter {
     private DateFormat df;
     private LayoutInflater inflater;
 
+    private static Typeface iconFont;
+
     private static class ViewHolder {
+        TextView iconTextView;
         TextView titleTextView;
         TextView startTimeTextView;
         TextView endTimeTextView;
@@ -69,6 +73,9 @@ public class EventsCursorAdapter extends CursorAdapter {
         this.crypto = new Crypto(context, dbHelper.getDBKey());
         this.df = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT);
         this.inflater = LayoutInflater.from(context);
+
+        //Get Font Awesome typeface
+        iconFont = FontManager.getTypeface(context, FontManager.FONTAWESOME);
     }
 
     /**
@@ -87,6 +94,9 @@ public class EventsCursorAdapter extends CursorAdapter {
         this.crypto = new Crypto(context, dbHelper.getDBKey());
         this.df = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT);
         this.inflater = LayoutInflater.from(context);
+
+        //Get Font Awesome typeface
+        iconFont = FontManager.getTypeface(context, FontManager.FONTAWESOME);
     }
 
     @Override
@@ -94,7 +104,7 @@ public class EventsCursorAdapter extends CursorAdapter {
         String title = crypto.decrypt(cursor.getString(cursor.getColumnIndex("title")));
         long startTime = cursor.getLong(cursor.getColumnIndex("startTime"));
         long endTime = cursor.getLong(cursor.getColumnIndex("endTime"));
-        final boolean pending = crypto.decrypt(cursor.getString(cursor.getColumnIndex("status"))).equals("pending");
+        final boolean pending = "pending".equals(crypto.decrypt(cursor.getString(cursor.getColumnIndex("status"))));
         Calendar today = Calendar.getInstance();
         Calendar startTimeCalendar = Calendar.getInstance();
         Calendar endTimeCalendar = Calendar.getInstance();
@@ -104,6 +114,12 @@ public class EventsCursorAdapter extends CursorAdapter {
 
         ViewHolder holder = (ViewHolder) view.getTag();
         view.setTag(holder);
+
+        holder.iconTextView = (TextView) view.findViewById(R.id.icon);
+        holder.iconTextView.setText(R.string.fa_check_square_o);
+
+        //Set Font Awesome typeface
+        holder.iconTextView.setTypeface(iconFont);
 
         holder.titleTextView = (TextView) view.findViewById(R.id.toptext);
         holder.startTimeTextView = (TextView) view.findViewById(R.id.startTimeTextView);
