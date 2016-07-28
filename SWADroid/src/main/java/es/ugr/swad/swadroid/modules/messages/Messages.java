@@ -273,6 +273,10 @@ public class Messages extends Module {
         body = savedInstanceState.getString("body");
 
         writeData();
+        if (!receivers.isEmpty()){
+            receiversLabel.setVisibility(View.VISIBLE);
+            rcvEditText.setVisibility(View.VISIBLE);
+        }
 
         super.onRestoreInstanceState(savedInstanceState);
     }
