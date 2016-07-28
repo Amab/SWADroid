@@ -188,7 +188,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
             for (int i = 0; i < csSize; i++) {
                 SoapObject pii = (SoapObject) soap.getProperty(i);
                 String nickname = pii.getPrimitiveProperty("userNickname").toString(); //getPrimitive to get empty instead anytype{}
-                if (!nickname.isEmpty()) {
+                if (!nickname.isEmpty()) { //if user doesn't have a nickname, he will not appear in the list
                     String surname1 = pii.getPrimitiveProperty("userSurname1").toString();
                     String surname2 = pii.getPrimitiveProperty("userSurname2").toString();
                     String firstname = pii.getPrimitiveProperty("userFirstname").toString();
