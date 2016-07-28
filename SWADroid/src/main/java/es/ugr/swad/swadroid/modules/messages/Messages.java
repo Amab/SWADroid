@@ -275,10 +275,14 @@ public class Messages extends Module {
     		writeData();
         }
 
+        receiversLabel = (TextView) findViewById(R.id.message_receivers_label);
         if (!receivers.isEmpty()){
-            receiversLabel = (TextView) findViewById(R.id.message_receivers_label);
             receiversLabel.setVisibility(View.VISIBLE);
             rcvEditText.setVisibility(View.VISIBLE);
+        }
+        else{
+            receiversLabel.setVisibility(View.GONE);
+            rcvEditText.setVisibility(View.GONE);
         }
 		super.onActivityResult(requestCode, resultCode, data);
 	}

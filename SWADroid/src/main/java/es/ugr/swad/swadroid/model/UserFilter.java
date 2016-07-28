@@ -48,6 +48,8 @@ public class UserFilter {
      */
     private String userPhoto;
 
+    private boolean selectedCheckbox;
+
     /**
      * Constructor.
      *
@@ -57,12 +59,13 @@ public class UserFilter {
      * @param userFirstname User name.
      * @param userPhoto     Full path where user's picture is stored.
      */
-    public UserFilter(String userNickname, String userSurname1, String userSurname2, String userFirstname, String userPhoto) throws ParseException {
+    public UserFilter(String userNickname, String userSurname1, String userSurname2, String userFirstname, String userPhoto, boolean selectedCheckbox) throws ParseException {
         this.userNickname = userNickname;
         this.userSurname1 = userSurname1;
         this.userSurname2 = userSurname2;
         this.userFirstname = userFirstname;
         this.userPhoto = userPhoto;
+        this.selectedCheckbox = selectedCheckbox;
     }
 
     /**
@@ -153,6 +156,14 @@ public class UserFilter {
      */
     public void setUserPhoto(String userPhoto) {
         this.userPhoto = userPhoto;
+    }
+
+    public boolean getCheckbox() {
+        return selectedCheckbox;
+    }
+
+    public void setCheckbox(boolean selected){
+        this.selectedCheckbox = selected;
     }
 
 }

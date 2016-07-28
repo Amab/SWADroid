@@ -84,11 +84,15 @@ public class UsersAdapter extends ArrayAdapter<UserFilter> {
 
         // Current user
         UserFilter user = getItem(position);
+
+        holder.checkbox.setChecked(user.getCheckbox());
+
+        /*
         if (checkboxSelected.get(position) != null){
             holder.checkbox.setChecked(((Boolean) checkboxSelected.get(position)).booleanValue());
         }else{
             holder.checkbox.setChecked(false);
-        }
+        }*/
 
         // Setup row
         if(user.getUserPhoto().isEmpty())  //when the user don't have photo, the string is empty

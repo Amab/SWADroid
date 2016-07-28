@@ -213,7 +213,14 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                     String userPhoto = pii.getPrimitiveProperty("userPhoto").toString();
                     Log.d(TAG, nickname + " " + surname1 + " " + surname2 + " " + firstname + " " + userPhoto);
 
-                    userFilters.saveUser(new UserFilter(nickname, surname1, surname2, firstname, userPhoto));
+                    boolean selected;
+                    Log.d(TAG,receivers);
+                    if (receivers.contains(nickname)) {
+                        selected = true;
+                    }
+                    else
+                        selected = false;
+                    userFilters.saveUser(new UserFilter(nickname, surname1, surname2, firstname, userPhoto, selected));
                 }
             }
             numUsers = userFilters.getUsers().size();
