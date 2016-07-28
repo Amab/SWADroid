@@ -42,7 +42,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
     private SearchView searchView;
     private MenuItem searchItem;
     private static ListView lvUsers;
-    private String receivers = "";
+    private String receivers;
     private String search;
     private UsersAdapter adapter;
     private CheckBox checkbox;
@@ -72,6 +72,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                 if (checkbox.isChecked()){
                     checkbox.setChecked(false);
                     adapter.checkboxSelected.set(position, false);
+                    receivers = receivers.replace("@" + userFilters.getUsers().get(position).getUserNickname() + ",", "");
                 }
                 else{
                     checkbox.setChecked(true);
@@ -86,6 +87,8 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         progressLayout = (LinearLayout) findViewById(R.id.progressbar_view);
         TextView textLoading = (TextView) findViewById(R.id.text_progress);
         textLoading.setText(R.string.loadingMsg);
+
+        receivers = getIntent().getStringExtra("receivers");
 
         setMETHOD_NAME("findUsers");
     }

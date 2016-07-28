@@ -271,7 +271,7 @@ public class Messages extends Module {
     @Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
     	if (data != null) {
-    		receivers += data.getStringExtra("receivers");
+    		receivers = data.getStringExtra("receivers");
     		writeData();
         }
 
@@ -294,6 +294,7 @@ public class Messages extends Module {
 	    switch (item.getItemId()) {
 	        case R.id.action_addUser:	        	
 	        	Intent intent = new Intent (this, SearchUsers.class);
+                intent.putExtra("receivers", receivers);
 				startActivityForResult(intent, Constants.SEARCH_USERS_REQUEST_CODE);
 	            
 	            return true;
