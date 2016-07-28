@@ -42,7 +42,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
     private SearchView searchView;
     private MenuItem searchItem;
     private static ListView lvUsers;
-    private String receivers;
+    private String receivers = "";
     private String search;
     private UsersAdapter adapter;
     private CheckBox checkbox;
@@ -76,6 +76,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                 else{
                     checkbox.setChecked(true);
                     adapter.checkboxSelected.set(position, true);
+                    receivers += "@" + userFilters.getUsers().get(position).getUserNickname() + ",";
                 }
 
                 //String idUser = userFilters.getUsers().get(position).getUserNickname();
@@ -106,7 +107,6 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                 hideMenu = true;
                 invalidateOptionsMenu(); // to manage the actionbar when searchview is closed
                 Intent intent = new Intent();
-                receivers = "@romilgildo";
                 intent.putExtra("receivers", receivers); // send receivers to parent activity
                 setResult(RESULT_OK, intent);
                 finish(); // go to parent activity

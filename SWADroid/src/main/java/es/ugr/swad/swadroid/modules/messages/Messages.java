@@ -113,6 +113,7 @@ public class Messages extends Module {
         if (savedInstanceState != null) 
             writeData();
 
+        receivers = "";
         setMETHOD_NAME("sendMessage");        
     }
     
@@ -270,7 +271,7 @@ public class Messages extends Module {
     @Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
     	if (data != null) {
-    		receivers = data.getStringExtra("receivers");
+    		receivers += data.getStringExtra("receivers");
     		writeData();
         }
 
