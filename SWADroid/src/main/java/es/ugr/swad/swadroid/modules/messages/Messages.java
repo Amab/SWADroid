@@ -140,6 +140,16 @@ public class Messages extends Module {
 
             }
         });
+
+        if (eventCode != 0) {
+            subjEditText.setText("Re: " + getIntent().getStringExtra("summary"));
+            receiversLabel.setVisibility(View.VISIBLE);
+            rcvEditText.setText(getIntent().getStringExtra("sender") + ",");
+            rcvEditText.setVisibility(View.VISIBLE);
+        }
+
+        receivers = rcvEditText.getText().toString();
+
         setMETHOD_NAME("sendMessage");        
     }
     
@@ -147,11 +157,6 @@ public class Messages extends Module {
 	protected void onStart() {
 		super.onStart();
         SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
-        
-        if (eventCode != 0) {
-            subjEditText.setText("Re: " + getIntent().getStringExtra("summary"));
-            rcvEditText.setVisibility(View.GONE);
-        }
 	}
 
 	/**
