@@ -1,7 +1,9 @@
 package es.ugr.swad.swadroid.modules.messages;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -40,7 +42,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
     private SearchView searchView;
     private MenuItem searchItem;
     private static ListView lvUsers;
-    private String[] receivers = {};
+    private String receivers;
     private String search;
     private UsersAdapter adapter;
     private CheckBox checkbox;
@@ -55,7 +57,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.list_items);
+        setContentView(R.layout.list_users);
         setTitle(R.string.actionBarAddUser);
 
         //users list
@@ -103,7 +105,10 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 hideMenu = true;
                 invalidateOptionsMenu(); // to manage the actionbar when searchview is closed
-                setResult(RESULT_OK);
+                Intent intent = new Intent();
+                receivers = "@romilgildo";
+                intent.putExtra("receivers", receivers); // send receivers to parent activity
+                setResult(RESULT_OK, intent);
                 finish(); // go to parent activity
                 return true;
             }
@@ -168,6 +173,16 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         search = newText;
 
         return true;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+
     }
 
     @Override

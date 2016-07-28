@@ -21,10 +21,12 @@ package es.ugr.swad.swadroid.modules.messages;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.ksoap2.serialization.SoapObject;
@@ -85,6 +87,8 @@ public class Messages extends Module {
      * Body EditText
      */
     private EditText bodyEditText;
+
+    private TextView receiversLabel;
 
  
     /* (non-Javadoc)
@@ -265,10 +269,15 @@ public class Messages extends Module {
 
     @Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-    	
     	if (data != null) {
-    		receivers = data.getStringExtra("ListaRcvs");
+    		receivers = data.getStringExtra("receivers");
     		writeData();
+        }
+
+        if (!receivers.isEmpty()){
+            receiversLabel = (TextView) findViewById(R.id.message_receivers_label);
+            receiversLabel.setVisibility(View.VISIBLE);
+            rcvEditText.setVisibility(View.VISIBLE);
         }
 		super.onActivityResult(requestCode, resultCode, data);
 	}
