@@ -3,6 +3,7 @@ package es.ugr.swad.swadroid.modules.messages;
 import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -177,13 +178,15 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
 
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-
+        //select checkboxes who users were added before
+        for(int i=0; i<numUsers; i++){
+            if (receivers.contains("@" + userFilters.getUsers().get(i).getUserNickname().toString() + ",")) {
+                userFilters.getUsers().get(i).setCheckbox(true);
+            }
+        }
     }
 
     @Override

@@ -173,6 +173,7 @@
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.messages.SearchUsers"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:theme="@style/Theme.AppCompat.Light"
             android:parentActivityName="es.ugr.swad.swadroid.modules.messages.Messages" >
             <meta-data
