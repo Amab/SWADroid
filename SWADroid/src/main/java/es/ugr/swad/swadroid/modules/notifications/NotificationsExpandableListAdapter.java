@@ -185,6 +185,7 @@ public class NotificationsExpandableListAdapter extends
                 notificationIcon.setText(R.string.fa_at);
             } else {
                 type = activity.getString(R.string.unknownNotification);
+                notificationIcon.setText(R.string.fa_bell);
             }
 
             eventType.setText(type);
