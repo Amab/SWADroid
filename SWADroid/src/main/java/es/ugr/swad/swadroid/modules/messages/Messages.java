@@ -21,6 +21,8 @@ package es.ugr.swad.swadroid.modules.messages;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -114,6 +116,27 @@ public class Messages extends Module {
             writeData();
 
         receivers = "";
+        receiversLabel = (TextView) findViewById(R.id.message_receivers_label);
+        rcvEditText.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.toString().isEmpty()){
+                    receiversLabel.setVisibility(View.GONE);
+                    rcvEditText.setVisibility(View.GONE);
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
         setMETHOD_NAME("sendMessage");        
     }
     
@@ -275,7 +298,6 @@ public class Messages extends Module {
     		writeData();
         }
 
-        receiversLabel = (TextView) findViewById(R.id.message_receivers_label);
         if (!receivers.isEmpty()){
             receiversLabel.setVisibility(View.VISIBLE);
             rcvEditText.setVisibility(View.VISIBLE);

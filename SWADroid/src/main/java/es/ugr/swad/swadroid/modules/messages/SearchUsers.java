@@ -215,7 +215,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
 
                     boolean selected;
                     Log.d(TAG,receivers);
-                    if (receivers.contains(nickname)) {
+                    if (receivers.contains("@" + nickname + ",")) {
                         selected = true;
                     }
                     else
