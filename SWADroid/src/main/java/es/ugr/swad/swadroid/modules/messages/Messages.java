@@ -298,6 +298,7 @@ public class Messages extends Module {
 	    switch (item.getItemId()) {
 	        case R.id.action_addUser:	        	
 	        	Intent intent = new Intent (this, SearchUsers.class);
+                receivers = rcvEditText.getText().toString();
                 intent.putExtra("receivers", receivers);
 				startActivityForResult(intent, Constants.SEARCH_USERS_REQUEST_CODE);
 	            
