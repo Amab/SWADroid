@@ -47,17 +47,20 @@ public class UserFilter {
      * Full path where user's picture is stored.
      */
     private String userPhoto;
-
+    /**
+     * Is a receiver?.
+     */
     private boolean selectedCheckbox;
 
     /**
      * Constructor.
      *
-     * @param userNickname        User identifier.
+     * @param userNickname  User identifier.
      * @param userSurname1  User first surname.
      * @param userSurname2  User last surname.
      * @param userFirstname User name.
      * @param userPhoto     Full path where user's picture is stored.
+     * @param selectedCheckbox  Is a receiver?.
      */
     public UserFilter(String userNickname, String userSurname1, String userSurname2, String userFirstname, String userPhoto, boolean selectedCheckbox) throws ParseException {
         this.userNickname = userNickname;

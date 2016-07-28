@@ -89,7 +89,9 @@ public class Messages extends Module {
      * Body EditText
      */
     private EditText bodyEditText;
-
+    /**
+     * Receivers label
+     */
     private TextView receiversLabel;
 
  
@@ -124,6 +126,7 @@ public class Messages extends Module {
 
             }
 
+            //receivers label disappears if there aren't receivers
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.toString().isEmpty()){
                     receiversLabel.setVisibility(View.GONE);
@@ -146,7 +149,6 @@ public class Messages extends Module {
         SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
         
         if (eventCode != 0) {
-        	
             subjEditText.setText("Re: " + getIntent().getStringExtra("summary"));
             rcvEditText.setVisibility(View.GONE);
         }
@@ -345,7 +347,5 @@ public class Messages extends Module {
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
-	    
 	}
-
 }

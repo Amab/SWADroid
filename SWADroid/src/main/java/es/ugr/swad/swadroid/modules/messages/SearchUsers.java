@@ -1,7 +1,6 @@
 package es.ugr.swad.swadroid.modules.messages;
 
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -49,10 +48,8 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
     private UsersList userFilters = new UsersList();
     private LinearLayout progressLayout;
     private boolean hideMenu = false;
-
     private long courseCode;
     private int numUsers;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,13 +117,14 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
 
         searchView.setQueryHint(getText(R.string.search_user));
+
         // listener to searchview
         searchView.setOnQueryTextListener(this);
 
         // searview expanded
         searchItem.expandActionView();
 
-        // to manage the actionbar when searchview is closed
+        // manage the actionbar when searchview is closed
         if(hideMenu){
             searchView.setVisibility(View.GONE);
         }
@@ -156,7 +154,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
             Toast.makeText(SearchUsers.this, R.string.introduceLongerText, Toast.LENGTH_SHORT).show();
         }
         else {
-            if (Courses.getSelectedCourseCode() != -1) { //guest user
+            if (Courses.getSelectedCourseCode() != -1) { //is not a guest user
                 showDialogSearch();
             } else {
                 courseCode = -1;
@@ -244,7 +242,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         adapter = new UsersAdapter(getBaseContext(), userFilters.getUsers());
         lvUsers.setAdapter(adapter);
 
-        //messages about found users
+        //toasts to inform about found users
         if (numUsers == 0){
             Toast.makeText(SearchUsers.this, R.string.users_NOTfound, Toast.LENGTH_SHORT).show();
         }

@@ -28,15 +28,9 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.nostra13.universalimageloader.core.ImageLoader;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.ImageFactory;
 import es.ugr.swad.swadroid.model.UserFilter;

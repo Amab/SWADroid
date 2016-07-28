@@ -11,7 +11,7 @@ import java.util.List;
 import es.ugr.swad.swadroid.model.UserFilter;
 
 /**
- * Users list
+ * UserFilter list
  */
 public class UsersList {
     private List<UserFilter> users = new ArrayList();
