@@ -18,9 +18,11 @@
  */
 package es.ugr.swad.swadroid.modules.messages;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -41,6 +43,7 @@ import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.Module;
+import es.ugr.swad.swadroid.modules.courses.Courses;
 import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
@@ -350,6 +353,8 @@ public class Messages extends Module {
 	                String errorMsg = getString(R.string.errorServerResponseMsg);
 	                error(errorMsg, e, true);
 	            }
+            case android.R.id.home:
+                showDialogCancel();
             
 	            return true;
             
@@ -357,4 +362,30 @@ public class Messages extends Module {
 	            return super.onOptionsItemSelected(item);
 	    }
 	}
+
+    @Override
+    public void onBackPressed()
+    {
+        showDialogCancel();
+    }
+
+    private void showDialogCancel(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(Messages.this);
+        builder.setTitle(R.string.areYouSure);
+        builder.setMessage(R.string.cancelSendMessage);
+
+        builder.setNegativeButton(getString(R.string.cancelMsg), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        builder.setPositiveButton(getString(R.string.acceptMsg), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
 }

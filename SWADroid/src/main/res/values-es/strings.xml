@@ -324,5 +324,6 @@
     <string name="in_subject">En</string>
     <string name="inAllPlatform">En toda la plataforma</string>
     <string name="introduceLongerText">Introduzca un texto más largo</string>
+    <string name="cancelSendMessage">Va a cancelar el envío del mensaje</string>
 
 </resources>

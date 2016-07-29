@@ -334,5 +334,6 @@
     <string name="in_subject">In</string>
     <string name="inAllPlatform">In all the platform</string>
     <string name="introduceLongerText">Introduce a longer text</string>
+    <string name="cancelSendMessage">You are going to cancel the sending message</string>
 
 </resources>
