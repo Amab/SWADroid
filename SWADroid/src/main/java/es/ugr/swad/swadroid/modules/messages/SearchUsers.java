@@ -1,5 +1,6 @@
 package es.ugr.swad.swadroid.modules.messages;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -120,7 +121,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
-                sendReceivers(false);
+                sendReceivers(true); //if confirm button exists, set to "false"
                 return true;
             }
         });
@@ -142,9 +143,18 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
             searchView.setVisibility(View.GONE);
         }
 
-        //delete these lines to see the search button
-        searchButton = menu.findItem(R.id.action_search);
-        searchButton.setVisible(false);
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                //select checkboxes who users were added before
+                for(int i=0; i<numUsers; i++){
+                    if (receivers.contains("@" + userFilters.getUsers().get(i).getUserNickname().toString() + ",")) {
+                        userFilters.getUsers().get(i).setCheckbox(true);
+                    }
+                }
+            }
+
+        });
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -266,6 +276,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
 
     @Override
     protected void connect() {
+        searchView.clearFocus();
         startConnection();
 
         progressLayout.setVisibility(View.VISIBLE);
