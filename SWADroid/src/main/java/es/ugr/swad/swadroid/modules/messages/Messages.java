@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -117,11 +118,10 @@ public class Messages extends Module {
         receivers = "";
         receiversNames = "";
         receiversLabel = (TextView) findViewById(R.id.message_receivers_label);
-        rcvEditText.setFocusable(false);
 
         if (eventCode != 0) {
             subjEditText.setText("Re: " + getIntent().getStringExtra("summary"));
-            rcvEditText.setText(getIntent().getStringExtra("sender") + ", ");
+            rcvEditText.setText(getIntent().getStringExtra("sender") + ",\n");
         }
 
         final ImageButton button = (ImageButton) findViewById(R.id.action_addUser);
@@ -200,8 +200,6 @@ public class Messages extends Module {
                 String firstname = pii.getProperty("userFirstname").toString();
                 String surname1 = pii.getProperty("userSurname1").toString();
                 String surname2 = pii.getProperty("userSurname2").toString();
-
-                receiversNames = receiversNames.replace(", ", "\n");
             }
         }
 

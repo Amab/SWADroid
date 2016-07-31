@@ -78,7 +78,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                     receivers = receivers.replace("@" + userFilters.getUsers().get(position).getUserNickname() + ",", "");
                     receiversNames = receiversNames.replace(userFilters.getUsers().get(position).getUserFirstname() + " " +
                             userFilters.getUsers().get(position).getUserSurname1() + " " +
-                            userFilters.getUsers().get(position).getUserSurname2() + ", ", "");
+                            userFilters.getUsers().get(position).getUserSurname2() + ",\n", "");
                 }
                 else{
                     checkbox.setChecked(true);
@@ -86,7 +86,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                     receivers += "@" + userFilters.getUsers().get(position).getUserNickname() + ",";
                     receiversNames += userFilters.getUsers().get(position).getUserFirstname() + " " +
                             userFilters.getUsers().get(position).getUserSurname1() + " " +
-                            userFilters.getUsers().get(position).getUserSurname2() + ", ";
+                            userFilters.getUsers().get(position).getUserSurname2() + ",\n";
                 }
 
                 //String idUser = userFilters.getUsers().get(position).getUserNickname();
@@ -166,6 +166,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         if(send) {
             intent.putExtra("receivers", receivers); // send receivers to parent activity
             intent.putExtra("receiversNames", receiversNames);
+            Log.d(TAG,receivers);
         }else{
             intent.putExtra("receivers", oldReceivers);
             intent.putExtra("receiversNames", oldReceiversNames);
@@ -258,7 +259,6 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                     Log.d(TAG, nickname + " " + surname1 + " " + surname2 + " " + firstname + " " + userPhoto);
 
                     boolean selected;
-                    Log.d(TAG,receivers);
                     if (receivers.contains("@" + nickname + ",")) {
                         selected = true;
                     }
