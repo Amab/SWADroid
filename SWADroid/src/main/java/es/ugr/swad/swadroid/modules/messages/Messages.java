@@ -121,6 +121,7 @@ public class Messages extends Module {
             writeData();
 
         receivers = "";
+        receiversNames = "";
         receiversLabel = (TextView) findViewById(R.id.message_receivers_label);
         rcvEditText.addTextChangedListener(new TextWatcher() {
 
@@ -147,11 +148,11 @@ public class Messages extends Module {
         if (eventCode != 0) {
             subjEditText.setText("Re: " + getIntent().getStringExtra("summary"));
             receiversLabel.setVisibility(View.VISIBLE);
-            rcvEditText.setText(getIntent().getStringExtra("sender") + ",");
+            rcvEditText.setText(getIntent().getStringExtra("sender") + ", ");
             rcvEditText.setVisibility(View.VISIBLE);
         }
 
-        receivers = rcvEditText.getText().toString();
+        //receivers = rcvEditText.getText().toString();
 
         setMETHOD_NAME("sendMessage");        
     }
@@ -166,7 +167,7 @@ public class Messages extends Module {
      * Reads user input
      */
     private void readData() {
-        receivers = rcvEditText.getText().toString();
+        receiversNames = rcvEditText.getText().toString();
         subject = subjEditText.getText().toString();
         body = bodyEditText.getText().toString();        
     }
@@ -175,7 +176,7 @@ public class Messages extends Module {
      * Writes user input
      */
     private void writeData() {
-        rcvEditText.setText(receivers);
+        rcvEditText.setText(receiversNames);
         subjEditText.setText(subject);
         bodyEditText.setText(body);
     }
@@ -208,7 +209,6 @@ public class Messages extends Module {
         addParam("body", body);
         sendRequest(User.class, false);
 
-        receiversNames = "";
         if (result != null) {
             ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
             SoapObject soap = (SoapObject) res.get(1);
@@ -220,12 +220,7 @@ public class Messages extends Module {
                 String surname1 = pii.getProperty("userSurname1").toString();
                 String surname2 = pii.getProperty("userSurname2").toString();
 
-                receiversNames += "\n";
-                receiversNames += firstname + " " + surname1 + " " + surname2;
-
-                if (!nickname.equalsIgnoreCase(Constants.NULL_VALUE) && !nickname.equalsIgnoreCase("")) {
-                    receiversNames += " (" + nickname + ")";
-                }
+                receiversNames = receiversNames.replace(", ", "\n");
             }
         }
 
@@ -309,6 +304,7 @@ public class Messages extends Module {
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
     	if (data != null) {
     		receivers = data.getStringExtra("receivers");
+            receiversNames = data.getStringExtra("receiversNames");
     		writeData();
         }
 
@@ -334,8 +330,9 @@ public class Messages extends Module {
 	    switch (item.getItemId()) {
 	        case R.id.action_addUser:	        	
 	        	Intent intent = new Intent (this, SearchUsers.class);
-                receivers = rcvEditText.getText().toString();
+                receiversNames = rcvEditText.getText().toString();
                 intent.putExtra("receivers", receivers);
+                intent.putExtra("receiversNames", receiversNames);
 				startActivityForResult(intent, Constants.SEARCH_USERS_REQUEST_CODE);
 	            
 	            return true;

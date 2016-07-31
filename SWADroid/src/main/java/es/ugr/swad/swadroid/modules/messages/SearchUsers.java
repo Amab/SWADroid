@@ -43,6 +43,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
     private MenuItem searchItem;
     private static ListView lvUsers;
     private String receivers;
+    private String receiversNames;
     private String search;
     private UsersAdapter adapter;
     private CheckBox checkbox;
@@ -71,11 +72,17 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                     checkbox.setChecked(false);
                     adapter.checkboxSelected.set(position, false);
                     receivers = receivers.replace("@" + userFilters.getUsers().get(position).getUserNickname() + ",", "");
+                    receiversNames = receiversNames.replace(userFilters.getUsers().get(position).getUserFirstname() + " " +
+                            userFilters.getUsers().get(position).getUserSurname1() + " " +
+                            userFilters.getUsers().get(position).getUserSurname2() + ", ", "");
                 }
                 else{
                     checkbox.setChecked(true);
                     adapter.checkboxSelected.set(position, true);
                     receivers += "@" + userFilters.getUsers().get(position).getUserNickname() + ",";
+                    receiversNames += userFilters.getUsers().get(position).getUserFirstname() + " " +
+                            userFilters.getUsers().get(position).getUserSurname1() + " " +
+                            userFilters.getUsers().get(position).getUserSurname2() + ", ";
                 }
 
                 //String idUser = userFilters.getUsers().get(position).getUserNickname();
@@ -87,6 +94,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         textLoading.setText(R.string.loadingMsg);
 
         receivers = getIntent().getStringExtra("receivers");
+        receiversNames = getIntent().getStringExtra("receiversNames");
 
         setMETHOD_NAME("findUsers");
     }
@@ -109,6 +117,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                 invalidateOptionsMenu(); // to manage the actionbar when searchview is closed
                 Intent intent = new Intent();
                 intent.putExtra("receivers", receivers); // send receivers to parent activity
+                intent.putExtra("receiversNames", receiversNames);
                 setResult(RESULT_OK, intent);
                 finish(); // go to parent activity
                 return true;
