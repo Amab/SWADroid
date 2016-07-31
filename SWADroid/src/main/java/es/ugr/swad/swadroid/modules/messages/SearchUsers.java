@@ -44,6 +44,8 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
     private static ListView lvUsers;
     private String receivers;
     private String receiversNames;
+    private String oldReceivers;
+    private String oldReceiversNames;
     private String search;
     private UsersAdapter adapter;
     private CheckBox checkbox;
@@ -94,7 +96,9 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         textLoading.setText(R.string.loadingMsg);
 
         receivers = getIntent().getStringExtra("receivers");
+        oldReceivers = receivers;
         receiversNames = getIntent().getStringExtra("receiversNames");
+        oldReceiversNames = receiversNames;
 
         setMETHOD_NAME("findUsers");
     }
@@ -113,13 +117,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
-                hideMenu = true;
-                invalidateOptionsMenu(); // to manage the actionbar when searchview is closed
-                Intent intent = new Intent();
-                intent.putExtra("receivers", receivers); // send receivers to parent activity
-                intent.putExtra("receiversNames", receiversNames);
-                setResult(RESULT_OK, intent);
-                finish(); // go to parent activity
+                sendReceivers(false);
                 return true;
             }
         });
@@ -130,6 +128,8 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
 
         // listener to searchview
         searchView.setOnQueryTextListener(this);
+
+        searchView.setMaxWidth(Integer.MAX_VALUE);
 
         // searview expanded
         searchItem.expandActionView();
@@ -142,12 +142,30 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         return super.onCreateOptionsMenu(menu);
     }
 
+    private void sendReceivers(boolean send){
+        hideMenu = true;
+        invalidateOptionsMenu();
+        Intent intent = new Intent();
+        if(send) {
+            intent.putExtra("receivers", receivers); // send receivers to parent activity
+            intent.putExtra("receiversNames", receiversNames);
+        }else{
+            intent.putExtra("receivers", oldReceivers);
+            intent.putExtra("receiversNames", oldReceiversNames);
+        }
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_search:
                 if(!search.equals(""))
                     onQueryTextSubmit(search); //find users with string search
+                return true;
+            case R.id.confirm_receivers:
+                sendReceivers(true);
                 return true;
 
             default:

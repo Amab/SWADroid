@@ -15,4 +15,9 @@
         swadroid:showAsAction="always"
         android:title="@string/search" />
 
+    <item
+        android:id="@+id/confirm_receivers"
+        android:icon="@drawable/ic_action_accept"
+        swadroid:showAsAction="always"
+        android:title="@string/search" />
 </menu>

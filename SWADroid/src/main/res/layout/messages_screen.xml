@@ -53,13 +53,10 @@
         <ImageButton
             android:id="@+id/action_addUser"
             android:src="@drawable/ic_action_add_receiver"
-            android:layout_height="60dp"
-            android:layout_width="60dp"
+            android:layout_height="55dp"
+            android:layout_width="55dp"
             android:layout_marginTop="5dp"
-            android:layout_marginRight="5dp"
-            android:scaleType="fitCenter"
-            android:adjustViewBounds="true"
-            android:padding="15dp"/>
+            android:layout_marginRight="5dp"/>
     </LinearLayout>
 
         <TextView android:id="@+id/message_subject_label"
