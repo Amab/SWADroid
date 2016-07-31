@@ -123,33 +123,11 @@ public class Messages extends Module {
         receivers = "";
         receiversNames = "";
         receiversLabel = (TextView) findViewById(R.id.message_receivers_label);
-        rcvEditText.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            //receivers label disappears if there aren't receivers
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().isEmpty()){
-                    receiversLabel.setVisibility(View.GONE);
-                    rcvEditText.setVisibility(View.GONE);
-                }
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
+        rcvEditText.setFocusable(false);
 
         if (eventCode != 0) {
             subjEditText.setText("Re: " + getIntent().getStringExtra("summary"));
-            receiversLabel.setVisibility(View.VISIBLE);
             rcvEditText.setText(getIntent().getStringExtra("sender") + ", ");
-            rcvEditText.setVisibility(View.VISIBLE);
         }
 
         //receivers = rcvEditText.getText().toString();
@@ -276,10 +254,6 @@ public class Messages extends Module {
         body = savedInstanceState.getString("body");
 
         writeData();
-        if (!receivers.isEmpty()){
-            receiversLabel.setVisibility(View.VISIBLE);
-            rcvEditText.setVisibility(View.VISIBLE);
-        }
 
         super.onRestoreInstanceState(savedInstanceState);
     }
@@ -306,15 +280,6 @@ public class Messages extends Module {
     		receivers = data.getStringExtra("receivers");
             receiversNames = data.getStringExtra("receiversNames");
     		writeData();
-        }
-
-        if (!receivers.isEmpty()){
-            receiversLabel.setVisibility(View.VISIBLE);
-            rcvEditText.setVisibility(View.VISIBLE);
-        }
-        else{
-            receiversLabel.setVisibility(View.GONE);
-            rcvEditText.setVisibility(View.GONE);
         }
 		super.onActivityResult(requestCode, resultCode, data);
 	}
@@ -350,9 +315,9 @@ public class Messages extends Module {
 	                String errorMsg = getString(R.string.errorServerResponseMsg);
 	                error(errorMsg, e, true);
 	            }
+                return true;
             case android.R.id.home:
                 showDialogCancel();
-            
 	            return true;
             
 	        default:
