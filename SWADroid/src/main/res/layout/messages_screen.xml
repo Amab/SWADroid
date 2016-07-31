@@ -6,7 +6,6 @@
     android:orientation="vertical" >
 
     <LinearLayout
-        android:id="@+id/linearLayout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -19,6 +18,21 @@
             android:textColor="@color/foreground1"
             android:visibility="invisible"
             android:textSize="8sp" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:orientation="vertical"
+            android:layout_weight="1">
 
         <TextView android:id="@+id/message_receivers_label"
             android:layout_width="match_parent"
@@ -34,6 +48,19 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:textColor="@color/foreground1"/>
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/action_addUser"
+            android:src="@drawable/ic_action_add_receiver"
+            android:layout_height="60dp"
+            android:layout_width="60dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:padding="15dp"/>
+    </LinearLayout>
 
         <TextView android:id="@+id/message_subject_label"
             android:layout_width="match_parent"

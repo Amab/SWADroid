@@ -23,27 +23,21 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import org.ksoap2.serialization.SoapObject;
-
 import java.util.ArrayList;
 import java.util.Vector;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.Module;
-import es.ugr.swad.swadroid.modules.courses.Courses;
 import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
@@ -130,7 +124,16 @@ public class Messages extends Module {
             rcvEditText.setText(getIntent().getStringExtra("sender") + ", ");
         }
 
-        //receivers = rcvEditText.getText().toString();
+        final ImageButton button = (ImageButton) findViewById(R.id.action_addUser);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent (Messages.this, SearchUsers.class);
+                receiversNames = rcvEditText.getText().toString();
+                intent.putExtra("receivers", receivers);
+                intent.putExtra("receiversNames", receiversNames);
+                startActivityForResult(intent, Constants.SEARCH_USERS_REQUEST_CODE);
+            }
+        });
 
         setMETHOD_NAME("sendMessage");        
     }
@@ -293,15 +296,6 @@ public class Messages extends Module {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
-	        case R.id.action_addUser:	        	
-	        	Intent intent = new Intent (this, SearchUsers.class);
-                receiversNames = rcvEditText.getText().toString();
-                intent.putExtra("receivers", receivers);
-                intent.putExtra("receiversNames", receiversNames);
-				startActivityForResult(intent, Constants.SEARCH_USERS_REQUEST_CODE);
-	            
-	            return true;
-	            
 	        case R.id.action_sendMsg:
 	            try {	
 	            	if((eventCode == 0) && (rcvEditText.getText().length() == 0)) {
