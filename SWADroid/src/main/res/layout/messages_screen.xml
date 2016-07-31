@@ -53,9 +53,8 @@
         <ImageButton
             android:id="@+id/action_addUser"
             android:src="@drawable/ic_action_add_receiver"
-            android:layout_height="55dp"
-            android:layout_width="55dp"
-            android:layout_marginTop="5dp"
+            android:layout_height="50dp"
+            android:layout_width="50dp"
             android:layout_marginRight="5dp"/>
     </LinearLayout>
 

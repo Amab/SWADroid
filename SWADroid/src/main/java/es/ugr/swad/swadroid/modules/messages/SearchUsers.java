@@ -41,6 +41,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
 
     private SearchView searchView;
     private MenuItem searchItem;
+    private MenuItem searchButton;
     private static ListView lvUsers;
     private String receivers;
     private String receiversNames;
@@ -100,6 +101,8 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         receiversNames = getIntent().getStringExtra("receiversNames");
         oldReceiversNames = receiversNames;
 
+        search = "";
+
         setMETHOD_NAME("findUsers");
     }
 
@@ -139,6 +142,10 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
             searchView.setVisibility(View.GONE);
         }
 
+        //delete these lines to see the search button
+        searchButton = menu.findItem(R.id.action_search);
+        searchButton.setVisible(false);
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -167,7 +174,6 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
             case R.id.confirm_receivers:
                 sendReceivers(true);
                 return true;
-
             default:
                 return super.onOptionsItemSelected(item);
         }

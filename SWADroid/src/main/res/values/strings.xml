@@ -335,5 +335,6 @@
     <string name="inAllPlatform">In all the platform</string>
     <string name="introduceLongerText">Introduce a longer text</string>
     <string name="cancelSendMessage">You are going to cancel the sending message</string>
+    <string name="cancelSendReceivers">You are going to cancel the selected receivers</string>
 
 </resources>
