@@ -267,7 +267,6 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
     @Override
     protected void connect() {
         startConnection();
-        searchView.clearFocus();
 
         progressLayout.setVisibility(View.VISIBLE);
     }
