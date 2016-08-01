@@ -14,7 +14,7 @@
         swadroid:showAsAction="ifRoom|withText"/>
     <item
         android:id="@+id/action_cleanUsers"
-        android:icon="@android:drawable/ic_menu_delete"
+        android:icon="@drawable/ic_menu_delete"
         android:title="@string/rollcallCleanUsers"
         swadroid:showAsAction="ifRoom|withText"/>
 

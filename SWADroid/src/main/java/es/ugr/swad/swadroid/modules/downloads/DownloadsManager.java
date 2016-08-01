@@ -391,7 +391,7 @@ public class DownloadsManager extends MenuActivity {
                         AlertDialog dialog;
                         builder.setTitle(R.string.sdCardBusyTitle);
                         builder.setMessage(R.string.sdCardBusy);
-                        builder.setIcon(android.R.drawable.ic_dialog_alert);
+                        builder.setIcon(R.drawable.ic_dialog_alert);
                         builder.setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.dismiss();
