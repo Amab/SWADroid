@@ -1,6 +1,5 @@
 package es.ugr.swad.swadroid.modules.messages;
 
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -42,13 +41,10 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
 
     private SearchView searchView;
     private MenuItem searchItem;
-    private MenuItem searchButton;
     private static ListView lvUsers;
-    private String receivers;
-    private String receiversNames;
-    private String oldReceivers;
-    private String oldReceiversNames;
     private String search;
+    private ArrayList<String> arrayReceivers;
+    private ArrayList<String> arrayReceiversNames;
     private UsersAdapter adapter;
     private CheckBox checkbox;
     private UsersList userFilters = new UsersList();
@@ -75,21 +71,19 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                 if (checkbox.isChecked()){
                     checkbox.setChecked(false);
                     adapter.checkboxSelected.set(position, false);
-                    receivers = receivers.replace("@" + userFilters.getUsers().get(position).getUserNickname() + ",", "");
-                    receiversNames = receiversNames.replace(userFilters.getUsers().get(position).getUserFirstname() + " " +
+                    arrayReceivers.remove("@" + userFilters.getUsers().get(position).getUserNickname());
+                    arrayReceiversNames.remove(userFilters.getUsers().get(position).getUserFirstname() + " " +
                             userFilters.getUsers().get(position).getUserSurname1() + " " +
-                            userFilters.getUsers().get(position).getUserSurname2() + ",\n", "");
+                            userFilters.getUsers().get(position).getUserSurname2());
                 }
                 else{
                     checkbox.setChecked(true);
                     adapter.checkboxSelected.set(position, true);
-                    receivers += "@" + userFilters.getUsers().get(position).getUserNickname() + ",";
-                    receiversNames += userFilters.getUsers().get(position).getUserFirstname() + " " +
+                    arrayReceivers.add("@" + userFilters.getUsers().get(position).getUserNickname());
+                    arrayReceiversNames.add(userFilters.getUsers().get(position).getUserFirstname() + " " +
                             userFilters.getUsers().get(position).getUserSurname1() + " " +
-                            userFilters.getUsers().get(position).getUserSurname2() + ",\n";
+                            userFilters.getUsers().get(position).getUserSurname2());
                 }
-
-                //String idUser = userFilters.getUsers().get(position).getUserNickname();
             }
         });
 
@@ -97,10 +91,9 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         TextView textLoading = (TextView) findViewById(R.id.text_progress);
         textLoading.setText(R.string.loadingMsg);
 
-        receivers = getIntent().getStringExtra("receivers");
-        oldReceivers = receivers;
-        receiversNames = getIntent().getStringExtra("receiversNames");
-        oldReceiversNames = receiversNames;
+
+        arrayReceivers = getIntent().getStringArrayListExtra("receivers");
+        arrayReceiversNames = getIntent().getStringArrayListExtra("receiversNames");
 
         search = "";
 
@@ -148,7 +141,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
             public void onFocusChange(View v, boolean hasFocus) {
                 //select checkboxes who users were added before
                 for(int i=0; i<numUsers; i++){
-                    if (receivers.contains("@" + userFilters.getUsers().get(i).getUserNickname().toString() + ",")) {
+                    if (arrayReceivers.contains("@" + userFilters.getUsers().get(i).getUserNickname().toString())) {
                         userFilters.getUsers().get(i).setCheckbox(true);
                     }
                 }
@@ -163,14 +156,14 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         hideMenu = true;
         invalidateOptionsMenu();
         Intent intent = new Intent();
-        if(send) {
-            intent.putExtra("receivers", receivers); // send receivers to parent activity
-            intent.putExtra("receiversNames", receiversNames);
-            Log.d(TAG,receivers);
-        }else{
-            intent.putExtra("receivers", oldReceivers);
-            intent.putExtra("receiversNames", oldReceiversNames);
-        }
+        intent.putExtra("receivers", arrayReceivers); // send receivers to parent activity
+        intent.putExtra("receiversNames", arrayReceiversNames);
+        /*
+        String receivers = "";
+        for(int i=0; i<arrayReceivers.size(); i++)
+            receivers += arrayReceivers.get(i);
+        Log.d(TAG, "Nickname Receivers: " + receivers);
+        */
         setResult(RESULT_OK, intent);
         finish();
     }
@@ -227,7 +220,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
 
         //select checkboxes who users were added before
         for(int i=0; i<numUsers; i++){
-            if (receivers.contains("@" + userFilters.getUsers().get(i).getUserNickname().toString() + ",")) {
+            if (arrayReceivers.contains("@" + userFilters.getUsers().get(i).getUserNickname().toString())) {
                 userFilters.getUsers().get(i).setCheckbox(true);
             }
         }
@@ -259,7 +252,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                     Log.d(TAG, nickname + " " + surname1 + " " + surname2 + " " + firstname + " " + userPhoto);
 
                     boolean selected;
-                    if (receivers.contains("@" + nickname + ",")) {
+                    if (arrayReceivers.contains("@" + nickname)) {
                         selected = true;
                     }
                     else

@@ -23,7 +23,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -67,6 +67,11 @@ public class Messages extends Module {
      * Names of receivers
      */
     private String receiversNames;
+
+    private ArrayList<String> arrayReceivers;
+
+    private ArrayList<String> arrayReceiversNames;
+    
     /**
      * Message's subject
      */
@@ -87,10 +92,8 @@ public class Messages extends Module {
      * Body EditText
      */
     private EditText bodyEditText;
-    /**
-     * Receivers label
-     */
-    private TextView receiversLabel;
+
+    private String sender;
 
  
     /* (non-Javadoc)
@@ -99,6 +102,11 @@ public class Messages extends Module {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        receivers = "";
+        receiversNames = "";
+        arrayReceivers = new ArrayList<>();
+        arrayReceiversNames = new ArrayList<>();
         
         eventCode = getIntent().getLongExtra("eventCode", 0);
         setContentView(R.layout.messages_screen);
@@ -110,27 +118,24 @@ public class Messages extends Module {
 		
         rcvEditText = (EditText) findViewById(R.id.message_receivers_text);
         subjEditText = (EditText) findViewById(R.id.message_subject_text);
-        bodyEditText = (EditText) findViewById(R.id.message_body_text);       
+        bodyEditText = (EditText) findViewById(R.id.message_body_text);
        
         if (savedInstanceState != null) 
             writeData();
 
-        receivers = "";
-        receiversNames = "";
-        receiversLabel = (TextView) findViewById(R.id.message_receivers_label);
-
+        sender = "";
         if (eventCode != 0) {
             subjEditText.setText("Re: " + getIntent().getStringExtra("summary"));
-            rcvEditText.setText(getIntent().getStringExtra("sender") + ",\n");
+            sender = getIntent().getStringExtra("sender") + ",\n";
+            rcvEditText.setText(sender);
         }
 
         final ImageButton button = (ImageButton) findViewById(R.id.action_addUser);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent (Messages.this, SearchUsers.class);
-                receiversNames = rcvEditText.getText().toString();
-                intent.putExtra("receivers", receivers);
-                intent.putExtra("receiversNames", receiversNames);
+                intent.putExtra("receivers", arrayReceivers);
+                intent.putExtra("receiversNames", arrayReceiversNames);
                 startActivityForResult(intent, Constants.SEARCH_USERS_REQUEST_CODE);
             }
         });
@@ -181,6 +186,9 @@ public class Messages extends Module {
 
         readData();
         addFootBody();
+        
+        for(int i=0; i<arrayReceivers.size(); i++)
+            receivers += arrayReceivers.get(i);
 
         createRequest(SOAPClient.CLIENT_TYPE);
         addParam("wsKey", Login.getLoggedUser().getWsKey());
@@ -194,12 +202,14 @@ public class Messages extends Module {
             ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
             SoapObject soap = (SoapObject) res.get(1);
             int csSize = soap.getPropertyCount();
+            receiversNames = "";
             for (int i = 0; i < csSize; i++) {
                 SoapObject pii = (SoapObject) soap.getProperty(i);
                 String nickname = pii.getProperty("userNickname").toString();
                 String firstname = pii.getProperty("userFirstname").toString();
                 String surname1 = pii.getProperty("userSurname1").toString();
                 String surname2 = pii.getProperty("userSurname2").toString();
+                receiversNames += firstname + " " + surname1 + " " + surname2 + ",\n";
             }
         }
 
@@ -278,8 +288,15 @@ public class Messages extends Module {
     @Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
     	if (data != null) {
-    		receivers = data.getStringExtra("receivers");
-            receiversNames = data.getStringExtra("receiversNames");
+    		arrayReceivers = data.getStringArrayListExtra("receivers");
+            arrayReceiversNames = data.getStringArrayListExtra("receiversNames");
+            receivers = "";
+            receiversNames = sender;
+            for(int i=0; i<arrayReceivers.size(); i++){
+                receivers += arrayReceivers.get(i) + ", ";
+                receiversNames += arrayReceiversNames.get(i) + ",\n";
+            }
+            Log.d(TAG, "Nickname Receivers: " + receivers);
     		writeData();
         }
 		super.onActivityResult(requestCode, resultCode, data);
