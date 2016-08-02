@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="40dp"
+    android:layout_gravity="left"
+    android:background="#DFDEDD"
+    android:layout_margin="5dp">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="30dp"
+        android:layout_height="40dp"
+        android:src="@drawable/usr_bl"/>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:layout_gravity="center_vertical"
+        tools:text="Rubén Martín Hidalgo"
+        android:padding="10dp"/>
+
+    <ImageView
+        android:id="@+id/imageDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/not_ok"
+        android:layout_gravity="center_vertical" />
+
+</LinearLayout>

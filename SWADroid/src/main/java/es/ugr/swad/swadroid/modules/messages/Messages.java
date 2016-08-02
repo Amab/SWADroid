@@ -24,11 +24,16 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import org.ksoap2.serialization.SoapObject;
@@ -95,6 +100,8 @@ public class Messages extends Module {
 
     private String sender;
 
+    private ViewGroup layout;
+
  
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
@@ -139,6 +146,39 @@ public class Messages extends Module {
                 startActivityForResult(intent, Constants.SEARCH_USERS_REQUEST_CODE);
             }
         });
+
+        layout = (ViewGroup) findViewById(R.id.layout_receivers);
+
+        LayoutInflater inflater = LayoutInflater.from(this);
+        int id = R.layout.receivers_item;
+
+        LinearLayout linearLayout = (LinearLayout) inflater.inflate(id, null, false);
+
+        TextView textView = (TextView) linearLayout.findViewById(R.id.textView);
+        textView.setText("Rubén Martín Hidalgo");
+
+        //layout params
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        params.topMargin = 15;
+        linearLayout.setPadding(5, 3, 5, 3);
+        linearLayout.setLayoutParams(params);
+        ///////
+
+        layout.addView(linearLayout);
+
+        LayoutInflater inflater2 = LayoutInflater.from(this);
+        int id2 = R.layout.receivers_item;
+
+        LinearLayout linearLayout2 = (LinearLayout) inflater2.inflate(id2, null, false);
+
+        TextView textView2 = (TextView) linearLayout2.findViewById(R.id.textView);
+        textView2.setText("Isabel Ortega Contreras");
+
+        linearLayout2.setPadding(5, 3, 5, 3);
+        linearLayout2.setLayoutParams(params);
+
+        layout.addView(linearLayout2);
 
         setMETHOD_NAME("sendMessage");        
     }
