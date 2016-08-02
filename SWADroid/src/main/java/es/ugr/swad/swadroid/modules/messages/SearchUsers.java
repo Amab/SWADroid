@@ -144,6 +144,8 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                     if (arrayReceivers.contains("@" + userFilters.getUsers().get(i).getUserNickname().toString())) {
                         userFilters.getUsers().get(i).setCheckbox(true);
                     }
+                    else
+                        userFilters.getUsers().get(i).setCheckbox(false);
                 }
             }
 
@@ -223,6 +225,8 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
             if (arrayReceivers.contains("@" + userFilters.getUsers().get(i).getUserNickname().toString())) {
                 userFilters.getUsers().get(i).setCheckbox(true);
             }
+            else
+                userFilters.getUsers().get(i).setCheckbox(false);
         }
     }
 
