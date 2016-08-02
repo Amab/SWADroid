@@ -481,7 +481,7 @@ public class TestsMake extends MenuActivity {
                         && !answerType.equals(TestAnswer.TYPE_UNIQUE_CHOICE)) {
 
                     if (!answers.get(0).isCorrectAnswered()) {
-                        img.setImageResource(android.R.drawable.ic_delete);
+                        img.setImageResource(R.drawable.ic_delete);
                     }
 
                     img.setVisibility(View.VISIBLE);
