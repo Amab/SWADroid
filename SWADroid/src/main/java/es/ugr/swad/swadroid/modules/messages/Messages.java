@@ -149,37 +149,6 @@ public class Messages extends Module {
 
         layout = (ViewGroup) findViewById(R.id.layout_receivers);
 
-        LayoutInflater inflater = LayoutInflater.from(this);
-        int id = R.layout.receivers_item;
-
-        LinearLayout linearLayout = (LinearLayout) inflater.inflate(id, null, false);
-
-        TextView textView = (TextView) linearLayout.findViewById(R.id.textView);
-        textView.setText("Rubén Martín Hidalgo");
-
-        //layout params
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        params.topMargin = 15;
-        linearLayout.setPadding(5, 3, 5, 3);
-        linearLayout.setLayoutParams(params);
-        ///////
-
-        layout.addView(linearLayout);
-
-        LayoutInflater inflater2 = LayoutInflater.from(this);
-        int id2 = R.layout.receivers_item;
-
-        LinearLayout linearLayout2 = (LinearLayout) inflater2.inflate(id2, null, false);
-
-        TextView textView2 = (TextView) linearLayout2.findViewById(R.id.textView);
-        textView2.setText("Isabel Ortega Contreras");
-
-        linearLayout2.setPadding(5, 3, 5, 3);
-        linearLayout2.setLayoutParams(params);
-
-        layout.addView(linearLayout2);
-
         setMETHOD_NAME("sendMessage");        
     }
     
@@ -338,6 +307,38 @@ public class Messages extends Module {
             }
             Log.d(TAG, "Nickname Receivers: " + receivers);
     		writeData();
+
+            layout.removeAllViewsInLayout();
+
+            for(int i=0; i<arrayReceiversNames.size(); i++){
+                LayoutInflater inflater = LayoutInflater.from(this);
+                int id = R.layout.receivers_item;
+
+                final LinearLayout linearLayout = (LinearLayout) inflater.inflate(id, null, false);
+
+                final TextView textName = (TextView) linearLayout.findViewById(R.id.textName);
+                textName.setText(arrayReceiversNames.get(i).toString());
+
+                final TextView textNickname = (TextView) linearLayout.findViewById(R.id.textNickname);
+                textNickname.setText(arrayReceivers.get(i).toString());
+
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+                params.topMargin = 7;
+                linearLayout.setPadding(1, 1, 1, 1);
+                linearLayout.setLayoutParams(params);
+
+                layout.addView(linearLayout);
+
+                ImageButton button = (ImageButton)linearLayout.findViewById(R.id.buttonDelete);
+                button.setOnClickListener( new View.OnClickListener() {
+                    public void onClick(View view){
+                        layout.removeView(linearLayout);
+                        arrayReceivers.remove(textNickname.getText().toString());
+                        arrayReceiversNames.remove(textName.getText().toString());
+                    }
+                });
+            }
         }
 		super.onActivityResult(requestCode, resultCode, data);
 	}

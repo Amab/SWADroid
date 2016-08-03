@@ -3,31 +3,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="wrap_content"
-    android:layout_height="40dp"
-    android:layout_gravity="left"
+    android:layout_height="wrap_content"
     android:background="#DFDEDD"
     android:layout_margin="5dp">
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="30dp"
-        android:layout_height="40dp"
+        android:layout_width="26dp"
+        android:layout_height="34dp"
         android:src="@drawable/usr_bl"/>
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textName"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:textColor="@android:color/black"
-        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
         tools:text="Rubén Martín Hidalgo"
-        android:padding="10dp"/>
+        android:paddingLeft="10dp"/>
 
-    <ImageView
-        android:id="@+id/imageDelete"
+    <TextView
+        android:id="@+id/textNickname"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/not_ok"
-        android:layout_gravity="center_vertical" />
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+
+    <ImageButton
+        android:id="@+id/buttonDelete"
+        android:layout_width="27dp"
+        android:layout_height="27dp"
+        android:layout_marginLeft="5dp"
+        android:background="@drawable/not_ok"
+        android:layout_gravity="center_vertical"/>
 
 </LinearLayout>

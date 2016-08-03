@@ -164,6 +164,7 @@
         </activity>
         <activity
             android:name="es.ugr.swad.swadroid.modules.messages.Messages"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:theme="@style/Theme.AppCompat.Light"
             android:label="@string/messagesModuleLabel"
             android:parentActivityName="es.ugr.swad.swadroid.SWADMain" >

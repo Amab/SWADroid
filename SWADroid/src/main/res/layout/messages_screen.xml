@@ -76,9 +76,9 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="1.5dp"
             android:layout_margin="3dp"
-            android:background="@android:color/darker_gray"/>
+            android:background="#878787"/>
 
         <TextView android:id="@+id/message_subject_label"
             android:layout_width="match_parent"
