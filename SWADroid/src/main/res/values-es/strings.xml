@@ -326,5 +326,6 @@
     <string name="introduceLongerText">Introduzca un texto más largo</string>
     <string name="cancelSendMessage">Va a cancelar el envío del mensaje</string>
     <string name="cancelSendReceivers">Va a cancelar los destinatarios seleccionados</string>
+    <string name="cancelRemoveReceivers">¿Quiere quitar a #nameUser# de la lista de destinatarios?</string>
 
 </resources>

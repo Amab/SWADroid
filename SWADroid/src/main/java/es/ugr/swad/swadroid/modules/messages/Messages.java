@@ -148,6 +148,7 @@ public class Messages extends Module {
                 intent.putExtra("receivers", arrayReceivers);
                 intent.putExtra("receiversNames", arrayReceiversNames);
                 intent.putExtra("receiversPhotos", arrayPhotos);
+                Log.d(TAG, "Receivers of Messages: " + receivers);
                 startActivityForResult(intent, Constants.SEARCH_USERS_REQUEST_CODE);
             }
         });
@@ -310,7 +311,7 @@ public class Messages extends Module {
                 receivers += arrayReceivers.get(i) + ", ";
                 receiversNames += arrayReceiversNames.get(i) + ",\n";
             }
-            Log.d(TAG, "Nickname Receivers: " + receivers);
+            Log.d(TAG, "Receivers of SearchUsers: " + receivers);
     		writeData();
 
             layout.removeAllViewsInLayout();
@@ -321,7 +322,7 @@ public class Messages extends Module {
 
                 final LinearLayout linearLayout = (LinearLayout) inflater.inflate(id, null, false);
 
-                TextView textName = (TextView) linearLayout.findViewById(R.id.textName);
+                final TextView textName = (TextView) linearLayout.findViewById(R.id.textName);
                 textName.setText(arrayReceiversNames.get(i).toString());
 
                 final TextView textNickname = (TextView) linearLayout.findViewById(R.id.textNickname);
@@ -349,11 +350,7 @@ public class Messages extends Module {
                 ImageButton button = (ImageButton)linearLayout.findViewById(R.id.buttonDelete);
                 button.setOnClickListener( new View.OnClickListener() {
                     public void onClick(View view){
-                        layout.removeView(linearLayout);
-                        int position = arrayReceivers.indexOf(textNickname.getText().toString());
-                        arrayReceivers.remove(position);
-                        arrayReceiversNames.remove(position);
-                        arrayPhotos.remove(position);
+                        showDialogDelete(linearLayout, textNickname, textName.getText().toString());
                     }
                 });
             }
@@ -372,7 +369,7 @@ public class Messages extends Module {
 	    switch (item.getItemId()) {
 	        case R.id.action_sendMsg:
 	            try {
-	            	if((eventCode == 0) && (rcvEditText.getText().length() == 0)) {
+	            	if((eventCode == 0) && (receivers.length() == 0)) {
 	            		Toast.makeText(this, R.string.noReceiversMsg, Toast.LENGTH_LONG).show();
 	            	} else if(subjEditText.getText().length() == 0) {
 	            		Toast.makeText(this, R.string.noSubjectMessageMsg, Toast.LENGTH_LONG).show();
@@ -412,6 +409,36 @@ public class Messages extends Module {
         builder.setPositiveButton(getString(R.string.acceptMsg), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 finish();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private void showDialogDelete(final LinearLayout linearLayout, final TextView textNickname, String textName){
+        AlertDialog.Builder builder = new AlertDialog.Builder(Messages.this);
+        builder.setTitle(R.string.areYouSure);
+        String dialog = getResources().getString(R.string.cancelRemoveReceivers);
+        dialog = dialog.replaceAll("#nameUser#", textName);
+        builder.setMessage(dialog);
+
+        builder.setNegativeButton(getString(R.string.cancelMsg), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        builder.setPositiveButton(getString(R.string.acceptMsg), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                layout.removeView(linearLayout);
+                int position = arrayReceivers.indexOf(textNickname.getText().toString());
+                arrayReceivers.remove(position);
+                arrayReceiversNames.remove(position);
+                arrayPhotos.remove(position);
+                receivers = "";
+                for(int i=0; i<arrayReceivers.size(); i++){
+                    receivers += arrayReceivers.get(i) + ", ";
+                }
             }
         });
 
