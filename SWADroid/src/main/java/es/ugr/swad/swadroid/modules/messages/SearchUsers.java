@@ -45,9 +45,10 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
     private String search;
     private ArrayList<String> arrayReceivers;
     private ArrayList<String> arrayReceiversNames;
+    private ArrayList<String> arrayPhotos;
     private UsersAdapter adapter;
     private CheckBox checkbox;
-    private UsersList userFilters = new UsersList();
+    private UsersList userFilters;
     private LinearLayout progressLayout;
     private boolean hideMenu = false;
     private long courseCode;
@@ -58,6 +59,8 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_users);
         setTitle(R.string.actionBarAddUser);
+
+        userFilters = new UsersList();
 
         //users list
         lvUsers = (ListView) findViewById(R.id.listItems);
@@ -75,6 +78,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                     arrayReceiversNames.remove(userFilters.getUsers().get(position).getUserFirstname() + " " +
                             userFilters.getUsers().get(position).getUserSurname1() + " " +
                             userFilters.getUsers().get(position).getUserSurname2());
+                    arrayPhotos.remove(userFilters.getUsers().get(position).getUserPhoto());
                 }
                 else{
                     checkbox.setChecked(true);
@@ -83,6 +87,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                     arrayReceiversNames.add(userFilters.getUsers().get(position).getUserFirstname() + " " +
                             userFilters.getUsers().get(position).getUserSurname1() + " " +
                             userFilters.getUsers().get(position).getUserSurname2());
+                    arrayPhotos.add(userFilters.getUsers().get(position).getUserPhoto());
                 }
             }
         });
@@ -94,6 +99,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
 
         arrayReceivers = getIntent().getStringArrayListExtra("receivers");
         arrayReceiversNames = getIntent().getStringArrayListExtra("receiversNames");
+        arrayPhotos = getIntent().getStringArrayListExtra("receiversPhotos");
 
         search = "";
 
@@ -160,6 +166,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         Intent intent = new Intent();
         intent.putExtra("receivers", arrayReceivers); // send receivers to parent activity
         intent.putExtra("receiversNames", arrayReceiversNames);
+        intent.putExtra("receiversPhotos", arrayPhotos);
         /*
         String receivers = "";
         for(int i=0; i<arrayReceivers.size(); i++)

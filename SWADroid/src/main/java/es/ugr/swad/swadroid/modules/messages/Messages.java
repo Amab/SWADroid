@@ -24,7 +24,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,8 +31,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import org.ksoap2.serialization.SoapObject;
@@ -42,9 +41,11 @@ import java.util.Vector;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.analytics.SWADroidTracker;
+import es.ugr.swad.swadroid.gui.ImageFactory;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.modules.login.Login;
+import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
@@ -76,7 +77,9 @@ public class Messages extends Module {
     private ArrayList<String> arrayReceivers;
 
     private ArrayList<String> arrayReceiversNames;
-    
+
+    private ArrayList<String> arrayPhotos;
+
     /**
      * Message's subject
      */
@@ -102,7 +105,7 @@ public class Messages extends Module {
 
     private ViewGroup layout;
 
- 
+
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
      */
@@ -114,7 +117,8 @@ public class Messages extends Module {
         receiversNames = "";
         arrayReceivers = new ArrayList<>();
         arrayReceiversNames = new ArrayList<>();
-        
+        arrayPhotos = new ArrayList<>();
+
         eventCode = getIntent().getLongExtra("eventCode", 0);
         setContentView(R.layout.messages_screen);
         setTitle(R.string.messagesModuleLabel);
@@ -122,12 +126,12 @@ public class Messages extends Module {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-		
+
         rcvEditText = (EditText) findViewById(R.id.message_receivers_text);
         subjEditText = (EditText) findViewById(R.id.message_subject_text);
         bodyEditText = (EditText) findViewById(R.id.message_body_text);
-       
-        if (savedInstanceState != null) 
+
+        if (savedInstanceState != null)
             writeData();
 
         sender = "";
@@ -143,15 +147,16 @@ public class Messages extends Module {
                 Intent intent = new Intent (Messages.this, SearchUsers.class);
                 intent.putExtra("receivers", arrayReceivers);
                 intent.putExtra("receiversNames", arrayReceiversNames);
+                intent.putExtra("receiversPhotos", arrayPhotos);
                 startActivityForResult(intent, Constants.SEARCH_USERS_REQUEST_CODE);
             }
         });
 
         layout = (ViewGroup) findViewById(R.id.layout_receivers);
 
-        setMETHOD_NAME("sendMessage");        
+        setMETHOD_NAME("sendMessage");
     }
-    
+
     @Override
 	protected void onStart() {
 		super.onStart();
@@ -164,7 +169,7 @@ public class Messages extends Module {
     private void readData() {
         receiversNames = rcvEditText.getText().toString();
         subject = subjEditText.getText().toString();
-        body = bodyEditText.getText().toString();        
+        body = bodyEditText.getText().toString();
     }
 
     /**
@@ -195,7 +200,7 @@ public class Messages extends Module {
 
         readData();
         addFootBody();
-        
+
         for(int i=0; i<arrayReceivers.size(); i++)
             receivers += arrayReceivers.get(i);
 
@@ -214,7 +219,6 @@ public class Messages extends Module {
             receiversNames = "";
             for (int i = 0; i < csSize; i++) {
                 SoapObject pii = (SoapObject) soap.getProperty(i);
-                String nickname = pii.getProperty("userNickname").toString();
                 String firstname = pii.getProperty("userFirstname").toString();
                 String surname1 = pii.getProperty("userSurname1").toString();
                 String surname2 = pii.getProperty("userSurname2").toString();
@@ -254,13 +258,13 @@ public class Messages extends Module {
     protected void onError() {
 
     }
-    
+
     @Override
 	protected void onRestart() {
 
 		super.onRestart();
 	}
-    
+
 
     /* (non-Javadoc)
      * @see android.app.Activity#onRestoreInstanceState(android.os.Bundle)
@@ -299,6 +303,7 @@ public class Messages extends Module {
     	if (data != null) {
     		arrayReceivers = data.getStringArrayListExtra("receivers");
             arrayReceiversNames = data.getStringArrayListExtra("receiversNames");
+            arrayPhotos = data.getStringArrayListExtra("receiversPhotos");
             receivers = "";
             receiversNames = sender;
             for(int i=0; i<arrayReceivers.size(); i++){
@@ -316,11 +321,22 @@ public class Messages extends Module {
 
                 final LinearLayout linearLayout = (LinearLayout) inflater.inflate(id, null, false);
 
-                final TextView textName = (TextView) linearLayout.findViewById(R.id.textName);
+                TextView textName = (TextView) linearLayout.findViewById(R.id.textName);
                 textName.setText(arrayReceiversNames.get(i).toString());
 
                 final TextView textNickname = (TextView) linearLayout.findViewById(R.id.textNickname);
                 textNickname.setText(arrayReceivers.get(i).toString());
+
+                ImageView photo = (ImageView) linearLayout.findViewById(R.id.imageView);
+                String userPhoto = arrayPhotos.get(i).toString();
+                if (Utils.connectionAvailable(this)
+                        && (userPhoto != null) && !userPhoto.equals("")
+                        && !userPhoto.equals(Constants.NULL_VALUE)) {
+                    ImageFactory.displayImage(getApplicationContext(), userPhoto, photo, true, true,
+                            R.drawable.usr_bl, R.drawable.usr_bl, R.drawable.usr_bl);
+                } else {
+                    Log.d(TAG, "No connection or no photo " + userPhoto);
+                }
 
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
@@ -334,8 +350,10 @@ public class Messages extends Module {
                 button.setOnClickListener( new View.OnClickListener() {
                     public void onClick(View view){
                         layout.removeView(linearLayout);
-                        arrayReceivers.remove(textNickname.getText().toString());
-                        arrayReceiversNames.remove(textName.getText().toString());
+                        int position = arrayReceivers.indexOf(textNickname.getText().toString());
+                        arrayReceivers.remove(position);
+                        arrayReceiversNames.remove(position);
+                        arrayPhotos.remove(position);
                     }
                 });
             }
@@ -348,18 +366,18 @@ public class Messages extends Module {
 	    getMenuInflater().inflate(R.menu.messages_main_activity_actions, menu);
 	    return super.onCreateOptionsMenu(menu);
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
 	        case R.id.action_sendMsg:
-	            try {	
+	            try {
 	            	if((eventCode == 0) && (rcvEditText.getText().length() == 0)) {
 	            		Toast.makeText(this, R.string.noReceiversMsg, Toast.LENGTH_LONG).show();
 	            	} else if(subjEditText.getText().length() == 0) {
 	            		Toast.makeText(this, R.string.noSubjectMessageMsg, Toast.LENGTH_LONG).show();
 	            	} else {
-	                    runConnection();            		
+	                    runConnection();
 	            	}
 	            } catch (Exception e) {
 	                String errorMsg = getString(R.string.errorServerResponseMsg);
@@ -369,7 +387,7 @@ public class Messages extends Module {
             case android.R.id.home:
                 showDialogCancel();
 	            return true;
-            
+
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
