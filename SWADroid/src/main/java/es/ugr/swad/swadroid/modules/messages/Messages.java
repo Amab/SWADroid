@@ -35,6 +35,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.nostra13.universalimageloader.core.ImageLoader;
+
 import org.ksoap2.serialization.SoapObject;
 import java.util.ArrayList;
 import java.util.Vector;
@@ -316,11 +319,12 @@ public class Messages extends Module {
 
             layout.removeAllViewsInLayout();
 
+            ImageLoader loader = ImageFactory.init(this, true, true, R.drawable.usr_bl, R.drawable.usr_bl,
+                    R.drawable.usr_bl);
+
             for(int i=0; i<arrayReceiversNames.size(); i++){
                 LayoutInflater inflater = LayoutInflater.from(this);
-                int id = R.layout.receivers_item;
-
-                final LinearLayout linearLayout = (LinearLayout) inflater.inflate(id, null, false);
+                final View linearLayout = inflater.inflate(R.layout.receivers_item, null, false);
 
                 final TextView textName = (TextView) linearLayout.findViewById(R.id.textName);
                 textName.setText(arrayReceiversNames.get(i).toString());
@@ -333,8 +337,7 @@ public class Messages extends Module {
                 if (Utils.connectionAvailable(this)
                         && (userPhoto != null) && !userPhoto.equals("")
                         && !userPhoto.equals(Constants.NULL_VALUE)) {
-                    ImageFactory.displayImage(getApplicationContext(), userPhoto, photo, true, true,
-                            R.drawable.usr_bl, R.drawable.usr_bl, R.drawable.usr_bl);
+                    ImageFactory.displayImage(loader, userPhoto, photo);
                 } else {
                     Log.d(TAG, "No connection or no photo " + userPhoto);
                 }
@@ -416,7 +419,7 @@ public class Messages extends Module {
         alert.show();
     }
 
-    private void showDialogDelete(final LinearLayout linearLayout, final TextView textNickname, String textName){
+    private void showDialogDelete(final View linearLayout, final TextView textNickname, String textName){
         AlertDialog.Builder builder = new AlertDialog.Builder(Messages.this);
         builder.setTitle(R.string.areYouSure);
         String dialog = getResources().getString(R.string.cancelRemoveReceivers);
