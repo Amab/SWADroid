@@ -344,7 +344,7 @@ public class Messages extends Module {
 
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-                params.topMargin = 7;
+                params.topMargin = 10;
                 linearLayout.setPadding(1, 1, 1, 1);
                 linearLayout.setLayoutParams(params);
 
