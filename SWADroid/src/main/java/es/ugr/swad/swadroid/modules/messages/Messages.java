@@ -110,6 +110,10 @@ public class Messages extends Module {
      * Name of reply notification receiver
      */
     private String sender;
+
+    private String photoSender;
+
+    private ImageLoader loader;
     /**
      * View group of receivers
      */
@@ -150,11 +154,48 @@ public class Messages extends Module {
         if (savedInstanceState != null)
             writeData();
 
+        layout = (ViewGroup) findViewById(R.id.layout_receivers);
+
+        messageLayout = (LinearLayout) findViewById(R.id.message_screen);
+        progressLayout = (LinearLayout) findViewById(R.id.progressbar_view);
+        TextView textLoading = (TextView) findViewById(R.id.text_progress);
+        textLoading.setText(R.string.sendingMessageMsg);
+
+        loader = ImageFactory.init(this, true, true, R.drawable.usr_bl, R.drawable.usr_bl,
+                R.drawable.usr_bl);
+
         eventCode = getIntent().getLongExtra("eventCode", 0);
         if (eventCode != 0) { //is a reply message
             subjEditText.setText("Re: " + getIntent().getStringExtra("summary"));
-            sender = getIntent().getStringExtra("sender") + ",\n";
-            //add sender to arrays and view
+            sender = getIntent().getStringExtra("sender");
+            photoSender = getIntent().getStringExtra("photo");
+
+            LayoutInflater inflater = LayoutInflater.from(this);
+            final View linearLayout = inflater.inflate(R.layout.receivers_item, null, false);
+
+            final TextView textName = (TextView) linearLayout.findViewById(R.id.textName);
+            textName.setText(sender);
+
+            ImageView photo = (ImageView) linearLayout.findViewById(R.id.imageView);
+            String userPhoto = photoSender;
+            if (Utils.connectionAvailable(this)
+                    && (userPhoto != null) && !userPhoto.equals("")
+                    && !userPhoto.equals(Constants.NULL_VALUE)) {
+                ImageFactory.displayImage(loader, userPhoto, photo);
+            } else {
+                Log.d(TAG, "No connection or no photo " + userPhoto);
+            }
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+            params.topMargin = 8;
+            linearLayout.setPadding(1, 1, 25, 1);
+            linearLayout.setLayoutParams(params);
+
+            layout.addView(linearLayout);
+
+            ImageButton button = (ImageButton)linearLayout.findViewById(R.id.buttonDelete);
+            button.setVisibility(View.GONE);
         }
 
         final ImageButton button = (ImageButton) findViewById(R.id.action_addUser);
@@ -164,17 +205,13 @@ public class Messages extends Module {
                 intent.putExtra("receivers", arrayReceivers);
                 intent.putExtra("receiversNames", arrayReceiversNames);
                 intent.putExtra("receiversPhotos", arrayPhotos);
+                for(int i=0; i<arrayReceivers.size(); i++){
+                    receivers += arrayReceivers.get(i) + ",";
+                }
                 Log.d(TAG, "Receivers of Messages: " + receivers);
                 startActivityForResult(intent, Constants.SEARCH_USERS_REQUEST_CODE);
             }
         });
-
-        layout = (ViewGroup) findViewById(R.id.layout_receivers);
-
-        messageLayout = (LinearLayout) findViewById(R.id.message_screen);
-        progressLayout = (LinearLayout) findViewById(R.id.progressbar_view);
-        TextView textLoading = (TextView) findViewById(R.id.text_progress);
-        textLoading.setText(R.string.sendingMessageMsg);
 
         setMETHOD_NAME("sendMessage");
     }
@@ -219,7 +256,7 @@ public class Messages extends Module {
     protected void requestService() throws Exception {
         readData();
         addFootBody();
-
+        receivers = "";
         for(int i=0; i<arrayReceivers.size(); i++)
             receivers += arrayReceivers.get(i) + ",";
 
@@ -268,7 +305,7 @@ public class Messages extends Module {
     @Override
     protected void postConnect() {
         progressLayout.setVisibility(View.GONE);
-        String messageSent = getString(R.string.messageSentMsg) + ":" + receiversNames;
+        String messageSent = getString(R.string.messageSentMsg) + ":\n" + receiversNames;
         Toast.makeText(this, messageSent, Toast.LENGTH_LONG).show();
         finish();
     }
@@ -325,10 +362,8 @@ public class Messages extends Module {
             arrayReceiversNames = data.getStringArrayListExtra("receiversNames");
             arrayPhotos = data.getStringArrayListExtra("receiversPhotos");
             receivers = "";
-            receiversNames = sender;
             for(int i=0; i<arrayReceivers.size(); i++){
-                receivers += arrayReceivers.get(i) + ", ";
-                receiversNames += arrayReceiversNames.get(i) + ",\n";
+                receivers += arrayReceivers.get(i) + ",";
             }
             Log.d(TAG, "Receivers of SearchUsers: " + receivers);
     		writeData();
@@ -337,8 +372,35 @@ public class Messages extends Module {
             layout.removeAllViewsInLayout();
             layout.setVisibility(View.GONE);
 
-            ImageLoader loader = ImageFactory.init(this, true, true, R.drawable.usr_bl, R.drawable.usr_bl,
-                    R.drawable.usr_bl);
+            if(sender != ""){
+                layout.setVisibility(View.VISIBLE);
+                LayoutInflater inflater = LayoutInflater.from(this);
+                final View linearLayout = inflater.inflate(R.layout.receivers_item, null, false);
+
+                final TextView textName = (TextView) linearLayout.findViewById(R.id.textName);
+                textName.setText(sender);
+
+                ImageView photo = (ImageView) linearLayout.findViewById(R.id.imageView);
+                String userPhoto = photoSender;
+                if (Utils.connectionAvailable(this)
+                        && (userPhoto != null) && !userPhoto.equals("")
+                        && !userPhoto.equals(Constants.NULL_VALUE)) {
+                    ImageFactory.displayImage(loader, userPhoto, photo);
+                } else {
+                    Log.d(TAG, "No connection or no photo " + userPhoto);
+                }
+
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+                params.topMargin = 8;
+                linearLayout.setPadding(1, 1, 25, 1);
+                linearLayout.setLayoutParams(params);
+
+                layout.addView(linearLayout);
+
+                ImageButton button = (ImageButton)linearLayout.findViewById(R.id.buttonDelete);
+                button.setVisibility(View.GONE);
+            }
 
             for(int i=0; i<arrayReceiversNames.size(); i++){
                 layout.setVisibility(View.VISIBLE);
@@ -391,6 +453,10 @@ public class Messages extends Module {
 	    switch (item.getItemId()) {
 	        case R.id.action_sendMsg:
 	            try {
+                    receivers = "";
+                    for(int i=0; i<arrayReceivers.size(); i++){
+                        receivers += arrayReceivers.get(i) + ",";
+                    }
 	            	if((eventCode == 0) && (receivers.length() == 0)) {
 	            		Toast.makeText(this, R.string.noReceiversMsg, Toast.LENGTH_LONG).show();
 	            	} else if(subjEditText.getText().length() == 0) {
@@ -458,9 +524,6 @@ public class Messages extends Module {
                 arrayReceiversNames.remove(position);
                 arrayPhotos.remove(position);
                 receivers = "";
-                for(int i=0; i<arrayReceivers.size(); i++){
-                    receivers += arrayReceivers.get(i) + ",";
-                }
             }
         });
 

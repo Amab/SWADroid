@@ -52,6 +52,7 @@ public class NotificationItem extends MenuActivity {
     private String notificationType;
     private String summary;
     private String sender;
+    private String userPhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +76,7 @@ public class NotificationItem extends MenuActivity {
         eventCode = Long.valueOf(this.getIntent().getStringExtra("eventCode"));
         notificationType = this.getIntent().getStringExtra("notificationType");
         sender = this.getIntent().getStringExtra("sender");
-        String userPhoto = this.getIntent().getStringExtra("userPhoto");
+        userPhoto = this.getIntent().getStringExtra("userPhoto");
         String course = this.getIntent().getStringExtra("course");
         summary = this.getIntent().getStringExtra("summary");
         String content = this.getIntent().getStringExtra("content");
@@ -159,6 +160,7 @@ public class NotificationItem extends MenuActivity {
                 activity.putExtra("eventCode", eventCode);
                 activity.putExtra("summary", summary);
                 activity.putExtra("sender", sender);
+                activity.putExtra("photo", userPhoto);
                 startActivity(activity);
                 return true;
 
