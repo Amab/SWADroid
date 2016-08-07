@@ -29,7 +29,6 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import java.util.ArrayList;
 import java.util.List;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.ImageFactory;
@@ -43,7 +42,6 @@ import es.ugr.swad.swadroid.model.UserFilter;
 public class UsersAdapter extends ArrayAdapter<UserFilter> {
     private LayoutInflater inflater;
     private ImageLoader loader;
-    public ArrayList checkboxSelected;
 
     private static class ViewHolder {
         ImageView image;
@@ -57,13 +55,9 @@ public class UsersAdapter extends ArrayAdapter<UserFilter> {
                 R.drawable.usr_bl);
 
         this.inflater = LayoutInflater.from(context);
-        checkboxSelected = new ArrayList();
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        // Get inflater
-        //this.inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
         // Does the current view exist?
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.row_user, parent, false);
@@ -80,13 +74,6 @@ public class UsersAdapter extends ArrayAdapter<UserFilter> {
         UserFilter user = getItem(position);
 
         holder.checkbox.setChecked(user.getCheckbox());
-
-        /*
-        if (checkboxSelected.get(position) != null){
-            holder.checkbox.setChecked(((Boolean) checkboxSelected.get(position)).booleanValue());
-        }else{
-            holder.checkbox.setChecked(false);
-        }*/
 
         // Setup row
         if(user.getUserPhoto().isEmpty())  //when the user don't have photo, the string is empty

@@ -161,10 +161,20 @@ public class UserFilter {
         this.userPhoto = userPhoto;
     }
 
+    /**
+     * Get if checkbox is selected.
+     *
+     * @return if checkbox is selected (true / false)
+     */
     public boolean getCheckbox() {
         return selectedCheckbox;
     }
 
+    /**
+     * Sets Full path where user's picture is stored.
+     *
+     * @param selected the checkbox is selected or not
+     */
     public void setCheckbox(boolean selected){
         this.selectedCheckbox = selected;
     }

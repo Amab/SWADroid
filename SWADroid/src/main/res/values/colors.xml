@@ -46,5 +46,6 @@
     <color name="button_background_blue">#50A3E1</color>
     <color name="button_background_green">#55B637</color>
     <color name="gray_text">#878787</color>
+    <color name="background_receiver">#DFDEDD</color>
 
 </resources>

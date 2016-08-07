@@ -35,9 +35,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.nostra13.universalimageloader.core.ImageLoader;
-
 import org.ksoap2.serialization.SoapObject;
 import java.util.ArrayList;
 import java.util.Vector;
@@ -69,20 +67,25 @@ public class Messages extends Module {
      */
     private Long eventCode;
     /**
-     * Message's receivers
+     * Message's receivers (nicknames)
      */
     private String receivers;
     /**
      * Names of receivers
      */
     private String receiversNames;
-
+    /**
+     * Array of nicknames
+     */
     private ArrayList<String> arrayReceivers;
-
+    /**
+     * Array of names
+     */
     private ArrayList<String> arrayReceiversNames;
-
+    /**
+     * Array of photos
+     */
     private ArrayList<String> arrayPhotos;
-
     /**
      * Message's subject
      */
@@ -103,11 +106,22 @@ public class Messages extends Module {
      * Body EditText
      */
     private EditText bodyEditText;
-
+    /**
+     * Name of reply notification receiver
+     */
     private String sender;
-
+    /**
+     * View group of receivers
+     */
     private ViewGroup layout;
-
+    /**
+     * Layout of sending progress
+     */
+    private LinearLayout progressLayout;
+    /**
+     * Layout of message screen
+     */
+    private LinearLayout messageLayout;
 
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
@@ -121,8 +135,8 @@ public class Messages extends Module {
         arrayReceivers = new ArrayList<>();
         arrayReceiversNames = new ArrayList<>();
         arrayPhotos = new ArrayList<>();
+        sender = "";
 
-        eventCode = getIntent().getLongExtra("eventCode", 0);
         setContentView(R.layout.messages_screen);
         setTitle(R.string.messagesModuleLabel);
 
@@ -130,18 +144,17 @@ public class Messages extends Module {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        rcvEditText = (EditText) findViewById(R.id.message_receivers_text);
         subjEditText = (EditText) findViewById(R.id.message_subject_text);
         bodyEditText = (EditText) findViewById(R.id.message_body_text);
 
         if (savedInstanceState != null)
             writeData();
 
-        sender = "";
-        if (eventCode != 0) {
+        eventCode = getIntent().getLongExtra("eventCode", 0);
+        if (eventCode != 0) { //is a reply message
             subjEditText.setText("Re: " + getIntent().getStringExtra("summary"));
             sender = getIntent().getStringExtra("sender") + ",\n";
-            rcvEditText.setText(sender);
+            //add sender to arrays and view
         }
 
         final ImageButton button = (ImageButton) findViewById(R.id.action_addUser);
@@ -158,6 +171,11 @@ public class Messages extends Module {
 
         layout = (ViewGroup) findViewById(R.id.layout_receivers);
 
+        messageLayout = (LinearLayout) findViewById(R.id.message_screen);
+        progressLayout = (LinearLayout) findViewById(R.id.progressbar_view);
+        TextView textLoading = (TextView) findViewById(R.id.text_progress);
+        textLoading.setText(R.string.sendingMessageMsg);
+
         setMETHOD_NAME("sendMessage");
     }
 
@@ -171,7 +189,6 @@ public class Messages extends Module {
      * Reads user input
      */
     private void readData() {
-        receiversNames = rcvEditText.getText().toString();
         subject = subjEditText.getText().toString();
         body = bodyEditText.getText().toString();
     }
@@ -180,7 +197,6 @@ public class Messages extends Module {
      * Writes user input
      */
     private void writeData() {
-        rcvEditText.setText(receiversNames);
         subjEditText.setText(subject);
         bodyEditText.setText(body);
     }
@@ -201,12 +217,11 @@ public class Messages extends Module {
      */
     @Override
     protected void requestService() throws Exception {
-
         readData();
         addFootBody();
 
         for(int i=0; i<arrayReceivers.size(); i++)
-            receivers += arrayReceivers.get(i);
+            receivers += arrayReceivers.get(i) + ",";
 
         createRequest(SOAPClient.CLIENT_TYPE);
         addParam("wsKey", Login.getLoggedUser().getWsKey());
@@ -216,7 +231,7 @@ public class Messages extends Module {
         addParam("body", body);
         sendRequest(User.class, false);
 
-        if (result != null) {
+        if (result != null) { //if there is result
             ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
             SoapObject soap = (SoapObject) res.get(1);
             int csSize = soap.getPropertyCount();
@@ -226,7 +241,10 @@ public class Messages extends Module {
                 String firstname = pii.getProperty("userFirstname").toString();
                 String surname1 = pii.getProperty("userSurname1").toString();
                 String surname2 = pii.getProperty("userSurname2").toString();
-                receiversNames += firstname + " " + surname1 + " " + surname2 + ",\n";
+                if (i == csSize-1)
+                    receiversNames += firstname + " " + surname1 + " " + surname2 + "";
+                else
+                    receiversNames += firstname + " " + surname1 + " " + surname2 + ",\n";
             }
         }
 
@@ -239,8 +257,9 @@ public class Messages extends Module {
     @Override
     protected void connect() {
         startConnection();
-
-        Toast.makeText(this, R.string.sendingMessageMsg, Toast.LENGTH_SHORT).show();
+        messageLayout.setVisibility(View.INVISIBLE);
+        progressLayout.setVisibility(View.VISIBLE);
+        //Toast.makeText(this, R.string.sendingMessageMsg, Toast.LENGTH_SHORT).show();
     }
 
     /* (non-Javadoc)
@@ -248,10 +267,9 @@ public class Messages extends Module {
      */
     @Override
     protected void postConnect() {
+        progressLayout.setVisibility(View.GONE);
         String messageSent = getString(R.string.messageSentMsg) + ":" + receiversNames;
-
         Toast.makeText(this, messageSent, Toast.LENGTH_LONG).show();
-
         finish();
     }
 
@@ -265,10 +283,8 @@ public class Messages extends Module {
 
     @Override
 	protected void onRestart() {
-
 		super.onRestart();
 	}
-
 
     /* (non-Javadoc)
      * @see android.app.Activity#onRestoreInstanceState(android.os.Bundle)
@@ -317,12 +333,15 @@ public class Messages extends Module {
             Log.d(TAG, "Receivers of SearchUsers: " + receivers);
     		writeData();
 
+            // if there are not receivers, hide view group
             layout.removeAllViewsInLayout();
+            layout.setVisibility(View.GONE);
 
             ImageLoader loader = ImageFactory.init(this, true, true, R.drawable.usr_bl, R.drawable.usr_bl,
                     R.drawable.usr_bl);
 
             for(int i=0; i<arrayReceiversNames.size(); i++){
+                layout.setVisibility(View.VISIBLE);
                 LayoutInflater inflater = LayoutInflater.from(this);
                 final View linearLayout = inflater.inflate(R.layout.receivers_item, null, false);
 
@@ -344,7 +363,7 @@ public class Messages extends Module {
 
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-                params.topMargin = 10;
+                params.topMargin = 8;
                 linearLayout.setPadding(1, 1, 1, 1);
                 linearLayout.setLayoutParams(params);
 
@@ -440,7 +459,7 @@ public class Messages extends Module {
                 arrayPhotos.remove(position);
                 receivers = "";
                 for(int i=0; i<arrayReceivers.size(); i++){
-                    receivers += arrayReceivers.get(i) + ", ";
+                    receivers += arrayReceivers.get(i) + ",";
                 }
             }
         });

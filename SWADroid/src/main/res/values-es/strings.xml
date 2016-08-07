@@ -319,6 +319,7 @@
     <string name="search">Buscar</string>
     <string name="search_user">Buscar usuario</string>
     <string name="users_found">usuarios encontrados</string>
+    <string name="user_found">usuario encontrado</string>
     <string name="users_NOTfound">No se encontraron usuarios</string>
     <string name="where_to_search">¿Dónde desea buscar?</string>
     <string name="in_subject">En</string>
@@ -327,5 +328,7 @@
     <string name="cancelSendMessage">Va a cancelar el envío del mensaje</string>
     <string name="cancelSendReceivers">Va a cancelar los destinatarios seleccionados</string>
     <string name="cancelRemoveReceivers">¿Quiere quitar a #nameUser# de la lista de destinatarios?</string>
+    <string name="user_added">Usuario añadido</string>
+    <string name="user_deleted">Usuario eliminado</string>
 
 </resources>

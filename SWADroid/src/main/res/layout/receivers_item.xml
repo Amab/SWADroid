@@ -4,7 +4,7 @@
     android:orientation="horizontal"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="#DFDEDD">
+    android:background="@color/background_receiver">
 
     <ImageView
         android:id="@+id/imageView"
@@ -21,6 +21,7 @@
         tools:text="Rubén Martín Hidalgo"
         android:paddingLeft="10dp"/>
 
+    <!--This TextView saves the nickname of receivers to remove it correctly-->
     <TextView
         android:id="@+id/textNickname"
         android:layout_width="wrap_content"

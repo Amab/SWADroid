@@ -73,21 +73,20 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                 checkbox = (CheckBox) view.findViewById(R.id.check);
                 if (checkbox.isChecked()){
                     checkbox.setChecked(false);
-                    adapter.checkboxSelected.set(position, false);
-                    arrayReceivers.remove("@" + userFilters.getUsers().get(position).getUserNickname());
-                    arrayReceiversNames.remove(userFilters.getUsers().get(position).getUserFirstname() + " " +
-                            userFilters.getUsers().get(position).getUserSurname1() + " " +
-                            userFilters.getUsers().get(position).getUserSurname2());
-                    arrayPhotos.remove(userFilters.getUsers().get(position).getUserPhoto());
+                    int index = arrayReceivers.indexOf("@" + userFilters.getUsers().get(position).getUserNickname());
+                    arrayReceivers.remove(index);
+                    arrayReceiversNames.remove(index);
+                    arrayPhotos.remove(index);
+                    Toast.makeText(SearchUsers.this, R.string.user_deleted, Toast.LENGTH_SHORT).show();
                 }
                 else{
                     checkbox.setChecked(true);
-                    adapter.checkboxSelected.set(position, true);
                     arrayReceivers.add("@" + userFilters.getUsers().get(position).getUserNickname());
                     arrayReceiversNames.add(userFilters.getUsers().get(position).getUserFirstname() + " " +
                             userFilters.getUsers().get(position).getUserSurname1() + " " +
                             userFilters.getUsers().get(position).getUserSurname2());
                     arrayPhotos.add(userFilters.getUsers().get(position).getUserPhoto());
+                    Toast.makeText(SearchUsers.this, R.string.user_added, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -95,7 +94,6 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         progressLayout = (LinearLayout) findViewById(R.id.progressbar_view);
         TextView textLoading = (TextView) findViewById(R.id.text_progress);
         textLoading.setText(R.string.loadingMsg);
-
 
         arrayReceivers = getIntent().getStringArrayListExtra("receivers");
         arrayReceiversNames = getIntent().getStringArrayListExtra("receiversNames");
@@ -126,12 +124,10 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         });
 
         searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-
         searchView.setQueryHint(getText(R.string.search_user));
 
         // listener to searchview
         searchView.setOnQueryTextListener(this);
-
         searchView.setMaxWidth(Integer.MAX_VALUE);
 
         // searview expanded
@@ -167,12 +163,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         intent.putExtra("receivers", arrayReceivers); // send receivers to parent activity
         intent.putExtra("receiversNames", arrayReceiversNames);
         intent.putExtra("receiversPhotos", arrayPhotos);
-        /*
-        String receivers = "";
-        for(int i=0; i<arrayReceivers.size(); i++)
-            receivers += arrayReceivers.get(i);
-        Log.d(TAG, "Nickname Receivers: " + receivers);
-        */
+
         setResult(RESULT_OK, intent);
         finish();
     }
@@ -197,7 +188,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
     @Override
     public boolean onQueryTextSubmit(String query) {
         String searchWithoutSpaces = search.replace(" ","");
-        if (searchWithoutSpaces.length() < 7){
+        if (searchWithoutSpaces.length() < 7){ //At least 7 characters
             Toast.makeText(SearchUsers.this, R.string.introduceLongerText, Toast.LENGTH_SHORT).show();
         }
         else {
@@ -296,11 +287,11 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         if (numUsers == 0){
             Toast.makeText(SearchUsers.this, R.string.users_NOTfound, Toast.LENGTH_SHORT).show();
         }
+        else if (numUsers == 1) {
+            Toast.makeText(SearchUsers.this, String.valueOf(numUsers) + " " + getResources().getString(R.string.user_found), Toast.LENGTH_SHORT).show();
+        }
         else{
             Toast.makeText(SearchUsers.this, String.valueOf(numUsers) + " " + getResources().getString(R.string.users_found), Toast.LENGTH_SHORT).show();
-            for (int i=0; i<numUsers; i++){
-                adapter.checkboxSelected.add(false);
-            }
         }
     }
 
