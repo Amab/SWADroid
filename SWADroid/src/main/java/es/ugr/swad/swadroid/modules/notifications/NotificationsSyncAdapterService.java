@@ -108,10 +108,10 @@ public class NotificationsSyncAdapterService extends Service {
         public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
             boolean sendException = true;
             int httpStatusCode;
-        	
+
         	try {
                 NotificationsSyncAdapterService.performSync(mContext);
-                
+
                 //If synchronization was successful, update last synchronization time in preferences
                 Preferences.setLastSyncTime(System.currentTimeMillis());
             } catch (Exception e) {
@@ -170,7 +170,7 @@ public class NotificationsSyncAdapterService extends Service {
                         errorMessage = mContext.getString(R.string.errorConnectionMsg);
                     }
                 }
-                
+
                 // Launch database rollback
                 if(dbHelper.isDbInTransaction()) {
                 	dbHelper.endTransaction(false);
@@ -182,12 +182,12 @@ public class NotificationsSyncAdapterService extends Service {
                 } else {
                     Log.e(TAG, errorMessage, e);
                 }
-                
+
                 //Notify synchronization stop
                 Intent stopIntent = new Intent();
                 stopIntent.setAction(STOP_SYNC);
-                stopIntent.putExtra("notifCount", notifCount);  
-                stopIntent.putExtra("errorMessage", errorMessage);        
+                stopIntent.putExtra("notifCount", notifCount);
+                stopIntent.putExtra("errorMessage", errorMessage);
                 mContext.sendBroadcast(stopIntent);
             }
         }
@@ -197,7 +197,7 @@ public class NotificationsSyncAdapterService extends Service {
 	 * @see android.app.Service#onCreate()
 	 */
 	@Override
-	public void onCreate() {        
+	public void onCreate() {
         isConnected = Utils.connectionAvailable(this);
 		// Check if debug mode is enabled
         try {
@@ -207,10 +207,10 @@ public class NotificationsSyncAdapterService extends Service {
         } catch (NameNotFoundException e) {
         	Log.e(TAG, "Error getting debuggable flag", e);
         }
-        
+
         try {
             prefs = new Preferences(this);
-            dbHelper = new DataBaseHelper(this);            
+            dbHelper = new DataBaseHelper(this);
             //Initialize webservices client
             webserviceClient = null;
         } catch (Exception e) {
@@ -219,7 +219,7 @@ public class NotificationsSyncAdapterService extends Service {
             //Send exception details to Google Analytics
             SWADroidTracker.sendException(mCtx, e, false);
         }
-        
+
 		super.onCreate();
 	}
 
@@ -229,14 +229,14 @@ public class NotificationsSyncAdapterService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		super.onStartCommand(intent, flags, startId);
-		 // return START_NOT_STICKY - we want this Service to be left running 
+		 // return START_NOT_STICKY - we want this Service to be left running
         //  unless explicitly stopped, and it's process is killed, we want it to
         //  be restarted
         return START_STICKY;
 	}
 
 	@Override
-    public IBinder onBind(Intent intent) {        
+    public IBinder onBind(Intent intent) {
         return getSyncAdapter().getSyncAdapterBinder();
     }
 
@@ -262,7 +262,7 @@ public class NotificationsSyncAdapterService extends Service {
 	    	if(clientType.equals(SOAPClient.CLIENT_TYPE)) {
 	    		webserviceClient = new SOAPClient();
 	    	}
-	
+
     	}
 
         webserviceClient.setMETHOD_NAME(METHOD_NAME);
@@ -282,16 +282,16 @@ public class NotificationsSyncAdapterService extends Service {
     /**
      * Sends a SOAP request to the specified webservice in METHOD_NAME class
      * constant of the webservice client.
-     * 
+     *
      * @param cl     Class to be mapped
      * @param simple Flag for select simple or complex response
-     * @throws Exception 
+     * @throws Exception
      */
     private static void sendRequest(Class<?> cl, boolean simple) throws Exception {
     	((SOAPClient) webserviceClient).sendRequest(cl, simple);
     	result = webserviceClient.getResult();
     }
-    
+
     private static void logUser() throws Exception {
     	Log.d(TAG, "Not logged");
 
@@ -327,7 +327,7 @@ public class NotificationsSyncAdapterService extends Service {
             Login.setLastLoginTime(System.currentTimeMillis());
         }
     }
-    
+
     private static void getNotifications() throws Exception {
         int numDeletedNotif;
 
@@ -339,7 +339,7 @@ public class NotificationsSyncAdapterService extends Service {
 
         //Creates webservice request, adds required params and sends request to webservice
         METHOD_NAME = "getNotifications";
-        
+
         createRequest(SOAPClient.CLIENT_TYPE);
         addParam("wsKey", Login.getLoggedUser().getWsKey());
         addParam("beginTime", timestamp);
@@ -352,7 +352,7 @@ public class NotificationsSyncAdapterService extends Service {
             ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
             SoapObject soap = (SoapObject) res.get(1);
             int numNotif = soap.getPropertyCount();
-            
+
             notifCount = 0;
             for (int i = 0; i < numNotif; i++) {
             	SoapObject pii = (SoapObject) soap.getProperty(i);
@@ -360,6 +360,7 @@ public class NotificationsSyncAdapterService extends Service {
                 Long eventCode = Long.valueOf(pii.getProperty("eventCode").toString());
                 String eventType = pii.getProperty("eventType").toString();
                 Long eventTime = Long.valueOf(pii.getProperty("eventTime").toString());
+                String userNickname = pii.getProperty("userNickname").toString();
                 String userSurname1 = pii.getProperty("userSurname1").toString();
                 String userSurname2 = pii.getProperty("userSurname2").toString();
                 String userFirstName = pii.getProperty("userFirstname").toString();
@@ -373,7 +374,10 @@ public class NotificationsSyncAdapterService extends Service {
 
                 // Add not cancelled notifications only
                 if(!notifCancelled) {
-                    SWADNotification n = new SWADNotification(notifCode, eventCode, eventType, eventTime, userSurname1, userSurname2, userFirstName, userPhoto, location, summary, status, content, notifReadSWAD, notifReadSWAD);
+                    SWADNotification n = new SWADNotification(notifCode, eventCode, eventType,
+                            eventTime, userNickname, userSurname1, userSurname2, userFirstName,
+                            userPhoto, location, summary, status, content, notifReadSWAD, notifReadSWAD);
+
                     dbHelper.insertNotification(n);
 
                     //Count unread notifications only
@@ -395,7 +399,7 @@ public class NotificationsSyncAdapterService extends Service {
             dbHelper.endTransaction(true);
         }
     }
-    
+
     /**
      * Sends to SWAD the "seen notifications" info
      */
@@ -404,17 +408,17 @@ public class NotificationsSyncAdapterService extends Service {
         String seenNotifCodes;
         Intent activity;
         int numMarkedNotificationsList;
-        
-    	//Construct a list of seen notifications in state "pending to mark as read in SWAD" 
+
+    	//Construct a list of seen notifications in state "pending to mark as read in SWAD"
         markedNotificationsList = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_NOTIFICATIONS,
         		"seenLocal='" + Utils.parseBoolString(true)
         		+ "' AND seenRemote='" + Utils.parseBoolString(false) + "'", null);
-        
+
         numMarkedNotificationsList = markedNotificationsList.size();
         if(isDebuggable)
         	Log.d(TAG, "numMarkedNotificationsList=" + numMarkedNotificationsList);
-        
-        if(numMarkedNotificationsList > 0) {            
+
+        if(numMarkedNotificationsList > 0) {
             //Creates a string of notification codes separated by commas from the previous list
             seenNotifCodes = Utils.getSeenNotificationCodes(markedNotificationsList);
 	        if(isDebuggable)
@@ -444,7 +448,7 @@ public class NotificationsSyncAdapterService extends Service {
                 0,
                 notificationIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
-        
+
         //Notify synchronization start
         Intent startIntent = new Intent();
         startIntent.setAction(START_SYNC);
@@ -466,7 +470,7 @@ public class NotificationsSyncAdapterService extends Service {
         //If last login time > Global.RELOGIN_TIME, force login
         if (Login.isLogged() &&
         		((System.currentTimeMillis() - Login.getLastLoginTime()) > Login.RELOGIN_TIME)) {
-        	
+
             Login.setLogged(false);
         }
 
@@ -476,7 +480,7 @@ public class NotificationsSyncAdapterService extends Service {
 
         if (Login.isLogged()) {
         	getNotifications();
-        	
+
         	if (notifCount > 0) {
 				notif = AlertNotificationFactory.createAlertNotification(context,
 						context.getString(R.string.app_name),
@@ -490,18 +494,18 @@ public class NotificationsSyncAdapterService extends Service {
 						true,
 						false,
 						false);
-				
+
 				AlertNotificationFactory.showAlertNotification(context, notif, Notifications.NOTIF_ALERT_ID);
         	}
-        	
+
         	sendReadedNotifications(context);
         }
 
         //Notify synchronization stop
         Intent stopIntent = new Intent();
         stopIntent.setAction(STOP_SYNC);
-        stopIntent.putExtra("notifCount", notifCount);  
-        stopIntent.putExtra("errorMessage", errorMessage);        
+        stopIntent.putExtra("notifCount", notifCount);
+        stopIntent.putExtra("errorMessage", errorMessage);
         context.sendBroadcast(stopIntent);
     }
 }

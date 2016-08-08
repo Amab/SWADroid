@@ -41,6 +41,10 @@ public class SWADNotification extends Model {
      */
     private long eventTime;
     /**
+     * Sender nickname
+     */
+    private String userNickname;
+    /**
      * Sender first surname
      */
     private String userSurname1;
@@ -84,6 +88,7 @@ public class SWADNotification extends Model {
     private static final PropertyInfo PI_eventCode = new PropertyInfo();
     private static final PropertyInfo PI_eventType = new PropertyInfo();
     private static final PropertyInfo PI_eventTime = new PropertyInfo();
+    private static final PropertyInfo PI_userNickname = new PropertyInfo();
     private static final PropertyInfo PI_userSurname1 = new PropertyInfo();
     private static final PropertyInfo PI_userSurname2 = new PropertyInfo();
     private static final PropertyInfo PI_userFirstName = new PropertyInfo();
@@ -99,6 +104,7 @@ public class SWADNotification extends Model {
                     PI_eventCode,
                     PI_eventType,
                     PI_eventTime,
+                    PI_userNickname,
                     PI_userSurname1,
                     PI_userSurname2,
                     PI_userFirstName,
@@ -114,6 +120,7 @@ public class SWADNotification extends Model {
      * @param eventCode     Event id (not unique)
      * @param eventType     Notification type
      * @param eventTime     Notification timestamp
+     * @param userNickname  Sender nickname
      * @param userSurname1  Sender first surname
      * @param userSurname2  Sender second surname
      * @param userFirstName Sender first name
@@ -125,14 +132,15 @@ public class SWADNotification extends Model {
      * @param seenRemote    Notification has been seen in SWAD
      */
     public SWADNotification(long id, long eventCode, String eventType, long eventTime,
-                            String userSurname1, String userSurname2, String userFirstName,
-                            String userPhoto, String location, String summary, int status,
-                            String content, boolean seenLocal, boolean seenRemote) {
+                            String userNickname, String userSurname1, String userSurname2,
+                            String userFirstName, String userPhoto, String location, String summary,
+                            int status, String content, boolean seenLocal, boolean seenRemote) {
 
         super(id);
         this.eventCode = eventCode;
         this.eventType = eventType;
         this.eventTime = eventTime;
+        this.userNickname = userNickname;
         this.userSurname1 = userSurname1;
         this.userSurname2 = userSurname2;
         this.userFirstName = userFirstName;
@@ -197,6 +205,24 @@ public class SWADNotification extends Model {
      */
     public void setEventTime(int eventTime) {
         this.eventTime = eventTime;
+    }
+
+    /**
+     * Gets sender nickname
+     *
+     * @return Sender nickname
+     */
+    public String getUserNickname() {
+        return userNickname;
+    }
+
+    /**
+     * Sets sender nickname
+     *
+     * @param userNickname Sender nickname
+     */
+    public void setUserNickname(String userNickname) {
+        this.userNickname = userNickname;
     }
 
     /**
@@ -383,118 +409,81 @@ public class SWADNotification extends Model {
 		this.seenRemote = seenRemote;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "SWADNotification [notifCode=" + getId() + ", eventCode=" + eventCode + ", eventType="
-				+ eventType + ", eventTime=" + eventTime + ", userSurname1="
-				+ userSurname1 + ", userSurname2=" + userSurname2
-				+ ", userFirstName=" + userFirstName + ", userPhoto="
-				+ userPhoto + ", location=" + location + ", summary=" + summary
-				+ ", status=" + status + ", content=" + content
-				+ ", seenLocal=" + seenLocal + ", seenRemote=" + seenRemote
-				+ "]";
-	}
+    @Override
+    public String toString() {
+        return "SWADNotification{" +
+                "eventCode=" + eventCode +
+                ", eventType='" + eventType + '\'' +
+                ", eventTime=" + eventTime +
+                ", userNickname='" + userNickname + '\'' +
+                ", userSurname1='" + userSurname1 + '\'' +
+                ", userSurname2='" + userSurname2 + '\'' +
+                ", userFirstName='" + userFirstName + '\'' +
+                ", userPhoto='" + userPhoto + '\'' +
+                ", location='" + location + '\'' +
+                ", summary='" + summary + '\'' +
+                ", status=" + status +
+                ", content='" + content + '\'' +
+                ", seenLocal=" + seenLocal +
+                ", seenRemote=" + seenRemote +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SWADNotification)) return false;
+        if (!super.equals(o)) return false;
+
+        SWADNotification that = (SWADNotification) o;
+
+        if (eventCode != that.eventCode) return false;
+        if (eventTime != that.eventTime) return false;
+        if (status != that.status) return false;
+        if (seenLocal != that.seenLocal) return false;
+        if (seenRemote != that.seenRemote) return false;
+        if (eventType != null ? !eventType.equals(that.eventType) : that.eventType != null)
+            return false;
+        if (userNickname != null ? !userNickname.equals(that.userNickname) : that.userNickname != null)
+            return false;
+        if (userSurname1 != null ? !userSurname1.equals(that.userSurname1) : that.userSurname1 != null)
+            return false;
+        if (userSurname2 != null ? !userSurname2.equals(that.userSurname2) : that.userSurname2 != null)
+            return false;
+        if (userFirstName != null ? !userFirstName.equals(that.userFirstName) : that.userFirstName != null)
+            return false;
+        if (userPhoto != null ? !userPhoto.equals(that.userPhoto) : that.userPhoto != null)
+            return false;
+        if (location != null ? !location.equals(that.location) : that.location != null)
+            return false;
+        if (summary != null ? !summary.equals(that.summary) : that.summary != null) return false;
+        return content != null ? content.equals(that.content) : that.content == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (int) (eventCode ^ (eventCode >>> 32));
+        result = 31 * result + (eventType != null ? eventType.hashCode() : 0);
+        result = 31 * result + (int) (eventTime ^ (eventTime >>> 32));
+        result = 31 * result + (userNickname != null ? userNickname.hashCode() : 0);
+        result = 31 * result + (userSurname1 != null ? userSurname1.hashCode() : 0);
+        result = 31 * result + (userSurname2 != null ? userSurname2.hashCode() : 0);
+        result = 31 * result + (userFirstName != null ? userFirstName.hashCode() : 0);
+        result = 31 * result + (userPhoto != null ? userPhoto.hashCode() : 0);
+        result = 31 * result + (location != null ? location.hashCode() : 0);
+        result = 31 * result + (summary != null ? summary.hashCode() : 0);
+        result = 31 * result + status;
+        result = 31 * result + (content != null ? content.hashCode() : 0);
+        result = 31 * result + (seenLocal ? 1 : 0);
+        result = 31 * result + (seenRemote ? 1 : 0);
+        return result;
+    }
 
     /* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((content == null) ? 0 : content.hashCode());
-		result = prime * result + (int) (eventCode ^ (eventCode >>> 32));
-		result = prime * result + (int) (eventTime ^ (eventTime >>> 32));
-		result = prime * result
-				+ ((eventType == null) ? 0 : eventType.hashCode());
-		result = prime * result
-				+ ((location == null) ? 0 : location.hashCode());
-		result = prime * result + (seenLocal ? 1231 : 1237);
-		result = prime * result + (seenRemote ? 1231 : 1237);
-		result = prime * result + status;
-		result = prime * result + ((summary == null) ? 0 : summary.hashCode());
-		result = prime * result
-				+ ((userFirstName == null) ? 0 : userFirstName.hashCode());
-		result = prime * result
-				+ ((userPhoto == null) ? 0 : userPhoto.hashCode());
-		result = prime * result
-				+ ((userSurname1 == null) ? 0 : userSurname1.hashCode());
-		result = prime * result
-				+ ((userSurname2 == null) ? 0 : userSurname2.hashCode());
-		return result;
-	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		SWADNotification other = (SWADNotification) obj;
-		if (content == null) {
-			if (other.content != null)
-				return false;
-		} else if (!content.equals(other.content))
-			return false;
-		if (eventCode != other.eventCode)
-			return false;
-		if (eventTime != other.eventTime)
-			return false;
-		if (eventType == null) {
-			if (other.eventType != null)
-				return false;
-		} else if (!eventType.equals(other.eventType))
-			return false;
-		if (location == null) {
-			if (other.location != null)
-				return false;
-		} else if (!location.equals(other.location))
-			return false;
-		if (seenLocal != other.seenLocal)
-			return false;
-		if (seenRemote != other.seenRemote)
-			return false;
-		if (status != other.status)
-			return false;
-		if (summary == null) {
-			if (other.summary != null)
-				return false;
-		} else if (!summary.equals(other.summary))
-			return false;
-		if (userFirstName == null) {
-			if (other.userFirstName != null)
-				return false;
-		} else if (!userFirstName.equals(other.userFirstName))
-			return false;
-		if (userPhoto == null) {
-			if (other.userPhoto != null)
-				return false;
-		} else if (!userPhoto.equals(other.userPhoto))
-			return false;
-		if (userSurname1 == null) {
-			if (other.userSurname1 != null)
-				return false;
-		} else if (!userSurname1.equals(other.userSurname1))
-			return false;
-		if (userSurname2 == null) {
-			if (other.userSurname2 != null)
-				return false;
-		} else if (!userSurname2.equals(other.userSurname2))
-			return false;
-		return true;
-	}
-
-	/* (non-Javadoc)
-     * @see org.ksoap2.serialization.KvmSerializable#getProperty(int)
-     */
+         * @see org.ksoap2.serialization.KvmSerializable#getProperty(int)
+         */
     public Object getProperty(int param) {
         Object object = null;
         switch (param) {
@@ -511,27 +500,30 @@ public class SWADNotification extends Model {
                 object = eventTime;
                 break;
             case 4:
-                object = userSurname1;
+                object = userNickname;
                 break;
             case 5:
-                object = userSurname2;
+                object = userSurname1;
                 break;
             case 6:
-                object = userFirstName;
+                object = userSurname2;
                 break;
             case 7:
-                object = userPhoto;
+                object = userFirstName;
                 break;
             case 8:
-                object = location;
+                object = userPhoto;
                 break;
             case 9:
-                object = summary;
+                object = location;
                 break;
             case 10:
-                object = status;
+                object = summary;
                 break;
             case 11:
+                object = status;
+                break;
+            case 12:
                 object = content;
                 break;
         }
@@ -569,33 +561,37 @@ public class SWADNotification extends Model {
                 break;
             case 4:
                 propertyInfo.type = PropertyInfo.STRING_CLASS;
-                propertyInfo.name = "userSurname1";
+                propertyInfo.name = "userNickname";
                 break;
             case 5:
                 propertyInfo.type = PropertyInfo.STRING_CLASS;
-                propertyInfo.name = "userSurname2";
+                propertyInfo.name = "userSurname1";
                 break;
             case 6:
                 propertyInfo.type = PropertyInfo.STRING_CLASS;
-                propertyInfo.name = "userFirstName";
+                propertyInfo.name = "userSurname2";
                 break;
             case 7:
                 propertyInfo.type = PropertyInfo.STRING_CLASS;
-                propertyInfo.name = "userPhoto";
+                propertyInfo.name = "userFirstName";
                 break;
             case 8:
                 propertyInfo.type = PropertyInfo.STRING_CLASS;
-                propertyInfo.name = "location";
+                propertyInfo.name = "userPhoto";
                 break;
             case 9:
                 propertyInfo.type = PropertyInfo.STRING_CLASS;
-                propertyInfo.name = "summary";
+                propertyInfo.name = "location";
                 break;
             case 10:
+                propertyInfo.type = PropertyInfo.STRING_CLASS;
+                propertyInfo.name = "summary";
+                break;
+            case 11:
                 propertyInfo.type = PropertyInfo.INTEGER_CLASS;
                 propertyInfo.name = "status";
                 break;
-            case 11:
+            case 12:
                 propertyInfo.type = PropertyInfo.STRING_CLASS;
                 propertyInfo.name = "content";
                 break;
@@ -620,27 +616,30 @@ public class SWADNotification extends Model {
                 eventTime = (Long) obj;
                 break;
             case 4:
-                userSurname1 = (String) obj;
+                userNickname = (String) obj;
                 break;
             case 5:
-                userSurname2 = (String) obj;
+                userSurname1 = (String) obj;
                 break;
             case 6:
-                userFirstName = (String) obj;
+                userSurname2 = (String) obj;
                 break;
             case 7:
-                userPhoto = (String) obj;
+                userFirstName = (String) obj;
                 break;
             case 8:
-                location = (String) obj;
+                userPhoto = (String) obj;
                 break;
             case 9:
-                summary = (String) obj;
+                location = (String) obj;
                 break;
             case 10:
-                status = (Integer) obj;
+                summary = (String) obj;
                 break;
             case 11:
+                status = (Integer) obj;
+                break;
+            case 12:
                 content = (String) obj;
                 break;
         }
