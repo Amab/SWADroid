@@ -320,10 +320,14 @@ public class DataBaseHelper {
                         ent.getInt(params.getSecond()));
                 break;
             case DataBaseHelper.DB_TABLE_NOTIFICATIONS:
+                String nickName = ent.getString("userNickname");
+                String decryptedNickname = (nickName != null && !nickName.isEmpty())? crypto.decrypt(nickName) : "";
+
                 o = new SWADNotification(ent.getInt("notifCode"),
                         ent.getInt("eventCode"),
                         crypto.decrypt(ent.getString("eventType")),
                         ent.getLong("eventTime"),
+                        decryptedNickname,
                         crypto.decrypt(ent.getString("userSurname1")),
                         crypto.decrypt(ent.getString("userSurname2")),
                         crypto.decrypt(ent.getString("userFirstname")),
@@ -958,6 +962,7 @@ public class DataBaseHelper {
         ent.setValue("eventCode", n.getEventCode());
         ent.setValue("eventType", crypto.encrypt(n.getEventType()));
         ent.setValue("eventTime", eventTime);
+        ent.setValue("userNickname", crypto.encrypt(n.getUserNickname()));
         ent.setValue("userSurname1", crypto.encrypt(n.getUserSurname1()));
         ent.setValue("userSurname2", crypto.encrypt(n.getUserSurname2()));
         ent.setValue("userFirstname", crypto.encrypt(n.getUserFirstName()));
@@ -1457,6 +1462,7 @@ public class DataBaseHelper {
         long eventCode = actual.getEventCode();
         String eventType = crypto.encrypt(actual.getEventType());
         String eventTime = String.valueOf(actual.getEventTime());
+        String userNickname = crypto.encrypt(actual.getUserNickname());
         String userSurname1 = crypto.encrypt(actual.getUserSurname1());
         String userSurname2 = crypto.encrypt(actual.getUserSurname2());
         String userFirstname = crypto.encrypt(actual.getUserFirstName());
@@ -1473,6 +1479,7 @@ public class DataBaseHelper {
 	        ent.setValue("eventCode", eventCode);
 	        ent.setValue("eventType", eventType);
 	        ent.setValue("eventTime", eventTime);
+            ent.setValue("userNickname", userNickname);
 	        ent.setValue("userSurname1", userSurname1);
 	        ent.setValue("userSurname2", userSurname2);
 	        ent.setValue("userFirstname", userFirstname);
@@ -1499,6 +1506,7 @@ public class DataBaseHelper {
         long eventCode = actual.getEventCode();
         String eventType = crypto.encrypt(actual.getEventType());
         String eventTime = String.valueOf(actual.getEventTime());
+        String userNickname = crypto.encrypt(actual.getUserNickname());
         String userSurname1 = crypto.encrypt(actual.getUserSurname1());
         String userSurname2 = crypto.encrypt(actual.getUserSurname2());
         String userFirstname = crypto.encrypt(actual.getUserFirstName());
@@ -1515,6 +1523,7 @@ public class DataBaseHelper {
 	        ent.setValue("eventCode", eventCode);
 	        ent.setValue("eventType", eventType);
 	        ent.setValue("eventTime", eventTime);
+            ent.setValue("userNickname", userNickname);
 	        ent.setValue("userSurname1", userSurname1);
 	        ent.setValue("userSurname2", userSurname2);
 	        ent.setValue("userFirstname", userFirstname);

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <database
     name="swadroid_db_crypt"
-    version="19" >
+    version="20" >
 
     <table
         name="courses"
@@ -47,6 +47,10 @@
         <field
             name="eventTime"
             obligatory="true"
+            type="text" />
+        <field
+            name="userNickname"
+            new-in-version="20"
             type="text" />
         <field
             name="userSurname1"

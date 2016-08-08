@@ -417,6 +417,8 @@ public class Notifications extends Module implements
 					String eventType = pii.getProperty("eventType").toString();
 					Long eventTime = Long.valueOf(pii.getProperty("eventTime")
 							.toString());
+					String userNickname = pii.getProperty("userNickname")
+							.toString();
 					String userSurname1 = pii.getProperty("userSurname1")
 							.toString();
 					String userSurname2 = pii.getProperty("userSurname2")
@@ -435,10 +437,11 @@ public class Notifications extends Module implements
 					// Add not cancelled notifications only
 					if(!notifCancelled) {
 						SWADNotification n = new SWADNotification(notifCode,
-								eventCode, eventType, eventTime, userSurname1,
+								eventCode, eventType, eventTime, userNickname, userSurname1,
 								userSurname2, userFirstName, userPhoto, location,
 								summary, status, content, notifReadSWAD,
 								notifReadSWAD);
+
 						dbHelper.insertNotification(n);
 
 						// Count unread notifications only
