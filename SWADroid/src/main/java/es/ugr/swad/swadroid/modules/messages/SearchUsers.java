@@ -53,6 +53,8 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
     private boolean hideMenu = false;
     private long courseCode;
     private int numUsers;
+    private String senderName;
+    private String senderPhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +100,8 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         arrayReceivers = getIntent().getStringArrayListExtra("receivers");
         arrayReceiversNames = getIntent().getStringArrayListExtra("receiversNames");
         arrayPhotos = getIntent().getStringArrayListExtra("receiversPhotos");
+        senderName = getIntent().getStringExtra("senderName");
+        senderPhoto = getIntent().getStringExtra("senderPhoto");
 
         search = "";
 
@@ -251,15 +255,21 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                     String surname2 = pii.getPrimitiveProperty("userSurname2").toString();
                     String firstname = pii.getPrimitiveProperty("userFirstname").toString();
                     String userPhoto = pii.getPrimitiveProperty("userPhoto").toString();
-                    Log.d(TAG, nickname + " " + surname1 + " " + surname2 + " " + firstname + " " + userPhoto);
+                    Log.d(TAG, nickname + ", " + firstname + " " + surname1 + " " + surname2 + ", " + userPhoto);
 
                     boolean selected;
-                    if (arrayReceivers.contains("@" + nickname)) {
-                        selected = true;
+
+                    if (!(firstname + " " + surname1 + " " + surname2).equals(senderName) || !userPhoto.equals(senderPhoto)){
+                        //is not the sender of reply message
+                        if (arrayReceivers.contains("@" + nickname)) {
+                            selected = true;
+                        }
+                        else
+                            selected = false;
+                        userFilters.saveUser(new UserFilter(nickname, surname1, surname2, firstname, userPhoto, selected));
+
                     }
-                    else
-                        selected = false;
-                    userFilters.saveUser(new UserFilter(nickname, surname1, surname2, firstname, userPhoto, selected));
+
                 }
             }
             numUsers = userFilters.getUsers().size();

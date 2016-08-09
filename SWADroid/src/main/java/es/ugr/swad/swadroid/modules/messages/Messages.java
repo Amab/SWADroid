@@ -111,7 +111,7 @@ public class Messages extends Module {
      */
     private String sender;
 
-    private String photoSender;
+    private String senderPhoto;
 
     private ImageLoader loader;
     /**
@@ -168,7 +168,7 @@ public class Messages extends Module {
         if (eventCode != 0) { //is a reply message
             subjEditText.setText("Re: " + getIntent().getStringExtra("summary"));
             sender = getIntent().getStringExtra("sender");
-            photoSender = getIntent().getStringExtra("photo");
+            senderPhoto = getIntent().getStringExtra("photo");
 
             LayoutInflater inflater = LayoutInflater.from(this);
             final View linearLayout = inflater.inflate(R.layout.receivers_item, null, false);
@@ -177,7 +177,7 @@ public class Messages extends Module {
             textName.setText(sender);
 
             ImageView photo = (ImageView) linearLayout.findViewById(R.id.imageView);
-            String userPhoto = photoSender;
+            String userPhoto = senderPhoto;
             if (Utils.connectionAvailable(this)
                     && (userPhoto != null) && !userPhoto.equals("")
                     && !userPhoto.equals(Constants.NULL_VALUE)) {
@@ -205,6 +205,8 @@ public class Messages extends Module {
                 intent.putExtra("receivers", arrayReceivers);
                 intent.putExtra("receiversNames", arrayReceiversNames);
                 intent.putExtra("receiversPhotos", arrayPhotos);
+                intent.putExtra("senderName", sender);
+                intent.putExtra("senderPhoto", senderPhoto);
                 for(int i=0; i<arrayReceivers.size(); i++){
                     receivers += arrayReceivers.get(i) + ",";
                 }
@@ -381,7 +383,7 @@ public class Messages extends Module {
                 textName.setText(sender);
 
                 ImageView photo = (ImageView) linearLayout.findViewById(R.id.imageView);
-                String userPhoto = photoSender;
+                String userPhoto = senderPhoto;
                 if (Utils.connectionAvailable(this)
                         && (userPhoto != null) && !userPhoto.equals("")
                         && !userPhoto.equals(Constants.NULL_VALUE)) {
