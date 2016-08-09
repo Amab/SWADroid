@@ -330,5 +330,6 @@
     <string name="cancelRemoveReceivers">¿Quiere quitar a #nameUser# de la lista de destinatarios?</string>
     <string name="user_added">Usuario añadido</string>
     <string name="user_deleted">Usuario eliminado</string>
+    <string name="see_all">Ver todos</string>
 
 </resources>

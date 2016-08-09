@@ -37,6 +37,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import org.ksoap2.serialization.SoapObject;
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Vector;
 import es.ugr.swad.swadroid.Constants;
@@ -170,32 +172,7 @@ public class Messages extends Module {
             sender = getIntent().getStringExtra("sender");
             senderPhoto = getIntent().getStringExtra("photo");
 
-            LayoutInflater inflater = LayoutInflater.from(this);
-            final View linearLayout = inflater.inflate(R.layout.receivers_item, null, false);
-
-            final TextView textName = (TextView) linearLayout.findViewById(R.id.textName);
-            textName.setText(sender);
-
-            ImageView photo = (ImageView) linearLayout.findViewById(R.id.imageView);
-            String userPhoto = senderPhoto;
-            if (Utils.connectionAvailable(this)
-                    && (userPhoto != null) && !userPhoto.equals("")
-                    && !userPhoto.equals(Constants.NULL_VALUE)) {
-                ImageFactory.displayImage(loader, userPhoto, photo);
-            } else {
-                Log.d(TAG, "No connection or no photo " + userPhoto);
-            }
-
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-            params.topMargin = 8;
-            linearLayout.setPadding(1, 1, 20, 1);
-            linearLayout.setLayoutParams(params);
-
-            layout.addView(linearLayout);
-
-            ImageButton button = (ImageButton)linearLayout.findViewById(R.id.buttonDelete);
-            button.setVisibility(View.GONE);
+            showSenderReplyMessage();
         }
 
         final ImageButton button = (ImageButton) findViewById(R.id.action_addUser);
@@ -370,76 +347,7 @@ public class Messages extends Module {
             Log.d(TAG, "Receivers of SearchUsers: " + receivers);
     		writeData();
 
-            // if there are not receivers, hide view group
-            layout.removeAllViewsInLayout();
-            layout.setVisibility(View.GONE);
-
-            if(sender != ""){
-                layout.setVisibility(View.VISIBLE);
-                LayoutInflater inflater = LayoutInflater.from(this);
-                final View linearLayout = inflater.inflate(R.layout.receivers_item, null, false);
-
-                final TextView textName = (TextView) linearLayout.findViewById(R.id.textName);
-                textName.setText(sender);
-
-                ImageView photo = (ImageView) linearLayout.findViewById(R.id.imageView);
-                String userPhoto = senderPhoto;
-                if (Utils.connectionAvailable(this)
-                        && (userPhoto != null) && !userPhoto.equals("")
-                        && !userPhoto.equals(Constants.NULL_VALUE)) {
-                    ImageFactory.displayImage(loader, userPhoto, photo);
-                } else {
-                    Log.d(TAG, "No connection or no photo " + userPhoto);
-                }
-
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-                params.topMargin = 8;
-                linearLayout.setPadding(1, 1, 25, 1);
-                linearLayout.setLayoutParams(params);
-
-                layout.addView(linearLayout);
-
-                ImageButton button = (ImageButton)linearLayout.findViewById(R.id.buttonDelete);
-                button.setVisibility(View.GONE);
-            }
-
-            for(int i=0; i<arrayReceiversNames.size(); i++){
-                layout.setVisibility(View.VISIBLE);
-                LayoutInflater inflater = LayoutInflater.from(this);
-                final View linearLayout = inflater.inflate(R.layout.receivers_item, null, false);
-
-                final TextView textName = (TextView) linearLayout.findViewById(R.id.textName);
-                textName.setText(arrayReceiversNames.get(i).toString());
-
-                final TextView textNickname = (TextView) linearLayout.findViewById(R.id.textNickname);
-                textNickname.setText(arrayReceivers.get(i).toString());
-
-                ImageView photo = (ImageView) linearLayout.findViewById(R.id.imageView);
-                String userPhoto = arrayPhotos.get(i).toString();
-                if (Utils.connectionAvailable(this)
-                        && (userPhoto != null) && !userPhoto.equals("")
-                        && !userPhoto.equals(Constants.NULL_VALUE)) {
-                    ImageFactory.displayImage(loader, userPhoto, photo);
-                } else {
-                    Log.d(TAG, "No connection or no photo " + userPhoto);
-                }
-
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-                params.topMargin = 8;
-                linearLayout.setPadding(1, 1, 1, 1);
-                linearLayout.setLayoutParams(params);
-
-                layout.addView(linearLayout);
-
-                ImageButton button = (ImageButton)linearLayout.findViewById(R.id.buttonDelete);
-                button.setOnClickListener( new View.OnClickListener() {
-                    public void onClick(View view){
-                        showDialogDelete(linearLayout, textNickname, textName.getText().toString());
-                    }
-                });
-            }
+            showReceivers();
         }
 		super.onActivityResult(requestCode, resultCode, data);
 	}
@@ -531,5 +439,94 @@ public class Messages extends Module {
 
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    private void showSenderReplyMessage (){
+        LayoutInflater inflater = LayoutInflater.from(this);
+        final View linearLayout = inflater.inflate(R.layout.receivers_item, null, false);
+
+        final TextView textName = (TextView) linearLayout.findViewById(R.id.textName);
+        textName.setText(sender);
+
+        ImageView photo = (ImageView) linearLayout.findViewById(R.id.imageView);
+        String userPhoto = senderPhoto;
+        if (Utils.connectionAvailable(this)
+                && (userPhoto != null) && !userPhoto.equals("")
+                && !userPhoto.equals(Constants.NULL_VALUE)) {
+            ImageFactory.displayImage(loader, userPhoto, photo);
+        } else {
+            Log.d(TAG, "No connection or no photo " + userPhoto);
+        }
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        params.topMargin = 8;
+        linearLayout.setPadding(1, 1, 25, 1);
+        linearLayout.setLayoutParams(params);
+
+        layout.addView(linearLayout);
+
+        ImageButton button = (ImageButton)linearLayout.findViewById(R.id.buttonDelete);
+        button.setVisibility(View.GONE);
+    }
+
+    private void showReceivers (){
+        // restart layout
+        layout.removeAllViewsInLayout();
+        layout.setVisibility(View.GONE);
+
+        if(sender != ""){ // add the sender of reply message to receivers list
+            layout.setVisibility(View.VISIBLE);
+            showSenderReplyMessage();
+        }
+
+        TextView seeAll = (TextView) findViewById(R.id.see_more_receivers);
+        int i;
+        if (arrayReceiversNames.size() > 3) {
+            i = arrayReceiversNames.size() - 3;
+            seeAll.setVisibility(View.VISIBLE);
+        }
+        else {
+            i = 0;
+            seeAll.setVisibility(View.GONE);
+        }
+
+        while (i < arrayReceiversNames.size()){
+            layout.setVisibility(View.VISIBLE);
+            LayoutInflater inflater = LayoutInflater.from(this);
+            final View linearLayout = inflater.inflate(R.layout.receivers_item, null, false);
+
+            final TextView textName = (TextView) linearLayout.findViewById(R.id.textName);
+            textName.setText(arrayReceiversNames.get(i).toString());
+
+            final TextView textNickname = (TextView) linearLayout.findViewById(R.id.textNickname);
+            textNickname.setText(arrayReceivers.get(i).toString());
+
+            ImageView photo = (ImageView) linearLayout.findViewById(R.id.imageView);
+            String userPhoto = arrayPhotos.get(i).toString();
+            if (Utils.connectionAvailable(this)
+                    && (userPhoto != null) && !userPhoto.equals("")
+                    && !userPhoto.equals(Constants.NULL_VALUE)) {
+                ImageFactory.displayImage(loader, userPhoto, photo);
+            } else {
+                Log.d(TAG, "No connection or no photo " + userPhoto);
+            }
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+            params.topMargin = 8;
+            linearLayout.setPadding(1, 1, 1, 1);
+            linearLayout.setLayoutParams(params);
+
+            layout.addView(linearLayout);
+
+            ImageButton button = (ImageButton)linearLayout.findViewById(R.id.buttonDelete);
+            button.setOnClickListener( new View.OnClickListener() {
+                public void onClick(View view){
+                    showDialogDelete(linearLayout, textNickname, textName.getText().toString());
+                }
+            });
+            i++;
+        }
     }
 }

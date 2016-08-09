@@ -89,6 +89,14 @@
                 android:layout_marginBottom="5dp"/>
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/see_more_receivers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/see_all"
+            android:layout_margin="5dp"
+            android:visibility="gone"/>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1.5dp"
