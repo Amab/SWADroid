@@ -20,6 +20,7 @@ package es.ugr.swad.swadroid.modules.messages;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -129,6 +130,10 @@ public class Messages extends Module {
      */
     private LinearLayout messageLayout;
 
+    private TextView seeAll;
+
+    private boolean showAll;
+
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
      */
@@ -184,11 +189,25 @@ public class Messages extends Module {
                 intent.putExtra("receiversPhotos", arrayPhotos);
                 intent.putExtra("senderName", sender);
                 intent.putExtra("senderPhoto", senderPhoto);
+                receivers = "";
                 for(int i=0; i<arrayReceivers.size(); i++){
                     receivers += arrayReceivers.get(i) + ",";
                 }
                 Log.d(TAG, "Receivers of Messages: " + receivers);
                 startActivityForResult(intent, Constants.SEARCH_USERS_REQUEST_CODE);
+            }
+        });
+
+        showAll = false;
+        seeAll = (TextView) findViewById(R.id.see_more_receivers);
+        seeAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (showAll)
+                    showAll = false;
+                else
+                    showAll = true;
+                showReceivers();
             }
         });
 
@@ -344,9 +363,11 @@ public class Messages extends Module {
             for(int i=0; i<arrayReceivers.size(); i++){
                 receivers += arrayReceivers.get(i) + ",";
             }
-            Log.d(TAG, "Receivers of SearchUsers: " + receivers);
-    		writeData();
 
+            if(arrayReceivers.size() <= 3)
+                showAll = false;
+
+    		writeData();
             showReceivers();
         }
 		super.onActivityResult(requestCode, resultCode, data);
@@ -428,12 +449,17 @@ public class Messages extends Module {
 
         builder.setPositiveButton(getString(R.string.acceptMsg), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                layout.removeView(linearLayout);
                 int position = arrayReceivers.indexOf(textNickname.getText().toString());
                 arrayReceivers.remove(position);
                 arrayReceiversNames.remove(position);
                 arrayPhotos.remove(position);
-                receivers = "";
+
+                if(arrayReceivers.size() <= 3){
+                    seeAll.setVisibility(View.GONE);
+                    showAll = false;
+                }
+
+                showReceivers();
             }
         });
 
@@ -441,7 +467,7 @@ public class Messages extends Module {
         alert.show();
     }
 
-    private void showSenderReplyMessage (){
+    private void showSenderReplyMessage(){
         LayoutInflater inflater = LayoutInflater.from(this);
         final View linearLayout = inflater.inflate(R.layout.receivers_item, null, false);
 
@@ -470,7 +496,13 @@ public class Messages extends Module {
         button.setVisibility(View.GONE);
     }
 
-    private void showReceivers (){
+    private void showReceivers(){
+        Log.d(TAG, "Receivers of SearchUsers: " + receivers);
+        for (int i=0; i<arrayReceivers.size(); i++){
+            Log.d(TAG, "arrayReceivers: " + arrayReceivers.get(i).toString() + " " + arrayReceiversNames.get(i).toString());
+        }
+        Log.d(TAG, Boolean.toString(showAll));
+
         // restart layout
         layout.removeAllViewsInLayout();
         layout.setVisibility(View.GONE);
@@ -480,15 +512,21 @@ public class Messages extends Module {
             showSenderReplyMessage();
         }
 
-        TextView seeAll = (TextView) findViewById(R.id.see_more_receivers);
         int i;
-        if (arrayReceiversNames.size() > 3) {
-            i = arrayReceiversNames.size() - 3;
-            seeAll.setVisibility(View.VISIBLE);
-        }
-        else {
+        if(showAll){
             i = 0;
-            seeAll.setVisibility(View.GONE);
+            seeAll.setText(getResources().getString(R.string.see_less));
+        }
+        else{
+            if (arrayReceiversNames.size() > 3) {
+                i = arrayReceiversNames.size() - 3;
+                seeAll.setVisibility(View.VISIBLE);
+                seeAll.setText(getResources().getString(R.string.see_all));
+            }
+            else {
+                i = 0;
+                seeAll.setVisibility(View.GONE);
+            }
         }
 
         while (i < arrayReceiversNames.size()){
