@@ -27,6 +27,7 @@
         android:id="@+id/preferences_menu"
         android:icon="@drawable/ic_menu_settings_holo_light"
         android:title="@string/preferencesTitle_menu"
+        android:visible="false"
         swadroid:showAsAction="ifRoom|withText">
     </item>
 

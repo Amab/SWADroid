@@ -445,19 +445,16 @@ public class SWADMain extends MenuExpandableListActivity {
 
                 if (lastSelected != -1 && lastSelected < listCourses.size()) {
                     courseSelected = (Course) listCourses.get(lastSelected);
-                    Courses.setSelectedCourseCode(courseSelected.getId());
-                    Courses.setSelectedCourseShortName(courseSelected.getShortName());
-                    Courses.setSelectedCourseFullName(courseSelected.getFullName());
-                    Login.setCurrentUserRole(courseSelected.getUserRole());
                     Preferences.setLastCourseSelected(lastSelected);
                 } else {
                     courseSelected = (Course) listCourses.get(0);
-                    Courses.setSelectedCourseCode(courseSelected.getId());
-                    Courses.setSelectedCourseShortName(courseSelected.getShortName());
-                    Courses.setSelectedCourseFullName(courseSelected.getFullName());
-                    Login.setCurrentUserRole(courseSelected.getUserRole());
                     Preferences.setLastCourseSelected(0);
                 }
+
+                Courses.setSelectedCourseCode(courseSelected.getId());
+                Courses.setSelectedCourseShortName(courseSelected.getShortName());
+                Courses.setSelectedCourseFullName(courseSelected.getFullName());
+                Login.setCurrentUserRole(courseSelected.getUserRole());
             }
 
             if (courseSelected != null) {
