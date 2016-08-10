@@ -20,7 +20,7 @@ package es.ugr.swad.swadroid.modules.messages;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
+import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -38,8 +38,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import org.ksoap2.serialization.SoapObject;
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.Vector;
 import es.ugr.swad.swadroid.Constants;
@@ -200,6 +198,7 @@ public class Messages extends Module {
 
         showAll = false;
         seeAll = (TextView) findViewById(R.id.see_more_receivers);
+        seeAll.setPaintFlags(seeAll.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         seeAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -210,6 +209,7 @@ public class Messages extends Module {
                 showReceivers();
             }
         });
+        seeAll.setText(getResources().getString(R.string.see_all));
 
         setMETHOD_NAME("sendMessage");
     }

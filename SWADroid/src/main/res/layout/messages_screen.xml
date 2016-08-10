@@ -93,8 +93,9 @@
             android:id="@+id/see_more_receivers"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/see_all"
-            android:layout_margin="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginBottom="5dp"
+            android:textSize="17sp"
             android:visibility="gone"/>
 
         <View
