@@ -177,6 +177,7 @@ public class MenuExpandableListActivity extends AppCompatActivity {
             menu.findItem(R.id.clean_database_menu).setVisible(true);
             menu.findItem(R.id.share_menu).setVisible(true);
             menu.findItem(R.id.rate_menu).setVisible(true);
+            menu.findItem(R.id.preferences_menu).setVisible(true);
 	    }
 
         return super.onCreateOptionsMenu(menu);
