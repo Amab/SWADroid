@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -46,6 +47,9 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
     private ArrayList<String> arrayReceivers;
     private ArrayList<String> arrayReceiversNames;
     private ArrayList<String> arrayPhotos;
+    private ArrayList<String> oldReceivers;
+    private ArrayList<String> oldReceiversNames;
+    private ArrayList<String> oldPhotos;
     private UsersAdapter adapter;
     private CheckBox checkbox;
     private UsersList userFilters;
@@ -79,7 +83,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                     arrayReceivers.remove(index);
                     arrayReceiversNames.remove(index);
                     arrayPhotos.remove(index);
-                    Toast.makeText(SearchUsers.this, R.string.user_deleted, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(SearchUsers.this, R.string.user_deleted, Toast.LENGTH_SHORT).show();
                 }
                 else{
                     checkbox.setChecked(true);
@@ -88,7 +92,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                             userFilters.getUsers().get(position).getUserSurname1() + " " +
                             userFilters.getUsers().get(position).getUserSurname2());
                     arrayPhotos.add(userFilters.getUsers().get(position).getUserPhoto());
-                    Toast.makeText(SearchUsers.this, R.string.user_added, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(SearchUsers.this, R.string.user_added, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -100,6 +104,10 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         arrayReceivers = getIntent().getStringArrayListExtra("receivers");
         arrayReceiversNames = getIntent().getStringArrayListExtra("receiversNames");
         arrayPhotos = getIntent().getStringArrayListExtra("receiversPhotos");
+        //save the old receivers
+        oldReceivers = (ArrayList) arrayReceivers.clone();
+        oldReceiversNames = (ArrayList) arrayReceiversNames.clone();
+        oldPhotos = (ArrayList) arrayPhotos.clone();
         senderName = getIntent().getStringExtra("senderName");
         senderPhoto = getIntent().getStringExtra("senderPhoto");
 
@@ -122,7 +130,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
-                sendReceivers(true); //if confirm button exists, set to "false"
+                sendReceivers(false); //if confirm button exists, set to "false"
                 return true;
             }
         });
@@ -133,6 +141,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         // listener to searchview
         searchView.setOnQueryTextListener(this);
         searchView.setMaxWidth(Integer.MAX_VALUE);
+        searchView.setPadding(-30,0,0,0);
 
         // searview expanded
         searchItem.expandActionView();
@@ -164,9 +173,15 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         hideMenu = true;
         invalidateOptionsMenu();
         Intent intent = new Intent();
-        intent.putExtra("receivers", arrayReceivers); // send receivers to parent activity
-        intent.putExtra("receiversNames", arrayReceiversNames);
-        intent.putExtra("receiversPhotos", arrayPhotos);
+        if(send){
+            intent.putExtra("receivers", arrayReceivers); // send receivers to parent activity
+            intent.putExtra("receiversNames", arrayReceiversNames);
+            intent.putExtra("receiversPhotos", arrayPhotos);
+        }else{
+            intent.putExtra("receivers", oldReceivers);
+            intent.putExtra("receiversNames", oldReceiversNames);
+            intent.putExtra("receiversPhotos", oldPhotos);
+        }
 
         setResult(RESULT_OK, intent);
         finish();
@@ -259,8 +274,10 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
 
                     boolean selected;
 
+                    //is not the sender of reply message
+                    /*
                     if (!(firstname + " " + surname1 + " " + surname2).equals(senderName) || !userPhoto.equals(senderPhoto)){
-                        //is not the sender of reply message
+
                         if (arrayReceivers.contains("@" + nickname)) {
                             selected = true;
                         }
@@ -268,8 +285,14 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                             selected = false;
                         userFilters.saveUser(new UserFilter(nickname, surname1, surname2, firstname, userPhoto, selected));
 
-                    }
+                    }*/
 
+                    if (arrayReceivers.contains("@" + nickname)) {
+                        selected = true;
+                    }
+                    else
+                        selected = false;
+                    userFilters.saveUser(new UserFilter(nickname, surname1, surname2, firstname, userPhoto, selected));
                 }
             }
             numUsers = userFilters.getUsers().size();

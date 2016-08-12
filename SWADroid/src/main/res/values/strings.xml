@@ -342,5 +342,6 @@
     <string name="user_deleted">User deleted</string>
     <string name="see_all">See all</string>
     <string name="see_less">See less</string>
+    <string name="confirm">Confirm</string>
 
 </resources>

@@ -19,6 +19,5 @@
         android:id="@+id/confirm_receivers"
         android:icon="@drawable/ic_action_accept"
         swadroid:showAsAction="always"
-        android:title="@string/search"
-        android:visible="false"/>
+        android:title="@string/confirm"/>
 </menu>
