@@ -130,7 +130,8 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
-                sendReceivers(false); //if confirm button exists, set to "false"
+                //showDiscardDialog();
+                sendReceivers(false);
                 return true;
             }
         });
@@ -212,7 +213,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         }
         else {
             if (Courses.getSelectedCourseCode() != -1) { //is not a guest user
-                showDialogSearch();
+                showSearchDialog();
             } else {
                 courseCode = -1;
                 runConnection();
@@ -333,7 +334,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
 
     }
 
-    private void showDialogSearch(){
+    private void showSearchDialog(){
         final String[] choiceList = {getString(R.string.in_subject) + " " + Courses.getSelectedCourseShortName(), getString(R.string.inAllPlatform)};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(SearchUsers.this);
@@ -360,6 +361,28 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                 else
                     courseCode = -1;
                 runConnection();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private void showDiscardDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(SearchUsers.this);
+        builder.setTitle(R.string.areYouSure);
+        builder.setMessage(R.string.cancelSendReceivers);
+        builder.setCancelable(true);
+
+        builder.setNegativeButton(getString(R.string.cancelMsg), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // no need to write anything here just implement this interface into this button
+            }
+        });
+
+        builder.setPositiveButton(getString(R.string.discardMsg), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                sendReceivers(false);
             }
         });
 

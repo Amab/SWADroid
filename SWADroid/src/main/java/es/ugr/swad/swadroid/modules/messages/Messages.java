@@ -401,7 +401,7 @@ public class Messages extends Module {
 	            }
                 return true;
             case android.R.id.home:
-                showDialogCancel();
+                showCancelDialog();
 	            return true;
 
 	        default:
@@ -412,10 +412,10 @@ public class Messages extends Module {
     @Override
     public void onBackPressed()
     {
-        showDialogCancel();
+        showCancelDialog();
     }
 
-    private void showDialogCancel(){
+    private void showCancelDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(Messages.this);
         builder.setTitle(R.string.areYouSure);
         builder.setMessage(R.string.cancelSendMessage);
@@ -435,7 +435,7 @@ public class Messages extends Module {
         alert.show();
     }
 
-    private void showDialogDelete(final View linearLayout, final TextView textNickname, String textName){
+    private void showDeleteDialog(final View linearLayout, final TextView textNickname, String textName){
         AlertDialog.Builder builder = new AlertDialog.Builder(Messages.this);
         builder.setTitle(R.string.areYouSure);
         String dialog = getResources().getString(R.string.cancelRemoveReceivers);
@@ -561,7 +561,7 @@ public class Messages extends Module {
             ImageButton button = (ImageButton)linearLayout.findViewById(R.id.buttonDelete);
             button.setOnClickListener( new View.OnClickListener() {
                 public void onClick(View view){
-                    showDialogDelete(linearLayout, textNickname, textName.getText().toString());
+                    showDeleteDialog(linearLayout, textNickname, textName.getText().toString());
                 }
             });
             i++;

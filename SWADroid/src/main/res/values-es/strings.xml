@@ -326,12 +326,13 @@
     <string name="inAllPlatform">En toda la plataforma</string>
     <string name="introduceLongerText">Introduzca un texto más largo</string>
     <string name="cancelSendMessage">Va a cancelar el envío del mensaje</string>
-    <string name="cancelSendReceivers">Va a cancelar los destinatarios seleccionados</string>
+    <string name="cancelSendReceivers">Va a descartar los destinatarios seleccionados</string>
     <string name="cancelRemoveReceivers">¿Quiere quitar a #nameUser# de la lista de destinatarios?</string>
     <string name="user_added">Usuario añadido</string>
     <string name="user_deleted">Usuario eliminado</string>
     <string name="see_all">Ver todos</string>
     <string name="see_less">Ver menos</string>
-    <string name="confirm">Confirmar</string>
+    <string name="confirmMsg">Confirmar</string>
+    <string name="discardMsg">Descartar</string>
 
 </resources>

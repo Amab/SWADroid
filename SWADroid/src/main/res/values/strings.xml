@@ -336,12 +336,13 @@
     <string name="inAllPlatform">In all the platform</string>
     <string name="introduceLongerText">Introduce a longer text</string>
     <string name="cancelSendMessage">You are going to cancel the sending message</string>
-    <string name="cancelSendReceivers">You are going to cancel the selected receivers</string>
+    <string name="cancelSendReceivers">You are going to discard the selected receivers</string>
     <string name="cancelRemoveReceivers">Do you want to remove #nameUser# from the list of receivers?</string>
     <string name="user_added">User added</string>
     <string name="user_deleted">User deleted</string>
     <string name="see_all">See all</string>
     <string name="see_less">See less</string>
-    <string name="confirm">Confirm</string>
+    <string name="confirmMsg">Confirm</string>
+    <string name="discardMsg">Discard</string>
 
 </resources>
