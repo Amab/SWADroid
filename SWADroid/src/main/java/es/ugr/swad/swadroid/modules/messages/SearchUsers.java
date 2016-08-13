@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -130,8 +129,13 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
-                //showDiscardDialog();
-                sendReceivers(false);
+                if(arrayReceivers.equals(oldReceivers)) // there aren't new receivers added
+                    sendReceivers(false);
+                else {
+                    hideMenu = true;
+                    invalidateOptionsMenu(); //reload the actionbar
+                    showDiscardDialog(search);
+                }
                 return true;
             }
         });
@@ -368,7 +372,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         alert.show();
     }
 
-    private void showDiscardDialog(){
+    private void showDiscardDialog(final String search){
         AlertDialog.Builder builder = new AlertDialog.Builder(SearchUsers.this);
         builder.setTitle(R.string.areYouSure);
         builder.setMessage(R.string.cancelSendReceivers);
@@ -376,7 +380,10 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
 
         builder.setNegativeButton(getString(R.string.cancelMsg), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                // no need to write anything here just implement this interface into this button
+                hideMenu = false;
+                invalidateOptionsMenu();
+                searchView.setIconified(false);
+                searchView.setQuery(search, false);
             }
         });
 
