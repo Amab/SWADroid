@@ -146,7 +146,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         // listener to searchview
         searchView.setOnQueryTextListener(this);
         searchView.setMaxWidth(Integer.MAX_VALUE);
-        searchView.setPadding(-30,0,0,0);
+        searchView.setPadding(-20,0,0,0);
 
         // searview expanded
         searchItem.expandActionView();
