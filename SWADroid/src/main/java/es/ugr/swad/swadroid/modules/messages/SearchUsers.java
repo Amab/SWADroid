@@ -4,11 +4,14 @@ import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
+import android.text.SpannableString;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -58,6 +61,8 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
     private int numUsers;
     private String senderName;
     private String senderPhoto;
+    private TextView frequentUsers;
+    private TextView frequentUsersText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +104,17 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         progressLayout = (LinearLayout) findViewById(R.id.progressbar_view);
         TextView textLoading = (TextView) findViewById(R.id.text_progress);
         textLoading.setText(R.string.loadingMsg);
+
+        frequentUsers = (TextView) findViewById(R.id.listTitle);
+
+        //font title of frequent users in bold
+        SpannableString title =  new SpannableString(frequentUsers.getHint().toString());
+        title.setSpan(new StyleSpan(Typeface.BOLD), 0, title.length(), 0);
+        frequentUsers.setHint(title);
+
+        frequentUsersText = (TextView) findViewById(R.id.listText);
+
+        frequentUsersText.setVisibility(View.VISIBLE); //gone when there are frequent users
 
         arrayReceivers = getIntent().getStringArrayListExtra("receivers");
         arrayReceiversNames = getIntent().getStringArrayListExtra("receiversNames");
@@ -196,8 +212,14 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_search:
-                if(!search.equals(""))
+                if(!search.equals("")) {
                     onQueryTextSubmit(search); //find users with string search
+                }
+                else {
+                    lvUsers.setVisibility(View.GONE);
+                    frequentUsers.setVisibility(View.VISIBLE);
+                    frequentUsersText.setVisibility(View.VISIBLE); //gone when there are frequent users
+                }
                 return true;
             case R.id.confirm_receivers:
                 sendReceivers(true);
@@ -317,9 +339,12 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
 
     @Override
     protected void postConnect() {
+        frequentUsers.setVisibility(View.GONE);
+        frequentUsersText.setVisibility(View.GONE);
         progressLayout.setVisibility(View.GONE);
         adapter = new UsersAdapter(getBaseContext(), userFilters.getUsers());
         lvUsers.setAdapter(adapter);
+        lvUsers.setVisibility(View.VISIBLE);
 
         //toasts to inform about found users
         if (numUsers == 0){

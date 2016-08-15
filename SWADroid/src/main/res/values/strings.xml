@@ -344,5 +344,7 @@
     <string name="see_less">See less</string>
     <string name="confirmMsg">Confirm</string>
     <string name="discardMsg">Discard</string>
+    <string name="frequent_users">Frequent users</string>
+    <string name="NOTfrequent_users">There are no frequent users</string>
 
 </resources>

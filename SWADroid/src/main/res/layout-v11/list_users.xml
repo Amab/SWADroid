@@ -33,12 +33,25 @@
         android:id="@+id/testsMenuLayout" >
 
         <TextView
+            android:id="@+id/listTitle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dip"
+            android:textColor="@color/foreground1"
+            android:textSize="18sp"
+            android:hint="@string/frequent_users"
+            android:visibility="visible" >
+        </TextView>
+
+        <TextView
             android:id="@+id/listText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:padding="20dip"
-            android:textColor="@color/foreground1"
-            android:textSize="20sp"
+            android:paddingLeft="15dip"
+            android:paddingTop="10dip"
+            android:textColorHint="@color/foreground1"
+            android:textSize="18sp"
+            android:hint="@string/NOTfrequent_users"
             android:visibility="gone" >
         </TextView>
 
