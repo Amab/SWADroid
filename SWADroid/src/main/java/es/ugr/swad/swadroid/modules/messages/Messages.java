@@ -57,6 +57,7 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  * @author Jose Antonio Guerrero Aviles <cany20@gmail.com>
+ * @author Rubén Martín Hidalgo <rubenmartin1991@gmail.com>
  */
 public class Messages extends Module {
 	/**
@@ -111,9 +112,13 @@ public class Messages extends Module {
      * Name of reply notification receiver
      */
     private String sender;
-
+    /**
+     * Photo of reply notification receiver
+     */
     private String senderPhoto;
-
+    /**
+     * Image of every receiver
+     */
     private ImageLoader loader;
     /**
      * View group of receivers
@@ -127,9 +132,13 @@ public class Messages extends Module {
      * Layout of message screen
      */
     private LinearLayout messageLayout;
-
+    /**
+     * Link to expand the receivers
+     */
     private TextView seeAll;
-
+    /**
+     * Save if the list is expanded
+     */
     private boolean showAll;
 
     /* (non-Javadoc)
@@ -174,6 +183,7 @@ public class Messages extends Module {
             subjEditText.setText("Re: " + getIntent().getStringExtra("summary"));
             sender = getIntent().getStringExtra("sender");
             senderPhoto = getIntent().getStringExtra("photo");
+            setTitle(getResources().getString(R.string.replyModuleLabel));
 
             showSenderReplyMessage();
         }
@@ -191,7 +201,7 @@ public class Messages extends Module {
                 for(int i=0; i<arrayReceivers.size(); i++){
                     receivers += arrayReceivers.get(i) + ",";
                 }
-                Log.d(TAG, "Receivers of Messages: " + receivers);
+                //Log.d(TAG, "Receivers of Messages: " + receivers);
                 startActivityForResult(intent, Constants.SEARCH_USERS_REQUEST_CODE);
             }
         });
@@ -472,7 +482,7 @@ public class Messages extends Module {
         final View linearLayout = inflater.inflate(R.layout.receivers_item, null, false);
 
         final TextView textName = (TextView) linearLayout.findViewById(R.id.textName);
-        textName.setText(sender);
+        textName.setText(sender + " (" + getResources().getString(R.string.primaryReceiver) + ")");
 
         ImageView photo = (ImageView) linearLayout.findViewById(R.id.imageView);
         String userPhoto = senderPhoto;
@@ -487,7 +497,7 @@ public class Messages extends Module {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         params.topMargin = 8;
-        linearLayout.setPadding(1, 1, 25, 1);
+        linearLayout.setPadding(1, 1, 15, 1);
         linearLayout.setLayoutParams(params);
 
         layout.addView(linearLayout);
@@ -497,11 +507,13 @@ public class Messages extends Module {
     }
 
     private void showReceivers(){
+        /*
         Log.d(TAG, "Receivers of SearchUsers: " + receivers);
         for (int i=0; i<arrayReceivers.size(); i++){
             Log.d(TAG, "arrayReceivers: " + arrayReceivers.get(i).toString() + " " + arrayReceiversNames.get(i).toString());
         }
         Log.d(TAG, Boolean.toString(showAll));
+        */
 
         // restart layout
         layout.removeAllViewsInLayout();

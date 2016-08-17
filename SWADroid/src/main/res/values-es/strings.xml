@@ -336,5 +336,7 @@
     <string name="discardMsg">Descartar</string>
     <string name="frequent_users">Usuarios frecuentes</string>
     <string name="NOTfrequent_users">No hay usuarios frecuentes</string>
+    <string name="replyModuleLabel">Responder mensaje</string>
+    <string name="primaryReceiver">Principal</string>
 
 </resources>

@@ -36,7 +36,7 @@ import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
- * Created by Romilgildo on 17/07/2016.
+ * Created by Rubén Martín Hidalgo on 17/07/2016.
  */
 public class SearchUsers extends Module implements SearchView.OnQueryTextListener {
 
@@ -297,7 +297,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                     String surname2 = pii.getPrimitiveProperty("userSurname2").toString();
                     String firstname = pii.getPrimitiveProperty("userFirstname").toString();
                     String userPhoto = pii.getPrimitiveProperty("userPhoto").toString();
-                    Log.d(TAG, nickname + ", " + firstname + " " + surname1 + " " + surname2 + ", " + userPhoto);
+                    //Log.d(TAG, nickname + ", " + firstname + " " + surname1 + " " + surname2 + ", " + userPhoto);
 
                     boolean selected;
 
