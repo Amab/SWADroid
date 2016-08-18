@@ -39,11 +39,14 @@ import android.widget.Toast;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import org.ksoap2.serialization.SoapObject;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.analytics.SWADroidTracker;
+import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.ImageFactory;
+import es.ugr.swad.swadroid.model.FrequentUser;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.modules.login.Login;
@@ -140,6 +143,8 @@ public class Messages extends Module {
      * Save if the list is expanded
      */
     private boolean showAll;
+
+    private List<FrequentUser> listFrequents;
 
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
@@ -314,6 +319,35 @@ public class Messages extends Module {
     protected void postConnect() {
         progressLayout.setVisibility(View.GONE);
         String messageSent = getString(R.string.messageSentMsg) + ":\n" + receiversNames;
+
+        listFrequents = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS);
+        boolean frequent = false;
+        int newFrequents = 0;
+        for(int i=0; i < arrayReceivers.size(); i++){
+            for(int j=0; j < listFrequents.size(); j++){
+                if(listFrequents.get(j).getUserNickname() == arrayReceivers.get(i)){
+                    frequent = true;
+                    listFrequents.get(j).setScore(listFrequents.get(j).getScore() * 1.2);
+                }
+                else{
+                    listFrequents.get(j).setScore(listFrequents.get(j).getScore() * 0.95);
+                }
+            }
+            if(frequent == false){
+                listFrequents.add(new FrequentUser(arrayReceivers.get(i), arrayReceiversNames.get(i), "s1", "s2", arrayPhotos.get(i), 1));
+                newFrequents++;
+            }
+            frequent = false;
+        }
+
+        for(int i=0; i < listFrequents.size()-newFrequents; i++){
+            dbHelper.updateFrequentRecipient(listFrequents.get(i));
+        }
+
+        for(int i=listFrequents.size()-newFrequents+1; i < listFrequents.size(); i++){
+            dbHelper.insertFrequentRecipient(listFrequents.get(i));
+        }
+
         Toast.makeText(this, messageSent, Toast.LENGTH_LONG).show();
         finish();
     }
