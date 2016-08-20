@@ -25,9 +25,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 import org.ksoap2.serialization.SoapObject;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.database.DataBaseHelper;
+import es.ugr.swad.swadroid.model.FrequentUser;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.model.UserFilter;
 import es.ugr.swad.swadroid.modules.Module;
@@ -47,22 +50,27 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
     private static ListView lvUsers;
     private String search;
     private ArrayList<String> arrayReceivers;
-    private ArrayList<String> arrayReceiversNames;
+    private ArrayList<String> arrayReceiversFirstNames;
+    private ArrayList<String> arrayReceiversSurNames1;
+    private ArrayList<String> arrayReceiversSurNames2;
     private ArrayList<String> arrayPhotos;
     private ArrayList<String> oldReceivers;
-    private ArrayList<String> oldReceiversNames;
+    private ArrayList<String> oldReceiversFirstNames;
+    private ArrayList<String> oldReceiversSurNames1;
+    private ArrayList<String> oldReceiversSurNames2;
     private ArrayList<String> oldPhotos;
     private UsersAdapter adapter;
+    private FrequentUsersAdapter frequentAdapter;
     private CheckBox checkbox;
     private UsersList userFilters;
+    private FrequentUsersList frequentUsers;
     private LinearLayout progressLayout;
     private boolean hideMenu = false;
     private long courseCode;
     private int numUsers;
-    private String senderName;
-    private String senderPhoto;
-    private TextView frequentUsers;
+    private TextView frequentUsersTitle;
     private TextView frequentUsersText;
+    private List<FrequentUser> frequentsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +84,42 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         lvUsers = (ListView) findViewById(R.id.listItems);
         lvUsers.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
 
+        progressLayout = (LinearLayout) findViewById(R.id.progressbar_view);
+        TextView textLoading = (TextView) findViewById(R.id.text_progress);
+        textLoading.setText(R.string.loadingMsg);
+
+        frequentUsersTitle = (TextView) findViewById(R.id.listTitle);
+
+        //font title of frequent users in bold
+        SpannableString title =  new SpannableString(frequentUsersTitle.getHint().toString());
+        title.setSpan(new StyleSpan(Typeface.BOLD), 0, title.length(), 0);
+        frequentUsersTitle.setHint(title);
+
+        frequentUsers = new FrequentUsersList();
+        frequentUsersText = (TextView) findViewById(R.id.listText);
+
+        frequentsList = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS, "", "score");
+
+        if(frequentsList.size() == 0) {
+            frequentUsersText.setVisibility(View.VISIBLE);
+        }
+        else{
+            frequentUsersText.setVisibility(View.GONE);
+            for(int i=0; i<frequentsList.size(); i++){
+                String nickname = frequentsList.get(i).getUserNickname();
+                String surname1 = frequentsList.get(i).getUserSurname1();
+                String surname2 = frequentsList.get(i).getUserSurname2();
+                String firstname = frequentsList.get(i).getUserFirstname();
+                String userPhoto = frequentsList.get(i).getUserPhoto();
+                boolean selected = frequentsList.get(i).getCheckbox();
+                Double score = frequentsList.get(i).getScore();
+                frequentUsers.saveUser(new FrequentUser(nickname, surname1, surname2, firstname, userPhoto, selected, score));
+            }
+            frequentAdapter = new FrequentUsersAdapter(getBaseContext(), frequentUsers.getUsers());
+            lvUsers.setAdapter(frequentAdapter);
+            lvUsers.setVisibility(View.VISIBLE);
+        }
+
         //checkbox is checked when the row of an user is clicked
         lvUsers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -83,48 +127,37 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                 checkbox = (CheckBox) view.findViewById(R.id.check);
                 if (checkbox.isChecked()){
                     checkbox.setChecked(false);
-                    int index = arrayReceivers.indexOf("@" + userFilters.getUsers().get(position).getUserNickname());
+                    int index = arrayReceivers.indexOf(frequentUsers.getUsers().get(position).getUserNickname());
                     arrayReceivers.remove(index);
-                    arrayReceiversNames.remove(index);
+                    arrayReceiversFirstNames.remove(index);
+                    arrayReceiversSurNames1.remove(index);
+                    arrayReceiversSurNames2.remove(index);
                     arrayPhotos.remove(index);
                     //Toast.makeText(SearchUsers.this, R.string.user_deleted, Toast.LENGTH_SHORT).show();
                 }
                 else{
                     checkbox.setChecked(true);
-                    arrayReceivers.add("@" + userFilters.getUsers().get(position).getUserNickname());
-                    arrayReceiversNames.add(userFilters.getUsers().get(position).getUserFirstname() + " " +
-                            userFilters.getUsers().get(position).getUserSurname1() + " " +
-                            userFilters.getUsers().get(position).getUserSurname2());
-                    arrayPhotos.add(userFilters.getUsers().get(position).getUserPhoto());
+                    arrayReceivers.add(frequentUsers.getUsers().get(position).getUserNickname());
+                    arrayReceiversFirstNames.add(frequentUsers.getUsers().get(position).getUserFirstname());
+                    arrayReceiversSurNames1.add(frequentUsers.getUsers().get(position).getUserSurname1());
+                    arrayReceiversSurNames2.add(frequentUsers.getUsers().get(position).getUserSurname2());
+                    arrayPhotos.add(frequentUsers.getUsers().get(position).getUserPhoto());
                     //Toast.makeText(SearchUsers.this, R.string.user_added, Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        progressLayout = (LinearLayout) findViewById(R.id.progressbar_view);
-        TextView textLoading = (TextView) findViewById(R.id.text_progress);
-        textLoading.setText(R.string.loadingMsg);
-
-        frequentUsers = (TextView) findViewById(R.id.listTitle);
-
-        //font title of frequent users in bold
-        SpannableString title =  new SpannableString(frequentUsers.getHint().toString());
-        title.setSpan(new StyleSpan(Typeface.BOLD), 0, title.length(), 0);
-        frequentUsers.setHint(title);
-
-        frequentUsersText = (TextView) findViewById(R.id.listText);
-
-        frequentUsersText.setVisibility(View.VISIBLE); //gone when there are frequent users
-
         arrayReceivers = getIntent().getStringArrayListExtra("receivers");
-        arrayReceiversNames = getIntent().getStringArrayListExtra("receiversNames");
+        arrayReceiversFirstNames = getIntent().getStringArrayListExtra("receiversFirstNames");
+        arrayReceiversSurNames1 = getIntent().getStringArrayListExtra("receiversSurNames1");
+        arrayReceiversSurNames2 = getIntent().getStringArrayListExtra("receiversSurNames2");
         arrayPhotos = getIntent().getStringArrayListExtra("receiversPhotos");
         //save the old receivers
         oldReceivers = (ArrayList) arrayReceivers.clone();
-        oldReceiversNames = (ArrayList) arrayReceiversNames.clone();
+        oldReceiversFirstNames = (ArrayList) arrayReceiversFirstNames.clone();
+        oldReceiversSurNames1 = (ArrayList) arrayReceiversSurNames1.clone();
+        oldReceiversSurNames2 = (ArrayList) arrayReceiversSurNames2.clone();
         oldPhotos = (ArrayList) arrayPhotos.clone();
-        senderName = getIntent().getStringExtra("senderName");
-        senderPhoto = getIntent().getStringExtra("senderPhoto");
 
         search = "";
 
@@ -177,7 +210,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
             public void onFocusChange(View v, boolean hasFocus) {
                 //select checkboxes who users were added before
                 for(int i=0; i<numUsers; i++){
-                    if (arrayReceivers.contains("@" + userFilters.getUsers().get(i).getUserNickname().toString())) {
+                    if (arrayReceivers.contains(userFilters.getUsers().get(i).getUserNickname().toString())) {
                         userFilters.getUsers().get(i).setCheckbox(true);
                     }
                     else
@@ -196,11 +229,15 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         Intent intent = new Intent();
         if(send){
             intent.putExtra("receivers", arrayReceivers); // send receivers to parent activity
-            intent.putExtra("receiversNames", arrayReceiversNames);
+            intent.putExtra("receiversFirstNames", arrayReceiversFirstNames);
+            intent.putExtra("receiversSurNames1", arrayReceiversSurNames1);
+            intent.putExtra("receiversSurNames2", arrayReceiversSurNames2);
             intent.putExtra("receiversPhotos", arrayPhotos);
         }else{
             intent.putExtra("receivers", oldReceivers);
-            intent.putExtra("receiversNames", oldReceiversNames);
+            intent.putExtra("receiversFirstNames", oldReceiversFirstNames);
+            intent.putExtra("receiversSurNames1", oldReceiversSurNames1);
+            intent.putExtra("receiversSurNames2", oldReceiversSurNames2);
             intent.putExtra("receiversPhotos", oldPhotos);
         }
 
@@ -216,9 +253,29 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                     onQueryTextSubmit(search); //find users with string search
                 }
                 else {
-                    lvUsers.setVisibility(View.GONE);
-                    frequentUsers.setVisibility(View.VISIBLE);
-                    frequentUsersText.setVisibility(View.VISIBLE); //gone when there are frequent users
+                    frequentsList = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS);
+
+                    if(frequentsList.size() == 0) {
+                        lvUsers.setVisibility(View.GONE);
+                        frequentUsersText.setVisibility(View.VISIBLE);
+                    }
+                    else{
+                        frequentUsers = new FrequentUsersList();
+                        frequentUsersText.setVisibility(View.GONE);
+                        for(int i=0; i<frequentsList.size(); i++){
+                            String nickname = frequentsList.get(i).getUserNickname();
+                            String surname1 = frequentsList.get(i).getUserSurname1();
+                            String surname2 = frequentsList.get(i).getUserSurname2();
+                            String firstname = frequentsList.get(i).getUserFirstname();
+                            String userPhoto = frequentsList.get(i).getUserPhoto();
+                            boolean selected = frequentsList.get(i).getCheckbox();
+                            Double score = frequentsList.get(i).getScore();
+                            frequentUsers.saveUser(new FrequentUser(nickname, surname1, surname2, firstname, userPhoto, selected, score));
+                        }
+                        frequentAdapter = new FrequentUsersAdapter(getBaseContext(), frequentUsers.getUsers());
+                        lvUsers.setAdapter(frequentAdapter);
+                        lvUsers.setVisibility(View.VISIBLE);
+                    }
                 }
                 return true;
             case R.id.confirm_receivers:
@@ -266,7 +323,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
 
         //select checkboxes who users were added before
         for(int i=0; i<numUsers; i++){
-            if (arrayReceivers.contains("@" + userFilters.getUsers().get(i).getUserNickname().toString())) {
+            if (arrayReceivers.contains(userFilters.getUsers().get(i).getUserNickname().toString())) {
                 userFilters.getUsers().get(i).setCheckbox(true);
             }
             else
@@ -314,7 +371,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
 
                     }*/
 
-                    if (arrayReceivers.contains("@" + nickname)) {
+                    if (arrayReceivers.contains(nickname)) {
                         selected = true;
                     }
                     else
@@ -339,12 +396,39 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
 
     @Override
     protected void postConnect() {
-        frequentUsers.setVisibility(View.GONE);
+        frequentUsersTitle.setVisibility(View.GONE);
         frequentUsersText.setVisibility(View.GONE);
         progressLayout.setVisibility(View.GONE);
         adapter = new UsersAdapter(getBaseContext(), userFilters.getUsers());
         lvUsers.setAdapter(adapter);
         lvUsers.setVisibility(View.VISIBLE);
+
+        //checkbox is checked when the row of an user is clicked
+        lvUsers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                checkbox = (CheckBox) view.findViewById(R.id.check);
+                if (checkbox.isChecked()){
+                    checkbox.setChecked(false);
+                    int index = arrayReceivers.indexOf(userFilters.getUsers().get(position).getUserNickname());
+                    arrayReceivers.remove(index);
+                    arrayReceiversFirstNames.remove(index);
+                    arrayReceiversSurNames1.remove(index);
+                    arrayReceiversSurNames2.remove(index);
+                    arrayPhotos.remove(index);
+                    //Toast.makeText(SearchUsers.this, R.string.user_deleted, Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    checkbox.setChecked(true);
+                    arrayReceivers.add(userFilters.getUsers().get(position).getUserNickname());
+                    arrayReceiversFirstNames.add(userFilters.getUsers().get(position).getUserFirstname());
+                    arrayReceiversSurNames1.add(userFilters.getUsers().get(position).getUserSurname1());
+                    arrayReceiversSurNames2.add(userFilters.getUsers().get(position).getUserSurname2());
+                    arrayPhotos.add(userFilters.getUsers().get(position).getUserPhoto());
+                    //Toast.makeText(SearchUsers.this, R.string.user_added, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         //toasts to inform about found users
         if (numUsers == 0){

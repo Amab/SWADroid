@@ -462,10 +462,11 @@ public class DataBaseHelper {
                 break;
             case DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS:
                 o = new FrequentUser(ent.getString("nicknameRecipient"),
-                        ent.getString("firstnameRecipient"),
                         ent.getString("surname1Recipient"),
                         ent.getString("surname2Recipient"),
+                        ent.getString("firstnameRecipient"),
                         ent.getString("photoRecipient"),
+                        false,
                         ent.getDouble("score"));
                 break;
         }
@@ -2381,22 +2382,22 @@ public class DataBaseHelper {
     public void insertFrequentRecipient(FrequentUser user) {
         Entity ent = new Entity(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS);
         ent.setValue("nicknameRecipient", user.getUserNickname());
-        ent.setValue("firstnameRecipient", user.getUserFirstname());
         ent.setValue("surname1Recipient", user.getUserSurname1());
         ent.setValue("surname2Recipient", user.getUserSurname2());
+        ent.setValue("firstnameRecipient", user.getUserFirstname());
         ent.setValue("photoRecipient", user.getUserPhoto());
         ent.setValue("score", user.getScore());
         ent.save();
     }
 
     public void updateFrequentRecipient(FrequentUser actual) {
-        List<Entity> rows = db.getEntityList(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS, "nicknameRecipient = " + actual.getUserNickname());
+        List<Entity> rows = db.getEntityList(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS, "nicknameRecipient = '" + actual.getUserNickname() + "'");
 
         for(Entity ent : rows) {
             ent.setValue("nicknameRecipient", actual.getUserNickname());
-            ent.setValue("firstnameRecipient", actual.getUserFirstname());
             ent.setValue("surname1Recipient", actual.getUserSurname1());
             ent.setValue("surname2Recipient", actual.getUserSurname2());
+            ent.setValue("firstnameRecipient", actual.getUserFirstname());
             ent.setValue("photoRecipient", actual.getUserPhoto());
             ent.setValue("score", actual.getScore());
             ent.save();
