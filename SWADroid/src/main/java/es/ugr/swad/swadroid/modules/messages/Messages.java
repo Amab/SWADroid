@@ -84,12 +84,16 @@ public class Messages extends Module {
      */
     private ArrayList<String> arrayReceivers;
     /**
-     * Array of names
+     * Array of firstnames
      */
     private ArrayList<String> arrayReceiversFirstNames;
-
+    /**
+     * Array of first surnames
+     */
     private ArrayList<String> arrayReceiversSurNames1;
-
+    /**
+     * Array of second surnames
+     */
     private ArrayList<String> arrayReceiversSurNames2;
     /**
      * Array of photos
@@ -147,7 +151,9 @@ public class Messages extends Module {
      * Save if the list is expanded
      */
     private boolean showAll;
-
+    /**
+     * List where requests of database are saved
+     */
     private List<FrequentUser> frequentsList;
 
     /* (non-Javadoc)
@@ -349,7 +355,7 @@ public class Messages extends Module {
         }
 
         for(int i=0; i < frequentsList.size()-newFrequents; i++){
-            dbHelper.updateFrequentRecipient(frequentsList.get(i));
+            dbHelper.updateFrequentRecipient(frequentsList.get(i).getUserNickname(), frequentsList.get(i).getScore());
             Log.d(TAG, "frequent user updated, score = " + frequentsList.get(i).getScore());
         }
 

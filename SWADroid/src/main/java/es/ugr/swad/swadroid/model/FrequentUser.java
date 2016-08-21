@@ -20,8 +20,6 @@
 package es.ugr.swad.swadroid.model;
 
 import org.ksoap2.serialization.PropertyInfo;
-
-import java.text.ParseException;
 import java.util.Hashtable;
 
 /**
@@ -51,11 +49,13 @@ public class FrequentUser extends Model {
      */
     private String userPhoto;
     /**
+     * Is a receiver?.
+     */
+    private boolean selectedCheckbox;
+    /**
      * Score of frequent recipient
      */
     private double score;
-
-    private boolean selectedCheckbox;
 
     /**
      * Constructor.
@@ -65,6 +65,7 @@ public class FrequentUser extends Model {
      * @param userSurname2  User last surname.
      * @param userFirstname User name.
      * @param userPhoto     Full path where user's picture is stored.
+     * @param selectedCheckbox  Is a receiver?.
      * @param score         Score of frequent recipient
      */
     public FrequentUser(String userNickname, String userSurname1, String userSurname2, String userFirstname, String userPhoto, boolean selectedCheckbox, double score) {

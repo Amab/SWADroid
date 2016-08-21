@@ -19,14 +19,16 @@
 
 package es.ugr.swad.swadroid.model;
 
-import java.text.ParseException;
+import org.ksoap2.serialization.PropertyInfo;
+
+import java.util.Hashtable;
 
 /**
  * User data.
  *
  * @author Rubén Martín Hidalgo
  */
-public class UserFilter {
+public class UserFilter extends Model{
     /**
      * User identifier.
      */
@@ -62,7 +64,7 @@ public class UserFilter {
      * @param userPhoto     Full path where user's picture is stored.
      * @param selectedCheckbox  Is a receiver?.
      */
-    public UserFilter(String userNickname, String userSurname1, String userSurname2, String userFirstname, String userPhoto, boolean selectedCheckbox) throws ParseException {
+    public UserFilter(String userNickname, String userSurname1, String userSurname2, String userFirstname, String userPhoto, boolean selectedCheckbox){
         this.userNickname = userNickname;
         this.userSurname1 = userSurname1;
         this.userSurname2 = userSurname2;
@@ -179,4 +181,23 @@ public class UserFilter {
         this.selectedCheckbox = selected;
     }
 
+    @Override
+    public Object getProperty(int index) {
+        return null;
+    }
+
+    @Override
+    public int getPropertyCount() {
+        return 0;
+    }
+
+    @Override
+    public void setProperty(int index, Object value) {
+
+    }
+
+    @Override
+    public void getPropertyInfo(int index, Hashtable properties, PropertyInfo info) {
+
+    }
 }

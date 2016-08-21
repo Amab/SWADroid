@@ -6,7 +6,6 @@ package es.ugr.swad.swadroid.modules.messages;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import es.ugr.swad.swadroid.model.FrequentUser;
 
 /**

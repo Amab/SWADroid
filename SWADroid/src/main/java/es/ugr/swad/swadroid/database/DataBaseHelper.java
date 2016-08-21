@@ -1402,6 +1402,22 @@ public class DataBaseHelper {
     }
 
     /**
+     * Inserts a new Frequent Recipient
+     *
+     * @param user the frequent recipient to insert in the list
+     */
+    public void insertFrequentRecipient(FrequentUser user) {
+        Entity ent = new Entity(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS);
+        ent.setValue("nicknameRecipient", user.getUserNickname());
+        ent.setValue("surname1Recipient", user.getUserSurname1());
+        ent.setValue("surname2Recipient", user.getUserSurname2());
+        ent.setValue("firstnameRecipient", user.getUserFirstname());
+        ent.setValue("photoRecipient", user.getUserPhoto());
+        ent.setValue("score", user.getScore());
+        ent.save();
+    }
+
+    /**
      * Updates a course in database
      *
      * @param prev   Course to be updated
@@ -1825,6 +1841,21 @@ public class DataBaseHelper {
             return returnValue;
         } else
             return false;
+    }
+
+    /**
+     * Updates a Frequent Recipient with the new score
+     *
+     * @param nickname    the identifier of recipient
+     * @param score   the score to order the frequent recipients list
+     */
+    public void updateFrequentRecipient(String nickname, Double score) {
+        List<Entity> rows = db.getEntityList(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS, "nicknameRecipient = '" + nickname + "'");
+
+        for(Entity ent : rows) {
+            ent.setValue("score", score);
+            ent.save();
+        }
     }
 
     /**
@@ -2379,28 +2410,4 @@ public class DataBaseHelper {
 	    dbCleaned = state;
 	}
 
-    public void insertFrequentRecipient(FrequentUser user) {
-        Entity ent = new Entity(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS);
-        ent.setValue("nicknameRecipient", user.getUserNickname());
-        ent.setValue("surname1Recipient", user.getUserSurname1());
-        ent.setValue("surname2Recipient", user.getUserSurname2());
-        ent.setValue("firstnameRecipient", user.getUserFirstname());
-        ent.setValue("photoRecipient", user.getUserPhoto());
-        ent.setValue("score", user.getScore());
-        ent.save();
-    }
-
-    public void updateFrequentRecipient(FrequentUser actual) {
-        List<Entity> rows = db.getEntityList(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS, "nicknameRecipient = '" + actual.getUserNickname() + "'");
-
-        for(Entity ent : rows) {
-            ent.setValue("nicknameRecipient", actual.getUserNickname());
-            ent.setValue("surname1Recipient", actual.getUserSurname1());
-            ent.setValue("surname2Recipient", actual.getUserSurname2());
-            ent.setValue("firstnameRecipient", actual.getUserFirstname());
-            ent.setValue("photoRecipient", actual.getUserPhoto());
-            ent.setValue("score", actual.getScore());
-            ent.save();
-        }
-    }
 }

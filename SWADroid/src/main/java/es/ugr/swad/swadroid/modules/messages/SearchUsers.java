@@ -42,35 +42,117 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
  * Created by Rubén Martín Hidalgo on 17/07/2016.
  */
 public class SearchUsers extends Module implements SearchView.OnQueryTextListener {
-
+    /**
+     * SearchUsers tag name for Logcat
+     */
     private static final String TAG = Constants.APP_TAG + " SearchUsers";
-
+    /**
+     * SearchView to search users field
+     */
     private SearchView searchView;
+    /**
+     * Messages tag name for Logcat
+     */
     private MenuItem searchItem;
+    /**
+     * List of users
+     */
     private static ListView lvUsers;
+    /**
+     * Current text in searchView
+     */
     private String search;
+    /**
+     * Array of nicknames
+     */
     private ArrayList<String> arrayReceivers;
+    /**
+     * Array of firstnames
+     */
     private ArrayList<String> arrayReceiversFirstNames;
+    /**
+     * Array of first surnames
+     */
     private ArrayList<String> arrayReceiversSurNames1;
+    /**
+     * Array of second surnames
+     */
     private ArrayList<String> arrayReceiversSurNames2;
+    /**
+     * Array of photos
+     */
     private ArrayList<String> arrayPhotos;
+    /**
+     * Array of old nicknames. It's used when we discard the users added
+     */
     private ArrayList<String> oldReceivers;
+    /**
+     * Array of old firstnames
+     */
     private ArrayList<String> oldReceiversFirstNames;
+    /**
+     * Array of old first surnames
+     */
     private ArrayList<String> oldReceiversSurNames1;
+    /**
+     * Array of old second surnames
+     */
     private ArrayList<String> oldReceiversSurNames2;
+    /**
+     * Array of old photos
+     */
     private ArrayList<String> oldPhotos;
+    /**
+     * Adapter to show UserFilter in list
+     */
     private UsersAdapter adapter;
+    /**
+     * Adapter to show FrequentUser in list
+     */
     private FrequentUsersAdapter frequentAdapter;
+    /**
+     * Checkbox of every user
+     */
     private CheckBox checkbox;
+    /**
+     * List of UserFilter
+     */
     private UsersList userFilters;
+    /**
+     * List of FrequentUser
+     */
     private FrequentUsersList frequentUsers;
+    /**
+     * Loading screen
+     */
     private LinearLayout progressLayout;
+    /**
+     * True if buttons of ActionBar are hidden
+     */
     private boolean hideMenu = false;
+    /**
+     * Identifier of course to search users inside
+     */
     private long courseCode;
+    /**
+     * Number of users in user list
+     */
     private int numUsers;
+    /**
+     * Number of frequent users
+     */
     private int numFrequents;
+    /**
+     * Title of frequent users
+     */
     private TextView frequentUsersTitle;
+    /**
+     * Text to inform that there aren't frequent users
+     */
     private TextView frequentUsersText;
+    /**
+     * List where requests of database are saved
+     */
     private List<FrequentUser> frequentsList;
 
     @Override
@@ -80,7 +162,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         setTitle(R.string.actionBarAddUser);
 
         userFilters = new UsersList();
-
+        frequentUsers = new FrequentUsersList();
         arrayReceivers = getIntent().getStringArrayListExtra("receivers");
         arrayReceiversFirstNames = getIntent().getStringArrayListExtra("receiversFirstNames");
         arrayReceiversSurNames1 = getIntent().getStringArrayListExtra("receiversSurNames1");
@@ -99,10 +181,12 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         lvUsers = (ListView) findViewById(R.id.listItems);
         lvUsers.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
 
+        //loading screen
         progressLayout = (LinearLayout) findViewById(R.id.progressbar_view);
         TextView textLoading = (TextView) findViewById(R.id.text_progress);
         textLoading.setText(R.string.loadingMsg);
 
+        //frequent users screen
         frequentUsersTitle = (TextView) findViewById(R.id.listTitle);
 
         //font title of frequent users in bold
@@ -110,7 +194,6 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         title.setSpan(new StyleSpan(Typeface.BOLD), 0, title.length(), 0);
         frequentUsersTitle.setHint(title);
 
-        frequentUsers = new FrequentUsersList();
         frequentUsersText = (TextView) findViewById(R.id.listText);
 
         frequentsList = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS, "", "score DESC");
@@ -142,8 +225,6 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
             frequentAdapter = new FrequentUsersAdapter(getBaseContext(), frequentUsers.getUsers());
             lvUsers.setAdapter(frequentAdapter);
             lvUsers.setVisibility(View.VISIBLE);
-
-
         }
 
         //checkbox is checked when the row of an user is clicked
@@ -243,12 +324,15 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         return super.onCreateOptionsMenu(menu);
     }
 
+    /*
+     * send receivers to parent activity
+     */
     private void sendReceivers(boolean send){
         hideMenu = true;
         invalidateOptionsMenu();
         Intent intent = new Intent();
         if(send){
-            intent.putExtra("receivers", arrayReceivers); // send receivers to parent activity
+            intent.putExtra("receivers", arrayReceivers);
             intent.putExtra("receiversFirstNames", arrayReceiversFirstNames);
             intent.putExtra("receiversSurNames1", arrayReceiversSurNames1);
             intent.putExtra("receiversSurNames2", arrayReceiversSurNames2);
@@ -272,7 +356,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                 if(!search.equals("")) {
                     onQueryTextSubmit(search); //find users with string search
                 }
-                else {
+                else { // shows frequent users
                     if(numFrequents == 0) {
                         lvUsers.setVisibility(View.GONE);
                         frequentUsersText.setVisibility(View.VISIBLE);
@@ -485,7 +569,6 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
 
         builder.setNegativeButton(getString(R.string.cancelMsg), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                // no need to write anything here just implement this interface into this button
             }
         });
 
