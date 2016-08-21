@@ -284,8 +284,8 @@ public class Notifications extends Module implements
 		refreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container_expandablelist);
 		list = (ExpandableListView) findViewById(R.id.expandablelist_pulltorefresh);
 		emptyNotifTextView = (TextView) findViewById(R.id.list_item_title);
-        mBirthdayLayout = (LinearLayout) findViewById(R.id.birthday_layout);
-        mBirthdayTextView = (TextView) findViewById(R.id.birthdayTextView);
+        mBirthdayLayout = (LinearLayout) findViewById(R.id.notify_layout);
+        mBirthdayTextView = (TextView) findViewById(R.id.notifyTextView);
 		
 		groupItem = new ArrayList<>();
 		childItem = new ArrayList<>();

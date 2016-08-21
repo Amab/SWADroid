@@ -36,6 +36,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
@@ -117,8 +118,9 @@ public class SWADMain extends MenuExpandableListActivity {
 
     private boolean dBCleaned = false;
 
-    private LinearLayout mBirthdayLayout;
-    private TextView mBirthdayTextView;
+    private LinearLayout mNotifyLayout;
+    private TextView mNotifyTextView;
+    private ImageView mNotifyImageView;
     private ExpandableListView mExpandableListView;
     private TextExpandableListAdapter mExpandableListAdapter;
     private Spinner mCoursesSpinner;
@@ -245,15 +247,29 @@ public class SWADMain extends MenuExpandableListActivity {
             //If today is the user birthday, show birthday message
             if((Login.getLoggedUser() != null)
                     && DateTimeUtils.isBirthday(Login.getLoggedUser().getUserBirthday())) {
-                mBirthdayTextView.setText(getString(R.string.birthdayMsg).replace(
-                        Constants.USERNAME_TEMPLATE, Login.getLoggedUser().getUserFirstname()));
-                mBirthdayLayout.setVisibility(View.VISIBLE);
+                showBirthdayMessage();
+            } else if ((listCourses == null) || listCourses.isEmpty()) {
+                showNoCoursesMessage();
             } else {
-                mBirthdayLayout.setVisibility(View.GONE);
+                mNotifyLayout.setVisibility(View.GONE);
             }
         }
 
         SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
+    }
+
+    private void showBirthdayMessage() {
+        mNotifyImageView.setImageResource(R.drawable.fabirthdaycake);
+        mNotifyImageView.setVisibility(View.VISIBLE);
+        mNotifyTextView.setText(getString(R.string.birthdayMsg).replace(
+                Constants.USERNAME_TEMPLATE, Login.getLoggedUser().getUserFirstname()));
+        mNotifyLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void showNoCoursesMessage() {
+        mNotifyImageView.setVisibility(View.GONE);
+        mNotifyTextView.setText(getString(R.string.noCoursesMsg));
+        mNotifyLayout.setVisibility(View.VISIBLE);
     }
 	
 	/**
@@ -347,17 +363,17 @@ public class SWADMain extends MenuExpandableListActivity {
     }
 
     private void createSpinnerAdapter() {
-        listCourses = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_COURSES, null, "fullName");
+        listCourses = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_COURSES, null, "shortName");
         /*
           Cursor for database access
          */
-        Cursor dbCursor = dbHelper.getDb().getCursor(DataBaseHelper.DB_TABLE_COURSES, null, "fullName");
+        Cursor dbCursor = dbHelper.getDb().getCursor(DataBaseHelper.DB_TABLE_COURSES, null, "shortName");
         startManagingCursor(dbCursor);
         if (listCourses.size() != 0) {
             SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
                     android.R.layout.simple_spinner_item,
                     dbCursor,
-                    new String[]{"fullName"},
+                    new String[]{"shortName"},
                     new int[]{android.R.id.text1});
 
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -490,7 +506,7 @@ public class SWADMain extends MenuExpandableListActivity {
      * Creates menu when there are no courses available. This menu is common for students and teachers.
      */
     private void createNoCourseMenu() {
-        if (currentRole == -1) {
+        if ((listCourses == null) || listCourses.isEmpty()) {
             clearMenu();
 
             //Order:
@@ -660,8 +676,9 @@ public class SWADMain extends MenuExpandableListActivity {
     
 	private void initializeMainViews() {
         mExpandableListView = (ExpandableListView) findViewById(R.id.expandableList);
-        mBirthdayLayout = (LinearLayout) findViewById(R.id.birthday_layout);
-        mBirthdayTextView = (TextView) findViewById(R.id.birthdayTextView);
+        mNotifyLayout = (LinearLayout) findViewById(R.id.notify_layout);
+        mNotifyTextView = (TextView) findViewById(R.id.notifyTextView);
+        mNotifyImageView = (ImageView) findViewById(R.id.notifyImageView);
         View mProgressScreenView = findViewById(R.id.progress_screen);
         View mCoursesListView = findViewById(R.id.courses_list_view);
         mCoursesSpinner = (Spinner) this.findViewById(R.id.spinner);
@@ -800,6 +817,8 @@ public class SWADMain extends MenuExpandableListActivity {
     }
 
     private void clearMenu() {
+        mNotifyLayout.setVisibility(View.GONE);
+
         mHeaderData.clear();
         mChildData.clear();
         mUsersData.clear();
