@@ -67,6 +67,20 @@ public class Messages extends Module {
      * Messages tag name for Logcat
      */
     private static final String TAG = Constants.APP_TAG + " Messages";
+
+    /**
+     * Constants to manage the frequents recipients
+     */
+    private static final Double MIN_SCORE = 0.5;
+
+    private static final Double MAX_SCORE = 20.0;
+
+    private static final Double INITIAL_SCORE = 1.0;
+
+    private static final Double INCREASE_FACTOR = 1.2;
+
+    private static final Double DECREASE_FACTOR = 0.95;
+
     /**
      * Message code
      */
@@ -337,26 +351,33 @@ public class Messages extends Module {
         frequentsList = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS);
         boolean frequent = false;
         int newFrequents = 0;
+        double score;
         for(int i=0; i < arrayReceivers.size(); i++){
             for(int j=0; j < frequentsList.size(); j++){
                 if(frequentsList.get(j).getUserNickname().equals(arrayReceivers.get(i).toString())){
                     frequent = true;
-                    frequentsList.get(j).setScore(frequentsList.get(j).getScore() * 1.2);
+                    score = frequentsList.get(j).getScore() * INCREASE_FACTOR;
+                    if(score > MAX_SCORE)
+                        score = MAX_SCORE;
+                    dbHelper.updateFrequentRecipient(frequentsList.get(j).getUserNickname(), score);
+                    Log.d(TAG, "frequent user updated, score = " + score);
                 }
                 else{
-                    frequentsList.get(j).setScore(frequentsList.get(j).getScore() * 0.95);
+                    score = frequentsList.get(j).getScore() * DECREASE_FACTOR;
+                    if(score < MIN_SCORE) {
+                        dbHelper.removeAllRows(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS, "nicknameRecipient", frequentsList.get(j).getUserNickname());
+                        Log.d(TAG, "frequent user removed");
+                    }else {
+                        dbHelper.updateFrequentRecipient(frequentsList.get(j).getUserNickname(), score);
+                        Log.d(TAG, "frequent user updated, score = " + score);
+                    }
                 }
             }
             if(frequent == false){
-                frequentsList.add(new FrequentUser(arrayReceivers.get(i), arrayReceiversSurNames1.get(i), arrayReceiversSurNames2.get(i), arrayReceiversFirstNames.get(i), arrayPhotos.get(i), false, 1));
+                frequentsList.add(new FrequentUser(arrayReceivers.get(i), arrayReceiversSurNames1.get(i), arrayReceiversSurNames2.get(i), arrayReceiversFirstNames.get(i), arrayPhotos.get(i), false, INITIAL_SCORE));
                 newFrequents++;
             }
             frequent = false;
-        }
-
-        for(int i=0; i < frequentsList.size()-newFrequents; i++){
-            dbHelper.updateFrequentRecipient(frequentsList.get(i).getUserNickname(), frequentsList.get(i).getScore());
-            Log.d(TAG, "frequent user updated, score = " + frequentsList.get(i).getScore());
         }
 
         for(int i=frequentsList.size()-newFrequents; i < frequentsList.size(); i++){

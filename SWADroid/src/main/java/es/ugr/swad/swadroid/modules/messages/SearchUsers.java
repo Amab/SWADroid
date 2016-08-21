@@ -228,31 +228,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         }
 
         //checkbox is checked when the row of an user is clicked
-        lvUsers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                checkbox = (CheckBox) view.findViewById(R.id.check);
-                if (checkbox.isChecked()){
-                    checkbox.setChecked(false);
-                    int index = arrayReceivers.indexOf(frequentUsers.getUsers().get(position).getUserNickname());
-                    arrayReceivers.remove(index);
-                    arrayReceiversFirstNames.remove(index);
-                    arrayReceiversSurNames1.remove(index);
-                    arrayReceiversSurNames2.remove(index);
-                    arrayPhotos.remove(index);
-                    //Toast.makeText(SearchUsers.this, R.string.user_deleted, Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    checkbox.setChecked(true);
-                    arrayReceivers.add(frequentUsers.getUsers().get(position).getUserNickname());
-                    arrayReceiversFirstNames.add(frequentUsers.getUsers().get(position).getUserFirstname());
-                    arrayReceiversSurNames1.add(frequentUsers.getUsers().get(position).getUserSurname1());
-                    arrayReceiversSurNames2.add(frequentUsers.getUsers().get(position).getUserSurname2());
-                    arrayPhotos.add(frequentUsers.getUsers().get(position).getUserPhoto());
-                    //Toast.makeText(SearchUsers.this, R.string.user_added, Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        listenerFrequentUsers();
 
         setMETHOD_NAME("findUsers");
     }
@@ -374,6 +350,9 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                         frequentAdapter = new FrequentUsersAdapter(getBaseContext(), frequentUsers.getUsers());
                         lvUsers.setAdapter(frequentAdapter);
                         lvUsers.setVisibility(View.VISIBLE);
+
+                        //checkbox is checked when the row of an user is clicked
+                        listenerFrequentUsers();
                     }
                 }
                 return true;
@@ -511,6 +490,26 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         lvUsers.setVisibility(View.VISIBLE);
 
         //checkbox is checked when the row of an user is clicked
+        listenerUserList();
+
+        //toasts to inform about found users
+        if (numUsers == 0){
+            Toast.makeText(SearchUsers.this, R.string.users_NOTfound, Toast.LENGTH_SHORT).show();
+        }
+        else if (numUsers == 1) {
+            Toast.makeText(SearchUsers.this, String.valueOf(numUsers) + " " + getResources().getString(R.string.user_found), Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(SearchUsers.this, String.valueOf(numUsers) + " " + getResources().getString(R.string.users_found), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onError() {
+
+    }
+
+    private void listenerUserList() {
         lvUsers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -536,22 +535,34 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                 }
             }
         });
-
-        //toasts to inform about found users
-        if (numUsers == 0){
-            Toast.makeText(SearchUsers.this, R.string.users_NOTfound, Toast.LENGTH_SHORT).show();
-        }
-        else if (numUsers == 1) {
-            Toast.makeText(SearchUsers.this, String.valueOf(numUsers) + " " + getResources().getString(R.string.user_found), Toast.LENGTH_SHORT).show();
-        }
-        else{
-            Toast.makeText(SearchUsers.this, String.valueOf(numUsers) + " " + getResources().getString(R.string.users_found), Toast.LENGTH_SHORT).show();
-        }
     }
 
-    @Override
-    protected void onError() {
-
+    private void listenerFrequentUsers() {
+        lvUsers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                checkbox = (CheckBox) view.findViewById(R.id.check);
+                if (checkbox.isChecked()){
+                    checkbox.setChecked(false);
+                    int index = arrayReceivers.indexOf(frequentUsers.getUsers().get(position).getUserNickname());
+                    arrayReceivers.remove(index);
+                    arrayReceiversFirstNames.remove(index);
+                    arrayReceiversSurNames1.remove(index);
+                    arrayReceiversSurNames2.remove(index);
+                    arrayPhotos.remove(index);
+                    //Toast.makeText(SearchUsers.this, R.string.user_deleted, Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    checkbox.setChecked(true);
+                    arrayReceivers.add(frequentUsers.getUsers().get(position).getUserNickname());
+                    arrayReceiversFirstNames.add(frequentUsers.getUsers().get(position).getUserFirstname());
+                    arrayReceiversSurNames1.add(frequentUsers.getUsers().get(position).getUserSurname1());
+                    arrayReceiversSurNames2.add(frequentUsers.getUsers().get(position).getUserSurname2());
+                    arrayPhotos.add(frequentUsers.getUsers().get(position).getUserPhoto());
+                    //Toast.makeText(SearchUsers.this, R.string.user_added, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void showSearchDialog(){
