@@ -1,28 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/birthday_layout"
+    android:id="@+id/notify_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:gravity="center"
-    android:background="@color/alert_messages"
+    android:background="@color/notify_messages"
     android:visibility="gone">
 
     <ImageView
-        android:id="@+id/birthdayImageView"
+        android:id="@+id/notifyImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dip"
-        android:src="@drawable/fabirthdaycake"
-        android:scaleType="centerCrop" />
+        android:layout_marginStart="5dip"
+        android:scaleType="centerCrop"
+        android:visibility="gone"/>
 
     <TextView
-        android:id="@+id/birthdayTextView"
+        android:id="@+id/notifyTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dip"
-        android:text="@string/birthdayMsg"
+        android:layout_marginStart="5dip"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/foreground1"
         android:gravity="center_vertical" />
