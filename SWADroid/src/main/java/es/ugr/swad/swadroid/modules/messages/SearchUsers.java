@@ -68,6 +68,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
     private boolean hideMenu = false;
     private long courseCode;
     private int numUsers;
+    private int numFrequents;
     private TextView frequentUsersTitle;
     private TextView frequentUsersText;
     private List<FrequentUser> frequentsList;
@@ -79,6 +80,20 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         setTitle(R.string.actionBarAddUser);
 
         userFilters = new UsersList();
+
+        arrayReceivers = getIntent().getStringArrayListExtra("receivers");
+        arrayReceiversFirstNames = getIntent().getStringArrayListExtra("receiversFirstNames");
+        arrayReceiversSurNames1 = getIntent().getStringArrayListExtra("receiversSurNames1");
+        arrayReceiversSurNames2 = getIntent().getStringArrayListExtra("receiversSurNames2");
+        arrayPhotos = getIntent().getStringArrayListExtra("receiversPhotos");
+        //save the old receivers
+        oldReceivers = (ArrayList) arrayReceivers.clone();
+        oldReceiversFirstNames = (ArrayList) arrayReceiversFirstNames.clone();
+        oldReceiversSurNames1 = (ArrayList) arrayReceiversSurNames1.clone();
+        oldReceiversSurNames2 = (ArrayList) arrayReceiversSurNames2.clone();
+        oldPhotos = (ArrayList) arrayPhotos.clone();
+
+        search = "";
 
         //users list
         lvUsers = (ListView) findViewById(R.id.listItems);
@@ -98,14 +113,15 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         frequentUsers = new FrequentUsersList();
         frequentUsersText = (TextView) findViewById(R.id.listText);
 
-        frequentsList = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS, "", "score");
+        frequentsList = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS, "", "score DESC");
+        numFrequents = frequentsList.size();
 
-        if(frequentsList.size() == 0) {
+        if(numFrequents == 0) {
             frequentUsersText.setVisibility(View.VISIBLE);
         }
         else{
             frequentUsersText.setVisibility(View.GONE);
-            for(int i=0; i<frequentsList.size(); i++){
+            for(int i=0; i<numFrequents; i++){
                 String nickname = frequentsList.get(i).getUserNickname();
                 String surname1 = frequentsList.get(i).getUserSurname1();
                 String surname2 = frequentsList.get(i).getUserSurname2();
@@ -115,9 +131,19 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                 Double score = frequentsList.get(i).getScore();
                 frequentUsers.saveUser(new FrequentUser(nickname, surname1, surname2, firstname, userPhoto, selected, score));
             }
+
+            for(int i=0; i<numFrequents; i++){
+                if (arrayReceivers.contains(frequentUsers.getUsers().get(i).getUserNickname().toString())) {
+                    frequentUsers.getUsers().get(i).setCheckbox(true);
+                }
+                else
+                    frequentUsers.getUsers().get(i).setCheckbox(false);
+            }
             frequentAdapter = new FrequentUsersAdapter(getBaseContext(), frequentUsers.getUsers());
             lvUsers.setAdapter(frequentAdapter);
             lvUsers.setVisibility(View.VISIBLE);
+
+
         }
 
         //checkbox is checked when the row of an user is clicked
@@ -146,20 +172,6 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                 }
             }
         });
-
-        arrayReceivers = getIntent().getStringArrayListExtra("receivers");
-        arrayReceiversFirstNames = getIntent().getStringArrayListExtra("receiversFirstNames");
-        arrayReceiversSurNames1 = getIntent().getStringArrayListExtra("receiversSurNames1");
-        arrayReceiversSurNames2 = getIntent().getStringArrayListExtra("receiversSurNames2");
-        arrayPhotos = getIntent().getStringArrayListExtra("receiversPhotos");
-        //save the old receivers
-        oldReceivers = (ArrayList) arrayReceivers.clone();
-        oldReceiversFirstNames = (ArrayList) arrayReceiversFirstNames.clone();
-        oldReceiversSurNames1 = (ArrayList) arrayReceiversSurNames1.clone();
-        oldReceiversSurNames2 = (ArrayList) arrayReceiversSurNames2.clone();
-        oldPhotos = (ArrayList) arrayPhotos.clone();
-
-        search = "";
 
         setMETHOD_NAME("findUsers");
     }
@@ -216,6 +228,14 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                     else
                         userFilters.getUsers().get(i).setCheckbox(false);
                 }
+
+                for(int i=0; i<numFrequents; i++){
+                    if (arrayReceivers.contains(frequentUsers.getUsers().get(i).getUserNickname().toString())) {
+                        frequentUsers.getUsers().get(i).setCheckbox(true);
+                    }
+                    else
+                        frequentUsers.getUsers().get(i).setCheckbox(false);
+                }
             }
 
         });
@@ -253,25 +273,20 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                     onQueryTextSubmit(search); //find users with string search
                 }
                 else {
-                    frequentsList = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS);
-
-                    if(frequentsList.size() == 0) {
+                    if(numFrequents == 0) {
                         lvUsers.setVisibility(View.GONE);
                         frequentUsersText.setVisibility(View.VISIBLE);
                     }
                     else{
-                        frequentUsers = new FrequentUsersList();
                         frequentUsersText.setVisibility(View.GONE);
-                        for(int i=0; i<frequentsList.size(); i++){
-                            String nickname = frequentsList.get(i).getUserNickname();
-                            String surname1 = frequentsList.get(i).getUserSurname1();
-                            String surname2 = frequentsList.get(i).getUserSurname2();
-                            String firstname = frequentsList.get(i).getUserFirstname();
-                            String userPhoto = frequentsList.get(i).getUserPhoto();
-                            boolean selected = frequentsList.get(i).getCheckbox();
-                            Double score = frequentsList.get(i).getScore();
-                            frequentUsers.saveUser(new FrequentUser(nickname, surname1, surname2, firstname, userPhoto, selected, score));
+                        for(int i=0; i<numFrequents; i++){
+                            if (arrayReceivers.contains(frequentUsers.getUsers().get(i).getUserNickname().toString())) {
+                                frequentUsers.getUsers().get(i).setCheckbox(true);
+                            }
+                            else
+                                frequentUsers.getUsers().get(i).setCheckbox(false);
                         }
+
                         frequentAdapter = new FrequentUsersAdapter(getBaseContext(), frequentUsers.getUsers());
                         lvUsers.setAdapter(frequentAdapter);
                         lvUsers.setVisibility(View.VISIBLE);
@@ -328,6 +343,14 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
             }
             else
                 userFilters.getUsers().get(i).setCheckbox(false);
+        }
+
+        for(int i=0; i<numFrequents; i++){
+            if (arrayReceivers.contains(frequentUsers.getUsers().get(i).getUserNickname().toString())) {
+                frequentUsers.getUsers().get(i).setCheckbox(true);
+            }
+            else
+                frequentUsers.getUsers().get(i).setCheckbox(false);
         }
     }
 

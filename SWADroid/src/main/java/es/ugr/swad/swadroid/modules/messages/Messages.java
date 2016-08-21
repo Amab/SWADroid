@@ -333,7 +333,7 @@ public class Messages extends Module {
         int newFrequents = 0;
         for(int i=0; i < arrayReceivers.size(); i++){
             for(int j=0; j < frequentsList.size(); j++){
-                if(frequentsList.get(j).getUserNickname() == arrayReceivers.get(i)){
+                if(frequentsList.get(j).getUserNickname().equals(arrayReceivers.get(i).toString())){
                     frequent = true;
                     frequentsList.get(j).setScore(frequentsList.get(j).getScore() * 1.2);
                 }
@@ -350,11 +350,12 @@ public class Messages extends Module {
 
         for(int i=0; i < frequentsList.size()-newFrequents; i++){
             dbHelper.updateFrequentRecipient(frequentsList.get(i));
+            Log.d(TAG, "frequent user updated, score = " + frequentsList.get(i).getScore());
         }
 
         for(int i=frequentsList.size()-newFrequents; i < frequentsList.size(); i++){
-            Log.d(TAG, "new frequent user");
             dbHelper.insertFrequentRecipient(frequentsList.get(i));
+            Log.d(TAG, "frequent user added = " + frequentsList.get(i).getScore());
         }
 
         Toast.makeText(this, messageSent, Toast.LENGTH_LONG).show();
