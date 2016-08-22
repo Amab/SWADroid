@@ -352,6 +352,9 @@ public class Messages extends Module {
         boolean frequent = false;
         int newFrequents = 0;
         double score;
+
+        dbHelper.beginTransaction();
+
         for(int i=0; i < arrayReceivers.size(); i++){
             for(int j=0; j < frequentsList.size(); j++){
                 if(frequentsList.get(j).getUserNickname().equals(arrayReceivers.get(i).toString())){
@@ -384,6 +387,8 @@ public class Messages extends Module {
             dbHelper.insertFrequentRecipient(frequentsList.get(i));
             Log.d(TAG, "frequent user added = " + frequentsList.get(i).getScore());
         }
+
+        dbHelper.endTransaction(true);
 
         Toast.makeText(this, messageSent, Toast.LENGTH_LONG).show();
         finish();
