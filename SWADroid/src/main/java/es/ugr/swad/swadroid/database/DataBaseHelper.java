@@ -1418,6 +1418,30 @@ public class DataBaseHelper {
     }
 
     /**
+     * Inserts a list of frequent recipients
+     *
+     * @param list the list of users
+     * @return number of users inserted in the table
+     */
+    public int insertFrequentsList(List<FrequentUser> list) {
+        int numElements = 0;
+
+        for(int i=0; i<list.size(); i++){
+            Entity ent = new Entity(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS);
+            ent.setValue("nicknameRecipient", list.get(i).getUserNickname());
+            ent.setValue("surname1Recipient", list.get(i).getUserSurname1());
+            ent.setValue("surname2Recipient", list.get(i).getUserSurname2());
+            ent.setValue("firstnameRecipient", list.get(i).getUserFirstname());
+            ent.setValue("photoRecipient", list.get(i).getUserPhoto());
+            ent.setValue("score", list.get(i).getScore());
+            ent.save();
+            numElements++;
+        }
+
+        return numElements;
+    }
+
+    /**
      * Updates a course in database
      *
      * @param prev   Course to be updated

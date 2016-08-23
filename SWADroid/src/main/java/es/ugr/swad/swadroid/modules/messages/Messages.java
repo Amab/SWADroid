@@ -352,17 +352,14 @@ public class Messages extends Module {
      */
     @Override
     protected void postConnect() {
-        progressLayout.setVisibility(View.GONE);
-        String messageSent = getString(R.string.messageSentMsg) + ":\n" + receiversNames;
-
-        frequentsList = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS);
         boolean frequent = false;
-        int newFrequents = 0;
         double score;
         String nickname;
 
-        dbHelper.beginTransaction();
+        //get data of frequent users
+        frequentsList = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS);
 
+        //modify data in memory
         for(int i=0; i < frequentsList.size(); i++){
             nickname = frequentsList.get(i).getUserNickname();
             for(int j=0; j < arrayReceivers.size(); j++){
@@ -372,7 +369,7 @@ public class Messages extends Module {
 
                     if(score > MAX_SCORE)
                         score = MAX_SCORE;
-                    dbHelper.updateFrequentRecipient(nickname, score);
+                    frequentsList.get(i).setScore(score);
                     arrayReceivers.remove(j);
                     arrayReceiversFirstNames.remove(j);
                     arrayReceiversSurNames1.remove(j);
@@ -385,10 +382,10 @@ public class Messages extends Module {
             if(frequent == false){
                 score = frequentsList.get(i).getScore() * DECREASE_FACTOR;
                 if(score < MIN_SCORE) {
-                    dbHelper.removeAllRows(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS, "nicknameRecipient", nickname);
+                    frequentsList.remove(i);
                     Log.d(TAG, "frequent user '" + nickname + "' removed");
                 }else {
-                    dbHelper.updateFrequentRecipient(nickname, score);
+                    frequentsList.get(i).setScore(score);
                     Log.d(TAG, "frequent user '" + nickname + "' updated, score = " + score);
                 }
             }
@@ -396,12 +393,18 @@ public class Messages extends Module {
         }
 
         for(int i=0; i < arrayReceivers.size(); i++){
-            dbHelper.insertFrequentRecipient(new FrequentUser(arrayReceivers.get(i), arrayReceiversSurNames1.get(i), arrayReceiversSurNames2.get(i), arrayReceiversFirstNames.get(i), arrayPhotos.get(i), false, INITIAL_SCORE));
+            frequentsList.add(new FrequentUser(arrayReceivers.get(i), arrayReceiversSurNames1.get(i), arrayReceiversSurNames2.get(i), arrayReceiversFirstNames.get(i), arrayPhotos.get(i), false, INITIAL_SCORE));
             Log.d(TAG, "frequent user '" + arrayReceivers.get(i) + "' added = " + INITIAL_SCORE);
         }
 
-        dbHelper.endTransaction(true);
+        //empty table of frequent recipients
+        dbHelper.emptyTable(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS);
 
+        //insert new data in data base
+        dbHelper.insertFrequentsList(frequentsList);
+
+        progressLayout.setVisibility(View.GONE);
+        String messageSent = getString(R.string.messageSentMsg) + ":\n" + receiversNames;
         Toast.makeText(this, messageSent, Toast.LENGTH_LONG).show();
         finish();
     }
