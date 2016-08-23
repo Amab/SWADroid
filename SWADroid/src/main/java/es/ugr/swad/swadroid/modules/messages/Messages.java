@@ -316,13 +316,20 @@ public class Messages extends Module {
             receiversNames = "";
             for (int i = 0; i < csSize; i++) {
                 SoapObject pii = (SoapObject) soap.getProperty(i);
-                String firstname = pii.getProperty("userFirstname").toString();
-                String surname1 = pii.getProperty("userSurname1").toString();
-                String surname2 = pii.getProperty("userSurname2").toString();
-                if (i == csSize-1)
-                    receiversNames += firstname + " " + surname1 + " " + surname2 + "";
-                else
-                    receiversNames += firstname + " " + surname1 + " " + surname2 + ",\n";
+                String firstname = pii.getPrimitiveProperty("userFirstname").toString();
+                String surname1 = pii.getPrimitiveProperty("userSurname1").toString();
+                String surname2 = pii.getPrimitiveProperty("userSurname2").toString();
+                if (i == csSize-1) {
+                    receiversNames += firstname + " " + surname1;
+                    if (!surname2.isEmpty())
+                        receiversNames += " " + surname2;
+                }
+                else {
+                    receiversNames += firstname + " " + surname1;
+                    if (!surname2.isEmpty())
+                        receiversNames += " " + surname2;
+                    receiversNames += ",\n";
+                }
             }
         }
 
@@ -352,40 +359,45 @@ public class Messages extends Module {
         boolean frequent = false;
         int newFrequents = 0;
         double score;
+        String nickname;
 
         dbHelper.beginTransaction();
 
-        for(int i=0; i < arrayReceivers.size(); i++){
-            for(int j=0; j < frequentsList.size(); j++){
-                if(frequentsList.get(j).getUserNickname().equals(arrayReceivers.get(i).toString())){
+        for(int i=0; i < frequentsList.size(); i++){
+            nickname = frequentsList.get(i).getUserNickname();
+            for(int j=0; j < arrayReceivers.size(); j++){
+                if(nickname.equals(arrayReceivers.get(j).toString())){
                     frequent = true;
-                    score = frequentsList.get(j).getScore() * INCREASE_FACTOR;
+                    score = frequentsList.get(i).getScore() * INCREASE_FACTOR;
+
                     if(score > MAX_SCORE)
                         score = MAX_SCORE;
-                    dbHelper.updateFrequentRecipient(frequentsList.get(j).getUserNickname(), score);
-                    Log.d(TAG, "frequent user updated, score = " + score);
-                }
-                else{
-                    score = frequentsList.get(j).getScore() * DECREASE_FACTOR;
-                    if(score < MIN_SCORE) {
-                        dbHelper.removeAllRows(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS, "nicknameRecipient", frequentsList.get(j).getUserNickname());
-                        Log.d(TAG, "frequent user removed");
-                    }else {
-                        dbHelper.updateFrequentRecipient(frequentsList.get(j).getUserNickname(), score);
-                        Log.d(TAG, "frequent user updated, score = " + score);
-                    }
+                    dbHelper.updateFrequentRecipient(nickname, score);
+                    arrayReceivers.remove(j);
+                    arrayReceiversFirstNames.remove(j);
+                    arrayReceiversSurNames1.remove(j);
+                    arrayReceiversSurNames2.remove(j);
+                    arrayPhotos.remove(j);
+                    j = arrayReceivers.size();
+                    Log.d(TAG, "frequent user '" + nickname + "' updated, score = " + score);
                 }
             }
             if(frequent == false){
-                frequentsList.add(new FrequentUser(arrayReceivers.get(i), arrayReceiversSurNames1.get(i), arrayReceiversSurNames2.get(i), arrayReceiversFirstNames.get(i), arrayPhotos.get(i), false, INITIAL_SCORE));
-                newFrequents++;
+                score = frequentsList.get(i).getScore() * DECREASE_FACTOR;
+                if(score < MIN_SCORE) {
+                    dbHelper.removeAllRows(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS, "nicknameRecipient", nickname);
+                    Log.d(TAG, "frequent user '" + nickname + "' removed");
+                }else {
+                    dbHelper.updateFrequentRecipient(nickname, score);
+                    Log.d(TAG, "frequent user '" + nickname + "' updated, score = " + score);
+                }
             }
             frequent = false;
         }
 
-        for(int i=frequentsList.size()-newFrequents; i < frequentsList.size(); i++){
-            dbHelper.insertFrequentRecipient(frequentsList.get(i));
-            Log.d(TAG, "frequent user added = " + frequentsList.get(i).getScore());
+        for(int i=0; i < arrayReceivers.size(); i++){
+            dbHelper.insertFrequentRecipient(new FrequentUser(arrayReceivers.get(i), arrayReceiversSurNames1.get(i), arrayReceiversSurNames2.get(i), arrayReceiversFirstNames.get(i), arrayPhotos.get(i), false, INITIAL_SCORE));
+            Log.d(TAG, "frequent user '" + arrayReceivers.get(i) + "' added = " + INITIAL_SCORE);
         }
 
         dbHelper.endTransaction(true);
@@ -570,8 +582,6 @@ public class Messages extends Module {
                 && (userPhoto != null) && !userPhoto.equals("")
                 && !userPhoto.equals(Constants.NULL_VALUE)) {
             ImageFactory.displayImage(loader, userPhoto, photo);
-        } else {
-            Log.d(TAG, "No connection or no photo " + userPhoto);
         }
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -640,8 +650,6 @@ public class Messages extends Module {
                     && (userPhoto != null) && !userPhoto.equals("")
                     && !userPhoto.equals(Constants.NULL_VALUE)) {
                 ImageFactory.displayImage(loader, userPhoto, photo);
-            } else {
-                Log.d(TAG, "No connection or no photo " + userPhoto);
             }
 
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);

@@ -210,6 +210,8 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                 String surname2 = frequentsList.get(i).getUserSurname2();
                 String firstname = frequentsList.get(i).getUserFirstname();
                 String userPhoto = frequentsList.get(i).getUserPhoto();
+                if(userPhoto.isEmpty())
+                    userPhoto = "https://swad.ugr.es/swad/icon/usr_bl.jpg"; //if I don't use this, put any image
                 boolean selected = frequentsList.get(i).getCheckbox();
                 Double score = frequentsList.get(i).getScore();
                 frequentUsers.saveUser(new FrequentUser(nickname, surname1, surname2, firstname, userPhoto, selected, score));
@@ -335,6 +337,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                 else { // shows frequent users
                     if(numFrequents == 0) {
                         lvUsers.setVisibility(View.GONE);
+                        frequentUsersTitle.setVisibility(View.VISIBLE);
                         frequentUsersText.setVisibility(View.VISIBLE);
                     }
                     else{

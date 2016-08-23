@@ -82,7 +82,12 @@ public class UsersAdapter extends ArrayAdapter<UserFilter> {
         else
             ImageFactory.displayImage(loader, user.getUserPhoto(), holder.image);
 
-        holder.name.setText(user.getUserSurname1() + " " + user.getUserSurname2() + ", " + user.getUserFirstname());
+        String name;
+        if(!user.getUserSurname2().isEmpty())
+            name = user.getUserSurname1() + " " + user.getUserSurname2() + ", " + user.getUserFirstname();
+        else
+            name = user.getUserSurname1() + ", " + user.getUserFirstname();
+        holder.name.setText(name);
 
         return convertView;
     }
