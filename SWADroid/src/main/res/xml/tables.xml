@@ -487,6 +487,10 @@
         new-in-version="21"
         to-string="%name%" >
         <field
+            name="idUser"
+            obligatory="true"
+            type="text" />
+        <field
             name="nicknameRecipient"
             obligatory="true"
             type="text" />

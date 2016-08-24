@@ -169,6 +169,10 @@ public class Messages extends Module {
      * List where requests of database are saved
      */
     private List<FrequentUser> frequentsList;
+    /**
+     * User logged identifier
+     */
+    private String userLogged;
 
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
@@ -185,6 +189,8 @@ public class Messages extends Module {
         arrayReceiversSurNames2 = new ArrayList<>();
         arrayPhotos = new ArrayList<>();
         sender = "";
+
+        userLogged = Login.getLoggedUser().getUserID();
 
         setContentView(R.layout.messages_screen);
         setTitle(R.string.messagesModuleLabel);
@@ -357,7 +363,7 @@ public class Messages extends Module {
         String nickname;
 
         //get data of frequent users
-        frequentsList = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS);
+        frequentsList = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS, "idUser='" + userLogged + "'", "");
 
         //modify data in memory
         for(int i=0; i < frequentsList.size(); i++){
@@ -393,15 +399,19 @@ public class Messages extends Module {
         }
 
         for(int i=0; i < arrayReceivers.size(); i++){
-            frequentsList.add(new FrequentUser(arrayReceivers.get(i), arrayReceiversSurNames1.get(i), arrayReceiversSurNames2.get(i), arrayReceiversFirstNames.get(i), arrayPhotos.get(i), false, INITIAL_SCORE));
-            Log.d(TAG, "frequent user '" + arrayReceivers.get(i) + "' added = " + INITIAL_SCORE);
+            frequentsList.add(new FrequentUser(userLogged, arrayReceivers.get(i), arrayReceiversSurNames1.get(i), arrayReceiversSurNames2.get(i), arrayReceiversFirstNames.get(i), arrayPhotos.get(i), false, INITIAL_SCORE));
+            Log.d(TAG, "frequent user '" + arrayReceivers.get(i) + "' added = " + INITIAL_SCORE + " (sender = '" + userLogged + "')");
         }
 
-        //empty table of frequent recipients
-        dbHelper.emptyTable(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS);
+        dbHelper.beginTransaction();
+
+        //delete frequent recipients of user logged
+        dbHelper.removeAllRows(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS, "idUser='" + userLogged + "'");
 
         //insert new data in data base
         dbHelper.insertFrequentsList(frequentsList);
+
+        dbHelper.endTransaction(true);
 
         progressLayout.setVisibility(View.GONE);
         String messageSent = getString(R.string.messageSentMsg) + ":\n" + receiversNames;

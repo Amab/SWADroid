@@ -461,7 +461,8 @@ public class DataBaseHelper {
                         ent.getLong("openTime"));
                 break;
             case DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS:
-                o = new FrequentUser(ent.getString("nicknameRecipient"),
+                o = new FrequentUser(ent.getString("idUser"),
+                        ent.getString("nicknameRecipient"),
                         ent.getString("surname1Recipient"),
                         ent.getString("surname2Recipient"),
                         ent.getString("firstnameRecipient"),
@@ -1408,6 +1409,7 @@ public class DataBaseHelper {
      */
     public void insertFrequentRecipient(FrequentUser user) {
         Entity ent = new Entity(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS);
+        ent.setValue("idUser", user.getidUser());
         ent.setValue("nicknameRecipient", user.getUserNickname());
         ent.setValue("surname1Recipient", user.getUserSurname1());
         ent.setValue("surname2Recipient", user.getUserSurname2());
@@ -1428,6 +1430,7 @@ public class DataBaseHelper {
 
         for(int i=0; i<list.size(); i++){
             Entity ent = new Entity(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS);
+            ent.setValue("idUser", list.get(i).getidUser());
             ent.setValue("nicknameRecipient", list.get(i).getUserNickname());
             ent.setValue("surname1Recipient", list.get(i).getUserSurname1());
             ent.setValue("surname2Recipient", list.get(i).getUserSurname2());

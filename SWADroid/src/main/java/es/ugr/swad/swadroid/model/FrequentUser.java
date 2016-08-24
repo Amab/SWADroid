@@ -29,7 +29,11 @@ import java.util.Hashtable;
  */
 public class FrequentUser extends Model {
     /**
-     * User identifier.
+     * Sender identifier.
+     */
+    private String idUser;
+    /**
+     * Recipient identifier.
      */
     private String userNickname;
     /**
@@ -60,7 +64,8 @@ public class FrequentUser extends Model {
     /**
      * Constructor.
      *
-     * @param userNickname  User identifier.
+     * @param idUser  Sender identifier.
+     * @param userNickname  Recipient identifier.
      * @param userSurname1  User first surname.
      * @param userSurname2  User last surname.
      * @param userFirstname User name.
@@ -68,7 +73,8 @@ public class FrequentUser extends Model {
      * @param selectedCheckbox  Is a receiver?.
      * @param score         Score of frequent recipient
      */
-    public FrequentUser(String userNickname, String userSurname1, String userSurname2, String userFirstname, String userPhoto, boolean selectedCheckbox, double score) {
+    public FrequentUser(String idUser, String userNickname, String userSurname1, String userSurname2, String userFirstname, String userPhoto, boolean selectedCheckbox, double score) {
+        this.idUser = idUser;
         this.userNickname = userNickname;
         this.userSurname1 = userSurname1;
         this.userSurname2 = userSurname2;
@@ -76,6 +82,24 @@ public class FrequentUser extends Model {
         this.userPhoto = userPhoto;
         this.selectedCheckbox = selectedCheckbox;
         this.score = score;
+    }
+
+    /**
+     * Gets sender identifier.
+     *
+     * @return Sender identifier.
+     */
+    public String getidUser() {
+        return this.idUser;
+    }
+
+    /**
+     * Sets sender identifier.
+     *
+     * @param idUser Sender identifier.
+     */
+    public void setIdUser(String idUser) {
+        this.idUser = idUser;
     }
 
     /**

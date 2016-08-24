@@ -154,12 +154,18 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
      * List where requests of database are saved
      */
     private List<FrequentUser> frequentsList;
+    /**
+     * User logged identifier
+     */
+    private String userLogged;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_users);
         setTitle(R.string.actionBarAddUser);
+
+        userLogged = Login.getLoggedUser().getUserID();
 
         userFilters = new UsersList();
         frequentUsers = new FrequentUsersList();
@@ -196,7 +202,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
 
         frequentUsersText = (TextView) findViewById(R.id.listText);
 
-        frequentsList = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS, "", "score DESC");
+        frequentsList = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS, "idUser='" + userLogged + "'", "score DESC");
         numFrequents = frequentsList.size();
 
         if(numFrequents == 0) {
@@ -205,6 +211,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         else{
             frequentUsersText.setVisibility(View.GONE);
             for(int i=0; i<numFrequents; i++){
+                String idUser = frequentsList.get(i).getidUser();
                 String nickname = frequentsList.get(i).getUserNickname();
                 String surname1 = frequentsList.get(i).getUserSurname1();
                 String surname2 = frequentsList.get(i).getUserSurname2();
@@ -214,7 +221,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                     userPhoto = "https://swad.ugr.es/swad/icon/usr_bl.jpg"; //if I don't use this, put any image
                 boolean selected = frequentsList.get(i).getCheckbox();
                 Double score = frequentsList.get(i).getScore();
-                frequentUsers.saveUser(new FrequentUser(nickname, surname1, surname2, firstname, userPhoto, selected, score));
+                frequentUsers.saveUser(new FrequentUser(idUser, nickname, surname1, surname2, firstname, userPhoto, selected, score));
             }
 
             for(int i=0; i<numFrequents; i++){
