@@ -324,7 +324,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
             switch (requestCode) {
                 case Constants.LOGIN_REQUEST_CODE:
                     mProgressScreen.hide();
-                    Login.setLogged(true);
+                    Login.getLoginInfo().setLogged(true);
                     setResult(RESULT_OK);
                     mFromPreference = false;
                     finish();

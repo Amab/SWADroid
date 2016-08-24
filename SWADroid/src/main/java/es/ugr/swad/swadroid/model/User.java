@@ -94,6 +94,10 @@ public class User extends Model {
             PI_userRole
     };
 
+    public User() {
+        super(-1);
+    }
+
     /**
      * Constructor.
      *
@@ -416,4 +420,18 @@ public class User extends Model {
         }
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "wsKey='" + wsKey + '\'' +
+                ", userID='" + userID + '\'' +
+                ", userNickname='" + userNickname + '\'' +
+                ", userSurname1='" + userSurname1 + '\'' +
+                ", userSurname2='" + userSurname2 + '\'' +
+                ", userFirstname='" + userFirstname + '\'' +
+                ", userPhoto='" + userPhoto + '\'' +
+                ", userBirthday=" + userBirthday +
+                ", userRole=" + userRole +
+                '}';
+    }
 }
