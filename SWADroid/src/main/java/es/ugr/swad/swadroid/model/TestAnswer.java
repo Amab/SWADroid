@@ -280,17 +280,6 @@ public class TestAnswer extends Model {
     }
 
     /* (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString() {
-        return "TestAnswer [id=" + getId() + ", qstCod=" + qstCod + ", ansInd=" + ansInd
-                + ", correct=" + correct + ", correctAnswered="
-                + correctAnswered + ", answer=" + answer + ", feedback="
-                + feedback + ", userAnswer=" + userAnswer + "]";
-    }
-
-    /* (non-Javadoc)
      * @see org.ksoap2.serialization.KvmSerializable#getProperty(int)
      */
     public Object getProperty(int param) {
@@ -382,5 +371,18 @@ public class TestAnswer extends Model {
                 feedback = (String) obj;
                 break;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "TestAnswer{" +
+                "qstCod=" + qstCod +
+                ", ansInd=" + ansInd +
+                ", correct=" + correct +
+                ", correctAnswered=" + correctAnswered +
+                ", answer='" + answer + '\'' +
+                ", feedback='" + feedback + '\'' +
+                ", userAnswer='" + userAnswer + '\'' +
+                "} " + super.toString();
     }
 }

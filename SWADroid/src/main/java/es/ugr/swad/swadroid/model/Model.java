@@ -80,11 +80,10 @@ public abstract class Model implements KvmSerializable {
         return id == other.id;
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
     @Override
     public String toString() {
-        return "Model [id=" + id + "]";
+        return "Model{" +
+                "id=" + id +
+                '}';
     }
 }

@@ -116,12 +116,6 @@ public class TestTag extends Model {
         this.tagInd = tagInd;
     }
 
-    @Override
-    public String toString() {
-        return "TestTag [id=" + getId() + ", qstCodList=" + qstCodList + ", tagTxt=" + tagTxt
-                + ", tagInd=" + tagInd + "]";
-    }
-
     /* (non-Javadoc)
              * @see org.ksoap2.serialization.KvmSerializable#getProperty(int)
              */
@@ -225,5 +219,14 @@ public class TestTag extends Model {
         }
 
         this.qstCodList.add(qstCod);
+    }
+
+    @Override
+    public String toString() {
+        return "TestTag{" +
+                "qstCodList=" + qstCodList +
+                ", tagTxt='" + tagTxt + '\'' +
+                ", tagInd=" + tagInd +
+                "} " + super.toString();
     }
 }

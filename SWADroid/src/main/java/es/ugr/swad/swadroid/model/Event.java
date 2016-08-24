@@ -402,8 +402,7 @@ public class Event extends Model {
     @Override
     public String toString() {
         return "Event{" +
-                "id=" + super.getId() +
-                ", hidden=" + hidden +
+                "hidden=" + hidden +
                 ", userSurname1='" + userSurname1 + '\'' +
                 ", userSurname2='" + userSurname2 + '\'' +
                 ", userFirstName='" + userFirstName + '\'' +
@@ -415,6 +414,6 @@ public class Event extends Model {
                 ", text='" + text + '\'' +
                 ", groups='" + groups + '\'' +
                 ", status='" + status + '\'' +
-                '}';
+                "} " + super.toString();
     }
 }

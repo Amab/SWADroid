@@ -90,11 +90,11 @@ public class Pair<FIRST, SECOND> {
         return result;
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
     @Override
     public String toString() {
-        return "Pair [first=" + first + ", second=" + second + "]";
+        return "Pair{" +
+                "first=" + first +
+                ", second=" + second +
+                '}';
     }
 }
