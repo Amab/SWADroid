@@ -240,7 +240,6 @@ public class Messages extends Module {
                 for(int i=0; i<arrayReceivers.size(); i++){
                     receivers += arrayReceivers.get(i) + ",";
                 }
-                //Log.d(TAG, "Receivers of Messages: " + receivers);
                 startActivityForResult(intent, Constants.SEARCH_USERS_REQUEST_CODE);
             }
         });
@@ -251,10 +250,7 @@ public class Messages extends Module {
         seeAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (showAll)
-                    showAll = false;
-                else
-                    showAll = true;
+                showAll = !showAll;
                 showReceivers();
             }
         });
@@ -292,8 +288,6 @@ public class Messages extends Module {
         body = body.replaceAll("\n", "<br />");
         body = body + "<br /><br />" + getString(R.string.footMessageMsg) + " " + getString(R.string.app_name) +
                 "<br />" + getString(R.string.marketWebURL);
-        //body = body + "<br /><br />"+ getString(R.string.footMessageMsg) + " <a href=\"" +
-        //		getString(R.string.marketWebURL) + "\">" + getString(R.string.app_name) + "</a>";
     }
 
     /* (non-Javadoc)
@@ -350,7 +344,6 @@ public class Messages extends Module {
         startConnection();
         messageLayout.setVisibility(View.INVISIBLE);
         progressLayout.setVisibility(View.VISIBLE);
-        //Toast.makeText(this, R.string.sendingMessageMsg, Toast.LENGTH_SHORT).show();
     }
 
     /* (non-Javadoc)
@@ -610,13 +603,6 @@ public class Messages extends Module {
     }
 
     private void showReceivers(){
-        /*
-        Log.d(TAG, "Receivers of SearchUsers: " + receivers);
-        for (int i=0; i<arrayReceivers.size(); i++){
-            Log.d(TAG, "arrayReceivers: " + arrayReceivers.get(i).toString() + " " + arrayReceiversNames.get(i).toString());
-        }
-        Log.d(TAG, Boolean.toString(showAll));
-        */
 
         // restart layout
         layout.removeAllViewsInLayout();
@@ -632,17 +618,16 @@ public class Messages extends Module {
             i = 0;
             seeAll.setText(getResources().getString(R.string.see_less));
         }
-        else{
-            if (arrayReceiversFirstNames.size() > 3) {
-                i = arrayReceiversFirstNames.size() - 3;
-                seeAll.setVisibility(View.VISIBLE);
-                seeAll.setText(getResources().getString(R.string.see_all));
-            }
-            else {
-                i = 0;
-                seeAll.setVisibility(View.GONE);
-            }
+        else if (arrayReceiversFirstNames.size() > 3) {
+            i = arrayReceiversFirstNames.size() - 3;
+            seeAll.setVisibility(View.VISIBLE);
+            seeAll.setText(getResources().getString(R.string.see_all));
         }
+        else {
+            i = 0;
+            seeAll.setVisibility(View.GONE);
+        }
+
 
         while (i < arrayReceiversFirstNames.size()){
             layout.setVisibility(View.VISIBLE);
