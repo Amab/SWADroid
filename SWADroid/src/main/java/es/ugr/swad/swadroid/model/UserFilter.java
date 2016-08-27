@@ -21,6 +21,7 @@ package es.ugr.swad.swadroid.model;
 
 import org.ksoap2.serialization.PropertyInfo;
 
+import java.io.Serializable;
 import java.util.Hashtable;
 
 /**
@@ -28,7 +29,7 @@ import java.util.Hashtable;
  *
  * @author Rubén Martín Hidalgo
  */
-public class UserFilter extends Model{
+public class UserFilter extends Model implements Serializable{
     /**
      * User identifier.
      */

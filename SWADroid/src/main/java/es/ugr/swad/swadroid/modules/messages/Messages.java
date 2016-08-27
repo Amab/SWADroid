@@ -46,8 +46,10 @@ import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.ImageFactory;
+import es.ugr.swad.swadroid.gui.ProgressScreen;
 import es.ugr.swad.swadroid.model.FrequentUser;
 import es.ugr.swad.swadroid.model.User;
+import es.ugr.swad.swadroid.model.UserFilter;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.utils.Utils;
@@ -94,25 +96,9 @@ public class Messages extends Module {
      */
     private String receiversNames;
     /**
-     * Array of nicknames
+     * Array of receivers
      */
-    private ArrayList<String> arrayReceivers;
-    /**
-     * Array of firstnames
-     */
-    private ArrayList<String> arrayReceiversFirstNames;
-    /**
-     * Array of first surnames
-     */
-    private ArrayList<String> arrayReceiversSurNames1;
-    /**
-     * Array of second surnames
-     */
-    private ArrayList<String> arrayReceiversSurNames2;
-    /**
-     * Array of photos
-     */
-    private ArrayList<String> arrayPhotos;
+    private ArrayList<UserFilter> arrayReceivers;
     /**
      * Message's subject
      */
@@ -121,10 +107,6 @@ public class Messages extends Module {
      * Message's body
      */
     private String body;
-    /**
-     * Receivers EditText
-     */
-    private EditText rcvEditText;
     /**
      * Subject EditText
      */
@@ -152,7 +134,7 @@ public class Messages extends Module {
     /**
      * Layout of sending progress
      */
-    private LinearLayout progressLayout;
+    private ProgressScreen progressLayout;
     /**
      * Layout of message screen
      */
@@ -183,11 +165,7 @@ public class Messages extends Module {
 
         receivers = "";
         receiversNames = "";
-        arrayReceivers = new ArrayList<>();
-        arrayReceiversFirstNames = new ArrayList<>();
-        arrayReceiversSurNames1 = new ArrayList<>();
-        arrayReceiversSurNames2 = new ArrayList<>();
-        arrayPhotos = new ArrayList<>();
+        arrayReceivers = new ArrayList<UserFilter>();
         sender = "";
 
         userLogged = Login.getLoggedUser().getUserID();
@@ -208,9 +186,10 @@ public class Messages extends Module {
         layout = (ViewGroup) findViewById(R.id.layout_receivers);
 
         messageLayout = (LinearLayout) findViewById(R.id.message_screen);
-        progressLayout = (LinearLayout) findViewById(R.id.progressbar_view);
-        TextView textLoading = (TextView) findViewById(R.id.text_progress);
-        textLoading.setText(R.string.sendingMessageMsg);
+        View mMessageView = findViewById(R.id.message_screen);
+        View mProgressScreenView = findViewById(R.id.progress_screen);
+        progressLayout = new ProgressScreen(mProgressScreenView, mMessageView,
+                getString(R.string.sendingMessageMsg), this);
 
         loader = ImageFactory.init(this, true, true, R.drawable.usr_bl, R.drawable.usr_bl,
                 R.drawable.usr_bl);
@@ -230,16 +209,8 @@ public class Messages extends Module {
             public void onClick(View v) {
                 Intent intent = new Intent (Messages.this, SearchUsers.class);
                 intent.putExtra("receivers", arrayReceivers);
-                intent.putExtra("receiversFirstNames", arrayReceiversFirstNames);
-                intent.putExtra("receiversSurNames1", arrayReceiversSurNames1);
-                intent.putExtra("receiversSurNames2", arrayReceiversSurNames2);
-                intent.putExtra("receiversPhotos", arrayPhotos);
                 intent.putExtra("senderName", sender);
                 intent.putExtra("senderPhoto", senderPhoto);
-                receivers = "";
-                for(int i=0; i<arrayReceivers.size(); i++){
-                    receivers += arrayReceivers.get(i) + ",";
-                }
                 startActivityForResult(intent, Constants.SEARCH_USERS_REQUEST_CODE);
             }
         });
@@ -299,7 +270,7 @@ public class Messages extends Module {
         addFootBody();
         receivers = "";
         for(int i=0; i<arrayReceivers.size(); i++)
-            receivers += "@" + arrayReceivers.get(i) + ",";
+            receivers += "@" + arrayReceivers.get(i).getUserNickname() + ",";
 
         createRequest(SOAPClient.CLIENT_TYPE);
         addParam("wsKey", Login.getLoggedUser().getWsKey());
@@ -343,7 +314,7 @@ public class Messages extends Module {
     protected void connect() {
         startConnection();
         messageLayout.setVisibility(View.INVISIBLE);
-        progressLayout.setVisibility(View.VISIBLE);
+        progressLayout.show();
     }
 
     /* (non-Javadoc)
@@ -362,7 +333,7 @@ public class Messages extends Module {
         for(int i=0; i < frequentsList.size(); i++){
             nickname = frequentsList.get(i).getUserNickname();
             for(int j=0; j < arrayReceivers.size(); j++){
-                if(nickname.equals(arrayReceivers.get(j).toString())){
+                if(nickname.equals(arrayReceivers.get(j).getUserNickname())){
                     frequent = true;
                     score = frequentsList.get(i).getScore() * INCREASE_FACTOR;
 
@@ -370,10 +341,6 @@ public class Messages extends Module {
                         score = MAX_SCORE;
                     frequentsList.get(i).setScore(score);
                     arrayReceivers.remove(j);
-                    arrayReceiversFirstNames.remove(j);
-                    arrayReceiversSurNames1.remove(j);
-                    arrayReceiversSurNames2.remove(j);
-                    arrayPhotos.remove(j);
                     j = arrayReceivers.size();
                     Log.d(TAG, "frequent user '" + nickname + "' updated, score = " + score);
                 }
@@ -392,8 +359,8 @@ public class Messages extends Module {
         }
 
         for(int i=0; i < arrayReceivers.size(); i++){
-            frequentsList.add(new FrequentUser(userLogged, arrayReceivers.get(i), arrayReceiversSurNames1.get(i), arrayReceiversSurNames2.get(i), arrayReceiversFirstNames.get(i), arrayPhotos.get(i), false, INITIAL_SCORE));
-            Log.d(TAG, "frequent user '" + arrayReceivers.get(i) + "' added = " + INITIAL_SCORE + " (sender = '" + userLogged + "')");
+            frequentsList.add(new FrequentUser(userLogged, arrayReceivers.get(i).getUserNickname(), arrayReceivers.get(i).getUserSurname1(), arrayReceivers.get(i).getUserSurname2(), arrayReceivers.get(i).getUserFirstname(), arrayReceivers.get(i).getUserPhoto(), false, INITIAL_SCORE));
+            Log.d(TAG, "frequent user '" + arrayReceivers.get(i).getUserNickname() + "' added = " + INITIAL_SCORE + " (sender = '" + userLogged + "')");
         }
 
         dbHelper.beginTransaction();
@@ -406,7 +373,7 @@ public class Messages extends Module {
 
         dbHelper.endTransaction(true);
 
-        progressLayout.setVisibility(View.GONE);
+        progressLayout.hide();
         String messageSent = getString(R.string.messageSentMsg) + ":\n" + receiversNames;
         Toast.makeText(this, messageSent, Toast.LENGTH_LONG).show();
         finish();
@@ -460,11 +427,7 @@ public class Messages extends Module {
     @Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
     	if (data != null) {
-    		arrayReceivers = data.getStringArrayListExtra("receivers");
-            arrayReceiversFirstNames = data.getStringArrayListExtra("receiversFirstNames");
-            arrayReceiversSurNames1 = data.getStringArrayListExtra("receiversSurNames1");
-            arrayReceiversSurNames2 = data.getStringArrayListExtra("receiversSurNames2");
-            arrayPhotos = data.getStringArrayListExtra("receiversPhotos");
+    		arrayReceivers = (ArrayList) data.getSerializableExtra("receivers");
             receivers = "";
             for(int i=0; i<arrayReceivers.size(); i++){
                 receivers += arrayReceivers.get(i) + ",";
@@ -490,10 +453,6 @@ public class Messages extends Module {
 	    switch (item.getItemId()) {
 	        case R.id.action_sendMsg:
 	            try {
-                    receivers = "";
-                    for(int i=0; i<arrayReceivers.size(); i++){
-                        receivers += arrayReceivers.get(i) + ",";
-                    }
 	            	if((eventCode == 0) && (receivers.length() == 0)) {
 	            		Toast.makeText(this, R.string.noReceiversMsg, Toast.LENGTH_LONG).show();
 	            	} else if(subjEditText.getText().length() == 0) {
@@ -555,12 +514,10 @@ public class Messages extends Module {
 
         builder.setPositiveButton(getString(R.string.acceptMsg), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                int position = arrayReceivers.indexOf(textNickname.getText().toString());
-                arrayReceivers.remove(position);
-                arrayReceiversFirstNames.remove(position);
-                arrayReceiversSurNames1.remove(position);
-                arrayReceiversSurNames2.remove(position);
-                arrayPhotos.remove(position);
+                for(int i=0; i<arrayReceivers.size(); i++) {
+                    if (arrayReceivers.get(i).getUserNickname().equals(textNickname.getText().toString()))
+                        arrayReceivers.remove(i);
+                }
 
                 if(arrayReceivers.size() <= 3){
                     seeAll.setVisibility(View.GONE);
@@ -618,8 +575,8 @@ public class Messages extends Module {
             i = 0;
             seeAll.setText(getResources().getString(R.string.see_less));
         }
-        else if (arrayReceiversFirstNames.size() > 3) {
-            i = arrayReceiversFirstNames.size() - 3;
+        else if (arrayReceivers.size() > 3) {
+            i = arrayReceivers.size() - 3;
             seeAll.setVisibility(View.VISIBLE);
             seeAll.setText(getResources().getString(R.string.see_all));
         }
@@ -629,21 +586,21 @@ public class Messages extends Module {
         }
 
 
-        while (i < arrayReceiversFirstNames.size()){
+        while (i < arrayReceivers.size()){
             layout.setVisibility(View.VISIBLE);
             LayoutInflater inflater = LayoutInflater.from(this);
             final View linearLayout = inflater.inflate(R.layout.receivers_item, null, false);
 
             final TextView textName = (TextView) linearLayout.findViewById(R.id.textName);
-            textName.setText(arrayReceiversFirstNames.get(i).toString() + " "
-                            + arrayReceiversSurNames1.get(i).toString() + " "
-                            + arrayReceiversSurNames2.get(i).toString());
+            textName.setText(arrayReceivers.get(i).getUserFirstname() + " "
+                            + arrayReceivers.get(i).getUserSurname1() + " "
+                            + arrayReceivers.get(i).getUserSurname2());
 
             final TextView textNickname = (TextView) linearLayout.findViewById(R.id.textNickname);
-            textNickname.setText(arrayReceivers.get(i).toString());
+            textNickname.setText(arrayReceivers.get(i).getUserNickname());
 
             ImageView photo = (ImageView) linearLayout.findViewById(R.id.imageView);
-            String userPhoto = arrayPhotos.get(i).toString();
+            String userPhoto = arrayReceivers.get(i).getUserPhoto();
             if (Utils.connectionAvailable(this)
                     && (userPhoto != null) && !userPhoto.equals("")
                     && !userPhoto.equals(Constants.NULL_VALUE)) {

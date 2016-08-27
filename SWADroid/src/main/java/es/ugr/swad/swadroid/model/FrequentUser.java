@@ -20,6 +20,8 @@
 package es.ugr.swad.swadroid.model;
 
 import org.ksoap2.serialization.PropertyInfo;
+
+import java.io.Serializable;
 import java.util.Hashtable;
 
 /**
@@ -27,7 +29,7 @@ import java.util.Hashtable;
  *
  * @author Rubén Martín Hidalgo
  */
-public class FrequentUser extends Model {
+public class FrequentUser extends Model implements Serializable{
     /**
      * Sender identifier.
      */

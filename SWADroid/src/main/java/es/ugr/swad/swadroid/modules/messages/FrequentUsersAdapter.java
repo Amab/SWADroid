@@ -21,6 +21,7 @@
 package es.ugr.swad.swadroid.modules.messages;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
+import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.ImageFactory;
 import es.ugr.swad.swadroid.model.FrequentUser;
@@ -45,6 +47,8 @@ import es.ugr.swad.swadroid.model.FrequentUser;
 public class FrequentUsersAdapter extends ArrayAdapter<FrequentUser> {
     private LayoutInflater inflater;
     private ImageLoader loader;
+
+    private static final String TAG = Constants.APP_TAG + " FrequentUsersAdapter";
 
     private static class ViewHolder {
         ImageView image;
