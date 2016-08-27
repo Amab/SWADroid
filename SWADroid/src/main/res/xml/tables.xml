@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <database
     name="swadroid_db_crypt"
-    version="20" >
+    version="21" >
 
     <table
         name="courses"
@@ -481,6 +481,39 @@
             foreign-table="groups"
             obligatory="true"
             type="foreign-key" />
+    </table>
+    <table
+        name="frequent_recipients"
+        new-in-version="21"
+        to-string="%name%" >
+        <field
+            name="idUser"
+            obligatory="true"
+            type="text" />
+        <field
+            name="nicknameRecipient"
+            obligatory="true"
+            type="text" />
+        <field
+            name="firstnameRecipient"
+            obligatory="true"
+            type="text" />
+        <field
+            name="surname1Recipient"
+            obligatory="true"
+            type="text" />
+        <field
+            name="surname2Recipient"
+            obligatory="true"
+            type="text" />
+        <field
+            name="photoRecipient"
+            obligatory="false"
+            type="text" />
+        <field
+            name="score"
+            obligatory="true"
+            type="double" />
     </table>
 
 </database>

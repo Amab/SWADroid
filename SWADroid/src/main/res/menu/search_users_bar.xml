@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:swadroid="http://schemas.android.com/apk/res-auto" >
+
+    <item
+        android:id="@+id/action_search_field"
+        android:icon="@drawable/ic_search_user"
+        swadroid:showAsAction="ifRoom|collapseActionView"
+        swadroid:actionViewClass="android.support.v7.widget.SearchView"
+        android:title="@string/search" />
+
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_search_user"
+        swadroid:showAsAction="always"
+        android:title="@string/search" />
+
+    <item
+        android:id="@+id/confirm_receivers"
+        android:icon="@drawable/ic_action_accept"
+        swadroid:showAsAction="always"
+        android:title="@string/confirmMsg"/>
+</menu>
