@@ -27,6 +27,8 @@ Copyright (C) 2010, Juan Miguel Boyero Corral
 
 [![Copyright and License](https://img.shields.io/badge/license-Apache%202-green.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0) SWADroid uses [MathJax](https://www.mathjax.org/) library developed by The MathJax Team and licensed under [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0).
 
+[![Copyright and License](https://img.shields.io/badge/license-Apache%202-green.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0) SWADroid uses [GSon](https://github.com/google/gson) library developed by Google and licensed under [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0).
+
 Author
 ------
 
@@ -40,6 +42,7 @@ Contributors
 -	[Antonio Aguilera Malagón](http://www.slideshare.net/antonioaguileramalagon)
 -	[José Antonio Guerrero Avilés](http://www.linkedin.com/in/antonioguerreroaviles)
 -	[Alejandro Alcalde](http://elbauldelprogramador.com/)
+-	[Rubén Martín Hidalgo](https://github.com/romilgildo)
 
 Contributing
 ------------
