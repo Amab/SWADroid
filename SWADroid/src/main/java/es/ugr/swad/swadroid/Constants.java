@@ -228,6 +228,10 @@ public class Constants {
      */
     public static final int CREATE_ACCOUNT_REQUEST_CODE = 39;
     /**
+     * Request code for search users
+     */
+    public static final int SEARCH_USERS_REQUEST_CODE = 40;
+    /**
      * Request code for CAMERA permission
      */
     public static final int PERMISSIONS_REQUEST_CAMERA = 100;

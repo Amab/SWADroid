@@ -41,6 +41,7 @@ import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.Event;
+import es.ugr.swad.swadroid.model.FrequentUser;
 import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.model.GroupType;
 import es.ugr.swad.swadroid.model.Model;
@@ -172,6 +173,10 @@ public class DataBaseHelper {
      */
     @Deprecated
     public static final String DB_TABLE_ROLLCALL = "rollcall";
+    /**
+     * Table name for frequent recipients
+     */
+    public static final String DB_TABLE_FREQUENT_RECIPIENTS = "frequent_recipients";
 
     /**
      * Constructor
@@ -454,6 +459,16 @@ public class DataBaseHelper {
                         ent.getInt("mandatory"),
                         ent.getInt("multiple"),
                         ent.getLong("openTime"));
+                break;
+            case DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS:
+                o = new FrequentUser(ent.getString("idUser"),
+                        ent.getString("nicknameRecipient"),
+                        ent.getString("surname1Recipient"),
+                        ent.getString("surname2Recipient"),
+                        ent.getString("firstnameRecipient"),
+                        ent.getString("photoRecipient"),
+                        false,
+                        ent.getDouble("score"));
                 break;
         }
 
@@ -1388,6 +1403,48 @@ public class DataBaseHelper {
     }
 
     /**
+     * Inserts a new Frequent Recipient
+     *
+     * @param user the frequent recipient to insert in the list
+     */
+    public void insertFrequentRecipient(FrequentUser user) {
+        Entity ent = new Entity(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS);
+        ent.setValue("idUser", user.getidUser());
+        ent.setValue("nicknameRecipient", user.getUserNickname());
+        ent.setValue("surname1Recipient", user.getUserSurname1());
+        ent.setValue("surname2Recipient", user.getUserSurname2());
+        ent.setValue("firstnameRecipient", user.getUserFirstname());
+        ent.setValue("photoRecipient", user.getUserPhoto());
+        ent.setValue("score", user.getScore());
+        ent.save();
+    }
+
+    /**
+     * Inserts a list of frequent recipients
+     *
+     * @param list the list of users
+     * @return number of users inserted in the table
+     */
+    public int insertFrequentsList(List<FrequentUser> list) {
+        int numElements = 0;
+
+        for(int i=0; i<list.size(); i++){
+            Entity ent = new Entity(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS);
+            ent.setValue("idUser", list.get(i).getidUser());
+            ent.setValue("nicknameRecipient", list.get(i).getUserNickname());
+            ent.setValue("surname1Recipient", list.get(i).getUserSurname1());
+            ent.setValue("surname2Recipient", list.get(i).getUserSurname2());
+            ent.setValue("firstnameRecipient", list.get(i).getUserFirstname());
+            ent.setValue("photoRecipient", list.get(i).getUserPhoto());
+            ent.setValue("score", list.get(i).getScore());
+            ent.save();
+            numElements++;
+        }
+
+        return numElements;
+    }
+
+    /**
      * Updates a course in database
      *
      * @param prev   Course to be updated
@@ -1811,6 +1868,21 @@ public class DataBaseHelper {
             return returnValue;
         } else
             return false;
+    }
+
+    /**
+     * Updates a Frequent Recipient with the new score
+     *
+     * @param nickname    the identifier of recipient
+     * @param score   the score to order the frequent recipients list
+     */
+    public void updateFrequentRecipient(String nickname, Double score) {
+        List<Entity> rows = db.getEntityList(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS, "nicknameRecipient = '" + nickname + "'");
+
+        for(Entity ent : rows) {
+            ent.setValue("score", score);
+            ent.save();
+        }
     }
 
     /**
@@ -2364,4 +2436,5 @@ public class DataBaseHelper {
 	public static void setDbCleaned(boolean state) {
 	    dbCleaned = state;
 	}
+
 }
