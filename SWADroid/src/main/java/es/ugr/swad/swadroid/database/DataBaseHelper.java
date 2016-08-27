@@ -568,6 +568,22 @@ public class DataBaseHelper {
     }
 
     /**
+     * Gets all tablenames of the database
+     *
+     * @return A list of all tablenames of the database
+     */
+    public List<String>  getAllTablenames() {
+        List<String> result = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name", null);
+
+        while (cursor.moveToNext()) {
+            result.add(cursor.getString(0));
+        }
+
+        return result;
+    }
+
+    /**
      * Gets an user
      *
      * @param fieldName  Field's name

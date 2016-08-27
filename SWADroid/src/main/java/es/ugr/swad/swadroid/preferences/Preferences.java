@@ -29,6 +29,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.analytics.SWADroidTracker;
@@ -474,7 +475,18 @@ public class Preferences {
      * Clean data of all tables from database. Removes users photos from external storage
      */
     private static void cleanDatabase() {
-        dbHelper.cleanTables();
+        List<String> tablenames = dbHelper.getAllTablenames();
+
+        //Empty all tables except DB_TABLE_FREQUENT_RECIPIENTS
+        dbHelper.beginTransaction();
+
+        for(String table : tablenames) {
+            if(!DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS.equals(table)) {
+                dbHelper.emptyTable(table);
+            }
+        }
+
+        dbHelper.endTransaction(true);
         
         Preferences.setLastCourseSelected(0);
         DataBaseHelper.setDbCleaned(true);
