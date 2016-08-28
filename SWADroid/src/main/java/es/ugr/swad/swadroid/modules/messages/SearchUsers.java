@@ -455,25 +455,27 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
     }
     
     private void updateCheckboxesUsersFilter(){
-        boolean result;
+        boolean selected;
         String nickname;
-        for(int i=0; i<arrayReceivers.size(); i++){
-            for(int j=0; j<numUsers; j++){
-                nickname = usersFilter.getUsers().get(j).getUserNickname();
-                result = arrayReceivers.get(i).getUserNickname().equals(nickname);
-                usersFilter.getUsers().get(j).setCheckbox(result);
+        for(int i=0; i<numUsers; i++){
+            for(int j=0; j<arrayReceivers.size(); j++){
+                nickname = usersFilter.getUsers().get(i).getUserNickname();
+                selected = arrayReceivers.get(j).getUserNickname().equals(nickname);
+                if(selected)
+                    j = arrayReceivers.size();
+                usersFilter.getUsers().get(i).setCheckbox(selected);
             }
         }
     }
     
     private void updateCheckboxesFrequentUsers(){
-        boolean result;
+        boolean selected;
         String nickname;
-        for(int i=0; i<arrayReceivers.size(); i++){
-            for(int j=0; j<numFrequents; j++){
-                nickname = frequentUsers.getUsers().get(j).getUserNickname();
-                result = arrayReceivers.get(i).getUserNickname().equals(nickname);
-                frequentUsers.getUsers().get(j).setCheckbox(result);
+        for(int i=0; i<numFrequents; i++){
+            for(int j=0; j<arrayReceivers.size(); j++){
+                nickname = frequentUsers.getUsers().get(i).getUserNickname();
+                selected = arrayReceivers.get(j).getUserNickname().equals(nickname);
+                frequentUsers.getUsers().get(i).setCheckbox(selected);
             }
         }
     }
