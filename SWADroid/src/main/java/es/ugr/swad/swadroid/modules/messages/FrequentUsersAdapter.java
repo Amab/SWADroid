@@ -21,12 +21,12 @@
 package es.ugr.swad.swadroid.modules.messages;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -34,7 +34,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
-import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.ImageFactory;
 import es.ugr.swad.swadroid.model.FrequentUser;
@@ -47,8 +46,7 @@ import es.ugr.swad.swadroid.model.FrequentUser;
 public class FrequentUsersAdapter extends ArrayAdapter<FrequentUser> {
     private LayoutInflater inflater;
     private ImageLoader loader;
-
-    private static final String TAG = Constants.APP_TAG + " FrequentUsersAdapter";
+    List<FrequentUser> list;
 
     private static class ViewHolder {
         ImageView image;
@@ -57,32 +55,42 @@ public class FrequentUsersAdapter extends ArrayAdapter<FrequentUser> {
     }
 
     public FrequentUsersAdapter(Context context, List<FrequentUser> objects) {
-        super(context, 0, objects);
+        super(context, R.layout.row_user, objects);
         this.loader = ImageFactory.init(context, true, true, R.drawable.usr_bl, R.drawable.usr_bl,
                 R.drawable.usr_bl);
 
         this.inflater = LayoutInflater.from(context);
+        this.list = objects;
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        // Does the current view exist?
+        FrequentUser user = getItem(position);
+        ViewHolder holder = null;
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.row_user, parent, false);
+            holder = new ViewHolder();
+
+            // UI references
+            holder.image = (ImageView) convertView.findViewById(R.id.imageView);
+            holder.name = (TextView) convertView.findViewById(R.id.text_user);
+            holder.checkbox = (CheckBox) convertView.findViewById(R.id.check);
+
+            holder.checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    int getPosition = (Integer) buttonView.getTag();  // Here we get the position that we have set for the checkbox using setTag.
+                    list.get(getPosition).setCheckbox(buttonView.isChecked()); // Set the value of checkbox to maintain its state.
+                }
+            });
+            convertView.setTag(holder);
+            convertView.setTag(R.id.check, holder.checkbox);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
         }
+        holder.checkbox.setTag(position); // This line is important.
+        holder.checkbox.setChecked(list.get(position).getCheckbox());
 
-        ViewHolder holder = new ViewHolder();
-
-        // UI references
-        holder.image = (ImageView) convertView.findViewById(R.id.imageView);
-        holder.name = (TextView) convertView.findViewById(R.id.text_user);
-        holder.checkbox = (CheckBox) convertView.findViewById(R.id.check);
-
-        // Current user
-        FrequentUser user = getItem(position);
-
-        holder.checkbox.setChecked(user.getCheckbox());
-
-        // Setup row
         if(user.getUserPhoto().isEmpty())  //when the user don't have photo, the string is empty
             holder.image.setImageResource(R.drawable.usr_bl);
 
