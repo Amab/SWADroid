@@ -180,7 +180,6 @@ public class SWADMain extends MenuExpandableListActivity {
                  */
                 SecureConnection conn = new SecureConnection();
         		conn.initSecureConnection();
-        		//conn.initUntrustedSecureConnection();
         		Log.i(TAG, "Android API < 11 (HONEYCOMB). Adding SSL certificates manually");
         	} else {
         		Log.i(TAG, "Android API >= 11 (HONEYCOMB). Using SSL built-in certificates");

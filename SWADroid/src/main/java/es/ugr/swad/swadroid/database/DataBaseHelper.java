@@ -462,11 +462,11 @@ public class DataBaseHelper {
                 break;
             case DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS:
                 o = new FrequentUser(ent.getString("idUser"),
-                        ent.getString("nicknameRecipient"),
-                        ent.getString("surname1Recipient"),
-                        ent.getString("surname2Recipient"),
-                        ent.getString("firstnameRecipient"),
-                        ent.getString("photoRecipient"),
+                        crypto.decrypt(ent.getString("nicknameRecipient")),
+                        crypto.decrypt(ent.getString("surname1Recipient")),
+                        crypto.decrypt(ent.getString("surname2Recipient")),
+                        crypto.decrypt(ent.getString("firstnameRecipient")),
+                        crypto.decrypt(ent.getString("photoRecipient")),
                         false,
                         ent.getDouble("score"));
                 break;
@@ -1426,11 +1426,11 @@ public class DataBaseHelper {
     public void insertFrequentRecipient(FrequentUser user) {
         Entity ent = new Entity(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS);
         ent.setValue("idUser", user.getidUser());
-        ent.setValue("nicknameRecipient", user.getUserNickname());
-        ent.setValue("surname1Recipient", user.getUserSurname1());
-        ent.setValue("surname2Recipient", user.getUserSurname2());
-        ent.setValue("firstnameRecipient", user.getUserFirstname());
-        ent.setValue("photoRecipient", user.getUserPhoto());
+        ent.setValue("nicknameRecipient", crypto.encrypt(user.getUserNickname()));
+        ent.setValue("surname1Recipient", crypto.encrypt(user.getUserSurname1()));
+        ent.setValue("surname2Recipient", crypto.encrypt(user.getUserSurname2()));
+        ent.setValue("firstnameRecipient", crypto.encrypt(user.getUserFirstname()));
+        ent.setValue("photoRecipient", crypto.encrypt(user.getUserPhoto()));
         ent.setValue("score", user.getScore());
         ent.save();
     }
@@ -1445,15 +1445,18 @@ public class DataBaseHelper {
         int numElements = 0;
 
         for(int i=0; i<list.size(); i++){
+            FrequentUser user = list.get(i);
+
             Entity ent = new Entity(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS);
-            ent.setValue("idUser", list.get(i).getidUser());
-            ent.setValue("nicknameRecipient", list.get(i).getUserNickname());
-            ent.setValue("surname1Recipient", list.get(i).getUserSurname1());
-            ent.setValue("surname2Recipient", list.get(i).getUserSurname2());
-            ent.setValue("firstnameRecipient", list.get(i).getUserFirstname());
-            ent.setValue("photoRecipient", list.get(i).getUserPhoto());
-            ent.setValue("score", list.get(i).getScore());
+            ent.setValue("idUser", user.getidUser());
+            ent.setValue("nicknameRecipient", crypto.encrypt(user.getUserNickname()));
+            ent.setValue("surname1Recipient", crypto.encrypt(user.getUserSurname1()));
+            ent.setValue("surname2Recipient", crypto.encrypt(user.getUserSurname2()));
+            ent.setValue("firstnameRecipient", crypto.encrypt(user.getUserFirstname()));
+            ent.setValue("photoRecipient", crypto.encrypt(user.getUserPhoto()));
+            ent.setValue("score", user.getScore());
             ent.save();
+
             numElements++;
         }
 
