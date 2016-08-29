@@ -34,6 +34,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ImageView;
@@ -110,6 +111,7 @@ public class SWADMain extends MenuExpandableListActivity {
      * Indicates if it is the first run
      */
     private boolean firstRun = false;
+
 
     /**
      * Current role 2 - student 3 - teacher -1 - none role was chosen
@@ -218,14 +220,16 @@ public class SWADMain extends MenuExpandableListActivity {
         super.onResume();
 
         if (isUserOrPasswordEmpty() && listCourses.isEmpty()) {
-            Log.i(TAG, "Logging on user " + Preferences.getUserID() + " against the server "
-                    + Preferences.getServer() +  " ...");
-
             startActivityForResult(new Intent(this, LoginActivity.class), Constants.LOGIN_REQUEST_CODE);
         } else {
             if(Preferences.isPreferencesChanged() || DataBaseHelper.isDbCleaned()) {
+                DataBaseHelper.setDbCleaned(false);
+
                 Preferences.setPreferencesChanged(false);
-                setMenuDbClean();
+                Preferences.initializeSelectedCourse();
+
+                listCourses.clear();
+                courseCode = -1;
             } else if(!firstRun) {
                 courseCode = Courses.getSelectedCourseCode();
             }
@@ -235,8 +239,6 @@ public class SWADMain extends MenuExpandableListActivity {
                     && DateTimeUtils.isBirthday(Login.getLoggedUser().getUserBirthday())) {
 
                 showBirthdayMessage();
-            } else if ((listCourses == null) || listCourses.isEmpty()) {
-                showNoCoursesMessage();
             } else {
                 mNotifyLayout.setVisibility(View.GONE);
             }
@@ -256,12 +258,6 @@ public class SWADMain extends MenuExpandableListActivity {
         mNotifyLayout.setVisibility(View.VISIBLE);
     }
 
-    private void showNoCoursesMessage() {
-        mNotifyImageView.setVisibility(View.GONE);
-        mNotifyTextView.setText(getString(R.string.noCoursesMsg));
-        mNotifyLayout.setVisibility(View.VISIBLE);
-    }
-
     /**
      * Initializes application on first run
      * @param currentVersion Current version of application
@@ -276,7 +272,7 @@ public class SWADMain extends MenuExpandableListActivity {
         Preferences.setLastVersion(currentVersion);
         firstRun = true;
 
-        initializeSelectedCourse();
+        Preferences.initializeSelectedCourse();
     }
 
     /**
@@ -325,6 +321,10 @@ public class SWADMain extends MenuExpandableListActivity {
                     }
 
                     mProgressScreen.hide();
+
+                    createSpinnerAdapter();
+                    createMenu();
+
                     break;
                 case Constants.LOGIN_REQUEST_CODE:
                     getCurrentCourses();
@@ -381,10 +381,9 @@ public class SWADMain extends MenuExpandableListActivity {
      * Create an empty spinner. It is called when the database is cleaned.
      */
     private void cleanSpinner() {
-        /*ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, new String[]{getString(R.string.clickToGetCourses)});
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, new String[]{getString(R.string.clickToGetCourses)});
         mCoursesSpinner.setAdapter(adapter);
-        mCoursesSpinner.setOnTouchListener(Spinner_OnTouch);*/
-        mCoursesSpinner.setVisibility(View.GONE);
+        mCoursesSpinner.setOnTouchListener(Spinner_OnTouch);
 
         Log.i(TAG, "Cleaned Spinner adapter");
     }
@@ -469,27 +468,24 @@ public class SWADMain extends MenuExpandableListActivity {
                 Courses.setSelectedCourseCode(courseSelected.getId());
                 Courses.setSelectedCourseShortName(courseSelected.getShortName());
                 Courses.setSelectedCourseFullName(courseSelected.getFullName());
-
-                Login.setCurrentUserRole(courseSelected.getUserRole());
             }
 
-            if (courseSelected != null) {
-                createBaseMenu();
+            createBaseMenu();
 
-                int userRole = courseSelected.getUserRole();
+            int userRole = courseSelected.getUserRole();
 
-                switch(userRole) {
-                    case Constants.STUDENT_TYPE_CODE:
-                        changeToStudentMenu();
-                        break;
-                    case Constants.TEACHER_TYPE_CODE:
-                        changeToTeacherMenu();
-                        break;
-
-                }
+            switch(userRole) {
+                case Constants.STUDENT_TYPE_CODE:
+                    changeToStudentMenu();
+                    break;
+                case Constants.TEACHER_TYPE_CODE:
+                    changeToTeacherMenu();
+                    break;
             }
+
+            Login.setCurrentUserRole(userRole);
         } else {
-            initializeSelectedCourse();
+            Preferences.initializeSelectedCourse();
 
             Log.w(TAG + " createMenu", "No courses available. Resetted selected course and current role to -1");
 
@@ -534,74 +530,72 @@ public class SWADMain extends MenuExpandableListActivity {
      * Sets currentRole to student role
      */
     private void createBaseMenu() {
-        if (mExpandableListView.getAdapter() == null || currentRole == -1) {
-            clearMenu();
+        clearMenu();
 
-            //the menu base is equal to students menu.
-            currentRole = Constants.STUDENT_TYPE_CODE;
+        //the menu base is equal to students menu.
+        currentRole = Constants.STUDENT_TYPE_CODE;
 
-            //Order:
-            // 1- Course
-            // 2- Evaluation
-            // 3- Messages
-            // 4- Enrollment
-            // 5- Users
-            mHeaderData.add(getMenuItem(R.string.course, R.string.fa_folder_open));
-            mHeaderData.add(getMenuItem(R.string.evaluation, R.string.fa_check_square_o));
-            mHeaderData.add(getMenuItem(R.string.users, R.string.fa_users));
-            mHeaderData.add(getMenuItem(R.string.messages, R.string.fa_envelope));
+        //Order:
+        // 1- Course
+        // 2- Evaluation
+        // 3- Messages
+        // 4- Enrollment
+        // 5- Users
+        mHeaderData.add(getMenuItem(R.string.course, R.string.fa_folder_open));
+        mHeaderData.add(getMenuItem(R.string.evaluation, R.string.fa_check_square_o));
+        mHeaderData.add(getMenuItem(R.string.users, R.string.fa_users));
+        mHeaderData.add(getMenuItem(R.string.messages, R.string.fa_envelope));
 
-            final ArrayList<HashMap<String, Object>> courseData = new ArrayList<>();
-            mChildData.add(courseData);
+        final ArrayList<HashMap<String, Object>> courseData = new ArrayList<>();
+        mChildData.add(courseData);
 
-            final ArrayList<HashMap<String, Object>> evaluationData = new ArrayList<>();
-            mChildData.add(evaluationData);
+        final ArrayList<HashMap<String, Object>> evaluationData = new ArrayList<>();
+        mChildData.add(evaluationData);
 
-            mChildData.add(mUsersData);
-            mChildData.add(mMessagesData);
+        mChildData.add(mUsersData);
+        mChildData.add(mMessagesData);
 
-            //Course category
-            //Introduction
-            courseData.add(getMenuItem(R.string.introductionModuleLabel, R.string.fa_info));
-            //Teaching Guide
-            courseData.add(getMenuItem(R.string.teachingguideModuleLabel, R.string.fa_file_text));
-            //Syllabus (lectures)
-            courseData.add(getMenuItem(R.string.syllabusLecturesModuleLabel, R.string.fa_list_ol));
-            //Syllabus (practicals)
-            courseData.add(getMenuItem(R.string.syllabusPracticalsModuleLabel, R.string.fa_flask));
-            //Documents
-            courseData.add(getMenuItem(R.string.documentsDownloadModuleLabel, R.string.fa_folder_open));
-            //Shared area
-            courseData.add(getMenuItem(R.string.sharedsDownloadModuleLabel, R.string.fa_folder_open));
-            //Bibliography
-            courseData.add(getMenuItem(R.string.bibliographyModuleLabel, R.string.fa_folder_open));
-            //FAQs
-            courseData.add(getMenuItem(R.string.faqsModuleLabel, R.string.fa_question));
-            //Links
-            courseData.add(getMenuItem(R.string.linksModuleLabel, R.string.fa_link));
+        //Course category
+        //Introduction
+        courseData.add(getMenuItem(R.string.introductionModuleLabel, R.string.fa_info));
+        //Teaching Guide
+        courseData.add(getMenuItem(R.string.teachingguideModuleLabel, R.string.fa_file_text));
+        //Syllabus (lectures)
+        courseData.add(getMenuItem(R.string.syllabusLecturesModuleLabel, R.string.fa_list_ol));
+        //Syllabus (practicals)
+        courseData.add(getMenuItem(R.string.syllabusPracticalsModuleLabel, R.string.fa_flask));
+        //Documents
+        courseData.add(getMenuItem(R.string.documentsDownloadModuleLabel, R.string.fa_folder_open));
+        //Shared area
+        courseData.add(getMenuItem(R.string.sharedsDownloadModuleLabel, R.string.fa_folder_open));
+        //Bibliography
+        courseData.add(getMenuItem(R.string.bibliographyModuleLabel, R.string.fa_folder_open));
+        //FAQs
+        courseData.add(getMenuItem(R.string.faqsModuleLabel, R.string.fa_question));
+        //Links
+        courseData.add(getMenuItem(R.string.linksModuleLabel, R.string.fa_link));
 
-            //Evaluation category
-            //Assessment system
-            evaluationData.add(getMenuItem(R.string.assessmentModuleLabel, R.string.fa_info));
-            //Test
-            evaluationData.add(getMenuItem(R.string.testsModuleLabel, R.string.fa_check_square_o));
-            //Marks
-            evaluationData.add(getMenuItem(R.string.marksModuleLabel, R.string.fa_list_alt));
+        //Evaluation category
+        //Assessment system
+        evaluationData.add(getMenuItem(R.string.assessmentModuleLabel, R.string.fa_info));
+        //Test
+        evaluationData.add(getMenuItem(R.string.testsModuleLabel, R.string.fa_check_square_o));
+        //Marks
+        evaluationData.add(getMenuItem(R.string.marksModuleLabel, R.string.fa_list_alt));
 
-            //Users category
-            //Groups
-            mUsersData.add(getMenuItem(R.string.myGroupsModuleLabel, R.string.fa_sitemap));
-            //Generate QR code
-            mUsersData.add(getMenuItem(R.string.generateQRModuleLabel, R.string.fa_qrcode));
+        //Users category
+        //Groups
+        mUsersData.add(getMenuItem(R.string.myGroupsModuleLabel, R.string.fa_sitemap));
+        //Generate QR code
+        mUsersData.add(getMenuItem(R.string.generateQRModuleLabel, R.string.fa_qrcode));
 
-            //Messages category
-            //Notifications
-            mMessagesData.add(getMenuItem(R.string.notificationsModuleLabel, R.string.fa_bell));
-            //Messages
-            mMessagesData.add(getMenuItem(R.string.messagesModuleLabel, R.string.fa_pencil_square_o));
+        //Messages category
+        //Notifications
+        mMessagesData.add(getMenuItem(R.string.notificationsModuleLabel, R.string.fa_bell));
+        //Messages
+        mMessagesData.add(getMenuItem(R.string.messagesModuleLabel, R.string.fa_pencil_square_o));
 
-            Log.i(TAG, "Created Base Menu");
-        }
+        Log.i(TAG, "Created Base Menu");
     }
 
     /**
@@ -634,17 +628,6 @@ public class SWADMain extends MenuExpandableListActivity {
 
             Log.i(TAG, "Changed to Teacher Menu");
         }
-    }
-
-    /**
-     * Creates an empty Menu and mCoursesSpinner when the data base is empty
-     */
-    protected void setMenuDbClean() {
-        initializeSelectedCourse();
-
-        DataBaseHelper.setDbCleaned(false);
-
-        listCourses.clear();
     }
 
     /**
@@ -828,18 +811,8 @@ public class SWADMain extends MenuExpandableListActivity {
 
             Login.setCurrentUserRole(c.getUserRole());
         } else {
-            initializeSelectedCourse();
+            Preferences.initializeSelectedCourse();
         }
-    }
-
-    private void initializeSelectedCourse() {
-        Courses.setSelectedCourseCode(-1);
-        Courses.setSelectedCourseShortName("");
-        Courses.setSelectedCourseFullName("");
-
-        Login.setCurrentUserRole(-1);
-
-        Preferences.setLastCourseSelected(-1);
     }
 
     @Override

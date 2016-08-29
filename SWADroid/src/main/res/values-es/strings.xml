@@ -316,7 +316,6 @@
     <string name="noDocumentsMsg">No hay documentos disponibles</string>
     <string name="notificationsMarkingAllAsReadMsg">Marcando todas las notificaciones como leídas…</string>
     <string name="syncronizingMsg">Sincronizando…</string>
-    <string name="noCoursesMsg">Es necesario estar inscrito en al menos una asignatura para poder ver todas las funciones. Cuando esté inscrito en una asignatura, pulse el botón refrescar en la action bar para actualizar el menú principal.</string>
     <string name="search">Buscar</string>
     <string name="search_user">Buscar usuario</string>
     <string name="users_found">usuarios encontrados</string>
