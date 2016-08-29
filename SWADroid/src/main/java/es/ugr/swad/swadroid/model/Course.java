@@ -118,14 +118,6 @@ public class Course extends Model {
     }
 
     /* (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString() {
-        return "Course [id=" + getId() + " userRole=" + userRole + "getShortName=" + shortName + "getFullName=" + fullName + "]";
-    }
-
-    /* (non-Javadoc)
      * @see org.ksoap2.serialization.KvmSerializable#getProperty(int)
      */
     public Object getProperty(int param) {
@@ -208,4 +200,12 @@ public class Course extends Model {
         return userRole == other.userRole && shortName.compareTo(other.getShortName()) == 0 && fullName.compareTo(other.getFullName()) == 0;
     }
 
+    @Override
+    public String toString() {
+        return "Course{" +
+                "userRole=" + userRole +
+                ", shortName='" + shortName + '\'' +
+                ", fullName='" + fullName + '\'' +
+                "} " + super.toString();
+    }
 }

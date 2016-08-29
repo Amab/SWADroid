@@ -410,26 +410,6 @@ public class SWADNotification extends Model {
 	}
 
     @Override
-    public String toString() {
-        return "SWADNotification{" +
-                "eventCode=" + eventCode +
-                ", eventType='" + eventType + '\'' +
-                ", eventTime=" + eventTime +
-                ", userNickname='" + userNickname + '\'' +
-                ", userSurname1='" + userSurname1 + '\'' +
-                ", userSurname2='" + userSurname2 + '\'' +
-                ", userFirstName='" + userFirstName + '\'' +
-                ", userPhoto='" + userPhoto + '\'' +
-                ", location='" + location + '\'' +
-                ", summary='" + summary + '\'' +
-                ", status=" + status +
-                ", content='" + content + '\'' +
-                ", seenLocal=" + seenLocal +
-                ", seenRemote=" + seenRemote +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof SWADNotification)) return false;
@@ -643,5 +623,25 @@ public class SWADNotification extends Model {
                 content = (String) obj;
                 break;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "SWADNotification{" +
+                "eventCode=" + eventCode +
+                ", eventType='" + eventType + '\'' +
+                ", eventTime=" + eventTime +
+                ", userNickname='" + userNickname + '\'' +
+                ", userSurname1='" + userSurname1 + '\'' +
+                ", userSurname2='" + userSurname2 + '\'' +
+                ", userFirstName='" + userFirstName + '\'' +
+                ", userPhoto='" + userPhoto + '\'' +
+                ", location='" + location + '\'' +
+                ", summary='" + summary + '\'' +
+                ", status=" + status +
+                ", content='" + content + '\'' +
+                ", seenLocal=" + seenLocal +
+                ", seenRemote=" + seenRemote +
+                "} " + super.toString();
     }
 }

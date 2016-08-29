@@ -35,6 +35,7 @@ import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.model.LoginInfo;
+import es.ugr.swad.swadroid.modules.courses.Courses;
 import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.sync.SyncUtils;
 import es.ugr.swad.swadroid.utils.Crypto;
@@ -497,7 +498,7 @@ public class Preferences {
     public static void logoutClean(Context context, String key) {
         Login.getLoginInfo().setLogged(false);
         removeLoginInfo();
-        Log.i(TAG, "Forced logout due to " + key + " change in preferences");
+        initializeSelectedCourse();
         
         cleanDatabase();
         setPreferencesChanged();
@@ -505,6 +506,20 @@ public class Preferences {
         if(isSyncEnabled()) {
         	SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, context);
         }
+
+        Log.i(TAG, "Forced logout due to " + key + " change in preferences");
+    }
+
+    public static void initializeSelectedCourse() {
+        Courses.setSelectedCourseCode(-1);
+        Courses.setSelectedCourseShortName("");
+        Courses.setSelectedCourseFullName("");
+
+        Login.setCurrentUserRole(-1);
+
+        Preferences.setLastCourseSelected(-1);
+
+        Log.i(TAG, "Initialized selected course to -1");
     }
     
     public static boolean isPreferencesChanged() {

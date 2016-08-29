@@ -326,7 +326,6 @@
     <string name="noDocumentsMsg">No documents currently available</string>
     <string name="notificationsMarkingAllAsReadMsg">Marking all notifications as read…</string>
     <string name="syncronizingMsg">Syncronizing…</string>
-    <string name="noCoursesMsg">You must be enrolled in at least one subject to see all functions. When enrolled in a subject, press the refresh button in the action bar to update the main menu.</string>
     <string name="search">Search</string>
     <string name="search_user">Search user</string>
     <string name="users_found">users found</string>

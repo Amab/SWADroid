@@ -157,6 +157,6 @@ public class UserAttendance extends Model {
         return "UserAttendance{" +
                 "eventCode=" + eventCode +
                 ", userPresent=" + userPresent +
-                '}';
+                "} " + super.toString();
     }
 }

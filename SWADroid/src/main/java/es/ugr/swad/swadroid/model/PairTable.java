@@ -121,15 +121,6 @@ public class PairTable<FIRST, SECOND> extends Model {
         return result;
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString() {
-        return "PairTable [values=" + values + ", table=" + table
-                + ", getId()=" + getId() + "]";
-    }
-
     public Object getProperty(int arg0) {
         // TODO Auto-generated method stub
         return null;
@@ -148,5 +139,13 @@ public class PairTable<FIRST, SECOND> extends Model {
     public void setProperty(int arg0, Object arg1) {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public String toString() {
+        return "PairTable{" +
+                "values=" + values +
+                ", table='" + table + '\'' +
+                "} " + super.toString();
     }
 }
