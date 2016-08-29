@@ -1,7 +1,9 @@
 package es.ugr.swad.swadroid.modules.messages;
 
 /**
- * Created by Romilgildo on 24/07/2016.
+ * Class for manage a list of users
+ *
+ * @author Rubén Martín Hidalgo
  */
 
 import java.util.ArrayList;

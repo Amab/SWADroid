@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Vector;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.ProgressScreen;
 import es.ugr.swad.swadroid.model.FrequentUser;
@@ -39,7 +40,10 @@ import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
- * Created by Rubén Martín Hidalgo on 17/07/2016.
+ * Class for search users
+ * @see <a href="https://openswad.org/ws/#findUsers">findUsers</a>
+ *
+ * @author Rubén Martín Hidalgo
  */
 public class SearchUsers extends Module implements SearchView.OnQueryTextListener {
     /**
@@ -193,6 +197,12 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         listenerFrequentUsers();
 
         setMETHOD_NAME("findUsers");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
     }
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
