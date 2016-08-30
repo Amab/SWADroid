@@ -324,7 +324,6 @@
     <string name="noMarksStudentMsg">No marks currently available or the student ID has not been verified by the teacher</string>
     <string name="noMarksTeacherMsg">No marks currently available</string>
     <string name="noDocumentsMsg">No documents currently available</string>
-    <string name="notificationsMarkingAllAsReadMsg">Marking all notifications as read…</string>
     <string name="syncronizingMsg">Syncronizing…</string>
     <string name="search">Search</string>
     <string name="search_user">Search user</string>

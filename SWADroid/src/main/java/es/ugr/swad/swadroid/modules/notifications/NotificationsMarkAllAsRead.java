@@ -20,15 +20,13 @@ package es.ugr.swad.swadroid.modules.notifications;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.ksoap2.serialization.SoapPrimitive;
 
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.analytics.SWADroidTracker;
-import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.modules.Module;
+import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
@@ -108,8 +106,6 @@ public class NotificationsMarkAllAsRead extends Module {
      */
     @Override
     protected void connect() {
-        Toast.makeText(this, R.string.notificationsMarkingAllAsReadMsg , Toast.LENGTH_SHORT).show();
-
         startConnection();
     }
 
