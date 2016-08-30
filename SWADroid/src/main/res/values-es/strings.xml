@@ -314,7 +314,6 @@
     <string name="noMarksStudentMsg">No hay calificaciones disponibles o el DNI del estudiante no ha sido verificado por el profesor</string>
     <string name="noMarksTeacherMsg">No hay calificaciones disponibles</string>
     <string name="noDocumentsMsg">No hay documentos disponibles</string>
-    <string name="notificationsMarkingAllAsReadMsg">Marcando todas las notificaciones como leídas…</string>
     <string name="syncronizingMsg">Sincronizando…</string>
     <string name="search">Buscar</string>
     <string name="search_user">Buscar usuario</string>
