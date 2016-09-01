@@ -45,6 +45,7 @@ import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.gui.DialogFactory;
+import es.ugr.swad.swadroid.model.LoginInfo;
 import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.modules.login.LoginActivity;
 import es.ugr.swad.swadroid.sync.SyncUtils;
@@ -214,7 +215,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
                 Preferences.logoutClean(ctx, Preferences.LOGOUTPREF);
                 Preferences.setUserID("");
                 Preferences.setUserPassword("");
-                Login.setLogged(false);
                 
                 startActivity(new Intent(getBaseContext(), LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                         | Intent.FLAG_ACTIVITY_SINGLE_TOP).putExtra("fromPreference", true));
@@ -339,7 +339,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
                     userPasswordPrefChanged = true;
                     syncPrefsChanged = true;
                     Preferences.setPreferencesChanged();
-                    Login.setLogged(false);
+                    Login.getLoginInfo().setLogged(false);
                 } else {
                     Toast.makeText(getApplicationContext(), R.string.pradoLoginToast,
                             Toast.LENGTH_LONG).show();

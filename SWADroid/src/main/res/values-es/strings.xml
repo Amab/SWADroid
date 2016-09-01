@@ -101,18 +101,18 @@
     <string name="errorServiceUnavailableMsg">SWAD se encuentra en mantenimiento en estos momentos.
         Por favor, inténtelo más tarde</string>
     <string name="sendingMessageMsg">Enviando mensaje…</string>
-    <string name="noReceiversMsg">Debe indicar al menos un destinatario</string>
+    <string name="noReceiversMsg">Debe añadir al menos un destinatario</string>
     <string name="noSubjectMessageMsg">Debe introducir el asunto del mensaje</string>
-    <string name="message_receivers_title">Destinatarios (separados por comas)</string>
-    <string name="message_subject_title">Asunto</string>
-    <string name="message_body_title">Mensaje</string>
+    <string name="message_receivers_title">Destinatarios:</string>
+    <string name="message_subject_title">Asunto:</string>
+    <string name="message_body_title">Mensaje:</string>
     <string name="notice_body_title">Aviso</string>
     <string name="publishingNotice">Publicando aviso…</string>
     <string name="noticePublished">Aviso publicado</string>
     <string name="noContentNoticeMsg">Debe introducir el contenido del aviso</string>
     <string name="sendMsg">Enviar</string>
-    <string name="selectRcvModuleLabel">Seleccionar Destinatarios</string>
-    <string name="filterUsersListModuleLabel">Filtrar Destinatarios</string>
+    <string name="selectRcvModuleLabel">Seleccionar destinatarios</string>
+    <string name="filterUsersListModuleLabel">Filtrar destinatarios</string>
     <string name="acceptFilters">Filtrar</string>
     <string name="cancelFilters">Cancel</string>
     <string name="cleanDatabaseMsg">Todos los datos de la base de datos han sido borrados</string>
@@ -263,7 +263,7 @@
     <string name="notSeenLabel">No leídas</string>
     <string name="actionBarRefresh">Actualizar</string>
     <string name="actionBarSave">Guardar</string>
-    <string name="actionBarAddUser">Agregar usuarios</string>
+    <string name="actionBarAddUser">Añadir usuarios</string>
     <string name="actionBarFilterUsers">Filtrar usuarios</string>
     <string name="Filters_All">Todo</string>
     <string name="Filters_Teachers">Profesores</string>
@@ -314,7 +314,27 @@
     <string name="noMarksStudentMsg">No hay calificaciones disponibles o el DNI del estudiante no ha sido verificado por el profesor</string>
     <string name="noMarksTeacherMsg">No hay calificaciones disponibles</string>
     <string name="noDocumentsMsg">No hay documentos disponibles</string>
-    <string name="notificationsMarkingAllAsReadMsg">Marcando todas las notificaciones como leídas…</string>
     <string name="syncronizingMsg">Sincronizando…</string>
-
+    <string name="search">Buscar</string>
+    <string name="search_user">Buscar usuario</string>
+    <string name="users_found">usuarios encontrados</string>
+    <string name="user_found">usuario encontrado</string>
+    <string name="users_NOTfound">No se encontraron usuarios</string>
+    <string name="where_to_search">¿Dónde desea buscar?</string>
+    <string name="in_subject">En</string>
+    <string name="inAllPlatform">En toda la plataforma</string>
+    <string name="introduceLongerText">Introduzca un texto más largo</string>
+    <string name="cancelSendMessage">Va a cancelar el envío del mensaje</string>
+    <string name="cancelSendReceivers">Va a descartar los destinatarios seleccionados</string>
+    <string name="cancelRemoveReceivers">¿Quiere quitar a #nameUser# de la lista de destinatarios?</string>
+    <string name="user_added">Usuario añadido</string>
+    <string name="user_deleted">Usuario eliminado</string>
+    <string name="see_all">Ver todos</string>
+    <string name="see_less">Ver menos</string>
+    <string name="confirmMsg">Confirmar</string>
+    <string name="discardMsg">Descartar</string>
+    <string name="frequent_users">Usuarios frecuentes</string>
+    <string name="NOTfrequent_users">No hay usuarios frecuentes</string>
+    <string name="replyModuleLabel">Responder mensaje</string>
+    <string name="primaryReceiver">Principal</string>
 </resources>

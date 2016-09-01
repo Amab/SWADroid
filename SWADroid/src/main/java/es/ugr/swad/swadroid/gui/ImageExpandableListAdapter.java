@@ -44,7 +44,6 @@ public class ImageExpandableListAdapter extends SimpleExpandableListAdapter {
     private final LayoutInflater layoutInflater;
     private final ArrayList<HashMap<String, Object>> groupData;
     private final ArrayList<ArrayList<HashMap<String, Object>>> childData;
-    Context context;
     
     private static final String TAG = "ImageExpandableListAdapter";
     private static int convertViewCounter = 0;

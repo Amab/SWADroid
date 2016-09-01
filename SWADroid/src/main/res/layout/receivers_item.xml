@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/background_receiver">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="26dp"
+        android:layout_height="34dp"
+        android:src="@drawable/usr_bl"/>
+
+    <TextView
+        android:id="@+id/textName"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:textColor="@android:color/black"
+        android:gravity="center_vertical"
+        tools:text="Rubén Martín Hidalgo"
+        android:paddingLeft="10dp"/>
+
+    <!--This TextView saves the nickname of receivers to remove it correctly-->
+    <TextView
+        android:id="@+id/textNickname"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+
+    <ImageButton
+        android:id="@+id/buttonDelete"
+        android:layout_width="27dp"
+        android:layout_height="27dp"
+        android:layout_marginLeft="5dp"
+        android:background="@drawable/not_ok"
+        android:layout_gravity="center_vertical"/>
+
+</LinearLayout>

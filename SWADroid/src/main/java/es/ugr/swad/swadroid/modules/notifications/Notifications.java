@@ -209,7 +209,7 @@ public class Notifications extends Module implements
 	/**
 	 * Sends to SWAD the "seen notifications" info
 	 */
-	private void sendReadedNotifications() {
+	private void sendReadNotifications() {
 		List<Model> markedNotificationsList;
 		String seenNotifCodes;
 		Intent activity;
@@ -275,8 +275,6 @@ public class Notifications extends Module implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.expandablelist_items_pulltorefresh);
 
-		getSupportActionBar().setIcon(R.drawable.notif);
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
@@ -286,8 +284,8 @@ public class Notifications extends Module implements
 		refreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container_expandablelist);
 		list = (ExpandableListView) findViewById(R.id.expandablelist_pulltorefresh);
 		emptyNotifTextView = (TextView) findViewById(R.id.list_item_title);
-        mBirthdayLayout = (LinearLayout) findViewById(R.id.birthday_layout);
-        mBirthdayTextView = (TextView) findViewById(R.id.birthdayTextView);
+        mBirthdayLayout = (LinearLayout) findViewById(R.id.notify_layout);
+        mBirthdayTextView = (TextView) findViewById(R.id.notifyTextView);
 		
 		groupItem = new ArrayList<>();
 		childItem = new ArrayList<>();
@@ -332,7 +330,7 @@ public class Notifications extends Module implements
 				Utils.parseBoolString(true));
 
 		// Sends to SWAD the "seen notifications" info
-		sendReadedNotifications();
+		sendReadNotifications();
 
 		refreshScreen();
 	}
@@ -419,6 +417,8 @@ public class Notifications extends Module implements
 					String eventType = pii.getProperty("eventType").toString();
 					Long eventTime = Long.valueOf(pii.getProperty("eventTime")
 							.toString());
+					String userNickname = pii.getProperty("userNickname")
+							.toString();
 					String userSurname1 = pii.getProperty("userSurname1")
 							.toString();
 					String userSurname2 = pii.getProperty("userSurname2")
@@ -437,10 +437,11 @@ public class Notifications extends Module implements
 					// Add not cancelled notifications only
 					if(!notifCancelled) {
 						SWADNotification n = new SWADNotification(notifCode,
-								eventCode, eventType, eventTime, userSurname1,
+								eventCode, eventType, eventTime, userNickname, userSurname1,
 								userSurname2, userFirstName, userPhoto, location,
 								summary, status, content, notifReadSWAD,
 								notifReadSWAD);
+
 						dbHelper.insertNotification(n);
 
 						// Count unread notifications only
@@ -521,7 +522,7 @@ public class Notifications extends Module implements
 			}
 
 			// Sends to SWAD the "seen notifications" info
-			sendReadedNotifications();
+			sendReadNotifications();
 
 			refreshScreen();
 		}
@@ -595,7 +596,7 @@ public class Notifications extends Module implements
 		case R.id.action_markAllRead:
 			dbHelper.updateAllNotifications("seenLocal",
 					Utils.parseBoolString(true));
-			sendReadedNotifications();
+			sendReadNotifications();
 			refreshScreen();
 			return true;
 

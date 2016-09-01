@@ -50,27 +50,19 @@ public class NotificationItem extends MenuActivity {
     private Long notifCode;
     private Long eventCode;
     private String notificationType;
+    private String summary;
     private String sender;
     private String userPhoto;
-    private String course;
-    private String summary;
-    private String content;
-    private String date;
-    private String time;
-    private boolean seenLocal;
 
-	@Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         TextView senderTextView, courseTextView, summaryTextView, dateTextView, timeTextView;
         ImageView userPhotoView;
         WebView webview;
         Intent activity;
-        //String type = this.getIntent().getStringExtra("notificationType");
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.single_notification_view);
-
-    	getSupportActionBar().setIcon(R.drawable.notif);
 
         senderTextView = (TextView) this.findViewById(R.id.senderNameText);
         courseTextView = (TextView) this.findViewById(R.id.courseNameText);
@@ -85,12 +77,12 @@ public class NotificationItem extends MenuActivity {
         notificationType = this.getIntent().getStringExtra("notificationType");
         sender = this.getIntent().getStringExtra("sender");
         userPhoto = this.getIntent().getStringExtra("userPhoto");
-        course = this.getIntent().getStringExtra("course");
+        String course = this.getIntent().getStringExtra("course");
         summary = this.getIntent().getStringExtra("summary");
-        content = this.getIntent().getStringExtra("content");
-        date = this.getIntent().getStringExtra("date");
-        time = this.getIntent().getStringExtra("time");
-        seenLocal = Utils.parseStringBool(this.getIntent().getStringExtra("seenLocal"));
+        String content = this.getIntent().getStringExtra("content");
+        String date = this.getIntent().getStringExtra("date");
+        String time = this.getIntent().getStringExtra("time");
+        boolean seenLocal = Utils.parseStringBool(this.getIntent().getStringExtra("seenLocal"));
 
         senderTextView.setText(sender);
         courseTextView.setText(course);
@@ -167,6 +159,8 @@ public class NotificationItem extends MenuActivity {
                 Intent activity = new Intent(this, Messages.class);
                 activity.putExtra("eventCode", eventCode);
                 activity.putExtra("summary", summary);
+                activity.putExtra("sender", sender);
+                activity.putExtra("photo", userPhoto);
                 startActivity(activity);
                 return true;
 

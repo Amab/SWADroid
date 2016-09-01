@@ -19,6 +19,7 @@
 package es.ugr.swad.swadroid.modules.groups;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.LongSparseArray;
@@ -28,7 +29,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -38,6 +38,7 @@ import java.util.Date;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.gui.FontManager;
 import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.model.GroupType;
 import es.ugr.swad.swadroid.model.Model;
@@ -56,6 +57,7 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
     private LongSparseArray<ArrayList<Group>> children = null;
     private ArrayList<Model> groups = null;
     private final LongSparseArray<boolean[]> realMembership = new LongSparseArray<>();
+    private static Typeface iconFont;
 
     private int role = -1;
     private int layoutGroup = 0;
@@ -68,7 +70,7 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 
     private static class ChildHolder {
         LinearLayout linearLayout;
-        ImageView imagePadlock;
+        TextView imagePadlock;
         CheckBox checkBox;
         RadioButton radioButton;
         TextView vacantsText;
@@ -97,6 +99,9 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
         
         setRealInscription();
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        //Get Font Awesome typeface
+        iconFont = FontManager.getTypeface(context, FontManager.FONTAWESOME);
     }
 
     @Override
@@ -119,7 +124,7 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
             convertView = mInflater.inflate(layoutChild, parent, false);
             holder = new ChildHolder();
             holder.linearLayout = (LinearLayout) convertView.findViewById(R.id.groupsLayout);
-            holder.imagePadlock = (ImageView) convertView.findViewById(R.id.padlockIcon);
+            holder.imagePadlock = (TextView) convertView.findViewById(R.id.padlockIcon);
             holder.checkBox = (CheckBox) convertView.findViewById(R.id.checkBox);
             holder.checkBox.setOnClickListener(checkListener);
             holder.radioButton = (RadioButton) convertView.findViewById(R.id.radioButton);
@@ -154,10 +159,15 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
         boolean freeSpot = ((maxStudents == -1) || (group.getCurrentStudents() < maxStudents));
 
         if (open != 0) {
-            holder.imagePadlock.setImageResource(R.drawable.padlock_green);
+            holder.imagePadlock.setText(R.string.fa_unlock);
+            holder.imagePadlock.setTextColor(Color.GREEN);
         } else {
-            holder.imagePadlock.setImageResource(R.drawable.padlock_red);
+            holder.imagePadlock.setText(R.string.fa_lock);
+            holder.imagePadlock.setTextColor(Color.RED);
         }
+
+        //Set Font Awesome typeface
+        holder.imagePadlock.setTypeface(iconFont);
 
         boolean canEnroll = ((open != 0 && freeSpot) || role == Constants.TEACHER_TYPE_CODE);
         if(canEnroll) {

@@ -46,7 +46,6 @@ public class Marks extends MenuActivity {
         }
 
 		setTitle(R.string.marksModuleLabel);
-		getSupportActionBar().setIcon(R.drawable.grades);
 	}
 
     @Override

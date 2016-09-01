@@ -153,12 +153,6 @@ public class GroupType extends Model {
 
     }
 
-    @Override
-    public String toString() {
-        return "GroupType [id=" + getId() + ", name=" + groupTypeName + ", getId()=" + getId() + ", getCourseCode()= " + courseCode + ", getMandatory()=" + mandatory +
-                ", getMultiple()=" + multiple + ", getOpenTime()= " + openTime;
-    }
-
     /**
      * Gets group type name
      *
@@ -224,5 +218,16 @@ public class GroupType extends Model {
      */
     public long getOpenTime() {
         return openTime;
+    }
+
+    @Override
+    public String toString() {
+        return "GroupType{" +
+                "groupTypeName='" + groupTypeName + '\'' +
+                ", courseCode=" + courseCode +
+                ", mandatory=" + mandatory +
+                ", multiple=" + multiple +
+                ", openTime=" + openTime +
+                "} " + super.toString();
     }
 }

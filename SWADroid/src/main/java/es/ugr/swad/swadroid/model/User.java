@@ -21,6 +21,7 @@ package es.ugr.swad.swadroid.model;
 
 import org.ksoap2.serialization.PropertyInfo;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -93,6 +94,12 @@ public class User extends Model {
             PI_userBirthday,
             PI_userRole
     };
+
+    private static DateFormat dateFormat = DateFormat.getDateInstance();
+
+    public User() {
+        super(-1);
+    }
 
     /**
      * Constructor.
@@ -416,4 +423,18 @@ public class User extends Model {
         }
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "wsKey='" + wsKey + '\'' +
+                ", userID='" + userID + '\'' +
+                ", userNickname='" + userNickname + '\'' +
+                ", userSurname1='" + userSurname1 + '\'' +
+                ", userSurname2='" + userSurname2 + '\'' +
+                ", userFirstname='" + userFirstname + '\'' +
+                ", userPhoto='" + userPhoto + '\'' +
+                ", userBirthday=" + userBirthday +
+                ", userRole=" + userRole +
+                "} " + super.toString();
+    }
 }

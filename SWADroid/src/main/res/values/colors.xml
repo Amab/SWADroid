@@ -35,7 +35,7 @@
     <color name="viewfinder_laser">#ffff0000</color>
     <color name="viewfinder_mask">#60000000</color>
     <color name="possible_result_points">#c0ffff00</color>
-    <color name="alert_messages">#CCEEFF</color>
+    <color name="notify_messages">#CCEEFF</color>
     <color name="sgilight_gray">#C1C1C1</color>
     <color name="sgilight_gray_32">#515151</color>
     <color name="gray_goose">#D1D0CE</color>
@@ -45,5 +45,7 @@
     <color name="blue">#0000ff</color>
     <color name="button_background_blue">#50A3E1</color>
     <color name="button_background_green">#55B637</color>
+    <color name="gray_text">#878787</color>
+    <color name="background_receiver">#DFDEDD</color>
 
 </resources>

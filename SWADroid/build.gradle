@@ -8,7 +8,7 @@ ext {
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24"
+    buildToolsVersion "24.0.2"
 
     dexOptions {
         maxProcessCount=2
@@ -56,12 +56,13 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:24.1.1'
-    compile 'com.android.support:appcompat-v7:24.1.1'
-    compile 'com.google.android.gms:play-services-analytics:9.2.1'
+    compile 'com.android.support:support-v4:24.2.0'
+    compile 'com.android.support:appcompat-v7:24.2.0'
+    compile 'com.google.android.gms:play-services-analytics:9.4.0'
     compile 'com.google.code.ksoap2-android:ksoap2-android:3.6.1'
     compile 'commons-io:commons-io:2.5'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     compile 'com.journeyapps:zxing-android-embedded:3.2.0@aar'
     compile 'com.google.zxing:core:3.2.1'
+    compile 'com.google.code.gson:gson:2.7'
 }

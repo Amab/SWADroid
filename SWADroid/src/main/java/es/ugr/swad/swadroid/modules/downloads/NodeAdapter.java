@@ -19,16 +19,17 @@
 package es.ugr.swad.swadroid.modules.downloads;
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.gui.FontManager;
 
 /**
  * Adapter to populate browser of files with the information received from SWAD
@@ -40,15 +41,19 @@ import es.ugr.swad.swadroid.R;
 public class NodeAdapter extends BaseAdapter {
     private ArrayList<DirectoryItem> list;
     private final Activity mContext;
+    private static Typeface iconFont;
 
     public NodeAdapter(Activity c, ArrayList<DirectoryItem> list) {
         mContext = c;
         this.list = list;
+
+        //Get Font Awesome typeface
+        iconFont = FontManager.getTypeface(c, FontManager.FONTAWESOME);
     }
 
     static class ViewHolder {
         TextView text;
-        ImageView image;
+        TextView image;
     }
 
     @Override
@@ -64,13 +69,11 @@ public class NodeAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int arg0) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public long getItemId(int arg0) {
-        // TODO Auto-generated method stub
         return 0;
     }
 
@@ -84,7 +87,7 @@ public class NodeAdapter extends BaseAdapter {
 
             holder = new ViewHolder();
             holder.text = (TextView) convertView.findViewById(R.id.icon_text);
-            holder.image = (ImageView) convertView.findViewById(R.id.icon_image);
+            holder.image = (TextView) convertView.findViewById(R.id.icon_image);
 
             convertView.setTag(holder);
         } else {
@@ -94,10 +97,13 @@ public class NodeAdapter extends BaseAdapter {
         holder.text.setText(list.get(position).getName());
 
         if (list.get(position).isFolder()) {
-            holder.image.setImageResource(R.drawable.folder_open);
+            holder.image.setText(R.string.fa_folder_open);
         } else {
-            holder.image.setImageResource(R.drawable.file);
+            holder.image.setText(R.string.fa_file_text);
         }
+
+        //Set Font Awesome typeface
+        holder.image.setTypeface(iconFont);
 
         return convertView;
     }

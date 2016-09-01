@@ -190,12 +190,6 @@ public class Group extends Model {
 
     }
 
-    @Override
-    public String toString() {
-        return "Group [id=" + getId() + ", name=" + groupName + ", getId()=" + getId() + ", getGroupTypeCode()=" + groupTypeCode + ", getMaxStudents()=" + maxStudents + ", getCurrentStudents()="
-                + students + ", getOpen()=" + open + ", getDocumentsArea()=" + fileZones + ", getMember()= " + member;
-    }
-
     /**
      * Gets group name
      *
@@ -369,4 +363,16 @@ public class Group extends Model {
         return maxStudents == other.maxStudents && students == other.students && open == other.open && fileZones == other.fileZones && member == other.member;
     }
 
+    @Override
+    public String toString() {
+        return "Group{" +
+                "groupName='" + groupName + '\'' +
+                ", groupTypeCode=" + groupTypeCode +
+                ", maxStudents=" + maxStudents +
+                ", students=" + students +
+                ", open=" + open +
+                ", fileZones=" + fileZones +
+                ", member=" + member +
+                "} " + super.toString();
+    }
 }

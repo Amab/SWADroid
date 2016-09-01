@@ -26,11 +26,16 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.google.gson.Gson;
+
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
+import es.ugr.swad.swadroid.model.LoginInfo;
+import es.ugr.swad.swadroid.modules.courses.Courses;
 import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.sync.SyncUtils;
 import es.ugr.swad.swadroid.utils.Crypto;
@@ -146,6 +151,10 @@ public class Preferences {
      */
     public static final String AUTHORSPREF = "authorsPref";
     /**
+     * Authors preference name
+     */
+    public static final String LOGININFOPREF = "loginInfoPref";
+    /**
      * Database Helper.
      */
     private static DataBaseHelper dbHelper;
@@ -157,7 +166,6 @@ public class Preferences {
     /**
      * Gets application preferences
      * @param ctx Application context
-     * @return Application preferences
      */
     private static void getPreferences(Context ctx) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -424,6 +432,37 @@ public class Preferences {
 	}
 
     /**
+     * Gets the login data
+     *
+     * @return The login data
+     */
+    public static LoginInfo getLoginInfo() {
+        Gson gson = new Gson();
+        String json = prefs.getString(LOGININFOPREF, null);
+        return gson.fromJson(json, LoginInfo.class);
+    }
+
+    /**
+     * Sets the login data
+     *
+     * @param loginInfo The login data
+     */
+    public static void setLoginInfo(LoginInfo loginInfo) {
+        Gson gson = new Gson();
+        String json = gson.toJson(loginInfo);
+        editor = editor.putString(LOGININFOPREF, json);
+        editor.commit();
+    }
+
+    /**
+     * Removes the login data
+     */
+    public static void removeLoginInfo() {
+        editor = editor.remove(LOGININFOPREF);
+        editor.commit();
+    }
+
+    /**
      * Upgrade password encryption
      *
      * @throws NoSuchAlgorithmException
@@ -437,7 +476,18 @@ public class Preferences {
      * Clean data of all tables from database. Removes users photos from external storage
      */
     private static void cleanDatabase() {
-        dbHelper.cleanTables();
+        List<String> tablenames = dbHelper.getAllTablenames();
+
+        //Empty all tables except DB_TABLE_FREQUENT_RECIPIENTS
+        dbHelper.beginTransaction();
+
+        for(String table : tablenames) {
+            if(!DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS.equals(table)) {
+                dbHelper.emptyTable(table);
+            }
+        }
+
+        dbHelper.endTransaction(true);
         
         Preferences.setLastCourseSelected(0);
         DataBaseHelper.setDbCleaned(true);
@@ -446,8 +496,9 @@ public class Preferences {
     }
     
     public static void logoutClean(Context context, String key) {
-        Login.setLogged(false);
-        Log.i(TAG, "Forced logout due to " + key + " change in preferences");
+        Login.getLoginInfo().setLogged(false);
+        removeLoginInfo();
+        initializeSelectedCourse();
         
         cleanDatabase();
         setPreferencesChanged();
@@ -455,6 +506,20 @@ public class Preferences {
         if(isSyncEnabled()) {
         	SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, context);
         }
+
+        Log.i(TAG, "Forced logout due to " + key + " change in preferences");
+    }
+
+    public static void initializeSelectedCourse() {
+        Courses.setSelectedCourseCode(-1);
+        Courses.setSelectedCourseShortName("");
+        Courses.setSelectedCourseFullName("");
+
+        Login.setCurrentUserRole(-1);
+
+        Preferences.setLastCourseSelected(-1);
+
+        Log.i(TAG, "Initialized selected course to -1");
     }
     
     public static boolean isPreferencesChanged() {

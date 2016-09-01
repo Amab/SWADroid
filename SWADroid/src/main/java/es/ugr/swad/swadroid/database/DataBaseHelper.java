@@ -41,6 +41,7 @@ import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.Event;
+import es.ugr.swad.swadroid.model.FrequentUser;
 import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.model.GroupType;
 import es.ugr.swad.swadroid.model.Model;
@@ -172,6 +173,10 @@ public class DataBaseHelper {
      */
     @Deprecated
     public static final String DB_TABLE_ROLLCALL = "rollcall";
+    /**
+     * Table name for frequent recipients
+     */
+    public static final String DB_TABLE_FREQUENT_RECIPIENTS = "frequent_recipients";
 
     /**
      * Constructor
@@ -320,10 +325,14 @@ public class DataBaseHelper {
                         ent.getInt(params.getSecond()));
                 break;
             case DataBaseHelper.DB_TABLE_NOTIFICATIONS:
+                String nickName = ent.getString("userNickname");
+                String decryptedNickname = (nickName != null && !nickName.isEmpty())? crypto.decrypt(nickName) : "";
+
                 o = new SWADNotification(ent.getInt("notifCode"),
                         ent.getInt("eventCode"),
                         crypto.decrypt(ent.getString("eventType")),
                         ent.getLong("eventTime"),
+                        decryptedNickname,
                         crypto.decrypt(ent.getString("userSurname1")),
                         crypto.decrypt(ent.getString("userSurname2")),
                         crypto.decrypt(ent.getString("userFirstname")),
@@ -451,6 +460,16 @@ public class DataBaseHelper {
                         ent.getInt("multiple"),
                         ent.getLong("openTime"));
                 break;
+            case DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS:
+                o = new FrequentUser(ent.getString("idUser"),
+                        crypto.decrypt(ent.getString("nicknameRecipient")),
+                        crypto.decrypt(ent.getString("surname1Recipient")),
+                        crypto.decrypt(ent.getString("surname2Recipient")),
+                        crypto.decrypt(ent.getString("firstnameRecipient")),
+                        crypto.decrypt(ent.getString("photoRecipient")),
+                        false,
+                        ent.getDouble("score"));
+                break;
         }
 
         return (T) o;
@@ -546,6 +565,22 @@ public class DataBaseHelper {
         }
 
         return row;
+    }
+
+    /**
+     * Gets all tablenames of the database
+     *
+     * @return A list of all tablenames of the database
+     */
+    public List<String>  getAllTablenames() {
+        List<String> result = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name", null);
+
+        while (cursor.moveToNext()) {
+            result.add(cursor.getString(0));
+        }
+
+        return result;
     }
 
     /**
@@ -958,6 +993,7 @@ public class DataBaseHelper {
         ent.setValue("eventCode", n.getEventCode());
         ent.setValue("eventType", crypto.encrypt(n.getEventType()));
         ent.setValue("eventTime", eventTime);
+        ent.setValue("userNickname", crypto.encrypt(n.getUserNickname()));
         ent.setValue("userSurname1", crypto.encrypt(n.getUserSurname1()));
         ent.setValue("userSurname2", crypto.encrypt(n.getUserSurname2()));
         ent.setValue("userFirstname", crypto.encrypt(n.getUserFirstName()));
@@ -1383,6 +1419,51 @@ public class DataBaseHelper {
     }
 
     /**
+     * Inserts a new Frequent Recipient
+     *
+     * @param user the frequent recipient to insert in the list
+     */
+    public void insertFrequentRecipient(FrequentUser user) {
+        Entity ent = new Entity(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS);
+        ent.setValue("idUser", user.getidUser());
+        ent.setValue("nicknameRecipient", crypto.encrypt(user.getUserNickname()));
+        ent.setValue("surname1Recipient", crypto.encrypt(user.getUserSurname1()));
+        ent.setValue("surname2Recipient", crypto.encrypt(user.getUserSurname2()));
+        ent.setValue("firstnameRecipient", crypto.encrypt(user.getUserFirstname()));
+        ent.setValue("photoRecipient", crypto.encrypt(user.getUserPhoto()));
+        ent.setValue("score", user.getScore());
+        ent.save();
+    }
+
+    /**
+     * Inserts a list of frequent recipients
+     *
+     * @param list the list of users
+     * @return number of users inserted in the table
+     */
+    public int insertFrequentsList(List<FrequentUser> list) {
+        int numElements = 0;
+
+        for(int i=0; i<list.size(); i++){
+            FrequentUser user = list.get(i);
+
+            Entity ent = new Entity(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS);
+            ent.setValue("idUser", user.getidUser());
+            ent.setValue("nicknameRecipient", crypto.encrypt(user.getUserNickname()));
+            ent.setValue("surname1Recipient", crypto.encrypt(user.getUserSurname1()));
+            ent.setValue("surname2Recipient", crypto.encrypt(user.getUserSurname2()));
+            ent.setValue("firstnameRecipient", crypto.encrypt(user.getUserFirstname()));
+            ent.setValue("photoRecipient", crypto.encrypt(user.getUserPhoto()));
+            ent.setValue("score", user.getScore());
+            ent.save();
+
+            numElements++;
+        }
+
+        return numElements;
+    }
+
+    /**
      * Updates a course in database
      *
      * @param prev   Course to be updated
@@ -1457,6 +1538,7 @@ public class DataBaseHelper {
         long eventCode = actual.getEventCode();
         String eventType = crypto.encrypt(actual.getEventType());
         String eventTime = String.valueOf(actual.getEventTime());
+        String userNickname = crypto.encrypt(actual.getUserNickname());
         String userSurname1 = crypto.encrypt(actual.getUserSurname1());
         String userSurname2 = crypto.encrypt(actual.getUserSurname2());
         String userFirstname = crypto.encrypt(actual.getUserFirstName());
@@ -1473,6 +1555,7 @@ public class DataBaseHelper {
 	        ent.setValue("eventCode", eventCode);
 	        ent.setValue("eventType", eventType);
 	        ent.setValue("eventTime", eventTime);
+            ent.setValue("userNickname", userNickname);
 	        ent.setValue("userSurname1", userSurname1);
 	        ent.setValue("userSurname2", userSurname2);
 	        ent.setValue("userFirstname", userFirstname);
@@ -1499,6 +1582,7 @@ public class DataBaseHelper {
         long eventCode = actual.getEventCode();
         String eventType = crypto.encrypt(actual.getEventType());
         String eventTime = String.valueOf(actual.getEventTime());
+        String userNickname = crypto.encrypt(actual.getUserNickname());
         String userSurname1 = crypto.encrypt(actual.getUserSurname1());
         String userSurname2 = crypto.encrypt(actual.getUserSurname2());
         String userFirstname = crypto.encrypt(actual.getUserFirstName());
@@ -1515,6 +1599,7 @@ public class DataBaseHelper {
 	        ent.setValue("eventCode", eventCode);
 	        ent.setValue("eventType", eventType);
 	        ent.setValue("eventTime", eventTime);
+            ent.setValue("userNickname", userNickname);
 	        ent.setValue("userSurname1", userSurname1);
 	        ent.setValue("userSurname2", userSurname2);
 	        ent.setValue("userFirstname", userFirstname);
@@ -1802,6 +1887,21 @@ public class DataBaseHelper {
             return returnValue;
         } else
             return false;
+    }
+
+    /**
+     * Updates a Frequent Recipient with the new score
+     *
+     * @param nickname    the identifier of recipient
+     * @param score   the score to order the frequent recipients list
+     */
+    public void updateFrequentRecipient(String nickname, Double score) {
+        List<Entity> rows = db.getEntityList(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS, "nicknameRecipient = '" + nickname + "'");
+
+        for(Entity ent : rows) {
+            ent.setValue("score", score);
+            ent.save();
+        }
     }
 
     /**
@@ -2355,4 +2455,5 @@ public class DataBaseHelper {
 	public static void setDbCleaned(boolean state) {
 	    dbCleaned = state;
 	}
+
 }
