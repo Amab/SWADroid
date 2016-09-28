@@ -32,6 +32,7 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.ImageFactory;
@@ -109,6 +110,19 @@ public class UsersCursorAdapter extends CursorAdapter {
         final long userCode = cursor.getLong(cursor.getColumnIndex("userCode"));
         String userPhoto = cursor.getString(cursor.getColumnIndex("photoPath"));
         boolean present = Utils.parseIntBool(cursor.getInt(cursor.getColumnIndex("present")));
+
+        // Replace NULL value for strings returned by the webservice with the empty string
+        if (userSurname1.equals(Constants.NULL_VALUE))
+            userSurname1 = "";
+
+        if (userSurname2.equals(Constants.NULL_VALUE))
+            userSurname2 = "";
+
+        if (userFirstname.equals(Constants.NULL_VALUE))
+            userFirstname = "";
+
+        if (userID.equals(Constants.NULL_VALUE))
+            userID = "";
 
         final ViewHolder holder = (ViewHolder) view.getTag();
         view.setTag(holder);
