@@ -97,6 +97,8 @@ public class ContinuousCaptureActivity extends AppCompatActivity {
 
         setContentView(R.layout.continuous_scan);
 
+        getSupportActionBar().hide();
+
         try {
             //Initialize database
             dbHelper = new DataBaseHelper(this);
