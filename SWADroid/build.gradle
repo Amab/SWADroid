@@ -4,6 +4,8 @@ ext {
     git = org.ajoberstar.grgit.Grgit.open()
     gitVersionCode = git.tag.list().size()
     gitVersionName = "${git.describe()}"
+
+    travisBuild = System.getenv("TRAVIS") == "true"
 }
 
 android {
@@ -52,7 +54,27 @@ android {
         debug {
             versionNameSuffix '-DEBUG'
         }
+
+        buildTypes.each {
+            it.buildConfigField "String", "SWAD_APP_KEY", getBuildConfigField("SWAD_APP_KEY")
+            it.buildConfigField "String", "ANALYTICS_API_KEY", getBuildConfigField("ANALYTICS_API_KEY")
+        }
     }
+}
+
+//return a BuildConfigField from a properties file.
+def getBuildConfigField(String property){
+    String value;
+
+    if(travisBuild) {
+        value = System.getenv(property)
+    } else {
+        Properties properties = new Properties()
+        properties.load(new FileInputStream("keystore.properties"))
+        value = "\"" + properties.getProperty(property) + "\""
+    }
+
+    return value
 }
 
 dependencies {
