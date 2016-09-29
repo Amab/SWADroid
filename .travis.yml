@@ -9,7 +9,9 @@ android:
   - build-tools-24.0.2
   - android-24
   - extra-android-m2repository
+  - extra-android-support
   - extra-google-m2repository
+  - extra-google-google_play_services
 script:
 - "./gradlew build connectedCheck"
 env:
