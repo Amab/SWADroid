@@ -13,8 +13,10 @@ Android client for e-learning platform [![SWADroid](https://openswad.org/logo/sw
 CI Status
 ---------
 
-- **develop:** [![SWADroid](https://api.travis-ci.org/Amab/SWADroid.svg)](https://api.travis-ci.org/Amab/SWADroid.svg?branch=feature%2Fdevelop)
-- **master:** [![SWADroid](https://api.travis-ci.org/Amab/SWADroid.svg)](https://api.travis-ci.org/Amab/SWADroid.svg?branch=feature%2Fmaster)
+|Branch|CI status|
+|------|---------|
+|develop|[![SWADroid](https://api.travis-ci.org/Amab/SWADroid.svg)](https://api.travis-ci.org/Amab/SWADroid.svg?branch=feature%2Fdevelop)|
+|master|[![SWADroid](https://api.travis-ci.org/Amab/SWADroid.svg)](https://api.travis-ci.org/Amab/SWADroid.svg?branch=feature%2Fmaster)|
 
 Copyright and License
 ---------------------
