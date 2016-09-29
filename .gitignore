@@ -7,4 +7,4 @@ local.properties
 /SWADroid.iml
 app/lint.xml
 /SWADroid/google-services.json
-/keystore.properties
+keystore.properties
