@@ -1,11 +1,10 @@
 .idea
 .gradle
 build
-gradlew
-gradlew.bat
 import-summary.txt
 local.properties
 /SWADroid/SWADroid-SWADroid.iml
 /SWADroid.iml
 app/lint.xml
 /SWADroid/google-services.json
+/keystore.properties
