@@ -64,7 +64,7 @@ android {
 
 //return a BuildConfigField from a properties file.
 def getBuildConfigField(String property){
-    String value
+    def value
 
     if(travisBuild) {
         value = System.getenv(property)
