@@ -10,6 +10,12 @@ Android client for e-learning platform [![SWADroid](https://openswad.org/logo/sw
 
 [![SWADroid](http://upload.wikimedia.org/wikipedia/commons/c/c8/Farm-Fresh_twitter_1.png)](http://twitter.com/SWADroid)[![SWADroid](http://upload.wikimedia.org/wikipedia/commons/4/4d/Farm-Fresh_facebook.png)](https://www.facebook.com/SWADroid)[![SWADroid](http://upload.wikimedia.org/wikipedia/commons/b/ba/Google_plus_32.png)](https://plus.google.com/115615684349730524355/posts)[![SWADroid](https://s.w.org/about/images/logos/wordpress-logo-32-blue.png)](http://swadroid.wordpress.com)
 
+CI Status
+---------
+
+- **develop:** [![SWADroid](https://api.travis-ci.org/Amab/SWADroid.svg)](https://api.travis-ci.org/Amab/SWADroid.svg?branch=feature%2Fdevelop)
+- **master:** [![SWADroid](https://api.travis-ci.org/Amab/SWADroid.svg)](https://api.travis-ci.org/Amab/SWADroid.svg?branch=feature%2Fmaster)
+
 Copyright and License
 ---------------------
 
