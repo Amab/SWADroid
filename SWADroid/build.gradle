@@ -17,6 +17,10 @@ android {
         javaMaxHeapSize "2g"
     }
 
+    lintOptions {
+        abortOnError false
+    }
+
     defaultConfig {
         applicationId "es.ugr.swad.swadroid"
         versionCode gitVersionCode
