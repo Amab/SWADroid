@@ -67,7 +67,7 @@ def getBuildConfigField(String property){
     def value
 
     if(travisBuild) {
-        value = System.getenv(property)
+        value = "\"" + System.getenv(property) + "\""
     } else {
         Properties properties = new Properties()
         properties.load(new FileInputStream("keystore.properties"))
