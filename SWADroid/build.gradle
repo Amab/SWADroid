@@ -14,7 +14,7 @@ android {
 
     dexOptions {
         maxProcessCount=2
-        javaMaxHeapSize "2560M"
+        javaMaxHeapSize "2g"
     }
 
     lintOptions {
