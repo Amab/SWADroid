@@ -86,6 +86,11 @@
             android:key="googlePlusPref"
             android:summary="@string/googlePlusURL"
             android:title="@string/googlePlusTitle" />
+        <Preference
+            android:defaultValue=""
+            android:key="telegramPref"
+            android:summary="@string/telegramURL"
+            android:title="@string/telegramTitle" />
     </PreferenceCategory>
 
 </PreferenceScreen>
