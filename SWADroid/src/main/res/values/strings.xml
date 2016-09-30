@@ -125,13 +125,15 @@
     <string name="twitterURL" translatable="false">https://twitter.com/#!/SWADroid</string>
     <string name="facebookURL" translatable="false">https://www.facebook.com/SWADroid</string>
     <string name="googlePlusURL" translatable="false">http://goo.gl/kuezQ</string>
+    <string name="telegramURL" translatable="false">https://telegram.me/swadroid</string>
     <string name="blogURL" translatable="false">http://swadroid.wordpress.com</string>
     <string name="twitterUser" translatable="false">\@SWADroid</string>
-    <string name="twitterTitle">Twitter</string>
-    <string name="facebookTitle">Facebook</string>
-    <string name="googlePlusTitle">Google+</string>
+    <string name="twitterTitle" translatable="false">Twitter</string>
+    <string name="facebookTitle" translatable="false">Facebook</string>
+    <string name="googlePlusTitle" translatable="false">Google+</string>
+    <string name="telegramTitle" translatable="false">Telegram</string>
+    <string name="marketTitle" translatable="false">Google Play</string>
     <string name="blogTitle">Blog</string>
-    <string name="marketTitle">Google Play</string>
     <string name="prefCatSyncTitle">Synchronization</string>
     <string name="prefSyncTimeTitle">Synchronization frecuency</string>
     <string name="prefSyncTimeSummary">Synchronization frecuency of notifications</string>

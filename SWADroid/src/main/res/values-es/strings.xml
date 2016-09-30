@@ -122,11 +122,7 @@
     <string name="shareBodyMsg">Estoy usando #SWADroid en mi Android para acceder a la
         plataforma de teleformación SWAD.\nObtenlo gratis aquí:
         https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid</string>
-    <string name="twitterTitle">Twitter</string>
-    <string name="facebookTitle">Facebook</string>
-    <string name="googlePlusTitle">Google+</string>
     <string name="blogTitle">Blog</string>
-    <string name="marketTitle">Google Play</string>
     <string name="prefCatSyncTitle">Sincronización</string>
     <string name="prefSyncTimeTitle">Frecuencia de sincronización</string>
     <string name="prefSyncTimeSummary">Frecuencia de sincronización de las notificaciones</string>
