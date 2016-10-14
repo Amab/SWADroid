@@ -25,7 +25,7 @@ Copyright (C) 2010, Juan Miguel Boyero Corral
 
 [![Copyright and License](https://img.shields.io/badge/license-GPLv3-green.svg?style=flat)](http://www.gnu.org/licenses/gpl.html) SWADroid client is free software; you can redistribute it and/or modify it under the same terms as [GPLv3](http://www.gnu.org/licenses/gpl.html) license.
 
-[![Copyright and License](https://img.shields.io/badge/license-LGPLv3-green.svg?style=flat)](http://www.gnu.org/licenses/lgpl.html) SWADroid uses [Android DataFrameWork](http://code.google.com/p/androiddataframework/) library developed by [Javier Pérez Pacheco](http://www.javielinux.com/quiensoy.php) and licensed under [LGPLv3](http://www.gnu.org/licenses/lgpl.html).
+[![Copyright and License](https://img.shields.io/badge/license-LGPLv3-green.svg?style=flat)](http://www.gnu.org/licenses/lgpl.html) SWADroid uses [Android DataFrameWork](http://code.google.com/p/androiddataframework/) library developed by Javier Pérez Pacheco and licensed under [LGPLv3](http://www.gnu.org/licenses/lgpl.html).
 
 [![Copyright and License](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](http://www.opensource.org/licenses/mit-license.php) SWADroid uses [ksoap2-android](https://github.com/simpligility/ksoap2-android) library developed by [Manfred Moser](https://github.com/mosabua) and licensed under [MIT](http://www.opensource.org/licenses/mit-license.php).
 
@@ -57,4 +57,4 @@ Contributing
 
 SWADroid is an open source project. I encourage contributions.
 
-The Github team has also been kind enough to write up some great [documentation](http://help.github.com/pull-requests/) on working with pull requests. Contributions should be performed on [topic branches](http://progit.org/book/ch3-4.html) in your personal forks - just issue your pull requests from there.
+The Github team has also been kind enough to write up some great [documentation](https://help.github.com/articles/about-pull-requests/) on working with pull requests. Contributions should be performed on [topic branches](http://progit.org/book/ch3-4.html) in your personal forks - just issue your pull requests from there.
