@@ -84,7 +84,7 @@ def getBuildConfigField(String property){
 dependencies {
     compile 'com.android.support:support-v4:25.0.0'
     compile 'com.android.support:appcompat-v7:25.0.0'
-    compile 'com.google.android.gms:play-services-analytics:9.8.00'
+    compile 'com.google.android.gms:play-services-analytics:9.8.0'
     compile 'com.google.code.ksoap2-android:ksoap2-android:3.6.2'
     compile 'commons-io:commons-io:2.5'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
