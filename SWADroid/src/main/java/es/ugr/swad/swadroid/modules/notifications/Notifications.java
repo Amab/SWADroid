@@ -196,7 +196,7 @@ public class Notifications extends Module implements
 		hideSwipeProgress();
 
         //If today is the user birthday, show birthday message
-        if((Login.getLoggedUser() != null)
+        if((Login.getLoggedUser() != null) && (Login.getLoggedUser().getUserBirthday() != null)
                 && DateTimeUtils.isBirthday(Login.getLoggedUser().getUserBirthday())) {
             mBirthdayTextView.setText(getString(R.string.birthdayMsg).replace(
                     Constants.USERNAME_TEMPLATE, Login.getLoggedUser().getUserFirstname()));
@@ -475,7 +475,7 @@ public class Notifications extends Module implements
 	 */
 	@Override
 	protected void connect() {
-		Toast.makeText(this, R.string.notificationsProgressDescription, Toast.LENGTH_SHORT).show();
+		//Toast.makeText(this, R.string.notificationsProgressDescription, Toast.LENGTH_SHORT).show();
 
 		startConnection();
 	}

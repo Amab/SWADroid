@@ -235,7 +235,7 @@ public class SWADMain extends MenuExpandableListActivity {
             }
 
             //If today is the user birthday, show birthday message
-            if((Login.getLoggedUser() != null)
+            if((Login.getLoggedUser() != null) && (Login.getLoggedUser().getUserBirthday() != null)
                     && DateTimeUtils.isBirthday(Login.getLoggedUser().getUserBirthday())) {
 
                 showBirthdayMessage();
@@ -292,7 +292,9 @@ public class SWADMain extends MenuExpandableListActivity {
             Preferences.upgradeCredentials();
 
             Preferences.setSyncTime(String.valueOf(Constants.DEFAULT_SYNC_TIME));
-        } else if(lastVersion < 57) {
+        }
+
+        if(lastVersion < 57) {
             //Reconfigure automatic synchronization
             SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, this);
             if(!Preferences.getSyncTime().equals("0") && Preferences.isSyncEnabled()) {
