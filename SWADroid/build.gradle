@@ -4,15 +4,21 @@ ext {
     git = org.ajoberstar.grgit.Grgit.open()
     gitVersionCode = git.tag.list().size()
     gitVersionName = "${git.describe()}"
+
+    travisBuild = System.getenv("TRAVIS") == "true"
 }
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.2"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
 
     dexOptions {
         maxProcessCount=2
         javaMaxHeapSize "2g"
+    }
+
+    lintOptions {
+        abortOnError false
     }
 
     defaultConfig {
@@ -21,7 +27,7 @@ android {
         versionName gitVersionName
 
         minSdkVersion 9
-        targetSdkVersion 24
+        targetSdkVersion 25
 
         android.applicationVariants.all { variant ->
             def appName
@@ -52,14 +58,34 @@ android {
         debug {
             versionNameSuffix '-DEBUG'
         }
+
+        buildTypes.each {
+            it.buildConfigField "String", "SWAD_APP_KEY", getBuildConfigField("SWAD_APP_KEY")
+            it.buildConfigField "String", "ANALYTICS_API_KEY", getBuildConfigField("ANALYTICS_API_KEY")
+        }
     }
 }
 
+//return a BuildConfigField from a properties file.
+def getBuildConfigField(String property){
+    def value
+
+    if(travisBuild) {
+        value = "\"" + System.getenv(property) + "\""
+    } else {
+        Properties properties = new Properties()
+        properties.load(new FileInputStream("keystore.properties"))
+        value = "\"" + properties.getProperty(property) + "\""
+    }
+
+    return value
+}
+
 dependencies {
-    compile 'com.android.support:support-v4:24.2.0'
-    compile 'com.android.support:appcompat-v7:24.2.0'
-    compile 'com.google.android.gms:play-services-analytics:9.4.0'
-    compile 'com.google.code.ksoap2-android:ksoap2-android:3.6.1'
+    compile 'com.android.support:support-v4:25.1.0'
+    compile 'com.android.support:appcompat-v7:25.1.0'
+    compile 'com.google.android.gms:play-services-analytics:10.0.1'
+    compile 'com.google.code.ksoap2-android:ksoap2-android:3.6.2'
     compile 'commons-io:commons-io:2.5'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     compile 'com.journeyapps:zxing-android-embedded:3.2.0@aar'

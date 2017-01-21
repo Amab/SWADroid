@@ -28,6 +28,8 @@ import java.util.Calendar;
 import java.util.Hashtable;
 import java.util.Locale;
 
+import es.ugr.swad.swadroid.Constants;
+
 /**
  * User data.
  *
@@ -256,7 +258,7 @@ public class User extends Model {
      * @param userBirthday User birthday.
      */
     private void setUserBirthday(String userBirthday) throws ParseException {
-        if((userBirthday != null) && !userBirthday.equals("00000000")) {
+        if((userBirthday != null) && !userBirthday.equals(Constants.NULL_VALUE) && !userBirthday.equals("00000000")) {
             this.userBirthday = Calendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
 

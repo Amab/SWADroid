@@ -99,6 +99,10 @@ public class Preferences {
      */
     public static final String GOOGLEPLUSPREF = "googlePlusPref";
     /**
+     * Telegram preference name
+     */
+    public static final String TELEGRAMPREF = "telegramPref";
+    /**
      * Blog preference name
      */
     public static final String BLOGPREF = "blogPref";
