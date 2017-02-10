@@ -91,6 +91,11 @@
             android:key="telegramPref"
             android:summary="@string/telegramURL"
             android:title="@string/telegramTitle" />
+        <Preference
+            android:defaultValue=""
+            android:key="privacyPolicyPref"
+            android:summary="@string/privacyPolicyURL"
+            android:title="@string/privacyPolicyTitle" />
     </PreferenceCategory>
 
 </PreferenceScreen>

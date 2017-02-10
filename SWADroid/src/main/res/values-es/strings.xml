@@ -333,4 +333,5 @@
     <string name="NOTfrequent_users">No hay usuarios frecuentes</string>
     <string name="replyModuleLabel">Responder mensaje</string>
     <string name="primaryReceiver">Principal</string>
+    <string name="privacyPolicyTitle">Política de privacidad</string>
 </resources>

@@ -349,4 +349,6 @@
     <string name="NOTfrequent_users">There are no frequent users</string>
     <string name="replyModuleLabel">Reply message</string>
     <string name="primaryReceiver">Primary</string>
+    <string name="privacyPolicyURL" translatable="false">https://swadroid.wordpress.com/politica-de-proteccion-de-datos/</string>
+    <string name="privacyPolicyTitle">Privacy policy</string>
 </resources>

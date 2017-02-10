@@ -103,6 +103,10 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
      */
     private static Preference sharePref;
     /**
+     * Privacy policy preference
+     */
+    private static Preference privacyPolicyPref;
+    /**
      * Synchronization time preference
      */
     private static Preference syncTimePref;
@@ -195,6 +199,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         telegramPref = findPreference(Preferences.TELEGRAMPREF);
         blogPref = findPreference(Preferences.BLOGPREF);
         sharePref = findPreference(Preferences.SHAREPREF);
+        privacyPolicyPref = findPreference(Preferences.PRIVACYPOLICYPREF);
         syncTimePref = findPreference(Preferences.SYNCTIMEPREF);
         syncEnablePref = (CheckBoxPreference) findPreference(Preferences.SYNCENABLEPREF);
         notifSoundEnablePref = (CheckBoxPreference) findPreference(Preferences.NOTIFSOUNDENABLEPREF);
@@ -208,6 +213,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         telegramPref.setOnPreferenceChangeListener(this);
         blogPref.setOnPreferenceChangeListener(this);
         sharePref.setOnPreferenceChangeListener(this);
+        privacyPolicyPref.setOnPreferenceChangeListener(this);
         syncEnablePref.setOnPreferenceChangeListener(this);
         syncTimePref.setOnPreferenceChangeListener(this);
         notifSoundEnablePref.setOnPreferenceChangeListener(this);
@@ -313,6 +319,18 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
                 sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.app_name));
                 sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, getString(R.string.shareBodyMsg));
                 startActivity(Intent.createChooser(sharingIntent, getString(R.string.shareTitle_menu)));
+                return true;
+            }
+        });
+        privacyPolicyPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            /**
+             * Called when a preference is selected.
+             * @param preference Preference selected.
+             */
+            public boolean onPreferenceClick(Preference preference) {
+                Intent urlIntent = new Intent(Intent.ACTION_VIEW);
+                urlIntent.setData(Uri.parse(getString(R.string.privacyPolicyURL)));
+                startActivity(urlIntent);
                 return true;
             }
         });

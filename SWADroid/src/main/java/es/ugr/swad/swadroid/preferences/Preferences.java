@@ -111,6 +111,10 @@ public class Preferences {
      */
     public static final String SHAREPREF = "sharePref";
     /**
+     * Privacy policy preference name
+     */
+    public static final String PRIVACYPOLICYPREF = "privacyPolicyPref";
+    /**
      * Server preference name
      */
     public static final String SERVERPREF = "serverPref";
