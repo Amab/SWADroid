@@ -242,10 +242,10 @@
     <string name="faqsModuleLabel">FAQs</string>
     <string name="linksModuleLabel">Enlaces</string>
     <string name="bibliographyModuleLabel">Bibliografía</string>
-    <string name="syllabusPracticalsModuleLabel">Programa de Prácticas</string>
-    <string name="syllabusLecturesModuleLabel">Programa de Teoría</string>
-    <string name="teachingguideModuleLabel">Guía Docente</string>
-    <string name="assessmentModuleLabel">Sistema de Evaluación</string>
+    <string name="syllabusPracticalsModuleLabel">Programa de prácticas</string>
+    <string name="syllabusLecturesModuleLabel">Programa de teoría</string>
+    <string name="teachingguideModuleLabel">Guía docente</string>
+    <string name="assessmentModuleLabel">Sistema de evaluación</string>
     <string name="informationProgressDescription">Obteniendo información…\nPor favor, espere…</string>
     <string name="informationProgressTitle">Información</string>
     <string name="emptyInformation">Información no disponible</string>
@@ -334,4 +334,5 @@
     <string name="replyModuleLabel">Responder mensaje</string>
     <string name="primaryReceiver">Principal</string>
     <string name="privacyPolicyTitle">Política de privacidad</string>
+    <string name="files">Archivos</string>
 </resources>

@@ -263,9 +263,9 @@
     <string name="faqsModuleLabel">FAQs</string>
     <string name="linksModuleLabel">Links</string>
     <string name="bibliographyModuleLabel">Bibliography</string>
-    <string name="syllabusPracticalsModuleLabel">Practices Program</string>
-    <string name="syllabusLecturesModuleLabel">Theory Program</string>
-    <string name="teachingguideModuleLabel">Teaching Guide</string>
+    <string name="syllabusPracticalsModuleLabel">Practices program</string>
+    <string name="syllabusLecturesModuleLabel">Theory program</string>
+    <string name="teachingguideModuleLabel">Teaching guide</string>
     <string name="assessmentModuleLabel">Assessment</string>
     <string name="informationProgressDescription">Getting information…\nWait, please…</string>
     <string name="informationProgressTitle">Information</string>
@@ -351,4 +351,5 @@
     <string name="primaryReceiver">Primary</string>
     <string name="privacyPolicyURL" translatable="false">https://swadroid.wordpress.com/politica-de-proteccion-de-datos/</string>
     <string name="privacyPolicyTitle">Privacy policy</string>
+    <string name="files">Files</string>
 </resources>
