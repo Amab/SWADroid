@@ -540,11 +540,12 @@ public class SWADMain extends MenuExpandableListActivity {
         //Order:
         // 1- Course
         // 2- Evaluation
-        // 3- Messages
-        // 4- Enrollment
-        // 5- Users
-        mHeaderData.add(getMenuItem(R.string.course, R.string.fa_folder_open));
+        // 3- Files
+        // 4- Users
+        // 5- Messages
+        mHeaderData.add(getMenuItem(R.string.course, R.string.fa_list_ol));
         mHeaderData.add(getMenuItem(R.string.evaluation, R.string.fa_check_square_o));
+        mHeaderData.add(getMenuItem(R.string.files, R.string.fa_folder_open));
         mHeaderData.add(getMenuItem(R.string.users, R.string.fa_users));
         mHeaderData.add(getMenuItem(R.string.messages, R.string.fa_envelope));
 
@@ -553,6 +554,9 @@ public class SWADMain extends MenuExpandableListActivity {
 
         final ArrayList<HashMap<String, Object>> evaluationData = new ArrayList<>();
         mChildData.add(evaluationData);
+
+        final ArrayList<HashMap<String, Object>> filesData = new ArrayList<>();
+        mChildData.add(filesData);
 
         mChildData.add(mUsersData);
         mChildData.add(mMessagesData);
@@ -566,12 +570,8 @@ public class SWADMain extends MenuExpandableListActivity {
         courseData.add(getMenuItem(R.string.syllabusLecturesModuleLabel, R.string.fa_list_ol));
         //Syllabus (practicals)
         courseData.add(getMenuItem(R.string.syllabusPracticalsModuleLabel, R.string.fa_flask));
-        //Documents
-        courseData.add(getMenuItem(R.string.documentsDownloadModuleLabel, R.string.fa_folder_open));
-        //Shared area
-        courseData.add(getMenuItem(R.string.sharedsDownloadModuleLabel, R.string.fa_folder_open));
         //Bibliography
-        courseData.add(getMenuItem(R.string.bibliographyModuleLabel, R.string.fa_folder_open));
+        courseData.add(getMenuItem(R.string.bibliographyModuleLabel, R.string.fa_book));
         //FAQs
         courseData.add(getMenuItem(R.string.faqsModuleLabel, R.string.fa_question));
         //Links
@@ -582,8 +582,14 @@ public class SWADMain extends MenuExpandableListActivity {
         evaluationData.add(getMenuItem(R.string.assessmentModuleLabel, R.string.fa_info));
         //Test
         evaluationData.add(getMenuItem(R.string.testsModuleLabel, R.string.fa_check_square_o));
+
+        //Files category
+        //Documents
+        filesData.add(getMenuItem(R.string.documentsDownloadModuleLabel, R.string.fa_folder_open));
+        //Shared area
+        filesData.add(getMenuItem(R.string.sharedsDownloadModuleLabel, R.string.fa_folder_open));
         //Marks
-        evaluationData.add(getMenuItem(R.string.marksModuleLabel, R.string.fa_list_alt));
+        filesData.add(getMenuItem(R.string.marksModuleLabel, R.string.fa_list_alt));
 
         //Users category
         //Groups
