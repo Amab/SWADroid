@@ -5,7 +5,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.2.3'
-        classpath 'org.ajoberstar:grgit:1.7.0'
+        classpath 'org.ajoberstar:grgit:1.8.0'
     }
 }
 
