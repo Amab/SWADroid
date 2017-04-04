@@ -6,7 +6,6 @@
 
 package es.ugr.swad.swadroid.modules.information;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebView;
@@ -19,9 +18,9 @@ import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.gui.ProgressScreen;
 import es.ugr.swad.swadroid.gui.WebViewFactory;
 import es.ugr.swad.swadroid.model.User;
+import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.modules.courses.Courses;
 import es.ugr.swad.swadroid.modules.login.Login;
-import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 /**
  * Module for get course info
@@ -72,9 +71,7 @@ public class Information extends Module {
 
 		getSupportActionBar().setSubtitle(Courses.getSelectedCourseShortName());
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		switch (requestCode) {
 

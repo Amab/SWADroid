@@ -75,9 +75,7 @@ public class CreateAccountActivity extends AppCompatActivity implements AdapterV
 
         setContentView(R.layout.create_account_activity);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         serversList = Arrays.asList(getResources().getStringArray(R.array.servers_array));
 

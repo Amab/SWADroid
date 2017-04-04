@@ -45,7 +45,6 @@ import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.gui.DialogFactory;
-import es.ugr.swad.swadroid.model.LoginInfo;
 import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.modules.login.LoginActivity;
 import es.ugr.swad.swadroid.sync.SyncUtils;

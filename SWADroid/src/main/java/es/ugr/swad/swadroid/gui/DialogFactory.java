@@ -206,12 +206,8 @@ public class DialogFactory {
         .setCancelable(cancelable)
         .setPositiveButton(acceptLabel, positiveListener)
         .setNegativeButton(cancelLabel, negativeListener);
-    	
-    	if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
-    		alertDialogBuilder.setIconAttribute(android.R.attr.alertDialogIcon);
-    	} else {
-        	alertDialogBuilder.setIcon(R.drawable.ic_dialog_alert);    		
-    	}
+
+		alertDialogBuilder.setIconAttribute(android.R.attr.alertDialogIcon);
     	
     	if(messageId != -1) {
     		alertDialogBuilder.setMessage(messageId);
@@ -257,12 +253,8 @@ public class DialogFactory {
                 .setTitle(R.string.title_error_dialog)
                 .setMessage(message)
                 .setNeutralButton(R.string.close_dialog, onClickListener);
-    	    	
-    	if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
-    		alertDialogBuilder.setIconAttribute(android.R.attr.alertDialogIcon);
-    	} else {
-        	alertDialogBuilder.setIcon(R.drawable.ic_dialog_alert);    		
-    	}
+
+		alertDialogBuilder.setIconAttribute(android.R.attr.alertDialogIcon);
 
         if (ex != null) {
             Log.e(tag, ex.getMessage(), ex);

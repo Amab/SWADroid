@@ -171,9 +171,7 @@ public class Rollcall extends MenuExpandableListActivity implements
 
     getSupportActionBar().setSubtitle(Courses.getSelectedCourseShortName());
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-      getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
+    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
   }
 
   /* (non-Javadoc)

@@ -21,7 +21,6 @@ package es.ugr.swad.swadroid.modules.messages;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Paint;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -36,11 +35,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.nostra13.universalimageloader.core.ImageLoader;
+
 import org.ksoap2.serialization.SoapObject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.analytics.SWADroidTracker;
@@ -173,9 +176,7 @@ public class Messages extends Module {
         setContentView(R.layout.messages_screen);
         setTitle(R.string.messagesModuleLabel);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         subjEditText = (EditText) findViewById(R.id.message_subject_text);
         bodyEditText = (EditText) findViewById(R.id.message_body_text);

@@ -76,40 +76,21 @@ public class DownloadFactory {
                 return false;
             }
         }
-	    
-	    if((Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) && !Utils.isHTTPUrl(url)) {
-	    	//DownloadManager GINGERBREAD (HTTPS support)
-	        Log.i(TAG, "Downloading file " + fileName + " with custom DownloadManager GINGERBREAD (HTTPS support)");
-	        
-		    managerGingerbread = new es.ugr.swad.swadroid.modules.downloads.DownloadManager(context.getContentResolver(), "es.ugr.swad.swadroid.modules.downloads");
-		    requestGingerbread = new es.ugr.swad.swadroid.modules.downloads.DownloadManager.Request(uri);
 
-	        requestGingerbread.setDescription(title);
-	        requestGingerbread.setTitle(description);
-	        requestGingerbread.setDestinationInExternalPublicDir(Constants.DIRECTORY_SWADROID, fileName);
-	        
-	    	managerGingerbread.enqueue(requestGingerbread);
-	    } else {	        
-		    managerHoneycomb = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
-		    requestHoneycomb = new DownloadManager.Request(uri);
-	        
-	        requestHoneycomb.setDescription(title);
-	        requestHoneycomb.setTitle(description);
-	        requestHoneycomb.setDestinationInExternalPublicDir(Constants.DIRECTORY_SWADROID, fileName);
+		managerHoneycomb = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+		requestHoneycomb = new DownloadManager.Request(uri);
 
-	    	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-	    		//DownloadManager HONEYCOMB
-		        Log.i(TAG, "Downloading file " + fileName + " with DownloadManager >= HONEYCOMB");
-		        
-		        requestHoneycomb.allowScanningByMediaScanner();
-		        requestHoneycomb.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);	    		
-	    	} else {
-		    	//DownloadManager GINGERBREAD (HTTP) 
-		        Log.i(TAG, "Downloading file " + fileName + " with DownloadManager GINGERBREAD (HTTP)");
-	    	}
-	    	
-	    	managerHoneycomb.enqueue(requestHoneycomb);
-	    }
+		requestHoneycomb.setDescription(title);
+		requestHoneycomb.setTitle(description);
+		requestHoneycomb.setDestinationInExternalPublicDir(Constants.DIRECTORY_SWADROID, fileName);
+
+		//DownloadManager HONEYCOMB
+		Log.i(TAG, "Downloading file " + fileName + " with DownloadManager >= HONEYCOMB");
+
+		requestHoneycomb.allowScanningByMediaScanner();
+		requestHoneycomb.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+
+		managerHoneycomb.enqueue(requestHoneycomb);
 	
 	    return true;
 	}
@@ -120,9 +101,6 @@ public class DownloadFactory {
 	 */
 	public static boolean isDownloadManagerAvailable(Context context) {
 	    try {
-	        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD) {
-	            return false;
-	        }
 	        Intent intent = new Intent(Intent.ACTION_MAIN);
 	        intent.addCategory(Intent.CATEGORY_LAUNCHER);
 	        intent.setClassName("com.android.providers.downloads.ui", "com.android.providers.downloads.ui.DownloadList");

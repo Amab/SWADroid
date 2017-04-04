@@ -806,9 +806,7 @@ public class DownloadsManager extends MenuActivity {
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void setupActionBar() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         switch (downloadsAreaCode) {
             case Constants.DOCUMENTS_AREA_CODE:

@@ -124,17 +124,10 @@ public class TestsMake extends MenuActivity {
     
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void setNumQuestions() {
-    	if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
-            android.widget.NumberPicker numberPicker = 
-            		(android.widget.NumberPicker) findViewById(R.id.testNumQuestionsNumberPicker);
-            
-    		numQuestions = numberPicker.getValue();
-    	} else {
-        	es.ugr.swad.swadroid.gui.widget.NumberPicker numberPickerOld =
-            		(es.ugr.swad.swadroid.gui.widget.NumberPicker) findViewById(R.id.testNumQuestionsNumberPickerOld);
-        	
-    		numQuestions = numberPickerOld.getCurrent();
-    	}
+        android.widget.NumberPicker numberPicker =
+                (android.widget.NumberPicker) findViewById(R.id.testNumQuestionsNumberPicker);
+
+        numQuestions = numberPicker.getValue();
 
         if (isDebuggable) {
             Log.d(TAG, "numQuestions=" + numQuestions);
@@ -152,22 +145,13 @@ public class TestsMake extends MenuActivity {
 
         setLayout(R.layout.tests_num_questions);
 
-        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
-            android.widget.NumberPicker numberPicker = 
-            		(android.widget.NumberPicker) findViewById(R.id.testNumQuestionsNumberPicker);
-            
-	        numberPicker.setMaxValue(test.getMax());
-	        numberPicker.setMinValue(test.getMin());
-	        numberPicker.setValue(test.getDef());
-	        numberPicker.setVisibility(View.VISIBLE);
-        } else {
-        	es.ugr.swad.swadroid.gui.widget.NumberPicker numberPickerOld =
-        		(es.ugr.swad.swadroid.gui.widget.NumberPicker) findViewById(R.id.testNumQuestionsNumberPickerOld);
-    		
-        	numberPickerOld.setRange(test.getMin(), test.getMax());
-        	numberPickerOld.setCurrent(test.getDef()); 
-        	numberPickerOld.setVisibility(View.VISIBLE);
-        }
+        android.widget.NumberPicker numberPicker =
+                (android.widget.NumberPicker) findViewById(R.id.testNumQuestionsNumberPicker);
+
+        numberPicker.setMaxValue(test.getMax());
+        numberPicker.setMinValue(test.getMin());
+        numberPicker.setValue(test.getDef());
+        numberPicker.setVisibility(View.VISIBLE);
 
         SWADroidTracker.sendScreenView(getApplicationContext(), TAG + " NumQuestions");
     }
@@ -757,9 +741,7 @@ public class TestsMake extends MenuActivity {
 
         getSupportActionBar().setSubtitle(Courses.getSelectedCourseShortName());
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         tagsAnswersTypeItemClickListener = new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position,

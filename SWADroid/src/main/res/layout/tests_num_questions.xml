@@ -22,15 +22,14 @@
             android:textColor="@color/foreground1"
             android:textSize="20sp" />
 
-        <es.ugr.swad.swadroid.gui.widget.NumberPicker
-            android:id="@+id/testNumQuestionsNumberPickerOld"
+        <NumberPicker
+            android:id="@+id/testNumQuestionsNumberPicker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/testNumQuestionsText"
             android:layout_centerInParent="true"
-            android:gravity="center"
-            android:textSize="30sp"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:width="100dip" />
     </RelativeLayout>
 
 </RelativeLayout>

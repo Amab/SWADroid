@@ -6,7 +6,6 @@
 
 package es.ugr.swad.swadroid.modules.marks;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.webkit.WebView;
 
@@ -41,9 +40,7 @@ public class Marks extends MenuActivity {
 
 		getSupportActionBar().setSubtitle(Courses.getSelectedCourseShortName());
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		setTitle(R.string.marksModuleLabel);
 	}

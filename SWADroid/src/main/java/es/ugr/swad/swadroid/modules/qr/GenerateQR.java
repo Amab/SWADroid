@@ -3,7 +3,6 @@ package es.ugr.swad.swadroid.modules.qr;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.Build;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -54,9 +53,7 @@ public class GenerateQR extends MenuActivity {
 
         setTitle(R.string.generateQRModuleLabel);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         barcodeEncoder = new BarcodeEncoder();
     }
