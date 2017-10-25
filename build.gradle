@@ -12,7 +12,7 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+        google()
         maven { url 'https://oss.sonatype.org/content/repositories/ksoap2-android-releases' }
-        maven { url 'https://maven.google.com' }
     }
 }
