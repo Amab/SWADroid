@@ -139,18 +139,6 @@ public class Preferences {
      */
     public static final String LASTSYNCTIMEPREF = "lastSyncTimeLimit";
     /**
-     * Notifications sound enable preference name
-     */
-    public static final String NOTIFSOUNDENABLEPREF = "prefNotifSoundEnable";
-    /**
-     * Notifications vibrate enable preference name
-     */
-    public static final String NOTIFVIBRATEENABLEPREF = "prefNotifVibrateEnable";
-    /**
-     * Notifications lights enable preference name
-     */
-    public static final String NOTIFLIGHTSENABLEPREF = "prefNotifLightsEnable";
-    /**
      * Changelog preference name
      */
     public static final String CHANGELOGPREF = "changelogPref";
@@ -367,68 +355,6 @@ public class Preferences {
         editor = editor.putString(DBKEYPREF, key);
         editor.commit();
     }
-
-    /**
-     * Checks if the sound is enabled for notification alerts
-     * 
-	 * @return true if the sound is enabled for notification alerts
-	 * 		   false otherwise
-	 */
-	public static boolean isNotifSoundEnabled() {
-		return prefs.getBoolean(NOTIFSOUNDENABLEPREF, true);
-	}
-
-	/**
-	 * Enables or disables the sound for notification alerts
-	 * 
-	 * @param notifSoundEnabled true if the sound is enabled for notification alerts
-	 * 		   				    false otherwise
-	 */
-	public static void setNotifSoundEnabled(boolean notifSoundEnabled) {
-		editor = editor.putBoolean(NOTIFSOUNDENABLEPREF, notifSoundEnabled);
-	    editor.commit();
-	}
-
-	/**
-	 * Checks if the vibration is enabled for notification alerts
-	 * 
-	 * @return true if the vibration is enabled for notification alerts
-	 * 		   false otherwise
-	 */
-	public static boolean isNotifVibrateEnabled() {
-		return prefs.getBoolean(NOTIFVIBRATEENABLEPREF, true);
-	}
-
-	/**
-	 * Enables or disables the vibration for notification alerts
-	 * 
-	 * @param notifVibrateEnabled the notifVibrateEnabled to set
-	 */
-	public static void setNotifVibrateEnabled(boolean notifVibrateEnabled) {
-		editor = editor.putBoolean(NOTIFVIBRATEENABLEPREF, notifVibrateEnabled);
-	    editor.commit();
-	}
-
-	/**
-	 * Checks if the lights are enabled for notification alerts
-	 * 
-	 * @return true if the lights are enabled for notification alerts
-	 * 		   false otherwise
-	 */
-	public static boolean isNotifLightsEnabled() {
-		return prefs.getBoolean(NOTIFLIGHTSENABLEPREF, true);
-	}
-
-	/**
-	 * Enables or disables the lights for notification alerts
-	 * 
-	 * @param notifLightsEnabled true if the lights are enabled for notification alerts
-	 * 		   				     false otherwise
-	 */
-	public static void setNotifLightsEnabled(boolean notifLightsEnabled) {
-		editor = editor.putBoolean(NOTIFLIGHTSENABLEPREF, notifLightsEnabled);
-	    editor.commit();
-	}
 
     /**
      * Gets the login data

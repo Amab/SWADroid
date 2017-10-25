@@ -509,7 +509,6 @@ public class Notifications extends Module implements
 						R.drawable.ic_launcher_swadroid_notif,
 						R.drawable.ic_launcher_swadroid,
 						true,
-						true,
 						false,
 						false);
 				

@@ -478,7 +478,6 @@ public class NotificationsSyncAdapterService extends Service {
 						R.drawable.ic_launcher_swadroid_notif,
 						R.drawable.ic_launcher_swadroid,
 						true,
-						true,
 						false,
 						false);
 

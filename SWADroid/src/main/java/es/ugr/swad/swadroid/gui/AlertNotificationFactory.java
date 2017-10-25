@@ -26,7 +26,9 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
 
-import es.ugr.swad.swadroid.preferences.Preferences;
+import es.ugr.swad.swadroid.utils.NotificationUtils;
+
+import static es.ugr.swad.swadroid.utils.NotificationUtils.SWADROID_CHANNEL_ID;
 
 /**
  * Class for create notification alerts.
@@ -35,12 +37,12 @@ import es.ugr.swad.swadroid.preferences.Preferences;
  */
 public class AlertNotificationFactory {
 	public static NotificationCompat.Builder createAlertNotificationBuilder(Context context, String contentTitle, String contentText,
-			String ticker, PendingIntent pendingIntent, int smallIcon, int largeIcon, boolean alertSignals,
+			String ticker, PendingIntent pendingIntent, int smallIcon, int largeIcon,
 			boolean autocancel, boolean ongoing, boolean onlyAlertOnce) {
 		
 		int flags = 0;
 
-    	NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(context)
+    	NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(context, SWADROID_CHANNEL_ID)
             .setAutoCancel(autocancel)
             .setSmallIcon(smallIcon)
             .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), largeIcon))
@@ -58,21 +60,9 @@ public class AlertNotificationFactory {
     	}
         
         //Add sound, vibration and lights
-    	if(alertSignals) {
-	        if(Preferences.isNotifSoundEnabled()) {
-	        	flags |= Notification.DEFAULT_SOUND;
-	        } else {
-	        	notifBuilder.setSound(null);
-	        }
-	        
-	        if(Preferences.isNotifVibrateEnabled()) {
-	        	flags |= Notification.DEFAULT_VIBRATE;
-	        }
-	        
-	        if(Preferences.isNotifLightsEnabled()) {
-	        	flags |= Notification.DEFAULT_LIGHTS;
-	        }
-    	}
+        flags |= Notification.DEFAULT_SOUND;
+        flags |= Notification.DEFAULT_VIBRATE;
+        flags |= Notification.DEFAULT_LIGHTS;
         
     	notifBuilder.setDefaults(flags);
     	
@@ -80,17 +70,16 @@ public class AlertNotificationFactory {
 	}
 	
 	public static NotificationCompat.Builder createProgressNotificationBuilder(Context context, String contentTitle, String contentText,
-			String ticker, PendingIntent pendingIntent, int smallIcon, int largeIcon, boolean alertSignals,
+			String ticker, PendingIntent pendingIntent, int smallIcon, int largeIcon,
 			boolean autocancel, boolean ongoing, boolean onlyAlertOnce, int maxProgress, int progress, boolean indeterminate) {
 		
-		NotificationCompat.Builder notifBuilder = createAlertNotificationBuilder(context, 
+		NotificationCompat.Builder notifBuilder = createAlertNotificationBuilder(context,
     			contentTitle, 
     			contentText,
     			ticker, 
     			pendingIntent, 
     			smallIcon,
-    			largeIcon, 
-    			alertSignals,
+    			largeIcon,
     			autocancel, 
     			ongoing, 
     			onlyAlertOnce);
@@ -101,7 +90,7 @@ public class AlertNotificationFactory {
 	}
 	
 	public static Notification createAlertNotification(Context context, String contentTitle, String contentText,
-			String ticker, PendingIntent pendingIntent, int smallIcon, int largeIcon, boolean alertSignals,
+			String ticker, PendingIntent pendingIntent, int smallIcon, int largeIcon,
 			boolean autocancel, boolean ongoing, boolean onlyAlertOnce) {
 
     	NotificationCompat.Builder notifBuilder = createAlertNotificationBuilder(context, 
@@ -110,8 +99,7 @@ public class AlertNotificationFactory {
     			ticker, 
     			pendingIntent, 
     			smallIcon,
-    			largeIcon, 
-    			alertSignals,
+    			largeIcon,
     			autocancel,
     			ongoing, 
     			onlyAlertOnce);
@@ -121,7 +109,7 @@ public class AlertNotificationFactory {
     }
 	
 	public static Notification createProgressNotification(Context context, String contentTitle, String contentText,
-			String ticker, PendingIntent pendingIntent, int smallIcon, int largeIcon, boolean alertSignals,
+			String ticker, PendingIntent pendingIntent, int smallIcon, int largeIcon,
 			boolean autocancel, boolean ongoing, boolean onlyAlertOnce, int maxProgress, int progress, boolean indeterminate) {
 
     	NotificationCompat.Builder notifBuilder = createProgressNotificationBuilder(context, 
@@ -130,8 +118,7 @@ public class AlertNotificationFactory {
     			ticker, 
     			pendingIntent, 
     			smallIcon,
-    			largeIcon, 
-    			alertSignals,
+    			largeIcon,
     			autocancel,
     			ongoing, 
     			onlyAlertOnce,
@@ -143,10 +130,17 @@ public class AlertNotificationFactory {
         return notifBuilder.build();
     }
 	
-	public static void showAlertNotification(Context context, Notification notif, int notifId) {		
-    	//Obtain a reference to the notification service
-        NotificationManager notifManager =
-                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+	public static void showAlertNotification(Context context, Notification notif, int notifId) {
+        NotificationManager notifManager;
+
+        //Obtain a reference to the notification service
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationUtils mNotificationUtils = new NotificationUtils(context);
+            notifManager = mNotificationUtils.getManager();
+        } else {
+            notifManager =
+                    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        }
 
         //Send alert
         notifManager.notify(notifId, notif);
