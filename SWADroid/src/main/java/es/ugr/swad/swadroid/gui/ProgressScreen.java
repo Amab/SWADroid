@@ -44,39 +44,29 @@ public class ProgressScreen {
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     public void show() {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = context.getResources().getInteger(android.R.integer.config_shortAnimTime);
+        int shortAnimTime = context.getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-            progressView.setVisibility(View.VISIBLE);
-            progressView.animate()
-                    .setDuration(shortAnimTime)
-                    .alpha(1)
-                    .setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            progressView.setVisibility(View.VISIBLE);
-                        }
-                    });
+        progressView.setVisibility(View.VISIBLE);
+        progressView.animate()
+                .setDuration(shortAnimTime)
+                .alpha(1)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        progressView.setVisibility(View.VISIBLE);
+                    }
+                });
 
-            activityView.setVisibility(View.VISIBLE);
-            activityView.animate()
-                    .setDuration(shortAnimTime)
-                    .alpha(0)
-                    .setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            activityView.setVisibility(View.GONE);
-                        }
-                    });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            progressView.setVisibility(View.VISIBLE);
-            activityView.setVisibility(View.GONE);
-        }
+        activityView.setVisibility(View.VISIBLE);
+        activityView.animate()
+                .setDuration(shortAnimTime)
+                .alpha(0)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        activityView.setVisibility(View.GONE);
+                    }
+                });
 
         this.showing = true;
     }
@@ -86,39 +76,29 @@ public class ProgressScreen {
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     public void hide() {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = context.getResources().getInteger(android.R.integer.config_shortAnimTime);
+        int shortAnimTime = context.getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-            progressView.setVisibility(View.VISIBLE);
-            progressView.animate()
-                    .setDuration(shortAnimTime)
-                    .alpha(0)
-                    .setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            progressView.setVisibility(View.GONE);
-                        }
-                    });
+        progressView.setVisibility(View.VISIBLE);
+        progressView.animate()
+                .setDuration(shortAnimTime)
+                .alpha(0)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        progressView.setVisibility(View.GONE);
+                    }
+                });
 
-            activityView.setVisibility(View.VISIBLE);
-            activityView.animate()
-                    .setDuration(shortAnimTime)
-                    .alpha(1)
-                    .setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            activityView.setVisibility(View.VISIBLE);
-                        }
-                    });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            progressView.setVisibility(View.GONE);
-            activityView.setVisibility(View.VISIBLE);
-        }
+        activityView.setVisibility(View.VISIBLE);
+        activityView.animate()
+                .setDuration(shortAnimTime)
+                .alpha(1)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        activityView.setVisibility(View.VISIBLE);
+                    }
+                });
 
         this.showing = false;
     }

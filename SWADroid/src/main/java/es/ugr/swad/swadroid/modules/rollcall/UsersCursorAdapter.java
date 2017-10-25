@@ -146,12 +146,8 @@ public class UsersCursorAdapter extends CursorAdapter {
 
                 //Refresh ListView
                 dbCursor = dbHelper.getUsersEventCursor(eventCode);
-                if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.GINGERBREAD) {
-                    oldCursor = swapCursor(dbCursor);
-                    oldCursor.close();
-                } else {
-                    changeCursor(dbCursor);
-                }
+                oldCursor = swapCursor(dbCursor);
+                oldCursor.close();
                 notifyDataSetChanged();
             }
         });

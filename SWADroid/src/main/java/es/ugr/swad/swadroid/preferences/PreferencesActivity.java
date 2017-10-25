@@ -33,7 +33,10 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
+import android.provider.Settings;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import java.security.NoSuchAlgorithmException;
@@ -45,11 +48,11 @@ import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.gui.DialogFactory;
-import es.ugr.swad.swadroid.model.LoginInfo;
 import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.modules.login.LoginActivity;
 import es.ugr.swad.swadroid.sync.SyncUtils;
 import es.ugr.swad.swadroid.utils.Crypto;
+import es.ugr.swad.swadroid.utils.NotificationUtils;
 import es.ugr.swad.swadroid.utils.Utils;
 
 /**
@@ -114,18 +117,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
      * Synchronization enable preference
      */
     private static CheckBoxPreference syncEnablePref;
-    /**
-     * Notifications sound enable preference
-     */
-    private static CheckBoxPreference notifSoundEnablePref;
-    /**
-     * Notifications vibrate enable preference
-     */
-    private static CheckBoxPreference notifVibrateEnablePref;
-    /**
-     * Notifications lights enable preference
-     */
-    private static CheckBoxPreference notifLightsEnablePref;
     /**
      * Application debuggable flag
      */
@@ -202,9 +193,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         privacyPolicyPref = findPreference(Preferences.PRIVACYPOLICYPREF);
         syncTimePref = findPreference(Preferences.SYNCTIMEPREF);
         syncEnablePref = (CheckBoxPreference) findPreference(Preferences.SYNCENABLEPREF);
-        notifSoundEnablePref = (CheckBoxPreference) findPreference(Preferences.NOTIFSOUNDENABLEPREF);
-        notifVibrateEnablePref = (CheckBoxPreference) findPreference(Preferences.NOTIFVIBRATEENABLEPREF);
-        notifLightsEnablePref = (CheckBoxPreference) findPreference(Preferences.NOTIFLIGHTSENABLEPREF);
 
         ratePref.setOnPreferenceChangeListener(this);
         twitterPref.setOnPreferenceChangeListener(this);
@@ -216,9 +204,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         privacyPolicyPref.setOnPreferenceChangeListener(this);
         syncEnablePref.setOnPreferenceChangeListener(this);
         syncTimePref.setOnPreferenceChangeListener(this);
-        notifSoundEnablePref.setOnPreferenceChangeListener(this);
-        notifVibrateEnablePref.setOnPreferenceChangeListener(this);
-        notifLightsEnablePref.setOnPreferenceChangeListener(this);
         
         logOutPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             
@@ -417,18 +402,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
             
             syncTimePref.setSummary(prefSyncTimeEntry);
             syncPrefsChanged = true;
-        } else if(Preferences.NOTIFSOUNDENABLEPREF.equals(key)) {
-            boolean notifSoundEnabled = (Boolean) newValue;
-            Preferences.setNotifSoundEnabled(notifSoundEnabled);
-            notifSoundEnablePref.setChecked(notifSoundEnabled);
-        } else if(Preferences.NOTIFVIBRATEENABLEPREF.equals(key)) {
-        	boolean notifVibrateEnabled = (Boolean) newValue;
-        	Preferences.setNotifVibrateEnabled(notifVibrateEnabled);
-            notifVibrateEnablePref.setChecked(notifVibrateEnabled);
-        } else if(Preferences.NOTIFLIGHTSENABLEPREF.equals(key)) {
-        	boolean notifLightsEnabled = (Boolean) newValue;
-        	Preferences.setNotifLightsEnabled(notifLightsEnabled);
-            notifLightsEnablePref.setChecked(notifLightsEnabled);
         }
         
         return returnValue;

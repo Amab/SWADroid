@@ -454,19 +454,6 @@ public class NotificationsSyncAdapterService extends Service {
         startIntent.setAction(START_SYNC);
         context.sendBroadcast(startIntent);
 
-        //Initialize HTTPS connections
-    	/*
-    	 * Terena root certificate is not included by default on Gingerbread and older
-    	 * If Android API < 11 (HONEYCOMB) add Terena certificate manually
-    	 */
-    	if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-    		conn = new SecureConnection();
-    		conn.initSecureConnection();
-    		Log.i(TAG, "Android API < 11 (HONEYCOMB). Adding Terena certificate manually");
-    	} else {
-    		Log.i(TAG, "Android API >= 11 (HONEYCOMB). Using Terena built-in certificate");
-    	}
-
         //If last login time > Global.RELOGIN_TIME, force login
         if (Login.isLogged() &&
         		((System.currentTimeMillis() - Login.getLastLoginTime()) > Login.RELOGIN_TIME)) {
@@ -490,7 +477,6 @@ public class NotificationsSyncAdapterService extends Service {
 						pendingIntent,
 						R.drawable.ic_launcher_swadroid_notif,
 						R.drawable.ic_launcher_swadroid,
-						true,
 						true,
 						false,
 						false);

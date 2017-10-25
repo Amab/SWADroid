@@ -275,9 +275,7 @@ public class Notifications extends Module implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.expandablelist_items_pulltorefresh);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
 
@@ -510,7 +508,6 @@ public class Notifications extends Module implements
 						pendingIntent,
 						R.drawable.ic_launcher_swadroid_notif,
 						R.drawable.ic_launcher_swadroid,
-						true,
 						true,
 						false,
 						false);

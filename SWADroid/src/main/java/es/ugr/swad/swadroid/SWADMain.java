@@ -24,7 +24,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -71,7 +70,6 @@ import es.ugr.swad.swadroid.modules.qr.GenerateQR;
 import es.ugr.swad.swadroid.modules.rollcall.Rollcall;
 import es.ugr.swad.swadroid.modules.tests.Tests;
 import es.ugr.swad.swadroid.preferences.Preferences;
-import es.ugr.swad.swadroid.ssl.SecureConnection;
 import es.ugr.swad.swadroid.sync.AccountAuthenticator;
 import es.ugr.swad.swadroid.sync.SyncUtils;
 import es.ugr.swad.swadroid.utils.DateTimeUtils;
@@ -170,23 +168,6 @@ public class SWADMain extends MenuExpandableListActivity {
         initializeMainViews();
 
         try {
-
-            //Initialize HTTPS connections
-        	/*
-        	 * SSL root certificates for SWAD are not included by default on Gingerbread and older
-        	 * If Android API < 11 (HONEYCOMB) add SSL certificates manually
-        	 */
-            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-        		/*
-                  SSL connection
-                 */
-                SecureConnection conn = new SecureConnection();
-                conn.initSecureConnection();
-                Log.i(TAG, "Android API < 11 (HONEYCOMB). Adding SSL certificates manually");
-            } else {
-                Log.i(TAG, "Android API >= 11 (HONEYCOMB). Using SSL built-in certificates");
-            }
-
             //Check if this is the first run after an install or upgrade
             lastVersion = Preferences.getLastVersion();
             currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
@@ -702,29 +683,17 @@ public class SWADMain extends MenuExpandableListActivity {
                     activity = new Intent(ctx, GenerateQR.class);
                     startActivityForResult(activity, Constants.GENERATE_QR_REQUEST_CODE);
                 } else if (keyword.equals(getString(R.string.documentsDownloadModuleLabel))) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                        activity = new Intent(ctx, DownloadsManager.class);
-                        activity.putExtra("downloadsAreaCode", Constants.DOCUMENTS_AREA_CODE);
-                        startActivityForResult(activity, Constants.DOWNLOADSMANAGER_REQUEST_CODE);
-                    } else {
-                        Toast.makeText(ctx, R.string.functionHoneycombMsg, Toast.LENGTH_LONG).show();
-                    }
+                    activity = new Intent(ctx, DownloadsManager.class);
+                    activity.putExtra("downloadsAreaCode", Constants.DOCUMENTS_AREA_CODE);
+                    startActivityForResult(activity, Constants.DOWNLOADSMANAGER_REQUEST_CODE);
                 } else if (keyword.equals(getString(R.string.sharedsDownloadModuleLabel))) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                        activity = new Intent(ctx, DownloadsManager.class);
-                        activity.putExtra("downloadsAreaCode", Constants.SHARE_AREA_CODE);
-                        startActivityForResult(activity, Constants.DOWNLOADSMANAGER_REQUEST_CODE);
-                    } else {
-                        Toast.makeText(ctx, R.string.functionHoneycombMsg, Toast.LENGTH_LONG).show();
-                    }
+                    activity = new Intent(ctx, DownloadsManager.class);
+                    activity.putExtra("downloadsAreaCode", Constants.SHARE_AREA_CODE);
+                    startActivityForResult(activity, Constants.DOWNLOADSMANAGER_REQUEST_CODE);
                 } else if (keyword.equals(getString(R.string.marksModuleLabel))) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                        activity = new Intent(ctx, DownloadsManager.class);
-                        activity.putExtra("downloadsAreaCode", Constants.MARKS_AREA_CODE);
-                        startActivityForResult(activity, Constants.DOWNLOADSMANAGER_REQUEST_CODE);
-                    } else {
-                        Toast.makeText(ctx, R.string.functionHoneycombMsg, Toast.LENGTH_LONG).show();
-                    }
+                    activity = new Intent(ctx, DownloadsManager.class);
+                    activity.putExtra("downloadsAreaCode", Constants.MARKS_AREA_CODE);
+                    startActivityForResult(activity, Constants.DOWNLOADSMANAGER_REQUEST_CODE);
                 } else if (keyword.equals(getString(R.string.myGroupsModuleLabel))) {
                     activity = new Intent(ctx, MyGroupsManager.class);
                     activity.putExtra("courseCode", Courses.getSelectedCourseCode());

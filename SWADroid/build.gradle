@@ -9,8 +9,8 @@ ext {
 }
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.2"
 
     dexOptions {
         maxProcessCount=2
@@ -26,8 +26,8 @@ android {
         versionCode gitVersionCode
         versionName gitVersionName
 
-        minSdkVersion 9
-        targetSdkVersion 25
+        minSdkVersion 14
+        targetSdkVersion 26
 
         android.applicationVariants.all { variant ->
             def appName
@@ -77,13 +77,13 @@ def getBuildConfigField(String property){
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:25.1.1'
-    compile 'com.android.support:appcompat-v7:25.1.1'
-    compile 'com.google.android.gms:play-services-analytics:10.0.1'
+    compile 'com.android.support:support-v4:26.0.0'
+    compile 'com.android.support:appcompat-v7:26.0.0'
+    compile 'com.google.android.gms:play-services-analytics:11.0.4'
     compile 'com.google.code.ksoap2-android:ksoap2-android:3.6.2'
     compile 'commons-io:commons-io:2.5'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
-    compile 'com.journeyapps:zxing-android-embedded:3.2.0@aar'
-    compile 'com.google.zxing:core:3.2.1'
-    compile 'com.google.code.gson:gson:2.7'
+    compile 'com.journeyapps:zxing-android-embedded:3.5.0@aar'
+    compile 'com.google.zxing:core:3.3.0'
+    compile 'com.google.code.gson:gson:2.8.1'
 }
