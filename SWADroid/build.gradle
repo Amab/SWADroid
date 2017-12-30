@@ -10,7 +10,7 @@ ext {
 
 android {
     compileSdkVersion 27
-    buildToolsVersion "27.0.1"
+    buildToolsVersion "27.0.3"
 
     dexOptions {
         maxProcessCount=2
@@ -75,9 +75,9 @@ def getBuildConfigField(String property){
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:27.0.1'
-    compile 'com.android.support:appcompat-v7:27.0.1'
-    compile 'com.google.android.gms:play-services-analytics:11.6.0'
+    compile 'com.android.support:support-v4:27.0.2'
+    compile 'com.android.support:appcompat-v7:27.0.2'
+    compile 'com.google.android.gms:play-services-analytics:11.8.0'
     compile 'com.google.code.ksoap2-android:ksoap2-android:3.6.2'
     compile 'commons-io:commons-io:2.6'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
