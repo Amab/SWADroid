@@ -205,7 +205,7 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
             holder.radioButton.setVisibility(View.GONE);
         }
 
-        holder.checkBox.setText(groupName);
+        holder.radioButton.setText(groupName);
         holder.checkBox.setChecked(member != 0);
 
         holder.nStudentText.setText(context.getString(R.string.numStudent) + ": " + String.valueOf(students));
