@@ -198,15 +198,15 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
         if (multiple == 0 && role != Constants.TEACHER_TYPE_CODE) { //single inscriptions:
             holder.checkBox.setVisibility(View.GONE);
             holder.radioButton.setVisibility(View.VISIBLE);
+            holder.radioButton.setText(groupName);
 
         } else { //multiple inscriptions :
 
             holder.checkBox.setVisibility(View.VISIBLE);
             holder.radioButton.setVisibility(View.GONE);
+            holder.checkBox.setText(groupName);
+            holder.checkBox.setChecked(member != 0);
         }
-
-        holder.radioButton.setText(groupName);
-        holder.checkBox.setChecked(member != 0);
 
         holder.nStudentText.setText(context.getString(R.string.numStudent) + ": " + String.valueOf(students));
 
