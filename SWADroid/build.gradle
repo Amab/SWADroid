@@ -9,8 +9,8 @@ ext {
 }
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.2"
+    compileSdkVersion 27
+    buildToolsVersion "27.0.3"
 
     dexOptions {
         maxProcessCount=2
@@ -27,7 +27,7 @@ android {
         versionName gitVersionName
 
         minSdkVersion 14
-        targetSdkVersion 26
+        targetSdkVersion 27
 
         android.applicationVariants.all { variant ->
             def appName
@@ -38,10 +38,8 @@ android {
                 appName = parent.name
             }
 
-            variant.outputs.each { output ->
-                def newApkName
-                newApkName = "${appName}-${output.baseName}-${variant.versionName}.apk"
-                output.outputFile = new File(output.outputFile.parent, newApkName)
+            variant.outputs.all { output ->
+                outputFileName = "${appName}-${output.baseName}-${variant.versionName}.apk"
             }
         }
 
@@ -77,13 +75,13 @@ def getBuildConfigField(String property){
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:26.0.0'
-    compile 'com.android.support:appcompat-v7:26.0.0'
-    compile 'com.google.android.gms:play-services-analytics:11.0.4'
+    compile 'com.android.support:support-v4:27.0.2'
+    compile 'com.android.support:appcompat-v7:27.0.2'
+    compile 'com.google.android.gms:play-services-analytics:11.8.0'
     compile 'com.google.code.ksoap2-android:ksoap2-android:3.6.2'
-    compile 'commons-io:commons-io:2.5'
+    compile 'commons-io:commons-io:2.6'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     compile 'com.journeyapps:zxing-android-embedded:3.5.0@aar'
-    compile 'com.google.zxing:core:3.3.0'
-    compile 'com.google.code.gson:gson:2.8.1'
+    compile 'com.google.zxing:core:3.3.1'
+    compile 'com.google.code.gson:gson:2.8.2'
 }

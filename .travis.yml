@@ -6,8 +6,8 @@ android:
   - tools
   - tools
   - platform-tools
-  - build-tools-26.0.2
-  - android-26
+  - build-tools-27.0.3
+  - android-27
   - extra-android-m2repository
   - extra-android-support
   - extra-google-m2repository
@@ -16,3 +16,4 @@ script:
 - "./gradlew build connectedCheck"
 before_install:
 - chmod +x gradlew
+- yes | sdkmanager "platforms;android-27"
