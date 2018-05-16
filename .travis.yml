@@ -6,7 +6,7 @@ jdk: oraclejdk8
 env:
  global:
    - ANDROID_API=P
-   - ANDROID_BUILD_TOOLS=28.0.0-preview
+   - ANDROID_BUILD_TOOLS=28.0.0-rc2
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -35,7 +35,9 @@ android:
     - 'google-gdk-license-.+'
 
 before_install:
-  - yes | sdkmanager "platforms;android-${ANDROID_API}"
+  - yes | sdkmanager --channel=3 \
+                      "tools" "platform-tools" "build-tools;${ANDROID_BUILD_TOOLS}" \
+                      "platforms;android-${ANDROID_API}" "extras;google;google_play_services"
   - chmod +x gradlew
   - ./gradlew dependencies || true
 
