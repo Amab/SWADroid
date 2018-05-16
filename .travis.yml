@@ -35,9 +35,6 @@ android:
     - 'google-gdk-license-.+'
 
 before_install:
-  - yes | sdkmanager --channel=3 \
-                      "platforms;android-${ANDROID_API}" \
-                      "extras;google;google_play_services"
   - chmod +x gradlew
   - ./gradlew dependencies || true
 
