@@ -18,28 +18,20 @@ cache:
     - $HOME/.gradle/wrapper/
     - $HOME/.android/build-cache
 
-android:
-  components:
-    - tools # to get the new `repository-11.xml`
-    - tools # see https://github.com/travis-ci/travis-ci/issues/6040#issuecomment-219367943)
-    - platform-tools
-    - android-${ANDROID_API}
-    - build-tools-${ANDROID_BUILD_TOOLS}
-    - extra-android-m2repository
-    - extra-android-support
-    - extra-google-m2repository
-    - extra-google-google_play_services
-  licenses:
-    - 'android-sdk-preview-license-.+'
-    - 'android-sdk-license-.+'
-    - 'google-gdk-license-.+'
-
 before_install:
+  # Travis still uses 'android' command behind the 'components' section update.
+  # That command is obsolete and cannot update Android SDK Tools after 25.2.5.
+  # Let's solve it here with the new command 'sdkmanager'
+  - yes | sdkmanager --verbose "build-tools;${ANDROID_BUILD_TOOLS}"
+  - yes | sdkmanager --verbose "platform-tools"
+  - yes | sdkmanager --verbose "tools"
+  - yes | sdkmanager --verbose "platforms;android-${ANDROID_API}"
+  - yes | sdkmanager --verbose "extras;android;m2repository"
+
+  # Check tools and dependencies installed
+  - yes | sdkmanager --list
+
   - chmod +x gradlew
-  - ./gradlew dependencies || true
 
 script :
   - ./gradlew build connectedCheck
-
-after_failure:
-  - find * -name lint-results.xml | xargs cat
