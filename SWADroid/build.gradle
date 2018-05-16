@@ -1,7 +1,9 @@
 apply plugin: 'com.android.application'
 
+import org.ajoberstar.grgit.Grgit
+
 ext {
-    git = org.ajoberstar.grgit.Grgit.open()
+    git = Grgit.open()
     gitVersionCode = git.tag.list().size()
     gitVersionName = "${git.describe()}"
 
