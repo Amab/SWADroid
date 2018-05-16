@@ -1,16 +1,31 @@
 apply plugin: 'com.android.application'
 
+import org.ajoberstar.grgit.Grgit
+
 ext {
-    git = org.ajoberstar.grgit.Grgit.open()
+    git = Grgit.open()
     gitVersionCode = git.tag.list().size()
     gitVersionName = "${git.describe()}"
+}
 
-    travisBuild = System.getenv("TRAVIS") == "true"
+//return a BuildConfigField from a properties file.
+def static getBuildConfigField(String property){
+    def travisBuild = System.getenv("TRAVIS") == "true"
+    def value
+
+    if(travisBuild) {
+        value = "\"" + System.getenv(property) + "\""
+    } else {
+        Properties properties = new Properties()
+        properties.load(new FileInputStream("keystore.properties"))
+        value = "\"" + properties.getProperty(property) + "\""
+    }
+
+    return value
 }
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion "27.0.3"
+    compileSdkVersion "android-P"
 
     dexOptions {
         maxProcessCount=2
@@ -27,7 +42,7 @@ android {
         versionName gitVersionName
 
         minSdkVersion 14
-        targetSdkVersion 27
+        targetSdkVersion "P"
 
         android.applicationVariants.all { variant ->
             def appName
@@ -59,25 +74,11 @@ android {
     }
 }
 
-//return a BuildConfigField from a properties file.
-def getBuildConfigField(String property){
-    def value
-
-    if(travisBuild) {
-        value = "\"" + System.getenv(property) + "\""
-    } else {
-        Properties properties = new Properties()
-        properties.load(new FileInputStream("keystore.properties"))
-        value = "\"" + properties.getProperty(property) + "\""
-    }
-
-    return value
-}
-
+//TODO Switch to release versions when Android P is released
 dependencies {
-    implementation 'com.android.support:support-v4:27.1.1'
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.google.android.gms:play-services-analytics:15.0.0'
+    implementation 'com.android.support:support-v4:28.0.0-alpha1'
+    implementation 'com.android.support:appcompat-v7:28.0.0-alpha1'
+    implementation 'com.google.android.gms:play-services-analytics:15.0.2'
     implementation 'com.google.code.ksoap2-android:ksoap2-android:3.6.2'
     implementation 'commons-io:commons-io:2.6'
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'

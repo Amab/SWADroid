@@ -1,19 +1,39 @@
+sudo: false
+
 language: android
-jdk:
-- oraclejdk8
-android:
-  components:
-  - tools
-  - tools
-  - platform-tools
-  - build-tools-27.0.3
-  - android-27
-  - extra-android-m2repository
-  - extra-android-support
-  - extra-google-m2repository
-  - extra-google-google_play_services
-script:
-- "./gradlew build connectedCheck"
+jdk: oraclejdk8
+
+env:
+ global:
+   - ANDROID_API=P
+   - ANDROID_BUILD_TOOLS=28.0.0-rc2 #TODO Switch to release version when Android P is released
+
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -rf $HOME/.gradle/caches/*/plugin-resolution/
+
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+    - $HOME/.android/build-cache
+
 before_install:
-- chmod +x gradlew
-- yes | sdkmanager "platforms;android-27"
+  # Travis still uses 'android' command behind the 'components' section update.
+  # That command is obsolete and cannot update Android SDK Tools after 25.2.5.
+  # Let's solve it here with the new command 'sdkmanager'
+  - yes | sdkmanager --verbose "build-tools;${ANDROID_BUILD_TOOLS}"
+  - yes | sdkmanager --verbose "platform-tools"
+  - yes | sdkmanager --verbose "tools"
+  - yes | sdkmanager --verbose "platforms;android-${ANDROID_API}"
+  - yes | sdkmanager --verbose "extras;android;m2repository"
+
+  # Check tools and dependencies installed
+  - yes | sdkmanager --list
+
+  - chmod +x gradlew
+
+script :
+  - ./gradlew build connectedCheck
+
+after_failure: "cat $TRAVIS_BUILD_DIR/SWADroid/build/reports/lint-results.xml"
