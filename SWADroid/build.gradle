@@ -6,8 +6,22 @@ ext {
     git = Grgit.open()
     gitVersionCode = git.tag.list().size()
     gitVersionName = "${git.describe()}"
+}
 
-    travisBuild = System.getenv("TRAVIS") == "true"
+//return a BuildConfigField from a properties file.
+def static getBuildConfigField(String property){
+    def travisBuild = System.getenv("TRAVIS") == "true"
+    def value
+
+    if(travisBuild) {
+        value = "\"" + System.getenv(property) + "\""
+    } else {
+        Properties properties = new Properties()
+        properties.load(new FileInputStream("keystore.properties"))
+        value = "\"" + properties.getProperty(property) + "\""
+    }
+
+    return value
 }
 
 android {
@@ -58,21 +72,6 @@ android {
             it.buildConfigField "String", "ANALYTICS_API_KEY", getBuildConfigField("ANALYTICS_API_KEY")
         }
     }
-}
-
-//return a BuildConfigField from a properties file.
-def getBuildConfigField(String property){
-    def value
-
-    if(travisBuild) {
-        value = "\"" + System.getenv(property) + "\""
-    } else {
-        Properties properties = new Properties()
-        properties.load(new FileInputStream("keystore.properties"))
-        value = "\"" + properties.getProperty(property) + "\""
-    }
-
-    return value
 }
 
 dependencies {
