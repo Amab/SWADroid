@@ -36,8 +36,8 @@ android:
 
 before_install:
   - yes | sdkmanager --channel=3 \
-                      "tools" "platform-tools" "build-tools;${ANDROID_BUILD_TOOLS}" \
-                      "platforms;android-${ANDROID_API}" "extras;google;google_play_services"
+                      "build-tools;${ANDROID_BUILD_TOOLS}" "platforms;android-${ANDROID_API}" \
+                      "extras;google;google_play_services"
   - chmod +x gradlew
   - ./gradlew dependencies || true
 
