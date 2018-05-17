@@ -32,6 +32,7 @@ before_deploy:
 - jarsigner -sigalg SHA1withRSA -digestalg SHA1 -keystore ${TRAVIS_BUILD_DIR}/keystore.jks -storepass $storepass -keypass $keypass SWADroid-release-unsigned.apk amab
 - jarsigner -verify SWADroid-release-unsigned.apk
 - "${ANDROID_HOME}/build-tools/${ANDROID_BUILD_TOOLS}/zipalign -p 4 SWADroid-release-unsigned.apk SWADroid-release.apk"
+- ls -R
 deploy:
   provider: releases
   api_key:
