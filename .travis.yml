@@ -16,11 +16,11 @@ cache:
   - "$HOME/.gradle/wrapper/"
   - "$HOME/.android/build-cache"
 before_install:
-- yes | sdkmanager --verbose "build-tools;${ANDROID_BUILD_TOOLS}"
-- yes | sdkmanager --verbose "platform-tools"
-- yes | sdkmanager --verbose "tools"
-- yes | sdkmanager --verbose "platforms;android-${ANDROID_API}"
-- yes | sdkmanager --verbose "extras;android;m2repository"
+- yes | sdkmanager "build-tools;${ANDROID_BUILD_TOOLS}"
+- yes | sdkmanager "platform-tools"
+- yes | sdkmanager "tools"
+- yes | sdkmanager "platforms;android-${ANDROID_API}"
+- yes | sdkmanager "extras;android;m2repository"
 - yes | sdkmanager --list
 - chmod +x gradlew
 script:
