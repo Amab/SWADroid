@@ -8,3 +8,5 @@ local.properties
 app/lint.xml
 /SWADroid/google-services.json
 keystore.properties
+/SWADroid/release/
+keystore.jks
