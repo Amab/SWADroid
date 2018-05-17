@@ -44,7 +44,8 @@ android {
         minSdkVersion 14
         targetSdkVersion "P"
 
-        android.applicationVariants.all { variant ->
+        // TODO Remove commented code
+        /*android.applicationVariants.all { variant ->
             def appName
             //Check if an applicationName property is supplied; if not use the name of the parent project.
             if (project.hasProperty("applicationName")) {
@@ -56,17 +57,13 @@ android {
             variant.outputs.all { output ->
                 outputFileName = "${appName}-${output.baseName}-${variant.versionName}.apk"
             }
-        }
+        }*/
 
         testApplicationId "es.ugr.swad.swadroid.test"
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
     }
 
     buildTypes {
-        debug {
-            versionNameSuffix '-DEBUG'
-        }
-
         buildTypes.each {
             it.buildConfigField "String", "SWAD_APP_KEY", getBuildConfigField("SWAD_APP_KEY")
             it.buildConfigField "String", "ANALYTICS_API_KEY", getBuildConfigField("ANALYTICS_API_KEY")
@@ -74,7 +71,7 @@ android {
     }
 }
 
-//TODO Switch to release versions when Android P is released
+// TODO Switch to release versions when Android P is released
 dependencies {
     implementation 'com.android.support:support-v4:28.0.0-alpha1'
     implementation 'com.android.support:appcompat-v7:28.0.0-alpha1'
