@@ -43,7 +43,7 @@ deploy:
   body: Automated release from Travis CI.
   draft: true # TODO Remove draft
   on:
-    tags: true
+    #tags: true # TODO Enable tags
     repo: Amab/SWADroid
     #branch: master # TODO Replace feature branch with master branch
     branch: feature/apk-autodeploy
