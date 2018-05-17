@@ -28,7 +28,7 @@ script:
 after_failure: cat $TRAVIS_BUILD_DIR/SWADroid/build/reports/lint-results.xml
 before_deploy:
 - openssl aes-256-cbc -K $encrypted_855ad244b8b2_key -iv $encrypted_855ad244b8b2_iv -in keystore.jks.enc -out keystore.jks -d
-- cd $TRAVIS_BUILD_DIR/SWADroid/build/outputs/apk/release
+- cd ${TRAVIS_BUILD_DIR}/SWADroid/build/outputs/apk/release
 - mv SWADroid-release.apk SWADroid-release-unsigned.apk
 - jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ${TRAVIS_BUILD_DIR}/keystore.jks -storepass $storepass -keypass $keypass SWADroid-release-unsigned.apk amab
 - jarsigner -verify SWADroid-release-unsigned.apk
@@ -37,10 +37,10 @@ deploy:
   provider: releases
   api_key:
     secure: ePphqb/bHjJC1wwlVfw3DNOZtluX7B/3G8a8uWDkDIBpKHqCykpnXUNmgnWEO9iQ+GUmSdkAHn+z9tKv+MAdBRgSw2Xfc8sEsj6lsWUjJxHk7/eQOdzE0FC8y8WjrKHpwbFEJAi03YId/0ruIBltMzCWyylxMTAXonrL9yAvGn9EL5m1y1Fap58XNUmDwnP+4yoTfTuXOOJrmppFGUKlR22xhI6j/zvVW1LeyA7kpp42X/76rgnSS78Fj4s/O8kN0aa6c9PM38rWg1TqgBRRuV+2PMWmZn3EfjdzBl2d+D5pJ+gPS9e+gSWpKtTkatZ+CKwSBvQSpNE6K7B1FSCSR+Gy9FtnnH0BMyeP71kMFDgU+zagZjuQZnVgRAIDYdaquNq52EwcStXV5LrqpzNpkgAfrNOSVfLZWS1eEkGy6q8WqpvBO8OcnseaiaNl4VNNRZn1e7FziDZHkA/SCr3aLOVYp4FkVK7Z+yiH2EbLJ5SeKuPWv7pEbBmNR7lzsZGZ0Rt6FmVN3yuA1/4oIN0zgdSwNEoqYGRXqG0bNeghwjLPCkpMJ3W8h82fblX40hk/f3bB3aGN9BX/oBa06MEFTSxUtp4pwfhRQVe0/13+oR2G6yei+fuGJSsil6FmaOB0jNoMvtMLI0IhQ47AflRW4QfAHnO+lbfP8ZmWdLgBidk=
-  file: $TRAVIS_BUILD_DIR/SWADroid/build/outputs/apk/release/SWADroid-release.apk
+  file: ${TRAVIS_BUILD_DIR}/SWADroid/build/outputs/apk/release/SWADroid-release.apk
   overwrite: true
   skip_cleanup: true
-  name: SWADroid $TRAVIS_TAG
+  name: SWADroid ${TRAVIS_TAG}
   body: Automated release from Travis CI.
   draft: true #TODO Remove draft
   on:
