@@ -40,10 +40,8 @@ deploy:
   skip_cleanup: true
   name: SWADroid $TRAVIS_TAG
   body: Automated release from Travis CI.
-  draft: true # TODO Remove draft
   target_commitsh: $TRAVIS_COMMIT
   on:
-    #tags: true # TODO Enable deploy on tagged commits only
+    tags: true
     repo: Amab/SWADroid
-    #branch: master # TODO Replace feature branch with master branch
-    branch: feature/apk-autodeploy
+    branch: master
