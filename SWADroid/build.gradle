@@ -43,7 +43,7 @@ android {
         versionName gitVersionName
 
         minSdkVersion 14
-        targetSdkVersion "P"
+        targetSdkVersion 28
 
         testApplicationId "es.ugr.swad.swadroid.test"
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
