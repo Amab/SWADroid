@@ -44,7 +44,6 @@ import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.gui.ProgressScreen;
 import es.ugr.swad.swadroid.preferences.Preferences;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.utils.Utils;
 
@@ -196,8 +195,6 @@ public class CreateAccountActivity extends AppCompatActivity implements AdapterV
      * Creates a new account
      */
     private void createAccount() {
-        SWADroidTracker.sendScreenView(getApplicationContext(), "SWADroid CreateAccount");
-
         Intent intent;
 
         // Values for text field at the time of the create account attempt.
@@ -317,7 +314,7 @@ public class CreateAccountActivity extends AppCompatActivity implements AdapterV
                         }
 
                         errorDialog = DialogFactory.createErrorDialog(this, TAG,
-                                errorMsg, null, false, false, new DialogInterface.OnClickListener() {
+                                errorMsg, null, false, new DialogInterface.OnClickListener() {
 
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

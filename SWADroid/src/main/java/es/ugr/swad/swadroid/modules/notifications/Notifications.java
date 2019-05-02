@@ -50,7 +50,6 @@ import java.util.Vector;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.AlertNotificationFactory;
 import es.ugr.swad.swadroid.model.Model;
@@ -341,7 +340,6 @@ public class Notifications extends Module implements
 	@Override
 	protected void onResume() {
 		super.onResume();
-        SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
 		
 		IntentFilter intentFilter = new IntentFilter();
 		intentFilter.addAction(NotificationsSyncAdapterService.START_SYNC);
@@ -543,7 +541,7 @@ public class Notifications extends Module implements
 		try {
 			dbHelper.emptyTable(DataBaseHelper.DB_TABLE_NOTIFICATIONS);
 		} catch (Exception e) {
-			error(e.getMessage(), e, true);
+			error(e.getMessage(), e);
 		}
 	}
 
@@ -570,7 +568,7 @@ public class Notifications extends Module implements
 				notifCount = intent.getIntExtra("notifCount", 0);
 				errorMessage = intent.getStringExtra("errorMessage");
 				if ((errorMessage != null) && !errorMessage.equals("")) {
-					error(errorMessage, null, true);
+					error(errorMessage, null);
 				} else if (notifCount == 0) {
 					Toast.makeText(context, R.string.NoNotificationsMsg,
 							Toast.LENGTH_LONG).show();

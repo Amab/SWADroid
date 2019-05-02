@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.Vector;
 
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.Model;
@@ -90,8 +89,6 @@ public class Courses extends Module {
     @Override
     protected void onStart() {
         super.onStart();
-
-        SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
         
         runConnection();
     }
@@ -210,12 +207,7 @@ public class Courses extends Module {
         try {
             dbHelper.emptyTable(DataBaseHelper.DB_TABLE_COURSES);
         } catch (Exception e) {
-            e.printStackTrace();
-
-            //Send exception details to Google Analytics
-            if (!isDebuggable) {
-                SWADroidTracker.sendException(context, e, false);
-            }
+            Log.e(TAG, e.getMessage(), e);
         }
     }
 

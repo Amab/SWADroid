@@ -20,6 +20,7 @@
 package es.ugr.swad.swadroid.utils;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.security.MessageDigest;
 import java.security.SecureRandom;
@@ -30,7 +31,6 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 
 /**
  * Cryptographic class for encryption purposes.
@@ -49,8 +49,7 @@ public class OldCrypto {
             byte[] result = encrypt(rawKey, cleartext.getBytes("UTF-8"));
             return Base64.encodeBytes(result);
         } catch (Exception e) {
-            //Send exception details to Google Analytics
-            SWADroidTracker.sendException(ctx, e, false);
+            Log.e(TAG, e.getMessage());
         }
         return "error";
     }
@@ -62,8 +61,7 @@ public class OldCrypto {
             byte[] result = decrypt(rawKey, enc);
             return new String(result, "UTF-8");
         } catch (Exception e) {
-            //Send exception details to Google Analytics
-            SWADroidTracker.sendException(ctx, e, false);
+            Log.e(TAG, e.getMessage());
         }
         return "error";
     }
@@ -107,8 +105,7 @@ public class OldCrypto {
             }
             return hexString.toString();
         } catch (Exception e) {
-            //Send exception details to Google Analytics
-            SWADroidTracker.sendException(ctx, e, false);
+            Log.e(TAG, e.getMessage());
         }
         return "error";
     }

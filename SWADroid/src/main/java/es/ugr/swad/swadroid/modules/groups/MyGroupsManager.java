@@ -35,7 +35,6 @@ import java.util.List;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
@@ -92,8 +91,6 @@ public class MyGroupsManager extends MenuExpandableListActivity {
         super.onStart();
 
         showProgressLoading();
-
-        SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
 
         List<Model> groupTypes = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_GROUP_TYPES, "courseCode = " + courseCode, "groupTypeName");
         List<Group> groups = dbHelper.getGroups(courseCode);
