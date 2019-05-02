@@ -66,13 +66,11 @@ android {
 
         testApplicationId "es.ugr.swad.swadroid.test"
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
+
+        buildConfigField "String", "SWAD_APP_KEY", getBuildConfigField("SWAD_APP_KEY")
     }
 
     buildTypes {
-        buildTypes.each {
-            it.buildConfigField "String", "SWAD_APP_KEY", getBuildConfigField("SWAD_APP_KEY")
-        }
-
         prod {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
