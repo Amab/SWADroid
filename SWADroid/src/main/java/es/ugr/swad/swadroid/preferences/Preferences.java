@@ -32,7 +32,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.model.LoginInfo;
 import es.ugr.swad.swadroid.modules.courses.Courses;
@@ -186,7 +185,6 @@ public class Preferences {
 	            dbHelper = new DataBaseHelper(ctx);
 	        } catch (Exception e) {
 	            Log.e(TAG, e.getMessage());
-                SWADroidTracker.sendException(ctx, e, false);
 	        }
     	}
 	}

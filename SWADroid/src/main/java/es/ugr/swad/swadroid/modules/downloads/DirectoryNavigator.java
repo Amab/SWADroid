@@ -19,13 +19,16 @@
 package es.ugr.swad.swadroid.modules.downloads;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
+import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,8 +36,9 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
-import es.ugr.swad.swadroid.analytics.SWADroidTracker;
+import es.ugr.swad.swadroid.Constants;
 
 
 /**
@@ -59,6 +63,11 @@ public class DirectoryNavigator {
      * Application context
      */
     private Context mContext;
+
+    /**
+     * Downloads tag name for Logcat
+     */
+    private static final String TAG = Constants.APP_TAG + " DirectoryNavigator";
 
     /**
      * Constructor.
@@ -278,9 +287,8 @@ public class DirectoryNavigator {
                     }
                 }
             }
-        } catch (Exception e) {
-            //Send exception details to Google Analytics
-            SWADroidTracker.sendException(mContext, e, false);
+        } catch (ParserConfigurationException | IOException | SAXException ex) {
+            Log.e(TAG, ex.getMessage(), ex);
         }
 
         //If we don't find the entire path, we throw an exception.

@@ -24,7 +24,6 @@ import android.util.Log;
 import org.ksoap2.serialization.SoapPrimitive;
 
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.utils.Utils;
@@ -52,13 +51,6 @@ public class NotificationsMarkAllAsRead extends Module {
         setMETHOD_NAME("markNotificationsAsRead");
         getSupportActionBar().hide();
         runConnection();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
     }
     
     /* (non-Javadoc)

@@ -21,6 +21,7 @@
 package es.ugr.swad.swadroid.utils;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -34,7 +35,6 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
 
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 
 /**
  * Cryptographic class for encryption purposes.
@@ -80,8 +80,7 @@ public class Crypto {
             ecipher.init(Cipher.ENCRYPT_MODE, key, paramSpec);
             dcipher.init(Cipher.DECRYPT_MODE, key, paramSpec);
         } catch (Exception e) {
-            //Send exception details to Google Analytics
-            SWADroidTracker.sendException(mContext, e, false);
+            Log.e(TAG, e.getMessage());
         }
     }
 
@@ -99,8 +98,7 @@ public class Crypto {
         } catch (Exception e) {
             rVal = "Error encrypting: " + e.getMessage();
 
-            //Send exception details to Google Analytics
-            SWADroidTracker.sendException(mContext, e, false);
+            Log.e(TAG, e.getMessage());
         }
         return rVal;
     }
@@ -119,8 +117,7 @@ public class Crypto {
         } catch (Exception e) {
             rVal = "Error encrypting: " + e.getMessage();
 
-            //Send exception details to Google Analytics
-            SWADroidTracker.sendException(mContext, e, false);
+            Log.e(TAG, e.getMessage());
         }
         return rVal;
     }

@@ -29,6 +29,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import org.ksoap2.SoapFault;
 import org.ksoap2.transport.HttpResponseException;
 import org.kxml2.kdom.Element;
@@ -63,6 +65,10 @@ public abstract class Module extends MenuActivity {
      * Class Module's tag name for Logcat
      */
     private static final String TAG = Constants.APP_TAG + " Module";
+    /**
+     * Obtain Firebase Analytics instance
+     */
+    protected FirebaseAnalytics mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
     /**
      * Async Task for background jobs
      */
@@ -332,7 +338,6 @@ public abstract class Module extends MenuActivity {
         protected void onPostExecute(Void unused) {
             String errorMsg;
             int httpStatusCode;
-            boolean sendException = true;
 
             if (e != null) {
                 /**
@@ -345,11 +350,9 @@ public abstract class Module extends MenuActivity {
                     switch (es.faultstring) {
                         case "Bad log in":
                             errorMsg = getString(R.string.errorBadLoginMsg);
-                            sendException = false;
                             break;
                         case "Bad web service key":
                             errorMsg = getString(R.string.errorBadLoginMsg);
-                            sendException = false;
 
                             // Force logout and reset password (this will show again
                             // the login screen)
@@ -365,7 +368,6 @@ public abstract class Module extends MenuActivity {
                     }
                 } else if ((e.getClass() == TimeoutException.class) || (e.getClass() == SocketTimeoutException.class)) {
                     errorMsg = getString(R.string.errorTimeoutMsg);
-                    sendException = false;
                 } else if ((e.getClass() == CertificateException.class) || (e .getClass() == SSLException.class)) {
                     errorMsg = getString(R.string.errorServerCertificateMsg);
                 } else if (e.getClass() == HttpResponseException.class) {
@@ -378,7 +380,6 @@ public abstract class Module extends MenuActivity {
                                   break;
 
                         case 503: errorMsg = getString(R.string.errorServiceUnavailableMsg);
-                                  sendException = false;
                                   break;
 
                         default:  errorMsg = e.getMessage();
@@ -396,7 +397,7 @@ public abstract class Module extends MenuActivity {
                 }
 
                 // Request finalized with errors
-                error(errorMsg, e, sendException);
+                error(errorMsg, e);
                 setResult(RESULT_CANCELED);
 
                 // Launch database rollback

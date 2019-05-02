@@ -24,7 +24,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -33,11 +33,10 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
-import android.provider.Settings;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
+
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -46,13 +45,11 @@ import java.util.List;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.modules.login.LoginActivity;
 import es.ugr.swad.swadroid.sync.SyncUtils;
 import es.ugr.swad.swadroid.utils.Crypto;
-import es.ugr.swad.swadroid.utils.NotificationUtils;
 import es.ugr.swad.swadroid.utils.Utils;
 
 /**
@@ -65,6 +62,10 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
      * PreferencesActivity tag name for Logcat
      */
     private static final String TAG = Constants.APP_TAG + " PreferencesActivity";
+    /**
+     * Obtain Firebase Analytics instance
+     */
+    protected FirebaseAnalytics mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
     /**
      * Application context
      */
@@ -130,11 +131,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
      * Synchronization preferences changed flag
      */
     private boolean syncPrefsChanged = false;
-
-    /**
-     * SWAD server to use
-     */
-    //private String mServer;
     
     /**
      * User password preference changed flag
@@ -146,14 +142,14 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
      *
      * @param message Error message to show.
      */
-    private void error(String message, Exception ex, boolean sendException) {
+    private void error(String message, Exception ex) {
     	DialogInterface.OnClickListener onClickListener = new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 finish();
             }
         };
         
-    	AlertDialog errorDialog = DialogFactory.createErrorDialog(this, TAG, message, ex, sendException,
+    	AlertDialog errorDialog = DialogFactory.createErrorDialog(this, TAG, message, ex,
     			isDebuggable, onClickListener); 
     	
     	errorDialog.show();
@@ -178,7 +174,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
                     getPackageName(), 0);
     		isDebuggable = (ApplicationInfo.FLAG_DEBUGGABLE != 0);
         } catch (Exception ex) {
-        	error(ex.getMessage(), ex, true);
+        	error(ex.getMessage(), ex);
         }
 
         logOutPref = findPreference(Preferences.LOGOUTPREF);
@@ -304,6 +300,12 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
                 sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.app_name));
                 sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, getString(R.string.shareBodyMsg));
                 startActivity(Intent.createChooser(sharingIntent, getString(R.string.shareTitle_menu)));
+
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "1");
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "text");
+                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SHARE, bundle);
+
                 return true;
             }
         });
@@ -319,11 +321,11 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
                 return true;
             }
         });
-        
+
         try {
             currentVersionPref.setSummary(getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
-        } catch (NameNotFoundException e) {
-            SWADroidTracker.sendException(getApplicationContext(), e, false);
+        } catch (PackageManager.NameNotFoundException ex) {
+            error(ex.getMessage(), ex);
         }
     }
 
@@ -369,7 +371,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
                 }
                 
 			} catch (NoSuchAlgorithmException ex) {
-				error(ex.getMessage(), ex, true);
+				error(ex.getMessage(), ex);
 			}
         } else if(Preferences.SYNCENABLEPREF.equals(key)) {
         	boolean syncEnabled = (Boolean) newValue;
