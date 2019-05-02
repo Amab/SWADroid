@@ -28,8 +28,4 @@ public class Config {
 	 * SWAD application key
 	 */
 	public static final String SWAD_APP_KEY = BuildConfig.SWAD_APP_KEY;
-    /**
-     * Google Analytics application key
-     */
-    public static final String ANALYTICS_API_KEY = BuildConfig.ANALYTICS_API_KEY;
 }

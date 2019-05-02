@@ -56,7 +56,6 @@ import java.util.List;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.gui.FontManager;
 import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.gui.ProgressScreen;
@@ -190,7 +189,6 @@ public class DownloadsManager extends MenuActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
 
         // check Android 6 permission
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)

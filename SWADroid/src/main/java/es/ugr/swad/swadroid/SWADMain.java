@@ -49,7 +49,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
@@ -159,8 +158,6 @@ public class SWADMain extends MenuExpandableListActivity {
     public void onCreate(Bundle icicle) {
         int lastVersion, currentVersion;
 
-        SWADroidTracker.initTracker(getApplicationContext());
-
         //Initialize screen
         super.onCreate(icicle);
 
@@ -188,7 +185,7 @@ public class SWADMain extends MenuExpandableListActivity {
 
             currentRole = -1;
         } catch (Exception ex) {
-            error(ex.getMessage(), ex, true);
+            error(ex.getMessage(), ex);
         }
     }
 
@@ -227,8 +224,6 @@ public class SWADMain extends MenuExpandableListActivity {
             createSpinnerAdapter();
             createMenu();
         }
-
-        SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
     }
 
     private void showBirthdayMessage() {

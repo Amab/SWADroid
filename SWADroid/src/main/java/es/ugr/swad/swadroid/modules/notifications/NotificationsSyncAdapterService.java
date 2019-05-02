@@ -52,7 +52,6 @@ import javax.net.ssl.SSLException;
 import es.ugr.swad.swadroid.Config;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.AlertNotificationFactory;
 import es.ugr.swad.swadroid.model.Model;
@@ -106,7 +105,6 @@ public class NotificationsSyncAdapterService extends Service {
 
         @Override
         public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
-            boolean sendException = true;
             int httpStatusCode;
 
         	try {
@@ -121,11 +119,9 @@ public class NotificationsSyncAdapterService extends Service {
                     switch (es.faultstring) {
                         case "Bad log in":
                             errorMessage = mContext.getString(R.string.errorBadLoginMsg);
-                            sendException = false;
                             break;
                         case "Bad web service key":
                             errorMessage = mContext.getString(R.string.errorBadLoginMsg);
-                            sendException = false;
 
                             // Force logout and reset password (this will show again
                             // the login screen)
@@ -141,7 +137,6 @@ public class NotificationsSyncAdapterService extends Service {
                     }
                 } else if ((e.getClass() == TimeoutException.class) || (e.getClass() == SocketTimeoutException.class)) {
                     errorMessage = mContext.getString(R.string.errorTimeoutMsg);
-                    sendException = false;
                 } else if ((e.getClass() == CertificateException.class) || (e .getClass() == SSLException.class)) {
                     errorMessage = mContext.getString(R.string.errorServerCertificateMsg);
                 } else if (e.getClass() == HttpResponseException.class) {
@@ -154,7 +149,6 @@ public class NotificationsSyncAdapterService extends Service {
                             break;
 
                         case 503: errorMessage = mContext.getString(R.string.errorServiceUnavailableMsg);
-                            sendException = false;
                             break;
 
                         default:  errorMessage = e.getMessage();
@@ -176,12 +170,7 @@ public class NotificationsSyncAdapterService extends Service {
                 	dbHelper.endTransaction(false);
                 }
 
-                //Send exception details to Google Analytics
-                if(sendException) {
-                    SWADroidTracker.sendException(mContext, e, false);
-                } else {
-                    Log.e(TAG, errorMessage, e);
-                }
+                Log.e(TAG, errorMessage, e);
 
                 //Notify synchronization stop
                 Intent stopIntent = new Intent();
@@ -215,9 +204,6 @@ public class NotificationsSyncAdapterService extends Service {
             webserviceClient = null;
         } catch (Exception e) {
             Log.e(TAG, "Error initializing database and preferences", e);
-
-            //Send exception details to Google Analytics
-            SWADroidTracker.sendException(mCtx, e, false);
         }
 
 		super.onCreate();

@@ -22,6 +22,8 @@ package es.ugr.swad.swadroid.modules.login;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 
@@ -173,6 +175,10 @@ public class Login extends Module {
 
         //Request finalized without errors
         setResult(RESULT_OK);
+
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.METHOD, "requestService");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, bundle);
     }
 
     /* (non-Javadoc)

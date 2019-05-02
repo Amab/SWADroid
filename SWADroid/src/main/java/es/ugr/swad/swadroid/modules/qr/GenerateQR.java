@@ -18,7 +18,6 @@ import java.util.Map;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.modules.login.Login;
 
@@ -64,8 +63,6 @@ public class GenerateQR extends MenuActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
-        SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
 
         if (!Login.isLogged() || (Login.getLoggedUser() == null)) {
             Intent activity = new Intent(getApplicationContext(), Login.class);
@@ -116,7 +113,7 @@ public class GenerateQR extends MenuActivity {
             qrCode = barcodeEncoder.encodeBitmap(qrContents, BarcodeFormat.QR_CODE, CODE_WIDTH, CODE_HEIGHT, hintMap);
             qr_image.setImageBitmap(qrCode);
         } catch (WriterException e) {
-            error(e.getMessage(), e, true);
+            error(e.getMessage(), e);
         }
     }
 }

@@ -138,14 +138,14 @@ public class MenuActivity extends AppCompatActivity {
      *
      * @param message Error message to show.
      */
-    protected void error(String message, Exception ex, boolean sendException) {
+    protected void error(String message, Exception ex) {
     	DialogInterface.OnClickListener onClickListener = new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 finish();
             }
         };
         
-    	AlertDialog errorDialog = DialogFactory.createErrorDialog(this, TAG, message, ex, sendException,
+    	AlertDialog errorDialog = DialogFactory.createErrorDialog(this, TAG, message, ex,
     			isDebuggable, onClickListener); 
     	
     	errorDialog.show();
@@ -208,7 +208,7 @@ public class MenuActivity extends AppCompatActivity {
                     getPackageName(), 0);
 			isDebuggable = (ApplicationInfo.FLAG_DEBUGGABLE != 0);	
         } catch (Exception ex) {
-            error(ex.getMessage(), ex, true);
+            error(ex.getMessage(), ex);
         }
     }
     
@@ -232,7 +232,7 @@ public class MenuActivity extends AppCompatActivity {
         try {
             dbHelper = new DataBaseHelper(this);
         } catch (Exception ex) {
-            error(ex.getMessage(), ex, true);
+            error(ex.getMessage(), ex);
         }
     }
 }

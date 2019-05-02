@@ -29,7 +29,6 @@ import java.util.Vector;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.modules.Module;
@@ -73,14 +72,12 @@ public class GetFile extends Module {
     @Override
     protected void onStart() {
         super.onStart();
-
-        SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
         
         try {
             runConnection();
         } catch (Exception e) {
             String errorMsg = getString(R.string.errorServerResponseMsg);
-            error(errorMsg, e, true);
+            error(errorMsg, e);
         }
     }
 
