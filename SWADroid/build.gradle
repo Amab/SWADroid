@@ -25,27 +25,27 @@ def static getBuildConfigField(String property){
     return value
 }
 
-def build_param = "${build}";
+def build_param = "${build}"
 
 if (build_param != "prod") {
     //exclude development build
     android.variantFilter { variant ->
-        if (variant.buildType.name.equals('prod')) {
-            variant.setIgnore(true);
+        if (variant.buildType.name == 'prod') {
+            variant.setIgnore(true)
         }
     }
 } else {
     //exclude all except development build
     android.variantFilter { variant ->
-        if (!variant.buildType.name.equals('prod')) {
-            variant.setIgnore(true);
+        if (variant.buildType.name != 'prod') {
+            variant.setIgnore(true)
         }
     }
 }
 
 android {
-    compileSdkVersion "android-28"
-    buildToolsVersion '29.0.0-rc2'
+    compileSdkVersion "android-29"
+    buildToolsVersion '29.0.0'
 
     dexOptions {
         maxProcessCount=2
@@ -62,7 +62,7 @@ android {
         versionName gitVersionName
 
         minSdkVersion 14
-        targetSdkVersion 28
+        targetSdkVersion 29
 
         testApplicationId "es.ugr.swad.swadroid.test"
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
@@ -79,13 +79,13 @@ android {
 }
 
 dependencies {
-    implementation 'com.android.support:support-v4:28.0.0'
-    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'com.google.code.ksoap2-android:ksoap2-android:3.6.4'
     implementation 'commons-io:commons-io:2.6'
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0@aar'
     implementation 'com.google.zxing:core:3.3.3'
     implementation 'com.google.code.gson:gson:2.8.5'
-    implementation 'com.google.firebase:firebase-core:16.0.8'
+    implementation 'com.google.firebase:firebase-core:16.0.9'
 }
