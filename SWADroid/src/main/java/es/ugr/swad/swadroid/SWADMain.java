@@ -178,6 +178,7 @@ public class SWADMain extends MenuExpandableListActivity {
 
                 //If this is an upgrade, show upgrade dialog
             } else if (lastVersion < currentVersion) {
+                //showUpgradeDialog(this);
                 upgradeApp(lastVersion, currentVersion);
             }
 
@@ -239,6 +240,8 @@ public class SWADMain extends MenuExpandableListActivity {
      * @param currentVersion Current version of application
      */
     private void firstRun(int currentVersion) {
+        Log.i(TAG, "Running application for first time. Setting current version to " + currentVersion);
+
         Intent activity = new Intent(this, AccountAuthenticator.class);
 
         //Configure automatic synchronization
@@ -249,6 +252,8 @@ public class SWADMain extends MenuExpandableListActivity {
         firstRun = true;
 
         Preferences.initializeSelectedCourse();
+
+        Log.i(TAG, "First initialization completed successfully");
     }
 
     /**
@@ -257,7 +262,8 @@ public class SWADMain extends MenuExpandableListActivity {
      * @param currentVersion Version to which the application is updated
      */
     private void upgradeApp(int lastVersion, int currentVersion) throws NoSuchAlgorithmException {
-        showUpgradeDialog(this);
+        Log.i(TAG, "Upgrading application from version " + lastVersion + " to version " + currentVersion);
+
         dbHelper.upgradeDB();
 
         if(lastVersion < 52) {
@@ -280,6 +286,8 @@ public class SWADMain extends MenuExpandableListActivity {
         }
 
         Preferences.setLastVersion(currentVersion);
+
+        Log.i(TAG, "Application upgraded from version " + lastVersion + " to version " + currentVersion);
     }
 
     @Override
