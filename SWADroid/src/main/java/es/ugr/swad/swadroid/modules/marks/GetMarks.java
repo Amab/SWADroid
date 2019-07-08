@@ -26,7 +26,6 @@ import android.util.Log;
 import org.ksoap2.serialization.SoapObject;
 
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.modules.login.Login;
@@ -72,8 +71,6 @@ public class GetMarks extends Module {
     @Override
     protected void onStart() {
         super.onStart();
-
-        SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
 
         fileCode = this.getIntent().getLongExtra("fileCode", 0);
 

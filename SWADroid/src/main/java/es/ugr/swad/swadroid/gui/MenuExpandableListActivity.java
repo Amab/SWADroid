@@ -26,7 +26,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -145,14 +145,14 @@ public class MenuExpandableListActivity extends AppCompatActivity {
      *
      * @param message Error message to show.
      */
-    protected void error(String message, Exception ex, boolean sendException) {
+    protected void error(String message, Exception ex) {
     	DialogInterface.OnClickListener onClickListener = new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 finish();
             }
         };
         
-    	AlertDialog errorDialog = DialogFactory.createErrorDialog(this, TAG, message, ex, sendException,
+    	AlertDialog errorDialog = DialogFactory.createErrorDialog(this, TAG, message, ex,
     			isDebuggable, onClickListener);    	
     	
     	errorDialog.show();
@@ -224,7 +224,7 @@ public class MenuExpandableListActivity extends AppCompatActivity {
 			isDebuggable = (ApplicationInfo.FLAG_DEBUGGABLE != 0);			
 			isSWADMain = this instanceof SWADMain;
         } catch (Exception ex) {
-            error(ex.getMessage(), ex, true);
+            error(ex.getMessage(), ex);
         }
     }
 
@@ -248,7 +248,7 @@ public class MenuExpandableListActivity extends AppCompatActivity {
         try {
             dbHelper = new DataBaseHelper(this);
         } catch (Exception ex) {
-            error(ex.getMessage(), ex, true);
+            error(ex.getMessage(), ex);
         }
     }
 

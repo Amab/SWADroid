@@ -33,7 +33,6 @@ import android.widget.Toast;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.courses.Courses;
@@ -84,7 +83,7 @@ public class Notices extends Module {
             	}
             } catch (Exception e) {
                 String errorMsg = getString(R.string.errorServerResponseMsg);
-                error(errorMsg, e, true);
+                error(errorMsg, e);
             }
         }
     };
@@ -189,7 +188,7 @@ public class Notices extends Module {
     @Override
     protected void onStart() {
         super.onStart();
-        SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
+
         selectedCourseCode = Courses.getSelectedCourseCode();
         launchNoticeDialog();
     }

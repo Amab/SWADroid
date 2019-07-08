@@ -30,7 +30,6 @@ import java.util.List;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.gui.ImageListItem;
 import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.gui.ProgressScreen;
@@ -70,8 +69,6 @@ public class Tests extends MenuActivity implements OnItemClickListener {
         View mTestsMenuLayoutView = findViewById(R.id.testsMenuLayout);
         mProgressScreen = new ProgressScreen(mProgressScreenView, mTestsMenuLayoutView,
                 getString(R.string.syncronizingMsg), this);
-
-        SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
 
         for (int i = 0; i < titles.length; i++) {
             ImageListItem item = new ImageListItem(images[i], titles[i]);

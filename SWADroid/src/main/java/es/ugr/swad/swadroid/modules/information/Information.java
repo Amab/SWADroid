@@ -14,7 +14,6 @@ import org.ksoap2.serialization.SoapObject;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.gui.ProgressScreen;
 import es.ugr.swad.swadroid.gui.WebViewFactory;
 import es.ugr.swad.swadroid.model.User;
@@ -149,12 +148,11 @@ public class Information extends Module {
     protected void onStart() {
         super.onStart();
 
-        SWADroidTracker.sendScreenView(getApplicationContext(), TAG + " " + infoTypeToAdd);
         try {
             runConnection();
         } catch (Exception e) {
             String errorMsg = getString(R.string.errorServerResponseMsg);
-            error(errorMsg, e, true);
+            error(errorMsg, e);
         }
     }
 

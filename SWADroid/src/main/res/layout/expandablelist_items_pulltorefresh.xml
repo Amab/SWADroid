@@ -9,7 +9,7 @@
         android:id="@+id/courseNameLayout"
         layout="@layout/course_or_group_name" />
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_container_expandablelist"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
@@ -30,6 +30,6 @@
                 android:layout_height="match_parent"
                 android:cacheColorHint="@color/background" />
         </LinearLayout>
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </LinearLayout>

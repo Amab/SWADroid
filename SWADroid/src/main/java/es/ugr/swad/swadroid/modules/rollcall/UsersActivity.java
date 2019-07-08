@@ -31,10 +31,10 @@ import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -49,7 +49,6 @@ import java.util.List;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
@@ -158,7 +157,6 @@ public class UsersActivity extends MenuExpandableListActivity implements
     @Override
     protected void onStart() {
         super.onStart();
-        SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
 
         //Refresh ListView of users
         refreshAdapter();
@@ -298,7 +296,7 @@ public class UsersActivity extends MenuExpandableListActivity implements
                     }
                 } else {
                     //If the device has no rear camera available show error message
-                    error(getString(R.string.noCameraFound), null, false);
+                    error(getString(R.string.noCameraFound), null);
                 }
 
                 return true;

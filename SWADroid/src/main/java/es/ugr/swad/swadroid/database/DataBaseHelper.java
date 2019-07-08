@@ -38,7 +38,6 @@ import java.util.Collection;
 import java.util.List;
 
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.Event;
 import es.ugr.swad.swadroid.model.FrequentUser;
@@ -417,8 +416,7 @@ public class DataBaseHelper {
                             null,                               //userBirthday
                             ent.getInt("userRole"));
                 } catch (ParseException e) {
-                    //Send exception details to Google Analytics
-                    SWADroidTracker.sendException(mCtx, e, false);
+                    Log.e(TAG, e.getMessage(), e);
                 }
                 break;
             case DataBaseHelper.DB_TABLE_USERS_ATTENDANCES:
@@ -618,8 +616,7 @@ public class DataBaseHelper {
                         null,
                         ent.getInt("userRole"));
             } catch (ParseException e) {
-                //Send exception details to Google Analytics
-                SWADroidTracker.sendException(mCtx, e, false);
+                Log.e(TAG, e.getMessage(), e);
             }
         }
 
@@ -2315,7 +2312,6 @@ public class DataBaseHelper {
      * Delete all tables from database
      */
     public void clearDB() {
-        SWADroidTracker.sendScreenView(mCtx, TAG + " clearDB");
         db.deleteTables();
         Log.i(TAG, "All tables deleted");
     }
@@ -2324,7 +2320,7 @@ public class DataBaseHelper {
      * Clean data of all tables from database. Removes users photos from external storage
      */
     public void cleanTables() {
-        SWADroidTracker.sendScreenView(mCtx, TAG + " cleanTables");
+        Log.i(TAG, "Emptying all tables");
 
         db.emptyTables();
         compactDB();
@@ -2340,8 +2336,7 @@ public class DataBaseHelper {
 	    	try {
 				wait();
 			} catch (InterruptedException e) {
-                //Send exception details to Google Analytics
-                SWADroidTracker.sendException(mCtx, e, false);
+                Log.e(TAG, e.getMessage(), e);
 			}
     	}
     	
@@ -2365,8 +2360,8 @@ public class DataBaseHelper {
 	        
 	        notifyAll();
     	} else {
-            //Send exception details to Google Analytics
-            SWADroidTracker.sendException(mCtx, new DataBaseHelperException("No active transactions"), false);
+    	    Exception e = new DataBaseHelperException("No active transactions");
+            Log.e(TAG, e.getMessage(), e);
     	}
     }
     
@@ -2378,6 +2373,7 @@ public class DataBaseHelper {
      * Compact the database
      */
     private void compactDB() {
+        Log.i(TAG, "Compacting database");
         db.getDB().execSQL("VACUUM;");
         Log.i(TAG, "Database compacted");
     }
@@ -2396,6 +2392,9 @@ public class DataBaseHelper {
      */
     public void upgradeDB() {
         int dbVersion = db.getDB().getVersion();
+
+        Log.i(TAG, "Upgrading database");
+
 		/* 
 		 * Modify database keeping data:
 		 * 1. Create temporary table __DB_TABLE_GROUPS (with the new model)
