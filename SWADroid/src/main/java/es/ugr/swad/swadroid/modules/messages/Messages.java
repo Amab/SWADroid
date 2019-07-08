@@ -22,7 +22,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -46,7 +46,6 @@ import java.util.Vector;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.ImageFactory;
 import es.ugr.swad.swadroid.gui.ProgressScreen;
@@ -230,12 +229,6 @@ public class Messages extends Module {
 
         setMETHOD_NAME("sendMessage");
     }
-
-    @Override
-	protected void onStart() {
-		super.onStart();
-        SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
-	}
 
 	/**
      * Reads user input
@@ -463,7 +456,7 @@ public class Messages extends Module {
 	            	}
 	            } catch (Exception e) {
 	                String errorMsg = getString(R.string.errorServerResponseMsg);
-	                error(errorMsg, e, true);
+	                error(errorMsg, e);
 	            }
                 return true;
             case android.R.id.home:

@@ -342,7 +342,7 @@
         <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
 
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="es.ugr.swad.swadroid.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">

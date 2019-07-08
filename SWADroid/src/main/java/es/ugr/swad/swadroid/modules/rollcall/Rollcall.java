@@ -27,7 +27,7 @@ import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.widget.SwipeRefreshLayout;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
@@ -39,7 +39,6 @@ import java.lang.ref.WeakReference;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.gui.ProgressScreen;
@@ -180,7 +179,6 @@ public class Rollcall extends MenuExpandableListActivity implements
   @Override
   protected void onStart() {
     super.onStart();
-    SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
 
     //Refresh ListView of events
     refreshAdapter();

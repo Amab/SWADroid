@@ -7,9 +7,9 @@ import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.SearchView;
+import androidx.core.view.MenuItemCompat;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SearchView;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
 import android.util.Log;
@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Vector;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.ProgressScreen;
 import es.ugr.swad.swadroid.model.FrequentUser;
@@ -197,12 +196,6 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         listenerFrequentUsers();
 
         setMETHOD_NAME("findUsers");
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
     }
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)

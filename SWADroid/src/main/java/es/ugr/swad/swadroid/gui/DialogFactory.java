@@ -19,7 +19,6 @@ import org.apache.commons.io.IOUtils;
 import java.io.InputStream;
 
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 
 /**
  * Class for create dialogs.
@@ -238,8 +237,6 @@ public class DialogFactory {
      * @param tag Module tag
      * @param message Error message string
      * @param ex Exception thrown
-     * @param sendException true if the error report has to be sent
-     * 						false otherwise
      * @param isDebuggable	true if the application is debuggable (develop mode). Activates Logcat messages
      * 						false otherwise
      * @param onClickListener ClickListener associated to the neutral button
@@ -247,7 +244,7 @@ public class DialogFactory {
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	public static AlertDialog createErrorDialog(Context context, String tag, String message, Exception ex,
-    		boolean sendException, boolean isDebuggable, DialogInterface.OnClickListener onClickListener) {
+    		boolean isDebuggable, DialogInterface.OnClickListener onClickListener) {
     	
     	AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context)
                 .setTitle(R.string.title_error_dialog)
@@ -258,11 +255,6 @@ public class DialogFactory {
 
         if (ex != null) {
             Log.e(tag, ex.getMessage(), ex);
-
-            // Send exception details to Google Analytics
-            if (!isDebuggable && sendException) {
-                SWADroidTracker.sendException(context, ex, false);
-            }
         }
         
         return alertDialogBuilder.create();

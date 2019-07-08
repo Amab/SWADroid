@@ -88,7 +88,7 @@ public class SendMyGroups extends Module {
             runConnection();
         } catch (Exception e) {
             String errorMsg = getString(R.string.errorServerResponseMsg);
-            error(errorMsg, e, true);
+            error(errorMsg, e);
         }
     }
 

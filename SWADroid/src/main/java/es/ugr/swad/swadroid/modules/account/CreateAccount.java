@@ -21,6 +21,8 @@ package es.ugr.swad.swadroid.modules.account;
 
 import android.os.Bundle;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 
@@ -122,6 +124,10 @@ public class CreateAccount extends Module {
 
         //Request finalized without errors
         setResult(RESULT_OK);
+
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.METHOD, "requestService");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, bundle);
     }
 
     /* (non-Javadoc)

@@ -5,9 +5,6 @@ Android client for e-learning platform [![SWADroid](https://openswad.org/logo/sw
 
 [![SWADroid](http://developer.android.com/images/brand/en_generic_rgb_wo_45.png)](https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid)
 
--	Code: `git clone https://github.com/Amab/SWADroid.git`
--	Issue tracker: https://github.com/Amab/SWADroid/issues
-
 [![SWADroid](http://upload.wikimedia.org/wikipedia/commons/c/c8/Farm-Fresh_twitter_1.png)](http://twitter.com/SWADroid)[![SWADroid](http://upload.wikimedia.org/wikipedia/commons/4/4d/Farm-Fresh_facebook.png)](https://www.facebook.com/SWADroid)[![SWADroid](http://upload.wikimedia.org/wikipedia/commons/b/ba/Google_plus_32.png)](https://plus.google.com/115615684349730524355/posts)[![SWADroid](https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Telegram_Messenger.png/35px-Telegram_Messenger.png?uselang=es)](https://telegram.me/swadroid)[![SWADroid](https://s.w.org/about/images/logos/wordpress-logo-32-blue.png)](http://swadroid.wordpress.com)
 
 CI Status
@@ -57,4 +54,4 @@ Contributing
 
 SWADroid is an open source project. I encourage contributions.
 
-The Github team has also been kind enough to write up some great [documentation](https://help.github.com/articles/about-pull-requests/) on working with pull requests. Contributions should be performed on [topic branches](http://progit.org/book/ch3-4.html) in your personal forks - just issue your pull requests from there.
+The Github team has also been kind enough to write up some great [documentation](https://help.github.com/articles/about-pull-requests/) on working with pull requests.

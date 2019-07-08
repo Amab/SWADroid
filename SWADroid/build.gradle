@@ -1,16 +1,51 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
+
+import org.ajoberstar.grgit.Grgit
 
 ext {
-    git = org.ajoberstar.grgit.Grgit.open()
+    git = Grgit.open()
     gitVersionCode = git.tag.list().size()
     gitVersionName = "${git.describe()}"
+}
 
-    travisBuild = System.getenv("TRAVIS") == "true"
+//return a BuildConfigField from a properties file.
+def static getBuildConfigField(String property){
+    def travisBuild = System.getenv("TRAVIS") == "true"
+    def value
+
+    if(travisBuild) {
+        value = "\"" + System.getenv(property) + "\""
+    } else {
+        Properties properties = new Properties()
+        properties.load(new FileInputStream("keystore.properties"))
+        value = "\"" + properties.getProperty(property) + "\""
+    }
+
+    return value
+}
+
+def build_param = "${build}"
+
+if (build_param != "prod") {
+    //exclude development build
+    android.variantFilter { variant ->
+        if (variant.buildType.name == 'prod') {
+            variant.setIgnore(true)
+        }
+    }
+} else {
+    //exclude all except development build
+    android.variantFilter { variant ->
+        if (variant.buildType.name != 'prod') {
+            variant.setIgnore(true)
+        }
+    }
 }
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion "27.0.3"
+    compileSdkVersion "android-29"
+    buildToolsVersion '29.0.0'
 
     dexOptions {
         maxProcessCount=2
@@ -26,62 +61,31 @@ android {
         versionCode gitVersionCode
         versionName gitVersionName
 
-        minSdkVersion 14
-        targetSdkVersion 27
-
-        android.applicationVariants.all { variant ->
-            def appName
-            //Check if an applicationName property is supplied; if not use the name of the parent project.
-            if (project.hasProperty("applicationName")) {
-                appName = applicationName
-            } else {
-                appName = parent.name
-            }
-
-            variant.outputs.all { output ->
-                outputFileName = "${appName}-${output.baseName}-${variant.versionName}.apk"
-            }
-        }
+        minSdkVersion 16
+        targetSdkVersion 29
 
         testApplicationId "es.ugr.swad.swadroid.test"
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
+
+        buildConfigField "String", "SWAD_APP_KEY", getBuildConfigField("SWAD_APP_KEY")
     }
 
     buildTypes {
-        debug {
-            versionNameSuffix '-DEBUG'
-        }
-
-        buildTypes.each {
-            it.buildConfigField "String", "SWAD_APP_KEY", getBuildConfigField("SWAD_APP_KEY")
-            it.buildConfigField "String", "ANALYTICS_API_KEY", getBuildConfigField("ANALYTICS_API_KEY")
+        prod {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-}
-
-//return a BuildConfigField from a properties file.
-def getBuildConfigField(String property){
-    def value
-
-    if(travisBuild) {
-        value = "\"" + System.getenv(property) + "\""
-    } else {
-        Properties properties = new Properties()
-        properties.load(new FileInputStream("keystore.properties"))
-        value = "\"" + properties.getProperty(property) + "\""
-    }
-
-    return value
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:27.0.2'
-    compile 'com.android.support:appcompat-v7:27.0.2'
-    compile 'com.google.android.gms:play-services-analytics:11.8.0'
-    compile 'com.google.code.ksoap2-android:ksoap2-android:3.6.2'
-    compile 'commons-io:commons-io:2.6'
-    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
-    compile 'com.journeyapps:zxing-android-embedded:3.5.0@aar'
-    compile 'com.google.zxing:core:3.3.1'
-    compile 'com.google.code.gson:gson:2.8.2'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'com.google.code.ksoap2-android:ksoap2-android:3.6.4'
+    implementation 'commons-io:commons-io:2.6'
+    implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+    implementation 'com.journeyapps:zxing-android-embedded:3.6.0@aar'
+    implementation 'com.google.zxing:core:3.3.3'
+    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.google.firebase:firebase-core:17.0.0'
 }

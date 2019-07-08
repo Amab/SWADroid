@@ -31,10 +31,10 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -56,7 +56,6 @@ import java.util.List;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.gui.FontManager;
 import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.gui.ProgressScreen;
@@ -190,7 +189,6 @@ public class DownloadsManager extends MenuActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        SWADroidTracker.sendScreenView(getApplicationContext(), TAG);
 
         // check Android 6 permission
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)

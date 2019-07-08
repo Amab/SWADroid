@@ -21,7 +21,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
@@ -43,7 +43,6 @@ import java.util.List;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.analytics.SWADroidTracker;
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.gui.ProgressScreen;
 import es.ugr.swad.swadroid.modules.account.CreateAccountActivity;
@@ -222,7 +221,6 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
      * are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
-        SWADroidTracker.sendScreenView(getApplicationContext(), "SWADroid Login");
 
         // Values for ID and password at the time of the login attempt.
         String idValue;
@@ -353,8 +351,6 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
     }
 
     private void whyMyPasswordNotWorkDialog() {
-        SWADroidTracker.sendScreenView(getApplicationContext(), "SWADroid WhyMyPasswordNotWork");
-
         AlertDialog passwordNotWorkDialog =
                 DialogFactory.createNeutralDialog(this,
                         R.layout.dialog_why_password,
@@ -373,8 +369,6 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
     }
 
     private void recoverPasswordDialog() {
-        SWADroidTracker.sendScreenView(getApplicationContext(), "SWADroid RecoverPassword");
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         final EditText user = new EditText(getApplicationContext());
