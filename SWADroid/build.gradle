@@ -61,7 +61,7 @@ android {
         versionCode gitVersionCode
         versionName gitVersionName
 
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 29
 
         testApplicationId "es.ugr.swad.swadroid.test"
@@ -87,5 +87,5 @@ dependencies {
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0@aar'
     implementation 'com.google.zxing:core:3.3.3'
     implementation 'com.google.code.gson:gson:2.8.5'
-    implementation 'com.google.firebase:firebase-core:16.0.9'
+    implementation 'com.google.firebase:firebase-core:17.0.0'
 }
