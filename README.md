@@ -12,8 +12,8 @@ CI Status
 
 |Branch|CI status|
 |------|---------|
-|develop|[![Build Status](https://travis-ci.org/Amab/SWADroid.svg?branch=develop)](https://travis-ci.org/Amab/SWADroid)|
-|master|[![Build Status](https://travis-ci.org/Amab/SWADroid.svg?branch=master)](https://travis-ci.org/Amab/SWADroid)|
+|develop|[![Build Status](https://travis-ci.com/Amab/SWADroid.svg?branch=develop)](https://travis-ci.com/Amab/SWADroid)|
+|master|[![Build Status](https://travis-ci.com/Amab/SWADroid.svg?branch=master)](https://travis-ci.com/Amab/SWADroid)|
 
 Copyright and License
 ---------------------
