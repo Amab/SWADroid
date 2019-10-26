@@ -61,7 +61,7 @@ android {
         versionCode gitVersionCode
         versionName gitVersionName
 
-        minSdkVersion 16
+        minSdkVersion 24
         targetSdkVersion 29
 
         testApplicationId "es.ugr.swad.swadroid.test"
