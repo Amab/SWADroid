@@ -87,5 +87,5 @@ dependencies {
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0@aar'
     implementation 'com.google.zxing:core:3.4.0'
     implementation 'com.google.code.gson:gson:2.8.6'
-    implementation 'com.google.firebase:firebase-core:17.2.0'
+    implementation 'com.google.firebase:firebase-core:17.2.1'
 }
