@@ -122,7 +122,7 @@ public class UsersDownload extends Module {
                 if (userSurname1.equalsIgnoreCase(Constants.NULL_VALUE)) userSurname1 = "";
                 if (userSurname2.equalsIgnoreCase(Constants.NULL_VALUE)) userSurname2 = "";
                 if (userFirstname.equalsIgnoreCase(Constants.NULL_VALUE)) userFirstname = "";
-                if (userPhoto.equalsIgnoreCase(Constants.NULL_VALUE)) userPhoto = null;
+                if (userPhoto.equalsIgnoreCase(Constants.NULL_VALUE)) userPhoto = "";
 
                 //Inserts user data into database
                 dbHelper.insertUser(new User(userCode, null, userID, userNickname, userSurname1, userSurname2,
@@ -153,7 +153,7 @@ public class UsersDownload extends Module {
         if (numUsers == 0) {
             Toast.makeText(this, R.string.noUsersAvailableMsg, Toast.LENGTH_LONG).show();
         } else {
-            String msg = String.valueOf(numUsers) + " " + getResources().getString(R.string.usersUpdated);
+            String msg = numUsers + " " + getResources().getString(R.string.usersUpdated);
             Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
         }
 
