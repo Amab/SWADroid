@@ -108,7 +108,7 @@ public class UsersCursorAdapter extends CursorAdapter {
         String userFirstname = crypto.decrypt(cursor.getString(cursor.getColumnIndex("userFirstname")));
         String userID = crypto.decrypt(cursor.getString(cursor.getColumnIndex("userID")));
         final long userCode = cursor.getLong(cursor.getColumnIndex("userCode"));
-        String userPhoto = cursor.getString(cursor.getColumnIndex("photoPath"));
+        String userPhoto = crypto.decrypt(cursor.getString(cursor.getColumnIndex("photoPath")));
         boolean present = Utils.parseIntBool(cursor.getInt(cursor.getColumnIndex("present")));
 
         // Replace NULL value for strings returned by the webservice with the empty string
@@ -127,10 +127,10 @@ public class UsersCursorAdapter extends CursorAdapter {
         final ViewHolder holder = (ViewHolder) view.getTag();
         view.setTag(holder);
 
-        holder.image = (ImageView) view.findViewById(R.id.imageView1);
-        holder.text1 = (TextView) view.findViewById(R.id.TextView1);
-        holder.text2 = (TextView) view.findViewById(R.id.TextView2);
-        holder.checkbox = (CheckBox) view.findViewById(R.id.check);
+        holder.image = view.findViewById(R.id.imageView1);
+        holder.text1 = view.findViewById(R.id.TextView1);
+        holder.text2 = view.findViewById(R.id.TextView2);
+        holder.checkbox = view.findViewById(R.id.check);
 
         holder.checkbox.setChecked(present);
         holder.checkbox.setOnClickListener(new View.OnClickListener() {
@@ -152,12 +152,13 @@ public class UsersCursorAdapter extends CursorAdapter {
             }
         });
 
-        holder.image.setImageResource(R.drawable.usr_bl);
-        if(userPhoto != null) {
-            ImageFactory.displayImage(loader, crypto.decrypt(userPhoto), holder.image);
+        if((userPhoto != null) && !userPhoto.isEmpty()) {
+            ImageFactory.displayImage(loader, userPhoto, holder.image);
+        } else {
+            holder.image.setImageResource(R.drawable.usr_bl);
         }
 
-        holder.text1.setText(userSurname1 + " " + userSurname2 + ", " + userFirstname);
+        holder.text1.setText(String.format("%s %s, %s", userSurname1, userSurname2, userFirstname));
         holder.text2.setText(userID);
     }
 
@@ -166,10 +167,10 @@ public class UsersCursorAdapter extends CursorAdapter {
         View view = inflater.inflate(R.layout.users_list_item, parent, false);
         ViewHolder holder = new ViewHolder();
 
-        holder.image = (ImageView) view.findViewById(R.id.imageView1);
-        holder.text1 = (TextView) view.findViewById(R.id.TextView1);
-        holder.text2 = (TextView) view.findViewById(R.id.TextView2);
-        holder.checkbox = (CheckBox) view.findViewById(R.id.check);
+        holder.image = view.findViewById(R.id.imageView1);
+        holder.text1 = view.findViewById(R.id.TextView1);
+        holder.text2 = view.findViewById(R.id.TextView2);
+        holder.checkbox = view.findViewById(R.id.check);
         view.setTag(holder);
 
         return view;

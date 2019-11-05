@@ -5,15 +5,21 @@ Android client for e-learning platform [![SWADroid](https://openswad.org/logo/sw
 
 [![SWADroid](http://developer.android.com/images/brand/en_generic_rgb_wo_45.png)](https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid)
 
-[![SWADroid](http://upload.wikimedia.org/wikipedia/commons/c/c8/Farm-Fresh_twitter_1.png)](http://twitter.com/SWADroid)[![SWADroid](http://upload.wikimedia.org/wikipedia/commons/4/4d/Farm-Fresh_facebook.png)](https://www.facebook.com/SWADroid)[![SWADroid](http://upload.wikimedia.org/wikipedia/commons/b/ba/Google_plus_32.png)](https://plus.google.com/115615684349730524355/posts)[![SWADroid](https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Telegram_Messenger.png/35px-Telegram_Messenger.png?uselang=es)](https://telegram.me/swadroid)[![SWADroid](https://s.w.org/about/images/logos/wordpress-logo-32-blue.png)](http://swadroid.wordpress.com)
+[![SWADroid](http://upload.wikimedia.org/wikipedia/commons/c/c8/Farm-Fresh_twitter_1.png)](http://twitter.com/SWADroid)[![SWADroid](http://upload.wikimedia.org/wikipedia/commons/4/4d/Farm-Fresh_facebook.png)](https://www.facebook.com/SWADroid)[![SWADroid](https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Telegram_Messenger.png/35px-Telegram_Messenger.png?uselang=es)](https://telegram.me/swadroid)[![SWADroid](https://s.w.org/about/images/logos/wordpress-logo-32-blue.png)](http://swadroid.wordpress.com)
 
 CI Status
 ---------
 
 |Branch|CI status|
 |------|---------|
-|develop|[![Build Status](https://travis-ci.org/Amab/SWADroid.svg?branch=develop)](https://travis-ci.org/Amab/SWADroid)|
-|master|[![Build Status](https://travis-ci.org/Amab/SWADroid.svg?branch=master)](https://travis-ci.org/Amab/SWADroid)|
+|develop|[![Build Status](https://travis-ci.com/Amab/SWADroid.svg?branch=develop)](https://travis-ci.com/Amab/SWADroid)|
+|master|[![Build Status](https://travis-ci.com/Amab/SWADroid.svg?branch=master)](https://travis-ci.com/Amab/SWADroid)|
+
+[![Releases](https://img.shields.io/github/release/Amab/SWADroid.svg)](https://github.com/Amab/SWADroid/releases/latest)
+[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=Amab/SWADroid)](https://dependabot.com)
+[![libraries.io](https://img.shields.io/librariesio/github/Amab/SWADroid.svg)](https://libraries.io/github/Amab/SWADroid)
+[![codecov](https://codecov.io/gh/Amab/SWADroid/branch/develop/graph/badge.svg)](https://codecov.io/gh/Amab/SWADroid)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/41ded03ee87d4ceaaafc976a7529bcf3)](https://www.codacy.com/manual/Amab/SWADroid?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Amab/SWADroid&amp;utm_campaign=Badge_Grade)
 
 Copyright and License
 ---------------------

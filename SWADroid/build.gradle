@@ -45,7 +45,7 @@ if (build_param != "prod") {
 
 android {
     compileSdkVersion "android-29"
-    buildToolsVersion '29.0.0'
+    buildToolsVersion '29.0.2'
 
     dexOptions {
         maxProcessCount=2
@@ -61,7 +61,7 @@ android {
         versionCode gitVersionCode
         versionName gitVersionName
 
-        minSdkVersion 16
+        minSdkVersion 24
         targetSdkVersion 29
 
         testApplicationId "es.ugr.swad.swadroid.test"
@@ -80,12 +80,12 @@ android {
 
 dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.code.ksoap2-android:ksoap2-android:3.6.4'
     implementation 'commons-io:commons-io:2.6'
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
-    implementation 'com.journeyapps:zxing-android-embedded:3.6.0@aar'
-    implementation 'com.google.zxing:core:3.3.3'
-    implementation 'com.google.code.gson:gson:2.8.5'
-    implementation 'com.google.firebase:firebase-core:17.0.0'
+    implementation 'com.journeyapps:zxing-android-embedded:4.0.2@aar'
+    implementation 'com.google.zxing:core:3.4.0'
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.google.firebase:firebase-core:17.2.1'
 }
