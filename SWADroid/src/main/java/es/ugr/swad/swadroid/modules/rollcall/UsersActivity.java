@@ -74,7 +74,7 @@ public class UsersActivity extends MenuExpandableListActivity implements
     /**
      * ListView of users
      */
-    private static ListView lvUsers;
+    private ListView lvUsers;
     /**
      * Adapter for ListView of users
      */
@@ -105,6 +105,16 @@ public class UsersActivity extends MenuExpandableListActivity implements
      */
     private IntentIntegrator integrator;
 
+    /**
+     * Button for send attendances to SWAD
+     */
+    private MenuItem mSendUsersMenuItem;
+
+    /**
+     * Button for clear all users for an event
+     */
+    private MenuItem mCleanUsersMenuItem;
+
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.MenuExpandableListActivity#onCreate(android.os.Bundle)
      */
@@ -113,14 +123,14 @@ public class UsersActivity extends MenuExpandableListActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_items_pulltorefresh);
 
-        refreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container_list);
-        emptyUsersTextView = (TextView) findViewById(R.id.list_item_title);
+        refreshLayout = findViewById(R.id.swipe_container_list);
+        emptyUsersTextView = findViewById(R.id.list_item_title);
 
         View mProgressScreenView = findViewById(R.id.progress_screen);
         mProgressScreen = new ProgressScreen(mProgressScreenView, refreshLayout,
                 getString(R.string.loadingMsg), this);
 
-        lvUsers = (ListView) findViewById(R.id.list_pulltorefresh);
+        lvUsers = findViewById(R.id.list_pulltorefresh);
 
         lvUsers.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -165,6 +175,9 @@ public class UsersActivity extends MenuExpandableListActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         refreshAdapter();
+        setActionMenuItemsEnabled(true);
+
+        super.onActivityResult(requestCode, resultCode, intent);
     }
 
     private void refreshAdapter() {
@@ -243,39 +256,50 @@ public class UsersActivity extends MenuExpandableListActivity implements
      */
     @Override
     public void onRefresh() {
+        setActionMenuItemsEnabled(false);
         showSwipeProgress();
 
         refreshUsers();
 
         hideSwipeProgress();
+        setActionMenuItemsEnabled(true);
     }
 
     private String getUsersCodes() {
-        String usersCodes = "";
+        StringBuilder usersCodes = new StringBuilder();
         List<UserAttendance> usersList = dbHelper.getUsersEvent(eventCode);
 
         //Concatenate the user code of all users checked as present and separate them with commas
         for(UserAttendance user : usersList) {
             if(user.isUserPresent()) {
-                usersCodes += user.getId() + ",";
+                usersCodes.append(user.getId()).append(",");
             }
         }
 
         //Remove final comma
-        if(!usersCodes.isEmpty()) {
-            usersCodes = usersCodes.substring(0, usersCodes.length()-1);
+        if(usersCodes.length() > 0) {
+            usersCodes = new StringBuilder(usersCodes.substring(0, usersCodes.length() - 1));
         }
 
-        return usersCodes;
+        return usersCodes.toString();
     }
 
     private void scanQRCode() {
         integrator.initiateScan();
     }
 
+    private void setActionMenuItemsEnabled(boolean enabled) {
+        mSendUsersMenuItem.setEnabled(enabled);
+        mCleanUsersMenuItem.setEnabled(enabled);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.rollcall_activity_actions, menu);
+
+        mSendUsersMenuItem = menu.findItem(R.id.action_sendMsg);
+        mCleanUsersMenuItem = menu.findItem(R.id.action_cleanUsers);
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -302,6 +326,8 @@ public class UsersActivity extends MenuExpandableListActivity implements
                 return true;
 
             case R.id.action_sendMsg:
+                setActionMenuItemsEnabled(false);
+
                 String usersCodes = getUsersCodes();
 
                 Intent activity = new Intent(getApplicationContext(),
@@ -318,6 +344,8 @@ public class UsersActivity extends MenuExpandableListActivity implements
                 return true;
 
             case R.id.action_cleanUsers:
+                setActionMenuItemsEnabled(false);
+
                 AlertDialog cleanDBDialog = DialogFactory.createWarningDialog(this,
                         -1,
                         R.string.areYouSure,
@@ -358,7 +386,7 @@ public class UsersActivity extends MenuExpandableListActivity implements
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         switch (requestCode) {
             case Constants.PERMISSIONS_REQUEST_CAMERA: {

@@ -153,7 +153,7 @@ public class UsersDownload extends Module {
         if (numUsers == 0) {
             Toast.makeText(this, R.string.noUsersAvailableMsg, Toast.LENGTH_LONG).show();
         } else {
-            String msg = String.valueOf(numUsers) + " " + getResources().getString(R.string.usersUpdated);
+            String msg = numUsers + " " + getResources().getString(R.string.usersUpdated);
             Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
         }
 
