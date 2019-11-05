@@ -108,7 +108,7 @@ public class UsersCursorAdapter extends CursorAdapter {
         String userFirstname = crypto.decrypt(cursor.getString(cursor.getColumnIndex("userFirstname")));
         String userID = crypto.decrypt(cursor.getString(cursor.getColumnIndex("userID")));
         final long userCode = cursor.getLong(cursor.getColumnIndex("userCode"));
-        String userPhoto = cursor.getString(cursor.getColumnIndex("photoPath"));
+        String userPhoto = crypto.decrypt(cursor.getString(cursor.getColumnIndex("photoPath")));
         boolean present = Utils.parseIntBool(cursor.getInt(cursor.getColumnIndex("present")));
 
         // Replace NULL value for strings returned by the webservice with the empty string
@@ -152,9 +152,10 @@ public class UsersCursorAdapter extends CursorAdapter {
             }
         });
 
-        holder.image.setImageResource(R.drawable.usr_bl);
-        if(userPhoto != null) {
-            ImageFactory.displayImage(loader, crypto.decrypt(userPhoto), holder.image);
+        if((userPhoto != null) && !userPhoto.isEmpty()) {
+            ImageFactory.displayImage(loader, userPhoto, holder.image);
+        } else {
+            holder.image.setImageResource(R.drawable.usr_bl);
         }
 
         holder.text1.setText(String.format("%s %s, %s", userSurname1, userSurname2, userFirstname));

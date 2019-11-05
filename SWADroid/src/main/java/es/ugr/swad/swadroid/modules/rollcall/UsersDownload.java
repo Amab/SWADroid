@@ -122,7 +122,7 @@ public class UsersDownload extends Module {
                 if (userSurname1.equalsIgnoreCase(Constants.NULL_VALUE)) userSurname1 = "";
                 if (userSurname2.equalsIgnoreCase(Constants.NULL_VALUE)) userSurname2 = "";
                 if (userFirstname.equalsIgnoreCase(Constants.NULL_VALUE)) userFirstname = "";
-                if (userPhoto.equalsIgnoreCase(Constants.NULL_VALUE)) userPhoto = null;
+                if (userPhoto.equalsIgnoreCase(Constants.NULL_VALUE)) userPhoto = "";
 
                 //Inserts user data into database
                 dbHelper.insertUser(new User(userCode, null, userID, userNickname, userSurname1, userSurname2,
