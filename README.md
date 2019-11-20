@@ -18,7 +18,6 @@ CI Status
 [![Releases](https://img.shields.io/github/release/Amab/SWADroid.svg)](https://github.com/Amab/SWADroid/releases/latest)
 [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=Amab/SWADroid)](https://dependabot.com)
 [![libraries.io](https://img.shields.io/librariesio/github/Amab/SWADroid.svg)](https://libraries.io/github/Amab/SWADroid)
-[![codecov](https://codecov.io/gh/Amab/SWADroid/branch/develop/graph/badge.svg)](https://codecov.io/gh/Amab/SWADroid)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/41ded03ee87d4ceaaafc976a7529bcf3)](https://www.codacy.com/manual/Amab/SWADroid?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Amab/SWADroid&amp;utm_campaign=Badge_Grade)
 
 Copyright and License
