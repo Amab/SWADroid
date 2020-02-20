@@ -60,6 +60,7 @@ import es.ugr.swad.swadroid.modules.courses.Courses;
 import es.ugr.swad.swadroid.modules.downloads.DownloadsManager;
 import es.ugr.swad.swadroid.modules.groups.MyGroupsManager;
 import es.ugr.swad.swadroid.modules.information.Information;
+import es.ugr.swad.swadroid.modules.location.ManageLocation;
 import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.modules.login.LoginActivity;
 import es.ugr.swad.swadroid.modules.messages.Messages;
@@ -687,6 +688,9 @@ public class SWADMain extends MenuExpandableListActivity {
                 } else if (keyword.equals(getString(R.string.generateQRModuleLabel))) {
                     activity = new Intent(ctx, GenerateQR.class);
                     startActivityForResult(activity, Constants.GENERATE_QR_REQUEST_CODE);
+                } else if (keyword.equals(R.string.manageLocation)) {
+                    activity = new Intent(ctx, ManageLocation.class);
+                    startActivityForResult(activity, Constants.MANAGE_LOCATION);
                 } else if (keyword.equals(getString(R.string.documentsDownloadModuleLabel))) {
                     activity = new Intent(ctx, DownloadsManager.class);
                     activity.putExtra("downloadsAreaCode", Constants.DOCUMENTS_AREA_CODE);
