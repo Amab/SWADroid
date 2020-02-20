@@ -235,7 +235,6 @@ public class Constants {
      * Request code for Manage Location
      */
     public static final int MANAGE_LOCATION = 41;
-
     /**
      * Request code for CAMERA permission
      */

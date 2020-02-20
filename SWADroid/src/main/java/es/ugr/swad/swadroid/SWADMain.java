@@ -688,7 +688,7 @@ public class SWADMain extends MenuExpandableListActivity {
                 } else if (keyword.equals(getString(R.string.generateQRModuleLabel))) {
                     activity = new Intent(ctx, GenerateQR.class);
                     startActivityForResult(activity, Constants.GENERATE_QR_REQUEST_CODE);
-                } else if (keyword.equals(R.string.manageLocation)) {
+                } else if (keyword.equals(getString(R.string.manageLocation))) {
                     activity = new Intent(ctx, ManageLocation.class);
                     startActivityForResult(activity, Constants.MANAGE_LOCATION);
                 } else if (keyword.equals(getString(R.string.documentsDownloadModuleLabel))) {
