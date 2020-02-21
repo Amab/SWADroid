@@ -61,7 +61,6 @@ SWADroid is an open source project. I encourage contributions.
 
 The Github team has also been kind enough to write up some great [documentation](https://help.github.com/articles/about-pull-requests/) on working with pull requests.
 
-  
 ### Notice
 
 Requests to the SWAD web service require an API key. This API key has not been uploaded to the repository for security reasons.  
