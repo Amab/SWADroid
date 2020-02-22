@@ -18,7 +18,7 @@ def static getBuildConfigField(String property){
         value = "\"" + System.getenv(property) + "\""
     } else {
         Properties properties = new Properties()
-        //properties.load(new FileInputStream("keystore.properties"))
+        properties.load(new FileInputStream("keystore.properties"))
         value = "\"" + properties.getProperty(property) + "\""
     }
 
