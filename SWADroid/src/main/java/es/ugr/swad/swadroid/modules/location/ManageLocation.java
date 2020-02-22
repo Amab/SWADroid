@@ -2,6 +2,10 @@ package es.ugr.swad.swadroid.modules.location;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Switch;
+import android.widget.Toast;
+
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import es.ugr.swad.swadroid.Constants;
@@ -28,6 +32,14 @@ public class ManageLocation extends MenuActivity {
      * Barcode Encoder
      */
     private static BarcodeEncoder barcodeEncoder;
+    /**
+     * Location switch
+     */
+    private static Switch shareLocation;
+    /**
+     * Allow to share location
+     */
+    private static Boolean allowSharingLocation=false;
 
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
@@ -51,6 +63,23 @@ public class ManageLocation extends MenuActivity {
     protected void onStart() {
         super.onStart();
 
+        shareLocation = findViewById(R.id.share_location);
+
+        shareLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (view.getId()==R.id.share_location) {
+                    if (shareLocation.isChecked()) {
+                        Toast.makeText(getApplicationContext(),"Ahora estás compartiendo tu ubicación", Toast.LENGTH_LONG).show();
+                        allowSharingLocation = true;
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(),"Has dejado de compartir tu ubicación", Toast.LENGTH_LONG).show();
+                        allowSharingLocation = false;
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -58,5 +87,7 @@ public class ManageLocation extends MenuActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
     }
+
+
 
 }
