@@ -336,4 +336,5 @@
     <string name="primaryReceiver">Principal</string>
     <string name="privacyPolicyTitle">Política de privacidad</string>
     <string name="files">Archivos</string>
+    <string name="shareLocation">Compartir mi ubicación</string>
 </resources>

@@ -35,7 +35,7 @@ public class ManageLocation extends MenuActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.navigation);
+        setContentView(R.layout.indoor_location);
 
         setTitle(R.string.manageLocation);
 

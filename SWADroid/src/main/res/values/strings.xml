@@ -353,4 +353,5 @@
     <string name="privacyPolicyURL" translatable="false">https://swadroid.wordpress.com/politica-de-proteccion-de-datos/</string>
     <string name="privacyPolicyTitle">Privacy policy</string>
     <string name="files">Files</string>
+    <string name="shareLocation">Share my location</string>
 </resources>
