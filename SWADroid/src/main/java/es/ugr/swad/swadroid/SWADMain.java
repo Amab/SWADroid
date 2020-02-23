@@ -501,8 +501,6 @@ public class SWADMain extends MenuExpandableListActivity {
             //Users category
             //Generate QR code
             mUsersData.add(getMenuItem(R.string.generateQRModuleLabel, R.string.fa_qrcode));
-            //Manage location
-            mUsersData.add(getMenuItem(R.string.manageLocation, R.string.fa_map_marker));
 
             //Messages category
             //Notifications
@@ -583,6 +581,8 @@ public class SWADMain extends MenuExpandableListActivity {
         mUsersData.add(getMenuItem(R.string.myGroupsModuleLabel, R.string.fa_sitemap));
         //Generate QR code
         mUsersData.add(getMenuItem(R.string.generateQRModuleLabel, R.string.fa_qrcode));
+        //Manage location
+        mUsersData.add(getMenuItem(R.string.manageLocation, R.string.fa_map_marker));
 
         //Messages category
         //Notifications

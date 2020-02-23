@@ -45,7 +45,7 @@ if (build_param != "prod") {
 
 android {
     compileSdkVersion "android-29"
-    buildToolsVersion '29.0.2'
+    buildToolsVersion '29.0.3'
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
