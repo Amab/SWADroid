@@ -337,4 +337,7 @@
     <string name="privacyPolicyTitle">Política de privacidad</string>
     <string name="files">Archivos</string>
     <string name="shareLocation">Compartir mi ubicación</string>
+    <string name="findUser">Encontrar usuario</string>
+    <string name="locationHistory">Mi historial de localizaciones</string>
+    <string name="update">Actualizar</string>
 </resources>

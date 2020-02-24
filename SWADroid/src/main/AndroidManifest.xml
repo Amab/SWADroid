@@ -298,6 +298,11 @@
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
+       <activity
+           android:name=".modules.location.FindUser"
+           android:theme="@style/Theme.AppCompat.Light"
+           android:label="@string/findUser">
+       </activity>
 
         <provider
             android:name="es.ugr.swad.swadroid.sync.DummyProvider"

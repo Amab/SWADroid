@@ -354,4 +354,7 @@
     <string name="privacyPolicyTitle">Privacy policy</string>
     <string name="files">Files</string>
     <string name="shareLocation">Share my location</string>
+    <string name="findUser">Find user</string>
+    <string name="locationHistory">My location history</string>
+    <string name="update">Update</string>
 </resources>

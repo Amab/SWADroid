@@ -2,8 +2,10 @@ package es.ugr.swad.swadroid.modules.location;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.journeyapps.barcodescanner.BarcodeEncoder;
@@ -36,6 +38,8 @@ public class ManageLocation extends MenuActivity {
      * Location switch
      */
     private static Switch shareLocation;
+
+    private static TextView findUser;
     /**
      * Allow to share location
      */
@@ -63,8 +67,8 @@ public class ManageLocation extends MenuActivity {
     protected void onStart() {
         super.onStart();
 
+        //Share location listener
         shareLocation = findViewById(R.id.share_location);
-
         shareLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -79,6 +83,17 @@ public class ManageLocation extends MenuActivity {
                     }
                 }
             }
+        });
+
+        //Find user location listener
+        findUser = findViewById(R.id.find_user);
+        findUser.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View view) {
+               Log.d(TAG, "onClick: Find user location");
+               Intent intent = new Intent(getApplicationContext(), FindUser.class);
+               startActivity(intent);
+           }
         });
     }
 
