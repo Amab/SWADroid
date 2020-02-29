@@ -38,8 +38,14 @@ public class ManageLocation extends MenuActivity {
      * Location switch
      */
     private static Switch shareLocation;
-
+    /**
+     * Find user location text&icon
+     */
     private static TextView findUser;
+    /**
+     * Location history
+     */
+    private static TextView history;
     /**
      * Allow to share location
      */
@@ -54,10 +60,14 @@ public class ManageLocation extends MenuActivity {
         setContentView(R.layout.indoor_location);
 
         setTitle(R.string.manageLocation);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         barcodeEncoder = new BarcodeEncoder();
+
+        history = findViewById(R.id.location_history_data);
+        if(history.getText().toString().matches(""))
+        {
+            history.setText("No data found");
+        }
     }
 
     /* (non-Javadoc)
