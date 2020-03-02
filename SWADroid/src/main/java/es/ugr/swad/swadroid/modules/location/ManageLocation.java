@@ -15,16 +15,22 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class ManageLocation extends MenuActivity {
     /**
@@ -78,6 +84,14 @@ public class ManageLocation extends MenuActivity {
      * List to store ScanResults of available networks
      */
     private List<ScanResult> results;
+    /**
+     * URL of MacStore
+     */
+    private String url = "https://mac-store.herokuapp.com/";
+    /**
+     * Client to make requests
+     */
+    private OkHttpClient client = new OkHttpClient();
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
      */
@@ -89,6 +103,13 @@ public class ManageLocation extends MenuActivity {
         setTitle(R.string.manageLocation);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         barcodeEncoder = new BarcodeEncoder();
+
+        wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+
+        if (!wifiManager.isWifiEnabled()) {
+            Toast.makeText(this, "Wifi is disabled ... You need to enable it", Toast.LENGTH_LONG).show();
+            wifiManager.setWifiEnabled(true);
+        }
     }
 
     /* (non-Javadoc)
@@ -160,9 +181,33 @@ public class ManageLocation extends MenuActivity {
             results = wifiManager.getScanResults();
             unregisterReceiver(this);
 
-            for (ScanResult scanResult : results){
-                String bssid = scanResult.BSSID.replace(":","");
-                double distance = (int)calculateDistance(scanResult.level,scanResult.frequency);
+            for (ScanResult scanResult : results) {
+                String bssid = scanResult.BSSID.replace(":", "");
+                double distance = (int) calculateDistance(scanResult.level, scanResult.frequency);
+
+                //Make get request to get location
+                Request request = new Request.Builder()
+                        .url(url + "/ap/" + bssid)
+                        .build();
+
+                client.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
+
+                    }
+
+                    @Override
+                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                        String resp = response.body().toString();
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                history.setText(resp);
+                            }
+                        });
+                    }
+                });
             }
         }
     };
@@ -171,7 +216,5 @@ public class ManageLocation extends MenuActivity {
         double exp = (27.55 - (20 * Math.log10(freqInMHz)) + Math.abs(levelInDb)) / 20.0;
         return Math.pow(10.0, exp);
     }
-
-
 
 }
