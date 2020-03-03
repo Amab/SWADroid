@@ -11,26 +11,29 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
-import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import es.ugr.swad.swadroid.model.LocationDistance;
 
 public class ManageLocation extends MenuActivity {
     /**
@@ -63,7 +66,7 @@ public class ManageLocation extends MenuActivity {
     /**
      * Location history
      */
-    private static TextView history;
+    private static ListView history;
     /**
      * Allow to share location
      */
@@ -89,9 +92,14 @@ public class ManageLocation extends MenuActivity {
      */
     private String url = "https://mac-store.herokuapp.com/";
     /**
-     * Client to make requests
+     * Adapter of LocationDistance array
      */
-    private OkHttpClient client = new OkHttpClient();
+    private ArrayAdapter adapter;
+    /**
+     * Array of Locations Distance
+     */
+    private ArrayList<LocationDistance> apList = new ArrayList<>();
+
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
      */
@@ -110,6 +118,9 @@ public class ManageLocation extends MenuActivity {
             Toast.makeText(this, "Wifi is disabled ... You need to enable it", Toast.LENGTH_LONG).show();
             wifiManager.setWifiEnabled(true);
         }
+
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, apList);
+        history.setAdapter(adapter);
     }
 
     /* (non-Javadoc)
@@ -148,12 +159,8 @@ public class ManageLocation extends MenuActivity {
            }
         });
 
-        //Show history by default
+        //Get history
         history = findViewById(R.id.location_history_data);
-        if(history.getText().toString().matches(""))
-        {
-            history.setText("No data found");
-        }
 
         updateLocation = findViewById(R.id.updateLocation);
         updateLocation.setOnClickListener(new View.OnClickListener() {
@@ -180,34 +187,12 @@ public class ManageLocation extends MenuActivity {
         public void onReceive(Context context, Intent intent) {
             results = wifiManager.getScanResults();
             unregisterReceiver(this);
-
-            for (ScanResult scanResult : results) {
-                String bssid = scanResult.BSSID.replace(":", "");
-                double distance = (int) calculateDistance(scanResult.level, scanResult.frequency);
-
-                //Make get request to get location
-                Request request = new Request.Builder()
-                        .url(url + "/ap/" + bssid)
-                        .build();
-
-                client.newCall(request).enqueue(new Callback() {
-                    @Override
-                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
-
-                    }
-
-                    @Override
-                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                        String resp = response.body().toString();
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                history.setText(resp);
-                            }
-                        });
-                    }
-                });
+            if (results.size() > 0) {
+                for (ScanResult scanResult : results) {
+                    String bssid = scanResult.BSSID.replace(":", "");
+                    double distance = (int) calculateDistance(scanResult.level, scanResult.frequency);
+                    addLocations(bssid, distance);
+                }
             }
         }
     };
@@ -215,6 +200,28 @@ public class ManageLocation extends MenuActivity {
     private double calculateDistance(double levelInDb, double freqInMHz)    {
         double exp = (27.55 - (20 * Math.log10(freqInMHz)) + Math.abs(levelInDb)) / 20.0;
         return Math.pow(10.0, exp);
+    }
+
+    private void addLocations(String bssid, double distance) {
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        String uri = url + "ap/" + bssid;
+        JsonObjectRequest jsObjectRequest = new JsonObjectRequest(Request.Method.GET, uri, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                     apList.add(new LocationDistance(response.getString("es"), distance));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        },
+            new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.d("TAG", "Error JSON: " + error.getMessage());
+                }
+            });
+        requestQueue.add(jsObjectRequest);
     }
 
 }
