@@ -34,6 +34,8 @@ import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.model.LocationDistance;
+import es.ugr.swad.swadroid.model.UserFilter;
+import es.ugr.swad.swadroid.modules.messages.SearchUsers;
 
 public class ManageLocation extends MenuActivity {
     /**
@@ -82,7 +84,7 @@ public class ManageLocation extends MenuActivity {
     /**
      * Arraylisto to store SSID of available networks
      */
-    private ArrayList<String> availableNetworks = new ArrayList<String>();
+    private ArrayList<String> availableNetworks = new ArrayList<>();
     /**
      * List to store ScanResults of available networks
      */
@@ -96,10 +98,17 @@ public class ManageLocation extends MenuActivity {
      */
     private ArrayAdapter adapter;
     /**
-     * Array of Locations Distance
+     * Array of receivers
      */
-    private ArrayList<LocationDistance> apList = new ArrayList<>();
-
+    private ArrayList<UserFilter> arrayReceivers;
+    /**
+     * Message's receivers (nicknames)
+     */
+    private String receivers;
+    /**
+     * Save if the list is expanded
+     */
+    private boolean showAll;
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
      */
@@ -112,6 +121,7 @@ public class ManageLocation extends MenuActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         barcodeEncoder = new BarcodeEncoder();
 
+        history = findViewById(R.id.location_history_data);
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 
         if (!wifiManager.isWifiEnabled()) {
@@ -119,7 +129,7 @@ public class ManageLocation extends MenuActivity {
             wifiManager.setWifiEnabled(true);
         }
 
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, apList);
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, availableNetworks);
         history.setAdapter(adapter);
     }
 
@@ -154,8 +164,10 @@ public class ManageLocation extends MenuActivity {
            @Override
            public void onClick(View view) {
                Log.d(TAG, "onClick: Find user location");
-               Intent intent = new Intent(getApplicationContext(), FindUser.class);
-               startActivity(intent);
+               arrayReceivers = new ArrayList<UserFilter>();
+               Intent intent = new Intent(getApplicationContext(), SearchUsers.class);
+               intent.putExtra("receivers", arrayReceivers);
+               startActivityForResult(intent, Constants.SEARCH_USERS_REQUEST_CODE);
            }
         });
 
@@ -173,6 +185,16 @@ public class ManageLocation extends MenuActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data != null) {
+            arrayReceivers = (ArrayList) data.getSerializableExtra("receivers");
+            receivers = "";
+            for(int i=0; i<arrayReceivers.size(); i++){
+                receivers += arrayReceivers.get(i) + ",";
+            }
+
+            if(arrayReceivers.size() <= 3)
+                showAll = false;
+        }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -209,7 +231,8 @@ public class ManageLocation extends MenuActivity {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                     apList.add(new LocationDistance(response.getString("es"), distance));
+                     availableNetworks.add("Estás a " + (int)distance + " m de " + response.getString(("es")));
+                     adapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

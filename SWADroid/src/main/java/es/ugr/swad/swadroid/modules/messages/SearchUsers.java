@@ -142,7 +142,9 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         frequentUsers = new FrequentUsersList();
         arrayReceivers = (ArrayList) getIntent().getSerializableExtra("receivers");
         //save the old receivers
-        oldReceivers = (ArrayList) arrayReceivers.clone();
+        if (arrayReceivers!=null){
+            oldReceivers = (ArrayList) arrayReceivers.clone();
+        }
 
         search = "";
 
