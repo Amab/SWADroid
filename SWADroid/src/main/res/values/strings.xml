@@ -136,8 +136,8 @@
     <string name="marketTitle" translatable="false">Google Play</string>
     <string name="blogTitle">Blog</string>
     <string name="prefCatSyncTitle">Synchronization</string>
-    <string name="prefSyncTimeTitle">Synchronization frecuency</string>
-    <string name="prefSyncTimeSummary">Synchronization frecuency of notifications</string>
+    <string name="prefSyncTimeTitle">Frecuency</string>
+    <string name="prefSyncTimeSummary">Synchronization frecuency</string>
     <string name="prefSyncTimeKey" translatable="false">prefSyncTime</string>
     <string name="prefSyncEnableTitle">Auto Sync</string>
     <string name="prefSyncEnableSummary">Enable auto sync</string>
@@ -357,4 +357,10 @@
     <string name="findUser">Find user</string>
     <string name="locationHistory">My location history</string>
     <string name="update">Update</string>
+    <string name="prefSyncLocationTimeTitle">Synchronization</string>
+    <string name="prefSyncLocationTimeSummary">Synchronization frecuency of location</string>
+    <string name="prefSyncLocationTimeKey" translatable="false">prefSyncLocationTime</string>
+    <string name="prefSyncNotificationTitle">Notifications</string>
+    <string name="prefShareLocation">Enable location</string>
+    <string name="prefShareLocationKey" translatable="false">prefShareLocation</string>
 </resources>

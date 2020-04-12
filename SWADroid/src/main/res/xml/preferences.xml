@@ -9,7 +9,7 @@
             android:key="logOutPref"
             android:title="@string/logout_title_preferences" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/prefCatSyncTitle" >
+    <PreferenceCategory android:title="@string/prefSyncNotificationTitle" >
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="@string/prefSyncEnableKey"
@@ -24,6 +24,21 @@
             android:key="@string/prefSyncTimeKey"
             android:summary="@string/prefSyncTimeSummary"
             android:title="@string/prefSyncTimeTitle" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Localizacion">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="@string/prefShareLocationKey"
+            android:title="@string/prefShareLocation" />
+        <ListPreference
+            android:defaultValue="5"
+            android:entries="@array/prefSyncLocationTimeEntries"
+            android:entryValues="@array/prefSyncLocationTimeValues"
+            android:key="@string/prefSyncLocationTimeKey"
+            android:summary="@string/prefSyncTimeSummary"
+            android:title="@string/prefSyncTimeTitle" />
+            />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/about_preferences" >
         <Preference

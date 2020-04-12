@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -22,6 +21,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import org.json.JSONException;
@@ -29,13 +29,17 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
-import es.ugr.swad.swadroid.model.LocationDistance;
 import es.ugr.swad.swadroid.model.UserFilter;
 import es.ugr.swad.swadroid.modules.messages.SearchUsers;
+import es.ugr.swad.swadroid.preferences.Preferences;
 
 public class ManageLocation extends MenuActivity {
     /**
@@ -58,13 +62,9 @@ public class ManageLocation extends MenuActivity {
      */
     private static BarcodeEncoder barcodeEncoder;
     /**
-     * Location switch
-     */
-    private static Switch shareLocation;
-    /**
      * Find user location text&icon
      */
-    private static TextView findUser;
+    private static FloatingActionButton findUser;
     /**
      * Location history
      */
@@ -76,7 +76,7 @@ public class ManageLocation extends MenuActivity {
     /**
      * Update location
      */
-    private static Button updateLocation;
+    private static FloatingActionButton updateLocation;
     /**
      * Manage wifi properties
      */
@@ -109,6 +109,7 @@ public class ManageLocation extends MenuActivity {
      * Save if the list is expanded
      */
     private boolean showAll;
+    private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
      */
@@ -140,31 +141,13 @@ public class ManageLocation extends MenuActivity {
     protected void onStart() {
         super.onStart();
 
-        //Share location listener
-        shareLocation = findViewById(R.id.share_location);
-        shareLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (view.getId()==R.id.share_location) {
-                    if (shareLocation.isChecked()) {
-                        Toast.makeText(getApplicationContext(),"Ahora estás compartiendo tu ubicación", Toast.LENGTH_LONG).show();
-                        allowSharingLocation = true;
-                    }
-                    else{
-                        Toast.makeText(getApplicationContext(),"Has dejado de compartir tu ubicación", Toast.LENGTH_LONG).show();
-                        allowSharingLocation = false;
-                    }
-                }
-            }
-        });
-
         //Find user location listener
         findUser = findViewById(R.id.find_user);
         findUser.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View view) {
                Log.d(TAG, "onClick: Find user location");
-               arrayReceivers = new ArrayList<UserFilter>();
+               arrayReceivers = new ArrayList<>();
                Intent intent = new Intent(getApplicationContext(), SearchUsers.class);
                intent.putExtra("receivers", arrayReceivers);
                startActivityForResult(intent, Constants.SEARCH_USERS_REQUEST_CODE);
@@ -174,11 +157,27 @@ public class ManageLocation extends MenuActivity {
         //Get history
         history = findViewById(R.id.location_history_data);
 
-        updateLocation = findViewById(R.id.updateLocation);
+        updateLocation = findViewById(R.id.update_location);
         updateLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                scanWifi();
+                if(Preferences.getShareLocation()) {
+                    int syncTime = Integer.parseInt(Preferences.getSyncLocationTime());
+
+                    Runnable wifiScanner = new Runnable() {
+                        @Override
+                        public void run() {
+                            scanWifi();
+                        }
+                    };
+                    try {
+                        ScheduledFuture<?> scheduledWifiScanner = scheduler.scheduleAtFixedRate(wifiScanner, 0, syncTime, TimeUnit.MINUTES);
+                    }catch (IllegalArgumentException e){
+                        e.printStackTrace();
+                    }
+                }else{
+                    Toast.makeText(getApplicationContext(), "You need to activate sharing location", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -200,6 +199,7 @@ public class ManageLocation extends MenuActivity {
 
     private void scanWifi() {
         availableNetworks.clear();
+        Log.d(TAG, "SCANNING WIFI");
         registerReceiver(wifiReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         wifiManager.startScan();
     }
@@ -207,6 +207,7 @@ public class ManageLocation extends MenuActivity {
     BroadcastReceiver wifiReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            Log.d(TAG, "onReceive se está ejecuntado");
             results = wifiManager.getScanResults();
             unregisterReceiver(this);
             if (results.size() > 0) {
@@ -227,6 +228,7 @@ public class ManageLocation extends MenuActivity {
     private void addLocations(String bssid, double distance) {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         String uri = url + "ap/" + bssid;
+        Log.d(TAG, "ADD LOCATIONS");
         JsonObjectRequest jsObjectRequest = new JsonObjectRequest(Request.Method.GET, uri, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
