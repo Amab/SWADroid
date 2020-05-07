@@ -44,7 +44,7 @@ if (build_param != "prod") {
 }
 
 android {
-    compileSdkVersion "android-29"
+    compileSdkVersion "android-R"
     buildToolsVersion '29.0.3'
 
     compileOptions {
@@ -67,7 +67,7 @@ android {
         versionName gitVersionName
 
         minSdkVersion 24
-        targetSdkVersion 29
+        targetSdkVersion 30
 
         testApplicationId "es.ugr.swad.swadroid.test"
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
