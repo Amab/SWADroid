@@ -37,9 +37,13 @@ import java.util.concurrent.TimeUnit;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
+import es.ugr.swad.swadroid.model.Location;
 import es.ugr.swad.swadroid.model.UserFilter;
+import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.modules.messages.SearchUsers;
 import es.ugr.swad.swadroid.preferences.Preferences;
+import es.ugr.swad.swadroid.webservices.IWebserviceClient;
+import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 public class ManageLocation extends MenuActivity {
     /**
@@ -110,6 +114,9 @@ public class ManageLocation extends MenuActivity {
      */
     private boolean showAll;
     private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    private static String METHOD_NAME = "";
+    private static IWebserviceClient webserviceClient;
+    private static Object result;
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
      */
@@ -214,7 +221,13 @@ public class ManageLocation extends MenuActivity {
                 for (ScanResult scanResult : results) {
                     String bssid = scanResult.BSSID.replace(":", "");
                     double distance = (int) calculateDistance(scanResult.level, scanResult.frequency);
-                    addLocations(bssid, distance);
+                    //addLocations(bssid, distance);
+                    try {
+                        getLocation(bssid);
+                    } catch (Exception e) {
+                        Log.d(TAG, "EXCEPCION AL OBTENER LA LOCALIZACIÓN");
+                        e.printStackTrace();
+                    }
                 }
             }
         }
@@ -225,6 +238,7 @@ public class ManageLocation extends MenuActivity {
         return Math.pow(10.0, exp);
     }
 
+    /*
     private void addLocations(String bssid, double distance) {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         String uri = url + "ap/" + bssid;
@@ -247,6 +261,53 @@ public class ManageLocation extends MenuActivity {
                 }
             });
         requestQueue.add(jsObjectRequest);
+    }*/
+    /**
+     * Creates webservice request.
+     */
+    private static void createRequest(String clientType) {
+        if(webserviceClient == null) {
+            if(clientType.equals(SOAPClient.CLIENT_TYPE)) {
+                webserviceClient = new SOAPClient();
+            }
+
+        }
+
+        webserviceClient.setMETHOD_NAME(METHOD_NAME);
+        webserviceClient.createRequest();
     }
 
+    /**
+     * Adds a parameter to webservice request.
+     *
+     * @param param Parameter name.
+     * @param value Parameter value.
+     */
+    private static void addParam(String param, Object value) {
+        webserviceClient.addParam(param, value);
+    }
+
+    /**
+     * Sends a SOAP request to the specified webservice in METHOD_NAME class
+     * constant of the webservice client.
+     *
+     * @param cl     Class to be mapped
+     * @param simple Flag for select simple or complex response
+     * @throws Exception
+     */
+    private static void sendRequest(Class<?> cl, boolean simple) throws Exception {
+        ((SOAPClient) webserviceClient).sendRequest(cl, simple);
+        result = webserviceClient.getResult();
+    }
+
+    private static void getLocation(String mac) throws Exception {
+        Log.d(TAG, "Get location from MAC address");
+
+        METHOD_NAME= "getLocations";
+
+        createRequest(SOAPClient.CLIENT_TYPE);
+        addParam("wsKey", Login.getLoggedUser().getWsKey());
+        addParam("MAC", mac);
+        sendRequest(Object.class, false);
+    }
 }
