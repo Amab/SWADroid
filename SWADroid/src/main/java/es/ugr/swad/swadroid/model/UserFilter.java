@@ -51,26 +51,31 @@ public class UserFilter extends Model implements Serializable{
      */
     private String userPhoto;
     /**
+     *  Unique identifier for each user
+     */
+    private int userCode;
+    /**
      * Is a receiver?.
      */
     private boolean selectedCheckbox;
 
     /**
      * Constructor.
-     *
-     * @param userNickname  User identifier.
+     *  @param userNickname  User identifier.
      * @param userSurname1  User first surname.
      * @param userSurname2  User last surname.
      * @param userFirstname User name.
      * @param userPhoto     Full path where user's picture is stored.
+     * @param userCode      Unique identifier for each user
      * @param selectedCheckbox  Is a receiver?.
      */
-    public UserFilter(String userNickname, String userSurname1, String userSurname2, String userFirstname, String userPhoto, boolean selectedCheckbox){
+    public UserFilter(String userNickname, String userSurname1, String userSurname2, String userFirstname, String userPhoto, int userCode, boolean selectedCheckbox){
         this.userNickname = userNickname;
         this.userSurname1 = userSurname1;
         this.userSurname2 = userSurname2;
         this.userFirstname = userFirstname;
         this.userPhoto = userPhoto;
+        this.userCode = userCode;
         this.selectedCheckbox = selectedCheckbox;
     }
 
@@ -162,6 +167,24 @@ public class UserFilter extends Model implements Serializable{
      */
     public void setUserPhoto(String userPhoto) {
         this.userPhoto = userPhoto;
+    }
+
+    /**
+     * Gets users code.
+     *
+     * @return the userCode
+     */
+    public int getUserCode() {
+        return userCode;
+    }
+
+    /**
+     * Sets user code.
+     *
+     * @param userCode the userCode to set
+     */
+    public void setUserCode(int userCode) {
+        this.userCode = userCode;
     }
 
     /**

@@ -183,9 +183,10 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                 String surname2 = frequentsList.get(i).getUserSurname2();
                 String firstname = frequentsList.get(i).getUserFirstname();
                 String userPhoto = frequentsList.get(i).getUserPhoto();
+                int userCode = frequentsList.get(i).getUserCode();
                 boolean selected = frequentsList.get(i).getCheckbox();
                 Double score = frequentsList.get(i).getScore();
-                frequentUsers.saveUser(new FrequentUser(idUser, nickname, surname1, surname2, firstname, userPhoto, selected, score));
+                frequentUsers.saveUser(new FrequentUser(idUser, nickname, surname1, surname2, firstname, userPhoto, userCode, selected, score));
             }
 
             updateCheckboxesFrequentUsers();
@@ -362,6 +363,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                     String surname2 = pii.getPrimitiveProperty("userSurname2").toString();
                     String firstname = pii.getPrimitiveProperty("userFirstname").toString();
                     String userPhoto = pii.getPrimitiveProperty("userPhoto").toString();
+                    int userCode = Integer.parseInt(pii.getPrimitiveProperty("userCode").toString());
 
                     boolean selected = false;
                     for(int j=0; j<arrayReceivers.size(); j++){
@@ -371,7 +373,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                         }
                     }
 
-                    usersFilter.saveUser(new UserFilter(nickname, surname1, surname2, firstname, userPhoto, selected));
+                    usersFilter.saveUser(new UserFilter(nickname, surname1, surname2, firstname, userPhoto, userCode, selected));
                 }
             }
             numUsers = usersFilter.getUsers().size();
@@ -453,7 +455,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                 else{
                     checkbox.setChecked(true);
                     FrequentUser currentFrequent = frequentUsers.getUsers().get(position);
-                    arrayReceivers.add(new UserFilter(currentFrequent.getUserNickname(), currentFrequent.getUserSurname1(), currentFrequent.getUserSurname2(), currentFrequent.getUserFirstname(), currentFrequent.getUserPhoto(), currentFrequent.getCheckbox()));
+                    arrayReceivers.add(new UserFilter(currentFrequent.getUserNickname(), currentFrequent.getUserSurname1(), currentFrequent.getUserSurname2(), currentFrequent.getUserFirstname(), currentFrequent.getUserPhoto(), currentFrequent.getUserCode(), currentFrequent.getCheckbox()));
                 }
             }
         });

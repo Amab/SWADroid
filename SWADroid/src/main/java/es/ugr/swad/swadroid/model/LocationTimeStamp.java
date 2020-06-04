@@ -4,7 +4,7 @@ import org.ksoap2.serialization.PropertyInfo;
 
 import java.util.Hashtable;
 
-public class Location extends Model {
+public class LocationTimeStamp extends Model {
 
     private int institutionCode;
 
@@ -31,6 +31,8 @@ public class Location extends Model {
     private String roomShortName;
 
     private String roomFullName;
+
+    private int checkInTime;
 
     private static final PropertyInfo PI_id = new PropertyInfo();
     private static final PropertyInfo PI_institutionCode = new PropertyInfo();
@@ -64,7 +66,7 @@ public class Location extends Model {
                     PI_roomFullName
             };
 
-    public Location(int institutionCode, String institutionShortName, String institutionFullName, int centerCode, String centerShortName, String centerFullName, int buildingCode, String buildingShortName, String buildingFullName, int floor, int roomCode, String roomShortName, String roomFullName) {
+    public LocationTimeStamp(int institutionCode, String institutionShortName, String institutionFullName, int centerCode, String centerShortName, String centerFullName, int buildingCode, String buildingShortName, String buildingFullName, int floor, int roomCode, String roomShortName, String roomFullName, int checkInTime) {
         this.institutionCode = institutionCode;
         this.institutionShortName = institutionShortName;
         this.institutionFullName = institutionFullName;
@@ -78,6 +80,7 @@ public class Location extends Model {
         this.roomCode = roomCode;
         this.roomShortName = roomShortName;
         this.roomFullName = roomFullName;
+        this.checkInTime = checkInTime;
     }
 
     public int getInstitutionCode() {
@@ -152,36 +155,12 @@ public class Location extends Model {
         this.buildingFullName = buildingFullName;
     }
 
-    public int getFloor() {
-        return floor;
+    public int getCheckInTime() {
+        return checkInTime;
     }
 
-    public void setFloor(int floor) {
-        this.floor = floor;
-    }
-
-    public int getRoomCode() {
-        return roomCode;
-    }
-
-    public void setRoomCode(int roomCode) {
-        this.roomCode = roomCode;
-    }
-
-    public String getRoomShortName() {
-        return roomShortName;
-    }
-
-    public void setRoomShortName(String roomShortName) {
-        this.roomShortName = roomShortName;
-    }
-
-    public String getRoomFullName() {
-        return roomFullName;
-    }
-
-    public void setRoomFullName(String roomFullName) {
-        this.roomFullName = roomFullName;
+    public void setCheckInTime(int checkInTime) {
+        this.checkInTime = checkInTime;
     }
 
     @Override
@@ -229,6 +208,9 @@ public class Location extends Model {
                 break;
             case 13:
                 object = roomFullName;
+                break;
+            case 14:
+                object = checkInTime;
                 break;
         }
         return object;
@@ -284,6 +266,8 @@ public class Location extends Model {
             case 13:
                 roomFullName = (String) obj;
                 break;
+            case 14:
+                checkInTime = (int) obj;
         }
     }
 
@@ -346,12 +330,15 @@ public class Location extends Model {
                 propertyInfo.type = PropertyInfo.STRING_CLASS;
                 propertyInfo.name = "roomFullName";
                 break;
+            case 14:
+                propertyInfo.type = PropertyInfo.INTEGER_CLASS;
+                propertyInfo.name = "checkInTime";
         }
     }
 
     @Override
     public String toString() {
-        return "Location{" +
+        return "LocationTimeStamp{" +
                 "institutionCode=" + institutionCode +
                 ", institutionShortName='" + institutionShortName + '\'' +
                 ", institutionFullName='" + institutionFullName + '\'' +
@@ -365,6 +352,7 @@ public class Location extends Model {
                 ", roomCode=" + roomCode +
                 ", roomShortName='" + roomShortName + '\'' +
                 ", roomFullName='" + roomFullName + '\'' +
+                ", checkInTime'" + checkInTime + '\'' +
                 '}';
     }
 }

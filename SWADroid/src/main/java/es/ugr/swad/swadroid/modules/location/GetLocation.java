@@ -5,18 +5,13 @@ import android.util.Log;
 
 import org.ksoap2.serialization.SoapObject;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
-
-import javax.xml.transform.Result;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.model.Location;
 import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.webservices.IWebserviceClient;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
+// This class must be AsyncTasked
 public class GetLocation extends AsyncTask<Void, Void, Void> {
     /**
      * Physical address of AP
@@ -58,7 +53,7 @@ public class GetLocation extends AsyncTask<Void, Void, Void> {
     private Location getLocation(String mac) throws Exception {
         Log.d(TAG, "Get location from MAC address");
 
-        METHOD_NAME= "getLocations";
+        METHOD_NAME= "getLocation";
 
         createRequest(SOAPClient.CLIENT_TYPE);
         addParam("wsKey", Login.getLoggedUser().getWsKey());
@@ -104,8 +99,10 @@ public class GetLocation extends AsyncTask<Void, Void, Void> {
         result = webserviceClient.getResult();
 
         if (result!=null) {
-
             SoapObject soap = (SoapObject) result;
+            // Location Output structure
+            soap = (SoapObject)soap.getProperty(0);
+            // Rest of properties
             Integer institutionCode = Integer.valueOf(soap.getProperty("institutionCode").toString());
             String institutionShortName = soap.getProperty("institutionShortName").toString();
             String institutionFullName = soap.getProperty("institutionShortName").toString();
@@ -123,7 +120,6 @@ public class GetLocation extends AsyncTask<Void, Void, Void> {
             location = new Location(institutionCode, institutionShortName, institutionFullName,
                     centerCode, centerShortName, centerFullName, buildingCode, buildingShortName, buildingFullName,
                     floor, roomCode, roomShortName, roomFullName);
-
         }
         return location;
     }

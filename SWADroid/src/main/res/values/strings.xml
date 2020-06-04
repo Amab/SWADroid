@@ -355,7 +355,7 @@
     <string name="files">Files</string>
     <string name="shareLocation">Share my location</string>
     <string name="findUser">Find user</string>
-    <string name="locationHistory">My location history</string>
+    <string name="locationHistory">Location history</string>
     <string name="update">Update</string>
     <string name="prefSyncLocationTimeTitle">Synchronization</string>
     <string name="prefSyncLocationTimeSummary">Synchronization frequency of location</string>

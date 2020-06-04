@@ -338,7 +338,7 @@
     <string name="files">Archivos</string>
     <string name="shareLocation">Compartir mi ubicación</string>
     <string name="findUser">Encontrar usuario</string>
-    <string name="locationHistory">Mi historial de localizaciones</string>
+    <string name="locationHistory">Historial de localizaciones</string>
     <string name="update">Actualizar</string>
     <string name="prefSyncLocationTimeTitle">Ubicación</string>
     <string name="prefShareLocation">Habilitar ubicación</string>

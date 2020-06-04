@@ -465,6 +465,7 @@ public class DataBaseHelper {
                         crypto.decrypt(ent.getString("surname2Recipient")),
                         crypto.decrypt(ent.getString("firstnameRecipient")),
                         crypto.decrypt(ent.getString("photoRecipient")),
+                        ent.getInt("userCode"),
                         false,
                         ent.getDouble("score"));
                 break;

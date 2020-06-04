@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="auto"
@@ -30,9 +29,11 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
         android:gravity="center|top"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:backgroundTint=""/>
 
     <LinearLayout
+        android:id="@+id/location_buttons"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
@@ -42,10 +43,20 @@
             android:layout_width="100dp"
             android:layout_height="60dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="60dp"
+            android:layout_marginStart="60dp"
             android:src="@drawable/sync"
             app:fabCustomSize="60dp"
-            app:backgroundTint="#00BFA5" />
+                app:backgroundTint="#00BFA5" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/my_location"
+            android:layout_width="100dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="60dp"
+            android:src="@drawable/ic_person_pin_circle_black_24dp"
+            app:backgroundTint="#FF9800"
+            app:fabCustomSize="60dp" />
 
         <View
             android:layout_width="0dp"
@@ -57,7 +68,7 @@
             android:layout_width="100dp"
             android:layout_height="60dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginRight="60dp"
+            android:layout_marginEnd="60dp"
             android:src="@drawable/account_search_outline"
             app:fabCustomSize="60dp"
             app:backgroundTint="#304FFE" />
