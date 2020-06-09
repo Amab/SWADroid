@@ -8,28 +8,28 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
+import android.util.Pair;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.model.Location;
+import es.ugr.swad.swadroid.model.UserFilter;
 import es.ugr.swad.swadroid.modules.messages.SearchUsers;
 import es.ugr.swad.swadroid.preferences.Preferences;
 
@@ -49,16 +49,18 @@ public class ManageLocation extends MenuActivity {
     /**
      * Arraylist to store SSID of available networks
      */
-    private ArrayList<String> availableNetworks = new ArrayList<>();
+    private ArrayList<String> locationHistory = new ArrayList<>();
     /**
      * Adapter of LocationDistance array
      */
-    private ArrayAdapter adapter;
+    private ArrayAdapter<String> adapter;
     /**
      * Array of receivers
      */
     private ArrayList arrayReceivers;
     private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    TextView textView;
+    List<Pair<Location, Integer>> availableNetworks = new ArrayList<>();
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
      */
@@ -70,6 +72,8 @@ public class ManageLocation extends MenuActivity {
         setTitle(R.string.manageLocation);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
+        textView = findViewById(R.id.location_history);
+
         history = findViewById(R.id.location_history_data);
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 
@@ -79,7 +83,7 @@ public class ManageLocation extends MenuActivity {
             wifiManager.setWifiEnabled(true);
         }
 
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, availableNetworks);
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, locationHistory);
         history.setAdapter(adapter);
     }
 
@@ -92,7 +96,6 @@ public class ManageLocation extends MenuActivity {
 
         //Find user location listener
         FloatingActionButton findUser = findViewById(R.id.find_user);
-
         findUser.setOnClickListener(view -> {
             Log.d(TAG, "onClick: Find user location");
             arrayReceivers = new ArrayList<>();
@@ -104,18 +107,21 @@ public class ManageLocation extends MenuActivity {
         //Get history
         history = findViewById(R.id.location_history_data);
 
-        FloatingActionButton updateLocation = findViewById(R.id.update_location);
+        FloatingActionButton updateLocation = findViewById(R.id.user_location);
         updateLocation.setOnClickListener(v -> {
             if(Preferences.getShareLocation()) {
+                locationHistory.clear();
+                textView.setText(getString(R.string.locationHistory));
                 int syncTime = Integer.parseInt(Preferences.getSyncLocationTime());
 
                 Runnable wifiScanner = this::scanWifi;
                 try {
-                    ScheduledFuture<?> scheduledWifiScanner = scheduler.scheduleAtFixedRate(wifiScanner, 0, syncTime, TimeUnit.MINUTES);
-                }catch (IllegalArgumentException e){
+                    scheduler.scheduleAtFixedRate(wifiScanner, 0, syncTime, TimeUnit.MINUTES);
+                    }catch (IllegalArgumentException e){
                     e.printStackTrace();
                 }
             }else{
+                scheduler.shutdown();
                 Toast.makeText(getApplicationContext(), "You need to activate sharing location", Toast.LENGTH_LONG).show();
             }
         });
@@ -125,13 +131,17 @@ public class ManageLocation extends MenuActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null) {
             arrayReceivers = (ArrayList) data.getSerializableExtra("receivers");
-
+            assert arrayReceivers != null;
+            UserFilter user = ((UserFilter)arrayReceivers.get(0));
+            String userText = "Historial de localización de " + user.getUserFirstname() + " "
+                    + user.getUserSurname1();
+            textView.setText(userText);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void scanWifi() {
-        availableNetworks.clear();
+        locationHistory.clear();
         Log.d(TAG, "SCANNING WIFI");
         registerReceiver(wifiReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         wifiManager.startScan();
@@ -152,17 +162,22 @@ public class ManageLocation extends MenuActivity {
                         GetLocation getLocation = new GetLocation(bssid);
                         getLocation.execute().get();
                         Location location = getLocation.getValue();
-                        availableNetworks.add("Estás a " + distance + "m de " +
-                                location.getRoomFullName() + " ( " + location.getCenterShortName() + " " + location.getInstitutionShortName() + " )");
-                        adapter.notifyDataSetChanged();
-                        SendCurrentLocation sendCurrentLocation = new SendCurrentLocation(location.getRoomCode());
-                        sendCurrentLocation.execute();
+                        availableNetworks.add(new Pair(location, distance));
                     } catch (Exception e) {
                         Log.d(TAG, "EXCEPCION AL OBTENER LA LOCALIZACIÓN");
                         e.printStackTrace();
                     }
-
                 }
+                Collections.sort(availableNetworks, (n1,n2) -> {
+                    return n2.second - n1.second;
+                });
+                locationHistory.add("Estás a " + availableNetworks.get(0).second + "m de " +
+                        availableNetworks.get(0).first.getRoomFullName() + " ( " +
+                        availableNetworks.get(0).first.getCenterShortName() + " " +
+                        availableNetworks.get(0).first.getInstitutionShortName() + " )");
+                adapter.notifyDataSetChanged();
+                SendCurrentLocation sendCurrentLocation = new SendCurrentLocation(availableNetworks.get(0).first.getRoomCode());
+                sendCurrentLocation.execute();
             }
         }
     };

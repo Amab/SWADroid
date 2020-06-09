@@ -29,8 +29,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
         android:gravity="center|top"
-        android:textSize="18sp"
-        android:backgroundTint=""/>
+        android:textSize="18sp"/>
 
     <LinearLayout
         android:id="@+id/location_buttons"
@@ -39,24 +38,14 @@
         android:orientation="horizontal">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/update_location"
-            android:layout_width="100dp"
-            android:layout_height="60dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="60dp"
-            android:src="@drawable/sync"
-            app:fabCustomSize="60dp"
-                app:backgroundTint="#00BFA5" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/my_location"
+            android:id="@+id/user_location"
             android:layout_width="100dp"
             android:layout_height="60dp"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="60dp"
             android:src="@drawable/ic_person_pin_circle_black_24dp"
-            app:backgroundTint="#FF9800"
-            app:fabCustomSize="60dp" />
+            app:fabCustomSize="60dp"
+            app:backgroundTint="#00BFA5" />
 
         <View
             android:layout_width="0dp"
