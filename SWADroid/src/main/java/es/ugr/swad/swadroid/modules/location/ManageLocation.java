@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -29,6 +30,7 @@ import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.model.Location;
+import es.ugr.swad.swadroid.model.LocationTimeStamp;
 import es.ugr.swad.swadroid.model.UserFilter;
 import es.ugr.swad.swadroid.modules.messages.SearchUsers;
 import es.ugr.swad.swadroid.preferences.Preferences;
@@ -61,6 +63,7 @@ public class ManageLocation extends MenuActivity {
     private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     TextView textView;
     List<Pair<Location, Integer>> availableNetworks = new ArrayList<>();
+    boolean userSearched = false;
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
      */
@@ -110,7 +113,9 @@ public class ManageLocation extends MenuActivity {
         FloatingActionButton updateLocation = findViewById(R.id.user_location);
         updateLocation.setOnClickListener(v -> {
             if(Preferences.getShareLocation()) {
+                if (userSearched)
                 locationHistory.clear();
+
                 textView.setText(getString(R.string.locationHistory));
                 int syncTime = Integer.parseInt(Preferences.getSyncLocationTime());
 
@@ -136,6 +141,17 @@ public class ManageLocation extends MenuActivity {
             String userText = "Historial de localización de " + user.getUserFirstname() + " "
                     + user.getUserSurname1();
             textView.setText(userText);
+            GetLastLocation getLastLocation = new GetLastLocation(user.getUserCode());
+            try {
+                getLastLocation.execute().get();
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+            }
+            LocationTimeStamp locationTimeStamp = getLastLocation.getValue();
+            locationHistory.add(locationTimeStamp.getRoomFullName() + " ( " +
+                    locationTimeStamp.getCenterShortName() + " " +
+                    locationTimeStamp.getInstitutionShortName() + " )");
+            adapter.notifyDataSetChanged();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -168,9 +184,7 @@ public class ManageLocation extends MenuActivity {
                         e.printStackTrace();
                     }
                 }
-                Collections.sort(availableNetworks, (n1,n2) -> {
-                    return n2.second - n1.second;
-                });
+                Collections.sort(availableNetworks, (n1,n2) -> n2.second - n1.second);
                 locationHistory.add("Estás a " + availableNetworks.get(0).second + "m de " +
                         availableNetworks.get(0).first.getRoomFullName() + " ( " +
                         availableNetworks.get(0).first.getCenterShortName() + " " +

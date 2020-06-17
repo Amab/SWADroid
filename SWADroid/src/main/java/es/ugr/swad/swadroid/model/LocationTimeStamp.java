@@ -163,6 +163,14 @@ public class LocationTimeStamp extends Model {
         this.checkInTime = checkInTime;
     }
 
+    public String getRoomFullName() {
+        return roomFullName;
+    }
+
+    public void setRoomFullName(String roomFullName) {
+        this.roomFullName = roomFullName;
+    }
+
     @Override
     public Object getProperty(int param) {
         Object object = null;
