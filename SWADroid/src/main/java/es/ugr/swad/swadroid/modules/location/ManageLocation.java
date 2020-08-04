@@ -121,7 +121,7 @@ public class ManageLocation extends MenuActivity {
 
                 Runnable wifiScanner = this::scanWifi;
                 try {
-                    scheduler.scheduleAtFixedRate(wifiScanner, 0, syncTime, TimeUnit.MINUTES);
+                        scheduler.scheduleAtFixedRate(wifiScanner, 0, syncTime, TimeUnit.MINUTES);
                     }catch (IllegalArgumentException e){
                     e.printStackTrace();
                 }
