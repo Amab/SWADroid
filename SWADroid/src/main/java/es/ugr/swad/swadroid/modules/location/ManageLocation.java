@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.util.Pair;
 import android.widget.ArrayAdapter;
@@ -58,7 +59,7 @@ public class ManageLocation extends MenuActivity {
     /**
      * Array of receivers
      */
-    private ArrayList arrayReceivers;
+    public ArrayList<Parcelable> arrayReceivers = new ArrayList<>();
     private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     TextView textView;
     List<Pair<Location, Integer>> availableNetworks = new ArrayList<>();
@@ -100,7 +101,6 @@ public class ManageLocation extends MenuActivity {
         FloatingActionButton findUser = findViewById(R.id.find_user);
         findUser.setOnClickListener(view -> {
             Log.d(TAG, "onClick: Find user location");
-            arrayReceivers = new ArrayList<>();
             Intent intent = new Intent(getApplicationContext(), SearchUsers.class);
             intent.putExtra("receivers", arrayReceivers);
             startActivityForResult(intent, Constants.SEARCH_USERS_REQUEST_CODE);
@@ -134,7 +134,7 @@ public class ManageLocation extends MenuActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null) {
-            arrayReceivers = (ArrayList) data.getSerializableExtra("receivers");
+            arrayReceivers = data.getParcelableArrayListExtra("receivers");
             if(arrayReceivers != null && arrayReceivers.size() > 0){
                 UserFilter user = ((UserFilter)arrayReceivers.get(0));
                 String userText = "Historial de localización de " + user.getUserFirstname() + " "
@@ -178,7 +178,7 @@ public class ManageLocation extends MenuActivity {
                         GetLocation getLocation = new GetLocation(bssid);
                         getLocation.execute().get();
                         Location location = getLocation.getValue();
-                        availableNetworks.add(new Pair(location, distance));
+                        availableNetworks.add(new Pair<>(location, (int) distance));
                     } catch (Exception e) {
                         Log.d(TAG, "EXCEPCION AL OBTENER LA LOCALIZACIÓN");
                         e.printStackTrace();
