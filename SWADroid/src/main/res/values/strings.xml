@@ -364,4 +364,5 @@
     <string name="prefShareLocation">Enable location</string>
     <string name="prefShareLocationKey" translatable="false">prefShareLocation</string>
     <string name="prefSyncLocationTitle">Location</string>
+    <string name="locationDisabled">You need to activate sharing location</string>
 </resources>

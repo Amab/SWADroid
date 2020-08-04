@@ -344,4 +344,5 @@
     <string name="prefShareLocation">Habilitar ubicación</string>
     <string name="prefSyncLocationTimeSummary">Frecuencia de sincronización para localización</string>
     <string name="prefSyncLocationTitle">Ubicación</string>
+    <string name="locationDisabled">Necesitas activar la ubicación</string>
 </resources>
