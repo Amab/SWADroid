@@ -17,7 +17,6 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -127,7 +126,7 @@ public class ManageLocation extends MenuActivity {
                 }
             }else{
                 scheduler.shutdown();
-                Toast.makeText(getApplicationContext(), "You need to activate sharing location", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.locationDisabled), Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -136,22 +135,23 @@ public class ManageLocation extends MenuActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null) {
             arrayReceivers = (ArrayList) data.getSerializableExtra("receivers");
-            assert arrayReceivers != null;
-            UserFilter user = ((UserFilter)arrayReceivers.get(0));
-            String userText = "Historial de localización de " + user.getUserFirstname() + " "
-                    + user.getUserSurname1();
-            textView.setText(userText);
-            GetLastLocation getLastLocation = new GetLastLocation(user.getUserCode());
-            try {
-                getLastLocation.execute().get();
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
+            if(arrayReceivers != null && arrayReceivers.size() > 0){
+                UserFilter user = ((UserFilter)arrayReceivers.get(0));
+                String userText = "Historial de localización de " + user.getUserFirstname() + " "
+                        + user.getUserSurname1();
+                textView.setText(userText);
+                GetLastLocation getLastLocation = new GetLastLocation(user.getUserCode());
+                try {
+                    getLastLocation.execute().get();
+                } catch (ExecutionException | InterruptedException e) {
+                    e.printStackTrace();
+                }
+                LocationTimeStamp locationTimeStamp = getLastLocation.getValue();
+                locationHistory.add(locationTimeStamp.getRoomFullName() + " ( " +
+                        locationTimeStamp.getCenterShortName() + " " +
+                        locationTimeStamp.getInstitutionShortName() + " )");
+                adapter.notifyDataSetChanged();
             }
-            LocationTimeStamp locationTimeStamp = getLastLocation.getValue();
-            locationHistory.add(locationTimeStamp.getRoomFullName() + " ( " +
-                    locationTimeStamp.getCenterShortName() + " " +
-                    locationTimeStamp.getInstitutionShortName() + " )");
-            adapter.notifyDataSetChanged();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
