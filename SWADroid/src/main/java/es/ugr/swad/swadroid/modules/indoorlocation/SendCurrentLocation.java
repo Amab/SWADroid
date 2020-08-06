@@ -1,4 +1,4 @@
-package es.ugr.swad.swadroid.modules.location;
+package es.ugr.swad.swadroid.modules.indoorlocation;
 
 import android.os.AsyncTask;
 import android.util.Log;
