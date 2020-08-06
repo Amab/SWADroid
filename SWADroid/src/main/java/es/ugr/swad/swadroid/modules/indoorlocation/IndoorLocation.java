@@ -1,4 +1,4 @@
-package es.ugr.swad.swadroid.modules.location;
+package es.ugr.swad.swadroid.modules.indoorlocation;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -35,7 +35,7 @@ import es.ugr.swad.swadroid.model.UserFilter;
 import es.ugr.swad.swadroid.modules.messages.SearchUsers;
 import es.ugr.swad.swadroid.preferences.Preferences;
 
-public class ManageLocation extends MenuActivity {
+public class IndoorLocation extends MenuActivity {
     /**
      * Messages tag name for Logcat
      */
@@ -62,8 +62,10 @@ public class ManageLocation extends MenuActivity {
     public ArrayList<Parcelable> arrayReceivers = new ArrayList<>();
     private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     TextView textView;
-    List<Pair<Location, Integer>> availableNetworks = new ArrayList<>();
+    List<Pair<es.ugr.swad.swadroid.model.Location, Integer>> availableNetworks = new ArrayList<>();
     boolean userSearched = false;
+    Intent getLocation;
+//    Intent getLocation = new Intent(this, GetLocation.class);
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
      */
@@ -120,8 +122,8 @@ public class ManageLocation extends MenuActivity {
 
                 Runnable wifiScanner = this::scanWifi;
                 try {
-                        scheduler.scheduleAtFixedRate(wifiScanner, 0, syncTime, TimeUnit.MINUTES);
-                    }catch (IllegalArgumentException e){
+                    scheduler.scheduleAtFixedRate(wifiScanner, 0, syncTime, TimeUnit.MINUTES);
+                }catch (IllegalArgumentException e){
                     e.printStackTrace();
                 }
             }else{
@@ -133,26 +135,46 @@ public class ManageLocation extends MenuActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (data != null) {
-            arrayReceivers = data.getParcelableArrayListExtra("receivers");
-            if(arrayReceivers != null && arrayReceivers.size() > 0){
-                UserFilter user = ((UserFilter)arrayReceivers.get(0));
-                String userText = "Historial de localización de " + user.getUserFirstname() + " "
-                        + user.getUserSurname1();
-                textView.setText(userText);
-                GetLastLocation getLastLocation = new GetLastLocation(user.getUserCode());
-                try {
-                    getLastLocation.execute().get();
-                } catch (ExecutionException | InterruptedException e) {
-                    e.printStackTrace();
-                }
-                LocationTimeStamp locationTimeStamp = getLastLocation.getValue();
-                locationHistory.add(locationTimeStamp.getRoomFullName() + " ( " +
-                        locationTimeStamp.getCenterShortName() + " " +
-                        locationTimeStamp.getInstitutionShortName() + " )");
-                adapter.notifyDataSetChanged();
+            switch (requestCode) {
+                case Constants.SEARCH_USERS_REQUEST_CODE:
+                    if (data != null) {
+                        arrayReceivers = data.getParcelableArrayListExtra("receivers");
+                        if(arrayReceivers != null && arrayReceivers.size() > 0){
+                            UserFilter user = ((UserFilter)arrayReceivers.get(0));
+                            String userText = getResources().getString(R.string.userLocation) + " " + user.getUserFirstname() + " "
+                                    + user.getUserSurname1();
+                            textView.setText(userText);
+                            GetLastLocation getLastLocation = new GetLastLocation(user.getUserCode());
+                            try {
+                                getLastLocation.execute().get();
+                            } catch (ExecutionException | InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            LocationTimeStamp locationTimeStamp = getLastLocation.getValue();
+                            locationHistory.add(locationTimeStamp.getRoomFullName() + " ( " +
+                                    locationTimeStamp.getCenterShortName() + " " +
+                                    locationTimeStamp.getInstitutionShortName() + " )");
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+                    break;
+                case Constants.GET_LOCATION:
+                    if (data != null) {
+                        Location location = (Location) data.getSerializableExtra("location");
+                        double distance = (double) data.getSerializableExtra("distance");
+                        availableNetworks.add(new Pair<>(location, (int) distance));
+                        Collections.sort(availableNetworks, (n1,n2) -> n2.second - n1.second);
+                        locationHistory.add("Estás a " + availableNetworks.get(0).second + "m de " +
+                                availableNetworks.get(0).first.getRoomFullName() + " ( " +
+                                availableNetworks.get(0).first.getCenterShortName() + " " +
+                                availableNetworks.get(0).first.getInstitutionShortName() + " )");
+                        adapter.notifyDataSetChanged();
+                        SendCurrentLocation sendCurrentLocation = new SendCurrentLocation(availableNetworks.get(0).first.getRoomCode());
+                        sendCurrentLocation.execute();
+                    }
+                    break;
             }
-        }
+
         super.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -175,23 +197,16 @@ public class ManageLocation extends MenuActivity {
                         String bssid = scanResult.BSSID.replace(":", "");
                         double distance = (int) calculateDistance(scanResult.level, scanResult.frequency);
                         bssid = "F07F0667D5FF";
-                        GetLocation getLocation = new GetLocation(bssid);
-                        getLocation.execute().get();
-                        Location location = getLocation.getValue();
-                        availableNetworks.add(new Pair<>(location, (int) distance));
+                        getLocation = new Intent(IndoorLocation.this, GetLocation.class);
+                        getLocation.putExtra("mac", bssid);
+                        getLocation.putExtra("distance", distance);
+                        startActivityForResult(getLocation, Constants.GET_LOCATION);
                     } catch (Exception e) {
                         Log.d(TAG, "EXCEPCION AL OBTENER LA LOCALIZACIÓN");
                         e.printStackTrace();
                     }
                 }
-                Collections.sort(availableNetworks, (n1,n2) -> n2.second - n1.second);
-                locationHistory.add("Estás a " + availableNetworks.get(0).second + "m de " +
-                        availableNetworks.get(0).first.getRoomFullName() + " ( " +
-                        availableNetworks.get(0).first.getCenterShortName() + " " +
-                        availableNetworks.get(0).first.getInstitutionShortName() + " )");
-                adapter.notifyDataSetChanged();
-                SendCurrentLocation sendCurrentLocation = new SendCurrentLocation(availableNetworks.get(0).first.getRoomCode());
-                sendCurrentLocation.execute();
+
             }
         }
     };

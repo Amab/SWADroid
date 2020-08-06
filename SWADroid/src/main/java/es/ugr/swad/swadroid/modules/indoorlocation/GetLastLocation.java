@@ -1,4 +1,4 @@
-package es.ugr.swad.swadroid.modules.location;
+package es.ugr.swad.swadroid.modules.indoorlocation;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -6,59 +6,48 @@ import android.util.Log;
 import org.ksoap2.serialization.SoapObject;
 
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.model.Location;
+import es.ugr.swad.swadroid.model.LocationTimeStamp;
 import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.webservices.IWebserviceClient;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
-// This class must be AsyncTasked
-public class GetLocation extends AsyncTask<Void, Void, Void> {
-    /**
-     * Physical address of AP
-     */
-    private String mac;
-    /**
-     * Location related to mac
-     */
-    private Location location;
+
+public class GetLastLocation extends AsyncTask<Void, Void, Void> {
+
+    private int userCode;
+    private LocationTimeStamp locationTimeStamp;
     /**
      * Messages tag name for Logcat
      */
-    private static final String TAG = Constants.APP_TAG + " Get location";
-
+    private static final String TAG = Constants.APP_TAG + " Get last location";
     private static String METHOD_NAME = "";
     private static IWebserviceClient webserviceClient;
     private static Object result;
 
-    GetLocation(String mac){
+    GetLastLocation(int userCode) {
         super();
-        this.mac = mac;
+        this.userCode = userCode;
     }
 
     @Override
     protected Void doInBackground(Void... voids) {
-        try {
-            location = getLocation(mac);
+        try{
+            locationTimeStamp = getLastLocation(userCode);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    @Override
-    protected void onPostExecute(Void result) {
-        getValue();
-    }
+    private LocationTimeStamp getLastLocation(int userCode) throws Exception {
+        Log.d(TAG, "Get location from user code");
 
-    private Location getLocation(String mac) throws Exception {
-        Log.d(TAG, "Get location from MAC address");
-
-        METHOD_NAME= "getLocation";
+        METHOD_NAME= "getLastLocation";
 
         createRequest(SOAPClient.CLIENT_TYPE);
         addParam("wsKey", Login.getLoggedUser().getWsKey());
-        addParam("MAC", mac);
-        return sendRequest(Location.class, true);
+        addParam("userCode", userCode);
+        return sendRequest(LocationTimeStamp.class, true);
     }
 
     /**
@@ -94,7 +83,7 @@ public class GetLocation extends AsyncTask<Void, Void, Void> {
      * @param simple Flag for select simple or complex response
      * @throws Exception
      */
-    protected Location sendRequest(Class<?> cl, boolean simple) throws Exception {
+    protected LocationTimeStamp sendRequest(Class<?> cl, boolean simple) throws Exception {
         ((SOAPClient) webserviceClient).sendRequest(cl, simple);
         result = webserviceClient.getResult();
 
@@ -103,31 +92,34 @@ public class GetLocation extends AsyncTask<Void, Void, Void> {
             // Location Output structure
             soap = (SoapObject)soap.getProperty(0);
             // Rest of properties
-            Integer institutionCode = Integer.valueOf(soap.getProperty("institutionCode").toString());
+            int institutionCode = Integer.parseInt(soap.getProperty("institutionCode").toString());
             String institutionShortName = soap.getProperty("institutionShortName").toString();
-            String institutionFullName = soap.getProperty("institutionShortName").toString();
-            Integer centerCode = Integer.valueOf(soap.getProperty("centerCode").toString());
+            String institutionFullName = soap.getProperty("institutionFullName").toString();
+            int centerCode = Integer.parseInt(soap.getProperty("centerCode").toString());
             String centerShortName = soap.getProperty("centerShortName").toString();
             String centerFullName = soap.getProperty("centerFullName").toString();
-            Integer buildingCode = Integer.valueOf(soap.getProperty("buildingCode").toString());
+            int buildingCode = Integer.parseInt(soap.getProperty("buildingCode").toString());
             String buildingShortName = soap.getProperty("buildingShortName").toString();
             String buildingFullName = soap.getProperty("buildingFullName").toString();
-            Integer floor = Integer.valueOf(soap.getProperty("floor").toString());
-            Integer roomCode = Integer.valueOf(soap.getProperty("roomCode").toString());
+            int floor = Integer.parseInt(soap.getProperty("floor").toString());
+            int roomCode = Integer.parseInt(soap.getProperty("roomCode").toString());
             String roomShortName = soap.getProperty("roomShortName").toString();
             String roomFullName = soap.getProperty("roomFullName").toString();
 
-            location = new Location(institutionCode, institutionShortName, institutionFullName,
+            soap = (SoapObject) result;
+            int checkInTime = Integer.parseInt(soap.getProperty(1).toString());
+
+            locationTimeStamp = new LocationTimeStamp(institutionCode, institutionShortName, institutionFullName,
                     centerCode, centerShortName, centerFullName, buildingCode, buildingShortName, buildingFullName,
-                    floor, roomCode, roomShortName, roomFullName);
+                    floor, roomCode, roomShortName, roomFullName, checkInTime);
         }
-        return location;
+        return locationTimeStamp;
     }
 
     /**
-     * Get location
+     * Get last location
      */
-    public Location getValue() {
-        return location;
+    public LocationTimeStamp getValue() {
+        return this.locationTimeStamp;
     }
 }
