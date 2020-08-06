@@ -16,7 +16,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
@@ -245,7 +244,15 @@
                 android:value="es.ugr.swad.swadroid.SWADMain" />
         </activity>
         <activity
-            android:name=".modules.location.ManageLocation"
+            android:name=".modules.indoorlocation.IndoorLocation"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:parentActivityName="es.ugr.swad.swadroid.SWADMain" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.ugr.swad.swadroid.SWADMain" />
+        </activity>
+        <activity
+            android:name=".modules.indoorlocation.GetLocation"
             android:theme="@style/Theme.AppCompat.Light"
             android:parentActivityName="es.ugr.swad.swadroid.SWADMain" >
             <meta-data
