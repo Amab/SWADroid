@@ -244,6 +244,14 @@ public class Constants {
      */
     public static final int GET_LOCATION = 43;
     /**
+     * Request code for Get Last Location
+     */
+    public static final int GET_LAST_LOCATION = 44;
+    /**
+     * Request code for Send Current Location
+     */
+    public static final int SEND_CURRENT_LOCATION = 45;
+    /**
      * Request code for CAMERA permission
      */
     public static final int PERMISSIONS_REQUEST_CAMERA = 100;

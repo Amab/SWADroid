@@ -2,8 +2,6 @@ package es.ugr.swad.swadroid.modules.indoorlocation;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.util.Log;
 
 import org.ksoap2.serialization.SoapObject;
 
@@ -11,7 +9,6 @@ import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.model.Location;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.modules.login.Login;
-import es.ugr.swad.swadroid.webservices.IWebserviceClient;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 public class GetLocation extends Module {

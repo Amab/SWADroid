@@ -2,9 +2,10 @@ package es.ugr.swad.swadroid.model;
 
 import org.ksoap2.serialization.PropertyInfo;
 
+import java.io.Serializable;
 import java.util.Hashtable;
 
-public class LocationTimeStamp extends Model {
+public class LocationTimeStamp extends Model implements Serializable {
 
     private int institutionCode;
 
