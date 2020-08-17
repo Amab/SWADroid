@@ -55,12 +55,12 @@ public class GetLocation extends Module {
     protected void onStart() {
         super.onStart();
         mac = getIntent().getStringExtra("mac");
+        distance = getIntent().getDoubleExtra("distance", 500.0);
         connect();
     }
 
     @Override
     protected void requestService() throws Exception {
-        //Creates webservice request, adds required params and sends request to webservice
         createRequest(SOAPClient.CLIENT_TYPE);
         addParam("wsKey", Login.getLoggedUser().getWsKey());
         addParam("MAC", mac);
@@ -68,9 +68,8 @@ public class GetLocation extends Module {
 
         if (result!=null) {
             SoapObject soap = (SoapObject) result;
-            // Location Output structure
             soap = (SoapObject)soap.getProperty(0);
-            // Rest of properties
+
             int institutionCode = Integer.parseInt(soap.getProperty("institutionCode").toString());
             String institutionShortName = soap.getProperty("institutionShortName").toString();
             String institutionFullName = soap.getProperty("institutionShortName").toString();

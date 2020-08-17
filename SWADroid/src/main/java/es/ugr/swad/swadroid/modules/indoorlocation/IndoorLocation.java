@@ -56,9 +56,6 @@ public class IndoorLocation extends MenuActivity {
 
     boolean userSearched = false;
 
-    /* (non-Javadoc)
-     * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,9 +79,6 @@ public class IndoorLocation extends MenuActivity {
         history.setAdapter(locationHistoryAdapter);
     }
 
-    /* (non-Javadoc)
-     * @see es.ugr.swad.swadroid.modules.Module#onStart()
-     */
     @Override
     protected void onStart() {
         super.onStart();
@@ -144,10 +138,9 @@ public class IndoorLocation extends MenuActivity {
                     if (data != null) {
                         Location location = (Location) data.getSerializableExtra("location");
                         double distance = (double) data.getSerializableExtra("distance");
-                        locationHistory.add("Estás a " + distance + "m de " +
-                                Objects.requireNonNull(location).getRoomFullName() + " ( " +
+                        locationHistory.add(Objects.requireNonNull(location).getRoomFullName() + " ( " +
                                 location.getCenterShortName() + " " +
-                                location.getInstitutionShortName() + " )");
+                                location.getInstitutionShortName() + " ) " + distance);
                         locationHistoryAdapter.notifyDataSetChanged();
                         Intent sendCurrentLocation = new Intent(getApplicationContext(), SendCurrentLocation.class);
                         sendCurrentLocation.putExtra("roomCode", location.getRoomCode());
@@ -155,16 +148,20 @@ public class IndoorLocation extends MenuActivity {
                     }
                     break;
                 case Constants.GET_LAST_LOCATION:
-                    LocationTimeStamp locationTimeStamp = (LocationTimeStamp) data.getSerializableExtra("locationTimeStamp");
-                    assert locationTimeStamp != null;
-                    locationHistory.add(locationTimeStamp.getRoomFullName() + " ( " +
-                            locationTimeStamp.getCenterShortName() + " " +
-                            locationTimeStamp.getInstitutionShortName() + " )");
-                    locationHistoryAdapter.notifyDataSetChanged();
+                    if (data != null){
+                        LocationTimeStamp locationTimeStamp = (LocationTimeStamp) data.getSerializableExtra("locationTimeStamp");
+                        assert locationTimeStamp != null;
+                        locationHistory.add(locationTimeStamp.getRoomFullName() + " ( " +
+                                locationTimeStamp.getCenterShortName() + " " +
+                                locationTimeStamp.getInstitutionShortName() + " )");
+                        locationHistoryAdapter.notifyDataSetChanged();
+                    }
                     break;
                 case Constants.SEND_CURRENT_LOCATION:
-                    if ((boolean) data.getSerializableExtra("success"))
-                        Log.d(TAG, "Current location sent");
+                    if (data != null){
+                        if ((boolean) data.getSerializableExtra("success"))
+                            Log.d(TAG, "Current location sent");
+                    }
                     break;
             }
         super.onActivityResult(requestCode, resultCode, data);
