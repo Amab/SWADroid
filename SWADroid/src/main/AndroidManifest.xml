@@ -253,7 +253,7 @@
         </activity>
         <activity
             android:name=".modules.indoorlocation.GetLocation"
-            android:theme="@style/Theme.AppCompat.Light"
+            android:theme="@style/Theme.AppCompat.Translucent"
             android:parentActivityName="es.ugr.swad.swadroid.SWADMain" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

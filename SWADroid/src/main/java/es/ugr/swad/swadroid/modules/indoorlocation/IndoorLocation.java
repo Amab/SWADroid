@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
+    import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -92,7 +92,6 @@ public class IndoorLocation extends MenuActivity {
             startActivityForResult(intent, Constants.SEARCH_USERS_REQUEST_CODE);
         });
 
-        //Get history
         history = findViewById(R.id.location_history_data);
 
         FloatingActionButton updateLocation = findViewById(R.id.user_location);
@@ -137,14 +136,25 @@ public class IndoorLocation extends MenuActivity {
                 case Constants.GET_LOCATION:
                     if (data != null) {
                         Location location = (Location) data.getSerializableExtra("location");
-                        double distance = (double) data.getSerializableExtra("distance");
-                        locationHistory.add(Objects.requireNonNull(location).getRoomFullName() + " ( " +
-                                location.getCenterShortName() + " " +
-                                location.getInstitutionShortName() + " ) " + distance);
-                        locationHistoryAdapter.notifyDataSetChanged();
-                        Intent sendCurrentLocation = new Intent(getApplicationContext(), SendCurrentLocation.class);
-                        sendCurrentLocation.putExtra("roomCode", location.getRoomCode());
-                        startActivityForResult(sendCurrentLocation, Constants.SEND_CURRENT_LOCATION);
+                        if (location != null) {
+                            double distance = (double) data.getSerializableExtra("distance");
+                            locationHistory.add(Objects.requireNonNull(location).getRoomFullName() + " ( " +
+                                    location.getCenterShortName() + " " +
+                                    location.getInstitutionShortName() + " ) " + distance);
+                            locationHistoryAdapter.notifyDataSetChanged();
+                            Intent sendCurrentLocation = new Intent(getApplicationContext(), SendCurrentLocation.class);
+                            sendCurrentLocation.putExtra("roomCode", location.getRoomCode());
+                            startActivityForResult(sendCurrentLocation, Constants.SEND_CURRENT_LOCATION);
+                        }else {
+                            try {
+                                availableNetworks.remove(0);
+                                Intent getLocation = new Intent(this.getApplicationContext(), GetLocation.class);
+                                getLocation.putExtra("mac", availableNetworks.get(0).first.BSSID.replace(":",""));
+                                startActivityForResult(getLocation, Constants.GET_LOCATION);
+                            }catch (IndexOutOfBoundsException e){
+                                Log.d(TAG, "No more available networks");
+                            }
+                        }
                     }
                     break;
                 case Constants.GET_LAST_LOCATION:

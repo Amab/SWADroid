@@ -71,22 +71,27 @@ public class GetLocation extends Module {
             soap = (SoapObject)soap.getProperty(0);
 
             int institutionCode = Integer.parseInt(soap.getProperty("institutionCode").toString());
-            String institutionShortName = soap.getProperty("institutionShortName").toString();
-            String institutionFullName = soap.getProperty("institutionShortName").toString();
-            int centerCode = Integer.parseInt(soap.getProperty("centerCode").toString());
-            String centerShortName = soap.getProperty("centerShortName").toString();
-            String centerFullName = soap.getProperty("centerFullName").toString();
-            int buildingCode = Integer.parseInt(soap.getProperty("buildingCode").toString());
-            String buildingShortName = soap.getProperty("buildingShortName").toString();
-            String buildingFullName = soap.getProperty("buildingFullName").toString();
-            int floor = Integer.parseInt(soap.getProperty("floor").toString());
-            int roomCode = Integer.parseInt(soap.getProperty("roomCode").toString());
-            String roomShortName = soap.getProperty("roomShortName").toString();
-            String roomFullName = soap.getProperty("roomFullName").toString();
 
-            location = new Location(institutionCode, institutionShortName, institutionFullName,
-                    centerCode, centerShortName, centerFullName, buildingCode, buildingShortName, buildingFullName,
-                    floor, roomCode, roomShortName, roomFullName);
+            if (institutionCode != -1) {
+                String institutionShortName = soap.getProperty("institutionShortName").toString();
+                String institutionFullName = soap.getProperty("institutionShortName").toString();
+                int centerCode = Integer.parseInt(soap.getProperty("centerCode").toString());
+                String centerShortName = soap.getProperty("centerShortName").toString();
+                String centerFullName = soap.getProperty("centerFullName").toString();
+                int buildingCode = Integer.parseInt(soap.getProperty("buildingCode").toString());
+                String buildingShortName = soap.getProperty("buildingShortName").toString();
+                String buildingFullName = soap.getProperty("buildingFullName").toString();
+                int floor = Integer.parseInt(soap.getProperty("floor").toString());
+                int roomCode = Integer.parseInt(soap.getProperty("roomCode").toString());
+                String roomShortName = soap.getProperty("roomShortName").toString();
+                String roomFullName = soap.getProperty("roomFullName").toString();
+
+                location = new Location(institutionCode, institutionShortName, institutionFullName,
+                        centerCode, centerShortName, centerFullName, buildingCode, buildingShortName, buildingFullName,
+                        floor, roomCode, roomShortName, roomFullName);
+            }else{
+                location = null;
+            }
         }
         Intent intent = new Intent();
         intent.putExtra("location", location);
