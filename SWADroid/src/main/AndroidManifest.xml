@@ -261,7 +261,7 @@
         </activity>
         <activity
         android:name=".modules.indoorlocation.GetLastLocation"
-        android:theme="@style/Theme.AppCompat.Light"
+        android:theme="@style/Theme.AppCompat.Translucent"
         android:parentActivityName="es.ugr.swad.swadroid.SWADMain" >
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"
@@ -269,7 +269,7 @@
         </activity>
         <activity
             android:name=".modules.indoorlocation.SendCurrentLocation"
-            android:theme="@style/Theme.AppCompat.Light"
+            android:theme="@style/Theme.AppCompat.Translucent"
             android:parentActivityName="es.ugr.swad.swadroid.SWADMain" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
