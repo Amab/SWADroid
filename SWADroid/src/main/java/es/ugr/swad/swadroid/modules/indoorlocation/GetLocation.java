@@ -70,9 +70,10 @@ public class GetLocation extends Module {
             SoapObject soap = (SoapObject) result;
             soap = (SoapObject)soap.getProperty(0);
 
-            int institutionCode = Integer.parseInt(soap.getProperty("institutionCode").toString());
+            int roomCode = Integer.parseInt(soap.getProperty("roomCode").toString());
 
-            if (institutionCode != -1) {
+            if (roomCode != -1) {
+                int institutionCode = Integer.parseInt(soap.getProperty("institutionCode").toString());
                 String institutionShortName = soap.getProperty("institutionShortName").toString();
                 String institutionFullName = soap.getProperty("institutionShortName").toString();
                 int centerCode = Integer.parseInt(soap.getProperty("centerCode").toString());
@@ -82,7 +83,6 @@ public class GetLocation extends Module {
                 String buildingShortName = soap.getProperty("buildingShortName").toString();
                 String buildingFullName = soap.getProperty("buildingFullName").toString();
                 int floor = Integer.parseInt(soap.getProperty("floor").toString());
-                int roomCode = Integer.parseInt(soap.getProperty("roomCode").toString());
                 String roomShortName = soap.getProperty("roomShortName").toString();
                 String roomFullName = soap.getProperty("roomFullName").toString();
 
