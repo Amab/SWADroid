@@ -172,6 +172,14 @@ public class LocationTimeStamp extends Model implements Serializable {
         this.roomFullName = roomFullName;
     }
 
+    public int getFloor() {
+        return floor;
+    }
+
+    public void setFloor(int floor) {
+        this.floor = floor;
+    }
+
     @Override
     public Object getProperty(int param) {
         Object object = null;

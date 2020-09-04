@@ -346,4 +346,11 @@
     <string name="prefSyncLocationTitle">Ubicación</string>
     <string name="locationDisabled">Necesitas activar la ubicación</string>
     <string name="userLocation">Ubicación de</string>
+    <string name="institution">Institución</string>
+    <string name="center">Centro</string>
+    <string name="building">Edificio</string>
+    <string name="floor">Planta</string>
+    <string name="room">Nombre</string>
+    <string name="distance">Distancia</string>
+    <string name="checkIn">Hora</string>
 </resources>

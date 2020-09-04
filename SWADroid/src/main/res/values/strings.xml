@@ -366,4 +366,11 @@
     <string name="prefSyncLocationTitle">Location</string>
     <string name="locationDisabled">You need to activate sharing location</string>
     <string name="userLocation">Location</string>
+    <string name="institution">Institution</string>
+    <string name="center">Center</string>
+    <string name="building">Building</string>
+    <string name="floor">Floor</string>
+    <string name="room">Name</string>
+    <string name="distance">Distance</string>
+    <string name="checkIn">Time</string>
 </resources>

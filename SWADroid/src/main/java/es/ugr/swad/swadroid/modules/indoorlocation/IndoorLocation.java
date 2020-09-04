@@ -1,5 +1,6 @@
 package es.ugr.swad.swadroid.modules.indoorlocation;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.util.Pair;
 import android.widget.ArrayAdapter;
@@ -17,8 +19,10 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-    import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Executors;
@@ -138,9 +142,13 @@ public class IndoorLocation extends MenuActivity {
                         Location location = (Location) data.getSerializableExtra("location");
                         if (location != null) {
                             double distance = (double) data.getSerializableExtra("distance");
-                            locationHistory.add(Objects.requireNonNull(location).getRoomFullName() + " ( " +
-                                    location.getCenterShortName() + " " +
-                                    location.getInstitutionShortName() + " ) " + distance);
+                            locationHistory.add(
+                                    getResources().getString(R.string.institution) + ": "  + location.getInstitutionShortName() + "\n" +
+                                    getResources().getString(R.string.center) + ": " + location.getCenterFullName() + "\n" +
+                                    getResources().getString(R.string.building) + ": " + location.getBuildingFullName() + "\n" +
+                                    getResources().getString(R.string.floor) + ": " + location.getFloor() + "\n" +
+                                    getResources().getString(R.string.room) + ": " + location.getFloor() + "\n" +
+                                    getResources().getString(R.string.distance) + ": " + distance + " m");
                             locationHistoryAdapter.notifyDataSetChanged();
                             Intent sendCurrentLocation = new Intent(getApplicationContext(), SendCurrentLocation.class);
                             sendCurrentLocation.putExtra("roomCode", location.getRoomCode());
@@ -161,9 +169,15 @@ public class IndoorLocation extends MenuActivity {
                     if (data != null){
                         LocationTimeStamp locationTimeStamp = (LocationTimeStamp) data.getSerializableExtra("locationTimeStamp");
                         assert locationTimeStamp != null;
-                        locationHistory.add(locationTimeStamp.getRoomFullName() + " ( " +
-                                locationTimeStamp.getCenterShortName() + " " +
-                                locationTimeStamp.getInstitutionShortName() + " )");
+                        Date checkIn = new Date((long)locationTimeStamp.getCheckInTime()*1000);
+                            @SuppressLint("SimpleDateFormat") SimpleDateFormat ft = new SimpleDateFormat ("hh:mm a");
+                        locationHistory.add(
+                                getResources().getString(R.string.institution) + ": " + locationTimeStamp.getInstitutionShortName() + "\n" +
+                                getResources().getString(R.string.center) + ": " + locationTimeStamp.getCenterShortName() + "\n" +
+                                getResources().getString(R.string.building) + ": " + locationTimeStamp.getBuildingFullName() + "\n" +
+                                getResources().getString(R.string.floor) + ": " + locationTimeStamp.getFloor() + "\n" +
+                                getResources().getString(R.string.room) + ": "+ locationTimeStamp.getRoomFullName() + "\n" +
+                                getResources().getString(R.string.checkIn) + ": "+ ft.format(checkIn) );
                         locationHistoryAdapter.notifyDataSetChanged();
                     }
                     break;
@@ -196,7 +210,8 @@ public class IndoorLocation extends MenuActivity {
                 }
                 Collections.sort(availableNetworks, (n1,n2) -> n2.second - n1.second);
                 Intent getLocation = new Intent(context, GetLocation.class);
-                getLocation.putExtra("mac", availableNetworks.get(0).first.BSSID.replace(":",""));
+                getLocation.putExtra("mac", "F07F0667D5FF"); //availableNetworks.get(0).first.BSSID.replace(":",""));
+                getLocation.putExtra("distance", availableNetworks.get(0).second.doubleValue());
                 startActivityForResult(getLocation, Constants.GET_LOCATION);
             }
         }
