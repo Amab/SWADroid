@@ -168,17 +168,19 @@ public class IndoorLocation extends MenuActivity {
                 case Constants.GET_LAST_LOCATION:
                     if (data != null){
                         LocationTimeStamp locationTimeStamp = (LocationTimeStamp) data.getSerializableExtra("locationTimeStamp");
-                        assert locationTimeStamp != null;
-                        Date checkIn = new Date((long)locationTimeStamp.getCheckInTime()*1000);
+                        if ( locationTimeStamp != null) {
+                            Date checkIn = new Date((long)locationTimeStamp.getCheckInTime()*1000);
                             @SuppressLint("SimpleDateFormat") SimpleDateFormat ft = new SimpleDateFormat ("hh:mm a");
-                        locationHistory.add(
-                                getResources().getString(R.string.institution) + ": " + locationTimeStamp.getInstitutionShortName() + "\n" +
-                                getResources().getString(R.string.center) + ": " + locationTimeStamp.getCenterShortName() + "\n" +
-                                getResources().getString(R.string.building) + ": " + locationTimeStamp.getBuildingFullName() + "\n" +
-                                getResources().getString(R.string.floor) + ": " + locationTimeStamp.getFloor() + "\n" +
-                                getResources().getString(R.string.room) + ": "+ locationTimeStamp.getRoomFullName() + "\n" +
-                                getResources().getString(R.string.checkIn) + ": "+ ft.format(checkIn) );
-                        locationHistoryAdapter.notifyDataSetChanged();
+                            locationHistory.clear();
+                            locationHistory.add(
+                                    getResources().getString(R.string.institution) + ": " + locationTimeStamp.getInstitutionShortName() + "\n" +
+                                            getResources().getString(R.string.center) + ": " + locationTimeStamp.getCenterShortName() + "\n" +
+                                            getResources().getString(R.string.building) + ": " + locationTimeStamp.getBuildingFullName() + "\n" +
+                                            getResources().getString(R.string.floor) + ": " + locationTimeStamp.getFloor() + "\n" +
+                                            getResources().getString(R.string.room) + ": "+ locationTimeStamp.getRoomFullName() + "\n" +
+                                            getResources().getString(R.string.checkIn) + ": "+ ft.format(checkIn) );
+                            locationHistoryAdapter.notifyDataSetChanged();
+                        }
                     }
                     break;
                 case Constants.SEND_CURRENT_LOCATION:
