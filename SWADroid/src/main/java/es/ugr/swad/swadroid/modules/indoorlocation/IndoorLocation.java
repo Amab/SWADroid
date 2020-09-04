@@ -9,7 +9,6 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.util.Pair;
 import android.widget.ArrayAdapter;
@@ -87,7 +86,6 @@ public class IndoorLocation extends MenuActivity {
     protected void onStart() {
         super.onStart();
 
-        //Find user location listener
         FloatingActionButton findUser = findViewById(R.id.find_user);
         findUser.setOnClickListener(view -> {
             Log.d(TAG, "onClick: Find user location");
@@ -210,7 +208,7 @@ public class IndoorLocation extends MenuActivity {
                     int distance = (int) calculateDistance(scanResult.level, scanResult.frequency);
                     availableNetworks.add(new Pair<>(scanResult, distance));
                 }
-                Collections.sort(availableNetworks, (n1,n2) -> n2.second - n1.second);
+                Collections.sort(availableNetworks, (n1,n2) -> n1.second - n2.second);
                 Intent getLocation = new Intent(context, GetLocation.class);
                 getLocation.putExtra("mac", "F07F0667D5FF"); //availableNetworks.get(0).first.BSSID.replace(":",""));
                 getLocation.putExtra("distance", availableNetworks.get(0).second.doubleValue());
