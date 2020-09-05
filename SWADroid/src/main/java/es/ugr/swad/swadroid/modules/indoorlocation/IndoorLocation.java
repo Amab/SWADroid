@@ -25,13 +25,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
-import es.ugr.swad.swadroid.model.Location;
 import es.ugr.swad.swadroid.model.LocationTimeStamp;
 import es.ugr.swad.swadroid.model.UserFilter;
 import es.ugr.swad.swadroid.modules.messages.SearchUsers;
@@ -39,7 +39,7 @@ import es.ugr.swad.swadroid.preferences.Preferences;
 
 public class IndoorLocation extends MenuActivity {
 
-    private static final String TAG = Constants.APP_TAG + " Manage location";
+    private static final String TAG = Constants.APP_TAG + " Location";
 
     private ListView history;
 
@@ -56,8 +56,6 @@ public class IndoorLocation extends MenuActivity {
     TextView textView;
 
     List<Pair<ScanResult, Integer>> availableNetworks = new ArrayList<>();
-
-    boolean userSearched = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +86,8 @@ public class IndoorLocation extends MenuActivity {
 
         FloatingActionButton findUser = findViewById(R.id.find_user);
         findUser.setOnClickListener(view -> {
-            Log.d(TAG, "onClick: Find user location");
+            scheduler.shutdownNow();
+            scheduler = Executors.newScheduledThreadPool(1);
             Intent intent = new Intent(getApplicationContext(), SearchUsers.class);
             intent.putExtra("receivers", arrayReceivers);
             startActivityForResult(intent, Constants.SEARCH_USERS_REQUEST_CODE);
@@ -99,20 +98,19 @@ public class IndoorLocation extends MenuActivity {
         FloatingActionButton updateLocation = findViewById(R.id.user_location);
         updateLocation.setOnClickListener(v -> {
             if(Preferences.getShareLocation()) {
-                if (userSearched)
-                locationHistory.clear();
-
                 textView.setText(getString(R.string.locationHistory));
-                int syncTime = Integer.parseInt(Preferences.getSyncLocationTime());
 
+                scheduler.shutdownNow();
+                int syncTime = Integer.parseInt(Preferences.getSyncLocationTime());
                 Runnable wifiScanner = this::scanWifi;
                 try {
+                    scheduler = Executors.newScheduledThreadPool(1);
                     scheduler.scheduleAtFixedRate(wifiScanner,0, syncTime, TimeUnit.MINUTES);
                 }catch (IllegalArgumentException e){
                     e.printStackTrace();
                 }
             }else{
-                scheduler.shutdown();
+                scheduler.shutdownNow();
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.locationDisabled), Toast.LENGTH_LONG).show();
             }
         });
@@ -125,6 +123,8 @@ public class IndoorLocation extends MenuActivity {
                     if (data != null) {
                         arrayReceivers = data.getParcelableArrayListExtra("receivers");
                         if(arrayReceivers != null && arrayReceivers.size() > 0){
+                            locationHistory.clear();
+                            locationHistoryAdapter.notifyDataSetChanged();
                             UserFilter user = ((UserFilter)arrayReceivers.get(0));
                             String userText = getResources().getString(R.string.userLocation) + " " + user.getUserFirstname() + " "
                                     + user.getUserSurname1();
@@ -137,7 +137,7 @@ public class IndoorLocation extends MenuActivity {
                     break;
                 case Constants.GET_LOCATION:
                     if (data != null) {
-                        Location location = (Location) data.getSerializableExtra("location");
+                        es.ugr.swad.swadroid.model.Location location = (es.ugr.swad.swadroid.model.Location) data.getSerializableExtra("location");
                         if (location != null) {
                             double distance = (double) data.getSerializableExtra("distance");
                             locationHistory.add(
@@ -172,11 +172,11 @@ public class IndoorLocation extends MenuActivity {
                             locationHistory.clear();
                             locationHistory.add(
                                     getResources().getString(R.string.institution) + ": " + locationTimeStamp.getInstitutionShortName() + "\n" +
-                                            getResources().getString(R.string.center) + ": " + locationTimeStamp.getCenterShortName() + "\n" +
-                                            getResources().getString(R.string.building) + ": " + locationTimeStamp.getBuildingFullName() + "\n" +
-                                            getResources().getString(R.string.floor) + ": " + locationTimeStamp.getFloor() + "\n" +
-                                            getResources().getString(R.string.room) + ": "+ locationTimeStamp.getRoomFullName() + "\n" +
-                                            getResources().getString(R.string.checkIn) + ": "+ ft.format(checkIn) );
+                                    getResources().getString(R.string.center) + ": " + locationTimeStamp.getCenterShortName() + "\n" +
+                                    getResources().getString(R.string.building) + ": " + locationTimeStamp.getBuildingFullName() + "\n" +
+                                    getResources().getString(R.string.floor) + ": " + locationTimeStamp.getFloor() + "\n" +
+                                    getResources().getString(R.string.room) + ": "+ locationTimeStamp.getRoomFullName() + "\n" +
+                                    getResources().getString(R.string.checkIn) + ": "+ ft.format(checkIn) );
                             locationHistoryAdapter.notifyDataSetChanged();
                         }
                     }
@@ -191,8 +191,7 @@ public class IndoorLocation extends MenuActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void scanWifi() {
-        locationHistory.clear();
+    public void scanWifi() {
         Log.d(TAG, "SCANNING WIFI");
         registerReceiver(wifiReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         wifiManager.startScan();
