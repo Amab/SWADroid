@@ -18,7 +18,7 @@ cache:
     - "$HOME/.gradle/wrapper/"
     - "$HOME/.android/build-cache"
 before_install:
-  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then bash ./travis/run_on_non_pull_requests.sh; fi'
+  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then bash ./.travis/run_on_non_pull_requests.sh; fi'
   - yes | sdkmanager "build-tools;${ANDROID_BUILD_TOOLS}"
   - yes | sdkmanager "platform-tools"
   - yes | sdkmanager "tools"
@@ -30,7 +30,7 @@ script:
   - "./gradlew clean test build connectedCheck -Pbuild=prod"
 after_failure: cat $TRAVIS_BUILD_DIR/SWADroid/build/reports/lint-results.xml
 before_deploy:
-  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then bash ./travis/run_on_before_deploy.sh; fi'
+  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then bash ./.travis/run_on_before_deploy.sh; fi'
   - cd $TRAVIS_BUILD_DIR/SWADroid/build/outputs/apk/release
   - jarsigner -sigalg SHA1withRSA -digestalg SHA1 -keystore ${TRAVIS_BUILD_DIR}/keystore.jks
     -storepass $storepass -keypass $keypass SWADroid-release-unsigned.apk amab
