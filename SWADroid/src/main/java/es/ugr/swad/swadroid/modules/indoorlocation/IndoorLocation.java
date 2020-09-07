@@ -208,7 +208,7 @@ public class IndoorLocation extends MenuActivity {
                 }
                 Collections.sort(availableNetworks, (n1,n2) -> n1.second - n2.second);
                 Intent getLocation = new Intent(context, GetLocation.class);
-                getLocation.putExtra("mac", "F07F0667D5FF"); //availableNetworks.get(0).first.BSSID.replace(":",""));
+                getLocation.putExtra("mac", availableNetworks.get(0).first.BSSID.replace(":",""));
                 getLocation.putExtra("distance", availableNetworks.get(0).second.doubleValue());
                 startActivityForResult(getLocation, Constants.GET_LOCATION);
             }
