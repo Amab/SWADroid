@@ -1,10 +1,13 @@
 package es.ugr.swad.swadroid.modules.indoorlocation;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -15,6 +18,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -72,17 +79,13 @@ public class IndoorLocation extends MenuActivity {
         assert wifiManager != null;
         if (!wifiManager.isWifiEnabled()) {
             Toast.makeText(this, "Wifi is disabled ... You need to enable it", Toast.LENGTH_LONG).show();
-            wifiManager.setWifiEnabled(true);
         }
 
         locationHistoryAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, locationHistory);
         history.setAdapter(locationHistoryAdapter);
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-
+    private void init() {
         FloatingActionButton findUser = findViewById(R.id.find_user);
         findUser.setOnClickListener(view -> {
             scheduler.shutdownNow();
@@ -113,6 +116,28 @@ public class IndoorLocation extends MenuActivity {
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.locationDisabled), Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        // check Android 6 permission
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_WIFI_STATE)
+                != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.CHANGE_WIFI_STATE)
+                        != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                                 Manifest.permission.ACCESS_WIFI_STATE,
+                                 Manifest.permission.CHANGE_WIFI_STATE}, Constants.PERMISSION_MULTIPLE);
+        }
+        else {
+            init();
+        }
+
     }
 
     @Override
@@ -221,4 +246,19 @@ public class IndoorLocation extends MenuActivity {
         return Math.pow(10.0, exp);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case Constants.PERMISSION_MULTIPLE: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                        && grantResults[1] == PackageManager.PERMISSION_GRANTED
+                        && grantResults[2] == PackageManager.PERMISSION_GRANTED) {
+                    init();
+                } else {
+                    setResult(Activity.RESULT_CANCELED);
+                    finish();
+                }
+            }
+        }
+    }
 }

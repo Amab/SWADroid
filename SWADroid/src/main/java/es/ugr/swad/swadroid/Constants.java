@@ -260,6 +260,10 @@ public class Constants {
      */
     public static final int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 101;
     /**
+     * Request code for PERMISSION_MULTIPLE permissions
+     */
+    public static final int PERMISSION_MULTIPLE = 102;
+    /**
      * Prefix tag name for Logcat
      */
     public static final String APP_TAG = "SWADroid";
