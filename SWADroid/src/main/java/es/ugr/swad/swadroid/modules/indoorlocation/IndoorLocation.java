@@ -141,76 +141,71 @@ public class IndoorLocation extends MenuActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (data != null) {
             switch (requestCode) {
                 case Constants.SEARCH_USERS_REQUEST_CODE:
-                    if (data != null) {
-                        arrayReceivers = data.getParcelableArrayListExtra("receivers");
-                        if(arrayReceivers != null && arrayReceivers.size() > 0){
-                            locationHistory.clear();
-                            locationHistoryAdapter.notifyDataSetChanged();
-                            UserFilter user = ((UserFilter)arrayReceivers.get(0));
-                            String userText = getResources().getString(R.string.userLocation) + " " + user.getUserFirstname() + " "
-                                    + user.getUserSurname1();
-                            textView.setText(userText);
-                            Intent getLastLocation = new Intent(getApplicationContext(), GetLastLocation.class);
-                            getLastLocation.putExtra("userCode", user.getUserCode());
-                            startActivityForResult(getLastLocation, Constants.GET_LAST_LOCATION);
-                        }
+                    arrayReceivers = data.getParcelableArrayListExtra("receivers");
+                    if(arrayReceivers != null && arrayReceivers.size() > 0){
+                        locationHistory.clear();
+                        locationHistoryAdapter.notifyDataSetChanged();
+                        UserFilter user = ((UserFilter)arrayReceivers.get(0));
+                        String userText = getResources().getString(R.string.userLocation) + " " + user.getUserFirstname() + " "
+                                + user.getUserSurname1();
+                        textView.setText(userText);
+                        Intent getLastLocation = new Intent(getApplicationContext(), GetLastLocation.class);
+                        getLastLocation.putExtra("userCode", user.getUserCode());
+                        startActivityForResult(getLastLocation, Constants.GET_LAST_LOCATION);
                     }
                     break;
                 case Constants.GET_LOCATION:
-                    if (data != null) {
-                        es.ugr.swad.swadroid.model.Location location = (es.ugr.swad.swadroid.model.Location) data.getSerializableExtra("location");
-                        if (location != null) {
-                            double distance = (double) data.getSerializableExtra("distance");
-                            locationHistory.add(
-                                    getResources().getString(R.string.institution) + ": "  + location.getInstitutionShortName() + "\n" +
-                                    getResources().getString(R.string.center) + ": " + location.getCenterFullName() + "\n" +
-                                    getResources().getString(R.string.building) + ": " + location.getBuildingFullName() + "\n" +
-                                    getResources().getString(R.string.floor) + ": " + location.getFloor() + "\n" +
-                                    getResources().getString(R.string.room) + ": " + location.getFloor() + "\n" +
-                                    getResources().getString(R.string.distance) + ": " + distance + " m");
-                            locationHistoryAdapter.notifyDataSetChanged();
-                            Intent sendCurrentLocation = new Intent(getApplicationContext(), SendCurrentLocation.class);
-                            sendCurrentLocation.putExtra("roomCode", location.getRoomCode());
-                            startActivityForResult(sendCurrentLocation, Constants.SEND_CURRENT_LOCATION);
-                        }else {
-                            try {
-                                availableNetworks.remove(0);
-                                Intent getLocation = new Intent(this.getApplicationContext(), GetLocation.class);
-                                getLocation.putExtra("mac", availableNetworks.get(0).first.BSSID.replace(":",""));
-                                startActivityForResult(getLocation, Constants.GET_LOCATION);
-                            }catch (IndexOutOfBoundsException e){
-                                Log.d(TAG, "No more available networks");
-                            }
+                    es.ugr.swad.swadroid.model.Location location = (es.ugr.swad.swadroid.model.Location) data.getSerializableExtra("location");
+                    if (location != null) {
+                        double distance = (double) data.getSerializableExtra("distance");
+                        locationHistory.add(
+                                getResources().getString(R.string.institution) + ": "  + location.getInstitutionShortName() + "\n" +
+                                        getResources().getString(R.string.center) + ": " + location.getCenterFullName() + "\n" +
+                                        getResources().getString(R.string.building) + ": " + location.getBuildingFullName() + "\n" +
+                                        getResources().getString(R.string.floor) + ": " + location.getFloor() + "\n" +
+                                        getResources().getString(R.string.room) + ": " + location.getFloor() + "\n" +
+                                        getResources().getString(R.string.distance) + ": " + distance + " m");
+                        locationHistoryAdapter.notifyDataSetChanged();
+                        Intent sendCurrentLocation = new Intent(getApplicationContext(), SendCurrentLocation.class);
+                        sendCurrentLocation.putExtra("roomCode", location.getRoomCode());
+                        startActivityForResult(sendCurrentLocation, Constants.SEND_CURRENT_LOCATION);
+                    }else {
+                        try {
+                            availableNetworks.remove(0);
+                            Intent getLocation = new Intent(this.getApplicationContext(), GetLocation.class);
+                            getLocation.putExtra("mac", availableNetworks.get(0).first.BSSID.replace(":",""));
+                            startActivityForResult(getLocation, Constants.GET_LOCATION);
+                        }catch (IndexOutOfBoundsException e){
+                            Log.d(TAG, "No more available networks");
                         }
                     }
                     break;
                 case Constants.GET_LAST_LOCATION:
-                    if (data != null){
-                        LocationTimeStamp locationTimeStamp = (LocationTimeStamp) data.getSerializableExtra("locationTimeStamp");
-                        if ( locationTimeStamp != null) {
-                            Date checkIn = new Date((long)locationTimeStamp.getCheckInTime()*1000);
-                            @SuppressLint("SimpleDateFormat") SimpleDateFormat ft = new SimpleDateFormat ("hh:mm a");
-                            locationHistory.clear();
-                            locationHistory.add(
-                                    getResources().getString(R.string.institution) + ": " + locationTimeStamp.getInstitutionShortName() + "\n" +
-                                    getResources().getString(R.string.center) + ": " + locationTimeStamp.getCenterShortName() + "\n" +
-                                    getResources().getString(R.string.building) + ": " + locationTimeStamp.getBuildingFullName() + "\n" +
-                                    getResources().getString(R.string.floor) + ": " + locationTimeStamp.getFloor() + "\n" +
-                                    getResources().getString(R.string.room) + ": "+ locationTimeStamp.getRoomFullName() + "\n" +
-                                    getResources().getString(R.string.checkIn) + ": "+ ft.format(checkIn) );
-                            locationHistoryAdapter.notifyDataSetChanged();
-                        }
+                    LocationTimeStamp locationTimeStamp = (LocationTimeStamp) data.getSerializableExtra("locationTimeStamp");
+                    if ( locationTimeStamp != null) {
+                        Date checkIn = new Date((long)locationTimeStamp.getCheckInTime()*1000);
+                        @SuppressLint("SimpleDateFormat") SimpleDateFormat ft = new SimpleDateFormat ("hh:mm a");
+                        locationHistory.clear();
+                        locationHistory.add(
+                                getResources().getString(R.string.institution) + ": " + locationTimeStamp.getInstitutionShortName() + "\n" +
+                                        getResources().getString(R.string.center) + ": " + locationTimeStamp.getCenterShortName() + "\n" +
+                                        getResources().getString(R.string.building) + ": " + locationTimeStamp.getBuildingFullName() + "\n" +
+                                        getResources().getString(R.string.floor) + ": " + locationTimeStamp.getFloor() + "\n" +
+                                        getResources().getString(R.string.room) + ": "+ locationTimeStamp.getRoomFullName() + "\n" +
+                                        getResources().getString(R.string.checkIn) + ": "+ ft.format(checkIn) );
+                        locationHistoryAdapter.notifyDataSetChanged();
                     }
                     break;
                 case Constants.SEND_CURRENT_LOCATION:
-                    if (data != null){
-                        if ((boolean) data.getSerializableExtra("success"))
-                            Log.d(TAG, "Current location sent");
-                    }
+                    if ((boolean) data.getSerializableExtra("success"))
+                        Log.d(TAG, "Current location sent");
                     break;
             }
+        }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
