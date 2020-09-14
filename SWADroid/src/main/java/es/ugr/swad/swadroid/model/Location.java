@@ -7,47 +7,47 @@ import java.util.Hashtable;
 
 public class Location extends Model implements Serializable {
 
-    private int institutionCode;
+    protected int institutionCode;
 
-    private String institutionShortName;
+    protected String institutionShortName;
 
-    private String institutionFullName;
+    protected String institutionFullName;
 
-    private int centerCode;
+    protected int centerCode;
 
-    private String centerShortName;
+    protected String centerShortName;
 
-    private String centerFullName;
+    protected String centerFullName;
 
-    private int buildingCode;
+    protected int buildingCode;
 
-    private String buildingShortName;
+    protected String buildingShortName;
 
-    private String buildingFullName;
+    protected String buildingFullName;
 
-    private int floor;
+    protected int floor;
 
-    private int roomCode;
+    protected int roomCode;
 
-    private String roomShortName;
+    protected String roomShortName;
 
-    private String roomFullName;
+    protected String roomFullName;
 
-    private static final PropertyInfo PI_id = new PropertyInfo();
-    private static final PropertyInfo PI_institutionCode = new PropertyInfo();
-    private static final PropertyInfo PI_institutionShortName = new PropertyInfo();
-    private static final PropertyInfo PI_institutionFullName = new PropertyInfo();
-    private static final PropertyInfo PI_centerCode = new PropertyInfo();
-    private static final PropertyInfo PI_centerShortName = new PropertyInfo();
-    private static final PropertyInfo PI_centerFullName = new PropertyInfo();
-    private static final PropertyInfo PI_buildingCode = new PropertyInfo();
-    private static final PropertyInfo PI_buildingShortName = new PropertyInfo();
-    private static final PropertyInfo PI_buildingFullName = new PropertyInfo();
-    private static final PropertyInfo PI_floor = new PropertyInfo();
-    private static final PropertyInfo PI_roomCode = new PropertyInfo();
-    private static final PropertyInfo PI_roomShortName = new PropertyInfo();
-    private static final PropertyInfo PI_roomFullName = new PropertyInfo();
-    private static PropertyInfo[] PI_PROP_ARRAY =
+    protected static final PropertyInfo PI_id = new PropertyInfo();
+    protected static final PropertyInfo PI_institutionCode = new PropertyInfo();
+    protected static final PropertyInfo PI_institutionShortName = new PropertyInfo();
+    protected static final PropertyInfo PI_institutionFullName = new PropertyInfo();
+    protected static final PropertyInfo PI_centerCode = new PropertyInfo();
+    protected static final PropertyInfo PI_centerShortName = new PropertyInfo();
+    protected static final PropertyInfo PI_centerFullName = new PropertyInfo();
+    protected static final PropertyInfo PI_buildingCode = new PropertyInfo();
+    protected static final PropertyInfo PI_buildingShortName = new PropertyInfo();
+    protected static final PropertyInfo PI_buildingFullName = new PropertyInfo();
+    protected static final PropertyInfo PI_floor = new PropertyInfo();
+    protected static final PropertyInfo PI_roomCode = new PropertyInfo();
+    protected static final PropertyInfo PI_roomShortName = new PropertyInfo();
+    protected static final PropertyInfo PI_roomFullName = new PropertyInfo();
+    protected static PropertyInfo[] PI_PROP_ARRAY =
             {
                     PI_id,
                     PI_institutionCode,
