@@ -21,6 +21,10 @@ public class GetLocation extends Module {
      */
     private double distance;
     /**
+     * Default distance
+     */
+    private final double defaultDistance = 500;
+    /**
      * Location related to mac
      */
     private Location location;
@@ -55,7 +59,7 @@ public class GetLocation extends Module {
     protected void onStart() {
         super.onStart();
         mac = getIntent().getStringExtra("mac");
-        distance = getIntent().getDoubleExtra("distance", 500.0);
+        distance = getIntent().getDoubleExtra("distance", defaultDistance);
         connect();
     }
 
