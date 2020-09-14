@@ -99,20 +99,19 @@ public class IndoorLocation extends MenuActivity {
 
         FloatingActionButton updateLocation = findViewById(R.id.user_location);
         updateLocation.setOnClickListener(v -> {
+            scheduler.shutdownNow();
+            scheduler = Executors.newScheduledThreadPool(1);
             if(Preferences.getShareLocation()) {
                 textView.setText(getString(R.string.locationHistory));
 
-                scheduler.shutdownNow();
                 int syncTime = Integer.parseInt(Preferences.getSyncLocationTime());
                 Runnable wifiScanner = this::scanWifi;
                 try {
-                    scheduler = Executors.newScheduledThreadPool(1);
                     scheduler.scheduleAtFixedRate(wifiScanner,0, syncTime, TimeUnit.MINUTES);
                 }catch (IllegalArgumentException e){
-                    e.printStackTrace();
+                    Log.e(TAG, e.getMessage(), e);
                 }
             }else{
-                scheduler.shutdownNow();
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.locationDisabled), Toast.LENGTH_LONG).show();
             }
         });
