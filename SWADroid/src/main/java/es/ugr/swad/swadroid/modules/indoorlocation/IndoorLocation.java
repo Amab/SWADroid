@@ -173,7 +173,7 @@ public class IndoorLocation extends MenuActivity {
                             Intent sendCurrentLocation = new Intent(getApplicationContext(), SendCurrentLocation.class);
                             sendCurrentLocation.putExtra("roomCode", location.getRoomCode());
                             startActivityForResult(sendCurrentLocation, Constants.SEND_CURRENT_LOCATION);
-                        }else {
+                        } else {
                             try {
                                 availableNetworks.remove(0);
                                 Intent getLocation = new Intent(this.getApplicationContext(), GetLocation.class);
