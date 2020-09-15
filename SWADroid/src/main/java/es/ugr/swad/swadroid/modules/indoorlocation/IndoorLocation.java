@@ -111,7 +111,7 @@ public class IndoorLocation extends MenuActivity {
                 } catch (IllegalArgumentException e) {
                     Log.e(TAG, e.getMessage(), e);
                 }
-            }else{
+            } else {
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.locationDisabled), Toast.LENGTH_LONG).show();
             }
         });
