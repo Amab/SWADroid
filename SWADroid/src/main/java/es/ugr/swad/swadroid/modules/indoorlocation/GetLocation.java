@@ -70,7 +70,7 @@ public class GetLocation extends Module {
         addParam("MAC", mac);
         sendRequest(Location.class, true);
 
-        if (result!=null) {
+        if (result != null) {
             SoapObject soap = (SoapObject) result;
             soap = (SoapObject)soap.getProperty(0);
 
