@@ -204,7 +204,7 @@ public class IndoorLocation extends MenuActivity {
     }
 
     public void scanWifi() {
-        Log.d(TAG, "SCANNING WIFI");
+        Log.i(TAG, "SCANNING WIFI");
         registerReceiver(wifiReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         wifiManager.startScan();
     }
