@@ -46,7 +46,7 @@ import es.ugr.swad.swadroid.preferences.Preferences;
 
 public class IndoorLocation extends MenuActivity {
 
-    private static final String TAG = Constants.APP_TAG + " Location";
+    private static final String TAG = Constants.APP_TAG + " IndoorLocation";
 
     private ListView history;
 
@@ -109,10 +109,10 @@ public class IndoorLocation extends MenuActivity {
                 Runnable wifiScanner = this::scanWifi;
                 try {
                     scheduler.scheduleAtFixedRate(wifiScanner,0, syncTime, TimeUnit.MINUTES);
-                }catch (IllegalArgumentException e){
+                } catch (IllegalArgumentException e) {
                     Log.e(TAG, e.getMessage(), e);
                 }
-            }else{
+            } else {
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.locationDisabled), Toast.LENGTH_LONG).show();
             }
         });
@@ -133,8 +133,7 @@ public class IndoorLocation extends MenuActivity {
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
                                  Manifest.permission.ACCESS_WIFI_STATE,
                                  Manifest.permission.CHANGE_WIFI_STATE}, Constants.PERMISSION_MULTIPLE);
-        }
-        else {
+        } else {
             init();
         }
 

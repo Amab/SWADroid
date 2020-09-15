@@ -31,7 +31,7 @@ public class GetLocation extends Module {
     /**
      * Messages tag name for Logcat
      */
-    private static final String TAG = Constants.APP_TAG + " Get location";
+    private static final String TAG = Constants.APP_TAG + " GetLocation";
 
     @Override
     protected void runConnection() {
@@ -70,7 +70,7 @@ public class GetLocation extends Module {
         addParam("MAC", mac);
         sendRequest(Location.class, true);
 
-        if (result!=null) {
+        if (result != null) {
             SoapObject soap = (SoapObject) result;
             soap = (SoapObject)soap.getProperty(0);
 
@@ -93,7 +93,7 @@ public class GetLocation extends Module {
                 location = new Location(institutionCode, institutionShortName, institutionFullName,
                         centerCode, centerShortName, centerFullName, buildingCode, buildingShortName, buildingFullName,
                         floor, roomCode, roomShortName, roomFullName);
-            }else{
+            } else {
                 location = null;
             }
         }
