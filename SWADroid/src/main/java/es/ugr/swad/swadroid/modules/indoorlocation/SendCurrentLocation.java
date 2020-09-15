@@ -58,7 +58,7 @@ public class SendCurrentLocation  extends Module {
         addParam("roomCode", roomCode);
         sendRequest(Boolean.class, true);
 
-        if (result!=null) {
+        if (result != null) {
             SoapObject soap = (SoapObject) result;
             success = Integer.parseInt(soap.getProperty("success").toString()) != 0
         }
