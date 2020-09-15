@@ -14,7 +14,7 @@
     <string name="messagesModuleLabel">Enviar mensaje</string>
     <string name="noticesModuleLabel">Publicar aviso</string>
     <string name="generateQRModuleLabel">Generar código QR</string>
-    <string name="manageLocation">Ubicación</string>
+    <string name="manageLocation">Ubicación en interiores</string>
     <string name="title_error_dialog">ERROR</string>
     <string name="areYouSure">¿Está usted seguro?</string>
     <string name="close_dialog">Cerrar</string>

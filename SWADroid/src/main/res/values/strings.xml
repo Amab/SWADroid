@@ -15,7 +15,7 @@
     <string name="messagesModuleLabel">Send message</string>
     <string name="noticesModuleLabel">Publish notice</string>
     <string name="generateQRModuleLabel">Generate QR code</string>
-    <string name="manageLocation">Location</string>
+    <string name="manageLocation">Indoor location</string>
     <string name="title_error_dialog">ERROR</string>
     <string name="areYouSure">Are you sure?</string>
     <string name="close_dialog">Close</string>
@@ -137,7 +137,7 @@
     <string name="blogTitle">Blog</string>
     <string name="prefCatSyncTitle">Synchronization</string>
     <string name="prefSyncTimeTitle">Frecuency</string>
-    <string name="prefSyncTimeSummary">Synchronization frecuency</string>
+    <string name="prefSyncTimeSummary">Synchronization frequency</string>
     <string name="prefSyncTimeKey" translatable="false">prefSyncTime</string>
     <string name="prefSyncEnableTitle">Auto Sync</string>
     <string name="prefSyncEnableSummary">Enable auto sync</string>
