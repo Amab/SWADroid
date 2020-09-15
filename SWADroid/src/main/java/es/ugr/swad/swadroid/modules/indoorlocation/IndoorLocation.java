@@ -147,7 +147,7 @@ public class IndoorLocation extends MenuActivity {
                         if(arrayReceivers != null && arrayReceivers.size() > 0){
                             locationHistory.clear();
                             locationHistoryAdapter.notifyDataSetChanged();
-                            UserFilter user = ((UserFilter)arrayReceivers.get(0));
+                            UserFilter user = ((UserFilter) arrayReceivers.get(0));
                             String userText = getResources().getString(R.string.userLocation) + " " + user.getUserFirstname() + " "
                                     + user.getUserSurname1();
                             textView.setText(userText);
