@@ -135,7 +135,7 @@
     <string name="telegramTitle" translatable="false">Telegram</string>
     <string name="marketTitle" translatable="false">Google Play</string>
     <string name="blogTitle">Blog</string>
-    <string name="prefSyncTimeTitle">Frecuency</string>
+    <string name="prefSyncTimeTitle">Frequency</string>
     <string name="prefSyncTimeSummary">Synchronization frequency</string>
     <string name="prefSyncTimeKey" translatable="false">prefSyncTime</string>
     <string name="prefSyncEnableTitle">Auto Sync</string>
