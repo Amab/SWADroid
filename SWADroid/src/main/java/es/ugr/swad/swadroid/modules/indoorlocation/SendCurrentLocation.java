@@ -15,7 +15,7 @@ public class SendCurrentLocation  extends Module {
     /**
      * Messages tag name for Logcat
      */
-    private static final String TAG = Constants.APP_TAG + " Send Current Location";
+    private static final String TAG = Constants.APP_TAG + " SendCurrentLocation";
     /**
      * Room code
      */
