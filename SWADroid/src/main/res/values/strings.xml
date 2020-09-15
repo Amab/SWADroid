@@ -137,7 +137,7 @@
     <string name="blogTitle">Blog</string>
     <string name="prefCatSyncTitle">Synchronization</string>
     <string name="prefSyncTimeTitle">Frecuency</string>
-    <string name="prefSyncTimeSummary">Synchronization frecuency</string>
+    <string name="prefSyncTimeSummary">Synchronization frequency</string>
     <string name="prefSyncTimeKey" translatable="false">prefSyncTime</string>
     <string name="prefSyncEnableTitle">Auto Sync</string>
     <string name="prefSyncEnableSummary">Enable auto sync</string>
