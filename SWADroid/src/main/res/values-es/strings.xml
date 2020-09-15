@@ -340,7 +340,7 @@
     <string name="findUser">Encontrar usuario</string>
     <string name="locationHistory">Historial de ubicaciones</string>
     <string name="update">Actualizar</string>
-    <string name="prefSyncLocationTimeTitle">Ubicación</string>
+    <string name="prefSyncLocationTimeTitle">Ubicación en interiores</string>
     <string name="prefSyncNotificationTitle">Notificaciones</string>
     <string name="prefShareLocation">Habilitar ubicación en interiores</string>
     <string name="prefSyncLocationTimeSummary">Frecuencia de sincronización para ubicación</string>
