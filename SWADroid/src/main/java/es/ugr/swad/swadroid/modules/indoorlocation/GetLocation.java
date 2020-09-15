@@ -93,7 +93,7 @@ public class GetLocation extends Module {
                 location = new Location(institutionCode, institutionShortName, institutionFullName,
                         centerCode, centerShortName, centerFullName, buildingCode, buildingShortName, buildingFullName,
                         floor, roomCode, roomShortName, roomFullName);
-            }else{
+            } else {
                 location = null;
             }
         }
