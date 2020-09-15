@@ -45,7 +45,7 @@ import es.ugr.swad.swadroid.preferences.Preferences;
 
 public class IndoorLocation extends MenuActivity {
 
-    private static final String TAG = Constants.APP_TAG + " Location";
+    private static final String TAG = Constants.APP_TAG + " IndoorLocation";
 
     private ListView history;
 
