@@ -189,7 +189,7 @@ public class IndoorLocation extends MenuActivity {
                     if (data != null){
                         LocationTimeStamp locationTimeStamp = (LocationTimeStamp) data.getSerializableExtra("locationTimeStamp");
                         if (locationTimeStamp != null) {
-                            Date checkIn = new Date((long)locationTimeStamp.getCheckInTime()*1000);
+                            Date checkIn = new Date((long) locationTimeStamp.getCheckInTime() * 1000);
                             @SuppressLint("SimpleDateFormat") SimpleDateFormat ft = new SimpleDateFormat ("hh:mm a");
                             locationHistory.clear();
                             locationHistory.add(
