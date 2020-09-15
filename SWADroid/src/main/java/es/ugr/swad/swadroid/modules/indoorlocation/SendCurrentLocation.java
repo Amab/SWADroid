@@ -15,7 +15,7 @@ public class SendCurrentLocation  extends Module {
     /**
      * Messages tag name for Logcat
      */
-    private static final String TAG = Constants.APP_TAG + " Send Current Location";
+    private static final String TAG = Constants.APP_TAG + " SendCurrentLocation";
     /**
      * Room code
      */
@@ -58,11 +58,9 @@ public class SendCurrentLocation  extends Module {
         addParam("roomCode", roomCode);
         sendRequest(Boolean.class, true);
 
-        if (result!=null) {
+        if (result != null) {
             SoapObject soap = (SoapObject) result;
-            if (Integer.parseInt(soap.getProperty("success").toString()) != 0) {
-                success = true;
-            }
+            success = Integer.parseInt(soap.getProperty("success").toString()) != 0
         }
 
         Intent intent = new Intent();

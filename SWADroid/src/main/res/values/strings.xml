@@ -135,8 +135,7 @@
     <string name="telegramTitle" translatable="false">Telegram</string>
     <string name="marketTitle" translatable="false">Google Play</string>
     <string name="blogTitle">Blog</string>
-    <string name="prefCatSyncTitle">Synchronization</string>
-    <string name="prefSyncTimeTitle">Frecuency</string>
+    <string name="prefSyncTimeTitle">Frequency</string>
     <string name="prefSyncTimeSummary">Synchronization frequency</string>
     <string name="prefSyncTimeKey" translatable="false">prefSyncTime</string>
     <string name="prefSyncEnableTitle">Auto Sync</string>
@@ -361,10 +360,10 @@
     <string name="prefSyncLocationTimeSummary">Synchronization frequency of indoor location</string>
     <string name="prefSyncLocationTimeKey" translatable="false">prefSyncLocationTime</string>
     <string name="prefSyncNotificationTitle">Notifications</string>
-    <string name="prefShareLocation">Enable location</string>
+    <string name="prefShareLocation">Enable indoor location</string>
     <string name="prefShareLocationKey" translatable="false">prefShareLocation</string>
-    <string name="prefSyncLocationTitle">Location</string>
-    <string name="locationDisabled">You need to activate sharing location</string>
+    <string name="prefSyncLocationTitle">Indoor location</string>
+    <string name="locationDisabled">You need to activate sharing indoor location in preferences</string>
     <string name="userLocation">Location</string>
     <string name="institution">Institution</string>
     <string name="center">Center</string>
