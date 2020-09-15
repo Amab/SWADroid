@@ -343,7 +343,7 @@
     <string name="prefSyncLocationTimeTitle">Ubicación</string>
     <string name="prefSyncNotificationTitle">Notificaciones</string>
     <string name="prefShareLocation">Habilitar ubicación en interiores</string>
-    <string name="prefSyncLocationTimeSummary">Frecuencia de sincronización para localización</string>
+    <string name="prefSyncLocationTimeSummary">Frecuencia de sincronización para ubicación</string>
     <string name="prefSyncLocationTitle">Ubicación en interiores</string>
     <string name="locationDisabled">Es necesario activar la ubicación en interiores en las preferencias</string>
     <string name="userLocation">Ubicación de</string>
