@@ -61,7 +61,7 @@ public class UserFilter extends Model implements Serializable{
 
     /**
      * Constructor.
-     *  @param userNickname  User identifier.
+     * @param userNickname  User identifier.
      * @param userSurname1  User first surname.
      * @param userSurname2  User last surname.
      * @param userFirstname User name.

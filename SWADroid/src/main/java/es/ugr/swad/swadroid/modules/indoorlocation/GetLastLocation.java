@@ -19,7 +19,7 @@ public class GetLastLocation extends Module {
     /**
      * Messages tag name for Logcat
      */
-    private static final String TAG = Constants.APP_TAG + " Get last location";
+    private static final String TAG = Constants.APP_TAG + " GetLastLocation";
 
     @Override
     protected void runConnection() {

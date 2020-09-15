@@ -358,7 +358,7 @@
     <string name="locationHistory">Location history</string>
     <string name="update">Update</string>
     <string name="prefSyncLocationTimeTitle">Synchronization</string>
-    <string name="prefSyncLocationTimeSummary">Synchronization frequency of location</string>
+    <string name="prefSyncLocationTimeSummary">Synchronization frequency of indoor location</string>
     <string name="prefSyncLocationTimeKey" translatable="false">prefSyncLocationTime</string>
     <string name="prefSyncNotificationTitle">Notifications</string>
     <string name="prefShareLocation">Enable location</string>
