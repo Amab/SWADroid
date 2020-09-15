@@ -125,7 +125,7 @@
         https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid</string>
     <string name="blogTitle">Blog</string>
     <string name="prefCatSyncTitle">Sincronización</string>
-    <string name="prefSyncTimeTitle">Notificaciones</string>
+    <string name="prefSyncTimeTitle">Frecuencia de sincronización</string>
     <string name="prefSyncTimeSummary">Frecuencia de sincronización de las notificaciones</string>
     <string name="prefSyncEnableTitle">Sincronización automática</string>
     <string name="prefSyncEnableSummary">Habilitar la sincronización automática</string>
