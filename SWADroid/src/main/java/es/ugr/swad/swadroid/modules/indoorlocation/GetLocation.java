@@ -31,7 +31,7 @@ public class GetLocation extends Module {
     /**
      * Messages tag name for Logcat
      */
-    private static final String TAG = Constants.APP_TAG + " Get location";
+    private static final String TAG = Constants.APP_TAG + " GetLocation";
 
     @Override
     protected void runConnection() {
