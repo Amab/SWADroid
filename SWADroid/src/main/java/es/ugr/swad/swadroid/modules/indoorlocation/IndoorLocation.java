@@ -38,6 +38,7 @@ import java.util.concurrent.TimeUnit;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
+import es.ugr.swad.swadroid.model.Location;
 import es.ugr.swad.swadroid.model.LocationTimeStamp;
 import es.ugr.swad.swadroid.model.UserFilter;
 import es.ugr.swad.swadroid.modules.messages.SearchUsers;
@@ -146,7 +147,7 @@ public class IndoorLocation extends MenuActivity {
             switch (requestCode) {
                 case Constants.SEARCH_USERS_REQUEST_CODE:
                     arrayReceivers = data.getParcelableArrayListExtra("receivers");
-                    if(arrayReceivers != null && arrayReceivers.size() > 0){
+                    if (arrayReceivers != null && arrayReceivers.size() > 0) {
                         locationHistory.clear();
                         locationHistoryAdapter.notifyDataSetChanged();
                         UserFilter user = ((UserFilter)arrayReceivers.get(0));
@@ -159,28 +160,24 @@ public class IndoorLocation extends MenuActivity {
                     }
                     break;
                 case Constants.GET_LOCATION:
-                    es.ugr.swad.swadroid.model.Location location = (es.ugr.swad.swadroid.model.Location) data.getSerializableExtra("location");
+                    Location location = (es.ugr.swad.swadroid.model.Location) data.getSerializableExtra("location");
                     if (location != null) {
                         double distance = (double) data.getSerializableExtra("distance");
                         locationHistory.add(
-                                getResources().getString(R.string.institution) + ": "  + location.getInstitutionShortName() + "\n" +
-                                        getResources().getString(R.string.center) + ": " + location.getCenterFullName() + "\n" +
-                                        getResources().getString(R.string.building) + ": " + location.getBuildingFullName() + "\n" +
-                                        getResources().getString(R.string.floor) + ": " + location.getFloor() + "\n" +
-                                        getResources().getString(R.string.room) + ": " + location.getFloor() + "\n" +
-                                        getResources().getString(R.string.distance) + ": " + distance + " m");
+                                getBasicInformation(location) +
+                                getResources().getString(R.string.distance) + ": " + distance + " m");
                         locationHistoryAdapter.notifyDataSetChanged();
                         Intent sendCurrentLocation = new Intent(getApplicationContext(), SendCurrentLocation.class);
                         sendCurrentLocation.putExtra("roomCode", location.getRoomCode());
                         startActivityForResult(sendCurrentLocation, Constants.SEND_CURRENT_LOCATION);
-                    }else {
-                        try {
+                    } else {
+                        if (availableNetworks.isEmpty()) {
+                            Log.d(TAG, "No more available networks");
+                        } else {
                             availableNetworks.remove(0);
                             Intent getLocation = new Intent(this.getApplicationContext(), GetLocation.class);
                             getLocation.putExtra("mac", availableNetworks.get(0).first.BSSID.replace(":",""));
                             startActivityForResult(getLocation, Constants.GET_LOCATION);
-                        }catch (IndexOutOfBoundsException e){
-                            Log.d(TAG, "No more available networks");
                         }
                     }
                     break;
@@ -191,12 +188,8 @@ public class IndoorLocation extends MenuActivity {
                         @SuppressLint("SimpleDateFormat") SimpleDateFormat ft = new SimpleDateFormat ("hh:mm a");
                         locationHistory.clear();
                         locationHistory.add(
-                                getResources().getString(R.string.institution) + ": " + locationTimeStamp.getInstitutionShortName() + "\n" +
-                                        getResources().getString(R.string.center) + ": " + locationTimeStamp.getCenterShortName() + "\n" +
-                                        getResources().getString(R.string.building) + ": " + locationTimeStamp.getBuildingFullName() + "\n" +
-                                        getResources().getString(R.string.floor) + ": " + locationTimeStamp.getFloor() + "\n" +
-                                        getResources().getString(R.string.room) + ": "+ locationTimeStamp.getRoomFullName() + "\n" +
-                                        getResources().getString(R.string.checkIn) + ": "+ ft.format(checkIn) );
+                                getBasicInformation(locationTimeStamp) +
+                                getResources().getString(R.string.checkIn) + ": "+ ft.format(checkIn));
                         locationHistoryAdapter.notifyDataSetChanged();
                     }
                     break;
@@ -254,5 +247,13 @@ public class IndoorLocation extends MenuActivity {
                 }
             }
         }
+    }
+
+    private String getBasicInformation(Location location) {
+        return  getResources().getString(R.string.institution) + ": "  + location.getInstitutionShortName() + "\n" +
+                getResources().getString(R.string.center) + ": " + location.getCenterFullName() + "\n" +
+                getResources().getString(R.string.building) + ": " + location.getBuildingFullName() + "\n" +
+                getResources().getString(R.string.floor) + ": " + location.getFloor() + "\n" +
+                getResources().getString(R.string.room) + ": " + location.getFloor() + "\n";
     }
 }
