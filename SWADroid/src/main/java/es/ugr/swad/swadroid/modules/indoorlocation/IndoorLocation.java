@@ -64,6 +64,8 @@ public class IndoorLocation extends MenuActivity {
 
     List<Pair<ScanResult, Integer>> availableNetworks = new ArrayList<>();
 
+    double FREE_SPACE_PATH_LOSS_CONSTANT = 27.55;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -227,7 +229,6 @@ public class IndoorLocation extends MenuActivity {
     };
 
     public double calculateDistance(double levelInDb, double freqInMHz) {
-        double FREE_SPACE_PATH_LOSS_CONSTANT = 27.55;
         double exp = (FREE_SPACE_PATH_LOSS_CONSTANT - (20 * Math.log10(freqInMHz)) + Math.abs(levelInDb)) / 20.0;
         return Math.pow(10.0, exp);
     }
