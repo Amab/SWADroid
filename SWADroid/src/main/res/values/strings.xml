@@ -364,7 +364,7 @@
     <string name="prefShareLocation">Enable location</string>
     <string name="prefShareLocationKey" translatable="false">prefShareLocation</string>
     <string name="prefSyncLocationTitle">Location</string>
-    <string name="locationDisabled">You need to activate sharing location</string>
+    <string name="locationDisabled">You need to activate sharing indoor location in preferences</string>
     <string name="userLocation">Location</string>
     <string name="institution">Institution</string>
     <string name="center">Center</string>
