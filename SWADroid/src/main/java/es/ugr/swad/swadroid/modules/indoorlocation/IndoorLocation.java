@@ -108,7 +108,7 @@ public class IndoorLocation extends MenuActivity {
                 Runnable wifiScanner = this::scanWifi;
                 try {
                     scheduler.scheduleAtFixedRate(wifiScanner,0, syncTime, TimeUnit.MINUTES);
-                }catch (IllegalArgumentException e){
+                } catch (IllegalArgumentException e) {
                     Log.e(TAG, e.getMessage(), e);
                 }
             }else{
