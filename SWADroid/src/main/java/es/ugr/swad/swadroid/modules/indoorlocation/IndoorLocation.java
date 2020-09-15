@@ -132,8 +132,7 @@ public class IndoorLocation extends MenuActivity {
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
                                  Manifest.permission.ACCESS_WIFI_STATE,
                                  Manifest.permission.CHANGE_WIFI_STATE}, Constants.PERMISSION_MULTIPLE);
-        }
-        else {
+        } else {
             init();
         }
 
