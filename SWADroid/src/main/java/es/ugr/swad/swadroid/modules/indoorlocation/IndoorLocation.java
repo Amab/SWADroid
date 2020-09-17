@@ -105,7 +105,7 @@ public class IndoorLocation extends MenuActivity {
             scheduler.shutdownNow();
             scheduler = Executors.newScheduledThreadPool(1);
             if(Preferences.getShareLocation()) {
-                textView.setText(getString(R.string.locationHistory));
+                textView.setText(getString(R.string.lastLocation));
 
                 int syncTime = Integer.parseInt(Preferences.getSyncLocationTime());
                 Runnable wifiScanner = this::scanWifi;
