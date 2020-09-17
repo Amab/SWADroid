@@ -60,7 +60,7 @@ public class SendCurrentLocation  extends Module {
 
         if (result != null) {
             SoapObject soap = (SoapObject) result;
-            success = Integer.parseInt(soap.getProperty("success").toString()) != 0
+            success = Integer.parseInt(soap.getProperty("success").toString()) != 0;
         }
 
         Intent intent = new Intent();

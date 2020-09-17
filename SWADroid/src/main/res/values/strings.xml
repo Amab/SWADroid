@@ -372,4 +372,5 @@
     <string name="room">Name</string>
     <string name="distance">Distance</string>
     <string name="checkIn">Time</string>
+    <string name="lostLocation">Location not found</string>
 </resources>

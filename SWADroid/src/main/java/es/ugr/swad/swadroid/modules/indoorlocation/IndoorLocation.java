@@ -84,6 +84,7 @@ public class IndoorLocation extends MenuActivity {
             Toast.makeText(this, "Wifi is disabled ... You need to enable it", Toast.LENGTH_LONG).show();
         }
 
+        locationHistory.add(getResources().getString(R.string.lostLocation));
         locationHistoryAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, locationHistory);
         history.setAdapter(locationHistoryAdapter);
     }
@@ -184,7 +185,7 @@ public class IndoorLocation extends MenuActivity {
                     break;
                 case Constants.GET_LAST_LOCATION:
                     LocationTimeStamp locationTimeStamp = (LocationTimeStamp) data.getSerializableExtra("locationTimeStamp");
-                    if ( locationTimeStamp != null) {
+                    if ( locationTimeStamp != null && locationTimeStamp.getRoomCode() != -1) {
                         Date checkIn = new Date((long)locationTimeStamp.getCheckInTime()*1000);
                         @SuppressLint("SimpleDateFormat") SimpleDateFormat ft = new SimpleDateFormat ("hh:mm a");
                         locationHistory.clear();
@@ -192,6 +193,11 @@ public class IndoorLocation extends MenuActivity {
                                 getBasicInformation(locationTimeStamp) +
                                 getResources().getString(R.string.checkIn) + ": "+ ft.format(checkIn));
                         locationHistoryAdapter.notifyDataSetChanged();
+                    } else {
+                        if (locationHistory.size() == 0) {
+                            locationHistory.add(getResources().getString(R.string.lostLocation));
+                            locationHistoryAdapter.notifyDataSetChanged();
+                        }
                     }
                     break;
                 case Constants.SEND_CURRENT_LOCATION:
