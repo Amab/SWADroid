@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -121,21 +123,24 @@ public class IndoorLocation extends MenuActivity {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onStart() {
         super.onStart();
 
-        // check Android 6 permission
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_WIFI_STATE)
                 != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(this, Manifest.permission.CHANGE_WIFI_STATE)
-                        != PackageManager.PERMISSION_GRANTED){
+                != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+                != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
                                  Manifest.permission.ACCESS_WIFI_STATE,
-                                 Manifest.permission.CHANGE_WIFI_STATE}, Constants.PERMISSION_MULTIPLE);
+                                 Manifest.permission.CHANGE_WIFI_STATE,
+                                 Manifest.permission.ACCESS_BACKGROUND_LOCATION}, Constants.PERMISSION_MULTIPLE);
         } else {
             init();
         }
@@ -245,7 +250,8 @@ public class IndoorLocation extends MenuActivity {
             case Constants.PERMISSION_MULTIPLE: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
                         && grantResults[1] == PackageManager.PERMISSION_GRANTED
-                        && grantResults[2] == PackageManager.PERMISSION_GRANTED) {
+                        && grantResults[2] == PackageManager.PERMISSION_GRANTED
+                        && grantResults[3] == PackageManager.PERMISSION_GRANTED) {
                     init();
                 } else {
                     setResult(Activity.RESULT_CANCELED);
