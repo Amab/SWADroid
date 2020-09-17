@@ -31,8 +31,10 @@
             android:defaultValue="false"
             android:key="@string/prefShareLocationKey"
             android:title="@string/prefShareLocation" />
+
         <ListPreference
             android:defaultValue="5"
+            android:dependency="@string/prefShareLocation"
             android:entries="@array/prefSyncLocationTimeEntries"
             android:entryValues="@array/prefSyncLocationTimeValues"
             android:key="@string/prefSyncLocationTimeKey"
