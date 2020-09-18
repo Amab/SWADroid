@@ -37,30 +37,68 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
+        <View
+            android:id="@+id/divider"
+            android:layout_width="62dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:backgroundTint="#FFFFFF"
+            android:background="?android:attr/listDivider" />
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/user_location"
-            android:layout_width="100dp"
-            android:layout_height="60dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="60dp"
+            android:layout_weight="1.0"
             android:src="@drawable/ic_person_pin_circle_black_24dp"
-            app:fabCustomSize="60dp"
-            app:backgroundTint="#00BFA5" />
+            app:backgroundTint="#00BFA5"
+            app:fabCustomSize="60dp" />
 
         <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:id="@+id/divider2"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:backgroundTint="#FFFFFF"
+            android:background="?android:attr/listDivider" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/find_mac"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1.0"
+            android:tint="#000000"
+            android:src="@android:drawable/ic_menu_mylocation"
+            app:backgroundTint="#00BFA5"
+            app:fabCustomSize="60dp" />
+
+        <View
+            android:id="@+id/divider3"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:backgroundTint="#FFFFFF"
+            android:background="?android:attr/listDivider" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/find_user"
-            android:layout_width="100dp"
-            android:layout_height="60dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
             android:layout_gravity="center_vertical"
-            android:layout_marginEnd="60dp"
             android:src="@drawable/account_search_outline"
-            app:fabCustomSize="60dp"
-            app:backgroundTint="#304FFE" />
+            app:backgroundTint="#304FFE"
+            app:fabCustomSize="60dp" />
+
+        <View
+            android:id="@+id/divider5"
+            android:layout_width="62dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:backgroundTint="#FFFFFF"
+            android:background="?android:attr/listDivider" />
 
     </LinearLayout>
 

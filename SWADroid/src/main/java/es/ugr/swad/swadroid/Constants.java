@@ -252,6 +252,10 @@ public class Constants {
      */
     public static final int SEND_CURRENT_LOCATION = 45;
     /**
+     * Request code for Get Available Roles
+     */
+    public static final int GET_AVAILABLE_ROLES = 46;
+    /**
      * Request code for CAMERA permission
      */
     public static final int PERMISSIONS_REQUEST_CAMERA = 100;

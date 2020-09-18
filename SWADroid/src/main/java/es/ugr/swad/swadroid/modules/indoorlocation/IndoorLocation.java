@@ -42,6 +42,7 @@ import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.model.Location;
 import es.ugr.swad.swadroid.model.LocationTimeStamp;
+import es.ugr.swad.swadroid.model.Roles;
 import es.ugr.swad.swadroid.model.UserFilter;
 import es.ugr.swad.swadroid.modules.messages.SearchUsers;
 import es.ugr.swad.swadroid.preferences.Preferences;
@@ -66,7 +67,7 @@ public class IndoorLocation extends MenuActivity {
 
     List<Pair<ScanResult, Integer>> availableNetworks = new ArrayList<>();
 
-    double FREE_SPACE_PATH_LOSS_CONSTANT = 27.55;
+    final double FREE_SPACE_PATH_LOSS_CONSTANT = 27.55;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +93,10 @@ public class IndoorLocation extends MenuActivity {
     }
 
     private void init() {
+
+        Intent getAvailableRoles = new Intent(getApplicationContext(), GetAvailableRoles.class);
+        startActivityForResult(getAvailableRoles, Constants.GET_AVAILABLE_ROLES);
+
         FloatingActionButton findUser = findViewById(R.id.find_user);
         findUser.setOnClickListener(view -> {
             scheduler.shutdownNow();
@@ -209,6 +214,13 @@ public class IndoorLocation extends MenuActivity {
                     if ((boolean) data.getSerializableExtra("success"))
                         Log.d(TAG, "Current location sent");
                     break;
+                case Constants.GET_AVAILABLE_ROLES:
+                    int rol = ((Roles) Objects.requireNonNull(data.getSerializableExtra("roles"))).getRol();
+                    int bitEnabled = Integer.toBinaryString(rol).indexOf("1");
+
+                    if (bitEnabled >= 7 ){
+                        //Mostrar botón
+                    }
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
