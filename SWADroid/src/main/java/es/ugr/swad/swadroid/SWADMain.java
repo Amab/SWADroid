@@ -58,6 +58,7 @@ import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.modules.courses.Courses;
 import es.ugr.swad.swadroid.modules.downloads.DownloadsManager;
+import es.ugr.swad.swadroid.modules.games.Games;
 import es.ugr.swad.swadroid.modules.groups.MyGroupsManager;
 import es.ugr.swad.swadroid.modules.information.Information;
 import es.ugr.swad.swadroid.modules.login.Login;
@@ -81,6 +82,7 @@ import es.ugr.swad.swadroid.utils.Utils;
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  * @author Jose Antonio Guerrero Aviles <cany20@gmail.com>
+ * @author Sergio Díaz Rueda <sergiodiazrueda8@gmail.com>
  */
 public class SWADMain extends MenuExpandableListActivity {
     /**
@@ -566,6 +568,8 @@ public class SWADMain extends MenuExpandableListActivity {
         evaluationData.add(getMenuItem(R.string.assessmentModuleLabel, R.string.fa_info));
         //Test
         evaluationData.add(getMenuItem(R.string.testsModuleLabel, R.string.fa_check_square_o));
+        //Games
+        evaluationData.add(getMenuItem(R.string.gamesModuleLabel, R.string.fa_trophy));
 
         //Files category
         //Documents
@@ -668,6 +672,11 @@ public class SWADMain extends MenuExpandableListActivity {
                 } else if (keyword.equals(getString(R.string.testsModuleLabel))) {
                     activity = new Intent(ctx, Tests.class);
                     startActivityForResult(activity, Constants.TESTS_REQUEST_CODE);
+
+                } else if (keyword.equals(getString(R.string.gamesModuleLabel))) {
+                    activity = new Intent(ctx, Games.class);
+                    startActivityForResult(activity, Constants.GAMES_REQUEST_CODE);
+
                 } else if (keyword.equals(getString(R.string.messagesModuleLabel))) {
                     activity = new Intent(ctx, Messages.class);
                     activity.putExtra("eventCode", Long.valueOf(0));

@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string-array name="gameMenuItems">
+        <item>Juegos activos</item>
+    </string-array>
     <string-array name="testMenuItems">
         <item>Sincronizar preguntas</item>
         <item>Realizar test</item>

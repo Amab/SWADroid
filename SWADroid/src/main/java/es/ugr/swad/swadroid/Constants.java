@@ -30,6 +30,7 @@ import java.io.File;
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  * @author Jose Antonio Guerrero Aviles <cany20@gmail.com>
+ * @author Sergio Díaz Rueda <sergiodiazrueda8@gmail.com>
  */
 public class Constants {
     /**
@@ -231,6 +232,38 @@ public class Constants {
      * Request code for search users
      */
     public static final int SEARCH_USERS_REQUEST_CODE = 40;
+    /**
+     * Request code for Games module.
+     */
+    public static final int GAMES_REQUEST_CODE = 41;
+    /**
+     * Request code for Games module.
+     */
+    public static final int GAMES_PLAY_REQUEST_CODE = 42;
+    /**
+     * Request code for Games module.
+     */
+    public static final int GAMES_ACTIVE_DOWNLOAD_CODE = 43;
+    /**
+     * Request code for Games module.
+     */
+    public static final int GAMES_ACTIVE_LIST_CODE = 44;
+    /**
+     * Request code for Games module.
+     */
+    public static final int MATCHES_ACTIVE_DOWNLOAD_CODE = 45;
+    /**
+     * Request code for Games module.
+     */
+    public static final int MATCHES_ACTIVE_LIST_CODE = 46;
+    /**
+     * Request code for Games module.
+     */
+    public static final int MATCHES_STATUS_CODE = 47;
+    /**
+     * Request code for Games module.
+     */
+    public static final int MATCHES_ANSWER_CODE = 48;
     /**
      * Request code for CAMERA permission
      */

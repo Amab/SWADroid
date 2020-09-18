@@ -11,6 +11,7 @@
     <string name="notificationsModuleLabel">Notificaciones</string>
     <string name="coursesModuleLabel">Asignaturas</string>
     <string name="testsModuleLabel">Tests</string>
+    <string name="gamesModuleLabel">Juegos</string>
     <string name="messagesModuleLabel">Enviar mensaje</string>
     <string name="noticesModuleLabel">Publicar aviso</string>
     <string name="generateQRModuleLabel">Generar código QR</string>
@@ -270,6 +271,32 @@
     <string name="eventsDownloadProgressTitle">Eventos</string>
     <string name="eventsUpdated">eventos actualizados</string>
     <string name="eventsDownloadProgressDescription">Sincronización de eventos.\n\nDependiendo del número de eventos a sincronizar, el procesamiento de los datos puede tardar varios minutos.\n\nPor favor, espere…</string>
+    <string name="gamesDownloadProgressDescription">Sincronización de juegos.\n\nDependiendo del número de juegos a sincronizar, el procesamiento de los datos puede tardar varios minutos.\n\nPor favor, espere…</string>
+    <string name="noGamesAvailableMsg">No hay juegos en esta asignatura</string>
+    <string name="gamesUpdated">juegos actualizados</string>
+    <string name="gamesEmptyListMsg">No se ha descargado ningún juego.\n\nPara descargar los
+        juegos más recientes deslice este mensaje hacia abajo.</string>
+    <string name="updatePendingGamesMsg">Hay juegos con cambios pendientes de enviar al servidor. Si actualiza el listado de juegos puede perder los cambios que no haya enviado.\n\n¿Está seguro de que quiere actualizar el listado de juegos?</string>
+    <string name="matchesDownloadProgressDescription">Sincronización de partidas.\n\nDependiendo del número de partidas a sincronizar, el procesamiento de los datos puede tardar varios minutos.\n\nPor favor, espere…</string>
+    <string name="noMatchesAvailableMsg">No hay partidas en este juego</string>
+    <string name="matchesUpdated">partidas actualizadas</string>
+    <string name="matchesEmptyListMsg">No se ha descargado ninguna partida.\n\nPara descargar las
+        partidas más recientes deslice este mensaje hacia abajo.</string>
+    <string name="updatePendingMatchesMsg">Hay partidas con cambios pendientes de enviar al servidor. Si actualiza el listado de partidas puede perder los cambios que no haya enviado.\n\n¿Está seguro de que quiere actualizar el listado de partidas?</string>
+    <string name="errorMatchStatusMsg">Ha ocurrido un error, el solicitante no puede unirse a la partida</string>
+    <string name="errorAnswerMatchMsg">Ha ocurrido un error, la respuesta no ha sido guardada</string>
+    <string name="matchPause">La partida está pausada</string>
+    <string name="gameAnswered">Respondida</string>
+    <string name="gameNoAnswered">No respondida</string>
+    <string name='gameAnswerRemove'>Borrar respuesta</string>
+    <string name='gameStart'>Inicio</string>
+    <string name='gameFinish'>Finalizado</string>
+    <string name='gameFinishMessage'>La partida ha finalizado</string>
+    <string name='answerRemovedMsg'>La respuesta ha sido borrada</string>
+    <string name='matchNotStartedMsg'>La partida no ha empezado</string>
+    <string name='matchFinishedMsg'>La partida ha finalizado</string>
+    <string name='matchPausedMsg'>La partida está pausada o está mostrando resultados</string>
+    <string name='matchNoAnsweredMsg'>No has respondido a la pregunta</string>
     <string name="noEventsAvailableMsg">No hay eventos en esta asignatura</string>
     <string name="event">Evento</string>
     <string name="usersUpdated">usuarios actualizados</string>

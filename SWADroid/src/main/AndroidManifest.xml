@@ -163,6 +163,79 @@
                 android:value="es.ugr.swad.swadroid.modules.tests.Tests" />
         </activity>
         <activity
+            android:name="es.ugr.swad.swadroid.modules.games.Games"
+            android:label="@string/gamesModuleLabel"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:parentActivityName="es.ugr.swad.swadroid.SWADMain" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.ugr.swad.swadroid.SWADMain" />
+        </activity>
+        <activity
+            android:name="es.ugr.swad.swadroid.modules.games.GamesActive"
+            android:label="@string/gamesModuleLabel"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:parentActivityName="es.ugr.swad.swadroid.modules.games.Games" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.ugr.swad.swadroid.modules.games.Games" />
+        </activity>
+        <activity
+            android:name="es.ugr.swad.swadroid.modules.games.GamesActiveList"
+            android:label="@string/gamesModuleLabel"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:parentActivityName="es.ugr.swad.swadroid.modules.games.Games" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.ugr.swad.swadroid.modules.games.Games" />
+        </activity>
+        <activity
+            android:name="es.ugr.swad.swadroid.modules.games.MatchesActive"
+            android:label="@string/gamesModuleLabel"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:parentActivityName="es.ugr.swad.swadroid.modules.games.GamesActiveList" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.ugr.swad.swadroid.modules.games.Games" />
+        </activity>
+        <activity
+            android:name="es.ugr.swad.swadroid.modules.games.MatchesActiveList"
+            android:label="@string/gamesModuleLabel"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:parentActivityName="es.ugr.swad.swadroid.modules.games.GamesActiveList" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.ugr.swad.swadroid.modules.games.Games" />
+        </activity>
+        <activity
+            android:name="es.ugr.swad.swadroid.modules.games.GamesPlay"
+            android:label="@string/gamesModuleLabel"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:parentActivityName="es.ugr.swad.swadroid.modules.games.GamesActiveList" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.ugr.swad.swadroid.modules.games.Games" />
+        </activity>
+        <activity
+            android:name="es.ugr.swad.swadroid.modules.games.GamesPlayStatus"
+            android:label="@string/gamesModuleLabel"
+            android:theme="@style/Theme.AppCompat.Translucent"
+            android:parentActivityName="es.ugr.swad.swadroid.modules.games.GamesPlay" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.ugr.swad.swadroid.modules.games.Games" />
+        </activity>
+        <activity
+            android:name="es.ugr.swad.swadroid.modules.games.GamesPlayAnswer"
+            android:label="@string/gamesModuleLabel"
+            android:theme="@style/Theme.AppCompat.Translucent"
+            android:parentActivityName="es.ugr.swad.swadroid.modules.games.GamesPlay" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.ugr.swad.swadroid.modules.games.Games" />
+        </activity>
+        <activity
             android:name="es.ugr.swad.swadroid.modules.messages.Messages"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:theme="@style/Theme.AppCompat.Light"

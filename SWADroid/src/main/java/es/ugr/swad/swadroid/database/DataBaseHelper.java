@@ -53,6 +53,8 @@ import es.ugr.swad.swadroid.model.TestQuestion;
 import es.ugr.swad.swadroid.model.TestTag;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.model.UserAttendance;
+import es.ugr.swad.swadroid.model.Game;
+import es.ugr.swad.swadroid.model.Match;
 import es.ugr.swad.swadroid.preferences.Preferences;
 import es.ugr.swad.swadroid.utils.Crypto;
 import es.ugr.swad.swadroid.utils.OldCrypto;
@@ -64,6 +66,7 @@ import es.ugr.swad.swadroid.utils.Utils;
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
+ * @author Sergio Díaz Rueda <sergiodiazrueda8@gmail.com>
  */
 public class DataBaseHelper {
     /**
@@ -146,6 +149,22 @@ public class DataBaseHelper {
      * Table name for relationship between events and courses
      */
     public static final String DB_TABLE_EVENTS_COURSES = "events_courses";
+    /**
+     * Table name for games
+     */
+    public static final String DB_TABLE_GAMES = "games";
+    /**
+     * Table name for relationship between games and courses
+     */
+    public static final String DB_TABLE_GAMES_COURSES = "games_courses";
+    /**
+     * Table name for matches
+     */
+    public static final String DB_TABLE_MATCHES = "matches";
+    /**
+     * Table name for relationship between matches and games
+     */
+    public static final String DB_TABLE_MATCHES_GAMES = "matches_games";
 	/**
 	 * Table name for groups
 	 */
@@ -271,6 +290,14 @@ public class DataBaseHelper {
                 firstParam = "eventCode";
                 secondParam = "crsCod";
                 break;
+            case DataBaseHelper.DB_TABLE_GAMES_COURSES:
+                firstParam = "gameCode";
+                secondParam = "crsCod";
+                break;
+            case DataBaseHelper.DB_TABLE_MATCHES_GAMES:
+                firstParam = "matchCode";
+                secondParam = "gamecode";
+                break;
             default:
                 Log.e("selectParamsPairTable", "Table " + table + " not exists");
                 break;
@@ -316,6 +343,22 @@ public class DataBaseHelper {
             case DataBaseHelper.DB_TABLE_GROUPS_COURSES:
             case DataBaseHelper.DB_TABLE_GROUPS_GROUPTYPES:
             case DataBaseHelper.DB_TABLE_EVENTS_COURSES:
+
+                params = selectParamsPairTable(table);
+
+                o = new PairTable<>(table,
+                        ent.getInt(params.getFirst()),
+                        ent.getInt(params.getSecond()));
+                break;
+            case DataBaseHelper.DB_TABLE_GAMES_COURSES:
+
+                params = selectParamsPairTable(table);
+
+                o = new PairTable<>(table,
+                        ent.getInt(params.getFirst()),
+                        ent.getInt(params.getSecond()));
+                break;
+            case DataBaseHelper.DB_TABLE_MATCHES_GAMES:
 
                 params = selectParamsPairTable(table);
 
@@ -467,6 +510,32 @@ public class DataBaseHelper {
                         crypto.decrypt(ent.getString("photoRecipient")),
                         false,
                         ent.getDouble("score"));
+                break;
+            case DataBaseHelper.DB_TABLE_GAMES:
+                o = new Game(ent.getLong("id"),
+                        crypto.decrypt(ent.getString("userSurname1")),
+                        crypto.decrypt(ent.getString("userSurname2")),
+                        crypto.decrypt(ent.getString("userFirstName")),
+                        crypto.decrypt(ent.getString("userPhoto")),
+                        ent.getLong("startTime"),
+                        ent.getLong("endTime"),
+                        crypto.decrypt(ent.getString("title")),
+                        crypto.decrypt(ent.getString("text")),
+                        ent.getInt("numQuestions"),
+                        ent.getFloat("maxGrade"),
+                        ent.getInt("visibility"));
+                break;
+            case DataBaseHelper.DB_TABLE_MATCHES:
+                o = new Match(ent.getLong("id"),
+                        crypto.decrypt(ent.getString("userSurname1")),
+                        crypto.decrypt(ent.getString("userSurname2")),
+                        crypto.decrypt(ent.getString("userFirstName")),
+                        crypto.decrypt(ent.getString("userPhoto")),
+                        ent.getLong("startTime"),
+                        ent.getLong("endTime"),
+                        crypto.decrypt(ent.getString("title")),
+                        ent.getInt("questionIndex"),
+                        crypto.decrypt(ent.getString("groups")));
                 break;
         }
 
@@ -734,6 +803,72 @@ public class DataBaseHelper {
                 + " INNER JOIN " + DB_TABLE_EVENTS_COURSES + " AS C"
                 + " ON E.id = C.eventCode WHERE C.crsCod ='" + crsCod + "' AND hidden=" + Utils.parseBoolInt(false)
                 + " ORDER BY E.startTime DESC,E.endTime DESC,E.title DESC", null);
+    }
+
+    /**
+     * Gets the list of games related to the selected course
+     *
+     * @param crsCod Course code to be referenced
+     * @return A Cursor with a list of games related to the selected course
+     */
+    public Cursor getGamesCourseCursor(long crsCod) {
+        return db.rawQuery("SELECT * FROM " + DB_TABLE_GAMES + " AS E"
+                + " INNER JOIN " + DB_TABLE_GAMES_COURSES + " AS C"
+                + " ON E.id = C.gameCode WHERE C.crsCod ='" + crsCod +"'"
+                + " ORDER BY E.startTime DESC,E.endTime DESC,E.title DESC", null);
+    }
+
+    /**
+     * Gets the list of matches related to the selected game
+     *
+     * @param gameCode game code to be referenced
+     * @return A Cursor with a list of matches related to the selected game
+     */
+    public Cursor getMatchesGameCursor(long gameCode) {
+        return db.rawQuery("SELECT * FROM " + DB_TABLE_MATCHES + " AS E"
+                + " INNER JOIN " + DB_TABLE_MATCHES_GAMES + " AS C"
+                + " ON E.id = C.matchCode WHERE C.gamecode ='" + gameCode +"'"
+                + " ORDER BY E.startTime DESC,E.endTime DESC,E.title DESC", null);
+    }
+
+    /**
+     * Gets the list of games related to the selected course
+     *
+     * @param crsCod Course code to be referenced
+     * @return A list of Game
+     */
+    public List<Game> getGamesCourse(long crsCod) {
+        List<Game> result = new ArrayList<>();
+        List<Entity> rows = db.getEntityList(DataBaseHelper.DB_TABLE_GAMES_COURSES,
+                "crsCod = '" + crsCod + "'");
+
+        if (rows != null) {
+            for (Entity ent : rows) {
+                result.add((Game) getRow(DataBaseHelper.DB_TABLE_GAMES,
+                        "id", ent.getValue("gameCode")));
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Gets the list of matches related to the selected game
+     *
+     * @param gameCode Course code to be referenced
+     * @return A list of Match
+     */
+    public List<Match> getMatchesGame(long gameCode) {
+        List<Match> result = new ArrayList<>();
+        List<Entity> rows = db.getEntityList(DataBaseHelper.DB_TABLE_MATCHES_GAMES,
+                "gameCode = '" + gameCode + "'");
+
+        if (rows != null) {
+            for (Entity ent : rows) {
+                result.add((Match) getRow(DataBaseHelper.DB_TABLE_MATCHES,
+                        "id", ent.getValue("matchCode")));
+            }
+        }
+        return result;
     }
 
     /**
@@ -1461,6 +1596,116 @@ public class DataBaseHelper {
     }
 
     /**
+     * Inserts a new record in database for a game,
+     * or updates it if already exists
+     *
+     * @param game Game to be inserted
+     */
+    public void insertGame(Game game) {
+        Entity ent;
+        String where = "id = " + game.getId();
+        List<Entity> rows = db.getEntityList(DataBaseHelper.DB_TABLE_GAMES, where);
+
+        if (rows.isEmpty()) {
+            ent = new Entity(DataBaseHelper.DB_TABLE_GAMES);
+        } else {
+            ent = rows.get(0);
+        }
+
+        ent.setValue("id", game.getId());
+        ent.setValue("userSurname1", crypto.encrypt(game.getUserSurname1()));
+        ent.setValue("userSurname2", crypto.encrypt(game.getUserSurname2()));
+        ent.setValue("userFirstName", crypto.encrypt(game.getUserFirstName()));
+        ent.setValue("userPhoto", crypto.encrypt(game.getUserPhoto()));
+        ent.setValue("startTime", game.getStartTime());
+        ent.setValue("endTime", game.getEndTime());
+        ent.setValue("title", crypto.encrypt(game.getTitle()));
+        ent.setValue("text", crypto.encrypt(game.getText()));
+        ent.setValue("numQuestions", game.getNumQuestions());
+        ent.setValue("maxGrade", game.getMaxGrade());
+        ent.setValue("visibility", game.getVisibility());
+        ent.save();
+    }
+
+    /**
+     * Inserts a new record in database for a match,
+     * or updates it if already exists
+     *
+     * @param match Match to be inserted
+     */
+    public void insertMatch(Match match) {
+        Entity ent;
+        String where = "id = " + match.getId();
+        List<Entity> rows = db.getEntityList(DataBaseHelper.DB_TABLE_MATCHES, where);
+
+        if (rows.isEmpty()) {
+            ent = new Entity(DataBaseHelper.DB_TABLE_MATCHES);
+        } else {
+            ent = rows.get(0);
+        }
+
+        ent.setValue("id", match.getId());
+        ent.setValue("userSurname1", crypto.encrypt(match.getUserSurname1()));
+        ent.setValue("userSurname2", crypto.encrypt(match.getUserSurname2()));
+        ent.setValue("userFirstName", crypto.encrypt(match.getUserFirstName()));
+        ent.setValue("userPhoto", crypto.encrypt(match.getUserPhoto()));
+        ent.setValue("startTime", match.getStartTime());
+        ent.setValue("endTime", match.getEndTime());
+        ent.setValue("title", crypto.encrypt(match.getTitle()));
+        ent.setValue("questionIndex", match.getQuestionIndex());
+        ent.setValue("groups", crypto.encrypt(match.getGroups()));
+        ent.save();
+    }
+
+
+    /**
+     * Inserts a new record in database for the relationship between an games and a course,
+     * or updates it if already exists
+     *
+     * @param gameCode Game code
+     * @param crsCod Course code
+     */
+    public void insertGameCourse(long gameCode, long crsCod) {
+        Entity ent;
+        String where = "gameCode = " + gameCode + " AND crsCod = " + crsCod;
+        List<Entity> rows = db.getEntityList(DataBaseHelper.DB_TABLE_GAMES_COURSES, where);
+
+        if (rows.isEmpty()) {
+            ent = new Entity(DataBaseHelper.DB_TABLE_GAMES_COURSES);
+        } else {
+            ent = rows.get(0);
+        }
+
+        ent.setValue("gameCode", gameCode);
+        ent.setValue("crsCod", crsCod);
+        ent.save();
+    }
+
+    /**
+     * Inserts a new record in database for the relationship between an matches and a game,
+     * or updates it if already exists
+     *
+     * @param matchCode Match code
+     * @param gameCode Game code
+     */
+    public void insertMatchGame(long matchCode, long gameCode) {
+        Entity ent;
+        String where = "matchCode = " + matchCode + " AND gameCode = " + gameCode;
+        List<Entity> rows = db.getEntityList(DataBaseHelper.DB_TABLE_MATCHES_GAMES, where);
+
+        if (rows.isEmpty()) {
+            ent = new Entity(DataBaseHelper.DB_TABLE_MATCHES_GAMES);
+        } else {
+            ent = rows.get(0);
+        }
+
+        ent.setValue("matchCode", matchCode);
+        ent.setValue("gameCode", gameCode);
+        ent.save();
+    }
+
+
+    /**
      * Updates a course in database
      *
      * @param prev   Course to be updated
@@ -1830,6 +2075,32 @@ public class DataBaseHelper {
     public void updateEventStatus(int eventCode, String status) {
         Entity ent = db.getTopEntity(DataBaseHelper.DB_TABLE_EVENTS_ATTENDANCES,
                 "id = " + eventCode, "1");
+        ent.setValue("status", crypto.encrypt(status));
+        ent.save();
+    }
+
+    /**
+     * Updates a game in database
+     *
+     * @param gameCode Code of event to be updated
+     * @param status    Event status to be updated
+     */
+    public void updateGameStatus(int gameCode, String status) {
+        Entity ent = db.getTopEntity(DataBaseHelper.DB_TABLE_GAMES,
+                "id = " + gameCode, "1");
+        ent.setValue("status", crypto.encrypt(status));
+        ent.save();
+    }
+
+    /**
+     * Updates a match in database
+     *
+     * @param matchCode Code of event to be updated
+     * @param status    Event status to be updated
+     */
+    public void updateMatchStatus(int matchCode, String status) {
+        Entity ent = db.getTopEntity(DataBaseHelper.DB_TABLE_MATCHES,
+                "id = " + matchCode, "1");
         ent.setValue("status", crypto.encrypt(status));
         ent.save();
     }
@@ -2434,6 +2705,8 @@ public class DataBaseHelper {
 		 * */
         if (dbVersion == 19) {
             emptyTable(DB_TABLE_EVENTS_ATTENDANCES);
+            emptyTable(DB_TABLE_GAMES);
+            emptyTable(DB_TABLE_MATCHES);
         }
 
         Log.i(TAG, "Database upgraded");

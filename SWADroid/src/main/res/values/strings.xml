@@ -12,6 +12,7 @@
     <string name="notificationsMarkAllAsReadModuleLabel" translatable="false">NotificationsMarkAsRead</string>
     <string name="coursesModuleLabel">Courses</string>
     <string name="testsModuleLabel">Tests</string>
+    <string name="gamesModuleLabel">Games</string>
     <string name="messagesModuleLabel">Send message</string>
     <string name="noticesModuleLabel">Publish notice</string>
     <string name="generateQRModuleLabel">Generate QR code</string>
@@ -211,6 +212,36 @@
     <string name="eventsDownloadProgressDescription">Synchronizing events.\n\nDepending on the number of
         events to synchronize, the data processing can take several minutes.\n\nPlease wait…</string>
     <string name="eventsDownloadProgressTitle">Events</string>
+    <string name="gamesDownloadProgressDescription">Synchronizing games.\n\nDepending on the number of
+        games to synchronize, the data processing can take several minutes.\n\nPlease wait…</string>
+    <string name="noGamesAvailableMsg">There are no games in this course</string>
+    <string name="gamesUpdated">games updated</string>
+    <string name="gamesEmptyListMsg">Did not download any game.\n\nTo download most recent
+        games slide down this message.</string>
+    <string name="updatePendingGamesMsg">There are pending changes waiting to be sent to the server.If you
+        update the list of games can lose the changes.\n\nAre you sure you want to update the list of games?</string>
+    <string name="matchesDownloadProgressDescription">Synchronizing matches.\n\nDepending on the number of
+        mathes to synchronize, the data processing can take several minutes.\n\nPlease wait…</string>
+    <string name="noMatchesAvailableMsg">There are no matches in this game</string>
+    <string name="matchesUpdated">matches updated</string>
+    <string name="matchesEmptyListMsg">Did not download any match.\n\nTo download most recent
+        matches slide down this message.</string>
+    <string name="updatePendingMatchesMsg">There are pending changes waiting to be sent to the server.If you
+        update the list of matches can lose the changes.\n\nAre you sure you want to update the list of matches?</string>
+    <string name="errorMatchStatusMsg">An error has happened, the requester can not join the match</string>
+    <string name="errorAnswerMatchMsg">An error has happened, the answer has not been saved</string>
+    <string name="matchPause">The match is paused</string>
+    <string name="gameAnswered">Answered</string>
+    <string name="gameNoAnswered">No answered</string>
+    <string name='gameAnswerRemove'>Remove answer</string>
+    <string name='gameStart'>Start</string>
+    <string name='gameFinish'>Finished</string>
+    <string name='gameFinishMessage'>The match has finished</string>
+    <string name='answerRemovedMsg'>The answer has been removed</string>
+    <string name='matchNotStartedMsg'>The match has not started</string>
+    <string name='matchFinishedMsg'>The match has finished</string>
+    <string name='matchPausedMsg'>The match is in pause or is showing result</string>
+    <string name='matchNoAnsweredMsg'>You has not answer the question</string>
     <string name="usersUpdate">Update</string>
     <string name="newTitle">New</string>
     <string name="rollcallScanQR">Scan QR</string>

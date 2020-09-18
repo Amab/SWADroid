@@ -47,5 +47,26 @@
     <color name="button_background_green">#55B637</color>
     <color name="gray_text">#878787</color>
     <color name="background_receiver">#DFDEDD</color>
+    <color name="button_red">#e21c3d</color>
+    <color name="button_blue">#1369ce</color>
+    <color name="button_yellow">#d89e00</color>
+    <color name="button_green">#2b9010</color>
+    <color name="button_pink">#e30087</color>
+    <color name="button_light_blue">#00b5e9</color>
+    <color name="button_orange">#f58700</color>
+    <color name="button_light_green">#b3d00a</color>
+    <color name="button_purple">#642075</color>
+    <color name="button_light_yellow">#f5e800</color>
+    <color name="button_red_border">#a9152d</color>
+    <color name="button_blue_border">#0e519c</color>
+    <color name="button_yellow_border">#a27600</color>
+    <color name="button_green_border">#206c0c</color>
+    <color name="button_pink_border">#aa0064</color>
+    <color name="button_light_blue_border">#0089b0</color>
+    <color name="button_orange_border">#b86400</color>
+    <color name="button_light_green_border">#869d07</color>
+    <color name="button_purple_border">#4b1858</color>
+    <color name="button_light_yellow_border">#b8ad00</color>
+    <color name="button_checked">#ccff00</color>
 
 </resources>

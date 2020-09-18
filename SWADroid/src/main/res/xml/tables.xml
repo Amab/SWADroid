@@ -386,6 +386,134 @@
         type="foreign-key" />
     </table>
     <table
+        name="games"
+        new-in-version="19"
+        to-string="%name%" >
+        <field
+            name="id"
+            obligatory="true"
+            type="long" />
+        <field
+            name="userSurname1"
+            obligatory="true"
+            type="text" />
+        <field
+            name="userSurname2"
+            obligatory="true"
+            type="text" />
+        <field
+            name="userFirstName"
+            obligatory="true"
+            type="text" />
+        <field
+            name="userPhoto"
+            obligatory="true"
+            type="text" />
+        <field
+            name="startTime"
+            obligatory="true"
+            type="integer" />
+        <field
+            name="endTime"
+            obligatory="true"
+            type="integer" />
+        <field
+            name="title"
+            obligatory="true"
+            type="string" />
+        <field
+            name="text"
+            obligatory="true"
+            type="string" />
+        <field
+            name="numQuestions"
+            obligatory="true"
+            type="integer" />
+        <field
+            name="maxGrade"
+            obligatory="true"
+            type="float" />
+        <field
+            name="visibility"
+            obligatory="true"
+            type="integer" />
+    </table>
+    <table
+        name="matches"
+        new-in-version="19"
+        to-string="%name%" >
+        <field
+            name="id"
+            obligatory="true"
+            type="long" />
+        <field
+            name="userSurname1"
+            obligatory="true"
+            type="text" />
+        <field
+            name="userSurname2"
+            obligatory="true"
+            type="text" />
+        <field
+            name="userFirstName"
+            obligatory="true"
+            type="text" />
+        <field
+            name="userPhoto"
+            obligatory="true"
+            type="text" />
+        <field
+            name="startTime"
+            obligatory="true"
+            type="integer" />
+        <field
+            name="endTime"
+            obligatory="true"
+            type="integer" />
+        <field
+            name="title"
+            obligatory="true"
+            type="string" />
+        <field
+            name="questionIndex"
+            obligatory="true"
+            type="integer" />
+        <field
+            name="groups"
+            obligatory="true"
+            type="text" />
+    </table>
+    <table
+        name="games_courses"
+        new-in-version="19"
+        to-string="%name%" >
+        <field
+            name="gameCode"
+            foreign-table="games"
+            obligatory="true"
+            type="foreign-key" />
+        <field
+            name="crsCod"
+            foreign-table="courses"
+            obligatory="true"
+            type="foreign-key" />
+    </table>
+    <table
+        name="matches_games"
+        new-in-version="19"
+        to-string="%name%" >
+        <field
+            name="matchCode"
+            foreign-table="matches"
+            obligatory="true"
+            type="foreign-key" />
+        <field
+            name="gameCode"
+            foreign-table="games"
+            obligatory="true"
+            type="foreign-key" />
+    </table>
+    <table
         name="groups"
         new-in-version="11"
         to-string="%name%" >
