@@ -52,7 +52,7 @@ public class LocationTimeStamp extends Location implements Serializable {
         if (param == 14) {
             propertyInfo.type = PropertyInfo.INTEGER_CLASS;
             propertyInfo.name = "checkInTime";
-        }else {
+        } else {
             super.getPropertyInfo(param, properties, propertyInfo);
         }
     }
