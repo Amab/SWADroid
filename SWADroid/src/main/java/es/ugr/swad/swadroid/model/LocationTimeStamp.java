@@ -42,7 +42,7 @@ public class LocationTimeStamp extends Location implements Serializable {
     public void setProperty(int param, Object obj) {
         if (param == 14) {
             checkInTime = (int) obj;
-        }else {
+        } else {
             super.setProperty(param, obj);
         }
     }
