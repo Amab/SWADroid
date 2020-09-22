@@ -373,4 +373,5 @@
     <string name="distance">Distance</string>
     <string name="checkIn">Time</string>
     <string name="lostLocation">Location not found</string>
+    <string name="nearestLocation">Nearest wireless access point</string>
 </resources>

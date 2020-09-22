@@ -69,9 +69,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="1.0"
-            android:tint="#000000"
             android:src="@android:drawable/ic_menu_mylocation"
-            app:backgroundTint="#00BFA5"
+            android:tint="#FFFFFF"
+            android:visibility="invisible"
+            app:backgroundTint="@color/design_default_color_primary"
             app:fabCustomSize="60dp" />
 
         <View

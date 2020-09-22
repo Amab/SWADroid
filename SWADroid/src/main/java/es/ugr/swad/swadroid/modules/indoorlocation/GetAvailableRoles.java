@@ -6,8 +6,10 @@ import android.os.Bundle;
 import org.ksoap2.serialization.SoapObject;
 
 import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.Roles;
 import es.ugr.swad.swadroid.modules.Module;
+import es.ugr.swad.swadroid.modules.courses.Courses;
 import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
@@ -52,6 +54,7 @@ public class GetAvailableRoles extends Module {
     protected void requestService() throws Exception {
         createRequest(SOAPClient.CLIENT_TYPE);
         addParam("wsKey", Login.getLoggedUser().getWsKey());
+        addParam("courseCode", Courses.getSelectedCourseCode());
         sendRequest(Roles.class, true);
 
         if (result!=null) {

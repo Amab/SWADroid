@@ -4,6 +4,8 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -15,6 +17,8 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
 import android.util.Pair;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -26,6 +30,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.nostra13.universalimageloader.utils.L;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -69,6 +74,8 @@ public class IndoorLocation extends MenuActivity {
 
     final double FREE_SPACE_PATH_LOSS_CONSTANT = 27.55;
 
+    private boolean showMac = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,10 +97,16 @@ public class IndoorLocation extends MenuActivity {
         locationHistory.add(getResources().getString(R.string.lostLocation));
         locationHistoryAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, locationHistory);
         history.setAdapter(locationHistoryAdapter);
+
+        history.setOnItemClickListener((adapterView, view, i, l) -> {
+            ClipboardManager clipboard = (ClipboardManager)
+                    getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("macAddress", availableNetworks.get(0).first.BSSID);
+            clipboard.setPrimaryClip(clip);
+        });
     }
 
     private void init() {
-
         Intent getAvailableRoles = new Intent(getApplicationContext(), GetAvailableRoles.class);
         startActivityForResult(getAvailableRoles, Constants.GET_AVAILABLE_ROLES);
 
@@ -125,6 +138,12 @@ public class IndoorLocation extends MenuActivity {
             } else {
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.locationDisabled), Toast.LENGTH_LONG).show();
             }
+        });
+
+        FloatingActionButton findMac = findViewById(R.id.find_mac);
+        findMac.setOnClickListener(v -> {
+            showMac = true;
+            scanWifi();
         });
     }
 
@@ -216,10 +235,13 @@ public class IndoorLocation extends MenuActivity {
                     break;
                 case Constants.GET_AVAILABLE_ROLES:
                     int rol = ((Roles) Objects.requireNonNull(data.getSerializableExtra("roles"))).getRol();
-                    int bitEnabled = Integer.toBinaryString(rol).indexOf("1");
+                    int bitEnabled = Integer.toBinaryString(rol).length();
 
+                    FloatingActionButton findMac = findViewById(R.id.find_mac);
                     if (bitEnabled >= 7 ){
-                        //Mostrar botón
+                        findMac.setVisibility(View.VISIBLE);
+                    }else{
+                        findMac.setVisibility(View.INVISIBLE);
                     }
             }
         }
@@ -243,13 +265,26 @@ public class IndoorLocation extends MenuActivity {
                     availableNetworks.add(new Pair<>(scanResult, distance));
                 }
                 Collections.sort(availableNetworks, (n1,n2) -> n1.second - n2.second);
-                Intent getLocation = new Intent(context, GetLocation.class);
-                getLocation.putExtra("mac", availableNetworks.get(0).first.BSSID.replace(":",""));
-                getLocation.putExtra("distance", availableNetworks.get(0).second.doubleValue());
-                startActivityForResult(getLocation, Constants.GET_LOCATION);
+                scanFinished();
             }
         }
     };
+
+    public void scanFinished() {
+        if (!showMac){
+            Intent getLocation = new Intent(getApplicationContext(), GetLocation.class);
+            getLocation.putExtra("mac", availableNetworks.get(0).first.BSSID.replace(":",""));
+            getLocation.putExtra("distance", availableNetworks.get(0).second.doubleValue());
+            startActivityForResult(getLocation, Constants.GET_LOCATION);
+        } else {
+            showMac = false;
+            locationHistory.clear();
+            locationHistory.add(availableNetworks.get(0).first.SSID + " - " + availableNetworks.get(0).first.BSSID + " - " + availableNetworks.get(0).second + "m" );
+            locationHistoryAdapter.notifyDataSetChanged();
+            textView.setText(getString(R.string.nearestLocation));
+        }
+
+    }
 
     public double calculateDistance(double levelInDb, double freqInMHz) {
         double exp = (FREE_SPACE_PATH_LOSS_CONSTANT - (20 * Math.log10(freqInMHz)) + Math.abs(levelInDb)) / 20.0;
