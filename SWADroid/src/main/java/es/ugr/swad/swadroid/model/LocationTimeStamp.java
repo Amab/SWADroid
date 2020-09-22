@@ -27,7 +27,7 @@ public class LocationTimeStamp extends Location implements Serializable {
         Object object;
         if (param == 14) {
             object = checkInTime;
-        }else{
+        } else {
             object = super.getProperty(param);
         }
         return object;
