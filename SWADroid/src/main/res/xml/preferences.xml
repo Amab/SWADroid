@@ -38,7 +38,7 @@
             android:entryValues="@array/prefSyncLocationTimeValues"
             android:key="@string/prefSyncLocationTimeKey"
             android:summary="@string/prefSyncLocationTimeSummary"
-            android:title="@string/prefSyncLocationTimeTitle" />
+            android:title="@string/prefSyncTimeTitle" />
             />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/about_preferences" >
