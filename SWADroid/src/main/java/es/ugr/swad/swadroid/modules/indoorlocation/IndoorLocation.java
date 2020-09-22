@@ -112,8 +112,7 @@ public class IndoorLocation extends MenuActivity {
 
         FloatingActionButton findUser = findViewById(R.id.find_user);
         findUser.setOnClickListener(view -> {
-            scheduler.shutdownNow();
-            scheduler = Executors.newScheduledThreadPool(1);
+            stopScheduler();
             Intent intent = new Intent(getApplicationContext(), SearchUsers.class);
             intent.putExtra("receivers", arrayReceivers);
             startActivityForResult(intent, Constants.SEARCH_USERS_REQUEST_CODE);
@@ -123,8 +122,7 @@ public class IndoorLocation extends MenuActivity {
 
         FloatingActionButton updateLocation = findViewById(R.id.user_location);
         updateLocation.setOnClickListener(v -> {
-            scheduler.shutdownNow();
-            scheduler = Executors.newScheduledThreadPool(1);
+            stopScheduler();
             if(Preferences.getShareLocation()) {
                 textView.setText(getString(R.string.lastLocation));
 
@@ -145,6 +143,11 @@ public class IndoorLocation extends MenuActivity {
             showMac = true;
             scanWifi();
         });
+    }
+
+    private void stopScheduler() {
+        scheduler.shutdownNow();
+        scheduler = Executors.newScheduledThreadPool(1);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
@@ -203,6 +206,7 @@ public class IndoorLocation extends MenuActivity {
                         startActivityForResult(sendCurrentLocation, Constants.SEND_CURRENT_LOCATION);
                     } else {
                         if (availableNetworks.isEmpty()) {
+                            stopScheduler();
                             Log.d(TAG, "No more available networks");
                         } else {
                             availableNetworks.remove(0);
