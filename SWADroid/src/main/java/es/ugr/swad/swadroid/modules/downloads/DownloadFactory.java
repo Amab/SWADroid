@@ -26,6 +26,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
 
+import java.io.File;
 import java.util.Locale;
 
 import es.ugr.swad.swadroid.Constants;
@@ -62,7 +63,7 @@ public class DownloadFactory {
 
 		request.setDescription(title);
 		request.setTitle(description);
-		request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, Constants.DIRECTORY_SWADROID + "/" + fileName);
+		request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, Constants.DIRECTORY_SWADROID + File.separator + fileName);
 
 		Log.i(TAG, "Downloading file " + fileName);
 
