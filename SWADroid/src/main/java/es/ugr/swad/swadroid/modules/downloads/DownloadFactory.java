@@ -21,20 +21,14 @@ package es.ugr.swad.swadroid.modules.downloads;
 import android.annotation.TargetApi;
 import android.app.DownloadManager;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.util.Log;
-import android.widget.Toast;
 
-import java.io.File;
-import java.util.List;
 import java.util.Locale;
 
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.utils.Utils;
 
 /**
  * Class for manage file downloads
@@ -60,56 +54,24 @@ public class DownloadFactory {
 			String description) {
 		
 		Uri uri = Uri.parse(url);	 
-	    DownloadManager managerHoneycomb;
-		DownloadManager.Request requestHoneycomb;
-	    es.ugr.swad.swadroid.modules.downloads.DownloadManager managerGingerbread;
-	    es.ugr.swad.swadroid.modules.downloads.DownloadManager.Request requestGingerbread;
-	    
-	    //Create destination directory if not exists
-	    File downloadDirectory = new File(Constants.DOWNLOADS_PATH);
-	    if (!downloadDirectory.exists()){
-	    	if(downloadDirectory.mkdir()) {
-	            Log.i(TAG, "Created directory " + Constants.DOWNLOADS_PATH);
-            } else {
-                Log.e(TAG, "Error creating directory " + Constants.DOWNLOADS_PATH);
-                Toast.makeText(context, "Error creating directory " + Constants.DOWNLOADS_PATH, Toast.LENGTH_LONG).show();
-                return false;
-            }
-        }
+	    DownloadManager manager;
+		DownloadManager.Request request;
 
-		managerHoneycomb = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
-		requestHoneycomb = new DownloadManager.Request(uri);
+		manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+		request = new DownloadManager.Request(uri);
 
-		requestHoneycomb.setDescription(title);
-		requestHoneycomb.setTitle(description);
-		requestHoneycomb.setDestinationInExternalPublicDir(Constants.DIRECTORY_SWADROID, fileName);
+		request.setDescription(title);
+		request.setTitle(description);
+		request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, Constants.DIRECTORY_SWADROID + "/" + fileName);
 
-		//DownloadManager HONEYCOMB
-		Log.i(TAG, "Downloading file " + fileName + " with DownloadManager >= HONEYCOMB");
+		Log.i(TAG, "Downloading file " + fileName);
 
-		requestHoneycomb.allowScanningByMediaScanner();
-		requestHoneycomb.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+		request.allowScanningByMediaScanner();
+		request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
 
-		managerHoneycomb.enqueue(requestHoneycomb);
+		manager.enqueue(request);
 	
 	    return true;
-	}
-
-	/**
-	 * @param context used to check the device version and DownloadManager information
-	 * @return true if the download manager is available
-	 */
-	public static boolean isDownloadManagerAvailable(Context context) {
-	    try {
-	        Intent intent = new Intent(Intent.ACTION_MAIN);
-	        intent.addCategory(Intent.CATEGORY_LAUNCHER);
-	        intent.setClassName("com.android.providers.downloads.ui", "com.android.providers.downloads.ui.DownloadList");
-	        List<ResolveInfo> list = context.getPackageManager().queryIntentActivities(intent,
-	                PackageManager.MATCH_DEFAULT_ONLY);
-	        return list.size() > 0;
-	    } catch (Exception e) {
-	        return false;
-	    }
 	}
 
 	/**
