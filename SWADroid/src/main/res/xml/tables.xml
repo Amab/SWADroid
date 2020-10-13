@@ -387,7 +387,7 @@
     </table>
     <table
         name="games"
-        new-in-version="19"
+        new-in-version="22"
         to-string="%name%" >
         <field
             name="id"
@@ -440,7 +440,7 @@
     </table>
     <table
         name="matches"
-        new-in-version="19"
+        new-in-version="22"
         to-string="%name%" >
         <field
             name="id"
@@ -485,7 +485,7 @@
     </table>
     <table
         name="games_courses"
-        new-in-version="19"
+        new-in-version="22"
         to-string="%name%" >
         <field
             name="gameCode"
@@ -500,7 +500,7 @@
     </table>
     <table
         name="matches_games"
-        new-in-version="19"
+        new-in-version="22"
         to-string="%name%" >
         <field
             name="matchCode"

@@ -273,7 +273,7 @@
     <string name="eventsDownloadProgressDescription">Sincronización de eventos.\n\nDependiendo del número de eventos a sincronizar, el procesamiento de los datos puede tardar varios minutos.\n\nPor favor, espere…</string>
     <string name="gamesDownloadProgressDescription">Sincronización de juegos.\n\nDependiendo del número de juegos a sincronizar, el procesamiento de los datos puede tardar varios minutos.\n\nPor favor, espere…</string>
     <string name="noGamesAvailableMsg">No hay juegos en esta asignatura</string>
-    <string name="gamesUpdated">juegos actualizados</string>
+    <string name="gamesUpdated">Juegos actualizados</string>
     <string name="gamesEmptyListMsg">No se ha descargado ningún juego.\n\nPara descargar los
         juegos más recientes deslice este mensaje hacia abajo.</string>
     <string name="updatePendingGamesMsg">Hay juegos con cambios pendientes de enviar al servidor. Si actualiza el listado de juegos puede perder los cambios que no haya enviado.\n\n¿Está seguro de que quiere actualizar el listado de juegos?</string>
@@ -296,10 +296,10 @@
     <string name='matchNotStartedMsg'>La partida no ha empezado</string>
     <string name='matchFinishedMsg'>La partida ha finalizado</string>
     <string name='matchPausedMsg'>La partida está pausada o está mostrando resultados</string>
-    <string name='matchNoAnsweredMsg'>No has respondido a la pregunta</string>
+    <string name='matchNoAnsweredMsg'>No ha respondido a la pregunta</string>
     <string name="noEventsAvailableMsg">No hay eventos en esta asignatura</string>
     <string name="event">Evento</string>
-    <string name="usersUpdated">usuarios actualizados</string>
+    <string name="usersUpdated">Usuarios actualizados</string>
     <string name="noUsersAvailableMsg">No hay usuarios en este evento</string>
     <string name="noUsersCheckedMsg">Debe marcar al menos un usuario</string>
     <string name="usersEmptyListMsg">No se ha descargado ningún usuario.\n\nPara descargar los

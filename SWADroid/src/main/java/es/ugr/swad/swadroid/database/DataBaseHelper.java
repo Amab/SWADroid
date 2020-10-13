@@ -2705,8 +2705,6 @@ public class DataBaseHelper {
 		 * */
         if (dbVersion == 19) {
             emptyTable(DB_TABLE_EVENTS_ATTENDANCES);
-            emptyTable(DB_TABLE_GAMES);
-            emptyTable(DB_TABLE_MATCHES);
         }
 
         Log.i(TAG, "Database upgraded");

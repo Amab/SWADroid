@@ -215,21 +215,21 @@
     <string name="gamesDownloadProgressDescription">Synchronizing games.\n\nDepending on the number of
         games to synchronize, the data processing can take several minutes.\n\nPlease wait…</string>
     <string name="noGamesAvailableMsg">There are no games in this course</string>
-    <string name="gamesUpdated">games updated</string>
+    <string name="gamesUpdated">Games updated</string>
     <string name="gamesEmptyListMsg">Did not download any game.\n\nTo download most recent
         games slide down this message.</string>
-    <string name="updatePendingGamesMsg">There are pending changes waiting to be sent to the server.If you
+    <string name="updatePendingGamesMsg">There are pending changes waiting to be sent to the server. If you
         update the list of games can lose the changes.\n\nAre you sure you want to update the list of games?</string>
     <string name="matchesDownloadProgressDescription">Synchronizing matches.\n\nDepending on the number of
         mathes to synchronize, the data processing can take several minutes.\n\nPlease wait…</string>
     <string name="noMatchesAvailableMsg">There are no matches in this game</string>
-    <string name="matchesUpdated">matches updated</string>
+    <string name="matchesUpdated">Matches updated</string>
     <string name="matchesEmptyListMsg">Did not download any match.\n\nTo download most recent
         matches slide down this message.</string>
-    <string name="updatePendingMatchesMsg">There are pending changes waiting to be sent to the server.If you
+    <string name="updatePendingMatchesMsg">There are pending changes waiting to be sent to the server. If you
         update the list of matches can lose the changes.\n\nAre you sure you want to update the list of matches?</string>
-    <string name="errorMatchStatusMsg">An error has happened, the requester can not join the match</string>
-    <string name="errorAnswerMatchMsg">An error has happened, the answer has not been saved</string>
+    <string name="errorMatchStatusMsg">An error has occurred, the requester can not join the match</string>
+    <string name="errorAnswerMatchMsg">An error has occurred, the answer has not been saved</string>
     <string name="matchPause">The match is paused</string>
     <string name="gameAnswered">Answered</string>
     <string name="gameNoAnswered">No answered</string>

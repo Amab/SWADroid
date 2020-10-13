@@ -360,13 +360,16 @@ public class GamesPlay extends MenuActivity implements View.OnClickListener {
     }
 
     @Override
-    public void onConfigurationChanged(Configuration configutation) {
-        super.onConfigurationChanged(configutation);
+    public void onConfigurationChanged(Configuration configuration) {
+
+        super.onConfigurationChanged(configuration);
+
         if(mProgressScreen != null && !mProgressScreen.isShowing()) {
             setQuestion();
             switch (nanswers) {
                 case 1:
-                    if (configutation.orientation ==
+                    if (configuration.orientation ==
+
                             Configuration.ORIENTATION_LANDSCAPE) {
                         ll12.setVisibility(View.VISIBLE);
                         one.setVisibility(View.VISIBLE);
@@ -390,7 +393,8 @@ public class GamesPlay extends MenuActivity implements View.OnClickListener {
                     break;
 
                 case 2:
-                    if (configutation.orientation ==
+                    if (configuration.orientation ==
+
                             Configuration.ORIENTATION_LANDSCAPE) {
                         ll12.setVisibility(View.VISIBLE);
                         one.setVisibility(View.VISIBLE);
@@ -414,7 +418,8 @@ public class GamesPlay extends MenuActivity implements View.OnClickListener {
                     break;
 
                 case 3:
-                    if (configutation.orientation ==
+                    if (configuration.orientation ==
+
                             Configuration.ORIENTATION_LANDSCAPE) {
                         ll12.setVisibility(View.VISIBLE);
                         one.setVisibility(View.VISIBLE);
@@ -440,7 +445,8 @@ public class GamesPlay extends MenuActivity implements View.OnClickListener {
                     break;
 
                 case 4:
-                    if (configutation.orientation ==
+                    if (configuration.orientation ==
+
                             Configuration.ORIENTATION_LANDSCAPE) {
                         ll12.setVisibility(View.VISIBLE);
                         one.setVisibility(View.VISIBLE);
@@ -466,7 +472,8 @@ public class GamesPlay extends MenuActivity implements View.OnClickListener {
                     break;
 
                 case 5:
-                    if (configutation.orientation ==
+                    if (configuration.orientation ==
+
                             Configuration.ORIENTATION_LANDSCAPE) {
                         ll12.setVisibility(View.VISIBLE);
                         one.setVisibility(View.VISIBLE);
@@ -494,7 +501,8 @@ public class GamesPlay extends MenuActivity implements View.OnClickListener {
                     break;
 
                 case 6:
-                    if (configutation.orientation ==
+                    if (configuration.orientation ==
+
                             Configuration.ORIENTATION_LANDSCAPE) {
                         ll12.setVisibility(View.VISIBLE);
                         one.setVisibility(View.VISIBLE);
@@ -522,7 +530,8 @@ public class GamesPlay extends MenuActivity implements View.OnClickListener {
                     break;
 
                 case 7:
-                    if (configutation.orientation ==
+                    if (configuration.orientation ==
+
                             Configuration.ORIENTATION_LANDSCAPE) {
                         ll12.setVisibility(View.VISIBLE);
                         one.setVisibility(View.VISIBLE);
@@ -552,7 +561,8 @@ public class GamesPlay extends MenuActivity implements View.OnClickListener {
                     break;
 
                 case 8:
-                    if (configutation.orientation ==
+                    if (configuration.orientation ==
+
                             Configuration.ORIENTATION_LANDSCAPE) {
                         ll12.setVisibility(View.VISIBLE);
                         one.setVisibility(View.VISIBLE);
@@ -582,7 +592,8 @@ public class GamesPlay extends MenuActivity implements View.OnClickListener {
                     break;
 
                 case 9:
-                    if (configutation.orientation ==
+                    if (configuration.orientation ==
+
                             Configuration.ORIENTATION_LANDSCAPE) {
                         ll12.setVisibility(View.VISIBLE);
                         one.setVisibility(View.VISIBLE);
@@ -614,7 +625,8 @@ public class GamesPlay extends MenuActivity implements View.OnClickListener {
                     break;
 
                 case 10:
-                    if (configutation.orientation ==
+                    if (configuration.orientation ==
+
                             Configuration.ORIENTATION_LANDSCAPE) {
                         ll12.setVisibility(View.VISIBLE);
                         one.setVisibility(View.VISIBLE);
