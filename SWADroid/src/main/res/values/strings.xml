@@ -15,6 +15,7 @@
     <string name="messagesModuleLabel">Send message</string>
     <string name="noticesModuleLabel">Publish notice</string>
     <string name="generateQRModuleLabel">Generate QR code</string>
+    <string name="manageLocation">Indoor location</string>
     <string name="title_error_dialog">ERROR</string>
     <string name="areYouSure">Are you sure?</string>
     <string name="close_dialog">Close</string>
@@ -134,9 +135,8 @@
     <string name="telegramTitle" translatable="false">Telegram</string>
     <string name="marketTitle" translatable="false">Google Play</string>
     <string name="blogTitle">Blog</string>
-    <string name="prefCatSyncTitle">Synchronization</string>
-    <string name="prefSyncTimeTitle">Synchronization frecuency</string>
-    <string name="prefSyncTimeSummary">Synchronization frecuency of notifications</string>
+    <string name="prefSyncTimeTitle">Frequency</string>
+    <string name="prefSyncTimeSummary">Synchronization frequency</string>
     <string name="prefSyncTimeKey" translatable="false">prefSyncTime</string>
     <string name="prefSyncEnableTitle">Auto Sync</string>
     <string name="prefSyncEnableSummary">Enable auto sync</string>
@@ -352,4 +352,26 @@
     <string name="privacyPolicyURL" translatable="false">https://swadroid.wordpress.com/politica-de-proteccion-de-datos/</string>
     <string name="privacyPolicyTitle">Privacy policy</string>
     <string name="files">Files</string>
+    <string name="shareLocation">Share my location</string>
+    <string name="findUser">Find user</string>
+    <string name="lastLocation">Last location</string>
+    <string name="update">Update</string>
+    <string name="prefSyncLocationTimeTitle">Synchronization</string>
+    <string name="prefSyncLocationTimeSummary">Synchronization frequency of indoor location</string>
+    <string name="prefSyncLocationTimeKey" translatable="false">prefSyncLocationTime</string>
+    <string name="prefSyncNotificationTitle">Notifications</string>
+    <string name="prefShareLocation">Enable indoor location</string>
+    <string name="prefShareLocationKey" translatable="false">prefShareLocation</string>
+    <string name="prefSyncLocationTitle">Indoor location</string>
+    <string name="locationDisabled">You need to activate sharing indoor location in preferences</string>
+    <string name="userLocation">Location</string>
+    <string name="institution">Institution</string>
+    <string name="center">Center</string>
+    <string name="building">Building</string>
+    <string name="floor">Floor</string>
+    <string name="room">Name</string>
+    <string name="distance">Distance</string>
+    <string name="checkIn">Time</string>
+    <string name="lostLocation">Location not found</string>
+    <string name="nearestLocation">Nearest wireless access point</string>
 </resources>

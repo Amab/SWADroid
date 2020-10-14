@@ -157,7 +157,14 @@ public class Preferences {
      * Indicates if there are changes on preferences
      */
     private static boolean preferencesChanged = false;
-
+    /**
+     * Synchronization time preference for location
+     */
+    public static final String SYNCLOCATIONTIMEPREF = "prefSyncLocationTime";
+    /*
+     * Sharing location preference
+     */
+    public static String SHARELOCATION = "prefShareLocation";
     /**
      * Gets application preferences
      * @param ctx Application context
@@ -465,4 +472,43 @@ public class Preferences {
     public static void setPreferencesChanged(boolean newState) {
         preferencesChanged = newState;
     }
+
+    /**
+     * Gets the synchronization time
+     *
+     * @return The synchronization time
+     */
+    public static String getSyncLocationTime() {
+        return prefs.getString(SYNCLOCATIONTIMEPREF, "1");
+    }
+
+    /**
+     * Sets the synchronization time for location
+     *
+     * @param syncLocationTime The synchronization time for location
+     */
+    public static void setSyncLocationTime(String syncLocationTime) {
+        editor = editor.putString(SYNCLOCATIONTIMEPREF, syncLocationTime);
+        editor.commit();
+    }
+
+    /**
+     * Gets sharing location preference
+     *
+     * @return share location preference
+     */
+    public static boolean getShareLocation() {
+        return prefs.getBoolean(SHARELOCATION, false);
+    }
+
+    /**
+     * Sets the SHARELOCATION preference
+     *
+     * @param shareLocation The preference for sharing location
+     */
+    public static void setShareLocation(boolean shareLocation) {
+        editor = editor.putBoolean(SHARELOCATION, shareLocation);
+        editor.commit();
+    }
+
 }
