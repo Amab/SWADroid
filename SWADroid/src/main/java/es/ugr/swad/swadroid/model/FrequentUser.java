@@ -55,6 +55,10 @@ public class FrequentUser extends Model implements Serializable{
      */
     private String userPhoto;
     /**
+     * Unique identifier for each user.
+     */
+    private int userCode;
+    /**
      * Is a receiver?.
      */
     private boolean selectedCheckbox;
@@ -72,16 +76,18 @@ public class FrequentUser extends Model implements Serializable{
      * @param userSurname2  User last surname.
      * @param userFirstname User name.
      * @param userPhoto     Full path where user's picture is stored.
+     * @param userCode      User code.
      * @param selectedCheckbox  Is a receiver?.
      * @param score         Score of frequent recipient
      */
-    public FrequentUser(String idUser, String userNickname, String userSurname1, String userSurname2, String userFirstname, String userPhoto, boolean selectedCheckbox, double score) {
+    public FrequentUser(String idUser, String userNickname, String userSurname1, String userSurname2, String userFirstname, String userPhoto, int userCode, boolean selectedCheckbox, double score) {
         this.idUser = idUser;
         this.userNickname = userNickname;
         this.userSurname1 = userSurname1;
         this.userSurname2 = userSurname2;
         this.userFirstname = userFirstname;
         this.userPhoto = userPhoto;
+        this.userCode = userCode;
         this.selectedCheckbox = selectedCheckbox;
         this.score = score;
     }
@@ -192,6 +198,24 @@ public class FrequentUser extends Model implements Serializable{
      */
     public void setUserPhoto(String userPhoto) {
         this.userPhoto = userPhoto;
+    }
+
+    /**
+     * Gets userCode.
+     *
+     * @return the userPhoto
+     */
+    public int getUserCode() {
+        return userCode;
+    }
+
+    /**
+     * Sets userCode.
+     *
+     * @param userCode
+     */
+    public void setUserCode(int userCode) {
+        this.userCode = userCode;
     }
 
     /**

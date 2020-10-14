@@ -93,4 +93,5 @@ dependencies {
     implementation 'com.google.zxing:core:3.4.1'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.google.firebase:firebase-core:17.5.1'
+    implementation 'com.google.android.material:material:1.2.1'
 }
