@@ -61,6 +61,7 @@ import es.ugr.swad.swadroid.modules.downloads.DownloadsManager;
 import es.ugr.swad.swadroid.modules.games.Games;
 import es.ugr.swad.swadroid.modules.groups.MyGroupsManager;
 import es.ugr.swad.swadroid.modules.information.Information;
+import es.ugr.swad.swadroid.modules.indoorlocation.IndoorLocation;
 import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.modules.login.LoginActivity;
 import es.ugr.swad.swadroid.modules.messages.Messages;
@@ -584,6 +585,8 @@ public class SWADMain extends MenuExpandableListActivity {
         mUsersData.add(getMenuItem(R.string.myGroupsModuleLabel, R.string.fa_sitemap));
         //Generate QR code
         mUsersData.add(getMenuItem(R.string.generateQRModuleLabel, R.string.fa_qrcode));
+        //Manage location
+        mUsersData.add(getMenuItem(R.string.manageLocation, R.string.fa_map_marker));
 
         //Messages category
         //Notifications
@@ -694,6 +697,9 @@ public class SWADMain extends MenuExpandableListActivity {
                 } else if (keyword.equals(getString(R.string.generateQRModuleLabel))) {
                     activity = new Intent(ctx, GenerateQR.class);
                     startActivityForResult(activity, Constants.GENERATE_QR_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.manageLocation))) {
+                    activity = new Intent(ctx, IndoorLocation.class);
+                    startActivityForResult(activity, Constants.MANAGE_LOCATION);
                 } else if (keyword.equals(getString(R.string.documentsDownloadModuleLabel))) {
                     activity = new Intent(ctx, DownloadsManager.class);
                     activity.putExtra("downloadsAreaCode", Constants.DOCUMENTS_AREA_CODE);

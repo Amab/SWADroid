@@ -353,7 +353,7 @@ public class Messages extends Module {
         }
 
         for(int i=0; i < arrayReceivers.size(); i++){
-            frequentsList.add(new FrequentUser(userLogged, arrayReceivers.get(i).getUserNickname(), arrayReceivers.get(i).getUserSurname1(), arrayReceivers.get(i).getUserSurname2(), arrayReceivers.get(i).getUserFirstname(), arrayReceivers.get(i).getUserPhoto(), false, INITIAL_SCORE));
+            frequentsList.add(new FrequentUser(userLogged, arrayReceivers.get(i).getUserNickname(), arrayReceivers.get(i).getUserSurname1(), arrayReceivers.get(i).getUserSurname2(), arrayReceivers.get(i).getUserFirstname(), arrayReceivers.get(i).getUserPhoto(), arrayReceivers.get(i).getUserCode(), false, INITIAL_SCORE));
             Log.d(TAG, "frequent user '" + arrayReceivers.get(i).getUserNickname() + "' added = " + INITIAL_SCORE + " (sender = '" + userLogged + "')");
         }
 
