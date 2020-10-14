@@ -100,10 +100,12 @@ public class GamesPlayStatus extends Module {
             numAnswers = Integer.parseInt(res.get(2).toString());
             answerIndex = Integer.parseInt(res.get(3).toString());
 
-            Log.d("matchCode",Long.toString(matchCode));
-            Log.d("questionIndex",Long.toString(questionIndex));
-            Log.d("numAnswers",Long.toString(numAnswers));
-            Log.d("answerIndex",Long.toString(answerIndex));
+            if (isDebuggable) {
+                Log.d("matchCode",Long.toString(matchCode));
+                Log.d("questionIndex",Long.toString(questionIndex));
+                Log.d("numAnswers",Long.toString(numAnswers));
+                Log.d("answerIndex",Long.toString(answerIndex));
+           }
 
 
             Log.i(TAG, "Consulted match" + matchCode);
@@ -140,4 +142,3 @@ public class GamesPlayStatus extends Module {
     @Override
     protected void onError() {}
 }
-

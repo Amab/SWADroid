@@ -110,7 +110,8 @@ public class GamesPlayAnswer extends Module {
             //Stores data returned by webservice response
             mc = Long.parseLong(soap.getValue().toString());
 
-        }    // end if (result != null)
+        }
+
 
 
         Intent data = new Intent();
@@ -139,4 +140,3 @@ public class GamesPlayAnswer extends Module {
     @Override
     protected void onError() {}
 }
-

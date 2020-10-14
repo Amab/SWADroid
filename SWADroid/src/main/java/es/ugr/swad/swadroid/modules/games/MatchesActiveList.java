@@ -55,10 +55,11 @@ public class MatchesActiveList extends MenuExpandableListActivity
     private final Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
-      /*
-    Database cursor for Adapter of matches
-   */
+           /*
+            * Database cursor for Adapter of matches
+            */
             Cursor dbCursor = dbHelper.getMatchesGameCursor(gameCode);
+
             startManagingCursor(dbCursor);
 
 
