@@ -6,7 +6,6 @@ import android.os.Bundle;
 import org.ksoap2.serialization.SoapObject;
 
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.Roles;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.modules.courses.Courses;
