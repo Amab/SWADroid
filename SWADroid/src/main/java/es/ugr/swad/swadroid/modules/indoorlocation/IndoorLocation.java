@@ -148,28 +148,52 @@ public class IndoorLocation extends MenuActivity {
         scheduler = Executors.newScheduledThreadPool(1);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onStart() {
         super.onStart();
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            requestMarshmallowPermissions();
+        } else {
+            requestSimplePermissions();
+        }
+
+    }
+
+    private void requestSimplePermissions() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_WIFI_STATE)
-                != PackageManager.PERMISSION_GRANTED ||
+                        != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(this, Manifest.permission.CHANGE_WIFI_STATE)
-                != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION)
-                != PackageManager.PERMISSION_GRANTED){
+                        != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
-                                 Manifest.permission.ACCESS_WIFI_STATE,
-                                 Manifest.permission.CHANGE_WIFI_STATE,
-                                 Manifest.permission.ACCESS_BACKGROUND_LOCATION}, Constants.PERMISSION_MULTIPLE);
+                            Manifest.permission.ACCESS_WIFI_STATE,
+                            Manifest.permission.CHANGE_WIFI_STATE}, Constants.PERMISSION_MULTIPLE);
         } else {
             init();
         }
+    }
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    private void requestMarshmallowPermissions() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_WIFI_STATE)
+                        != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.CHANGE_WIFI_STATE)
+                        != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_WIFI_STATE,
+                            Manifest.permission.CHANGE_WIFI_STATE,
+                            Manifest.permission.ACCESS_BACKGROUND_LOCATION}, Constants.PERMISSION_MULTIPLE);
+        } else {
+            init();
+        }
     }
 
     @Override
@@ -297,14 +321,27 @@ public class IndoorLocation extends MenuActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case Constants.PERMISSION_MULTIPLE: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
-                        && grantResults[1] == PackageManager.PERMISSION_GRANTED
-                        && grantResults[2] == PackageManager.PERMISSION_GRANTED
-                        && grantResults[3] == PackageManager.PERMISSION_GRANTED) {
-                    init();
-                } else {
-                    setResult(Activity.RESULT_CANCELED);
-                    finish();
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                            && grantResults[1] == PackageManager.PERMISSION_GRANTED
+                            && grantResults[2] == PackageManager.PERMISSION_GRANTED
+                            && grantResults[3] == PackageManager.PERMISSION_GRANTED) {
+                        init();
+                    } else {
+                        setResult(Activity.RESULT_CANCELED);
+                        finish();
+                    }
+                }
+                else {
+                    if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                            && grantResults[1] == PackageManager.PERMISSION_GRANTED
+                            && grantResults[2] == PackageManager.PERMISSION_GRANTED) {
+                        init();
+                    } else {
+                        setResult(Activity.RESULT_CANCELED);
+                        finish();
+                    }
                 }
             }
         }
