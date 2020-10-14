@@ -33,6 +33,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -238,9 +239,9 @@ public class IndoorLocation extends MenuActivity {
                     break;
                 case Constants.GET_LAST_LOCATION:
                     LocationTimeStamp locationTimeStamp = (LocationTimeStamp) data.getSerializableExtra("locationTimeStamp");
-                    if ( locationTimeStamp != null && locationTimeStamp.getRoomCode() != -1) {
+                    if (locationTimeStamp != null && locationTimeStamp.getRoomCode() != -1) {
                         Date checkIn = new Date((long)locationTimeStamp.getCheckInTime()*1000);
-                        SimpleDateFormat ft = new SimpleDateFormat ("hh:mm a");
+                        SimpleDateFormat ft = new SimpleDateFormat ("hh:mm a", Locale.getDefault());
                         locationHistory.clear();
                         locationHistory.add(
                                 getBasicInformation(locationTimeStamp) +
