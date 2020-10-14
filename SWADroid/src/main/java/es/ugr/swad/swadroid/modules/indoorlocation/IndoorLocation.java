@@ -229,9 +229,9 @@ public class IndoorLocation extends MenuActivity {
                             stopScheduler();
                             Log.d(TAG, "No more available networks");
                         } else {
-                            availableNetworks.remove(0);
                             Intent getLocation = new Intent(this.getApplicationContext(), GetLocation.class);
                             getLocation.putExtra("mac", availableNetworks.get(0).first.BSSID.replace(":",""));
+                            availableNetworks.remove(0);
                             startActivityForResult(getLocation, Constants.GET_LOCATION);
                         }
                     }
