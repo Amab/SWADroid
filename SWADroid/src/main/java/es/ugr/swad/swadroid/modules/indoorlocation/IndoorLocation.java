@@ -215,7 +215,7 @@ public class IndoorLocation extends MenuActivity {
                     }
                     break;
                 case Constants.GET_LOCATION:
-                    Location location = (es.ugr.swad.swadroid.model.Location) data.getSerializableExtra("location");
+                    Location location = (Location) data.getSerializableExtra("location");
                     if (location != null) {
                         double distance = (double) data.getSerializableExtra("distance");
                         locationHistory.add(
@@ -279,7 +279,7 @@ public class IndoorLocation extends MenuActivity {
         wifiManager.startScan();
     }
 
-    BroadcastReceiver wifiReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver wifiReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             List<ScanResult> results = wifiManager.getScanResults();
