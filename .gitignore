@@ -56,3 +56,4 @@ lint/outputs/
 lint/tmp/
 # lint/reports/
 /SWADroid/src/debug/
+/SWADroid/release/
