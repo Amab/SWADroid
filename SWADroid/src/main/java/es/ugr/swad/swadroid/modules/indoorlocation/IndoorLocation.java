@@ -1,7 +1,6 @@
 package es.ugr.swad.swadroid.modules.indoorlocation;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ClipData;
@@ -32,7 +31,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -54,23 +52,23 @@ public class IndoorLocation extends MenuActivity {
 
     private static final String TAG = Constants.APP_TAG + " IndoorLocation";
 
-    private ListView history;
+    private final List<String> locationHistory = new ArrayList<>();
 
-    private ArrayList<String> locationHistory = new ArrayList<>();
+    private final List<Pair<ScanResult, Integer>> availableNetworks = new ArrayList<>();
+
+    private final double FREE_SPACE_PATH_LOSS_CONSTANT = 27.55;
+
+    private ListView history;
 
     private ArrayAdapter<String> locationHistoryAdapter;
 
     private WifiManager wifiManager;
 
-    public ArrayList<Parcelable> arrayReceivers = new ArrayList<>();
+    private ArrayList<Parcelable> arrayReceivers = new ArrayList<>();
 
     private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
-    TextView textView;
-
-    List<Pair<ScanResult, Integer>> availableNetworks = new ArrayList<>();
-
-    final double FREE_SPACE_PATH_LOSS_CONSTANT = 27.55;
+    private TextView textView;
 
     private boolean showMac = false;
 
@@ -203,7 +201,7 @@ public class IndoorLocation extends MenuActivity {
             switch (requestCode) {
                 case Constants.SEARCH_USERS_REQUEST_CODE:
                     arrayReceivers = data.getParcelableArrayListExtra("receivers");
-                    if (arrayReceivers != null && arrayReceivers.size() > 0) {
+                    if (arrayReceivers != null && !arrayReceivers.isEmpty()) {
                         locationHistory.clear();
                         locationHistoryAdapter.notifyDataSetChanged();
                         UserFilter user = ((UserFilter)arrayReceivers.get(0));
@@ -242,14 +240,14 @@ public class IndoorLocation extends MenuActivity {
                     LocationTimeStamp locationTimeStamp = (LocationTimeStamp) data.getSerializableExtra("locationTimeStamp");
                     if ( locationTimeStamp != null && locationTimeStamp.getRoomCode() != -1) {
                         Date checkIn = new Date((long)locationTimeStamp.getCheckInTime()*1000);
-                        @SuppressLint("SimpleDateFormat") SimpleDateFormat ft = new SimpleDateFormat ("hh:mm a");
+                        SimpleDateFormat ft = new SimpleDateFormat ("hh:mm a");
                         locationHistory.clear();
                         locationHistory.add(
                                 getBasicInformation(locationTimeStamp) +
                                 getResources().getString(R.string.checkIn) + ": "+ ft.format(checkIn));
                         locationHistoryAdapter.notifyDataSetChanged();
                     } else {
-                        if (locationHistory.size() == 0) {
+                        if (locationHistory.isEmpty()) {
                             locationHistory.add(getResources().getString(R.string.lostLocation));
                             locationHistoryAdapter.notifyDataSetChanged();
                         }
@@ -274,7 +272,7 @@ public class IndoorLocation extends MenuActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    public void scanWifi() {
+    private void scanWifi() {
         Log.i(TAG, "SCANNING WIFI");
         registerReceiver(wifiReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         wifiManager.startScan();
@@ -285,43 +283,42 @@ public class IndoorLocation extends MenuActivity {
         public void onReceive(Context context, Intent intent) {
             List<ScanResult> results = wifiManager.getScanResults();
             unregisterReceiver(this);
-            if (results.size() > 0) {
+            if (!results.isEmpty()) {
                 for (ScanResult scanResult : results) {
                     int distance = (int) calculateDistance(scanResult.level, scanResult.frequency);
                     availableNetworks.add(new Pair<>(scanResult, distance));
                 }
-                Collections.sort(availableNetworks, (n1,n2) -> n1.second - n2.second);
+                availableNetworks.sort((n1, n2) -> n1.second - n2.second);
                 scanFinished();
             }
         }
-    };
 
-    public void scanFinished() {
-        if (!showMac){
-            Intent getLocation = new Intent(getApplicationContext(), GetLocation.class);
-            getLocation.putExtra("mac", availableNetworks.get(0).first.BSSID.replace(":",""));
-            getLocation.putExtra("distance", availableNetworks.get(0).second.doubleValue());
-            startActivityForResult(getLocation, Constants.GET_LOCATION);
-        } else {
-            showMac = false;
-            locationHistory.clear();
-            locationHistory.add(availableNetworks.get(0).first.SSID + " - " + availableNetworks.get(0).first.BSSID + " - " + availableNetworks.get(0).second + "m" );
-            locationHistoryAdapter.notifyDataSetChanged();
-            textView.setText(getString(R.string.nearestLocation));
+        private void scanFinished() {
+            if (!showMac){
+                Intent getLocation = new Intent(getApplicationContext(), GetLocation.class);
+                getLocation.putExtra("mac", availableNetworks.get(0).first.BSSID.replace(":",""));
+                getLocation.putExtra("distance", availableNetworks.get(0).second.doubleValue());
+                startActivityForResult(getLocation, Constants.GET_LOCATION);
+            } else {
+                showMac = false;
+                locationHistory.clear();
+                locationHistory.add(availableNetworks.get(0).first.SSID + " - " + availableNetworks.get(0).first.BSSID + " - " + availableNetworks.get(0).second + "m" );
+                locationHistoryAdapter.notifyDataSetChanged();
+                textView.setText(getString(R.string.nearestLocation));
+            }
+
         }
 
-    }
-
-    public double calculateDistance(double levelInDb, double freqInMHz) {
-        double exp = (FREE_SPACE_PATH_LOSS_CONSTANT - (20 * Math.log10(freqInMHz)) + Math.abs(levelInDb)) / 20.0;
-        return Math.pow(10.0, exp);
-    }
+        private double calculateDistance(double levelInDb, double freqInMHz) {
+            double exp = (FREE_SPACE_PATH_LOSS_CONSTANT - (20 * Math.log10(freqInMHz)) + Math.abs(levelInDb)) / 20.0;
+            return Math.pow(10.0, exp);
+        }
+    };
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case Constants.PERMISSION_MULTIPLE: {
-
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
                             && grantResults[1] == PackageManager.PERMISSION_GRANTED
@@ -332,8 +329,7 @@ public class IndoorLocation extends MenuActivity {
                         setResult(Activity.RESULT_CANCELED);
                         finish();
                     }
-                }
-                else {
+                } else {
                     if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
                             && grantResults[1] == PackageManager.PERMISSION_GRANTED
                             && grantResults[2] == PackageManager.PERMISSION_GRANTED) {
