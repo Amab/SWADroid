@@ -1,5 +1,12 @@
 package es.ugr.swad.swadroid.modules.games;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
+
+import org.ksoap2.serialization.SoapPrimitive;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.MatchAnswer;
@@ -8,20 +15,13 @@ import es.ugr.swad.swadroid.modules.courses.Courses;
 import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
-
-import org.ksoap2.serialization.SoapPrimitive;
-
 
 /**
  * Match answer upload module.
- * @see <a href="https://openswad.org/ws/#answerMatchQuestion">answerMatchQuestion</a>
  *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Sergio Díaz Rueda <sergiodiazrueda8@gmail.com>
+ * @see <a href="https://openswad.org/ws/#answerMatchQuestion">answerMatchQuestion</a>
  */
 
 public class GamesPlayAnswer extends Module {
@@ -58,8 +58,8 @@ public class GamesPlayAnswer extends Module {
         super.onCreate(savedInstanceState);
         gameCode = getIntent().getLongExtra("gameCode", 0);
         matchCode = getIntent().getLongExtra("matchCode", 0);
-        questionIndex = getIntent().getIntExtra("questionIndex",0);
-        answerIndex = getIntent().getIntExtra("answerIndex",0);
+        questionIndex = getIntent().getIntExtra("questionIndex", 0);
+        answerIndex = getIntent().getIntExtra("answerIndex", 0);
 
         setMETHOD_NAME("answerMatchQuestion");
         getSupportActionBar().hide();
@@ -102,7 +102,7 @@ public class GamesPlayAnswer extends Module {
         sendRequest(MatchAnswer.class, false);
 
 
-        Long mc = 0L;
+        long mc = 0L;
         if (result != null) {
 
             //Stores tests data returned by webservice response
@@ -111,7 +111,6 @@ public class GamesPlayAnswer extends Module {
             mc = Long.parseLong(soap.getValue().toString());
 
         }
-
 
 
         Intent data = new Intent();
@@ -138,5 +137,6 @@ public class GamesPlayAnswer extends Module {
     }
 
     @Override
-    protected void onError() {}
+    protected void onError() {
+    }
 }

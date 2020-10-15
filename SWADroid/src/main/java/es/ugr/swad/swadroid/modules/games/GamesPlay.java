@@ -1,12 +1,5 @@
 package es.ugr.swad.swadroid.modules.games;
 
-import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.gui.MenuActivity;
-import es.ugr.swad.swadroid.gui.ProgressScreen;
-import es.ugr.swad.swadroid.model.Match;
-import es.ugr.swad.swadroid.modules.courses.Courses;
-
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -14,11 +7,19 @@ import android.os.CountDownTimer;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-import android.widget.Button;
+
 import java.util.List;
+
+import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.gui.MenuActivity;
+import es.ugr.swad.swadroid.gui.ProgressScreen;
+import es.ugr.swad.swadroid.model.Match;
+import es.ugr.swad.swadroid.modules.courses.Courses;
 
 /**
  * Games Play module.
@@ -66,7 +67,7 @@ public class GamesPlay extends MenuActivity implements View.OnClickListener {
     /**
      * Number of answers of the current question
      */
-    private int nanswers=0;
+    private int nanswers = 0;
     /**
      * Number of questions of the game
      */
@@ -74,15 +75,15 @@ public class GamesPlay extends MenuActivity implements View.OnClickListener {
     /**
      * Index of que current question
      */
-    private int currentQuestion=0;
+    private int currentQuestion = 0;
     /**
      * Index of the answer chosen by the user
      */
-    private int answerChosen=-1;
+    private int answerChosen = -1;
     /**
      * Variable that indicates if the game is paused
      */
-    private boolean pause=true;
+    private boolean pause = true;
     /**
      * Variable that indicates if the button should be turned on
      */
@@ -120,14 +121,17 @@ public class GamesPlay extends MenuActivity implements View.OnClickListener {
 
 
         countDownMatchStatus = new CountDownTimer(3000, 1000) {
-            public void onTick(long millisUntilFinished) {}
+            public void onTick(long millisUntilFinished) {
+            }
+
             public void onFinish() {
                 getMatchStatus();
             }
         };
 
         countDownRemoveAnswerMatch = new CountDownTimer(1000, 500) {
-            public void onTick(long millisUntilFinished) {}
+            public void onTick(long millisUntilFinished) {
+            }
 
             public void onFinish() {
                 one.setChecked(false);
@@ -150,7 +154,7 @@ public class GamesPlay extends MenuActivity implements View.OnClickListener {
     }
 
     @Override
-    protected void onStart(){
+    protected void onStart() {
 
         super.onStart();
         mProgressScreen.show();
@@ -158,7 +162,7 @@ public class GamesPlay extends MenuActivity implements View.OnClickListener {
         getMatchStatus();
     }
 
-    private void setFinish(){
+    private void setFinish() {
 
         setContentView(R.layout.games_finish);
         finish = (Button) findViewById(R.id.buttonFinish);
@@ -167,25 +171,25 @@ public class GamesPlay extends MenuActivity implements View.OnClickListener {
 
     public void getMatchStatus() {
 
-            countDownMatchStatus.cancel();
-            Intent activity = new Intent(getApplicationContext(),
-                    GamesPlayStatus.class);
-            activity.putExtra("gameCode", gameCode);
-            activity.putExtra("matchCode", matchCode);
-            startActivityForResult(activity, Constants.MATCHES_STATUS_CODE);
+        countDownMatchStatus.cancel();
+        Intent activity = new Intent(getApplicationContext(),
+                GamesPlayStatus.class);
+        activity.putExtra("gameCode", gameCode);
+        activity.putExtra("matchCode", matchCode);
+        startActivityForResult(activity, Constants.MATCHES_STATUS_CODE);
 
     }
 
-    public void sendMatchAnswer(int newAnswer){
+    public void sendMatchAnswer(int newAnswer) {
 
-            countDownMatchStatus.cancel();
-            Intent activity = new Intent(getApplicationContext(),
-                    GamesPlayAnswer.class);
-            activity.putExtra("gameCode", gameCode);
-            activity.putExtra("matchCode", matchCode);
-            activity.putExtra("questionIndex", currentQuestion);
-            activity.putExtra("answerIndex", newAnswer);
-            startActivityForResult(activity, Constants.MATCHES_ANSWER_CODE);
+        countDownMatchStatus.cancel();
+        Intent activity = new Intent(getApplicationContext(),
+                GamesPlayAnswer.class);
+        activity.putExtra("gameCode", gameCode);
+        activity.putExtra("matchCode", matchCode);
+        activity.putExtra("questionIndex", currentQuestion);
+        activity.putExtra("answerIndex", newAnswer);
+        startActivityForResult(activity, Constants.MATCHES_ANSWER_CODE);
 
     }
 
@@ -193,7 +197,7 @@ public class GamesPlay extends MenuActivity implements View.OnClickListener {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Long mc = 0L;
+        long mc = 0L;
         switch (requestCode) {
             case Constants.MATCHES_STATUS_CODE:
 
@@ -202,23 +206,21 @@ public class GamesPlay extends MenuActivity implements View.OnClickListener {
                 int numAnswers = data.getIntExtra("numAnswers", 0);
                 int answerIndex = data.getIntExtra("answerIndex", 0);
 
-                if(mc<0) {
+                if (mc < 0) {
                     Toast.makeText(this, R.string.errorMatchStatusMsg, Toast.LENGTH_LONG).show();
                     finish();
-                }
-                else{
-                    if(mc!=0) {
+                } else {
+                    if (mc != 0) {
 
                         pause = false;
                         currentQuestion = questionIndex;
                         nanswers = numAnswers;
                         answerChosen = answerIndex;
 
-                        if(answerChosen<0){
+                        if (answerChosen < 0) {
                             menu.findItem(R.id.action_answered).setVisible(false);
                             menu.findItem(R.id.action_no_answered).setVisible(true);
-                        }
-                        else {
+                        } else {
                             menu.findItem(R.id.action_answered).setVisible(true);
                             menu.findItem(R.id.action_no_answered).setVisible(false);
                         }
@@ -227,19 +229,17 @@ public class GamesPlay extends MenuActivity implements View.OnClickListener {
                         mProgressScreen.hide();
                         onConfigurationChanged(getResources().getConfiguration());
 
-                        if(answered) {
-                            if (answerChosen != -1){
+                        if (answered) {
+                            if (answerChosen != -1) {
                                 setButtons();
                                 countDownRemoveAnswerMatch.start();
+                            } else {
+                                Toast.makeText(this, R.string.answerRemovedMsg, Toast.LENGTH_LONG).show();
                             }
-                            else{
-                                Toast.makeText(this,R.string.answerRemovedMsg, Toast.LENGTH_LONG).show();
-                            }
-                            answered=false;
+                            answered = false;
                         }
 
-                    }
-                    else {
+                    } else {
 
                         pause = true;
                         hideButtons();
@@ -248,30 +248,26 @@ public class GamesPlay extends MenuActivity implements View.OnClickListener {
                         menu.findItem(R.id.action_no_answered).setVisible(false);
                         menu.findItem(R.id.action_remove).setVisible(false);
 
-                        if(questionIndex==0){
-                            Toast.makeText(this,R.string.matchNotStartedMsg, Toast.LENGTH_LONG).show();
-                        }
-                        else if(questionIndex > 100000){
-                            Toast.makeText(this,R.string.matchFinishedMsg,Toast.LENGTH_LONG).show();
-                        }
-                        else{
-                            Toast.makeText(this,R.string.matchPausedMsg,Toast.LENGTH_LONG).show();
+                        if (questionIndex == 0) {
+                            Toast.makeText(this, R.string.matchNotStartedMsg, Toast.LENGTH_LONG).show();
+                        } else if (questionIndex > 100000) {
+                            Toast.makeText(this, R.string.matchFinishedMsg, Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(this, R.string.matchPausedMsg, Toast.LENGTH_LONG).show();
                         }
                     }
 
                     menu.findItem(R.id.action_question_index).setVisible(true);
 
-                    if(questionIndex==0) {
+                    if (questionIndex == 0) {
                         menu.findItem(R.id.action_question_index).setTitle(R.string.gameStart);
-                    }
-                    else if(questionIndex > 100000) {
+                    } else if (questionIndex > 100000) {
                         menu.findItem(R.id.action_question_index).setTitle(R.string.gameFinish);
                         setFinish();
-                    }
-                    else{
+                    } else {
                         menu.findItem(R.id.action_question_index).setTitle
                                 (Integer.toString(currentQuestion)
-                                        +"/"+Integer.toString(nquestions));
+                                        + "/" + Integer.toString(nquestions));
                     }
                     countDownMatchStatus.start();
                 }
@@ -281,11 +277,10 @@ public class GamesPlay extends MenuActivity implements View.OnClickListener {
 
                 mc = data.getLongExtra("matchCode", 0);
 
-                if(mc<=0) {
+                if (mc <= 0) {
                     Toast.makeText(this, R.string.errorAnswerMatchMsg, Toast.LENGTH_LONG).show();
-                }
-                else {
-                    answered=true;
+                } else {
+                    answered = true;
                     getMatchStatus();
 
                 }
@@ -293,8 +288,8 @@ public class GamesPlay extends MenuActivity implements View.OnClickListener {
         }
     }
 
-    public void hideButtons(){
-        if (getResources().getConfiguration().orientation==
+    public void hideButtons() {
+        if (getResources().getConfiguration().orientation ==
                 Configuration.ORIENTATION_LANDSCAPE) {
             ll12.setVisibility(View.GONE);
             ll34.setVisibility(View.GONE);
@@ -316,16 +311,14 @@ public class GamesPlay extends MenuActivity implements View.OnClickListener {
     }
 
     private void setQuestion() {
-        if(getResources().getConfiguration().orientation==
+        if (getResources().getConfiguration().orientation ==
                 Configuration.ORIENTATION_LANDSCAPE) {
             setContentView(R.layout.button_quadrant);
-        }
-        else{
+        } else {
             setContentView(R.layout.button_list);
         }
         setQuestionButtons();
     }
-
 
 
     public void setQuestionButtons() {
@@ -364,7 +357,7 @@ public class GamesPlay extends MenuActivity implements View.OnClickListener {
 
         super.onConfigurationChanged(configuration);
 
-        if(mProgressScreen != null && !mProgressScreen.isShowing()) {
+        if (mProgressScreen != null && !mProgressScreen.isShowing()) {
             setQuestion();
             switch (nanswers) {
                 case 1:
@@ -661,7 +654,7 @@ public class GamesPlay extends MenuActivity implements View.OnClickListener {
                     break;
             }
 
-            if(one.isChecked() || two.isChecked() || three.isChecked() ||
+            if (one.isChecked() || two.isChecked() || three.isChecked() ||
                     four.isChecked() || five.isChecked() || six.isChecked() ||
                     seven.isChecked() || eight.isChecked() ||
                     nine.isChecked() || ten.isChecked()) {
@@ -670,8 +663,8 @@ public class GamesPlay extends MenuActivity implements View.OnClickListener {
         }
     }
 
-    public void setButtons(){
-        switch (answerChosen){
+    public void setButtons() {
+        switch (answerChosen) {
             case 0:
                 one.setChecked(true);
                 break;
@@ -781,15 +774,15 @@ public class GamesPlay extends MenuActivity implements View.OnClickListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_answered:
-                answered=true;
+                answered = true;
                 getMatchStatus();
                 return true;
             case R.id.action_no_answered:
-                Toast.makeText(this,R.string.matchNoAnsweredMsg,
+                Toast.makeText(this, R.string.matchNoAnsweredMsg,
                         Toast.LENGTH_LONG).show();
                 return true;
             case R.id.action_remove:
-                answered=true;
+                answered = true;
                 sendMatchAnswer(-1);
                 return true;
             default:

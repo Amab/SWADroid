@@ -1,15 +1,5 @@
 package es.ugr.swad.swadroid.modules.games;
 
-import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.database.DataBaseHelper;
-import es.ugr.swad.swadroid.model.Match;
-import es.ugr.swad.swadroid.modules.Module;
-import es.ugr.swad.swadroid.modules.courses.Courses;
-import es.ugr.swad.swadroid.modules.login.Login;
-import es.ugr.swad.swadroid.webservices.SOAPClient;
-
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,12 +12,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.database.DataBaseHelper;
+import es.ugr.swad.swadroid.model.Match;
+import es.ugr.swad.swadroid.modules.Module;
+import es.ugr.swad.swadroid.modules.courses.Courses;
+import es.ugr.swad.swadroid.modules.login.Login;
+import es.ugr.swad.swadroid.webservices.SOAPClient;
+
 /**
  * Match download module.
- * @see <a href="https://openswad.org/ws/#getGames">getGames</a>
  *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Sergio Díaz Rueda <sergiodiazrueda8@gmail.com>
+ * @see <a href="https://openswad.org/ws/#getGames">getGames</a>
  */
 
 public class MatchesActive extends Module {
@@ -57,7 +56,7 @@ public class MatchesActive extends Module {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         gameCode = getIntent().getLongExtra("gameCode", 0);
-        Log.d("gameCode",Long.toString(gameCode));
+        Log.d("gameCode", Long.toString(gameCode));
         setMETHOD_NAME("getMatches");
         getSupportActionBar().hide();
     }
@@ -99,7 +98,7 @@ public class MatchesActive extends Module {
 
         if (result != null) {
             //Stores tests data returned by webservice response
-            ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
+            List<Object> res = new ArrayList<>((Vector<?>) result);
             SoapObject soap = (SoapObject) res.get(1);
             numMatches = soap.getPropertyCount();
 
@@ -115,7 +114,7 @@ public class MatchesActive extends Module {
                 long endTime = Long.parseLong(pii.getProperty("endTime").toString());
                 String title = pii.getProperty("title").toString();
                 int questionIndex = Integer.parseInt(pii.getProperty("questionIndex").toString());
-                String groups = (pii.hasProperty("groups")? pii.getProperty("groups").toString() : "");
+                String groups = (pii.hasProperty("groups") ? pii.getProperty("groups").toString() : "");
 
                 if (userSurname1.equalsIgnoreCase(Constants.NULL_VALUE)) userSurname1 = "";
                 if (userSurname2.equalsIgnoreCase(Constants.NULL_VALUE)) userSurname2 = "";
@@ -138,7 +137,7 @@ public class MatchesActive extends Module {
             //removeOldMatches();
 
             Log.i(TAG, "Retrieved " + numMatches + " matches");
-        }    // end if (result != null)
+        }
 
 
         Intent data = new Intent();
@@ -168,13 +167,14 @@ public class MatchesActive extends Module {
     }
 
     @Override
-    protected void onError() {}
+    protected void onError() {
+    }
 
     private void removeOldMatches() {
         List<Match> dbMatches = dbHelper.getMatchesGame(gameCode);
         int nMatchesRemoved = 0;
 
-        if((dbMatches != null) && (dbMatches.size() > 0)) {
+        if ((dbMatches != null) && (!dbMatches.isEmpty())) {
             for (Match m : dbMatches) {
                 if (!matchCodes.contains(m.getId())) {
                     dbHelper.removeAllRows(DataBaseHelper.DB_TABLE_MATCHES_GAMES,
@@ -188,10 +188,6 @@ public class MatchesActive extends Module {
 
         Log.i(TAG, "Removed " + nMatchesRemoved + " matches");
     }
-
-
-
-
 
 
 }

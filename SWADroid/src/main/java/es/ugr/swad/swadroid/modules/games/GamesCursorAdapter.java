@@ -3,12 +3,13 @@ package es.ugr.swad.swadroid.modules.games;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Typeface;
-import androidx.core.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -26,10 +27,10 @@ import es.ugr.swad.swadroid.utils.Crypto;
  */
 public class GamesCursorAdapter extends CursorAdapter {
 
-    private Crypto crypto;
-    private Cursor cursor;
-    private DateFormat df;
-    private LayoutInflater inflater;
+    private final Crypto crypto;
+    private final Cursor cursor;
+    private final DateFormat df;
+    private final LayoutInflater inflater;
 
     private static Typeface iconFont;
 
@@ -44,9 +45,9 @@ public class GamesCursorAdapter extends CursorAdapter {
     /**
      * Constructor
      *
-     * @param context   Application context
-     * @param c         Database cursor
-     * @param dbHelper  Database helper
+     * @param context  Application context
+     * @param c        Database cursor
+     * @param dbHelper Database helper
      */
     public GamesCursorAdapter(Context context, Cursor c, DataBaseHelper dbHelper) {
 
@@ -69,7 +70,7 @@ public class GamesCursorAdapter extends CursorAdapter {
      * @param dbHelper    Database helper
      */
     public GamesCursorAdapter(Context context, Cursor c,
-                               boolean autoRequery, DataBaseHelper dbHelper) {
+                              boolean autoRequery, DataBaseHelper dbHelper) {
 
         super(context, c, autoRequery);
         this.cursor = c;
@@ -112,7 +113,7 @@ public class GamesCursorAdapter extends CursorAdapter {
         holder.endTimeTextView.setText(df.format(endTimeCalendar.getTime()));
 
         //If the game is in time, show dates in green, else show in red
-        if(today.before(startTimeCalendar) || today.after(endTimeCalendar)) {
+        if (today.before(startTimeCalendar) || today.after(endTimeCalendar)) {
             holder.startTimeTextView.setTextColor(ContextCompat.getColor(context, R.color.red));
             holder.endTimeTextView.setTextColor(ContextCompat.getColor(context, R.color.red));
         } else {
@@ -142,8 +143,8 @@ public class GamesCursorAdapter extends CursorAdapter {
 
     @Override
     public long getItemId(int position) {
-        if(cursor != null) {
-            if(cursor.moveToPosition(position)) {
+        if (cursor != null) {
+            if (cursor.moveToPosition(position)) {
                 return cursor.getLong(cursor.getColumnIndex("id"));
             } else {
                 return 0;

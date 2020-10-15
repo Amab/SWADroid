@@ -1,21 +1,12 @@
 package es.ugr.swad.swadroid.modules.games;
 
-import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.gui.DialogFactory;
-import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
-import es.ugr.swad.swadroid.gui.ProgressScreen;
-import es.ugr.swad.swadroid.modules.courses.Courses;
-
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
@@ -23,7 +14,16 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import java.lang.ref.WeakReference;
+
+import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.gui.DialogFactory;
+import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
+import es.ugr.swad.swadroid.gui.ProgressScreen;
+import es.ugr.swad.swadroid.modules.courses.Courses;
 
 /**
  * Matches List module.
@@ -41,7 +41,7 @@ public class MatchesActiveList extends MenuExpandableListActivity
     /**
      * ListView of matches
      */
-    private static ListView lvMatches;
+    private ListView lvMatches;
     /**
      * Adapter for ListView of matches
      */
@@ -55,9 +55,9 @@ public class MatchesActiveList extends MenuExpandableListActivity
     private final Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
-           /*
-            * Database cursor for Adapter of matches
-            */
+            /*
+             * Database cursor for Adapter of matches
+             */
             Cursor dbCursor = dbHelper.getMatchesGameCursor(gameCode);
 
             startManagingCursor(dbCursor);
@@ -109,8 +109,7 @@ public class MatchesActiveList extends MenuExpandableListActivity
             Intent activity = new Intent(getApplicationContext(),
                     GamesPlay.class);
             activity.putExtra("gameCode", (long) gameCode);
-            activity.putExtra("matchCode",
-                    (long) adapter.getItemId(position));
+            activity.putExtra("matchCode", adapter.getItemId(position));
             startActivity(activity);
         }
     };
@@ -228,7 +227,7 @@ public class MatchesActiveList extends MenuExpandableListActivity
         int i = 0;
 
         if ((lvMatches != null) && (lvMatches.getChildCount() > 0)) {
-            while(!hasPendingMatches && (i<lvMatches.getChildCount())) {
+            while (!hasPendingMatches && (i < lvMatches.getChildCount())) {
                 sendingStateTextView = (TextView) lvMatches.getChildAt(i).findViewById
                         (R.id.sendingStateTextView);
                 hasPendingMatches = sendingStateTextView.getText().equals
@@ -253,7 +252,7 @@ public class MatchesActiveList extends MenuExpandableListActivity
      */
     @Override
     public void onRefresh() {
-        if(!hasPendingMatches()) {
+        if (!hasPendingMatches()) {
             updateMatches();
         } else {
             AlertDialog cleanMatchesDialog = DialogFactory.createWarningDialog(this,
@@ -263,18 +262,12 @@ public class MatchesActiveList extends MenuExpandableListActivity
                     R.string.yesMsg,
                     R.string.noMsg,
                     true,
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
+                    (dialog, id) -> {
+                        dialog.cancel();
 
-                            updateMatches();
-                        }
+                        updateMatches();
                     },
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                        }
-                    },
+                    (dialog, id) -> dialog.cancel(),
                     null);
 
             cleanMatchesDialog.show();

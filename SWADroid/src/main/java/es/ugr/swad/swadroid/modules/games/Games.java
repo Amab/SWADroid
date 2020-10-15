@@ -1,13 +1,5 @@
 package es.ugr.swad.swadroid.modules.games;
 
-import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.gui.ImageListItem;
-import es.ugr.swad.swadroid.gui.MenuActivity;
-import es.ugr.swad.swadroid.gui.ProgressScreen;
-import es.ugr.swad.swadroid.gui.TextListAdapter;
-import es.ugr.swad.swadroid.modules.courses.Courses;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -16,6 +8,14 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.gui.ImageListItem;
+import es.ugr.swad.swadroid.gui.MenuActivity;
+import es.ugr.swad.swadroid.gui.ProgressScreen;
+import es.ugr.swad.swadroid.gui.TextListAdapter;
+import es.ugr.swad.swadroid.modules.courses.Courses;
 
 /**
  * Games module.

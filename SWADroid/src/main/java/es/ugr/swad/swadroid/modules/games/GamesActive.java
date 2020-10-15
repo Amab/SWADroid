@@ -1,14 +1,5 @@
 package es.ugr.swad.swadroid.modules.games;
 
-import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.database.DataBaseHelper;
-import es.ugr.swad.swadroid.model.Game;
-import es.ugr.swad.swadroid.modules.Module;
-import es.ugr.swad.swadroid.modules.courses.Courses;
-import es.ugr.swad.swadroid.modules.login.Login;
-import es.ugr.swad.swadroid.webservices.SOAPClient;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -19,12 +10,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.database.DataBaseHelper;
+import es.ugr.swad.swadroid.model.Game;
+import es.ugr.swad.swadroid.modules.Module;
+import es.ugr.swad.swadroid.modules.courses.Courses;
+import es.ugr.swad.swadroid.modules.login.Login;
+import es.ugr.swad.swadroid.webservices.SOAPClient;
+
 /**
  * Games download module.
- * @see <a href="https://openswad.org/ws/#getGames">getGames</a>
  *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Sergio Díaz Rueda <sergiodiazrueda8@gmail.com>
+ * @see <a href="https://openswad.org/ws/#getGames">getGames</a>
  */
 public class GamesActive extends Module {
     /**
@@ -39,7 +39,6 @@ public class GamesActive extends Module {
      * List of downloaded game codes
      */
     private List<Long> gameCodes;
-
 
 
     /* (non-Javadoc)
@@ -61,7 +60,7 @@ public class GamesActive extends Module {
         try {
             if (isDebuggable) {
                 Log.d(TAG, "selectedCourseCode = " +
-                        Long.toString(Courses.getSelectedCourseCode()));
+                        Courses.getSelectedCourseCode());
             }
             runConnection();
         } catch (Exception e) {
@@ -89,7 +88,7 @@ public class GamesActive extends Module {
 
         if (result != null) {
             //Stores tests data returned by webservice response
-            ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
+            List<Object> res = new ArrayList<>((Vector<?>) result);
             SoapObject soap = (SoapObject) res.get(1);
             numGames = soap.getPropertyCount();
 
@@ -128,7 +127,7 @@ public class GamesActive extends Module {
             removeOldGames();
 
             Log.i(TAG, "Retrieved " + numGames + " games");
-        }    // end if (result != null)
+        }
 
         // Request finalized without errors
         setResult(RESULT_OK);
@@ -153,13 +152,14 @@ public class GamesActive extends Module {
     }
 
     @Override
-    protected void onError() {}
+    protected void onError() {
+    }
 
     private void removeOldGames() {
         List<Game> dbGames = dbHelper.getGamesCourse(Courses.getSelectedCourseCode());
         int nGamesRemoved = 0;
 
-        if((dbGames != null) && (dbGames.size() > 0)) {
+        if ((dbGames != null) && (!dbGames.isEmpty())) {
             for (Game g : dbGames) {
                 if (!gameCodes.contains(g.getId())) {
                     dbHelper.removeAllRows(DataBaseHelper.DB_TABLE_GAMES_COURSES,

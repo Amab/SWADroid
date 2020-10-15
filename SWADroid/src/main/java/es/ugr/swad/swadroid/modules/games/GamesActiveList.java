@@ -1,21 +1,12 @@
 package es.ugr.swad.swadroid.modules.games;
 
-import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.gui.DialogFactory;
-import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
-import es.ugr.swad.swadroid.gui.ProgressScreen;
-import es.ugr.swad.swadroid.modules.courses.Courses;
-
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
@@ -23,7 +14,16 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import java.lang.ref.WeakReference;
+
+import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.gui.DialogFactory;
+import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
+import es.ugr.swad.swadroid.gui.ProgressScreen;
+import es.ugr.swad.swadroid.modules.courses.Courses;
 
 /**
  * Games List module.
@@ -40,7 +40,7 @@ public class GamesActiveList extends MenuExpandableListActivity
     /**
      * ListView of games
      */
-    private static ListView lvGames;
+    private ListView lvGames;
     /**
      * Adapter for ListView of games
      */
@@ -101,14 +101,13 @@ public class GamesActiveList extends MenuExpandableListActivity
     /**
      * ListView click listener
      */
-    private ListView.OnItemClickListener clickListener = new ListView.OnItemClickListener() {
+    private final ListView.OnItemClickListener clickListener = new ListView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             mProgressScreen.show();
             Intent activity = new Intent(getApplicationContext(),
                     MatchesActive.class);
-            activity.putExtra("gameCode",
-                    (long) adapter.getItemId(position));
+            activity.putExtra("gameCode", adapter.getItemId(position));
             startActivityForResult(activity, Constants.MATCHES_ACTIVE_DOWNLOAD_CODE);
         }
     };
@@ -121,14 +120,14 @@ public class GamesActiveList extends MenuExpandableListActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_items_pulltorefresh);
 
-        refreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container_list);
-        emptyGamesTextView = (TextView) findViewById(R.id.list_item_title);
+        refreshLayout = findViewById(R.id.swipe_container_list);
+        emptyGamesTextView = findViewById(R.id.list_item_title);
 
         View mProgressScreenView = findViewById(R.id.progress_screen);
         mProgressScreen = new ProgressScreen(mProgressScreenView, refreshLayout,
                 getString(R.string.loadingMsg), this);
 
-        lvGames = (ListView) findViewById(R.id.list_pulltorefresh);
+        lvGames = findViewById(R.id.list_pulltorefresh);
         lvGames.setOnItemClickListener(clickListener);
 
         lvGames.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -223,7 +222,7 @@ public class GamesActiveList extends MenuExpandableListActivity
         int i = 0;
 
         if ((lvGames != null) && (lvGames.getChildCount() > 0)) {
-            while(!hasPendingGames && (i<lvGames.getChildCount())) {
+            while (!hasPendingGames && (i < lvGames.getChildCount())) {
                 sendingStateTextView = (TextView) lvGames.getChildAt(i).findViewById
                         (R.id.sendingStateTextView);
                 hasPendingGames = sendingStateTextView.getText().equals(
@@ -248,7 +247,7 @@ public class GamesActiveList extends MenuExpandableListActivity
      */
     @Override
     public void onRefresh() {
-        if(!hasPendingGames()) {
+        if (!hasPendingGames()) {
             updateGames();
         } else {
             AlertDialog cleanGamesDialog = DialogFactory.createWarningDialog(this,
@@ -258,18 +257,12 @@ public class GamesActiveList extends MenuExpandableListActivity
                     R.string.yesMsg,
                     R.string.noMsg,
                     true,
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
+                    (dialog, id) -> {
+                        dialog.cancel();
 
-                            updateGames();
-                        }
+                        updateGames();
                     },
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                        }
-                    },
+                    (dialog, id) -> dialog.cancel(),
                     null);
 
             cleanGamesDialog.show();
@@ -281,6 +274,7 @@ public class GamesActiveList extends MenuExpandableListActivity
     private static class RefreshAdapterHandler extends Handler {
 
         private final WeakReference<GamesActiveList> mActivity;
+
         public RefreshAdapterHandler(GamesActiveList activity) {
             mActivity = new WeakReference<>(activity);
         }

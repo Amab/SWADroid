@@ -1,5 +1,14 @@
 package es.ugr.swad.swadroid.modules.games;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.model.MatchStatus;
@@ -8,20 +17,12 @@ import es.ugr.swad.swadroid.modules.courses.Courses;
 import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.Vector;
-
 /**
  * Match status download module.
- * @see <a href="https://openswad.org/ws/#getMatchStatus">getMatchStatus</a>
  *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Sergio Díaz Rueda <sergiodiazrueda8@gmail.com>
+ * @see <a href="https://openswad.org/ws/#getMatchStatus">getMatchStatus</a>
  */
 
 public class GamesPlayStatus extends Module {
@@ -32,11 +33,11 @@ public class GamesPlayStatus extends Module {
     /**
      * Game code
      */
-    private long gameCode=-1;
+    private long gameCode = -1;
     /**
      * Match code
      */
-    private long matchCode=-1;
+    private long matchCode = -1;
 
 
     /* (non-Javadoc)
@@ -76,11 +77,11 @@ public class GamesPlayStatus extends Module {
     @Override
     protected void requestService() throws Exception {
 
-         long courseCode = Courses.getSelectedCourseCode();
+        long courseCode = Courses.getSelectedCourseCode();
 
-        int questionIndex=-1;
-        int numAnswers=-1;
-        int answerIndex=-1;
+        int questionIndex = -1;
+        int numAnswers = -1;
+        int answerIndex = -1;
 
 
         //Creates webservice request, adds required params and sends request to webservice
@@ -94,26 +95,26 @@ public class GamesPlayStatus extends Module {
         if (result != null) {
             //Stores tests data returned by webservice response
 
-            ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
+            List<Object> res = new ArrayList<>((Vector<?>) result);
             matchCode = Long.parseLong(res.get(0).toString());
             questionIndex = Integer.parseInt(res.get(1).toString());
             numAnswers = Integer.parseInt(res.get(2).toString());
             answerIndex = Integer.parseInt(res.get(3).toString());
 
             if (isDebuggable) {
-                Log.d("matchCode",Long.toString(matchCode));
-                Log.d("questionIndex",Long.toString(questionIndex));
-                Log.d("numAnswers",Long.toString(numAnswers));
-                Log.d("answerIndex",Long.toString(answerIndex));
-           }
+                Log.d("matchCode", Long.toString(matchCode));
+                Log.d("questionIndex", Long.toString(questionIndex));
+                Log.d("numAnswers", Long.toString(numAnswers));
+                Log.d("answerIndex", Long.toString(answerIndex));
+            }
 
 
             Log.i(TAG, "Consulted match" + matchCode);
-        }    // end if (result != null)
+        }
 
 
         Intent data = new Intent();
-        data.putExtra("matchCode",matchCode);
+        data.putExtra("matchCode", matchCode);
         data.putExtra("questionIndex", questionIndex);
         data.putExtra("numAnswers", numAnswers);
         data.putExtra("answerIndex", answerIndex);
@@ -140,5 +141,6 @@ public class GamesPlayStatus extends Module {
     }
 
     @Override
-    protected void onError() {}
+    protected void onError() {
+    }
 }
