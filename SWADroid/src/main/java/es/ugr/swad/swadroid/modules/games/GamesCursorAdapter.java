@@ -32,7 +32,7 @@ public class GamesCursorAdapter extends CursorAdapter {
     private final DateFormat df;
     private final LayoutInflater inflater;
 
-    private static Typeface iconFont;
+    private final Typeface iconFont;
 
     private static class ViewHolder {
         TextView iconTextView;
