@@ -53,6 +53,7 @@ Contributors
 -	[José Antonio Guerrero Avilés](http://www.linkedin.com/in/antonioguerreroaviles)
 -	[Alejandro Alcalde](http://elbauldelprogramador.com/)
 -	[Rubén Martín Hidalgo](https://github.com/romilgildo)
+-	[Javier Bueno López](https://github.com/JaviBL8)
 
 Contributing
 ------------
