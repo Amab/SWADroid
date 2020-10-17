@@ -134,7 +134,7 @@ public class MatchesActive extends Module {
             }
 
             //Removes old matches not listed in eventCodes
-            //removeOldMatches();
+            removeOldMatches();
 
             Log.i(TAG, "Retrieved " + numMatches + " matches");
         }
