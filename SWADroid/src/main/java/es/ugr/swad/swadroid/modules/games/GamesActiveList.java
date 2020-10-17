@@ -44,7 +44,7 @@ public class GamesActiveList extends MenuExpandableListActivity
     /**
      * Adapter for ListView of games
      */
-    private static GamesCursorAdapter adapter;
+    private GamesCursorAdapter adapter;
     /**
      * Handler for games
      */
