@@ -109,7 +109,7 @@ public class GamesPlayStatus extends Module {
             }
 
 
-            Log.i(TAG, "Consulted match" + matchCode);
+            Log.i(TAG, "Recovered status for match " + matchCode);
         }
 
 
