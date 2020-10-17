@@ -241,7 +241,7 @@
     <string name='matchNotStartedMsg'>The match has not started</string>
     <string name='matchFinishedMsg'>The match has finished</string>
     <string name='matchPausedMsg'>The match is in pause or is showing result</string>
-    <string name='matchNoAnsweredMsg'>You has not answer the question</string>
+    <string name='matchNoAnsweredMsg'>You have not answered the question</string>
     <string name="usersUpdate">Update</string>
     <string name="newTitle">New</string>
     <string name="rollcallScanQR">Scan QR</string>
@@ -405,4 +405,14 @@
     <string name="checkIn">Time</string>
     <string name="lostLocation">Location not found</string>
     <string name="nearestLocation">Nearest wireless access point</string>
+    <string name="buttonTitleA">a</string>
+    <string name="buttonTitleB">b</string>
+    <string name="buttonTitleC">c</string>
+    <string name="buttonTitleD">d</string>
+    <string name="buttonTitleE">e</string>
+    <string name="buttonTitleF">f</string>
+    <string name="buttonTitleG">g</string>
+    <string name="buttonTitleH">h</string>
+    <string name="buttonTitleI">i</string>
+    <string name="buttonTitleJ">j</string>
 </resources>
