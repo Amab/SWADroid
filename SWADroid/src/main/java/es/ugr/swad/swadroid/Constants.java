@@ -386,9 +386,12 @@ public class Constants {
     public static final String DIRECTORY_SWADROID = "SWADroid";
     public static final String DOWNLOADS_PATH =
             Environment.DIRECTORY_DOWNLOADS + File.separator + DIRECTORY_SWADROID;
-
     /**
      * Username template for messages
      */
     public static final String USERNAME_TEMPLATE = "{userName}";
+    /**
+     * Maximum number of questions for games
+     */
+    public static final int MAX_NUM_QUESTIONS_GAMES = 100000;
 }

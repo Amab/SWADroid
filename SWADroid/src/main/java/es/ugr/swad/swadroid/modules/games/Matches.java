@@ -1,5 +1,7 @@
 package es.ugr.swad.swadroid.modules.games;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -13,32 +15,38 @@ import java.util.Vector;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.database.DataBaseHelper;
-import es.ugr.swad.swadroid.model.Game;
+import es.ugr.swad.swadroid.model.Match;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.modules.courses.Courses;
 import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
- * Games download module.
+ * Match download module.
  *
  * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Sergio Díaz Rueda <sergiodiazrueda8@gmail.com>
  * @see <a href="https://openswad.org/ws/#getGames">getGames</a>
  */
-public class Games extends Module {
+
+public class Matches extends Module {
+
     /**
      * Games tag name for Logcat
      */
-    private static final String TAG = Constants.APP_TAG + " Games";
+    private static final String TAG = Constants.APP_TAG + " MatchesActive";
     /**
-     * Number of games associated to the selected course
+     * Number of matches associated to the selected game
      */
-    private int numGames;
+    private int numMatches;
     /**
-     * List of downloaded game codes
+     * List of downloaded match codes
      */
-    private List<Long> gameCodes;
+    private List<Long> matchCodes;
+    /**
+     * Game code
+     */
+    private long gameCode;
 
 
     /* (non-Javadoc)
@@ -47,7 +55,9 @@ public class Games extends Module {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setMETHOD_NAME("getGames");
+        gameCode = getIntent().getLongExtra("gameCode", 0);
+        Log.d("gameCode", Long.toString(gameCode));
+        setMETHOD_NAME("getMatches");
         getSupportActionBar().hide();
     }
 
@@ -57,16 +67,16 @@ public class Games extends Module {
     @Override
     protected void onStart() {
         super.onStart();
+
         try {
             if (isDebuggable) {
                 Log.d(TAG, "selectedCourseCode = " +
-                        Courses.getSelectedCourseCode());
+                        Long.toString(Courses.getSelectedCourseCode()));
             }
             runConnection();
         } catch (Exception e) {
             String errorMsg = getString(R.string.errorServerResponseMsg);
             error(errorMsg, e);
-
         }
     }
 
@@ -79,23 +89,23 @@ public class Games extends Module {
         long courseCode = Courses.getSelectedCourseCode();
 
         //Creates webservice request, adds required params and sends request to webservice
-
         createRequest(SOAPClient.CLIENT_TYPE);
         addParam("wsKey", Login.getLoggedUser().getWsKey());
         addParam("courseCode", (int) courseCode);
-        sendRequest(Game.class, false);
-        gameCodes = new ArrayList<>();
+        addParam("gameCode", gameCode);
+        sendRequest(Match.class, false);
+        matchCodes = new ArrayList<>();
 
         if (result != null) {
             //Stores tests data returned by webservice response
             List<Object> res = new ArrayList<>((Vector<?>) result);
             SoapObject soap = (SoapObject) res.get(1);
-            numGames = soap.getPropertyCount();
+            numMatches = soap.getPropertyCount();
 
-            for (int i = 0; i < numGames; i++) {
+            for (int i = 0; i < numMatches; i++) {
                 SoapObject pii = (SoapObject) soap.getProperty(i);
 
-                long gameCode = Long.parseLong(pii.getProperty("gameCode").toString());
+                long matchCode = Long.parseLong(pii.getProperty("matchCode").toString());
                 String userSurname1 = pii.getProperty("userSurname1").toString();
                 String userSurname2 = pii.getProperty("userSurname2").toString();
                 String userFirstName = pii.getProperty("userFirstname").toString();
@@ -103,49 +113,54 @@ public class Games extends Module {
                 long startTime = Long.parseLong(pii.getProperty("startTime").toString());
                 long endTime = Long.parseLong(pii.getProperty("endTime").toString());
                 String title = pii.getProperty("title").toString();
-                String text = pii.getProperty("text").toString();
-                int numQuestions = Integer.parseInt(pii.getProperty("numQuestions").toString());
-                float maxGrade = Float.parseFloat(pii.getProperty("maxGrade").toString());
-                int visibility = Integer.parseInt(pii.getPrimitiveProperty("visibility").toString());
+                int questionIndex = Integer.parseInt(pii.getProperty("questionIndex").toString());
+                String groups = (pii.hasProperty("groups") ? pii.getProperty("groups").toString() : "");
 
                 if (userSurname1.equalsIgnoreCase(Constants.NULL_VALUE)) userSurname1 = "";
                 if (userSurname2.equalsIgnoreCase(Constants.NULL_VALUE)) userSurname2 = "";
                 if (userFirstName.equalsIgnoreCase(Constants.NULL_VALUE)) userFirstName = "";
                 if (userPhoto.equalsIgnoreCase(Constants.NULL_VALUE)) userPhoto = "";
                 if (title.equalsIgnoreCase(Constants.NULL_VALUE)) title = "";
-                if (text.equalsIgnoreCase(Constants.NULL_VALUE)) text = "";
+                if (groups.equalsIgnoreCase(Constants.NULL_VALUE)) groups = "";
 
-                //Inserts or updates games into database
-                dbHelper.insertGame(new Game(gameCode, userSurname1, userSurname2,
+                //Inserts or updates event into database
+                dbHelper.insertMatch(new Match(matchCode, userSurname1, userSurname2,
                         userFirstName, userPhoto, startTime, endTime,
-                        title, text, numQuestions, maxGrade, visibility));
-                dbHelper.insertGameCourse(gameCode, courseCode);
+                        title, questionIndex, groups));
+                dbHelper.insertMatchGame(matchCode, gameCode);
 
-                gameCodes.add(gameCode);
+                //Add a match Code to the new match list
+                matchCodes.add(matchCode);
             }
 
-            removeOldGames();
+            //Removes old matches not listed in eventCodes
+            removeOldMatches();
 
-            Log.i(TAG, "Retrieved " + numGames + " games");
+            Log.i(TAG, "Retrieved " + numMatches + " matches");
         }
 
+
+        Intent data = new Intent();
+        data.setData(Uri.parse(Long.toString(gameCode)));
         // Request finalized without errors
-        setResult(RESULT_OK);
+        setResult(RESULT_OK, data);
     }
+
 
     @Override
     protected void connect() {
+        String progressDescription = getString(R.string.matchesDownloadProgressDescription);
+
         startConnection();
     }
 
     @Override
     protected void postConnect() {
-        if (numGames == 0) {
-            Toast.makeText(this, R.string.noGamesAvailableMsg,
-                    Toast.LENGTH_LONG).show();
+        if (numMatches == 0) {
+            Toast.makeText(this, R.string.noMatchesAvailableMsg, Toast.LENGTH_LONG).show();
         } else {
-            String msg = numGames + " " +
-                    getResources().getString(R.string.gamesUpdated);
+            String msg = String.valueOf(numMatches) + " "
+                    + getResources().getString(R.string.matchesUpdated);
             Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
         }
         finish();
@@ -155,22 +170,24 @@ public class Games extends Module {
     protected void onError() {
     }
 
-    private void removeOldGames() {
-        List<Game> dbGames = dbHelper.getGamesCourse(Courses.getSelectedCourseCode());
-        int nGamesRemoved = 0;
+    private void removeOldMatches() {
+        List<Match> dbMatches = dbHelper.getMatchesGame(gameCode);
+        int nMatchesRemoved = 0;
 
-        if ((dbGames != null) && (!dbGames.isEmpty())) {
-            for (Game g : dbGames) {
-                if (!gameCodes.contains(g.getId())) {
-                    dbHelper.removeAllRows(DataBaseHelper.DB_TABLE_GAMES_COURSES,
-                            "gameCode", g.getId());
-                    dbHelper.removeAllRows(DataBaseHelper.DB_TABLE_GAMES,
-                            "id", g.getId());
-                    nGamesRemoved++;
+        if ((dbMatches != null) && (!dbMatches.isEmpty())) {
+            for (Match m : dbMatches) {
+                if (!matchCodes.contains(m.getId())) {
+                    dbHelper.removeAllRows(DataBaseHelper.DB_TABLE_MATCHES_GAMES,
+                            "matchcode", m.getId());
+                    dbHelper.removeAllRows(DataBaseHelper.DB_TABLE_MATCHES,
+                            "id", m.getId());
+                    nMatchesRemoved++;
                 }
             }
         }
 
-        Log.i(TAG, "Removed " + nGamesRemoved + " games");
+        Log.i(TAG, "Removed " + nMatchesRemoved + " matches");
     }
+
+
 }

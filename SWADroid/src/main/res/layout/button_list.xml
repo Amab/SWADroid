@@ -20,12 +20,12 @@
             android:layout_weight="2"
             android:background="@drawable/togglebuttona"
             android:checked="false"
-            android:text='a'
+            android:text="@string/buttonTitleA"
             android:textAllCaps="false"
-            android:textColor="#ffffff"
-            android:textOff='a'
-            android:textOn='a'
-            android:textSize="30dp"
+            android:textColor="@color/white"
+            android:textOff="@string/buttonTitleA"
+            android:textOn="@string/buttonTitleA"
+            android:textSize="30sp"
             android:visibility="gone" />
 
         <ToggleButton
@@ -36,12 +36,12 @@
             android:layout_weight="2"
             android:background="@drawable/togglebuttonb"
             android:checked="false"
-            android:text='b'
+            android:text="@string/buttonTitleB"
             android:textAllCaps="false"
-            android:textColor="#ffffff"
-            android:textOff='b'
-            android:textOn='b'
-            android:textSize="30dp"
+            android:textColor="@color/white"
+            android:textOff="@string/buttonTitleB"
+            android:textOn="@string/buttonTitleB"
+            android:textSize="30sp"
             android:visibility="gone" />
 
         <ToggleButton
@@ -52,11 +52,11 @@
             android:layout_weight="2"
             android:background="@drawable/togglebuttonc"
             android:textAllCaps="false"
-            android:text='c'
-            android:textOn='c'
-            android:textOff='c'
-            android:textSize="30dp"
-            android:textColor="#ffffff"
+            android:text="@string/buttonTitleC"
+            android:textOn="@string/buttonTitleC"
+            android:textOff="@string/buttonTitleC"
+            android:textSize="30sp"
+            android:textColor="@color/white"
             android:visibility="gone" />
 
         <ToggleButton
@@ -67,11 +67,11 @@
             android:layout_weight="2"
             android:background="@drawable/togglebuttond"
             android:textAllCaps="false"
-            android:text='d'
-            android:textOn='d'
-            android:textOff='d'
-            android:textSize="30dp"
-            android:textColor="#ffffff"
+            android:text="@string/buttonTitleD"
+            android:textOn="@string/buttonTitleD"
+            android:textOff="@string/buttonTitleD"
+            android:textSize="30sp"
+            android:textColor="@color/white"
             android:visibility="gone" />
 
         <ToggleButton
@@ -82,11 +82,11 @@
             android:layout_weight="2"
             android:background="@drawable/togglebuttone"
             android:textAllCaps="false"
-            android:text='e'
-            android:textOn='e'
-            android:textOff='e'
-            android:textSize="30dp"
-            android:textColor="#ffffff"
+            android:text="@string/buttonTitleE"
+            android:textOn="@string/buttonTitleE"
+            android:textOff="@string/buttonTitleE"
+            android:textSize="30sp"
+            android:textColor="@color/white"
             android:visibility="gone" />
 
         <ToggleButton
@@ -97,11 +97,11 @@
             android:layout_weight="2"
             android:background="@drawable/togglebuttonf"
             android:textAllCaps="false"
-            android:text='f'
-            android:textOn='f'
-            android:textOff='f'
-            android:textSize="30dp"
-            android:textColor="#ffffff"
+            android:text="@string/buttonTitleF"
+            android:textOn="@string/buttonTitleF"
+            android:textOff="@string/buttonTitleF"
+            android:textSize="30sp"
+            android:textColor="@color/white"
             android:visibility="gone" />
 
         <ToggleButton
@@ -112,11 +112,11 @@
             android:layout_weight="2"
             android:background="@drawable/togglebuttong"
             android:textAllCaps="false"
-            android:text='g'
-            android:textOn='g'
-            android:textOff='g'
-            android:textSize="30dp"
-            android:textColor="#ffffff"
+            android:text="@string/buttonTitleG"
+            android:textOn="@string/buttonTitleG"
+            android:textOff="@string/buttonTitleG"
+            android:textSize="30sp"
+            android:textColor="@color/white"
             android:visibility="gone" />
 
         <ToggleButton
@@ -127,11 +127,11 @@
             android:layout_weight="2"
             android:background="@drawable/togglebuttonh"
             android:textAllCaps="false"
-            android:text='h'
-            android:textOn='h'
-            android:textOff='h'
-            android:textSize="30dp"
-            android:textColor="#ffffff"
+            android:text="@string/buttonTitleH"
+            android:textOn="@string/buttonTitleH"
+            android:textOff="@string/buttonTitleH"
+            android:textSize="30sp"
+            android:textColor="@color/white"
             android:visibility="gone" />
 
         <ToggleButton
@@ -142,11 +142,11 @@
             android:layout_weight="2"
             android:background="@drawable/togglebuttoni"
             android:textAllCaps="false"
-            android:text='i'
-            android:textOn='i'
-            android:textOff='i'
-            android:textSize="30dp"
-            android:textColor="#ffffff"
+            android:text="@string/buttonTitleI"
+            android:textOn="@string/buttonTitleI"
+            android:textOff="@string/buttonTitleI"
+            android:textSize="30sp"
+            android:textColor="@color/white"
             android:visibility="gone" />
 
         <ToggleButton
@@ -157,57 +157,12 @@
             android:layout_weight="2"
             android:background="@drawable/togglebuttonj"
             android:textAllCaps="false"
-            android:text='j'
-            android:textOn='j'
-            android:textOff='j'
-            android:textSize="30dp"
-            android:textColor="#ffffff"
+            android:text="@string/buttonTitleJ"
+            android:textOn="@string/buttonTitleJ"
+            android:textOff="@string/buttonTitleJ"
+            android:textSize="30sp"
+            android:textColor="@color/white"
             android:visibility="gone" />
-
-        <LinearLayout
-            android:id="@+id/linearLayout12"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:visibility="gone">
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearLayout34"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:visibility="gone">
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearLayout56"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:visibility="gone">
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearLayout78"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:visibility="gone">
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearLayout910"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:visibility="gone">
-        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>
