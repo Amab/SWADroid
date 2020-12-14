@@ -136,7 +136,11 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
      * User password preference changed flag
      */
     private boolean userPasswordPrefChanged = false;
-    
+    /**
+     * Synchronization time preference for location
+     */
+    private static Preference syncTimeLocationPref;
+
     /**
      * Shows an error message.
      *
@@ -189,6 +193,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         privacyPolicyPref = findPreference(Preferences.PRIVACYPOLICYPREF);
         syncTimePref = findPreference(Preferences.SYNCTIMEPREF);
         syncEnablePref = (CheckBoxPreference) findPreference(Preferences.SYNCENABLEPREF);
+        syncTimeLocationPref = findPreference(Preferences.SYNCLOCATIONTIMEPREF);
 
         ratePref.setOnPreferenceChangeListener(this);
         twitterPref.setOnPreferenceChangeListener(this);
@@ -200,7 +205,8 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         privacyPolicyPref.setOnPreferenceChangeListener(this);
         syncEnablePref.setOnPreferenceChangeListener(this);
         syncTimePref.setOnPreferenceChangeListener(this);
-        
+        syncTimeLocationPref.setOnPreferenceChangeListener(this);
+
         logOutPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             
             @Override
@@ -378,7 +384,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
             Preferences.setSyncEnabled(syncEnabled);
             syncEnablePref.setChecked(syncEnabled);
             syncPrefsChanged = true;
-        } else if(Preferences.SYNCTIMEPREF.equals(key)) { 
+        } else if(Preferences.SYNCTIMEPREF.equals(key)) {
         	String syncTime = (String) newValue;
         	long lastSyncTime = Preferences.getLastSyncTime();
         	
@@ -403,6 +409,16 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
             }
             
             syncTimePref.setSummary(prefSyncTimeEntry);
+            syncPrefsChanged = true;
+        } else if(Preferences.SYNCLOCATIONTIMEPREF.equals(key)) {
+            String syncLocationTime = (String) newValue;
+
+            List<String> prefSyncTimeValues = Arrays.asList(getResources().getStringArray(R.array.prefSyncLocationTimeValues));
+            List<String> prefSyncTimeEntries = Arrays.asList(getResources().getStringArray(R.array.prefSyncLocationTimeEntries));
+            int prefSyncTimeIndex = prefSyncTimeValues.indexOf(syncLocationTime);
+            String prefSyncTimeEntry = prefSyncTimeEntries.get(prefSyncTimeIndex);
+            Preferences.setSyncLocationTime(syncLocationTime);
+            syncTimeLocationPref.setSummary(prefSyncTimeEntry);
             syncPrefsChanged = true;
         }
         

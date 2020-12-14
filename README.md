@@ -18,7 +18,6 @@ CI Status
 [![Releases](https://img.shields.io/github/release/Amab/SWADroid.svg)](https://github.com/Amab/SWADroid/releases/latest)
 [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=Amab/SWADroid)](https://dependabot.com)
 [![libraries.io](https://img.shields.io/librariesio/github/Amab/SWADroid.svg)](https://libraries.io/github/Amab/SWADroid)
-[![codecov](https://codecov.io/gh/Amab/SWADroid/branch/develop/graph/badge.svg)](https://codecov.io/gh/Amab/SWADroid)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/41ded03ee87d4ceaaafc976a7529bcf3)](https://www.codacy.com/manual/Amab/SWADroid?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Amab/SWADroid&amp;utm_campaign=Badge_Grade)
 
 Copyright and License
@@ -54,6 +53,7 @@ Contributors
 -	[José Antonio Guerrero Avilés](http://www.linkedin.com/in/antonioguerreroaviles)
 -	[Alejandro Alcalde](http://elbauldelprogramador.com/)
 -	[Rubén Martín Hidalgo](https://github.com/romilgildo)
+-	[Javier Bueno López](https://github.com/JaviBL8)
 
 Contributing
 ------------
@@ -61,3 +61,13 @@ Contributing
 SWADroid is an open source project. I encourage contributions.
 
 The Github team has also been kind enough to write up some great [documentation](https://help.github.com/articles/about-pull-requests/) on working with pull requests.
+
+### Notice
+
+Requests to the SWAD web service require an API key. This API key has not been uploaded to the repository for security reasons.  
+
+The `keystore.properties` file must be created in the root of the project, at the same level as this `README.md` file, with the following format:  
+
+`SWAD_APP_KEY=ExampleAPIKey`  
+
+If you want to collaborate with the SWADroid project you can request the API key by sending a request to [Contact Support](mailto:swadroid.gmail.com).

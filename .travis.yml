@@ -1,53 +1,51 @@
-sudo: false
+os: linux
+dist: xenial
 language: android
 jdk: oraclejdk8
 env:
   global:
-  - ANDROID_API=29
-  - ANDROID_BUILD_TOOLS=29.0.2
-  - secure: eY3bGKw4jZ+HHkkMBZHiL2dhcz+RJYHib0WC77SSVHLJcCg63pBvs420i4rjNQHycMs+PhRSlR79jdglDTm8svphhRjSts6VMkHDxObwJIyLF8vAZ0PfjhqfOXO+4+Fx6pRIjwM7cBMOQrDfSimJHRB+z/f2AJfUIsaMSlltGVya7nmrLY/fO4dtl4wPnejslj3mhnBAxr+a2Or978RwI2TMpxBovHZKFT/46wJTcMzKXGdXU64M8nmQmpcKHeIKIBiR4g+A2tahC+Us4tFxxoTDd3R+IAzj7Gvjd5JuMlYmQ3quRv2M08u9OJNiT14LpDXy19fZKdw/QNHg3S8JVis8kJDkv6z4HyZXTIBgISZpCZZti04GP29Lj+1f4ISRFc6uxankDuRgfX8ucsxoEPJVq3PfJlpTdP7wjlQtEGv0HF/3MNNyruNbLHFiCgHOANwEOX44INtw6XylPEftmw4y4ptntFG3VXyV1Zi+732Qe4b2QNTbvLPrsmkCRKzo59vKKAzBBhvYvFVITcWbySqdx9/n1H25SRL2Q96nPGQSQyBF6obzzFcjMKkknPle1PXvAfb171964cdIK6/zo9rh/ZCL3+gAKZibmGWvbeztWYl5ON8B8x8mgLO/qgPIotY+aqwmsY06pKrqi6adYZacMF+UgtbLJlhnird6ugk=
-  - secure: EmcSyXk/5pEJhbRX9DSFzhQGYvGaYdxjDuQwmLuxUGitGpFQZbWexTAK/l0LLcIRsiSmucY7KJgOpL7I6odh2kVUZedarj8/5K1P69ljDDB7bfG8jyOLZvHJ1JTZRuKvUnT846zQwQWTnLXF9N4LaQ86FVqSW2bGHqptIivEjDEVh78V3g4PDsbX5aQ5LjTlSn7bezu9chpVS0fnRlqjAa6U2kUwUt+DDaSHEOs35Z89jT7JoonGFrMsyA7S26CQhOBYE3w76AllIea+MWzPJX3V364ZIzPBnQAkCz02oVI3n+LHZkzUCYHkY8DXWXNy6+/sulFa6L1v6bt8DzF1vwJ+nTNVqmqSDYBe2s1qAUZ+4o8l/THMndxC11LjbbEExG4ekBRFvRsOOf0pBps3Yr4ry27gaj4+9Ap2JCKKOQwm0izh48AJiy0Y8pzIzTO5wB5B7a4czLJmzaNWkPVXw4lKg2ldJ4sd6EBqUZqG2vRmN6VwHb8gHFNaQTH3feBRhYTpkv1wWUuhvclNn5yoZzcSxMT/b8d89e5DahoBYMW48c6jb5wL/EoY3bHp3mjtnTW8oIIjyZK8FjYX+8IqeEoue8bDDqNUN71xmRvp+0CX1iXnfgUeDWnYhXHTewOlJu6i509wGrZPxYjgwAdnpfTyGXPq7Vin9CkNHMw9fbA=
-  - secure: WS7Jgz0L0aMEZmg4/HxPb9nO7oER9z23n8n508UVQ0DyKL92UPhfVol7+Cob8zuO5SJl5TPOh58gd/C0Prq8t5q3mwlDA9buhnb1uef7pwZOFzQOF0o8RuPSpxLgu8tFlDooWrG9oxZObXwh84TXGX7zgoiWr9Y318qsQSHCiv9Ue9kgJxkjk9wVanJws7zHWAevfFzyoEvqtkDTqNie4RJbMEOdeX+TyUpc77Si2UpAC23Mpl8q+qZr32cgxk3MzSdhJk2C3Vz5MS6LBZ7ynyv+em+/vz2RBlFLetrcknHY8lgE060itWcns6Pj/8tv2SQbJptVFToXbfay/EVleApojHG4w5DFDzQt8a3Az0lBnqOxv3BiAPRcr49/A08qXAKh30p6YBiSvVd8zK+MZoMoj2dDQhdXb72nv0yHZmzkiaQEOGnsBD4Gt3epn/KoJke3W0ffBZOfJNScACW0Gta2XLImZsekb4sjfOF84HrISSMiXunlLpgtcC4C3Pn9VV/6+uciIMqMFDYkJMe2gyRNA2vSyZ61n/ioTLOHYzhYHjZUXB4MOlonYTiFuF4HmVVHO2J9CpOdFFP7hrkWK3HzvcQm9k8dxUkuKDoOlRb+CSlrEZO24V+TaY2DDr1bcitA77VJp90Cz2RpLC3tvSvThgY2VNk+OEbeSrP5DNA=
+    - ANDROID_API=30
+    - ANDROID_BUILD_TOOLS=30.0.3
+    - secure: eY3bGKw4jZ+HHkkMBZHiL2dhcz+RJYHib0WC77SSVHLJcCg63pBvs420i4rjNQHycMs+PhRSlR79jdglDTm8svphhRjSts6VMkHDxObwJIyLF8vAZ0PfjhqfOXO+4+Fx6pRIjwM7cBMOQrDfSimJHRB+z/f2AJfUIsaMSlltGVya7nmrLY/fO4dtl4wPnejslj3mhnBAxr+a2Or978RwI2TMpxBovHZKFT/46wJTcMzKXGdXU64M8nmQmpcKHeIKIBiR4g+A2tahC+Us4tFxxoTDd3R+IAzj7Gvjd5JuMlYmQ3quRv2M08u9OJNiT14LpDXy19fZKdw/QNHg3S8JVis8kJDkv6z4HyZXTIBgISZpCZZti04GP29Lj+1f4ISRFc6uxankDuRgfX8ucsxoEPJVq3PfJlpTdP7wjlQtEGv0HF/3MNNyruNbLHFiCgHOANwEOX44INtw6XylPEftmw4y4ptntFG3VXyV1Zi+732Qe4b2QNTbvLPrsmkCRKzo59vKKAzBBhvYvFVITcWbySqdx9/n1H25SRL2Q96nPGQSQyBF6obzzFcjMKkknPle1PXvAfb171964cdIK6/zo9rh/ZCL3+gAKZibmGWvbeztWYl5ON8B8x8mgLO/qgPIotY+aqwmsY06pKrqi6adYZacMF+UgtbLJlhnird6ugk=
+    - secure: EmcSyXk/5pEJhbRX9DSFzhQGYvGaYdxjDuQwmLuxUGitGpFQZbWexTAK/l0LLcIRsiSmucY7KJgOpL7I6odh2kVUZedarj8/5K1P69ljDDB7bfG8jyOLZvHJ1JTZRuKvUnT846zQwQWTnLXF9N4LaQ86FVqSW2bGHqptIivEjDEVh78V3g4PDsbX5aQ5LjTlSn7bezu9chpVS0fnRlqjAa6U2kUwUt+DDaSHEOs35Z89jT7JoonGFrMsyA7S26CQhOBYE3w76AllIea+MWzPJX3V364ZIzPBnQAkCz02oVI3n+LHZkzUCYHkY8DXWXNy6+/sulFa6L1v6bt8DzF1vwJ+nTNVqmqSDYBe2s1qAUZ+4o8l/THMndxC11LjbbEExG4ekBRFvRsOOf0pBps3Yr4ry27gaj4+9Ap2JCKKOQwm0izh48AJiy0Y8pzIzTO5wB5B7a4czLJmzaNWkPVXw4lKg2ldJ4sd6EBqUZqG2vRmN6VwHb8gHFNaQTH3feBRhYTpkv1wWUuhvclNn5yoZzcSxMT/b8d89e5DahoBYMW48c6jb5wL/EoY3bHp3mjtnTW8oIIjyZK8FjYX+8IqeEoue8bDDqNUN71xmRvp+0CX1iXnfgUeDWnYhXHTewOlJu6i509wGrZPxYjgwAdnpfTyGXPq7Vin9CkNHMw9fbA=
+    - secure: WS7Jgz0L0aMEZmg4/HxPb9nO7oER9z23n8n508UVQ0DyKL92UPhfVol7+Cob8zuO5SJl5TPOh58gd/C0Prq8t5q3mwlDA9buhnb1uef7pwZOFzQOF0o8RuPSpxLgu8tFlDooWrG9oxZObXwh84TXGX7zgoiWr9Y318qsQSHCiv9Ue9kgJxkjk9wVanJws7zHWAevfFzyoEvqtkDTqNie4RJbMEOdeX+TyUpc77Si2UpAC23Mpl8q+qZr32cgxk3MzSdhJk2C3Vz5MS6LBZ7ynyv+em+/vz2RBlFLetrcknHY8lgE060itWcns6Pj/8tv2SQbJptVFToXbfay/EVleApojHG4w5DFDzQt8a3Az0lBnqOxv3BiAPRcr49/A08qXAKh30p6YBiSvVd8zK+MZoMoj2dDQhdXb72nv0yHZmzkiaQEOGnsBD4Gt3epn/KoJke3W0ffBZOfJNScACW0Gta2XLImZsekb4sjfOF84HrISSMiXunlLpgtcC4C3Pn9VV/6+uciIMqMFDYkJMe2gyRNA2vSyZ61n/ioTLOHYzhYHjZUXB4MOlonYTiFuF4HmVVHO2J9CpOdFFP7hrkWK3HzvcQm9k8dxUkuKDoOlRb+CSlrEZO24V+TaY2DDr1bcitA77VJp90Cz2RpLC3tvSvThgY2VNk+OEbeSrP5DNA=
 before_cache:
-- rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
-- rm -rf $HOME/.gradle/caches/*/plugin-resolution/
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -rf $HOME/.gradle/caches/*/plugin-resolution/
 cache:
   directories:
-  - "$HOME/.gradle/caches/"
-  - "$HOME/.gradle/wrapper/"
-  - "$HOME/.android/build-cache"
+    - "$HOME/.gradle/caches/"
+    - "$HOME/.gradle/wrapper/"
+    - "$HOME/.android/build-cache"
 before_install:
-- openssl aes-256-cbc -K $encrypted_b7f76037f2f7_key -iv $encrypted_b7f76037f2f7_iv
-  -in $TRAVIS_BUILD_DIR/SWADroid/src/prod/google-services.json.enc -out $TRAVIS_BUILD_DIR/SWADroid/src/prod/google-services.json
-  -d
-- yes | sdkmanager "build-tools;${ANDROID_BUILD_TOOLS}"
-- yes | sdkmanager "platform-tools"
-- yes | sdkmanager "tools"
-- yes | sdkmanager "platforms;android-${ANDROID_API}"
-- yes | sdkmanager "extras;android;m2repository"
-- yes | sdkmanager --list
-- chmod +x gradlew
+  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then bash ./.travis/run_on_non_pull_requests.sh; fi'
+  - yes | sdkmanager "build-tools;${ANDROID_BUILD_TOOLS}"
+  - yes | sdkmanager "platform-tools"
+  - yes | sdkmanager "tools"
+  - yes | sdkmanager "platforms;android-${ANDROID_API}"
+  - yes | sdkmanager "extras;android;m2repository"
+  - yes | sdkmanager --list
+  - chmod +x gradlew
 script:
-- "./gradlew clean test build connectedCheck -Pbuild=prod"
+  - "./gradlew clean test build connectedCheck -Pbuild=prod"
 after_failure: cat $TRAVIS_BUILD_DIR/SWADroid/build/reports/lint-results.xml
 before_deploy:
-- openssl aes-256-cbc -K $encrypted_855ad244b8b2_key -iv $encrypted_855ad244b8b2_iv
-  -in keystore.jks.enc -out keystore.jks -d
-- cd SWADroid/build/outputs/apk/release
-- jarsigner -sigalg SHA1withRSA -digestalg SHA1 -keystore ${TRAVIS_BUILD_DIR}/keystore.jks
-  -storepass $storepass -keypass $keypass SWADroid-release-unsigned.apk amab
-- jarsigner -verify SWADroid-release-unsigned.apk
-- "${ANDROID_HOME}/build-tools/${ANDROID_BUILD_TOOLS}/zipalign -p 4 SWADroid-release-unsigned.apk
+  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then bash ./.travis/run_on_before_deploy.sh; fi'
+  - cd $TRAVIS_BUILD_DIR/SWADroid/build/outputs/apk/release
+  - jarsigner -sigalg SHA1withRSA -digestalg SHA1 -keystore ${TRAVIS_BUILD_DIR}/keystore.jks
+    -storepass $storepass -keypass $keypass SWADroid-release-unsigned.apk amab
+  - jarsigner -verify SWADroid-release-unsigned.apk
+  - "${ANDROID_HOME}/build-tools/${ANDROID_BUILD_TOOLS}/zipalign -p 4 SWADroid-release-unsigned.apk
   SWADroid-release.apk"
 deploy:
   provider: releases
-  api_key:
+  token:
     secure: ePphqb/bHjJC1wwlVfw3DNOZtluX7B/3G8a8uWDkDIBpKHqCykpnXUNmgnWEO9iQ+GUmSdkAHn+z9tKv+MAdBRgSw2Xfc8sEsj6lsWUjJxHk7/eQOdzE0FC8y8WjrKHpwbFEJAi03YId/0ruIBltMzCWyylxMTAXonrL9yAvGn9EL5m1y1Fap58XNUmDwnP+4yoTfTuXOOJrmppFGUKlR22xhI6j/zvVW1LeyA7kpp42X/76rgnSS78Fj4s/O8kN0aa6c9PM38rWg1TqgBRRuV+2PMWmZn3EfjdzBl2d+D5pJ+gPS9e+gSWpKtTkatZ+CKwSBvQSpNE6K7B1FSCSR+Gy9FtnnH0BMyeP71kMFDgU+zagZjuQZnVgRAIDYdaquNq52EwcStXV5LrqpzNpkgAfrNOSVfLZWS1eEkGy6q8WqpvBO8OcnseaiaNl4VNNRZn1e7FziDZHkA/SCr3aLOVYp4FkVK7Z+yiH2EbLJ5SeKuPWv7pEbBmNR7lzsZGZ0Rt6FmVN3yuA1/4oIN0zgdSwNEoqYGRXqG0bNeghwjLPCkpMJ3W8h82fblX40hk/f3bB3aGN9BX/oBa06MEFTSxUtp4pwfhRQVe0/13+oR2G6yei+fuGJSsil6FmaOB0jNoMvtMLI0IhQ47AflRW4QfAHnO+lbfP8ZmWdLgBidk=
   file: "$TRAVIS_BUILD_DIR/SWADroid/build/outputs/apk/release/SWADroid-release.apk"
-  skip_cleanup: true
+  cleanup: false
   name: SWADroid $TRAVIS_TAG
-  body: Automated release from Travis CI.
-  target_commitsh: "$TRAVIS_COMMIT"
+  release_notes: Automated release from Travis CI.
+  target_commitish: "$TRAVIS_COMMIT"
   on:
     tags: true
     repo: Amab/SWADroid

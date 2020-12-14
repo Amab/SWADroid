@@ -1,48 +1,53 @@
 {
   "project_info": {
-    "project_number": "",
-    "project_id": ""
+    "project_number": "398995989132",
+    "firebase_url": "https://swadroid-1190.firebaseio.com",
+    "project_id": "swadroid-1190",
+    "storage_bucket": "swadroid-1190.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:123456789012:android:1234567890123456",
+        "mobilesdk_app_id": "1:398995989132:android:cf9fabf2a9cd64da",
         "android_client_info": {
           "package_name": "es.ugr.swad.swadroid"
         }
       },
       "oauth_client": [
         {
-          "client_id": "",
-          "client_type": 3
-        },
-        {
-          "client_id": "",
+          "client_id": "398995989132-23hrn3d7s4unrfftra30hekdtvrk1pdv.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "es.ugr.swad.swadroid",
-            "certificate_hash": ""
+            "certificate_hash": "11890c064b1d34fe0e6486e214439c9aa1083a70"
           }
+        },
+        {
+          "client_id": "398995989132-olrnp4ilkdh8ggh54ruj65rocacs2pgc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "es.ugr.swad.swadroid",
+            "certificate_hash": "17c4f28f7db5404990ebfcf626b582cc8e8b54de"
+          }
+        },
+        {
+          "client_id": "398995989132-os2h8neftvc80bq785s4bqj4osmanc7l.apps.googleusercontent.com",
+          "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": ""
+          "current_key": "AIzaSyCyEiJ-L6CrIsiF99OUXi4UvQV2TzCVNMA"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 2,
-          "analytics_property": {
-            "tracking_id": ""
-          }
-        },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 1
+          "other_platform_oauth_client": [
+            {
+              "client_id": "398995989132-os2h8neftvc80bq785s4bqj4osmanc7l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

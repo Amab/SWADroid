@@ -232,6 +232,30 @@ public class Constants {
      */
     public static final int SEARCH_USERS_REQUEST_CODE = 40;
     /**
+     * Request code for Manage Location
+     */
+    public static final int MANAGE_LOCATION = 41;
+    /**
+     * Request code for Find User
+     */
+    public static final int FIND_USER = 42;
+    /**
+     * Request code for Get Location
+     */
+    public static final int GET_LOCATION = 43;
+    /**
+     * Request code for Get Last Location
+     */
+    public static final int GET_LAST_LOCATION = 44;
+    /**
+     * Request code for Send Current Location
+     */
+    public static final int SEND_CURRENT_LOCATION = 45;
+    /**
+     * Request code for Get Available Roles
+     */
+    public static final int GET_AVAILABLE_ROLES = 46;
+    /**
      * Request code for CAMERA permission
      */
     public static final int PERMISSIONS_REQUEST_CAMERA = 100;
@@ -239,6 +263,10 @@ public class Constants {
      * Request code for WRITE_EXTERNAL_STORAGE permission
      */
     public static final int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 101;
+    /**
+     * Request code for PERMISSION_MULTIPLE permissions
+     */
+    public static final int PERMISSION_MULTIPLE = 102;
     /**
      * Prefix tag name for Logcat
      */
@@ -324,7 +352,7 @@ public class Constants {
      */
     public static final String DIRECTORY_SWADROID = "SWADroid";
     public static final String DOWNLOADS_PATH =
-            Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + DIRECTORY_SWADROID;
+            Environment.DIRECTORY_DOWNLOADS + File.separator + DIRECTORY_SWADROID;
 
     /**
      * Username template for messages
