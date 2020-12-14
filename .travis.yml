@@ -42,6 +42,7 @@ deploy:
   token:
     secure: "IzDdPlY0KyCF1TUdUUeYYU/vBCNmJpxZ/w3B7QeVd1BhyL947jiyJpdEckJhMB7z4MWt5IHRGOXU2pYGxoJC86ES/33Acn91eo22FuaeRmIwjxL9yczae5KmakrSUA8iDjubfjLeWRy/MXAIGJ9qAuLOreAe/xGEoAILCxlJMjANw0AuJG+dBabBc2pt67bjaJO4WNFCkfDK9AC8XGJPXlwWB4L1IDwPQLBWEVRyhf3Ac1Om0lzf7kF240xCcR/cmLqOXArU8iRr3n30HaRQOBibCMjnds7etA+Fs1HiyB8B5gqMXpUM02hI35R9GHOrgqO/+N5lNMdDveLjLhwjPXrkIoWrzI/QifXxnnpa/bCqo4knjy7B8CGAZ5Z3w9Hq/zN2YAkLUIMyl9z1b2LzN9pzAh5SrtuRCBJKUfB7I/qv+wEVj8vrFrZDnMuQntAfBtKu6bD0L/lupkKD31L1i3G9bG3vSaaGauQGqi2/ORyPtLVhgH7LQI7gMzghi2DP1BhgrJCUHK4O7dky0klr0spfEiOLKhZQhzVosjXySh2CLzo/pqkCzWCjr6ozvzyc2VTxh5EvheJvw1gxl5eGlTDzCIu4U9ebQ5X5jXm7uec2c9tn9IYxBjASC7ay9x6UuM7khdbqg4RQ0JLo/6032ZIkxuloZMGF8P1jzHHCtko="
   file: "$TRAVIS_BUILD_DIR/SWADroid/build/outputs/apk/prod/SWADroid-release.apk"
+  cleanup: false
   skip_cleanup: true
   name: SWADroid $TRAVIS_TAG
   release_notes: Automated release from Travis CI.
