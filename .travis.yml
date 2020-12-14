@@ -31,18 +31,19 @@ script:
 after_failure: cat $TRAVIS_BUILD_DIR/SWADroid/build/reports/lint-results.xml
 before_deploy:
   - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then bash ./.travis/run_on_before_deploy.sh; fi'
-  - cd $TRAVIS_BUILD_DIR/SWADroid/build/outputs/apk/release
+  - cd $TRAVIS_BUILD_DIR/SWADroid/build/outputs/apk/prod
   - jarsigner -sigalg SHA1withRSA -digestalg SHA1 -keystore ${TRAVIS_BUILD_DIR}/keystore.jks
-    -storepass $storepass -keypass $keypass SWADroid-release-unsigned.apk amab
-  - jarsigner -verify SWADroid-release-unsigned.apk
-  - "${ANDROID_HOME}/build-tools/${ANDROID_BUILD_TOOLS}/zipalign -p 4 SWADroid-release-unsigned.apk
+    -storepass $storepass -keypass $keypass SWADroid-prod-unsigned.apk amab
+  - jarsigner -verify SWADroid-prod-unsigned.apk
+  - "${ANDROID_HOME}/build-tools/${ANDROID_BUILD_TOOLS}/zipalign -p 4 SWADroid-prod-unsigned.apk
   SWADroid-release.apk"
 deploy:
   provider: releases
   token:
-    secure: ePphqb/bHjJC1wwlVfw3DNOZtluX7B/3G8a8uWDkDIBpKHqCykpnXUNmgnWEO9iQ+GUmSdkAHn+z9tKv+MAdBRgSw2Xfc8sEsj6lsWUjJxHk7/eQOdzE0FC8y8WjrKHpwbFEJAi03YId/0ruIBltMzCWyylxMTAXonrL9yAvGn9EL5m1y1Fap58XNUmDwnP+4yoTfTuXOOJrmppFGUKlR22xhI6j/zvVW1LeyA7kpp42X/76rgnSS78Fj4s/O8kN0aa6c9PM38rWg1TqgBRRuV+2PMWmZn3EfjdzBl2d+D5pJ+gPS9e+gSWpKtTkatZ+CKwSBvQSpNE6K7B1FSCSR+Gy9FtnnH0BMyeP71kMFDgU+zagZjuQZnVgRAIDYdaquNq52EwcStXV5LrqpzNpkgAfrNOSVfLZWS1eEkGy6q8WqpvBO8OcnseaiaNl4VNNRZn1e7FziDZHkA/SCr3aLOVYp4FkVK7Z+yiH2EbLJ5SeKuPWv7pEbBmNR7lzsZGZ0Rt6FmVN3yuA1/4oIN0zgdSwNEoqYGRXqG0bNeghwjLPCkpMJ3W8h82fblX40hk/f3bB3aGN9BX/oBa06MEFTSxUtp4pwfhRQVe0/13+oR2G6yei+fuGJSsil6FmaOB0jNoMvtMLI0IhQ47AflRW4QfAHnO+lbfP8ZmWdLgBidk=
-  file: "$TRAVIS_BUILD_DIR/SWADroid/build/outputs/apk/release/SWADroid-release.apk"
+    secure: "IzDdPlY0KyCF1TUdUUeYYU/vBCNmJpxZ/w3B7QeVd1BhyL947jiyJpdEckJhMB7z4MWt5IHRGOXU2pYGxoJC86ES/33Acn91eo22FuaeRmIwjxL9yczae5KmakrSUA8iDjubfjLeWRy/MXAIGJ9qAuLOreAe/xGEoAILCxlJMjANw0AuJG+dBabBc2pt67bjaJO4WNFCkfDK9AC8XGJPXlwWB4L1IDwPQLBWEVRyhf3Ac1Om0lzf7kF240xCcR/cmLqOXArU8iRr3n30HaRQOBibCMjnds7etA+Fs1HiyB8B5gqMXpUM02hI35R9GHOrgqO/+N5lNMdDveLjLhwjPXrkIoWrzI/QifXxnnpa/bCqo4knjy7B8CGAZ5Z3w9Hq/zN2YAkLUIMyl9z1b2LzN9pzAh5SrtuRCBJKUfB7I/qv+wEVj8vrFrZDnMuQntAfBtKu6bD0L/lupkKD31L1i3G9bG3vSaaGauQGqi2/ORyPtLVhgH7LQI7gMzghi2DP1BhgrJCUHK4O7dky0klr0spfEiOLKhZQhzVosjXySh2CLzo/pqkCzWCjr6ozvzyc2VTxh5EvheJvw1gxl5eGlTDzCIu4U9ebQ5X5jXm7uec2c9tn9IYxBjASC7ay9x6UuM7khdbqg4RQ0JLo/6032ZIkxuloZMGF8P1jzHHCtko="
+  file: "$TRAVIS_BUILD_DIR/SWADroid/build/outputs/apk/prod/SWADroid-release.apk"
   cleanup: false
+  skip_cleanup: true
   name: SWADroid $TRAVIS_TAG
   release_notes: Automated release from Travis CI.
   target_commitish: "$TRAVIS_COMMIT"
