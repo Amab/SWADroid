@@ -582,7 +582,7 @@ public class SWADMain extends MenuExpandableListActivity {
         //Generate QR code
         mUsersData.add(getMenuItem(R.string.generateQRModuleLabel, R.string.fa_qrcode));
         //Manage location
-        mUsersData.add(getMenuItem(R.string.manageLocation, R.string.fa_map_marker));
+        //mUsersData.add(getMenuItem(R.string.manageLocation, R.string.fa_map_marker));
 
         //Messages category
         //Notifications
