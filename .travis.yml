@@ -32,7 +32,7 @@ after_failure: cat $TRAVIS_BUILD_DIR/SWADroid/build/reports/lint-results.xml
 before_deploy:
   - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then bash ./.travis/run_on_before_deploy.sh; fi'
   - "cd $TRAVIS_BUILD_DIR/SWADroid/build/outputs/apk/prod"
-  - "${ANDROID_HOME}/build-tools/${ANDROID_BUILD_TOOLS}/apksigner sign --ks ${TRAVIS_BUILD_DIR}/keystore.jks --ks-pass pass:$storepass --key-pass pass:$keypass --out SWADroid-release.apk SWADroid-prod-zipaligned.apk"
+  - "${ANDROID_HOME}/build-tools/${ANDROID_BUILD_TOOLS}/apksigner sign --ks ${TRAVIS_BUILD_DIR}/keystore.jks --ks-pass pass:$storepass --key-pass pass:$keypass --out SWADroid-release.apk SWADroid-prod-unsigned.apk"
   - "${ANDROID_HOME}/build-tools/${ANDROID_BUILD_TOOLS}/apksigner verify SWADroid-release.apk"
 deploy:
   provider: releases
