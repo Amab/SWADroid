@@ -19,7 +19,6 @@ cache:
     - "$HOME/.android/build-cache"
 before_install:
   - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then bash ./.travis/run_on_non_pull_requests.sh; fi'
-  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then bash ./.travis/run_on_before_deploy.sh; fi'
   - yes | sdkmanager "build-tools;${ANDROID_BUILD_TOOLS}"
   - yes | sdkmanager "platform-tools"
   - yes | sdkmanager "tools"
@@ -30,6 +29,11 @@ before_install:
 script:
   - "./gradlew clean test build connectedCheck -Pbuild=prod"
 after_failure: cat $TRAVIS_BUILD_DIR/SWADroid/build/reports/lint-results.xml
+before_deploy:
+  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then bash ./.travis/run_on_before_deploy.sh; fi'
+  - "cd $TRAVIS_BUILD_DIR/SWADroid/build/outputs/apk/prod"
+  - "apksigner sign --ks ${TRAVIS_BUILD_DIR}/keystore.jks --ks-pass pass:$storepass --key-pass pass:$keypass --out SWADroid-release.apk SWADroid-prod-zipaligned.apk"
+  - "apksigner verify SWADroid-release.apk"
 deploy:
   provider: releases
   token:
