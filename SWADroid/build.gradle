@@ -75,25 +75,11 @@ android {
         buildConfigField "String", "SWAD_APP_KEY", getBuildConfigField("SWAD_APP_KEY")
     }
 
-    def signingPropertiesFile = rootProject.file("signing.properties")
-    def signingProperties = new Properties()
-    signingProperties.load(new FileInputStream(signingPropertiesFile))
-
-    signingConfigs {
-        release {
-            storeFile file(signingProperties['RELEASE_STORE_FILE'])
-            keyAlias signingProperties['RELEASE_KEY_ALIAS']
-            storePassword signingProperties['RELEASE_STORE_PASSWORD']
-            keyPassword signingProperties['RELEASE_KEY_PASSWORD']
-        }
-    }
-
     buildTypes {
         prod {
             minifyEnabled true
             zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
         }
     }
 }
