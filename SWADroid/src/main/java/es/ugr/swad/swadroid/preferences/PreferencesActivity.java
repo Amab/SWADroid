@@ -193,7 +193,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         privacyPolicyPref = findPreference(Preferences.PRIVACYPOLICYPREF);
         syncTimePref = findPreference(Preferences.SYNCTIMEPREF);
         syncEnablePref = (CheckBoxPreference) findPreference(Preferences.SYNCENABLEPREF);
-        syncTimeLocationPref = findPreference(Preferences.SYNCLOCATIONTIMEPREF);
+        //syncTimeLocationPref = findPreference(Preferences.SYNCLOCATIONTIMEPREF);
 
         ratePref.setOnPreferenceChangeListener(this);
         twitterPref.setOnPreferenceChangeListener(this);
@@ -205,7 +205,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         privacyPolicyPref.setOnPreferenceChangeListener(this);
         syncEnablePref.setOnPreferenceChangeListener(this);
         syncTimePref.setOnPreferenceChangeListener(this);
-        syncTimeLocationPref.setOnPreferenceChangeListener(this);
+        //syncTimeLocationPref.setOnPreferenceChangeListener(this);
 
         logOutPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             

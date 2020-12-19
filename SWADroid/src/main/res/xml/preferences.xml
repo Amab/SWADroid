@@ -26,7 +26,8 @@
             android:title="@string/prefSyncTimeTitle" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/prefSyncLocationTitle">
+    <!--<PreferenceCategory
+        android:title="@string/prefSyncLocationTitle"
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="@string/prefShareLocationKey"
@@ -39,8 +40,8 @@
             android:key="@string/prefSyncLocationTimeKey"
             android:summary="@string/prefSyncLocationTimeSummary"
             android:title="@string/prefSyncTimeTitle" />
-            />
-    </PreferenceCategory>
+        />
+    </PreferenceCategory>-->
     <PreferenceCategory android:title="@string/about_preferences" >
         <Preference
             android:defaultValue=""
