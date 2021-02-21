@@ -1,13 +1,8 @@
+plugins {
+    id 'com.gladed.androidgitversion' version '0.4.14'
+}
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
-
-import org.ajoberstar.grgit.Grgit
-
-ext {
-    git = Grgit.open()
-    gitVersionCode = git.tag.list().size()
-    gitVersionName = "${git.describe()}"
-}
 
 //return a BuildConfigField from a properties file.
 def static getBuildConfigField(String property){
@@ -63,8 +58,8 @@ android {
 
     defaultConfig {
         applicationId "es.ugr.swad.swadroid"
-        versionCode gitVersionCode
-        versionName gitVersionName
+        versionName androidGitVersion.name()
+        versionCode androidGitVersion.code()
 
         minSdkVersion 24
         targetSdkVersion 30
