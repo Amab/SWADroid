@@ -12,8 +12,8 @@ CI Status
 
 |Branch|CI status|
 |------|---------|
-|develop|[![Build Status](https://travis-ci.com/Amab/SWADroid.svg?branch=develop)](https://travis-ci.com/Amab/SWADroid)|
-|master|[![Build Status](https://travis-ci.com/Amab/SWADroid.svg?branch=master)](https://travis-ci.com/Amab/SWADroid)|
+|develop|![Build Status Develop](https://github.com/Amab/SWADroid/actions/workflows/android-build.yml/badge.svg?branch=develop)|
+|master|![Build Status Master](https://github.com/Amab/SWADroid/actions/workflows/android-build.yml/badge.svg?branch=master)|
 
 [![Releases](https://img.shields.io/github/release/Amab/SWADroid.svg)](https://github.com/Amab/SWADroid/releases/latest)
 [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=Amab/SWADroid)](https://dependabot.com)
