@@ -2,9 +2,9 @@ name: Android CI
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ $default-branch ]
   pull_request:
-    branches: [ develop ]
+    branches: [ $default-branch ]
 
 jobs:
   build:
@@ -13,12 +13,19 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
       - name: set up JDK 1.8
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+        key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build with Gradle
