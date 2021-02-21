@@ -1,7 +1,7 @@
 name: Android CI for builds
 
 on:
-  push:
+  push: [ develop, master ]
   pull_request:
 
 jobs:

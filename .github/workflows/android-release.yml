@@ -1,11 +1,10 @@
 name: Android CI for releases
 
 on:
-  on:
-    push:
-      # Pattern matched against refs/tags
-      tags:
-        - '*'           # Push events to every tag
+  push:
+    # Pattern matched against refs/tags
+    tags:
+      - '*'           # Push events to every tag
 
 jobs:
   release:
