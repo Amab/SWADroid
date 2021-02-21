@@ -1,25 +1,20 @@
+plugins {
+    id 'com.gladed.androidgitversion' version '0.4.14'
+}
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 
-import org.ajoberstar.grgit.Grgit
-
-ext {
-    git = Grgit.open()
-    gitVersionCode = git.tag.list().size()
-    gitVersionName = "${git.describe()}"
-}
-
 //return a BuildConfigField from a properties file.
 def static getBuildConfigField(String property){
-    def travisBuild = System.getenv("TRAVIS") == "true"
+    def propFile = new File("keystore.properties")
     def value
 
-    if(travisBuild) {
-        value = "\"" + System.getenv(property) + "\""
-    } else {
+    if(propFile.exists()) {
         Properties properties = new Properties()
-        properties.load(new FileInputStream("keystore.properties"))
+        properties.load(new FileInputStream(propFile))
         value = "\"" + properties.getProperty(property) + "\""
+    } else {
+        value = "\"" + System.getenv(property) + "\""
     }
 
     return value
@@ -63,8 +58,8 @@ android {
 
     defaultConfig {
         applicationId "es.ugr.swad.swadroid"
-        versionCode gitVersionCode
-        versionName gitVersionName
+        versionName androidGitVersion.name()
+        versionCode androidGitVersion.code()
 
         minSdkVersion 24
         targetSdkVersion 30
