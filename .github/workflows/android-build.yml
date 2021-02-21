@@ -1,8 +1,7 @@
-name: Android CI for develop branch
+name: Android CI for builds
 
 on:
   push:
-    branches: [ develop ]
   pull_request:
 
 jobs:
