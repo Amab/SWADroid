@@ -18,7 +18,6 @@
  */
 package es.ugr.swad.swadroid.gui;
 
-import android.os.Build;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -35,34 +34,13 @@ public class WebViewFactory {
         settings.setJavaScriptEnabled(true);
         settings.setBuiltInZoomControls(true);
 
-        view.loadDataWithBaseURL("http://bar/", "<script type='text/x-mathjax-config'>"
-                + "MathJax.Hub.Config({ "
-                + "showMathMenu: false, "
-                + "jax: ['input/TeX','output/HTML-CSS'], "
-                + "extensions: ['tex2jax.js','toMathML.js'], "
-                + "TeX: { extensions: ['AMSmath.js','AMSsymbols.js',"
-                + "'noErrors.js','noUndefined.js'] }, "
-                + "tex2jax: {"
-                + "      inlineMath: [ ['$','$'], [\"\\\\(\",\"\\\\)\"] ],"
-                + "      processEscapes: true"
-                + "    }"
-                + "});</script>"
-                + "<script type='text/javascript' "
-                //Local MathJax
-                + "src='file:///android_asset/MathJax/MathJax.js'"
-                //Remote CDN MathJax
-                //+ "src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML'"
-                + "></script>"
-                + "<script type='text/javascript'>getLiteralMML = function() {"
-                + "math=MathJax.Hub.getAllJax('math')[0];"
-                // below, toMathML() reruns literal MathML string
-                + "mml=math.root.toMathML(''); return mml;"
-                + "}; getEscapedMML = function() {"
-                + "math=MathJax.Hub.getAllJax('math')[0];"
-                // below, toMathMLquote() applies &-escaping to MathML string input
-                + "mml=math.root.toMathMLquote(getLiteralMML()); return mml;}"
-                + "</script>"
-                + "<span id='math'></span><pre><span id='mmlout'></span></pre>", "text/html", "utf-8", "");
+        view.loadDataWithBaseURL("http://mathjax/",
+        "<script src=\"file:///android_asset/mathjax/conf.js\"> </script>"
+            //Local MathJax
+            + "<script src=\"file:///android_asset/mathjax/tex-chtml.js\"> </script>"
+            //Remote CDN MathJax
+            //+ "<script src=='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js'> </script>"
+            + "<span id='math'></span><pre><span id='mmlout'></span></pre>", "text/html", "utf-8", "");
 
         return view;
     }
@@ -72,29 +50,23 @@ public class WebViewFactory {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                if (!url.startsWith("http://bar"))
-                    return;
 
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-                    view.loadUrl("javascript:document.getElementById('math').innerHTML='"
-                            + doubleEscapeTeX(expression) + "';");
-                    view.loadUrl("javascript:MathJax.Hub.Queue(['Typeset',MathJax.Hub]);");
-                } else {
+                if (url.startsWith("http://mathjax")) {
                     view.evaluateJavascript("javascript:document.getElementById('math').innerHTML='"
                             + doubleEscapeTeX(expression) + "';", null);
-                    view.evaluateJavascript("javascript:MathJax.Hub.Queue(['Typeset',MathJax.Hub]);", null);
+                    view.evaluateJavascript("javascript:MathJax.startup.promise.then(() => MathJax.typesetPromise());", null);
                 }
             }
         };
     }
 
     private static String doubleEscapeTeX(String s) {
-        String t="";
+        StringBuilder t= new StringBuilder();
         for (int i=0; i < s.length(); i++) {
-            if (s.charAt(i) == '\'') t += '\\';
-            if (s.charAt(i) != '\n') t += s.charAt(i);
-            if (s.charAt(i) == '\\') t += "\\";
+            if (s.charAt(i) == '\'') t.append('\\');
+            if (s.charAt(i) != '\n') t.append(s.charAt(i));
+            if (s.charAt(i) == '\\') t.append("\\");
         }
-        return t;
+        return t.toString();
     }
 }
