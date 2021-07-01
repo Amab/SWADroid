@@ -94,10 +94,6 @@ public class Preferences {
      */
     public static final String FACEBOOKPREF = "facebookPref";
     /**
-     * Google Plus preference name
-     */
-    public static final String GOOGLEPLUSPREF = "googlePlusPref";
-    /**
      * Telegram preference name
      */
     public static final String TELEGRAMPREF = "telegramPref";
