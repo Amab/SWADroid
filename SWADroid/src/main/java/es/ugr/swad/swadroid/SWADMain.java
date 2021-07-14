@@ -58,9 +58,10 @@ import es.ugr.swad.swadroid.model.Course;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.modules.courses.Courses;
 import es.ugr.swad.swadroid.modules.downloads.DownloadsManager;
+import es.ugr.swad.swadroid.modules.games.GamesList;
 import es.ugr.swad.swadroid.modules.groups.MyGroupsManager;
-import es.ugr.swad.swadroid.modules.information.Information;
 import es.ugr.swad.swadroid.modules.indoorlocation.IndoorLocation;
+import es.ugr.swad.swadroid.modules.information.Information;
 import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.modules.login.LoginActivity;
 import es.ugr.swad.swadroid.modules.messages.Messages;
@@ -82,16 +83,17 @@ import es.ugr.swad.swadroid.utils.Utils;
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  * @author Jose Antonio Guerrero Aviles <cany20@gmail.com>
+ * @author Sergio Díaz Rueda <sergiodiazrueda8@gmail.com>
  */
 public class SWADMain extends MenuExpandableListActivity {
     /**
      * Function name field
      */
-    private final String NAME = "listText";
+    private static final String NAME = "listText";
     /**
      * Function text field
      */
-    private final String IMAGE = "listIcon";
+    private static final String IMAGE = "listIcon";
     /**
      * Code of selected course
      */
@@ -157,7 +159,8 @@ public class SWADMain extends MenuExpandableListActivity {
      */
     @Override
     public void onCreate(Bundle icicle) {
-        int lastVersion, currentVersion;
+        int lastVersion;
+        int currentVersion;
 
         //Initialize screen
         super.onCreate(icicle);
@@ -282,7 +285,7 @@ public class SWADMain extends MenuExpandableListActivity {
             SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, this);
             if(!Preferences.getSyncTime().equals("0") && Preferences.isSyncEnabled()) {
                 SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY,
-                        Long.valueOf(Preferences.getSyncTime()), this);
+                        Long.parseLong(Preferences.getSyncTime()), this);
             }
         }
 
@@ -355,7 +358,7 @@ public class SWADMain extends MenuExpandableListActivity {
             else
                 mCoursesSpinner.setSelection(0);
 
-            mCoursesSpinner.setOnTouchListener(Spinner_OnTouch);
+            mCoursesSpinner.setOnTouchListener(spinnerOnTouch);
             mCoursesSpinner.setVisibility(View.VISIBLE);
 
             Log.i(TAG, "Created Spinner adapter");
@@ -370,7 +373,7 @@ public class SWADMain extends MenuExpandableListActivity {
     private void cleanSpinner() {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, new String[]{getString(R.string.clickToGetCourses)});
         mCoursesSpinner.setAdapter(adapter);
-        mCoursesSpinner.setOnTouchListener(Spinner_OnTouch);
+        mCoursesSpinner.setOnTouchListener(spinnerOnTouch);
 
         Log.i(TAG, "Cleaned Spinner adapter");
     }
@@ -402,20 +405,17 @@ public class SWADMain extends MenuExpandableListActivity {
         }
     }
 
-    private final View.OnTouchListener Spinner_OnTouch = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            if (event.getAction() == MotionEvent.ACTION_UP) {
+    private final View.OnTouchListener spinnerOnTouch = (v, event) -> {
+        if (event.getAction() == MotionEvent.ACTION_UP) {
 
-                if (dbHelper.getAllRows(DataBaseHelper.DB_TABLE_COURSES).isEmpty()) {
-                    if (Utils.connectionAvailable(getApplicationContext()))
-                        getCurrentCourses();
-                } else {
-                    v.performClick();
-                }
+            if (dbHelper.getAllRows(DataBaseHelper.DB_TABLE_COURSES).isEmpty()) {
+                if (Utils.connectionAvailable(getApplicationContext()))
+                    getCurrentCourses();
+            } else {
+                v.performClick();
             }
-            return true;
         }
+        return true;
     };
 
     private void getCurrentCourses() {
@@ -567,6 +567,8 @@ public class SWADMain extends MenuExpandableListActivity {
         evaluationData.add(getMenuItem(R.string.assessmentModuleLabel, R.string.fa_info));
         //Test
         evaluationData.add(getMenuItem(R.string.testsModuleLabel, R.string.fa_check_square_o));
+        //Games
+        evaluationData.add(getMenuItem(R.string.gamesModuleLabel, R.string.fa_trophy));
 
         //Files category
         //Documents
@@ -671,6 +673,11 @@ public class SWADMain extends MenuExpandableListActivity {
                 } else if (keyword.equals(getString(R.string.testsModuleLabel))) {
                     activity = new Intent(ctx, Tests.class);
                     startActivityForResult(activity, Constants.TESTS_REQUEST_CODE);
+
+                } else if (keyword.equals(getString(R.string.gamesModuleLabel))) {
+                    activity = new Intent(ctx, GamesList.class);
+                    startActivityForResult(activity, Constants.GAMES_REQUEST_CODE);
+
                 } else if (keyword.equals(getString(R.string.messagesModuleLabel))) {
                     activity = new Intent(ctx, Messages.class);
                     activity.putExtra("eventCode", Long.valueOf(0));

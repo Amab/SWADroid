@@ -30,6 +30,7 @@ import java.io.File;
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  * @author Jose Antonio Guerrero Aviles <cany20@gmail.com>
+ * @author Sergio Díaz Rueda <sergiodiazrueda8@gmail.com>
  */
 public class Constants {
     /**
@@ -256,6 +257,38 @@ public class Constants {
      */
     public static final int GET_AVAILABLE_ROLES = 46;
     /**
+     * Request code for Games module.
+     */
+    public static final int GAMES_REQUEST_CODE = 47;
+    /**
+     * Request code for Games module.
+     */
+    public static final int GAMES_PLAY_REQUEST_CODE = 48;
+    /**
+     * Request code for Games module.
+     */
+    public static final int GAMES_ACTIVE_DOWNLOAD_CODE = 49;
+    /**
+     * Request code for Games module.
+     */
+    public static final int GAMES_ACTIVE_LIST_CODE = 50;
+    /**
+     * Request code for Games module.
+     */
+    public static final int MATCHES_ACTIVE_DOWNLOAD_CODE = 51;
+    /**
+     * Request code for Games module.
+     */
+    public static final int MATCHES_ACTIVE_LIST_CODE = 52;
+    /**
+     * Request code for Games module.
+     */
+    public static final int MATCHES_STATUS_CODE = 53;
+    /**
+     * Request code for Games module.
+     */
+    public static final int MATCHES_ANSWER_CODE = 54;
+    /**
      * Request code for CAMERA permission
      */
     public static final int PERMISSIONS_REQUEST_CAMERA = 100;
@@ -353,9 +386,12 @@ public class Constants {
     public static final String DIRECTORY_SWADROID = "SWADroid";
     public static final String DOWNLOADS_PATH =
             Environment.DIRECTORY_DOWNLOADS + File.separator + DIRECTORY_SWADROID;
-
     /**
      * Username template for messages
      */
     public static final String USERNAME_TEMPLATE = "{userName}";
+    /**
+     * Maximum number of questions for games
+     */
+    public static final int MAX_NUM_QUESTIONS_GAMES = 100000;
 }

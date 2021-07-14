@@ -167,6 +167,70 @@
                 android:value="es.ugr.swad.swadroid.modules.tests.Tests" />
         </activity>
         <activity
+            android:name="es.ugr.swad.swadroid.modules.games.Games"
+            android:label="@string/gamesModuleLabel"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:parentActivityName="es.ugr.swad.swadroid.modules.games.GamesList" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.ugr.swad.swadroid.modules.games.GamesList" />
+        </activity>
+        <activity
+            android:name="es.ugr.swad.swadroid.modules.games.GamesList"
+            android:label="@string/gamesModuleLabel"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:parentActivityName="es.ugr.swad.swadroid.modules.games.GamesList" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.ugr.swad.swadroid.modules.games.GamesList" />
+        </activity>
+        <activity
+            android:name="es.ugr.swad.swadroid.modules.games.Matches"
+            android:label="@string/gamesModuleLabel"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:parentActivityName="es.ugr.swad.swadroid.modules.games.GamesList" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.ugr.swad.swadroid.modules.games.GamesList" />
+        </activity>
+        <activity
+            android:name="es.ugr.swad.swadroid.modules.games.MatchesList"
+            android:label="@string/gamesModuleLabel"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:parentActivityName="es.ugr.swad.swadroid.modules.games.GamesList" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.ugr.swad.swadroid.modules.games.GamesList" />
+        </activity>
+        <activity
+            android:name="es.ugr.swad.swadroid.modules.games.GamesPlay"
+            android:label="@string/gamesModuleLabel"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:parentActivityName="es.ugr.swad.swadroid.modules.games.GamesList" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.ugr.swad.swadroid.modules.games.GamesList" />
+        </activity>
+        <activity
+            android:name="es.ugr.swad.swadroid.modules.games.GamesPlayStatus"
+            android:label="@string/gamesModuleLabel"
+            android:theme="@style/Theme.AppCompat.Translucent"
+            android:parentActivityName="es.ugr.swad.swadroid.modules.games.GamesPlay" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.ugr.swad.swadroid.modules.games.GamesPlay" />
+        </activity>
+        <activity
+            android:name="es.ugr.swad.swadroid.modules.games.GamesPlayAnswer"
+            android:label="@string/gamesModuleLabel"
+            android:theme="@style/Theme.AppCompat.Translucent"
+            android:parentActivityName="es.ugr.swad.swadroid.modules.games.GamesPlay" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.ugr.swad.swadroid.modules.games.GamesPlay" />
+        </activity>
+        <activity
             android:name="es.ugr.swad.swadroid.modules.messages.Messages"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:theme="@style/Theme.AppCompat.Light"
@@ -363,27 +427,6 @@
                 android:name="android.content.SyncAdapter"
                 android:resource="@xml/sync_notifications" />
         </service>
-        <!-- Optionally, register AnalyticsReceiver and AnalyticsService to support background
-      dispatching on non-Google Play devices -->
-        <receiver android:name="com.google.android.gms.analytics.AnalyticsReceiver"
-            android:enabled="true">
-            <intent-filter>
-                <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
-            </intent-filter>
-        </receiver>
-        <service android:name="com.google.android.gms.analytics.AnalyticsService"
-            android:enabled="true"
-            android:exported="false"/>
-
-        <!-- Optionally, register CampaignTrackingReceiver and CampaignTrackingService to enable
-             installation campaign reporting -->
-        <receiver android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER" />
-            </intent-filter>
-        </receiver>
-        <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
