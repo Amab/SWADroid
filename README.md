@@ -10,11 +10,8 @@ Android client for e-learning platform [![SWADroid](https://openswad.org/logo/sw
 CI Status
 ---------
 
-|Branch|CI status|
-|------|---------|
-|master|![Build Status Master](https://github.com/Amab/SWADroid/actions/workflows/android-build.yml/badge.svg?branch=master)|
-
 [![Releases](https://img.shields.io/github/release/Amab/SWADroid.svg)](https://github.com/Amab/SWADroid/releases/latest)
+[![Build Status Master](https://github.com/Amab/SWADroid/actions/workflows/android-build.yml/badge.svg?branch=master)](https://github.com/Amab/SWADroid/actions/workflows/android-build.yml/badge.svg?branch=master)
 [![libraries.io](https://img.shields.io/librariesio/github/Amab/SWADroid.svg)](https://libraries.io/github/Amab/SWADroid)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/41ded03ee87d4ceaaafc976a7529bcf3)](https://www.codacy.com/manual/Amab/SWADroid?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Amab/SWADroid&amp;utm_campaign=Badge_Grade)
 
