@@ -12,7 +12,6 @@ CI Status
 
 |Branch|CI status|
 |------|---------|
-|develop|![Build Status Develop](https://github.com/Amab/SWADroid/actions/workflows/android-build.yml/badge.svg?branch=develop)|
 |master|![Build Status Master](https://github.com/Amab/SWADroid/actions/workflows/android-build.yml/badge.svg?branch=master)|
 
 [![Releases](https://img.shields.io/github/release/Amab/SWADroid.svg)](https://github.com/Amab/SWADroid/releases/latest)
