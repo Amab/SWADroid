@@ -39,17 +39,12 @@ if (build_param != "prod") {
 }
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
+    compileSdkVersion 31
+    buildToolsVersion "31.0.0"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
-    }
-
-    dexOptions {
-        maxProcessCount=2
-        javaMaxHeapSize "2g"
     }
 
     lintOptions {
@@ -62,7 +57,7 @@ android {
         versionCode androidGitVersion.code()
 
         minSdkVersion 24
-        targetSdkVersion 30
+        targetSdkVersion 31
 
         testApplicationId "es.ugr.swad.swadroid.test"
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
