@@ -433,7 +433,7 @@ public class NotificationsSyncAdapterService extends Service {
         pendingIntent = PendingIntent.getActivity(context,
                 0,
                 notificationIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
 
         //Notify synchronization start
         Intent startIntent = new Intent();
