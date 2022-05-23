@@ -39,8 +39,8 @@ if (build_param != "prod") {
 }
 
 android {
-    compileSdkVersion 31
-    buildToolsVersion "31.0.0"
+    compileSdkVersion 32
+    buildToolsVersion "32.0.0"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
@@ -57,7 +57,7 @@ android {
         versionCode androidGitVersion.code()
 
         minSdkVersion 24
-        targetSdkVersion 31
+        targetSdkVersion 32
 
         testApplicationId "es.ugr.swad.swadroid.test"
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
