@@ -2,11 +2,10 @@ kind: pipeline
 name: default
 
 steps:
-- name: build
+- name: test
   image: gradle:jdk11
   commands:
-  - chmod +x gradlew
-  - ./gradlew build
+  - gradle assemble check connectedCheck
 
 - name: code-analysis
   image: aosapps/drone-sonar-plugin
