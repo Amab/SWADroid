@@ -2,6 +2,11 @@ kind: pipeline
 name: default
 
 steps:
+- name: fetch
+  image: drone/git
+  commands:
+  - git fetch --tags
+
 - name: build
   image: gradle:jdk11
   commands:
