@@ -2,11 +2,10 @@ kind: pipeline
 name: default
 
 steps:
-- name: test
+- name: build
   image: gradle:jdk11
   commands:
-  - gradle assemble
-  - gradle check
+  - gradle build
 
 - name: code-analysis
   image: aosapps/drone-sonar-plugin
