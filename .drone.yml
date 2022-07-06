@@ -3,8 +3,8 @@ name: default
 
 steps:
 - name: code-analysis
-image: aosapps/drone-sonar-plugin
-settings:
+  image: aosapps/drone-sonar-plugin
+  settings:
     sonar_host:
       from_secret: sonar_host
     sonar_token:
