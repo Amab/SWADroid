@@ -5,7 +5,8 @@ steps:
 - name: build
   image: gradle:jdk11
   commands:
-  - gradle build
+  - chmod +x gradlew
+  - ./gradlew build
 
 - name: code-analysis
   image: aosapps/drone-sonar-plugin
