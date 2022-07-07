@@ -3,7 +3,7 @@ name: default
 
 steps:
 - name: fetch-tags
-  image: drone/git
+  image: drone/git:latest
   commands:
   - git fetch --tags
 
@@ -23,13 +23,9 @@ steps:
   - ./gradlew connectedCheck
 
 - name: code-analysis
-  image: mailbyms/drone-sonar-plugin
+  image: drone-plugins/sonarqube-scanner:latest
   settings:
       sonar_host:
         from_secret: sonar_host
       sonar_token:
         from_secret: sonar_token
-      java_binaries: target/classes
-      # optional, for sonarqube webhook
-      #custom_ding_token:
-      #  from_secret: dingtalk_token
