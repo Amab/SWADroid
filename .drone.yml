@@ -22,10 +22,10 @@ steps:
   commands:
   - ./gradlew connectedCheck
 
-- name: code-analysis
-  image: drone-plugins/sonarqube-scanner:latest
-  settings:
-      sonar_host:
-        from_secret: sonar_host
-      sonar_token:
-        from_secret: sonar_token
+#- name: code-analysis
+#  image: drone-plugins/sonarqube-scanner:latest
+#  settings:
+#      sonar_host:
+#        from_secret: sonar_host
+#      sonar_token:
+#        from_secret: sonar_token
