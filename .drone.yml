@@ -29,4 +29,4 @@ steps:
       from_secret: sonar_host
     sonar_token:
       from_secret: sonar_token
-    inclusions: /drone/src/target/classes/**
+    inclusions: /drone/src/.git/**
