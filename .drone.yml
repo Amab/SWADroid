@@ -2,7 +2,7 @@ kind: pipeline
 name: default
 
 steps:
-- name: fetch
+- name: fetch-tags
   image: drone/git
   commands:
   - git fetch --tags
@@ -11,16 +11,22 @@ steps:
   image: androidsdk/android-31:latest
   commands:
   - ./gradlew assemble
+  depends_on:
+  - fetch-tags
 
 - name: unit-tests
   image: androidsdk/android-31:latest
   commands:
   - ./gradlew check
+  depends_on:
+  - build
 
 - name: integration-tests
   image: androidsdk/android-31:latest
   commands:
   - ./gradlew connectedCheck
+  depends_on:
+  - build
 
 - name: code-analysis
   image: aosapps/drone-sonar-plugin
@@ -29,3 +35,7 @@ steps:
       from_secret: sonar_host
     sonar_token:
       from_secret: sonar_token
+  depends_on:
+  - build
+  - unit-tests
+  - integration-tests
