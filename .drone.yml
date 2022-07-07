@@ -23,10 +23,13 @@ steps:
   - ./gradlew connectedCheck
 
 - name: code-analysis
-  image: aosapps/drone-sonar-plugin
+  image: mailbyms/drone-sonar-plugin
   settings:
-    sonar_host:
-      from_secret: sonar_host
-    sonar_token:
-      from_secret: sonar_token
-    inclusions: /drone/src/**
+      sonar_host:
+        from_secret: sonar_host
+      sonar_token:
+        from_secret: sonar_token
+      java_binaries: target/classes
+      # optional, for sonarqube webhook
+      #custom_ding_token:
+      #  from_secret: dingtalk_token
