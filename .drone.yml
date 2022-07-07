@@ -8,19 +8,19 @@ steps:
   - git fetch --tags
 
 - name: build
-  image: gradle:jdk11
+  image: androidsdk/android-31:latest
   commands:
-  - gradle assemble
+  - ./gradlew assemble
 
 - name: unit-tests
-  image: gradle:jdk11
+  image: androidsdk/android-31:latest
   commands:
-  - gradle check
+  - ./gradlew check
 
 - name: integration-tests
-  image: gradle:jdk11
+  image: androidsdk/android-31:latest
   commands:
-  - gradle connectedCheck
+  - ./gradlew connectedCheck
 
 - name: code-analysis
   image: aosapps/drone-sonar-plugin
