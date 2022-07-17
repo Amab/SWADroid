@@ -13,10 +13,11 @@ import java.util.Vector;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.dao.GroupTypeDao;
+import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.model.GroupType;
-import es.ugr.swad.swadroid.modules.Module;
+import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.modules.courses.Courses;
+import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
@@ -36,10 +37,6 @@ public class GroupTypes extends Module {
      * Course code to which the request is related
      */
     private long courseCode = -1;
-    /**
-     * Data Access Object GroupType
-     */
-    private GroupTypeDao groupTypeDao;
 
     @Override
     protected void runConnection() {
@@ -56,9 +53,6 @@ public class GroupTypes extends Module {
         courseCode = getIntent().getLongExtra("courseCode", -1);
         setMETHOD_NAME("getGroupTypes");
         getSupportActionBar().hide();
-
-        //Initialize DAOs
-        groupTypeDao = db.getGroupTypeDao();
     }
 
     @Override
@@ -91,9 +85,9 @@ public class GroupTypes extends Module {
 
         if (result != null) {
             //Stores groups data returned by webservice response
-            List<GroupType> groupsSWAD = new ArrayList<>();
+            List<Model> groupsSWAD = new ArrayList<>();
 
-            ArrayList<?> res = new ArrayList<>((Vector<?>) result);
+            ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
             SoapObject soap = (SoapObject) res.get(1);
             int csSize = soap.getPropertyCount();
 
@@ -113,7 +107,7 @@ public class GroupTypes extends Module {
                 }
             }
 
-            groupTypeDao.insertGroupTypes(groupsSWAD);
+            dbHelper.insertCollection(DataBaseHelper.DB_TABLE_GROUP_TYPES, groupsSWAD);
 
             setResult(RESULT_OK);
         }
@@ -132,7 +126,7 @@ public class GroupTypes extends Module {
 
     @Override
     protected void onError() {
-        // No-op
+
     }
 
 }

@@ -27,15 +27,11 @@ import android.widget.Toast;
 
 import org.ksoap2.serialization.SoapObject;
 
-import java.util.Collections;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.dao.EventDao;
-import es.ugr.swad.swadroid.dao.UserAttendanceDao;
-import es.ugr.swad.swadroid.model.Event;
-import es.ugr.swad.swadroid.modules.Module;
+import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.modules.login.Login;
+import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
@@ -43,7 +39,7 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
  * Rollcall users send module.
  * @see <a href="https://openswad.org/ws/#sendAttendanceUsers">sendAttendanceUsers</a>
  *
- * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class UsersSend extends Module {
     /**
@@ -70,14 +66,6 @@ public class UsersSend extends Module {
      */
     private String usersCodes;
     /**
-     * Database Access Object for UserAttendance
-     */
-    private UserAttendanceDao userAttendanceDao;
-    /**
-     * Database Access Object for Event
-     */
-    private EventDao eventDao;
-    /**
      * Rollcall Users Download tag name for Logcat
      */
     private static final String TAG = Constants.APP_TAG + " UsersSend";
@@ -90,10 +78,6 @@ public class UsersSend extends Module {
         super.onCreate(savedInstanceState);
         setMETHOD_NAME("sendAttendanceUsers");
         getSupportActionBar().hide();
-
-        //Initialize DAOs
-        userAttendanceDao = db.getUserAttendanceDao();
-        eventDao = db.getEventDao();
     }
 
     @Override
@@ -127,7 +111,7 @@ public class UsersSend extends Module {
             //Stores data returned by webservice response
             success = Integer.parseInt(soap.getProperty("success").toString());
             numUsers = Integer.parseInt(soap.getProperty("numUsers").toString());
-        }
+        }    // end if (result != null)
 
         Log.i(TAG, "Sent " + numUsers + " users");
     }
@@ -156,13 +140,13 @@ public class UsersSend extends Module {
 
             Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
 
+            dbHelper.beginTransaction();
             //Remove all event attendances from database after a successful sending
-            userAttendanceDao.deleteAttendancesByEventCode(eventCode);
+            dbHelper.removeAllRows(DataBaseHelper.DB_TABLE_USERS_ATTENDANCES, "eventCode", eventCode);
 
             //Mark the event as sent to SWAD
-            Event event = eventDao.findById(eventCode);
-            event.setStatus("OK");
-            eventDao.updateEvents(Collections.singletonList(event));
+            dbHelper.updateEventStatus(eventCode, "OK");
+            dbHelper.endTransaction(true);
 
             setResult(RESULT_OK);
         }
@@ -172,7 +156,7 @@ public class UsersSend extends Module {
 
     @Override
     protected void onError() {
-    // No-op
+
     }
 
 }

@@ -26,7 +26,7 @@ import javax.net.ssl.X509TrustManager;
 /**
  * TrustManager that accepts untrusted certificates.
  *
- * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class UntrustedTrustManager implements X509TrustManager {
     /**

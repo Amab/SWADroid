@@ -23,6 +23,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -30,21 +31,22 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 
 import java.io.File;
 import java.net.URLConnection;
@@ -54,7 +56,6 @@ import java.util.List;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.dao.GroupDao;
 import es.ugr.swad.swadroid.gui.FontManager;
 import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.gui.ProgressScreen;
@@ -73,7 +74,7 @@ import es.ugr.swad.swadroid.utils.Utils;
  * the downloads of documents
  *
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
- * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class DownloadsManager extends MenuActivity {
     /**
@@ -152,15 +153,10 @@ public class DownloadsManager extends MenuActivity {
      */
     private boolean previousConnection = false;
 
-    /**
-     * DAO for groups
-     */
-    private GroupDao groupDao;
-
     private void init() {
         mProgressScreen.show();
 
-        List<Group> allGroups = groupDao.findGroupsCourseByCourseCode(Courses.getSelectedCourseCode()).groups;
+        List<Group> allGroups = dbHelper.getGroups(Courses.getSelectedCourseCode());
         int nGroups = allGroups.size();
 
         if (!saveState) {
@@ -209,9 +205,6 @@ public class DownloadsManager extends MenuActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Initialize DAOs
-        groupDao = db.getGroupDao();
-
         if (savedInstanceState != null) {
             this.saveState = savedInstanceState.getBoolean("saveState", false);
             if (saveState) {
@@ -243,20 +236,30 @@ public class DownloadsManager extends MenuActivity {
         //Get Font Awesome typeface
         iconFont = FontManager.getTypeface(this, FontManager.FONTAWESOME);
 
-        TextView homeButton = this
+        TextView homeButton = (TextView) this
                 .findViewById(R.id.home_button);
-        homeButton.setOnClickListener((v -> {
-            if (navigator != null) {
-                updateView(navigator.goToRoot());
+        homeButton.setOnClickListener((new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (navigator != null) {
+                    updateView(navigator.goToRoot());
+                }
             }
+
         }));
 
-        TextView parentButton = this
+        TextView parentButton = (TextView) this
                 .findViewById(R.id.parent_button);
-        parentButton.setOnClickListener((v -> {
-            if (navigator != null) {
-                updateView(navigator.goToParentDirectory());
+        parentButton.setOnClickListener((new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (navigator != null) {
+                    updateView(navigator.goToParentDirectory());
+                }
             }
+
         }));
 
         //Set Font Awesome typeface
@@ -266,30 +269,33 @@ public class DownloadsManager extends MenuActivity {
         downloadsAreaCode = getIntent().getIntExtra("downloadsAreaCode",
                 Constants.DOCUMENTS_AREA_CODE);
 
-        messageText = this.findViewById(R.id.messageText);
+        messageText = (TextView) this.findViewById(R.id.messageText);
 
-        grid = this.findViewById(R.id.gridview);
-        grid.setOnItemClickListener(((parent, v, position, id) -> {
+        grid = (GridView) this.findViewById(R.id.gridview);
+        grid.setOnItemClickListener((new OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v,
+                                    int position, long id) {
 
-            DirectoryItem node = navigator.getDirectoryItem(position);
-            if (node.getFileCode() == -1) //it is a directory therefore navigates into it
-                updateView(navigator.goToSubDirectory(position));
-            else { //it is a files therefore gets its information through web service GETFILE
-                chosenNodeName = node.getName();
-                fileSize = node.getSize();
-                File f = new File(Constants.DOWNLOADS_PATH + File.separator + chosenNodeName);
+                DirectoryItem node = navigator.getDirectoryItem(position);
+                if (node.getFileCode() == -1) //it is a directory therefore navigates into it
+                    updateView(navigator.goToSubDirectory(position));
+                else { //it is a files therefore gets its information through web service GETFILE
+                    chosenNodeName = node.getName();
+                    fileSize = node.getSize();
+                    File f = new File(Constants.DOWNLOADS_PATH + File.separator + chosenNodeName);
 
-                //If a student is requesting the marks, gets the marks and call the Marks module
-                if((downloadsAreaCode == Constants.MARKS_AREA_CODE)
-                        && (Login.getLoggedUser().getUserRole() == Constants.STUDENT_TYPE_CODE)) {
+                    //If a student is requesting the marks, gets the marks and call the Marks module
+                    if((downloadsAreaCode == Constants.MARKS_AREA_CODE)
+                            && (Login.getLoggedUser().getUserRole() == Constants.STUDENT_TYPE_CODE)) {
 
-                    requestGetMarks(node.getFileCode());
-                } else { //Otherwise treat as a regular file
-                    if (isDownloaded(f)) {
-                        viewFile(f);
-                    } else {
-                        AlertDialog fileInfoDialog = createFileInfoDialog(node.getName(), node.getSize(), node.getTime(), node.getPublisher(), node.getFileCode(), node.getLicense());
-                        fileInfoDialog.show();
+                        requestGetMarks(node.getFileCode());
+                    } else { //Otherwise treat as a regular file
+                        if (isDownloaded(f)) {
+                            viewFile(f);
+                        } else {
+                            AlertDialog fileInfoDialog = createFileInfoDialog(node.getName(), node.getSize(), node.getTime(), node.getPublisher(), node.getFileCode(), node.getLicense());
+                            fileInfoDialog.show();
+                        }
                     }
                 }
             }
@@ -384,7 +390,11 @@ public class DownloadsManager extends MenuActivity {
                         builder.setTitle(R.string.sdCardBusyTitle);
                         builder.setMessage(R.string.sdCardBusy);
                         builder.setIcon(R.drawable.ic_dialog_alert);
-                        builder.setNeutralButton(android.R.string.ok, (dialog1, id) -> dialog1.dismiss());
+                        builder.setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                            }
+                        });
                         dialog = builder.create();
                         dialog.show();
                     }
@@ -398,7 +408,7 @@ public class DownloadsManager extends MenuActivity {
                     groupsRequested = true;
                     myGroups = getFilteredGroups(); //only groups where the user is enrolled.
                     this.loadGroupsSpinner(myGroups);
-                    if (myGroups.isEmpty()) {
+                    if (myGroups.size() == 0) {
                         requestDirectoryTree();
                     } else {
                         mProgressScreen.hide();
@@ -486,7 +496,7 @@ public class DownloadsManager extends MenuActivity {
      * This method set the grid of nodes visible and paints the directory tree in its root node
      */
     private void setMainView() {
-        currentPathText = this.findViewById(R.id.path);
+        currentPathText = (TextView) this.findViewById(R.id.path);
 
         ArrayList<DirectoryItem> items;
         if (!(this.saveState && this.previousConnection)) {
@@ -538,11 +548,11 @@ public class DownloadsManager extends MenuActivity {
      * Get the list of the groups of the course with a documents zone to whom the user belongs
      */
     private List<Group> getFilteredGroups() {
-        List<Group> currentGroups = groupDao.findGroupsCourseByCourseCode(Courses.getSelectedCourseCode()).groups;
+        List<Group> currentGroups = dbHelper.getGroups(Courses.getSelectedCourseCode());
         //remove groups that do not have a file zone assigned
         int j = 0;
         while (j < currentGroups.size()) {
-            if (currentGroups.get(j).getFileZones() != 0 && currentGroups.get(j).isMember())
+            if (currentGroups.get(j).getDocumentsArea() != 0 && currentGroups.get(j).isMember())
                 ++j;
             else
                 currentGroups.remove(j);
@@ -556,13 +566,13 @@ public class DownloadsManager extends MenuActivity {
     private void loadGroupsSpinner(List<Group> currentGroups) {
 
         if (!currentGroups.isEmpty()) { //there are groups in the selected course, therefore the groups spinner should be loaded
-            Spinner groupsSpinner = this.findViewById(R.id.groupSpinner);
+            Spinner groupsSpinner = (Spinner) this.findViewById(R.id.groupSpinner);
             groupsSpinner.setVisibility(View.VISIBLE);
 
             ArrayList<String> spinnerNames = new ArrayList<>(currentGroups.size() + 1);
             spinnerNames.add(getString(R.string.course) + "-" + Courses.getSelectedCourseShortName());
             for (Group g : currentGroups) {
-                GroupType gType = groupDao.findGroupsGroupTypeByGroupCode(g.getId()).groupType;
+                GroupType gType = dbHelper.getGroupTypeFromGroup(g.getId());
                 spinnerNames.add(getString(R.string.group) + "-" + gType.getGroupTypeName() + " " + g.getGroupName());
             }
 
@@ -599,7 +609,6 @@ public class DownloadsManager extends MenuActivity {
 
         @Override
         public void onNothingSelected(AdapterView<?> arg0) {
-            // No-op
         }
 
     }
@@ -760,8 +769,16 @@ public class DownloadsManager extends MenuActivity {
         
         builder.setTitle(name);
         builder.setMessage(message);
-        builder.setPositiveButton(R.string.downloadFileTitle, (dialog1, id) -> requestGetFile(code));
-        builder.setNegativeButton(R.string.cancelMsg, (dialog12, id) -> dialog12.dismiss());
+        builder.setPositiveButton(R.string.downloadFileTitle, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                requestGetFile(code);
+            }
+        });
+        builder.setNegativeButton(R.string.cancelMsg, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
+            }
+        });
 
         dialog = builder.create();
         return dialog;

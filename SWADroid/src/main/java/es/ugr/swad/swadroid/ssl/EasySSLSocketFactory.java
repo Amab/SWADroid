@@ -35,7 +35,7 @@ import javax.net.ssl.TrustManager;
 /**
  * SSLSocketFactory for self-signed certificates.
  * 
- * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class EasySSLSocketFactory extends SSLSocketFactory implements SocketFactory, LayeredSocketFactory 
 {  

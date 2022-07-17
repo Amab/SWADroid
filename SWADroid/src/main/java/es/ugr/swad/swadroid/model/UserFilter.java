@@ -21,17 +21,15 @@ package es.ugr.swad.swadroid.model;
 
 import org.ksoap2.serialization.PropertyInfo;
 
+import java.io.Serializable;
 import java.util.Hashtable;
-
-import lombok.Data;
 
 /**
  * User data.
  *
  * @author Rubén Martín Hidalgo
  */
-@Data
-public class UserFilter extends Model {
+public class UserFilter extends Model implements Serializable{
     /**
      * User identifier.
      */
@@ -61,7 +59,17 @@ public class UserFilter extends Model {
      */
     private boolean selectedCheckbox;
 
-    public UserFilter(String userNickname, String userSurname1, String userSurname2, String userFirstname, String userPhoto, int userCode, boolean selectedCheckbox) {
+    /**
+     * Constructor.
+     * @param userNickname  User identifier.
+     * @param userSurname1  User first surname.
+     * @param userSurname2  User last surname.
+     * @param userFirstname User name.
+     * @param userPhoto     Full path where user's picture is stored.
+     * @param userCode      Unique identifier for each user
+     * @param selectedCheckbox  Is a receiver?.
+     */
+    public UserFilter(String userNickname, String userSurname1, String userSurname2, String userFirstname, String userPhoto, int userCode, boolean selectedCheckbox){
         this.userNickname = userNickname;
         this.userSurname1 = userSurname1;
         this.userSurname2 = userSurname2;
@@ -69,6 +77,132 @@ public class UserFilter extends Model {
         this.userPhoto = userPhoto;
         this.userCode = userCode;
         this.selectedCheckbox = selectedCheckbox;
+    }
+
+    /**
+     * Gets user name.
+     *
+     * @return User name.
+     */
+    public String getUserFirstname() {
+        return userFirstname;
+    }
+
+    /**
+     * Sets user name.
+     *
+     * @param userFirstname User name.
+     */
+    public void setUserFirstname(String userFirstname) {
+        this.userFirstname = userFirstname;
+    }
+
+    /**
+     * Gets user identifier.
+     *
+     * @return User identifier.
+     */
+    public String getUserNickname() {
+        return userNickname;
+    }
+
+    /**
+     * Sets user identifier.
+     *
+     * @param userNickname User identifier.
+     */
+    public void setUserNickname(String userNickname) {
+        this.userNickname = userNickname;
+    }
+
+    /**
+     * Gets user first surname.
+     *
+     * @return User first surname.
+     */
+    public String getUserSurname1() {
+        return userSurname1;
+    }
+
+    /**
+     * Sets user first surname.
+     *
+     * @param userSurname1 User first surname.
+     */
+    public void setUserSurname1(String userSurname1) {
+        this.userSurname1 = userSurname1;
+    }
+
+    /**
+     * Gets user last surname.
+     *
+     * @return User last surname.
+     */
+    public String getUserSurname2() {
+        return userSurname2;
+    }
+
+    /**
+     * Sets user last surname.
+     *
+     * @param userSurname2 User last surname.
+     */
+    public void setUserSurname2(String userSurname2) {
+        this.userSurname2 = userSurname2;
+    }
+
+    /**
+     * Gets Full path where user's picture is stored.
+     *
+     * @return the userPhoto
+     */
+    public String getUserPhoto() {
+        return userPhoto;
+    }
+
+    /**
+     * Sets Full path where user's picture is stored.
+     *
+     * @param userPhoto the userPhoto to set
+     */
+    public void setUserPhoto(String userPhoto) {
+        this.userPhoto = userPhoto;
+    }
+
+    /**
+     * Gets users code.
+     *
+     * @return the userCode
+     */
+    public int getUserCode() {
+        return userCode;
+    }
+
+    /**
+     * Sets user code.
+     *
+     * @param userCode the userCode to set
+     */
+    public void setUserCode(int userCode) {
+        this.userCode = userCode;
+    }
+
+    /**
+     * Get if checkbox is selected.
+     *
+     * @return if checkbox is selected (true / false)
+     */
+    public boolean getCheckbox() {
+        return selectedCheckbox;
+    }
+
+    /**
+     * Sets Full path where user's picture is stored.
+     *
+     * @param selected the checkbox is selected or not
+     */
+    public void setCheckbox(boolean selected){
+        this.selectedCheckbox = selected;
     }
 
     @Override
@@ -83,11 +217,11 @@ public class UserFilter extends Model {
 
     @Override
     public void setProperty(int index, Object value) {
-        // No-op
+
     }
 
     @Override
     public void getPropertyInfo(int index, Hashtable properties, PropertyInfo info) {
-        // No-op
+
     }
 }

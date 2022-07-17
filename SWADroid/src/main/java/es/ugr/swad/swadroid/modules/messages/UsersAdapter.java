@@ -29,11 +29,8 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.nostra13.universalimageloader.core.ImageLoader;
-
 import java.util.List;
-
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.ImageFactory;
 import es.ugr.swad.swadroid.model.UserFilter;
@@ -80,7 +77,7 @@ public class UsersAdapter extends ArrayAdapter<UserFilter> {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     int getPosition = (Integer) buttonView.getTag();  // Here we get the position that we have set for the checkbox using setTag.
-                    list.get(getPosition).setSelectedCheckbox(buttonView.isChecked()); // Set the value of checkbox to maintain its state.
+                    list.get(getPosition).setCheckbox(buttonView.isChecked()); // Set the value of checkbox to maintain its state.
                 }
             });
             convertView.setTag(holder);
@@ -89,7 +86,7 @@ public class UsersAdapter extends ArrayAdapter<UserFilter> {
             holder = (ViewHolder) convertView.getTag();
         }
         holder.checkbox.setTag(position); // This line is important.
-        holder.checkbox.setChecked(list.get(position).isSelectedCheckbox());
+        holder.checkbox.setChecked(list.get(position).getCheckbox());
 
         if(user.getUserPhoto().isEmpty())  //when the user don't have photo, the string is empty
             holder.image.setImageResource(R.drawable.usr_bl);

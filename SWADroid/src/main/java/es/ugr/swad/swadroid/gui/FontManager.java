@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * Manager for Font Awesome icons
  *
- * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class FontManager {
 

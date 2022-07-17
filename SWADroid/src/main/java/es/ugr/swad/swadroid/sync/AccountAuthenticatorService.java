@@ -23,7 +23,7 @@ public class AccountAuthenticatorService extends Service {
 
     public IBinder onBind(Intent intent) {
         IBinder ret = null;
-        if (android.accounts.AccountManager.ACTION_AUTHENTICATOR_INTENT.equals(intent.getAction()))
+        if (intent.getAction().equals(android.accounts.AccountManager.ACTION_AUTHENTICATOR_INTENT))
             ret = getAuthenticator().getIBinder();
         return ret;
     }

@@ -43,23 +43,24 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import es.ugr.swad.swadroid.dao.CourseDao;
-import es.ugr.swad.swadroid.database.AppDatabase;
+import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.gui.ProgressScreen;
 import es.ugr.swad.swadroid.gui.TextExpandableListAdapter;
 import es.ugr.swad.swadroid.model.Course;
+import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.modules.courses.Courses;
 import es.ugr.swad.swadroid.modules.downloads.DownloadsManager;
 import es.ugr.swad.swadroid.modules.groups.MyGroupsManager;
-import es.ugr.swad.swadroid.modules.indoorlocation.IndoorLocation;
 import es.ugr.swad.swadroid.modules.information.Information;
+import es.ugr.swad.swadroid.modules.indoorlocation.IndoorLocation;
 import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.modules.login.LoginActivity;
 import es.ugr.swad.swadroid.modules.messages.Messages;
@@ -77,7 +78,7 @@ import es.ugr.swad.swadroid.utils.Utils;
 /**
  * Main class of the application.
  *
- * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  * @author Jose Antonio Guerrero Aviles <cany20@gmail.com>
@@ -98,7 +99,7 @@ public class SWADMain extends MenuExpandableListActivity {
     /**
      * User courses list
      */
-    private List<Course> listCourses;
+    private List<Model> listCourses;
     /**
      * SWADMain tag name for Logcat
      */
@@ -109,10 +110,6 @@ public class SWADMain extends MenuExpandableListActivity {
      */
     private boolean firstRun = false;
 
-    /**
-     * DAO for Courses
-     */
-    private CourseDao courseDao;
 
     /**
      * Current role 2 - student 3 - teacher -1 - none role was chosen
@@ -134,6 +131,15 @@ public class SWADMain extends MenuExpandableListActivity {
     private ProgressScreen mProgressScreen;
 
     /**
+     * Gets the database helper
+     *
+     * @return the database helper
+     */
+    public static DataBaseHelper getDbHelper() {
+        return dbHelper;
+    }
+
+    /**
      * Shows initial dialog after application upgrade.
      *
      * @param context Application context
@@ -151,14 +157,10 @@ public class SWADMain extends MenuExpandableListActivity {
      */
     @Override
     public void onCreate(Bundle icicle) {
-        int lastVersion;
-        int currentVersion;
+        int lastVersion, currentVersion;
 
         //Initialize screen
         super.onCreate(icicle);
-
-        //Initialize DAOs
-        courseDao = db.getCourseDao();
 
         setContentView(R.layout.main);
         initializeMainViews();
@@ -167,6 +169,7 @@ public class SWADMain extends MenuExpandableListActivity {
             //Check if this is the first run after an install or upgrade
             lastVersion = Preferences.getLastVersion();
             currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+            dbHelper.initializeDB();
             //lastVersion = 67;
             //currentVersion = 68;
 
@@ -199,8 +202,8 @@ public class SWADMain extends MenuExpandableListActivity {
         if (isUserOrPasswordEmpty() && listCourses.isEmpty()) {
             startActivityForResult(new Intent(this, LoginActivity.class), Constants.LOGIN_REQUEST_CODE);
         } else {
-            if(Preferences.isPreferencesChanged() || AppDatabase.isDbCleaned()) {
-                AppDatabase.setDbCleaned(false);
+            if(Preferences.isPreferencesChanged() || DataBaseHelper.isDbCleaned()) {
+                DataBaseHelper.setDbCleaned(false);
 
                 Preferences.setPreferencesChanged(false);
                 Preferences.initializeSelectedCourse();
@@ -259,8 +262,29 @@ public class SWADMain extends MenuExpandableListActivity {
      * @param lastVersion Version from which the application is updated
      * @param currentVersion Version to which the application is updated
      */
-    private void upgradeApp(int lastVersion, int currentVersion) {
+    private void upgradeApp(int lastVersion, int currentVersion) throws NoSuchAlgorithmException {
         Log.i(TAG, "Upgrading application from version " + lastVersion + " to version " + currentVersion);
+
+        dbHelper.upgradeDB();
+
+        if(lastVersion < 52) {
+            //Encrypts users table
+            dbHelper.encryptUsers();
+
+            //If the app is updating from an unencrypted user password version, encrypt user password
+            Preferences.upgradeCredentials();
+
+            Preferences.setSyncTime(String.valueOf(Constants.DEFAULT_SYNC_TIME));
+        }
+
+        if(lastVersion < 57) {
+            //Reconfigure automatic synchronization
+            SyncUtils.removePeriodicSync(Constants.AUTHORITY, Bundle.EMPTY, this);
+            if(!Preferences.getSyncTime().equals("0") && Preferences.isSyncEnabled()) {
+                SyncUtils.addPeriodicSync(Constants.AUTHORITY, Bundle.EMPTY,
+                        Long.valueOf(Preferences.getSyncTime()), this);
+            }
+        }
 
         Preferences.setLastVersion(currentVersion);
 
@@ -309,11 +333,11 @@ public class SWADMain extends MenuExpandableListActivity {
     }
 
     private void createSpinnerAdapter() {
-        listCourses = courseDao.findAllOrderedByShortNameAsc();
+        listCourses = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_COURSES, null, "shortName");
         /*
           Cursor for database access
          */
-        Cursor dbCursor = courseDao.findAllOrderedByShortNameAscCursor();
+        Cursor dbCursor = dbHelper.getDb().getCursor(DataBaseHelper.DB_TABLE_COURSES, null, "shortName");
         startManagingCursor(dbCursor);
         if (!listCourses.isEmpty()) {
             SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
@@ -331,7 +355,7 @@ public class SWADMain extends MenuExpandableListActivity {
             else
                 mCoursesSpinner.setSelection(0);
 
-            mCoursesSpinner.setOnTouchListener(spinnerOnTouch);
+            mCoursesSpinner.setOnTouchListener(Spinner_OnTouch);
             mCoursesSpinner.setVisibility(View.VISIBLE);
 
             Log.i(TAG, "Created Spinner adapter");
@@ -346,7 +370,7 @@ public class SWADMain extends MenuExpandableListActivity {
     private void cleanSpinner() {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, new String[]{getString(R.string.clickToGetCourses)});
         mCoursesSpinner.setAdapter(adapter);
-        mCoursesSpinner.setOnTouchListener(spinnerOnTouch);
+        mCoursesSpinner.setOnTouchListener(Spinner_OnTouch);
 
         Log.i(TAG, "Cleaned Spinner adapter");
     }
@@ -358,7 +382,7 @@ public class SWADMain extends MenuExpandableListActivity {
             if (!listCourses.isEmpty()) {
                 Preferences.setLastCourseSelected(position);
 
-                Course courseSelected = listCourses.get(position);
+                Course courseSelected = (Course) listCourses.get(position);
 
                 courseCode = courseSelected.getId();
 
@@ -374,21 +398,24 @@ public class SWADMain extends MenuExpandableListActivity {
 
         @Override
         public void onNothingSelected(AdapterView<?> arg0) {
-            // No-op
+
         }
     }
 
-    private final View.OnTouchListener spinnerOnTouch = (v, event) -> {
-        if (event.getAction() == MotionEvent.ACTION_UP) {
+    private final View.OnTouchListener Spinner_OnTouch = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
 
-            if (courseDao.findAllOrderedByShortNameAsc().isEmpty()) {
-                if (Utils.connectionAvailable(getApplicationContext()))
-                    getCurrentCourses();
-            } else {
-                v.performClick();
+                if (dbHelper.getAllRows(DataBaseHelper.DB_TABLE_COURSES).isEmpty()) {
+                    if (Utils.connectionAvailable(getApplicationContext()))
+                        getCurrentCourses();
+                } else {
+                    v.performClick();
+                }
             }
+            return true;
         }
-        return true;
     };
 
     private void getCurrentCourses() {
@@ -405,7 +432,7 @@ public class SWADMain extends MenuExpandableListActivity {
             Course courseSelected;
 
             if (Courses.getSelectedCourseCode() != -1) {
-                courseSelected = courseDao.findCourseById(Courses.getSelectedCourseCode());
+                courseSelected = dbHelper.getRow(DataBaseHelper.DB_TABLE_COURSES, "id", String.valueOf(Courses.getSelectedCourseCode()));
 
                 Log.i(TAG + " createMenu", "Recovered selected course " + courseSelected + " from database");
             } else {
@@ -414,12 +441,12 @@ public class SWADMain extends MenuExpandableListActivity {
                 int lastSelected = Preferences.getLastCourseSelected();
 
                 if (lastSelected != -1 && lastSelected < listCourses.size()) {
-                    courseSelected = listCourses.get(lastSelected);
+                    courseSelected = (Course) listCourses.get(lastSelected);
                     Preferences.setLastCourseSelected(lastSelected);
 
                     Log.i(TAG + " createMenu", "Setted last course selected to " + courseSelected);
                 } else {
-                    courseSelected = listCourses.get(0);
+                    courseSelected = (Course) listCourses.get(0);
                     Preferences.setLastCourseSelected(0);
 
                     Log.w(TAG + " createMenu", "No last course selected. Initialized last course selected to " + courseSelected);
@@ -626,90 +653,96 @@ public class SWADMain extends MenuExpandableListActivity {
         mProgressScreen = new ProgressScreen(mProgressScreenView, mCoursesListView,
                 getString(R.string.coursesProgressDescription), this);
 
-        OnChildClickListener mExpandableClickListener = (parent, v, groupPosition, childPosition, id) -> {
-            // Get the item that was clicked
-            Object o = parent.getExpandableListAdapter().getChild(groupPosition, childPosition);
-            String keyword = (String) ((Map<String, Object>) o).get(NAME);
-            Intent activity;
-            Context ctx = getApplicationContext();
+        OnChildClickListener mExpandableClickListener = new OnChildClickListener() {
 
-            if (keyword.equals(getString(R.string.notificationsModuleLabel))) {
-                activity = new Intent(ctx, Notifications.class);
-                startActivityForResult(activity, Constants.NOTIFICATIONS_REQUEST_CODE);
-            } else if (keyword.equals(getString(R.string.testsModuleLabel))) {
-                activity = new Intent(ctx, Tests.class);
-                startActivityForResult(activity, Constants.TESTS_REQUEST_CODE);
-            } else if (keyword.equals(getString(R.string.messagesModuleLabel))) {
-                activity = new Intent(ctx, Messages.class);
-                activity.putExtra("eventCode", Long.valueOf(0));
-                startActivityForResult(activity, Constants.MESSAGES_REQUEST_CODE);
-            } else if (keyword.equals(getString(R.string.noticesModuleLabel))) {
-                activity = new Intent(ctx, Notices.class);
-                startActivityForResult(activity, Constants.NOTICES_REQUEST_CODE);
-            } else if (keyword.equals(getString(R.string.rollcallModuleLabel))) {
-                if (Utils.connectionAvailable(ctx)) {
-                    activity = new Intent(ctx, Rollcall.class);
-                    startActivityForResult(activity, Constants.ROLLCALL_REQUEST_CODE);
-                } else {
-                    Toast.makeText(ctx, R.string.noConnectionMsg, Toast.LENGTH_LONG).show();
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition,
+                                        int childPosition, long id) {
+                // Get the item that was clicked
+                Object o = parent.getExpandableListAdapter().getChild(groupPosition, childPosition);
+                @SuppressWarnings("unchecked")
+                String keyword = (String) ((Map<String, Object>) o).get(NAME);
+                Intent activity;
+                Context ctx = getApplicationContext();
+
+                if (keyword.equals(getString(R.string.notificationsModuleLabel))) {
+                    activity = new Intent(ctx, Notifications.class);
+                    startActivityForResult(activity, Constants.NOTIFICATIONS_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.testsModuleLabel))) {
+                    activity = new Intent(ctx, Tests.class);
+                    startActivityForResult(activity, Constants.TESTS_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.messagesModuleLabel))) {
+                    activity = new Intent(ctx, Messages.class);
+                    activity.putExtra("eventCode", Long.valueOf(0));
+                    startActivityForResult(activity, Constants.MESSAGES_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.noticesModuleLabel))) {
+                    activity = new Intent(ctx, Notices.class);
+                    startActivityForResult(activity, Constants.NOTICES_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.rollcallModuleLabel))) {
+                    if (Utils.connectionAvailable(ctx)) {
+                        activity = new Intent(ctx, Rollcall.class);
+                        startActivityForResult(activity, Constants.ROLLCALL_REQUEST_CODE);
+                    } else {
+                        Toast.makeText(ctx, R.string.noConnectionMsg, Toast.LENGTH_LONG).show();
+                    }
+                } else if (keyword.equals(getString(R.string.generateQRModuleLabel))) {
+                    activity = new Intent(ctx, GenerateQR.class);
+                    startActivityForResult(activity, Constants.GENERATE_QR_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.manageLocation))) {
+                    activity = new Intent(ctx, IndoorLocation.class);
+                    startActivityForResult(activity, Constants.MANAGE_LOCATION);
+                } else if (keyword.equals(getString(R.string.documentsDownloadModuleLabel))) {
+                    activity = new Intent(ctx, DownloadsManager.class);
+                    activity.putExtra("downloadsAreaCode", Constants.DOCUMENTS_AREA_CODE);
+                    startActivityForResult(activity, Constants.DOWNLOADSMANAGER_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.sharedsDownloadModuleLabel))) {
+                    activity = new Intent(ctx, DownloadsManager.class);
+                    activity.putExtra("downloadsAreaCode", Constants.SHARE_AREA_CODE);
+                    startActivityForResult(activity, Constants.DOWNLOADSMANAGER_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.marksModuleLabel))) {
+                    activity = new Intent(ctx, DownloadsManager.class);
+                    activity.putExtra("downloadsAreaCode", Constants.MARKS_AREA_CODE);
+                    startActivityForResult(activity, Constants.DOWNLOADSMANAGER_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.myGroupsModuleLabel))) {
+                    activity = new Intent(ctx, MyGroupsManager.class);
+                    activity.putExtra("courseCode", Courses.getSelectedCourseCode());
+                    startActivityForResult(activity, Constants.MYGROUPSMANAGER_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.introductionModuleLabel))) {
+                    activity = new Intent(ctx, Information.class);
+                    activity.putExtra("requestCode", Constants.INTRODUCTION_REQUEST_CODE);
+                    startActivityForResult(activity, Constants.INTRODUCTION_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.faqsModuleLabel))) {
+                    activity = new Intent(ctx, Information.class);
+                    activity.putExtra("requestCode", Constants.FAQS_REQUEST_CODE);
+                    startActivityForResult(activity, Constants.FAQS_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.bibliographyModuleLabel))) {
+                    activity = new Intent(ctx, Information.class);
+                    activity.putExtra("requestCode", Constants.BIBLIOGRAPHY_REQUEST_CODE);
+                    startActivityForResult(activity, Constants.BIBLIOGRAPHY_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.syllabusPracticalsModuleLabel))) {
+                    activity = new Intent(ctx, Information.class);
+                    activity.putExtra("requestCode", Constants.SYLLABUSPRACTICALS_REQUEST_CODE);
+                    startActivityForResult(activity, Constants.SYLLABUSPRACTICALS_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.syllabusLecturesModuleLabel))) {
+                    activity = new Intent(ctx, Information.class);
+                    activity.putExtra("requestCode", Constants.SYLLABUSLECTURES_REQUEST_CODE);
+                    startActivityForResult(activity, Constants.SYLLABUSLECTURES_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.linksModuleLabel))) {
+                    activity = new Intent(ctx, Information.class);
+                    activity.putExtra("requestCode", Constants.LINKS_REQUEST_CODE);
+                    startActivityForResult(activity, Constants.LINKS_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.teachingguideModuleLabel))) {
+                    activity = new Intent(ctx, Information.class);
+                    activity.putExtra("requestCode", Constants.TEACHINGGUIDE_REQUEST_CODE);
+                    startActivityForResult(activity, Constants.TEACHINGGUIDE_REQUEST_CODE);
+                } else if (keyword.equals(getString(R.string.assessmentModuleLabel))) {
+                    activity = new Intent(ctx, Information.class);
+                    activity.putExtra("requestCode", Constants.ASSESSMENT_REQUEST_CODE);
+                    startActivityForResult(activity, Constants.ASSESSMENT_REQUEST_CODE);
                 }
-            } else if (keyword.equals(getString(R.string.generateQRModuleLabel))) {
-                activity = new Intent(ctx, GenerateQR.class);
-                startActivityForResult(activity, Constants.GENERATE_QR_REQUEST_CODE);
-            } else if (keyword.equals(getString(R.string.manageLocation))) {
-                activity = new Intent(ctx, IndoorLocation.class);
-                startActivityForResult(activity, Constants.MANAGE_LOCATION);
-            } else if (keyword.equals(getString(R.string.documentsDownloadModuleLabel))) {
-                activity = new Intent(ctx, DownloadsManager.class);
-                activity.putExtra("downloadsAreaCode", Constants.DOCUMENTS_AREA_CODE);
-                startActivityForResult(activity, Constants.DOWNLOADSMANAGER_REQUEST_CODE);
-            } else if (keyword.equals(getString(R.string.sharedsDownloadModuleLabel))) {
-                activity = new Intent(ctx, DownloadsManager.class);
-                activity.putExtra("downloadsAreaCode", Constants.SHARE_AREA_CODE);
-                startActivityForResult(activity, Constants.DOWNLOADSMANAGER_REQUEST_CODE);
-            } else if (keyword.equals(getString(R.string.marksModuleLabel))) {
-                activity = new Intent(ctx, DownloadsManager.class);
-                activity.putExtra("downloadsAreaCode", Constants.MARKS_AREA_CODE);
-                startActivityForResult(activity, Constants.DOWNLOADSMANAGER_REQUEST_CODE);
-            } else if (keyword.equals(getString(R.string.myGroupsModuleLabel))) {
-                activity = new Intent(ctx, MyGroupsManager.class);
-                activity.putExtra("courseCode", Courses.getSelectedCourseCode());
-                startActivityForResult(activity, Constants.MYGROUPSMANAGER_REQUEST_CODE);
-            } else if (keyword.equals(getString(R.string.introductionModuleLabel))) {
-                activity = new Intent(ctx, Information.class);
-                activity.putExtra("requestCode", Constants.INTRODUCTION_REQUEST_CODE);
-                startActivityForResult(activity, Constants.INTRODUCTION_REQUEST_CODE);
-            } else if (keyword.equals(getString(R.string.faqsModuleLabel))) {
-                activity = new Intent(ctx, Information.class);
-                activity.putExtra("requestCode", Constants.FAQS_REQUEST_CODE);
-                startActivityForResult(activity, Constants.FAQS_REQUEST_CODE);
-            } else if (keyword.equals(getString(R.string.bibliographyModuleLabel))) {
-                activity = new Intent(ctx, Information.class);
-                activity.putExtra("requestCode", Constants.BIBLIOGRAPHY_REQUEST_CODE);
-                startActivityForResult(activity, Constants.BIBLIOGRAPHY_REQUEST_CODE);
-            } else if (keyword.equals(getString(R.string.syllabusPracticalsModuleLabel))) {
-                activity = new Intent(ctx, Information.class);
-                activity.putExtra("requestCode", Constants.SYLLABUSPRACTICALS_REQUEST_CODE);
-                startActivityForResult(activity, Constants.SYLLABUSPRACTICALS_REQUEST_CODE);
-            } else if (keyword.equals(getString(R.string.syllabusLecturesModuleLabel))) {
-                activity = new Intent(ctx, Information.class);
-                activity.putExtra("requestCode", Constants.SYLLABUSLECTURES_REQUEST_CODE);
-                startActivityForResult(activity, Constants.SYLLABUSLECTURES_REQUEST_CODE);
-            } else if (keyword.equals(getString(R.string.linksModuleLabel))) {
-                activity = new Intent(ctx, Information.class);
-                activity.putExtra("requestCode", Constants.LINKS_REQUEST_CODE);
-                startActivityForResult(activity, Constants.LINKS_REQUEST_CODE);
-            } else if (keyword.equals(getString(R.string.teachingguideModuleLabel))) {
-                activity = new Intent(ctx, Information.class);
-                activity.putExtra("requestCode", Constants.TEACHINGGUIDE_REQUEST_CODE);
-                startActivityForResult(activity, Constants.TEACHINGGUIDE_REQUEST_CODE);
-            } else if (keyword.equals(getString(R.string.assessmentModuleLabel))) {
-                activity = new Intent(ctx, Information.class);
-                activity.putExtra("requestCode", Constants.ASSESSMENT_REQUEST_CODE);
-                startActivityForResult(activity, Constants.ASSESSMENT_REQUEST_CODE);
-            }
 
-            return true;
+                return true;
+            }
         };
 
         mExpandableListView.setOnChildClickListener(mExpandableClickListener);
@@ -754,9 +787,9 @@ public class SWADMain extends MenuExpandableListActivity {
     }
 
     private void loadCourses() {
-        listCourses = courseDao.findAllOrderedByShortNameAsc();
+        listCourses = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_COURSES, "", "shortName");
         if (!listCourses.isEmpty()) {
-            Course c = listCourses.get(0);
+            Course c = (Course) listCourses.get(0);
 
             Courses.setSelectedCourseCode(c.getId());
             Courses.setSelectedCourseShortName(c.getShortName());

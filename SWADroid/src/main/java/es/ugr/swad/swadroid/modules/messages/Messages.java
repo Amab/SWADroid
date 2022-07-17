@@ -18,9 +18,11 @@
  */
 package es.ugr.swad.swadroid.modules.messages;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
+import androidx.appcompat.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -34,8 +36,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
-
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.ksoap2.serialization.SoapObject;
@@ -43,11 +43,10 @@ import org.ksoap2.serialization.SoapObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
-import java.util.stream.Collectors;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.dao.FrequentUserDao;
+import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.ImageFactory;
 import es.ugr.swad.swadroid.gui.ProgressScreen;
 import es.ugr.swad.swadroid.model.FrequentUser;
@@ -62,7 +61,7 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
  * Module for send messages.
  * @see <a href="https://openswad.org/ws/#sendMessage">sendMessage</a>
  *
- * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  * @author Jose Antonio Guerrero Aviles <cany20@gmail.com>
  * @author Rubén Martín Hidalgo <rubenmartin1991@gmail.com>
@@ -101,7 +100,7 @@ public class Messages extends Module {
     /**
      * Array of receivers
      */
-    private List<UserFilter> arrayReceivers;
+    private ArrayList<UserFilter> arrayReceivers;
     /**
      * Message's subject
      */
@@ -158,11 +157,6 @@ public class Messages extends Module {
      * User logged identifier
      */
     private String userLogged;
-    /**
-     * Data Access Object for FrequentUser table
-     *
-     */
-    private FrequentUserDao frequentUserDao;
 
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
@@ -171,12 +165,9 @@ public class Messages extends Module {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Initialize DAOs
-        frequentUserDao = db.getFrequentUserDao();
-
         receivers = "";
         receiversNames = "";
-        arrayReceivers = new ArrayList<>();
+        arrayReceivers = new ArrayList<UserFilter>();
         sender = "";
 
         userLogged = Login.getLoggedUser().getUserID();
@@ -186,16 +177,16 @@ public class Messages extends Module {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        subjEditText = findViewById(R.id.message_subject_text);
-        bodyEditText = findViewById(R.id.message_body_text);
+        subjEditText = (EditText) findViewById(R.id.message_subject_text);
+        bodyEditText = (EditText) findViewById(R.id.message_body_text);
 
         if (savedInstanceState != null)
             writeData();
 
-        layout = findViewById(R.id.layout_receivers);
+        layout = (ViewGroup) findViewById(R.id.layout_receivers);
 
-        messageLayout = findViewById(R.id.message_screen);
-        View mMessageView = messageLayout;
+        messageLayout = (LinearLayout) findViewById(R.id.message_screen);
+        View mMessageView = findViewById(R.id.message_screen);
         View mProgressScreenView = findViewById(R.id.progress_screen);
         progressLayout = new ProgressScreen(mProgressScreenView, mMessageView,
                 getString(R.string.sendingMessageMsg), this);
@@ -205,7 +196,7 @@ public class Messages extends Module {
 
         eventCode = getIntent().getLongExtra("eventCode", 0);
         if (eventCode != 0) { //is a reply message
-            subjEditText.setText(String.format("Re: %s", getIntent().getStringExtra("summary")));
+            subjEditText.setText("Re: " + getIntent().getStringExtra("summary"));
             sender = getIntent().getStringExtra("sender");
             senderPhoto = getIntent().getStringExtra("photo");
             setTitle(getResources().getString(R.string.replyModuleLabel));
@@ -213,21 +204,26 @@ public class Messages extends Module {
             showSenderReplyMessage();
         }
 
-        final ImageButton button = findViewById(R.id.action_addUser);
-        button.setOnClickListener(v -> {
-            Intent intent = new Intent (Messages.this, SearchUsers.class);
-            intent.putExtra("receivers", (ArrayList) arrayReceivers);
-            intent.putExtra("senderName", sender);
-            intent.putExtra("senderPhoto", senderPhoto);
-            startActivityForResult(intent, Constants.SEARCH_USERS_REQUEST_CODE);
+        final ImageButton button = (ImageButton) findViewById(R.id.action_addUser);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent (Messages.this, SearchUsers.class);
+                intent.putExtra("receivers", arrayReceivers);
+                intent.putExtra("senderName", sender);
+                intent.putExtra("senderPhoto", senderPhoto);
+                startActivityForResult(intent, Constants.SEARCH_USERS_REQUEST_CODE);
+            }
         });
 
         showAll = false;
-        seeAll = findViewById(R.id.see_more_receivers);
+        seeAll = (TextView) findViewById(R.id.see_more_receivers);
         seeAll.setPaintFlags(seeAll.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        seeAll.setOnClickListener(view -> {
-            showAll = !showAll;
-            showReceivers();
+        seeAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showAll = !showAll;
+                showReceivers();
+            }
         });
         seeAll.setText(getResources().getString(R.string.see_all));
 
@@ -267,7 +263,7 @@ public class Messages extends Module {
         readData();
         addFootBody();
         receivers = "";
-        for(int i = 0; i< arrayReceivers.size(); i++)
+        for(int i=0; i<arrayReceivers.size(); i++)
             receivers += "@" + arrayReceivers.get(i).getUserNickname() + ",";
 
         createRequest(SOAPClient.CLIENT_TYPE);
@@ -279,23 +275,26 @@ public class Messages extends Module {
         sendRequest(User.class, false);
 
         if (result != null) { //if there is result
-            ArrayList<?> res = new ArrayList<>((Vector<?>) result);
+            ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
             SoapObject soap = (SoapObject) res.get(1);
             int csSize = soap.getPropertyCount();
-            StringBuilder receiversNamesBuilder = new StringBuilder();
             receiversNames = "";
             for (int i = 0; i < csSize; i++) {
                 SoapObject pii = (SoapObject) soap.getProperty(i);
                 String firstname = pii.getPrimitiveProperty("userFirstname").toString();
                 String surname1 = pii.getPrimitiveProperty("userSurname1").toString();
                 String surname2 = pii.getPrimitiveProperty("userSurname2").toString();
-                receiversNamesBuilder.append(firstname).append(" ").append(surname1);
-                if (!surname2.isEmpty())
-                    receiversNamesBuilder.append(" ").append(surname2);
-                if (i != csSize - 1) {
-                    receiversNamesBuilder.append(",\n");
+                if (i == csSize-1) {
+                    receiversNames += firstname + " " + surname1;
+                    if (!surname2.isEmpty())
+                        receiversNames += " " + surname2;
                 }
-                receiversNames = receiversNamesBuilder.toString();
+                else {
+                    receiversNames += firstname + " " + surname1;
+                    if (!surname2.isEmpty())
+                        receiversNames += " " + surname2;
+                    receiversNames += ",\n";
+                }
             }
         }
 
@@ -322,27 +321,25 @@ public class Messages extends Module {
         String nickname;
 
         //get data of frequent users
-        frequentsList = frequentUserDao.findByUserByIdUser(userLogged);
+        frequentsList = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS, "idUser='" + userLogged + "'", "");
 
         //modify data in memory
         for(int i=0; i < frequentsList.size(); i++){
             nickname = frequentsList.get(i).getUserNickname();
-            for(int j = 0; j < arrayReceivers.size(); j++){
+            for(int j=0; j < arrayReceivers.size(); j++){
                 if(nickname.equals(arrayReceivers.get(j).getUserNickname())){
                     frequent = true;
                     score = frequentsList.get(i).getScore() * INCREASE_FACTOR;
 
                     if(score > MAX_SCORE)
                         score = MAX_SCORE;
-
                     frequentsList.get(i).setScore(score);
                     arrayReceivers.remove(j);
                     j = arrayReceivers.size();
-
                     Log.d(TAG, "frequent user '" + nickname + "' updated, score = " + score);
                 }
             }
-            if(!frequent){
+            if(frequent == false){
                 score = frequentsList.get(i).getScore() * DECREASE_FACTOR;
                 if(score < MIN_SCORE) {
                     frequentsList.remove(i);
@@ -355,16 +352,20 @@ public class Messages extends Module {
             frequent = false;
         }
 
-        for(int i = 0; i < arrayReceivers.size(); i++){
-            frequentsList.add(new FrequentUser(i, userLogged, arrayReceivers.get(i).getUserNickname(), arrayReceivers.get(i).getUserSurname1(), arrayReceivers.get(i).getUserSurname2(), arrayReceivers.get(i).getUserFirstname(), arrayReceivers.get(i).getUserPhoto(), arrayReceivers.get(i).getUserCode(), false, INITIAL_SCORE));
-            Log.d(TAG, "Frequent user '" + arrayReceivers.get(i).getUserNickname() + "' added = " + INITIAL_SCORE + " (sender = '" + userLogged + "')");
+        for(int i=0; i < arrayReceivers.size(); i++){
+            frequentsList.add(new FrequentUser(userLogged, arrayReceivers.get(i).getUserNickname(), arrayReceivers.get(i).getUserSurname1(), arrayReceivers.get(i).getUserSurname2(), arrayReceivers.get(i).getUserFirstname(), arrayReceivers.get(i).getUserPhoto(), arrayReceivers.get(i).getUserCode(), false, INITIAL_SCORE));
+            Log.d(TAG, "frequent user '" + arrayReceivers.get(i).getUserNickname() + "' added = " + INITIAL_SCORE + " (sender = '" + userLogged + "')");
         }
 
-        //delete frequent recipients of user logged;
-        frequentUserDao.deleteById(userLogged);
+        dbHelper.beginTransaction();
+
+        //delete frequent recipients of user logged
+        dbHelper.removeAllRows(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS, "idUser='" + userLogged + "'");
 
         //insert new data in data base
-        frequentUserDao.insertUsers(frequentsList);
+        dbHelper.insertFrequentsList(frequentsList);
+
+        dbHelper.endTransaction(true);
 
         progressLayout.hide();
         String messageSent = getString(R.string.messageSentMsg) + ":\n" + receiversNames;
@@ -377,7 +378,7 @@ public class Messages extends Module {
      */
     @Override
     protected void onError() {
-        // No-op
+
     }
 
     @Override
@@ -421,8 +422,13 @@ public class Messages extends Module {
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
     	if (data != null) {
     		arrayReceivers = (ArrayList) data.getSerializableExtra("receivers");
-            receivers = arrayReceivers.stream().map(UserFilter::getUserNickname).collect(Collectors.joining(","));
-            showAll = arrayReceivers.size() > 3;
+            receivers = "";
+            for(int i=0; i<arrayReceivers.size(); i++){
+                receivers += arrayReceivers.get(i) + ",";
+            }
+
+            if(arrayReceivers.size() <= 3)
+                showAll = false;
 
     		writeData();
             showReceivers();
@@ -473,34 +479,47 @@ public class Messages extends Module {
         builder.setTitle(R.string.areYouSure);
         builder.setMessage(R.string.cancelSendMessage);
 
-        builder.setNegativeButton(getString(R.string.cancelMsg), (dialog, which) -> {
+        builder.setNegativeButton(getString(R.string.cancelMsg), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+            }
         });
 
-        builder.setPositiveButton(getString(R.string.acceptMsg), (dialog, which) -> finish());
+        builder.setPositiveButton(getString(R.string.acceptMsg), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
 
         AlertDialog alert = builder.create();
         alert.show();
     }
 
-    private void showDeleteDialog(final TextView textNickname, String textName){
+    private void showDeleteDialog(final View linearLayout, final TextView textNickname, String textName){
         AlertDialog.Builder builder = new AlertDialog.Builder(Messages.this);
         builder.setTitle(R.string.areYouSure);
         String dialog = getResources().getString(R.string.cancelRemoveReceivers);
         dialog = dialog.replaceAll("#nameUser#", textName);
         builder.setMessage(dialog);
 
-        builder.setNegativeButton(getString(R.string.cancelMsg), (dialog1, which) -> {
+        builder.setNegativeButton(getString(R.string.cancelMsg), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+            }
         });
 
-        builder.setPositiveButton(getString(R.string.acceptMsg), (dialog12, which) -> {
-            arrayReceivers = arrayReceivers.stream().filter(u -> !u.getUserNickname().equals(textNickname.getText().toString())).collect(Collectors.toList());
+        builder.setPositiveButton(getString(R.string.acceptMsg), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                for(int i=0; i<arrayReceivers.size(); i++) {
+                    if (arrayReceivers.get(i).getUserNickname().equals(textNickname.getText().toString()))
+                        arrayReceivers.remove(i);
+                }
 
-            if(arrayReceivers.size() <= 3){
-                seeAll.setVisibility(View.GONE);
-                showAll = false;
+                if(arrayReceivers.size() <= 3){
+                    seeAll.setVisibility(View.GONE);
+                    showAll = false;
+                }
+
+                showReceivers();
             }
-
-            showReceivers();
         });
 
         AlertDialog alert = builder.create();
@@ -511,10 +530,10 @@ public class Messages extends Module {
         LayoutInflater inflater = LayoutInflater.from(this);
         final View linearLayout = inflater.inflate(R.layout.receivers_item, null, false);
 
-        final TextView textName = linearLayout.findViewById(R.id.textName);
-        textName.setText(String.format("%s (%s)", sender, getResources().getString(R.string.primaryReceiver)));
+        final TextView textName = (TextView) linearLayout.findViewById(R.id.textName);
+        textName.setText(sender + " (" + getResources().getString(R.string.primaryReceiver) + ")");
 
-        ImageView photo = linearLayout.findViewById(R.id.imageView);
+        ImageView photo = (ImageView) linearLayout.findViewById(R.id.imageView);
         String userPhoto = senderPhoto;
         if (Utils.connectionAvailable(this)
                 && (userPhoto != null) && !userPhoto.equals("")
@@ -540,7 +559,7 @@ public class Messages extends Module {
         layout.removeAllViewsInLayout();
         layout.setVisibility(View.GONE);
 
-        if(!sender.equals("")){ // add the sender of reply message to receivers list
+        if(sender != ""){ // add the sender of reply message to receivers list
             layout.setVisibility(View.VISIBLE);
             showSenderReplyMessage();
         }
@@ -566,13 +585,15 @@ public class Messages extends Module {
             LayoutInflater inflater = LayoutInflater.from(this);
             final View linearLayout = inflater.inflate(R.layout.receivers_item, null, false);
 
-            final TextView textName = linearLayout.findViewById(R.id.textName);
-            textName.setText(String.format("%s %s %s", arrayReceivers.get(i).getUserFirstname(), arrayReceivers.get(i).getUserSurname1(), arrayReceivers.get(i).getUserSurname2()));
+            final TextView textName = (TextView) linearLayout.findViewById(R.id.textName);
+            textName.setText(arrayReceivers.get(i).getUserFirstname() + " "
+                            + arrayReceivers.get(i).getUserSurname1() + " "
+                            + arrayReceivers.get(i).getUserSurname2());
 
-            final TextView textNickname = linearLayout.findViewById(R.id.textNickname);
+            final TextView textNickname = (TextView) linearLayout.findViewById(R.id.textNickname);
             textNickname.setText(arrayReceivers.get(i).getUserNickname());
 
-            ImageView photo = linearLayout.findViewById(R.id.imageView);
+            ImageView photo = (ImageView) linearLayout.findViewById(R.id.imageView);
             String userPhoto = arrayReceivers.get(i).getUserPhoto();
             if (Utils.connectionAvailable(this)
                     && (userPhoto != null) && !userPhoto.equals("")
@@ -588,8 +609,12 @@ public class Messages extends Module {
 
             layout.addView(linearLayout);
 
-            ImageButton button = linearLayout.findViewById(R.id.buttonDelete);
-            button.setOnClickListener(view -> showDeleteDialog(textNickname, textName.getText().toString()));
+            ImageButton button = (ImageButton)linearLayout.findViewById(R.id.buttonDelete);
+            button.setOnClickListener( new View.OnClickListener() {
+                public void onClick(View view){
+                    showDeleteDialog(linearLayout, textNickname, textName.getText().toString());
+                }
+            });
             i++;
         }
     }

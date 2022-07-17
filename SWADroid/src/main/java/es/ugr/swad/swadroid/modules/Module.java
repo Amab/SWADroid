@@ -58,7 +58,7 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
 /**
  * Superclass for encapsulate common behavior of all modules.
  * 
- * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public abstract class Module extends MenuActivity {
     /**
@@ -249,7 +249,7 @@ public abstract class Module extends MenuActivity {
                 webserviceClient = new SOAPClient();
             }
 
-            webserviceClient.setMethodName(METHOD_NAME);
+            webserviceClient.setMETHOD_NAME(METHOD_NAME);
         }
 
         webserviceClient.createRequest();
@@ -399,6 +399,11 @@ public abstract class Module extends MenuActivity {
                 // Request finalized with errors
                 error(errorMsg, e);
                 setResult(RESULT_CANCELED);
+
+                // Launch database rollback
+                if (dbHelper.isDbInTransaction()) {
+                    dbHelper.endTransaction(false);
+                }
 
                 onError();
             } else {

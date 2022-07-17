@@ -28,27 +28,22 @@ import android.widget.Toast;
 import org.ksoap2.serialization.SoapObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Vector;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.dao.EventDao;
-import es.ugr.swad.swadroid.dao.UserAttendanceDao;
-import es.ugr.swad.swadroid.dao.UserDao;
-import es.ugr.swad.swadroid.model.Event;
+import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.model.UserAttendance;
-import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.modules.login.Login;
+import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
  * Rollcall users download module.
  * @see <a href="https://openswad.org/ws/#getAttendanceUsers">getAttendanceUsers</a>
  *
- * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class UsersDownload extends Module {
     /**
@@ -59,18 +54,6 @@ public class UsersDownload extends Module {
      * Code of event associated to the users list
      */
     private int eventCode;
-    /**
-     * Database Access Object for User
-     */
-    private UserDao userDao;
-    /**
-     * Database Access Object for UserAttendance
-     */
-    private UserAttendanceDao userAttendanceDao;
-    /**
-     * Database Access Object for Event
-     */
-    private EventDao eventDao;
     /**
      * Rollcall Users Download tag name for Logcat
      */
@@ -84,11 +67,6 @@ public class UsersDownload extends Module {
         super.onCreate(savedInstanceState);
         setMETHOD_NAME("getAttendanceUsers");
         getSupportActionBar().hide();
-
-        //Initialize DAOs
-        userDao = db.getUserDao();
-        userAttendanceDao = db.getUserAttendanceDao();
-        eventDao = db.getEventDao();
     }
 
     @Override
@@ -109,9 +87,6 @@ public class UsersDownload extends Module {
 
     @Override
     protected void requestService() throws Exception {
-        List<User> usersList = new ArrayList<>();
-        List<UserAttendance> attendancesList = new ArrayList<>();
-
         // Creates webservice request, adds required params and sends request to webservice
         createRequest(SOAPClient.CLIENT_TYPE);
         addParam("wsKey", Login.getLoggedUser().getWsKey());
@@ -120,13 +95,15 @@ public class UsersDownload extends Module {
 
         if (result != null) {
             // Stores users data returned by webservice response
-            ArrayList<?> res = new ArrayList<>((Vector<?>) result);
+            ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
             SoapObject soap = (SoapObject) res.get(1);
             numUsers = soap.getPropertyCount();
 
             if(numUsers > 0) {
+                dbHelper.beginTransaction();
+
                 //Removes old attendances from database
-                userAttendanceDao.deleteAttendancesByEventCode(eventCode);
+                dbHelper.removeAllRows(DataBaseHelper.DB_TABLE_USERS_ATTENDANCES, "eventCode", eventCode);
             }
             for (int i = 0; i < numUsers; i++) {
                 SoapObject pii = (SoapObject) soap.getProperty(i);
@@ -147,21 +124,18 @@ public class UsersDownload extends Module {
                 if (userFirstname.equalsIgnoreCase(Constants.NULL_VALUE)) userFirstname = "";
                 if (userPhoto.equalsIgnoreCase(Constants.NULL_VALUE)) userPhoto = "";
 
-                usersList.add(new User(userCode, null, userID, userNickname, userSurname1, userSurname2,
-                        userFirstname, userPhoto, "", 0));
+                //Inserts user data into database
+                dbHelper.insertUser(new User(userCode, null, userID, userNickname, userSurname1, userSurname2,
+                        userFirstname, userPhoto, null, 0));
 
                 //Inserts attendance data into database
-                attendancesList.add(new UserAttendance(userCode, eventCode, userPresent));
+                dbHelper.insertAttendance(userCode, eventCode, userPresent);
             }
 
-            //Inserts user data into database
-            userDao.insertUsers(usersList);
-
-            //Inserts attendance data into database
-            userAttendanceDao.insertAttendances(attendancesList);
+            dbHelper.endTransaction(true);
 
             Log.i(TAG, "Retrieved " + numUsers + " users");
-        }
+        }    // end if (result != null)
 
         // Request finalized without errors
         setResult(RESULT_OK);
@@ -183,16 +157,13 @@ public class UsersDownload extends Module {
             Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
         }
 
-        Event event = eventDao.findById(eventCode);
-        event.setStatus("OK");
-        eventDao.updateEvents(Collections.singletonList(event));
+        dbHelper.updateEventStatus(eventCode, "OK");
 
         finish();
     }
 
     @Override
     protected void onError() {
-        // No-op
     }
 
 }

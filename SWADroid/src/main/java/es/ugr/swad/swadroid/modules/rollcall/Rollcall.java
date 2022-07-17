@@ -21,11 +21,13 @@ package es.ugr.swad.swadroid.modules.rollcall;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
@@ -33,13 +35,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import java.lang.ref.WeakReference;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.dao.EventDao;
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.gui.ProgressScreen;
@@ -48,7 +47,7 @@ import es.ugr.swad.swadroid.modules.courses.Courses;
 /**
  * Rollcall module.
  *
- * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class Rollcall extends MenuExpandableListActivity implements
         SwipeRefreshLayout.OnRefreshListener {
@@ -57,10 +56,6 @@ public class Rollcall extends MenuExpandableListActivity implements
      * Rollcall tag name for Logcat
      */
     private static final String TAG = Constants.APP_TAG + " Rollcall";
-    /**
-     * Data Access Object for Event table
-     */
-    private EventDao eventDao;
     /**
      * ListView of events
      */
@@ -73,10 +68,10 @@ public class Rollcall extends MenuExpandableListActivity implements
     private final Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
-            /*
-             * Database cursor for Adapter of events
-             */
-            Cursor dbCursor = eventDao.findAllByCourseCodeCursor(Courses.getSelectedCourseCode());
+      /*
+    Database cursor for Adapter of events
+   */
+            Cursor dbCursor = dbHelper.getEventsCourseCursor(Courses.getSelectedCourseCode());
             startManagingCursor(dbCursor);
 
 
@@ -98,7 +93,7 @@ public class Rollcall extends MenuExpandableListActivity implements
                 lvEvents.setVisibility(View.VISIBLE);
             }
 
-            adapter = new EventsCursorAdapter(getBaseContext(), dbCursor);
+            adapter = new EventsCursorAdapter(getBaseContext(), dbCursor, dbHelper);
             lvEvents.setAdapter(adapter);
 
             mProgressScreen.hide();
@@ -119,12 +114,15 @@ public class Rollcall extends MenuExpandableListActivity implements
     /**
      * ListView click listener
      */
-    private final AdapterView.OnItemClickListener clickListener = (AdapterView<?> parent, View view, int position, long id) -> {
+    private ListView.OnItemClickListener clickListener = new ListView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Intent activity = new Intent(getApplicationContext(),
                     UsersActivity.class);
             activity.putExtra("attendanceEventCode",
                     (int) adapter.getItemId(position));
             startActivity(activity);
+        }
     };
 
     /* (non-Javadoc)
@@ -148,7 +146,6 @@ public class Rollcall extends MenuExpandableListActivity implements
         lvEvents.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView absListView, int scrollState) {
-                //No-op
             }
 
             @Override
@@ -268,12 +265,18 @@ public class Rollcall extends MenuExpandableListActivity implements
                     R.string.yesMsg,
                     R.string.noMsg,
                     true,
-                    (dialog, id) -> {
-                        dialog.cancel();
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
 
-                        updateEvents();
+                            updateEvents();
+                        }
                     },
-                    (dialog, id) -> dialog.cancel(),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    },
                     null);
 
             cleanEventsDialog.show();

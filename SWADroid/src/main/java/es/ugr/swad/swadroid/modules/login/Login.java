@@ -40,7 +40,7 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
  * Login module for connect to SWAD.
  * @see <a href="https://openswad.org/ws/#loginByUserPasswordKey">loginByUserPasswordKey</a>
  *
- * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  */
 public class Login extends Module {

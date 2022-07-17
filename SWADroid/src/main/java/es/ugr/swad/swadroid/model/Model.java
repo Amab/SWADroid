@@ -18,29 +18,75 @@
  */
 package es.ugr.swad.swadroid.model;
 
-import androidx.room.PrimaryKey;
-
 import org.ksoap2.serialization.KvmSerializable;
-
-import lombok.Data;
 
 /**
  * Superclass for encapsulate common behavior of all Models.
  *
- * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
-@Data
 public abstract class Model implements KvmSerializable {
     /**
      * Model identifier
      */
-    @PrimaryKey
-    protected long id;
+    private long id;
+
+    Model(long id) {
+        super();
+        this.id = id;
+    }
 
     protected Model() {
     }
 
-    protected Model(long id) {
+    /**
+     * Gets model identifier
+     *
+     * @return Model identifier
+     */
+    public long getId() {
+        return id;
+    }
+
+    /**
+     * Sets model identifier
+     *
+     * @param id Model identifier
+     */
+    void setId(long id) {
         this.id = id;
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (int) (id ^ (id >>> 32));
+        return result;
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Model other = (Model) obj;
+        return id == other.id;
+    }
+
+    @Override
+    public String toString() {
+        return "Model{" +
+                "id=" + id +
+                '}';
     }
 }

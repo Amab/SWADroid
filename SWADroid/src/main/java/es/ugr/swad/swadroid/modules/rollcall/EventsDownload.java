@@ -28,16 +28,14 @@ import org.ksoap2.serialization.SoapObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.dao.EventDao;
+import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.model.Event;
-import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.modules.courses.Courses;
 import es.ugr.swad.swadroid.modules.login.Login;
+import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
@@ -45,7 +43,7 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
  * Rollcall events download module.
  * @see <a href="https://openswad.org/ws/#getAttendanceEvents">getAttendanceEvents</a>
  *
- * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class EventsDownload extends Module {
     /**
@@ -56,10 +54,6 @@ public class EventsDownload extends Module {
      * List of downloaded event codes
      */
     private List<Long> eventCodes;
-    /**
-     * Data Access Object for Event table
-     */
-    private EventDao eventDao;
     /**
      * Rollcall Events Download tag name for Logcat
      */
@@ -73,9 +67,6 @@ public class EventsDownload extends Module {
         super.onCreate(savedInstanceState);
         setMETHOD_NAME("getAttendanceEvents");
         getSupportActionBar().hide();
-
-        //Initialize DAOs
-        eventDao = db.getEventDao();
     }
 
     @Override
@@ -84,7 +75,7 @@ public class EventsDownload extends Module {
         
         try {
             if (isDebuggable) {
-                Log.d(TAG, "selectedCourseCode = " + Courses.getSelectedCourseCode());
+                Log.d(TAG, "selectedCourseCode = " + Long.toString(Courses.getSelectedCourseCode()));
             }
             runConnection();
         } catch (Exception e) {
@@ -95,7 +86,6 @@ public class EventsDownload extends Module {
 
     @Override
     protected void requestService() throws Exception {
-        List<Event> eventsList = new ArrayList<>();
         long courseCode = Courses.getSelectedCourseCode();
 
         // Creates webservice request, adds required params and sends request to webservice
@@ -106,7 +96,7 @@ public class EventsDownload extends Module {
 
         if (result != null) {
             // Stores events data returned by webservice response
-            ArrayList<?> res = new ArrayList<>((Vector<?>) result);
+            ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
             SoapObject soap = (SoapObject) res.get(1);
             numEvents = soap.getPropertyCount();
             eventCodes = new ArrayList<>();
@@ -135,22 +125,22 @@ public class EventsDownload extends Module {
                 if (title.equalsIgnoreCase(Constants.NULL_VALUE)) title = "";
                 if (text.equalsIgnoreCase(Constants.NULL_VALUE)) text = "";
 
-                eventsList.add(new Event(attendanceEventCode, courseCode, hidden, userSurname1,
+                //Inserts or updates event into database
+                dbHelper.insertEvent(new Event(attendanceEventCode, hidden, userSurname1,
                         userSurname2, userFirstName, userPhoto, startTime, endTime,
                         commentsTeachersVisible, title, text, groups));
+
+                dbHelper.insertEventCourse(attendanceEventCode, courseCode);
 
                 //Add eventCode to the new events list
                 eventCodes.add(attendanceEventCode);
             }
 
-            //Inserts or updates event into database
-            eventDao.insertEvents(eventsList);
-
             //Removes old events not listed in eventCodes
             removeOldEvents();
 
             Log.i(TAG, "Retrieved " + numEvents + " events");
-        }
+        }    // end if (result != null)
 
         // Request finalized without errors
         setResult(RESULT_OK);
@@ -168,7 +158,7 @@ public class EventsDownload extends Module {
         if (numEvents == 0) {
             Toast.makeText(this, R.string.noEventsAvailableMsg, Toast.LENGTH_LONG).show();
         } else {
-            String msg = numEvents + " " + getResources().getString(R.string.eventsUpdated);
+            String msg = String.valueOf(numEvents) + " " + getResources().getString(R.string.eventsUpdated);
             Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
         }
         finish();
@@ -176,19 +166,23 @@ public class EventsDownload extends Module {
 
     @Override
     protected void onError() {
-        // No-op
+
     }
 
     private void removeOldEvents() {
-        List<Event> dbEvents = eventDao.findAllByCourseCode(Courses.getSelectedCourseCode());
-        Stream<Event> eventsStream;
-        long deletedEventsCount = 0;
+        List<Event> dbEvents = dbHelper.getEventsCourse(Courses.getSelectedCourseCode());
+        int nEventsRemoved = 0;
 
-        if((dbEvents != null) && (!dbEvents.isEmpty())) {
-            eventsStream = dbEvents.stream().filter(e -> !eventCodes.contains(e.getId()));
-            deletedEventsCount = eventDao.deleteEvents(eventsStream.collect(Collectors.toList()));
+        if((dbEvents != null) && (dbEvents.size() > 0)) {
+            for (Event e : dbEvents) {
+                if (!eventCodes.contains(e.getId())) {
+                    dbHelper.removeAllRows(DataBaseHelper.DB_TABLE_EVENTS_COURSES, "eventCode", e.getId());
+                    dbHelper.removeAllRows(DataBaseHelper.DB_TABLE_EVENTS_ATTENDANCES, "id", e.getId());
+                    nEventsRemoved++;
+                }
+            }
         }
 
-        Log.i(TAG, "Removed " + deletedEventsCount + " events");
+        Log.i(TAG, "Removed " + nEventsRemoved + " events");
     }
 }

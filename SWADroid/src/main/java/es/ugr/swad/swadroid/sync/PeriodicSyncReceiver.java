@@ -30,7 +30,7 @@ import es.ugr.swad.swadroid.Constants;
 /**
  * Class for launch a periodic sync request
  *
- * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public final class PeriodicSyncReceiver extends BroadcastReceiver {
 

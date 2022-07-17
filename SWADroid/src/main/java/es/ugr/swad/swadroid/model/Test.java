@@ -18,24 +18,26 @@
  */
 package es.ugr.swad.swadroid.model;
 
+import org.ksoap2.serialization.PropertyInfo;
+
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.StringTokenizer;
 
 import es.ugr.swad.swadroid.utils.Utils;
-import lombok.Data;
 
 /**
  * Class for store a test
  *
- * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
-@Data
-public class Test {
+public class Test extends Model {
     /**
      * Correct answer score
      */
-    private static final float CORRECT_ANSWER_SCORE = 1;
+    private final float CORRECT_ANSWER_SCORE = 1;
     /**
      * None feedback
      */
@@ -61,13 +63,29 @@ public class Test {
      */
     public static final List<String> FEEDBACK_VALUES = Arrays.asList(FEEDBACK_NONE, FEEDBACK_MIN, FEEDBACK_MEDIUM, FEEDBACK_HIGH, FEEDBACK_MAX);
     /**
-     * Test config
-     */
-    private final TestConfig testConfig;
-    /**
      * List of questions and related answers
      */
-    private List<TestAnswersQuestion> answersQuestions;
+    private List<TestQuestion> questions;
+    /**
+     * Minimum questions in test
+     */
+    private int min;
+    /**
+     * Default questions in test
+     */
+    private int def;
+    /**
+     * Maximum questions in test
+     */
+    private int max;
+    /**
+     * Feedback to be showed to the student
+     */
+    private String feedback;
+    /**
+     * Last time test was updated
+     */
+    private Long editTime;
     /**
      * Total test's score
      */
@@ -80,10 +98,51 @@ public class Test {
      * Flag for check if the test has been evaluated
      */
     private boolean evaluated;
+    private static final PropertyInfo PI_min = new PropertyInfo();
+    private static final PropertyInfo PI_def = new PropertyInfo();
+    private static final PropertyInfo PI_max = new PropertyInfo();
+    private static final PropertyInfo PI_feedback = new PropertyInfo();
+    @SuppressWarnings("unused")
+    private static PropertyInfo[] PI_PROP_ARRAY =
+            {
+                    PI_min,
+                    PI_def,
+                    PI_max,
+                    PI_feedback
+            };
 
-    public Test(TestConfig testConfig, List<TestAnswersQuestion> answersQuestions) {
-        this.testConfig = testConfig;
-        this.answersQuestions = answersQuestions;
+    /**
+     * Constructor from fields
+     *
+     * @param selectedCourseCode Code of test's course
+     * @param min                Minimum questions in test
+     * @param def                Default questions in test
+     * @param max                Maximum questions in test
+     * @param feedback           Feedback to be showed to the student
+     */
+    public Test(long selectedCourseCode, int min, int def, int max, String feedback) {
+        super(selectedCourseCode);
+        this.min = min;
+        this.def = def;
+        this.max = max;
+        this.feedback = feedback;
+        this.totalScore = 0;
+        this.questionsScore = new ArrayList<>();
+    }
+
+    /**
+     * Constructor from fields
+     *
+     * @param crsCode  Code of test's course
+     * @param min      Minimum questions in test
+     * @param def      Default questions in test
+     * @param max      Maximum questions in test
+     * @param feedback Feedback to be showed to the student
+     * @param editTime Last time test was updated
+     */
+    public Test(long crsCode, int min, int def, int max, String feedback, Long editTime) {
+        this(crsCode, min, def, max, feedback);
+        this.editTime = editTime;
     }
 
     /**
@@ -92,8 +151,116 @@ public class Test {
      * @param i Question's position
      * @return A pair of values <Question, List of answers>
      */
-    public TestAnswersQuestion getQuestionAndAnswers(int i) {
-        return answersQuestions.get(i);
+    public TestQuestion getQuestionAndAnswers(int i) {
+        return questions.get(i);
+    }
+
+    /**
+     * Gets minimum questions in test
+     *
+     * @return Minimum questions in test
+     */
+    public int getMin() {
+        return min;
+    }
+
+    /**
+     * Sets minimum questions in test
+     *
+     * @param min Minimum questions in test
+     */
+    public void setMin(int min) {
+        this.min = min;
+    }
+
+    /**
+     * Gets default questions in test
+     *
+     * @return Default questions in test
+     */
+    public int getDef() {
+        return def;
+    }
+
+    /**
+     * Sets default questions in test
+     *
+     * @param def Default questions in test
+     */
+    public void setDef(int def) {
+        this.def = def;
+    }
+
+    /**
+     * Gets maximum questions in test
+     *
+     * @return Maximum questions in test
+     */
+    public int getMax() {
+        return max;
+    }
+
+    /**
+     * Sets maximum questions in test
+     *
+     * @param max Maximum questions in test
+     */
+    public void setMax(int max) {
+        this.max = max;
+    }
+
+    /**
+     * Gets feedback to be showed to the student
+     *
+     * @return Feedback to be showed to the student
+     */
+    public String getFeedback() {
+        return feedback;
+    }
+
+    /**
+     * Sets feedback to be showed to the student
+     *
+     * @param feedback Feedback to be showed to the student
+     */
+    public void setFeedback(String feedback) {
+        this.feedback = feedback;
+    }
+
+    /**
+     * Gets last time test was updated
+     *
+     * @return Last time test was updated
+     */
+    public Long getEditTime() {
+        return editTime;
+    }
+
+    /**
+     * Sets last time test was updated
+     *
+     * @param timestamp Last time test was updated
+     */
+    public void setEditTime(Long timestamp) {
+        this.editTime = timestamp;
+    }
+
+    /**
+     * Gets total test's score
+     *
+     * @return Total test's score
+     */
+    public float getTotalScore() {
+        return totalScore;
+    }
+
+    /**
+     * Sets total test's score
+     *
+     * @param totalScore Total test's score
+     */
+    public void setTotalScore(float totalScore) {
+        this.totalScore = totalScore;
     }
 
     /**
@@ -117,6 +284,62 @@ public class Test {
     }
 
     /**
+     * Gets the questions list
+     *
+     * @return The questions list
+     */
+    public List<TestQuestion> getQuestions() {
+        return questions;
+    }
+
+    /**
+     * Sets the questions list
+     *
+     * @param questions The questions to set
+     */
+    public void setQuestions(List<TestQuestion> questions) {
+        this.questions = questions;
+    }
+
+    /**
+     * Gets the questions's score
+     *
+     * @return The questions's score
+     */
+    public List<Float> getQuestionsScore() {
+        return questionsScore;
+    }
+
+    /**
+     * Sets the questions's score
+     *
+     * @param questionsScore The questions's score
+     */
+    public void setQuestionsScore(List<Float> questionsScore) {
+        this.questionsScore = questionsScore;
+    }
+
+    /**
+     * Checks if the test has been evaluated
+     *
+     * @return true if the test has been evaluated
+     *         false if the test hasn't been evaluated
+     */
+    public boolean isEvaluated() {
+        return evaluated;
+    }
+
+    /**
+     * Specifies if the test has been evaluated
+     *
+     * @param evaluated true if the test has been evaluated
+     *                  false if the test hasn't been evaluated
+     */
+    public void setEvaluated(boolean evaluated) {
+        this.evaluated = evaluated;
+    }
+
+    /**
      * Initializes questions's score and total score
      */
     private void prepareEvaluation() {
@@ -124,7 +347,7 @@ public class Test {
         totalScore = 0;
         questionsScore.clear();
 
-        for (int i = 0; i<this.answersQuestions.size(); i++) {
+        for (int i=0; i<this.questions.size(); i++) {
             this.questionsScore.add((float) 0);
         }
     }
@@ -148,6 +371,12 @@ public class Test {
 
         //Remove accents
         s = Utils.unAccent(s);
+        
+        /*s = s.replace('á', 'a');
+        s = s.replace('é', 'e');
+        s = s.replace('í', 'i');
+        s = s.replace('ó', 'o');
+        s = s.replace('ú', 'u');*/
 
         return s;
     }
@@ -156,29 +385,18 @@ public class Test {
      * Calculates total score and individual question's score of the test
      */
     public void evaluate() {
-        int totalAnswers;
-        int trueAnswers;
-        int falseAnswers;
-        int correctUserAnswers;
-        int errors;
-        float score;
-        float userFloatAnswer;
-        float minFloatRange;
-        float maxFloatRange;
-        TestAnswersQuestion aQ;
+        int totalAnswers, trueAnswers, falseAnswers, correctUserAnswers, errors;
+        Float score, userFloatAnswer, minFloatRange, maxFloatRange;
         TestQuestion q;
         TestAnswer a;
         List<TestAnswer> la;
-        String answerType;
-        String userAnswerText;
-        String answerText;
+        String answerType, userAnswerText, answerText;
         boolean noneSelected;
 
         prepareEvaluation();
-        for (int i = 0; i < answersQuestions.size(); i++) {
-            aQ = answersQuestions.get(i);
-            q = aQ.testQuestion;
-            la = aQ.testAnswers;
+        for (int i = 0; i < questions.size(); i++) {
+            q = questions.get(i);
+            la = q.getAnswers();
             answerType = q.getAnswerType();
             totalAnswers = 1;
             trueAnswers = 0;
@@ -192,9 +410,9 @@ public class Test {
 
                     userAnswerText = a.getUserAnswer();
                     if (!userAnswerText.equals("")) {
-                        userFloatAnswer = Float.parseFloat(userAnswerText);
-                        minFloatRange = Float.parseFloat(a.getAnswer());
-                        maxFloatRange = Float.parseFloat(la.get(1).getAnswer());
+                        userFloatAnswer = Float.valueOf(userAnswerText);
+                        minFloatRange = Float.valueOf(a.getAnswer());
+                        maxFloatRange = Float.valueOf(la.get(1).getAnswer());
                         a.setCorrectAnswered((userFloatAnswer >= minFloatRange) && (userFloatAnswer <= maxFloatRange));
                     }
 
@@ -205,7 +423,7 @@ public class Test {
                     }
 
                     if (userAnswerText.equals("")) {
-                        score = 0;
+                        score = (float) 0;
                     } else {
                         score = correctUserAnswers / (float) totalAnswers;
                     }
@@ -214,7 +432,7 @@ public class Test {
                     a = la.get(0);
 
                     userAnswerText = a.getUserAnswer();
-                    if (a.isCorrect()) {
+                    if (a.getCorrect()) {
                         a.setCorrectAnswered(a.getAnswer().equals(a.getUserAnswer()));
                     } else {
                         a.setCorrectAnswered(!a.getAnswer().equals(a.getUserAnswer()));
@@ -227,9 +445,9 @@ public class Test {
                     }
 
                     if (userAnswerText.equals("")) {
-                        score = 0;
+                        score = (float) 0;
                     } else {
-                        score = (correctUserAnswers - errors);
+                        score = (float) (correctUserAnswers - errors);
                     }
                     break;
                 case "int":
@@ -244,7 +462,7 @@ public class Test {
                     }
 
                     if (userAnswerText.equals("")) {
-                        score = 0;
+                        score = (float) 0;
                     } else {
                         score = correctUserAnswers / (float) totalAnswers;
                     }
@@ -270,7 +488,7 @@ public class Test {
                     }
 
                     if (userAnswerText.equals("")) {
-                        score = 0;
+                        score = (float) 0;
                     } else {
                         score = correctUserAnswers / (float) totalAnswers;
                     }
@@ -281,7 +499,7 @@ public class Test {
                     a.setCorrectAnswered(false);
 
                     for (TestAnswer ans : la) {
-                        if (ans.isCorrect() && ans.getAnswer().equals(a.getUserAnswer())) {
+                        if (ans.getCorrect() && ans.getAnswer().equals(a.getUserAnswer())) {
                             a.setCorrectAnswered(true);
                             break;
                         }
@@ -294,7 +512,7 @@ public class Test {
                     }
 
                     if (a.getUserAnswer().equals("")) {
-                        score = 0;
+                        score = (float) 0;
                     } else {
                         score = correctUserAnswers - (errors / ((float) totalAnswers - 1));
                     }
@@ -303,12 +521,14 @@ public class Test {
                     noneSelected = true;
                     totalAnswers = la.size();
                     for (TestAnswer ans : la) {
-                        if (ans.isCorrect()) {
+                        if (ans.getCorrect()) {
                             trueAnswers++;
                             if (ans.getUserAnswer().equals("Y")) {
                                 correctUserAnswers++;
                                 noneSelected = false;
-                            }
+                            }/* else {
+                            errors++;
+						}*/
                         } else {
                             falseAnswers++;
                             if (ans.getUserAnswer().equals("Y")) {
@@ -319,7 +539,7 @@ public class Test {
                     }
 
                     if (noneSelected) {
-                        score = 0;
+                        score = (float) 0;
                     } else {
                         if (falseAnswers == 0) {
                             score = correctUserAnswers / (float) totalAnswers;
@@ -337,4 +557,93 @@ public class Test {
         evaluated = true;
     }
 
+    /* (non-Javadoc)
+     * @see org.ksoap2.serialization.KvmSerializable#getProperty(int)
+     */
+    public Object getProperty(int param) {
+        Object object = null;
+        switch (param) {
+            case 1:
+                object = min;
+                break;
+            case 2:
+                object = def;
+                break;
+            case 3:
+                object = max;
+                break;
+            case 4:
+                object = feedback;
+                break;
+        }
+
+        return object;
+    }
+
+    /* (non-Javadoc)
+     * @see org.ksoap2.serialization.KvmSerializable#getPropertyCount()
+     */
+    public int getPropertyCount() {
+        return PI_PROP_ARRAY.length;
+    }
+
+    /* (non-Javadoc)
+     * @see org.ksoap2.serialization.KvmSerializable#getPropertyInfo(int, java.util.Hashtable, org.ksoap2.serialization.PropertyInfo)
+     */
+    public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo propertyInfo) {
+        switch (param) {
+            case 0:
+                propertyInfo.type = PropertyInfo.INTEGER_CLASS;
+                propertyInfo.name = "min";
+                break;
+            case 1:
+                propertyInfo.type = PropertyInfo.INTEGER_CLASS;
+                propertyInfo.name = "def";
+                break;
+            case 2:
+                propertyInfo.type = PropertyInfo.INTEGER_CLASS;
+                propertyInfo.name = "max";
+                break;
+            case 3:
+                propertyInfo.type = PropertyInfo.STRING_CLASS;
+                propertyInfo.name = "feedback";
+                break;
+        }
+    }
+
+    /* (non-Javadoc)
+     * @see org.ksoap2.serialization.KvmSerializable#setProperty(int, java.lang.Object)
+     */
+    public void setProperty(int param, Object obj) {
+        switch (param) {
+            case 0:
+                min = (Integer) obj;
+                break;
+            case 1:
+                def = (Integer) obj;
+                break;
+            case 2:
+                max = (Integer) obj;
+                break;
+            case 3:
+                feedback = (String) obj;
+                break;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Test{" +
+                "CORRECT_ANSWER_SCORE=" + CORRECT_ANSWER_SCORE +
+                ", questions=" + questions +
+                ", min=" + min +
+                ", def=" + def +
+                ", max=" + max +
+                ", feedback='" + feedback + '\'' +
+                ", editTime=" + editTime +
+                ", totalScore=" + totalScore +
+                ", questionsScore=" + questionsScore +
+                ", evaluated=" + evaluated +
+                "} " + super.toString();
+    }
 }

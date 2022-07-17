@@ -36,7 +36,7 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
  * Module for create a new account
  * @see <a href="https://openswad.org/ws/#createAccount">createAccount</a>
  *
- * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class CreateAccount extends Module {
     /**

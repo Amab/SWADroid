@@ -18,48 +18,107 @@
  */
 package es.ugr.swad.swadroid.model;
 
-import androidx.room.Entity;
-import androidx.room.Ignore;
-import androidx.room.Index;
-
 import org.ksoap2.serialization.PropertyInfo;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
-
-import lombok.Data;
+import java.util.List;
 
 /**
  * Class for store a test tag
  *
- * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
-@Data
-@Entity(indices = {@Index("tagTxt")})
 public class TestTag extends Model {
+    /**
+     * Question codes;
+     */
+    private List<Integer> qstCodList;
     /**
      * Tag text
      */
     private String tagTxt;
-
-    @Ignore
+    /**
+     * Tag index
+     */
+    private int tagInd;
     private static final PropertyInfo PI_id = new PropertyInfo();
-    @Ignore
     private static final PropertyInfo PI_tagText = new PropertyInfo();
-    @Ignore
+    private static final PropertyInfo PI_tagInd = new PropertyInfo();
+    @SuppressWarnings("unused")
     private static PropertyInfo[] PI_PROP_ARRAY =
             {
                     PI_id,
-                    PI_tagText
+                    PI_tagText,
+                    PI_tagInd
             };
 
-    public TestTag(long id, String tagTxt) {
+    /**
+     * Constructor
+     *
+     * @param id     tag id
+     * @param tagTxt Tag text
+     * @param tagInd Tag index
+     */
+    public TestTag(long id, String tagTxt, int tagInd) {
         super(id);
+        this.tagTxt = tagTxt;
+        this.tagInd = tagInd;
+    }
+
+    /**
+     * Constructor
+     *
+     * @param id     tag id
+     * @param tagTxt Tag text
+     * @param tagInd Tag index
+     */
+    public TestTag(long id, List<Integer> qstCodList, String tagTxt, int tagInd) {
+        super(id);
+        this.qstCodList = qstCodList;
+        this.tagTxt = tagTxt;
+        this.tagInd = tagInd;
+    }
+
+    /**
+     * Gets tag text
+     *
+     * @return Tag text
+     */
+    public String getTagTxt() {
+        return tagTxt;
+    }
+
+    /**
+     * Sets tag text
+     *
+     * @param tagTxt Tag text
+     */
+    public void setTagTxt(String tagTxt) {
         this.tagTxt = tagTxt;
     }
 
-    /* (non-Javadoc)
-     * @see org.ksoap2.serialization.KvmSerializable#getProperty(int)
+    /**
+     * Gets tag index
+     *
+     * @return Tag index
      */
+    public int getTagInd() {
+        return tagInd;
+    }
+
+    /**
+     * Sets tag index
+     *
+     * @param tagInd Tag index
+     */
+    public void setTagInd(int tagInd) {
+        this.tagInd = tagInd;
+    }
+
+    /* (non-Javadoc)
+             * @see org.ksoap2.serialization.KvmSerializable#getProperty(int)
+             */
     public Object getProperty(int param) {
         Object object = null;
         switch (param) {
@@ -68,6 +127,9 @@ public class TestTag extends Model {
                 break;
             case 1:
                 object = tagTxt;
+                break;
+            case 2:
+                object = tagInd;
                 break;
         }
 
@@ -84,7 +146,7 @@ public class TestTag extends Model {
     /* (non-Javadoc)
      * @see org.ksoap2.serialization.KvmSerializable#getPropertyInfo(int, java.util.Hashtable, org.ksoap2.serialization.PropertyInfo)
      */
-    public void getPropertyInfo(int param, Hashtable arg1, PropertyInfo propertyInfo) {
+    public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo propertyInfo) {
         switch (param) {
             case 0:
                 propertyInfo.type = PropertyInfo.LONG_CLASS;
@@ -93,6 +155,10 @@ public class TestTag extends Model {
             case 1:
                 propertyInfo.type = PropertyInfo.STRING_CLASS;
                 propertyInfo.name = "tagTxt";
+                break;
+            case 2:
+                propertyInfo.type = PropertyInfo.INTEGER_CLASS;
+                propertyInfo.name = "tagInd";
                 break;
         }
     }
@@ -108,7 +174,59 @@ public class TestTag extends Model {
             case 1:
                 tagTxt = (String) obj;
                 break;
+            case 2:
+                tagInd = (Integer) obj;
+                break;
         }
     }
 
+    /**
+     * Gets question codes
+     *
+     * @return Question codes
+     */
+    public List<Integer> getQstCodList() {
+        return qstCodList;
+    }
+
+    /**
+     * Sets question codes
+     *
+     * @param qstCodList Question codes
+     */
+    public void setQstCodList(List<Integer> qstCodList) {
+        this.qstCodList = qstCodList;
+    }
+
+    /**
+     * Gets the question code in position i
+     *
+     * @param i Position of question code
+     * @return Question code
+     */
+    public Integer getQstCod(int i) {
+        return this.qstCodList.get(i);
+    }
+
+    /**
+     * Adds a question code to the list
+     *
+     * @param qstCod Question code to be added
+     */
+    public void addQstCod(Integer qstCod) {
+        if (this.qstCodList == null) {
+            this.qstCodList = new ArrayList<>();
+        }
+
+        this.qstCodList.add(qstCod);
+    }
+
+    @Override
+    public String toString() {
+        return "TestTag{" +
+                "qstCodList=" + qstCodList +
+                ", tagTxt='" + tagTxt + '\'' +
+                ", tagInd=" + tagInd +
+                "} " + super.toString();
+    }
 }

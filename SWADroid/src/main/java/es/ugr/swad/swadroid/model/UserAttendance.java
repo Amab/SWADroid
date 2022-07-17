@@ -21,38 +21,18 @@
 
 package es.ugr.swad.swadroid.model;
 
-import androidx.room.Entity;
-import androidx.room.ForeignKey;
-import androidx.room.Ignore;
-import androidx.room.Index;
-
 import org.ksoap2.serialization.PropertyInfo;
 
 import java.util.Hashtable;
 
-import lombok.Data;
-
 /**
  * User attendance data.
  *
- * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
-@Data
-@Entity(indices = {@Index("eventCode")},
-        foreignKeys = {
-                @ForeignKey(entity = User.class,
-                        parentColumns = "id",
-                        childColumns = "id",
-                        onDelete = ForeignKey.CASCADE),
-                @ForeignKey(entity = Event.class,
-                        parentColumns = "id",
-                        childColumns = "eventCode",
-                        onDelete = ForeignKey.CASCADE)
-        }
-)
 public class UserAttendance extends Model {
     /**
-     * Event identifier.
+     * User identifier.
      */
     private int eventCode;
     /**
@@ -60,21 +40,15 @@ public class UserAttendance extends Model {
      */
     private boolean userPresent;
 
-    @Ignore
     private static final PropertyInfo PI_userID = new PropertyInfo();
-    @Ignore
     private static final PropertyInfo PI_userNickname = new PropertyInfo();
-    @Ignore
     private static final PropertyInfo PI_userSurname1 = new PropertyInfo();
-    @Ignore
     private static final PropertyInfo PI_userSurname2 = new PropertyInfo();
-    @Ignore
     private static final PropertyInfo PI_userFirstname = new PropertyInfo();
-    @Ignore
     private static final PropertyInfo PI_userPhoto = new PropertyInfo();
-    @Ignore
     private static final PropertyInfo PI_userPresent = new PropertyInfo();
-    @Ignore
+
+    @SuppressWarnings("unused")
     private static PropertyInfo[] PI_PROP_ARRAY = {
             PI_userID,
             PI_userNickname,
@@ -85,9 +59,36 @@ public class UserAttendance extends Model {
             PI_userPresent
     };
 
+    public UserAttendance(long id) {
+        super(id);
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param id            User code.
+     * @param eventCode     Event code.
+     * @param userPresent   Flag for indicate if the user is present in the attendance.
+     */
     public UserAttendance(long id, int eventCode, boolean userPresent) {
         super(id);
         this.eventCode = eventCode;
+        this.userPresent = userPresent;
+    }
+
+    public int getEventCode() {
+        return eventCode;
+    }
+
+    public void setEventCode(int eventCode) {
+        this.eventCode = eventCode;
+    }
+
+    public boolean isUserPresent() {
+        return userPresent;
+    }
+
+    public void setUserPresent(boolean userPresent) {
         this.userPresent = userPresent;
     }
 
@@ -105,11 +106,9 @@ public class UserAttendance extends Model {
         return object;
     }
 
-    public int getPropertyCount() {
-        return PI_PROP_ARRAY.length;
-    }
+    public int getPropertyCount() { return PI_PROP_ARRAY.length; }
 
-    public void getPropertyInfo(int param, Hashtable arg1, PropertyInfo propertyInfo) {
+    public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo propertyInfo) {
         switch (param) {
             case 0:
                 propertyInfo.type = PropertyInfo.STRING_CLASS;
@@ -153,4 +152,11 @@ public class UserAttendance extends Model {
         }
     }
 
+    @Override
+    public String toString() {
+        return "UserAttendance{" +
+                "eventCode=" + eventCode +
+                ", userPresent=" + userPresent +
+                "} " + super.toString();
+    }
 }

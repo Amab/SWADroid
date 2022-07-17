@@ -77,6 +77,6 @@ public class GetAvailableRoles extends Module {
 
     @Override
     protected void onError() {
-        // No-op
+
     }
 }

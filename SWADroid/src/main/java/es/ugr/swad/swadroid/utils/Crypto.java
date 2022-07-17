@@ -20,9 +20,9 @@
 
 package es.ugr.swad.swadroid.utils;
 
+import android.content.Context;
 import android.util.Log;
 
-import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.AlgorithmParameterSpec;
@@ -39,70 +39,70 @@ import es.ugr.swad.swadroid.Constants;
 /**
  * Cryptographic class for encryption purposes.
  *
- * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
-public class CryptoUtils {
+public class Crypto {
     /**
      * Crypto tag name for Logcat
      */
     public static final String TAG = Constants.APP_TAG + " Crypto";
 
-    @Deprecated
-    private static final String HEX = "0123456789ABCDEF";
+    private Cipher ecipher;
+    private Cipher dcipher;
 
-    @Deprecated
-    private Cipher eCipher;
-    @Deprecated
-    private Cipher dCipher;
+    // 8-byte Salt
+    private final byte[] salt = {1, 2, 4, 5, 7, 8, 3, 6};
 
-    @Deprecated
-    public CryptoUtils(String passPhrase) {
+    // Iteration count
+    private final int iterationCount = 1979;
+    /**
+     * Application context
+     */
+    private Context mContext;
+
+    public Crypto(Context ctx, String passPhrase) {
+        mContext = ctx;
+
         try {
-            // 8-byte Salt
-            byte[] salt = {1, 2, 4, 5, 7, 8, 3, 6};
-            // Iteration count
-            int iterationCount = 1979;
             // Create the key
             KeySpec keySpec = new PBEKeySpec(passPhrase.toCharArray(), salt,
                     iterationCount);
             SecretKey key = SecretKeyFactory.getInstance(
                     "PBEWITHSHA256AND128BITAES-CBC-BC").generateSecret(keySpec);
-            eCipher = Cipher.getInstance(key.getAlgorithm());
-            dCipher = Cipher.getInstance(key.getAlgorithm());
+            ecipher = Cipher.getInstance(key.getAlgorithm());
+            dcipher = Cipher.getInstance(key.getAlgorithm());
 
             // Prepare the parameter to the ciphers
             AlgorithmParameterSpec paramSpec = new PBEParameterSpec(salt,
                     iterationCount);
 
             // Create the ciphers
-            eCipher.init(Cipher.ENCRYPT_MODE, key, paramSpec);
-            dCipher.init(Cipher.DECRYPT_MODE, key, paramSpec);
+            ecipher.init(Cipher.ENCRYPT_MODE, key, paramSpec);
+            dcipher.init(Cipher.DECRYPT_MODE, key, paramSpec);
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage(), e);
+            Log.e(TAG, e.getMessage());
         }
     }
 
-    @Deprecated
     public String encrypt(String str) {
         String rVal;
         try {
             // Encode the string into bytes using utf-8
-            byte[] utf8 = str.getBytes(StandardCharsets.UTF_8);
+            byte[] utf8 = str.getBytes("UTF8");
 
             // Encrypt
-            byte[] enc = eCipher.doFinal(utf8);
+            byte[] enc = ecipher.doFinal(utf8);
 
             // Encode bytes to base64 to get a string
             rVal = toHex(enc);
         } catch (Exception e) {
             rVal = "Error encrypting: " + e.getMessage();
 
-            Log.e(TAG, e.getMessage(), e);
+            Log.e(TAG, e.getMessage());
         }
         return rVal;
     }
 
-    @Deprecated
     public String decrypt(String str) {
         String rVal;
         try {
@@ -110,19 +110,18 @@ public class CryptoUtils {
             byte[] dec = toByte(str);
 
             // Decrypt
-            byte[] utf8 = dCipher.doFinal(dec);
+            byte[] utf8 = dcipher.doFinal(dec);
 
             // Decode using utf-8
-            rVal = new String(utf8, StandardCharsets.UTF_8);
+            rVal = new String(utf8, "UTF8");
         } catch (Exception e) {
             rVal = "Error encrypting: " + e.getMessage();
 
-            Log.e(TAG, e.getMessage(), e);
+            Log.e(TAG, e.getMessage());
         }
         return rVal;
     }
 
-    @Deprecated
     private static byte[] toByte(String hexString) {
         int len = hexString.length() / 2;
         byte[] result = new byte[len];
@@ -132,19 +131,19 @@ public class CryptoUtils {
         return result;
     }
 
-    @Deprecated
     private static String toHex(byte[] buf) {
         if (buf == null)
             return "";
-        StringBuilder result = new StringBuilder(2 * buf.length);
+        StringBuffer result = new StringBuffer(2 * buf.length);
         for (byte aBuf : buf) {
             appendHex(result, aBuf);
         }
         return result.toString();
     }
 
-    @Deprecated
-    private static void appendHex(StringBuilder sb, byte b) {
+    private final static String HEX = "0123456789ABCDEF";
+
+    private static void appendHex(StringBuffer sb, byte b) {
         sb.append(HEX.charAt((b >> 4) & 0x0f)).append(HEX.charAt(b & 0x0f));
     }
 
@@ -159,7 +158,7 @@ public class CryptoUtils {
         String p;
         MessageDigest md = MessageDigest.getInstance("SHA-512");
         md.update(password.getBytes());
-        p = Base64Utils.encodeBytes(md.digest());
+        p = Base64.encodeBytes(md.digest());
         p = p.replace('+', '-').replace('/', '_').replace('=', ' ').replaceAll("\\s+", "").trim();
 
         return p;

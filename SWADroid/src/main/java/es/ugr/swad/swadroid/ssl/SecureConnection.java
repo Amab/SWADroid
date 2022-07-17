@@ -37,7 +37,7 @@ import es.ugr.swad.swadroid.Constants;
 /**
  * Establishes a secure connection.
  * 
- * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class SecureConnection {
 	/**

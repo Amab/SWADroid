@@ -34,7 +34,7 @@ import es.ugr.swad.swadroid.R;
  * Note that we are responsible for the deletion of the file when it is no longer needed.
  *
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
- * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Victor Terron <vterron@iaa.es>
  */
 

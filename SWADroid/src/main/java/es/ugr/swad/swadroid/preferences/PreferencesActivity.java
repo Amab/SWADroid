@@ -30,6 +30,7 @@ import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
+import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
 import android.util.Log;
@@ -48,13 +49,13 @@ import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.modules.login.LoginActivity;
 import es.ugr.swad.swadroid.sync.SyncUtils;
-import es.ugr.swad.swadroid.utils.CryptoUtils;
+import es.ugr.swad.swadroid.utils.Crypto;
 import es.ugr.swad.swadroid.utils.Utils;
 
 /**
  * Preferences window of application.
  *
- * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class PreferencesActivity extends PreferenceActivity implements OnPreferenceChangeListener {
     /**
@@ -142,7 +143,11 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
      * @param message Error message to show.
      */
     private void error(String message, Exception ex) {
-    	DialogInterface.OnClickListener onClickListener = (dialog, id) -> finish();
+    	DialogInterface.OnClickListener onClickListener = new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                finish();
+            }
+        };
         
     	AlertDialog errorDialog = DialogFactory.createErrorDialog(this, TAG, message, ex,
     			isDebuggable, onClickListener); 
@@ -196,67 +201,113 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         syncTimePref.setOnPreferenceChangeListener(this);
         //syncTimeLocationPref.setOnPreferenceChangeListener(this);
 
-        logOutPref.setOnPreferenceClickListener(preference -> {
-            Preferences.logoutClean(ctx, Preferences.LOGOUTPREF);
-            Preferences.setUserID("");
-            Preferences.setUserPassword("");
+        logOutPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Preferences.logoutClean(ctx, Preferences.LOGOUTPREF);
+                Preferences.setUserID("");
+                Preferences.setUserPassword("");
+                
+                startActivity(new Intent(getBaseContext(), LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                        | Intent.FLAG_ACTIVITY_SINGLE_TOP).putExtra("fromPreference", true));
 
-            startActivity(new Intent(getBaseContext(), LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-                    | Intent.FLAG_ACTIVITY_SINGLE_TOP).putExtra("fromPreference", true));
-
-            finish();
-            return true;
+                finish();
+                return true;
+            }
         });
         
-        ratePref.setOnPreferenceClickListener(preference -> {
-            Intent urlIntent = new Intent(Intent.ACTION_VIEW);
-            urlIntent.setData(Uri.parse(getString(R.string.marketURL)));
-            startActivity(urlIntent);
-            return true;
+        ratePref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            /**
+             * Called when a preference is selected.
+             * @param preference Preference selected.
+             */
+            public boolean onPreferenceClick(Preference preference) {
+                Intent urlIntent = new Intent(Intent.ACTION_VIEW);
+                urlIntent.setData(Uri.parse(getString(R.string.marketURL)));
+                startActivity(urlIntent);
+                return true;
+            }
         });
-        twitterPref.setOnPreferenceClickListener(preference -> {
-            Intent urlIntent = new Intent(Intent.ACTION_VIEW);
-            urlIntent.setData(Uri.parse(getString(R.string.twitterURL)));
-            startActivity(urlIntent);
-            return true;
+        twitterPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            /**
+             * Called when a preference is selected.
+             * @param preference Preference selected.
+             */
+            public boolean onPreferenceClick(Preference preference) {
+                Intent urlIntent = new Intent(Intent.ACTION_VIEW);
+                urlIntent.setData(Uri.parse(getString(R.string.twitterURL)));
+                startActivity(urlIntent);
+                return true;
+            }
         });
-        facebookPref.setOnPreferenceClickListener(preference -> {
-            Intent urlIntent = new Intent(Intent.ACTION_VIEW);
-            urlIntent.setData(Uri.parse(getString(R.string.facebookURL)));
-            startActivity(urlIntent);
-            return true;
+        facebookPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            /**
+             * Called when a preference is selected.
+             * @param preference Preference selected.
+             */
+            public boolean onPreferenceClick(Preference preference) {
+                Intent urlIntent = new Intent(Intent.ACTION_VIEW);
+                urlIntent.setData(Uri.parse(getString(R.string.facebookURL)));
+                startActivity(urlIntent);
+                return true;
+            }
         });
-        telegramPref.setOnPreferenceClickListener(preference -> {
-            Intent urlIntent = new Intent(Intent.ACTION_VIEW);
-            urlIntent.setData(Uri.parse(getString(R.string.telegramURL)));
-            startActivity(urlIntent);
-            return true;
+        telegramPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            /**
+             * Called when a preference is selected.
+             * @param preference Preference selected.
+             */
+            public boolean onPreferenceClick(Preference preference) {
+                Intent urlIntent = new Intent(Intent.ACTION_VIEW);
+                urlIntent.setData(Uri.parse(getString(R.string.telegramURL)));
+                startActivity(urlIntent);
+                return true;
+            }
         });
-        blogPref.setOnPreferenceClickListener(preference -> {
-            Intent urlIntent = new Intent(Intent.ACTION_VIEW);
-            urlIntent.setData(Uri.parse(getString(R.string.blogURL)));
-            startActivity(urlIntent);
-            return true;
+        blogPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            /**
+             * Called when a preference is selected.
+             * @param preference Preference selected.
+             */
+            public boolean onPreferenceClick(Preference preference) {
+                Intent urlIntent = new Intent(Intent.ACTION_VIEW);
+                urlIntent.setData(Uri.parse(getString(R.string.blogURL)));
+                startActivity(urlIntent);
+                return true;
+            }
         });
-        sharePref.setOnPreferenceClickListener(preference -> {
-            Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-            sharingIntent.setType("text/plain");
-            sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.app_name));
-            sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, getString(R.string.shareBodyMsg));
-            startActivity(Intent.createChooser(sharingIntent, getString(R.string.shareTitle_menu)));
+        sharePref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            /**
+             * Called when a preference is selected.
+             * @param preference Preference selected.
+             */
+            public boolean onPreferenceClick(Preference preference) {
+                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.app_name));
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, getString(R.string.shareBodyMsg));
+                startActivity(Intent.createChooser(sharingIntent, getString(R.string.shareTitle_menu)));
 
-            Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "1");
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "text");
-            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SHARE, bundle);
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "1");
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "text");
+                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SHARE, bundle);
 
-            return true;
+                return true;
+            }
         });
-        privacyPolicyPref.setOnPreferenceClickListener(preference -> {
-            Intent urlIntent = new Intent(Intent.ACTION_VIEW);
-            urlIntent.setData(Uri.parse(getString(R.string.privacyPolicyURL)));
-            startActivity(urlIntent);
-            return true;
+        privacyPolicyPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            /**
+             * Called when a preference is selected.
+             * @param preference Preference selected.
+             */
+            public boolean onPreferenceClick(Preference preference) {
+                Intent urlIntent = new Intent(Intent.ACTION_VIEW);
+                urlIntent.setData(Uri.parse(getString(R.string.privacyPolicyURL)));
+                startActivity(urlIntent);
+                return true;
+            }
         });
 
         try {
@@ -292,7 +343,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
 
                 // Try to guest if user is using PRADO password
                 if ((password.length() >= 8) && !Utils.isLong(password)) {
-                    userPassword = CryptoUtils.encryptPassword(password);
+                    userPassword = Crypto.encryptPassword(password);
                     
                     // If preferences have changed, logout
                     Log.i(TAG, "Forced logout due to " + key + " change in preferences");
@@ -355,8 +406,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnPrefere
         
         return returnValue;
     }
-
-    @Override
+    
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen,
             final Preference preference) {
 

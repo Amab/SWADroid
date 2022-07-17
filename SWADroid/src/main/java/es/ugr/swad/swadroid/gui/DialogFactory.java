@@ -23,7 +23,7 @@ import es.ugr.swad.swadroid.R;
 /**
  * Class for create dialogs.
  *
- * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class DialogFactory {
 	/**

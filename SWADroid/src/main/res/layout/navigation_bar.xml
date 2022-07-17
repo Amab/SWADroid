@@ -12,6 +12,7 @@
         android:layout_width="30dp"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
         android:layout_margin="5dip"
         android:gravity="center"
         android:textColor="@color/foreground1"
@@ -27,6 +28,7 @@
         android:layout_width="30dp"
         android:layout_height="match_parent"
         android:layout_toEndOf="@id/home_button"
+        android:layout_toRightOf="@id/home_button"
         android:layout_margin="5dip"
         android:gravity="center"
         android:textColor="@color/foreground1"
@@ -41,6 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toEndOf="@id/parent_button"
+        android:layout_toRightOf="@id/parent_button"
         android:ellipsize="start"
         android:padding="4dp"
         android:singleLine="true"
@@ -55,6 +58,7 @@
         android:layout_height="2dip"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
         android:background="@color/sgilight_gray" />
 
 </RelativeLayout>

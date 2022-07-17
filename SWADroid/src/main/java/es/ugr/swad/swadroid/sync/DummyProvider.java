@@ -27,7 +27,7 @@ import android.net.Uri;
 /**
  * Dummy provider for sync adapter.
  *
- * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class DummyProvider extends ContentProvider {
 

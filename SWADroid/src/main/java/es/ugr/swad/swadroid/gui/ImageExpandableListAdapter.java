@@ -35,7 +35,7 @@ import es.ugr.swad.swadroid.BuildConfig;
 import es.ugr.swad.swadroid.R;
 
 /**
- * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */
 public class ImageExpandableListAdapter extends SimpleExpandableListAdapter {

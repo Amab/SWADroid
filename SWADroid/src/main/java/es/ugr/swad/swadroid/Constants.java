@@ -26,7 +26,7 @@ import java.io.File;
 /**
  * Constants of application.
  *
- * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  * @author Jose Antonio Guerrero Aviles <cany20@gmail.com>
@@ -61,10 +61,9 @@ public class Constants {
      */
     public static final int CONNECTION_TIMEOUT = 60000;
     /**
-     * Threshold for clean old notifications (in days)
+     * Threshold for clean old notifications (in seconds)
      */
-    //public static final int CLEAN_NOTIFICATIONS_THRESHOLD = 2592000; // 30 days
-    public static final int CLEAN_NOTIFICATIONS_THRESHOLD = 2592000;
+    public static final int CLEAN_NOTIFICATIONS_THRESHOLD = 2592000; // 30 days
     /**
      * Null value returned by webservices when a field is empty
      */

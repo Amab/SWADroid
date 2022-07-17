@@ -26,24 +26,23 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.SWADMain;
-import es.ugr.swad.swadroid.database.AppDatabase;
+import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.preferences.Preferences;
 import es.ugr.swad.swadroid.preferences.PreferencesActivity;
 
 /**
  * Superclass for add the options menu to all children classes of ExpandableListActivity
  *
- * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */
@@ -55,7 +54,7 @@ public class MenuExpandableListActivity extends AppCompatActivity {
     /**
      * Database Helper.
      */
-    protected AppDatabase db;
+    protected static DataBaseHelper dbHelper;
     /**
      * Application debuggable flag
      */
@@ -71,20 +70,25 @@ public class MenuExpandableListActivity extends AppCompatActivity {
     /**
      * Listener for dialog cancellation
      */
-    private final OnClickListener cancelClickListener = (dialog, id) -> dialog.cancel();
+    private OnClickListener cancelClickListener = new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int id) {
+            dialog.cancel();
+        }
+    };
     /**
      * Listener for clean database dialog
      */
-    private final OnClickListener positiveClickListener = (dialog, id) -> {
-        db.clearAllTables();
-        AppDatabase.vacuumDb();
-        Preferences.setLastCourseSelected(0);
-        AppDatabase.setDbCleaned(true);
-        Toast.makeText(getApplicationContext(), R.string.cleanDatabaseMsg, Toast.LENGTH_LONG).show();
-        if (isSWADMain) {
-            setMenuDbClean();
+    private OnClickListener positiveClickListener = new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int id) {            
+            dbHelper.cleanTables();
+            Preferences.setLastCourseSelected(0);
+            DataBaseHelper.setDbCleaned(true);
+            Toast.makeText(getApplicationContext(), R.string.cleanDatabaseMsg, Toast.LENGTH_LONG).show();
+            if (isSWADMain) {
+                setMenuDbClean();
+            }
+            Log.i(Constants.APP_TAG, getString(R.string.cleanDatabaseMsg));
         }
-        Log.i(Constants.APP_TAG, getString(R.string.cleanDatabaseMsg));
     };
 
     /**
@@ -121,6 +125,7 @@ public class MenuExpandableListActivity extends AppCompatActivity {
      * Deletes all data from database
      */
     private void cleanDatabase() {
+
     	AlertDialog cleanDBDialog = DialogFactory.createWarningDialog(this,
     			-1,
     			R.string.areYouSure,
@@ -141,7 +146,11 @@ public class MenuExpandableListActivity extends AppCompatActivity {
      * @param message Error message to show.
      */
     protected void error(String message, Exception ex) {
-    	DialogInterface.OnClickListener onClickListener = (dialog, id) -> finish();
+    	DialogInterface.OnClickListener onClickListener = new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                finish();
+            }
+        };
         
     	AlertDialog errorDialog = DialogFactory.createErrorDialog(this, TAG, message, ex,
     			isDebuggable, onClickListener);    	
@@ -209,7 +218,7 @@ public class MenuExpandableListActivity extends AppCompatActivity {
         	prefs = new Preferences(this);
         	
             //Initialize database
-            db = AppDatabase.getAppDatabase(this);
+            dbHelper = new DataBaseHelper(this);
             getPackageManager().getApplicationInfo(
                     getPackageName(), 0);
 			isDebuggable = (ApplicationInfo.FLAG_DEBUGGABLE != 0);			
@@ -224,7 +233,7 @@ public class MenuExpandableListActivity extends AppCompatActivity {
      */
     @Override
     protected void onPause() {
-        AppDatabase.destroyInstance();
+        dbHelper.close();
         super.onPause();
     }
 
@@ -237,13 +246,13 @@ public class MenuExpandableListActivity extends AppCompatActivity {
 
         //Initialize database
         try {
-            db = AppDatabase.getAppDatabase(this);
+            dbHelper = new DataBaseHelper(this);
         } catch (Exception ex) {
             error(ex.getMessage(), ex);
         }
     }
 
     protected void setMenuDbClean() {
-        // No-op
+
     }
 }

@@ -34,7 +34,7 @@ import es.ugr.swad.swadroid.Constants;
 /**
  * Class for manage file downloads
  *
- * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class DownloadFactory {
     /**

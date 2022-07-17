@@ -29,19 +29,20 @@ import android.util.Log;
 import com.google.gson.Gson;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.database.AppDatabase;
+import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.model.LoginInfo;
 import es.ugr.swad.swadroid.modules.courses.Courses;
 import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.sync.SyncUtils;
-import es.ugr.swad.swadroid.utils.CryptoUtils;
+import es.ugr.swad.swadroid.utils.Crypto;
 
 /**
  * Class for store the application preferences
  *
- * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class Preferences {
     /**
@@ -147,7 +148,7 @@ public class Preferences {
     /**
      * Database Helper.
      */
-    private static AppDatabase db;
+    private static DataBaseHelper dbHelper;
     /**
      * Indicates if there are changes on preferences
      */
@@ -159,7 +160,7 @@ public class Preferences {
     /*
      * Sharing location preference
      */
-    public static final String SHARELOCATION = "prefShareLocation";
+    public static String SHARELOCATION = "prefShareLocation";
     /**
      * Gets application preferences
      * @param ctx Application context
@@ -181,12 +182,14 @@ public class Preferences {
         getPreferences(ctx);
 
     	editor = prefs.edit();
-
-        try {
-            db = AppDatabase.getAppDatabase(ctx);
-        } catch (Exception e) {
-            Log.e(TAG, e.getMessage(), e);
-        }
+    	
+    	if(dbHelper == null) {
+	    	try {
+	            dbHelper = new DataBaseHelper(ctx);
+	        } catch (Exception e) {
+	            Log.e(TAG, e.getMessage());
+	        }
+    	}
 	}
 
 	/**
@@ -392,17 +395,28 @@ public class Preferences {
      */
     public static void upgradeCredentials() throws NoSuchAlgorithmException {
         String userPassword = getUserPassword();
-        setUserPassword(CryptoUtils.encryptPassword(userPassword));
+        setUserPassword(Crypto.encryptPassword(userPassword));
     }
     
     /**
      * Clean data of all tables from database. Removes users photos from external storage
      */
     private static void cleanDatabase() {
-        db.clearAllTables();
+        List<String> tablenames = dbHelper.getAllTablenames();
+
+        //Empty all tables except DB_TABLE_FREQUENT_RECIPIENTS
+        dbHelper.beginTransaction();
+
+        for(String table : tablenames) {
+            if(!DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS.equals(table)) {
+                dbHelper.emptyTable(table);
+            }
+        }
+
+        dbHelper.endTransaction(true);
         
         Preferences.setLastCourseSelected(0);
-        AppDatabase.setDbCleaned(true);
+        DataBaseHelper.setDbCleaned(true);
         
         Log.i(TAG, "Database has been cleaned");
     }

@@ -13,6 +13,7 @@
             android:id="@+id/notifUserPhoto"
             android:layout_width="65dip"
             android:layout_height="81dip"
+            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:scaleType="centerCrop"
             android:src="@drawable/usr_bl" />
@@ -21,8 +22,10 @@
             android:id="@+id/senderNameText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="7dip"
             android:layout_marginStart="7dip"
             android:layout_marginTop="7dip"
+            android:layout_toRightOf="@id/notifUserPhoto"
             android:layout_toEndOf="@id/notifUserPhoto"
             android:textColor="@color/foreground1"
             android:textSize="16sp" />
@@ -32,8 +35,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/senderNameText"
+            android:layout_marginLeft="7dip"
             android:layout_marginStart="7dip"
             android:layout_marginTop="7dip"
+            android:layout_toRightOf="@id/notifUserPhoto"
             android:layout_toEndOf="@id/notifUserPhoto"
             android:textColor="@color/foreground1"
             android:textSize="16sp" />
@@ -43,8 +48,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/courseNameText"
+            android:layout_marginLeft="7dip"
             android:layout_marginStart="7dip"
             android:layout_marginTop="7dip"
+            android:layout_toRightOf="@id/notifUserPhoto"
             android:layout_toEndOf="@id/notifUserPhoto"
             android:textColor="@color/foreground2" />
 
@@ -53,8 +60,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@id/notifDate"
+            android:layout_marginLeft="7dip"
             android:layout_marginStart="7dip"
             android:layout_marginTop="7dip"
+            android:layout_toRightOf="@id/notifDate"
             android:layout_toEndOf="@id/notifDate"
             android:textColor="@color/foreground2" />
     </RelativeLayout>
@@ -64,6 +73,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/not_item_header"
+        android:layout_marginLeft="7dip"
         android:layout_marginStart="7dip"
         android:layout_marginTop="7dip"
         android:textColor="@color/foreground1"

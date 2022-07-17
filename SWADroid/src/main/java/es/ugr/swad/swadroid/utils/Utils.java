@@ -22,8 +22,9 @@ package es.ugr.swad.swadroid.utils;
 import android.content.Context;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
-import android.net.Network;
-import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.TypedValue;
 
 import java.text.Normalizer;
@@ -34,12 +35,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import es.ugr.swad.swadroid.model.Model;
-import es.ugr.swad.swadroid.model.SWADNotification;
 
 /**
  * Utilities class.
  *
- * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */
@@ -52,8 +52,6 @@ public class Utils {
 	 * Base string to generate random alphanumeric strings
 	 */
 	private static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-	private Utils() {}
 	
     /**
      * Generates a random string of length len
@@ -64,7 +62,7 @@ public class Utils {
     public static String randomString(int len) {
         StringBuilder sb = new StringBuilder(len);
         for (int i = 0; i < len; i++)
-            sb.append(AB.charAt(rnd.nextInt(AB.length())));
+            sb.append(Utils.AB.charAt(Utils.rnd.nextInt(Utils.AB.length())));
         return sb.toString();
     }
 
@@ -75,15 +73,13 @@ public class Utils {
      * @return true if there is a connection available, false in other case
      */
     public static boolean connectionAvailable(Context ctx) {
-        ConnectivityManager connectivityManager = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
-        Network nw = connectivityManager.getActiveNetwork();
-        if (nw == null) return false;
-        NetworkCapabilities actNw = connectivityManager.getNetworkCapabilities(nw);
-        return actNw != null
-                && (actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
-                || actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
-                || actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
-                || actNw.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH));
+        //boolean connAvailable = false;
+        ConnectivityManager cm = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        //If boolean remains false there is no connection available
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null &&
+                              activeNetwork.isConnectedOrConnecting();
     }
 
     /**
@@ -124,6 +120,10 @@ public class Utils {
      */
     public static String parseBoolString(boolean b) {
         return b ? "Y" : "N";
+    }
+
+    public static boolean isHTTPUrl(String url) {
+        return url.startsWith("http://");
     }
 
     public static boolean isInteger(String str) {
@@ -169,25 +169,26 @@ public class Utils {
         body = body.replaceAll(regex, "<a href=\"$0\">$0</a>");
         return body;
     }
-
+    
     /**
      * Creates a string of notification codes separated by commas from a list of notifications
      */
-    public static String getSeenNotificationCodes(List<SWADNotification> markedNotificationsList) {
-    	StringBuilder seenNotifCodes = new StringBuilder();
+    public static String getSeenNotificationCodes(List<Model> markedNotificationsList) {
+    	String seenNotifCodes = "";
     	Model m;
-
-    	for(Iterator<SWADNotification> it = markedNotificationsList.iterator(); it.hasNext();) {
+    	
+    	for(Iterator<Model> it = markedNotificationsList.iterator(); it.hasNext();) {
     		m = it.next();
-    		seenNotifCodes.append(m.getId());
-
+    		seenNotifCodes += m.getId();
+    		
     		if(it.hasNext()) {
-    			seenNotifCodes.append(",");
+    			seenNotifCodes += ",";
     		}
     	}
-
-    	return seenNotifCodes.toString();
+    	
+    	return seenNotifCodes;
     }
+    
     public static String unAccent(String s) {
         String temp = Normalizer.normalize(s, Normalizer.Form.NFD);
         Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
@@ -200,6 +201,18 @@ public class Utils {
                 sp,
                 Resources.getSystem().getDisplayMetrics()
         );
+    }
+
+    public static Spanned fromHtml(String text) {
+        Spanned result;
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            result = Html.fromHtml(text,Html.FROM_HTML_MODE_LEGACY);
+        } else {
+            result = Html.fromHtml(text);
+        }
+
+        return result;
     }
 
 }

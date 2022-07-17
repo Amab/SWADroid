@@ -28,22 +28,18 @@ import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.Collections;
-
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.dao.SWADNotificationDao;
 import es.ugr.swad.swadroid.gui.ImageFactory;
 import es.ugr.swad.swadroid.gui.MenuActivity;
 import es.ugr.swad.swadroid.gui.WebViewFactory;
-import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.modules.messages.Messages;
 import es.ugr.swad.swadroid.utils.Utils;
 
 /**
  * Webview activity for showing marks
  *
- * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class NotificationItem extends MenuActivity {
     /**
@@ -56,37 +52,24 @@ public class NotificationItem extends MenuActivity {
     private String summary;
     private String sender;
     private String userPhoto;
-    /**
-     * Data Access Object for Notifications
-     */
-    private SWADNotificationDao swadNotificationDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        TextView senderTextView;
-        TextView courseTextView;
-        TextView summaryTextView;
-        TextView dateTextView;
-        TextView timeTextView;
+        TextView senderTextView, courseTextView, summaryTextView, dateTextView, timeTextView;
         ImageView userPhotoView;
         WebView webview;
         Intent activity;
-        SWADNotification notification;
 
         super.onCreate(savedInstanceState);
-
-        //Initialize DAOs
-        swadNotificationDao = db.getSwadNotificationDao();
-
         setContentView(R.layout.single_notification_view);
 
-        senderTextView = this.findViewById(R.id.senderNameText);
-        courseTextView = this.findViewById(R.id.courseNameText);
-        summaryTextView = this.findViewById(R.id.summaryText);
-        userPhotoView = this.findViewById(R.id.notifUserPhoto);
-        webview = this.findViewById(R.id.contentWebView);
-        dateTextView = this.findViewById(R.id.notifDate);
-        timeTextView = this.findViewById(R.id.notifTime);
+        senderTextView = (TextView) this.findViewById(R.id.senderNameText);
+        courseTextView = (TextView) this.findViewById(R.id.courseNameText);
+        summaryTextView = (TextView) this.findViewById(R.id.summaryText);
+        userPhotoView = (ImageView) this.findViewById(R.id.notifUserPhoto);
+        webview = (WebView) this.findViewById(R.id.contentWebView);
+        dateTextView = (TextView) this.findViewById(R.id.notifDate);
+        timeTextView = (TextView) this.findViewById(R.id.notifTime);
 
         notifCode = Long.valueOf(this.getIntent().getStringExtra("notifCode")); 
         eventCode = Long.valueOf(this.getIntent().getStringExtra("eventCode"));
@@ -125,9 +108,7 @@ public class NotificationItem extends MenuActivity {
         webview.setWebViewClient(WebViewFactory.getMathJaxExpression(content));
         
         //Set notification as seen locally
-        notification = swadNotificationDao.findById(notifCode);
-        notification.setSeenLocal(true);
-        swadNotificationDao.updateSWADNotifications(Collections.singletonList(notification));
+        dbHelper.updateNotification(notifCode, "seenLocal", Utils.parseBoolString(true));
         
         //Sends "seen notifications" info to the server if there is a connection available
         if(!seenLocal) {

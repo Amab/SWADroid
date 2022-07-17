@@ -21,6 +21,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
@@ -36,8 +37,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.List;
@@ -49,14 +48,14 @@ import es.ugr.swad.swadroid.gui.ProgressScreen;
 import es.ugr.swad.swadroid.modules.account.CreateAccountActivity;
 import es.ugr.swad.swadroid.modules.password.RecoverPassword;
 import es.ugr.swad.swadroid.preferences.Preferences;
-import es.ugr.swad.swadroid.utils.CryptoUtils;
+import es.ugr.swad.swadroid.utils.Crypto;
 import es.ugr.swad.swadroid.utils.Utils;
 
 
 /**
  * 
  * @author Alejandro Alcalde <algui91@gmail.com>
- * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  *
  */
 public class LoginActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -300,7 +299,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
             // perform the user login attempt.
             try {
                 Preferences.setUserID(idValue);
-                Preferences.setUserPassword(CryptoUtils.encryptPassword(passwordValue));
+                Preferences.setUserPassword(Crypto.encryptPassword(passwordValue));
             } catch (NoSuchAlgorithmException e) {
                 //error(TAG, e.getMessage(), e, true);
             }

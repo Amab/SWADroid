@@ -24,6 +24,7 @@ import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.graphics.Rect;
 import android.os.Build;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -31,8 +32,6 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ListView;
-
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.Collections;

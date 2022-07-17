@@ -20,16 +20,15 @@ package es.ugr.swad.swadroid.modules.tests;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.text.Html;
+import androidx.core.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckedTextView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import androidx.core.content.ContextCompat;
 
 import java.util.List;
 
@@ -38,6 +37,7 @@ import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.widget.CheckableLinearLayout;
 import es.ugr.swad.swadroid.model.Test;
 import es.ugr.swad.swadroid.model.TestAnswer;
+import es.ugr.swad.swadroid.utils.Utils;
 
 public class CheckedAnswersArrayAdapter extends ArrayAdapter<TestAnswer> {
     private final Context context;
@@ -76,7 +76,7 @@ public class CheckedAnswersArrayAdapter extends ArrayAdapter<TestAnswer> {
         }
 
         cl = (CheckableLinearLayout) convertView;
-        tt = convertView.findViewById(android.R.id.text1);
+        tt = (CheckedTextView) convertView.findViewById(android.R.id.text1);
 
         if (answerType.equals(TestAnswer.TYPE_TRUE_FALSE)) {
             if (a.getAnswer().equals(TestAnswer.VALUE_TRUE)) {
@@ -85,38 +85,42 @@ public class CheckedAnswersArrayAdapter extends ArrayAdapter<TestAnswer> {
                 tt.setText(R.string.falseMsg);
             }
         } else {
-            tt.setText(Html.fromHtml(a.getAnswer(), Html.FROM_HTML_MODE_LEGACY));
+            tt.setText(Utils.fromHtml(a.getAnswer()));
         }
 
         if (answerType.equals(TestAnswer.TYPE_UNIQUE_CHOICE) || answerType.equals(TestAnswer.TYPE_TRUE_FALSE)) {
-            tt.setOnClickListener(v -> {
-                CheckedTextView rb = (CheckedTextView) v;
-                boolean checked = rb.isChecked();
-                CheckableLinearLayout lb;
-                LinearLayout ll = (LinearLayout) cl.getParent();
-                int childCount = ll.getChildCount();
+            tt.setOnClickListener(new OnClickListener() {
+                public void onClick(View v) {
+                    CheckedTextView rb = (CheckedTextView) v;
+                    boolean checked = rb.isChecked();
+                    CheckableLinearLayout lb;
+                    LinearLayout ll = (LinearLayout) cl.getParent();
+                    int childCount = ll.getChildCount();
 
-                for (int i = 0; i < childCount; i++) {
-                    lb = (CheckableLinearLayout) ll.getChildAt(i);
-                    lb.setChecked(false);
+                    for (int i = 0; i < childCount; i++) {
+                        lb = (CheckableLinearLayout) ll.getChildAt(i);
+                        lb.setChecked(false);
+                    }
+
+                    rb.setChecked(!checked);
                 }
-
-                rb.setChecked(!checked);
             });
         } else if (answerType.equals(TestAnswer.TYPE_MULTIPLE_CHOICE)) {
-            tt.setOnClickListener(v -> {
-                CheckedTextView rb = (CheckedTextView) v;
-                rb.setChecked(!rb.isChecked());
+            tt.setOnClickListener(new OnClickListener() {
+                public void onClick(View v) {
+                    CheckedTextView rb = (CheckedTextView) v;
+                    rb.setChecked(!rb.isChecked());
+                }
             });
         }
 
         if (evaluated) {
             tt.setOnClickListener(null);
-            answerFeedback = convertView.findViewById(android.R.id.text2);
-            answerFeedback.setText(Html.fromHtml(a.getFeedback(), Html.FROM_HTML_MODE_LEGACY));
+            answerFeedback = (TextView) convertView.findViewById(android.R.id.text2);
+            answerFeedback.setText(Utils.fromHtml(a.getFeedback()));
 
             feedbackLevel = Test.FEEDBACK_VALUES.indexOf(feedback);
-            if ((feedbackLevel > Test.FEEDBACK_VALUES.indexOf(Test.FEEDBACK_MEDIUM)) && a.isCorrect()) {
+            if ((feedbackLevel > Test.FEEDBACK_VALUES.indexOf(Test.FEEDBACK_MEDIUM)) && a.getCorrect()) {
                 tt.setTextColor(ContextCompat.getColor(context, R.color.green));
             } else {
                 tt.setTextColor(Color.BLACK);

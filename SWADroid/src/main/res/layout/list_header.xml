@@ -6,5 +6,7 @@
     android:layout_height="wrap_content"
     android:paddingBottom="2dip"
     android:paddingEnd="0dip"
+    android:paddingLeft="5dip"
+    android:paddingRight="0dip"
     android:paddingStart="5dip"
     android:paddingTop="2dip" />

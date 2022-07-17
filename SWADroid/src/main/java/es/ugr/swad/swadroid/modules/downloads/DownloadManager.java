@@ -59,7 +59,7 @@ import es.ugr.swad.swadroid.Constants;
  * {@link #ACTION_NOTIFICATION_CLICKED} to appropriately handle when the user clicks on a running
  * download in a notification or from the downloads UI.
  *
- * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class DownloadManager {
     private static final String TAG = Constants.APP_TAG + " DownloadManager";

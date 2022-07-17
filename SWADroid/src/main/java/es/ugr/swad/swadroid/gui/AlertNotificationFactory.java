@@ -19,22 +19,21 @@
 
 package es.ugr.swad.swadroid.gui;
 
-import static es.ugr.swad.swadroid.utils.NotificationUtils.SWADROID_CHANNEL_ID;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.graphics.BitmapFactory;
-
 import androidx.core.app.NotificationCompat;
 
 import es.ugr.swad.swadroid.utils.NotificationUtils;
 
+import static es.ugr.swad.swadroid.utils.NotificationUtils.SWADROID_CHANNEL_ID;
+
 /**
  * Class for create notification alerts.
  *
- * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  */
 public class AlertNotificationFactory {
 	public static NotificationCompat.Builder createAlertNotificationBuilder(Context context, String contentTitle, String contentText,

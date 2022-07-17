@@ -18,6 +18,7 @@
  */
 package es.ugr.swad.swadroid.modules.tests;
 
+import android.database.SQLException;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -30,18 +31,13 @@ import java.util.Vector;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.dao.TestAnswerDao;
-import es.ugr.swad.swadroid.dao.TestQuestionDao;
-import es.ugr.swad.swadroid.dao.TestTagDao;
-import es.ugr.swad.swadroid.dao.TestTagsQuestionsDao;
 import es.ugr.swad.swadroid.model.Test;
 import es.ugr.swad.swadroid.model.TestAnswer;
 import es.ugr.swad.swadroid.model.TestQuestion;
 import es.ugr.swad.swadroid.model.TestTag;
-import es.ugr.swad.swadroid.model.TestTagsQuestions;
-import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.modules.courses.Courses;
 import es.ugr.swad.swadroid.modules.login.Login;
+import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.utils.DateTimeUtils;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
@@ -50,7 +46,7 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
  * Tests module for download and update questions
  * @see <a href="https://openswad.org/ws/#getTests">getTests</a>
  *
- * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  */
 public class TestsQuestionsDownload extends Module {
@@ -58,22 +54,6 @@ public class TestsQuestionsDownload extends Module {
      * Next timestamp to be requested
      */
     private Long timestamp;
-    /**
-     * DAO for TestTag
-     */
-    private TestTagDao testTagDao;
-    /**
-     * DAO for TestQuestion
-     */
-    private TestQuestionDao testQuestionDao;
-    /**
-     * DAO for TestAnswer
-     */
-    private TestAnswerDao testAnswerDao;
-    /**
-     * DAO for TestTagsQuestions
-     */
-    private TestTagsQuestionsDao testTagsQuestionsDao;
     /**
      * Tests tag name for Logcat
      */
@@ -87,12 +67,6 @@ public class TestsQuestionsDownload extends Module {
         super.onCreate(savedInstanceState);
         setMETHOD_NAME("getTests");
         getSupportActionBar().hide();
-
-        //Initialize DAOs
-        testTagDao = db.getTestTagDao();
-        testQuestionDao = db.getTestQuestionDao();
-        testAnswerDao = db.getTestAnswerDao();
-        testTagsQuestionsDao = db.getTestTagsQuestionsDao();
     }
 
     /* (non-Javadoc)
@@ -122,16 +96,13 @@ public class TestsQuestionsDownload extends Module {
 
         if (result != null) {
             //Stores tests data returned by webservice response
-            ArrayList<?> res = new ArrayList<>((Vector<?>) result);
+            ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
 
             SoapObject tagsListObject = (SoapObject) res.get(0);
             SoapObject questionsListObject = (SoapObject) res.get(1);
             SoapObject answersListObject = (SoapObject) res.get(2);
             SoapObject questionTagsListObject = (SoapObject) res.get(3);
             List<TestTag> tagsList = new ArrayList<>();
-            List<TestQuestion> questionsList = new ArrayList<>();
-            List<TestAnswer> answersList = new ArrayList<>();
-            List<TestTagsQuestions> tagsQuestionsList = new ArrayList<>();
 
             int listSizeTags = tagsListObject.getPropertyCount();
             int listSizeQuestions = questionsListObject.getPropertyCount();
@@ -141,56 +112,101 @@ public class TestsQuestionsDownload extends Module {
             //Read tags info from webservice response
             for (int i = 0; i < listSizeTags; i++) {
                 SoapObject pii = (SoapObject) tagsListObject.getProperty(i);
-                int tagCod = Integer.parseInt(pii.getProperty("tagCode").toString());
+                Integer tagCod = Integer.valueOf(pii.getProperty("tagCode").toString());
                 String tagTxt = pii.getProperty("tagText").toString();
-                TestTag tag = new TestTag(tagCod, tagTxt);
+                TestTag tag = new TestTag(tagCod, null, tagTxt, 0);
                 tagsList.add(tag);
 
                 if (isDebuggable)
                     Log.d(TAG, tag.toString());
             }
 
-            testTagDao.insertTestTag(tagsList);
-
             //Read questions info from webservice response
+            dbHelper.beginTransaction();
+
             for (int i = 0; i < listSizeQuestions; i++) {
                 SoapObject pii = (SoapObject) questionsListObject.getProperty(i);
-                int qstCod = Integer.parseInt(pii.getProperty("questionCode").toString());
+                Integer qstCod = Integer.valueOf(pii.getProperty("questionCode").toString());
                 String anstype = pii.getProperty("answerType").toString();
-                int shuffle = Integer.parseInt(pii.getProperty("shuffle").toString());
+                Integer shuffle = Integer.valueOf(pii.getProperty("shuffle").toString());
                 String stem = pii.getProperty("stem").toString();
                 String questionFeedback = pii.getProperty("feedback").toString();
-                TestQuestion q = new TestQuestion(qstCod, Courses.getSelectedCourseCode(), stem, anstype, Utils.parseIntBool(shuffle), questionFeedback);
-                questionsList.add(q);
-            }
+                TestQuestion q = new TestQuestion(qstCod, stem, anstype, Utils.parseIntBool(shuffle), questionFeedback);
 
-            testQuestionDao.insertTestQuestion(questionsList);
+                //If it's a new question, insert in database
+                try {
+                    dbHelper.insertTestQuestion(q, Courses.getSelectedCourseCode());
+
+                    if (isDebuggable)
+                        Log.d(TAG, "INSERTED: " + q.toString());
+
+                    //If it's an updated question, update it's row in database
+                } catch (SQLException e) {
+                    dbHelper.updateTestQuestion(q, Courses.getSelectedCourseCode());
+
+                    if (isDebuggable)
+                        Log.d(TAG, "UPDATED: " + q.toString());
+                }
+            }
 
             //Read answers info from webservice response
             for (int i = 0; i < listSizeAnswers; i++) {
                 SoapObject pii = (SoapObject) answersListObject.getProperty(i);
-                int qstCod = Integer.parseInt(pii.getProperty("questionCode").toString());
-                int ansIndex = Integer.parseInt(pii.getProperty("answerIndex").toString());
-                int correct = Integer.parseInt(pii.getProperty("correct").toString());
+                Integer qstCod = Integer.valueOf(pii.getProperty("questionCode").toString());
+                Integer ansIndex = Integer.valueOf(pii.getProperty("answerIndex").toString());
+                Integer correct = Integer.valueOf(pii.getProperty("correct").toString());
                 String answer = pii.getProperty("answerText").toString();
                 String answerFeeback = pii.getProperty("answerFeedback").toString();
-                TestAnswer a = new TestAnswer(0L, qstCod, ansIndex, Utils.parseIntBool(correct), false, answer, answerFeeback, "");
-                answersList.add(a);
-            }
+                TestAnswer a = new TestAnswer(0, ansIndex, qstCod, Utils.parseIntBool(correct), answer, answerFeeback);
 
-            testAnswerDao.insertTestAnswer(answersList);
+                //If it's a new answer, insert in database
+                try {
+                    dbHelper.insertTestAnswer(a, qstCod);
+
+                    if (isDebuggable)
+                        Log.d(TAG, "INSERTED: " + a.toString());
+
+                    //If it's an updated answer, update it's row in database
+                } catch (SQLException e) {
+                    dbHelper.updateTestAnswer(a, qstCod);
+
+                    if (isDebuggable)
+                        Log.d(TAG, "UPDATED: " + a.toString());
+                }
+            }
 
             //Read relationships between questions and tags from webservice response
             for (int i = 0; i < listSizeQuestionTags; i++) {
                 SoapObject pii = (SoapObject) questionTagsListObject.getProperty(i);
-                int qstCod = Integer.parseInt(pii.getProperty("questionCode").toString());
-                int tagCod = Integer.parseInt(pii.getProperty("tagCode").toString());
-                int tagIndex = Integer.parseInt(pii.getProperty("tagIndex").toString());
-                tagsQuestionsList.add(new TestTagsQuestions(qstCod, tagCod, tagIndex));
+                Integer qstCod = Integer.valueOf(pii.getProperty("questionCode").toString());
+                Integer tagCod = Integer.valueOf(pii.getProperty("tagCode").toString());
+                Integer tagIndex = Integer.valueOf(pii.getProperty("tagIndex").toString());
+                TestTag tag = tagsList.get(tagsList.indexOf(new TestTag(tagCod, "", 0)));
+                tag.addQstCod(qstCod);
+                tag.setTagInd(tagIndex);
+
+                //If it's a new tag, insert in database
+                try {
+                    dbHelper.insertTestTag(tag);
+
+                    if (isDebuggable)
+                        Log.d(TAG, "INSERTED: " + tag.toString());
+
+                    //If it's an updated tag, update it's rows in database
+                } catch (SQLException e) {
+                    dbHelper.updateTestTag(tag);
+
+                    if (isDebuggable)
+                        Log.d(TAG, "UPDATED: " + tag.toString());
+                }
             }
 
-            testTagsQuestionsDao.insertTestTagQuestion(tagsQuestionsList);
-
+            //Update last time test was updated
+            //Test testConfig = (Test) dbHelper.getRow(Constants.DB_TABLE_TEST_CONFIG, "id", Long.toString(Constants.getSelectedCourseCode()));
+            //testConfig.setEditTime(System.currentTimeMillis() / 1000L);
+            //dbHelper.updateTestConfig(testConfig.getId(), testConfig);
+            dbHelper.endTransaction(true);
+            
             timeAfter = System.currentTimeMillis();
 
             Log.i(TAG, "Retrieved " + listSizeTags + " tags");
@@ -226,6 +242,6 @@ public class TestsQuestionsDownload extends Module {
      */
     @Override
     protected void onError() {
-        // No-op
+
     }
 }

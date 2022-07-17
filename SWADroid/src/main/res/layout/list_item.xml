@@ -4,6 +4,8 @@
     android:layout_height="match_parent"
     android:paddingBottom="10dip"
     android:paddingEnd="0dip"
+    android:paddingLeft="15dip"
+    android:paddingRight="0dip"
     android:paddingStart="15dip"
     android:paddingTop="10dip"
     android:textAppearance="?android:attr/textAppearanceLarge"

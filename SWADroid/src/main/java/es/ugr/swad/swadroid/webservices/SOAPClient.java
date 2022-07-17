@@ -33,7 +33,7 @@ import es.ugr.swad.swadroid.preferences.Preferences;
 /**
  * SOAP client for SWAD webservices
  * 
- * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
+ * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
  * 
  */
 public class SOAPClient implements IWebserviceClient {
@@ -99,12 +99,12 @@ public class SOAPClient implements IWebserviceClient {
 	/**
 	 * Sets METHOD_NAME parameter.
 	 * 
-	 * @param methodName
+	 * @param METHOD_NAME
 	 *            METHOD_NAME parameter.
 	 */
 	@Override
-	public void setMethodName(String methodName) {
-		this.METHOD_NAME = methodName;
+	public void setMETHOD_NAME(String METHOD_NAME) {
+		this.METHOD_NAME = METHOD_NAME;
 	}
 
 	/**
@@ -172,7 +172,7 @@ public class SOAPClient implements IWebserviceClient {
 			PATH = "";
 		}
 
-		/*
+		/**
 		 * Use of KeepAliveHttpsTransport deals with the problems with the
 		 * Android ssl libraries having trouble with certificates and
 		 * certificate authorities somehow messing up connecting/needing
