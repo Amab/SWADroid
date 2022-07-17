@@ -80,7 +80,7 @@ public class FrequentUsersAdapter extends ArrayAdapter<FrequentUser> {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     int getPosition = (Integer) buttonView.getTag();  // Here we get the position that we have set for the checkbox using setTag.
-                    list.get(getPosition).setCheckbox(buttonView.isChecked()); // Set the value of checkbox to maintain its state.
+                    list.get(getPosition).setSelectedCheckbox(buttonView.isChecked()); // Set the value of checkbox to maintain its state.
                 }
             });
             convertView.setTag(holder);
@@ -89,7 +89,7 @@ public class FrequentUsersAdapter extends ArrayAdapter<FrequentUser> {
             holder = (ViewHolder) convertView.getTag();
         }
         holder.checkbox.setTag(position); // This line is important.
-        holder.checkbox.setChecked(list.get(position).getCheckbox());
+        holder.checkbox.setChecked(list.get(position).isSelectedCheckbox());
 
         if(user.getUserPhoto().isEmpty())  //when the user don't have photo, the string is empty
             holder.image.setImageResource(R.drawable.usr_bl);

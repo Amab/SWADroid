@@ -28,10 +28,11 @@ import org.ksoap2.serialization.SoapObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import java.util.stream.Collectors;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.database.DataBaseHelper;
+import es.ugr.swad.swadroid.dao.GroupDao;
 import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.modules.Module;
@@ -54,6 +55,10 @@ public class Groups extends Module {
      */
     private long courseCode;
     /**
+     * DAO for groups
+     */
+    private GroupDao groupDao;
+    /**
      * Groups tag name for Logcat
      */
     private static final String TAG = Constants.APP_TAG + " Groups";
@@ -73,6 +78,9 @@ public class Groups extends Module {
         courseCode = getIntent().getLongExtra("courseCode", -1);
         setMETHOD_NAME("getGroups");
         getSupportActionBar().hide();
+
+        //Initialize DAOs
+        groupDao = db.getGroupDao();
     }
 
     @Override
@@ -114,9 +122,9 @@ public class Groups extends Module {
 
         if (result != null) {
             //Stores groups data returned by webservice response
-            List<Model> groupsSWAD = new ArrayList<>();
+            List<Group> groupsSWAD = new ArrayList<>();
 
-            ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
+            ArrayList<?> res = new ArrayList<>((Vector<?>) result);
             SoapObject soap = (SoapObject) res.get(1);
             int numGroups = soap.getPropertyCount();
 
@@ -130,7 +138,7 @@ public class Groups extends Module {
                 int numStudents = Integer.parseInt(pii.getProperty("numStudents").toString());
                 int fileZones = Integer.parseInt(pii.getProperty("fileZones").toString());
                 int member = Integer.parseInt(pii.getProperty("member").toString());
-                Group g = new Group(id, groupName, groupTypeCode, maxStudents, open, numStudents, fileZones, member);
+                Group g = new Group(id, groupName, groupTypeCode, courseCode, maxStudents, open, numStudents, fileZones, member);
 
                 groupsSWAD.add(g);
 
@@ -139,16 +147,9 @@ public class Groups extends Module {
                 }
             }
 
-            dbHelper.insertCollection(DataBaseHelper.DB_TABLE_GROUPS, groupsSWAD, courseCode);
-            //TODO remove obsolete groups
-            /*for(int i = 0; i < groupsSWAD.size(); ++i){
-                Group g = (Group) groupsSWAD.get(i);
-				//boolean isAdded = dbHelper.insertGroup(g,Global.getSelectedCourseCode());
-				//if(!isAdded){
-				if(!dbHelper.insertGroup(g,Global.getSelectedCourseCode())){
-					dbHelper.updateGroup(g.getId(), Global.getSelectedCourseCode(), g);
-				}
-			}*/
+            groupDao.insertGroups(groupsSWAD);
+            //Remove obsolete groups
+            groupDao.deleteGroupsByIdNotIn(groupsSWAD.stream().map(Model::getId).collect(Collectors.toList()));
             //Request finalized without errors
             setResult(RESULT_OK);
         }

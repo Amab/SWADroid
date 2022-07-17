@@ -30,7 +30,6 @@ import android.content.Intent;
 import android.content.SyncResult;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -46,15 +45,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.TimeoutException;
+import java.util.stream.Collectors;
 
 import javax.net.ssl.SSLException;
 
 import es.ugr.swad.swadroid.Config;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.database.DataBaseHelper;
+import es.ugr.swad.swadroid.dao.SWADNotificationDao;
+import es.ugr.swad.swadroid.database.AppDatabase;
 import es.ugr.swad.swadroid.gui.AlertNotificationFactory;
-import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.model.User;
 import es.ugr.swad.swadroid.modules.login.Login;
@@ -68,7 +68,7 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
  * Service for notifications sync adapter.
  * @see <a href="https://openswad.org/ws/#getNotifications">getNotifications</a>
  *
- * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
  */
 public class NotificationsSyncAdapterService extends Service {
     private static final String TAG = "NotificationsSyncAdapterService";
@@ -76,13 +76,13 @@ public class NotificationsSyncAdapterService extends Service {
 	private static SecureConnection conn;
     private static SyncAdapterImpl sSyncAdapter = null;
     private static int notifCount;
-    private static DataBaseHelper dbHelper;
     private static IWebserviceClient webserviceClient;
     private static String METHOD_NAME = "";
     private static Object result;
     private static String errorMessage = "";
     private static boolean isConnected;
     private static boolean isDebuggable;
+    private static SWADNotificationDao swadNotificationDao;
     public static final String START_SYNC = "es.ugr.swad.swadroid.sync.start";
     public static final String STOP_SYNC = "es.ugr.swad.swadroid.sync.stop";
     /**
@@ -165,11 +165,6 @@ public class NotificationsSyncAdapterService extends Service {
                     }
                 }
 
-                // Launch database rollback
-                if(dbHelper.isDbInTransaction()) {
-                	dbHelper.endTransaction(false);
-                }
-
                 Log.e(TAG, errorMessage, e);
 
                 //Notify synchronization stop
@@ -199,9 +194,11 @@ public class NotificationsSyncAdapterService extends Service {
 
         try {
             prefs = new Preferences(this);
-            dbHelper = new DataBaseHelper(this);
             //Initialize webservices client
             webserviceClient = null;
+
+            //Initialize DAOs
+            swadNotificationDao = AppDatabase.getAppDatabase(this).getSwadNotificationDao();
         } catch (Exception e) {
             Log.e(TAG, "Error initializing database and preferences", e);
         }
@@ -244,14 +241,11 @@ public class NotificationsSyncAdapterService extends Service {
      * Creates webservice request.
      */
     private static void createRequest(String clientType) {
-    	if(webserviceClient == null) {
-	    	if(clientType.equals(SOAPClient.CLIENT_TYPE)) {
-	    		webserviceClient = new SOAPClient();
-	    	}
-
+    	if(webserviceClient == null && clientType.equals(SOAPClient.CLIENT_TYPE)) {
+            webserviceClient = new SOAPClient();
     	}
 
-        webserviceClient.setMETHOD_NAME(METHOD_NAME);
+        webserviceClient.setMethodName(METHOD_NAME);
     	webserviceClient.createRequest();
     }
 
@@ -315,12 +309,13 @@ public class NotificationsSyncAdapterService extends Service {
     }
 
     private static void getNotifications() throws Exception {
-        int numDeletedNotif;
+        List<SWADNotification> notificationsList = new ArrayList<>();
+        long numDeletedNotif;
 
     	Log.d(TAG, "Logged");
 
         //Calculates next timestamp to be requested
-        Long timestamp = Long.valueOf(dbHelper.getFieldOfLastNotification("eventTime"));
+        long timestamp = swadNotificationDao.findMaxEventTime();
         timestamp++;
 
         //Creates webservice request, adds required params and sends request to webservice
@@ -332,20 +327,18 @@ public class NotificationsSyncAdapterService extends Service {
         sendRequest(SWADNotification.class, false);
 
         if (result != null) {
-            dbHelper.beginTransaction();
-
             //Stores notifications data returned by webservice response
-            ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
+            ArrayList<?> res = new ArrayList<>((Vector<?>) result);
             SoapObject soap = (SoapObject) res.get(1);
             int numNotif = soap.getPropertyCount();
 
             notifCount = 0;
             for (int i = 0; i < numNotif; i++) {
             	SoapObject pii = (SoapObject) soap.getProperty(i);
-                Long notifCode = Long.valueOf(pii.getProperty("notifCode").toString());
-                Long eventCode = Long.valueOf(pii.getProperty("eventCode").toString());
+                long notifCode = Long.parseLong(pii.getProperty("notifCode").toString());
+                long eventCode = Long.parseLong(pii.getProperty("eventCode").toString());
                 String eventType = pii.getProperty("eventType").toString();
-                Long eventTime = Long.valueOf(pii.getProperty("eventTime").toString());
+                long eventTime = Long.parseLong(pii.getProperty("eventTime").toString());
                 String userNickname = pii.getProperty("userNickname").toString();
                 String userSurname1 = pii.getProperty("userSurname1").toString();
                 String userSurname2 = pii.getProperty("userSurname2").toString();
@@ -353,7 +346,7 @@ public class NotificationsSyncAdapterService extends Service {
                 String userPhoto = pii.getProperty("userPhoto").toString();
                 String location = pii.getProperty("location").toString();
                 String summary = pii.getProperty("summary").toString();
-                Integer status = Integer.valueOf(pii.getProperty("status").toString());
+                int status = Integer.parseInt(pii.getProperty("status").toString());
                 String content = pii.getProperty("content").toString();
                 boolean notifReadSWAD = (status >= 4);
                 boolean notifCancelled = (status >= 8);
@@ -364,25 +357,23 @@ public class NotificationsSyncAdapterService extends Service {
                             eventTime, userNickname, userSurname1, userSurname2, userFirstName,
                             userPhoto, location, summary, status, content, notifReadSWAD, notifReadSWAD);
 
-                    dbHelper.insertNotification(n);
+                    notificationsList.add(n);
 
                     //Count unread notifications only
                     if (!notifReadSWAD) {
                         notifCount++;
                     }
-
-                    //Log.d(TAG, n.toString());
                 }
             }
+
+            swadNotificationDao.insertSWADNotifications(notificationsList);
 
             //Request finalized without errors
             Log.i(TAG, "Retrieved " + numNotif + " notifications (" + notifCount + " unread)");
 
             //Clean old notifications to control database size
-            numDeletedNotif = dbHelper.cleanOldNotificationsByAge(Constants.CLEAN_NOTIFICATIONS_THRESHOLD);
+            numDeletedNotif = swadNotificationDao.deleteAllByAge(Constants.CLEAN_NOTIFICATIONS_THRESHOLD);
             Log.i(TAG, "Deleted " + numDeletedNotif + " notifications from database");
-
-            dbHelper.endTransaction(true);
         }
     }
 
@@ -390,15 +381,13 @@ public class NotificationsSyncAdapterService extends Service {
      * Sends to SWAD the "seen notifications" info
      */
     private static void sendReadedNotifications(Context context) {
-        List<Model> markedNotificationsList;
+        List<SWADNotification> markedNotificationsList;
         String seenNotifCodes;
         Intent activity;
         int numMarkedNotificationsList;
 
     	//Construct a list of seen notifications in state "pending to mark as read in SWAD"
-        markedNotificationsList = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_NOTIFICATIONS,
-        		"seenLocal='" + Utils.parseBoolString(true)
-        		+ "' AND seenRemote='" + Utils.parseBoolString(false) + "'", null);
+        markedNotificationsList = swadNotificationDao.findAllPendingToRead();
 
         numMarkedNotificationsList = markedNotificationsList.size();
         if(isDebuggable)
@@ -406,7 +395,10 @@ public class NotificationsSyncAdapterService extends Service {
 
         if(numMarkedNotificationsList > 0) {
             //Creates a string of notification codes separated by commas from the previous list
-            seenNotifCodes = Utils.getSeenNotificationCodes(markedNotificationsList);
+            seenNotifCodes = markedNotificationsList.stream()
+                    .map(n -> String.valueOf(n.getId()))
+                    .collect(Collectors.joining(","));
+
 	        if(isDebuggable)
 	        	Log.d(TAG, "seenNotifCodes=" + seenNotifCodes);
 

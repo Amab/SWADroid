@@ -1,15 +1,11 @@
 package es.ugr.swad.swadroid.modules.messages;
 
 import android.annotation.TargetApi;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.core.view.MenuItemCompat;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.SearchView;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
 import android.util.Log;
@@ -17,18 +13,25 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SearchView;
+import androidx.core.view.MenuItemCompat;
+
 import org.ksoap2.serialization.SoapObject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import java.util.stream.Collectors;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.database.DataBaseHelper;
+import es.ugr.swad.swadroid.dao.FrequentUserDao;
 import es.ugr.swad.swadroid.gui.ProgressScreen;
 import es.ugr.swad.swadroid.model.FrequentUser;
 import es.ugr.swad.swadroid.model.User;
@@ -68,11 +71,11 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
     /**
      * Array of receivers
      */
-    private ArrayList<UserFilter> arrayReceivers;
+    private List<UserFilter> arrayReceivers;
     /**
      * Array of old receivers. It's used when we discard the users added
      */
-    private ArrayList<UserFilter> oldReceivers;
+    private List<UserFilter> oldReceivers;
     /**
      * Adapter to show UserFilter in list
      */
@@ -129,6 +132,10 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
      * User logged identifier
      */
     private String userLogged;
+    /**
+     * DAO for FrequentRecipient
+     */
+    private FrequentUserDao frequentUserDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,16 +147,16 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
 
         usersFilter = new UsersList();
         frequentUsers = new FrequentUsersList();
-        arrayReceivers = (ArrayList) getIntent().getSerializableExtra("receivers");
+        arrayReceivers = (List) getIntent().getSerializableExtra("receivers");
         //save the old receivers
         if (arrayReceivers != null) {
-            oldReceivers = (ArrayList) arrayReceivers.clone();
+            oldReceivers = new ArrayList<>(arrayReceivers);
         }
 
         search = "";
 
         //users list
-        lvUsers = (ListView) findViewById(R.id.listItems);
+        lvUsers = findViewById(R.id.listItems);
         lvUsers.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
 
         //loading screen
@@ -159,16 +166,16 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                 getString(R.string.loadingMsg), this);
 
         //frequent users screen
-        frequentUsersTitle = (TextView) findViewById(R.id.listTitle);
+        frequentUsersTitle = findViewById(R.id.listTitle);
 
         //font title of frequent users in bold
         SpannableString title =  new SpannableString(frequentUsersTitle.getHint().toString());
         title.setSpan(new StyleSpan(Typeface.BOLD), 0, title.length(), 0);
         frequentUsersTitle.setHint(title);
 
-        frequentUsersText = (TextView) findViewById(R.id.listText);
+        frequentUsersText = findViewById(R.id.listText);
 
-        frequentsList = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_FREQUENT_RECIPIENTS, "idUser='" + userLogged + "'", "score DESC");
+        frequentsList = frequentUserDao.findByUserByIdUserOrderByScoreDesc(userLogged);
         numFrequents = frequentsList.size();
 
         if(numFrequents == 0) {
@@ -177,16 +184,16 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         else{
             frequentUsersText.setVisibility(View.GONE);
             for(int i=0; i<numFrequents; i++){
-                String idUser = frequentsList.get(i).getidUser();
+                String idUser = frequentsList.get(i).getIdUser();
                 String nickname = frequentsList.get(i).getUserNickname();
                 String surname1 = frequentsList.get(i).getUserSurname1();
                 String surname2 = frequentsList.get(i).getUserSurname2();
                 String firstname = frequentsList.get(i).getUserFirstname();
                 String userPhoto = frequentsList.get(i).getUserPhoto();
                 int userCode = frequentsList.get(i).getUserCode();
-                boolean selected = frequentsList.get(i).getCheckbox();
-                Double score = frequentsList.get(i).getScore();
-                frequentUsers.saveUser(new FrequentUser(idUser, nickname, surname1, surname2, firstname, userPhoto, userCode, selected, score));
+                boolean selected = frequentsList.get(i).isSelectedCheckbox();
+                double score = frequentsList.get(i).getScore();
+                frequentUsers.saveUser(new FrequentUser(i, idUser, nickname, surname1, surname2, firstname, userPhoto, userCode, selected, score));
             }
 
             updateCheckboxesFrequentUsers();
@@ -242,13 +249,9 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
             searchView.setVisibility(View.GONE);
         }
 
-        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                //select checkboxes whose users were added before
-                updateCheckboxesUsersFilter();
-            }
-
+        searchView.setOnQueryTextFocusChangeListener((v, hasFocus) -> {
+            //select checkboxes whose users were added before
+            updateCheckboxesUsersFilter();
         });
 
         return super.onCreateOptionsMenu(menu);
@@ -262,9 +265,9 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         invalidateOptionsMenu();
         Intent intent = new Intent();
         if(send){
-            intent.putExtra("receivers", arrayReceivers);
+            intent.putExtra("receivers", (ArrayList) arrayReceivers);
         }else{
-            intent.putExtra("receivers", oldReceivers);
+            intent.putExtra("receivers", (ArrayList) oldReceivers);
         }
 
         setResult(RESULT_OK, intent);
@@ -350,7 +353,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         sendRequest(User.class, false);
 
         if (result != null) {
-            ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
+            ArrayList<?> res = new ArrayList<>((Vector<?>) result);
             SoapObject soap = (SoapObject) res.get(1);
             int csSize = soap.getPropertyCount();
             usersFilter = new UsersList();
@@ -377,7 +380,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                 }
             }
             numUsers = usersFilter.getUsers().size();
-            Log.d(TAG, "numUsersSWAD = " + String.valueOf(csSize) + ", numUsersSWADroid = " + numUsers);
+            Log.d(TAG, "numUsersSWAD = " + csSize + ", numUsersSWADroid = " + numUsers);
         }
 
         setResult(RESULT_OK);
@@ -417,46 +420,34 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
 
     @Override
     protected void onError() {
-
+        // No-op
     }
 
     private void listenerUserList() {
-        lvUsers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                checkbox = (CheckBox) view.findViewById(R.id.check);
-                if (checkbox.isChecked()){
-                    checkbox.setChecked(false);
-                    for(int i=0; i<arrayReceivers.size(); i++) {
-                        if (arrayReceivers.get(i).getUserNickname().equals(usersFilter.getUsers().get(position).getUserNickname()))
-                            arrayReceivers.remove(i);
-                    }
-                }
-                else{
-                    checkbox.setChecked(true);
-                    arrayReceivers.add(usersFilter.getUsers().get(position));
-                }
+        lvUsers.setOnItemClickListener((parent, view, position, id) -> {
+            checkbox = view.findViewById(R.id.check);
+            if (checkbox.isChecked()){
+                checkbox.setChecked(false);
+                arrayReceivers = arrayReceivers.stream().filter(u -> !u.getUserNickname().equals(usersFilter.getUsers().get(position).getUserNickname())).collect(Collectors.toList());
+            }
+            else{
+                checkbox.setChecked(true);
+                arrayReceivers.add(usersFilter.getUsers().get(position));
             }
         });
     }
 
     private void listenerFrequentUsers() {
-        lvUsers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                checkbox = (CheckBox) view.findViewById(R.id.check);
-                if (checkbox.isChecked()){
-                    checkbox.setChecked(false);
-                    for(int i=0; i<arrayReceivers.size(); i++) {
-                        if (arrayReceivers.get(i).getUserNickname().equals(frequentUsers.getUsers().get(position).getUserNickname()))
-                            arrayReceivers.remove(i);
-                    }
-                }
-                else{
-                    checkbox.setChecked(true);
-                    FrequentUser currentFrequent = frequentUsers.getUsers().get(position);
-                    arrayReceivers.add(new UserFilter(currentFrequent.getUserNickname(), currentFrequent.getUserSurname1(), currentFrequent.getUserSurname2(), currentFrequent.getUserFirstname(), currentFrequent.getUserPhoto(), currentFrequent.getUserCode(), currentFrequent.getCheckbox()));
-                }
+        lvUsers.setOnItemClickListener((parent, view, position, id) -> {
+            checkbox = view.findViewById(R.id.check);
+            if (checkbox.isChecked()){
+                checkbox.setChecked(false);
+                arrayReceivers = arrayReceivers.stream().filter(u -> !u.getUserNickname().equals(frequentUsers.getUsers().get(position).getUserNickname())).collect(Collectors.toList());
+            }
+            else{
+                checkbox.setChecked(true);
+                FrequentUser currentFrequent = frequentUsers.getUsers().get(position);
+                arrayReceivers.add(new UserFilter(currentFrequent.getUserNickname(), currentFrequent.getUserSurname1(), currentFrequent.getUserSurname2(), currentFrequent.getUserFirstname(), currentFrequent.getUserPhoto(), currentFrequent.getUserCode(), currentFrequent.isSelectedCheckbox()));
             }
         });
     }
@@ -470,7 +461,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
                 selected = arrayReceivers.get(j).getUserNickname().equals(nickname);
                 if(selected)
                     j = arrayReceivers.size();
-                usersFilter.getUsers().get(i).setCheckbox(selected);
+                usersFilter.getUsers().get(i).setSelectedCheckbox(selected);
             }
         }
     }
@@ -482,7 +473,7 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
             for(int j=0; j<arrayReceivers.size(); j++){
                 nickname = frequentUsers.getUsers().get(i).getUserNickname();
                 selected = arrayReceivers.get(j).getUserNickname().equals(nickname);
-                frequentUsers.getUsers().get(i).setCheckbox(selected);
+                frequentUsers.getUsers().get(i).setSelectedCheckbox(selected);
             }
         }
     }
@@ -494,26 +485,19 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         builder.setTitle(R.string.where_to_search);
         builder.setCancelable(false);
 
-        builder.setSingleChoiceItems(choiceList, 0, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-            }
+        builder.setSingleChoiceItems(choiceList, 0, (dialog, item) -> {
         });
 
-        builder.setNegativeButton(getString(R.string.cancelMsg), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-            }
+        builder.setNegativeButton(getString(R.string.cancelMsg), (dialog, which) -> {
         });
 
-        builder.setPositiveButton(getString(R.string.acceptMsg), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                int selectedPosition = ((AlertDialog)dialog).getListView().getCheckedItemPosition();
-                if (selectedPosition == 0)
-                    courseCode = Courses.getSelectedCourseCode();
-                else
-                    courseCode = -1;
-                runConnection();
-            }
+        builder.setPositiveButton(getString(R.string.acceptMsg), (dialog, which) -> {
+            int selectedPosition = ((AlertDialog)dialog).getListView().getCheckedItemPosition();
+            if (selectedPosition == 0)
+                courseCode = Courses.getSelectedCourseCode();
+            else
+                courseCode = -1;
+            runConnection();
         });
 
         AlertDialog alert = builder.create();
@@ -526,20 +510,14 @@ public class SearchUsers extends Module implements SearchView.OnQueryTextListene
         builder.setMessage(R.string.cancelSendReceivers);
         builder.setCancelable(true);
 
-        builder.setNegativeButton(getString(R.string.cancelMsg), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                hideMenu = false;
-                invalidateOptionsMenu();
-                searchView.setIconified(false);
-                searchView.setQuery(search, false);
-            }
+        builder.setNegativeButton(getString(R.string.cancelMsg), (dialog, which) -> {
+            hideMenu = false;
+            invalidateOptionsMenu();
+            searchView.setIconified(false);
+            searchView.setQuery(search, false);
         });
 
-        builder.setPositiveButton(getString(R.string.discardMsg), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                sendReceivers(false);
-            }
-        });
+        builder.setPositiveButton(getString(R.string.discardMsg), (dialog, which) -> sendReceivers(false));
 
         AlertDialog alert = builder.create();
         alert.show();

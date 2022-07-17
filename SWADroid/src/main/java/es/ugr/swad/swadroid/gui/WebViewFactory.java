@@ -25,7 +25,7 @@ import android.webkit.WebViewClient;
 /**
  * Class for create WebViews
  *
- * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
  */
 public class WebViewFactory {
     public static WebView getMathJaxWebView(WebView view) {

@@ -3,7 +3,7 @@ package es.ugr.swad.swadroid.utils;
 /**
  * Class for manage Android Oreo notifications
  *
- * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
  */
 
 import android.annotation.TargetApi;

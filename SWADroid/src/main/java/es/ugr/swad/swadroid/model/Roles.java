@@ -1,12 +1,17 @@
 package es.ugr.swad.swadroid.model;
 
+import org.ksoap2.serialization.KvmSerializable;
 import org.ksoap2.serialization.PropertyInfo;
 
 import java.io.Serializable;
 import java.util.Hashtable;
 
-public class Roles extends Model implements Serializable {
+import lombok.Data;
 
+@Data
+public class Roles implements Serializable, KvmSerializable {
+
+    private long id;
     private int rol;
 
     protected static final PropertyInfo PI_id = new PropertyInfo();
@@ -18,14 +23,6 @@ public class Roles extends Model implements Serializable {
             };
 
     public Roles(int rol) {
-        this.rol = rol;
-    }
-
-    public int getRol() {
-        return rol;
-    }
-
-    public void setRol(int rol) {
         this.rol = rol;
     }
 

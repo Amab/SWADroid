@@ -31,9 +31,8 @@ import java.util.List;
 import java.util.Vector;
 
 import es.ugr.swad.swadroid.Constants;
-import es.ugr.swad.swadroid.database.DataBaseHelper;
+import es.ugr.swad.swadroid.dao.CourseDao;
 import es.ugr.swad.swadroid.model.Course;
-import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
@@ -42,7 +41,7 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
  * Courses module for get user's courses
  * @see <a href="https://openswad.org/ws/#getCourses">getCourses</a>
  *
- * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */
@@ -64,6 +63,8 @@ public class Courses extends Module {
 	 */
 	private static String selectedCourseFullName;
 
+	private CourseDao courseDao;
+
     @Override
     protected void runConnection() {
         super.runConnection();
@@ -81,6 +82,9 @@ public class Courses extends Module {
         super.onCreate(savedInstanceState);
         setMETHOD_NAME("getCourses");
         getSupportActionBar().hide();
+
+        //Initialize DAOs
+        courseDao = db.getCourseDao();
     }
 
     /* (non-Javadoc)
@@ -127,12 +131,10 @@ public class Courses extends Module {
 
         if (result != null) {
             //Stores courses data returned by webservice response
-            List<Model> coursesDB = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_COURSES);
-            List<Model> coursesSWAD = new ArrayList<>();
-            List<Model> newCourses = new ArrayList<>();
-            List<Model> obsoleteCourses = new ArrayList<>();
+            List<Course> coursesDB = courseDao.findAll();
+            List<Course> coursesSWAD = new ArrayList<>();
 
-			ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
+            ArrayList<?> res = new ArrayList<>((Vector<?>) result);
             SoapObject soap = (SoapObject) res.get(1);
             int csSize = soap.getPropertyCount();
             for (int i = 0; i < csSize; i++) {
@@ -143,39 +145,26 @@ public class Courses extends Module {
                 String fullName = pii.getProperty("courseFullName").toString();
                 Course c = new Course(id, userRole, shortName, fullName);
                 coursesSWAD.add(c);
-
-				/*if(isDebuggable)
-                    Log.d(TAG, c.toString());*/
             }
 
             Log.i(TAG, "Retrieved " + csSize + " courses");
 
             //Obtain old unregistered courses and modified courses
-            obsoleteCourses.addAll(coursesDB);
+            List<Course> obsoleteCourses = new ArrayList<>(coursesDB);
             obsoleteCourses.removeAll(coursesSWAD);
 
             //Obtain new registered courses
-            newCourses.addAll(coursesSWAD);
+            List<Course> newCourses = new ArrayList<>(coursesSWAD);
             newCourses.removeAll(coursesDB);
             newCourses.removeAll(obsoleteCourses);
 
             //Delete old unregistered courses stuff
-            csSize = obsoleteCourses.size();
-            for (int i = 0; i < csSize; i++) {
-                Course c = (Course) obsoleteCourses.get(i);
-                dbHelper.removeRow(DataBaseHelper.DB_TABLE_COURSES, c.getId());
-            }
-
+            csSize = (int) courseDao.deleteCourses(obsoleteCourses);
             Log.i(TAG, "Deleted " + csSize + " old courses");
 
             //Insert new registered courses
-            csSize = newCourses.size();
-            for (int i = 0; i < csSize; i++) {
-                Course c = (Course) newCourses.get(i);
-                dbHelper.insertCourse(c);
-            }
-
-            Log.i(TAG, "Added " + csSize + " new courses");
+            courseDao.insertCourses(newCourses);
+            Log.i(TAG, "Added " + newCourses.size() + " new courses");
 
             //Request finalized without errors
             setResult(RESULT_OK);
@@ -195,7 +184,7 @@ public class Courses extends Module {
      */
     @Override
     protected void onError() {
-
+        // No-op
     }
 
     /**
@@ -205,7 +194,7 @@ public class Courses extends Module {
      */
     public void clearCourses(Context context) {
         try {
-            dbHelper.emptyTable(DataBaseHelper.DB_TABLE_COURSES);
+            courseDao.deleteAll();
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
         }
@@ -228,21 +217,17 @@ public class Courses extends Module {
 
 	public static void setSelectedCourseShortName(String currentCourseShortName) {
 	    selectedCourseShortName = currentCourseShortName;
-	
 	}
 
 	public static void setSelectedCourseFullName(String currentCourseFullName) {
 	    selectedCourseFullName = currentCourseFullName;
-	
 	}
 
 	public static String getSelectedCourseShortName() {
 	    return selectedCourseShortName;
-	
 	}
 
 	public static String getSelectedCourseFullName() {
 	    return selectedCourseFullName;
-	
 	}
 }

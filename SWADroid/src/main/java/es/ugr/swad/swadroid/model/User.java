@@ -19,23 +19,28 @@
 
 package es.ugr.swad.swadroid.model;
 
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.Index;
+import androidx.room.TypeConverters;
+
 import org.ksoap2.serialization.PropertyInfo;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Hashtable;
-import java.util.Locale;
 
-import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.converters.CalendarConverter;
+import lombok.Data;
 
 /**
  * User data.
  *
- * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  */
+@Data
+@TypeConverters({CalendarConverter.class})
+@Entity(indices = {@Index("userNickname")})
 public class User extends Model {
     /**
      * Webservices session key.
@@ -74,17 +79,25 @@ public class User extends Model {
      */
     private int userRole;
 
+    @Ignore
     private static final PropertyInfo PI_wsKey = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_userID = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_userNickname = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_userSurname1 = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_userSurname2 = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_userFirstname = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_userPhoto = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_userBirthday = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_userRole = new PropertyInfo();
-
-    @SuppressWarnings("unused")
+    @Ignore
     private static PropertyInfo[] PI_PROP_ARRAY = {
             PI_wsKey,
             PI_userID,
@@ -97,8 +110,7 @@ public class User extends Model {
             PI_userRole
     };
 
-    private static DateFormat dateFormat = DateFormat.getDateInstance();
-
+    @Ignore
     public User() {
         super(-1);
     }
@@ -119,7 +131,7 @@ public class User extends Model {
      */
     public User(long id, String wsKey, String userID, String userNickname, String userSurname1,
                 String userSurname2, String userFirstname, String userPhoto, String userBirthday,
-                int userRole) throws ParseException {
+                int userRole) {
         super(id);
         this.wsKey = wsKey;
         this.userID = userID;
@@ -132,124 +144,23 @@ public class User extends Model {
         this.userRole = userRole;
     }
 
-    /**
-     * Gets user name.
-     *
-     * @return User name.
-     */
-    public String getUserFirstname() {
-        return userFirstname;
-    }
-
-    /**
-     * Sets user name.
-     *
-     * @param userFirstname User name.
-     */
-    public void setUserFirstname(String userFirstname) {
-        this.userFirstname = userFirstname;
-    }
-
-    /**
-     * Gets user identifier.
-     *
-     * @return User identifier.
-     */
-    public String getUserID() {
-        return userID;
-    }
-
-    /**
-     * Sets user identifier.
-     *
-     * @param userID User identifier.
-     */
-    public void setUserID(String userID) {
+    public User(long id, String wsKey, String userID, String userNickname, String userSurname1,
+                String userSurname2, String userFirstname, String userPhoto, Calendar userBirthday,
+                int userRole) {
+        super(id);
+        this.wsKey = wsKey;
         this.userID = userID;
-    }
-
-    /**
-     * Gets user nickname.
-     *
-     * @return User nickname.
-     */
-    public String getUserNickname() {
-        return userNickname;
-    }
-
-    /**
-     * Sets user nickname.
-     *
-     * @param userNickname User nickname.
-     */
-    public void setUserNickname(String userNickname) {
-        this.userID = userNickname;
-    }
-
-    /**
-     * Gets user first surname.
-     *
-     * @return User first surname.
-     */
-    public String getUserSurname1() {
-        return userSurname1;
-    }
-
-    /**
-     * Sets user first surname.
-     *
-     * @param userSurname1 User first surname.
-     */
-    public void setUserSurname1(String userSurname1) {
+        this.userNickname = userNickname;
         this.userSurname1 = userSurname1;
-    }
-
-    /**
-     * Gets user last surname.
-     *
-     * @return User last surname.
-     */
-    public String getUserSurname2() {
-        return userSurname2;
-    }
-
-    /**
-     * Sets user last surname.
-     *
-     * @param userSurname2 User last surname.
-     */
-    public void setUserSurname2(String userSurname2) {
         this.userSurname2 = userSurname2;
+        this.userFirstname = userFirstname;
+        this.userPhoto = userPhoto;
+        this.userBirthday = userBirthday;
+        this.userRole = userRole;
     }
 
-    /**
-     * Gets Full path where user's picture is stored.
-     *
-     * @return the userPhoto
-     */
-    public String getUserPhoto() {
-        return userPhoto;
-    }
-
-    /**
-     * Gets File name where user's picture is stored.
-     *
-     * @return the userPhoto
-     */
-    public String getPhotoFileName() {
-        if (userPhoto == null || userPhoto.equals(""))
-            return null;
-        else
-            return userPhoto.substring(userPhoto.lastIndexOf('/') + 1);
-    }
-
-    /**
-     * Gets user birthday.
-     *
-     * @return User birthday.
-     */
-    public Calendar getUserBirthday() {
-        return userBirthday;
+    public void setUserBirthday(Calendar userBirthday) {
+        this.userBirthday = userBirthday;
     }
 
     /**
@@ -257,60 +168,8 @@ public class User extends Model {
      *
      * @param userBirthday User birthday.
      */
-    private void setUserBirthday(String userBirthday) throws ParseException {
-        if((userBirthday != null) && !userBirthday.equals(Constants.NULL_VALUE) && !userBirthday.equals("00000000")) {
-            this.userBirthday = Calendar.getInstance();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
-
-            this.userBirthday.setTime(sdf.parse(userBirthday));
-        } else {
-            this.userBirthday = null;
-        }
-    }
-
-    /**
-     * Sets Full path where user's picture is stored.
-     *
-     * @param userPhoto the userPhoto to set
-     */
-    public void setUserPhoto(String userPhoto) {
-        this.userPhoto = userPhoto;
-    }
-
-    /**
-     * Gets User role.
-     *
-     * @return User role.
-     */
-    public int getUserRole() {
-        return userRole;
-    }
-
-    /**
-     * Sets User role.
-     *
-     * @param userRole User role.
-     */
-    public void setUserRole(int userRole) {
-        this.userRole = userRole;
-    }
-
-    /**
-     * Gets Webservices session key.
-     *
-     * @return Webservices session key.
-     */
-    public String getWsKey() {
-        return wsKey;
-    }
-
-    /**
-     * Sets Webservices session key.
-     *
-     * @param wsKey Webservices session key.
-     */
-    public void setWsKey(String wsKey) {
-        this.wsKey = wsKey;
+    public void setUserBirthday(String userBirthday) {
+        this.userBirthday = CalendarConverter.toCalendar(userBirthday);
     }
 
     public Object getProperty(int param) {
@@ -425,18 +284,4 @@ public class User extends Model {
         }
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "wsKey='" + wsKey + '\'' +
-                ", userID='" + userID + '\'' +
-                ", userNickname='" + userNickname + '\'' +
-                ", userSurname1='" + userSurname1 + '\'' +
-                ", userSurname2='" + userSurname2 + '\'' +
-                ", userFirstname='" + userFirstname + '\'' +
-                ", userPhoto='" + userPhoto + '\'' +
-                ", userBirthday=" + userBirthday +
-                ", userRole=" + userRole +
-                "} " + super.toString();
-    }
 }

@@ -21,7 +21,7 @@ package es.ugr.swad.swadroid;
 /**
  * Application settings.
  * 
- * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
  */
 public class Config {
 	/**

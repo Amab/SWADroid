@@ -3,37 +3,42 @@ package es.ugr.swad.swadroid.modules.rollcall;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.zxing.ResultPoint;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.CompoundBarcodeView;
 
+import java.util.Collections;
 import java.util.List;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.database.DataBaseHelper;
+import es.ugr.swad.swadroid.dao.EventDao;
+import es.ugr.swad.swadroid.dao.UserAttendanceDao;
+import es.ugr.swad.swadroid.dao.UserDao;
+import es.ugr.swad.swadroid.database.AppDatabase;
 import es.ugr.swad.swadroid.gui.ImageFactory;
+import es.ugr.swad.swadroid.model.Event;
 import es.ugr.swad.swadroid.model.User;
-import es.ugr.swad.swadroid.utils.Crypto;
+import es.ugr.swad.swadroid.model.UserAttendance;
 import es.ugr.swad.swadroid.utils.Utils;
 
 /**
  * This Activity performs continuous scanning, processing rollcalls whenever
  * a barcode is scanned.
  *
- * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
  */
 public class ContinuousCaptureActivity extends AppCompatActivity {
 
@@ -50,14 +55,17 @@ public class ContinuousCaptureActivity extends AppCompatActivity {
     private static final long BULK_MODE_SCAN_DELAY_MS = 1000L;
 
     /**
-     * Database helper
+     * Database Access Object for User
      */
-    private static DataBaseHelper dbHelper;
-
+    private UserDao userDao;
     /**
-     * Cryptographic helper
+     * Database Access Object for UserAttendance
      */
-    private static Crypto crypto;
+    private UserAttendanceDao userAttendanceDao;
+    /**
+     * Database Access Object for Event
+     */
+    private EventDao eventDao;
 
     /**
      * Code view
@@ -67,7 +75,7 @@ public class ContinuousCaptureActivity extends AppCompatActivity {
     /**
      * Callback function called when a code is scanned
      */
-    private BarcodeCallback callback = new BarcodeCallback() {
+    private final BarcodeCallback callback = new BarcodeCallback() {
         private long lastTimestamp = 0;
 
         @Override
@@ -88,11 +96,14 @@ public class ContinuousCaptureActivity extends AppCompatActivity {
 
         @Override
         public void possibleResultPoints(List<ResultPoint> resultPoints) {
+            // No-op
         }
     };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AppDatabase db;
+
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.continuous_scan);
@@ -101,13 +112,15 @@ public class ContinuousCaptureActivity extends AppCompatActivity {
 
         try {
             //Initialize database
-            dbHelper = new DataBaseHelper(this);
-            crypto = new Crypto(this, dbHelper.getDBKey());
+            db = AppDatabase.getAppDatabase(this);
+            userDao = db.getUserDao();
+            userAttendanceDao = db.getUserAttendanceDao();
+            eventDao = db.getEventDao();
         } catch (Exception ex) {
             Log.e(TAG, ex.getMessage(), ex);
         }
 
-        barcodeView = (CompoundBarcodeView) findViewById(R.id.barcode_scanner);
+        barcodeView = findViewById(R.id.barcode_scanner);
         barcodeView.decodeContinuous(callback);
     }
 
@@ -140,21 +153,24 @@ public class ContinuousCaptureActivity extends AppCompatActivity {
         int iconResult;
         String qrContent = result.getText();
         boolean validContent = Utils.isValidNickname(qrContent);
+        boolean isUserEnrolledEvent;
         User u = null;
+        Event event;
 
         MediaPlayer mediaPlayer;
         if (validContent) {
-            u = dbHelper.getUser("userNickname", crypto.encrypt(qrContent.substring(1)));
+            u = userDao.findUserByUserNickname(qrContent.substring(1));
+            isUserEnrolledEvent = userAttendanceDao.findByUserCodeAndEventCode(u.getId(), UsersActivity.getEventCode()) != null;
 
-            if ((u != null) && dbHelper.isUserEnrolledEvent(UsersActivity.getEventCode(), "userCode",
-                    String.valueOf(u.getId()))) {
-                Log.d(TAG, "isUserEnrolledEvent=" + dbHelper.isUserEnrolledEvent(UsersActivity.getEventCode(), "userCode",
-                        crypto.encrypt(String.valueOf(u.getId()))));
+            if ((u != null) && isUserEnrolledEvent) {
+                Log.d(TAG, "isUserEnrolledEvent=" + isUserEnrolledEvent);
                 //Mark student as present in the event
-                dbHelper.insertAttendance(u.getId(), UsersActivity.getEventCode(), true);
+                userAttendanceDao.insertAttendances(Collections.singletonList(new UserAttendance(u.getId(), UsersActivity.getEventCode(), true)));
 
                 //Mark event status as "pending"
-                dbHelper.updateEventStatus(UsersActivity.getEventCode(), "pending");
+                event = eventDao.findById(UsersActivity.getEventCode());
+                event.setStatus("pending");
+                eventDao.updateEvents(Collections.singletonList(event));
 
                 messageResult = getString(R.string.scan_valid_student);
                 iconResult = R.drawable.ok;
@@ -178,19 +194,15 @@ public class ContinuousCaptureActivity extends AppCompatActivity {
         }
 
         //Release media player when playback ends
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            public void onCompletion(MediaPlayer mMediaPlayer) {
-                mMediaPlayer.release();
-            }
-        });
+        mediaPlayer.setOnCompletionListener(MediaPlayer::release);
 
         //Play selected sound
         mediaPlayer.start();
 
         // Show photo of student
         LayoutInflater inflater = getLayoutInflater();
-        View layout = inflater.inflate(R.layout.toast_layout, (ViewGroup) findViewById(R.id.toast_layout_root));
-        ImageView image = (ImageView) layout.findViewById(R.id.image);
+        View layout = inflater.inflate(R.layout.toast_layout, findViewById(R.id.toast_layout_root));
+        ImageView image = layout.findViewById(R.id.image);
 
         if (u != null) {
             ImageFactory.displayImage(getApplicationContext(), u.getUserPhoto(), image, true, true,
@@ -198,11 +210,11 @@ public class ContinuousCaptureActivity extends AppCompatActivity {
         }
 
         // Show appropriate icon
-        ImageView icon = (ImageView) layout.findViewById(R.id.icon);
+        ImageView icon = layout.findViewById(R.id.icon);
         icon.setImageResource(iconResult);
 
         // Show appropriate message
-        TextView toastText = (TextView) layout.findViewById(R.id.text);
+        TextView toastText = layout.findViewById(R.id.text);
         toastText.setText(messageResult);
         toastText.setGravity(Gravity.CENTER_VERTICAL);
         toastText.setTextSize(SCAN_TEXT_SIZE);
@@ -215,13 +227,7 @@ public class ContinuousCaptureActivity extends AppCompatActivity {
 
         // Hide message after delay
         if(BULK_MODE_SCAN_DELAY_MS < 2000L) {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    toast.cancel();
-                }
-            }, BULK_MODE_SCAN_DELAY_MS);
+            new Handler().postDelayed(toast::cancel, BULK_MODE_SCAN_DELAY_MS);
         }
     }
 }
-

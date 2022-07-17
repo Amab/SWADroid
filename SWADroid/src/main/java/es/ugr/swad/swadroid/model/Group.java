@@ -1,15 +1,30 @@
 package es.ugr.swad.swadroid.model;
 
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Ignore;
+import androidx.room.Index;
+
 import org.ksoap2.serialization.PropertyInfo;
 
 import java.util.Hashtable;
+
+import lombok.Data;
 
 /**
  * Class for store a group. A group is related to a course and to a group type
  *
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
+ * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
  */
+@Data
+@Entity(indices = {@Index("groupTypeCode"), @Index("crsCod")},
+        foreignKeys = {
+        @ForeignKey(entity = Course.class,
+                parentColumns = "id",
+                childColumns = "crsCod",
+                onDelete = ForeignKey.CASCADE)})
 public class Group extends Model {
     /**
      * Group name.
@@ -19,6 +34,10 @@ public class Group extends Model {
      * Group type code to which the group belongs
      */
     private long groupTypeCode = -1;
+    /**
+     * Group course code to which the group belongs
+     */
+    private long crsCod = -1;
     /**
      * Maximum number of students allowed in this group
      */
@@ -40,15 +59,24 @@ public class Group extends Model {
      */
     private int member;
 
+    @Ignore
     private static final PropertyInfo PI_id = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_groupName = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_maxStudents = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_students = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_open = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_fileZones = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_member = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_groupTypeCode = new PropertyInfo();
 
+    @Ignore
     private static final PropertyInfo[] PI_PROP_ARRAY = {
             PI_id,
             PI_groupName,
@@ -60,25 +88,15 @@ public class Group extends Model {
             PI_member
     };
 
-    /**
-     * Constructor.
-     *
-     * @param id          Group code.
-     * @param groupName   Group name.
-     * @param maxStudents Maximum number of students allowed in this group
-     * @param students    Current number of students that belong to this group
-     * @param open        Indicates whether the enrollment to this group is allowed or not
-     * @param fileZones   Indicates whether the group has an area of documents related to or not
-     * @param member      Indicates if the logged user is a member of this group
-     */
-    public Group(long id, String groupName, long groupTypeCode, int maxStudents, int open, int students, int fileZones, int member) {
+    public Group(long id, String groupName, long groupTypeCode, long crsCod, int maxStudents, int students, int open, int fileZones, int member) {
         super(id);
         this.groupName = groupName;
+        this.groupTypeCode = groupTypeCode;
+        this.crsCod = crsCod;
         this.maxStudents = maxStudents;
         this.students = students;
         this.open = open;
         this.fileZones = fileZones;
-        this.groupTypeCode = groupTypeCode;
         this.member = member;
     }
 
@@ -122,7 +140,7 @@ public class Group extends Model {
     }
 
     @Override
-    public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo propertyInfo) {
+    public void getPropertyInfo(int param, Hashtable arg1, PropertyInfo propertyInfo) {
         switch (param) {
             case 0:
                 propertyInfo.type = PropertyInfo.LONG_CLASS;
@@ -191,108 +209,6 @@ public class Group extends Model {
     }
 
     /**
-     * Gets group name
-     *
-     * @return group name
-     */
-    public String getGroupName() {
-        return groupName;
-    }
-
-    /**
-     * Gets group type code to which the group belongs
-     *
-     * @return groupTypeCode code
-     */
-    public long getGroupTypeCode() {
-        return groupTypeCode;
-    }
-
-    /**
-     * Gets maximum number of students allowed in this group
-     *
-     * @return -1 if there is not a limit of students for this group, maximum number allowed otherwise
-     */
-    public int getMaxStudents() {
-        return maxStudents;
-    }
-
-
-    /**
-     * Indicates if there is a limit of students for this group
-     *
-     * @return true if there is not a limit of students for this group, false otherwise
-     */
-    public boolean existsMaxStudents() {
-        return maxStudents != -1;
-    }
-
-    /**
-     * Gets current student number enrolled in this group
-     *
-     * @return current number of students enrolled in this group over 0 and, in case there is a limit of students, maximum students allowed
-     */
-    public int getCurrentStudents() {
-        return students;
-    }
-
-    /**
-     * Gets the number of available vacancies in this group
-     *
-     * @return -1 if there is not a limit of students for this group
-     *         number of available vacancies currently otherwise
-     */
-    public int getVacancies() {
-        if (maxStudents == -1) return -1;
-        else
-            return maxStudents - students;
-    }
-
-    /**
-     * Indicates if the enrollment in this group is already allowed
-     *
-     * @return true if the enrollment is already allowed
-     *         false otherwise
-     */
-    public boolean isOpen() {
-        return open != 0;
-    }
-
-    /**
-     * Indicates if the enrollment in this group is already allowed
-     *
-     * @return not 0 if the enrollment is already allowed
-     *         0 otherwise
-     */
-    public int getOpen() {
-        return open;
-    }
-
-    public void setOpen(int open) {
-        this.open = open;
-    }
-
-    /**
-     * Indicates if the group has an area of documents and of shared documents related to or not
-     *
-     * @return true if the area of documents exits
-     *         false otherwise
-     */
-    public boolean exitsDocumentsArea() {
-        return fileZones != 0;
-    }
-
-    /**
-     * Indicates if the group has an area of documents and of shared documents related to or not
-     *
-     * @return not 0 if the area of documents exits
-     *         false otherwise
-     */
-    public int getDocumentsArea() {
-        return fileZones;
-    }
-
-    /**
      * Indicates if the logged user is a member of this group
      *
      * @return true if the logged user is a member of this group
@@ -302,22 +218,6 @@ public class Group extends Model {
         return member != 0;
     }
 
-    /**
-     * Indicates if the logged user is a member of this group
-     *
-     * @return not 0 if the logged user is a member of this group
-     *         0 otherwise
-     */
-    public int getMember() {
-        return member;
-    }
-
-    /**
-     * Set that the user belongs to this group or not
-     */
-    public void setMember(int member) {
-        this.member = member;
-    }
     //TODO relate Group to Group Type
 
 	/*	public String getGroupCompleteName(){
@@ -326,53 +226,4 @@ public class Group extends Model {
 
 	 */
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = (int) (prime * result + this.getId());
-        result = prime * result
-                + ((groupName == null) ? 0 : groupName.hashCode());
-        result = (int) (prime * result + groupTypeCode);
-        result = prime * result + maxStudents;
-        result = prime * result + students;
-        result = prime * result + open;
-        result = prime * result + fileZones;
-        result = prime * result + member;
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (!super.equals(obj))
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Group other = (Group) obj;
-        if (getId() != other.getId())
-            return false;
-        if (groupName == null) {
-            if (other.groupName != null)
-                return false;
-        } else if (!groupName.equals(other.groupName))
-            return false;
-        if (groupTypeCode != other.groupTypeCode)
-            return false;
-        return maxStudents == other.maxStudents && students == other.students && open == other.open && fileZones == other.fileZones && member == other.member;
-    }
-
-    @Override
-    public String toString() {
-        return "Group{" +
-                "groupName='" + groupName + '\'' +
-                ", groupTypeCode=" + groupTypeCode +
-                ", maxStudents=" + maxStudents +
-                ", students=" + students +
-                ", open=" + open +
-                ", fileZones=" + fileZones +
-                ", member=" + member +
-                "} " + super.toString();
-    }
 }

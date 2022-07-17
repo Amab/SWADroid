@@ -24,7 +24,7 @@ import android.provider.BaseColumns;
 /**
  * The Download Manager
  *
- * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
  */
 public final class Downloads {
     /**

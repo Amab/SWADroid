@@ -32,25 +32,45 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.util.Collections;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.database.DataBaseHelper;
+import es.ugr.swad.swadroid.dao.EventDao;
+import es.ugr.swad.swadroid.dao.UserAttendanceDao;
+import es.ugr.swad.swadroid.dao.UserDao;
+import es.ugr.swad.swadroid.database.AppDatabase;
 import es.ugr.swad.swadroid.gui.ImageFactory;
-import es.ugr.swad.swadroid.utils.Crypto;
+import es.ugr.swad.swadroid.model.Event;
+import es.ugr.swad.swadroid.model.UserAttendance;
 import es.ugr.swad.swadroid.utils.Utils;
 
 /**
  * Custom CursorAdapter for display users
  *
- * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
  */
 public class UsersCursorAdapter extends CursorAdapter {
-    private DataBaseHelper dbHelper;
+    /**
+     * Database Helper.
+     */
+    protected AppDatabase db;
     private Cursor dbCursor;
-    private Crypto crypto;
-    private ImageLoader loader;
-    private int eventCode;
-    private LayoutInflater inflater;
+    private final ImageLoader loader;
+    private final int eventCode;
+    private final LayoutInflater inflater;
+    /**
+     * Database Access Object for User
+     */
+    private final UserDao userDao;
+    /**
+     * Database Access Object for UserAttendance
+     */
+    private final UserAttendanceDao userAttendanceDao;
+    /**
+     * Database Access Object for Event
+     */
+    private final EventDao eventDao;
 
     private static class ViewHolder {
         ImageView image;
@@ -65,36 +85,17 @@ public class UsersCursorAdapter extends CursorAdapter {
      *
      * @param context   Application context
      * @param c         Database cursor
-     * @param dbHelper  Database helper
      * @param eventCode  Code of related event
      */
-    public UsersCursorAdapter(Context context, Cursor c, DataBaseHelper dbHelper, int eventCode) {
-
+    public UsersCursorAdapter(Context context, Cursor c, int eventCode) {
         super(context, c, true);
 
-        this.dbHelper = dbHelper;
-        this.eventCode = eventCode;
-        this.crypto = new Crypto(context, dbHelper.getDBKey());
-        this.loader = ImageFactory.init(context, true, true, R.drawable.usr_bl, R.drawable.usr_bl,
-                R.drawable.usr_bl);
-        this.inflater = LayoutInflater.from(context);
-    }
+        //Initialize DAOs
+        db = AppDatabase.getAppDatabase(context);
+        userDao = db.getUserDao();
+        userAttendanceDao = db.getUserAttendanceDao();
+        eventDao = db.getEventDao();
 
-    /**
-     * Constructor
-     *
-     * @param context     Application context
-     * @param c           Database cursor
-     * @param autoRequery Flag to set autoRequery function
-     * @param dbHelper    Database helper
-     * @param eventCode  Code of related event
-     */
-    public UsersCursorAdapter(Context context, Cursor c,
-                              boolean autoRequery, DataBaseHelper dbHelper, int eventCode) {
-
-        super(context, c, autoRequery);
-
-        this.dbHelper = dbHelper;
         this.eventCode = eventCode;
         this.loader = ImageFactory.init(context, true, true, R.drawable.usr_bl, R.drawable.usr_bl,
                 R.drawable.usr_bl);
@@ -103,12 +104,12 @@ public class UsersCursorAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        String userSurname1 = crypto.decrypt(cursor.getString(cursor.getColumnIndex("userSurname1")));
-        String userSurname2 = crypto.decrypt(cursor.getString(cursor.getColumnIndex("userSurname2")));
-        String userFirstname = crypto.decrypt(cursor.getString(cursor.getColumnIndex("userFirstname")));
-        String userID = crypto.decrypt(cursor.getString(cursor.getColumnIndex("userID")));
+        String userSurname1 = cursor.getString(cursor.getColumnIndex("userSurname1"));
+        String userSurname2 = cursor.getString(cursor.getColumnIndex("userSurname2"));
+        String userFirstname = cursor.getString(cursor.getColumnIndex("userFirstname"));
+        String userID = cursor.getString(cursor.getColumnIndex("userID"));
         final long userCode = cursor.getLong(cursor.getColumnIndex("userCode"));
-        String userPhoto = crypto.decrypt(cursor.getString(cursor.getColumnIndex("photoPath")));
+        String userPhoto = cursor.getString(cursor.getColumnIndex("photoPath"));
         boolean present = Utils.parseIntBool(cursor.getInt(cursor.getColumnIndex("present")));
 
         // Replace NULL value for strings returned by the webservice with the empty string
@@ -133,23 +134,22 @@ public class UsersCursorAdapter extends CursorAdapter {
         holder.checkbox = view.findViewById(R.id.check);
 
         holder.checkbox.setChecked(present);
-        holder.checkbox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Cursor oldCursor;
+        holder.checkbox.setOnClickListener(v -> {
+            Cursor oldCursor;
 
-                //Inserts attendance into database
-                dbHelper.insertAttendance(userCode, eventCode, holder.checkbox.isChecked());
+            //Inserts attendance into database
+            userAttendanceDao.insertAttendances(Collections.singletonList(new UserAttendance(userCode, eventCode, holder.checkbox.isChecked())));
 
-                //Mark event status as "pending"
-                dbHelper.updateEventStatus(eventCode, "pending");
+            //Mark event status as "pending"
+            Event event = eventDao.findById(eventCode);
+            event.setStatus("pending");
+            eventDao.updateEvents(Collections.singletonList(event));
 
-                //Refresh ListView
-                dbCursor = dbHelper.getUsersEventCursor(eventCode);
-                oldCursor = swapCursor(dbCursor);
-                oldCursor.close();
-                notifyDataSetChanged();
-            }
+            //Refresh ListView
+            dbCursor = userDao.findAllByEventCodeCursor(eventCode);
+            oldCursor = swapCursor(dbCursor);
+            oldCursor.close();
+            notifyDataSetChanged();
         });
 
         if((userPhoto != null) && !userPhoto.isEmpty()) {

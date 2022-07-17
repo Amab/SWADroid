@@ -19,17 +19,29 @@
 
 package es.ugr.swad.swadroid.model;
 
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Index;
+
 import org.ksoap2.serialization.PropertyInfo;
 
-import java.io.Serializable;
 import java.util.Hashtable;
+
+import lombok.Data;
 
 /**
  * User data.
  *
  * @author Rubén Martín Hidalgo
  */
-public class FrequentUser extends Model implements Serializable{
+@Data
+@Entity(indices = {@Index("idUser")},
+        foreignKeys = {
+                @ForeignKey(entity = User.class,
+                        parentColumns = "id",
+                        childColumns = "idUser",
+                        onDelete = ForeignKey.CASCADE)})
+public class FrequentUser extends Model {
     /**
      * Sender identifier.
      */
@@ -70,17 +82,18 @@ public class FrequentUser extends Model implements Serializable{
     /**
      * Constructor.
      *
-     * @param idUser  Sender identifier.
-     * @param userNickname  Recipient identifier.
-     * @param userSurname1  User first surname.
-     * @param userSurname2  User last surname.
-     * @param userFirstname User name.
-     * @param userPhoto     Full path where user's picture is stored.
-     * @param userCode      User code.
-     * @param selectedCheckbox  Is a receiver?.
-     * @param score         Score of frequent recipient
+     * @param idUser           Sender identifier.
+     * @param userNickname     Recipient identifier.
+     * @param userSurname1     User first surname.
+     * @param userSurname2     User last surname.
+     * @param userFirstname    User name.
+     * @param userPhoto        Full path where user's picture is stored.
+     * @param userCode         User code.
+     * @param selectedCheckbox Is a receiver?.
+     * @param score            Score of frequent recipient
      */
-    public FrequentUser(String idUser, String userNickname, String userSurname1, String userSurname2, String userFirstname, String userPhoto, int userCode, boolean selectedCheckbox, double score) {
+    public FrequentUser(long id, String idUser, String userNickname, String userSurname1, String userSurname2, String userFirstname, String userPhoto, int userCode, boolean selectedCheckbox, double score) {
+        super(id);
         this.idUser = idUser;
         this.userNickname = userNickname;
         this.userSurname1 = userSurname1;
@@ -89,168 +102,6 @@ public class FrequentUser extends Model implements Serializable{
         this.userPhoto = userPhoto;
         this.userCode = userCode;
         this.selectedCheckbox = selectedCheckbox;
-        this.score = score;
-    }
-
-    /**
-     * Gets sender identifier.
-     *
-     * @return Sender identifier.
-     */
-    public String getidUser() {
-        return this.idUser;
-    }
-
-    /**
-     * Sets sender identifier.
-     *
-     * @param idUser Sender identifier.
-     */
-    public void setIdUser(String idUser) {
-        this.idUser = idUser;
-    }
-
-    /**
-     * Gets user name.
-     *
-     * @return User name.
-     */
-    public String getUserFirstname() {
-        return userFirstname;
-    }
-
-    /**
-     * Sets user name.
-     *
-     * @param userFirstname User name.
-     */
-    public void setUserFirstname(String userFirstname) {
-        this.userFirstname = userFirstname;
-    }
-
-    /**
-     * Gets user identifier.
-     *
-     * @return User identifier.
-     */
-    public String getUserNickname() {
-        return userNickname;
-    }
-
-    /**
-     * Sets user identifier.
-     *
-     * @param userNickname User identifier.
-     */
-    public void setUserNickname(String userNickname) {
-        this.userNickname = userNickname;
-    }
-
-    /**
-     * Gets user first surname.
-     *
-     * @return User first surname.
-     */
-    public String getUserSurname1() {
-        return userSurname1;
-    }
-
-    /**
-     * Sets user first surname.
-     *
-     * @param userSurname1 User first surname.
-     */
-    public void setUserSurname1(String userSurname1) {
-        this.userSurname1 = userSurname1;
-    }
-
-    /**
-     * Gets user last surname.
-     *
-     * @return User last surname.
-     */
-    public String getUserSurname2() {
-        return userSurname2;
-    }
-
-    /**
-     * Sets user last surname.
-     *
-     * @param userSurname2 User last surname.
-     */
-    public void setUserSurname2(String userSurname2) {
-        this.userSurname2 = userSurname2;
-    }
-
-    /**
-     * Gets Full path where user's picture is stored.
-     *
-     * @return the userPhoto
-     */
-    public String getUserPhoto() {
-        return userPhoto;
-    }
-
-    /**
-     * Sets Full path where user's picture is stored.
-     *
-     * @param userPhoto the userPhoto to set
-     */
-    public void setUserPhoto(String userPhoto) {
-        this.userPhoto = userPhoto;
-    }
-
-    /**
-     * Gets userCode.
-     *
-     * @return the userPhoto
-     */
-    public int getUserCode() {
-        return userCode;
-    }
-
-    /**
-     * Sets userCode.
-     *
-     * @param userCode
-     */
-    public void setUserCode(int userCode) {
-        this.userCode = userCode;
-    }
-
-    /**
-     * Get if checkbox is selected.
-     *
-     * @return if checkbox is selected (true / false)
-     */
-    public boolean getCheckbox() {
-        return selectedCheckbox;
-    }
-
-    /**
-     * Sets Full path where user's picture is stored.
-     *
-     * @param selected the checkbox is selected or not
-     */
-    public void setCheckbox(boolean selected){
-        this.selectedCheckbox = selected;
-    }
-
-    /**
-     * Get score of frequent recipient.
-     *
-     * @return score
-     */
-    public double getScore() {
-        return score;
-    }
-
-    /**
-     * Set score of frequent recipient.
-     *
-     * @param score
-     */
-    public void setScore(double score){
         this.score = score;
     }
 

@@ -1,14 +1,27 @@
 package es.ugr.swad.swadroid.model;
 
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Ignore;
+import androidx.room.Index;
+
 import org.ksoap2.serialization.PropertyInfo;
 
 import java.util.Hashtable;
+
+import lombok.Data;
 
 /**
  * Class to store a Group Type. A group type is related to a course and to multiple groups
  * * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */
-
+@Data
+@Entity(indices = {@Index("courseCode"), @Index("groupTypeName")},
+        foreignKeys = {
+                @ForeignKey(entity = Course.class,
+                        parentColumns = "id",
+                        childColumns = "courseCode",
+                        onDelete = ForeignKey.CASCADE)})
 public class GroupType extends Model {
 
     /**
@@ -16,9 +29,9 @@ public class GroupType extends Model {
      */
     private String groupTypeName;
     /**
-     * course code to which the request is related
+     * Course code to which the request is related
      */
-    private long courseCode = -1;
+    private long courseCode;
     /**
      * Indicates if the enrollment in this group is mandatory or not
      */
@@ -33,13 +46,20 @@ public class GroupType extends Model {
      */
     private long openTime;
 
+    @Ignore
     private static final PropertyInfo PI_id = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_groupTypeName = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_courseCode = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_mandatory = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_multiple = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_openTime = new PropertyInfo();
 
+    @Ignore
     private static final PropertyInfo[] PI_PROP_ARRAY = {
             PI_id,
             PI_groupTypeName,
@@ -49,14 +69,6 @@ public class GroupType extends Model {
             PI_openTime
     };
 
-    /**
-     * Constructor.
-     *
-     * @param id            Group code.
-     * @param groupTypeName Group type name.
-     * @param mandatory     Indicates if the enrollment in this group is mandatory or not
-     * @param multiple      Indicates if a multiple enrollment is allowed
-     */
     public GroupType(long id, String groupTypeName, long courseCode, int mandatory, int multiple, long openTime) {
         super(id);
         this.groupTypeName = groupTypeName;
@@ -99,7 +111,7 @@ public class GroupType extends Model {
     }
 
     @Override
-    public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo propertyInfo) {
+    public void getPropertyInfo(int param, Hashtable arg1, PropertyInfo propertyInfo) {
         switch (param) {
             case 0:
                 propertyInfo.type = PropertyInfo.LONG_CLASS;
@@ -153,81 +165,4 @@ public class GroupType extends Model {
 
     }
 
-    /**
-     * Gets group type name
-     *
-     * @return group type name
-     */
-    public String getGroupTypeName() {
-        return groupTypeName;
-    }
-
-    /**
-     * Indicates if the enrollment in this group is mandatory or not
-     *
-     * @return true if the enrollment is mandatory, false otherwise
-     */
-    public boolean isMandatory() {
-        return mandatory != 0;
-    }
-
-    /**
-     * Indicates if a multiple enrollment is allowed
-     *
-     * @return true if a multiple enrollment is allowed , false otherwise
-     */
-    public boolean isMultiple() {
-        return multiple != 0;
-    }
-
-    /**
-     * Gets course code to which the group type is related to
-     *
-     * @return courseCode
-     *         -1 in case the group type is not related to any course
-     */
-    public long getCourseCode() {
-        return courseCode;
-    }
-
-    /**
-     * Indicates if the enrollment is mandatory
-     *
-     * @return 0 - if the inscription is not mandatory
-     *         not 0 otherwise
-     */
-    public int getMandatory() {
-        return mandatory;
-    }
-
-    /**
-     * Indicates if a multiple enrollment is allowed
-     *
-     * @return 0 - if the inscription is not multiple
-     *         not 0 otherwise
-     */
-    public int getMultiple() {
-        return multiple;
-    }
-
-    /**
-     * Gets the date when the groups of this kind will be automatically opened, in case, it exits
-     *
-     * @return 0 if there is not a date when the groups of this kind will be automatically opened
-     *         otherwise date in unix format (see http://en.wikipedia.org/wiki/Unix_time)
-     */
-    public long getOpenTime() {
-        return openTime;
-    }
-
-    @Override
-    public String toString() {
-        return "GroupType{" +
-                "groupTypeName='" + groupTypeName + '\'' +
-                ", courseCode=" + courseCode +
-                ", mandatory=" + mandatory +
-                ", multiple=" + multiple +
-                ", openTime=" + openTime +
-                "} " + super.toString();
-    }
 }

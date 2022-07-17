@@ -31,7 +31,7 @@ import javax.net.ssl.X509TrustManager;
 /**
  * TrustManager for self-signed certificates.
  * 
- * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
  */
 public class EasyX509TrustManager implements X509TrustManager 
 {  

@@ -18,20 +18,34 @@
  */
 package es.ugr.swad.swadroid.model;
 
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Ignore;
+import androidx.room.Index;
+
 import org.ksoap2.serialization.PropertyInfo;
 
 import java.util.Hashtable;
 
+import lombok.Data;
+
 /**
  * Class for store a test answer
  *
- * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
  */
+@Data
+@Entity(indices = {@Index("qstCod"), @Index("ansInd")},
+        foreignKeys = {
+                @ForeignKey(entity = TestQuestion.class,
+                        parentColumns = "id",
+                        childColumns = "qstCod",
+                        onDelete = ForeignKey.CASCADE)})
 public class TestAnswer extends Model {
     /**
      * Question code;
      */
-    private int qstCod;
+    private long qstCod;
     /**
      * Answer index;
      */
@@ -43,6 +57,7 @@ public class TestAnswer extends Model {
     /**
      * Flag to know if the user has answered correctly
      */
+    @Ignore
     private boolean correctAnswered;
     /**
      * Answer's text
@@ -52,6 +67,11 @@ public class TestAnswer extends Model {
      * Answer's feedback
      */
     private String feedback;
+    /**
+     * User answer
+     */
+    @Ignore
+    private String userAnswer;
     /**
      * Type integer
      */
@@ -84,17 +104,20 @@ public class TestAnswer extends Model {
      * False value
      */
     public static final String VALUE_FALSE = "F";
-    /**
-     * User answer
-     */
-    private String userAnswer;
+
+    @Ignore
     private static final PropertyInfo PI_id = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_correct = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_correctAnswered = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_answer = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_ansInd = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_feedback = new PropertyInfo();
-    @SuppressWarnings("unused")
+    @Ignore
     private static PropertyInfo[] PI_PROP_ARRAY =
             {
                     PI_id,
@@ -105,178 +128,19 @@ public class TestAnswer extends Model {
                     PI_feedback
             };
 
-    /**
-     * Constructor
-     *
-     * @param id       Answer id
-     * @param ansInd   Answer index inside the question
-     * @param qstCod   Question code
-     * @param correct  Flag to know if this is the correct answer of the question
-     * @param answer   Answer's text
-     * @param feedback Text of the answer's feedback
-     */
-    public TestAnswer(long id, int ansInd, int qstCod, boolean correct, String answer, String feedback) {
+    public TestAnswer(long id, long qstCod, int ansInd, boolean correct, String answer, String feedback) {
         super(id);
-        this.ansInd = ansInd;
         this.qstCod = qstCod;
+        this.ansInd = ansInd;
         this.correct = correct;
-        this.correctAnswered = false;
         this.answer = answer;
-        this.userAnswer = "";
         this.feedback = feedback;
     }
 
-    /**
-     * Gets answer correct flag
-     *
-     * @return Answer correct flag
-     */
-    public boolean getCorrect() {
-        return correct;
-    }
-
-    /**
-     * Sets answer correct flag
-     */
-    public void setCorrect(boolean correct) {
-        this.correct = correct;
-    }
-
-    /**
-     * Gets answer text
-     *
-     * @return Answer text
-     */
-    public String getAnswer() {
-        return answer;
-    }
-
-    /**
-     * Sets answer text
-     *
-     * @param answer Answer text
-     */
-    public void setAnswer(String answer) {
-        this.answer = answer;
-    }
-
-    /**
-     * Gets question code
-     *
-     * @return Question code
-     */
-    public int getQstCod() {
-        return qstCod;
-    }
-
-    /**
-     * Sets question code
-     *
-     * @param qstCod question code
-     */
-    public void setQstCod(int qstCod) {
-        this.qstCod = qstCod;
-    }
-
-    /**
-     * Gets the user answer
-     *
-     * @return User answer
-     */
-    public String getUserAnswer() {
-        return userAnswer;
-    }
-
-    /**
-     * Sets user answer text
-     *
-     * @param userAnswer User answer text
-     */
-    public void setUserAnswer(String userAnswer) {
-        this.userAnswer = userAnswer;
-    }
-
-    /**
-     * Checks if the user has answered correctly
-     *
-     * @return true if the user has answered correctly
-     *         false otherwise
-     */
-    public boolean isCorrectAnswered() {
-        return correctAnswered;
-    }
-
-    /**
-     * Marks this answer as correctly or incorrectly answered by the user
-     *
-     * @param correctAnswered true if the user has answered correctly
-     *                        false otherwise
-     */
-    public void setCorrectAnswered(boolean correctAnswered) {
+    public TestAnswer(long id, int qstCod, int ansInd, boolean correct, boolean correctAnswered, String answer, String feedback, String userAnswer) {
+        this(id, qstCod, ansInd, correct, answer, feedback);
         this.correctAnswered = correctAnswered;
-    }
-
-    /**
-     * Gets the answer index inside the question
-     *
-     * @return Answer index inside the question
-     */
-    public int getAnsInd() {
-        return ansInd;
-    }
-
-    /**
-     * Sets the answer index inside the question
-     *
-     * @param ansInd Answer index inside the question
-     */
-    public void setAnsInd(int ansInd) {
-        this.ansInd = ansInd;
-    }
-
-    /**
-     * Gets the text of the answer's feedback
-     *
-     * @return Text of the answer's feedback
-     */
-    public String getFeedback() {
-        return feedback;
-    }
-
-    /**
-     * Sets the text of the answer's feedback
-     *
-     * @param feedback Text of the answer's feedback
-     */
-    public void setFeedback(String feedback) {
-        this.feedback = feedback;
-    }
-
-    /* (non-Javadoc)
-     * @see java.lang.Object#hashCode()
-     */
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + ansInd;
-        result = prime * result + ((answer == null) ? 0 : answer.hashCode());
-        result = prime * result + (correct ? 1231 : 1237);
-        result = prime * result + (correctAnswered ? 1231 : 1237);
-        result = prime * result
-                + ((feedback == null) ? 0 : feedback.hashCode());
-        result = prime * result + qstCod;
-        result = prime * result
-                + ((userAnswer == null) ? 0 : userAnswer.hashCode());
-        return result;
-    }
-
-    /* (non-Javadoc)
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    @Override
-    public boolean equals(Object obj) {
-        return this == obj || super.equals(obj) && getClass() == obj.getClass();
+        this.userAnswer = userAnswer;
     }
 
     /* (non-Javadoc)
@@ -318,7 +182,7 @@ public class TestAnswer extends Model {
     /* (non-Javadoc)
      * @see org.ksoap2.serialization.KvmSerializable#getPropertyInfo(int, java.util.Hashtable, org.ksoap2.serialization.PropertyInfo)
      */
-    public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo propertyInfo) {
+    public void getPropertyInfo(int param, Hashtable arg1, PropertyInfo propertyInfo) {
         switch (param) {
             case 0:
                 propertyInfo.type = PropertyInfo.LONG_CLASS;
@@ -373,16 +237,4 @@ public class TestAnswer extends Model {
         }
     }
 
-    @Override
-    public String toString() {
-        return "TestAnswer{" +
-                "qstCod=" + qstCod +
-                ", ansInd=" + ansInd +
-                ", correct=" + correct +
-                ", correctAnswered=" + correctAnswered +
-                ", answer='" + answer + '\'' +
-                ", feedback='" + feedback + '\'' +
-                ", userAnswer='" + userAnswer + '\'' +
-                "} " + super.toString();
-    }
 }

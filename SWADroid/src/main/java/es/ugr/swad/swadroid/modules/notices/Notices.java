@@ -35,8 +35,8 @@ import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.model.User;
-import es.ugr.swad.swadroid.modules.courses.Courses;
 import es.ugr.swad.swadroid.modules.Module;
+import es.ugr.swad.swadroid.modules.courses.Courses;
 import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
@@ -46,7 +46,7 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
  *
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
- * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
  */
 public class Notices extends Module {
     /**

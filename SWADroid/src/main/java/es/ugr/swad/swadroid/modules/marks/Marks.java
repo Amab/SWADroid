@@ -19,7 +19,7 @@ import es.ugr.swad.swadroid.utils.Utils;
 /**
  * Marks module for show user's marks
  *
- * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
  */
 public class Marks extends MenuActivity {
 

@@ -21,8 +21,6 @@ package es.ugr.swad.swadroid.modules.groups;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import androidx.core.content.ContextCompat;
-import androidx.collection.LongSparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -33,15 +31,18 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import androidx.collection.LongSparseArray;
+import androidx.core.content.ContextCompat;
+
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.FontManager;
 import es.ugr.swad.swadroid.model.Group;
 import es.ugr.swad.swadroid.model.GroupType;
-import es.ugr.swad.swadroid.model.Model;
 
 /**
  * Adapter to populate with data  an expandable list.
@@ -49,19 +50,19 @@ import es.ugr.swad.swadroid.model.Model;
  * There are two kind of layout: one for the groups and one for the children
  *
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
- * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
  */
 
 public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 
-    private LongSparseArray<ArrayList<Group>> children = null;
-    private ArrayList<Model> groups = null;
+    private LongSparseArray<List<Group>> children;
+    private final List<GroupType> groupTypes;
     private final LongSparseArray<boolean[]> realMembership = new LongSparseArray<>();
     private static Typeface iconFont;
 
-    private int role = -1;
-    private int layoutGroup = 0;
-    private int layoutChild = 0;
+    private final int role;
+    private final int layoutGroup;
+    private final int layoutChild;
 
     private static class GroupHolder {
         TextView textViewGroupTypeName;
@@ -81,10 +82,10 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
     private final LayoutInflater mInflater;
     private final Context context;
 
-    public EnrollmentExpandableListAdapter(Context context, ArrayList<Model> groups, LongSparseArray<ArrayList<Group>> children, int layoutGroup, int layoutChild, int currentRole) {
+    public EnrollmentExpandableListAdapter(Context context, List<GroupType> groupTypes, LongSparseArray<List<Group>> children, int layoutGroup, int layoutChild, int currentRole) {
         super();
         this.context = context;
-        this.groups = groups;
+        this.groupTypes = groupTypes;
         this.children = children;
         this.layoutGroup = layoutGroup;
         this.layoutChild = layoutChild;
@@ -92,8 +93,8 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 
         //Initialize real inscription
         for (int i = 0; i < children.size(); i++) {
-            Long groupTypeCode = children.keyAt(i);
-            ArrayList<Group> groupsChildren = children.get(groupTypeCode);
+            long groupTypeCode = children.keyAt(i);
+            List<Group> groupsChildren = children.get(groupTypeCode);
             realMembership.put(groupTypeCode, new boolean[groupsChildren.size()]);
         }
         
@@ -106,14 +107,14 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        Long groupTypeCode = groups.get(groupPosition).getId();
-        ArrayList<Group> children = this.children.get(groupTypeCode);
+        long groupTypeCode = groupTypes.get(groupPosition).getId();
+        List<Group> children = this.children.get(groupTypeCode);
         return children.get(childPosition);
     }
 
     @Override
     public long getChildId(int groupPosition, int childPosition) {
-        return groupPosition * 10 + childPosition;
+        return groupPosition * 10L + childPosition;
     }
 
     @Override
@@ -136,10 +137,10 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
             holder = (ChildHolder) convertView.getTag();
         }
 
-        Long groupTypeCode = groups.get(groupPosition).getId();
-        int multiple = ((GroupType) groups.get(groupPosition)).getMultiple();
+        long groupTypeCode = groupTypes.get(groupPosition).getId();
+        int multiple = ((GroupType) groupTypes.get(groupPosition)).getMultiple();
 
-        ArrayList<Group> children = this.children.get(groupTypeCode);
+        List<Group> children = this.children.get(groupTypeCode);
         Group group = children.get(childPosition);
 
         holder.linearLayout.setBackgroundColor(ContextCompat.getColor(context, android.R.color.white));
@@ -147,7 +148,7 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
         //Data from Group
         String groupName = group.getGroupName();
         int maxStudents = group.getMaxStudents();
-        int students = group.getCurrentStudents();
+        int students = group.getStudents();
         int open = group.getOpen();
         int member = group.getMember();
 
@@ -156,7 +157,7 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
         holder.checkBox.setTag(g);
 
         //if maxStudent == -1, there is not limit of students in this groups
-        boolean freeSpot = ((maxStudents == -1) || (group.getCurrentStudents() < maxStudents));
+        boolean freeSpot = ((maxStudents == -1) || (group.getStudents() < maxStudents));
 
         if (open != 0) {
             holder.imagePadlock.setText(R.string.fa_unlock);
@@ -208,12 +209,12 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
             holder.checkBox.setChecked(member != 0);
         }
 
-        holder.nStudentText.setText(context.getString(R.string.numStudent) + ": " + String.valueOf(students));
+        holder.nStudentText.setText(context.getString(R.string.numStudent) + ": " + students);
 
         if (maxStudents != -1) {
             int vacants = maxStudents - students;
-            holder.maxStudentText.setText(context.getString(R.string.maxStudent) + ": " + String.valueOf(maxStudents));
-            holder.vacantsText.setText(context.getString(R.string.vacants) + ": " + String.valueOf(vacants));
+            holder.maxStudentText.setText(context.getString(R.string.maxStudent) + ": " + maxStudents);
+            holder.vacantsText.setText(context.getString(R.string.vacants) + ": " + vacants);
             if (vacants == 0) {
                 holder.vacantsText.setTextColor(ContextCompat.getColor(context, R.color.sgi_salmon));
                 holder.vacantsText.setTypeface(null, Typeface.BOLD);
@@ -231,19 +232,19 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        Long groupTypeCode = groups.get(groupPosition).getId();
-        ArrayList<Group> children = this.children.get(groupTypeCode);
+        long groupTypeCode = groupTypes.get(groupPosition).getId();
+        List<Group> children = this.children.get(groupTypeCode);
         return children.size();
     }
 
     @Override
     public Object getGroup(int groupPosition) {
-        return groups.get(groupPosition);
+        return groupTypes.get(groupPosition);
     }
 
     @Override
     public int getGroupCount() {
-        return groups.size();
+        return groupTypes.size();
     }
 
     @Override
@@ -259,14 +260,14 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
         if (convertView == null) {
             convertView = mInflater.inflate(layoutGroup, parent, false);
             holder = new GroupHolder();
-            holder.textViewGroupTypeName = (TextView) convertView.findViewById(R.id.groupTypeText);
-            holder.openTimeText = (TextView) convertView.findViewById(R.id.openTimeText);
+            holder.textViewGroupTypeName = convertView.findViewById(R.id.groupTypeText);
+            holder.openTimeText = convertView.findViewById(R.id.openTimeText);
             convertView.setTag(holder);
         } else {
             holder = (GroupHolder) convertView.getTag();
         }
 
-        GroupType groupType = (GroupType) groups.get(groupPosition);
+        GroupType groupType = (GroupType) groupTypes.get(groupPosition);
         holder.textViewGroupTypeName.setText(groupType.getGroupTypeName());
 
         long unixTime = groupType.getOpenTime();
@@ -289,14 +290,14 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
-        Long groupTypeCode = groups.get(groupPosition).getId();
+        long groupTypeCode = groupTypes.get(groupPosition).getId();
 
-        ArrayList<Group> children = this.children.get(groupTypeCode);
+        List<Group> children = this.children.get(groupTypeCode);
         Group group = children.get(childPosition);
         int maxStudent = group.getMaxStudents();
         boolean freeSpot = false;
         if (maxStudent != -1) {
-            if (group.getCurrentStudents() < maxStudent)
+            if (group.getStudents() < maxStudent)
                 freeSpot = true;
         } else { //if maxStudent == -1, there is not limit of students in this groups
             freeSpot = true;
@@ -323,8 +324,8 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
 
             if (multiple == 0 && previousCheckState == 0 && role != Constants.TEACHER_TYPE_CODE) {//unique enrollment. Only an option is checked.
                 //If the group does not allow multiple enrollment and previously it was not checked, the rest of the groups should be unchecked.
-                Long groupTypeCode = groupType.getId();
-                ArrayList<Group> children = this.children.get(groupTypeCode);
+                long groupTypeCode = groupType.getId();
+                List<Group> children = this.children.get(groupTypeCode);
                 for (int i = 0; i < children.size(); ++i) {
                     Group g = children.get(i);
                     if (i != childPosition) g.setMember(0);
@@ -337,7 +338,7 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
         return result;
     }
 
-    public void resetChildren(LongSparseArray<ArrayList<Group>> children) {
+    public void resetChildren(LongSparseArray<List<Group>> children) {
         this.children = children;
         setRealInscription();
     }
@@ -345,17 +346,17 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
     public String getChosenGroupCodesAsString() {
         String groupCodes = "";
 
-        Long key;
+        long key;
         for (int i = 0; i < children.size(); i++) {
             key = children.keyAt(i);
-            ArrayList<Group> child = children.get(key);
+            List<Group> child = children.get(key);
             Group g;
             for (Group aChildren : child) {
                 g = aChildren;
                 if (g.getMember() == 1) {
                     long code = g.getId();
                     if (groupCodes.compareTo("") != 0) groupCodes =
-                            groupCodes.concat("," + String.valueOf(code));
+                            groupCodes.concat("," + code);
                     else groupCodes = groupCodes.concat(String.valueOf(code));
                 }
             }
@@ -363,12 +364,12 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
         return groupCodes;
     }
 
-    public ArrayList<Long> getChosenGroupCodes() {
-        ArrayList<Long> groupCodes = new ArrayList<>();
-        Long key;
+    public List<Long> getChosenGroupCodes() {
+        List<Long> groupCodes = new ArrayList<>();
+        long key;
         for (int i = 0; i < children.size(); i++) {
             key = children.keyAt(i);
-            ArrayList<Group> child = children.get(key);
+            List<Group> child = children.get(key);
             Group g;
             for (Group aChildren : child) {
                 g = aChildren;
@@ -383,8 +384,8 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
     private void setRealInscription() {
         
         for (int i = 0; i < children.size(); i++) {
-            Long groupTypeCode = children.keyAt(i);
-            ArrayList<Group> childs = children.get(groupTypeCode);
+            long groupTypeCode = children.keyAt(i);
+            List<Group> childs = children.get(groupTypeCode);
             Group g;
             for (int k = 0; k < childs.size(); ++k) {
                 g = childs.get(k);
@@ -393,17 +394,10 @@ public class EnrollmentExpandableListAdapter extends BaseExpandableListAdapter {
         }
     }
 
-    private OnClickListener checkListener = new OnClickListener()
-    {
-
-        @Override
-        public void onClick(View v)
-        {
-
-            Group d = (Group) v.getTag();
-           ((CheckBox) v).setChecked(!d.isMember());
-           d.setMember(d.isMember() ? 0:1);
-        }
+    private final OnClickListener checkListener = v -> {
+        Group d = (Group) v.getTag();
+       ((CheckBox) v).setChecked(!d.isMember());
+       d.setMember(d.isMember() ? 0:1);
     };
     
 }

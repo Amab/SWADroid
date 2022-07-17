@@ -13,7 +13,7 @@ import es.ugr.swad.swadroid.R;
 /**
  * Class for manage a progress screen
  *
- * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
  */
 public class ProgressScreen {
     private View progressView;

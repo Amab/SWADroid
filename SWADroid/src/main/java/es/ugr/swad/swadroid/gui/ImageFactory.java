@@ -29,7 +29,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 /**
  * Class for create images.
  *
- * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
  */
 public class ImageFactory {
     private static ImageLoader loader = ImageLoader.getInstance();

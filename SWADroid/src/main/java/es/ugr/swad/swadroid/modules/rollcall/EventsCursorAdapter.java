@@ -23,28 +23,26 @@ package es.ugr.swad.swadroid.modules.rollcall;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Typeface;
-import androidx.core.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+
 import java.text.DateFormat;
 import java.util.Calendar;
 
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.database.DataBaseHelper;
 import es.ugr.swad.swadroid.gui.FontManager;
-import es.ugr.swad.swadroid.utils.Crypto;
 
 /**
  * Custom CursorAdapter for display events
  *
- * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
  */
 public class EventsCursorAdapter extends CursorAdapter {
-    private Crypto crypto;
     private Cursor cursor;
     private DateFormat df;
     private LayoutInflater inflater;
@@ -64,34 +62,11 @@ public class EventsCursorAdapter extends CursorAdapter {
      *
      * @param context   Application context
      * @param c         Database cursor
-     * @param dbHelper  Database helper
      */
-    public EventsCursorAdapter(Context context, Cursor c, DataBaseHelper dbHelper) {
+    public EventsCursorAdapter(Context context, Cursor c) {
 
         super(context, c, true);
         this.cursor = c;
-        this.crypto = new Crypto(context, dbHelper.getDBKey());
-        this.df = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT);
-        this.inflater = LayoutInflater.from(context);
-
-        //Get Font Awesome typeface
-        iconFont = FontManager.getTypeface(context, FontManager.FONTAWESOME);
-    }
-
-    /**
-     * Constructor
-     *
-     * @param context     Application context
-     * @param c           Database cursor
-     * @param autoRequery Flag to set autoRequery function
-     * @param dbHelper    Database helper
-     */
-    public EventsCursorAdapter(Context context, Cursor c,
-                               boolean autoRequery, DataBaseHelper dbHelper) {
-
-        super(context, c, autoRequery);
-        this.cursor = c;
-        this.crypto = new Crypto(context, dbHelper.getDBKey());
         this.df = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT);
         this.inflater = LayoutInflater.from(context);
 
@@ -101,10 +76,10 @@ public class EventsCursorAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, final Context context, Cursor cursor) {
-        String title = crypto.decrypt(cursor.getString(cursor.getColumnIndex("title")));
+        String title = cursor.getString(cursor.getColumnIndex("title"));
         long startTime = cursor.getLong(cursor.getColumnIndex("startTime"));
         long endTime = cursor.getLong(cursor.getColumnIndex("endTime"));
-        final boolean pending = "pending".equals(crypto.decrypt(cursor.getString(cursor.getColumnIndex("status"))));
+        final boolean pending = "pending".equals(cursor.getString(cursor.getColumnIndex("status")));
         Calendar today = Calendar.getInstance();
         Calendar startTimeCalendar = Calendar.getInstance();
         Calendar endTimeCalendar = Calendar.getInstance();
@@ -115,16 +90,16 @@ public class EventsCursorAdapter extends CursorAdapter {
         ViewHolder holder = (ViewHolder) view.getTag();
         view.setTag(holder);
 
-        holder.iconTextView = (TextView) view.findViewById(R.id.icon);
+        holder.iconTextView = view.findViewById(R.id.icon);
         holder.iconTextView.setText(R.string.fa_check_square_o);
 
         //Set Font Awesome typeface
         holder.iconTextView.setTypeface(iconFont);
 
-        holder.titleTextView = (TextView) view.findViewById(R.id.toptext);
-        holder.startTimeTextView = (TextView) view.findViewById(R.id.startTimeTextView);
-        holder.endTimeTextView = (TextView) view.findViewById(R.id.endTimeTextView);
-        holder.sendingStateTextView = (TextView) view.findViewById(R.id.sendingStateTextView);
+        holder.titleTextView = view.findViewById(R.id.toptext);
+        holder.startTimeTextView = view.findViewById(R.id.startTimeTextView);
+        holder.endTimeTextView = view.findViewById(R.id.endTimeTextView);
+        holder.sendingStateTextView = view.findViewById(R.id.sendingStateTextView);
 
         holder.titleTextView.setText(title);
         holder.startTimeTextView.setText(df.format(startTimeCalendar.getTime()));
@@ -159,10 +134,10 @@ public class EventsCursorAdapter extends CursorAdapter {
         View view = inflater.inflate(R.layout.event_list_item, parent, false);
         ViewHolder holder = new ViewHolder();
 
-        holder.titleTextView = (TextView) view.findViewById(R.id.toptext);
-        holder.startTimeTextView = (TextView) view.findViewById(R.id.startTimeTextView);
-        holder.endTimeTextView = (TextView) view.findViewById(R.id.endTimeTextView);
-        holder.sendingStateTextView = (TextView) view.findViewById(R.id.sendingStateTextView);
+        holder.titleTextView = view.findViewById(R.id.toptext);
+        holder.startTimeTextView = view.findViewById(R.id.startTimeTextView);
+        holder.endTimeTextView = view.findViewById(R.id.endTimeTextView);
+        holder.sendingStateTextView = view.findViewById(R.id.sendingStateTextView);
         view.setTag(holder);
 
         return view;
@@ -170,12 +145,8 @@ public class EventsCursorAdapter extends CursorAdapter {
 
     @Override
     public long getItemId(int position) {
-        if(cursor != null) {
-            if(cursor.moveToPosition(position)) {
-                return cursor.getLong(cursor.getColumnIndex("id"));
-            } else {
-                return 0;
-            }
+        if((cursor != null) && cursor.moveToPosition(position)) {
+            return cursor.getLong(cursor.getColumnIndex("id"));
         } else {
             return 0;
         }

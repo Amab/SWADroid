@@ -39,7 +39,7 @@ import es.ugr.swad.swadroid.modules.courses.Courses;
 /**
  * Tests module for download questions and evaluate user skills in a course
  *
- * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
  * @author Helena Rodríguez Gijon <hrgijon@gmail.com>
  */
 public class Tests extends MenuActivity implements OnItemClickListener {

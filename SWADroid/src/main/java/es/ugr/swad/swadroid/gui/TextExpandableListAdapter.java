@@ -35,7 +35,7 @@ import es.ugr.swad.swadroid.BuildConfig;
 import es.ugr.swad.swadroid.R;
 
 /**
- * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
  */
 public class TextExpandableListAdapter extends SimpleExpandableListAdapter {
     private final String NAME = "listText";

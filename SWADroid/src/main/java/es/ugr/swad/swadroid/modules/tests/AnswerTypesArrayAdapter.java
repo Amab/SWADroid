@@ -19,13 +19,12 @@
 package es.ugr.swad.swadroid.modules.tests;
 
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckedTextView;
-
-import es.ugr.swad.swadroid.utils.Utils;
 
 public class AnswerTypesArrayAdapter extends ArrayAdapter<CharSequence> {
     private final Context context;
@@ -51,9 +50,9 @@ public class AnswerTypesArrayAdapter extends ArrayAdapter<CharSequence> {
             convertView = vi.inflate(textViewResourceId, null);
         }
 
-        CheckedTextView tt = (CheckedTextView) convertView.findViewById(android.R.id.text1);
+        CheckedTextView tt = convertView.findViewById(android.R.id.text1);
         if (tt != null) {
-            tt.setText(Utils.fromHtml(itemsNames[position]));
+            tt.setText(Html.fromHtml(itemsNames[position], Html.FROM_HTML_MODE_LEGACY));
         }
 
         return convertView;

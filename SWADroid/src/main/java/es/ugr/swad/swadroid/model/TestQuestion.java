@@ -18,20 +18,30 @@
  */
 package es.ugr.swad.swadroid.model;
 
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Ignore;
+import androidx.room.Index;
+
 import org.ksoap2.serialization.PropertyInfo;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Hashtable;
-import java.util.List;
 
 import es.ugr.swad.swadroid.utils.Utils;
+import lombok.Data;
 
 /**
- * Clas for store a test question
+ * Class for store a test question
  *
- * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
  */
+@Data
+@Entity(indices = {@Index("crsCod"), @Index("answerType"), @Index("shuffle")},
+        foreignKeys = {
+                @ForeignKey(entity = Course.class,
+                        parentColumns = "id",
+                        childColumns = "crsCod",
+                        onDelete = ForeignKey.CASCADE)})
 public class TestQuestion extends Model {
     /**
      * Course code
@@ -54,17 +64,19 @@ public class TestQuestion extends Model {
      */
     private String feedback;
 
-    /**
-     * Question's answers
-     */
-    private List<TestAnswer> answers;
+    @Ignore
     private static final PropertyInfo PI_id = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_stem = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_editTime = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_ansType = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_shuffle = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_feedback = new PropertyInfo();
-    @SuppressWarnings("unused")
+    @Ignore
     private static PropertyInfo[] PI_PROP_ARRAY =
             {
                     PI_id,
@@ -75,202 +87,13 @@ public class TestQuestion extends Model {
                     PI_feedback
             };
 
-    /**
-     * @param id       Test identifier
-     * @param stem     Question's text
-     * @param anstype  Answer type
-     * @param shuffle  Flag to shuffle answers in test
-     * @param feedback Text of the question's feedback
-     */
-    public TestQuestion(long id, String stem, String anstype, boolean shuffle, String feedback) {
+    public TestQuestion(long id, long crsCod, String stem, String answerType, boolean shuffle, String feedback) {
         super(id);
-        this.stem = stem;
-        this.answerType = anstype;
-        this.shuffle = shuffle;
-        this.answers = new ArrayList<>();
-        this.feedback = feedback;
-    }
-
-    /**
-     * @param id                 Test identifier
-     * @param selectedCourseCode Course code
-     * @param stem               Question's text
-     * @param anstype            Answer type
-     * @param shuffle            Flag to shuffle answers in test
-     * @param feedback           Text of the question's feedback
-     */
-    public TestQuestion(long id, long selectedCourseCode, String stem, String anstype, boolean shuffle, String feedback) {
-        super(id);
-        this.crsCod = selectedCourseCode;
-        this.stem = stem;
-        this.answerType = anstype;
-        this.shuffle = shuffle;
-        this.answers = new ArrayList<>();
-        this.feedback = feedback;
-    }
-
-    /**
-     * Gets question code
-     *
-     * @return Question code
-     */
-    public long getCrsCod() {
-        return crsCod;
-    }
-
-    /**
-     * Sets question code
-     *
-     * @param crsCod Question code
-     */
-    public void setCrsCod(long crsCod) {
         this.crsCod = crsCod;
-    }
-
-    /**
-     * Gets question's text
-     *
-     * @return Question's text
-     */
-    public String getStem() {
-        return stem;
-    }
-
-    /**
-     * Sets question's text
-     *
-     * @param stem Question's text
-     */
-    public void setStem(String stem) {
         this.stem = stem;
-    }
-
-    /**
-     * Gets answer type
-     *
-     * @return Answer type
-     */
-    public String getAnswerType() {
-        return answerType;
-    }
-
-    /**
-     * Sets answer type
-     *
-     * @param anstype Answer type
-     */
-    public void setAnswerType(String anstype) {
-        this.answerType = anstype;
-    }
-
-    /**
-     * Gets shuffle flag
-     *
-     * @return Shuffle flag
-     */
-    public boolean getShuffle() {
-        return shuffle;
-    }
-
-    /**
-     * Sets shuffle flag
-     *
-     * @param shuffle Shuffle flag
-     */
-    public void setShuffle(boolean shuffle) {
+        this.answerType = answerType;
         this.shuffle = shuffle;
-    }
-
-    /**
-     * Gets question's answers
-     *
-     * @return Question's answers
-     */
-    public List<TestAnswer> getAnswers() {
-        return answers;
-    }
-
-    /**
-     * Sets question's answers
-     *
-     * @param answers Question's answers
-     */
-    public void setAnswers(List<TestAnswer> answers) {
-        this.answers = answers;
-    }
-
-    /**
-     * Gets the text of the question's feedback
-     *
-     * @return Text of the question's feedback
-     */
-    public String getFeedback() {
-        return feedback;
-    }
-
-    /**
-     * Sets the text of the question's feedback
-     *
-     * @param feedback Text of the question's feedback
-     */
-    public void setFeedback(String feedback) {
         this.feedback = feedback;
-    }
-
-    /**
-     * Gets correct answer for this test
-     *
-     * @return Correct test's answer
-     */
-    public List<TestAnswer> getCorrectAnswers() {
-        List<TestAnswer> corrects = new ArrayList<>();
-        TestAnswer current;
-
-        for (TestAnswer answer : this.answers) {
-            current = answer;
-            if (current.getCorrect()) {
-                corrects.add(current);
-            }
-        }
-
-        if (corrects.isEmpty()) {
-            corrects = null;
-        }
-
-        return corrects;
-    }
-
-    /**
-     * Shuffles the list of related answers in a question
-     */
-    public void shuffleAnswers() {
-        Collections.shuffle(answers);
-    }
-
-    /* (non-Javadoc)
-     * @see java.lang.Object#hashCode()
-     */
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result
-                + ((answerType == null) ? 0 : answerType.hashCode());
-        result = prime * result + ((answers == null) ? 0 : answers.hashCode());
-        result = prime * result + (int) (crsCod ^ (crsCod >>> 32));
-        result = prime * result
-                + ((feedback == null) ? 0 : feedback.hashCode());
-        result = prime * result + (shuffle ? 1231 : 1237);
-        result = prime * result + ((stem == null) ? 0 : stem.hashCode());
-        return result;
-    }
-
-    /* (non-Javadoc)
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    @Override
-    public boolean equals(Object obj) {
-        return this == obj || super.equals(obj) && getClass() == obj.getClass();
     }
 
     /* (non-Javadoc)
@@ -309,7 +132,7 @@ public class TestQuestion extends Model {
     /* (non-Javadoc)
      * @see org.ksoap2.serialization.KvmSerializable#getPropertyInfo(int, java.util.Hashtable, org.ksoap2.serialization.PropertyInfo)
      */
-    public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo propertyInfo) {
+    public void getPropertyInfo(int param, Hashtable arg1, PropertyInfo propertyInfo) {
         switch (param) {
             case 0:
                 propertyInfo.type = PropertyInfo.LONG_CLASS;
@@ -357,15 +180,4 @@ public class TestQuestion extends Model {
         }
     }
 
-    @Override
-    public String toString() {
-        return "TestQuestion{" +
-                "crsCod=" + crsCod +
-                ", stem='" + stem + '\'' +
-                ", answerType='" + answerType + '\'' +
-                ", shuffle=" + shuffle +
-                ", feedback='" + feedback + '\'' +
-                ", answers=" + answers +
-                "} " + super.toString();
-    }
 }

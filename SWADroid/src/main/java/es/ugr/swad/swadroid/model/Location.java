@@ -1,10 +1,17 @@
 package es.ugr.swad.swadroid.model;
 
+import androidx.room.Entity;
+import androidx.room.Ignore;
+
 import org.ksoap2.serialization.PropertyInfo;
 
 import java.io.Serializable;
 import java.util.Hashtable;
 
+import lombok.Data;
+
+@Data
+@Entity
 public class Location extends Model implements Serializable {
 
     protected int institutionCode;
@@ -33,20 +40,35 @@ public class Location extends Model implements Serializable {
 
     protected String roomFullName;
 
+    @Ignore
     protected static final PropertyInfo PI_id = new PropertyInfo();
+    @Ignore
     protected static final PropertyInfo PI_institutionCode = new PropertyInfo();
+    @Ignore
     protected static final PropertyInfo PI_institutionShortName = new PropertyInfo();
+    @Ignore
     protected static final PropertyInfo PI_institutionFullName = new PropertyInfo();
+    @Ignore
     protected static final PropertyInfo PI_centerCode = new PropertyInfo();
+    @Ignore
     protected static final PropertyInfo PI_centerShortName = new PropertyInfo();
+    @Ignore
     protected static final PropertyInfo PI_centerFullName = new PropertyInfo();
+    @Ignore
     protected static final PropertyInfo PI_buildingCode = new PropertyInfo();
+    @Ignore
     protected static final PropertyInfo PI_buildingShortName = new PropertyInfo();
+    @Ignore
     protected static final PropertyInfo PI_buildingFullName = new PropertyInfo();
+    @Ignore
     protected static final PropertyInfo PI_floor = new PropertyInfo();
+    @Ignore
     protected static final PropertyInfo PI_roomCode = new PropertyInfo();
+    @Ignore
     protected static final PropertyInfo PI_roomShortName = new PropertyInfo();
+    @Ignore
     protected static final PropertyInfo PI_roomFullName = new PropertyInfo();
+    @Ignore
     protected static PropertyInfo[] PI_PROP_ARRAY =
             {
                     PI_id,
@@ -78,110 +100,6 @@ public class Location extends Model implements Serializable {
         this.floor = floor;
         this.roomCode = roomCode;
         this.roomShortName = roomShortName;
-        this.roomFullName = roomFullName;
-    }
-
-    public int getInstitutionCode() {
-        return institutionCode;
-    }
-
-    public void setInstitutionCode(int institutionCode) {
-        this.institutionCode = institutionCode;
-    }
-
-    public String getInstitutionShortName() {
-        return institutionShortName;
-    }
-
-    public void setInstitutionShortName(String institutionShortName) {
-        this.institutionShortName = institutionShortName;
-    }
-
-    public String getInstitutionFullName() {
-        return institutionFullName;
-    }
-
-    public void setInstitutionFullName(String institutionFullName) {
-        this.institutionFullName = institutionFullName;
-    }
-
-    public int getCenterCode() {
-        return centerCode;
-    }
-
-    public void setCenterCode(int centerCode) {
-        this.centerCode = centerCode;
-    }
-
-    public String getCenterShortName() {
-        return centerShortName;
-    }
-
-    public void setCenterShortName(String centerShortName) {
-        this.centerShortName = centerShortName;
-    }
-
-    public String getCenterFullName() {
-        return centerFullName;
-    }
-
-    public void setCenterFullName(String centerFullName) {
-        this.centerFullName = centerFullName;
-    }
-
-    public int  getBuildingCode() {
-        return buildingCode;
-    }
-
-    public void setBuildingCode(int buildingCode) {
-        this.buildingCode = buildingCode;
-    }
-
-    public String getBuildingShortName() {
-        return buildingShortName;
-    }
-
-    public void setBuildingShortName(String buildingShortName) {
-        this.buildingShortName = buildingShortName;
-    }
-
-    public String getBuildingFullName() {
-        return buildingFullName;
-    }
-
-    public void setBuildingFullName(String buildingFullName) {
-        this.buildingFullName = buildingFullName;
-    }
-
-    public int getFloor() {
-        return floor;
-    }
-
-    public void setFloor(int floor) {
-        this.floor = floor;
-    }
-
-    public int getRoomCode() {
-        return roomCode;
-    }
-
-    public void setRoomCode(int roomCode) {
-        this.roomCode = roomCode;
-    }
-
-    public String getRoomShortName() {
-        return roomShortName;
-    }
-
-    public void setRoomShortName(String roomShortName) {
-        this.roomShortName = roomShortName;
-    }
-
-    public String getRoomFullName() {
-        return roomFullName;
-    }
-
-    public void setRoomFullName(String roomFullName) {
         this.roomFullName = roomFullName;
     }
 
@@ -350,22 +268,4 @@ public class Location extends Model implements Serializable {
         }
     }
 
-    @Override
-    public String toString() {
-        return "Location{" +
-                "institutionCode=" + institutionCode +
-                ", institutionShortName='" + institutionShortName + '\'' +
-                ", institutionFullName='" + institutionFullName + '\'' +
-                ", centerCode=" + centerCode +
-                ", centerShortName='" + centerShortName + '\'' +
-                ", centerFullName='" + centerFullName + '\'' +
-                ", buildingCode=" + buildingCode +
-                ", buildingShortName='" + buildingShortName + '\'' +
-                ", buildingFullName='" + buildingFullName + '\'' +
-                ", floor=" + floor +
-                ", roomCode=" + roomCode +
-                ", roomShortName='" + roomShortName + '\'' +
-                ", roomFullName='" + roomFullName + '\'' +
-                '}';
-    }
 }

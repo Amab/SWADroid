@@ -30,7 +30,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,6 +41,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import org.ksoap2.serialization.SoapObject;
 
 import java.util.ArrayList;
@@ -50,9 +51,8 @@ import java.util.Vector;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.database.DataBaseHelper;
+import es.ugr.swad.swadroid.dao.SWADNotificationDao;
 import es.ugr.swad.swadroid.gui.AlertNotificationFactory;
-import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.modules.login.Login;
@@ -65,7 +65,7 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
  * Notifications module for get user's notifications
  * @see <a href="https://openswad.org/ws/#getNotifications">getNotifications</a>
  *
- * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */
@@ -75,10 +75,6 @@ public class Notifications extends Module implements
 	 * Unique identifier for notification alerts
 	 */
 	public static final int NOTIF_ALERT_ID = 1982;
-	/**
-	 * Cursor orderby parameter
-	 */
-	private final String orderby = "eventTime DESC";
 	/**
 	 * Notifications counter
 	 */
@@ -138,52 +134,51 @@ public class Notifications extends Module implements
 	/**
 	 * List of childs for ExpandableListView
 	 */
-	private ArrayList<List<Model>> childItem;
+	private ArrayList<List<SWADNotification>> childItem;
 	/**
 	 * Id for the not seen notifications group
 	 */
-	private int NOT_SEEN_GROUP_ID = 0;
+	private final int NOT_SEEN_GROUP_ID = 0;
 	/**
 	 * Id for the seen notifications group
 	 */
-	private int SEEN_GROUP_ID = 1;
+	private final int SEEN_GROUP_ID = 1;
+	/**
+	 * Data Access Object for Notifications
+	 */
+	private SWADNotificationDao swadNotificationDao;
 	/**
 	 * ListView click listener
 	 */
-	private OnChildClickListener clickListener = new OnChildClickListener() {
-		@Override
-		public boolean onChildClick(ExpandableListView parent, View v,
-				int groupPosition, int childPosition, long id) {
-			
-			TextView notifCode = (TextView) v.findViewById(R.id.notifCode);
-			TextView code = (TextView) v.findViewById(R.id.eventCode);
-			TextView type = (TextView) v.findViewById(R.id.eventType);
-			TextView userPhoto = (TextView) v.findViewById(R.id.eventUserPhoto);
-			TextView sender = (TextView) v.findViewById(R.id.eventSender);
-			TextView course = (TextView) v.findViewById(R.id.eventLocation);
-			TextView summary = (TextView) v.findViewById(R.id.eventSummary);
-			TextView content = (TextView) v.findViewById(R.id.eventText);
-			TextView date = (TextView) v.findViewById(R.id.eventDate);
-			TextView time = (TextView) v.findViewById(R.id.eventTime);
-			TextView seenLocalText = (TextView) v.findViewById(R.id.seenLocal);
+	private final OnChildClickListener clickListener = (parent, v, groupPosition, childPosition, id) -> {
+		TextView notifCode = v.findViewById(R.id.notifCode);
+		TextView code = v.findViewById(R.id.eventCode);
+		TextView type = v.findViewById(R.id.eventType);
+		TextView userPhoto = v.findViewById(R.id.eventUserPhoto);
+		TextView sender = v.findViewById(R.id.eventSender);
+		TextView course = v.findViewById(R.id.eventLocation);
+		TextView summary = v.findViewById(R.id.eventSummary);
+		TextView content = v.findViewById(R.id.eventText);
+		TextView date = v.findViewById(R.id.eventDate);
+		TextView time = v.findViewById(R.id.eventTime);
+		TextView seenLocalText = v.findViewById(R.id.seenLocal);
 
-			Intent activity = new Intent(getApplicationContext(),
-					NotificationItem.class);
-			activity.putExtra("notifCode", notifCode.getText().toString());
-			activity.putExtra("eventCode", code.getText().toString());
-			activity.putExtra("notificationType", type.getText().toString());
-			activity.putExtra("userPhoto", userPhoto.getText().toString());
-			activity.putExtra("sender", sender.getText().toString());
-			activity.putExtra("course", course.getText().toString());
-			activity.putExtra("summary", summary.getText().toString());
-			activity.putExtra("content", content.getText().toString());
-			activity.putExtra("date", date.getText().toString());
-			activity.putExtra("time", time.getText().toString());
-			activity.putExtra("seenLocal", seenLocalText.getText().toString());
-			startActivity(activity);
-			
-			return true;
-		}
+		Intent activity = new Intent(getApplicationContext(),
+				NotificationItem.class);
+		activity.putExtra("notifCode", notifCode.getText().toString());
+		activity.putExtra("eventCode", code.getText().toString());
+		activity.putExtra("notificationType", type.getText().toString());
+		activity.putExtra("userPhoto", userPhoto.getText().toString());
+		activity.putExtra("sender", sender.getText().toString());
+		activity.putExtra("course", course.getText().toString());
+		activity.putExtra("summary", summary.getText().toString());
+		activity.putExtra("content", content.getText().toString());
+		activity.putExtra("date", date.getText().toString());
+		activity.putExtra("time", time.getText().toString());
+		activity.putExtra("seenLocal", seenLocalText.getText().toString());
+		startActivity(activity);
+
+		return true;
 	};
 
 	/**
@@ -209,18 +204,14 @@ public class Notifications extends Module implements
 	 * Sends to SWAD the "seen notifications" info
 	 */
 	private void sendReadNotifications() {
-		List<Model> markedNotificationsList;
+		List<SWADNotification> markedNotificationsList;
 		String seenNotifCodes;
 		Intent activity;
 		int numMarkedNotificationsList;
 
 		// Construct a list of seen notifications in state
 		// "pending to mark as read in SWAD"
-		markedNotificationsList = dbHelper.getAllRows(
-				DataBaseHelper.DB_TABLE_NOTIFICATIONS,
-				"seenLocal='" + Utils.parseBoolString(true)
-						+ "' AND seenRemote='"
-						+ Utils.parseBoolString(false) + "'", null);
+		markedNotificationsList = swadNotificationDao.findAllPendingToRead();
 
 		numMarkedNotificationsList = markedNotificationsList.size();
 		if (isDebuggable)
@@ -272,17 +263,21 @@ public class Notifications extends Module implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {		
 		super.onCreate(savedInstanceState);
+
+		//Initialize DAOs
+		swadNotificationDao = db.getSwadNotificationDao();
+
 		setContentView(R.layout.expandablelist_items_pulltorefresh);
 
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		this.findViewById(R.id.groupSpinner).setVisibility(View.GONE);
 
-		refreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container_expandablelist);
-		list = (ExpandableListView) findViewById(R.id.expandablelist_pulltorefresh);
-		emptyNotifTextView = (TextView) findViewById(R.id.list_item_title);
-        mBirthdayLayout = (LinearLayout) findViewById(R.id.notify_layout);
-        mBirthdayTextView = (TextView) findViewById(R.id.notifyTextView);
+		refreshLayout = findViewById(R.id.swipe_container_expandablelist);
+		list = findViewById(R.id.expandablelist_pulltorefresh);
+		emptyNotifTextView = findViewById(R.id.list_item_title);
+        mBirthdayLayout = findViewById(R.id.notify_layout);
+        mBirthdayTextView = findViewById(R.id.notifyTextView);
 		
 		groupItem = new ArrayList<>();
 		childItem = new ArrayList<>();
@@ -298,7 +293,7 @@ public class Notifications extends Module implements
 		 * If there aren't notifications to show, hide the notifications list
 		 * and show the empty notifications message
 		 */
-		if (dbHelper.getAllRowsCount(DataBaseHelper.DB_TABLE_NOTIFICATIONS) == 0) {
+		if (swadNotificationDao.countAll() == 0) {
 			Log.d(TAG, "[onCreate] Notifications table is empty");
 			
 			emptyNotifTextView.setText(R.string.notificationsEmptyListMsg);
@@ -316,20 +311,6 @@ public class Notifications extends Module implements
 		setMETHOD_NAME("getNotifications");
 		receiver = new SyncReceiver(this);
 		account = new Account(getString(R.string.app_name), accountType);
-	}
-
-	/**
-	 * Launches an action when markAllRead button is pushed
-	 *
-	 */
-	public void onMarkAllReadClick() {
-		dbHelper.updateAllNotifications("seenLocal",
-				Utils.parseBoolString(true));
-
-		// Sends to SWAD the "seen notifications" info
-		sendReadNotifications();
-
-		refreshScreen();
 	}
 	
 	/*
@@ -371,7 +352,8 @@ public class Notifications extends Module implements
 	 */
 	@Override
 	protected void requestService() throws Exception {
-		int numDeletedNotif;
+		List<SWADNotification> notificationsList = new ArrayList<>();
+		long numDeletedNotif;
 
 		if (SyncUtils.isSyncAutomatically(getApplicationContext())) {
 			Log.i(TAG,
@@ -384,8 +366,7 @@ public class Notifications extends Module implements
 					"Automatic synchronization is disabled. Requesting manual sync operation");
 
 			// Calculates next timestamp to be requested
-			Long timestamp = Long.valueOf(dbHelper
-					.getFieldOfLastNotification("eventTime"));
+			Long timestamp = swadNotificationDao.findMaxEventTime();
 			timestamp++;
 
 			// Creates webservice request, adds required params and sends
@@ -396,22 +377,20 @@ public class Notifications extends Module implements
 			sendRequest(SWADNotification.class, false);
 
 			if (result != null) {
-				dbHelper.beginTransaction();
-
 				// Stores notifications data returned by webservice response
-				ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
+				ArrayList<?> res = new ArrayList<>((Vector<?>) result);
 				SoapObject soap = (SoapObject) res.get(1);
 				int numNotif = soap.getPropertyCount();
 
 				notifCount = 0;
 				for (int i = 0; i < numNotif; i++) {
 					SoapObject pii = (SoapObject) soap.getProperty(i);
-					Long notifCode = Long.valueOf(pii.getProperty("notifCode")
+					long notifCode = Long.parseLong(pii.getProperty("notifCode")
 							.toString());
-					Long eventCode = Long.valueOf(pii.getProperty(
+					long eventCode = Long.parseLong(pii.getProperty(
 							"eventCode").toString());
 					String eventType = pii.getProperty("eventType").toString();
-					Long eventTime = Long.valueOf(pii.getProperty("eventTime")
+					long eventTime = Long.parseLong(pii.getProperty("eventTime")
 							.toString());
 					String userNickname = pii.getProperty("userNickname")
 							.toString();
@@ -424,7 +403,7 @@ public class Notifications extends Module implements
 					String userPhoto = pii.getProperty("userPhoto").toString();
 					String location = pii.getProperty("location").toString();
 					String summary = pii.getProperty("summary").toString();
-					Integer status = Integer.valueOf(pii.getProperty("status")
+					int status = Integer.parseInt(pii.getProperty("status")
 							.toString());
 					String content = pii.getProperty("content").toString();
 					boolean notifReadSWAD = (status >= 4);
@@ -438,7 +417,7 @@ public class Notifications extends Module implements
 								summary, status, content, notifReadSWAD,
 								notifReadSWAD);
 
-						dbHelper.insertNotification(n);
+						notificationsList.add(n);
 
 						// Count unread notifications only
 						if (!notifReadSWAD) {
@@ -450,16 +429,16 @@ public class Notifications extends Module implements
 					}
 				}
 
+				swadNotificationDao.insertSWADNotifications(notificationsList);
+
 				// Request finalized without errors
 				setResult(RESULT_OK);
 				Log.i(TAG, "Retrieved " + numNotif + " notifications ("
 						+ notifCount + " unread)");
 
 				// Clean old notifications to control database size
-                numDeletedNotif = dbHelper.cleanOldNotificationsByAge(Constants.CLEAN_NOTIFICATIONS_THRESHOLD);
+                numDeletedNotif = swadNotificationDao.deleteAllByAge(Constants.CLEAN_NOTIFICATIONS_THRESHOLD);
                 Log.i(TAG, "Deleted " + numDeletedNotif + " notifications from database");
-
-				dbHelper.endTransaction(true);
 			}
 		}
 	}
@@ -471,8 +450,6 @@ public class Notifications extends Module implements
 	 */
 	@Override
 	protected void connect() {
-		//Toast.makeText(this, R.string.notificationsProgressDescription, Toast.LENGTH_SHORT).show();
-
 		startConnection();
 	}
 
@@ -530,7 +507,7 @@ public class Notifications extends Module implements
 	 */
 	@Override
 	protected void onError() {
-
+		// No-op
 	}
 
 	/**
@@ -539,7 +516,7 @@ public class Notifications extends Module implements
 	 */
 	public void clearNotifications() {
 		try {
-			dbHelper.emptyTable(DataBaseHelper.DB_TABLE_NOTIFICATIONS);
+			swadNotificationDao.deleteAll();
 		} catch (Exception e) {
 			error(e.getMessage(), e);
 		}
@@ -548,7 +525,7 @@ public class Notifications extends Module implements
 	/**
 	 * Synchronization callback. Is called when synchronization starts and stops
 	 *
-	 * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+	 * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
 	 */
 	private class SyncReceiver extends BroadcastReceiver {
 
@@ -589,8 +566,7 @@ public class Notifications extends Module implements
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_markAllRead:
-			dbHelper.updateAllNotifications("seenLocal",
-					Utils.parseBoolString(true));
+			swadNotificationDao.updateAllBySeenLocal(true);
 			sendReadNotifications();
 			refreshScreen();
 			return true;
@@ -600,26 +576,14 @@ public class Notifications extends Module implements
 		}
 	}
 
-	/*
-	 * @Override public void setContentView(int layoutResID) { View v =
-	 * getLayoutInflater().inflate(layoutResID, refreshLayout, false);
-	 * setContentView(v); }
-	 * 
-	 * @Override public void setContentView(View view) { setContentView(view,
-	 * view.getLayoutParams()); }
-	 * 
-	 * @Override public void setContentView(View view, ViewGroup.LayoutParams
-	 * params) { refreshLayout.addView(view, params); initSwipeOptions(); }
-	 */
-
 	private void initSwipeOptions() {
 		refreshLayout.setOnRefreshListener(this);
 		setAppearance();
-		// disableSwipe();
 
         list.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+            	// No-op
             }
 
             @Override
@@ -638,73 +602,6 @@ public class Notifications extends Module implements
                 refreshLayout.setEnabled(enable);
             }
         });
-		/*
-		 * Create a ListView-specific touch listener. ListViews are given special treatment because
-		 * by default they handle touches for their list items... i.e. they're in charge of drawing
-		 * the pressed state (the list selector), handling list item clicks, etc.
-		 * 
-		 * Requires Android 3.1 (HONEYCOMB_MR1) or newer
-		 */
-		/*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
-			SwipeListViewTouchListener touchListener =
-			    new SwipeListViewTouchListener(
-			    		list,
-			        new SwipeListViewTouchListener.OnSwipeCallback() {		    			
-			            @Override
-			            public void onSwipeLeft(ListView listView, int [] reverseSortedPositions) {
-                            if(reverseSortedPositions.length > 0) {
-                                swipeItem(reverseSortedPositions[0]);
-                            }
-			            }
-	
-			            @Override
-			            public void onSwipeRight(ListView listView, int [] reverseSortedPositions) {
-                            if(reverseSortedPositions.length > 0) {
-                                swipeItem(reverseSortedPositions[0]);
-                            }
-			            }
-	
-						@Override
-						public void onStartSwipe() {
-                            disableSwipe();
-						}
-	
-						@Override
-						public void onStopSwipe() {
-							enableSwipe();
-						}
-			        },
-			        true,
-			        true);
-			
-			list.setOnTouchListener(touchListener);
-			// Setting this scroll listener is required to ensure that during ListView scrolling,
-			// we don't look for swipes.
-			list.setOnScrollListener(touchListener.makeScrollListener(refreshLayout));
-		} else {
-			Log.w(TAG, "SwipeListViewTouchListener requires Android 3.1 (HONEYCOMB_MR1) or newer");
-			list.setOnScrollListener(new AbsListView.OnScrollListener() {
-                @Override
-	            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
-	            }
-
-	            @Override
-	            public void onScroll(AbsListView absListView, int firstVisibleItem,
-	                    int visibleItemCount, int totalItemCount) {
-	            	
-	            	boolean enable = false;
-			        if(list != null && list.getChildCount() > 0){
-			            // check if the first item of the list is visible
-			            boolean firstItemVisible = list.getFirstVisiblePosition() == 0;
-			            // check if the top of the first item is visible
-			            boolean topOfFirstItemVisible = list.getChildAt(0).getTop() == 0;
-			            // enabling or disabling the refresh layout
-			            enable = firstItemVisible && topOfFirstItemVisible;
-			        }
-			        refreshLayout.setEnabled(enable);
-	            }
-	        });	
-		}*/
 	}
 
 	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
@@ -734,7 +631,6 @@ public class Notifications extends Module implements
 	 */
 	private void enableSwipe() {
 		refreshLayout.setEnabled(true);
-        //Log.d(TAG, "RefreshLayout Swipe ENABLED");
 	}
 
 	/**
@@ -743,7 +639,6 @@ public class Notifications extends Module implements
 	 */
 	public void disableSwipe() {
         refreshLayout.setEnabled(false);
-        //Log.d(TAG, "RefreshLayout Swipe DISABLED");
 	}
 
 	/**
@@ -765,19 +660,17 @@ public class Notifications extends Module implements
 	}
 
 	private void setChildGroupData() {
-		List<Model> child;
+		List<SWADNotification> child;
 		
 		//Clear data
 		childItem.clear();
 		
 		//Add data for not seen notifications		 
-		child = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_NOTIFICATIONS,
-				"seenLocal='" + Utils.parseBoolString(false) + "'", orderby);
+		child = swadNotificationDao.findAllOrderByEventTimeDesc(false);
 		childItem.add(child);
 		
 		//Add data for seen notifications	
-		child = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_NOTIFICATIONS,
-				"seenLocal='" + Utils.parseBoolString(true) + "'", orderby);
+		child = swadNotificationDao.findAllOrderByEventTimeDesc(true);
 		childItem.add(child);
 		
 		Log.d(TAG, "groups size=" + childItem.size());
@@ -786,7 +679,7 @@ public class Notifications extends Module implements
 		
 		adapter = new NotificationsExpandableListAdapter(this, groupItem, childItem);
 
-		if(dbHelper.getAllRowsCount(DataBaseHelper.DB_TABLE_NOTIFICATIONS) > 0) {
+		if(swadNotificationDao.countAll() > 0) {
 			Log.d(TAG, "[setChildGroupData] Notifications table is not empty");
 			
 			emptyNotifTextView.setVisibility(View.GONE);

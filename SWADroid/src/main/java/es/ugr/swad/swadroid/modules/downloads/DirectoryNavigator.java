@@ -47,7 +47,7 @@ import es.ugr.swad.swadroid.Constants;
  *
  * @author Sergio Ropero Oliver. <sro0000@gmail.com>
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
- * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
  * @version 1.0
  */
 

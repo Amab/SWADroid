@@ -18,16 +18,24 @@
  */
 package es.ugr.swad.swadroid.model;
 
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.Index;
+
 import org.ksoap2.serialization.PropertyInfo;
 
 import java.util.Hashtable;
 
+import lombok.Data;
+
 /**
  * Class for store a course
  *
- * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
  */
+@Data
+@Entity(indices = {@Index("shortName")})
 public class Course extends Model {
     /**
      * Course name
@@ -35,10 +43,16 @@ public class Course extends Model {
     private int userRole;
     private String shortName;
     private String fullName;
+
+    @Ignore
     private static final PropertyInfo PI_id = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_userRole = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_shortName = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_fullName = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo[] PI_PROP_ARRAY =
             {
                     PI_id,
@@ -47,74 +61,11 @@ public class Course extends Model {
                     PI_fullName
             };
 
-    /**
-     * Constructor
-     *
-     * @param id Course identifier
-     */
     public Course(long id, int userRole, String shortName, String fullName) {
         super(id);
         this.userRole = userRole;
         this.shortName = shortName;
         this.fullName = fullName;
-    }
-
-
-    /**
-     * Gets user role inside the course
-     *
-     * @return user role (2 = student, 3 = teacher)
-     */
-    public int getUserRole() {
-        return userRole;
-    }
-
-    /**
-     * Gets short course name
-     *
-     * @return Short course name
-     */
-    public String getShortName() {
-        return shortName;
-    }
-
-    /**
-     * Sets short course name
-     *
-     * @param shortName short course name
-     */
-    public void setShortName(String shortName) {
-        this.shortName = shortName;
-    }
-
-    /**
-     * Gets short course name
-     *
-     * @return Full course name
-     */
-    public String getFullName() {
-        return fullName;
-    }
-
-    /**
-     * Sets short course name
-     */
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-
-    /* (non-Javadoc)
-     * @see java.lang.Object#hashCode()
-     */
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + userRole;
-        result = prime * result + ((shortName == null) ? 0 : shortName.hashCode());
-        result = prime * result + ((fullName == null) ? 0 : fullName.hashCode());
-        return result;
     }
 
     /* (non-Javadoc)
@@ -150,7 +101,7 @@ public class Course extends Model {
     /* (non-Javadoc)
      * @see org.ksoap2.serialization.KvmSerializable#getPropertyInfo(int, java.util.Hashtable, org.ksoap2.serialization.PropertyInfo)
      */
-    public void getPropertyInfo(int param, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo propertyInfo) {
+    public void getPropertyInfo(int param, Hashtable arg1, PropertyInfo propertyInfo) {
         switch (param) {
             case 0:
                 propertyInfo.type = PropertyInfo.LONG_CLASS;
@@ -193,19 +144,4 @@ public class Course extends Model {
         }
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (!super.equals(obj)) return false;
-        Course other = (Course) obj;
-        return userRole == other.userRole && shortName.compareTo(other.getShortName()) == 0 && fullName.compareTo(other.getFullName()) == 0;
-    }
-
-    @Override
-    public String toString() {
-        return "Course{" +
-                "userRole=" + userRole +
-                ", shortName='" + shortName + '\'' +
-                ", fullName='" + fullName + '\'' +
-                "} " + super.toString();
-    }
 }

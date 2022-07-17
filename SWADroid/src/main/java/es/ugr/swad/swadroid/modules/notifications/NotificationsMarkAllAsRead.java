@@ -24,16 +24,16 @@ import android.util.Log;
 import org.ksoap2.serialization.SoapPrimitive;
 
 import es.ugr.swad.swadroid.Constants;
+import es.ugr.swad.swadroid.dao.SWADNotificationDao;
 import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.modules.login.Login;
-import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
  * Notifications module for mark as read user's notifications
  * @see <a href="https://openswad.org/ws/#markNotificationsAsRead">markNotificationsAsRead</a>
  *
- * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
  */
 public class NotificationsMarkAllAsRead extends Module {
     /**
@@ -41,12 +41,20 @@ public class NotificationsMarkAllAsRead extends Module {
      */
     private static final String TAG = Constants.APP_TAG + " NotificationsMarkAllAsRead";
 
+    /**
+     * DAO fo Notifications
+     */
+    private SWADNotificationDao swadNotificationDao;
+
     /* (non-Javadoc)
      * @see es.ugr.swad.swadroid.modules.Module#onCreate(android.os.Bundle)
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Initialize DAOs
+        swadNotificationDao = db.getSwadNotificationDao();
 
         setMETHOD_NAME("markNotificationsAsRead");
         getSupportActionBar().hide();
@@ -81,9 +89,9 @@ public class NotificationsMarkAllAsRead extends Module {
             //Stores user data returned by webservice response
             numMarkedNotifications = Integer.parseInt(soap.toString());
         }
-        
+
         Log.i(TAG, "Marked " + numMarkedNotifications + " notifications as readed");
-    	dbHelper.updateAllNotifications("seenRemote", Utils.parseBoolString(true));
+        swadNotificationDao.updateAllBySeenRemote(true);
         
         if(numMarkedNotifications != numMarkedNotificationsList) {	            
         	Log.e(TAG, "numMarkedNotifications (" + numMarkedNotifications + ") != numMarkedNotificationsList (" + numMarkedNotificationsList + ")");
@@ -114,6 +122,6 @@ public class NotificationsMarkAllAsRead extends Module {
      */
     @Override
     protected void onError() {
-    	
+    	// No-op
     }
 }

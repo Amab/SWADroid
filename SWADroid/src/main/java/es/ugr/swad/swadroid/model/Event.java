@@ -22,6 +22,11 @@ package es.ugr.swad.swadroid.model;
 
 import android.text.TextUtils;
 
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Ignore;
+import androidx.room.Index;
+
 import org.ksoap2.serialization.PropertyInfo;
 
 import java.util.ArrayList;
@@ -30,12 +35,22 @@ import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
 
+import lombok.Data;
+
 /**
  * Class for store a rollcall event
  *
- * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
  */
+@Data
+@Entity(indices = {@Index("crsCod")},
+        foreignKeys = {
+                @ForeignKey(entity = Course.class,
+                        parentColumns = "id",
+                        childColumns = "crsCod",
+                        onDelete = ForeignKey.CASCADE)})
 public class Event extends Model {
+    private long crsCod;
     private boolean hidden;
     private String userSurname1;
     private String userSurname2;
@@ -48,18 +63,32 @@ public class Event extends Model {
     private String text;
     private String groups;
     private String status;
+
+    @Ignore
     private static final PropertyInfo PI_id = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_hidden = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_userSurname1 = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_userSurname2 = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_userFirstName = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_userPhoto = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_startTime = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_endTime = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_commentsTeachersVisible = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_title = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_groups = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo PI_status = new PropertyInfo();
+    @Ignore
     private static final PropertyInfo[] PI_PROP_ARRAY =
             {
                     PI_id,
@@ -76,14 +105,32 @@ public class Event extends Model {
                     PI_status
             };
 
+    public Event(long crsCod, boolean hidden, String userSurname1, String userSurname2, String userFirstName, String userPhoto, long startTime, long endTime, boolean commentsTeachersVisible, String title, String text, String groups, String status) {
+        this.crsCod = crsCod;
+        this.hidden = hidden;
+        this.userSurname1 = userSurname1;
+        this.userSurname2 = userSurname2;
+        this.userFirstName = userFirstName;
+        this.userPhoto = userPhoto;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.commentsTeachersVisible = commentsTeachersVisible;
+        this.title = title;
+        this.text = text;
+        this.groups = groups;
+        this.status = status;
+    }
+
     /**
-     * Constructor with status
+     * Constructor
      */
-    public Event(long attendanceEventCode, boolean hidden, String userSurname1, String userSurname2,
-                 String userFirstName, String userPhoto, long startTime, long endTime,
-                 boolean commentsTeachersVisible, String title, String text, String groups,
+    public Event(long attendanceEventCode, long courseCode, boolean hidden, String userSurname1,
+                 String userSurname2, String userFirstName, String userPhoto, long startTime,
+                 long endTime, boolean commentsTeachersVisible, String title, String text, String groups,
                  String status) {
+
         super(attendanceEventCode);
+        this.crsCod = courseCode;
         this.hidden = hidden;
         this.userSurname1 = userSurname1;
         this.userSurname2 = userSurname2;
@@ -101,66 +148,14 @@ public class Event extends Model {
     /**
      * Constructor without status
      */
-    public Event(long attendanceEventCode, boolean hidden, String userSurname1, String userSurname2,
-                 String userFirstName, String userPhoto, long startTime, long endTime,
-                 boolean commentsTeachersVisible, String title, String text, String groups) {
-        super(attendanceEventCode);
-        this.hidden = hidden;
-        this.userSurname1 = userSurname1;
-        this.userSurname2 = userSurname2;
-        this.userFirstName = userFirstName;
-        this.userPhoto = userPhoto;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.commentsTeachersVisible = commentsTeachersVisible;
-        this.title = title;
-        this.text = text;
-        this.groups = groups;
-        this.status = "OK";
-    }
+    @Ignore
+    public Event(long attendanceEventCode, long courseCode, boolean hidden, String userSurname1,
+                 String userSurname2, String userFirstName, String userPhoto, long startTime,
+                 long endTime, boolean commentsTeachersVisible, String title, String text,
+                 String groups) {
 
-    public boolean isHidden() {
-        return hidden;
-    }
-
-    public void setHidden(boolean hidden) {
-        this.hidden = hidden;
-    }
-
-    public String getUserSurname1() {
-        return userSurname1;
-    }
-
-    public void setUserSurname1(String userSurname1) {
-        this.userSurname1 = userSurname1;
-    }
-
-    public String getUserSurname2() {
-        return userSurname2;
-    }
-
-    public void setUserSurname2(String userSurname2) {
-        this.userSurname2 = userSurname2;
-    }
-
-    public String getUserFirstName() {
-        return userFirstName;
-    }
-
-    public void setUserFirstName(String userFirstName) {
-        this.userFirstName = userFirstName;
-    }
-
-    public String getUserPhoto() {
-        return userPhoto;
-    }
-
-    public void setUserPhoto(String userPhoto) {
-        this.userPhoto = userPhoto;
-    }
-
-    public long getStartTime() {
-        return startTime;
+        this(attendanceEventCode, courseCode, hidden, userSurname1, userSurname2, userFirstName, userPhoto,
+                startTime, endTime, commentsTeachersVisible, title, text, groups, "OK");
     }
 
     public Calendar getStartTimeCalendar() {
@@ -169,54 +164,10 @@ public class Event extends Model {
         return calendar;
     }
 
-    public void setStartTime(long startTime) {
-        this.startTime = startTime;
-    }
-
-    public long getEndTime() {
-        return endTime;
-    }
-
     public Calendar getEndTimeCalendar() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(endTime * 1000L);
         return calendar;
-    }
-
-    public void setEndTime(long endTime) {
-        this.endTime = endTime;
-    }
-
-    public boolean isCommentsTeachersVisible() {
-        return commentsTeachersVisible;
-    }
-
-    public void setCommentsTeachersVisible(boolean commentsTeachersVisible) {
-        this.commentsTeachersVisible = commentsTeachersVisible;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public String getGroups() {
-        return groups;
-    }
-
-    public void setGroups(String groups) {
-        this.groups = groups;
     }
 
     public List<String> getGroupsList() {
@@ -227,17 +178,9 @@ public class Event extends Model {
         this.groups = TextUtils.join(",", groups);
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     /* (non-Javadoc)
-         * @see org.ksoap2.serialization.KvmSerializable#getProperty(int)
-         */
+     * @see org.ksoap2.serialization.KvmSerializable#getProperty(int)
+     */
     public Object getProperty(int param) {
         Object object = null;
         switch (param) {
@@ -399,21 +342,4 @@ public class Event extends Model {
         }
     }
 
-    @Override
-    public String toString() {
-        return "Event{" +
-                "hidden=" + hidden +
-                ", userSurname1='" + userSurname1 + '\'' +
-                ", userSurname2='" + userSurname2 + '\'' +
-                ", userFirstName='" + userFirstName + '\'' +
-                ", userPhoto='" + userPhoto + '\'' +
-                ", startTime=" + startTime +
-                ", endTime=" + endTime +
-                ", commentsTeachersVisible=" + commentsTeachersVisible +
-                ", title='" + title + '\'' +
-                ", text='" + text + '\'' +
-                ", groups='" + groups + '\'' +
-                ", status='" + status + '\'' +
-                "} " + super.toString();
-    }
 }

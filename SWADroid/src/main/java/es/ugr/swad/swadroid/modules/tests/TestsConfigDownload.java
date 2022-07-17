@@ -25,13 +25,16 @@ import android.widget.Toast;
 
 import org.ksoap2.serialization.SoapObject;
 
+import java.util.Collections;
+
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.database.DataBaseHelper;
+import es.ugr.swad.swadroid.dao.TestConfigDao;
 import es.ugr.swad.swadroid.model.Test;
+import es.ugr.swad.swadroid.model.TestConfig;
+import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.modules.courses.Courses;
 import es.ugr.swad.swadroid.modules.login.Login;
-import es.ugr.swad.swadroid.modules.Module;
 import es.ugr.swad.swadroid.utils.Utils;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
@@ -39,7 +42,7 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
  * Tests module for download and update questions
  * @see <a href="https://openswad.org/ws/#getTestConfig">getTestConfig</a>
  *
- * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
  * @author Antonio Aguilera Malagon <aguilerin@gmail.com>
  */
 public class TestsConfigDownload extends Module {
@@ -51,6 +54,10 @@ public class TestsConfigDownload extends Module {
      * Number of available questions
      */
     private int numQuestions;
+    /**
+     * DAO for TestConfig
+     */
+    private TestConfigDao testConfigDao;
     /**
      * Tests tag name for Logcat
      */
@@ -64,6 +71,9 @@ public class TestsConfigDownload extends Module {
         super.onCreate(savedInstanceState);
         setMETHOD_NAME("getTestConfig");
         getSupportActionBar().hide();
+
+        //Initialize DAOs
+        testConfigDao = db.getTestConfigDao();
     }
 
     /* (non-Javadoc)
@@ -75,7 +85,7 @@ public class TestsConfigDownload extends Module {
         try {
 
             if (isDebuggable) {
-                Log.d(TAG, "selectedCourseCode = " + Long.toString(Courses.getSelectedCourseCode()));
+                Log.d(TAG, "selectedCourseCode = " + Courses.getSelectedCourseCode());
             }
 
             runConnection();
@@ -91,9 +101,8 @@ public class TestsConfigDownload extends Module {
      */
     @Override
     protected void requestService() throws Exception {
-
         //Calculates next timestamp to be requested
-        Long timestamp = Long.valueOf(dbHelper.getTimeOfLastTestUpdate(Courses.getSelectedCourseCode()));
+        Long timestamp = testConfigDao.findByCourseCode(Courses.getSelectedCourseCode()).getEditTime();
         timestamp++;
 
         //Creates webservice request, adds required params and sends request to webservice
@@ -106,9 +115,9 @@ public class TestsConfigDownload extends Module {
             //Stores tests data returned by webservice response
 			SoapObject soap = (SoapObject) result;
 
-            Integer pluggable = Integer.valueOf(soap.getProperty("pluggable").toString());
+            int pluggable = Integer.parseInt(soap.getProperty("pluggable").toString());
             isPluggable = Utils.parseIntBool(pluggable);
-            numQuestions = Integer.valueOf(soap.getProperty("numQuestions").toString());
+            numQuestions = Integer.parseInt(soap.getProperty("numQuestions").toString());
 
             //If the teacher doesn't allows questions download, notify to user
             if (!isPluggable) {
@@ -120,27 +129,16 @@ public class TestsConfigDownload extends Module {
 
                 //If there are questions and the teacher allows their download, process the questions data
             } else {
-                Integer minQuestions = Integer.valueOf(soap.getProperty("minQuestions").toString());
-                Integer defQuestions = Integer.valueOf(soap.getProperty("defQuestions").toString());
-                Integer maxQuestions = Integer.valueOf(soap.getProperty("maxQuestions").toString());
+                int minQuestions = Integer.parseInt(soap.getProperty("minQuestions").toString());
+                int defQuestions = Integer.parseInt(soap.getProperty("defQuestions").toString());
+                int maxQuestions = Integer.parseInt(soap.getProperty("maxQuestions").toString());
                 String feedback = soap.getProperty("feedback").toString();
-                Test tDB = dbHelper.getRow(DataBaseHelper.DB_TABLE_TEST_CONFIG, "id",
-                        Long.toString(Courses.getSelectedCourseCode()));
-
-                //If exists a test configuration for this course, remove from database
-                if (tDB != null) {
-                	dbHelper.removeRow(DataBaseHelper.DB_TABLE_TEST_CONFIG, Courses.getSelectedCourseCode());
-                	Log.i(TAG, "Removed old test configuration for course " + Courses.getSelectedCourseFullName());
-                }
                 
-                Test t = new Test(Courses.getSelectedCourseCode(), minQuestions, defQuestions, maxQuestions, feedback, System.currentTimeMillis() / 1000L);
-                dbHelper.insertTestConfig(t);
+                TestConfig t = new TestConfig(Courses.getSelectedCourseCode(), minQuestions, defQuestions, maxQuestions, feedback, System.currentTimeMillis() / 1000L);
+                testConfigDao.insertTestConfig(Collections.singletonList(t));
 
                 if (isDebuggable) {
-                    Log.d(TAG, "minQuestions=" + minQuestions);
-                    Log.d(TAG, "defQuestions=" + defQuestions);
-                    Log.d(TAG, "maxQuestions=" + maxQuestions);
-                    Log.d(TAG, "feedback=" + feedback);
+                    Log.d(TAG, t.toString());
                 }
 
                 Intent activity = new Intent(this, TestsQuestionsDownload.class);
@@ -181,6 +179,6 @@ public class TestsConfigDownload extends Module {
      */
     @Override
     protected void onError() {
-
+        // No-op
     }
 }

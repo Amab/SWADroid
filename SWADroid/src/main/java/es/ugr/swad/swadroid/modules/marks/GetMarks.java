@@ -35,7 +35,7 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
  * Marks module for get user's marks
  * @see <a href="https://openswad.org/ws/#getMarks">getMarks</a>
  *
- * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
  */
 public class GetMarks extends Module {
     /**

@@ -20,12 +20,14 @@ package es.ugr.swad.swadroid.modules.notifications;
 
 import android.app.Activity;
 import android.graphics.Typeface;
-import androidx.core.content.ContextCompat;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,32 +36,31 @@ import java.util.List;
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
 import es.ugr.swad.swadroid.gui.FontManager;
-import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.model.SWADNotification;
 import es.ugr.swad.swadroid.utils.Utils;
 
 /**
  * Custom ExpandableListAdapter for display notifications
  *
- * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
  */
 public class NotificationsExpandableListAdapter extends
 		BaseExpandableListAdapter {
 
-	private ArrayList<String> groupItem;
-	private ArrayList<List<Model>> childItem;
+	private final ArrayList<String> groupItem;
+	private final ArrayList<List<SWADNotification>> childItem;
 	private LayoutInflater mInflater;
 	private Activity activity;
     private static Typeface iconFont;
 
 	public NotificationsExpandableListAdapter(ArrayList<String> grList,
-			ArrayList<List<Model>> childItem2) {
+			ArrayList<List<SWADNotification>> childItem2) {
 		groupItem = grList;
         this.childItem = childItem2;
 	}
 
 	public NotificationsExpandableListAdapter(Activity act, ArrayList<String> grList,
-			ArrayList<List<Model>> childItem2) {
+			ArrayList<List<SWADNotification>> childItem2) {
 		groupItem = grList;
 		activity = act;
 		mInflater = LayoutInflater.from(activity);
@@ -84,13 +85,18 @@ public class NotificationsExpandableListAdapter extends
 			boolean isLastChild, View convertView, ViewGroup parent) {
 		
 		SWADNotification notif = (SWADNotification) childItem.get(groupPosition).get(childPosition);
-		final Long notifCode = notif.getId();
-        final Long eventCode = notif.getEventCode();
+		final long notifCode = notif.getId();
+        final long eventCode = notif.getEventCode();
         final String userPhoto = notif.getUserPhoto();
         long unixTime;
         String type = "";
-        String sender, senderFirstname, senderSurname1, senderSurname2, summaryText;
-        String contentText, contentMsgText;
+        String sender;
+        String senderFirstname;
+        String senderSurname1;
+        String senderSurname2;
+        String summaryText;
+        String contentText;
+        String contentMsgText;
         Date d;
         java.text.DateFormat dateShortFormat = android.text.format.DateFormat.getDateFormat(activity);
         java.text.DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(activity);
@@ -126,8 +132,8 @@ public class NotificationsExpandableListAdapter extends
         notificationIcon.setTypeface(iconFont);
 
         if (eventType != null) {
-            notifCodeHided.setText(notifCode.toString());
-            eventCodeHided.setText(eventCode.toString());
+            notifCodeHided.setText(Long.toString(notifCode));
+            eventCodeHided.setText(Long.toString(eventCode));
             seenLocalHided.setText(seenLocalString);
             eventUserPhoto.setText(userPhoto);
             type = notif.getEventType();
@@ -165,7 +171,7 @@ public class NotificationsExpandableListAdapter extends
             } else if (type.startsWith("enrollment")) {
                 type = activity.getString(R.string.enrollment);
                 notificationIcon.setText(R.string.fa_check);
-            } else if (type.equals("documentFile")) {
+            } else if (type.equals("survey")) {
                 type = activity.getString(R.string.survey);
                 notificationIcon.setText(R.string.fa_check_square_o);
             } else if (type.equals("follower")) {
@@ -213,7 +219,7 @@ public class NotificationsExpandableListAdapter extends
             eventSender.setText(sender);
         }
         if (location != null) {
-            location.setText(Utils.fromHtml(notif.getLocation()));
+            location.setText(Html.fromHtml(notif.getLocation(), Html.FROM_HTML_MODE_LEGACY));
         }
         if (summary != null) {
             summaryText = notif.getSummary();
@@ -222,7 +228,7 @@ public class NotificationsExpandableListAdapter extends
             if (summaryText.equals(Constants.NULL_VALUE))
                 summaryText = activity.getString(R.string.noSubjectMsg);
 
-            summary.setText(Utils.fromHtml(summaryText));
+            summary.setText(Html.fromHtml(summaryText, Html.FROM_HTML_MODE_LEGACY));
         }
         if ((content != null)) {
         	contentText = notif.getContent();
@@ -257,16 +263,6 @@ public class NotificationsExpandableListAdapter extends
 	@Override
 	public int getGroupCount() {
 		return groupItem.size();
-	}
-
-	@Override
-	public void onGroupCollapsed(int groupPosition) {
-		super.onGroupCollapsed(groupPosition);
-	}
-
-	@Override
-	public void onGroupExpanded(int groupPosition) {
-		super.onGroupExpanded(groupPosition);
 	}
 
 	@Override

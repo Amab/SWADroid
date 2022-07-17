@@ -20,26 +20,27 @@ package es.ugr.swad.swadroid.modules.groups;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.collection.LongSparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 
-import java.util.ArrayList;
+import androidx.collection.LongSparseArray;
+
 import java.util.List;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.database.DataBaseHelper;
+import es.ugr.swad.swadroid.dao.GroupDao;
+import es.ugr.swad.swadroid.dao.GroupTypeDao;
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.gui.ProgressScreen;
 import es.ugr.swad.swadroid.model.Group;
+import es.ugr.swad.swadroid.model.GroupType;
 import es.ugr.swad.swadroid.model.Model;
 import es.ugr.swad.swadroid.modules.courses.Courses;
 import es.ugr.swad.swadroid.modules.login.Login;
@@ -62,8 +63,18 @@ public class MyGroupsManager extends MenuExpandableListActivity {
      * Course code of current selected course
      */
     private long courseCode = -1;
+    /**
+     * Data Access Object for Group table
+     */
+    private GroupDao groupDao;
+    /**
+     * Data Access Object GroupType
+     */
+    private GroupTypeDao groupTypeDao;
 
-    private ArrayList<Model> groupTypes;
+    private List<GroupType> groupTypes;
+
+    private List<Group> groups;
 
     private boolean groupTypesRequested = false;
 
@@ -74,11 +85,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
      */
     private Menu menu;
 
-    private OnClickListener cancelClickListener = new DialogInterface.OnClickListener() {
-        public void onClick(DialogInterface dialog, int id) {
-            dialog.cancel();
-        }
-    };
+    private final OnClickListener cancelClickListener = (dialog, id) -> dialog.cancel();
 
     private ExpandableListView mExpandableListView;
     /**
@@ -92,8 +99,8 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 
         showProgressLoading();
 
-        List<Model> groupTypes = dbHelper.getAllRows(DataBaseHelper.DB_TABLE_GROUP_TYPES, "courseCode = " + courseCode, "groupTypeName");
-        List<Group> groups = dbHelper.getGroups(courseCode);
+        groupTypes = groupTypeDao.findAllByCourseCodeOrderByGroupTypeNameAsc(courseCode);
+        groups = groupDao.findGroupsCourseByCourseCode(courseCode).groups;
         if ((!groupTypes.isEmpty()) && (!groups.isEmpty())) {
             setMenu();
         } else {
@@ -119,7 +126,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 
         setContentView(R.layout.group_choice);
         
-        mExpandableListView = (ExpandableListView) findViewById(android.R.id.list);
+        mExpandableListView = findViewById(android.R.id.list);
 
         View mProgressScreenView = findViewById(R.id.progress_screen);
         View mGroupChoiceLayoutView = findViewById(R.id.groupChoiceLayout);
@@ -129,6 +136,10 @@ public class MyGroupsManager extends MenuExpandableListActivity {
         getSupportActionBar().setSubtitle(Courses.getSelectedCourseShortName());
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //Initialize DAOs
+        groupDao = db.getGroupDao();
+        groupTypeDao = db.getGroupTypeDao();
     }
 
     @Override
@@ -138,7 +149,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
             switch (requestCode) {
                 case Constants.GROUPTYPES_REQUEST_CODE:
                     groupTypesRequested = true;
-                    if (dbHelper.getAllRows(DataBaseHelper.DB_TABLE_GROUP_TYPES, "courseCode = " + courseCode, "groupTypeName").size() > 0) {
+                    if (groupTypes.size() > 0) {
                         //If there are not group types, either groups. Therefore, there is no need to request groups
                         Intent activity = new Intent(getApplicationContext(), Groups.class);
                         activity.putExtra("courseCode", courseCode);
@@ -149,7 +160,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
 
                     break;
                 case Constants.GROUPS_REQUEST_CODE:
-                    if (dbHelper.getGroups(courseCode).size() > 0 || refreshRequested) {
+                    if (groups.size() > 0 || refreshRequested) {
                         mExpandableListView.setVisibility(View.VISIBLE);
                         menu.getItem(0).setVisible(true);
                         this.findViewById(R.id.noGroupsText).setVisibility(View.GONE);
@@ -165,7 +176,7 @@ public class MyGroupsManager extends MenuExpandableListActivity {
                 case Constants.SENDMYGROUPS_REQUEST_CODE:
                     int success = data.getIntExtra("success", 0);
 
-                    LongSparseArray<ArrayList<Group>> currentGroups = getHashMapGroups(groupTypes);
+                    LongSparseArray<List<Group>> currentGroups = getHashMapGroups(groupTypes);
                     ((EnrollmentExpandableListAdapter) mExpandableListView.getExpandableListAdapter()).resetChildren(currentGroups);
                     ((EnrollmentExpandableListAdapter) mExpandableListView.getExpandableListAdapter()).notifyDataSetChanged();
 
@@ -221,16 +232,14 @@ public class MyGroupsManager extends MenuExpandableListActivity {
      * Shows dialog to ask for confirmation in group enrollments
      */
     private void showConfirmEnrollmentDialog() {
-    	OnClickListener positiveClickListener = new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                String myGroups = ((EnrollmentExpandableListAdapter) mExpandableListView.getExpandableListAdapter()).getChosenGroupCodesAsString();
-                Intent activity = new Intent(getApplicationContext(), SendMyGroups.class);
-                activity.putExtra("courseCode", courseCode);
-                activity.putExtra("myGroups", myGroups);
-                startActivityForResult(activity, Constants.SENDMYGROUPS_REQUEST_CODE);
+    	OnClickListener positiveClickListener = (dialog, id) -> {
+            String myGroups = ((EnrollmentExpandableListAdapter) mExpandableListView.getExpandableListAdapter()).getChosenGroupCodesAsString();
+            Intent activity = new Intent(getApplicationContext(), SendMyGroups.class);
+            activity.putExtra("courseCode", courseCode);
+            activity.putExtra("myGroups", myGroups);
+            startActivityForResult(activity, Constants.SENDMYGROUPS_REQUEST_CODE);
 
-                showProgressSending();
-            }
+            showProgressSending();
         };
         
     	AlertDialog dialog = DialogFactory.createWarningDialog(this,
@@ -256,8 +265,8 @@ public class MyGroupsManager extends MenuExpandableListActivity {
     }
 
     private void setMenu() {
-        groupTypes = (ArrayList<Model>) dbHelper.getAllRows(DataBaseHelper.DB_TABLE_GROUP_TYPES, "courseCode =" + String.valueOf(courseCode), "groupTypeName");
-        LongSparseArray<ArrayList<Group>> children = getHashMapGroups(groupTypes);
+        groupTypes = groupTypeDao.findAllByCourseCode(courseCode);
+        LongSparseArray<List<Group>> children = getHashMapGroups(groupTypes);
         int currentRole = Login.getCurrentUserRole();
         EnrollmentExpandableListAdapter adapter = new EnrollmentExpandableListAdapter(this, groupTypes, children, R.layout.group_type_list_item, R.layout.group_list_item, currentRole);
         mExpandableListView.setAdapter(adapter);
@@ -273,18 +282,18 @@ public class MyGroupsManager extends MenuExpandableListActivity {
     @Override
     protected void onStop() {
         if (mExpandableListView.getExpandableListAdapter() != null) {
-            LongSparseArray<ArrayList<Group>> updatedChildren = getHashMapGroups(groupTypes);
+            LongSparseArray<List<Group>> updatedChildren = getHashMapGroups(groupTypes);
             ((EnrollmentExpandableListAdapter) mExpandableListView.getExpandableListAdapter()).resetChildren(updatedChildren);
         }
         super.onStop();
     }
 
-    private LongSparseArray<ArrayList<Group>> getHashMapGroups(ArrayList<Model> groupTypes) {
-        LongSparseArray<ArrayList<Group>> children = new LongSparseArray<>();
+    private LongSparseArray<List<Group>> getHashMapGroups(List<GroupType> groupTypes) {
+        LongSparseArray<List<Group>> children = new LongSparseArray<>();
         for (Model groupType : groupTypes) {
             long groupTypeCode = groupType.getId();
-            ArrayList<Group> groups = (ArrayList<Group>) dbHelper.getGroupsOfType(groupTypeCode);
-            children.put(groupTypeCode, groups);
+            List<Group> groupsList = groupDao.findAllByTypeCode(groupTypeCode);
+            children.put(groupTypeCode, groupsList);
         }
         return children;
     }

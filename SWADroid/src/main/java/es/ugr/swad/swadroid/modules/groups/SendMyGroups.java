@@ -31,10 +31,10 @@ import java.util.Vector;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
+import es.ugr.swad.swadroid.dao.GroupDao;
 import es.ugr.swad.swadroid.model.Group;
-import es.ugr.swad.swadroid.model.Model;
-import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.modules.Module;
+import es.ugr.swad.swadroid.modules.login.Login;
 import es.ugr.swad.swadroid.webservices.SOAPClient;
 
 /**
@@ -48,8 +48,8 @@ import es.ugr.swad.swadroid.webservices.SOAPClient;
  * other than 0 -if all the requested changes were possible and are made. It that case the groups in database will be also updated * 					!= 0 -
  *
  * @author Helena Rodriguez Gijon <hrgijon@gmail.com>
+ * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
  */
-
 
 public class SendMyGroups extends Module {
     /**
@@ -60,6 +60,10 @@ public class SendMyGroups extends Module {
      * String that contains group codes separated with comma
      */
     private String myGroups = null;
+    /**
+     * DAO for groups
+     */
+    private GroupDao groupDao;
 
     /**
      * Groups tag name for Logcat
@@ -78,6 +82,9 @@ public class SendMyGroups extends Module {
         }
 
         setMETHOD_NAME("sendMyGroups");
+
+        //Initialize DAOs
+        groupDao = db.getGroupDao();
     }
 
     @Override
@@ -111,7 +118,7 @@ public class SendMyGroups extends Module {
         sendRequest(Group.class, false);
         
         if (result != null) {
-            ArrayList<?> res = new ArrayList<Object>((Vector<?>) result);
+            ArrayList<?> res = new ArrayList<>((Vector<?>) result);
             SoapPrimitive soapP = (SoapPrimitive) res.get(0);
 
             /*
@@ -121,7 +128,7 @@ public class SendMyGroups extends Module {
              */
             int success = Integer.parseInt(soapP.toString());
             if (success != 0) {
-                List<Model> groupsSWAD = new ArrayList<>();
+                List<Group> groupsSWAD = new ArrayList<>();
 
                 SoapObject soapO = (SoapObject) res.get(2);
                 int propertyCount = soapO.getPropertyCount();
@@ -137,21 +144,15 @@ public class SendMyGroups extends Module {
                     int fileZones = Integer.parseInt(pii.getProperty("fileZones").toString());
                     int member = Integer.parseInt(pii.getProperty("member").toString());
 
-                    Group g = new Group(id, groupName, groupTypeCode, maxStudents, open, numStudents, fileZones, member);
+                    Group g = new Group(id, groupName, groupTypeCode, courseCode, maxStudents, open, numStudents, fileZones, member);
                     groupsSWAD.add(g);
 
                     if (isDebuggable) {
                         Log.i(TAG, g.toString());
                     }
                 }
-                for (Model aGroupsSWAD : groupsSWAD) {
-                    Group g = (Group) aGroupsSWAD;
-                    //boolean isAdded = dbHelper.insertGroup(g,Global.getSelectedCourseCode());
-                    //if(!isAdded){
-                    if (!dbHelper.updateGroup(g.getId(), courseCode, g)) {
-                        dbHelper.insertGroup(g, courseCode);
-                    }
-                }
+
+                groupDao.insertGroups(groupsSWAD);
             }
             Intent resultIntent = new Intent();
             resultIntent.putExtra("success", success);
@@ -173,7 +174,7 @@ public class SendMyGroups extends Module {
 
     @Override
     protected void onError() {
-
+        // No-op
     }
 
 }

@@ -24,7 +24,7 @@ import java.util.Locale;
 /**
  * Class for date and time methods
  *
- * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
  */
 public class DateTimeUtils {
 

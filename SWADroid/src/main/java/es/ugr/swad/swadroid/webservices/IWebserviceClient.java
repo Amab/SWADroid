@@ -21,7 +21,7 @@ package es.ugr.swad.swadroid.webservices;
 /**
  * Interface for webservices clients
  * 
- * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
  * 
  */
 public interface IWebserviceClient {
@@ -29,7 +29,7 @@ public interface IWebserviceClient {
 
 	void addParam(String param, Object value);
 
-	void setMETHOD_NAME(String METHOD_NAME);
+	void setMethodName(String methodName);
 
 	Object getResult();
 }

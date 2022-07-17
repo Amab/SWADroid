@@ -24,17 +24,12 @@ package es.ugr.swad.swadroid.modules.rollcall;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,23 +38,32 @@ import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.google.zxing.integration.android.IntentIntegrator;
 
+import java.util.Collections;
 import java.util.List;
 
 import es.ugr.swad.swadroid.Constants;
 import es.ugr.swad.swadroid.R;
-import es.ugr.swad.swadroid.database.DataBaseHelper;
+import es.ugr.swad.swadroid.dao.EventDao;
+import es.ugr.swad.swadroid.dao.UserAttendanceDao;
+import es.ugr.swad.swadroid.dao.UserDao;
 import es.ugr.swad.swadroid.gui.DialogFactory;
 import es.ugr.swad.swadroid.gui.MenuExpandableListActivity;
 import es.ugr.swad.swadroid.gui.ProgressScreen;
+import es.ugr.swad.swadroid.model.Event;
 import es.ugr.swad.swadroid.model.UserAttendance;
 import es.ugr.swad.swadroid.modules.courses.Courses;
 
 /**
  * UsersActivity module.
  *
- * @author Juan Miguel Boyero Corral <juanmi1982@gmail.com>
+ * @author Juan Miguel Boyero Corral <swadroid@gmail.com>
  */
 public class UsersActivity extends MenuExpandableListActivity implements
         SwipeRefreshLayout.OnRefreshListener {
@@ -83,6 +87,18 @@ public class UsersActivity extends MenuExpandableListActivity implements
      * Database cursor for Adapter of users
      */
     private Cursor dbCursor;
+    /**
+     * Database Access Object for User
+     */
+    private UserDao userDao;
+    /**
+     * Database Access Object for UserAttendance
+     */
+    private UserAttendanceDao userAttendanceDao;
+    /**
+     * Database Access Object for Event
+     */
+    private EventDao eventDao;
     /**
      * Layout with "Pull to refresh" function
      */
@@ -121,6 +137,12 @@ public class UsersActivity extends MenuExpandableListActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Initialize DAOs
+        userDao = db.getUserDao();
+        userAttendanceDao = db.getUserAttendanceDao();
+        eventDao = db.getEventDao();
+
         setContentView(R.layout.list_items_pulltorefresh);
 
         refreshLayout = findViewById(R.id.swipe_container_list);
@@ -135,6 +157,7 @@ public class UsersActivity extends MenuExpandableListActivity implements
         lvUsers.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+                // No-op
             }
 
             @Override
@@ -186,37 +209,34 @@ public class UsersActivity extends MenuExpandableListActivity implements
          * so its safe to call database query in another thread
          * Handler, will handle this stuff for you
          */
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                dbCursor = dbHelper.getUsersEventCursor(eventCode);
-                startManagingCursor(dbCursor);
+        new Handler().post(() -> {
+            dbCursor = userDao.findAllByEventCodeCursor(eventCode);
+            startManagingCursor(dbCursor);
 
-                /*
-                 * If there aren't users to show, hide the users lvUsers
-                 * and show the empty users message
-                 */
-                if ((dbCursor == null) || (dbCursor.getCount() == 0)) {
-                    Log.d(TAG, "Users lvUsers is empty");
+            /*
+             * If there aren't users to show, hide the users lvUsers
+             * and show the empty users message
+             */
+            if ((dbCursor == null) || (dbCursor.getCount() == 0)) {
+                Log.d(TAG, "Users lvUsers is empty");
 
-                    emptyUsersTextView.setText(R.string.usersEmptyListMsg);
-                    emptyUsersTextView.setVisibility(View.VISIBLE);
+                emptyUsersTextView.setText(R.string.usersEmptyListMsg);
+                emptyUsersTextView.setVisibility(View.VISIBLE);
 
-                    lvUsers.setVisibility(View.GONE);
+                lvUsers.setVisibility(View.GONE);
 
-                    refreshLayout.setEnabled(true);
-                } else {
-                    Log.d(TAG, "Users lvUsers is not empty");
+                refreshLayout.setEnabled(true);
+            } else {
+                Log.d(TAG, "Users lvUsers is not empty");
 
-                    emptyUsersTextView.setVisibility(View.GONE);
-                    lvUsers.setVisibility(View.VISIBLE);
-                }
-
-                adapter = new UsersCursorAdapter(getBaseContext(), dbCursor, dbHelper, eventCode);
-                lvUsers.setAdapter(adapter);
-
-                mProgressScreen.hide();
+                emptyUsersTextView.setVisibility(View.GONE);
+                lvUsers.setVisibility(View.VISIBLE);
             }
+
+            adapter = new UsersCursorAdapter(getBaseContext(), dbCursor, eventCode);
+            lvUsers.setAdapter(adapter);
+
+            mProgressScreen.hide();
         });
     }
 
@@ -267,7 +287,7 @@ public class UsersActivity extends MenuExpandableListActivity implements
 
     private String getUsersCodes() {
         StringBuilder usersCodes = new StringBuilder();
-        List<UserAttendance> usersList = dbHelper.getUsersEvent(eventCode);
+        List<UserAttendance> usersList = userAttendanceDao.findByEventCode(eventCode);
 
         //Concatenate the user code of all users checked as present and separate them with commas
         for(UserAttendance user : usersList) {
@@ -353,23 +373,17 @@ public class UsersActivity extends MenuExpandableListActivity implements
                         R.string.yesMsg,
                         R.string.noMsg,
                         true,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
+                        (dialog, id) -> {
+                            dialog.cancel();
 
-                                dbHelper.beginTransaction();
-                                dbHelper.removeAllRows(DataBaseHelper.DB_TABLE_USERS_ATTENDANCES, "eventCode", eventCode);
-                                dbHelper.updateEventStatus(eventCode, "OK");
-                                dbHelper.endTransaction(true);
+                            userAttendanceDao.deleteAttendancesByEventCode(eventCode);
+                            Event event = eventDao.findById(eventCode);
+                            event.setStatus("OK");
+                            eventDao.updateEvents(Collections.singletonList(event));
 
-                                refreshAdapter();
-                            }
+                            refreshAdapter();
                         },
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        },
+                        (dialog, id) -> dialog.cancel(),
                         null);
 
                 cleanDBDialog.show();
@@ -396,6 +410,8 @@ public class UsersActivity extends MenuExpandableListActivity implements
                 }
             }
         }
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
 }

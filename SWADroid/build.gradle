@@ -39,16 +39,12 @@ if (build_param != "prod") {
 }
 
 android {
-    compileSdkVersion 32
-    buildToolsVersion "32.0.0"
+    compileSdkVersion 33
+    buildToolsVersion "33.0.0"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
-    }
-
-    lintOptions {
-        abortOnError false
     }
 
     defaultConfig {
@@ -57,12 +53,18 @@ android {
         versionCode androidGitVersion.code()
 
         minSdkVersion 24
-        targetSdkVersion 32
+        targetSdkVersion 33
 
-        testApplicationId "es.ugr.swad.swadroid.test"
-        testInstrumentationRunner "android.test.InstrumentationTestRunner"
+        testApplicationId "es.ugr.swad.swadroid.androidTest"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField "String", "SWAD_APP_KEY", getBuildConfigField("SWAD_APP_KEY")
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
     }
 
     buildTypes {
@@ -72,6 +74,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    sourceSets {
+        // Adds exported schema location as androidTest app assets.
+        androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
+    }
+    lint {
+        abortOnError false
+    }
+    namespace 'es.ugr.swad.swadroid'
+
 }
 
 dependencies {
@@ -86,4 +98,28 @@ dependencies {
     implementation 'com.google.android.material:material:1.6.1'
     implementation platform('com.google.firebase:firebase-bom:30.2.0')
     implementation 'com.google.firebase:firebase-analytics'
+
+    //Lombok
+    def lombok_version = "1.18.24"
+    compileOnly "org.projectlombok:lombok:$lombok_version"
+    annotationProcessor "org.projectlombok:lombok:$lombok_version"
+    testCompileOnly "org.projectlombok:lombok:$lombok_version"
+    testAnnotationProcessor "org.projectlombok:lombok:$lombok_version"
+
+    //Database dependencies
+    def room_version = "2.4.2"
+    implementation 'net.zetetic:android-database-sqlcipher:4.5.1@aar'
+    implementation "androidx.sqlite:sqlite:2.2.0"
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+    // optional - Test helpers
+    testImplementation "androidx.room:room-testing:$room_version"
+
+    //Tests
+    def test_version = "1.4.0"
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation "androidx.test:core:$test_version"
+    androidTestImplementation "androidx.test:rules:$test_version"
+    androidTestImplementation "androidx.test:runner:$test_version"
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
 }
