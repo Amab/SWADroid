@@ -2,25 +2,22 @@ kind: pipeline
 name: default
 
 steps:
-- name: fetch-tags
-  image: drone/git:latest
-  commands:
-  - git fetch --tags
+  - name: fetch-tags
+    image: drone/git:latest
+    commands:
+      - git fetch --tags
 
-- name: build
-  image: androidsdk/android-31:latest
-  commands:
-  - ./gradlew assemble
-
-- name: unit-tests
-  image: androidsdk/android-31:latest
-  commands:
-  - ./gradlew check
-
-- name: integration-tests
-  image: androidsdk/android-31:latest
-  commands:
-  - ./gradlew connectedCheck
+  - name: build & test
+    image: amab/android-sdk-docker:latest
+    privileged: true
+    commands:
+      # Create and run emulator
+      - echo "no" | avdmanager --verbose create avd --force --name "generic_33" --package "system-images;android-33;google_apis;x86_64" --tag "google_apis" --abi "x86_64"
+      - emulator -avd "generic_33" -no-window -no-audio -no-boot-anim -netdelay none -no-snapshot -wipe-data -partition-size 1024 &
+      # Wait for emulator to be ready
+      - android-wait-for-emulator.sh
+      # Run tests
+      - ./gradlew connectedCheck -i
 
 #- name: code-analysis
 #  image: drone-plugins/sonarqube-scanner:latest
