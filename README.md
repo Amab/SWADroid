@@ -7,6 +7,18 @@ Android client for e-learning platform [![SWADroid](https://openswad.org/logo/sw
 
 [![SWADroid](http://upload.wikimedia.org/wikipedia/commons/c/c8/Farm-Fresh_twitter_1.png)](http://twitter.com/SWADroid)[![SWADroid](http://upload.wikimedia.org/wikipedia/commons/4/4d/Farm-Fresh_facebook.png)](https://www.facebook.com/SWADroid)[![SWADroid](https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Telegram_Messenger.png/35px-Telegram_Messenger.png?uselang=es)](https://telegram.me/swadroid)[![SWADroid](https://s.w.org/about/images/logos/wordpress-logo-32-blue.png)](http://swadroid.wordpress.com)
 
+# Give Up GitHub
+
+This project has given up GitHub.  ([See Software Freedom Conservancy's *Give Up  GitHub* site for details](https://GiveUpGitHub.org).)
+
+You can now find this project at [SWADroid Gitea repository](https://git.cuernodehipnos.es/Marown/SWADroid) instead.
+
+Any use of this project's code by GitHub Copilot, past or present, is done without our permission.  We do not consent to GitHub's use of this project's code in Copilot.
+
+Join us; you can [give up GitHub](https://GiveUpGitHub.org) too!
+
+![Logo of the GiveUpGitHub campaign](https://sfconservancy.org/img/GiveUpGitHub.png)
+
 CI Status
 ---------
 
